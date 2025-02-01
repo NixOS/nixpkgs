@@ -210,110 +210,137 @@ originalAttrs:
     '';
 
     preInstall =
+      # What follows is a horribly cursed hack.
+      #
+      # GCC will install its libraries to $out/lib, $out/lib32, $out/lib64,
+      # $out/$targetConfig/lib, $out/$targetConfig/lib32 or $out/$targetConfig/lib64,
+      # depending on whether it's built as native or cross, and the exact target spec.
+      #
+      # We can't predict what it's actually going to do, and we also can't just tell it
+      # to always install to $out/lib, but we want everything to end up in $out/lib
+      # for consistency (multilib weirdness aside).
+      #
+      # So, we create a bunch of symlinks before we run GCC's install phase,
+      # redirecting every possible directory it may want to write to to the place
+      # we actually want things to be installed.
+      # We will then nuke the symlinks in postInstall.
+      #
+      # FIXME: there must be a better way to do this.
       ''
-        mkdir -p "$out/''${targetConfig}/lib"
-        mkdir -p "''${!outputLib}/''${targetConfig}/lib"
+        declare -ga compatibilitySymlinks=()
+
+        makeCompatibilitySymlink() {
+          for output in "$out" "''${!outputLib}"; do
+            local linkTarget="$1"
+            local linkName="$output/$2"
+
+            echo "Creating compatibility symlink: $linkTarget -> $linkName"
+
+            mkdir -p "$(dirname "$linkName")"
+            ln -s "$linkTarget" "$linkName"
+            compatibilitySymlinks+=("$linkName")
+          done
+        }
       ''
       +
-        # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
-        # since native-compiles have $lib/lib as a directory (not a
-        # symlink), this ensures that in every case we can assume that
-        # $lib/lib contains the .so files
-        lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
-          ln -Ts "''${!outputLib}/''${targetConfig}/lib" $lib/lib
+        # This will redirect $output/lib{32,64} to $output/lib.
+        # Multilib is special, because it creates $out/lib (for 32-bit)
+        # and $out/lib64 (for 64-bit). No other targets can have both.
+        lib.optionalString (!enableMultilib) ''
+          makeCompatibilitySymlink lib lib32
+          makeCompatibilitySymlink lib lib64
         ''
       +
-        # Make `lib64` symlinks to `lib`.
-        lib.optionalString
-          (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32)
-          ''
-            ln -s lib "$out/''${targetConfig}/lib64"
-            ln -s lib "''${!outputLib}/''${targetConfig}/lib64"
-          ''
-      +
-        # On mips platforms, gcc follows the IRIX naming convention:
-        #
-        #  $PREFIX/lib   = mips32
-        #  $PREFIX/lib32 = mips64n32
-        #  $PREFIX/lib64 = mips64
-        #
-        # Make `lib32` symlinks to `lib`.
-        lib.optionalString (!enableMultilib && stdenv.targetPlatform.isMips64n32) ''
-          ln -s lib "$out/''${targetConfig}/lib32"
-          ln -s lib "''${!outputLib}/''${targetConfig}/lib32"
+        # This will redirect $output/$targetConfig/lib{,32,64} to $output/lib.
+        lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
+          makeCompatibilitySymlink lib $targetConfig/lib32
+          makeCompatibilitySymlink lib $targetConfig/lib64
+          makeCompatibilitySymlink ../lib $targetConfig/lib
         '';
 
-    postInstall = ''
-      # Move runtime libraries to lib output.
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.so*" "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll" "''${!outputLib}"
-      moveToOutput "share/gcc-*/python" "''${!outputLib}"
+    postInstall =
+      ''
+        # Clean up our compatibility symlinks (see above)
+        for link in "''${compatibilitySymlinks[@]}"; do
+          echo "Removing compatibility symlink: $link"
+          rm -f "$link"
+        done
 
-      if [ -z "$enableShared" ]; then
-          moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.a" "''${!outputLib}"
-      fi
+        # Move runtime libraries to lib output.
+        moveToOutput "lib/lib*.so*" "''${!outputLib}"
+        moveToOutput "lib/lib*.la"  "''${!outputLib}"
+        moveToOutput "lib/lib*.dylib" "''${!outputLib}"
+        moveToOutput "lib/lib*.dll.a" "''${!outputLib}"
+        moveToOutput "lib/lib*.dll" "''${!outputLib}"
+        moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
-      for i in "''${!outputLib}/''${targetConfig}"/lib/*.{la,py}; do
-          substituteInPlace "$i" --replace "$out" "''${!outputLib}"
-      done
+        if [ -z "$enableShared" ]; then
+            moveToOutput "lib/lib*.a" "''${!outputLib}"
+        fi
 
-      if [ -n "$enableMultilib" ]; then
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.la"  "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dylib" "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll.a" "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll" "''${!outputLib}"
+        for i in "''${!outputLib}"/lib/*.{la,py}; do
+            substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+        done
 
-          for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
-              substituteInPlace "$i" --replace "$out" "''${!outputLib}"
-          done
-      fi
+        if [ -n "$enableMultilib" ]; then
+            moveToOutput "lib64/lib*.so*" "''${!outputLib}"
+            moveToOutput "lib64/lib*.la"  "''${!outputLib}"
+            moveToOutput "lib64/lib*.dylib" "''${!outputLib}"
+            moveToOutput "lib64/lib*.dll.a" "''${!outputLib}"
+            moveToOutput "lib64/lib*.dll" "''${!outputLib}"
 
-      # Remove `fixincl' to prevent a retained dependency on the
-      # previous gcc.
-      rm -rf $out/libexec/gcc/*/*/install-tools
-      rm -rf $out/lib/gcc/*/*/install-tools
+            for i in "''${!outputLib}"/lib64/*.{la,py}; do
+                substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+            done
+        fi
 
-      # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
-      rm -rf $out/bin/gccbug
+        # Remove `fixincl' to prevent a retained dependency on the
+        # previous gcc.
+        rm -rf $out/libexec/gcc/*/*/install-tools
+        rm -rf $out/lib/gcc/*/*/install-tools
 
-      if type "install_name_tool"; then
-          for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
-              install_name_tool -id "$i" "$i" || true
-              for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-                new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
-                install_name_tool -change "$old_path" "$new_path" "$i" || true
-              done
-          done
-      fi
+        # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
+        rm -rf $out/bin/gccbug
 
-      # Get rid of some "fixed" header files
-      rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
+        if type "install_name_tool"; then
+            for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
+                install_name_tool -id "$i" "$i" || true
+                for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
+                  new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
+                  install_name_tool -change "$old_path" "$new_path" "$i" || true
+                done
+            done
+        fi
 
-      # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
-      for i in $out/bin/*-gcc*; do
-          if cmp -s $out/bin/gcc $i; then
-              ln -sfn gcc $i
-          fi
-      done
+        # Get rid of some "fixed" header files
+        rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
 
-      for i in $out/bin/c++ $out/bin/*-c++* $out/bin/*-g++*; do
-          if cmp -s $out/bin/g++ $i; then
-              ln -sfn g++ $i
-          fi
-      done
+        # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
+        for i in $out/bin/*-gcc*; do
+            if cmp -s $out/bin/gcc $i; then
+                ln -sfn gcc $i
+            fi
+        done
 
-      # Two identical man pages are shipped (moving and compressing is done later)
-      for i in "$out"/share/man/man1/*g++.1; do
-          if test -e "$i"; then
-              man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
-              ln -sf "$man_prefix"gcc.1 "$i"
-          fi
-      done
-    '';
+        for i in $out/bin/c++ $out/bin/*-c++* $out/bin/*-g++*; do
+            if cmp -s $out/bin/g++ $i; then
+                ln -sfn g++ $i
+            fi
+        done
+
+        # Two identical man pages are shipped (moving and compressing is done later)
+        for i in "$out"/share/man/man1/*g++.1; do
+            if test -e "$i"; then
+                man_prefix=`echo "$i" | sed "s,.*/\(.*\)g++.1,\1,"`
+                ln -sf "$man_prefix"gcc.1 "$i"
+            fi
+        done
+      ''
+      +
+        # Recreate the target symlink so GCC can find libgcc_s on non-split builds.
+        lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
+          ln -s $lib/lib $lib/$targetConfig/lib
+        '';
   }
   // lib.optionalAttrs ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc) {
     dontCheckForBrokenSymlinks = true;
