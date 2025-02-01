@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   lvm2,
   libuuid,
   gettext,
@@ -23,6 +24,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/parted/parted-${version}.tar.xz";
     sha256 = "sha256-O0Pb4zzKD5oYYB66tWt4UrEo7Bo986mzDM3l5zNZ5hI=";
   };
+
+  patches = [
+    # Fix the build against C23 compilers (like gcc-15):
+    (fetchpatch {
+      name = "c23.patch";
+      url = "https://git.savannah.gnu.org/gitweb/?p=parted.git;a=patch;h=16343bda6ce0d41edf43f8dac368db3bbb63d271";
+      hash = "sha256-8FgnwMrzMHPZNU+b/mRHCSu8sn6H7GhVLIhMUel40Hk=";
+    })
+  ];
 
   outputs = [
     "out"
