@@ -207,8 +207,7 @@ in
 
 let
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = (
-    stdenv.mkDerivation (
+  self = stdenv.mkDerivation (
       finalAttrs:
       let
   format' =
@@ -450,8 +449,7 @@ let
           unittestFlagsArray = attrs.unittestFlagsArray;
         }
       )
-    )
-  );
+    );
 
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.
