@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     tag = version;
-    hash = "sha256-JyAdGVddxUaFWWgReQxMeGI//mvKJUdxEFv6G0A9z3U=";
+    hash = "sha256-dFj9ob9RRmeaaVDJeDOVLe06fBkCGEWhavLFKytJ8Mo=";
   };
 
   build-system = [
