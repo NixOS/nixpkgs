@@ -48,7 +48,6 @@ mkAppleDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
-    "--enable-pax_emutramp"
   ];
 
   # Make sure aarch64-darwin is using the trampoline dylib.
