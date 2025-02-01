@@ -4,6 +4,7 @@
   fetchurl,
   makeWrapper,
   jre_headless,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,12 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    reposilite = nixosTests.reposilite;
+  };
+
   meta = {
     description = "Lightweight and easy-to-use repository management software dedicated for the Maven based artifacts in the JVM ecosystem";
     homepage = "https://github.com/dzikoysk/reposilite";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jamalam ];
+    maintainers = with lib.maintainers; [
+      jamalam
+      magneticflux-
+    ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "reposilite";
   };
