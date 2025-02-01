@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Update prisma to match the version in nixpkgs exactly (currently 6.0.1). To create this patch, change the
+    # Update prisma to match the version in nixpkgs exactly (currently 6.3.0). To create this patch, change the
     # versions in `package.json`, then run `nix run nixpkgs#yarn-berry -- install --mode update-lockfile`
     # to update `yarn.lock`.
     ./prisma6.patch
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       yarn install --immutable --mode skip-build
     '';
 
-    outputHash = "sha256-kWE6YVhyH5Lk/SO0h624Zq9/6ztoUE3FNzHB0dyl5aI=";
+    outputHash = "sha256-c7U/PMlulbjzWx0w4jstgfjeDYPkmfcXIRCDEQxhirA=";
     outputHashMode = "recursive";
   };
 
