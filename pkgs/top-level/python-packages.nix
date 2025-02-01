@@ -16138,6 +16138,8 @@ self: super: with self; {
 
   textual-universal-directorytree = callPackage ../development/python-modules/textual-universal-directorytree { };
 
+  textualeffects = callPackage ../development/python-modules/textualeffects { };
+
   textual-textarea = callPackage ../development/python-modules/textual-textarea { };
 
   testbook = callPackage ../development/python-modules/testbook { };
