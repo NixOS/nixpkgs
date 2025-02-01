@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildLua,
-  alass,
+  ffsubsync,
 }:
 
 buildLua {
@@ -20,9 +20,9 @@ buildLua {
   patchPhase = ''
     runHook prePatch
     substituteInPlace autosubsync.lua                                            \
-      --replace-warn 'alass_path = ""' 'alass_path = "${alass}/bin/alass-cli"'   \
-      --replace-warn 'audio_subsync_tool = "ask"' 'audio_subsync_tool = "alass"' \
-      --replace-warn 'altsub_subsync_tool = "ask"' 'altsub_subsync_tool = "alass"'
+      --replace-warn 'ffsubsync_path = ""' 'ffsubsync_path = "${lib.getExe ffsubsync}"'   \
+      --replace-warn 'audio_subsync_tool = "ask"' 'audio_subsync_tool = "ffsubsync"' \
+      --replace-warn 'altsub_subsync_tool = "ask"' 'altsub_subsync_tool = "ffsubsync"'
     runHook postPatch
   '';
 
