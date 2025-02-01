@@ -571,6 +571,7 @@ in {
   lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
   lorri = handleTest ./lorri/default.nix {};
+  lxqt = handleTest ./lxqt.nix {};
   ly = handleTest ./ly.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });
   maestral = handleTest ./maestral.nix {};
