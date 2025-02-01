@@ -1,0 +1,13 @@
+diff --git a/profiler/build/unix/legacy.mk b/profiler/build/unix/legacy.mk
+index 24765f1a..8baffb68 100644
+--- a/profiler/build/unix/legacy.mk
++++ b/profiler/build/unix/legacy.mk
+@@ -16,7 +16,7 @@ else
+ 	UNAME := $(shell uname -s)
+ 	ifeq ($(UNAME),Darwin)
+ 		SRC3 += ../../../nfd/nfd_cocoa.m
+-		LIBS +=  -framework CoreFoundation -framework AppKit -framework UniformTypeIdentifiers
++		LIBS +=  -framework CoreFoundation -framework AppKit
+ 	else
+ 		ifdef TRACY_GTK_FILESELECTOR
+ 			SRC += ../../../nfd/nfd_gtk.cpp

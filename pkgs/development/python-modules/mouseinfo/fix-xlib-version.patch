@@ -1,0 +1,14 @@
+diff --git a/setup.py b/setup.py
+index 37d5f77..894fe78 100644
+--- a/setup.py
++++ b/setup.py
+@@ -31,8 +31,7 @@ setup(
+     test_suite='tests',
+     # NOTE: Update the python_version info for Pillow as Pillow supports later versions of Python.
+     install_requires=['rubicon-objc;platform_system=="Darwin"',
+-                      'python3-Xlib;platform_system=="Linux" and python_version>="3.0"',
+-                      'Xlib;platform_system=="Linux" and python_version<"3.0"',
++                      'python-Xlib;platform_system=="Linux"',
+                       'pyperclip',
+                       'Pillow >= 6.2.1; python_version == "3.8"',
+                       'Pillow >= 5.2.0; python_version == "3.7"',
