@@ -35,11 +35,13 @@ buildPythonPackage rec {
       cern-root
     ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.DarwinTools
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+    ]);
 
   propagatedBuildInputs = [
     setuptools
