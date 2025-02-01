@@ -1,0 +1,17 @@
+diff --git i/src/flb_utils.c w/src/flb_utils.c
+index 87637f1331d7..7a0036566438 100644
+--- i/src/flb_utils.c
++++ w/src/flb_utils.c
+@@ -1424,11 +1424,11 @@ int flb_utils_get_machine_id(char **out_id, size_t *out_size)
+         return 0;
+     }
+ #elif defined (FLB_SYSTEM_MACOS)
+     bool bret;
+     CFStringRef serialNumber;
+-    io_service_t platformExpert = IOServiceGetMatchingService(kIOMainPortDefault,
++    io_service_t platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault,
+         IOServiceMatching("IOPlatformExpertDevice"));
+
+     if (platformExpert) {
+         CFTypeRef serialNumberAsCFString =
+             IORegistryEntryCreateCFProperty(platformExpert,

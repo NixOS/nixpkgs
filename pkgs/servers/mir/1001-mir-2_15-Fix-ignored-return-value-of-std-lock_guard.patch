@@ -1,0 +1,40 @@
+From d31d3abb36163b0f0a892898349d6a99aaf50e10 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 26 Dec 2024 23:12:39 +0100
+Subject: [PATCH] Fix ignored return value of std::lock_guard
+
+Upstream this seems to have been resolved as part of the big platform API change, so manually rewrote this change into a patch.
+---
+ src/platforms/wayland/displayclient.cpp         | 2 +-
+ src/server/frontend_xwayland/xcb_connection.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/platforms/wayland/displayclient.cpp b/src/platforms/wayland/displayclient.cpp
+index 27bdfe5..987be52 100644
+--- a/src/platforms/wayland/displayclient.cpp
++++ b/src/platforms/wayland/displayclient.cpp
+@@ -563,7 +563,7 @@ void mgw::DisplayClient::on_display_config_changed()
+ 
+ void mgw::DisplayClient::delete_outputs_to_be_deleted()
+ {
+-    std::lock_guard{outputs_mutex};
++    std::lock_guard lock{outputs_mutex};
+     outputs_to_be_deleted.clear();
+ }
+ 
+diff --git a/src/server/frontend_xwayland/xcb_connection.cpp b/src/server/frontend_xwayland/xcb_connection.cpp
+index 4f72b98..0be74b0 100644
+--- a/src/server/frontend_xwayland/xcb_connection.cpp
++++ b/src/server/frontend_xwayland/xcb_connection.cpp
+@@ -207,7 +207,7 @@ void mf::XCBConnection::verify_not_in_error_state() const
+ 
+ auto mf::XCBConnection::query_name(xcb_atom_t atom) const -> std::string
+ {
+-    std::lock_guard{atom_name_cache_mutex};
++    std::lock_guard lock{atom_name_cache_mutex};
+     auto const iter = atom_name_cache.find(atom);
+ 
+     if (iter == atom_name_cache.end())
+-- 
+2.47.0
+

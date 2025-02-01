@@ -1,0 +1,21 @@
+--- old/ccx_2.22/src/Makefile	2024-08-06 01:13:21.031704000 +0800
++++ new/ccx_2.22/src/Makefile	2024-12-19 00:27:06.848862592 +0800
+@@ -18,15 +18,10 @@
+ OCCXC = $(SCCXC:.c=.o)
+ OCCXMAIN = $(SCCXMAIN:.c=.o)
+ 
+-DIR=../../../SPOOLES.2.2
++LIBS = -lpthread -lm -lc -lspooles -larpack -lblas -llapack
+ 
+-LIBS = \
+-       $(DIR)/spooles.a \
+-	../../../ARPACK/libarpack_INTEL.a \
+-       -lpthread -lm -lc
+-
+-ccx_2.22: $(OCCXMAIN) ccx_2.22.a  $(LIBS)
+-	./date.pl; $(CC) $(CFLAGS) -c ccx_2.22.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.22.a $(LIBS) -fopenmp
++ccx_2.22: $(OCCXMAIN) ccx_2.22.a
++	$(CC) $(CFLAGS) -c ccx_2.22.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.22.a $(LIBS) -fopenmp
+ 
+ ccx_2.22.a: $(OCCXF) $(OCCXC)
+ 	ar vr $@ $?

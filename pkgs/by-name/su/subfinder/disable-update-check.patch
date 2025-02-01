@@ -1,0 +1,11 @@
+--- a/v2/pkg/runner/options.go
++++ b/v2/pkg/runner/options.go
+@@ -107,7 +107,7 @@ func ParseOptions() *Options {
+ 
+ 	flagSet.CreateGroup("update", "Update",
+ 		flagSet.CallbackVarP(GetUpdateCallback(), "update", "up", "update subfinder to latest version"),
+-		flagSet.BoolVarP(&options.DisableUpdateCheck, "disable-update-check", "duc", false, "disable automatic subfinder update check"),
++		flagSet.BoolVarP(&options.DisableUpdateCheck, "disable-update-check", "duc", true, "disable automatic subfinder update check"),
+ 	)
+ 
+ 	flagSet.CreateGroup("output", "Output",

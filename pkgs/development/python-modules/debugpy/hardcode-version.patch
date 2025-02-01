@@ -1,0 +1,47 @@
+diff --git a/setup.py b/setup.py
+index d16a27c5..a7e407e1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -12,7 +12,6 @@ import sys
+ 
+ 
+ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+-import versioneer  # noqa
+ 
+ del sys.path[0]
+ 
+@@ -145,13 +144,13 @@ if __name__ == "__main__":
+     if platforms is not None:
+         extras["platforms"] = platforms
+ 
+-    cmds = versioneer.get_cmdclass()
++    cmds = {}
+     override_build(cmds)
+     override_build_py(cmds)
+ 
+     setuptools.setup(
+         name="debugpy",
+-        version=versioneer.get_version(),
++        version="@version@",
+         description="An implementation of the Debug Adapter Protocol for Python",  # noqa
+         long_description=long_description,
+         long_description_content_type="text/markdown",
+diff --git a/src/debugpy/public_api.py b/src/debugpy/public_api.py
+index c61a2607..f26f8272 100644
+--- a/src/debugpy/public_api.py
++++ b/src/debugpy/public_api.py
+@@ -7,8 +7,6 @@ from __future__ import annotations
+ import functools
+ import typing
+ 
+-from debugpy import _version
+-
+ 
+ # Expose debugpy.server API from subpackage, but do not actually import it unless
+ # and until a member is invoked - we don't want the server package loaded in the
+@@ -192,4 +190,4 @@ def trace_this_thread(__should_trace: bool):
+     """
+ 
+ 
+-__version__: str = _version.get_versions()["version"]
++__version__: str = "@version@"

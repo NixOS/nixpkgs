@@ -1,0 +1,17 @@
+Unsetting __STRICT_ANSI__ is not a supported configuration for gcc
+nowadays. gcc-14 started failing libstdc++ build as it uses gcc
+extensions without __STRICT_ANSI__: https://gcc.gnu.org/PR111824
+--- a/src/base.hh
++++ b/src/base.hh
+@@ -34,11 +34,6 @@
+ #define WIN32_LEAN_AND_MEAN
+ #endif
+ 
+-// Cygwin somehow enables strict ansi, which we don't want.
+-#ifdef __STRICT_ANSI__
+-#undef __STRICT_ANSI__
+-#endif
+-
+ #include <iosfwd>
+ #include <string>  // it would be nice if there were a <stringfwd>
+ 
