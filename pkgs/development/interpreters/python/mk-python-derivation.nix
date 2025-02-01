@@ -271,7 +271,7 @@ let
   isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = toPythonModule (
+  self = (
     stdenv.mkDerivation (
       finalAttrs:
       (cleanAttrs attrs)
@@ -451,7 +451,14 @@ let
     )
   );
 
+  # This derivation transformation function must be independent to `attrs`
+  # for fixed-point arguments support in the future.
+  transformDrv =
+    drv:
+    extendDerivation (
+      drv.disabled
+      -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+    ) { } (toPythonModule drv);
+
 in
-extendDerivation (
-  disabled -> throw "${name} not supported for interpreter ${python.executable}"
-) { } self
+transformDrv self
