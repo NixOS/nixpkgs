@@ -73,6 +73,14 @@ in
               SizeMinBytes = if config.nixpkgs.hostPlatform.isx86_64 then "64M" else "96M";
             };
           };
+          "swap" = {
+            repartConfig = {
+              Type = "swap";
+              Format = "swap";
+              SizeMinBytes = "10M";
+              SizeMaxBytes = "10M";
+            };
+          };
           "root" = {
             storePaths = [ config.system.build.toplevel ];
             repartConfig = {
