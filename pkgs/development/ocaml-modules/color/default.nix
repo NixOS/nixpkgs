@@ -22,10 +22,14 @@ buildDunePackage rec {
     gg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts between different color formats";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fgaz ];
+    longDescription = ''
+      Library that converts between different color formats. Right now it deals with RGB[A], HSL[A], OkLab, and Oklch formats. All those format convert to and from [Gg.Color.t]
+    '';
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fgaz ];
     homepage = "https://github.com/anuragsoni/color";
+    changelog = "https://github.com/anuragsoni/color/blob/${version}/CHANGES.md";
   };
 }
