@@ -16,7 +16,7 @@
 }:
 
 let
-  goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo123Module; };
 
@@ -49,11 +49,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.23.4";
+  version = "1.23.5";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-rTRaxCHpCBQpOpaZzKGd1SOCUcP2h5gLvK4oSVsmNTE=";
+    hash = "sha256-pvP0u9PmvdYm95tmjyEvu1ZJ2vdQhPt5tnigrk2XQjs=";
   };
 
   strictDeps = true;
