@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  httpx,
   iconv,
   pytestCheckHook,
   pythonOlder,
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   version = "2.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "daggaz";
@@ -25,14 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-/GDEC/Poy84TGuXM34OW4+K/qMJELFfO+lNQ5M5VsdI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
+  dependencies = [ json-stream-rs-tokenizer ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
-  propagatedBuildInputs = [
-    requests
-    json-stream-rs-tokenizer
-  ];
+  optional-dependencies = {
+    httpx = [ httpx ];
+    requests = [ requests ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -43,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Streaming JSON parser";
     homepage = "https://github.com/daggaz/json-stream";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
