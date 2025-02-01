@@ -206,6 +206,11 @@ in
 }@attrs:
 
 let
+  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
+  self = (
+    stdenv.mkDerivation (
+      finalAttrs:
+      let
   format' =
     assert (pyproject != null) -> (format == null);
     if pyproject != null then
@@ -270,10 +275,7 @@ let
 
   isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
-  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = (
-    stdenv.mkDerivation (
-      finalAttrs:
+      in
       (cleanAttrs attrs)
       // {
 
