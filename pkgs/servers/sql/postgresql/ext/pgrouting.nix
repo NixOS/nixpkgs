@@ -11,7 +11,7 @@
 
 buildPostgresqlExtension rec {
   pname = "pgrouting";
-  version = "3.7.0";
+  version = "3.7.1";
 
   nativeBuildInputs = [
     cmake
@@ -23,7 +23,7 @@ buildPostgresqlExtension rec {
     owner = "pgRouting";
     repo = "pgrouting";
     rev = "v${version}";
-    hash = "sha256-IwH8bEdyJyPMFYtCfWLRr+jVmS5sOr5QFOhGykGPYh4=";
+    hash = "sha256-tK1JLWPtFR9nn5SULsPdpC3TXdmWAqq8QGDuD0bkElc=";
   };
 
   meta = with lib; {
