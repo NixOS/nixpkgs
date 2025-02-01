@@ -2,7 +2,6 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchCrate,
   fetchFromGitHub,
   openssl,
   pkg-config,
@@ -17,10 +16,11 @@ rustPlatform.buildRustPackage rec {
   pname = "nixci";
   version = "1.0.0";
 
-  src = fetchCrate {
-    inherit version;
-    pname = "nixci";
-    hash = "sha256-49I09hXYoVo6vzv1b6mkeiFwzfj6g1SkXTL/tCEdOYc=";
+  src = fetchFromGitHub {
+    owner = "srid";
+    repo = "nixci";
+    tag = version;
+    hash = "sha256-0VvZFclqwAcKN95eusQ3lgV0pp1NRUDcVXpVUC0P4QI=";
   };
 
   cargoHash = "sha256-trmWeYJNev7jYJtGp9XR/emmQiiI94NM0cPFrAuD7m0=";
@@ -53,15 +53,15 @@ rustPlatform.buildRustPackage rec {
   env.DEVOUR_FLAKE = fetchFromGitHub {
     owner = "srid";
     repo = "devour-flake";
-    rev = "v4";
+    tag = "v4";
     hash = "sha256-Vey9n9hIlWiSAZ6CCTpkrL6jt4r2JvT2ik9wa2bjeC0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Define and build CI for Nix projects anywhere";
     homepage = "https://github.com/srid/nixci";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       srid
       shivaraj-bh
       rsrohitsingh682
