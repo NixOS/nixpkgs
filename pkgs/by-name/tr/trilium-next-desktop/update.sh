@@ -18,6 +18,8 @@ setKV ./package.nix linuxSource.sha256 $sha256_linux64
 setKV ./package.nix darwinSource.sha256 $sha256_darwin64
 
 # Update server
-sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-server-linux-x64.tar.xz)
+sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-x64-v${version}.tar.xz)
+sha256_linux64_server_arm=$(nix-prefetch-url --quiet https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-arm64-v${version}.tar.xz)
 setKV ../trilium-next-server/package.nix version $version
-setKV ../trilium-next-server/package.nix serverSource.sha256 $sha256_linux64_server
+setKV ../trilium-next-server/package.nix serverSource_x64.sha256 $sha256_linux64_server
+setKV ../trilium-next-server/package.nix serverSource_arm64.sha256 $sha256_linux64_server_arm
