@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   poetry-core,
   poetry-dynamic-versioning,
@@ -42,6 +41,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "protobuf"
     "python-bidi"
+    "unicodedata2"
     "youseedee"
   ];
 
