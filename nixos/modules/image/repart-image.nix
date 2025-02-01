@@ -10,6 +10,7 @@
 , mypy
 , systemd
 , fakeroot
+, util-linux
 
   # filesystem tools
 , dosfstools
@@ -108,6 +109,7 @@ in
 
   nativeBuildInputs = [
     systemd
+    util-linux
     fakeroot
   ] ++ lib.optionals (compression.enable) [
     compressionPkg
@@ -153,7 +155,7 @@ in
     runHook preBuild
 
     echo "Building image with systemd-repart..."
-    fakeroot systemd-repart \
+    unshare --map-root-user fakeroot systemd-repart \
       ''${systemdRepartFlags[@]} \
       ${imageFileBasename}.raw \
       | tee repart-output.json
