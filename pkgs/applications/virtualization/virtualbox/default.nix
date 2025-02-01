@@ -375,7 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
     # the source code (see postPatch).
     + optionalString (!headless && !enableHardening) ''
       wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
-         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
+         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL vulkan-loader ]}"
     '';
 
   passthru = {
