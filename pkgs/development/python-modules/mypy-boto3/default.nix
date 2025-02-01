@@ -130,8 +130,8 @@ rec {
       "sha256-yom2bJBipo+ywhlUjueeELrTV+cYW43zVbdKIYvjHGg=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.36.0"
-      "sha256-mmoqRFyHOcY9oVufUP5t9OlhUVQt1Fu5zaIC6iLiBt8=";
+    buildMypyBoto3Package "appstream" "1.36.10"
+      "sha256-nLO7lRp3s0m1s6CMcEhpTAXpqhC+fgdXuus0AZhXTts=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.36.8"
@@ -454,12 +454,12 @@ rec {
       "sha256-q6u1MssNxk38vE2Gy/508A5bhdUrqxH/Mq3DeBFVfqA=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.36.9"
-      "sha256-fcK3kDTHtZ1wsCJ1LL3kd3+tz0ukEejeW/badxJQvBg=";
+    buildMypyBoto3Package "ecr" "1.36.10"
+      "sha256-CRPZzCV+iTXSR/7aiqLe1+r+gAjE4kN+YhXy53iTKmg=";
 
   mypy-boto3-ecr-public =
-    buildMypyBoto3Package "ecr-public" "1.36.9"
-      "sha256-PDee5f426UyeflcN83ETtwpUmIY6AqqGu7Q6JdOnazM=";
+    buildMypyBoto3Package "ecr-public" "1.36.10"
+      "sha256-ecc65BMq6HfjT+gI6EdN+5IzYUBawTST8Arbx5+I5OE=";
 
   mypy-boto3-ecs =
     buildMypyBoto3Package "ecs" "1.36.1"
@@ -890,8 +890,8 @@ rec {
       "sha256-0RThm2DxaPHRdCtIAvHQvN8y3jU6B5qYQALgl4tWUck=";
 
   mypy-boto3-mediatailor =
-    buildMypyBoto3Package "mediatailor" "1.36.0"
-      "sha256-2sp9kDuD7JtDL02AJNG0o5jEkQZKs4nCQoOtT8HqDJ0=";
+    buildMypyBoto3Package "mediatailor" "1.36.10"
+      "sha256-gKM1GZAF4eawEjZA+zjJgi3Fbf6ydtgVks7t1QZXq2Y=";
 
   mypy-boto3-medical-imaging =
     buildMypyBoto3Package "medical-imaging" "1.36.0"
@@ -1378,8 +1378,8 @@ rec {
       "sha256-eciWk3er9XomkPcP8vNGta2L2+vRwL4ytUVjmR1gDBQ=";
 
   mypy-boto3-verifiedpermissions =
-    buildMypyBoto3Package "verifiedpermissions" "1.36.0"
-      "sha256-GehPDR8OrIy2MphBTVTYtVl8XUfBu3UnvbrZopoTL+4=";
+    buildMypyBoto3Package "verifiedpermissions" "1.36.10"
+      "sha256-ddf14Wu/CBtG3BtoDDxaP2ALv2aRntAdwXtZvVrHAp4=";
 
   mypy-boto3-voice-id =
     buildMypyBoto3Package "voice-id" "1.36.0"
