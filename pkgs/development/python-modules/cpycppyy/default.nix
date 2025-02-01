@@ -18,7 +18,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    inherit pname version;
     owner = "wlav";
     repo = pname;
     rev = "8bd9d9e10d658a33294a4ba9b2251bf1f9223469";
@@ -55,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    cmake ../${pname}-${version}
+    cmake ./
     make
     cp libcppyy.so $out/${python3.sitePackages}/
   '';
