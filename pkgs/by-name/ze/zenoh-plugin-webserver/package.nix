@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zenoh-plugin-webserver";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-webserver";
     tag = version;
-    hash = "sha256-DduYSy8jO0LtpEadhBhVFW5uht9LFmTbmSJ0jGTh/TQ=";
+    hash = "sha256-+2ta3LdT1YwRs62dyrbmJDCfKDhpWdig1bX0Qq8EoCY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YFCu3e3SGAelAneJ/LwXZy3c6kz76qG4B8tsBVOPynI=";
+  cargoHash = "sha256-5gN1BzNqB4xWV0a2Qh1PLzw+bOnln9Nua1+NGes6jaQ=";
 
   meta = {
     description = "Implements an HTTP server mapping URLs to zenoh paths";
