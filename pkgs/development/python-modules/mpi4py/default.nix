@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
     rev = version;
-    hash = "sha256-pH4z+hyoFOSAUlXv9EKO54/SM5HyLxv7B+18xBidH2Q=";
+    hash = "sha256-hsP4aonjiBit2un6EQWQxF+lVjsnMFFqLaAOqBWAzgo=";
   };
 
   build-system = [
@@ -37,10 +37,6 @@ buildPythonPackage rec {
     mpiCheckPhaseHook
   ];
   doCheck = true;
-  disabledTestPaths = [
-    # Almost all tests in this file fail (TODO: Report about this upstream..)
-    "test/test_spawn.py"
-  ];
 
   passthru = {
     inherit mpi;
