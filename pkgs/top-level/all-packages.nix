@@ -4741,10 +4741,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  poedit = callPackage ../tools/text/poedit {
-    wxGTK32 = wxGTK32.override { withWebKit = true; };
-  };
-
   polaris = callPackage ../servers/polaris { };
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
@@ -17811,7 +17807,7 @@ with pkgs;
 
   nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 
-  nixci = callPackage ../tools/nix/nixci {
+  nixci = callPackage ../by-name/ni/nixci/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration IOKit;
   };
 

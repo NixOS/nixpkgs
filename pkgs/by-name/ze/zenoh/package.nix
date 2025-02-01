@@ -8,17 +8,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zenoh";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh";
     rev = version;
-    hash = "sha256-5lFs/t1Otmp8C0j5LQN/GV19ukfLq4alBpgwsA934FU=";
+    hash = "sha256-X/jUANTwuOHIA+m8LB4UuJDJ0PwZuMQHtSdgSPiPYNI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-A0xjYn9+Xt+K1U1Z1J8mAegw4mR4cB5T2mYIOBu4AbE=";
+  cargoHash = "sha256-hCon4ydLLwvdglVfNn+eWMbDaTpcPZxzLWINPULYZwI=";
 
   cargoBuildFlags = [
     "--workspace"
