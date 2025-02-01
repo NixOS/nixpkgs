@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zeM6/x2vjZ2IL+nZz1WBf5yY4C6ovmxyvgVLD54BKVc=";
   };
 
-  cargoHash = "sha256-VYT6wV59fraAoJgR/i6GlO8s7LUoehGtxPAggEL1eLo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/n41JGypLsFd02tW5WuxXsATn7/I09N+dOiq0H0QDug=";
 
   # swayws does not have any tests
   doCheck = false;

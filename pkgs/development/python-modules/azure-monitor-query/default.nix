@@ -1,10 +1,10 @@
 {
+  lib,
   azure-cli,
   azure-core,
   buildPythonPackage,
   fetchPypi,
   isodate,
-  lib,
   setuptools,
   typing-extensions,
 }:
@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "azure-monitor-query";
   version = "1.4.1";
+
   pyproject = true;
 
   src = fetchPypi {
