@@ -45,7 +45,9 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   configurePhase = ''
+    runHook preConfigure
     sed -i "s|%cflags_placeholder%|return '${lib.optionalString stdenv.hostPlatform.isLinux "-pthread"} -std=c++2a'|" setup.py
+    runHook postConfigure
   '';
 
   pipInstallFlags = [
