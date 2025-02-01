@@ -29,17 +29,14 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  postInstall =
-    ''
-      $out/bin/gum man > gum.1
-      installManPage gum.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd gum \
-        --bash <($out/bin/gum completion bash) \
-        --fish <($out/bin/gum completion fish) \
-        --zsh <($out/bin/gum completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/gum man > gum.1
+    installManPage gum.1
+    installShellCompletion --cmd gum \
+      --bash <($out/bin/gum completion bash) \
+      --fish <($out/bin/gum completion fish) \
+      --zsh <($out/bin/gum completion zsh)
+  '';
 
   meta = with lib; {
     description = "Tasty Bubble Gum for your shell";
