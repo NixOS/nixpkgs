@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     tag = version;
-    hash = "sha256-9y0M2CYG7tFdT9nAcQLhgvTKeaxoFHAVihM2Rj+0N34=";
+    hash = "sha256-poW8CN8Ewc86mJ9YfhU8E2DEIz/GdqTdMS0QQ3YZQ4o=";
   };
 
   build-system = [ hatchling ];
