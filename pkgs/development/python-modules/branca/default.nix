@@ -42,6 +42,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Some tests require a browser
     "tests/test_utilities.py"
+    "tests/test_iframe.py"
   ];
 
   disabledTests = [
