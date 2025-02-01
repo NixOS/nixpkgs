@@ -407,27 +407,27 @@ in
         };
 
       # Preferences are converted into a policy
-      programs.firefox.policies = {
-        DisableAppUpdate = true;
-        Preferences = (
-          builtins.mapAttrs (_: value: {
-            Value = value;
-            Status = cfg.preferencesStatus;
-          }) cfg.preferences
-        );
-        ExtensionSettings = lib.mkMerge [
-          (builtins.listToAttrs (
-            builtins.map (
-              lang:
-              lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-                installation_mode = "normal_installed";
-                install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-              }
-            ) cfg.languagePacks
-          ))
+      programs.firefox = {
+        addons = map (lang: {
+          id = "langpack-${lang}@firefox.mozilla.org";
+          settings = {
+            installation_mode = "normal_installed";
+            install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+          };
+        }) cfg.languagePacks;
 
-          (lib.listToAttrs (map (addon: lib.nameValuePair addon.id addon.settings) cfg.addons))
-        ];
+        policies = {
+          DisableAppUpdate = true;
+          Preferences = (
+            builtins.mapAttrs (_: value: {
+              Value = value;
+              Status = cfg.preferencesStatus;
+            }) cfg.preferences
+          );
+          ExtensionSettings = lib.listToAttrs (
+            map (addon: lib.nameValuePair addon.id addon.settings) cfg.addons
+          );
+        };
       };
     };
 
