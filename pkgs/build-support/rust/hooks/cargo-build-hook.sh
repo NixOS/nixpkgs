@@ -19,7 +19,7 @@ cargoBuildHook() {
 
     local flagsArray=(
         "-j" "$NIX_BUILD_CORES"
-        "--target" "@rustHostPlatformSpec@"
+        "--target" "@rustcTarget@"
         "--offline"
     )
 
@@ -38,7 +38,7 @@ cargoBuildHook() {
     concatTo flagsArray cargoBuildFlags
 
     echoCmd 'cargoBuildHook flags' "${flagsArray[@]}"
-    @setEnv@ cargo build "${flagsArray[@]}"
+    cargo build "${flagsArray[@]}"
 
     if [ -n "${buildAndTestSubdir-}" ]; then
         popd
