@@ -42,7 +42,7 @@ let
       { }
   );
 in
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
   version = "0.29";
 
@@ -98,7 +98,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-uma3evj/81qz/+1+poIl0FJqWe1e2Ay0Jm446CKOGP0=";
+  vendorHash = "sha256-+twzmUayrAj65ixEsweHM6886nN/6PYUCTSLMc+EmVE=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
