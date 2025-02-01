@@ -14,8 +14,9 @@
   brotli,
   lz4,
   zstd,
-  libusb1,
   pcre2,
+  fmt,
+  udev,
 }:
 
 let
@@ -24,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "35.0.1";
+  version = "35.0.2";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-ZUAwx/ltJdciTNaGH6wUoEPPHTmA9AKIzfviGflP+vk=";
+    hash = "sha256-0sMiIoAxXzbYv6XALXYytH42W/4ud+maNWT7ZXbwQJc=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     perl
     go
   ];
+
   buildInputs = [
     protobuf
     zlib
@@ -45,16 +47,25 @@ stdenv.mkDerivation rec {
     brotli
     lz4
     zstd
-    libusb1
     pcre2
+    fmt
+    udev
   ];
-  propagatedBuildInputs = [ pythonEnv ];
+
+  dependencies = [ pythonEnv ];
 
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
   '';
 
-  meta = with lib; {
+  # android-tools uses libusb API that has not been released yet
+  # use newer bundled libusb until the new libusb release arrive
+  cmakeFlags = [
+    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" true)
+    (lib.cmakeBool "ANDROID_TOOLS_USE_BUNDLED_LIBUSB" true)
+  ];
+
+  meta = {
     description = "Android SDK platform tools";
     longDescription = ''
       Android SDK Platform-Tools is a component for the Android SDK. It
@@ -74,11 +85,11 @@ stdenv.mkDerivation rec {
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       unicode-dfs-2015
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }
