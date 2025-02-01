@@ -12,6 +12,7 @@
   pkg-config,
   pycountry,
   pytest-asyncio,
+  pytest-codspeed,
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "11.0.0";
+  version = "11.1.0b2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -31,12 +32,12 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = version;
-    hash = "sha256-G8NLirz81+b2YJBvxmfCEPpy2M9MMvs3n6JmdXR+3oc=";
+    hash = "sha256-nvuIjVf7r2CcuHWyIox1P8nuBB4DReV6jrwr4SLJhHA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-mpm5TYYWb8hENhRPAiE9KbprdtdlKZx12cLZQ+UbziE=";
+    hash = "sha256-oSvosZsGM0R5DRc43KvCNcqNIh4gbvzqgnrIJjAN+/k=";
   };
 
   pythonRelaxDeps = [
@@ -49,13 +50,9 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    xz
-  ];
+  buildInputs = [ xz ];
 
   dependencies = [
     aiohttp
@@ -71,6 +68,7 @@ buildPythonPackage rec {
     docker
     pycountry
     pytest-asyncio
+    pytest-codspeed
     pytestCheckHook
     testfixtures
   ];
