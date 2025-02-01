@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   httpx,
-  iconv,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
   dependencies = [ json-stream-rs-tokenizer ];
 
