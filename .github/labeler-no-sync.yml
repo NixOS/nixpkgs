@@ -1,13 +1,12 @@
 # This file is used by .github/workflows/labels.yml
 # This version uses `sync-labels: false`, meaning that a non-match will NOT remove the label
 
-"backport: release-24.11":
+"backport release-24.11":
   - any:
     - changed-files:
       - any-glob-to-any-file:
         - .github/workflows/*
-        - ci/**/*
-        - "!ci/OWNERS"
+        - ci/**/*.*
 
 "6.topic: policy discussion":
   - any:

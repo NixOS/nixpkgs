@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${version}";
-    hash = "sha256-Jws6AW0rj6N/MOoaxK6N7KaPkjCYN47Il0xzyKZ7Wc0=";
+    hash = "sha256-TeoM8fKSZuV+2XnkwSz7dJh4piGU8mP1vQfCbRxJ3/Q=";
   };
 
   nativeBuildInputs =
