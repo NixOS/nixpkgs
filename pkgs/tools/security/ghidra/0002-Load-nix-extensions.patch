@@ -1,0 +1,15 @@
+diff --git a/Ghidra/Framework/Utility/src/main/java/utility/application/ApplicationUtilities.java b/Ghidra/Framework/Utility/src/main/java/utility/application/ApplicationUtilities.java
+index ea12a661f0..da7779b07f 100644
+--- a/Ghidra/Framework/Utility/src/main/java/utility/application/ApplicationUtilities.java
++++ b/Ghidra/Framework/Utility/src/main/java/utility/application/ApplicationUtilities.java
+@@ -36,6 +36,10 @@ public class ApplicationUtilities {
+ 	 */
+ 	public static Collection<ResourceFile> findDefaultApplicationRootDirs() {
+ 		Collection<ResourceFile> applicationRootDirs = new ArrayList<>();
++		String nixGhidraHome = System.getenv("NIX_GHIDRAHOME");
++		if (nixGhidraHome != null) {
++			applicationRootDirs.add(new ResourceFile(nixGhidraHome));
++		};
+ 		ResourceFile applicationRootDir = findPrimaryApplicationRootDir();
+ 		if (applicationRootDir != null) {
+ 			applicationRootDirs.add(applicationRootDir);

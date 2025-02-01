@@ -1,0 +1,53 @@
+Removes the deprecated and removed `dvdcss_interface_2` libdvdcss function.
+
+This does not change any functionality; it only modifies the printing of software version information.
+--- a/cssdec.c
++++ b/cssdec.c
+@@ -102,8 +102,8 @@ int main( int argc, char *argv[] )
+ 			b_keyonly = 1;
+ 			break;
+ 		case 'V':
+-			printf( "%s version %s (libdvdcss version %s)\n",
+-			  progname, progversion, dvdcss_interface_2 );
++			printf( "%s version %s\n",
++			  progname, progversion );
+ 			exit( EX_SUCCESS );
+ 			break;
+ 		case '?':
+@@ -126,8 +126,8 @@ int main( int argc, char *argv[] )
+ 	if( argc >= 3 ) end = (int)strtol( argv[2], (char **)NULL, 0 );
+ 
+ 	/* Initialize libdvdcss */
+-	printe( 2, "%s version %s (libdvdcss version %s)",
+-	  progname, progversion, dvdcss_interface_2 );
++	printe( 2, "%s version %s",
++	  progname, progversion );
+ 	dvdcss = dvdcss_open( (char *)dvdfile );
+ 	if( dvdcss == NULL )
+ 	{
+diff --git a/dvdimgdecss.c b/dvdimgdecss.c
+index 0b7006d..b7d251a 100644
+--- a/dvdimgdecss.c
++++ b/dvdimgdecss.c
+@@ -157,8 +157,8 @@ int main( int argc, char *argv[] )
+ 			dvdread_decrypt = 1;
+ 			break;
+ 		case 'V':
+-			printf( "%s version %s (libdvdcss version %s)\n",
+-			  progname, progversion, dvdcss_interface_2 );
++			printf( "%s version %s\n",
++			  progname, progversion );
+ 			exit( EX_SUCCESS );
+ 			break;
+ 		case '?':
+@@ -180,8 +180,8 @@ int main( int argc, char *argv[] )
+ 	if( !imgfile ) verbosity++;
+ 
+ 	/* Open the DVD */
+-	printe( 2, "%s: version %s (libdvdcss version %s)\n",
+-	  progname, progversion, dvdcss_interface_2 );
++	printe( 2, "%s: version %s\n",
++	  progname, progversion );
+ 	dvdcss = dvdcss_open( dvdfile );
+ 	if( dvdcss == NULL ) {
+ 		printe( 1, "opening of the DVD (%s) with libdvdcss failed\n", dvdfile );

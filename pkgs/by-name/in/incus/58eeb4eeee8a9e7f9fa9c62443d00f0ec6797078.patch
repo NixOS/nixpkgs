@@ -1,0 +1,33 @@
+From 58eeb4eeee8a9e7f9fa9c62443d00f0ec6797078 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@stgraber.org>
+Date: Fri, 6 Sep 2024 17:10:01 -0400
+Subject: [PATCH] incusd/instance/qemu: Force threads I/O mode for
+ unsafe/writeback
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The default "native" aioMode requires direct I/O which is incompatible
+with unsafe/writeback.
+
+Signed-off-by: Stéphane Graber <stgraber@stgraber.org>
+---
+ internal/server/instance/drivers/driver_qemu.go | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/internal/server/instance/drivers/driver_qemu.go b/internal/server/instance/drivers/driver_qemu.go
+index 9609b73c1b..a5a4944d40 100644
+--- a/internal/server/instance/drivers/driver_qemu.go
++++ b/internal/server/instance/drivers/driver_qemu.go
+@@ -4088,9 +4088,11 @@ func (d *qemu) addDriveConfig(qemuDev map[string]string, bootIndexes map[string]
+ 	noFlushCache := false // Don't ignore any flush requests for the device.
+ 
+ 	if cacheMode == "unsafe" {
++		aioMode = "threads"
+ 		directCache = false
+ 		noFlushCache = true
+ 	} else if cacheMode == "writeback" {
++		aioMode = "threads"
+ 		directCache = false
+ 	}
+ 

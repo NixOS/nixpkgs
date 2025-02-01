@@ -1,0 +1,30 @@
+Fix build with glibc 2.34.  Adapted from:
+https://github.com/gcc-mirror/gcc/commit/331763de7d4850702a0f67298f36017c73cdb103
+--- a/gcc/ada/init.c
++++ b/gcc/ada/init.c
+@@ -579,12 +579,8 @@
+ 
+ #ifndef __ia64__
+ #define HAVE_GNAT_ALTERNATE_STACK 1
+-/* This must be in keeping with System.OS_Interface.Alternate_Stack_Size.
+-   It must be larger than MINSIGSTKSZ and hopefully near 2 * SIGSTKSZ.  */
+-# if 16 * 1024 < MINSIGSTKSZ
+-#  error "__gnat_alternate_stack too small"
+-# endif
+-char __gnat_alternate_stack[16 * 1024];
++/* This must be in keeping with System.OS_Interface.Alternate_Stack_Size.  */
++char __gnat_alternate_stack[32 * 1024];
+ #endif
+ 
+ #ifdef __XENO__
+--- a/gcc/ada/s-osinte-linux.ads
++++ b/gcc/ada/s-osinte-linux.ads
+@@ -328,7 +328,7 @@
+       oss : access stack_t) return int;
+    pragma Import (C, sigaltstack, "sigaltstack");
+ 
+-   Alternate_Stack_Size : constant := 16 * 1024;
++   Alternate_Stack_Size : constant := 32 * 1024;
+    --  This must be in keeping with init.c:__gnat_alternate_stack
+ 
+    Alternate_Stack : aliased char_array (1 .. Alternate_Stack_Size);

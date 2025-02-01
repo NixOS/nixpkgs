@@ -1,0 +1,66 @@
+From 70f209ad582121750d54e3692b1e62c7f36af6f9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 7 May 2018 14:09:06 +0200
+Subject: [PATCH] Adapt to changes in pcre-8.42
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+pcre-8.42 replaced internal real_pcre with real_pcre8_or_16. This
+broke monotone that decided not to use the public "pcre" type.
+
+This patch adapts monotone to the pcre >= 8.42.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/pcrewrap.cc | 4 ++--
+ src/pcrewrap.hh | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/pcrewrap.cc b/src/pcrewrap.cc
+index 8c0c9d1..30bafff 100644
+--- a/src/pcrewrap.cc
++++ b/src/pcrewrap.cc
+@@ -74,7 +74,7 @@ get_capturecount(void const * bd)
+ namespace pcre
+ {
+   typedef map<char const *,
+-              pair<struct real_pcre const *, struct pcre_extra const *> >
++              pair<struct real_pcre8_or_16 const *, struct pcre_extra const *> >
+               regex_cache;
+ 
+   class regex_cache_manager
+@@ -86,7 +86,7 @@ public:
+       }
+ 
+     void store(char const * pattern,
+-               pair<struct real_pcre const *, struct pcre_extra const *>
++               pair<struct real_pcre8_or_16 const *, struct pcre_extra const *>
+                data)
+       {
+         cache[pattern] = data;
+diff --git a/src/pcrewrap.hh b/src/pcrewrap.hh
+index 3359cdd..5008e88 100644
+--- a/src/pcrewrap.hh
++++ b/src/pcrewrap.hh
+@@ -18,7 +18,7 @@
+ // definitions and so we don't actually expose it here. Unfortunately, this
+ // means we have to hope this pair of forward declarations will not change...
+ 
+-struct real_pcre;
++struct real_pcre8_or_16;
+ struct pcre_extra;
+ 
+ namespace pcre
+@@ -61,7 +61,7 @@ namespace pcre
+     regex & operator=(regex const &);
+ 
+     // data
+-    struct real_pcre const * basedat;
++    struct real_pcre8_or_16 const * basedat;
+     struct pcre_extra const * extradat;
+ 
+     // used by constructors
+-- 
+2.14.3
+

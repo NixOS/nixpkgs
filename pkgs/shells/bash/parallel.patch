@@ -1,0 +1,12 @@
+From https://savannah.gnu.org/patch/index.php?10373
+  https://savannah.gnu.org/patch/download.php?file_id=54964
+--- Makefile.in
++++ Makefile.in
+@@ -1432,6 +1432,7 @@ siglist.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
+ subst.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
+ test.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
+ trap.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
++unwind_prot.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
+ variables.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
+ version.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
+ xmalloc.o: bashintl.h ${LIBINTL_H} $(BASHINCDIR)/gettext.h
