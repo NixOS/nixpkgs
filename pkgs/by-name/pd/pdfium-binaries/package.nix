@@ -2,8 +2,10 @@
   lib,
   fetchzip,
   stdenv,
+  python3Packages,
 }:
 let
+  # also update rev of headers in python3Packages.pypdfium2
   version = "6968";
   src =
     let
@@ -41,7 +43,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (python3Packages) pypdfium2;
+    };
+  };
 
   meta = {
     description = "Binary distribution of PDFium";
