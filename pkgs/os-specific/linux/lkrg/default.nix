@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
+
 let
   isKernelRT = (kernel.structuredExtraConfig ? PREEMPT_RT) && (kernel.structuredExtraConfig.PREEMPT_RT == lib.kernel.yes);
 in
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
