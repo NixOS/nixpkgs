@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>ProjectReferencesTest.Library</PackageId>
+    </PropertyGroup>
+</Project>

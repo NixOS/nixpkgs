@@ -1,0 +1,15 @@
+diff --git a/distribution/flare.desktop.in b/distribution/flare.desktop.in
+index c740e2a6..eef91a89 100644
+--- a/distribution/flare.desktop.in
++++ b/distribution/flare.desktop.in
+@@ -14,8 +14,8 @@ Comment[fr]=Un jeu de rôle d'action monojoueur en 2D isométrique
+ Comment[gl]=Xogo individual de acción e rol cunha vista isométrica en dúas dimensións.
+ Comment[ru]=Изометрический ролевой боевик для одного игрока
+ Comment[uk]=Ізометричний рольовий екшн (Action/RPG) для одного гравця
+-TryExec=@FLARE_EXECUTABLE_PATH@
+-Exec=@FLARE_EXECUTABLE_PATH@
++TryExec=flare
++Exec=flare
+ Categories=Game;RolePlaying;
+ Icon=flare
+ Terminal=false

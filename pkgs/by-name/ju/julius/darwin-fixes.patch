@@ -1,0 +1,49 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 038a34ba..d46b9258 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -669,16 +669,14 @@ endif()
+ if(APPLE)
+     # generating a macOS icns file (see https://stackoverflow.com/a/20703594)
+     add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/res/julius.icns
+-        COMMAND mkdir -p julius.iconset
+-        COMMAND sips -z 16 16    julius_256.png --out julius.iconset/icon_16x16.png
+-        COMMAND sips -z 32 32    julius_256.png --out julius.iconset/icon_16x16@2x.png
+-        COMMAND sips -z 32 32    julius_256.png --out julius.iconset/icon_32x32.png
+-        COMMAND sips -z 64 64    julius_256.png --out julius.iconset/icon_32x32@2x.png
+-        COMMAND sips -z 128 128  julius_256.png --out julius.iconset/icon_128x128.png
+-        COMMAND sips -z 256 256  julius_256.png --out julius.iconset/icon_128x128@2x.png
+-        COMMAND sips -z 256 256  julius_256.png --out julius.iconset/icon_256x256.png
+-        COMMAND sips -z 512 512  julius_512.png --out julius.iconset/icon_256x256@2x.png
+-        COMMAND iconutil -c icns julius.iconset
++        COMMAND mkdir julius.iconset
++        COMMAND convert julius_256.png -resize 16x16 julius.iconset/icon_16.png
++        COMMAND convert julius_256.png -resize 32x32 julius.iconset/icon_32.png
++        COMMAND convert julius_256.png -resize 64x64 julius.iconset/icon_64.png
++        COMMAND convert julius_256.png -resize 128x128 julius.iconset/icon_128.png
++        COMMAND cp julius_256.png julius.iconset/icon_256.png
++        COMMAND cp julius_512.png julius.iconset/icon_512.png
++        COMMAND png2icns julius.icns julius.iconset/icon_{16,32,64,128,256,512}.png
+         COMMAND rm -R julius.iconset
+         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/res)
+     set_source_files_properties(${PROJECT_SOURCE_DIR}/res/julius.icns PROPERTIES
+@@ -687,7 +685,6 @@ if(APPLE)
+     # setting variables that will populate Info.plist
+     set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.github.bvschaik.julius")
+     set(MACOSX_BUNDLE_BUNDLE_NAME ${USER_FRIENDLY_NAME})
+-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.10" CACHE STRING "Minimum OS X deployment version" FORCE)
+     set(MACOSX_BUNDLE_ICON_FILE "julius.icns")
+     set(MACOSX_BUNDLE_BUNDLE_VERSION
+         "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${VERSION_REVISION}")
+diff --git a/cmake/FindSDL2_mixer.cmake b/cmake/FindSDL2_mixer.cmake
+index 29cc683c..1fa28a1f 100644
+--- a/cmake/FindSDL2_mixer.cmake
++++ b/cmake/FindSDL2_mixer.cmake
+@@ -93,7 +93,6 @@ ELSE()
+         PATH_SUFFIXES include include/SDL2
+         PATHS ${SDL2_SEARCH_PATHS}
+       )
+-      set(SDL2_MIXER_INCLUDE_DIR "${SDL2_MIXER_INCLUDE_DIR}/Headers")
+     endif()
+ 
+     if(NOT APPLE OR NOT EXISTS "${SDL2_MIXER_INCLUDE_DIR}/SDL_mixer.h")

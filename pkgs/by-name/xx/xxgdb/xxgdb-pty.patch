@@ -1,0 +1,84 @@
+--- xxgdb-1.12-org/calldbx.c	2012-10-26 17:17:49.810750909 -0700
++++ xxgdb-1.12/calldbx.c	2012-10-26 17:53:59.209918816 -0700
+@@ -69,6 +69,12 @@
+  *    create_io_window(): create an io window for gdb to use 
+  */
+ 
++#ifdef linux
++#ifndef _GNU_SOURCE
++#define _GNU_SOURCE
++#endif
++#endif
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -126,6 +132,13 @@
+ {
+     int master;
+     
++#ifdef _POSIX_SOURCE
++    if ((master = posix_openpt (O_RDWR|O_NOCTTY)) < 0) {
++	perror("posix_openpt failed:");
++    } else {
++	return master;
++    }
++#else
+ #ifdef SVR4				/* (MJH) Use STREAMS */
+ 
+     if((master = open(MASTER_CLONE, O_RDWR)) < 0)
+@@ -152,6 +165,7 @@
+ 	}
+ #endif
+ #endif /* SVR4 */
++#endif /*  _POSIX_SOURCE */
+ 
+ #ifdef GDB
+     fprintf(stderr, "xxgdb: all ptys in use\n");
+@@ -167,7 +181,28 @@
+ {
+     int slave;
+ 
+-#ifdef SVR4				/* (MJH) */
++#ifdef _POSIX_SOURCE
++    char *slave_name = ptsname (master);
++    if (slave_name == NULL) {
++	perror ("Pseudo-tty slave");
++	exit (2);
++    } // end if
++    if (grantpt (master) < 0) {
++	perror ("grantpt error");
++	exit (3);
++    }
++    if (unlockpt (master) < 0) {
++	perror ("unlockpt error");
++	exit (4);
++    }
++    if ((slave = open (slave_name, O_RDWR)) < 0) {
++	perror (slave_name);
++	exit (5);
++    } // end if
++    return slave;
++#else
++#ifdef SVR4		
++	/* (MJH) */
+     char *slave_name = "unknown";
+     extern char *ptsname(int master);
+     void (*handler)();
+@@ -194,6 +229,7 @@
+ 	    }
+     return slave;
+ #endif /* SVR4 */
++#endif /*  _POSIX_SOURCE */
+ }
+ 
+ #ifdef CREATE_IO_WINDOW 
+@@ -230,7 +266,7 @@
+     {
+ 	/* child */
+ 	/* printf("xterm xterm -l -e xxgdbiowin\n");*/
+-	if (execlp("xterm", "xterm", "-e", "xxgdbiowin", 0))
++	if (execlp("xterm", "xterm", "-e", "xxgdbiowin", NULL))
+ 	{
+ 	    printf("exec of 'xterm -e xxgdbiowin' fails\n");
+ 	    unlink("/tmp/iowindowtty");

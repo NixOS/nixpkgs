@@ -1,0 +1,30 @@
+diff --git a/libs/JUCE/modules/juce_audio_devices/native/juce_JackAudio_linux.cpp b/libs/JUCE/modules/juce_audio_devices/native/juce_JackAudio_linux.cpp
+index 4cce7016f..25554a7cd 100644
+--- a/libs/JUCE/modules/juce_audio_devices/native/juce_JackAudio_linux.cpp
++++ b/libs/JUCE/modules/juce_audio_devices/native/juce_JackAudio_linux.cpp
+@@ -291,7 +291,6 @@ public:
+         juce::jack_on_info_shutdown (client, infoShutdownCallback, this);
+         juce::jack_set_xrun_callback (client, xrunCallback, this);
+         juce::jack_activate (client);
+-        deviceIsOpen = true;
+ 
+         if (! inputChannels.isZero())
+         {
+@@ -336,6 +335,7 @@ public:
+         }
+ 
+         updateActivePorts();
++        deviceIsOpen = true;
+ 
+         return lastError;
+     }
+@@ -525,7 +525,8 @@ private:
+     static void portConnectCallback (jack_port_id_t, jack_port_id_t, int, void* arg)
+     {
+         if (JackAudioIODevice* device = static_cast<JackAudioIODevice*> (arg))
+-            device->mainThreadDispatcher.updateActivePorts();
++            if (device->isOpen())
++                device->mainThreadDispatcher.updateActivePorts();
+     }
+ 
+     static void threadInitCallback (void* /* callbackArgument */)

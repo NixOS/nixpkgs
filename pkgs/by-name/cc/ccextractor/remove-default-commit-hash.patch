@@ -1,0 +1,14 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d7fdda02e3...2738cab631 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -24,9 +24,6 @@
+             OUTPUT_VARIABLE GIT_COMMIT_HASH
+             OUTPUT_STRIP_TRAILING_WHITESPACE
+     )
+-ELSE(EXISTS "${BASE_PROJ_DIR}/.git")
+-    set(GIT_BRANCH "Unknown")
+-    set(GIT_COMMIT_HASH "Unknown")
+ ENDIF(EXISTS "${BASE_PROJ_DIR}/.git")
+ 
+ #Get the date

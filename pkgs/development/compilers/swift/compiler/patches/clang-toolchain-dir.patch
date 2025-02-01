@@ -1,0 +1,13 @@
+Use the Nix include dirs and gcc runtime dir, when no sysroot is configured.
+
+--- a/lib/Driver/ToolChains/Linux.cpp
++++ b/lib/Driver/ToolChains/Linux.cpp
+@@ -574,7 +574,7 @@
+
+   // Check for configure-time C include directories.
+   StringRef CIncludeDirs(C_INCLUDE_DIRS);
+-  if (CIncludeDirs != "") {
++  if (CIncludeDirs != "" && (SysRoot.empty() || SysRoot == "/")) {
+     SmallVector<StringRef, 5> dirs;
+     CIncludeDirs.split(dirs, ":");
+     for (StringRef dir : dirs) {

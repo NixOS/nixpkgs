@@ -1,0 +1,54 @@
+diff --git a/icu/icu4c/source/common/unicode/utypes.h b/icu/icu4c/source/common/unicode/utypes.h
+index a3e0ec911c..e361c658ef 100644
+--- a/common/unicode/utypes.h
++++ b/common/unicode/utypes.h
+@@ -66,20 +66,6 @@
+  * \def U_SHOW_CPLUSPLUS_API
+  * @internal
+  */
+-#if APPLE_ICU_CHANGES
+-// rdar://60884991 #58 Replace installsrc patching with changes directly in header files
+-// Apple modifies the default to be 0, not 1
+-#ifdef __cplusplus
+-#   ifndef U_SHOW_CPLUSPLUS_API
+-#       define U_SHOW_CPLUSPLUS_API 0
+-#   endif
+-#else
+-#   undef U_SHOW_CPLUSPLUS_API
+-#   define U_SHOW_CPLUSPLUS_API 0
+-#endif
+-
+-#else
+-
+ #ifdef __cplusplus
+ #   ifndef U_SHOW_CPLUSPLUS_API
+ #       define U_SHOW_CPLUSPLUS_API 1
+@@ -89,28 +75,6 @@
+ #   define U_SHOW_CPLUSPLUS_API 0
+ #endif
+ 
+-#endif // APPLE_ICU_CHANGES
+-
+-
+-#if APPLE_ICU_CHANGES
+-// rdar://30624081 64b8ed9b89.. Add #if U_SHOW_CPLUSPLUS_API..#endif around C++ interfaces that don’t have it
+-// rdar://24075048 0f5f76d43c.. update ICU for AAS to use VS2015, remove old ICU 4.0 shims, fix build issues
+-/* 
+- * Apple-specific warning if U_SHOW_CPLUSPLUS_API set and the compile
+- * is not for a build of ICU itself (ICU_DATA_DIR is always defined
+- * for ICU builds, and is unlikely to be defined for client builds).
+- * Windows VSC compliler does not like #warning, skip for it.
+- */
+-#if U_SHOW_CPLUSPLUS_API
+-#ifndef ICU_DATA_DIR
+-#if U_PLATFORM!=U_PF_WINDOWS
+-#warning Do not set U_SHOW_CPLUSPLUS_API for code that ships with the OS, it is only for local tools.
+-#warning ICU C++ functionality may not be used by any OS client, it is not binary compatible across updates.
+-#endif
+-#endif
+-#endif
+-#endif // APPLE_ICU_CHANGES
+-
+ /** @{ API visibility control */
+ 
+ /**

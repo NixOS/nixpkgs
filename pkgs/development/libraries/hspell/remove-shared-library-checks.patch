@@ -1,0 +1,12 @@
+--- a/Makefile.in	2017-06-22 22:32:50.000000000 +0100
++++ a/Makefile.in.patched	2024-01-20 21:41:59.135013186 +0000
+@@ -142,9 +142,6 @@
+ 	test -d $(DESTDIR)$(INCLUDEDIR) || mkdir -m 755 -p $(DESTDIR)$(INCLUDEDIR)
+ 	cp hspell.h linginfo.h $(DESTDIR)$(INCLUDEDIR)/
+ 	chmod 644 $(DESTDIR)$(INCLUDEDIR)/hspell.h $(DESTDIR)$(INCLUDEDIR)/linginfo.h
+-	test -f libhspell.so.0 && cp libhspell.so.0 $(DESTDIR)$(LIBDIR)/
+-	test -f libhspell.so.0 && chmod 755 $(DESTDIR)$(LIBDIR)/libhspell.so.0
+-	test -f libhspell.so.0 && ln -sf libhspell.so.0 $(DESTDIR)$(LIBDIR)/libhspell.so
+ 
+ 
+ ################################################

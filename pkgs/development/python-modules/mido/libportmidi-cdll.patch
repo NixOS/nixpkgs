@@ -1,0 +1,19 @@
+diff --git a/mido/backends/portmidi_init.py b/mido/backends/portmidi_init.py
+index 84bb128..5efcdaa 100644
+--- a/mido/backends/portmidi_init.py
++++ b/mido/backends/portmidi_init.py
+@@ -10,13 +10,7 @@ from ctypes import (CDLL, CFUNCTYPE, POINTER, Structure, c_char_p,
+                     create_string_buffer, byref)
+ import ctypes.util
+ 
+-dll_name = ''
+-if sys.platform == 'darwin':
+-    dll_name = ctypes.util.find_library('libportmidi.dylib')
+-elif sys.platform in ('win32', 'cygwin'):
+-    dll_name = 'portmidi.dll'
+-else:
+-    dll_name = 'libportmidi.so'
++dll_name = '@libportmidi@'
+ 
+ lib = CDLL(dll_name)
+ 

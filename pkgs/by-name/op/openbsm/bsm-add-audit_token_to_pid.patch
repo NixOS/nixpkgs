@@ -1,0 +1,24 @@
+Subject: Add audit_token_to_pid()
+
+Description: Apple provides audit_token_to_pid to get the pid of an
+audit token. Unfortunately, they have never released this to the
+OpenBSM project.
+
+diff -r -u -p1 a/bsm/libbsm.h b/bsm/libbsm.h
+--- a/bsm/libbsm.h	      2009-04-15 16:45:54.000000000 -0500
++++ b/bsm/libbsm.h	      2018-05-11 04:11:14.063083147 -0500
+@@ -1298,1 +1298,2 @@ int audit_set_stat(au_stat_t *stats, siz
+ int audit_send_trigger(int *trigger);
++pid_t audit_token_to_pid(audit_token_t atoken);
+
+diff -r -u -p1 a/libbsm/bsm_wrappers.c b/libbsm/bsm_wrappers.c
+--- a/libbsm/bsm_wrappers.c	       2009-04-15 16:46:06.000000000 -0500
++++ b/libbsm/bsm_wrappers.c	       2018-05-11 04:10:15.710820393 -0500
+@@ -823,1 +823,6 @@ audit_get_car(char *path, size_t sz)
+ }
++
++pid_t audit_token_to_pid(audit_token_t atoken)
++{
++	return atoken.val[5];
++}
+ 

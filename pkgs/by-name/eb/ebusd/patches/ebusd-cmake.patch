@@ -1,0 +1,21 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -184,16 +184,11 @@
+ add_subdirectory(src/lib/knx)
+ add_subdirectory(src/tools)
+
+-if(EXISTS "${ROOT}/etc/debian_version")
+-  install(FILES ${CMAKE_SOURCE_DIR}/contrib/debian/default/ebusd DESTINATION /etc/default/)
+-  install(FILES ${CMAKE_SOURCE_DIR}/contrib/debian/init.d/ebusd DESTINATION /etc/init.d/)
+-  install(FILES ${CMAKE_SOURCE_DIR}/contrib/debian/systemd/ebusd.service DESTINATION /lib/systemd/system/)
+-endif()
+ if(HAVE_MQTT)
+   FILE(GLOB MQTT_CFG_FILES "${CMAKE_SOURCE_DIR}/contrib/etc/ebusd/mqtt-*.cfg")
+-  install(FILES ${MQTT_CFG_FILES} DESTINATION /etc/ebusd/)
++  install(FILES ${MQTT_CFG_FILES} DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/ebusd/)
+ endif(HAVE_MQTT)
+ if(HAVE_KNX)
+   FILE(GLOB KNX_CFG_FILES "${CMAKE_SOURCE_DIR}/contrib/etc/ebusd/knx*.cfg")
+-  install(FILES ${KNX_CFG_FILES} DESTINATION /etc/ebusd/)
++  install(FILES ${KNX_CFG_FILES} DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/ebusd/)
+ endif(HAVE_KNX)
