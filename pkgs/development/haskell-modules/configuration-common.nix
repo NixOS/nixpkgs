@@ -2438,12 +2438,6 @@ self: super: {
     editedCabalFile = null;
   }) super.relude);
 
-  # Support hedgehog 1.5: https://github.com/kowainik/stan/pull/581
-  stan = appendPatch (fetchpatch {
-    url = "https://github.com/kowainik/stan/pull/581/commits/3429e419b26b56f86dbebbb657106a7da5182d20.patch";
-    sha256 = "sha256-CNWAuBryWMkd3yqDJ29OMZ+vXoiwprbyF2jNBD6qXIs=";
-  })  super.stan;
-
   # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
   hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
 
