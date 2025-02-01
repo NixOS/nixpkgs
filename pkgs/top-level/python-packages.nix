@@ -7268,6 +7268,8 @@ self: super: with self; {
     inherit python;
   });
 
+  lib4package = callPackage ../development/python-modules/lib4package { };
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
@@ -14517,6 +14519,10 @@ self: super: with self; {
   sarge = callPackage ../development/python-modules/sarge { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
+
+  sbom2dot = callPackage ../development/python-modules/sbom2dot { };
+
+  sbom4files = callPackage ../development/python-modules/sbom4files { };
 
   scalene = callPackage ../development/python-modules/scalene { };
 
