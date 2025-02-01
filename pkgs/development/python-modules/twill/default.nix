@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  flask,
   httpx,
   lxml,
   pyparsing,
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    flask
     pytestCheckHook
     quixote
   ];
