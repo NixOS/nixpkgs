@@ -4402,6 +4402,8 @@ with pkgs;
   pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend {};
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
+  
+  nakama = callPackage ../servers/nakama { };
 
   nifskope = libsForQt5.callPackage ../tools/graphics/nifskope { };
 
