@@ -1,0 +1,80 @@
+diff --git a/serlib/ser_constr.ml b/serlib/ser_constr.ml
+index 69b2077..47fa06a 100644
+--- a/serlib/ser_constr.ml
++++ b/serlib/ser_constr.ml
+@@ -99,11 +99,13 @@ type 'constr pcase_branch =
+ let map_pcase_branch f (bi, c) = (bi, f c)
+ 
+ type 'types pcase_return =
+-  [%import: 'constr Constr.pcase_return]
++  [%import: 'types Constr.pcase_return]
+   [@@deriving sexp,yojson]
+ 
+ let map_pcase_return f (bi, c) = (bi, f c)
+ 
++type 'a identity = 'a [@@deriving sexp,yojson]
++
+ type _constr =
+   | Rel       of int
+   | Var       of Names.Id.t
+@@ -126,7 +128,7 @@ type _constr =
+   | Float     of Float64.t
+   | Array     of Univ.Instance.t * _constr array * _constr * _types
+ [@@deriving sexp,yojson]
+-and _types = _constr
++and _types = _constr identity
+ [@@deriving sexp,yojson]
+ 
+ let rec _constr_put (c : constr) : _constr =
+diff --git a/serlib/ser_locus.ml b/serlib/ser_locus.ml
+index 1f74ebc..cdcfc99 100644
+--- a/serlib/ser_locus.ml
++++ b/serlib/ser_locus.ml
+@@ -57,7 +57,7 @@ type clause_atom =
+   [%import: Locus.clause_atom]
+   [@@deriving sexp]
+ 
+-type concrete_clause =
++type 'id concrete_clause =
+   [%import: 'id Locus.clause_expr]
+   [@@deriving sexp]
+ 
+@@ -65,7 +65,7 @@ type hyp_location =
+   [%import: Locus.clause_atom]
+   [@@deriving sexp]
+ 
+-type goal_location =
++type 'id goal_location =
+   [%import: 'id Locus.clause_expr]
+   [@@deriving sexp]
+ 
+@@ -73,7 +73,7 @@ type simple_clause =
+   [%import: Locus.clause_atom]
+   [@@deriving sexp]
+ 
+-type 'a or_like_first =
++type 'id or_like_first =
+   [%import: 'id Locus.clause_expr]
+   [@@deriving sexp]
+ 
+diff --git a/serlib/ser_stdlib.ml b/serlib/ser_stdlib.ml
+index fdb1720..3907548 100644
+--- a/serlib/ser_stdlib.ml
++++ b/serlib/ser_stdlib.ml
+@@ -16,6 +16,16 @@
+ open Sexplib.Conv
+ 
+ type nonrec 'a ref = 'a ref
++let ref = ref
++let ( ! ) = ( ! )
++let ( := ) = ( := )
++
++module Option = struct
++  type 'a t = 'a option =
++    | None
++    | Some of 'a
++  [@@deriving sexp]
++end
+ 
+ let ref_of_sexp = ref_of_sexp
+ let sexp_of_ref = sexp_of_ref

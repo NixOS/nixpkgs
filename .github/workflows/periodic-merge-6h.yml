@@ -1,0 +1,58 @@
+# This action periodically merges base branches into staging branches.
+# This is done to
+#  * prevent conflicts or rather resolve them early
+#  * make all potential breakage happen on the staging branch
+#  * and make sure that all major rebuilds happen before the staging
+#    branch get’s merged back into its base branch.
+
+name: "Periodic Merges (6h)"
+
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # Merge every 6 hours
+    - cron:  '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  periodic-merge:
+    permissions:
+      contents: write  # for devmasx/merge-branch to merge branches
+      pull-requests: write  # for peter-evans/create-or-update-comment to create or update comment
+    if: github.repository_owner == 'NixOS'
+    runs-on: ubuntu-latest
+    strategy:
+      # don't fail fast, so that all pairs are tried
+      fail-fast: false
+      # certain branches need to be merged in order, like master->staging-next->staging
+      # and disabling parallelism ensures the order of the pairs below.
+      max-parallel: 1
+      matrix:
+        pairs:
+          - from: master
+            into: staging-next
+          - from: staging-next
+            into: staging
+    name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
+    steps:
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+
+      - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
+        uses: devmasx/merge-branch@854d3ac71ed1e9deb668e0074781b81fdd6e771f # 1.4.0
+        with:
+          type: now
+          from_branch: ${{ matrix.pairs.from }}
+          target_branch: ${{ matrix.pairs.into }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on failure
+        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
+        if: ${{ failure() }}
+        with:
+          issue-number: 105153
+          body: |
+            Periodic merge from `${{ matrix.pairs.from }}` into `${{ matrix.pairs.into }}` has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).

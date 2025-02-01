@@ -1,0 +1,56 @@
+Submitted By:            Armin K. <krejzi at email dot com>
+Date:                    2012-07-06
+Initial Package Version: 0.4.6
+Upstream Status:         Unknown
+Origin:                  Self
+Description:             Some build fixes.
+
+--- obex-data-server.orig/src/ods-obex.c	2011-02-10 10:14:42.000000000 +0100
++++ obex-data-server/src/ods-obex.c	2012-07-06 20:10:09.208712553 +0200
+@@ -412,7 +412,7 @@
+ 		goto err;
+ 	}
+ 
+-	interfaces_num = OBEX_FindInterfaces(obex_context->obex_handle, &obex_intf);
++	interfaces_num = OBEX_EnumerateInterfaces(obex_context->obex_handle);
+ 	if (intf_num >= interfaces_num) {
+ 		g_set_error (error, ODS_ERROR, ODS_ERROR_FAILED, "Invalid interface number");
+ 		goto err;
+@@ -1928,7 +1928,7 @@
+ 	gchar	*uname;
+ 	gsize	uname_len;
+ 
+-	if (action != OBEX_ACTION_SETPERM)
++	if (action != 0x03)
+ 		g_assert (src && dst);
+ 
+ 	object = OBEX_ObjectNew (obex_context->obex_handle, OBEX_CMD_ACTION);
+@@ -1974,7 +1974,7 @@
+ 	                      OBEX_HDR_ACTION_ID, hv, 1, 0);
+ 
+ 	/* permissions header */
+-	if (action == OBEX_ACTION_SETPERM) {
++	if (action == 0x03) {
+ 		hv.bq4 = perms;
+ 		ret = OBEX_ObjectAddHeader (obex_context->obex_handle, object,
+ 		                            OBEX_HDR_PERMISSIONS, hv, 4, 0);
+--- obex-data-server.orig/src/ods-session.c	2011-02-10 09:57:31.000000000 +0100
++++ obex-data-server/src/ods-session.c	2012-07-06 20:10:09.208712553 +0200
+@@ -1761,7 +1761,7 @@
+                          DBusGMethodInvocation *context)
+ {
+ 	return ods_session_remote_action (session, remote_source,
+-	                                  remote_destination, OBEX_ACTION_COPY,
++	                                  remote_destination, 0x00,
+ 	                                  context);
+ }
+ 
+@@ -1772,7 +1772,7 @@
+                          DBusGMethodInvocation *context)
+ {
+ 	return ods_session_remote_action (session, remote_source,
+-	                                  remote_destination, OBEX_ACTION_MOVE,
++	                                  remote_destination, 0x01,
+ 	                                  context);
+ }
+ 

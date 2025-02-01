@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <me@pbb.lc>
+Date: Sun, 10 May 2020 12:47:28 +0200
+Subject: [PATCH] qtbase: derive plugin load path from PATH
+
+---
+ src/corelib/kernel/qcoreapplication.cpp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
+index 1ce2642cf2d..48fd91a0d7f 100644
+--- a/src/corelib/kernel/qcoreapplication.cpp
++++ b/src/corelib/kernel/qcoreapplication.cpp
+@@ -3038,6 +3038,15 @@ QStringList QCoreApplication::libraryPathsLocked()
+                 app_libpaths->append(installPathPlugins);
+         }
+ 
++        // Add library paths derived from PATH
++        const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(QStringLiteral(":"));
++        const QString plugindir = QStringLiteral("../" NIXPKGS_QT_PLUGIN_PREFIX);
++        for (const QString &path: paths) {
++            if (!path.isEmpty()) {
++                app_libpaths->append(QDir::cleanPath(path + QDir::separator() + plugindir));
++            }
++        }
++
+         // If QCoreApplication is not yet instantiated,
+         // make sure we add the application path when we construct the QCoreApplication
+         if (self) self->d_func()->appendApplicationPathToLibraryPaths();

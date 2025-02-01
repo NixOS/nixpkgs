@@ -1,0 +1,11 @@
+[package]
+name = "make-initrd-ng"
+version = "0.1.0"
+authors = ["Will Fancher <elvishjerricco@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+eyre = "0.6.8"
+goblin = "0.5.0"

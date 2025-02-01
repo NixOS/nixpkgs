@@ -1,0 +1,13 @@
+diff --git a/src/Panes/Typing.vala b/src/Panes/Typing.vala
+index b4ae8b0..5b8fd7e 100644
+--- a/src/Panes/Typing.vala
++++ b/src/Panes/Typing.vala
+@@ -83,7 +83,7 @@ public class Accessibility.Panes.Typing : Categories.Pane {
+ 
+         onboard_settings_label.clicked.connect (() => {
+             try {
+-                var appinfo = AppInfo.create_from_commandline ("onboard-settings", null, AppInfoCreateFlags.NONE);
++                var appinfo = AppInfo.create_from_commandline ("@onboard@/bin/onboard-settings", null, AppInfoCreateFlags.NONE);
+                 appinfo.launch (null, null);
+             } catch (Error e) {
+                 warning ("%s\n", e.message);
