@@ -10,7 +10,6 @@
   substituteAll,
   wrapGAppsHook3,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelflasher";
   version = "7.9.2.4";
@@ -52,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   patchPhase = ''
     # we set the default android-tools path for convenience
     substituteInPlace config.py --replace-fail \
-      "platform_tools_path = None" "platform_tools_path = '${lib.getBin android-tools}/bin'"
+      "platform_tools_path = None" "platform_tools_path = '/run/current-system/sw/bin/'"
   '';
 
   buildPhase = ''
