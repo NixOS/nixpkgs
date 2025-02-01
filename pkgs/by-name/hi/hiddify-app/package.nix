@@ -63,7 +63,10 @@ let
       description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc";
       homepage = "https://hiddify.com";
       mainProgram = "HiddifyCli";
-      license = lib.licenses.cc-by-nc-sa-40;
+      license = with lib.licenses; [
+        unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
+        gpl3Only
+      ];
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ ];
     };
@@ -146,7 +149,10 @@ flutter324.buildFlutterApplication {
     description = "Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc";
     homepage = "https://hiddify.com";
     mainProgram = "hiddify";
-    license = lib.licenses.cc-by-nc-sa-40;
+    license = with lib.licenses; [
+      unfree # upstream adds non-free additional conditions. https://github.com/hiddify/hiddify-app/blob/0f6b15057f626016fcd7a0c075f1c8c2f606110a/LICENSE.md#additional-conditions-to-gpl-v3
+      gpl3Only
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
   };
