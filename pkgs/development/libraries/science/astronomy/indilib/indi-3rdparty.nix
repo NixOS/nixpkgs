@@ -45,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-J9WPoaULH6UXL1q1O76+IDW97ydQWkHIID6n7wvOdE4=";
+    hash = "sha256-WYvinfAbMxgF5Q9iB/itQTMsVmG83lY45JriUo3kzFg=";
   };
 
   buildIndi3rdParty =
@@ -172,8 +172,9 @@ let
 
     postPatch = ''
       substituteInPlace 99-asi.rules \
-        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${lib.getExe bash}" \
+        --replace-fail "/bin/chmod" "${lib.getBin coreutils}/bin/chmod"
     '';
 
     buildInputs = [
@@ -350,8 +351,8 @@ let
     pname = "libplayerone";
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
-        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace-fail "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${lib.getExe bash}"
     '';
 
     buildInputs = [
@@ -376,7 +377,7 @@ let
       substituteInPlace 85-qhyccd.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
         --replace-fail "/lib/firmware" "$out/lib/firmware" \
-        --replace-fail "/bin/sleep" "${coreutils}/bin/sleep"
+        --replace-fail "/bin/sleep" "${lib.getBin coreutils}/bin/sleep"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 85-qhyccd.rules
     '';
@@ -464,6 +465,15 @@ let
     };
   };
 
+  libsvbonycam = buildIndi3rdParty {
+    pname = "libsvbonycam";
+    nativeBuildInputs = [ autoPatchelfHook ];
+    meta = with lib; {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    };
+  };
+
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -490,12 +500,21 @@ in
     buildInputs = [ indilib ];
   };
 
-  # libahc-xc needs libdfu, which is not packaged
-  # indi-ahp-xc = buildIndi3rdParty {
-  #   pname = "indi-ahp-xc";
-  #   buildInputs = [ cfitsio indilib libahp-xc libnova zlib ];
-  #   meta.platforms = libahp-xc.meta.platforms;
-  # };
+  indi-ahp-xc = buildIndi3rdParty {
+    pname = "indi-ahp-xc";
+    buildInputs = [
+      cfitsio
+      indilib
+      libahp-xc
+      libnova
+      zlib
+    ];
+    meta = {
+      platforms = libahp-xc.meta.platforms;
+      # libahc-xc needs libdfu, which is not packaged
+      broken = true;
+    };
+  };
 
   indi-aok = buildIndi3rdParty {
     pname = "indi-aok";
@@ -762,7 +781,6 @@ in
     meta.platforms = libinovasdk.meta.platforms;
   };
 
-  # broken, wants rpicam-apps
   indi-libcamera = buildIndi3rdParty {
     pname = "indi-libcamera";
     buildInputs = [
@@ -778,6 +796,7 @@ in
       zlib
     ];
     meta.platforms = [ ];
+    # broken, wants rpicam-apps
     meta.broken = true;
   };
 
@@ -879,6 +898,7 @@ in
       cfitsio
       indilib
       libraw
+      libjpeg
       zlib
     ];
     propagatedBuildInputs = [
@@ -1041,6 +1061,7 @@ in
       libogmacam
       libomegonprocam
       libstarshootg
+      libsvbonycam
       libtoupcam
       libtscam
     ];
