@@ -8028,6 +8028,8 @@ self: super: with self; {
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
 
+  mcp = callPackage ../development/python-modules/mcp { };
+
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   mcuuid = callPackage ../development/python-modules/mcuuid { };
