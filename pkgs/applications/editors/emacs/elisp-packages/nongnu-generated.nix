@@ -4285,10 +4285,10 @@
     elpaBuild {
       pname = "scad-mode";
       ename = "scad-mode";
-      version = "95.0";
+      version = "96.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/scad-mode-95.0.tar";
-        sha256 = "1wkpgrkx3cjmh72qg9yiq2x9sqswx6x6pbr8zzhldyjs6kmjl7km";
+        url = "https://elpa.nongnu.org/nongnu/scad-mode-96.0.tar";
+        sha256 = "0l5r88srzzxy143kjghyfcm0n7vbm79qxy0mgxfd66i8gmvw85m4";
       };
       packageRequires = [ compat ];
       meta = {
@@ -4601,10 +4601,10 @@
     elpaBuild {
       pname = "subed";
       ename = "subed";
-      version = "1.2.23";
+      version = "1.2.25";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/subed-1.2.23.tar";
-        sha256 = "0bvsv688mqhga8dffy3841wxs5pkw0vish15dgligll47cj98mzp";
+        url = "https://elpa.nongnu.org/nongnu/subed-1.2.25.tar";
+        sha256 = "1w4r1xh8i7fvaifq50x3s21d31bp53hrvfsw1xp5lnh68xbx9and";
       };
       packageRequires = [ ];
       meta = {
