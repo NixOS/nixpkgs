@@ -22,7 +22,7 @@ buildPythonPackage rec {
       clingwrapper = fetchFromGitHub {
         owner = "wlav";
         repo = "cppyy-backend";
-        rev = "cppyy-cling-${version}";
+        tag = "cppyy-cling-${version}";
         hash = "sha256-XTocvkAT5fKH49BnNjnv6ASWU7YGlotKqRMRZrN5HhA=";
       };
       cern-root = fetchurl {
