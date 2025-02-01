@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
-  version = "2.74.0";
+  version = "2.75.0";
 
   src = fetchFromGitHub {
     owner = "felt";
     repo = "tippecanoe";
     rev = finalAttrs.version;
-    hash = "sha256-LOy9q2Qc47DQxPkAt2mmlmrJUcoL+hBpm0dFI4oZo/0=";
+    hash = "sha256-0ayEGmIUw5jI5utp689oxlFR15TeQ1gbLJIos4AXdd4=";
   };
 
   buildInputs = [

@@ -5,6 +5,7 @@
   php,
   openssl,
   hiredis,
+  libck,
   zstd,
   lz4,
   autoPatchelfHook,
@@ -14,42 +15,36 @@
 }:
 
 let
-  version = "0.7.0";
+  version = "0.10.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.0" = "sha256-pd/9TWZPgAfmVM0/QVYRHu5k4gANcxCSnfAl38irO0Y=";
-        "8.1" = "sha256-OpxE/nu8MZedTmKGQeyJm36pyyHlRpW11avuGcnGP68=";
-        "8.2" = "sha256-+CMPdXZotUr43Qda1FwGpuWPEE1K4RuBNE9fiokAtoY=";
-        "8.3" = "sha256-lbKVxOd5gK5VDGnJ42w7L5DFKsBQDZXgEZLR/Y0gP88=";
+        "8.1" = "sha256-aEuYKo31dKV7TSOeKt4BSShstNxfS4EdibJ2279XTbg=";
+        "8.2" = "sha256-tjE+bAiVWYh6od8rW7flZ6ajMGxMJszw7H055VtDJsc=";
+        "8.3" = "1czi5sfic13068hj8x1fgzkwsykbrr1g5ifc53zxds5vqywa74d7";
+        "8.4" = "sha256-QUryARS5omADR3kEykCnoK4IFau1RpTQKDcCJ+lN/SY=";
+        "8.5" = "0k33qfrlxb9v0d15mdzzqsgdcik8z65nv1q9spn7ibdxg6clzykj";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.0" = "sha256-NfeC3p0YLYz3NbjzjMRRuzMsnYe9JRwlBjddAG2WV7g=";
-        "8.1" = "sha256-kvO0PE3BSgFSfe1zHh3WnygQfVV+5V0YFfClBim1Kj4=";
-        "8.2" = "sha256-illxRqqwMKVNAp6BD+mktKDccM7B/Q1W1KF9UB6aMUQ=";
-        "8.3" = "sha256-QdB7g+ePJU8qt/BVo1CFnQ2vfkqR29WueBy3dLOOaR0=";
-      };
-    };
-    "x86_64-darwin" = {
-      platform = "darwin-x86-64";
-      hash = {
-        "8.0" = "sha256-rd3pt2N22bF4a8OOwksI7KJjR91IoxHwk3LcKuHSpV0=";
-        "8.1" = "sha256-Y/moZrBe4rooQBSQKS8vPCTjviHKy4O7d4T1kD3udC4=";
-        "8.2" = "sha256-H3EWFk/ZmE+fSU98nLHyq1p1vtU/TYp28OzNLox6kYY=";
-        "8.3" = "sha256-vZTarrauo7U2JLOXUCwmu2h+vBtWZpm0Q39KkuLyVgY=";
+        "8.1" = "sha256-Aq4jZyo5JzVtJM96HzzsnSnx8jOCAmHB6f3eo1922gs=";
+        "8.2" = "sha256-Yd1bWEsRXuG30aDE9lCgLa/qlnXyeMehR3ROF0uAVTY=";
+        "8.3" = "sha256-j6qhr04zQDi+mQh968nVxlTGEnhQobI7kG8DK35sCiM=";
+        "8.4" = "0av8g5n4h3g2r4jbv3v1bwyx256z58wyygnd5jk4jzpx0ik2c1vv";
+        "8.5" = "1aav4lh29d507av5ydxjvgm20fljl5lwdljdyq3038g3gi06yjaj";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.0" = "sha256-jq/nHC9IGevYBqbM08nF71P9jH6z4NB8s1NdjHOfXQA=";
-        "8.1" = "sha256-vbFONNHpuSTQsZMrAIdGEoBl5ySchcFkSuhW5uZKbWg=";
-        "8.2" = "sha256-mXUAMkxwtuPZbIyCybBcxpmaBplr5h59pZEdgJ3PWtA=";
-        "8.3" = "sha256-YL0P8GtFkV0cmJX1y6wd/HtA0LFzeuOcKDLUCagxHxE=";
+        "8.1" = "sha256-306YMQr/UCJ+LOgEdzmqAPVBvbq2TDXnvSxdh4u6Nbc=";
+        "8.2" = "sha256-tapNth0vqNlCh1c3HryIYOs+V9jadTV1rMvoz+tVbeI=";
+        "8.3" = "sha256-f0eKpHcdiOHM55VuPYq+AJnbIwnBDLaECv+hYMBh0dw=";
+        "8.4" = "05h2ikl0ymd2xmqifvv700xazhllsm234s41ipdgfwdj7zyxv58s";
+        "8.5" = "0frnd7y3zvj8vq10r4479lx04lj606xzd3hjg61lg5mq65i6xih0";
       };
     };
   };
@@ -79,17 +74,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ autoPatchelfHook ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    hiredis
+    libck
     openssl
     zstd
     lz4
   ];
+  internalDeps = [ php.extensions.session ];
   installPhase =
     ''
       runHook preInstall
-
-      mkdir -p $out/lib/php/extensions
-      cp relay-pkg.so $out/lib/php/extensions/relay.so
-      chmod +w $out/lib/php/extensions/relay.so
+      install -Dm755 relay.so -t $out/lib/php/extensions
     ''
     + (
       if stdenv.hostPlatform.isDarwin then
@@ -105,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
                 [
                   (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
                   (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
+                  (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
                   (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
                   (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
                   (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
@@ -136,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
           common-updater-scripts
         ]
       }"
-      NEW_VERSION=$(curl --silent https://builds.r2.relay.so/meta/builds | tail -n1 | cut -c2-)
+      NEW_VERSION=$(curl --silent https://builds.r2.relay.so/meta/builds | sort -V | tail -n1 | cut -c2-)
 
       if [[ "${version}" = "$NEW_VERSION" ]]; then
           echo "The new version same as the old version."
@@ -144,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       for source in ${lib.concatStringsSep " " (builtins.attrNames finalAttrs.passthru.updateables)}; do
-        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "$NEW_VERSION" --ignore-same-version
+        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "$NEW_VERSION" --ignore-same-version --ignore-same-hash --print-changes
       done
     '';
 

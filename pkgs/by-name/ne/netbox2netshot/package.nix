@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "netbox2netshot";
-  version = "0.1.13";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "netbox2netshot";
     rev = version;
-    hash = "sha256-zi/on31uYSW3XhIZzKMkxIj0QZxUzoOcpRR8w5LFH90=";
+    hash = "sha256-4Leg7MaLSos2RjmxB6yVzxGju6OzNrChXdw5htppuZU=";
   };
 
-  cargoHash = "sha256-qMIGCE3YsV+ZihqBpayrxddsSkmFPldgYNHnAK5semA=";
+  cargoHash = "sha256-p7QvXm8FLN/HcOYnzF5Ey4h/PWuwPS7R1GUa1qFieUk=";
 
   nativeBuildInputs = [
     pkg-config
