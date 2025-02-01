@@ -2,7 +2,7 @@
   callPackages,
   lib,
   wasm-bindgen-cli_0_2_92,
-  wasm-bindgen-cli_0_2_93,
+  wasm-bindgen-cli_0_2_95,
   ...
 }@args:
 let
@@ -17,7 +17,7 @@ let
     teleport_16 = import ./16 (
       args
       // {
-        wasm-bindgen-cli = wasm-bindgen-cli_0_2_93;
+        wasm-bindgen-cli = wasm-bindgen-cli_0_2_95;
       }
     );
     teleport = teleport_16;
@@ -29,6 +29,6 @@ callPackages f' (
   builtins.removeAttrs args [
     "callPackages"
     "wasm-bindgen-cli_0_2_92"
-    "wasm-bindgen-cli_0_2_93"
+    "wasm-bindgen-cli_0_2_95"
   ]
 )

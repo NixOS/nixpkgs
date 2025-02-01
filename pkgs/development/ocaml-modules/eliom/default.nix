@@ -17,13 +17,13 @@
 
 buildDunePackage rec {
   pname = "eliom";
-  version = "11.1.0";
+  version = "11.1.1";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
     rev = version;
-    hash = "sha256-q8XLkyE5GE7NmU+v5221mkMrm2pK0Loh+RsS++PZp+Q=";
+    hash = "sha256-ALuoyO6axNQEeBteBVIFwdoSrbLxxcaSTObAcLPGIvo=";
   };
 
   nativeBuildInputs = [

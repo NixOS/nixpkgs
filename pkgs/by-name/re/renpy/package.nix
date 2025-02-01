@@ -16,6 +16,7 @@
   zlib,
   harfbuzz,
   makeWrapper,
+  withoutSteam ? true,
 }:
 
 let
@@ -90,7 +91,7 @@ stdenv.mkDerivation {
   patches = [
     ./shutup-erofs-errors.patch
     ./5687.patch
-  ];
+  ] ++ lib.optional withoutSteam ./noSteam.patch;
 
   postPatch = ''
     cp tutorial/game/tutorial_director.rpy{m,}
@@ -136,7 +137,5 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ shadowrz ];
   };
 
-  passthru = {
-    inherit base_version vc_version;
-  };
+  passthru = { inherit base_version vc_version; };
 }
