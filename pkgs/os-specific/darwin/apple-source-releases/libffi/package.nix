@@ -56,7 +56,8 @@ mkAppleDerivation (finalAttrs: {
   '';
 
   postBuild = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    $CC src/aarch64/trampoline.S -dynamiclib -o libffi-trampolines.dylib \
+    $CC -Os -Wl,-allowable_client,! -Wl,-not_for_dyld_shared_cache -Wl,-no_compact_unwind \
+      src/aarch64/trampoline.S -dynamiclib -o libffi-trampolines.dylib \
       -Iinclude -Iaarch64-apple-darwin -Iaarch64-apple-darwin/include \
       -install_name "$out/lib/libffi-trampoline.dylib" -Wl,-compatibility_version,1 -Wl,-current_version,1
   '';
