@@ -2,10 +2,10 @@ args:
 import ../generic.nix (
   args
   // {
-    version = "15.4.21";
-    hash = "sha256-n5dAJ5ilq5nHo3neQzCUFnDRwLhArwleMSho4/g0MT4=";
-    vendorHash = "sha256-bW8ztNeSzxUNtbuBtxIya9TeGfktC+/fz9iXB0GL0Mg=";
-    yarnHash = "sha256-ZaLLrcwAeq6TQ1SaA2few4s0HqktOZEpxCTcNGloGfk=";
+    version = "15.4.26";
+    hash = "sha256-LxMwCI/8otH32bRJvz9p1zWw4QzF/wrqeboZ6B3aw9o=";
+    vendorHash = "sha256-VG9b1M3zdtRXY3eCFC7izejSSs4nTjtR9/wOc36PFnA=";
+    yarnHash = "sha256-kmjY7KQfSzmlNS7ZK25YItZct/Tg7CWKfoRfubFBGlY=";
     cargoLock = {
       lockFile = ./Cargo.lock;
       outputHashes = {
