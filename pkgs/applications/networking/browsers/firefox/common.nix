@@ -592,11 +592,9 @@ buildStdenv.mkDerivation {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
-    cp -r dist/${binaryName}/*.app $out/Applications
+    cp -r dist/${binaryName}/*.app "$out/Applications/${applicationName}.app"
 
-    appBundlePath=(dist/${binaryName}/*.app)
-    appBundle=''${appBundlePath[0]#dist/${binaryName}}
-    resourceDir=$out/Applications/$appBundle/Contents/Resources
+    resourceDir="$out/Applications/${applicationName}.app/Contents/Resources"
 
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Remove SDK cruft. FIXME: move to a separate output?
@@ -621,7 +619,7 @@ buildStdenv.mkDerivation {
   # Some basic testing
   doInstallCheck = true;
   installCheckPhase = lib.optionalString buildStdenv.hostPlatform.isDarwin ''
-    bindir=$out/Applications/$appBundle/Contents/MacOS
+    bindir="$out/Applications/${applicationName}.app/Contents/MacOS"
   '' + lib.optionalString (!buildStdenv.hostPlatform.isDarwin) ''
     bindir=$out/bin
   '' + ''
