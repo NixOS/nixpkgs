@@ -49,6 +49,7 @@ let
             pname
             version
             src
+            goModules
             npmDeps
             webapp
             meta
