@@ -42,6 +42,12 @@ buildPythonPackage rec {
       "test_invalid_def_stmt"
     ];
 
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    "tests/python_parser/test_ast_parsing.py"
+    "tests/python_parser/test_syntax_error_handling.py"
+    "tests/python_parser/test_unsupported_syntax.py"
+  ];
+
   meta = with lib; {
     description = "Library to generate PEG parsers";
     homepage = "https://github.com/we-like-parsers/pegen";
