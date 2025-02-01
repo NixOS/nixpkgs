@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wlav";
     repo = "cppyy-backend";
-    rev = "clingwrapper-${version}";
+    tag = "clingwrapper-${version}";
     hash = "sha256-XTocvkAT5fKH49BnNjnv6ASWU7YGlotKqRMRZrN5HhA=";
   };
 
