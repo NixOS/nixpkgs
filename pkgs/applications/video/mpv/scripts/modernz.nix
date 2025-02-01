@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 buildLua (finalAttrs: {
-  pname = "modernx";
+  pname = "modernz";
   version = "0.2.5";
 
   scriptPath = "modernz.lua";
