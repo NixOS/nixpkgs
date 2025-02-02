@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kgretzky/evilginx2";
     license = licenses.bsd3;
     mainProgram = "evilginx";
+    platforms = with lib.platforms; [ "x86_64-linux" ];
   };
 }
