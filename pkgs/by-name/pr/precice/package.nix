@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   gcc,
   boost,
@@ -23,6 +24,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-KpmcQj8cv5V5OXCMhe2KLTsqUzKWtTeQyP+zg+Y+yd0=";
   };
+
+  patches = lib.optionals (!lib.versionOlder "3.1.2" version) [
+    (fetchpatch {
+      name = "boost-187-fixes.patch";
+      url = "https://github.com/precice/precice/commit/23788e9eeac49a2069e129a0cb1ac846e8cbeb9f.patch";
+      hash = "sha256-Z8qOGOkXoCui8Wy0H/OeE+NaTDvyRuPm2A+VJKtjH4s=";
+    })
+  ];
 
   cmakeFlags = [
     "-DPRECICE_PETScMapping=OFF"
