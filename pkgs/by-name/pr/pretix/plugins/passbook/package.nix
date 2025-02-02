@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   patches = [
     (substituteAll {
-      src = ./passbook-openssl.patch;
+      src = ./openssl.patch;
       openssl = lib.getExe openssl;
     })
   ];
