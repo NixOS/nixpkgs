@@ -11308,9 +11308,7 @@ self: super: with self; {
 
   pwndbg = callPackage ../development/python-modules/pwndbg { };
 
-  pwntools = callPackage ../development/python-modules/pwntools {
-    debugger = pkgs.gdb;
-  };
+  pwntools = callPackage ../development/python-modules/pwntools { };
 
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
