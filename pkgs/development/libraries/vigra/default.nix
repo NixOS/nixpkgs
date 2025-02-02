@@ -17,14 +17,14 @@
 let
   python = python3.withPackages (py: with py; [ numpy ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vigra";
   version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "ukoethe";
     repo = "vigra";
-    tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "Version-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-ZmHj1BSyoMBCuxI5hrRiBEb5pDUsGzis+T5FSX27UN8=";
   };
 
@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     python
   ];
 
+  postPatch = ''
+    chmod +x config/run_test.sh.in
+    patchShebangs --build config/run_test.sh.in
+  '';
+
   cmakeFlags =
     [
       "-DWITH_OPENEXR=1"
@@ -51,12 +56,22 @@ stdenv.mkDerivation rec {
       "-DCMAKE_C_FLAGS=-fPIC"
     ];
 
+  enableParallelBuilding = true;
+
+  passthru = {
+    tests = {
+      check = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      });
+    };
+  };
+
   meta = with lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     mainProgram = "vigra-config";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ShamrockLee ];
     platforms = platforms.unix;
   };
-}
+})
