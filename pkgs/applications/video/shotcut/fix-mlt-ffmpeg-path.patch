@@ -1,0 +1,80 @@
+diff --git a/src/docks/encodedock.cpp b/src/docks/encodedock.cpp
+index 3359f676..24e44f98 100644
+--- a/src/docks/encodedock.cpp
++++ b/src/docks/encodedock.cpp
+@@ -2177,7 +2177,7 @@ bool EncodeDock::detectHardwareEncoders()
+ {
+     MAIN.showStatusMessage(tr("Detecting hardware encoders..."));
+     QStringList hwlist;
+-    QFileInfo ffmpegPath(qApp->applicationDirPath(), "ffmpeg");
++    QFileInfo ffmpegPath("@ffmpeg@/bin/ffmpeg");
+     foreach (const QString &codec, codecs()) {
+         LOG_INFO() << "checking for" << codec;
+         QProcess proc;
+@@ -2220,7 +2220,7 @@ bool EncodeDock::detectHardwareEncoders()
+ QString &EncodeDock::defaultFormatExtension()
+ {
+     auto format = ui->formatCombo->currentText();
+-    QFileInfo ffmpegPath(qApp->applicationDirPath(), "ffmpeg");
++    QFileInfo ffmpegPath("@ffmpeg@/bin/ffmpeg");
+     QProcess proc;
+     QStringList args;
+     args << "-hide_banner" << "-h" << format.prepend("muxer=");
+diff --git a/src/jobs/ffmpegjob.cpp b/src/jobs/ffmpegjob.cpp
+index 1f15e647..b6ad6633 100644
+--- a/src/jobs/ffmpegjob.cpp
++++ b/src/jobs/ffmpegjob.cpp
+@@ -54,7 +54,7 @@ FfmpegJob::~FfmpegJob()
+ void FfmpegJob::start()
+ {
+     QString shotcutPath = qApp->applicationDirPath();
+-    QFileInfo ffmpegPath(shotcutPath, "ffmpeg");
++    QFileInfo ffmpegPath("@ffmpeg@/bin/ffmpeg");
+     setReadChannel(QProcess::StandardError);
+     LOG_DEBUG() << ffmpegPath.absoluteFilePath() + " " + m_args.join(' ');
+     AbstractJob::start(ffmpegPath.absoluteFilePath(), m_args);
+diff --git a/src/jobs/meltjob.cpp b/src/jobs/meltjob.cpp
+index fd8c00b8..9150fe7b 100644
+--- a/src/jobs/meltjob.cpp
++++ b/src/jobs/meltjob.cpp
+@@ -98,9 +98,9 @@ void MeltJob::start()
+     }
+     QString shotcutPath = qApp->applicationDirPath();
+ #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+-    QFileInfo meltPath(shotcutPath, "melt-7");
++    QFileInfo meltPath("@mlt@/bin/melt");
+ #else
+-    QFileInfo meltPath(shotcutPath, "melt");
++    QFileInfo meltPath("@mlt@/bin/melt");
+ #endif
+     setReadChannel(QProcess::StandardError);
+     QStringList args;
+diff --git a/src/mltcontroller.cpp b/src/mltcontroller.cpp
+index 1e2299ac..b8f39f12 100644
+--- a/src/mltcontroller.cpp
++++ b/src/mltcontroller.cpp
+@@ -1555,9 +1555,9 @@ int Controller::checkFile(const QString &path)
+             || path.endsWith(".aep")) {
+         QString shotcutPath = qApp->applicationDirPath();
+ #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+-        QFileInfo meltPath(shotcutPath, "melt-7");
++        QFileInfo meltPath("@mlt@/bin/melt");
+ #else
+-        QFileInfo meltPath(shotcutPath, "melt");
++        QFileInfo meltPath("@mlt@/bin/melt");
+ #endif
+         QStringList args;
+         args << "-quiet" << "-consumer" << "null" << "real_time=0" << "out=0" << "terminate_on_pause=1" <<
+diff --git a/src/widgets/directshowvideowidget.cpp b/src/widgets/directshowvideowidget.cpp
+index c91ba821..73dd5a61 100644
+--- a/src/widgets/directshowvideowidget.cpp
++++ b/src/widgets/directshowvideowidget.cpp
+@@ -35,7 +35,7 @@ DirectShowVideoWidget::DirectShowVideoWidget(QWidget *parent) :
+     ui->setupUi(this);
+     Util::setColorsToHighlight(ui->label);
+ #ifdef Q_OS_WIN
+-    QFileInfo ffmpegPath(qApp->applicationDirPath(), "ffmpeg");
++    QFileInfo ffmpegPath("@ffmpeg@/bin/ffmpeg");
+     QProcess proc;
+     QStringList args;
+     args << "-hide_banner" << "-list_devices" << "true" << "-f" << "dshow" << "-i" << "dummy";

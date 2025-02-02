@@ -1,0 +1,11 @@
+--- eflite-0.4.1.orig/es.c	2017-03-02 14:38:36.009731423 +0100
++++ eflite-0.4.1/es.c	2017-03-02 14:39:06.285894934 +0100
+@@ -449,7 +449,7 @@
+   fclose(fp);
+   if (flags & LOG_STDERR)
+   {
+-    fprintf(stderr, buf);
++    fprintf(stderr, "%s", buf);
+     fprintf(stderr, "\n");
+   }
+ #endif

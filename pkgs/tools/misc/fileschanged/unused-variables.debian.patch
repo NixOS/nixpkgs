@@ -1,0 +1,48 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 07_unused_variables.dpatch by Colin Watson <cjwatson@ubuntu.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: GCC 4.6 warns about unused variables, and fileschanged builds with
+## DP: -Werror, so deal with unused variable warnings.
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' fileschanged-0.6.5~/src/monitor.c fileschanged-0.6.5/src/monitor.c
+--- fileschanged-0.6.5~/src/monitor.c	2006-04-19 20:42:29.000000000 +0100
++++ fileschanged-0.6.5/src/monitor.c	2011-09-14 01:17:23.000000000 +0100
+@@ -84,6 +84,7 @@
+ 	  retval = FAMMonitorDirectory (c, node->filename, &node->request,
+ 					(void *) node);
+ 	  //printf ("FAMMonitorDirectory returns %d (reqnum %d)\n", retval, node->request.reqnum);
++	  (void) retval;
+ 	}
+       else if (S_ISREG (node->statbuf.st_mode))
+ 	{
+@@ -91,6 +92,7 @@
+ 	  retval = FAMMonitorFile (c, node->filename, &node->request,
+ 				   (void *) node);
+ 	  //printf ("FAMMonitorFile returns %d (reqnum %d)\n", retval, node->request.reqnum);
++	  (void) retval;
+ 	}
+       monitor_handle_events (c, list, 0, 30);
+     }
+
+diff -r -U3 fileschanged-0.6.9-orig/src/main.c fileschanged-0.6.9/src/main.c
+--- fileschanged-0.6.9-orig/src/main.c  2012-04-13 01:31:59.160601022 +0400
++++ fileschanged-0.6.9/src/main.c       2012-04-13 01:32:47.549599643 +0400
+@@ -126,6 +126,7 @@
+     {
+       retval = process_file (filelist, filelist_len, arguments.args[i]);
+     }
++  (void) retval;
+   return 0;
+ }
+ 
+@@ -168,6 +169,7 @@
+ 
+   if (fileptr != stdin)
+     fclose (fileptr);
++  (void) retval;
+   return 0;
+ }
+ int 
+

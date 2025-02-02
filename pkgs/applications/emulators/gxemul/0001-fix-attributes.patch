@@ -1,0 +1,26 @@
+diff -Naur gxemul-0.7.0-old/src/include/thirdparty/pcireg.h gxemul-0.7.0/src/include/thirdparty/pcireg.h
+--- gxemul-0.7.0-old/src/include/thirdparty/pcireg.h	2021-04-22 15:04:14.000000000 -0300
++++ gxemul-0.7.0-new/src/include/thirdparty/pcireg.h	2021-06-28 18:41:13.063065322 -0300
+@@ -12,9 +12,6 @@
+ #undef __noreturn__
+ #endif
+ 
+-#define __attribute__(x)  /*  */
+-#define __noreturn__  /*  */
+-
+ /*
+  * Copyright (c) 1995, 1996, 1999, 2000
+  *     Christopher G. Demetriou.  All rights reserved.
+diff -Naur gxemul-0.7.0-old/src/include/thirdparty/sgi_arcbios.h gxemul-0.7.0/src/include/thirdparty/sgi_arcbios.h
+--- gxemul-0.7.0-old/src/include/thirdparty/sgi_arcbios.h	2021-04-22 15:04:14.000000000 -0300
++++ gxemul-0.7.0-new/src/include/thirdparty/sgi_arcbios.h	2021-06-28 18:41:33.549981505 -0300
+@@ -14,9 +14,6 @@
+ #undef __noreturn__
+ #endif
+ 
+-#define	__attribute__(x)  /*  */
+-#define	__noreturn__  /*  */
+-
+ /*	$NetBSD: arcbios.h,v 1.3 2001/12/06 14:59:02 rafal Exp $	*/
+ 
+ /*-

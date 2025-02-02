@@ -1,0 +1,38 @@
+commit 9374b88b97911d9c6e19d5e764e25183cd45d534
+Author: Doron Behar <doron.behar@gmail.com>
+Date:   Tue Aug 1 13:29:16 2023 +0300
+
+    aarch64-Darwin: Disable failing polar test
+
+--- a/test/test_xsimd_api.cpp
++++ b/test/test_xsimd_api.cpp
+@@ -661,17 +661,6 @@ struct xsimd_api_float_types_functions
+         value_type val1(4);
+         CHECK_EQ(extract(xsimd::nextafter(T(val0), T(val1))), std::nextafter(val0, val1));
+     }
+-    void test_polar()
+-    {
+-        value_type val0(3);
+-        value_type val1(4);
+-#ifndef EMSCRIPTEN
+-        CHECK_EQ(extract(xsimd::polar(T(val0), T(val1))), std::polar(val0, val1));
+-#else
+-        CHECK_EQ(std::real(extract(xsimd::polar(T(val0), T(val1)))), doctest::Approx(std::real(std::polar(val0, val1))));
+-        CHECK_EQ(std::imag(extract(xsimd::polar(T(val0), T(val1)))), doctest::Approx(std::imag(std::polar(val0, val1))));
+-#endif
+-    }
+     void test_pow()
+     {
+         value_type val0(2);
+@@ -931,11 +920,6 @@ TEST_CASE_TEMPLATE("[xsimd api | float types functions]", B, FLOAT_TYPES)
+         Test.test_nextafter();
+     }
+ 
+-    SUBCASE("polar")
+-    {
+-        Test.test_polar();
+-    }
+-
+     SUBCASE("pow")
+     {
+         Test.test_pow();

@@ -1,0 +1,78 @@
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 92d6f01c3d..d2b67d8d6f 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -50,6 +50,7 @@ jobs:
+           meson setup build \
+                 -Dtests=true \
+                 -Dpam-cgroup=true \
++                -Dtools-multicall=true \
+                 -Dwerror=true \
+                 -Db_lto_mode=default
+           ninja -C build
+diff --git a/src/lxc/cmd/meson.build b/src/lxc/cmd/meson.build
+index 3ed3670e4b..edfb986622 100644
+--- a/src/lxc/cmd/meson.build
++++ b/src/lxc/cmd/meson.build
+@@ -46,7 +46,7 @@ cmd_lxc_init_static_sources = files(
+     '../string_utils.c',
+     '../string_utils.h') + include_sources
+ 
+-cmd_lxc_monitord_sources = files('lxc_monitord.c') + include_sources + netns_ifaddrs_sources
++cmd_lxc_monitord_sources = files('lxc_monitord.c')
+ cmd_lxc_user_nic_sources = files('lxc_user_nic.c') + cmd_common_sources + netns_ifaddrs_sources
+ cmd_lxc_usernsexec_sources = files('lxc_usernsexec.c') + cmd_common_sources + netns_ifaddrs_sources
+ 
+@@ -88,8 +88,8 @@ cmd_programs += executable(
+     'lxc-monitord',
+     cmd_lxc_monitord_sources,
+     include_directories: liblxc_includes,
+-    dependencies: liblxc_dep,
+-    link_with: [liblxc_static],
++    dependencies: liblxc_dependencies,
++    link_whole: [liblxc_static],
+     install: true,
+     install_dir: lxclibexec)
+ 
+diff --git a/src/lxc/tools/meson.build b/src/lxc/tools/meson.build
+index 00a863d936..6d317fc80b 100644
+--- a/src/lxc/tools/meson.build
++++ b/src/lxc/tools/meson.build
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: LGPL-2.1+
+ 
+-tools_common_sources = files('arguments.c', 'arguments.h') + include_sources + netns_ifaddrs_sources
++tools_common_sources = files('arguments.c', 'arguments.h') + include_sources
++tools_common_sources_for_dynamic_link = tools_common_sources + netns_ifaddrs_sources
+ 
+ tools_commands_dynamic_link = ['attach', 'autostart', 'cgroup', 'checkpoint', 'config',
+     'console', 'copy', 'create', 'destroy', 'device', 'execute', 'freeze',
+@@ -15,7 +16,7 @@ if want_tools
+     foreach cmd : tools_commands_dynamic_link
+         public_programs += executable(
+             'lxc-' + cmd,
+-            files('lxc_' + cmd + '.c') + tools_common_sources + liblxc_ext_sources,
++            files('lxc_' + cmd + '.c') + tools_common_sources_for_dynamic_link + liblxc_ext_sources,
+             dependencies: liblxc_dependencies,
+             include_directories: liblxc_includes,
+             c_args: ['-DNO_LXC_CONF'],
+@@ -26,16 +27,16 @@ if want_tools
+     foreach cmd : tools_commands_static_link
+         public_programs += executable(
+             'lxc-' + cmd,
+-            files('lxc_' + cmd + '.c') + tools_common_sources,
++            files('lxc_' + cmd + '.c') + files('arguments.c', 'arguments.h'),
+             dependencies: liblxc_dependencies,
+             include_directories: liblxc_includes,
+-            link_with: [liblxc_static],
++            link_whole: [liblxc_static],
+             install: true)
+     endforeach
+ endif
+ 
+ if want_tools_multicall
+-    tools_all_sources = files('lxc_multicall.c') + tools_common_sources
++    tools_all_sources = files('lxc_multicall.c') + tools_common_sources_for_dynamic_link
+     foreach cmd : tools_commands
+         tools_all_sources += files('lxc_' + cmd + '.c')
+     endforeach
