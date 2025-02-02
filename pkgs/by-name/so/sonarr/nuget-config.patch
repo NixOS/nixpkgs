@@ -1,0 +1,9 @@
+Move NuGet configuration file to the source root where Nixpkgs .NET
+build infrastructure expects to find it.
+
+https://github.com/NixOS/nixpkgs/pull/291640#discussion_r1601841807
+
+diff --git a/src/NuGet.Config b/NuGet.Config
+similarity index 100%
+rename from src/NuGet.Config
+rename to NuGet.Config

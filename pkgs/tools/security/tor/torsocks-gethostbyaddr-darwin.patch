@@ -1,0 +1,33 @@
+diff --git a/tests/test_dns.c b/tests/test_dns.c
+index 7e07663..acf095c 100644
+--- a/tests/test_dns.c
++++ b/tests/test_dns.c
+@@ -76,6 +76,8 @@ static void test_gethostbyname(const struct test_host *host)
+ 	return;
+ }
+ 
++#ifdef __linux__
++
+ static void test_gethostbyaddr_r_failed(void)
+ {
+ 	int result;
+@@ -129,6 +131,8 @@ static void test_gethostbyaddr_r(const struct test_host *host)
+   ok(1, "Resolved address");
+ }
+ 
++#endif
++
+ static void test_gethostbyaddr(const struct test_host *host)
+ {
+ 	struct hostent *he;
+@@ -199,8 +203,10 @@ int main(int argc, char **argv)
+ 	test_getaddrinfo(&tor_check);
+ 	test_gethostbyname(&tor_dir_auth1);
+ 	test_gethostbyaddr(&tor_dir_auth2);
++#ifdef __linux__
+ 	test_gethostbyaddr_r(&tor_dir_auth2);
+ 	test_gethostbyaddr_r_failed();
++#endif
+ 	test_getaddrinfo(&tor_localhost);
+ 
+ end:

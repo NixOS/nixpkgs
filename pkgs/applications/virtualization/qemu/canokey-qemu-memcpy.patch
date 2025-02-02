@@ -1,0 +1,41 @@
+From 9e59480d941c40b868ebafa5138bbc71ca87f08e Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sat, 18 May 2024 09:55:17 +0200
+Subject: [PATCH] Fix build where memcpy is a macro
+
+I got the following compiler error with Clang 16 building for
+x86_64-apple-darwin:
+
+	/tmp/nix-build-canokey-qemu-0-unstable-2023-06-06.drv-0/source/canokey-core/applets/oath/oath.c:44:50: error: too many arguments provided to function-like macro invocation
+	  memcpy(RDATA, (uint8_t[]){OATH_TAG_VERSION, 3, 0x05, 0x05, 0x05, OATH_TAG_NAME, HANDLE_LEN}, 7);
+	                                                 ^
+	/nix/store/vw8y07yai2pjv02s1piw3r5cyhmjbddf-Libsystem-1238.60.2/include/secure/_string.h:64:9: note: macro 'memcpy' defined here
+	#define memcpy(dest, src, len)                                  \
+	        ^
+	/tmp/nix-build-canokey-qemu-0-unstable-2023-06-06.drv-0/source/canokey-core/applets/oath/oath.c:44:3: note: parentheses are required around macro argument containing braced initializer list
+	  memcpy(RDATA, (uint8_t[]){OATH_TAG_VERSION, 3, 0x05, 0x05, 0x05, OATH_TAG_NAME, HANDLE_LEN}, 7);
+	  ^
+	                (                                                                            )
+	1 error generated.
+
+Link: https://github.com/canokeys/canokey-core/pull/85
+---
+ canokey-core/applets/oath/oath.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/canokey-core/applets/oath/oath.c b/canokey-core/applets/oath/oath.c
+index bd8361a..2d2c0ef 100644
+--- a/canokey-core/applets/oath/oath.c
++++ b/canokey-core/applets/oath/oath.c
+@@ -41,7 +41,7 @@ int oath_install(uint8_t reset) {
+ static int oath_select(const CAPDU *capdu, RAPDU *rapdu) {
+   if (P2 != 0x00) EXCEPT(SW_WRONG_P1P2);
+ 
+-  memcpy(RDATA, (uint8_t[]){OATH_TAG_VERSION, 3, 0x05, 0x05, 0x05, OATH_TAG_NAME, HANDLE_LEN}, 7);
++  memcpy(RDATA, ((uint8_t[]){OATH_TAG_VERSION, 3, 0x05, 0x05, 0x05, OATH_TAG_NAME, HANDLE_LEN}), 7);
+   if (read_attr(OATH_FILE, ATTR_HANDLE, RDATA + 7, HANDLE_LEN) < 0) return -1;
+   LL = 7 + HANDLE_LEN;
+ 
+-- 
+2.44.0
+

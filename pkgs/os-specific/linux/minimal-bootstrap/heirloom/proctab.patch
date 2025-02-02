@@ -1,0 +1,11 @@
+--- nawk/Makefile.mk
++++ nawk/Makefile.mk
+@@ -28,8 +28,6 @@ maketab: maketab.o
+ 	$(HOSTCC) maketab.o -o maketab
+ 	./maketab > proctab.c
+ 
+-proctab.c: maketab
+-
+ awk.g.o: awk.g.c
+ 	$(CC) $(CFLAGSS) $(CPPFLAGS) $(XO5FL) $(LARGEF) $(IWCHAR) $(ICOMMON) $(IUXRE) -c awk.g.c
+ 

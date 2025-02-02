@@ -1,0 +1,31 @@
+diff -burN InsightToolkit-4.10.0.orig/CMake/FindFFTW.cmake InsightToolkit-4.10.0/CMake/FindFFTW.cmake
+--- InsightToolkit-4.10.0.orig/CMake/FindFFTW.cmake	2016-06-16 14:21:15.226203872 +0200
++++ InsightToolkit-4.10.0/CMake/FindFFTW.cmake	2016-06-16 14:23:48.966202670 +0200
+@@ -35,14 +35,12 @@
+   set(FFTW_LIB_SEARCHPATH
+     ${FFTW_INSTALL_BASE_PATH}/lib
+     ${FFTW_INSTALL_BASE_PATH}/lib64
+-    /usr/lib/fftw
+-    /usr/local/lib/fftw
+   )
+ 
+   if(ITK_USE_FFTWD)
+     mark_as_advanced(FFTWD_LIB)
+-    find_library(FFTWD_LIB fftw3 ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib
+-    find_library(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib only if compiled with threads support
++    find_library(FFTWD_LIB fftw3 ${FFTW_LIB_SEARCHPATH} NO_DEFAULT_PATH) #Double Precision Lib
++    find_library(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH} NO_DEFAULT_PATH) #Double Precision Lib only if compiled with threads support
+ 
+     if(FFTWD_LIB)
+       set(FFTWD_FOUND 1)
+@@ -55,8 +53,8 @@
+ 
+   if(ITK_USE_FFTWF)
+     mark_as_advanced(FFTWF_LIB)
+-    find_library(FFTWF_LIB fftw3f ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib
+-    find_library(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib only if compiled with threads support
++    find_library(FFTWF_LIB fftw3f ${FFTW_LIB_SEARCHPATH} NO_DEFAULT_PATH) #Single Precision Lib
++    find_library(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH} NO_DEFAULT_PATH) #Single Precision Lib only if compiled with threads support
+ 
+     if(FFTWF_LIB)
+       set(FFTWF_FOUND 1)
