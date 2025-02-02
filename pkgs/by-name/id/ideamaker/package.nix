@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
       );
     in
     fetchurl {
-      url = "https://download.raise3d.com/ideamaker/release/${semver}/ideaMaker_${finalAttrs.version}-ubuntu_amd64.deb";
+      url = "https://downcdn.raise3d.com/ideamaker/release/${semver}/ideaMaker_${finalAttrs.version}-ubuntu_amd64.deb";
       hash = "sha256-aTVWCTgnVKD16uhJUVz0vR7KPGJqCVj0xoL53Qi3IKM=";
     };
 
