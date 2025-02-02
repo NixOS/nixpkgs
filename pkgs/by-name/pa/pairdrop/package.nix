@@ -45,6 +45,9 @@ buildNpmPackage rec {
     '';
     homepage = "https://github.com/schlagmichdoch/PairDrop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [
+      diogotcorreia
+      dit7ya
+    ];
   };
 }
