@@ -11,5 +11,4 @@ writableTmpDirAsHome () {
     fi
 }
 
-# shellcheck disable=SC2154
-addEnvHooks "$targetOffset" writableTmpDirAsHome
+postHooks+=(writableTmpDirAsHome)
