@@ -17,10 +17,7 @@ buildPostgresqlExtension (finalAttrs: {
     hash = "sha256-W3G6TGtkj+zXXdGZZR0bmZhsLuFJvuGTlDoo8kL8sf0=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
-    postgresql
     perl
   ];
 
