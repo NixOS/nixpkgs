@@ -2586,6 +2586,8 @@ self: super: with self; {
 
   compressed-rtf = callPackage ../development/python-modules/compressed-rtf { };
 
+  compressed-tensors = callPackage ../development/python-modules/compressed-tensors { };
+
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
