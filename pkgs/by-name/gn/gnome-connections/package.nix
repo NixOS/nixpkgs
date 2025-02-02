@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
@@ -20,13 +20,16 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-connections";
-  version = "47.0";
+  version = "47.2.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-connections/${lib.versions.major version}/gnome-connections-${version}.tar.xz";
-    hash = "sha256-lT4jQ8C9SRawLtE6Ce8Rhv6WmSSSct/tuKI9ibQ3Lm0=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "connections";
+    rev = finalAttrs.version;
+    hash = "sha256-myrh6m+z8tiAfuvYZlAwiARrbGK5Iu4gica0rJRgLWk=";
   };
 
   nativeBuildInputs = [
@@ -51,10 +54,6 @@ stdenv.mkDerivation rec {
     gtk-frdp
   ];
 
-  passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-connections"; };
-  };
-
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/connections";
     changelog = "https://gitlab.gnome.org/GNOME/connections/-/blob/${version}/NEWS?ref_type=tags";
@@ -64,4 +63,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})
