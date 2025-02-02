@@ -66,14 +66,6 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      url =
-        "https://github.com/cfhammill/cupy/commit/67526c756e4a0a70f0420bf0e7f081b8a35a8ee5.patch";
-      hash = "sha256-WZgexBdM9J0ep5s+9CGZriVq0ZidCRccox+g0iDDywQ=";
-    })
-  ];
-
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
   # a small amount of thrashing but it turns out there are a large number of
