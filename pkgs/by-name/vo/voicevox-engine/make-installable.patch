@@ -1,0 +1,21 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index fa23446..6a7705c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -40,7 +40,15 @@ use_parentheses = true
+ datas = "datas" # PyInstaller's argument
+ 
+ [tool.poetry]
+-package-mode = false
++name = "voicevox-engine"
++version = "@version@"
++authors = []
++description = ""
++packages = [ { include = "voicevox_engine" } ]
++include = [ "resources/**/*", "run.py", "engine_manifest.json", "presets.yaml"]
++
++[tool.poetry.scripts]
++voicevox-engine = "run:main"
+ 
+ [tool.poetry.dependencies]
+ python = "~3.11"

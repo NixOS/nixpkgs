@@ -1,0 +1,10 @@
+--- a/jlibrary/bin/profile.ijs	2022-11-23 18:45:50.049675025 +0100
++++ b/jlibrary/bin/profile.ijs	2022-11-23 18:47:43.798532581 +0100
+@@ -13,6 +13,7 @@
+ fhs=. (FHS"_)^:(0=4!:0<'FHS')(5=systype)*.0=#1!:0<BINPATH,'/../system/util/boot.ijs'
+ install=. (0&~:fhs){::install;install,'/share/j/',omitversion{::'9.03';'0'
+ install=. (INSTALLROOT"_)^:(0=4!:0<'INSTALLROOT') install
++install=. bin,'/../share/j'
+ addons=. install,'/addons'
+ system=. install,'/system'
+ tools=. install,'/tools'

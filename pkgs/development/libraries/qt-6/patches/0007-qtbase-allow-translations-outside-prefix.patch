@@ -1,0 +1,13 @@
+diff --git a/cmake/QtBuildPathsHelpers.cmake b/cmake/QtBuildPathsHelpers.cmake
+index bf28d1e9ee..08e64a2092 100644
+--- a/cmake/QtBuildPathsHelpers.cmake
++++ b/cmake/QtBuildPathsHelpers.cmake
+@@ -140,7 +140,7 @@ function(qt_configure_process_path name default docstring)
+         set(new_value ".")
+     elseif(rel_path MATCHES "^\.\./")
+         # INSTALL_SYSCONFDIR is allowed to be outside the prefix.
+-        if(NOT name STREQUAL "INSTALL_SYSCONFDIR")
++        if(NOT (name STREQUAL "INSTALL_SYSCONFDIR" OR name STREQUAL "INSTALL_TRANSLATIONSDIR"))
+             message(FATAL_ERROR
+                 "Path component '${name}' is outside computed install prefix: ${rel_path} ")
+         endif()
