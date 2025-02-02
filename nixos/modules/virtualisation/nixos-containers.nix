@@ -506,8 +506,12 @@ in
                         config = {
                           nixpkgs =
                             if options.nixpkgs?hostPlatform
-                            then { inherit (host.pkgs.stdenv) hostPlatform; }
-                            else { localSystem = host.pkgs.stdenv.hostPlatform; }
+                            then {
+                              hostPlatform =
+                                if host.options.nixpkgs.hostPlatform.isDefined
+                                then host.config.nixpkgs.hostPlatform
+                                else lib.defaultTo host.config.nixpkgs.localSystem host.config.nixpkgs.crossSystem;
+                            } else { localSystem = lib.defaultTo host.config.nixpkgs.localSystem host.config.nixpkgs.crossSystem; }
                           ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
