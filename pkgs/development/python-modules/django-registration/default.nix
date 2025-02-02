@@ -1,21 +1,17 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+  pdm-backend,
   confusable-homoglyphs,
   coverage,
   django,
-  fetchFromGitHub,
-  pdm-backend,
-  pythonAtLeast,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-registration";
   version = "5.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "ubernostrum";
