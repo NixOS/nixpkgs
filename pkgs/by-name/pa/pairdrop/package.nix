@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nixosTests,
   nodejs,
 }:
 
@@ -35,6 +36,12 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) pairdrop;
+    };
+  };
 
   meta = with lib; {
     description = "Local file sharing in your browser";
