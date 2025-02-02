@@ -175,7 +175,7 @@ jobs:
             --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
             || [[ -z "$run" ]]; then
             echo "Could not find an eval.yml workflow run for $BASE_SHA, cannot make comparison"
-            exit 0
+            exit 1
           fi
           echo "Comparing against $(jq .html_url <<< "$run")"
           runId=$(jq .id <<< "$run")
@@ -189,7 +189,7 @@ jobs:
 
           if [[ "$conclusion" != "success" ]]; then
             echo "Workflow was not successful (conclusion: $conclusion), cannot make comparison"
-            exit 0
+            exit 1
           fi
 
           echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
