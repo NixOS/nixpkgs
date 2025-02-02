@@ -3,7 +3,6 @@
   stdenv,
   enableMultilib,
   targetConfig,
-  withoutTargetLibc,
 }:
 
 let
@@ -357,8 +356,5 @@ originalAttrs:
         ln -s "$lib/$targetConfig/lib" "$lib/lib"
       fi
     '';
-  }
-  // lib.optionalAttrs ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc) {
-    dontCheckForBrokenSymlinks = true;
   }
 ))
