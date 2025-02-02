@@ -19,8 +19,7 @@
 let
   version = "1.1.0";
   hash = "sha256-gdrhzyhxRHZkALB3SG/aWOdA5iMYkel3Cjk5VBy3E4M=";
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1KtS/lzVUEDiDCo3b8RFDYeTMsbHk2tIdniFZfoTxYk=";
+  cargoHash = "sha256-ulqMjpW3UI509vs3jVHXAEQUhxU/f/hN8XiIo8UBRq8=";
 
   noDefaultFeatures = lib.warnIf
     (args ? buildNoDefaultFeatures)
@@ -44,6 +43,8 @@ rustPlatform.buildRustPackage {
     repo = "himalaya";
     rev = "v${version}";
   };
+
+  useFetchCargoVendor = true;
 
   buildNoDefaultFeatures = noDefaultFeatures;
   buildFeatures = features;
