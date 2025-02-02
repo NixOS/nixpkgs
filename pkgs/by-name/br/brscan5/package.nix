@@ -21,16 +21,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "brscan5";
-  version = "1.3.1-0";
+  version = "1.3.10-5";
   src =
     {
       "i686-linux" = fetchurl {
         url = "https://download.brother.com/welcome/dlf104034/${pname}-${version}.i386.deb";
-        hash = "sha256-BgS64vwsKESJBDz9H2MDwcGiresROSNFP1b+7+zlE5c=";
+        hash = "sha256-b7f4123956dcbf296da0afa6c260a92e6658d5202f2bc83697b24abcaba82a6f";
       };
       "x86_64-linux" = fetchurl {
         url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
-        hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
+        hash = "sha256-a32d031aa9ec90ab33c210b703967cac44f82f9f100f8f66be9d6fe653f2f29f";
       };
     }
     ."${system}" or (throw "Unsupported system: ${system}");
