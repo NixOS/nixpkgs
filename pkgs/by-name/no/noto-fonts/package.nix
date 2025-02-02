@@ -29,6 +29,11 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-IXQmHBG7yvngifLTVLwkL+10lfqofgERtNmgZSvgrt8=";
   };
 
+  outputs = [
+    "out"
+    "megamerge" # Experimental fonts created by mergeing regular notofonts
+  ];
+
   _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
   installPhase =
@@ -39,6 +44,8 @@ stdenvNoCC.mkDerivation rec {
       #
       # We have a mix of otf and ttf fonts
       local out_font=$out/share/fonts/noto
+
+      install -m444 -Dt $megamerge/share/fonts/truetype/ megamerge/*.ttf
     ''
     + (
       if _variants == [ ] then
