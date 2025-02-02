@@ -171,9 +171,9 @@ in
         );
 
         DynamicUser = true;
-        LoadCredential = lib.optionals (
-          cfg.basicAuthPasswordFile != null
-        ) "basic_auth_password:${cfg.basicAuthPasswordFile}";
+        LoadCredential = lib.optionals (cfg.basicAuthPasswordFile != null) [
+          "basic_auth_password:${cfg.basicAuthPasswordFile}"
+        ];
 
         RestartSec = 1;
         Restart = "on-failure";
