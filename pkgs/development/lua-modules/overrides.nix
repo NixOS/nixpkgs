@@ -862,6 +862,24 @@ in
 
   });
 
+  tree-sitter-http = prev.tree-sitter-http.overrideAttrs (oa: {
+    propagatedBuildInputs =
+      let
+        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+        # but that doesn't seem to work
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+      ++ [
+        lua.pkgs.luarocks-build-treesitter-parser
+        tree-sitter
+      ];
+
+    preInstall = ''
+      export HOME="$TMPDIR";
+    '';
+  });
+
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
     propagatedBuildInputs = let
       # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
