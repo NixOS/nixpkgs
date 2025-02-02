@@ -141,6 +141,13 @@ in stdenv.mkDerivation {
     # cherry-picked from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
     # safe to remove for versions > 24.3.2
     ./cross_clc.patch
+
+    # dril fix for xf86videointel
+    # FIXME: remove when backported upstream
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/4ecd183c563670c5c3ab371d6b5596ecabbe6fad.diff";
+      hash = "sha256-AXXp1MHXEsvua1SyzQUbQLVqaA4Iw1yziqvAce+UkxQ=";
+    })
   ];
 
   postPatch = ''
