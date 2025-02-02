@@ -27,6 +27,8 @@ self: super: with self; {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  airportsdata = callPackage ../development/python-modules/airportsdata { };
+
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
   abjad = callPackage ../development/python-modules/abjad { };
@@ -10153,6 +10155,8 @@ self: super: with self; {
   };
 
   outlines = callPackage ../development/python-modules/outlines { };
+
+  outlines-core = callPackage ../development/python-modules/outlines-core { };
 
   overly = callPackage ../development/python-modules/overly { };
 
