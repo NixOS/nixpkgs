@@ -4351,9 +4351,6 @@ with pkgs;
 
   inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
-    nomad_1_4
-    nomad_1_5
-    nomad_1_6
     nomad_1_7
     nomad_1_8
     nomad_1_9
