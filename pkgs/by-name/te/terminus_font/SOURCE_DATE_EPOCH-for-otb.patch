@@ -1,0 +1,83 @@
+From 2f935030ddb834426da1180b768e6b1e71d0824a Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Sat, 9 Oct 2021 10:17:05 +0100
+Subject: [PATCH] terminus-font: bin/otb1cli.py: add support for
+ SOURCE_DATE_EPOCH
+
+NixOS (and a few other distributions) strive for bit-reproducible
+builds. terminus-font-4.49.1 fails reproducibility test due to
+timestamp embedding into .otb files. diffoscope says that two
+consecutive builds differ at file creation timestamp:
+
+ $ diffoscope '...-terminus-font-4.49.1' '...-terminus-font-4.49.1.check'
+ - ...-terminus-font-4.49.1/share/fonts/terminus/ter-u12b.otb
+ + ...-terminus-font-4.49.1.check/share/fonts/terminus/ter-u12b.otb
+  showttf {}
+ @@ -1,32 +1,32 @@
+  version=1, numtables=12, searchRange=128 entrySel=3 rangeshift=64
+  File Checksum =b1b0afba (should be 0xb1b0afba), diff=0
+  EBDT checksum=5263c696 actual=5263c696 diff=0 offset=204 len=23056
+  EBLC checksum=350f1222 actual=350f1222 diff=0 offset=23260 len=84
+  OS/2 checksum=8b4939dd actual=8b4939dd diff=0 offset=23344 len=96
+  cmap checksum=da4e56f3 actual=da4e56f3 diff=0 offset=23440 len=1220
+  glyf checksum=00000000 actual=00000000 diff=0 offset=24660 len=0
+ -head checksum=1cb1374e actual=9db28c18 diff=8103bb56 offset=24660 len=54
+ +head checksum=1cb528c7 actual=9dae9a9f diff=811bb258 offset=24660 len=54
+  hhea checksum=055706a2 actual=055706a2 diff=0 offset=24716 len=36
+  hmtx checksum=98000000 actual=98000000 diff=0 offset=24752 len=5424
+  loca checksum=00000000 actual=00000000 diff=0 offset=30176 len=2714
+  maxp checksum=058e0003 actual=058e0003 diff=0 offset=32892 len=32
+  name checksum=208d345e actual=208d345e diff=0 offset=32924 len=448
+  post checksum=ffd80056 actual=ffd80056 diff=0 offset=33372 len=32
+
+  HEAD table (at 24660)
+       Version=1
+       fontRevision=1
+ -     checksumAdj=810154ca
+ +     checksumAdj=80f971d8
+       magicNumber=5f0f3cf5 (0x5f0f3cf5, diff=0)
+       flags=20b baseline_at_0 lsb_at_0 ppem_to_int
+       unitsPerEm=1024
+       create[0]=0
+ -      create[1]=dd831dec
+ -     File created: Wed Oct  6 09:33:32 2021
+ +      create[1]=dd870f65
+ +     File created: Sat Oct  9 09:20:37 2021
+
+The change uses SOURCE_DATE_EPOCH environment variable to override
+on-disk timestamps:
+    https://reproducible-builds.org/docs/source-date-epoch/
+---
+ bin/otb1cli.py | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/bin/otb1cli.py b/bin/otb1cli.py
+index 92ab07b..847b570 100644
+--- a/bin/otb1cli.py
++++ b/bin/otb1cli.py
+@@ -17,6 +17,7 @@
+ #
+ 
+ from datetime import datetime, timezone
++import os
+ 
+ import fnutil
+ import fncli
+@@ -81,8 +82,12 @@ def main_program(nonopt, parsed):
+ 			try:
+ 				stat = ifs.fstat()
+ 				if stat:
+-					parsed.created = datetime.fromtimestamp(stat.st_ctime, timezone.utc)
+-					parsed.modified = datetime.fromtimestamp(stat.st_mtime, timezone.utc)
++					# Allow deterministic builds when SOURCE_DATE_EPOCH is set:
++					#  https://reproducible-builds.org/docs/source-date-epoch/
++					ct = int(os.environ.get('SOURCE_DATE_EPOCH', stat.st_ctime))
++					mt = int(os.environ.get('SOURCE_DATE_EPOCH', stat.st_mtime))
++					parsed.created = datetime.fromtimestamp(ct, timezone.utc)
++					parsed.modified = datetime.fromtimestamp(mt, timezone.utc)
+ 			except Exception as ex:
+ 				fnutil.warning(ifs.location(), str(ex))
+ 
+-- 
+2.33.0
+

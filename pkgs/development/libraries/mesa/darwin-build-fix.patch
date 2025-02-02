@@ -1,0 +1,13 @@
+diff --git a/src/glx/glxext.c b/src/glx/glxext.c
+index b03554487c3..9738dbdcaf2 100644
+--- a/src/glx/glxext.c
++++ b/src/glx/glxext.c
+@@ -28,7 +28,7 @@
+ #include "glxextensions.h"
+ 
+ #include "util/u_debug.h"
+-#ifndef GLX_USE_APPLEGL
++#if !defined(GLX_USE_APPLEGL) || defined(GLX_USE_APPLE)
+ #include "dri_common.h"
+ #endif
+ 

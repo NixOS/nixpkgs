@@ -1,0 +1,341 @@
+diff --git a/proxy/gnome/gproxyresolvergnome.c b/proxy/gnome/gproxyresolvergnome.c
+index 50b63cd..4364116 100644
+--- a/proxy/gnome/gproxyresolvergnome.c
++++ b/proxy/gnome/gproxyresolvergnome.c
+@@ -156,23 +156,79 @@
+ 
+   resolver->base_resolver = g_simple_proxy_resolver_new (NULL, NULL);
+ 
+-  resolver->proxy_settings = g_settings_new (GNOME_PROXY_SETTINGS_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA,
++                                             FALSE);
++    resolver->proxy_settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_signal_connect (resolver->proxy_settings, "changed",
+                     G_CALLBACK (gsettings_changed), resolver);
+-  resolver->http_settings = g_settings_get_child (resolver->proxy_settings,
+-                                                  GNOME_PROXY_HTTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTP_CHILD_SCHEMA,
++                                             FALSE);
++    resolver->http_settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_signal_connect (resolver->http_settings, "changed",
+                     G_CALLBACK (gsettings_changed), resolver);
+-  resolver->https_settings = g_settings_get_child (resolver->proxy_settings,
+-                                                   GNOME_PROXY_HTTPS_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTPS_CHILD_SCHEMA,
++                                             FALSE);
++    resolver->https_settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_signal_connect (resolver->https_settings, "changed",
+                     G_CALLBACK (gsettings_changed), resolver);
+-  resolver->ftp_settings = g_settings_get_child (resolver->proxy_settings,
+-                                                 GNOME_PROXY_FTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_FTP_CHILD_SCHEMA,
++                                             FALSE);
++    resolver->ftp_settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_signal_connect (resolver->ftp_settings, "changed",
+                     G_CALLBACK (gsettings_changed), resolver);
+-  resolver->socks_settings = g_settings_get_child (resolver->proxy_settings,
+-                                                   GNOME_PROXY_SOCKS_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_SOCKS_CHILD_SCHEMA,
++                                             FALSE);
++    resolver->socks_settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_signal_connect (resolver->socks_settings, "changed",
+                     G_CALLBACK (gsettings_changed), resolver);
+ 
+diff --git a/proxy/tests/gnome.c b/proxy/tests/gnome.c
+index f76b094..54751e3 100644
+--- a/proxy/tests/gnome.c
++++ b/proxy/tests/gnome.c
+@@ -55,26 +55,86 @@
+ {
+   GSettings *settings, *child;
+ 
+-  settings = g_settings_new (GNOME_PROXY_SETTINGS_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA,
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_reset (settings, GNOME_PROXY_MODE_KEY);
+   g_settings_reset (settings, GNOME_PROXY_USE_SAME_PROXY_KEY);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_HTTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTP_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_reset (child, GNOME_PROXY_HTTP_HOST_KEY);
+   g_settings_reset (child, GNOME_PROXY_HTTP_PORT_KEY);
+   g_object_unref (child);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_HTTPS_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTPS_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_reset (child, GNOME_PROXY_HTTPS_HOST_KEY);
+   g_settings_reset (child, GNOME_PROXY_HTTPS_PORT_KEY);
+   g_object_unref (child);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_FTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_FTP_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_reset (child, GNOME_PROXY_FTP_HOST_KEY);
+   g_settings_reset (child, GNOME_PROXY_FTP_PORT_KEY);
+   g_object_unref (child);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_SOCKS_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_SOCKS_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_reset (child, GNOME_PROXY_SOCKS_HOST_KEY);
+   g_settings_reset (child, GNOME_PROXY_SOCKS_PORT_KEY);
+   g_object_unref (child);
+@@ -88,21 +148,69 @@
+ {
+   GSettings *settings, *child;
+ 
+-  settings = g_settings_new (GNOME_PROXY_SETTINGS_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA,
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_enum (settings, GNOME_PROXY_MODE_KEY, G_DESKTOP_PROXY_MODE_MANUAL);
+   g_settings_set_boolean (settings, GNOME_PROXY_USE_SAME_PROXY_KEY, TRUE);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_HTTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTP_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_string (child, GNOME_PROXY_HTTP_HOST_KEY, "proxy.example.com");
+   g_settings_set_int (child, GNOME_PROXY_HTTP_PORT_KEY, 8080);
+   g_object_unref (child);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_HTTPS_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTPS_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_string (child, GNOME_PROXY_HTTPS_HOST_KEY, "proxy-s.example.com");
+   g_settings_set_int (child, GNOME_PROXY_HTTPS_PORT_KEY, 7070);
+   g_object_unref (child);
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_FTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_FTP_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_string (child, GNOME_PROXY_FTP_HOST_KEY, "proxy-f.example.com");
+   g_settings_set_int (child, GNOME_PROXY_FTP_PORT_KEY, 6060);
+   g_object_unref (child);
+@@ -119,12 +227,36 @@
+   GSettings *settings, *child;
+   const gchar *ignore_hosts[2] = { "127.0.0.1", NULL };
+ 
+-  settings = g_settings_new (GNOME_PROXY_SETTINGS_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA,
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_enum (settings, GNOME_PROXY_MODE_KEY, G_DESKTOP_PROXY_MODE_MANUAL);
+   g_settings_set (settings, GNOME_PROXY_IGNORE_HOSTS_KEY,
+                   "@as", g_variant_new_strv (ignore_hosts, -1));
+ 
+-  child = g_settings_get_child (settings, GNOME_PROXY_SOCKS_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_SOCKS_CHILD_SCHEMA,
++                                             FALSE);
++    child = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_string (child, GNOME_PROXY_SOCKS_HOST_KEY, "proxy.example.com");
+   g_settings_set_int (child, GNOME_PROXY_SOCKS_PORT_KEY, 1234);
+   g_object_unref (child);
+@@ -139,12 +271,36 @@
+ {
+   GSettings *settings, *http;
+ 
+-  settings = g_settings_new (GNOME_PROXY_SETTINGS_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA,
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_enum (settings, GNOME_PROXY_MODE_KEY, G_DESKTOP_PROXY_MODE_MANUAL);
+   g_settings_set (settings, GNOME_PROXY_IGNORE_HOSTS_KEY,
+                   "@as", g_variant_new_strv (ignore_hosts, n_ignore_hosts));
+ 
+-  http = g_settings_get_child (settings, GNOME_PROXY_HTTP_CHILD_SCHEMA);
++  {
++    GSettingsSchemaSource *schema_source;
++    GSettingsSchema *schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds_gsettings_path@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             GNOME_PROXY_SETTINGS_SCHEMA "." GNOME_PROXY_HTTP_CHILD_SCHEMA,
++                                             FALSE);
++    http = g_settings_new_full(schema, NULL, NULL);
++    g_settings_schema_source_unref(schema_source);
++    g_settings_schema_unref(schema);
++  }
+   g_settings_set_string (http, GNOME_PROXY_HTTP_HOST_KEY, "localhost");
+   g_settings_set_int (http, GNOME_PROXY_HTTP_PORT_KEY, 8080);
+ 

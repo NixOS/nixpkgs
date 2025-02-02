@@ -1,0 +1,161 @@
+Making mairix work with mbox files over 2GB.
+
+https://github.com/rc0/mairix/pull/19
+
+diff --git a/mairix.h b/mairix.h
+index 2480492..cb25824 100644
+--- a/mairix.h
++++ b/mairix.h
+@@ -327,9 +327,9 @@ enum data_to_rfc822_error {
+   DTR8_BAD_HEADERS, /* corrupt headers */
+   DTR8_BAD_ATTACHMENT /* corrupt attachment (e.g. no body part) */
+ };
+-struct rfc822 *data_to_rfc822(struct msg_src *src, char *data, int length, enum data_to_rfc822_error *error);
+-void create_ro_mapping(const char *filename, unsigned char **data, int *len);
+-void free_ro_mapping(unsigned char *data, int len);
++struct rfc822 *data_to_rfc822(struct msg_src *src, char *data, size_t length, enum data_to_rfc822_error *error);
++void create_ro_mapping(const char *filename, unsigned char **data, size_t *len);
++void free_ro_mapping(unsigned char *data, size_t len);
+ char *format_msg_src(struct msg_src *src);
+ 
+ /* In tok.c */
+diff --git a/mbox.c b/mbox.c
+index ebbfa78..396e27d 100644
+--- a/mbox.c
++++ b/mbox.c
+@@ -816,7 +816,7 @@ void build_mbox_lists(struct database *db, const char *folder_base, /*{{{*/
+         mb->n_old_msgs_valid = mb->n_msgs;
+       } else {
+         unsigned char *va;
+-        int len;
++        size_t len;
+         create_ro_mapping(mb->path, &va, &len);
+         if (va) {
+           rescan_mbox(mb, (char *) va, len);
+@@ -852,7 +852,7 @@ int add_mbox_messages(struct database *db)/*{{{*/
+   int any_new = 0;
+   int N;
+   unsigned char *va;
+-  int valen;
++  size_t valen;
+   enum data_to_rfc822_error error;
+ 
+   for (i=0; i<db->n_mboxen; i++) {
+diff --git a/reader.c b/reader.c
+index 71ac5bd..18f0108 100644
+--- a/reader.c
++++ b/reader.c
+@@ -81,7 +81,8 @@ static void read_toktable2_db(char *data, struct toktable2_db *toktable, int sta
+ /*}}}*/
+ struct read_db *open_db(char *filename)/*{{{*/
+ {
+-  int fd, len;
++  int fd;
++  size_t len;
+   char *data;
+   struct stat sb;
+   struct read_db *result;
+diff --git a/reader.h b/reader.h
+index 9b5dfa3..d709cc4 100644
+--- a/reader.h
++++ b/reader.h
+@@ -138,7 +138,7 @@ struct toktable2_db {/*{{{*/
+ struct read_db {/*{{{*/
+   /* Raw file parameters, needed later for munmap */
+   char *data;
+-  int len;
++  size_t len;
+ 
+   /* Pathname information */
+   int n_msgs;
+diff --git a/rfc822.c b/rfc822.c
+index b411f85..9c8e1a4 100644
+--- a/rfc822.c
++++ b/rfc822.c
+@@ -990,7 +990,7 @@ static void scan_status_flags(const char *s, struct headers *hdrs)/*{{{*/
+ 
+ /*{{{ data_to_rfc822() */
+ struct rfc822 *data_to_rfc822(struct msg_src *src,
+-    char *data, int length,
++    char *data, size_t length,
+     enum data_to_rfc822_error *error)
+ {
+   struct rfc822 *result;
+@@ -1265,7 +1265,7 @@ static struct ro_mapping *add_ro_cache(const char *filename, int fd, size_t len)
+ }
+ #endif /* USE_GZIP_MBOX || USE_BZIP_MBOX */
+ 
+-void create_ro_mapping(const char *filename, unsigned char **data, int *len)/*{{{*/
++void create_ro_mapping(const char *filename, unsigned char **data, size_t *len)/*{{{*/
+ {
+   struct stat sb;
+   int fd;
+@@ -1386,7 +1386,7 @@ comp_error:
+   data_alloc_type = ALLOC_MMAP;
+ }
+ /*}}}*/
+-void free_ro_mapping(unsigned char *data, int len)/*{{{*/
++void free_ro_mapping(unsigned char *data, size_t len)/*{{{*/
+ {
+   int r;
+ 
+@@ -1414,7 +1414,7 @@ static struct msg_src *setup_msg_src(char *filename)/*{{{*/
+ /*}}}*/
+ struct rfc822 *make_rfc822(char *filename)/*{{{*/
+ {
+-  int len;
++  size_t len;
+   unsigned char *data;
+   struct rfc822 *result;
+ 
+diff --git a/search.c b/search.c
+index 18b51ee..97967bc 100644
+--- a/search.c
++++ b/search.c
+@@ -681,7 +681,7 @@ static void mbox_terminate(const unsigned char *data, int len, FILE *out)/*{{{*/
+ static void append_file_to_mbox(const char *path, FILE *out)/*{{{*/
+ {
+   unsigned char *data;
+-  int len;
++  size_t len;
+   create_ro_mapping(path, &data, &len);
+   if (data) {
+     fprintf(out, "From mairix@mairix Mon Jan  1 12:34:56 1970\n");
+@@ -698,8 +698,8 @@ static int had_failed_checksum;
+ 
+ static void get_validated_mbox_msg(struct read_db *db, int msg_index,/*{{{*/
+                                    int *mbox_index,
+-                                   unsigned char **mbox_data, int *mbox_len,
+-                                   unsigned char **msg_data,  int *msg_len)
++                                   unsigned char **mbox_data, size_t *mbox_len,
++                                   unsigned char **msg_data,  size_t *msg_len)
+ {
+   /* msg_data==NULL if checksum mismatches */
+   unsigned char *start;
+@@ -738,7 +738,7 @@ static void append_mboxmsg_to_mbox(struct read_db *db, int msg_index, FILE *out)
+ {
+   /* Need to common up code with try_copy_to_path */
+   unsigned char *mbox_start, *msg_start;
+-  int mbox_len, msg_len;
++  size_t mbox_len, msg_len;
+   int mbox_index;
+ 
+   get_validated_mbox_msg(db, msg_index, &mbox_index, &mbox_start, &mbox_len, &msg_start, &msg_len);
+@@ -759,7 +759,7 @@ static void append_mboxmsg_to_mbox(struct read_db *db, int msg_index, FILE *out)
+ static void try_copy_to_path(struct read_db *db, int msg_index, char *target_path)/*{{{*/
+ {
+   unsigned char *data;
+-  int mbox_len, msg_len;
++  size_t mbox_len, msg_len;
+   int mbi;
+   FILE *out;
+   unsigned char *start;
+@@ -1214,7 +1214,7 @@ static int do_search(struct read_db *db, char **args, char *output_path, int sho
+                 unsigned int mbix, msgix;
+                 int start, len, after_end;
+                 unsigned char *mbox_start, *msg_start;
+-                int mbox_len, msg_len;
++                size_t mbox_len, msg_len;
+                 int mbox_index;
+ 
+                 start = db->mtime_table[i];

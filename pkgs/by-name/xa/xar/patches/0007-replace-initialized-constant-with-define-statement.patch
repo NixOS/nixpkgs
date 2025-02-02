@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Fabian Groffen <grobian@gentoo.org>
+Date: Sat, 16 Jul 2022 21:34:13 +0200
+Subject: [PATCH 07/19] replace initialized constant with #define statement
+
+GCC doesn't like this:
+
+filetree.c:744:9: error: variable-sized object may not be initialized
+
+Since there's nothing changing at runtime at all, just make the compiler
+see it's always going to be 1.
+
+Patch-Source: https://github.com/gentoo/gentoo/blob/dce914f2bbf52360f45c90d877857df3c4c2a353/app-arch/xar/files/xar-1.8.0.0.487-variable-sized-object.patch
+---
+ xar/lib/filetree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xar/lib/filetree.c b/xar/lib/filetree.c
+index f31682a..9c30c03 100644
+--- a/xar/lib/filetree.c
++++ b/xar/lib/filetree.c
+@@ -752,7 +752,7 @@ int xar_file_equals_file(xar_file_t f1, xar_file_t f2)
+ 	size_t fspath1_size = 0, fspath2_size = 0;
+ 	size_t ns1_size = 0, ns2_size = 0;
+ 	const struct __xar_file_t * child1 = NULL, * child2 = NULL;
+-	const uint keys_to_ignore_count = 1;
++#define keys_to_ignore_count 1
+ 	char * keys_to_ignore[keys_to_ignore_count] = { "id" }; // ID is allowed ot mismatch
+ 	
+ 	// If the two pointers match, call it the same.
+-- 
+2.44.1
+
