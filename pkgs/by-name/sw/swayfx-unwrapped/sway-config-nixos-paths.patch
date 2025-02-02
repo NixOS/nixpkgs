@@ -1,0 +1,21 @@
+diff --git a/config.in b/config.in
+index 08703bef..f3872730 100644
+--- a/config.in
++++ b/config.in
+@@ -22,8 +22,8 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
+ 
+ ### Output configuration
+ #
+-# Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
+-output * bg @datadir@/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
++# Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
++output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+ #
+ # Example configuration:
+ #
+@@ -214,4 +214,4 @@ bar {
+     }
+ }
+ 
+-include @sysconfdir@/sway/config.d/*
++include /etc/sway/config.d/*

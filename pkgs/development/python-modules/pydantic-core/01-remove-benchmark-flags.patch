@@ -1,0 +1,18 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 1602e32..507048d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -72,13 +72,6 @@ filterwarnings = [
+ ]
+ timeout = 30
+ xfail_strict = true
+-# min, max, mean, stddev, median, iqr, outliers, ops, rounds, iterations
+-addopts = [
+-    '--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations',
+-    '--benchmark-group-by', 'group',
+-    '--benchmark-warmup', 'on',
+-    '--benchmark-disable',  # this is enable by `make benchmark` when you actually want to run benchmarks
+-]
+ 
+ [tool.coverage.run]
+ source = ['pydantic_core']

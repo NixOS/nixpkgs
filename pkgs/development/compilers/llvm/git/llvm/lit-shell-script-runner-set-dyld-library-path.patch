@@ -1,0 +1,12 @@
+--- a/utils/lit/lit/TestRunner.py	2024-03-15 17:27:53.170780798 -0700
++++ b/utils/lit/lit/TestRunner.py	2024-03-15 17:28:43.277447791 -0700
+@@ -1183,6 +1183,9 @@
+         f.write("@echo on\n")
+         f.write("\n@if %ERRORLEVEL% NEQ 0 EXIT\n".join(commands))
+     else:
++        if "DYLD_LIBRARY_PATH" in test.config.environment:
++            f.write(f'export DYLD_LIBRARY_PATH="{test.config.environment["DYLD_LIBRARY_PATH"]}"\n')
++
+         for i, ln in enumerate(commands):
+             match = re.fullmatch(kPdbgRegex, ln)
+             if match:

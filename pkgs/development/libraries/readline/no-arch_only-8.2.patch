@@ -1,0 +1,13 @@
+diff -ru -x '*~' readline-6.3-orig/support/shobj-conf readline-6.3/support/shobj-conf
+--- support/shobj-conf	2014-02-24 03:06:29.000000000 +0100
++++ support/shobj-conf	2014-07-22 11:18:52.000000000 +0200
+@@ -159,9 +159,6 @@
+ 	# Darwin 8 == Mac OS X 10.4; Mac OS X 10.N == Darwin N+4
+ 	*)
+ 		case "${host_os}" in
+-		darwin[89]*|darwin1[012]*)
+-			SHOBJ_ARCHFLAGS=
+-			;;
+ 		 *) 	# Mac OS X 10.9 (Mavericks) and later
+ 			SHOBJ_ARCHFLAGS=
+ 			# for 32 and 64bit universal library

@@ -1,0 +1,204 @@
+# This is a modified version of stage0-posix/x86/mescc-tools-full-kaem.kaem
+# https://github.com/oriansj/stage0-posix-x86/blob/56e6b8df3e95f4bc04f8b420a4cd8c82c70b9efa/mescc-tools-full-kaem.kaem
+# - Paths to build inputs have been changed for nix
+
+# Mes --- Maxwell Equations of Software
+# Copyright © 2017,2019 Jan Nieuwenhuizen <janneke@gnu.org>
+# Copyright © 2017,2019 Jeremiah Orians
+#
+# This file is part of Mes.
+#
+# Mes is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or (at
+# your option) any later version.
+#
+# Mes is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Mes.  If not, see <http://www.gnu.org/licenses/>.
+
+${mkdir} -p ${out}/bin
+${cp} ${M2} ${out}/bin/M2
+${chmod} 0555 ${out}/bin/M2
+${cp} ${M1} ${out}/bin/M1
+${chmod} 0555 ${out}/bin/M1
+${cp} ${hex2} ${out}/bin/hex2
+${chmod} 0555 ${out}/bin/hex2
+
+# M2-Mesoplanet searches for runtime dependencies in environment variables
+# We can hardcode them with the "replace" utility from mescc-tools-extra
+${replace} \
+	--file ${src}/M2-Mesoplanet/cc.c \
+	--output ./cc_patched.c \
+	--match-on "env_lookup(\"M2LIBC_PATH\")" \
+	--replace-with "\"${m2libc}\""
+${replace} \
+	--file ${src}/M2-Mesoplanet/cc_spawn.c \
+	--output ./cc_spawn_patched.c \
+	--match-on "env_lookup(\"PATH\")" \
+	--replace-with "\"${out}/bin:\""
+
+###############################################
+# Phase-12 Build M2-Mesoplanet from M2-Planet #
+###############################################
+
+${M2} --architecture ${m2libcArch} \
+  -f ${m2libc}/sys/types.h \
+  -f ${m2libc}/stddef.h \
+  -f ${m2libc}/${m2libcArch}/linux/fcntl.c \
+  -f ${m2libc}/fcntl.c \
+  -f ${m2libc}/${m2libcArch}/linux/unistd.c \
+  -f ${m2libc}/${m2libcArch}/linux/sys/stat.c \
+  -f ${m2libc}/stdlib.c \
+  -f ${m2libc}/stdio.h \
+  -f ${m2libc}/stdio.c \
+  -f ${m2libc}/string.c \
+  -f ${m2libc}/bootstrappable.c \
+  -f ${src}/M2-Mesoplanet/cc.h \
+  -f ${src}/M2-Mesoplanet/cc_globals.c \
+  -f ${src}/M2-Mesoplanet/cc_env.c \
+  -f ${src}/M2-Mesoplanet/cc_reader.c \
+  -f ./cc_spawn_patched.c \
+  -f ${src}/M2-Mesoplanet/cc_core.c \
+  -f ${src}/M2-Mesoplanet/cc_macro.c \
+  -f ./cc_patched.c \
+  --debug \
+  -o ./M2-Mesoplanet-1.M1
+
+${blood-elf-0} ${endianFlag} ${bloodFlag} -f ./M2-Mesoplanet-1.M1 -o ./M2-Mesoplanet-1-footer.M1
+
+${M1} --architecture ${m2libcArch} \
+  ${endianFlag} \
+  -f ${m2libc}/${m2libcArch}/${m2libcArch}_defs.M1 \
+  -f ${m2libc}/${m2libcArch}/libc-full.M1 \
+  -f ./M2-Mesoplanet-1.M1 \
+  -f ./M2-Mesoplanet-1-footer.M1 \
+  -o ./M2-Mesoplanet-1.hex2
+
+${hex2} --architecture ${m2libcArch} \
+  ${endianFlag} \
+  --base-address ${baseAddress} \
+  -f ${m2libc}/${m2libcArch}/ELF-${m2libcArch}-debug.hex2 \
+  -f ./M2-Mesoplanet-1.hex2 \
+  -o ${out}/bin/M2-Mesoplanet
+
+#################################################
+# Phase-13 Build final blood-elf from C sources #
+#################################################
+
+${M2} --architecture ${m2libcArch} \
+	-f ${m2libc}/sys/types.h \
+	-f ${m2libc}/stddef.h \
+	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
+	-f ${m2libc}/fcntl.c \
+	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
+	-f ${m2libc}/stdlib.c \
+	-f ${m2libc}/stdio.h \
+	-f ${m2libc}/stdio.c \
+	-f ${m2libc}/bootstrappable.c \
+	-f ${src}/mescc-tools/stringify.c \
+	-f ${src}/mescc-tools/blood-elf.c \
+	--debug \
+	-o ./blood-elf-1.M1
+
+${blood-elf-0} ${endianFlag} ${bloodFlag} -f ./blood-elf-1.M1 -o ./blood-elf-1-footer.M1
+
+${M1} --architecture ${m2libcArch} \
+	${endianFlag} \
+	-f ${m2libc}/${m2libcArch}/${m2libcArch}_defs.M1 \
+	-f ${m2libc}/${m2libcArch}/libc-full.M1 \
+	-f ./blood-elf-1.M1 \
+	-f ./blood-elf-1-footer.M1 \
+	-o ./blood-elf-1.hex2
+
+${hex2} --architecture ${m2libcArch} \
+	${endianFlag} \
+	--base-address ${baseAddress} \
+	-f ${m2libc}/${m2libcArch}/ELF-${m2libcArch}-debug.hex2 \
+	-f ./blood-elf-1.hex2 \
+	-o ${out}/bin/blood-elf
+
+# Now we have our shipping debuggable blood-elf, the rest will be down hill from
+# here as we have ALL of the core pieces of compiling and assembling debuggable
+# programs in a debuggable form with corresponding C source code.
+
+#############################################
+# Phase-14 Build get_machine from C sources #
+#############################################
+
+${M2} --architecture ${m2libcArch} \
+	-f ${m2libc}/sys/types.h \
+	-f ${m2libc}/stddef.h \
+	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
+	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
+	-f ${m2libc}/fcntl.c \
+	-f ${m2libc}/stdlib.c \
+	-f ${m2libc}/stdio.h \
+	-f ${m2libc}/stdio.c \
+	-f ${m2libc}/bootstrappable.c \
+	-f ${src}/mescc-tools/get_machine.c \
+	--debug \
+	-o get_machine.M1
+
+${out}/bin/blood-elf ${endianFlag} ${bloodFlag} -f ./get_machine.M1 -o ./get_machine-footer.M1
+
+${M1} --architecture ${m2libcArch} \
+	${endianFlag} \
+	-f ${m2libc}/${m2libcArch}/${m2libcArch}_defs.M1 \
+	-f ${m2libc}/${m2libcArch}/libc-full.M1 \
+	-f ./get_machine.M1 \
+	-f ./get_machine-footer.M1 \
+	-o ./get_machine.hex2
+
+${hex2} --architecture ${m2libcArch} \
+	${endianFlag} \
+	--base-address ${baseAddress} \
+	-f ${m2libc}/${m2libcArch}/ELF-${m2libcArch}-debug.hex2 \
+	-f ./get_machine.hex2 \
+	-o ${out}/bin/get_machine
+
+############################################
+# Phase-15 Build M2-Planet from M2-Planet  #
+############################################
+
+${M2} --architecture ${m2libcArch} \
+	-f ${m2libc}/sys/types.h \
+	-f ${m2libc}/stddef.h \
+	-f ${m2libc}/${m2libcArch}/linux/unistd.c \
+	-f ${m2libc}/${m2libcArch}/linux/fcntl.c \
+	-f ${m2libc}/fcntl.c \
+	-f ${m2libc}/stdlib.c \
+	-f ${m2libc}/stdio.h \
+	-f ${m2libc}/stdio.c \
+	-f ${m2libc}/bootstrappable.c \
+	-f ${src}/M2-Planet/cc.h \
+	-f ${src}/M2-Planet/cc_globals.c \
+	-f ${src}/M2-Planet/cc_reader.c \
+	-f ${src}/M2-Planet/cc_strings.c \
+	-f ${src}/M2-Planet/cc_types.c \
+	-f ${src}/M2-Planet/cc_core.c \
+	-f ${src}/M2-Planet/cc_macro.c \
+	-f ${src}/M2-Planet/cc.c \
+	--debug \
+	-o ./M2-1.M1
+
+${out}/bin/blood-elf ${endianFlag} ${bloodFlag} -f ./M2-1.M1 -o ./M2-1-footer.M1
+
+${M1} --architecture ${m2libcArch} \
+	${endianFlag} \
+	-f ${m2libc}/${m2libcArch}/${m2libcArch}_defs.M1 \
+	-f ${m2libc}/${m2libcArch}/libc-full.M1 \
+	-f ./M2-1.M1 \
+	-f ./M2-1-footer.M1 \
+	-o ./M2-1.hex2
+
+${hex2} --architecture ${m2libcArch} \
+	${endianFlag} \
+	--base-address ${baseAddress} \
+	-f ${m2libc}/${m2libcArch}/ELF-${m2libcArch}-debug.hex2 \
+	-f ./M2-1.hex2 \
+	-o ${out}/bin/M2-Planet

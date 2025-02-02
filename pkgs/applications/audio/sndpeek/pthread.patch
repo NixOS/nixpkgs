@@ -1,0 +1,13 @@
+diff --git a/makefile.alsa b/makefile.alsa
+index 34fb848..cdaeaec 100644
+--- a/makefile.alsa
++++ b/makefile.alsa
+@@ -4,7 +4,7 @@ CPP=g++
+ INCLUDES=-I../marsyas/
+ MARSYAS_DIR=../marsyas/
+ CFLAGS=-D__LINUX_ALSA__ -D__LITTLE_ENDIAN__ $(INCLUDES) -O3 -c
+-LIBS=-L/usr/X11R6/lib -lglut -lGL -lGLU -lasound -lXmu -lX11 -lXext -lXi -lm -lsndfile
++LIBS=-L/usr/X11R6/lib -lglut -lGL -lGLU -lasound -lXmu -lX11 -lXext -lXi -lm -lsndfile -lpthread
+ 
+ OBJS=chuck_fft.o RtAudio.o Thread.o sndpeek.o Stk.o \
+ 	Centroid.o DownSampler.o Flux.o LPC.o MFCC.o RMS.o Rolloff.o \

@@ -1,0 +1,11 @@
+--- a/libdbusmenu-glib/dbusmenu-glib-0.4.pc.in
++++ b/libdbusmenu-glib/dbusmenu-glib-0.4.pc.in
+@@ -5,7 +5,7 @@
+ includedir=@includedir@
+
+ Cflags: -I${includedir}/libdbusmenu-glib-0.4
+-Requires:
++Requires: glib-2.0
+ Libs: -L${libdir} -ldbusmenu-glib
+
+ Name: libdbusmenu-glib

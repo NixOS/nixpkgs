@@ -1,0 +1,27 @@
+From 3eb1a408758b68543c73d5214b467c2905fbea2a Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:32:36 +0100
+Subject: [PATCH 5/6] Use app context to create routes
+
+Routes creates session database tables, so it needs a context.
+---
+ powerdnsadmin/__init__.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/powerdnsadmin/__init__.py b/powerdnsadmin/__init__.py
+index 653af33..bc6f7df 100755
+--- a/powerdnsadmin/__init__.py
++++ b/powerdnsadmin/__init__.py
+@@ -73,7 +73,8 @@ def create_app(config=None):
+     # Load app's components
+     assets.init_app(app)
+     models.init_app(app)
+-    routes.init_app(app)
++    with app.app_context():
++        routes.init_app(app)
+     services.init_app(app)
+ 
+     # Register filters
+-- 
+2.42.0
+
