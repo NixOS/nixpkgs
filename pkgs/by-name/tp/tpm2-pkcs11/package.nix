@@ -1,68 +1,76 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
   autoconf-archive,
+  autoreconfHook,
+  clangStdenv,
+  cmocka,
+  fetchFromGitHub,
+  glibc,
+  lib,
+  libyaml,
   makeWrapper,
-  patchelf,
-  tpm2-tss,
-  tpm2-tools,
   opensc,
   openssl,
-  sqlite,
+  patchelf,
+  pkg-config,
   python3,
-  glibc,
-  libyaml,
-  abrmdSupport ? true,
-  tpm2-abrmd ? null,
+  stdenv,
+  sqlite,
+  tpm2-abrmd,
+  tpm2-pkcs11, # for passthru abrmd tests
+  tpm2-tools,
+  tpm2-tss,
+  abrmdSupport ? false,
   fapiSupport ? true,
+  enableFuzzing ? false,
 }:
 
-stdenv.mkDerivation rec {
+let
+  chosenStdenv = if enableFuzzing then clangStdenv else stdenv;
+in
+chosenStdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-pkcs11";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-SoHtgZRIYNJg4/w1MIocZAM26mkrM+UOQ+RKCh6nwCk=";
+    repo = "tpm2-pkcs11";
+    tag = finalAttrs.version;
+    hash = "sha256-W74ckrpK7ypny1L3Gn7nNbOVh8zbHavIk/TX3b8XbI8=";
   };
-
-  patches = [
-    ./version.patch
-    ./graceful-fapi-fail.patch
-  ];
 
   # The preConfigure phase doesn't seem to be working here
   # ./bootstrap MUST be executed as the first step, before all
   # of the autoreconfHook stuff
   postPatch = ''
-    echo ${version} > VERSION
+    echo "$version" > VERSION
+
+    # Don't run git in the bootstrap
+    substituteInPlace bootstrap --replace-warn "git" "# git"
+
+    # Don't run tests with dbus
+    substituteInPlace Makefile.am --replace-fail "dbus-run-session" "env"
+
+    patchShebangs test
+
     ./bootstrap
   '';
 
-  configureFlags = lib.optionals (!fapiSupport) [
-    # Note: this will be renamed to with-fapi in next release.
-    "--enable-fapi=no"
-  ];
+  configureFlags =
+    lib.singleton (lib.enableFeature finalAttrs.doCheck "unit")
+    ++ lib.optionals enableFuzzing [
+      "--enable-fuzzing"
+      "--disable-hardening"
+    ]
+    ++ lib.optional fapiSupport "--with-fapi";
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
     autoconf-archive
+    autoreconfHook
     makeWrapper
     patchelf
-  ];
-  buildInputs = [
-    tpm2-tss
-    tpm2-tools
-    opensc
-    openssl
-    sqlite
-    libyaml
+    pkg-config
     (python3.withPackages (
       ps: with ps; [
         packaging
@@ -73,6 +81,20 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+  buildInputs = [
+    libyaml
+    opensc
+    openssl
+    sqlite
+    tpm2-tools
+    tpm2-tss
+  ];
+  checkInputs = [
+    cmocka
+  ];
+
+  enableParallelBuilding = true;
+  hardeningDisable = lib.optional enableFuzzing "all";
 
   outputs = [
     "out"
@@ -80,6 +102,7 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+  doCheck = true;
   dontStrip = true;
   dontPatchELF = true;
 
@@ -90,11 +113,11 @@ stdenv.mkDerivation rec {
       rpath = lib.makeLibraryPath (
         (lib.optional abrmdSupport tpm2-abrmd)
         ++ [
-          tpm2-tss
-          sqlite
-          openssl
           glibc
           libyaml
+          openssl
+          sqlite
+          tpm2-tss
         ]
       );
     in
@@ -113,6 +136,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ tpm2-tools ]}
   '';
 
+  passthru = {
+    tests.tpm2-pkcs11-abrmd = tpm2-pkcs11.override {
+      abrmdSupport = true;
+    };
+  };
+
   meta = with lib; {
     description = "PKCS#11 interface for TPM2 hardware";
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
@@ -121,4 +150,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tpm2_ptool";
   };
-}
+})
