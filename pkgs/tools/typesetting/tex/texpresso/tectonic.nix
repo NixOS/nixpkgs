@@ -14,7 +14,7 @@ tectonic-unwrapped.override (old: {
             hash = "sha256-RPsXmp+5MF9h+H3wdL1O1hXSRZWjWTY8lXq/dWZIM1g=";
             fetchSubmodules = true;
           };
-          cargoHash = "sha256-g4iBo8r+QUOcFJ3CI2+HOi4VHxU7jKnIWlJcKx/6r5E=";
+          cargoHash = "sha256-mqhbIv5r/5EDRDfP2BymXv9se2NCKxzRGqNqwqbD9A0=";
           # binary has a different name, bundled tests won't work
           doCheck = false;
           meta.mainProgram = "texpresso-tonic";
