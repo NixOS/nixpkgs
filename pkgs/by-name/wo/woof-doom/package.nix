@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "woof-doom";
-  version = "15.1.0";
+  version = "15.2.0";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "woof";
     rev = "woof_${finalAttrs.version}";
-    hash = "sha256-rVcD+yeqkguNcfusVI1Y0X+RkXRMIShr9FjTbWB4Qfg=";
+    hash = "sha256-U1JxdWKSIbIbPMipnjY2SJ5lOP9AFMLNjyplK0mFhxE=";
   };
 
   nativeBuildInputs = [
