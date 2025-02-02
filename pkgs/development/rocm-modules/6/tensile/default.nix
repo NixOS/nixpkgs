@@ -91,7 +91,8 @@ buildPythonPackage rec {
     }))
     ++ (lib.optional isTensileLite ./tensile-create-library-dont-copy-twice.diff)
     ++ (lib.optional isTensileLite ./gen_assembly-venv-err-handling.diff)
-    ++ (lib.optional isTensileLite ./log-fallback.diff);
+    ++ (lib.optional isTensileLite ./log-fallback.diff)
+    ++ (lib.optional isTensileLite ./tensile-compression.diff);
 
   doCheck = false; # Too many errors, not sure how to set this up properly
 
