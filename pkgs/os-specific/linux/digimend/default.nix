@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   kernel,
   kernelModuleMakeFlags,
 }:
@@ -16,6 +17,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-YYCxTyoZGMnqC2nKkRi5Z1uofldGvJDGY2/sO9iMNIo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "digimend-linux-6.12.patch";
+      url = "https://github.com/DIGImend/digimend-kernel-drivers/commit/f3c7c7f1179fc786a8e5aad027d4db904c31b42c.patch";
+      sha256 = "17ar96n5qaxsvmx2s0fcz3iiv59i7bwc6jdj05vjz29gqy95l91j";
+    })
+  ];
 
   postPatch = ''
     sed 's/udevadm /true /' -i Makefile
