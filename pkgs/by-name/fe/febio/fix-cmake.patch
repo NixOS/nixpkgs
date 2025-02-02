@@ -1,0 +1,71 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c1bc953edf..f6aaf92fb5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,6 +2,7 @@
+ set(CMAKE_CXX_STANDARD 14)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ mark_as_advanced(FORCE CMAKE_INSTALL_PREFIX)
++include(GNUInstallDirs)
+ 
+ project(FEBio)
+ set(FEBIO_LIBS FEBioFluid FEBioLib FEBioMech FEBioMix FEBioOpt FECore NumCore FEAMR FEBioRVE FEImgLib)
+@@ -51,7 +52,7 @@
+         find_library(TEMP NAMES ${libName}.lib ${ARGV3}.lib ${ARGV4}.lib ${ARGV5}.lib ${ARGV6}.lib
+             PATHS ${${libDir}} NO_DEFAULT_PATH)
+     else()
+-        find_library(TEMP NAMES lib${libName}.a lib${ARGV3}.a lib${ARGV4}.a lib${ARGV5}.a lib${ARGV6}.a
++        find_library(TEMP NAMES lib${libName}.a lib${ARGV3}.a lib${ARGV4}.a lib${ARGV5}.a lib${ARGV6}.a lib${libName}@so@ lib${ARGV3}@so@ lib${ARGV4}@so@ lib${ARGV5}@so@ lib${ARGV6}@so@
+             PATHS ${${libDir}} NO_DEFAULT_PATH)
+     endif()
+     
+@@ -154,7 +155,7 @@
+ ##### Find Source Files #####
+ 
+ macro(findHdrSrc name)
+-	file(GLOB HDR_${name} "${name}/*.h")
++	file(GLOB HDR_${name} "${name}/*.h" "${name}/*.hpp")
+ 	file(GLOB SRC_${name} "${name}/*.cpp")
+ endmacro()
+ 
+@@ -171,8 +172,9 @@
+ 
+ macro(addLib name TYPE)
+     string(TOLOWER ${name} lname)
+-	add_library(${lname} ${TYPE} ${HDR_${name}} ${SRC_${name}})
++	add_library(${lname} ${TYPE} ${SRC_${name}})
+ 	set_property(TARGET ${lname} PROPERTY AUTOGEN_BUILD_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/AutoGen/${name}_autogen)
++    target_sources(${lname} PUBLIC FILE_SET HEADERS TYPE HEADERS FILES ${HDR_${name}})
+     
+     if(NOT WIN32)
+         set_property(TARGET ${lname} PROPERTY POSITION_INDEPENDENT_CODE ON)
+@@ -181,6 +183,8 @@
+     if(APPLE)
+         target_link_libraries(${lname} PRIVATE "-undefined dynamic_lookup")
+     endif()
++
++    install(TARGETS ${lname} FILE_SET HEADERS)
+ endmacro()
+ 
+ foreach(name IN LISTS FEBIO_LIBS)
+@@ -194,6 +198,7 @@
+ ##### Set up executable compilation #####
+ file(GLOB SOURCES "FEBio/*.cpp")
+ add_executable (febio4 ${SOURCES})
++install(TARGETS febio4)
+ 
+ if(WIN32)
+     target_compile_options(febio4 PRIVATE /openmp)
+@@ -269,7 +274,6 @@
+ mark_as_advanced(EXTRA_INC)
+ 
+ ##### Setup includes, defnitions, and linking options #####
+-include_directories(${PROJECT_SOURCE_DIR})
+ 
+ # Link LEVMAR
+ if(USE_LEVMAR)
+@@ -438,3 +442,4 @@
+     file(WRITE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/febio.xml "${filedata}")
+ endif()
+ 
++install(FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/febio.xml TYPE BIN)

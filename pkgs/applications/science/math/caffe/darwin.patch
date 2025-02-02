@@ -1,0 +1,47 @@
+diff --git a/Makefile b/Makefile
+index c823f66e..65b90c5e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -32,9 +32,9 @@ SRC_DIRS := $(shell find * -type d -exec bash -c "find {} -maxdepth 1 \
+ LIBRARY_NAME := $(PROJECT)
+ LIB_BUILD_DIR := $(BUILD_DIR)/lib
+ STATIC_NAME := $(LIB_BUILD_DIR)/lib$(LIBRARY_NAME).a
+-DYNAMIC_VERSION_MAJOR 		:= 1
+-DYNAMIC_VERSION_MINOR 		:= 0
+-DYNAMIC_VERSION_REVISION 	:= 0
++DYNAMIC_VERSION_MAJOR		:= 1
++DYNAMIC_VERSION_MINOR		:= 0
++DYNAMIC_VERSION_REVISION	:= 0
+ DYNAMIC_NAME_SHORT := lib$(LIBRARY_NAME).so
+ #DYNAMIC_SONAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR)
+ DYNAMIC_VERSIONED_NAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
+diff --git a/cmake/Dependencies.cmake b/cmake/Dependencies.cmake
+index c48255c8..cf4c580e 100644
+--- a/cmake/Dependencies.cmake
++++ b/cmake/Dependencies.cmake
+@@ -105,7 +105,6 @@ if(USE_OPENCV)
+ endif()
+ 
+ # ---[ BLAS
+-if(NOT APPLE)
+   set(BLAS "Atlas" CACHE STRING "Selected BLAS library")
+   set_property(CACHE BLAS PROPERTY STRINGS "Atlas;Open;MKL")
+ 
+@@ -123,17 +122,6 @@ if(NOT APPLE)
+     list(APPEND Caffe_LINKER_LIBS PUBLIC ${MKL_LIBRARIES})
+     list(APPEND Caffe_DEFINITIONS PUBLIC -DUSE_MKL)
+   endif()
+-elseif(APPLE)
+-  find_package(vecLib REQUIRED)
+-  list(APPEND Caffe_INCLUDE_DIRS PUBLIC ${vecLib_INCLUDE_DIR})
+-  list(APPEND Caffe_LINKER_LIBS PUBLIC ${vecLib_LINKER_LIBS})
+-
+-  if(VECLIB_FOUND)
+-    if(NOT vecLib_INCLUDE_DIR MATCHES "^/System/Library/Frameworks/vecLib.framework.*")
+-      list(APPEND Caffe_DEFINITIONS PUBLIC -DUSE_ACCELERATE)
+-    endif()
+-  endif()
+-endif()
+ 
+ # ---[ Python
+ if(BUILD_python)

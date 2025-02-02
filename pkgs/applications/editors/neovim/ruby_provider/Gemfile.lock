@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    msgpack (1.7.2)
+    multi_json (1.15.0)
+    neovim (0.10.0)
+      msgpack (~> 1.1)
+      multi_json (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  neovim
+
+BUNDLED WITH
+   2.3.27

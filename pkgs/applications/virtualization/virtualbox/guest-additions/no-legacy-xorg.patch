@@ -1,0 +1,45 @@
+# https://www.virtualbox.org/changeset/100258/vbox
+diff --git a/src/VBox/Additions/linux/Makefile.kmk b/src/VBox/Additions/linux/Makefile.kmk
+index 0921b3fe619..de9e98b4989 100644
+--- a/src/VBox/Additions/linux/Makefile.kmk
++++ b/src/VBox/Additions/linux/Makefile.kmk
+@@ -136,23 +136,29 @@ VBOX_LNX_ADD_STRIP_SBIN += \
+ 	$(if $(VBOX_WITH_LIGHTDM_GREETER),vbox-greeter)
+ 
+ VBOX_LNX_ADD_STRIP_MOD = \
+-	vboxmouse_drv_70.so \
+-	vboxmouse_drv_71.so \
+-	vboxmouse_drv_13.so \
+-	vboxmouse_drv_14.so \
+-	vboxmouse_drv_15.so \
+-	vboxmouse_drv_16.so \
+-	$(addsuffix .so,$(filter-out %_32,$(filter vboxvideo_drv_%,$(DLLS)))) \
+ 	$(if $(VBOX_WITH_PAM),pam_vbox.so,) \
+ 	mount.vboxsf
+ 
++ifndef VBOX_NO_LEGACY_XORG_X11
++ VBOX_LNX_ADD_STRIP_MOD += \
++ 	vboxmouse_drv_70.so \
++ 	vboxmouse_drv_71.so \
++ 	vboxmouse_drv_13.so \
++ 	vboxmouse_drv_14.so \
++ 	vboxmouse_drv_15.so \
++ 	vboxmouse_drv_16.so \
++ 	$(addsuffix .so,$(filter-out %_32,$(filter vboxvideo_drv_%,$(DLLS))))
++endif
++
+ VBOX_LNX_ADD_MOD = \
+ 	98vboxadd-xclient \
+ 	x11config.sh
+ 
+-VBOX_LNX_ADD_STRIP_OBJ = \
+-	vboxmouse_drv.o \
+-	vboxvideo_drv.o
++ifndef VBOX_NO_LEGACY_XORG_X11
++ VBOX_LNX_ADD_STRIP_OBJ = \
++ 	vboxmouse_drv.o \
++ 	vboxvideo_drv.o
++endif
+ 
+ VBOX_LNX_ADD_INIT = \
+ 	vboxadd \
