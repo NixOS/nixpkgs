@@ -23,12 +23,9 @@ buildPostgresqlExtension (finalAttrs: {
     hash = "sha256-Sa9ltW3KV/69OCxD3gRcp5owL0oW+z3fs4fRBHbSh30=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config
-    postgresql
   ];
 
   buildInputs = [
