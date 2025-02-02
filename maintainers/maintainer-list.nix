@@ -2729,6 +2729,12 @@
     githubId = 34620799;
     name = "Jacob Bachmann";
   };
+  bct = {
+    email = "bct@diffeq.com";
+    github = "bct";
+    githubId = 548;
+    name = "Brendan Taylor";
+  };
   bcyran = {
     email = "bazyli@cyran.dev";
     github = "bcyran";
