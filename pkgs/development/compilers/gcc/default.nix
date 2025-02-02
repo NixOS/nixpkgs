@@ -20,7 +20,7 @@
 , zlib ? null
 , libucontext ? null
 , gnat-bootstrap ? null
-, enableMultilib ? false
+, enableMultilib ? !withoutTargetLibc && (stdenv.targetPlatform.gcc.enableMultilib or false) # only enable if with libc
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
