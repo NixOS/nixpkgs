@@ -29,15 +29,6 @@ let
       hash = "sha256-ZjCl1gx/6sGtpXAYO4sAh6dutjwzClQ7kZoq0WaaBlU=";
     };
 
-    postPatch = ''
-      substituteInPlace Makefile \
-        --replace-fail 'O6' 'O3'
-      substituteInPlace Misc/common.h \
-        --replace-fail '|| defined(TARGET_OS_MAC)' ""
-      substituteInPlace Misc/common.c \
-        --replace-fail '|| defined(TARGET_OS_MAC)' ""
-    '';
-
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
