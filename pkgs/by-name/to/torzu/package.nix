@@ -98,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-udp-protocol.patch
     # Use specific boost::asio includes and update to modern io_context
     ./fix-udp-client.patch
+    # Updates suppressed diagnostics
+    ./fix-aarch64-linux-build.patch
   ];
 
   nativeBuildInputs = [
@@ -215,10 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://notabug.org/litucks/torzu";
     mainProgram = "yuzu";
     platforms = lib.platforms.linux;
-    badPlatforms = [
-      # Several conversion errors, probably caused by the update to GCC 14
-      "aarch64-linux"
-    ];
     maintainers = with lib.maintainers; [ liberodark ];
     license = with lib.licenses; [
       gpl3Plus
