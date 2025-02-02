@@ -11941,6 +11941,8 @@ self: super: with self; {
 
   pyhocon = callPackage ../development/python-modules/pyhocon { };
 
+  pyhomee = callPackage ../development/python-modules/pyhomee { };
+
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
   pyhomepilot = callPackage ../development/python-modules/pyhomepilot { };
