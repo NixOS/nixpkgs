@@ -16,19 +16,20 @@
   ansible-core,
   flaky,
   pytest-mock,
+  pytest-instafail,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "25.0.0";
+  version = "25.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-compat";
     tag = "v${version}";
-    hash = "sha256-9ETe9LiisPOaRxfwqj3O5iXljoIABkku4DXVaIerlkA=";
+    hash = "sha256-uchju9ZxmoqZX3xlAC9lXc+DPpbG71xq1mIHwtaiB9c=";
   };
 
   build-system = [
@@ -51,11 +52,13 @@ buildPythonPackage rec {
     ansible-core
     flaky
     pytest-mock
+    pytest-instafail
     pytestCheckHook
   ];
 
   disabledTests = [
     # require network
+    "test_install_collection"
     "test_install_collection_from_disk"
     "test_install_collection_git"
     "test_load_plugins"
@@ -64,9 +67,13 @@ buildPythonPackage rec {
     "test_prerun_reqs_v2"
     "test_require_collection_install"
     "test_require_collection_no_cache_dir"
+    "test_require_collection_preexisting_broken"
+    "test_require_collection_not_isolated"
     "test_runtime_has_playbook"
     "test_runtime_plugins"
+    "test_runtime_example"
     "test_scan_sys_path"
+    "test_upgrade_collection"
   ];
 
   pythonImportsCheck = [ "ansible_compat" ];
