@@ -30,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-heVdo0MtsWi/r9yse+/FZ55lhiunyEdwB3UkOOY5Vj0=";
   };
 
+  # https://www.github.com/Stiffstream/restinio/issues/230
+  # > string sub-command JSON failed parsing json string: * Line 1, Column 1
+  # > Syntax error: value, object or array expected.
+  postPatch = ''
+    substituteInPlace dev/test/CMakeLists.txt \
+      --replace-fail "add_subdirectory(metaprogramming)" ""
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
