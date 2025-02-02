@@ -1,6 +1,16 @@
 [
   {
     "pname": "Avalonia",
+    "version": "11.1.3",
+    "hash": "sha256-kz+k/vkuWoL0XBvRT8SadMOmmRCFk9W/J4k/IM6oYX0="
+  },
+  {
+    "pname": "Avalonia",
+    "version": "11.2.1",
+    "hash": "sha256-KdjhwDKlii12v7HNI3NsYAM1qYoXKRsVN2scQJbYMTc="
+  },
+  {
+    "pname": "Avalonia",
     "version": "11.2.3",
     "hash": "sha256-NUoyXJkIsgbkcKFVb10VRafM4ViHs801c/7vhu3ssUY="
   },
@@ -35,11 +45,6 @@
     "hash": "sha256-DIGkaBff+C3BLwedw5xteR5lfzb6ecxiLt12eJVgLQc="
   },
   {
-    "pname": "Avalonia.Fonts.Inter",
-    "version": "11.2.3",
-    "hash": "sha256-ySsCXVpjqjCX/uYkwluSfrAoBtuq9k7fC1bFjxKC9/Q="
-  },
-  {
     "pname": "Avalonia.FreeDesktop",
     "version": "11.2.3",
     "hash": "sha256-3sNemBmZE06w2ul87T5HrEeHUxXMOa9MfQhpI4AoxDY="
@@ -53,6 +58,16 @@
     "pname": "Avalonia.ReactiveUI",
     "version": "11.2.3",
     "hash": "sha256-NqRetBiFg5gNCS8C0J1JJJsZ4sz+w+GoEegGFddBGDg="
+  },
+  {
+    "pname": "Avalonia.Remote.Protocol",
+    "version": "11.1.3",
+    "hash": "sha256-CKF+62zCbK1Rd/HiC6MGrags3ylXrVQ1lni3Um0Muqk="
+  },
+  {
+    "pname": "Avalonia.Remote.Protocol",
+    "version": "11.2.1",
+    "hash": "sha256-RlO65QbExBdjEUY66CTlHefRdTZWzZbN4ksibVXxKv4="
   },
   {
     "pname": "Avalonia.Remote.Protocol",
@@ -176,18 +191,13 @@
   },
   {
     "pname": "Semi.Avalonia",
-    "version": "11.2.1.3",
-    "hash": "sha256-AtJSFLa/zHk/58fJ+1h6IDowNDLTaRNUVaQ7lfQyYAw="
+    "version": "11.2.1.4",
+    "hash": "sha256-X1YIonqLNySnMMope2/+O2HfpArc8AhT/gNBOI+0Ts8="
   },
   {
     "pname": "Semi.Avalonia.DataGrid",
-    "version": "11.2.1.3",
-    "hash": "sha256-CEjvrgPSxqubAQ6aOiag7SukA19WJ2s4G3zeLrk9810="
-  },
-  {
-    "pname": "SkiaSharp",
-    "version": "2.88.6",
-    "hash": "sha256-y0wzgwdQXtgl5boCz/EgLWbK3SwC0cFVRUbBxOUPQXc="
+    "version": "11.2.1.4",
+    "hash": "sha256-UDb+Gw8nDsuxbMlV8CJaGItfJ85k+p3XPGPuZrIl0KM="
   },
   {
     "pname": "SkiaSharp",
@@ -206,11 +216,6 @@
   },
   {
     "pname": "SkiaSharp.NativeAssets.macOS",
-    "version": "2.88.6",
-    "hash": "sha256-7hOMjlYTOiNPLNwfLFUjTcdgiGEtmYUI1EubiRiC6bo="
-  },
-  {
-    "pname": "SkiaSharp.NativeAssets.macOS",
     "version": "2.88.7",
     "hash": "sha256-WgPldXSqPMm0TrdUWAyjge5rcRhd9G3/Ix/v/2NQvBc="
   },
@@ -226,11 +231,6 @@
   },
   {
     "pname": "SkiaSharp.NativeAssets.Win32",
-    "version": "2.88.6",
-    "hash": "sha256-ljD4QmAO2/vwA6I8GIUNkONpOzmGsOVJJy9vPDnjVfA="
-  },
-  {
-    "pname": "SkiaSharp.NativeAssets.Win32",
     "version": "2.88.7",
     "hash": "sha256-+7RxCAr+ne9MZWdXKKpV4ZbHW0k6hLD20ZFWWOCiNYU="
   },
@@ -238,11 +238,6 @@
     "pname": "SkiaSharp.NativeAssets.Win32",
     "version": "2.88.9",
     "hash": "sha256-kP5XM5GgwHGfNJfe4T2yO5NIZtiF71Ddp0pd1vG5V/4="
-  },
-  {
-    "pname": "SkiaSharp.QrCode",
-    "version": "0.7.0",
-    "hash": "sha256-2FvbwizAKAPTcMvf/TgBZEwOF4nYQ/79TvTSC+8LZ74="
   },
   {
     "pname": "Splat",
