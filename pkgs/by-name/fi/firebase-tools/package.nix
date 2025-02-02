@@ -44,6 +44,9 @@ buildNpmPackage {
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = with lib.maintainers; [
+      momeemt
+      sarahec
+    ];
   };
 }
