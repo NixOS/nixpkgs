@@ -1,0 +1,66 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
+    base64 (0.2.0)
+    cf-uaa-lib (4.0.8)
+      addressable (~> 2.8, >= 2.8.0)
+      base64
+      httpclient (~> 2.8, >= 2.8.2.4)
+      json (~> 2.7)
+      mutex_m
+    cf-uaac (4.27.0)
+      cf-uaa-lib (~> 4.0.7)
+      em-http-request (~> 1.1, >= 1.1.2)
+      eventmachine (~> 1.2)
+      highline (>= 2, < 4)
+      json (~> 2.7)
+      launchy (>= 2.5, < 4.0)
+      rack (~> 3.0)
+    childprocess (5.1.0)
+      logger (~> 1.5)
+    cookiejar (0.3.4)
+    em-http-request (1.1.7)
+      addressable (>= 2.3.4)
+      cookiejar (!= 0.3.1)
+      em-socksify (>= 0.3)
+      eventmachine (>= 1.0.3)
+      http_parser.rb (>= 0.6.0)
+    em-socksify (0.3.3)
+      base64
+      eventmachine (>= 1.0.0.beta.4)
+    eventmachine (1.2.7)
+    eventmachine (1.2.7-x86-mingw32)
+    highline (3.1.2)
+      reline
+    http_parser.rb (0.8.0)
+    httpclient (2.8.3)
+    io-console (0.8.0)
+    json (2.9.1)
+    launchy (3.1.0)
+      addressable (~> 2.8)
+      childprocess (~> 5.0)
+      logger (~> 1.6)
+    logger (1.6.5)
+    mutex_m (0.3.0)
+    public_suffix (6.0.1)
+    rack (3.1.8)
+    reline (0.6.0)
+      io-console (~> 0.5)
+
+PLATFORMS
+  arm64-darwin-21
+  arm64-darwin-22
+  arm64-linux
+  ruby
+  x86-mingw32
+  x86_64-darwin-21
+  x86_64-darwin-22
+  x86_64-linux
+
+DEPENDENCIES
+  cf-uaac
+
+BUNDLED WITH
+   2.5.22
