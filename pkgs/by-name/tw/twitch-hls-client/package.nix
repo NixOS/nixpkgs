@@ -4,21 +4,20 @@
   fetchFromGitHub,
   stdenv,
   darwin,
-  ...
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "twitch-hls-client";
-  version = "unstable-2024-10-16";
+  version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "2bc4";
     repo = "twitch-hls-client";
-    rev = "4d1b6fe71d18f7c7dbceea04a99c98db16cd0d0b";
-    hash = "sha256-ja2pFmJNFfNMaNlkgvfxCFYyuVup6CgIEhnbzyk/kro=";
+    rev = version;
+    hash = "sha256-H446qXFwRGippLMZemkW8sVhTV3YGpKmAvD8QBamAlo=";
   };
 
-  cargoHash = "sha256-XL/LSEhWZB7p9wgisKcGWDknEvNNFje5WLQazS1730o=";
+  cargoHash = "sha256-PK6x7xRUSbOFEAhw22T/zbMlqcS5ZQd2bpMp9OFIiUc=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
