@@ -98,7 +98,7 @@ buildPythonPackage rec {
     "test_no_dangling_fds"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/main/test_redis.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 
