@@ -190,21 +190,11 @@ stdenv.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      set -eu -o pipefail
-
-      release_page=$(mktemp)
-      curl -s https://www.raise3d.com/download/ideamaker-all-versions/ > "$release_page"
-
-      latest_stable_version=$(
-        sed -nE '/Beta|Alpha/! s/.*Version ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' "$release_page" | \
-          head -n 1
-      )
-
-      latest_stable_build_number=$(
-        sed -nE "s/.*ideaMaker_$latest_stable_version\.([0-9]+).*/\1/p" "$release_page" | head -n 1
-      )
-
-      update-source-version ideamaker "$latest_stable_version.$latest_stable_build_number"
+      update-source-version ideamaker "$(
+        curl 'https://api.raise3d.com/ideamakerio-v1.1/hq/ofpVersionControl/find' -X 'POST' \
+        | jq -r '.data.release_version.linux_64_deb_url' \
+        | sed -E 's#.*/release/([0-9]+\.[0-9]+\.[0-9]+)/ideaMaker_\1\.([0-9]+).*#\1.\2#'
+      )"
     '';
   });
 
