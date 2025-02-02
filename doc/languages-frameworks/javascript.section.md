@@ -558,6 +558,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 ```nix
 {
+  stdenv,
   bun,
 }:
 

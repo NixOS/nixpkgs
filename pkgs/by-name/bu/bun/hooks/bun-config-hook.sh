@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2164
 
 bunConfigHook() {
     echo "Executing bunConfigHook"
@@ -12,12 +13,17 @@ bunConfigHook() {
       exit 1
     fi
 
+    # `bunDeps` should be a tarball
+    unpackFile "$bunDeps"
+    bunDepsCopy="$(stripHash "$bunDeps" | xargs realpath)"
+
     echo "Configuring bun store"
 
-    export HOME=$(mktemp -d)
-    export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+    HOME=$(mktemp -d)
+    BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+    export HOME BUN_INSTALL_CACHE_DIR
 
-    cp -Tr "$bunDeps" "$BUN_INSTALL_CACHE_DIR"
+    cp -Tr "$bunDepsCopy" "$BUN_INSTALL_CACHE_DIR"
     chmod -R +w "$BUN_INSTALL_CACHE_DIR"
 
     echo "Installing dependencies"

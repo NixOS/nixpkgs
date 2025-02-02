@@ -9,40 +9,45 @@
 }:
 
 {
-  fetchDeps =
-    {
-      hash ? "",
-      pname,
+  fetchDeps = lib.makeOverridable (
+    lib.fetchers.withNormalizedHash { } (
+      {
+        name ?
+          lib.optionalString (args ? "pname" && args ? "version") "${args.pname}-${args.version}-"
+          + "bun-deps",
       workspaces ? [ ],
       preInstall ? "",
       installFlags ? [ ],
+      outputHash,
+      outputHashAlgo,
       ...
     }@args:
     let
       args' = builtins.removeAttrs args [
-        "hash"
         "pname"
+        "version"
+        "workspaces"
+        "preInstall"
+        "installFlags"
       ];
     in
     stdenvNoCC.mkDerivation (
-      finalAttrs:
-      (
-        args'
+      args'
         // {
-          name = "${pname}-bun-deps";
+          inherit name;
 
           nativeBuildInputs = [
             cacert
             jq
             moreutils
             bun
-          ] ++ args'.nativeBuildInputs;
+          ] ++ args'.nativeBuildInputs or [ ];
 
-          installPhase = ''
+          installPhase = args.installPhase or ''
             runHook preInstall
 
             export HOME=$(mktemp -d)
-            export BUN_INSTALL_CACHE_DIR=$out
+            export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
             ${preInstall}
 
@@ -55,26 +60,24 @@
             runHook postInstall
           '';
 
-          fixupPhase = ''
+          # Build a reproducible tarball, per instructions at https://reproducible-builds.org/docs/archives/
+          fixupPhase = args.fixupPhase or ''
             runHook preFixup
 
-            # Remove timestamp and sort the json files
-            #   rm -rf $out/v3/tmp
-            #   for f in $(find $out -name "*.json"); do
-            #     jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
-            #   done
+            tar --sort-name \
+              --mtime="@$SOURCE_DATE_EPOCH" \
+              --owner=0 --group=0 --numeric-owner \
+              --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+              -czf $out $BUN_INSTALL_CACHE_DIR
 
               runHook postFixup
           '';
 
-          dontConfigure = true;
-          dontBuild = true;
+          dontConfigure = args'.dontConfigure or true;
+          dontBuild = args'.dontBuild or true;
 
-          outputHash = hash;
+          inherit outputHash outputHashAlgo;
           outputHashMode = "recursive";
-        }
-        // lib.optionalAttrs (hash == "") {
-          outputHashAlgo = "sha256";
         }
       )
     );
