@@ -6,16 +6,20 @@
 
 buildNpmPackage rec {
   pname = "hexo-cli";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "hexojs";
     repo = "hexo-cli";
-    rev = "v${version}";
-    hash = "sha256-mtbg9Fa9LBqG/aNfm4yEo4ymuaxuqhymkO1q6mYA2Fs=";
+    tag = "v${version}";
+    hash = "sha256-qU2K1HOXEKs06SGEuyzEWag8JpD9EKWgEH15Z4pqEX4=";
   };
 
-  npmDepsHash = "sha256-VCHG1YMPRwEBbwgscSv6V+fTNVRpsCxWeyO8co4Zy6k=";
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
+
+  npmDepsHash = "sha256-ESbeNXkW9kQtlZnQq849Sr6zoLx1eKv8Fqvsep6Ibow=";
 
   installPhase = ''
     runHook preInstall
