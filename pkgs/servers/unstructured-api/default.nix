@@ -100,7 +100,7 @@ let
       pypandoc
       pyparsing
       pypdf
-      # pypdfium2
+      pypdfium2
       python-dateutil
       python-docx
       # python-iso639

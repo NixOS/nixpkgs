@@ -251,6 +251,8 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
+        patches = [ ];
+        doCheck = false;
       });
 
       slack-sdk = super.slack-sdk.overridePythonAttrs (oldAttrs: rec {

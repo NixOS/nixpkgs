@@ -28,18 +28,18 @@ in
 
     boot.growPartition = true;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) lib.mkDefault {
+    fileSystems."/" = mkIf (!cfg.zfs.enable) (lib.mkDefault {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
-    };
+    });
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) lib.mkDefault {
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (lib.mkDefault {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
-    };
+    });
 
     services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
 
