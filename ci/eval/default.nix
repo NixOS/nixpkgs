@@ -89,6 +89,7 @@ let
         set +e
         command time -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
           nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          --eval-system "$system" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
           --query --available \
