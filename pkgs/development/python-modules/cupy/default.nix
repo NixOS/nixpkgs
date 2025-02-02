@@ -14,13 +14,13 @@
   addDriverRunpath,
   pythonOlder,
   symlinkJoin,
-  fetchpatch
 }:
 
 let
   inherit (cudaPackages) cudnn;
 
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   # some packages are not available on all platforms
   cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
@@ -28,25 +28,32 @@ let
   nccl = shouldUsePkg (cudaPackages.nccl or null);
 
   outpaths = with cudaPackages; [
-      cuda_cccl # <nv/target>
-      cuda_cudart
-      cuda_nvcc # <crt/host_defines.h>
-      cuda_nvprof
-      cuda_nvrtc
-      cuda_nvtx
-      cuda_profiler_api
-      libcublas
-      libcufft
-      libcurand
-      libcusolver
-      libcusparse
+    cuda_cccl # <nv/target>
+    cuda_cudart
+    cuda_nvcc # <crt/host_defines.h>
+    cuda_nvprof
+    cuda_nvrtc
+    cuda_nvtx
+    cuda_profiler_api
+    libcublas
+    libcufft
+    libcurand
+    libcusolver
+    libcusparse
 
-      # Missing:
-      # cusparselt
+    # Missing:
+    # cusparselt
   ];
   cudatoolkit-joined = symlinkJoin {
     name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = outpaths ++ lib.concatMap (f: lib.map f outpaths) [lib.getLib lib.getDev (lib.getOutput "static") (lib.getOutput "stubs")];
+    paths =
+      outpaths
+      ++ lib.concatMap (f: lib.map f outpaths) [
+        lib.getLib
+        lib.getDev
+        (lib.getOutput "static")
+        (lib.getOutput "stubs")
+      ];
   };
 in
 buildPythonPackage rec {
@@ -121,7 +128,10 @@ buildPythonPackage rec {
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ hyphon81 ];
   };
 }
