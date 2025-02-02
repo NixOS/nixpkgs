@@ -171,10 +171,10 @@ jobs:
         run: |
           # Get the latest eval.yml workflow run for the PR's target commit
           if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
-            -f head_sha="$BASE_SHA" -f event=push \
+            -f head_sha="$TARGET_SHA" -f event=push \
             --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
             || [[ -z "$run" ]]; then
-            echo "Could not find an eval.yml workflow run for $BASE_SHA, cannot make comparison"
+            echo "Could not find an eval.yml workflow run for $TARGET_SHA, cannot make comparison"
             exit 1
           fi
           echo "Comparing against $(jq .html_url <<< "$run")"
@@ -195,7 +195,7 @@ jobs:
           echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
         env:
           REPOSITORY: ${{ github.repository }}
-          BASE_SHA: ${{ needs.attrs.outputs.targetSha }}
+          TARGET_SHA: ${{ needs.attrs.outputs.targetSha }}
           GH_TOKEN: ${{ github.token }}
 
       - uses: actions/download-artifact@v4
