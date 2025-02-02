@@ -6,6 +6,7 @@
   openssl,
   stdenv,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +37,12 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/hydra-check --shell-completion fish) \
       --zsh <($out/bin/hydra-check --shell-completion zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Check hydra for the build status of a package";
