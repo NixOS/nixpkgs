@@ -16380,6 +16380,12 @@
     githubId = 43587167;
     name = "Nikita Tikhonov";
   };
+  nekowinston = {
+    email = "hey@winston.sh";
+    github = "nekowinston";
+    githubId = 79978224;
+    name = "winston";
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
