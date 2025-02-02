@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "1.2.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bamthomas";
     repo = "aioimaplib";
     tag = version;
-    hash = "sha256-GBehZq2F9vJQGbeBuG1EGmTt8s7XcnTIIK0QQAB+ZII=";
+    hash = "sha256-njzSpKPis033eLoRKXL538ljyMOB43chslio1wodrKU=";
   };
 
   build-system = [ poetry-core ];
