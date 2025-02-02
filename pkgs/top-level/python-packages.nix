@@ -8278,6 +8278,8 @@ self: super: with self; {
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
+  mistral-common = callPackage ../development/python-modules/mistral-common { };
+
   mistune = callPackage ../development/python-modules/mistune { };
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
