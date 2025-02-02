@@ -19,6 +19,7 @@ buildPostgresqlExtension rec {
   };
 
   buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
   meta = with lib; {
     description = "HTTP client for PostgreSQL, retrieve a web page from inside the database";

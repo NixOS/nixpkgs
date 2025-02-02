@@ -40,20 +40,11 @@ in
           The Nixpkgs overlays that `pkgs` was initialized with.
         '';
       };
-      hostPlatform = mkOption {
-        internal = true;
-        readOnly = true;
-        description = ''
-          The platform of the machine that is running the NixOS configuration.
-        '';
-      };
-      buildPlatform = mkOption {
-        internal = true;
-        readOnly = true;
-        description = ''
-          The platform of the machine that built the NixOS configuration.
-        '';
-      };
+      # buildPlatform and hostPlatform left out on purpose:
+      # - They are not supposed to be changed with this read-only module.
+      # - They are not supposed to be read either, according to the description
+      #   of "system" in the traditional nixpkgs module.
+      #
       # NOTE: do not add the legacy options such as localSystem here. Let's keep
       #       this module simple and let module authors upgrade their code instead.
     };
@@ -61,12 +52,8 @@ in
   config = {
     _module.args.pkgs =
       # find mistaken definitions
-      builtins.seq cfg.config builtins.seq cfg.overlays builtins.seq cfg.hostPlatform builtins.seq
-        cfg.buildPlatform
-        cfg.pkgs;
+      builtins.seq cfg.config builtins.seq cfg.overlays cfg.pkgs;
     nixpkgs.config = cfg.pkgs.config;
     nixpkgs.overlays = cfg.pkgs.overlays;
-    nixpkgs.hostPlatform = cfg.pkgs.stdenv.hostPlatform;
-    nixpkgs.buildPlatform = cfg.pkgs.stdenv.buildPlatform;
   };
 }
