@@ -6231,6 +6231,8 @@ self: super: with self; {
     inherit (pkgs) cgal libxml2;
   };
 
+  igloohome-api = callPackage ../development/python-modules/igloohome-api { };
+
   ignite = callPackage ../development/python-modules/ignite { };
 
   igraph = callPackage ../development/python-modules/igraph {
