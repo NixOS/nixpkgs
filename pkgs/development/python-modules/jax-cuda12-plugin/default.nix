@@ -95,7 +95,7 @@ buildPythonPackage {
     wheelUnpackHook
   ];
 
-  # jax-cuda12-plugin looks for ptxas at runtime, e.g. with a xla custom call.
+  # jax-cuda12-plugin looks for ptxas at runtime, e.g. with a triton kernel.
   # Linking into $out is the least bad solution. See
   # * https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621
   # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
