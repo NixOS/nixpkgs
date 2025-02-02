@@ -1,39 +1,38 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchurl,
   cmake,
   pkg-config,
-  qttools,
-  qtx11extras,
-  drumstick,
+  qt6,
+  qt6Packages,
   docbook-xsl-nons,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "vmpk";
-  version = "0.8.8";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+NjTcszb1KXGynIcCf4IEDvN4f8pgXtR1TksxGR5ZHQ=";
+    hash = "sha256-O/uIg1Wq6Hwt7J5AkoXQshBhrKrQdfVTbb8qr7ttSNw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
+    qt6.qttools
     docbook-xsl-nons
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    drumstick
-    qtx11extras
+    qt6Packages.drumstick
   ];
 
   postInstall = ''
     # vmpk drumstickLocales looks here:
-    ln -s ${drumstick}/share/drumstick $out/share/
+    ln -s ${qt6Packages.drumstick}/share/drumstick $out/share/
   '';
 
   meta = with lib; {
