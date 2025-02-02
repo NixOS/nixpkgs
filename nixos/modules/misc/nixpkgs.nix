@@ -73,7 +73,10 @@ let
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
-        isCross = cfg.buildPlatform != cfg.hostPlatform;
+        isCross =
+          !(lib.systems.equals (lib.systems.elaborate cfg.buildPlatform) (
+            lib.systems.elaborate cfg.hostPlatform
+          ));
         systemArgs =
           if isCross then
             {
@@ -195,13 +198,10 @@ in
     };
 
     hostPlatform = lib.mkOption {
-      type = lib.types.either lib.types.str lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
+      type = lib.types.either lib.types.str lib.types.attrs;
       example = {
         system = "aarch64-linux";
       };
-      # Make sure that the final value has all fields for sake of other modules
-      # referring to this. TODO make `lib.systems` itself use the module system.
-      apply = lib.systems.elaborate;
       defaultText = lib.literalExpression ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform where the NixOS configuration will run.
@@ -213,22 +213,13 @@ in
     };
 
     buildPlatform = lib.mkOption {
-      type = lib.types.either lib.types.str lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
+      type = lib.types.either lib.types.str lib.types.attrs;
       default = cfg.hostPlatform;
       example = {
         system = "x86_64-linux";
       };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this.
-      apply =
-        inputBuildPlatform:
-        let
-          elaborated = lib.systems.elaborate inputBuildPlatform;
-        in
-        if lib.systems.equals elaborated cfg.hostPlatform then
-          cfg.hostPlatform # make identical, so that `==` equality works; see https://github.com/NixOS/nixpkgs/issues/278001
-        else
-          elaborated;
       defaultText = lib.literalExpression ''config.nixpkgs.hostPlatform'';
       description = ''
         Specifies the platform on which NixOS should be built.
@@ -245,14 +236,11 @@ in
     };
 
     localSystem = lib.mkOption {
-      type = lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
+      type = lib.types.attrs;
       default = { inherit (cfg) system; };
       example = {
         system = "aarch64-linux";
       };
-      # Make sure that the final value has all fields for sake of other modules
-      # referring to this. TODO make `lib.systems` itself use the module system.
-      apply = lib.systems.elaborate;
       defaultText = lib.literalExpression ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Systems with a recently generated `hardware-configuration.nix`
@@ -280,7 +268,7 @@ in
     #      is a relation between at least 2 systems in the context of a
     #      specific build step, not a single system.
     crossSystem = lib.mkOption {
-      type = lib.types.nullOr lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
+      type = lib.types.nullOr lib.types.attrs;
       default = null;
       example = {
         system = "aarch64-linux";
@@ -414,6 +402,18 @@ in
 
             Defined in:
             ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.config.files}
+          '';
+        }
+        {
+          assertion =
+            (opt.hostPlatform.isDefined -> builtins.isAttrs cfg.buildPlatform -> !(cfg.buildPlatform ? parsed))
+            && (opt.hostPlatform.isDefined -> builtins.isAttrs cfg.hostPlatform -> !(cfg.hostPlatform ? parsed))
+            && (builtins.isAttrs cfg.localSystem -> !(cfg.localSystem ? parsed))
+            && (builtins.isAttrs cfg.crossSystem -> !(cfg.crossSystem ? parsed));
+          message = ''
+            Passing fully elaborated systems to `nixpkgs.localSystem`, `nixpkgs.crossSystem`, `nixpkgs.buildPlatform`
+            or `nixpkgs.hostPlatform` will break composability of package sets in nixpkgs. For example, pkgs.pkgsStatic
+            would not work in modules anymore.
           '';
         }
       ];

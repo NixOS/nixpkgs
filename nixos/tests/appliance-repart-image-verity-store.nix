@@ -40,7 +40,7 @@
         verityStore = {
           enable = true;
           # by default the module works with systemd-boot, for simplicity this test directly boots the UKI
-          ukiPath = "/EFI/BOOT/BOOT${lib.toUpper config.nixpkgs.hostPlatform.efiArch}.EFI";
+          ukiPath = "/EFI/BOOT/BOOT${lib.toUpper pkgs.stdenv.hostPlatform.efiArch}.EFI";
         };
 
         name = "appliance-verity-store-image";
@@ -51,7 +51,7 @@
             repartConfig = {
               Type = "esp";
               Format = "vfat";
-              SizeMinBytes = if config.nixpkgs.hostPlatform.isx86_64 then "64M" else "96M";
+              SizeMinBytes = if pkgs.stdenv.hostPlatform.isx86_64 then "64M" else "96M";
             };
           };
           ${partitionIds.store-verity}.repartConfig = {
