@@ -10092,6 +10092,8 @@ self: super: with self; {
 
   partd = callPackage ../development/python-modules/partd { };
 
+  partial-json-parser = callPackage ../development/python-modules/partial-json-parser { };
+
   parts = callPackage ../development/python-modules/parts { };
 
   particle = callPackage ../development/python-modules/particle { };
