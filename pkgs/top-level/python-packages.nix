@@ -9502,6 +9502,8 @@ self: super: with self; {
 
   python-debian = callPackage ../development/python-modules/python-debian { };
 
+  python-google-drive-api = callPackage ../development/python-modules/python-google-drive-api { };
+
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 
   python-lorem = callPackage ../development/python-modules/python-lorem { };
