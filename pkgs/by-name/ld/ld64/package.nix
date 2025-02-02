@@ -1,11 +1,14 @@
 {
   lib,
   stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   fetchurl,
+  apple-sdk,
+  apple-sdk_14,
+  cctools,
   darwin,
   libtapi,
-  libunwind,
   llvm,
   meson,
   ninja,
@@ -30,14 +33,39 @@ let
     hash = "sha256-0ybVcwHuGEdThv0PPjYQc3SW0YVOyrM3/L9zG/l1Vtk=";
   };
 
-  # First version with all the required definitions. This is used in preference to darwin.xnu to make it easier
-  # to support Linux and because the version of darwin.xnu available on x86_64-darwin in the 10.12 SDK is too old.
-  xnu = fetchFromGitHub {
-    name = "xnu-src";
-    owner = "apple-oss-distributions";
-    repo = "xnu";
-    rev = "xnu-6153.11.26";
-    hash = "sha256-dcnGcp7bIjQxeAn5pXt+mHSYEXb2Ad9Smhd/WUG4kb4=";
+  dyld = apple-sdk_14.sourceRelease "dyld";
+
+  libdispatchPrivate = apple-sdk.sourceRelease "libdispatch";
+
+  xnu = apple-sdk.sourceRelease "xnu";
+
+  privateHeaders = stdenvNoCC.mkDerivation {
+    name = "ld64-deps-private-headers";
+
+    buildCommand = ''
+      mkdir -p "$out/include/System"
+      for dir in arm i386 machine; do
+        cp -r '${xnu}/osfmk/'$dir "$out/include/System/$dir"
+      done
+
+      substitute '${crashreporter_h}' "$out/include/CrashReporterClient.h" \
+        --replace-fail 'USE(APPLE_INTERNAL_SDK)' '0'
+
+      cp -r '${libdispatchPrivate}/private' "$out/include/dispatch"
+
+      install -D -t "$out/include/mach-o" \
+        '${dyld}/include/mach-o/dyld_priv.h' \
+        '${cctools.src}/include/mach-o/loader.h'
+
+      install -D -t "$out/include/mach-o/arm" \
+        '${cctools.src}/include/mach-o/arm/reloc.h'
+
+      install -D -t "$out/include/sys" \
+        '${xnu}/bsd/sys/commpage.h'
+
+      substituteInPlace "$out/include/mach-o/dyld_priv.h" \
+        --replace-fail ', bridgeos(3.0)' ""
+    '';
   };
 
   # Avoid pulling in all of Swift just to build libdispatch
@@ -63,8 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
   xcodeHash = "sha256-+j7Ed/6aD46SJnr3DWPfWuYWylb2FNJRPmWsUVxZJHM=";
 
   postUnpack = ''
-    unpackFile '${xnu}'
-
     # Verify that the Xcode project has not changed unexpectedly.
     hashType=$(echo $xcodeHash | cut -d- -f1)
     expectedHash=$(echo $xcodeHash | cut -d- -f2)
@@ -91,27 +117,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./0006-Add-libcd_is_blob_a_linker_signature-implementation.patch
     # Add OpenSSL implementation of CoreCrypto digest functions. Avoids use of private and non-free APIs.
     ./0007-Add-OpenSSL-based-CoreCrypto-digest-functions.patch
-    # ld64 will search `/usr/lib`, `/Library/Frameworks`, etc by default. Disable that.
-    ./0008-Disable-searching-in-standard-library-locations.patch
+    ./remove-unused-and-incomplete-blob-clone.diff
   ];
 
   postPatch = ''
     substitute ${./meson.build} meson.build \
       --subst-var version
     cp ${./meson.options} meson.options
-
-    # Copy headers for certain private APIs
-    mkdir -p include
-    substitute ${crashreporter_h} include/CrashReporterClient.h \
-      --replace-fail 'USE(APPLE_INTERNAL_SDK)' '0'
-
-    # Copy from the source so the headers can be used on Linux and x86_64-darwin
-    mkdir -p include/System
-    for dir in arm i386 machine; do
-      cp -r ../xnu-src/osfmk/$dir include/System/$dir
-    done
-    mkdir -p include/sys
-    cp ../xnu-src/bsd/sys/commpage.h include/sys
 
     # Match the version format used by upstream.
     sed -i src/ld/Options.cpp \
@@ -134,6 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env.NIX_CFLAGS_COMPILE = "-DTARGET_OS_BRIDGE=0 -I${privateHeaders}/include";
+
   nativeBuildInputs = [
     meson
     ninja
@@ -145,10 +159,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libtapi
     llvm
-    libunwind
     openssl
     xar
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.dyld ] ++ lib.optionals stdenv.isLinux [ libdispatch ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libdispatch ];
 
   # Note for overrides: ld64 cannot be built as a debug build because of UB in its iteration implementations,
   # which trigger libc++ debug assertions due to trying to take the address of the first element of an emtpy vector.
@@ -170,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$NIX_BUILD_TOP/$sourceRoot"
 
     export NIX_CFLAGS_COMPILE+=" --ld-path=$out/bin/${targetPrefix}ld"
+    export NIX_CFLAGS_LINK+=" -L$SDKROOT/usr/lib"
     meson setup build-install-check -Db_lto=true --buildtype=$mesonBuildType${
       lib.optionalString (targetPrefix != "") " -Dtarget_prefix=${targetPrefix}"
     }
@@ -198,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://opensource.apple.com/releases/";
     license = lib.licenses.apple-psl20;
     mainProgram = "ld";
-    maintainers = with lib.maintainers; [ reckenrode ];
+    maintainers = lib.teams.darwin.members;
     platforms = lib.platforms.darwin; # Porting to other platforms is incomplete. Support only Darwin for now.
   };
 })

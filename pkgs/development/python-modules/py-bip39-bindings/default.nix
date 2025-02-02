@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-bip39-bindings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3/KBPUFVFkJifunGWJeAHLnY08KVTb8BHCFzDqKWH18=";
   };
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

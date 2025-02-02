@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "portalocker";
-  version = "2.8.2";
+  version = "2.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KwNap4KORsWOmzE5DuHxabmOEGarELmmqGH+fiXuTzM=";
+    hash = "sha256-7xv4ROh4qwiu5+QBhBVuEVHyKPEDqlxr0HJMwzCWD48=";
   };
 
   postPatch = ''

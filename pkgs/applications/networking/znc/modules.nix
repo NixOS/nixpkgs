@@ -1,22 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, znc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  znc,
+}:
 
 let
   zncDerivation =
-    a@{ pname
-    , src
-    , module_name
-    , buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp"
-    , installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so"
-    , ...
-    }: stdenv.mkDerivation (a // {
-      inherit buildPhase;
-      inherit installPhase;
+    a@{
+      pname,
+      src,
+      module_name,
+      buildPhase ? "${znc}/bin/znc-buildmod ${module_name}.cpp",
+      installPhase ? "install -D ${module_name}.so $out/lib/znc/${module_name}.so",
+      ...
+    }:
+    stdenv.mkDerivation (
+      a
+      // {
+        inherit buildPhase;
+        inherit installPhase;
 
-      buildInputs = znc.buildInputs;
+        buildInputs = znc.buildInputs;
 
-      meta = a.meta // { platforms = lib.platforms.unix; };
-      passthru.module_name = module_name;
-    });
+        meta = a.meta // {
+          platforms = lib.platforms.unix;
+        };
+        passthru.module_name = module_name;
+      }
+    );
 
 in
 {
@@ -57,7 +69,11 @@ in
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
-      maintainers = with maintainers; [ hrdinka szlend cybershadow ];
+      maintainers = with maintainers; [
+        hrdinka
+        szlend
+        cybershadow
+      ];
     };
   };
 
@@ -195,7 +211,10 @@ in
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ offline schneefux ];
+      maintainers = with lib.maintainers; [
+        offline
+        schneefux
+      ];
     };
   };
 

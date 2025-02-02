@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, gettext
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  gettext,
+  go,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vietnamese input method engine support for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-bamboo";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

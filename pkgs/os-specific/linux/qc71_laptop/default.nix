@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qc71_laptop";
@@ -13,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "VERSION=${version}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -27,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux driver for QC71 laptop";
     homepage = "https://github.com/pobrn/qc71_laptop/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ aacebedo ];
     platforms = platforms.linux;
   };

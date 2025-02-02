@@ -1,26 +1,28 @@
-{ stdenv, fetchurl
-, glade
-, gnunet
-, gnutls
-, gtk3
-, libextractor
-, libgcrypt
-, libsodium
-, libxml2
-, pkg-config
-, wrapGAppsHook3
+{
+  stdenv,
+  fetchurl,
+  glade,
+  gnunet,
+  gnutls,
+  gtk3,
+  libextractor,
+  libgcrypt,
+  libsodium,
+  libxml2,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.21.0";
+  version = "0.23.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-gtk-${version}.tar.gz";
-    hash = "sha256-vQFtKFI57YG64WpKVngx1kq687hI+f1kpP9ooK53/aw=";
+    hash = "sha256-bmU3799pZVUyrsJ92MKgn5NIqCW76ml4N42Ewi+VWvI=";
   };
 
-  nativeBuildInputs= [
+  nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
   ];

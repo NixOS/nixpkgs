@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rabix";
     repo = "cwl-format";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FI8hUgb/KglTkubZ+StzptoSsYal71ITyyFNg7j48yk=";
   };
 

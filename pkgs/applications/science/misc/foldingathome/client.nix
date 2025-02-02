@@ -13,24 +13,24 @@
 , extraPkgs ? [ ]
 }:
 let
-  version = "8.3.7";
+  pname = "fah-client";
+  version = "8.3.18";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     rev = "bastet-v${version}";
-    sha256 = "sha256-acAImItdkgo6PBFL6Vu/caIdcnvp/3VEW2lgVDgKy9g=";
+    sha256 = "sha256-BQNomjz6Bhod3FOC5iICwt1rPrZgIxGQ08yspSvAnJc=";
   };
 
   fah-client = stdenv.mkDerivation {
-    pname = "fah-client";
-    inherit version;
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       rev = "v${version}";
-      sha256 = "sha256-d+LY/R4TAko+2e2W76KEBQ8fXj0hzzmBOm+c4tksXMA=";
+      sha256 = "sha256-lqpC1fAMFb8iX02daVre/pE0c7DkwswlFigJS3ZGEjM=";
     };
 
     nativeBuildInputs = [ scons re2 libevent git ];
@@ -66,15 +66,11 @@ let
   };
 in
 buildFHSEnv {
-  name = fah-client.name;
+  inherit pname version;
 
   targetPkgs = _: [ fah-client ocl-icd zlib expat ] ++ extraPkgs;
 
   runScript = "/bin/fah-client";
-
-  extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/fah-client
-  '';
 
   meta = {
     description = "Folding@home client";

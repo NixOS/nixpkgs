@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "wikipedia-api";
-  version = "0.6.0";
+  version = "0.7.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martin-majlis";
     repo = "Wikipedia-API";
-    rev = "v${version}";
-    hash = "sha256-cmwyQhKbkIpZXkKqqT0X2Lp8OFma2joeb4uxDRPiQe8=";
+    tag = "v${version}";
+    hash = "sha256-2vU4X8Qjv13e2aBiKJdZDgUKnmyp7vZ0U5BZVLhbc80=";
   };
 
   propagatedBuildInputs = [ requests ];

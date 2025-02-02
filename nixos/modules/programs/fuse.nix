@@ -2,7 +2,8 @@
 
 let
   cfg = config.programs.fuse;
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ primeos ];
 
   options.programs.fuse = {
@@ -26,7 +27,7 @@ in {
     };
   };
 
-  config =  {
+  config = {
     environment.etc."fuse.conf".text = ''
       ${lib.optionalString (!cfg.userAllowOther) "#"}user_allow_other
       mount_max = ${builtins.toString cfg.mountMax}

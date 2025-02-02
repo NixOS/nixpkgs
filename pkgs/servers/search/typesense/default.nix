@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  nixosTests,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 

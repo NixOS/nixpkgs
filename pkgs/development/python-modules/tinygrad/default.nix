@@ -9,19 +9,26 @@
   rocmSupport ? config.rocmSupport,
   cudaPackages,
   ocl-icd,
-  stdenv,
   rocmPackages,
+  stdenv,
+
   # build-system
   setuptools,
-  wheel,
-  # dependencies
-  numpy,
-  tqdm,
-  # nativeCheckInputs
+
+  # optional-dependencies
+  llvmlite,
+  triton,
+  unicorn,
+
+  # tests
+  blobfile,
+  bottle,
   clang,
   hexdump,
   hypothesis,
   librosa,
+  networkx,
+  numpy,
   onnx,
   pillow,
   pytest-xdist,
@@ -30,19 +37,22 @@
   sentencepiece,
   tiktoken,
   torch,
+  tqdm,
   transformers,
+
+  tinygrad,
 }:
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-opBxciETZruZjHqz/3vO7rogzjvVJKItulIiok/Zs2Y=";
+    tag = "v${version}";
+    hash = "sha256-IIyTb3jDUSEP2IXK6DLsI15E5N34Utt7xv86aTHpXf8=";
   };
 
   patches = [
@@ -58,46 +68,61 @@ buildPythonPackage rec {
   ];
 
   postPatch =
+    # Patch `clang` directly in the source file
     ''
+      substituteInPlace tinygrad/runtime/ops_clang.py \
+        --replace-fail "'clang'" "'${lib.getExe clang}'"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace tinygrad/runtime/autogen/opencl.py \
         --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
     ''
-    # hipGetDevicePropertiesR0600 is a symbol from rocm-6. We are currently at rocm-5.
-    # We are not sure that this works. Remove when rocm gets updated to version 6.
+    # `cuda_fp16.h` and co. are needed at runtime to compile kernels
+    + lib.optionalString cudaSupport ''
+      substituteInPlace tinygrad/runtime/support/compiler_cuda.py \
+        --replace-fail \
+        ', "-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include/"' \
+        ', "-I${lib.getDev cudaPackages.cuda_cudart}/include/"'
+    ''
     + lib.optionalString rocmSupport ''
-      substituteInPlace extra/hip_gpu_driver/hip_ioctl.py \
-        --replace-fail "processor = platform.processor()" "processor = ${stdenv.hostPlatform.linuxArch}"
       substituteInPlace tinygrad/runtime/autogen/hip.py \
-        --replace-fail "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \
-        --replace-fail "/opt/rocm/lib/libhiprtc.so" "${rocmPackages.clr}/lib/libhiprtc.so" \
-        --replace-fail "hipGetDevicePropertiesR0600" "hipGetDeviceProperties"
+        --replace-fail "/opt/rocm/" "${rocmPackages.clr}/"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/include" "${rocmPackages.clr}/include"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/llvm" "${rocmPackages.llvm.llvm}"
 
       substituteInPlace tinygrad/runtime/autogen/comgr.py \
-        --replace-fail "/opt/rocm/lib/libamd_comgr.so" "${rocmPackages.rocm-comgr}/lib/libamd_comgr.so"
+        --replace-fail "/opt/rocm/" "${rocmPackages.rocm-comgr}/"
     '';
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  dependencies =
+  optional-dependencies = {
+    llvm = [ llvmlite ];
+    arm = [ unicorn ];
+    triton = [ triton ];
+  };
+
+  pythonImportsCheck =
     [
-      numpy
-      tqdm
+      "tinygrad"
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      # pyobjc-framework-libdispatch
-      # pyobjc-framework-metal
+    ++ lib.optionals cudaSupport [
+      "tinygrad.runtime.ops_nv"
     ];
 
-  pythonImportsCheck = [ "tinygrad" ];
-
   nativeCheckInputs = [
+    blobfile
+    bottle
     clang
     hexdump
     hypothesis
     librosa
+    networkx
+    numpy
     onnx
     pillow
     pytest-xdist
@@ -106,8 +131,9 @@ buildPythonPackage rec {
     sentencepiece
     tiktoken
     torch
+    tqdm
     transformers
-  ];
+  ] ++ networkx.optional-dependencies.extra;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -115,6 +141,10 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # Fixed in https://github.com/tinygrad/tinygrad/pull/7792
+      # TODO: re-enable at next release
+      "test_kernel_cache_in_action"
+
       # Require internet access
       "test_benchmark_openpilot_model"
       "test_bn_alone"
@@ -129,12 +159,14 @@ buildPythonPackage rec {
       "test_e2e_big"
       "test_fetch_small"
       "test_huggingface_enet_safetensors"
+      "test_index_mnist"
       "test_linear_mnist"
       "test_load_convnext"
       "test_load_enet"
       "test_load_enet_alt"
       "test_load_llama2bfloat"
       "test_load_resnet"
+      "test_mnist_val"
       "test_openpilot_model"
       "test_resnet"
       "test_shufflenet"
@@ -146,35 +178,39 @@ buildPythonPackage rec {
       "test_transcribe_long_no_batch"
       "test_vgg7"
     ]
-    # Fail on aarch64-linux with AssertionError
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      "test_casts_to"
-      "test_casts_to"
-      "test_int8_to_uint16_negative"
-      "test_casts_to"
-      "test_casts_to"
+      # Fixed in https://github.com/tinygrad/tinygrad/pull/7796
+      # TODO: re-enable at next release
+      "test_interpolate_bilinear"
+
+      # Fail with AssertionError
       "test_casts_from"
       "test_casts_to"
       "test_int8"
-      "test_casts_to"
+      "test_int8_to_uint16_negative"
     ];
 
-  disabledTestPaths =
-    [
-      # Require internet access
-      "test/models/test_mnist.py"
-      "test/models/test_real_world.py"
-      "test/testextra/test_lr_scheduler.py"
-    ]
-    ++ lib.optionals (!rocmSupport) [ "extra/hip_gpu_driver/" ];
+  disabledTestPaths = [
+    # Require internet access
+    "test/models/test_mnist.py"
+    "test/models/test_real_world.py"
+    "test/testextra/test_lr_scheduler.py"
 
-  meta = with lib; {
+    # Files under this directory are not considered as tests by upstream and should be skipped
+    "extra/"
+  ];
+
+  passthru.tests = {
+    withCuda = tinygrad.override { cudaSupport = true; };
+  };
+
+  meta = {
     description = "Simple and powerful neural network framework";
     homepage = "https://github.com/tinygrad/tinygrad";
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
-    # Requires unpackaged pyobjc-framework-libdispatch and pyobjc-framework-metal
-    broken = stdenv.isDarwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    # Tests segfault on darwin
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }

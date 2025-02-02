@@ -1,13 +1,28 @@
-{ lib, stdenv, fetchurl, fetchpatch, alsa-lib, cmake, gtk2, libjack2, libgnomecanvas
-, libpthreadstubs, libsamplerate, libsndfile, libtool, libxml2
-, pkg-config, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  alsa-lib,
+  cmake,
+  gtk2,
+  libjack2,
+  libgnomecanvas,
+  libpthreadstubs,
+  libsamplerate,
+  libsndfile,
+  libtool,
+  libxml2,
+  pkg-config,
+  openssl,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "petri-foo";
   version = "0.1.87";
 
   src = fetchurl {
-    url =  "mirror://sourceforge/petri-foo/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/petri-foo/${pname}-${version}.tar.bz2";
     sha256 = "0b25iicgn8c42487fdw32ycfrll1pm2zjgy5djvgw6mfcaa4gizh";
   };
 
@@ -21,10 +36,23 @@ stdenv.mkDerivation  rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ alsa-lib gtk2 libjack2 libgnomecanvas libpthreadstubs
-                  libsamplerate libsndfile libtool libxml2 openssl ];
+  buildInputs = [
+    alsa-lib
+    gtk2
+    libjack2
+    libgnomecanvas
+    libpthreadstubs
+    libsamplerate
+    libsndfile
+    libtool
+    libxml2
+    openssl
+  ];
 
   meta = with lib; {
     description = "MIDI controllable audio sampler";

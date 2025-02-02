@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, rustfmt
-, stdenv
-, darwin
-, pkg-config
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  rustfmt,
+  stdenv,
+  darwin,
+  pkg-config,
+  openssl,
 }:
 
 let
@@ -40,7 +41,7 @@ in
       rustfmt
     ];
 
-    buildInputs = lib.optionals stdenv.isDarwin [
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
     ];
 
@@ -67,11 +68,13 @@ in
       rustfmt
     ];
 
-    buildInputs = [
-      openssl
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+    buildInputs =
+      [
+        openssl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        darwin.apple_sdk.frameworks.SystemConfiguration
+      ];
 
     passthru.updateScript = updateScript;
 

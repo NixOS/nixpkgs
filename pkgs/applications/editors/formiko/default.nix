@@ -9,18 +9,18 @@
 , gtkspell3
 , librsvg
 , pygobject3
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 buildPythonApplication rec {
   pname = "formiko";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ondratu";
     repo = "formiko";
-    rev = version;
-    sha256 = "0n7w585gbrpn2xcd5n04hivrjarpr2wj260y2kpxpgh93vn52sdi";
+    tag = version;
+    sha256 = "sha256-slfpkckCvxHJ/jlBP7QAhzaf9TAcS6biDQBZcBTyTKI=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonApplication rec {
     gtkspell3
     librsvg
     pygobject3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   # Needs a display

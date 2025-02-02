@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, rocksdb_7_10
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  rocksdb_7_10,
+  Security,
 }:
 
 let
@@ -11,16 +12,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.10.5";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tAHN5HWI9XsiCQzqLNtiib9wMskjfogc44+b4Bsjpog=";
+    hash = "sha256-Xo7aqP4tIh/kYthPucscxnl+ZtVioEja4TTFdH0Q350=";
   };
 
-  cargoHash = "sha256-M0DIKt41K3BcP43+fBhv3HbRcIh8U9nhQYA/sm+bNow=";
+  cargoHash = "sha256-T98nbf6j7hLRoCa38rN5KDYHqnGmAcVt9edwQ3cduKY=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.updateScript = ./update.sh;
 

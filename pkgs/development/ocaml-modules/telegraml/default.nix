@@ -1,10 +1,11 @@
-{ batteries
-, buildDunePackage
-, cohttp-lwt-unix
-, fetchFromGitHub
-, lib
-, logs
-, yojson
+{
+  batteries,
+  buildDunePackage,
+  cohttp-lwt-unix,
+  fetchFromGitHub,
+  lib,
+  logs,
+  yojson,
 }:
 
 buildDunePackage rec {

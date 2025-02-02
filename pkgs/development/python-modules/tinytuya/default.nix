@@ -1,27 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cryptography,
-  requests,
   colorama,
+  cryptography,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.14.0";
+  version = "1.16.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jasonacox";
     repo = "tinytuya";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ytM7S0V/hDOCb3RyzAXZEd2zV/sMVQPrah/2zRACMsQ=";
+    tag = "v${version}";
+    hash = "sha256-+ReTNPKMYUXNA5tu7kZM8/7Bh4XjHSjZTiW8ROHkk5M=";
   };
 
   build-system = [ setuptools ];

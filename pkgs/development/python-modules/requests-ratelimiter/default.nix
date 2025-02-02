@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JWCook";
     repo = "requests-ratelimiter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DS4BzS8AD4axniyV6jVYXWZ6cQLvMPp8tdGoBhYu51o=";
   };
 

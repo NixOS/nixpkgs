@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   # Some of the tests use localhost networking on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # RuntimeError and NotImplementedError

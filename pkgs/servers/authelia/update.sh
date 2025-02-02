@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl nix jq nodePackages.npm
+#! nix-shell -I nixpkgs=./. -i bash -p coreutils gnused curl nix jq nodejs
 set -euo pipefail
 
 DRV_DIR="$(dirname "${BASH_SOURCE[0]}")"

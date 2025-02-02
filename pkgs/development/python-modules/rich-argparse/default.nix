@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rich-argparse";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hamdanal";
     repo = "rich-argparse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kHGNjVx3d+JSsN/BpNua2rGD5S5sBfJvh1NyqQnziBI=";
+    tag = "v${version}";
+    hash = "sha256-ae++npgZ8jZazwARwlPw73uhpQ8IT+7OekNl2vfu4Z0=";
   };
 
   build-system = [ hatchling ];

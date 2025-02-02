@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "gowall";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
     rev = "v${version}";
-    hash = "sha256-R7dOONfyzj6V3101Rp/WhUcFpqrSKWEkVm4a2riXZAI=";
+    hash = "sha256-BBalJADhQ7D7p5PeafddkqQmHGhLsq1DlF1FUoazJGg=";
   };
 
   vendorHash = "sha256-H2Io1K2LEFmEPJYVcEaVAK2ieBrkV6u+uX82XOvNXj4=";

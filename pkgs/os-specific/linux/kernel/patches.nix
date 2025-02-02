@@ -1,4 +1,8 @@
-{ lib, fetchpatch, fetchurl }:
+{
+  lib,
+  fetchpatch,
+  fetchurl,
+}:
 
 {
   ath_regd_optional = rec {
@@ -14,10 +18,10 @@
     };
   };
 
-  bridge_stp_helper =
-    { name = "bridge-stp-helper";
-      patch = ./bridge-stp-helper.patch;
-    };
+  bridge_stp_helper = {
+    name = "bridge-stp-helper";
+    patch = ./bridge-stp-helper.patch;
+  };
 
   # Reverts the buggy commit causing https://bugzilla.kernel.org/show_bug.cgi?id=217802
   dell_xps_regression = {
@@ -29,37 +33,44 @@
     };
   };
 
-  request_key_helper =
-    { name = "request-key-helper";
-      patch = ./request-key-helper.patch;
-    };
+  request_key_helper = {
+    name = "request-key-helper";
+    patch = ./request-key-helper.patch;
+  };
 
-  request_key_helper_updated =
-    { name = "request-key-helper-updated";
-      patch = ./request-key-helper-updated.patch;
-    };
+  request_key_helper_updated = {
+    name = "request-key-helper-updated";
+    patch = ./request-key-helper-updated.patch;
+  };
 
-  modinst_arg_list_too_long =
-    { name = "modinst-arglist-too-long";
-      patch = ./modinst-arg-list-too-long.patch;
-    };
-
-  hardened = let
-    mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
-      name = lib.removeSuffix ".patch" src.name;
-      patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
-      extra = src.extra;
-      inherit version sha256;
-    };
-    patches = lib.importJSON ./hardened/patches.json;
-  in lib.mapAttrs mkPatch patches;
+  hardened =
+    let
+      mkPatch =
+        kernelVersion:
+        {
+          version,
+          sha256,
+          patch,
+        }:
+        let
+          src = patch;
+        in
+        {
+          name = lib.removeSuffix ".patch" src.name;
+          patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
+          extra = src.extra;
+          inherit version sha256;
+        };
+      patches = lib.importJSON ./hardened/patches.json;
+    in
+    lib.mapAttrs mkPatch patches;
 
   # Adapted for Linux 5.4 from:
   # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04896832c94aae4842100cafb8d3a73e1bed3a45
-  rtl8761b_support =
-    { name = "rtl8761b-support";
-      patch = ./rtl8761b-support.patch;
-    };
+  rtl8761b_support = {
+    name = "rtl8761b-support";
+    patch = ./rtl8761b-support.patch;
+  };
 
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";

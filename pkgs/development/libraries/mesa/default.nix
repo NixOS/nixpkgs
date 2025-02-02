@@ -5,16 +5,15 @@
 , elfutils
 , expat
 , fetchCrate
-, fetchurl
-, fetchpatch
+, fetchFromGitLab
 , file
 , flex
 , glslang
+, spirv-tools
 , intltool
 , jdupes
 , libdrm
 , libglvnd
-, libomxil-bellagio
 , libunwind
 , libva-minimal
 , libvdpau
@@ -40,26 +39,27 @@
 , xorg
 , zstd
 , enablePatentEncumberedCodecs ? true
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
 
 , galliumDrivers ? [
     "d3d12" # WSL emulated GPU (aka Dozen)
     "iris" # new Intel (Broadwell+)
-    "kmsro" # special "render only" driver for GPUs without a display controller
+    "llvmpipe" # software renderer
     "nouveau" # Nvidia
-    "radeonsi" # new AMD (GCN+)
     "r300" # very old AMD
     "r600" # less old AMD
-    "swrast" # software renderer (aka LLVMPipe)
+    "radeonsi" # new AMD (GCN+)
+    "softpipe" # older software renderer
     "svga" # VMWare virtualized GPU
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) [
     "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "lima" # ARM Mali 4xx
     "panfrost" # ARM Mali Midgard and up (T/G series)
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "tegra" # Nvidia Tegra SoCs
     "v3d" # Broadcom VC5 (Raspberry Pi 4)
   ] ++ lib.optionals stdenv.hostPlatform.isx86 [
@@ -76,7 +76,7 @@
     # QEMU virtualized GPU (aka VirGL)
     # Requires ATOMIC_INT_LOCK_FREE == 2.
     "virtio"
-  ] ++ lib.optionals stdenv.isAarch64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
     "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
     "imagination-experimental" # PowerVR Rogue (currently N/A)
@@ -103,8 +103,8 @@ let
     }
     {
       pname = "proc-macro2";
-      version = "1.0.70";
-      hash = "sha256-e4ZgyZUTu5nAtaH5QVkLelqJQX/XPj/rWkzf/g2c+1g=";
+      version = "1.0.86";
+      hash = "sha256-9fYAlWRGVIwPp8OKX7Id84Kjt8OoN2cANJ/D9ZOUUZE=";
     }
     {
       pname = "quote";
@@ -113,8 +113,8 @@ let
     }
     {
       pname = "syn";
-      version = "2.0.39";
-      hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
+      version = "2.0.68";
+      hash = "sha256-nGLBbxR0DFBpsXMngXdegTm/o13FBS6QsM7TwxHXbgQ=";
     }
     {
       pname = "unicode-ident";
@@ -132,19 +132,15 @@ let
 
   needNativeCLC = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  common = import ./common.nix { inherit lib fetchurl; };
+  common = import ./common.nix { inherit lib fetchFromGitLab; };
 in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
   patches = [
     ./opencl.patch
-
-    # Fixes video corruption / crashes when decoding video on AMD iGPUs
-    # FIXME: remove in the next update
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/8b35da91b23afc65256b78a59d116fd09544cd28.patch";
-      hash = "sha256-z0KKBtot3VxXiS16YcmwZbeg8HSCLzEbvWdufI/fOk8=";
-    })
+    # cherry-picked from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
+    # safe to remove for versions > 24.3.2
+    ./cross_clc.patch
   ];
 
   postPatch = ''
@@ -175,7 +171,7 @@ in stdenv.mkDerivation {
 
   # Needed to discover llvm-config for cross
   preConfigure = ''
-    PATH=${llvmPackages.libllvm.dev}/bin:$PATH
+    PATH=${lib.getDev llvmPackages.libllvm}/bin:$PATH
   '';
 
   mesonFlags = [
@@ -186,17 +182,15 @@ in stdenv.mkDerivation {
     (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
     (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))
     (lib.mesonOption "vulkan-drivers" (lib.concatStringsSep "," vulkanDrivers))
-    (lib.mesonOption "vulkan-layers" (builtins.concatStringsSep "," vulkanLayers))
+    (lib.mesonOption "vulkan-layers" (lib.concatStringsSep "," vulkanLayers))
 
-    # Make sure we know where to find all the drivers
+    # Make sure we know where to put all the drivers
     (lib.mesonOption "dri-drivers-path" "${placeholder "drivers"}/lib/dri")
     (lib.mesonOption "vdpau-libs-path" "${placeholder "drivers"}/lib/vdpau")
-    (lib.mesonOption "omx-libs-path" "${placeholder "drivers"}/lib/bellagio")
     (lib.mesonOption "va-libs-path" "${placeholder "drivers"}/lib/dri")
     (lib.mesonOption "d3d-drivers-path" "${placeholder "drivers"}/lib/d3d")
 
     # Set search paths for non-Mesa drivers (e.g. Nvidia)
-    (lib.mesonOption "dri-search-path" "${libglvnd.driverLink}/lib/dri")
     (lib.mesonOption "gbm-backends-path" "${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm")
 
     # Enable glvnd for dynamic libGL dispatch
@@ -206,10 +200,16 @@ in stdenv.mkDerivation {
     (lib.mesonBool "osmesa" true) # used by wine
     (lib.mesonBool "teflon" true) # TensorFlow frontend
 
+    # Enable all freedreno kernel mode drivers. (For example, virtio can be
+    # used with a virtio-gpu device supporting drm native context.) This option
+    # is ignored when freedreno is not being built.
+    (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
+
     # Enable Intel RT stuff when available
     (lib.mesonBool "install-intel-clc" true)
-    (lib.mesonEnable "intel-rt" stdenv.isx86_64)
-    (lib.mesonOption "clang-libdir" "${llvmPackages.clang-unwrapped.lib}/lib")
+    (lib.mesonBool "install-mesa-clc" true)
+    (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
+    (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
     # Clover, old OpenCL frontend
     (lib.mesonOption "gallium-opencl" "icd")
@@ -221,10 +221,12 @@ in stdenv.mkDerivation {
     # meson auto_features enables this, but we do not want it
     (lib.mesonEnable "android-libbacktrace" false)
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
     (lib.mesonOption "intel-clc" "system")
+    (lib.mesonOption "mesa-clc" "system")
   ];
 
   strictDeps = true;
@@ -233,9 +235,8 @@ in stdenv.mkDerivation {
     directx-headers
     elfutils
     expat
-    glslang
+    spirv-tools
     libglvnd
-    libomxil-bellagio
     libunwind
     libva-minimal
     libvdpau
@@ -254,13 +255,14 @@ in stdenv.mkDerivation {
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
-    valgrind-light
     vulkan-loader
     wayland
     wayland-protocols
     xcbutilkeysyms
     xorgproto
     zstd
+  ] ++ lib.optionals withValgrind [
+    valgrind-light
   ];
 
   depsBuildBuild = [
@@ -281,19 +283,23 @@ in stdenv.mkDerivation {
     python3Packages.pycparser
     python3Packages.mako
     python3Packages.ply
+    python3Packages.pyyaml
     jdupes
-    glslang
+    # Use bin output from glslang to not propagate the dev output at
+    # the build time with the host glslang.
+    (lib.getBin glslang)
     rustc
     rust-bindgen
     rust-cbindgen
     rustPlatform.bindgenHook
     wayland-scanner
   ] ++ lib.optionals needNativeCLC [
-    buildPackages.mesa.driversdev
+    # `or null` to not break eval with `attribute missing` on darwin to linux cross
+    (buildPackages.mesa.driversdev or null)
   ];
 
   disallowedRequisites = lib.optionals needNativeCLC [
-    buildPackages.mesa.driversdev
+    (buildPackages.mesa.driversdev or null)
   ];
 
   propagatedBuildInputs = [ libdrm ];
@@ -302,10 +308,13 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     # Move driver-related bits to $drivers
+    moveToOutput "lib/gbm" $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
+    moveToOutput "lib/libgallium*" $drivers
+    moveToOutput "lib/libglapi*" $drivers
     moveToOutput "lib/libpowervr_rogue*" $drivers
-    moveToOutput "lib/libxatracker*" $drivers
     moveToOutput "lib/libvulkan_*" $drivers
+    moveToOutput "lib/libxatracker*" $drivers
 
     # Update search path used by glvnd (it's pointing to $out but drivers are in $drivers)
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
@@ -329,6 +338,7 @@ in stdenv.mkDerivation {
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
 
     moveToOutput bin/intel_clc $driversdev
+    moveToOutput bin/mesa_clc $driversdev
     moveToOutput lib/gallium-pipe $opencl
     moveToOutput "lib/lib*OpenCL*" $opencl
     moveToOutput "lib/libOSMesa*" $osmesa
@@ -357,6 +367,11 @@ in stdenv.mkDerivation {
       fi
     done
 
+    # update symlinks pointing to libgallium in $out
+    for link in $drivers/lib/dri/*_drv_video.so $drivers/lib/vdpau/*.so.1.0.0; do
+      ln -sf $drivers/lib/libgallium*.so $link
+    done
+
     # Don't depend on build python
     patchShebangs --host --update $out/bin/*
 
@@ -372,7 +387,7 @@ in stdenv.mkDerivation {
     done
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/dri/zink_dri.so
+    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/libgallium*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([

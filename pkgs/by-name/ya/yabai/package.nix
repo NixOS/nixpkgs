@@ -1,59 +1,37 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   fetchzip,
-  installShellFiles,
-  testers,
-  writeShellScript,
+  apple-sdk_15,
   common-updater-scripts,
   curl,
-  darwin,
+  installShellFiles,
   jq,
-  xcodebuild,
+  versionCheckHook,
+  writeShellScript,
   xxd,
-  yabai,
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
-    ;
-
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.2";
+  version = "7.1.6";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  env = {
-    # silence service.h error
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
-
   nativeBuildInputs =
     [ installShellFiles ]
-    ++ lib.optionals stdenv.isx86_64 [
-      xcodebuild
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       xxd
     ];
 
-  buildInputs = lib.optionals stdenv.isx86_64 [
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
+  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
+    apple-sdk_15
   ];
 
   dontConfigure = true;
-  dontBuild = stdenv.isAarch64;
+  dontBuild = stdenv.hostPlatform.isAarch64;
   enableParallelBuilding = true;
 
   installPhase = ''
@@ -62,47 +40,39 @@ stdenv'.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/icons/hicolor/scalable/apps}
 
     cp ./bin/yabai $out/bin/yabai
-    ${lib.optionalString stdenv.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
+    ${lib.optionalString stdenv.hostPlatform.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
     installManPage ./doc/yabai.1
 
     runHook postInstall
   '';
 
   postPatch =
-    lib.optionalString stdenv.isx86_64 # bash
+    lib.optionalString stdenv.hostPlatform.isx86_64 # bash
       ''
         # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
         substituteInPlace makefile \
-        --replace "-arch arm64e" "" \
-        --replace "-arch arm64" "" \
-        --replace "clang" "${stdenv.cc.targetPrefix}clang"
-
-        # `NSScreen::safeAreaInsets` is only available on macOS 12.0 and above, which frameworks aren't packaged.
-        # When a lower OS version is detected upstream just returns 0, so we can hardcode that at compile time.
-        # https://github.com/koekeishiya/yabai/blob/v4.0.2/src/workspace.m#L109
-        substituteInPlace src/workspace.m \
-        --replace 'return screen.safeAreaInsets.top;' 'return 0;'
+        --replace-fail "-arch arm64e" "" \
+        --replace-fail "-arch arm64" ""
       '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = yabai;
-      version = "yabai-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
+  passthru = {
     sources = {
       # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-4ZJs7Xpou0Ek0CCCjbK47Nu/XPpuTpBDU8GJz5AsaUg=";
+        hash = "sha256-6cHOHL73BB2UaZKLPxnc6n0bo7XwhxehDj+m+s1dGqk=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-H+7vH6AjP6HQ1ifXe8qlLSh0FQu8KJkwr+38C5akk/c=";
+        hash = "sha256-yigpGy4n7QS1WvWyxESmSPNWqGWh7Mqp/NrmvdMhPdY=";
       };
     };
 
@@ -146,6 +116,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     sourceProvenance =
       with lib.sourceTypes;
-      lib.optionals stdenv.isx86_64 [ fromSource ] ++ lib.optionals stdenv.isAarch64 [ binaryNativeCode ];
+      lib.optionals stdenv.hostPlatform.isx86_64 [ fromSource ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ binaryNativeCode ];
   };
 })

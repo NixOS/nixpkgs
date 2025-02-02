@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 build2ConfigurePhase() {
     runHook preConfigure
 
@@ -16,9 +18,10 @@ build2ConfigurePhase() {
         "config.install.man=${!outputDoc}/share/man"
         "config.install.sbin=${!outputBin}/sbin"
         "config.install.bin.mode=755"
-        $build2ConfigureFlags "${build2ConfigureFlagsArray[@]}"
     )
+    concatTo flagsArray build2ConfigureFlags build2ConfigureFlagsArray
 
+    # shellcheck disable=SC2157
     if [ -n "@isTargetDarwin@" ]; then
         flagsArray+=("config.bin.ld=ld64-lld")
         flagsArray+=("config.cc.loptions+=-fuse-ld=lld")
@@ -35,9 +38,8 @@ build2ConfigurePhase() {
 build2BuildPhase() {
     runHook preBuild
 
-    local flagsArray=(
-        $build2BuildFlags "${build2BuildFlagsArray[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray build2BuildFlags build2BuildFlagsArray
 
     echo 'build flags' "${flagsArray[@]}"
     b "${flagsArray[@]}"
@@ -48,13 +50,12 @@ build2BuildPhase() {
 build2CheckPhase() {
     runHook preCheck
 
-    local flagsArray=(
-        $build2CheckFlags "${build2CheckFlags[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray build2CheckFlags build2CheckFlags
 
     echo 'check flags' "${flagsArray[@]}"
 
-    b test ${build2Dir:-.} "${flagsArray[@]}"
+    b test "${build2Dir:-.}" "${flagsArray[@]}"
 
     runHook postCheck
 }
@@ -62,10 +63,8 @@ build2CheckPhase() {
 build2InstallPhase() {
     runHook preInstall
 
-    local flagsArray=(
-        $build2InstallFlags "${build2InstallFlagsArray[@]}"
-        ${installTargets:-}
-    )
+    local flagsArray=()
+    concatTo flagsArray build2InstallFlags build2InstallFlagsArray installTargets
 
     echo 'install flags' "${flagsArray[@]}"
     b install "${flagsArray[@]}"
@@ -73,19 +72,20 @@ build2InstallPhase() {
     runHook postInstall
 }
 
-if [ -z "${dontUseBuild2Configure-}" -a -z "${configurePhase-}" ]; then
+if [ -z "${dontUseBuild2Configure-}" ] && [ -z "${configurePhase-}" ]; then
+    # shellcheck disable=SC2034
     setOutputFlags=
     configurePhase=build2ConfigurePhase
 fi
 
-if [ -z "${dontUseBuild2Build-}" -a -z "${buildPhase-}" ]; then
+if [ -z "${dontUseBuild2Build-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=build2BuildPhase
 fi
 
-if [ -z "${dontUseBuild2Check-}" -a -z "${checkPhase-}" ]; then
+if [ -z "${dontUseBuild2Check-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=build2CheckPhase
 fi
 
-if [ -z "${dontUseBuild2Install-}" -a -z "${installPhase-}" ]; then
+if [ -z "${dontUseBuild2Install-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=build2InstallPhase
 fi

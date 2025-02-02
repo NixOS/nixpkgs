@@ -1,41 +1,70 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
-, tzdata, wire
-, yarn, nodejs, python3, cacert
-, jq, moreutils
-, nix-update-script, nixosTests, xcbuild
-, faketty
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  removeReferencesTo,
+  tzdata,
+  wire,
+  yarn,
+  nodejs,
+  python3,
+  cacert,
+  jq,
+  moreutils,
+  nix-update-script,
+  nixosTests,
+  xcbuild,
+  faketty,
+  git,
 }:
 
+let
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  patchGoVersion = ''
+    substituteInPlace go.{mod,work} apps/alerting/notifications/go.mod pkg/storage/unified/apistore/go.mod pkg/storage/unified/resource/go.mod \
+      --replace-fail "go 1.23.5" "go 1.23.4"
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.23.5" "GO_VERSION = 1.23.4"
+  '';
+in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.2.0";
+  version = "11.5.0";
 
-  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
+  subPackages = [
+    "pkg/cmd/grafana"
+    "pkg/cmd/grafana-server"
+    "pkg/cmd/grafana-cli"
+  ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-SthxNf8e8LEV0LSdVR/x6UXOXy+lGAUqHtQd0bQufjY=";
+    hash = "sha256-c0C+/mH5PojwE86ni5huLPoymloeLOGCiutvSPcKobs=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-  } // lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    # Fix error: no member named 'aligned_alloc' in the global namespace.
-    # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
-    NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
   };
 
   offlineCache = stdenv.mkDerivation {
     name = "${pname}-${version}-yarn-offline-cache";
     inherit src env;
     nativeBuildInputs = [
-      yarn nodejs cacert
-      jq moreutils python3
-    # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+      yarn
+      nodejs
+      cacert
+      jq
+      moreutils
+      # required to run old node-gyp
+      (python3.withPackages (ps: [ ps.distutils ]))
+      git
+      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
       runHook preBuild
       export HOME="$(mktemp -d)"
@@ -50,22 +79,34 @@ buildGoModule rec {
     dontInstall = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = rec {
-      x86_64-linux = "sha256-Fo6WsgrFTp79wk+nPuUbPklneTvE+/ki0hX3IE8WR94=";
-      aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-C2zo+ykk5Zr5DDO4AB9wkc8jgn82VY8WlTR3XiqbD/0=";
-      x86_64-darwin = aarch64-darwin;
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    outputHash =
+      rec {
+        x86_64-linux = "sha256-ZGsEAyvAMUKJoNRArtS3fZUoC4c8WDizwugzJY89+dE=";
+        aarch64-linux = x86_64-linux;
+        aarch64-darwin = "sha256-NbbX8cewI7fA/8rJjZArU+pYWiVam3vMKXCMiotcqJ0=";
+        x86_64-darwin = aarch64-darwin;
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-Pmh+tSJR7l34Ncr2DexjvbWRxnWLG3rzuz4n8vpPbx0=";
+  postPatch = patchGoVersion;
+
+  vendorHash = "sha256-Pt87hb0+EuGd62ld65jTszeTy7GZZbviH8X9qCGOaJQ=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
-    ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [
+    wire
+    yarn
+    jq
+    moreutils
+    removeReferencesTo
+    # required to run old node-gyp
+    (python3.withPackages (ps: [ ps.distutils ]))
+    faketty
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -102,7 +143,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -135,8 +178,20 @@ buildGoModule rec {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      offline
+      fpletz
+      willibutz
+      globin
+      ma27
+      Frostman
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "grafana-server";
   };
 }

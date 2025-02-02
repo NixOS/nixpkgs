@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-messages";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-D1181eD2mAVXEa7RLXXC4b2tVGrxbh0WWgtbC1anHH0=";
   };
 
@@ -40,16 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ] ++ lib.optionals withDocumentation [ "devdoc" ];
 
+  patches = [
+    # Remove when https://github.com/AyatanaIndicators/ayatana-indicator-messages/pull/39 merged & in release
+    ./fix-pie.patch
+  ];
+
   postPatch =
     ''
       # Uses pkg_get_variable, cannot substitute prefix with that
       substituteInPlace data/CMakeLists.txt \
-        --replace "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
+        --replace-fail "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
 
       # Bad concatenation
       substituteInPlace libmessaging-menu/messaging-menu.pc.in \
-        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
-        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+        --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
+        --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
 
       # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
       substituteInPlace tests/CMakeLists.txt \

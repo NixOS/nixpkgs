@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dlanger";
     repo = "inlinestyler";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9TKXqW+5SiiNXnHW2lOVh3zhFhodM7a1UB2yXsEuX3I=";
   };
 

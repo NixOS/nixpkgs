@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.0.8";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qdPQMC8HCMdcbHyO8B0OFiefO+jM1ytA2dYNymE0Xuc=";
+    hash = "sha256-S9FXa+yBA4IYPOiiFkLUNdEFZPraVV5vjtgwDQ/FbNY=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Socket address collisions between tests
   enableParallelChecking = false;
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
       substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \

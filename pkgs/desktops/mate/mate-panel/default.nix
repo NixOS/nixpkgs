@@ -1,41 +1,43 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, glib
-, gtk-layer-shell
-, gtk3
-, libmateweather
-, libwnck
-, librsvg
-, libxml2
-, dconf
-, dconf-editor
-, mate-desktop
-, mate-menus
-, hicolor-icon-theme
-, wayland
-, gobject-introspection
-, wrapGAppsHook3
-, marco
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libmateweather,
+  libwnck,
+  librsvg,
+  libxml2,
+  dconf,
+  dconf-editor,
+  mate-desktop,
+  mate-menus,
+  hicolor-icon-theme,
+  wayland,
+  gobject-introspection,
+  wrapGAppsHook3,
+  marco,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.2";
+  version = "1.28.4";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Z4pD6DeqJxhJQgT93xm7kGzwfl2A/S4d3nRfJtKtujM=";
+    hash = "sha256-AvCesDFMKsGXtvCJlQpXHNujm/0D1sOguP13JSqWiHQ=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
     gettext
     itstool
+    libxml2 # xmllint
     pkg-config
     wrapGAppsHook3
   ];
@@ -45,7 +47,6 @@ stdenv.mkDerivation rec {
     libmateweather
     libwnck
     librsvg
-    libxml2
     dconf
     mate-desktop
     mate-menus
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glib
     gtk3
-    # See https://github.com/mate-desktop/mate-panel/issues/1402
+    # Optionally for the ca.desrt.dconf-editor.Settings schema
     # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
     dconf-editor
   ];
@@ -85,7 +86,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

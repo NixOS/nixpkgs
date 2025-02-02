@@ -1,13 +1,13 @@
 {
-  "version": "3.181.23",
+  "version": "3.195.13",
   "deb": {
     "x86_64-linux": {
-      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.181.23/standard-notes-3.181.23-linux-amd64.deb",
-      "hash": "sha512-zWjST3guI0qifvZIwSLJ0nIpU12Mu3+m25Xdoqv0BQC7tscChEdCGUAJRUKHEf0b8l4uvp8qBGHiBOfbrIi//w=="
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.195.13/standard-notes-3.195.13-linux-amd64.deb",
+      "hash": "sha512-z7tZkOvzYzEPhu3rz8PG7mWdEua1z2ToVoj6l2wmvZUx/nS6lQ3yIFhEvpnMyXRZ2qDn4ihnBT20fyZttvkjMQ=="
     },
     "aarch64-linux": {
-      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.181.23/standard-notes-3.181.23-linux-arm64.deb",
-      "hash": "sha512-7R5Ym44mrVgUiqdt6NL8F9uUUOroQRxwn30xKThyIQm2HGRUJivRfOws98El9zV8bKG1khk4DZaMiLQSMjrtaQ=="
+      "url": "https://github.com/standardnotes/app/releases/download/%40standardnotes/desktop%403.195.13/standard-notes-3.195.13-linux-arm64.deb",
+      "hash": "sha512-c9p7aLCkcqdtx/X2vrmb5GCyc7JtR9O9GVwrkgGPJpZ0FdSR5zhX0nI9sJFHBIA/GuPuDYOM4fimyfpQzy0Nfw=="
     }
   }
 }

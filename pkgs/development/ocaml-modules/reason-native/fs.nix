@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fp, reason, src }:
+{
+  lib,
+  buildDunePackage,
+  fp,
+  reason,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -21,4 +27,3 @@ buildDunePackage {
     maintainers = [ ];
   };
 }
-

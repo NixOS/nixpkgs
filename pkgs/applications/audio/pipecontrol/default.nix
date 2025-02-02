@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pipewire
-, cmake
-, extra-cmake-modules
-, wrapQtAppsHook
-, qtbase
-, qttools
-, kirigami2
-, kcoreaddons
-, ki18n
-, qtquickcontrols2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pipewire,
+  cmake,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  kirigami2,
+  kcoreaddons,
+  ki18n,
+  qtquickcontrols2,
 }:
 
 stdenv.mkDerivation rec {

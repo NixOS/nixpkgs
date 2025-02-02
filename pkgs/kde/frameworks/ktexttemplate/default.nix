@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "ktexttemplate";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

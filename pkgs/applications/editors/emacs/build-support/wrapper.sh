@@ -50,4 +50,7 @@ export emacsWithPackages_siteLisp=@wrapperSiteLisp@
 export EMACSNATIVELOADPATH="${newNativeLoadPath[*]}"
 export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 
+export emacsWithPackages_invocationDirectory=@wrapperInvocationDirectory@
+export emacsWithPackages_invocationName=@wrapperInvocationName@
+
 exec @prog@ "$@"

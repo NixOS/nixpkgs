@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, installShellFiles
-, boost
-, lua
-, protobuf_21
-, rapidjson
-, shapelib
-, sqlite
-, zlib
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  cmake,
+  installShellFiles,
+  boost,
+  lua,
+  protobuf_21,
+  rapidjson,
+  shapelib,
+  sqlite,
+  zlib,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,12 +34,24 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "default_value(\"static\")" "default_value(\"$out/share/tilemaker/static\")"
   '';
 
-  nativeBuildInputs = [ cmake installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
-  buildInputs = [ boost lua protobuf_21 rapidjson shapelib sqlite zlib ];
+  buildInputs = [
+    boost
+    lua
+    protobuf_21
+    rapidjson
+    shapelib
+    sqlite
+    zlib
+  ];
 
-  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    (lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc");
+  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (
+    lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc"
+  );
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
 

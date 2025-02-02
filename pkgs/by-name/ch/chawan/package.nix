@@ -11,28 +11,29 @@
 , zlib
 , unstableGitUpdater
 , libseccomp
-, substituteAll
+, replaceVars
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-08-03";
+  version = "0-unstable-2025-01-06";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "4c64687290c908cd791a058dede9bd4f2a1c7757";
-    hash = "sha256-o0GMRNl5GiW0cJdaQYsL2JVp0CPs5VxQF8s0XEh/f7o=";
+    rev = "30a933adb2bade2ceee08a9b36371cecf554d648";
+    hash = "sha256-EepSEN66GTdWfCSiR/p69pN5bvTEiUFOMErCxedrq+g=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Include chawan's man pages in mancha's search path
-    (substituteAll {
-      src = ./mancha-augment-path.diff;
-      out = placeholder "out";
-    })
-  ];
+  patches = [ ./mancha-augment-path.diff ];
+
+  # Include chawan's man pages in mancha's search path
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace adapter/protocol/man.nim \
+      --replace-fail '@out@' "$out"
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
@@ -79,6 +80,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
-    broken = stdenv.isDarwin; # pending PR #292043
+    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }

@@ -5,18 +5,18 @@
 }:
 let
   pname = "miru";
-  version = "5.5.0";
-  meta = with lib; {
+  version = "5.5.9";
+  meta = {
     description = "Stream anime torrents, real-time with no waiting for downloads";
     homepage = "https://miru.watch";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       d4ilyrun
       matteopacini
     ];
     mainProgram = "miru";
 
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
 
     longDescription = ''
@@ -36,7 +36,7 @@ let
     updateScript = ./update.sh;
   };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
     inherit
       pname

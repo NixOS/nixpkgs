@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonAtLeast,
   fetchFromGitHub,
   # build-system
   setuptools,
@@ -30,17 +29,16 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.12.0";
+  version = "0.12.3";
   pyproject = true;
 
-  # https://github.com/MatthiasValvekens/certomancer/issues/12
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-c2Fq4YTHQvhxuZrpKQYZvqHIMfubbkeKV4rctELLeJU=";
+    tag = "v${version}";
+    hash = "sha256-2BjLoGUWU0RaWVI9JA3s/Hf5aVtmv8hn+fB2jkWdQNY=";
   };
 
   build-system = [
@@ -57,7 +55,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     requests-mocker = [ requests-mock ];
     web-api = [
       jinja2
@@ -73,12 +71,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  disabledTests = [
-    # pyhanko_certvalidator.errors.DisallowedAlgorithmError
-    "test_validate"
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "certomancer" ];
 

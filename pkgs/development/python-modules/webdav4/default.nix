@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skshetry";
     repo = "webdav4";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LgWYgERRuUODFzUnC08kDJTVRx9vanJ+OU8sREEMVwM=";
   };
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     wsgidav
-  ] ++ passthru.optional-dependencies.fsspec;
+  ] ++ optional-dependencies.fsspec;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [ fsspec ];
     http2 = [ httpx.optional-dependencies.http2 ];
     all = [

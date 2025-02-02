@@ -1,9 +1,44 @@
-{ lib, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript
-, libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsa-lib, freetype
-, perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
-, libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
-, soundtouch, libzip, libhdhomerun
-, withWebKit ? false
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  which,
+  qtbase,
+  qtwebkit,
+  qtscript,
+  libpulseaudio,
+  fftwSinglePrec,
+  lame,
+  zlib,
+  libGLU,
+  libGL,
+  alsa-lib,
+  freetype,
+  perl,
+  pkg-config,
+  libsamplerate,
+  libbluray,
+  lzo,
+  libX11,
+  libXv,
+  libXrandr,
+  libXvMC,
+  libXinerama,
+  libXxf86vm,
+  libXmu,
+  yasm,
+  libuuid,
+  taglib,
+  libtool,
+  autoconf,
+  automake,
+  file,
+  exiv2,
+  linuxHeaders,
+  soundtouch,
+  libzip,
+  libhdhomerun,
+  withWebKit ? false,
 }:
 
 mkDerivation rec {
@@ -25,15 +60,46 @@ mkDerivation rec {
   setSourceRoot = "sourceRoot=$(echo */mythtv)";
 
   buildInputs = [
-    freetype qtbase qtscript lame zlib libGLU libGL
-    perl libsamplerate libbluray lzo alsa-lib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
-    libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2 soundtouch libzip
+    freetype
+    qtbase
+    qtscript
+    lame
+    zlib
+    libGLU
+    libGL
+    perl
+    libsamplerate
+    libbluray
+    lzo
+    alsa-lib
+    libpulseaudio
+    fftwSinglePrec
+    libX11
+    libXv
+    libXrandr
+    libXvMC
+    libXmu
+    libXinerama
+    libXxf86vm
+    libXmu
+    libuuid
+    taglib
+    exiv2
+    soundtouch
+    libzip
     libhdhomerun
   ] ++ lib.optional withWebKit qtwebkit;
-  nativeBuildInputs = [ pkg-config which yasm libtool autoconf automake file ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+    yasm
+    libtool
+    autoconf
+    automake
+    file
+  ];
 
-  configureFlags =
-    [ "--dvb-path=${linuxHeaders}/include" ];
+  configureFlags = [ "--dvb-path=${linuxHeaders}/include" ];
 
   enableParallelBuilding = true;
 

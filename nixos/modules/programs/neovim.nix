@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.neovim;
@@ -102,45 +107,49 @@ in
         Set of files that have to be linked in {file}`runtime`.
       '';
 
-      type = with lib.types; attrsOf (submodule (
-        { name, config, ... }:
-        {
-          options = {
+      type =
+        with lib.types;
+        attrsOf (
+          submodule (
+            { name, config, ... }:
+            {
+              options = {
 
-            enable = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-              description = ''
-                Whether this runtime directory should be generated.  This
-                option allows specific runtime files to be disabled.
-              '';
-            };
+                enable = lib.mkOption {
+                  type = lib.types.bool;
+                  default = true;
+                  description = ''
+                    Whether this runtime directory should be generated.  This
+                    option allows specific runtime files to be disabled.
+                  '';
+                };
 
-            target = lib.mkOption {
-              type = lib.types.str;
-              description = ''
-                Name of symlink.  Defaults to the attribute
-                name.
-              '';
-            };
+                target = lib.mkOption {
+                  type = lib.types.str;
+                  description = ''
+                    Name of symlink.  Defaults to the attribute
+                    name.
+                  '';
+                };
 
-            text = lib.mkOption {
-              default = null;
-              type = lib.types.nullOr lib.types.lines;
-              description = "Text of the file.";
-            };
+                text = lib.mkOption {
+                  default = null;
+                  type = lib.types.nullOr lib.types.lines;
+                  description = "Text of the file.";
+                };
 
-            source = lib.mkOption {
-              default = null;
-              type = lib.types.nullOr lib.types.path;
-              description = "Path of the source file.";
-            };
+                source = lib.mkOption {
+                  default = null;
+                  type = lib.types.nullOr lib.types.path;
+                  description = "Path of the source file.";
+                };
 
-          };
+              };
 
-          config.target = lib.mkDefault name;
-        }
-      ));
+              config.target = lib.mkDefault name;
+            }
+          )
+        );
 
     };
   };
@@ -155,19 +164,29 @@ in
     # from other packages will be used by neovim.
     environment.pathsToLink = [ "/share/nvim" ];
 
-    environment.etc = builtins.listToAttrs (builtins.attrValues (builtins.mapAttrs
-      (name: value: {
-        name = "xdg/nvim/${name}";
-        value = builtins.removeAttrs
-          (value // {
-            target = "xdg/nvim/${value.target}";
-          })
-          (lib.optionals (builtins.isNull value.source) [ "source" ]);
-      })
-      cfg.runtime));
+    environment.etc = builtins.listToAttrs (
+      builtins.attrValues (
+        builtins.mapAttrs (name: value: {
+          name = "xdg/nvim/${name}";
+          value = builtins.removeAttrs (
+            value
+            // {
+              target = "xdg/nvim/${value.target}";
+            }
+          ) (lib.optionals (builtins.isNull value.source) [ "source" ]);
+        }) cfg.runtime
+      )
+    );
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby configure;
+      inherit (cfg)
+        viAlias
+        vimAlias
+        withPython3
+        withNodeJs
+        withRuby
+        configure
+        ;
     };
   };
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq yq-go nix-prefetch
+#!nix-shell -i bash -p curl gnugrep gnused jq nurl yq-go
 
 set -x -eu -o pipefail
 
@@ -10,6 +10,7 @@ trap "rm -rf ${WORKDIR}" EXIT
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
+OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_1_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_1_${MINOR_VERSION}.name).version" | tr -d '"')"
 cd ${NIXPKGS_K3S_PATH}
 
 cd 1_${MINOR_VERSION}
@@ -107,7 +108,13 @@ CONTAINERD_VERSION=$(grep github.com/containerd/containerd ${FILE_GO_MOD} \
 CONTAINERD_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/k3s-io/containerd/archive/refs/tags/v${CONTAINERD_VERSION}.tar.gz")
 
-CRI_CTL_VERSION=$(grep github.com/kubernetes-sigs/cri-tools ${FILE_GO_MOD} \
+# The repository of "cri-tools" changes for 1.31.x, this can likely be removed in future releases
+if [ "$MINOR_VERSION" -gt 30 ]; then
+    CRI_CTL_REPO=sigs.k8s.io
+else
+    CRI_CTL_REPO=github.com/kubernetes-sigs
+fi
+CRI_CTL_VERSION=$(grep "$CRI_CTL_REPO/cri-tools" ${FILE_GO_MOD} \
     | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
 
 setKV () {
@@ -135,7 +142,7 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_HASH=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules.overrideAttrs (_: { vendorHash = sha256; })")
+K3S_VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules")
 set -e
 
 if [ -n "${K3S_VENDOR_HASH:-}" ]; then
@@ -147,12 +154,11 @@ fi
 
 # Implement commit
 # See https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
-OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
 cat <<EOF
 [{
     "attrPath": "k3s_1_${MINOR_VERSION}",
     "oldVersion": "$OLD_VERSION",
     "newVersion": "$K3S_VERSION",
-    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix"]
+    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix","$PWD/images-versions.json"]
 }]
 EOF

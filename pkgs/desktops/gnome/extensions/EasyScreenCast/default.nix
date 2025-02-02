@@ -1,25 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome, gettext, jq, intltool }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  glib,
+  gnome-shell,
+  gettext,
+  jq,
+  intltool,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
     rev = finalAttrs.version;
-    hash = "sha256-rRRMFAdWseTxW6W194TE3yNlnpPX7gLViLPLQW6zuSI=";
+    hash = "sha256-5PJB+lm4NKeNpS2vg9xaVl5aUR0Rofmt6sEKXfuGG6c=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-gi-path.patch;
-      gnomeShell = gnome.gnome-shell;
+    (replaceVars ./fix-gi-path.patch {
+      gnomeShell = gnome-shell;
     })
   ];
 
   nativeBuildInputs = [
-    glib gettext jq intltool
+    glib
+    gettext
+    jq
+    intltool
   ];
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];

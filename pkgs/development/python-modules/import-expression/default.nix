@@ -3,38 +3,40 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  astunparse,
+  pythonOlder,
   setuptools,
 }:
+
 buildPythonPackage rec {
   pname = "import-expression";
-  version = "2.0.0";
+  version = "2.2.1.post1";
   pyproject = true;
 
+  disabled = pythonOlder "3.9";
+
   src = fetchPypi {
-    inherit version;
     pname = "import_expression";
-    hash = "sha256-Biw7dIOPKbDcqYJSCyeqC/seREcVihSZuaKNFfgjTew=";
+    inherit version;
+    hash = "sha256-HIMb8mvvft82qXs0xoe5Yuer4GEWxm8A4U+aMhhiPU8=";
   };
 
   build-system = [ setuptools ];
-  dependencies = [ astunparse ];
+
   nativeCheckInputs = [ pytestCheckHook ];
+
   pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "import_expression"
-    "import_expression._codec"
-  ];
+  pythonImportsCheck = [ "import_expression" ];
 
   meta = {
     description = "Transpiles a superset of python to allow easy inline imports";
     homepage = "https://github.com/ioistired/import-expression-parser";
+    changelog = "https://github.com/ioistired/import-expression/releases/tag/v${version}";
     license = with lib.licenses; [
       mit
       psfl
     ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "import-expression";
-    maintainers = with lib.maintainers; [ lychee ];
   };
 }

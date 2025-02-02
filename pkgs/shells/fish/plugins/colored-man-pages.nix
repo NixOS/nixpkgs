@@ -1,8 +1,12 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "colored-man-pages";
-  version = "unstable-2022-04-30";
+  version = "0-unstable-2022-04-30";
 
   src = fetchFromGitHub {
     owner = "patrickf1";

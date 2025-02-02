@@ -24,7 +24,7 @@ let
 
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkg-config coreutils gnugrep glibcLocales
+    pkg-config coreutils glibcLocales
     emscripten;
 
 in
@@ -34,6 +34,8 @@ in
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
+, sourceRoot ? null
+, setSourceRoot ? null
 , buildDepends ? [], setupHaskellDepends ? [], libraryHaskellDepends ? [], executableHaskellDepends ? []
 , buildTarget ? ""
 , buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? [], benchmarkToolDepends ? []
@@ -53,7 +55,7 @@ in
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
-, enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
+, enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin)  # TODO: use -dead_strip for darwin
 # Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
 , enableStaticLibraries ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs)
 , enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows
@@ -242,8 +244,8 @@ let
     "--with-gcc=$CC" # Clang won't work without that extra information.
   ] ++ [
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
-    (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
+    (optionalString (enableSharedExecutables && stdenv.hostPlatform.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.hostPlatform.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding (makeGhcOptions [ "-j$NIX_BUILD_CORES" "+RTS" "-A64M" "-RTS" ]))
     (optionalString useCpphs ("--with-cpphs=${cpphs}/bin/cpphs " + (makeGhcOptions [ "-cpp"  "-pgmP${cpphs}/bin/cpphs" "-optP--cpp" ])))
     (enableFeature enableLibraryProfiling "library-profiling")
@@ -476,13 +478,13 @@ stdenv.mkDerivation ({
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       ${buildPkgDb ghc "$packageConfDir"}
       if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
+        appendToVar configureFlags "--extra-include-dirs=$p/include"
       fi
       if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
+        appendToVar configureFlags "--extra-lib-dirs=$p/lib"
       fi
       if [[ -d "$p/Library/Frameworks" ]]; then
-        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+        appendToVar configureFlags "--extra-framework-dirs=$p/Library/Frameworks"
       fi
   '' + ''
     done
@@ -501,7 +503,7 @@ stdenv.mkDerivation ({
   # the `$out/lib/links` directory to read-only when the build is done after the
   # dist directory has already been exported, which triggers an unnecessary
   # rebuild of modules included in the exported dist directory.
-  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateIntermediatesOutput) ''
+  + (optionalString (stdenv.hostPlatform.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateIntermediatesOutput) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -567,7 +569,7 @@ stdenv.mkDerivation ({
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
-      if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+      if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
         echo >&2 "*** abort because of serious configure-time warning from Cabal"
         exit 1
       fi
@@ -800,7 +802,7 @@ stdenv.mkDerivation ({
         buildInputs =
           otherBuildInputsSystem;
         LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
         "NIX_${ghcCommandCaps}" = "${ghcEnv}/bin/${ghcCommand}";
         "NIX_${ghcCommandCaps}PKG" = "${ghcEnv}/bin/${ghcCommand}-pkg";
         # TODO: is this still valid?
@@ -825,6 +827,8 @@ stdenv.mkDerivation ({
          ;
 
 }
+// optionalAttrs (args ? sourceRoot)             { inherit sourceRoot; }
+// optionalAttrs (args ? setSourceRoot)          { inherit setSourceRoot; }
 // optionalAttrs (args ? preCompileBuildDriver)  { inherit preCompileBuildDriver; }
 // optionalAttrs (args ? postCompileBuildDriver) { inherit postCompileBuildDriver; }
 // optionalAttrs (args ? preUnpack)              { inherit preUnpack; }

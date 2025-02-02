@@ -23,7 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
 
-
   pythonRelaxDeps = [ "smart-open" ];
 
   build-system = [ setuptools ];

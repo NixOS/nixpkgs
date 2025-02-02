@@ -1,14 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nlohmann_json
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nlohmann_json,
+  cmake,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json_schema_validator";
   version = "2.3.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "pboettch";

@@ -1,15 +1,16 @@
-{ alcotest
-, angstrom
-, bigstringaf
-, buildDunePackage
-, crowbar
-, fetchzip
-, fmt
-, hxd
-, ke
-, lib
-, rresult
-, uutf
+{
+  alcotest,
+  angstrom,
+  bigstringaf,
+  buildDunePackage,
+  crowbar,
+  fetchzip,
+  fmt,
+  hxd,
+  ke,
+  lib,
+  rresult,
+  uutf,
 }:
 
 buildDunePackage rec {

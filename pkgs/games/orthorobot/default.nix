@@ -1,14 +1,15 @@
-{ lib
-, copyDesktopItems
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
-, love
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, strip-nondeterminism
-, zip
+{
+  lib,
+  copyDesktopItems,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  love,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  strip-nondeterminism,
+  zip,
 }:
 
 stdenv.mkDerivation rec {

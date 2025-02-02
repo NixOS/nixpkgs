@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, djangorestframework
-, django
-, josepy
-, requests
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  djangorestframework,
+  django,
+  josepy,
+  requests,
+  cryptography,
 }:
 
 buildPythonPackage rec {

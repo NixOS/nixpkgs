@@ -12,6 +12,7 @@
   requests,
   moto,
   paramiko,
+  pynacl,
   pytestCheckHook,
   responses,
   setuptools,
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4HOTaF6AKXGlVCvSGKnnaH73aa4IO0aRxz03XQ4gSd8=";
   };
 
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     responses
+    pynacl
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "smart_open" ];

@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
-  version = "0.25.9";
+  version = "0.26.3";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "sha256-ZevtYJ1ibSs3an3m1KJNTTquz1w6UfTiFgd1mNHFHWE=";
+    sha256 = "sha256-OxE0+KK2qt06gAi7rw3hiG2lczBqbyNThb4aCpyM6q8=";
   };
 
-  cargoHash = "sha256-QHhfHm2fDFR5BpSnw1wzr3dfCWDTzWNDDdRtj2qOoKE=";
+  cargoHash = "sha256-RtN3+TWRNsOgVb4KrCEN0cxB8ctBZ5qNUXbux3RKkqc=";
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
 
   nativeCheckInputs = [ git ];
 

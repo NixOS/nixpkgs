@@ -17,6 +17,7 @@ There is no uniform interface for build helpers.
 [Language- or framework-specific build helpers](#chap-language-support) usually follow the style of `stdenv.mkDerivation`, which accepts an attribute set or a fixed-point function taking an attribute set.
 
 ```{=include=} chapters
+build-helpers/fixed-point-arguments.chapter.md
 build-helpers/fetchers.chapter.md
 build-helpers/trivial-build-helpers.chapter.md
 build-helpers/testers.chapter.md

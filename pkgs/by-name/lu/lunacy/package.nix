@@ -20,17 +20,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunacy";
-  version = "9.6.2";
+  version = "10.11";
 
   src = fetchurl {
     url = "https://lcdn.icons8.com/setup/Lunacy_${finalAttrs.version}.deb";
-    hash = "sha256-iTne+vUnv+O/+QUKgSUr+ACdZpXrvRQkZmqghJH1fDw=";
+    hash = "sha256-yRTp23UISWBbBkA9YavYcjqYMU0RijMyLOCoYk49Jxo=";
   };
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $src root
-  '';
 
   buildInputs = [
     zlib

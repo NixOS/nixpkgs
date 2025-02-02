@@ -7,4 +7,4 @@ fixGprProjectDarwinRpath() {
     done
 }
 
-preFixupPhases+=" fixGprProjectDarwinRpath"
+appendToVar preFixupPhases fixGprProjectDarwinRpath

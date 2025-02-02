@@ -7,7 +7,7 @@
 , zlib
 , libssh2
 , openssl
-, pcre
+, pcre2
 , libiconv
 , Security
 , staticBuild ? stdenv.hostPlatform.isStatic
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.8.1";
+  version = "1.8.4";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = ["lib" "dev" "out"];
@@ -31,10 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J2rCxTecyLbbDdsyBWn9w7r3pbKRMkI9E7RvRgAqBdY=";
+    hash = "sha256-AVhDq9nC2ccwFYJmejr0hmnyV4AxZLamuHktYPlkzUs=";
   };
 
   cmakeFlags = [
+    "-DREGEX_BACKEND=pcre2"
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
     (lib.cmakeBool "USE_GSSAPI" withGssapi)
@@ -47,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
 
-  buildInputs = [ zlib libssh2 openssl pcre llhttp ]
+  buildInputs = [ zlib libssh2 openssl pcre2 llhttp ]
     ++ lib.optional withGssapi krb5
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
+  propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
   doCheck = true;
   checkPhase = ''

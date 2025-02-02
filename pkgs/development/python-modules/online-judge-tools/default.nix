@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "oj";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-m6V4Sq3yU/KPnbpA0oCLI/qaSrAPA6TutcBL5Crb/Cc=";
   };
 

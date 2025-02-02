@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batch";
-  version = "17.3.0";
+  version = "18.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/JSIGmrNuKlTPzcbb3stPq6heJ65VQFLJKkI1t/nWZE=";
+    pname = "azure_mgmt_batch";
+    inherit version;
+    hash = "sha256-MF61H7P3OyCSfvR7O2+T6eMtyTmHbARflwvThsB7p5w=";
   };
 
   nativeBuildInputs = [ setuptools ];

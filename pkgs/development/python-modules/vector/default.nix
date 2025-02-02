@@ -1,7 +1,7 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -12,7 +12,7 @@
   numpy,
   packaging,
 
-  # checks
+  # tests
   awkward,
   dask-awkward,
   notebook,
@@ -20,22 +20,18 @@
   papermill,
   pytestCheckHook,
   sympy,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "1.4.1";
+  version = "1.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ckwJgh5aWFTwoEBVmKukdk+cmQeOuecLiYD2EcuELGw=";
+    tag = "v${version}";
+    hash = "sha256-EHvdz6Tv3qJr6yUAw3/TuoMSrOCAQpsFBF1sS5I2p2k=";
   };
 
   build-system = [
@@ -62,7 +58,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # AssertionError: assert 2.1073424255447017e-08 == 0.0
     "test_issue_463"
   ];

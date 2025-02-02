@@ -83,9 +83,6 @@ example:
     ```nix
     # nixpkgs/nixos/modules/services/prometheus/exporters/postfix.nix
     { config, lib, pkgs, options }:
-
-    with lib;
-
     let
       # for convenience we define cfg here
       cfg = config.services.prometheus.exporters.postfix;
@@ -97,15 +94,15 @@ example:
       # (and optional overrides for default options).
       # Note that this attribute is optional.
       extraOpts = {
-        telemetryPath = mkOption {
-          type = types.str;
+        telemetryPath = lib.mkOption {
+          type = lib.types.str;
           default = "/metrics";
           description = ''
             Path under which to expose metrics.
           '';
         };
-        logfilePath = mkOption {
-          type = types.path;
+        logfilePath = lib.mkOption {
+          type = lib.types.path;
           default = /var/log/postfix_exporter_input.log;
           example = /var/log/mail.log;
           description = ''
@@ -113,8 +110,8 @@ example:
             This file will be truncated by this exporter!
           '';
         };
-        showqPath = mkOption {
-          type = types.path;
+        showqPath = lib.mkOption {
+          type = lib.types.path;
           default = /var/spool/postfix/public/showq;
           example = /var/lib/postfix/queue/public/showq;
           description = ''
@@ -136,7 +133,7 @@ example:
             ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
               --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
               --web.telemetry-path ${cfg.telemetryPath} \
-              ${concatStringsSep " \\\n  " cfg.extraFlags}
+              ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
           '';
         };
       };
@@ -156,8 +153,6 @@ information about the change to the exporter definition similar to
 ```nix
 { config, lib, pkgs, options }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.nginx;
 in
@@ -173,10 +168,10 @@ in
   };
   imports = [
     # 'services.prometheus.exporters.nginx.telemetryEndpoint' -> 'services.prometheus.exporters.nginx.telemetryPath'
-    (mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
+    (lib.mkRenamedOptionModule [ "telemetryEndpoint" ] [ "telemetryPath" ])
 
     # removed option 'services.prometheus.exporters.nginx.insecure'
-    (mkRemovedOptionModule [ "insecure" ] ''
+    (lib.mkRemovedOptionModule [ "insecure" ] ''
       This option was replaced by 'prometheus.exporters.nginx.sslVerify' which defaults to true.
     '')
     ({ options.warnings = options.warnings; })

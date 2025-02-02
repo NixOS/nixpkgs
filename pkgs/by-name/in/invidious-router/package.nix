@@ -2,29 +2,33 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
-}: let
-  version = "1.1";
+  nix-update-script,
+}:
+let
+  version = "1.2";
 in
-  buildGoModule {
-    pname = "invidious-router";
-    inherit version;
+buildGoModule {
+  pname = "invidious-router";
+  inherit version;
 
-    src = fetchFromGitLab {
-      owner = "gaincoder";
-      repo = "invidious-router";
-      rev = version;
-      hash = "sha256-t8KQqMPkBbVis1odDcSu+H0uvyvoFqCmtWoHqVRxmfc=";
-    };
+  src = fetchFromGitLab {
+    owner = "gaincoder";
+    repo = "invidious-router";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YcMtZq4VMHr6XqHcsAAEmMF6jF1j1wb7Lq4EK42QAEo=";
+  };
 
-    vendorHash = "sha256-c03vYidm8SkoesRVQZdg/bCp9LIpdTmpXdfwInlHBKk=";
+  vendorHash = "sha256-c03vYidm8SkoesRVQZdg/bCp9LIpdTmpXdfwInlHBKk=";
 
-    doCheck = true;
+  passthru.updateScript = nix-update-script { };
 
-    meta = {
-      homepage = "https://gitlab.com/gaincoder/invidious-router";
-      description = "Go application that routes requests to different Invidious instances based on their health status and (optional) response time";
-      license = with lib.licenses; [mit];
-      maintainers = with lib.maintainers; [sils];
-      mainProgram = "invidious-router";
-    };
-  }
+  doCheck = true;
+
+  meta = {
+    homepage = "https://gitlab.com/gaincoder/invidious-router";
+    description = "Go application that routes requests to different Invidious instances based on their health status and (optional) response time";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ sils ];
+    mainProgram = "invidious-router";
+  };
+}

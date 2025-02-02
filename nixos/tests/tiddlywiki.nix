@@ -1,27 +1,28 @@
-import ./make-test-python.nix ({ ... }: {
-  name = "tiddlywiki";
-  nodes = {
-    default = {
-      services.tiddlywiki.enable = true;
-    };
-    configured = {
-      boot.postBootCommands = ''
-        echo "username,password
-        somelogin,somesecret" > /var/lib/wikiusers.csv
-      '';
-      services.tiddlywiki = {
-        enable = true;
-        listenOptions = {
-          port = 3000;
-          credentials="../wikiusers.csv";
-          readers="(authenticated)";
+import ./make-test-python.nix (
+  { ... }:
+  {
+    name = "tiddlywiki";
+    nodes = {
+      default = {
+        services.tiddlywiki.enable = true;
+      };
+      configured = {
+        boot.postBootCommands = ''
+          echo "username,password
+          somelogin,somesecret" > /var/lib/wikiusers.csv
+        '';
+        services.tiddlywiki = {
+          enable = true;
+          listenOptions = {
+            port = 3000;
+            credentials = "../wikiusers.csv";
+            readers = "(authenticated)";
+          };
         };
       };
     };
-  };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       with subtest("by default works without configuration"):
@@ -66,4 +67,5 @@ import ./make-test-python.nix ({ ... }: {
               "curl --fail -o /dev/null 127.0.0.1:8080/recipes/default/tiddlers/somepage"
           )
     '';
-})
+  }
+)

@@ -1,45 +1,45 @@
 {
   lib,
   stdenv,
-  darwin,
-  ocl-icd,
-  buildPythonPackage,
   fetchFromGitHub,
+  buildPythonPackage,
 
   # build-system
   cmake,
   nanobind,
   ninja,
   numpy,
-  pathspec,
   scikit-build-core,
 
   # buildInputs
   opencl-headers,
   pybind11,
+  darwin,
+  ocl-icd,
 
   # dependencies
   platformdirs,
   pytools,
 
-  # checks
+  # tests
   pytestCheckHook,
 }:
 
 let
   os-specific-buildInputs =
-    if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
+    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.2.7";
+  version = "2025.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pyopencl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DfZCtTeN1a1KS2qUU6iztba4opAVC/RUCe/hnkqTbII=";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-wAZBDPMJbTmujP1j7LjK28ZozZaUwKPDPZLZbFFTeAs=";
   };
 
   build-system = [
@@ -47,7 +47,6 @@ buildPythonPackage rec {
     nanobind
     ninja
     numpy
-    pathspec
     scikit-build-core
   ];
 
@@ -66,15 +65,25 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preBuild = ''
+  preCheck = ''
     export HOME=$(mktemp -d)
-    rm -rf pyopencl
+
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
   '';
 
-  # gcc: error: pygpu_language_opencl.cpp: No such file or directory
+  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
+  # tests are all the tests that are available.
   doCheck = false;
 
-  pythonImportsCheck = [ "pyopencl" ];
+  pythonImportsCheck = [
+    "pyopencl"
+    "pyopencl.array"
+    "pyopencl.cltypes"
+    "pyopencl.compyte"
+    "pyopencl.elementwise"
+    "pyopencl.tools"
+  ];
 
   meta = {
     description = "Python wrapper for OpenCL";
@@ -82,7 +91,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # ld: symbol(s) not found for architecture arm64
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    badPlatforms = [
+      # ld: symbol(s) not found for architecture arm64/x86_64
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

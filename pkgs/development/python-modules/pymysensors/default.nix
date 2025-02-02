@@ -42,7 +42,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     mqtt-client = [ paho-mqtt ];
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-forked";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-owkGwF5WQ17/CXwTsIYJ2AgktekRB4qhtsDxR0LCI/k=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    if (pythonAtLeast "3.12" && stdenv.isDarwin && stdenv.isx86_64) then
+    if (pythonAtLeast "3.12" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
       [
         # non reproducible test failure on hydra, works on community builder
         # https://hydra.nixos.org/build/252537267

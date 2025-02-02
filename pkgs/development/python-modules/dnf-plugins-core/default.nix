@@ -23,7 +23,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
-  version = "4.9.0";
+  version = "4.10.0";
   format = "other";
 
   outputs = [
@@ -34,19 +34,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-MQ7QZ5qn/0OU0slohwEP83w8NvSP2M+hpCDKvYqlezY=";
+    tag = version;
+    hash = "sha256-7MPCLnclRT07m6CrGguDxSB+sIybp4tMcExU9+Sz9EM=";
   };
-
-  patches = [ ./fix-python-install-dir.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}" \
-      --replace "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
-      --replace "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
+      --replace-fail "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
+      --replace-fail "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
     substituteInPlace doc/CMakeLists.txt \
-      --replace 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
+      --replace-fail 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
   '';
 
   nativeBuildInputs = [
@@ -68,6 +65,7 @@ buildPythonPackage rec {
   cmakeFlags = [
     "-DPYTHON_DESIRED=${pyMajor}"
     "-DWITHOUT_LOCAL=0"
+    "-DPYTHON_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
 
   postBuild = ''

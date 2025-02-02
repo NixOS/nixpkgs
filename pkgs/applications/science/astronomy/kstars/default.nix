@@ -1,47 +1,47 @@
-{ lib
-, stdenv
-, mkDerivation
-, extra-cmake-modules
-, fetchurl
-, kconfig
-, kdoctools
-, kguiaddons
-, ki18n
-, kinit
-, kiconthemes
-, kio
-, knewstuff
-, kplotting
-, kwidgetsaddons
-, kxmlgui
-, knotifyconfig
-, qtx11extras
-, qtwebsockets
-, qtkeychain
-, qtdatavis3d
-, wrapQtAppsHook
-, breeze-icons
-, libsecret
-, eigen
-, zlib
-, cfitsio
-, indi-full
-, xplanet
-, libnova
-, libraw
-, gsl
-, wcslib
-, stellarsolver
-, libxisf
+{
+  lib,
+  stdenv,
+  extra-cmake-modules,
+  fetchurl,
+  kconfig,
+  kdoctools,
+  kguiaddons,
+  ki18n,
+  kinit,
+  kiconthemes,
+  kio,
+  knewstuff,
+  kplotting,
+  kwidgetsaddons,
+  kxmlgui,
+  knotifyconfig,
+  qtx11extras,
+  qtwebsockets,
+  qtkeychain,
+  qtdatavis3d,
+  wrapQtAppsHook,
+  breeze-icons,
+  libsecret,
+  eigen,
+  zlib,
+  cfitsio,
+  indi-full,
+  xplanet,
+  libnova,
+  libraw,
+  gsl,
+  wcslib,
+  stellarsolver,
+  libxisf,
+  curl,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.0";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kstars/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yvN1k0LqUi5Odb34Nk8UP5qoIbFUcvUiyESpoMKmuqg=";
+    url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
+    hash = "sha256-WdVsPCwDQWW/NIRehuqk5f8rgtucAbGLSbmwZLMLiHM=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     wcslib
     stellarsolver
     libxisf
+    curl
   ];
 
   cmakeFlags = [
@@ -97,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput hjones2199 ];
+    maintainers = with maintainers; [
+      timput
+      hjones2199
+    ];
   };
 })

@@ -97,7 +97,7 @@ let
         default = null;
         description = ''
           Type of the route.  See the `Route types` section
-          in the `ip-route(8)` manual page for the details.
+          in the {manpage}`ip-route(8)` manual page for the details.
 
           Note that `prohibit`, `blackhole`,
           `unreachable`, and `throw` cannot
@@ -118,7 +118,7 @@ let
         example = { mtu = "1492"; window = "524288"; };
         description = ''
           Other route options. See the symbol `OPTIONS`
-          in the `ip-route(8)` manual page for the details.
+          in the {manpage}`ip-route(8)` manual page for the details.
           You may also specify `metric`,
           `src`, `protocol`,
           `scope`, `from`
@@ -438,7 +438,7 @@ let
 
   hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
       hi="${cfg.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
+      ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
         echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
       '' else ''
         echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
@@ -1446,6 +1446,7 @@ in
 
     systemd.services = {
       network-local-commands = {
+        enable = (cfg.localCommands != "");
         description = "Extra networking commands.";
         before = [ "network.target" ];
         wantedBy = [ "network.target" ];

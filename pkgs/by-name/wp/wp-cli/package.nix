@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, formats
-, installShellFiles
-, makeWrapper
-, php
-, phpIniFile ? null
+{
+  stdenv,
+  lib,
+  fetchurl,
+  formats,
+  installShellFiles,
+  makeWrapper,
+  php,
+  phpIniFile ? null,
 }:
 
 let
@@ -17,14 +18,13 @@ let
   };
 
   ini =
-    if phpIniFile == null
-    then
-      (formats.ini { }).generate "php.ini"
-        {
-          PHP.memory_limit = -1; # no limit as composer uses a lot of memory
-          Phar."phar.readonly" = "Off";
-        }
-    else phpIniFile;
+    if phpIniFile == null then
+      (formats.ini { }).generate "php.ini" {
+        PHP.memory_limit = -1; # no limit as composer uses a lot of memory
+        Phar."phar.readonly" = "Off";
+      }
+    else
+      phpIniFile;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -40,8 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
+  # Usually --set-default is used to set default environment variables.
+  # But the value is wrapped in single-quotes so our variables would be used literally instead
+  # of the expanded version. Thus we use --run instead.
   installPhase = ''
     runHook preInstall
 
@@ -50,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash --name wp ${completion}
 
     makeWrapper ${lib.getExe php} $out/bin/${finalAttrs.meta.mainProgram} \
-      --set-default XDG_CACHE_HOME \$HOME/.cache \
-      --set-default XDG_CONFIG_HOME \$HOME/.config \
-      --set-default XDG_DATA_HOME \$HOME/.local/share \
-      --set-default WP_CLI_CONFIG_PATH \$XDG_CONFIG_HOME}/wp-cli \
-      --set-default WP_CLI_PACKAGES_DIR \$XDG_DATA_HOME/wp-cli \
-      --set-default WP_CLI_CACHE_DIR \$XDG_CACHE_HOME/wp-cli \
+      --run 'export XDG_CACHE_HOME=''${XDG_CACHE_HOME-"$HOME/.cache"}' \
+      --run 'export XDG_CONFIG_HOME=''${XDG_CONFIG_HOME-"$HOME/.config"}' \
+      --run 'export XDG_DATA_HOME=''${XDG_DATA_HOME-"$HOME/.local/share"}' \
+      --run 'export WP_CLI_CONFIG_PATH=''${WP_CLI_CONFIG_PATH-"$XDG_CONFIG_HOME/wp-cli"}' \
+      --run 'export WP_CLI_PACKAGES_DIR=''${WP_CLI_PACKAGES_DIR-"$XDG_DATA_HOME/wp-cli"}' \
+      --run 'export WP_CLI_CACHE_DIR=''${WP_CLI_CACHE_DIR-"$XDG_CACHE_HOME/wp-cli"}' \
       --add-flags "-c $out/etc/${ini.name}" \
       --add-flags "-f $out/share/wp-cli/wp-cli.phar" \
       --add-flags "--"

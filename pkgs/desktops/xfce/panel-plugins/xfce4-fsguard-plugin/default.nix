@@ -1,31 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, libxfce4util
-, xfce4-panel
-, libxfce4ui
-, xfconf
-, glib
-, gtk3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  libxfce4util,
+  xfce4-panel,
+  libxfce4ui,
+  xfconf,
+  glib,
+  gtk3,
+  gitUpdater,
 }:
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "xfce4-fsguard-plugin";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-hO+LtHUiktZMDvEBut97FESHkL+gqF3mRNv6Iphuwlg=";
+    sha256 = "sha256-JLN4m+bekmeOcDZnhTDE2ks4OKo82kKEOaqNFAcEpKY=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [

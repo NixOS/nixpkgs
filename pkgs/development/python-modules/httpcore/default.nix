@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,21 +32,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "httpcore";
-    rev = "refs/tags/${version}";
-    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
+    tag = version;
+    hash = "sha256-sF/ymIoEnqWRX9b8knojIw+ySci/obXSttaNJLb+/nE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     h11
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ anyio ];
     http2 = [ h2 ];
     socks = [ socksio ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "httpcore" ];
 

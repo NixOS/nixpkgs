@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vokimon";
     repo = "python-wavefile";
-    rev = "refs/tags/python-wavefile-${version}";
+    tag = "python-wavefile-${version}";
     hash = "sha256-TLSWhLARY+3sHkl2p3d3LDGzLu6DggjTJWFpyrwRXSI=";
   };
 

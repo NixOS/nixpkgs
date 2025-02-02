@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     default = [
       numpy
       scipy

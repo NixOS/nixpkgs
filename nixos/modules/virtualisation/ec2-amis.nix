@@ -6,4 +6,4 @@ let
   doAllVersions = mapAttrs (versionName: doRegion);
   doRegion = mapAttrs (regionName: systems: systems.x86_64-linux);
 in
-  doAllVersions everything
+doAllVersions everything

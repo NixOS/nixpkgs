@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nKkKtLEW0pohXiMtjWl2Kzh7SRwZJ/yzhXpDyluLodc=";
   };
 

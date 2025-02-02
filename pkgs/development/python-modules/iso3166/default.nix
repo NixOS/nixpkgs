@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deactivated";
     repo = "python-iso3166";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/y7c2qSA6+WKUP9YTSaMBjBxtqAuF4nB3MKvL5P6vL0=";
   };
 

@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "cxxtest";
@@ -38,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   meta = with lib; {
-    homepage = "http://cxxtest.com";
+    homepage = "http://github.com/CxxTest/cxxtest";
     description = "Unit testing framework for C++";
     mainProgram = "cxxtestgen";
     license = licenses.lgpl3;

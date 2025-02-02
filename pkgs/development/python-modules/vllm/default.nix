@@ -25,7 +25,6 @@
   uvicorn,
   pydantic,
   aioprometheus,
-  pynvml,
   openai,
   pyzmq,
   tiktoken,
@@ -58,7 +57,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.5.3.post1";
+  version = "0.6.2";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
@@ -67,7 +66,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-++DK2Y2zz+1KrEcdQc5XFrSjc7fCwMD2DQ/RqY7PoFU=";
+    hash = "sha256-zUkqAPPhDRdN9rDQ2biCl1B+trV0xIHXub++v9zsQGo=";
   };
 
   patches = [
@@ -149,7 +148,6 @@ buildPythonPackage rec {
     ++ aioprometheus.optional-dependencies.starlette
     ++ lib.optionals cudaSupport [
       cupy
-      pynvml
     ];
 
   dontUseCmakeConfigure = true;
@@ -176,6 +174,8 @@ buildPythonPackage rec {
       happysalada
       lach
     ];
-    broken = !cudaSupport && !rocmSupport;
+    # RuntimeError: Unknown runtime environment
+    broken = true;
+    # broken = !cudaSupport && !rocmSupport;
   };
 }

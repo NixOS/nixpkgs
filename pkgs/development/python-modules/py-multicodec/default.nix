@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2aK+bfhqCMqSO+mtrHIfNQmQpQHpwd7yHseI/3O7Sp4=";
   };
 

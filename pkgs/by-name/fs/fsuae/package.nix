@@ -1,24 +1,25 @@
-{ lib
-, SDL2
-, autoreconfHook
-, fetchFromGitHub
-, freetype
-, gettext
-, glib
-, gtk2
-, libGL
-, libGLU
-, libmpeg2
-, lua
-, openal
-, pkg-config
-, strip-nondeterminism
-, stdenv
-, zip
-, zlib
+{
+  lib,
+  SDL2,
+  autoreconfHook,
+  fetchFromGitHub,
+  freetype,
+  gettext,
+  glib,
+  gtk2,
+  libGL,
+  libGLU,
+  libmpeg2,
+  lua,
+  openal,
+  pkg-config,
+  strip-nondeterminism,
+  stdenv,
+  zip,
+  zlib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae";
   version = "3.1.66";
 
@@ -69,7 +70,6 @@ stdenv.mkDerivation (finalAttrs:{
     license = lib.licenses.gpl2Plus;
     mainProgram = "fs-uae";
     maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = with lib.systems.inspect;
-      patternLogicalAnd patterns.isx86 patterns.isLinux;
+    platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
 })

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lucretiel";
     repo = "autocommand";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9bv9Agj4RpeyNJvTLUaMwygQld2iZZkoLb81rkXOd3E=";
   };
 

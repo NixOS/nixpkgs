@@ -21,28 +21,23 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.14.2-1";
+  version = "3.15.4-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
-    repo = pname;
+    repo = "grandorgue";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-FHM8fFUga9poGhojKBTF4gsJ6L4XEksueVxfMbngvks=";
+    hash = "sha256-9H7YpTtv9Y36Nc0WCyRy/ohpOQ3WVUd9gMahnGhANRc=";
   };
 
-  postPatch = ''
-    substituteInPlace resources/CMakeLists.txt \
-      --replace \
-        "iconutil -c icns \''${GENERATED_ICONS_DIR}" \
-        "png2icns \''${GENERATED_ICONS_DIR}/../GrandOrgue.icns \''${GENERATED_ICONS_DIR}/*{16,32,128,256,512,1024}.png" \
-  '';
+  patches = [ ./darwin-fixes.patch ];
 
   nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
 
   buildInputs = [ fftwFloat zlib wavpack wxGTK32 yaml-cpp ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
   cmakeFlags = lib.optionals (!jackaudioSupport) [
@@ -52,12 +47,10 @@ stdenv.mkDerivation rec {
     "-DINSTALL_DEPEND=OFF"
   ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin,lib}
     mv $out/GrandOrgue.app $out/Applications/
-    for lib in $out/Applications/GrandOrgue.app/Contents/MacOS/lib*; do
+    for lib in $out/Applications/GrandOrgue.app/Contents/Frameworks/lib*; do
       ln -s $lib $out/lib/
     done
     makeWrapper $out/{Applications/GrandOrgue.app/Contents/MacOS,bin}/GrandOrgue

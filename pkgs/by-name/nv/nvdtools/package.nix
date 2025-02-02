@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "nvdtools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uB7dfqGaoP9Xx04BykscIFQ2rckaMaj93gh5mhgMqfw=";
   };
 

@@ -8,28 +8,32 @@
   pytest-base-url,
   python-slugify,
   pythonOlder,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.5.0";
-  format = "setuptools";
+  version = "0.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HS0Qpr5R4dAoXe0bpPGU7JABB7CmwugReRD75XeJ8l4=";
+    tag = "v${version}";
+    hash = "sha256-F5tbqm1k4SdTHIUgwSunLIL2W5mhJoMI4x4UZBLidlA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     playwright
     pytest-base-url
     python-slugify

@@ -1,12 +1,24 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, qttools
-, libxcb, libXau, pam, qtbase, qtdeclarative
-, qtquickcontrols2 ? null, systemd, xkeyboardconfig
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  libxcb,
+  libXau,
+  pam,
+  qtbase,
+  qtdeclarative,
+  qtquickcontrols2 ? null,
+  systemd,
+  xkeyboardconfig,
+  nixosTests,
 }:
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation(finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "sddm-unwrapped";
   version = "0.21.0";
 
@@ -28,7 +40,11 @@ in stdenv.mkDerivation(finalAttrs: {
       --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+  ];
 
   buildInputs = [
     libxcb
@@ -81,9 +97,13 @@ in stdenv.mkDerivation(finalAttrs: {
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage    = "https://github.com/sddm/sddm";
-    maintainers = with maintainers; [ abbradar ttuegel k900 ];
-    platforms   = platforms.linux;
-    license     = licenses.gpl2Plus;
+    homepage = "https://github.com/sddm/sddm";
+    maintainers = with maintainers; [
+      abbradar
+      ttuegel
+      k900
+    ];
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 })

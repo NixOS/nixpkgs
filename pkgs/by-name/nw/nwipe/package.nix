@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, autoreconfHook
-, makeWrapper
-, fetchFromGitHub
-, ncurses
-, parted
-, pkg-config
-, libconfig
-, hdparm
-, smartmontools
-, dmidecode
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  makeWrapper,
+  fetchFromGitHub,
+  ncurses,
+  parted,
+  pkg-config,
+  libconfig,
+  hdparm,
+  smartmontools,
+  dmidecode,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nwipe";
-  version = "0.37";
+  version = "0.38";
 
   src = fetchFromGitHub {
     owner = "martijnvanbrummelen";
     repo = "nwipe";
     rev = "v${version}";
-    sha256 = "sha256-0mBiWKkMV8i9n158k843caulF90k43ctpMvKhc4HZxY";
+    sha256 = "sha256-idSIdq7DKhSwuR1xe9JEws0jIh1juCaz2eSeKvd85D4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/nwipe \
-      --prefix PATH : ${lib.makeBinPath [ hdparm smartmontools dmidecode ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          hdparm
+          smartmontools
+          dmidecode
+        ]
+      }
   '';
 
   enableParallelBuilding = true;
@@ -47,7 +54,10 @@ stdenv.mkDerivation rec {
     mainProgram = "nwipe";
     homepage = "https://github.com/martijnvanbrummelen/nwipe";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ vifino woffs ];
+    maintainers = with maintainers; [
+      vifino
+      woffs
+    ];
     platforms = platforms.linux;
   };
 }

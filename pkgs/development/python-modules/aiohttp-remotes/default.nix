@@ -2,8 +2,8 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  fetchPypi,
-  flit,
+  fetchFromGitHub,
+  flit-core,
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
@@ -13,20 +13,26 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-remotes";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    pname = "aiohttp_remotes";
-    inherit version;
-    sha256 = "f95c3a6be5e2de746a85ce9af49ec548da6db8378d7e81bb171ec77b13562a6c";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiohttp-remotes";
+    tag = "v${version}";
+    hash = "sha256-/bcYrpZfO/sXc0Tcpr67GBqCu4ZSAVmUj9kzupIHHnM=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ aiohttp ] ++ lib.optionals (pythonOlder "3.7") [ typing-extensions ];
+  dependencies = [
+    aiohttp
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pytest-aiohttp
@@ -35,12 +41,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "aiohttp_remotes" ];
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "--asyncio-mode=auto"
-  ];
 
   __darwinAllowLocalNetworking = true;
 

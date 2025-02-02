@@ -3,32 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pynmeagps";
-  version = "1.0.39";
+  version = "1.0.44";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "semuconsulting";
     repo = "pynmeagps";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aBNvrqGDCUOn3wiTwqmanUQzBuiPNDSguZhlznYXUkY=";
+    tag = "v${version}";
+    hash = "sha256-AnLQJueJYhoOzTjC1hKyo4UFL//pDyKETvLNA4pKp7A=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report html --cov-fail-under 98" ""
-  '';
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "pynmeagps" ];
 

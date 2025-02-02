@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, pkg-config
-, wrapQtAppsHook
-, libnitrokey
-, cppcodec
-, qttools
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  wrapQtAppsHook,
+  libnitrokey,
+  cppcodec,
+  qttools,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c6EC5uuMna07xVHDRFq0UDwuSeopZTmZGZ9ZD5zaq8Y=";
   };
 
@@ -48,6 +49,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Nitrokey/nitrokey-app";
     changelog = "https://github.com/Nitrokey/nitrokey-app/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kaiha panicgh ];
+    maintainers = with maintainers; [
+      kaiha
+      panicgh
+    ];
   };
 }

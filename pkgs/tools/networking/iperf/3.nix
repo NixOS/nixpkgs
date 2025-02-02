@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-hEBMqEMbWV6GxHPY8j2LsQKBAAHxX+r2EO/9OzGHiKo=";
   };
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isLinux [ lksctp-tools ];
   configureFlags = [ "--with-openssl=${openssl.dev}" ];
 
   outputs = [

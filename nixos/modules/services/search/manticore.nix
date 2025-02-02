@@ -1,42 +1,51 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.manticore;
   format = pkgs.formats.json { };
 
-  toSphinx = {
-    mkKeyValue    ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? true
-  }: attrsOfAttrs:
+  toSphinx =
+    {
+      mkKeyValue ? lib.generators.mkKeyValueDefault { } "=",
+      listsAsDuplicateKeys ? true,
+    }:
+    attrsOfAttrs:
     let
-        # map function to string for each key val
-        mapAttrsToStringsSep = sep: mapFn: attrs:
-          concatStringsSep sep
-            (mapAttrsToList mapFn attrs);
-        mkSection = sectName: sectValues: ''
+      # map function to string for each key val
+      mapAttrsToStringsSep =
+        sep: mapFn: attrs:
+        lib.concatStringsSep sep (lib.mapAttrsToList mapFn attrs);
+      mkSection =
+        sectName: sectValues:
+        ''
           ${sectName} {
-        '' + lib.generators.toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues + ''}'';
+        ''
+        + lib.generators.toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues
+        + ''}'';
     in
-      # map input to ini sections
-      mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+    # map input to ini sections
+    mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
 
   configFile = pkgs.writeText "manticore.conf" (
     toSphinx {
-        mkKeyValue = k: v: "  ${k} = ${v}";
+      mkKeyValue = k: v: "  ${k} = ${v}";
     } cfg.settings
   );
 
-in {
+in
+{
 
   options = {
     services.manticore = {
 
-      enable = mkEnableOption "Manticoresearch";
+      enable = lib.mkEnableOption "Manticoresearch";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = {
           searchd = {
             listen = [
@@ -55,10 +64,10 @@ in {
           <https://manual.manticoresearch.com/Server%20settings>
           for more information.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             searchd = {
                 listen = [
@@ -78,49 +87,58 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       packages = [ pkgs.manticoresearch ];
       services.manticore = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig = {
-          ExecStart = [
-            ""
-            "${pkgs.manticoresearch}/bin/searchd --config ${configFile}"
-          ];
-          ExecStop = [
-            ""
-            "${pkgs.manticoresearch}/bin/searchd --config ${configFile} --stopwait"
-          ];
-          ExecStartPre = [ "" ];
-          DynamicUser = true;
-          LogsDirectory = "manticore";
-          RuntimeDirectory = "manticore";
-          StateDirectory = "manticore";
-          ReadWritePaths = "";
-          CapabilityBoundingSet = "";
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-          RestrictNamespaces = true;
-          PrivateDevices = true;
-          PrivateUsers = true;
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
-          RestrictRealtime = true;
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          UMask = "0066";
-          ProtectHostname = true;
-        } // lib.optionalAttrs (cfg.settings.searchd.pid_file != null) {
-          PIDFile = cfg.settings.searchd.pid_file;
-        };
+        serviceConfig =
+          {
+            ExecStart = [
+              ""
+              "${pkgs.manticoresearch}/bin/searchd --config ${configFile}"
+            ];
+            ExecStop = [
+              ""
+              "${pkgs.manticoresearch}/bin/searchd --config ${configFile} --stopwait"
+            ];
+            ExecStartPre = [ "" ];
+            DynamicUser = true;
+            LogsDirectory = "manticore";
+            RuntimeDirectory = "manticore";
+            StateDirectory = "manticore";
+            ReadWritePaths = "";
+            CapabilityBoundingSet = "";
+            RestrictAddressFamilies = [
+              "AF_UNIX"
+              "AF_INET"
+              "AF_INET6"
+            ];
+            RestrictNamespaces = true;
+            PrivateDevices = true;
+            PrivateUsers = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged"
+            ];
+            RestrictRealtime = true;
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            UMask = "0066";
+            ProtectHostname = true;
+          }
+          // lib.optionalAttrs (cfg.settings.searchd.pid_file != null) {
+            PIDFile = cfg.settings.searchd.pid_file;
+          };
       };
     };
 

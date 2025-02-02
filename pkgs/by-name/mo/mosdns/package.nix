@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "IrineSistiana";
     repo = "mosdns";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nSqSfbpi91W28DaLjCsWlPiLe1gLVHeZnstktc/CLag=";
   };
 

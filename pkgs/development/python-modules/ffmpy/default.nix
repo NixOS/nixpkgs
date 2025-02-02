@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ch00k";
     repo = "ffmpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XWI0Hq4vf9Q0/dRzmu1B7EQHdQRkWaNJaBaqusWW7YM=";
+    tag = version;
+    hash = "sha256-spbyz1EyMJRXJTm7TqN9XoqR9ztBKsNZx3NURwV7N2w=";
   };
 
   postPatch = ''
     # default to store ffmpeg
-    substituteInPlace ffmpy.py \
+    substituteInPlace ffmpy/ffmpy.py \
       --replace-fail \
         'executable: str = "ffmpeg",' \
         'executable: str = "${ffmpeg-headless}/bin/ffmpeg",'
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     go
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # expects a FFExecutableNotFoundError, gets a NotADirectoryError raised by os
     "test_invalid_executable_path"
   ];

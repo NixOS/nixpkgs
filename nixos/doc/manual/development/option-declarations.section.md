@@ -99,7 +99,7 @@ mkPackageOption pkgs "name" { default = [ "path" "in" "pkgs" ]; example = "liter
 
 Creates an Option attribute set for an option that specifies the package a module should use for some purpose.
 
-**Note**: You shouldn’t necessarily make package options for all of your modules. You can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+**Note**: You should make package options for your modules, where applicable. While one can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays), they slow down nixpkgs evaluation significantly and are harder to debug when issues arise.
 
 The package is specified in the third argument under `default` as a list of strings
 representing its attribute path in nixpkgs (or another package set).

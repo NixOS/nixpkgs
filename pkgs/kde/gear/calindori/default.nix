@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "calindori";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
 }

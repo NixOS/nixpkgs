@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   nncpCfgFile = "/run/nncp.hjson";
@@ -6,11 +11,11 @@ let
   settingsFormat = pkgs.formats.json { };
   jsonCfgFile = settingsFormat.generate "nncp.json" programCfg.settings;
   pkg = programCfg.package;
-in {
+in
+{
   options.programs.nncp = {
 
-    enable =
-      lib.mkEnableOption "NNCP (Node to Node copy) utilities and configuration";
+    enable = lib.mkEnableOption "NNCP (Node to Node copy) utilities and configuration";
 
     group = lib.mkOption {
       type = lib.types.str;
@@ -74,19 +79,13 @@ in {
       wantedBy = [ "basic.target" ];
       serviceConfig.Type = "oneshot";
       script = ''
-        umask u=rw
-        nncpCfgDir=$(mktemp --directory nncp.XXX)
-        for f in ${jsonCfgFile} ${builtins.toString config.programs.nncp.secrets}; do
-          tmpdir=$(mktemp --directory nncp.XXX)
-          nncp-cfgdir -cfg $f -dump $tmpdir
-          find $tmpdir -size 1c -delete
-          cp -a $tmpdir/* $nncpCfgDir/
-          rm -rf $tmpdir
-        done
-        nncp-cfgdir -load $nncpCfgDir > ${nncpCfgFile}
-        rm -rf $nncpCfgDir
+        umask 127
+        rm -f ${nncpCfgFile}
+        for f in ${jsonCfgFile} ${builtins.toString config.programs.nncp.secrets}
+        do
+          ${lib.getExe pkgs.hjson-go} -c <"$f"
+        done |${lib.getExe pkgs.jq} --slurp 'reduce .[] as $x ({}; . * $x)' >${nncpCfgFile}
         chgrp ${programCfg.group} ${nncpCfgFile}
-        chmod g+r ${nncpCfgFile}
       '';
     };
   };

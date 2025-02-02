@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SKDqLvWbzaBcL13E87kcphBJNIZfdkPp2g4SIDEKA0U=";
+    tag = "v${version}";
+    hash = "sha256-/MiWawB1Y4/eMBHXQLjd+P+Pe8EtsLbGFrzQa1RNf6g=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     stanio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ xarray ];
   };
 
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix
@@ -77,7 +77,7 @@ buildPythonPackage rec {
       "test_pathfinder_threads"
       "test_save_profile"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_init_types" # CmdStan error: error during processing Operation not permitted
     ];
 

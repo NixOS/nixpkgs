@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, fontconfig
-, freetype
-, libX11
-, libXft
-, libXi
-, libXpm
-, libXrandr
-, libXt
-, libXtst
-, perl
-, pkg-config
-, readline
-, texinfo
-, xorgproto
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  fontconfig,
+  freetype,
+  libX11,
+  libXft,
+  libXi,
+  libXpm,
+  libXrandr,
+  libXt,
+  libXtst,
+  perl,
+  pkg-config,
+  readline,
+  texinfo,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
   ];
 
-  outputs = [ "out" "contrib" "man" "doc" "info" ];
+  outputs = [
+    "out"
+    "contrib"
+    "man"
+    "doc"
+    "info"
+  ];
 
   strictDeps = true;
 
@@ -67,18 +74,18 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.nongnu.org/ratpoison/";
     description = "Simple mouse-free tiling window manager";
     longDescription = ''
-       Ratpoison is a simple window manager with no fat library
-       dependencies, no fancy graphics, no window decorations, and no
-       rodent dependence.  It is largely modelled after GNU Screen which
-       has done wonders in the virtual terminal market.
+      Ratpoison is a simple window manager with no fat library
+      dependencies, no fancy graphics, no window decorations, and no
+      rodent dependence.  It is largely modelled after GNU Screen which
+      has done wonders in the virtual terminal market.
 
-       The screen can be split into non-overlapping frames.  All windows
-       are kept maximized inside their frames to take full advantage of
-       your precious screen real estate.
+      The screen can be split into non-overlapping frames.  All windows
+      are kept maximized inside their frames to take full advantage of
+      your precious screen real estate.
 
-       All interaction with the window manager is done through keystrokes.
-       Ratpoison has a prefix map to minimize the key clobbering that
-       cripples Emacs and other quality pieces of software.
+      All interaction with the window manager is done through keystrokes.
+      Ratpoison has a prefix map to minimize the key clobbering that
+      cripples Emacs and other quality pieces of software.
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "ratpoison";

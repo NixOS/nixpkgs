@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , llvm_meta
+, release_version
 , buildLlvmTools
 , monorepoSrc
 , runCommand
@@ -9,7 +10,8 @@
 , libxml2
 , libllvm
 , version
-, doCheck ? (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, doCheck ? (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, devExtraCmakeFlags ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -17,14 +19,16 @@ stdenv.mkDerivation rec {
   inherit version doCheck;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" { } ''
+  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
     mkdir -p "$out"
+  '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
     cp -r ${monorepoSrc}/cmake "$out"
+  '' + ''
     cp -r ${monorepoSrc}/mlir "$out"
     cp -r ${monorepoSrc}/third-party "$out/third-party"
 
     mkdir -p "$out/llvm"
-  '';
+  '');
 
   sourceRoot = "${src.name}/mlir";
 
@@ -55,15 +59,14 @@ stdenv.mkDerivation rec {
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
+    "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/mlir-tblgen"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
     "-DLLVM_BUILD_STATIC=ON"
     "-DLLVM_LINK_LLVM_DYLIB=OFF"
-  ] ++ lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
-    "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-    "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.mlir}/bin/mlir-tblgen"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   outputs = [ "out" "dev" ];
 

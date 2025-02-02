@@ -55,7 +55,7 @@ mkDerivation rec {
     homepage = "https://www.zombietrackergps.net/ztgps/";
     changelog = "https://www.zombietrackergps.net/ztgps/history.html";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [sohalt];
+    maintainers = with maintainers; [ sohalt ];
     platforms = platforms.linux;
   };
 }

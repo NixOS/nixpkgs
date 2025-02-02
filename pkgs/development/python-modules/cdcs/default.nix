@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HhAzULVWkKOWDJ6IZyBy0MYc/YGAFkSTLIgpdyvw1eI=";
   };
 
@@ -43,6 +43,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "cdcs" ];
+
+  disabledTests = [
+    # Test is out-dated
+    "test_head"
+  ];
 
   meta = with lib; {
     description = "Python client for performing REST calls to configurable data curation system (CDCS) databases";

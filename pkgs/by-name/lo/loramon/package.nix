@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "LoRaMon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-94tXhuAoaS1y/zGz63PPqOayRylGK0Ei2a6H4/BCB30";
   };
 

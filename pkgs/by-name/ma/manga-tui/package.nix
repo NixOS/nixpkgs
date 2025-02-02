@@ -3,13 +3,15 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  dbus,
   openssl,
   sqlite,
   stdenv,
   darwin,
+  nix-update-script,
 }:
 let
-  version = "0.3.1";
+  version = "0.5.0";
 in
 rustPlatform.buildRustPackage {
   pname = "manga-tui";
@@ -19,10 +21,10 @@ rustPlatform.buildRustPackage {
     owner = "josueBarretogit";
     repo = "manga-tui";
     rev = "v${version}";
-    hash = "sha256-672AuQWviwihnUS3G0xSn4IAMHy0fPE1VLDfu8wrPGg=";
+    hash = "sha256-kmJrr1Gi1z9v2gkFmvcCAtBST+AkofVJSxyvAFnUZKQ=";
   };
 
-  cargoHash = "sha256-yf0hISz/jHtrO1clTSIKfxFiwI+W0Mu3mY+XW6+ynJU=";
+  cargoHash = "sha256-3/dTaZ7meIPjtvxPm+nkhsqJVgi4fN6WgCGsIBTZtf8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,8 +32,9 @@ rustPlatform.buildRustPackage {
     [
       openssl
       sqlite
+      dbus
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security
@@ -44,7 +47,12 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/josueBarretogit/manga-tui";
     changelog = "https://github.com/josueBarretogit/manga-tui/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      isabelroses
+      youwen5
+    ];
     mainProgram = "manga-tui";
   };
+
+  passthru.updateScript = nix-update-script { };
 }

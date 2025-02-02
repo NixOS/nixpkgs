@@ -1,17 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-{
-  name = "vault";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 ];
-  };
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.vault ];
-    environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
-    services.vault.enable = true;
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "vault";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ lnl7 ];
+    };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.vault ];
+        environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
+        services.vault.enable = true;
+      };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       machine.wait_for_unit("multi-user.target")
@@ -22,4 +24,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.fail("vault status")
       machine.succeed("vault status || test $? -eq 2")
     '';
-})
+  }
+)

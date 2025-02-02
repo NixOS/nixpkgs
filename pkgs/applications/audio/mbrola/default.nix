@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, runCommandLocal, mbrola-voices }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runCommandLocal,
+  mbrola-voices,
+}:
 
 let
   pname = "mbrola";
@@ -23,8 +29,21 @@ let
       sha256 = "1w86gv6zs2cbr0731n49z8v6xxw0g8b0hzyv2iqb9mqcfh38l8zy";
     };
 
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace-fail 'O6' 'O3'
+      substituteInPlace Misc/common.h \
+        --replace-fail '|| defined(TARGET_OS_MAC)' ""
+      substituteInPlace Misc/common.c \
+        --replace-fail '|| defined(TARGET_OS_MAC)' ""
+    '';
+
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    };
 
     installPhase = ''
       runHook preInstall
@@ -39,14 +58,12 @@ let
   };
 
 in
-  runCommandLocal
-    "${pname}-${version}"
-    {
-      inherit pname version meta;
-    }
-    ''
-      mkdir -p "$out/share/mbrola"
-      ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
-      ln -s '${bin}/bin' "$out/"
-    ''
-
+runCommandLocal "${pname}-${version}"
+  {
+    inherit pname version meta;
+  }
+  ''
+    mkdir -p "$out/share/mbrola"
+    ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
+    ln -s '${bin}/bin' "$out/"
+  ''

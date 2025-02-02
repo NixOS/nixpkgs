@@ -1,30 +1,34 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "spirit";
-  version = "0-unstable-2024-05-24";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "cashapp";
     repo = "spirit";
-    rev = "a384d903db9586d2610f06319bd67814dad678a5";
-    hash = "sha256-oybvdVSG9XvBk4j+a+R8CIrEmzZ+gV0Chysq/sr2sws=";
+    rev = "v${version}-prerelease";
+    hash = "sha256-qC27kkUWELRFEVhZT7R6ickpAfDbL/AtYx2gRkDTvrI=";
   };
 
-  vendorHash = "sha256-iTU45Ce5Mb09MyJTzqueyO0F9wV39l106Lkj50oYDvc=";
+  vendorHash = "sha256-Dq7UeAH7FvY12rEYkpcKpEUzMMrGfubt0WadnZYt8dk=";
 
   subPackages = [ "cmd/spirit" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cashapp/spirit";
     description = "Online schema change tool for MySQL";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "spirit";
   };
 }

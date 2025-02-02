@@ -60,7 +60,7 @@ buildPythonPackage rec {
     ''
       sed -i "/--cov/d" setup.cfg
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Fake the impure dependencies pbpaste and pbcopy
       mkdir bin
       echo '#!${stdenv.shell}' > bin/pbpaste
@@ -69,7 +69,7 @@ buildPythonPackage rec {
       export PATH=$(realpath bin):$PATH
     '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "cmd2" ];
 

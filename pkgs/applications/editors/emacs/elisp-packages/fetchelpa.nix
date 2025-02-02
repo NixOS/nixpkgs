@@ -7,15 +7,19 @@
 
 { fetchurl, lzip }:
 
-{ url, ... }@args: fetchurl ((removeAttrs args [ "url" ]) // {
-  urls = [
-    url
-    (url + ".lz")
-  ];
-  postFetch = ''
-    if [[ $url == *.lz ]]; then
-      ${lzip}/bin/lzip -c -d $out > uncompressed
-      mv uncompressed $out
-    fi
-  '';
-})
+{ url, ... }@args:
+fetchurl (
+  (removeAttrs args [ "url" ])
+  // {
+    urls = [
+      url
+      (url + ".lz")
+    ];
+    postFetch = ''
+      if [[ $url == *.lz ]]; then
+        ${lzip}/bin/lzip -c -d $out > uncompressed
+        mv uncompressed $out
+      fi
+    '';
+  }
+)

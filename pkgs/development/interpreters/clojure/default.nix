@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.11.4.1474";
+  version = "1.12.0.1495";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sNFDXvrHMrFgLrBHmbv3DKOXuNu6u1OqcmlqZNX/EAg=";
+    hash = "sha256-GMwT+Hx07E8Xe9g8RBbZ7Cu5FChg2wYFWvdZjhuClJw=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ jlesquembre thiagokokada ];
+    maintainers = with maintainers; [ jlesquembre ];
     platforms = platforms.unix;
   };
 })

@@ -1,40 +1,41 @@
-{ lib
-, pkg-config
-, fetchurl
-, meson
-, ninja
-, wrapGAppsHook3
-, gobject-introspection
-, gettext
-, yelp-tools
-, itstool
-, python3
-, gtk3
-, gnome
-, substituteAll
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, xkbcomp
-, procps
-, lsof
-, coreutils
-, gsettings-desktop-schemas
-, speechd-minimal
-, brltty
-, liblouis
-, gst_all_1
+{
+  lib,
+  pkg-config,
+  fetchurl,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gettext,
+  yelp-tools,
+  itstool,
+  python3,
+  gtk3,
+  gnome,
+  substituteAll,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  xkbcomp,
+  procps,
+  lsof,
+  coreutils,
+  gsettings-desktop-schemas,
+  speechd-minimal,
+  brltty,
+  liblouis,
+  gst_all_1,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "46.2";
+  version = "47.3";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-j2MpmxpPnDCFfCKfapzhbyxD6u6pD7+QkxTKi7c+/V4=";
+    url = "mirror://gnome/sources/orca/${lib.versions.major version}/orca-${version}.tar.xz";
+    hash = "sha256-GwsUW7aFzXTso+KMt7cJf5jRPuHMWLce3u06j5BFIxs=";
   };
 
   patches = [
@@ -92,7 +93,7 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "orca";
     };
   };
 

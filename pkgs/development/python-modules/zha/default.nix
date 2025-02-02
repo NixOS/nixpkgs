@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.31";
+  version = "0.0.45";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha";
-    rev = "refs/tags/${version}";
-    hash = "sha256-H1VmB20ldUyKIiMRT8YMgiFIno41WN2bY8rhqFsGYcA=";
+    tag = version;
+    hash = "sha256-KeHGuQGEoXQnIJKQ86DrsoufN+Ppp/fyYblXx2iGHgU=";
   };
 
   postPatch = ''
@@ -44,10 +44,6 @@ buildPythonPackage rec {
       --replace-fail '"setuptools-git-versioning<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
-
-  pythonRelaxDeps = [
-    "pyserial-asyncio-fast"
-  ];
 
   build-system = [
     setuptools
@@ -87,7 +83,7 @@ buildPythonPackage rec {
     "test_check_available_unsuccessful"
     "test_device_counter_sensors"
     "test_device_tracker"
-    "test_device_unavailable_skips_entity_polling"
+    "test_device_unavailable_or_disabled_skips_entity_polling"
     "test_elec_measurement_sensor_polling"
     "test_electrical_measurement_init"
     "test_group_member_assume_state"
@@ -108,11 +104,6 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
-
-  pytestFlagsArray = [
-    "-v"
-    "--timeout=5"
-  ];
 
   meta = with lib; {
     description = "Zigbee Home Automation";

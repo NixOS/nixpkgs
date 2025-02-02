@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, hicolor-icon-theme
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  hicolor-icon-theme,
 }:
 stdenvNoCC.mkDerivation {
   pname = "kanagawa-icon-theme";

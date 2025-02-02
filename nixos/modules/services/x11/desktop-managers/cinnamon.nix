@@ -12,7 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cinnamon.excludePackages;
 in
 
 {
@@ -97,7 +97,6 @@ in
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
@@ -112,6 +111,7 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
@@ -135,6 +135,17 @@ in
       };
 
       environment.systemPackages = with pkgs; ([
+        # Teach nemo-desktop how to launch file browser.
+        # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
+        (writeTextFile {
+          name = "x-cinnamon-mimeapps";
+          destination = "/share/applications/x-cinnamon-mimeapps.list";
+          text = ''
+            [Default Applications]
+            inode/directory=nemo.desktop
+          '';
+        })
+
         desktop-file-utils
 
         # common-files
@@ -151,9 +162,6 @@ in
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
-
-        # For a polkit authentication agent
-        polkit_gnome
 
         # packages
         nemo-with-extensions
@@ -173,7 +181,6 @@ in
       ] ++ utils.removePackagesByName [
         # accessibility
         onboard
-        orca
 
         # theme
         sound-theme-freedesktop
@@ -194,11 +201,10 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-xapp
-        (pkgs.xdg-desktop-portal-gtk.override {
-          # Do not build portals that we already have.
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
+
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
 
       xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 
@@ -213,13 +219,6 @@ in
       # Shell integration for VTE terminals
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
-
-      # Qt application style
-      qt = {
-        enable = mkDefault true;
-        style = mkDefault "gtk2";
-        platformTheme = mkDefault "gtk2";
-      };
 
       # Default Fonts
       fonts.packages = with pkgs; [
@@ -242,10 +241,10 @@ in
         xviewer
         xreader
         xed-editor
-        xplayer
         pix
 
         # external apps shipped with linux-mint
+        celluloid
         gnome-calculator
         gnome-calendar
         gnome-screenshot

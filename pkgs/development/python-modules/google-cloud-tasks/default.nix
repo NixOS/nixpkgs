@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.16.4";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YQM8Ht19xao7n75cjetkvgxQ4LrunZRl8/i3WyzaVbk=";
+    pname = "google_cloud_tasks";
+    inherit version;
+    hash = "sha256-EaJrW0hzNAXMTqBmtPgaw1Pl+4VmQZubTTXUvRzuxYw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus

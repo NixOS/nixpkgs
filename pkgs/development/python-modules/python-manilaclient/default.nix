@@ -10,7 +10,6 @@
   oslo-utils,
   prettytable,
   requests,
-  simplejson,
   setuptools,
   sphinxHook,
   sphinxcontrib-programoutput,
@@ -23,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "4.9.1";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TebykdG0fkeC+5Vs9eiwuJpXam41gg8gR4F2poYKDhI=";
+    hash = "sha256-bknD1MTDSS7e4SkUqf+yaj57PdSfzGDy3Nv+piQILlg=";
   };
 
   build-system = [
@@ -48,7 +47,6 @@ buildPythonPackage rec {
     oslo-utils
     prettytable
     requests
-    simplejson
     babel
     osc-lib
     python-keystoneclient

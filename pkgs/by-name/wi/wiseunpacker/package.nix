@@ -15,7 +15,7 @@ buildDotnetModule rec {
     owner = "mnadareski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
+    hash = "sha256-APbfo2D/p733AwNNByu5MvC9LA8WW4mAzq6t2w/YNrs=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -28,7 +28,7 @@ buildDotnetModule rec {
     mv "$out/bin/Test" "$out/bin/WiseUnpacker"
   '';
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "Test/Test.csproj";
 

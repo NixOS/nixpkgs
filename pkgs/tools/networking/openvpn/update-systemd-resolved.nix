@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, iproute2
-, runtimeShell
-, systemd
-, coreutils
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  iproute2,
+  runtimeShell,
+  systemd,
+  coreutils,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace ${PREFIX}/update-systemd-resolved \
-      --subst-var-by PATH ${lib.makeBinPath [ coreutils iproute2 runtimeShell systemd util-linux ]}
+      --subst-var-by PATH ${
+        lib.makeBinPath [
+          coreutils
+          iproute2
+          runtimeShell
+          systemd
+          util-linux
+        ]
+      }
   '';
 
   meta = with lib; {

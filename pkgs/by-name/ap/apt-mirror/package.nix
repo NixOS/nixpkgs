@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, wget
-, makeWrapper
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  wget,
+  makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GNsyXP/O56Y+8QhoSfMm+ig5lK/K3Cm085jxRt9ZRmI=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    perl # pod2man
+  ];
 
   buildInputs = [ perl ];
 
@@ -29,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/apt-mirror \
-      --prefix PATH : ${lib.makeBinPath [wget]}
+      --prefix PATH : ${lib.makeBinPath [ wget ]}
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool that provides the ability to mirror any parts of apt sources";

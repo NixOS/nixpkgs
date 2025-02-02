@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
 
-, tenacity
-, typing-extensions
+  tenacity,
+  typing-extensions,
 
-, anyio
-, pytestCheckHook
+  anyio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "stamina";
-  version = "24.2.0";
+  version = "24.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "stamina";
-    rev = version;
-    hash = "sha256-gn8kbLLj+wMPtIwnsOdKDEhBsLApkl3K6mf/bQT3qT8=";
+    tag = version;
+    hash = "sha256-DasubVqKRhX4CRyKyJ3fIA9Rxmy+kGxkW0pDdu8OPPo=";
   };
 
   nativeBuildInputs = [

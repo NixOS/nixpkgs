@@ -1,7 +1,7 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -22,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.5";
+  version = "0.11.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r4HKn+WJmC7BrTeDDAQ1++TpQhhtLcK6HL2CoM/MGx8=";
+    tag = "v${version}";
+    hash = "sha256-xCAk9qac2ZmevUMMRgBokLKuGWyrF4fGpN03li49cR8=";
   };
 
   build-system = [ hatchling ];
@@ -50,29 +48,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "equinox" ];
-
-  disabledTests = [
-    # For simplicity, JAX has removed its internal frames from the traceback of the following exception.
-    # https://github.com/patrick-kidger/equinox/issues/716
-    "test_abstract"
-    "test_complicated"
-    "test_grad"
-    "test_jvp"
-    "test_mlp"
-    "test_num_traces"
-    "test_pytree_in"
-    "test_simple"
-    "test_vmap"
-
-    # AssertionError: assert 'foo:\n   pri...pe=float32)\n' == 'foo:\n   pri...pe=float32)\n'
-    # Also reported in patrick-kidger/equinox#716
-    "test_backward_nan"
-
-    # Flaky test
-    # See https://github.com/patrick-kidger/equinox/issues/781
-    "test_traceback_runtime_eqx"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    "test_filter"
   ];
+
+  pythonImportsCheck = [ "equinox" ];
 
   meta = {
     description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   inherit (lib)
@@ -13,7 +19,8 @@ let
     listToAttrs
     filterAttrs
     mapAttrsToList
-    foldl';
+    foldl'
+    ;
 
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
@@ -77,20 +84,17 @@ in
           "sha256_generic" # Should be baked into our kernel, just to be sure
         ];
 
-      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)
-      ''
+      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)
-      ''
+      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable)
-      ''
+      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) ''
         btrfs device scan
       '';
 
@@ -100,7 +104,7 @@ in
     (mkIf enableAutoScrub {
       assertions = [
         {
-          assertion = cfgScrub.enable -> (cfgScrub.fileSystems != []);
+          assertion = cfgScrub.enable -> (cfgScrub.fileSystems != [ ]);
           message = ''
             If 'services.btrfs.autoScrub' is enabled, you need to have at least one
             btrfs file system mounted via 'fileSystems' or specify a list manually
@@ -113,56 +117,79 @@ in
       # time, or additionally mounted subvolumes, as well as having a filesystem span
       # multiple devices (provided the same device is used to mount said filesystem).
       services.btrfs.autoScrub.fileSystems =
-      let
-        isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
+        let
+          isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
 
-        uniqueDeviceList = foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
-      in
-      mkDefault (map (e: e.mountPoint)
-        (uniqueDeviceList (mapAttrsToList (name: fs: { mountPoint = fs.mountPoint; device = fs.device; })
-          (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems))));
+          uniqueDeviceList = foldl' (acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]) [ ];
+        in
+        mkDefault (
+          map (e: e.mountPoint) (
+            uniqueDeviceList (
+              mapAttrsToList (name: fs: {
+                mountPoint = fs.mountPoint;
+                device = fs.device;
+              }) (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
+            )
+          )
+        );
 
       # TODO: Did not manage to do it via the usual btrfs-scrub@.timer/.service
       # template units due to problems enabling the parameterized units,
       # so settled with many units and templating via nix for now.
       # https://github.com/NixOS/nixpkgs/pull/32496#discussion_r156527544
-      systemd.timers = let
-        scrubTimer = fs: let
-          fs' = utils.escapeSystemdPath fs;
-        in nameValuePair "btrfs-scrub-${fs'}" {
-          description = "regular btrfs scrub timer on ${fs}";
+      systemd.timers =
+        let
+          scrubTimer =
+            fs:
+            let
+              fs' = utils.escapeSystemdPath fs;
+            in
+            nameValuePair "btrfs-scrub-${fs'}" {
+              description = "regular btrfs scrub timer on ${fs}";
 
-          wantedBy = [ "timers.target" ];
-          timerConfig = {
-            OnCalendar = cfgScrub.interval;
-            AccuracySec = "1d";
-            Persistent = true;
-          };
-        };
-      in listToAttrs (map scrubTimer cfgScrub.fileSystems);
+              wantedBy = [ "timers.target" ];
+              timerConfig = {
+                OnCalendar = cfgScrub.interval;
+                AccuracySec = "1d";
+                Persistent = true;
+              };
+            };
+        in
+        listToAttrs (map scrubTimer cfgScrub.fileSystems);
 
-      systemd.services = let
-        scrubService = fs: let
-          fs' = utils.escapeSystemdPath fs;
-        in nameValuePair "btrfs-scrub-${fs'}" {
-          description = "btrfs scrub on ${fs}";
-          # scrub prevents suspend2ram or proper shutdown
-          conflicts = [ "shutdown.target" "sleep.target" ];
-          before = [ "shutdown.target" "sleep.target" ];
+      systemd.services =
+        let
+          scrubService =
+            fs:
+            let
+              fs' = utils.escapeSystemdPath fs;
+            in
+            nameValuePair "btrfs-scrub-${fs'}" {
+              description = "btrfs scrub on ${fs}";
+              # scrub prevents suspend2ram or proper shutdown
+              conflicts = [
+                "shutdown.target"
+                "sleep.target"
+              ];
+              before = [
+                "shutdown.target"
+                "sleep.target"
+              ];
 
-          serviceConfig = {
-            # simple and not oneshot, otherwise ExecStop is not used
-            Type = "simple";
-            Nice = 19;
-            IOSchedulingClass = "idle";
-            ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${fs}";
-            # if the service is stopped before scrub end, cancel it
-            ExecStop  = pkgs.writeShellScript "btrfs-scrub-maybe-cancel" ''
-              (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}
-            '';
-          };
-        };
-      in listToAttrs (map scrubService cfgScrub.fileSystems);
+              serviceConfig = {
+                # simple and not oneshot, otherwise ExecStop is not used
+                Type = "simple";
+                Nice = 19;
+                IOSchedulingClass = "idle";
+                ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${fs}";
+                # if the service is stopped before scrub end, cancel it
+                ExecStop = pkgs.writeShellScript "btrfs-scrub-maybe-cancel" ''
+                  (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}
+                '';
+              };
+            };
+        in
+        listToAttrs (map scrubService cfgScrub.fileSystems);
     })
   ];
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libcoldclear
-, luajit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libcoldclear,
+  luajit,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +14,14 @@ stdenv.mkDerivation rec {
     owner = "26F-Studio";
     repo = "cold_clear_ai_love2d_wrapper";
     rev = version;
-    hash = "sha256-zfTSMWqjFrAKW5m+9q3K2Je8bbSyhC6pC/vPAWDGCNg=";
+    fetchSubmodules = true;
+    hash = "sha256-sguV+Dw+etZH43tXZYL46NAdsI/qvyvGWCPUiTEjhy4=";
   };
 
-  buildInputs = [ libcoldclear luajit ];
+  buildInputs = [
+    libcoldclear
+    luajit
+  ];
 
   buildPhase = ''
     runHook preBuild

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.bind;
@@ -22,15 +28,28 @@ in
       '';
     };
     bindVersion = mkOption {
-      type = types.enum [ "xml.v2" "xml.v3" "auto" ];
+      type = types.enum [
+        "xml.v2"
+        "xml.v3"
+        "auto"
+      ];
       default = "auto";
       description = ''
         BIND statistics version. Can be detected automatically.
       '';
     };
     bindGroups = mkOption {
-      type = types.listOf (types.enum [ "server" "view" "tasks" ]);
-      default = [ "server" "view" ];
+      type = types.listOf (
+        types.enum [
+          "server"
+          "view"
+          "tasks"
+        ]
+      );
+      default = [
+        "server"
+        "view"
+      ];
       description = ''
         List of statistics to collect. Available: [server, view, tasks]
       '';

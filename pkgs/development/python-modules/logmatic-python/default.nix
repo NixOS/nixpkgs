@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "logmatic";
     repo = "logmatic-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UYKm00KhXnPQDkKJVm7s0gOwZ3GNY07O0oKbzPhAdVE=";
   };
 

@@ -19,17 +19,17 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "7.2.1";
+  version = "7.2.4";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KXFGT1fprRKN+V+3k0hpjjaI/xpw6UDAk+jj9zMek7k=";
+    hash = "sha256-FFaGyMOXivorXVqCcYskEibnHnzhJ/AlxR46AtWFkI4=";
   };
 
   projectFile = "Recyclarr.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   prePatch = ''
     substituteInPlace src/Recyclarr.Cli/Program.cs \
@@ -39,6 +39,8 @@ buildDotnetModule (finalAttrs: {
       --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
   '';
   patches = [ ./001-Git-Version.patch ];
+
+  enableParallelBuilding = false;
 
   dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 

@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       # Generate the squashfs image.
       mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $imgPath ${pseudoFilesArgs} \
         -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 ${compFlag} \
-        -processors $NIX_BUILD_CORES
+        -processors $NIX_BUILD_CORES -root-mode 0755
     '' + lib.optionalString hydraBuildProduct ''
 
       mkdir -p $out/nix-support

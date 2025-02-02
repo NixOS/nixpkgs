@@ -15,18 +15,18 @@
 
 buildGoModule rec {
   pname = "picocrypt";
-  version = "1.40";
+  version = "1.45";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-L3UkWUT6zsUj5C/RHVvaTbt6E8VERk3hZNBGSGbON3c=";
+    tag = version;
+    hash = "sha256-VJCLbMthxb2eWN20pXA6GOzR1FDN97KCU6ligKbKQkY=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-YYQMJXyVANDrYsd7B/q8L5dpvbzxqjLvm6v20PnpAkY=";
+  vendorHash = "sha256-ufMxDyK4EPTYLGc0AJ6EARIFCPwz+5OgZzQSGnP+WLA=";
 
   ldflags = [
     "-s"
@@ -37,7 +37,7 @@ buildGoModule rec {
     # Depends on a vendored, patched GLFW.
     glfw.buildInputs or [ ]
     ++ glfw.propagatedBuildInputs or [ ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gtk3
       xorg.libXxf86vm
     ];
@@ -48,7 +48,7 @@ buildGoModule rec {
     wrapGAppsHook3
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   postInstall = ''
     mv $out/bin/Picocrypt $out/bin/picocrypt-gui

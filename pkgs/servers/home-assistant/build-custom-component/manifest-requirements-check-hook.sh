@@ -1,17 +1,28 @@
+# shellcheck shell=bash
+
 # Setup hook to check HA manifest requirements
-echo "Sourcing manifest-requirements-check-hook"
+echo "Sourcing manifest-check-hook"
 
 function manifestCheckPhase() {
     echo "Executing manifestCheckPhase"
     runHook preCheck
 
-    manifests=$(shopt -s nullglob; echo $out/custom_components/*/manifest.json)
+    args=""
+    # shellcheck disable=SC2154
+    for package in "${ignoreVersionRequirement[@]}"; do
+        args+=" --ignore-version-requirement ${package}"
+    done
 
-    if [ ! -z "$manifests" ]; then
-        echo Checking manifests $manifests
-        @pythonCheckInterpreter@ @checkManifest@ $manifests
+    readarray -d '' manifests < <(find . -type f -name "manifest.json" -print0)
+
+    if [ "${#manifests[@]}" -gt 0 ]; then
+        # shellcheck disable=SC2068
+        echo Checking manifests ${manifests[@]}
+        # shellcheck disable=SC2068,SC2086
+        @pythonCheckInterpreter@ @checkManifest@ ${manifests[@]} $args
     else
-        echo "No custom component manifests found in $out" >&2
+        # shellcheck disable=SC2154
+        echo "No component manifests found in $out" >&2
         exit 1
     fi
 
@@ -21,5 +32,5 @@ function manifestCheckPhase() {
 
 if [ -z "${dontCheckManifest-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using manifestCheckPhase"
-    preDistPhases+=" manifestCheckPhase"
+    appendToVar preDistPhases manifestCheckPhase
 fi

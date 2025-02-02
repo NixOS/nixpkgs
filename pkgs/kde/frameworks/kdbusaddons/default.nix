@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "kdbusaddons";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
   meta.mainProgram = "kquitapp6";
 }

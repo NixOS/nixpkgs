@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "diego-treitos";
     repo = "linux-smart-enumeration";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qGLmrbyeyhHG6ONs7TJLTm68xpvxB1iAnMUApfTSqEk=";
   };
 

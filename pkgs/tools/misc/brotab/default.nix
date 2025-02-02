@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, fetchpatch, python }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python,
+}:
 
 python.pkgs.buildPythonApplication rec {
   pname = "brotab";

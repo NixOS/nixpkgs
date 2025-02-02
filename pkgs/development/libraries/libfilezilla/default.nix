@@ -22,11 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ gettext gnutls nettle libxcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
-
-  preBuild = lib.optionalString (stdenv.isDarwin) ''
-    export MACOSX_DEPLOYMENT_TARGET=11.0
-  '';
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 

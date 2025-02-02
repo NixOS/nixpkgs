@@ -8,23 +8,26 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "versionfinder";
   version = "1.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jantman";
-    repo = pname;
+    repo = "versionfinder";
     rev = version;
-    sha256 = "16mvjwyhmw39l8by69dgr9b9jnl7yav36523lkh7w7pwd529pbb9";
+    hash = "sha256-aa2bRGn8Hn7gpEMUM7byh1qZVsqvJeMXomnwCj2Xu5o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     gitpython
     backoff
   ];

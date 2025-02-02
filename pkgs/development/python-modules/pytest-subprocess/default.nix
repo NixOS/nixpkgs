@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wEPIRWEwAiHSpcu9FMtkpAxqz64csT9AO27NDax3zNY=";
   };
 

@@ -5,34 +5,34 @@
   autoPatchelfHook,
   curl,
   openssl,
-  testers,
-  mongodb-ce,
+  versionCheckHook,
   writeShellApplication,
   jq,
   nix-update,
   gitMinimal,
   pup,
+  nixosTests,
 }:
 
 let
-  version = "7.0.12";
+  version = "8.0.4";
 
   srcs = version: {
     "x86_64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-Kgq66rOBKgNIVw6bvzNrpnGRxyoBCP0AWnfzs9ReVVk=";
+      hash = "sha256-N5rwtPrrjVJj7UAk/weBAhV4+7wHRLNowkX6gEWCQVU=";
     };
     "aarch64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-OLxPpAYFicWrqRJo3cNIG5Y0S6MIMd2vW8bluQkqnyk=";
+      hash = "sha256-uBa7/jxfZBNmB0l2jspJW2QQ8VY0GtWxc/tPlkV6UBk=";
     };
     "x86_64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-sKfg1EpRQ7L2rgJArRHQLrawU8bh42liih5GR2/3jok=";
+      hash = "sha256-Ya+HIlRPWXPp9aX1AlRgkh/pfKRgxhqNep/6uuARmCo=";
     };
     "aarch64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-XkFSuKKxgSRoyzzrPYamE/44FV8ol125nqDOB9EnSMM=";
+      hash = "sha256-IZ47PXsxwEn/e890cNOO/3BOVt8qwY1N94Ql4phcz1g=";
     };
   };
 in
@@ -45,19 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
       or (throw "unsupported system: ${stdenv.hostPlatform.system}")
   );
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   dontStrip = true;
 
   buildInputs = [
-    # This is to avoid the following error:
-    # ./result/bin/mongod: /nix/store/y6w7agm3aw5p96q7vsgzivba0dqq3rd0-curl-8.8.0/lib/libcurl.so.4: no version information available (required by ./result/bin/mongod)
-    # When running `mongod --version`
-    # See https://discourse.nixos.org/t/patchelf-and-libcurl-no-version-information-available/24453
-    (curl.overrideAttrs (old: {
-      configureFlags = old.configureFlags ++ [ "--enable-versioned-symbols" ];
-    })).dev
+    curl.dev
     openssl.dev
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''
@@ -68,6 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
+  versionCheckProgramArg = [ "--version" ];
+  # Only enable the version install check on darwin.
+  # On Linux, this would fail as mongod relies on tcmalloc, which
+  # requires access to `/sys/devices/system/cpu/possible`.
+  # See https://github.com/NixOS/nixpkgs/issues/377016
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
 
   passthru = {
 
@@ -87,10 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
           text =
             ''
               # Get latest version string from Github
-              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r7.0")) | select(contains("rc") | not) | .[1:])')
+              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
 
               # Check if the new version is available for download, if not, exit
-              AVAILABLE=$(curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION")
+              curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
 
               if [[ "${version}" = "$NEW_VERSION" ]]; then
                   echo "The new version same as the old version."
@@ -108,14 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
         command = lib.getExe script;
       };
 
-    tests.version = testers.testVersion {
-      package = mongodb-ce;
-      command = "mongod --version";
+    tests = {
+      inherit (nixosTests) mongodb-ce;
     };
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/7.0/";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
     description = "MongoDB is a general purpose, document-based, distributed database.";
     homepage = "https://www.mongodb.com/";
     license = with lib.licenses; [ sspl ];

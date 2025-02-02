@@ -1,0 +1,4 @@
+#!/bin/sh -eu
+cd "$(dirname "$0")"
+deps=$(nix-build --no-link -A x32edit.deps ../../../..)
+cat "$deps" > deps.nix

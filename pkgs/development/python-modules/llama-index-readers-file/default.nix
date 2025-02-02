@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-file";
-  version = "0.1.27";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_readers_file";
     inherit version;
-    hash = "sha256-BMm8MGOpQJ/Nh3932bKr/VAuBydjqm3XiODGN0GLhmQ=";
+    hash = "sha256-4Haz+h5o7qFZTUfOwfZLOE+2Bn8ml8qKriK0ohrSfKc=";
   };
 
   pythonRelaxDeps = [
@@ -30,7 +30,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     beautifulsoup4

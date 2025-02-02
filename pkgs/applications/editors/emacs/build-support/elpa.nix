@@ -1,37 +1,57 @@
 # builder for Emacs packages built for packages.el
 
-{ lib, stdenv, emacs, texinfo, writeText }:
+{
+  lib,
+  stdenv,
+  emacs,
+  texinfo,
+  writeText,
+}:
 
 let
-  handledArgs = [ "meta" ];
-  genericBuild = import ./generic.nix { inherit lib stdenv emacs texinfo writeText; };
+  genericBuild = import ./generic.nix {
+    inherit
+      lib
+      stdenv
+      emacs
+      texinfo
+      writeText
+      ;
+  };
+  libBuildHelper = import ./lib-build-helper.nix;
 
 in
 
-{ pname
-, version
-, src
-, meta ? {}
-, ...
-}@args:
+libBuildHelper.extendMkDerivation' genericBuild (
+  finalAttrs:
 
-genericBuild ({
+  {
+    pname,
+    dontUnpack ? true,
+    meta ? { },
+    ...
+  }@args:
 
-  dontUnpack = true;
+  {
 
-  installPhase = ''
-    runHook preInstall
+    elpa2nix = args.elpa2nix or ./elpa2nix.el;
 
-    emacs --batch -Q -l ${./elpa2nix.el} \
-        -f elpa2nix-install-package \
-        "$src" "$out/share/emacs/site-lisp/elpa"
+    inherit dontUnpack;
 
-    runHook postInstall
-  '';
+    installPhase =
+      args.installPhase or ''
+        runHook preInstall
 
-  meta = {
-    homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
-  } // meta;
-}
+        emacs --batch -Q -l "$elpa2nix" \
+            -f elpa2nix-install-package \
+            "$src" "$out/share/emacs/site-lisp/elpa"
 
-// removeAttrs args handledArgs)
+        runHook postInstall
+      '';
+
+    meta = {
+      homepage = args.src.meta.homepage or "https://elpa.gnu.org/packages/${pname}.html";
+    } // meta;
+  }
+
+)

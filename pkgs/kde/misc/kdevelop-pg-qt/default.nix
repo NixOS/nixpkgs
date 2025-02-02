@@ -10,14 +10,17 @@ mkKdeDerivation rec {
   version = "2.3.0";
 
   # Breaks with split -dev
-  outputs = ["out"];
+  outputs = [ "out" ];
 
   src = fetchurl {
     url = "mirror://kde/stable/kdevelop-pg-qt/${version}/src/kdevelop-pg-qt-${version}.tar.xz";
     hash = "sha256-PT7zyzlelnDmDDmepthlzHluAOUsNV7tlD++yn2nEg0=";
   };
 
-  extraNativeBuildInputs = [ bison flex ];
+  extraNativeBuildInputs = [
+    bison
+    flex
+  ];
 
   meta.license = with lib.licenses; [
     bsd3

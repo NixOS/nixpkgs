@@ -1,14 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.zsh.syntaxHighlighting;
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
-    (lib.mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "enable" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
-    (lib.mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "highlighters" ] [ "programs" "zsh" "syntaxHighlighting" "highlighters" ])
-    (lib.mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "patterns" ] [ "programs" "zsh" "syntaxHighlighting" "patterns" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "enableSyntaxHighlighting" ]
+      [ "programs" "zsh" "syntaxHighlighting" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "syntax-highlighting" "enable" ]
+      [ "programs" "zsh" "syntaxHighlighting" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "syntax-highlighting" "highlighters" ]
+      [ "programs" "zsh" "syntaxHighlighting" "highlighters" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "syntax-highlighting" "patterns" ]
+      [ "programs" "zsh" "syntaxHighlighting" "patterns" ]
+    )
   ];
 
   options = {
@@ -19,15 +36,17 @@ in
         default = [ "main" ];
 
         # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-        type = lib.types.listOf(lib.types.enum([
-          "main"
-          "brackets"
-          "pattern"
-          "cursor"
-          "regexp"
-          "root"
-          "line"
-        ]));
+        type = lib.types.listOf (
+          lib.types.enum ([
+            "main"
+            "brackets"
+            "pattern"
+            "cursor"
+            "regexp"
+            "root"
+            "line"
+          ])
+        );
 
         description = ''
           Specifies the highlighters to be used by zsh-syntax-highlighting.
@@ -38,7 +57,7 @@ in
       };
 
       patterns = lib.mkOption {
-        default = {};
+        default = { };
         type = lib.types.attrsOf lib.types.str;
 
         example = lib.literalExpression ''
@@ -55,7 +74,7 @@ in
         '';
       };
       styles = lib.mkOption {
-        default = {};
+        default = { };
         type = lib.types.attrsOf lib.types.str;
 
         example = lib.literalExpression ''
@@ -79,28 +98,31 @@ in
 
     assertions = [
       {
-        assertion = builtins.length(builtins.attrNames cfg.patterns) > 0 -> builtins.elem "pattern" cfg.highlighters;
+        assertion =
+          builtins.length (builtins.attrNames cfg.patterns) > 0 -> builtins.elem "pattern" cfg.highlighters;
         message = ''
           When highlighting patterns, "pattern" needs to be included in the list of highlighters.
         '';
       }
     ];
 
-    programs.zsh.interactiveShellInit =
-      lib.mkAfter (lib.concatStringsSep "\n" ([
-        "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-      ] ++ lib.optional (builtins.length(cfg.highlighters) > 0)
-        "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
-        ++ lib.optionals (builtins.length(builtins.attrNames cfg.patterns) > 0)
-          (lib.mapAttrsToList (
-            pattern: design:
-            "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
-          ) cfg.patterns)
-        ++ lib.optionals (builtins.length(builtins.attrNames cfg.styles) > 0)
-          (lib.mapAttrsToList (
-            styles: design:
-            "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'"
-          ) cfg.styles)
-      ));
+    programs.zsh.interactiveShellInit = lib.mkAfter (
+      lib.concatStringsSep "\n" (
+        [
+          "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        ]
+        ++ lib.optional (
+          builtins.length (cfg.highlighters) > 0
+        ) "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
+        ++ lib.optionals (builtins.length (builtins.attrNames cfg.patterns) > 0) (
+          lib.mapAttrsToList (
+            pattern: design: "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
+          ) cfg.patterns
+        )
+        ++ lib.optionals (builtins.length (builtins.attrNames cfg.styles) > 0) (
+          lib.mapAttrsToList (styles: design: "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'") cfg.styles
+        )
+      )
+    );
   };
 }

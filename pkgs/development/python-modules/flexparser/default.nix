@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  wheel,
 
   # dependencies
   typing-extensions,
@@ -19,23 +18,22 @@
 
 buildPythonPackage rec {
   pname = "flexparser";
-  version = "0.3.1";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "flexparser";
     rev = version;
-    hash = "sha256-9ImG8uh1SZ+pAbqzWBkTVn+3EBAGzzdP8vqqP59IgIw=";
+    hash = "sha256-0Ocp4GsrnzkpSqnP+AK5OxJ3KyUf5Uc6CegDXpRYRqo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook

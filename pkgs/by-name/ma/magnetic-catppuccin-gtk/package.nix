@@ -5,38 +5,75 @@
   gtk-engine-murrine,
   jdupes,
   sassc,
-  accent ? ["default"],
+  accent ? [ "default" ],
   shade ? "dark",
   size ? "standard",
-  tweaks ? [],
-}: let
-  validAccents = ["default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all"];
-  validShades = ["light" "dark"];
-  validSizes = ["standard" "compact"];
-  validTweaks = ["frappe" "macchiato" "black" "float" "outline" "macos"];
+  tweaks ? [ ],
+}:
+let
+  validAccents = [
+    "default"
+    "purple"
+    "pink"
+    "red"
+    "orange"
+    "yellow"
+    "green"
+    "teal"
+    "grey"
+    "all"
+  ];
+  validShades = [
+    "light"
+    "dark"
+  ];
+  validSizes = [
+    "standard"
+    "compact"
+  ];
+  validTweaks = [
+    "frappe"
+    "macchiato"
+    "black"
+    "float"
+    "outline"
+    "macos"
+  ];
 
   single = x: lib.optional (x != null) x;
   pname = "Catppuccin-GTK";
 in
-  lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent
-  lib.checkListOfEnum "${pname} Valid shades" validShades (single shade)
-  lib.checkListOfEnum "${pname} Valid sizes" validSizes (single size)
-  lib.checkListOfEnum "${pname} Valid tweaks" validTweaks tweaks
+lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.checkListOfEnum
+  "${pname} Valid shades"
+  validShades
+  (single shade)
+  lib.checkListOfEnum
+  "${pname} Valid sizes"
+  validSizes
+  (single size)
+  lib.checkListOfEnum
+  "${pname} Valid tweaks"
+  validTweaks
+  tweaks
 
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2024-06-27";
+    version = "0-unstable-2024-11-06";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "0bd2869e7f0fdb36c720a4fb873d4fed361b0606";
-      hash = "sha256-oFVsYrJ27hYGY+x9+Z4SxVCp3w6PiLYTZaxmGhnpVHQ=";
+      rev = "be79b8289200aa1a17620f84dde3fe4c3b9c5998";
+      hash = "sha256-QItHmYZpe7BiPC+2CtFwiRXyMTG7+ex0sJTs63xmkAo=";
     };
 
-    nativeBuildInputs = [jdupes sassc];
+    nativeBuildInputs = [
+      jdupes
+      sassc
+    ];
 
-    propagatedUserEnvPkgs = [gtk-engine-murrine];
+    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
     postPatch = ''
       find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do

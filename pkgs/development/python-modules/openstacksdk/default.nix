@@ -10,10 +10,10 @@
   jsonpatch,
   keystoneauth1,
   munch,
-  netifaces,
   openstackdocstheme,
   os-service-types,
   pbr,
+  psutil,
   pythonOlder,
   pyyaml,
   requestsexceptions,
@@ -23,10 +23,10 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "3.3.0";
+  version = "4.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BghpDKN8pzMnsPo3YdF+ZTlb43/yALhzXY8kJ3tPSYA=";
+    hash = "sha256-6NIRsSqBqedjca5O3cqXVh6h/bUEefB3QAz0Ry0q2Jw=";
   };
 
   postPatch = ''
@@ -44,13 +44,14 @@ buildPythonPackage rec {
       --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     openstackdocstheme
-    setuptools
     sphinxHook
   ];
 
   sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     platformdirs
@@ -60,9 +61,9 @@ buildPythonPackage rec {
     jsonpatch
     keystoneauth1
     munch
-    netifaces
     os-service-types
     pbr
+    psutil
     requestsexceptions
     pyyaml
   ];

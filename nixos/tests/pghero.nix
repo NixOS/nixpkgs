@@ -3,37 +3,42 @@ let
   pgheroUser = "pghero";
   pgheroPass = "pghero";
 in
-{ lib, ... }: {
+{ lib, ... }:
+{
   name = "pghero";
   meta.maintainers = [ lib.maintainers.tie ];
 
-  nodes.machine = { config, ... }: {
-    services.postgresql = {
-      enable = true;
-      # This test uses default peer authentication (socket and its directory is
-      # world-readably by default), so we essentially test that we can connect
-      # with DynamicUser= set.
-      ensureUsers = [{
-        name = "pghero";
-        ensureClauses.superuser = true;
-      }];
-    };
-    services.pghero = {
-      enable = true;
-      listenAddress = "[::]:${toString pgheroPort}";
-      settings = {
-        databases = {
-          postgres.url = "<%= ENV['POSTGRES_DATABASE_URL'] %>";
-          nulldb.url = "nulldb:///";
+  nodes.machine =
+    { config, ... }:
+    {
+      services.postgresql = {
+        enable = true;
+        # This test uses default peer authentication (socket and its directory is
+        # world-readably by default), so we essentially test that we can connect
+        # with DynamicUser= set.
+        ensureUsers = [
+          {
+            name = "pghero";
+            ensureClauses.superuser = true;
+          }
+        ];
+      };
+      services.pghero = {
+        enable = true;
+        listenAddress = "[::]:${toString pgheroPort}";
+        settings = {
+          databases = {
+            postgres.url = "<%= ENV['POSTGRES_DATABASE_URL'] %>";
+            nulldb.url = "nulldb:///";
+          };
+        };
+        environment = {
+          PGHERO_USERNAME = pgheroUser;
+          PGHERO_PASSWORD = pgheroPass;
+          POSTGRES_DATABASE_URL = "postgresql:///postgres?host=/run/postgresql";
         };
       };
-      environment = {
-        PGHERO_USERNAME = pgheroUser;
-        PGHERO_PASSWORD = pgheroPass;
-        POSTGRES_DATABASE_URL = "postgresql:///postgres?host=/run/postgresql";
-      };
     };
-  };
 
   testScript = ''
     pgheroPort = ${toString pgheroPort}

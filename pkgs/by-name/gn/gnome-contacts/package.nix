@@ -23,15 +23,17 @@
   ninja,
   libadwaita,
   gsettings-desktop-schemas,
+  gst_all_1,
+  pipewire,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "46.0";
+  version = "47.1.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/gnome-contacts-${version}.tar.xz";
-    hash = "sha256-cK606DWhx3+bzH5XotzCN22TvbYXVxYYJXRF9WxjcN8=";
+    hash = "sha256-R+GuRbcEGgXV4nZJ2RLiwwAlYYisRg7cukaJnGYIpHg=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +50,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-rs # GTK4 sink & paintable
+    pipewire # pipewiresrc
     gtk4
     glib
     libportal-gtk4

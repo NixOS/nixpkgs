@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybox2d";
     repo = "pybox2d";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yjLFvsg8GQLxjN1vtZM9zl+kAmD4+eS/vzRkpj0SCjY=";
   };
 

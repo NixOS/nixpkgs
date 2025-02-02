@@ -11,7 +11,7 @@
 , configText ? ""
 }:
 let
-  version = "2312.1";
+  version = "2406";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -36,8 +36,8 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART25FQ1_LIN_2312.1_TARBALL/VMware-Horizon-Client-Linux-2312.1-8.12.1-23543969.tar.gz";
-      sha256 = "23d18be2955ba60ab3cca941a529fa3b804af97ebf1602d246ca6147cced8135";
+      url = "https://download3.omnissa.com/software/CART25FQ2_LIN_2406_TARBALL/VMware-Horizon-Client-Linux-2406-8.13.0-9995429239.tar.gz";
+      sha256 = "d6bae5cea83c418bf3a9cb884a7d8351d8499f1858a1ac282fd79dc0c64e83f6";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -46,7 +46,8 @@ let
 
       chmod -R u+w ext/usr/lib
       mv ext/usr $out
-      cp -r ext/lib $out/
+      cp -r ext/${sysArch}/include $out/
+      cp -r ext/${sysArch}/lib $out/
 
       # Horizon includes a copy of libstdc++ which is loaded via $LD_LIBRARY_PATH
       # when it cannot detect a new enough version already present on the system.
@@ -63,14 +64,14 @@ let
       ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
 
       ${wrapBinCommands "bin" "vmware-view"}
-      ${wrapBinCommands "lib/vmware/view/usb" "vmware-usbarbitrator"}
+      ${wrapBinCommands "lib/vmware/view/usb" "vmware-eucusbarbitrator"}
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSEnv {
-    inherit name;
+  vmwareFHSUserEnv = pname: buildFHSEnv {
+    inherit pname version;
 
-    runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
+    runScript = "${vmwareHorizonClientFiles}/bin/${pname}_wrapper";
 
     targetPkgs = pkgs: with pkgs; [
       at-spi2-atk
@@ -87,6 +88,7 @@ let
       harfbuzz
       liberation_ttf
       libjpeg
+      libpng
       libpulseaudio
       libtiff
       libudev0-shim
@@ -96,6 +98,7 @@ let
       pango
       pcsclite
       pixman
+      udev
       vmwareHorizonClientFiles
       xorg.libX11
       xorg.libXau

@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  gomarkdoc
+  gomarkdoc,
 }:
 
 buildGoModule rec {

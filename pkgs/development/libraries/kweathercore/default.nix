@@ -1,10 +1,11 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, extra-cmake-modules
-, kholidays
-, ki18n
-, qtlocation
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  extra-cmake-modules,
+  kholidays,
+  ki18n,
+  qtlocation,
 }:
 
 mkDerivation rec {

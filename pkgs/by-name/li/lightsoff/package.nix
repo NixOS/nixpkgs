@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/lightsoff";
+    changelog = "https://gitlab.gnome.org/GNOME/lightsoff/-/blob/${version}/NEWS?ref_type=tags";
     description = "Puzzle game, where the objective is to turn off all of the tiles on the board";
     mainProgram = "lightsoff";
     maintainers = teams.gnome.members;

@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kdesdk-kio";
 
-  extraNativeBuildInputs = [perl];
+  extraNativeBuildInputs = [ perl ];
 }

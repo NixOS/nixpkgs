@@ -1,12 +1,20 @@
-{ lib, stdenvNoCC, fetchzip, makeBinaryWrapper, jdk21_headless, gawk, statePath ? "/var/lib/youtrack" }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  makeBinaryWrapper,
+  jdk21_headless,
+  gawk,
+  statePath ? "/var/lib/youtrack",
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
-  version = "2024.2.40106";
+  version = "2024.3.56671";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.zip";
-    hash = "sha256-EihSVUmsVhex2/+VmQ74jEVbpA5A6aOKDt8ejPlw5dQ=";
+    hash = "sha256-uzbeI9QyT+DPjhiSxCGxDKSnmLqL8DQF11ZldLKpNAI=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

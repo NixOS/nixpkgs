@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "httpx-sse";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nU8vkmV/WynzQrSrq9+FQXtfAJPVLpMsRSuntU0HWrE=";
   };
 

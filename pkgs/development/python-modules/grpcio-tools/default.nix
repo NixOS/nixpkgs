@@ -7,21 +7,19 @@
   setuptools,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.64.1";
-  format = "setuptools";
+  version = "1.68.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-crNVC5GtuDVGVuzw9tHUYRKZBEuuEfsefMHRu2a4wes=";
+    hash = "sha256-JBOhetFsnIIbNuSmf8ZMN7nkY2qxw6B3eAGIATeHObo=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
-  '';
 
   outputs = [
     "out"
@@ -30,7 +28,14 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+    "grpcio"
+  ];
+
+  dependencies = [
     protobuf
     grpcio
     setuptools

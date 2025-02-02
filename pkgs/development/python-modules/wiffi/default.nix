@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "python-wiffi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pnbzJxq8K947Yg54LysPPho6IRKf0cc+szTETgyzFao=";
   };
 

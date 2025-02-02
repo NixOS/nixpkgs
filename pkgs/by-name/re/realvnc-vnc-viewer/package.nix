@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, callPackage
+{
+  lib,
+  stdenv,
+  callPackage,
 }:
 let
   pname = "realvnc-vnc-viewer";
-  version = "7.12.0";
+  version = "7.12.1";
 
   meta = {
     description = "VNC remote desktop client software by RealVNC";
@@ -15,10 +16,15 @@ let
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
     };
-    maintainers = with lib.maintainers; [ emilytrau onedragon ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      onedragon
+    ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "vncviewer";
   };
 in
-if stdenv.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }
-else callPackage ./linux.nix { inherit pname version meta; }
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { inherit pname version meta; }
+else
+  callPackage ./linux.nix { inherit pname version meta; }

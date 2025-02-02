@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "5.0.9";
+  version = "5.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7qJdPIk2xSF909chvjwT9zdSQ6NA6cgwefJGaBw1BQY=";
+    tag = "v${version}";
+    hash = "sha256-+4RGaeUgTiHOt2F1oSu06USbDh0ZrILsZAPwBUsFnJE=";
   };
 
   build-system = [ setuptools ];

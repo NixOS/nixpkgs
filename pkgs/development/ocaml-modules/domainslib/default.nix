@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, saturn
-, domain-local-await
-, kcas
-, mirage-clock-unix
-, qcheck-stm
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  saturn,
+  domain-local-await,
+  kcas,
+  mirage-clock-unix,
+  qcheck-stm,
 }:
 
 buildDunePackage rec {
@@ -19,15 +20,23 @@ buildDunePackage rec {
     hash = "sha256-KMJd+6XZmUSXNsXW/KXgvnFtgY9vODeW3vhL77mDXQE=";
   };
 
-  propagatedBuildInputs = [ domain-local-await saturn ];
+  propagatedBuildInputs = [
+    domain-local-await
+    saturn
+  ];
 
   doCheck = true;
-  checkInputs = [ kcas mirage-clock-unix qcheck-stm ];
+  checkInputs = [
+    kcas
+    mirage-clock-unix
+    qcheck-stm
+  ];
 
   meta = {
     homepage = "https://github.com/ocaml-multicore/domainslib";
     description = "Nested-parallel programming";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = true; # Not compatible with saturn > 0.4.0
   };
 }

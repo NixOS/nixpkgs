@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pytestCheckHook,
   fontmath,
   fonttools,
@@ -16,15 +17,25 @@
 
 buildPythonPackage rec {
   pname = "fontmake";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontmake";
     rev = "v${version}";
-    hash = "sha256-q6ul9MYbq85RpZE0ozHOCBNAR4r9InIjumadT1GyJ6k=";
+    hash = "sha256-ZlK8QyZ5cIEphFiZXMV/Z5pL9H62X2UwLBtpwLGpUMQ=";
   };
+
+  patches = [
+    # Update to FontTools 4.55 and glyphsLib 6.9.5
+    # https://github.com/googlefonts/fontmake/pull/1133
+    (fetchpatch2 {
+      url = "https://github.com/googlefonts/fontmake/commit/ca96d25faa67638930ddc7f9bd1ab218a76caf22.patch";
+      includes = [ "tests/test_main.py" ];
+      hash = "sha256-vz+KeWiGCpUdX5HaXDdyyUCbuMkIylB364j6cD7xR1E=";
+    })
+  ];
 
   build-system = [
     setuptools

@@ -76,10 +76,11 @@ rec {
 
   };
 
-  yaml = {}: {
+  yaml = yaml_1_1;
 
-    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
-      nativeBuildInputs = [ remarshal ];
+  yaml_1_1 = {}: {
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal_0_17 }: runCommand name {
+      nativeBuildInputs = [ remarshal_0_17 ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
       preferLocalBuild = true;
@@ -109,20 +110,23 @@ rec {
       singleIniAtom = nullOr (oneOf [ bool int float str ]) // {
         description = "INI atom (null, bool, int, float or string)";
       };
-      iniAtom = { listsAsDuplicateKeys, listToValue }:
+      iniAtom = { listsAsDuplicateKeys, listToValue, atomsCoercedToLists }:
+        let
+          singleIniAtomOr = if atomsCoercedToLists then coercedTo singleIniAtom lib.singleton else either singleIniAtom;
+        in
         if listsAsDuplicateKeys then
-          coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
+          singleIniAtomOr (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
         else if listToValue != null then
-          coercedTo singleIniAtom lib.singleton (nonEmptyListOf singleIniAtom) // {
+          singleIniAtomOr (nonEmptyListOf singleIniAtom) // {
             description = singleIniAtom.description + " or a non-empty list of them";
           }
         else
           singleIniAtom;
-      iniSection = { listsAsDuplicateKeys, listToValue }@args:
-        attrsOf (iniAtom args) // {
-          description = "section of an INI file (attrs of " + (iniAtom args).description + ")";
+      iniSection = atom:
+        attrsOf atom // {
+          description = "section of an INI file (attrs of " + atom.description + ")";
         };
 
       maybeToList = listToValue: if listToValue != null then lib.mapAttrs (key: val: if lib.isList val then listToValue val else val) else lib.id;
@@ -133,18 +137,28 @@ rec {
         # Alternative to listsAsDuplicateKeys, converts list to non-list
         # listToValue :: [IniAtom] -> IniAtom
         listToValue ? null,
+        # Merge multiple instances of the same key into a list
+        atomsCoercedToLists ? null,
         ...
         }@args:
         assert listsAsDuplicateKeys -> listToValue == null;
+        assert atomsCoercedToLists != null -> (listsAsDuplicateKeys || listToValue != null);
+        let
+          atomsCoercedToLists' = if atomsCoercedToLists == null then false else atomsCoercedToLists;
+          atom = iniAtom { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; };
+        in
         {
 
-        type = lib.types.attrsOf (iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; });
+        type = lib.types.attrsOf (
+          iniSection atom
+        );
+        lib.types.atom = atom;
 
         generate = name: value:
           lib.pipe value
           [
             (lib.mapAttrs (_: maybeToList listToValue))
-            (lib.generators.toINI (removeAttrs args ["listToValue"]))
+            (lib.generators.toINI (removeAttrs args ["listToValue" "atomsCoercedToLists"]))
             (pkgs.writeText name)
           ];
       };
@@ -155,42 +169,55 @@ rec {
         # Alternative to listsAsDuplicateKeys, converts list to non-list
         # listToValue :: [IniAtom] -> IniAtom
         listToValue ? null,
+        # Merge multiple instances of the same key into a list
+        atomsCoercedToLists ? null,
         ...
         }@args:
         assert listsAsDuplicateKeys -> listToValue == null;
+        assert atomsCoercedToLists != null -> (listsAsDuplicateKeys || listToValue != null);
+        let
+          atomsCoercedToLists' = if atomsCoercedToLists == null then false else atomsCoercedToLists;
+          atom = iniAtom { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; };
+        in
         {
           type = lib.types.submodule {
             options = {
               sections = lib.mkOption rec {
-                type = lib.types.attrsOf (iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; });
+                type = lib.types.attrsOf (
+                  iniSection atom
+                );
                 default = {};
                 description = type.description;
               };
               globalSection = lib.mkOption rec {
-                type = iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; };
+                type = iniSection atom;
                 default = {};
                 description = "global " + type.description;
               };
             };
           };
+          lib.types.atom = atom;
           generate = name: { sections ? {}, globalSection ? {}, ... }:
-            pkgs.writeText name (lib.generators.toINIWithGlobalSection (removeAttrs args ["listToValue"])
+            pkgs.writeText name (lib.generators.toINIWithGlobalSection (removeAttrs args ["listToValue" "atomsCoercedToLists"])
             {
               globalSection = maybeToList listToValue globalSection;
               sections = lib.mapAttrs (_: maybeToList listToValue) sections;
             });
         };
 
-      gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
-        type = let
+      gitIni = { listsAsDuplicateKeys ? false, ... }@args:
+        let
           atom = iniAtom {
-            listsAsDuplicateKeys = listsAsDuplicateKeys;
+            inherit listsAsDuplicateKeys;
             listToValue = null;
+            atomsCoercedToLists = false;
           };
-        in attrsOf (attrsOf (either atom (attrsOf atom)));
-
-        generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
-      };
+        in
+        {
+          type = attrsOf (attrsOf (either atom (attrsOf atom)));
+          lib.types.atom = atom;
+          generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
+        };
 
     }) ini iniWithGlobalSection gitIni;
 
@@ -281,6 +308,39 @@ rec {
       json2toml "$valuePath" "$out"
     '') {};
 
+  };
+
+  /* dzikoysk's CDN format, see https://github.com/dzikoysk/cdn
+
+    The result is almost identical to YAML when there are no nested properties,
+    but differs enough in the other case to warrant a separate format.
+    (see https://github.com/dzikoysk/cdn#supported-formats)
+
+    Currently used by Panda, Reposilite, and FunnyGuilds (as per the repo's readme).
+  */
+  cdn = {}: json {} // {
+    type = let
+      valueType = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ]) // {
+        description = "CDN value";
+      };
+    in valueType;
+
+    generate = name: value: pkgs.callPackage ({ runCommand, json2cdn }: runCommand name {
+      nativeBuildInputs = [ json2cdn ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+      preferLocalBuild = true;
+    } ''
+      json2cdn "$valuePath" > $out
+    '') {};
   };
 
   /* For configurations of Elixir project, like config.exs or runtime.exs
@@ -516,5 +576,65 @@ rec {
       black $out
     '') {};
   };
+
+  xml =
+    {
+      format ? "badgerfish",
+      withHeader ? true,
+    }:
+    if format == "badgerfish" then
+      {
+        type = let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            path
+            (attrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "XML value";
+          };
+        in valueType;
+
+        generate =
+          name: value:
+          pkgs.callPackage (
+            {
+              runCommand,
+              python3,
+              libxml2Python,
+            }:
+            runCommand name
+              {
+                nativeBuildInputs = [
+                  python3
+                  python3.pkgs.xmltodict
+                  libxml2Python
+                ];
+                value = builtins.toJSON value;
+                pythonGen = ''
+                  import json
+                  import os
+                  import xmltodict
+
+                  with open(os.environ["valuePath"], "r") as f:
+                      print(xmltodict.unparse(json.load(f), full_document=${toString withHeader}, pretty=True, indent=" " * 2))
+                '';
+                passAsFile = [
+                  "value"
+                  "pythonGen"
+                ];
+                preferLocalBuild = true;
+              }
+              ''
+                python3 "$pythonGenPath" > $out
+                xmllint $out > /dev/null
+              ''
+          ) { };
+      }
+    else
+      throw "pkgs.formats.xml: Unknown format: ${format}";
 
 }

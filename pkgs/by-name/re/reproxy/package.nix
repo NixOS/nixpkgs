@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "reproxy";
@@ -14,7 +18,9 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-s" "-w" "-X main.revision=${version}"
+    "-s"
+    "-w"
+    "-X main.revision=${version}"
   ];
 
   checkFlags = [
@@ -25,6 +31,8 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/{app,reproxy}
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Simple edge server / reverse proxy";

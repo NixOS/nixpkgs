@@ -2,24 +2,35 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, testers
+, lazysql
 , xorg ? null
 , darwin ? null
 }:
 
 buildGoModule rec {
   pname = "lazysql";
-  version = "0.2.4";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "jorgerojas26";
     repo = "lazysql";
     rev = "v${version}";
-    hash = "sha256-Pzx9wjuPv7k0q+ads/uKrRTEAZbktf4ciyD7KZjYGwQ=";
+    hash = "sha256-APbfaAHufpEaBdXO13afmdnpSA98LhXUhYZ6TK/gazk=";
   };
 
-  vendorHash = "sha256-hYkSdFmzljhjsh2stXWGDLHwB4NXeKQyjiN2DqG0GRg=";
+  vendorHash = "sha256-ef3GngaaoNEJAOF5IlTQhTrO5P22w5p7G91TYJasfGk=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ xorg.libX11 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  ldflags = [
+   "-X main.version=${version}"
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+
+  passthru.tests.version = testers.testVersion {
+    package = lazysql;
+    command = "lazysql --version";
+  };
 
   meta = with lib; {
     description = "A cross-platform TUI database management tool written in Go";

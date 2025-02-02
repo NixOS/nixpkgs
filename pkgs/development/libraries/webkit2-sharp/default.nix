@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   ac_cv_path_MONODOCER = "no";
-  installFlagsArray = ["GAPIXMLDIR=/tmp/gapixml"];
+  installFlags = [ "GAPIXMLDIR=/tmp/gapixml" ];
 
   passthru = {
     inherit webkitgtk;

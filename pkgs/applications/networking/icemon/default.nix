@@ -1,4 +1,17 @@
-{ lib, fetchFromGitHub, mkDerivation, qtbase, cmake, extra-cmake-modules, icecream, libcap_ng, lzo, zstd, libarchive, wrapQtAppsHook }:
+{
+  lib,
+  fetchFromGitHub,
+  mkDerivation,
+  qtbase,
+  cmake,
+  extra-cmake-modules,
+  icecream,
+  libcap_ng,
+  lzo,
+  zstd,
+  libarchive,
+  wrapQtAppsHook,
+}:
 
 mkDerivation rec {
   pname = "icemon";
@@ -11,8 +24,19 @@ mkDerivation rec {
     sha256 = "09jnipr67dhawbxfn69yh7mmjrkylgiqmd0gmc2limd3z15d7pgc";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ icecream qtbase libcap_ng lzo zstd libarchive ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    icecream
+    qtbase
+    libcap_ng
+    lzo
+    zstd
+    libarchive
+  ];
 
   meta = with lib; {
     description = "Icecream GUI Monitor";

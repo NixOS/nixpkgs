@@ -6,13 +6,21 @@
 # profile, try disabling it. If you report an issue and use this
 # profile, always mention that you do.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 {
   meta = {
-    maintainers = [ maintainers.joachifm maintainers.emily ];
+    maintainers = [
+      maintainers.joachifm
+      maintainers.emily
+    ];
   };
 
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;

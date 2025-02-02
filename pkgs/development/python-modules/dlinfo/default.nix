@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cloudflightio/python-dlinfo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

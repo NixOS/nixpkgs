@@ -1,4 +1,9 @@
-{ buildDunePackage, linenoise, fetchFromGitHub, lib }:
+{
+  buildDunePackage,
+  linenoise,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildDunePackage rec {
   pname = "ocamline";

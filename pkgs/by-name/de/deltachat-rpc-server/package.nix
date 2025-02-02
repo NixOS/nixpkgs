@@ -1,20 +1,31 @@
-{ rustPlatform
-, libdeltachat
-, perl
-, pkg-config
+{
+  rustPlatform,
+  libdeltachat,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "deltachat-rpc-server";
 
-  inherit (libdeltachat) version src cargoLock buildInputs;
+  inherit (libdeltachat)
+    version
+    src
+    cargoDeps
+    buildInputs
+    ;
 
   nativeBuildInputs = [
-    perl
     pkg-config
   ];
 
-  cargoBuildFlags = [ "--package" "deltachat-rpc-server" ];
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
+
+  cargoBuildFlags = [
+    "--package"
+    "deltachat-rpc-server"
+  ];
 
   doCheck = false;
 

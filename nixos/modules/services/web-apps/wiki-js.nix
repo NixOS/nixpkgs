@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,8 @@ let
   format = pkgs.formats.json { };
 
   configFile = format.generate "wiki-js.yml" cfg.settings;
-in {
+in
+{
   options.services.wiki-js = {
     enable = mkEnableOption "wiki-js";
 
@@ -30,7 +36,7 @@ in {
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       type = types.submodule {
         freeformType = format.type;
         options = {
@@ -53,7 +59,12 @@ in {
           db = {
             type = mkOption {
               default = "postgres";
-              type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
+              type = types.enum [
+                "postgres"
+                "mysql"
+                "mariadb"
+                "mssql"
+              ];
               description = ''
                 Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
@@ -79,7 +90,14 @@ in {
 
           logLevel = mkOption {
             default = "info";
-            type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
+            type = types.enum [
+              "error"
+              "warn"
+              "info"
+              "verbose"
+              "debug"
+              "silly"
+            ];
             description = ''
               Define how much detail is supposed to be logged at runtime.
             '';

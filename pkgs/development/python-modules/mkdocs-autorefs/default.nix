@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-quN5Ow5mEQ1o5RGYVCcFLrMG9bl51Mg/hrc+VR/SVwM=";
+    tag = version;
+    hash = "sha256-EfZcY5eZtRKjxWC4/sWF3F4N/uK2e3gFK2dBY/kTCM4=";
   };
 
   postPatch = ''
@@ -28,9 +28,9 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown
     mkdocs
   ];

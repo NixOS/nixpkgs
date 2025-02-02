@@ -1,17 +1,18 @@
-{ coreutils
-, fetchFromGitHub
-, fontconfig
-, gawk
-, getopt
-, i3lock-color
-, imagemagick
-, installShellFiles
-, lib
-, makeWrapper
-, scrot
-, stdenv
+{
+  coreutils,
+  fetchFromGitHub,
+  fontconfig,
+  gawk,
+  getopt,
+  i3lock-color,
+  imagemagick,
+  installShellFiles,
+  lib,
+  makeWrapper,
+  scrot,
+  stdenv,
 
-, screenshotCommand ? ""
+  screenshotCommand ? "",
 }:
 
 stdenv.mkDerivation {
@@ -30,15 +31,17 @@ stdenv.mkDerivation {
     installShellFiles
   ];
 
-  postPatch = ''
-    sed -i i3lock-fancy \
-      -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
-      -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
-    rm Makefile
-  '' + lib.optionalString (screenshotCommand != "") ''
-    sed -i i3lock-fancy \
-      -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
-  '';
+  postPatch =
+    ''
+      sed -i i3lock-fancy \
+        -e 's|icon="/usr/share/i3lock-fancy/icons/lockdark.png"|icon="'$out'/share/i3lock-fancy/icons/lockdark.png"|' \
+        -e 's|icon="/usr/share/i3lock-fancy/icons/lock.png"|icon="'$out'/share/i3lock-fancy/icons/lock.png"|'
+      rm Makefile
+    ''
+    + lib.optionalString (screenshotCommand != "") ''
+      sed -i i3lock-fancy \
+        -e "s|shot=(import -silent -window root)|shot=(${screenshotCommand})|";
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -54,7 +57,17 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram $out/bin/i3lock-fancy \
-      --prefix PATH : ${lib.makeBinPath [ coreutils fontconfig gawk getopt i3lock-color imagemagick scrot ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          fontconfig
+          gawk
+          getopt
+          i3lock-color
+          imagemagick
+          scrot
+        ]
+      }
   '';
 
   meta = with lib; {

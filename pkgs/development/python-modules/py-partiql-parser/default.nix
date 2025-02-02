@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "py-partiql-parser";
-  version = "0.5.4";
+  version = "0.5.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "py-partiql-parser";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BSqc3xibStb3J6Rua4dDp/eRD5/ns/dU1vGa4vL1Cyo=";
+    tag = version;
+    hash = "sha256-uEpgcY2bBaeFaK/0gWg1ef81FmKJy7m5G21aETW9QXU=";
   };
 
   build-system = [ hatchling ];

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   cython,
   cmake,
   symengine,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.11.0";
+  version = "0.13.0";
 
   build-system = [ setuptools ];
   pyproject = true;
@@ -22,33 +21,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uUMcNnynE2itIwc7IGFwxveqLRL8f4dAAcaD6FUWJaY=";
+    tag = "v${version}";
+    hash = "sha256-PJUzA86SGCnDpqU9j/dr3PlM9inyi8SQX0HGqPQ9wQw=";
   };
 
   env = {
     SymEngine_DIR = "${symengine}";
   };
 
-  patches = [
-    # Distutils has been removed in python 3.12
-    # See https://github.com/symengine/symengine.py/pull/478
-    (fetchpatch {
-      name = "no-distutils.patch";
-      url = "https://github.com/symengine/symengine.py/pull/478/commits/e72006d5f7425cd50c54b22766e0ed4bcd2dca85.patch";
-      hash = "sha256-kGJRGkBgxOfI1wf88JwnSztkOYd1wvg62H7wA6CcYEQ=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "\"cmake\"" "\"${lib.getExe' cmake "cmake"}\"" \
       --replace-fail "'cython>=0.29.24'" "'cython'"
 
     export PATH=${cython}/bin:$PATH
   '';
 
-  nativeBuildUnputs = [ cmake ];
+  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ cython ];
 
@@ -58,8 +47,10 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     mkdir empty && cd empty
     ${python.interpreter} ../bin/test_python.py
+    runHook postCheck
   '';
 
   meta = with lib; {

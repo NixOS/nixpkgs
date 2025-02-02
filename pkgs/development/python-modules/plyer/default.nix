@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kivy";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-7Icb2MVj5Uit86lRHxal6b7y9gIJ3UT2HNqpA9DYWVE=";
   };
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "plyer" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Plyer is a platform-independent api to use features commonly found on various platforms";
     homepage = "https://github.com/kivy/plyer";
     license = licenses.mit;

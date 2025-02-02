@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onelogin";
     repo = "python3-saml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KyDGmqhg/c29FaXPKK8rWKSBP6BOCpKKpOujCavXUcc=";
   };
 

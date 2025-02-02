@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, gnucap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnucap,
 }:
 
 stdenv.mkDerivation rec {

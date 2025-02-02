@@ -1,22 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fonttools,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fontpens";
-  version = "0.2.4";
+  version = "0.3.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "fontPens";
-    inherit version;
-    sha256 = "1za15dzsnymq6d9x7xdfqwgw4a3003wj75fn2crhyidkfd2s3nd6";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "robotools";
+    repo = pname;
+    tag = "v${version}";
+    sha256 = "13msj0s7mg45klzbnd2w4f4ljb16bp9m0s872s6hczn0j7jmyz11";
   };
 
-  propagatedBuildInputs = [ fonttools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ fonttools ];
 
   # can't run normal tests due to circular dependency with fontParts
   doCheck = false;

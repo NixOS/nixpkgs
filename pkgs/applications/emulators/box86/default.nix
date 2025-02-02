@@ -15,13 +15,13 @@ assert withDynarec -> stdenv.hostPlatform.isAarch32;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box86";
-  version = "0.3.6";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box86";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ywsf+q7tWcAbrwbE/KvM6AJFNMJvqHKWD6tuANxrUt8=";
+    hash = "sha256-/xeyb4NK5ZzPevlAjjSnc6JAmsmqnx3slaMfPLL9dYI=";
   };
 
   nativeBuildInputs = [

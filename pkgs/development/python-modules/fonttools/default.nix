@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.53.0";
+  version = "4.55.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-eWN5QcdiQIDfjn7Hrqk0f5jMaADpqNa/kExncjcWXFw=";
+    owner = "fonttools";
+    repo = "fonttools";
+    tag = version;
+    hash = "sha256:1y2sxzl9is3k1gmf9rvvxk9294dwbma1sh2ip56h7q1073346bv3";
   };
 
   build-system = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
           (if isPyPy then brotlicffi else brotli)
           zopfli
         ];
-        unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+        unicode = lib.optional (pythonOlder "3.13") unicodedata2;
         graphite = [ lz4 ];
         interpolatable = [
           pycairo
@@ -61,7 +61,7 @@ buildPythonPackage rec {
         ];
         plot = [ matplotlib ];
         symfont = [ sympy ];
-        type1 = lib.optional stdenv.isDarwin xattr;
+        type1 = lib.optional stdenv.hostPlatform.isDarwin xattr;
         pathops = [ skia-pathops ];
         repacker = [ uharfbuzz ];
       };

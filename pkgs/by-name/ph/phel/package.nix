@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, php
+{
+  lib,
+  fetchFromGitHub,
+  php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "phel";
-  version = "0.13.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "phel-lang";
     repo = "phel-lang";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-EITeApaQ1nmQb53/DrSidcmWUACapjTUuUYuJQDML0Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-irN1Dnov6vDiU4xGsf2nxz7/kz1YOMq0yOLYt4HY1EM=";
   };
 
-  vendorHash = "sha256-IWFOpsPcrPg2/QWemRJ8tP6k0sIc2OogETdiBFAQ5BI=";
+  vendorHash = "sha256-jcMfGPnGoSP8E1JXPEqKr53amV0d08GvGfe8niwM8Q4=";
 
   doInstallCheck = true;
   postInstallCheck = ''

@@ -1,30 +1,38 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
 
 buildGoModule rec {
   pname = "optimism";
-  version = "1.9.0";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "ethereum-optimism";
     repo = "optimism";
     rev = "op-node/v${version}";
-    hash = "sha256-TIxA+Dyxdwm3Q8U6xh7x7hBPNXmH+vVDK2lAaRFKSN0=";
+    hash = "sha256-pAmstWA6up0CvHEQW5RnDYumdwKP0i6fpz59EYTBsmU=";
     fetchSubmodules = true;
   };
 
-  subPackages = [ "op-node/cmd" "op-proposer/cmd" "op-batcher/cmd" ];
+  subPackages = [
+    "op-node/cmd"
+    "op-proposer/cmd"
+    "op-batcher/cmd"
+  ];
 
-  vendorHash = "sha256-xoflPeUeFlbMBUSas+dmBOCFOOvrBHEvYWEk7QkNW14=";
+  vendorHash = "sha256-Sr9OECXbRa4SPe3owMto2EbnAIygeIEmZv73hvA6iww=";
 
   buildInputs = [
     libpcap
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Optimism is Ethereum, scaled";

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
-  js2py,
 }:
 
 let
@@ -21,17 +20,10 @@ let
 
     nativeCheckInputs = [
       pytestCheckHook
-      js2py
     ];
 
-    # escape infinite recursion with js2py
+    # js2py is needed for tests but it's unmaintained and insecure
     doCheck = false;
-
-    passthru.tests = {
-      check = pyjsparser.overridePythonAttrs (_: {
-        doCheck = true;
-      });
-    };
 
     pythonImportsCheck = [ "pyjsparser" ];
 

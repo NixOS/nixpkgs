@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.4.5";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_appengine_logging";
     inherit version;
-    hash = "sha256-3n12bl1nsZ/Fgzl0tQWzLSpbvfsoP9lB4yDnz9rky4M=";
+    hash = "sha256-OaLfaU2XmB7QDvXfVB98/MqSCpJJZwdVfysHu3up1no=";
   };
 
   build-system = [ setuptools ];

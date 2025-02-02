@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, fmt
-, bigstringaf
-, angstrom
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fmt,
+  bigstringaf,
+  angstrom,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -20,7 +21,11 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ angstrom fmt bigstringaf ];
+  propagatedBuildInputs = [
+    angstrom
+    fmt
+    bigstringaf
+  ];
   checkInputs = [ alcotest ];
   doCheck = true;
 

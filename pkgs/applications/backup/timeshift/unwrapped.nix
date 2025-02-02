@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, help2man
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk3
-, json-glib
-, libgee
-, util-linux
-, vte
-, xapp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  help2man,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk3,
+  json-glib,
+  libgee,
+  util-linux,
+  vte,
+  xapp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "24.06.3";
+  version = "24.06.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
     rev = version;
-    hash = "sha256-npYiUSAPzr6g29ilQ1JELxqR1VbOR7TNMkdx37n92kk=";
+    hash = "sha256-umMekxP9bvV01KzfIh2Zxa9Xb+tR5x+tG9dOnBIOkjY=";
   };
 
   patches = [
@@ -56,6 +57,10 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     description = "System restore tool for Linux";
     longDescription = ''
@@ -65,6 +70,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/timeshift";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ShamrockLee bobby285271 ];
+    maintainers = with maintainers; [
+      ShamrockLee
+      bobby285271
+    ];
   };
 }

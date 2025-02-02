@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython_0 ];
   buildInputs =
-    lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreAudio
       CoreMIDI
       CoreServices

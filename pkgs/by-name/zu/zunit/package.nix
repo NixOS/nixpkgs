@@ -87,6 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Powerful testing framework for ZSH projects";
     homepage = "https://zunit.xyz/";
     downloadPage = "https://github.com/zunit-zsh/zunit/releases";
+    changelog = "https://github.com/zunit-zsh/zunit/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "zunit";
     inherit (zsh.meta) platforms;

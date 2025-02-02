@@ -1,79 +1,59 @@
 {
+  asar,
   lib,
   stdenv,
   fetchurl,
   makeWrapper,
   dpkg,
   electron,
-  unzip,
 }:
-
 let
   mainProgram = "proton-mail";
-  srcHashes = {
-    # Upstream info: It's intended to stay like this in further releases
-    # https://github.com/NixOS/nixpkgs/pull/326152#discussion_r1679558135
-    universal-darwin = "sha256-6b+CNCvrkIA1CvSohSJZq/veZZNsA3lyhVv5SsBlJlw=";
-    x86_64-linux = "sha256-v8ufnQQEqTT5cr7fq8Fozje/NDlBzaCeKIzE6yU/biE=";
-  };
+  version = "1.6.1";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "protonmail-desktop";
-  # Upstream info: "v"-prefix got dropped
-  version = "1.0.6";
+  inherit version;
 
   src = fetchurl {
-    url =
-      if stdenv.isDarwin then
-        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/Proton.Mail-darwin-universal-${version}.zip"
-      else
-        "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/proton-mail_${version}_amd64.deb";
-    sha256 =
-      {
-        x86_64-linux = srcHashes.x86_64-linux;
-        x86_64-darwin = srcHashes.universal-darwin;
-        aarch64-darwin = srcHashes.universal-darwin;
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+    url = "https://proton.me/download/mail/linux/${version}/ProtonMail-desktop-beta.deb";
+    sha256 = "sha256-ajN7f3SmqUfgJGksPVRuc1qR2FjEQaY+y/rpn7Hs71I=";
   };
-
-  sourceRoot = lib.optionalString stdenv.isDarwin ".";
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [
+    dpkg
     makeWrapper
-  ] ++ lib.optional stdenv.isLinux dpkg ++ lib.optional stdenv.isDarwin unzip;
+    asar
+  ];
 
-  installPhase =
-    let
-      darwin = ''
-        mkdir -p $out/{Applications,bin}
-        cp -r "Proton Mail.app" $out/Applications/
-        makeWrapper $out/Applications/"Proton Mail.app"/Contents/MacOS/Proton\ Mail $out/bin/protonmail-desktop
-      '';
-      linux = ''
-        runHook preInstall
-        mkdir -p $out
-        cp -r usr/share/ $out/
-        cp -r usr/lib/proton-mail/resources/app.asar $out/share/
-      '';
+  # Rebuild the ASAR archive, hardcoding the resourcesPath
+  preInstall = ''
+    asar extract usr/lib/proton-mail/resources/app.asar tmp
+    rm usr/lib/proton-mail/resources/app.asar
+    substituteInPlace tmp/.webpack/main/index.js \
+      --replace-fail "process.resourcesPath" "'$out/share/proton-mail'"
+    asar pack tmp/ usr/lib/proton-mail/resources/app.asar
+    rm -fr tmp
+  '';
 
-    in
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      ${if stdenv.isDarwin then darwin else linux}
+    mkdir -p $out/share/proton-mail
+    cp -r usr/share/ $out/
+    cp -r usr/lib/proton-mail/resources/* $out/share/proton-mail/
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper ${lib.getExe electron} $out/bin/${mainProgram} \
-      --add-flags $out/share/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags $out/share/proton-mail/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
@@ -83,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Desktop application for Mail and Calendar, made with Electron";
-    homepage = "https://github.com/ProtonMail/inbox-desktop";
+    homepage = "https://github.com/ProtonMail/WebClients";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       rsniezek
@@ -92,10 +72,9 @@ stdenv.mkDerivation rec {
     ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+
     inherit mainProgram;
   };
 }

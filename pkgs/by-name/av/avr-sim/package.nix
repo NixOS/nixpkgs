@@ -24,12 +24,23 @@ stdenv.mkDerivation rec {
       "http://www.avr-asm-tutorial.net/avr_sim/28/avr_sim_28_lin_src.zip"
       "https://web.archive.org/web/20231129125754/http://www.avr-asm-tutorial.net/avr_sim/28/avr_sim_28_lin_src.zip"
     ];
-    sha256 = "sha256-7MgUzMs+l+3RVUbORAWyU1OUpgrKIeWhS+ObgRJtOHc=";
+    hash = "sha256-7MgUzMs+l+3RVUbORAWyU1OUpgrKIeWhS+ObgRJtOHc=";
   };
 
-  nativeBuildInputs = [lazarus fpc];
+  nativeBuildInputs = [
+    lazarus
+    fpc
+  ];
 
-  buildInputs = [pango cairo glib atk gtk2 libX11 gdk-pixbuf];
+  buildInputs = [
+    pango
+    cairo
+    glib
+    atk
+    gtk2
+    libX11
+    gdk-pixbuf
+  ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -56,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.avr-asm-tutorial.net/avr_sim/index_en.html";
     license = licenses.unfree;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ameer];
+    maintainers = with maintainers; [ ameer ];
   };
 }

@@ -22,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.25.13";
+  version = "1.27.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-O482RKJejgg3eJe4M9U0ExuDFwFz9Fbpxvrn6re58h8=";
+    tag = "v${version}";
+    hash = "sha256-Kh4F5dicbVvM9k8T4iMERMuze3Ztawi9LXH7+udtZFU=";
   };
 
   pythonRelaxDeps = [
@@ -44,7 +44,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     aiohttp
@@ -61,7 +60,7 @@ buildPythonPackage rec {
     w3lib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     recaptcha = [
       speechrecognition
       pydub

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, qtwayland
-, qtsvg
-, qt3d
-, qtdeclarative
-, qtconnectivity
-, qtlocation
-, qtscxml
-, qtwebengine
-, kdePackages
-, wayland
-, elfutils
-, libbfd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
+  qt3d,
+  qtdeclarative,
+  qtconnectivity,
+  qtlocation,
+  qtscxml,
+  qtwebengine,
+  kdePackages,
+  wayland,
+  elfutils,
+  libbfd,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,4 +69,3 @@ stdenv.mkDerivation rec {
     mainProgram = "gammaray";
   };
 }
-

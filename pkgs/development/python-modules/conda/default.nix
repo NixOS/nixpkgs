@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  hostPlatform,
+  stdenv,
   fetchFromGitHub,
   # build dependencies
   hatchling,
@@ -34,10 +34,9 @@ buildPythonPackage rec {
     inherit pname version;
     owner = "conda";
     repo = "conda";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e+C+tSUdSGyotuZzkOuV0e0hOj+MZRuq1fHzsu3LERQ=";
   };
-
 
   build-system = [
     hatchling
@@ -72,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "conda" ];
 
   # menuinst is currently not packaged
-  pythonRemoveDeps = lib.optionals (!hostPlatform.isWindows) [ "menuinst" ];
+  pythonRemoveDeps = lib.optionals (!stdenv.hostPlatform.isWindows) [ "menuinst" ];
 
   meta = {
     description = "OS-agnostic, system-level binary package manager";

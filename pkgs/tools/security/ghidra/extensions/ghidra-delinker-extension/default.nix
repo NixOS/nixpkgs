@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.4.0";
+  version = "0.5.1";
   self = ghidra.buildGhidraExtension {
     pname = "ghidra-delinker-extension";
     inherit version;
@@ -13,8 +13,8 @@ let
     src = fetchFromGitHub {
       owner = "boricj";
       repo = "ghidra-delinker-extension";
-      rev = "04338fd028bf8b5449ff3f5373635111140bbeda";
-      hash = "sha256-tfO92dnpfY13ZbvL36WzV/pC3xH/fbQDICNAF8D4fCI=";
+      rev = "v${version}";
+      hash = "sha256-h6F50Z7S6tPOl9mIhChLKoFxHuAkq/n36ysUEFwWGxI=";
     };
 
     postPatch = ''

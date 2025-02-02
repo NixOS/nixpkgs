@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "lsp-tree-sitter";
-  version = "0.0.15";
+  version = "0.0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "lsp-tree-sitter";
-    rev = version;
-    hash = "sha256-yzScgix3BtSCBzlDoE1kMYGtVzkup/+ZK9L1C7VA3do=";
+    tag = version;
+    hash = "sha256-4DQzHdii2YS/Xg6AdT/kXC/8B88ZQaLgUf2oWoOthV8=";
   };
 
   build-system = [

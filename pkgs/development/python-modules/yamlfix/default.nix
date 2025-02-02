@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nadyBIzXHbWm0QvympRaYU38tuPJ3TPJg8EbvVv+4L0=";
   };
 

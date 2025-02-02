@@ -1,22 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rwpspread";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${version}";
-    hash = "sha256-B8K8/M5cUSchG54ar0ZY2XOH6lYLimdZr+dk5ffdplY=";
+    hash = "sha256-1i1675OiyleCXcc/uN95kyY7m5ht/rS3UKY7EmuSsrk=";
   };
-  cargoHash = "sha256-bTCXgaE8+nxuEFeOMSihL3lfmbIxiv1f400rmyV2b8k=";
+  cargoHash = "sha256-5e/Fj/8wfWrl0b4WRDmX/BOBfeCrlN+mq3c0Qz7MQPE=";
 
   nativeBuildInputs = [ pkg-config ];
 

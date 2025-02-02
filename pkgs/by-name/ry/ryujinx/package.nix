@@ -1,7 +1,7 @@
 { lib
 , buildDotnetModule
 , dotnetCorePackages
-, fetchFromGitHub
+, fetchzip
 , libX11
 , libgdiplus
 , ffmpeg
@@ -10,15 +10,14 @@
 , sndio
 , pulseaudio
 , vulkan-loader
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
 , glew
 , libGL
+, libICE
+, libSM
+, libXcursor
+, libXext
+, libXi
+, libXrandr
 , udev
 , SDL2
 , SDL2_mixer
@@ -26,19 +25,19 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1379"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1401"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
-  src = fetchFromGitHub {
-    owner = "Ryujinx";
-    repo = "Ryujinx";
-    rev = "b45a81458a0b48acd519ce280c7b8f3970e0ffed";
-    sha256 = "1w3nfhx496im06m3gc67xw8w1n6qprs9ggka2sq0g8w2ssz4iy7f";
+  src = fetchzip {
+    url = "https://archive.org/download/ryujinx-5dbba-07e-33e-83c-9047dcbb-701c-9655edbbe-89086.tar/Ryujinx-5dbba07e33e83c9047dcbb701c9655edbbe89086.tar.gz";
+    hash = "sha256-UeJ3KE5e5H9crqroAxjmxYTf/Z4cbj41a6/1HW2nLcA=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  enableParallelBuilding = false;
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   runtimeDeps = [
     libX11
@@ -53,14 +52,13 @@ buildDotnetModule rec {
     udev
 
     # Avalonia UI
+    glew
     libICE
     libSM
-    libXi
     libXcursor
     libXext
+    libXi
     libXrandr
-    fontconfig
-    glew
 
     # Headless executable
     libGL
@@ -100,15 +98,10 @@ buildDotnetModule rec {
     install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
-    substituteInPlace $out/share/applications/Ryujinx.desktop \
-      --replace "Ryujinx.sh %f" "$out/bin/Ryujinx.sh %f"
-
     ln -s $out/bin/Ryujinx $out/bin/ryujinx
 
     popd
   '';
-
-  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     homepage = "https://ryujinx.org/";

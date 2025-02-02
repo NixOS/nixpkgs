@@ -49,7 +49,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     mainapp = [
       gunicorn
       gevent

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tsoding";
     repo = "eepers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KG7ci327qlTtlN4yV54P8Q34ExFLJfTGMTZxN3RtZbc=";
   };
 

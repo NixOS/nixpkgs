@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, which, file }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  which,
+  file,
+}:
 
 stdenv.mkDerivation rec {
   pname = "magic";
@@ -14,7 +22,10 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [
+    ocaml
+    findlib
+  ];
   propagatedBuildInputs = [ file ];
 
   meta = with lib; {

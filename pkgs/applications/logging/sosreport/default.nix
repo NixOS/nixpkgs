@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gettext
-, magic
-, pexpect
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gettext,
+  magic,
+  pexpect,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.7.2";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-67YRmD3kaJbRR7g3w57EwFg7duhcI6zov7gQ4H1MkR8=";
+    tag = version;
+    sha256 = "sha256-ET0dduAiSPCwfO+JoyG7uK1HAkL94SDbS/uL4IXMhW4=";
   };
 
   nativeBuildInputs = [

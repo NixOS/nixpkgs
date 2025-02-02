@@ -1,4 +1,9 @@
-{ lib, bundlerApp, ruby, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  ruby,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "colorls";
@@ -10,10 +15,14 @@ bundlerApp {
 
   meta = with lib; {
     description = "Prettified LS";
-    homepage    = "https://github.com/athityakumar/colorls";
-    license     = with licenses; mit;
-    maintainers = with maintainers; [ lukebfox nicknovitski cbley ];
-    platforms   = ruby.meta.platforms;
+    homepage = "https://github.com/athityakumar/colorls";
+    license = with licenses; mit;
+    maintainers = with maintainers; [
+      lukebfox
+      nicknovitski
+      cbley
+    ];
+    platforms = ruby.meta.platforms;
     mainProgram = "colorls";
   };
 }

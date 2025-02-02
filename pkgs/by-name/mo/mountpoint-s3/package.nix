@@ -1,30 +1,35 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, fuse3
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  fuse3,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mountpoint-s3";
-  version = "1.8.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
     rev = "v${version}";
-    hash = "sha256-0SygSRp2HXgLhW0BscRhH3H/WUstAf6VbQPJ35ffrRM=";
+    hash = "sha256-QpJYpHow9/vEPrq82XtbDosGz8lqVB0cOPQmY7Dx78Q=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-nkTvVfbpi5yvWpRd1Tm6INi3PrR6mP8VkBpIVeCEkw0=";
+  cargoHash = "sha256-lyxuYrmmB1hQCR3fKEMXI69xYcubisRi/bc6M7hQl70=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
   auditable = false;
 
-  nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
   buildInputs = [ fuse3 ];
 
   checkFlags = [

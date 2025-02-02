@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "havn";
-  version = "0.1.13";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "mrjackwills";
     repo = "havn";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-z6505lMqNQ0FpMMRJwpOFodELfDeoIjrjG58mrfSvTY=";
+    tag = "v${version}";
+    hash = "sha256-G6nhWcrnMYysIHSocIeQsBGG51D1ozZPF/LGsDNG/+k=";
   };
 
-  cargoHash = "sha256-RzfIu2apaFacSJz29UTaCKcC7Y81uxj1EerVyxZB50E=";
+  cargoHash = "sha256-xlaf6S4JeFmSuBOxykTXZlP2dXg4R/5RY7HsJi3/7PU=";
 
   checkFlags = [
     # Skip tests that require network access

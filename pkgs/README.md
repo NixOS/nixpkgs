@@ -73,17 +73,17 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](./by-name/he/hello/package.nix). Trivial package, which specifies some `meta` attributes which is good practice.
 
-   - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
+   - GNU cpio: [`pkgs/by-name/cp/cpio/package.nix`](./by-name/cp/cpio/package.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
+   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](applications/networking/browsers/firefox/common.nix). A reusable build function for Firefox, Thunderbird and Librewolf.
 
-   - JDiskReport, a Java utility: [`pkgs/tools/misc/jdiskreport/default.nix`](tools/misc/jdiskreport/default.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
+   - JDiskReport, a Java utility: [`pkgs/by-name/jd/jdiskreport/package.nix`](./by-name/jd/jdiskreport/package.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
 
    - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
@@ -131,6 +131,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+
+(using "→" instead of "->" is also accepted)
 
 ## Category Hierarchy
 [categories]: #category-hierarchy
@@ -327,42 +329,70 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 # Conventions
 
-## Package naming
-
 The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.
+
+## Package naming
 
 In Nixpkgs, there are generally three different names associated with a package:
 
 - The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
-- The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
+- The attribute name used for the package in the [`pkgs/by-name` structure](./pkgs/by-name/README.md) or in [`all-packages.nix`](./pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the attribute name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
-There are a few naming guidelines:
+Follow these guidelines:
 
-- The `pname` attribute _should_ be identical to the upstream package name.
+- For the `pname` attribute:
 
-- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
+  - It _should_ be identical to the upstream package name.
 
-- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"` or `"0-unstable-1970-01-01"`.
+  - It _must not_ contain uppercase letters.
 
-- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+    Example: Use `"mplayer"` instead of `"MPlayer"`
 
-Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+- For the package attribute name:
 
-- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning / tagging schema - then the latest upstream version in the above schema should be `0`.
+  - It _must_ be a valid identifier in Nix.
 
-Example: Given a project that has no tags / released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
+  - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore. Otherwise the attribute name _should not_ be prefixed with an underline.
 
-- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+    Example: The corresponding attribute name for `0ad` should be `_0ad`.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [versioning][versioning].
+  - New attribute names _should_ be the same as the value in `pname`.
+
+    Hyphenated names _should not_ be converted to [snake case](https://en.wikipedia.org/wiki/Snake_case) or [camel case](https://en.wikipedia.org/wiki/Camel_case).
+    This was done historically, but is not necessary any more.
+    [The Nix language allows dashes in identifiers since 2012](https://github.com/NixOS/nix/commit/95c74eae269b2b9e4bc514581b5caa1d80b54acc).
+
+  - If there are multiple versions of a package, this _should_ be reflected in the attribute names in `all-packages.nix`.
+
+    Example: `json-c_0_9` and `json-c_0_11`
+
+    If there is an obvious “default” version, make an extra attribute.
+
+    Example: `json-c = json-c_0_9;`
+
+    See also [versioning][versioning].
 
 ## Versioning
 [versioning]: #versioning
+
+These are the guidelines the `version` attribute of a package:
+
+- It _must_ start with a digit. This is required for backwards-compatibility with [how `nix-env` parses derivation names](https://nix.dev/manual/nix/latest/command-ref/nix-env#selectors).
+
+  Example: `"0.3.1rc2"` or `"0-unstable-1970-01-01"`
+
+- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+
+  Example: Given a project had its latest releases `2.2` in November 2021 and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+
+- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning or tagging scheme - then the latest upstream version in the above schema should be `0`.
+
+  Example: Given a project that has no tags or released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
 
 Because every version of a package in Nixpkgs creates a potential maintenance burden, old versions of a package should not be kept unless there is a good reason to do so. For instance, Nixpkgs contains several versions of GCC because other packages don’t build with the latest version of GCC. Other examples are having both the latest stable and latest pre-release version of a package, or to keep several major releases of an application that differ significantly in functionality.
 
@@ -462,7 +492,14 @@ Examples going from bad to best practices:
 Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
 When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
 
-Patches already merged upstream or published elsewhere should be retrieved using `fetchpatch`.
+> [!Note]
+> The version of the package does not need to be changed just because a patch is applied. Declarative package installations don't depend on the version, while imperative `nix-env` installations can use [`upgrade --eq/leq/--always`](https://nix.dev/manual/nix/2.25/command-ref/nix-env/upgrade#flags).
+>
+> See [Versioning](#versioning) for details on package versioning.
+
+### Fetching patches
+
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
 
 ```nix
 {
@@ -476,15 +513,22 @@ Patches already merged upstream or published elsewhere should be retrieved using
 }
 ```
 
-Otherwise, you can add a `.patch` file to the `nixpkgs` repository.
-In the interest of keeping our maintenance burden and the size of nixpkgs to a minimum, only do this for patches that are unique to `nixpkgs` or that have been proposed upstream but are not merged yet, cannot be easily fetched or have a high chance to disappear in the future due to unstable or unreliable URLs.
-The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
-
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+
+### Vendoring patches
+
+In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
+
+- solves problems unique to packaging in Nixpkgs
+- is already proposed upstream but not merged yet
+- cannot be fetched easily
+- has a high chance to disappear in the future due to unstable or unreliable URLs
+
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
 {
-  patches = [ ./0001-changes.patch ];
+  patches = [ ./0001-add-missing-include.patch ];
 }
 ```
 
@@ -598,8 +642,8 @@ buildGoModule rec {
 }
 ```
 
-Any derivaton can be specified as a test, even if it's in a different file.
-Such a derivaton that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+Any derivation can be specified as a test, even if it's in a different file.
+Such a derivation that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
 
 In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
 
@@ -689,7 +733,7 @@ Here are examples of package tests:
 - [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
-- [Multiple tests for nanopb](development/libraries/nanopb/default.nix)
+- [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
 
 ### Linking NixOS module tests to a package
 
@@ -717,7 +761,7 @@ stdenv.mkDerivation {
 Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
 
 > [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
 >
 > ```nix
 > { stdenv, nix-update-script }:
@@ -727,7 +771,7 @@ Nixpkgs periodically tries to update all packages that have a `passthru.updateSc
 > }
 > ```
 >
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released.
+> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
 > The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
 > While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
 
@@ -870,7 +914,7 @@ Reviewing process:
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
-  - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+  - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.

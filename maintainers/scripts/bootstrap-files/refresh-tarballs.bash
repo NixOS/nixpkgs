@@ -35,15 +35,15 @@ Synopsis:
     This is usually done in the following cases:
 
     1. Single target fix: current bootstrap files for a single target
-       are problematic for some reason (target-specific bug). In this
-       case we can refresh just that target as:
+        are problematic for some reason (target-specific bug). In this
+        case we can refresh just that target as:
 
-       \$ $0 --commit --targets=i686-unknown-linux-gnu
+        \$ $0 --commit --targets=i686-unknown-linux-gnu
 
     2. Routine refresh: all bootstrap files should be refreshed to avoid
-       debugging problems that only occur on very old binaries.
+        debugging problems that only occur on very old binaries.
 
-       \$ $0 --commit --all-targets
+        \$ $0 --commit --all-targets
 
 To get help on uploading refreshed binaries to 'tarballs.nixos.org'
 please have a look at <maintainers/scripts/bootstrap-files/README.md>.
@@ -232,50 +232,50 @@ for target in "${targets[@]}"; do
 # - build time: ${build_time}
 {
 EOF
-      for p in "${outpath}/on-server"/*; do
-          fname=$(basename "$p")
-          fnames+=("$fname")
-          case "$fname" in
-              bootstrap-tools.tar.xz) attr=bootstrapTools ;;
-              busybox) attr=$fname ;;
-              unpack.nar.xz) attr=unpack ;;
-              *) die "Don't know how to map '$fname' to attribute name. Please update me."
-          esac
+        for p in "${outpath}/on-server"/*; do
+            fname=$(basename "$p")
+            fnames+=("$fname")
+            case "$fname" in
+                bootstrap-tools.tar.xz) attr=bootstrapTools ;;
+                busybox) attr=$fname ;;
+                unpack.nar.xz) attr=unpack ;;
+                *) die "Don't know how to map '$fname' to attribute name. Please update me."
+            esac
 
-          executable_arg=
-          executable_nix=
-          if [[ -x "$p" ]]; then
-              executable_arg="--executable"
-              executable_nix="executable = true;"
-          fi
-          unpack_nix=
-          name_nix=
-          if [[ $fname = *.nar.xz ]]; then
-              unpack_nix="unpack = true;"
-              name_nix="name = \"${fname%.nar.xz}\";"
-              sri=$(nar_sri_get "$p" "${fname%.nar.xz}")
-              [[ $? -ne 0 ]] && die "Failed to get hash of '$p'"
-          else
-              sha256=$(nix-prefetch-url $executable_arg --name "$fname" "file://$p")
-              [[ $? -ne 0 ]] && die "Failed to get the hash for '$p'"
-              sri=$(nix-hash --to-sri "sha256:$sha256")
-              [[ $? -ne 0 ]] && die "Failed to convert '$sha256' hash to an SRI form"
-          fi
+            executable_arg=
+            executable_nix=
+            if [[ -x "$p" ]]; then
+                executable_arg="--executable"
+                executable_nix="executable = true;"
+            fi
+            unpack_nix=
+            name_nix=
+            if [[ $fname = *.nar.xz ]]; then
+                unpack_nix="unpack = true;"
+                name_nix="name = \"${fname%.nar.xz}\";"
+                sri=$(nar_sri_get "$p" "${fname%.nar.xz}")
+                [[ $? -ne 0 ]] && die "Failed to get hash of '$p'"
+            else
+                sha256=$(nix-prefetch-url $executable_arg --name "$fname" "file://$p")
+                [[ $? -ne 0 ]] && die "Failed to get the hash for '$p'"
+                sri=$(nix-hash --to-sri "sha256:$sha256")
+                [[ $? -ne 0 ]] && die "Failed to convert '$sha256' hash to an SRI form"
+            fi
 
-          # individual file entries
-          cat <<EOF
-  $attr = import <nix/fetchurl.nix> {
+            # individual file entries
+            cat <<EOF
+$attr = import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/${s3_prefix}/${nixpkgs_revision}/$fname";
     hash = "${sri}";$(
     [[ -n ${executable_nix} ]] && printf "\n    %s" "${executable_nix}"
     [[ -n ${name_nix} ]]       && printf "\n    %s" "${name_nix}"
     [[ -n ${unpack_nix} ]]     && printf "\n    %s" "${unpack_nix}"
-)
-  };
+    )
+};
 EOF
-      done
-      # footer
-      cat <<EOF
+    done
+    # footer
+    cat <<EOF
 }
 EOF
     } > "${target_file}"

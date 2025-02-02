@@ -1,15 +1,20 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, effects
-, lightyear
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  effects,
+  lightyear,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "ipkgparser";
   version = "2017-11-14";
 
-  idrisDeps = [ contrib effects lightyear ];
+  idrisDeps = [
+    contrib
+    effects
+    lightyear
+  ];
 
   src = fetchFromGitHub {
     owner = "emptyflash";

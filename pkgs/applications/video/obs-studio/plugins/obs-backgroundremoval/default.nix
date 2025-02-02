@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, obs-studio
-, onnxruntime
-, opencv
-, qt6
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  obs-studio,
+  onnxruntime,
+  opencv,
+  qt6,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-QoC9/HkwOXMoFNvcOxQkGCLLAJmsja801LKCNT9O9T0=";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ obs-studio onnxruntime opencv qt6.qtbase curl ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  buildInputs = [
+    obs-studio
+    onnxruntime
+    opencv
+    qt6.qtbase
+    curl
+  ];
 
   dontWrapQtApps = true;
 
@@ -35,8 +45,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-     cd ..
-     cmake --build build_x86_64 --parallel
+    cd ..
+    cmake --build build_x86_64 --parallel
   '';
 
   installPhase = ''

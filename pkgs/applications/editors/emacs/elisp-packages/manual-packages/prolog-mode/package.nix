@@ -19,8 +19,6 @@ melpaBuild {
       --replace-fail ";; prolog.el ---" ";;; prolog.el ---"
   '';
 
-  ignoreCompilationError = false;
-
   meta = {
     homepage = "https://bruda.ca/emacs/prolog_mode_for_emacs/";
     description = "Prolog mode for Emacs";

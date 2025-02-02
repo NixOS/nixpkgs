@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, rpclib, alcotest, ppxlib, ppx_deriving, yojson }:
+{
+  lib,
+  buildDunePackage,
+  rpclib,
+  alcotest,
+  ppxlib,
+  ppx_deriving,
+  yojson,
+}:
 
 buildDunePackage rec {
   pname = "ppx_deriving_rpc";
@@ -8,9 +16,16 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
-  propagatedBuildInputs = [ ppxlib rpclib ppx_deriving ];
+  propagatedBuildInputs = [
+    ppxlib
+    rpclib
+    ppx_deriving
+  ];
 
-  checkInputs = [ alcotest yojson ];
+  checkInputs = [
+    alcotest
+    yojson
+  ];
   doCheck = true;
 
   meta = with lib; {

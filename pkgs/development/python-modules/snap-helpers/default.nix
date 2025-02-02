@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "albertodonato";
     repo = "snap-helpers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7JBvrD4WNOcFSVx3xauk4JgiVGKWuUEdUMRlH7mudE4=";
   };
 

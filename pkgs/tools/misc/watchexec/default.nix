@@ -1,25 +1,39 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Cocoa, AppKit, installShellFiles }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Cocoa,
+  AppKit,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "2.1.2";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-mH670pBxSQQ4mTtX6O71aRRxRVyz0J7r4227UsUJ5LE=";
+    hash = "sha256-wm3zse5VqUNZ5d6ksCXXrngCcwrAniQbQqx9MOJoK58=";
   };
 
-  cargoHash = "sha256-cBxFaERUDaOxAYfpvBdJa9LxvrG2niJqVovcZDucbUA=";
+  cargoHash = "sha256-92lvMka6IqzNAxvYSMUeiDfYw4uKZjjpkZOABq9Mypo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+    AppKit
+  ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
 
-  checkFlags = [ "--skip=help" "--skip=help_short" ];
+  checkFlags = [
+    "--skip=help"
+    "--skip=help_short"
+  ];
 
   postPatch = ''
     rm .cargo/config.toml

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2024.08.07";
+  version = "2024.09.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
-    rev = "refs/tags/${version}";
-    hash = "sha256-odllaOqqVGI/k84cro5YXkhDlUx+BRSe5WWwYWXhCY0=";
+    tag = version;
+    hash = "sha256-LQqs9wg6kgubY4SygTNQt5YTtF3LsFj7+RkAlcp4SSo=";
   };
 
   build-system = [ pdm-backend ];

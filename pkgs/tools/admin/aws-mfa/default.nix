@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, boto3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  boto3,
 }:
 
 buildPythonApplication rec {

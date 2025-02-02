@@ -1,4 +1,8 @@
-{ lib, stdenv, linux }:
+{
+  lib,
+  stdenv,
+  linux,
+}:
 
 stdenv.mkDerivation {
   pname = "mm-tools";

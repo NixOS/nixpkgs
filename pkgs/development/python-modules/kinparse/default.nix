@@ -19,7 +19,6 @@ buildPythonPackage {
     sha256 = "1nrjnybwzy93c79yylcwmb4lvkx7hixavnjwffslz0zwn32l0kx3";
   };
 
-  doCheck = true;
   pythonImportsCheck = [ "kinparse" ];
 
   nativeCheckInputs = [ pytest ];

@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wayfire
-, eudev
-, libinput
-, libxkbcommon
-, librsvg
-, libGL
-, xcbutilwm
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  eudev,
+  libinput,
+  libxkbcommon,
+  librsvg,
+  libGL,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

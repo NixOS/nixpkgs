@@ -13,43 +13,50 @@
   rdkafka,
   requests,
   requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.4.0";
-  format = "setuptools";
+  version = "2.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JlPWh46WjY4GHRKtamB+qigVvVzvbRagbigyCol6lfg=";
+    tag = "v${version}";
+    hash = "sha256-SFmZ/KriysvLkGT5mvIS9SJcUHWmvZXrqFAY0lC6bGc=";
   };
 
   buildInputs = [ rdkafka ];
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     avro = [
       avro
       fastavro
+      requests
     ];
     json = [
       jsonschema
       pyrsistent
+      requests
     ];
-    protobuf = [ protobuf ];
+    protobuf = [
+      protobuf
+      requests
+    ];
+    schema-registry = [ requests ];
   };
 
   nativeCheckInputs = [
     pyflakes
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "confluent_kafka" ];
 

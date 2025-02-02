@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, Cocoa
-, installShellFiles
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  Cocoa,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   ldflags = [
     "-s"

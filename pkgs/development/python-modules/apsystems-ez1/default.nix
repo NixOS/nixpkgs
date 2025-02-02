@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "apsystems-ez1";
-  version = "1.3.3";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SonnenladenGmbH";
     repo = "APsystems-EZ1-API";
-    rev = "refs/tags/${version}";
-    hash = "sha256-V6GcTSupjhjGEOsO+C9pImYJRnvdDbttW3Zh0PDYt5I=";
+    tag = version;
+    hash = "sha256-H4vhF4CgZmKmBF+v6SpnpIOlPBkFLL50W+Ua+gDr/7I=";
   };
 
   build-system = [ poetry-core ];

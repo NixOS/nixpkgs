@@ -1,10 +1,15 @@
-{ qtModule
-, qtbase
-, qtdeclarative
-, qtpositioning
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  qtpositioning,
 }:
 
 qtModule {
   pname = "qtlocation";
-  propagatedBuildInputs = [ qtbase qtdeclarative qtpositioning ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    qtpositioning
+  ];
 }

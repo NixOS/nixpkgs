@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libkeepass";
     repo = "pykeepass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-64is/XoRF/kojqd4jQIAQi1od8TRhiv9uR+WNIGvP2A=";
   };
 

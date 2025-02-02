@@ -1,10 +1,16 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.alps;
-in {
+in
+{
   options.services.alps = {
     enable = mkEnableOption "alps";
 
@@ -25,7 +31,10 @@ in {
     };
 
     theme = mkOption {
-      type = types.enum [ "alps" "sourcehut" ];
+      type = types.enum [
+        "alps"
+        "sourcehut"
+      ];
       default = "sourcehut";
       description = ''
         The frontend's theme to use.
@@ -81,8 +90,10 @@ in {
       internal = true;
       type = types.listOf types.str;
       default = [
-        "-addr" "${cfg.bindIP}:${toString cfg.port}"
-        "-theme" "${cfg.theme}"
+        "-addr"
+        "${cfg.bindIP}:${toString cfg.port}"
+        "-theme"
+        "${cfg.theme}"
         "imaps://${cfg.imaps.host}:${toString cfg.imaps.port}"
         "smtps://${cfg.smtps.host}:${toString cfg.smtps.port}"
       ];
@@ -95,7 +106,10 @@ in {
       documentation = [ "https://git.sr.ht/~migadu/alps" ];
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/alps ${escapeShellArgs cfg.args}";
@@ -119,14 +133,20 @@ in {
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SocketBindAllow = cfg.port;
         SocketBindDeny = "any";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @obsolete" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @obsolete"
+        ];
       };
     };
   };

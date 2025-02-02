@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  apple-sdk_15,
   chafa,
   cmake,
-  darwin,
   dbus,
   dconf,
   ddcutil,
@@ -19,18 +19,18 @@
   libsepol,
   libxcb,
   makeBinaryWrapper,
+  moltenvk,
   nix-update-script,
   ocl-icd,
   opencl-headers,
-  overrideSDK,
   pcre,
   pcre2,
   pkg-config,
   python3,
   rpm,
   sqlite,
-  testers,
   util-linux,
+  versionCheckHook,
   vulkan-loader,
   wayland,
   xfce,
@@ -41,19 +41,17 @@
   vulkanSupport ? true,
   waylandSupport ? true,
   x11Support ? true,
+  flashfetchSupport ? false,
 }:
-let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.22.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
-    rev = finalAttrs.version;
-    hash = "sha256-ncaBMSV7n4RVA2376ExBv+a8bzuvuMttv3GlNaOH23k=";
+    tag = finalAttrs.version;
+    hash = "sha256-ChuK5DHRj1qJIjRo3oB5gdCxox2mDffCVM0wRGc5t1o=";
   };
 
   outputs = [
@@ -77,7 +75,7 @@ stdenv'.mkDerivation (finalAttrs: {
       sqlite
       yyjson
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       dbus
       dconf
       ddcutil
@@ -103,25 +101,11 @@ stdenv'.mkDerivation (finalAttrs: {
       xorg.libXdmcp
       xorg.libXext
     ]
-    ++ lib.optionals (x11Support && (!stdenv.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Apple80211
-        AppKit
-        AVFoundation
-        Cocoa
-        CoreDisplay
-        CoreVideo
-        CoreWLAN
-        DisplayServices
-        IOBluetooth
-        MediaRemote
-        OpenCL
-        SystemConfiguration
-        darwin.moltenvk
-      ]
-    );
+    ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+      moltenvk
+    ];
 
   cmakeFlags =
     [
@@ -138,10 +122,11 @@ stdenv'.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_X11" x11Support)
       (lib.cmakeBool "ENABLE_XCB" x11Support)
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
-      (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
+      (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.hostPlatform.isDarwin)))
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+      (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
       (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
     ];
@@ -150,24 +135,24 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/fastfetch \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    wrapProgram $out/bin/flashfetch \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/fastfetch \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    ''
+    + lib.optionalString flashfetchSupport ''
+      wrapProgram $out/bin/flashfetch \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "fastfetch -v | cut -d '(' -f 1";
-      version = "fastfetch ${finalAttrs.version}";
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Like neofetch, but much faster because written in C";
+    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

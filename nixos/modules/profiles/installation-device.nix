@@ -74,8 +74,8 @@ with lib;
     # installation device for head-less systems i.e. arm boards by manually
     # mounting the storage in a different system.
     services.openssh = {
-      enable = true;
-      settings.PermitRootLogin = "yes";
+      enable = mkDefault true;
+      settings.PermitRootLogin = mkDefault "yes";
     };
 
     # Enable wpa_supplicant, but don't start it by default.
@@ -128,13 +128,13 @@ with lib;
     nix.settings.trusted-users = [ "nixos" ];
 
     # Install less voices for speechd to save some space
-    services.speechd.package = pkgs.speechd.override {
-      mbrola = pkgs.mbrola.override {
-        mbrola-voices = pkgs.mbrola-voices.override {
+    nixpkgs.overlays = [
+      (_: prev: {
+        mbrola-voices = prev.mbrola-voices.override {
           # only ship with one voice per language
           languages = [ "*1" ];
         };
-      };
-    };
+      })
+    ];
   };
 }

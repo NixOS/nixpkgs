@@ -13,23 +13,24 @@
 let
   dirty-equals = buildPythonPackage rec {
     pname = "dirty-equals";
-    version = "0.7.1-post0";
-    format = "pyproject";
+    version = "0.8.0";
+    pyproject = true;
 
     disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "samuelcolvin";
-      repo = pname;
-      rev = "refs/tags/v${version}";
-      hash = "sha256-U6DNluthDgxzh6IOaKrN/JhX4u+ztY/jVp9IKh0iP34=";
+      repo = "dirty-equals";
+      tag = "v${version}";
+      hash = "sha256-DZuzZ8cLYpVdivMh+zNJKpHe+0fpxM3ulKiCpN2S6co=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
-    propagatedBuildInputs = [ pytz ];
+    dependencies = [ pytz ];
 
     doCheck = false;
+
     passthru.tests.pytest = dirty-equals.overrideAttrs { doCheck = true; };
 
     nativeCheckInputs = [

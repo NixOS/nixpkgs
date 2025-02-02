@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nteract";
     repo = "papermill";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NxC5+hRDdMCl/7ZIho5ml4hdENrgO+wzi87GRPeMv8Q=";
   };
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     ansicolors
   ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     azure = [
       azure-datalake-store
       azure-identity
@@ -76,9 +76,9 @@ buildPythonPackage rec {
       pytest-mock
       pytestCheckHook
     ]
-    ++ passthru.optional-dependencies.azure
-    ++ passthru.optional-dependencies.s3
-    ++ passthru.optional-dependencies.gcs;
+    ++ optional-dependencies.azure
+    ++ optional-dependencies.s3
+    ++ optional-dependencies.gcs;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -91,7 +91,7 @@ buildPythonPackage rec {
       # pytest 8 compat
       "test_read_with_valid_file_extension"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # might fail due to the sandbox
       "test_end2end_autosave_slow_notebook"
     ];

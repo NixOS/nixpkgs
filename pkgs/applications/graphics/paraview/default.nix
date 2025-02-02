@@ -26,13 +26,13 @@
 }:
 
 let
-  version = "5.12.1";
+  version = "5.13.2";
 
   docFiles = [
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
       name = "Tutorial.pdf";
-      hash = "sha256-ETA799peqP9RAjcqPBwVb8egKfQJAuIXNgso+k8o50Q=";
+      hash = "sha256-jJ6YUT2rgVExfKv900LbSO+MDQ4u73K7cBScHxWoP+g=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
@@ -42,7 +42,7 @@ let
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewCatalystGuide-${version}.pdf";
       name = "CatalystGuide.pdf";
-      hash = "sha256-imRW70lGQX7Gy0AavIHQMVhnn9E2FPpiCdCKt7Jje4w=";
+      hash = "sha256-Pl7X5cBj3OralkOw5A29CtXnA+agYr6kWHf/+KZNHow=";
     })
   ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    hash = "sha256-jbqMqj3D7LTwQ+hHIPscCHw4TfY/BR2HuVmMYom2+dA=";
+    hash = "sha256-29PLXVpvj8RLkSDWQgj5QjBZ6l1/0NoVx/qcJXOSssU=";
     fetchSubmodules = true;
   };
 

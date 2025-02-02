@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.openwebrx;
 in
@@ -18,7 +23,7 @@ in
         codec2
         js8call
         m17-cxx-demod
-        alsaUtils
+        alsa-utils
         netcat
       ];
       serviceConfig = {

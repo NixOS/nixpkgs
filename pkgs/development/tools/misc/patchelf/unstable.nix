@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "patchelf";
-  version = "0.18.0-unstable-2024-06-15";
+  version = "0.18.0-unstable-2025-01-07";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "a0f54334df36770b335c051e540ba40afcbf8378";
-    sha256 = "sha256-FSoxTcRZMGHNJh8dNtKOkcUtjhmhU6yQXcZZfUPLhQM=";
+    rev = "43b75fbc9ffbc1190fee7c8693ad74cb8286cfd4";
+    sha256 = "sha256-rqFH9xUu36Hky763cQ9D1V7iuWteItAFDM2jIQGP5Us=";
   };
 
   # Drop test that fails on musl (?)
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = unstableGitUpdater {

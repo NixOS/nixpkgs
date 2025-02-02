@@ -1,25 +1,35 @@
-{ lib, fetchurl, stdenv, zlib, ncurses, libiconv }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  zlib,
+  ncurses,
+  libiconv,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnc";
-  version = "0.16";
+  version = "0.18";
 
   src = fetchurl {
     url = "https://fnc.bsdbox.org/tarball/${finalAttrs.version}/fnc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6I6wtSMHaKdnlUK4pYiaybJeODGu2P+smYW8lQDIWGM=";
+    hash = "sha256-npS+sOxF0S/9TuFjtEFlev0HpIOsaP6zmcfopPNUehk=";
   };
 
-  buildInputs = [ libiconv ncurses zlib ];
+  buildInputs = [
+    libiconv
+    ncurses
+    zlib
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # error: 'strtonum' is only available on macOS 11.0 or newer
-    "-Wno-error=unguarded-availability-new"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      # Needed with GCC 12
+      "-Wno-error=maybe-uninitialized"
+    ]
+  );
 
   preInstall = ''
     mkdir -p $out/bin

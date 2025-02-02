@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchurl, xorg, pixman, pkg-config, AppKit, Foundation, Xplugin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorg,
+  pixman,
+  pkg-config,
+  AppKit,
+  Foundation,
+  Xplugin,
+}:
 
-let version = "1.3.1";
-in stdenv.mkDerivation {
+let
+  version = "1.3.1";
+in
+stdenv.mkDerivation {
   pname = "quartz-wm";
   inherit version;
   src = fetchurl {
@@ -21,7 +33,9 @@ in stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXext
     pixman
-    AppKit Xplugin Foundation
+    AppKit
+    Xplugin
+    Foundation
   ];
   meta = with lib; {
     license = licenses.apple-psl20;

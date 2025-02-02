@@ -1,36 +1,38 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.weechat;
 in
 
 {
   options.services.weechat = {
-    enable = mkEnableOption "weechat";
-    root = mkOption {
+    enable = lib.mkEnableOption "weechat";
+    root = lib.mkOption {
       description = "Weechat state directory.";
-      type = types.str;
+      type = lib.types.str;
       default = "/var/lib/weechat";
     };
-    sessionName = mkOption {
+    sessionName = lib.mkOption {
       description = "Name of the `screen` session for weechat.";
       default = "weechat-screen";
-      type = types.str;
+      type = lib.types.str;
     };
-    binary = mkOption {
-      type = types.path;
+    binary = lib.mkOption {
+      type = lib.types.path;
       description = "Binary to execute.";
       default = "${pkgs.weechat}/bin/weechat";
-      defaultText = literalExpression ''"''${pkgs.weechat}/bin/weechat"'';
-      example = literalExpression ''"''${pkgs.weechat}/bin/weechat-headless"'';
+      defaultText = lib.literalExpression ''"''${pkgs.weechat}/bin/weechat"'';
+      example = lib.literalExpression ''"''${pkgs.weechat}/bin/weechat-headless"'';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users = {
-      groups.weechat = {};
+      groups.weechat = { };
       users.weechat = {
         createHome = true;
         group = "weechat";
@@ -51,12 +53,12 @@ in
       wants = [ "network.target" ];
     };
 
-    security.wrappers.screen =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.screen}/bin/screen";
-      };
+    security.wrappers.screen = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.screen}/bin/screen";
+    };
   };
 
   meta.doc = ./weechat.md;

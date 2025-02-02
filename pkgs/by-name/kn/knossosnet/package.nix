@@ -1,29 +1,29 @@
 {
-  buildDotnetModule
-  , fetchFromGitHub
-  , fontconfig
-  , lib
-  , openal
-  , xorg
+  buildDotnetModule,
+  fetchFromGitHub,
+  lib,
+  openal,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.2.0";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     rev = "v${version}";
-    hash = "sha256-4GVbwBykagSMGF3TxyZeoRb7Km+yLEMFOO8fCkH3U5A=";
+    hash = "sha256-vlSiM6kskV4wfBZF7Rv5ICyqKG0Zhz/iU8kflYOaf0U=";
   };
 
-  patches = [ ./targetframework.patch ];
+  patches = [ ./dotnet-8-upgrade.patch ];
 
-  nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  nugetDeps = ./deps.json;
   executables = [ "Knossos.NET" ];
 
-  runtimeDeps = [ fontconfig openal xorg.libX11 xorg.libICE xorg.libSM ];
+  runtimeDeps = [ openal ];
 
   meta = with lib; {
     homepage = "https://github.com/KnossosNET/Knossos.NET";

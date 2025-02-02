@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, libotr, pidgin, intltool } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libotr,
+  pidgin,
+  intltool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-otr";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
 
   nativeBuildInputs = [ intltool ];
-  buildInputs = [ libotr pidgin ];
+  buildInputs = [
+    libotr
+    pidgin
+  ];
 
   meta = with lib; {
     homepage = "https://otr.cypherpunks.ca/";

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, mfcj880dwlpr, makeWrapper, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mfcj880dwlpr,
+  makeWrapper,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj880dw-cupswrapper";
@@ -6,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf102044/mfcj880dw_cupswrapper_GPL_source_${version}.tar.gz";
-    sha256 = "bf291fe31d64afeaefb5b0e606f4baf80c41d80009e34b32b77d56f759e9cf94";
+    hash = "sha256-vykf4x1kr+rvtbDmBvS6+AxB2AAJ40syt31W91npz5Q=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,7 +21,11 @@ stdenv.mkDerivation rec {
     bash # shebang
   ];
 
-  makeFlags = [ "-C" "brcupsconfig" "all" ];
+  makeFlags = [
+    "-C"
+    "brcupsconfig"
+    "all"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -33,7 +44,7 @@ stdenv.mkDerivation rec {
     ln -s ${mfcj880dwlpr}/lib/cups/filter/brother_lpdwrapper_mfcj880dw $out/lib/cups/filter/brother_lpdwrapper_mfcj880dw
 
     runHook postInstall
-    '';
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";

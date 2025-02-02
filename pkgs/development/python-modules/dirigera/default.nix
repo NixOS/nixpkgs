@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dirigera";
-  version = "1.1.8";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Leggin";
     repo = "dirigera";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hJE3K3h6hyjeHVrE1Sj/S9eRD4JEGIhq4BWkScy1AEk=";
+    tag = "v${version}";
+    hash = "sha256-f5+9uDS8WfGjWWYf0wUEPM6ZitQpKPJIjAj1WhyyWEM=";
   };
 
   build-system = [ setuptools ];
@@ -43,5 +43,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "generate-token";
+    broken = versionOlder pydantic.version "2";
   };
 }

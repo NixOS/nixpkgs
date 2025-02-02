@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, autoconf }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  autoconf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "automake";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "1bzd9g32dfm4rsbw93ld9x7b5nc1y6i4m6zp032qf1i28a8s6sxg";
   };
 
-  nativeBuildInputs = [ autoconf perl ];
+  nativeBuildInputs = [
+    autoconf
+    perl
+  ];
   buildInputs = [ autoconf ];
 
   setupHook = ./setup-hook.sh;

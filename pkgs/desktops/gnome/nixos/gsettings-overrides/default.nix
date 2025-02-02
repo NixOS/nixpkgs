@@ -1,28 +1,32 @@
-{ lib
-, runCommand
-, gsettings-desktop-schemas
-, gnome-shell
-, glib
-, gnome-flashback
-, nixos-artwork
-, nixos-background-light ? nixos-artwork.wallpapers.simple-blue
-, nixos-background-dark ? nixos-artwork.wallpapers.simple-dark-gray
-, extraGSettingsOverrides ? ""
-, extraGSettingsOverridePackages ? [ ]
-, favoriteAppsOverride ? ""
-, flashbackEnabled ? false
+{
+  lib,
+  runCommand,
+  gsettings-desktop-schemas,
+  gnome-shell,
+  glib,
+  gnome-flashback,
+  nixos-artwork,
+  nixos-background-light ? nixos-artwork.wallpapers.simple-blue,
+  nixos-background-dark ? nixos-artwork.wallpapers.simple-dark-gray,
+  extraGSettingsOverrides ? "",
+  extraGSettingsOverridePackages ? [ ],
+  favoriteAppsOverride ? "",
+  flashbackEnabled ? false,
 }:
 
 let
 
   inherit (lib) concatMapStringsSep;
 
-  gsettingsOverridePackages = [
-    gsettings-desktop-schemas
-    gnome-shell
-  ] ++ lib.optionals flashbackEnabled [
-    gnome-flashback
-  ] ++ extraGSettingsOverridePackages;
+  gsettingsOverridePackages =
+    [
+      gsettings-desktop-schemas
+      gnome-shell
+    ]
+    ++ lib.optionals flashbackEnabled [
+      gnome-flashback
+    ]
+    ++ extraGSettingsOverridePackages;
 
   gsettingsOverrides = ''
     [org.gnome.desktop.background]
@@ -44,7 +48,10 @@ runCommand "gnome-gsettings-overrides" { preferLocalBuild = true; } ''
   schema_dir="$data_dir/glib-2.0/schemas"
   mkdir -p "$schema_dir"
 
-  ${concatMapStringsSep "\n" (pkg: "cp -rf \"${glib.getSchemaPath pkg}\"/*.xml \"${glib.getSchemaPath pkg}\"/*.gschema.override \"$schema_dir\"") gsettingsOverridePackages}
+  ${concatMapStringsSep "\n" (
+    pkg:
+    "cp -rf \"${glib.getSchemaPath pkg}\"/*.xml \"${glib.getSchemaPath pkg}\"/*.gschema.override \"$schema_dir\""
+  ) gsettingsOverridePackages}
 
   chmod -R a+w "$data_dir"
   cat - > "$schema_dir/zz-nixos-defaults.gschema.override" <<- EOF

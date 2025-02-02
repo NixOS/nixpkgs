@@ -9,7 +9,6 @@
 , clang
 , cmake
 , curl
-, darwin
 , dbus
 , dbus-glib
 , fontconfig
@@ -47,9 +46,6 @@
 , ...
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-in
 {
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
@@ -71,8 +67,7 @@ in
   };
 
   cargo = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    buildInputs = [ openssl zlib curl ];
   };
 
   libz-sys = attrs: {
@@ -232,7 +227,7 @@ in
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
   };
 
   openssl = attrs: {
@@ -280,10 +275,6 @@ in
     crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
   };
 
-  security-framework-sys = attr: {
-    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
-  };
-
   sequoia-openpgp = attrs: {
     buildInputs = [ gmp ];
   };
@@ -317,10 +308,6 @@ in
   sequoia-tool = attrs: {
     nativeBuildInputs = [ capnproto ];
     buildInputs = [ sqlite gmp ];
-  };
-
-  serde_derive = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin Security;
   };
 
   servo-fontconfig-sys = attrs: {

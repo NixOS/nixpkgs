@@ -4,6 +4,7 @@
   substituteAll,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pythonOlder,
   asn1crypto,
   cffi,
@@ -23,23 +24,26 @@ let
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.2.1";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uPFUc0IvN39ZxyF9zRR5FlzOYt+jOTTsl2oni68unv4=";
+    hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
   };
 
   patches =
     [
       # Fix hardcoded `fapi-config.json` configuration path
       ./fapi-config.patch
-      # Backport for https://github.com/tpm2-software/tpm2-pytss/pull/576
-      # This is likely to be dropped with the next major release (>= 2.3)
-      ./pr576-backport.patch
+      # libtpms (underneath swtpm) bumped the TPM revision
+      # https://github.com/tpm2-software/tpm2-pytss/pull/593
+      (fetchpatch {
+        url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
+        hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
+      })
     ]
     ++ lib.optionals isCross [
       # pytss will regenerate files from headers of tpm2-tss.
@@ -80,8 +84,6 @@ buildPythonPackage rec {
     cryptography
     pyyaml
   ];
-
-  doCheck = true;
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.3.5";
+  version = "2.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-elWMUOrR7wVi3C+BBpz1T8jiEg7LiJDw6hSlnr5kNxU=";
+    tag = "v${version}";
+    hash = "sha256-zf1EkS+cdCkttce2jCjRf1693AlBYkmAuLX5IysWeUs=";
   };
 
   outputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [ poetry-core ] ++ optional-dependencies.docs;
+  build-system = [ poetry-core ] ++ optional-dependencies.docs;
 
   optional-dependencies = {
     docs = [

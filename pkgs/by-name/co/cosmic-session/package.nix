@@ -5,32 +5,26 @@
   rustPlatform,
   just,
   dbus,
-  rust,
   stdenv,
   xdg-desktop-portal-cosmic,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     rev = "epoch-${version}";
-    sha256 = "sha256-5zfEBNsMxtKPJZcGYZth/SoXrsg0gpug15VR5fPbvt0=";
+    hash = "sha256-rkzcu5lXKVQ5RfilcKQjTzeKZv+FpqrtARZgGGlYKK4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cosmic-notifications-util-0.1.0" = "sha256-GmTT7SFBqReBMe4GcNSym1YhsKtFQ/0hrDcwUqXkaBw=";
-      "launch-pad-0.1.0" = "sha256-c+uawTQlg5SW8x7DOBG2Idv/AfIaCFNtLQLUz8ifT2I=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rK0tWckPvp31BT+K0pfs/mk/Z4XkwlOIwJEZwpYphJE=";
 
   postPatch = ''
     substituteInPlace Justfile \
-      --replace-fail '{{cargo-target-dir}}/release/cosmic-session' 'target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-session'
+      --replace-fail '{{cargo-target-dir}}/release/cosmic-session' 'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-session'
     substituteInPlace data/start-cosmic \
       --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
       --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
@@ -60,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-session";
     maintainers = with maintainers; [
       a-kenji
-      nyanbinary
+      nyabinary
     ];
     platforms = platforms.linux;
   };

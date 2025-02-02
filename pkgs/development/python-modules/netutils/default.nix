@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.9.1";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,15 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hB5ySup7vd01VPyRuNT5d3FufuMvbHF8x5ULOzR1TWY=";
+    tag = "v${version}";
+    hash = "sha256-LslE/ROfr/2gU5VPiLKgaTxd4miM+Bvrh9OdY06zkr0=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [ jsonschema ];
 
-  passthru.optional-dependencies.optionals = [
+  optional-dependencies.optionals = [
     jsonschema
     napalm
   ];

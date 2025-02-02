@@ -1,23 +1,24 @@
-{ lib
-, boost
-, breakpad
-, ceres-solver
-, cgal
-, cmake
-, eigen
-, fetchFromGitHub
-, glfw
-, gmp
-, libjpeg
-, libpng
-, libtiff
-, mpfr
-, opencv
-, openmp
-, pkg-config
-, stdenv
-, vcg
-, zstd
+{
+  lib,
+  boost,
+  breakpad,
+  ceres-solver,
+  cgal,
+  cmake,
+  eigen,
+  fetchFromGitHub,
+  glfw,
+  gmp,
+  libjpeg,
+  libpng,
+  libtiff,
+  mpfr,
+  opencv,
+  openmp,
+  pkg-config,
+  stdenv,
+  vcg,
+  zstd,
 }:
 
 let
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
   buildInputs = [
     boostWithZstd
@@ -57,7 +58,10 @@ stdenv.mkDerivation rec {
     vcg
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postInstall = ''
     mv $out/bin/OpenMVS/* $out/bin

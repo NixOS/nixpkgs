@@ -8,7 +8,7 @@
   gobject-introspection,
   gjs,
   glib-networking,
-  gnome,
+  gnome-bluetooth,
   gtk-layer-shell,
   libpulseaudio,
   libsoup_3,
@@ -50,7 +50,7 @@ buildNpmPackage rec {
   buildInputs = [
     gjs
     glib-networking
-    gnome.gnome-bluetooth
+    gnome-bluetooth
     gtk-layer-shell
     libpulseaudio
     libsoup_3
@@ -63,7 +63,7 @@ buildNpmPackage rec {
     chmod u+x ./post_install.sh && patchShebangs ./post_install.sh
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Aylur/ags";

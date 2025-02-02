@@ -1,6 +1,17 @@
-{ fetchFromGitHub, lib, stdenv
-, git, gnupg, pass, pwgen, qrencode
-, qtbase, qtsvg, qttools, qmake, wrapQtAppsHook
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  git,
+  gnupg,
+  pass,
+  pwgen,
+  qrencode,
+  qtbase,
+  qtsvg,
+  qttools,
+  qmake,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +30,19 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
   '';
 
-  buildInputs = [ git gnupg pass qtbase qtsvg ];
+  buildInputs = [
+    git
+    gnupg
+    pass
+    qtbase
+    qtsvg
+  ];
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:
@@ -29,7 +50,14 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git gnupg pass pwgen ]}"
+    "--suffix PATH : ${
+      lib.makeBinPath [
+        git
+        gnupg
+        pass
+        pwgen
+      ]
+    }"
   ];
 
   postInstall = ''

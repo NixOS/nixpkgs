@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "azogue";
     repo = "aiopvpc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1xeXfhoXRfJ7vrpRPeYmwcAGjL09iNCOm/f4pPvuZLU=";
   };
 

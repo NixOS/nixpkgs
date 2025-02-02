@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "csv2md";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lzakharov";
     repo = "csv2md";
     rev = "v${version}";
-    hash = "sha256-INwZRbyJmyDd5SV7PBdqUc/3FO91upTgaxBfP/Giaw4=";
+    hash = "sha256-CzURejGIxsD7IBSbAYXz0kj5oX47e+uN13fqd56CM1A=";
   };
 
   pythonImportsCheck = [ "csv2md" ];

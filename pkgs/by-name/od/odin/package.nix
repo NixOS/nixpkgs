@@ -15,17 +15,17 @@ let
 in
 stdenv.mkDerivation {
   pname = "odin";
-  version = "0-unstable-2024-08-05";
+  version = "dev-2025-01";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "a1c3c38f0453dcf94ba13d572fa392cb5331a878";
-    hash = "sha256-LYUy/llW3BFnRx6sdTF/8QdvK/v+5/ShKJR+ZXocC+4=";
+    rev = "dev-2025-01";
+    hash = "sha256-GXea4+OIFyAhTqmDh2q+ewTUqI92ikOsa2s83UH2r58=";
   };
 
   postPatch =
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/linker.cpp \
           --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
     ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     which
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
   ];
@@ -74,6 +74,10 @@ stdenv.mkDerivation {
       } \
       --set-default ODIN_ROOT $out/share
 
+    make -C "$out/share/vendor/cgltf/src/"
+    make -C "$out/share/vendor/stb/src/"
+    make -C "$out/share/vendor/miniaudio/src/"
+
     runHook postInstall
   '';
 
@@ -87,8 +91,6 @@ stdenv.mkDerivation {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      luc65r
-      znaniye
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

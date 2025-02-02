@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "steampipe-plugin-github";
-  version = "0.43.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe-plugin-github";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Kr9JXVLd0E7IG5dq9liS5uQNAX535urETwZytKRaZIA=";
+    tag = "v${version}";
+    hash = "sha256-FEoDpiLlHwIRtrugaiVUrQzURFIB58iRQlQ6fuJatAg=";
   };
 
-  vendorHash = "sha256-UivLueePtstJtAWbl7li8FzZ41Q2kF9FYzVYdQ4172g=";
+  vendorHash = "sha256-EVcPpFzRd9EmyuPqZBQjSNEB4BEbU8Km6Y/f+ulfK5s=";
 
   ldflags = [
     "-s"
@@ -43,7 +43,7 @@ buildGoModule rec {
     changelog = "https://github.com/turbot/steampipe-plugin-github/blob/v${version}/CHANGELOG.md";
     description = "GitHub Plugin for Steampipe";
     homepage = "https://github.com/turbot/steampipe-plugin-github";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     longDescription = "Use SQL to instantly query repositories, users, gists and more from GitHub.";
     maintainers = with lib.maintainers; [ anthonyroussel ];
     platforms = steampipe.meta.platforms;

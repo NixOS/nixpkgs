@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   expat,
-  ffmpeg_7,
+  ffmpeg,
   freetype,
   libarchive,
   libjpeg,
@@ -13,7 +13,6 @@
   zlib,
   openal,
   fontconfig,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -32,7 +31,7 @@ stdenv.mkDerivation {
   buildInputs =
     [
       expat
-      ffmpeg_7
+      ffmpeg
       freetype
       libarchive
       libjpeg
@@ -40,16 +39,9 @@ stdenv.mkDerivation {
       sfml
       zlib
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       openal
       fontconfig
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Carbon
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.CoreVideo
-      darwin.apple_sdk.frameworks.OpenAL
     ];
 
   makeFlags = [
@@ -61,7 +53,7 @@ stdenv.mkDerivation {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "AR=${stdenv.cc.targetPrefix}ar"
     "BUILD_EXPAT=0"
-  ] ++ lib.optionals stdenv.isDarwin [ "USE_FONTCONFIG=0" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "USE_FONTCONFIG=0" ];
 
   enableParallelBuilding = true;
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-johTs1AGvC6mGasK87ijhBNbHb1m36Ep9TR8XPG35d0=";
   };
 

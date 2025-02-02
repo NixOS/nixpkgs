@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.6.7";
+  version = "0.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "superqt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/VR9Lc1x+7J/3zyo/eBFBvGkPXzpTfPpNAvNhSzWio8=";
+    tag = "v${version}";
+    hash = "sha256-rKm4MUheQOJyaBggiZQ3U9J2kzOXrUcWpJnfPr4HzyU=";
   };
 
   build-system = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     quantity = [ pint ];
     pyside2 = [ pyside2 ];
     pyside6 = [ pyside6 ];

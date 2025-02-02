@@ -16,7 +16,6 @@ in
     systemd.sysusers.enable = true;
     users.mutableUsers = false;
 
-
     # Read this password file at runtime from outside the Nix store.
     environment.etc."rootpw.secret".text = rootPassword;
     # Override the empty root password set by the test instrumentation.

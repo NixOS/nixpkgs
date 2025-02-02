@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-pattern-library";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-pattern-library";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hrdJYVioY6y9D29DuKPMZjdWj92GcbHXANWiEHadimI=";
+    tag = "v${version}";
+    hash = "sha256-2a/Rg6ljBe1J0FOob7Z9aNVZZ3l+gTD34QCRjk4PiQg=";
   };
 
   nativeBuildInputs = [ poetry-core ];

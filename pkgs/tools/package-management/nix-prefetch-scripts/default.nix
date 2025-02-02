@@ -1,19 +1,21 @@
 { lib, stdenv, makeWrapper, buildEnv
-, breezy, coreutils, cvs, findutils, gawk, git, git-lfs, gnused, mercurial, nix, subversion
+, bash, breezy, coreutils, cvs, findutils, gawk, git, git-lfs, gnused, mercurial, nix, subversion
 }:
 
 let mkPrefetchScript = tool: src: deps:
   stdenv.mkDerivation {
     name = "nix-prefetch-${tool}";
 
+    strictDeps = true;
     nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ bash ];
 
     dontUnpack = true;
 
     installPhase = ''
       install -vD ${src} $out/bin/$name;
       wrapProgram $out/bin/$name \
-        --prefix PATH : ${lib.makeBinPath (deps ++ [ gnused nix ])} \
+        --prefix PATH : ${lib.makeBinPath (deps ++ [ coreutils gnused nix ])} \
         --set HOME /homeless-shelter
     '';
 
@@ -28,7 +30,7 @@ let mkPrefetchScript = tool: src: deps:
 in rec {
   nix-prefetch-bzr = mkPrefetchScript "bzr" ../../../build-support/fetchbzr/nix-prefetch-bzr [ breezy ];
   nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [ cvs ];
-  nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [ coreutils findutils gawk git git-lfs ];
+  nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [ findutils gawk git git-lfs ];
   nix-prefetch-hg  = mkPrefetchScript "hg"  ../../../build-support/fetchhg/nix-prefetch-hg   [ mercurial ];
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [ subversion ];
 

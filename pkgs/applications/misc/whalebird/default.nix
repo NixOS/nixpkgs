@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, electron
-, cacert
-, gitMinimal
-, yarn
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  electron,
+  cacert,
+  gitMinimal,
+  yarn,
 }:
 stdenv.mkDerivation rec {
   pname = "whalebird";
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${electron}/bin/electron" "$out/bin/whalebird" \
       --add-flags "$out/opt/Whalebird/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
@@ -108,6 +109,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ weathercold ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

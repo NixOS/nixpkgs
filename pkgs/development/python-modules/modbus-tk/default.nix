@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "modbus-tk";
-  version = "1.1.3";
+  version = "1.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "modbus_tk";
     inherit version;
-    hash = "sha256-aQ+nu4bql4mSRl0tYci1rMY5zg6LgzoKqW1N0XLFZEo=";
+    hash = "sha256-aJd3ZusQRplz3VaigUvZgbhd0YC3kEMkh4bYgAjyWTs=";
   };
 
   build-system = [ setuptools ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "modbus_tk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for simple Modbus interactions";
     homepage = "https://github.com/ljean/modbus-tk";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

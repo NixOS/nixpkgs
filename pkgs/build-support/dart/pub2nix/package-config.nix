@@ -34,13 +34,15 @@ in
   done < <(jq -r '.packages | to_entries | map("\(.key),\(.value.src),\(.value.packageRoot)") | .[]' "$NIX_ATTRS_JSON_FILE")
 
   for package in "''${!packageSources[@]}"; do
-    if [ ! -e "''${packageSources["$package"]}/''${packageRoots["$package"]}/pubspec.yaml" ]; then
+    pubspec="$(realpath --logical "''${packageSources["$package"]}/''${packageRoots["$package"]}/pubspec.yaml")"
+
+    if [ ! -e "$pubspec" ]; then
       echo >&2 "The package sources for $package are missing. Is the following path inside the source derivation?"
-      echo >&2 "Source path: ''${packageSources["$package"]}/''${packageRoots["$package"]}/pubspec.yaml"
+      echo >&2 "Source path: $pubspec"
       exit 1
     fi
 
-    languageConstraint="$(yq -r .environment.sdk "''${packageSources["$package"]}/''${packageRoots["$package"]}/pubspec.yaml")"
+    languageConstraint="$(yq -r .environment.sdk "$pubspec")"
     if [[ "$languageConstraint" =~ ^[[:space:]]*(\^|>=|>)?[[:space:]]*([[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+.*$ ]]; then
       languageVersionJson="\"''${BASH_REMATCH[2]}\""
     elif [ "$languageConstraint" = 'any' ]; then

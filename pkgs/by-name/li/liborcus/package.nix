@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, boost
-, libixion
-, mdds
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  boost,
+  libixion,
+  mdds,
+  python3,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = "pygls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ws = [ websockets ];
   };
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin issue: OSError: [Errno 24] Too many open files
     ulimit -n 1024
   '';

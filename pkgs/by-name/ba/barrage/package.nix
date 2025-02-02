@@ -1,8 +1,9 @@
-{ lib
-, SDL
-, SDL_mixer
-, fetchurl
-, stdenv
+{
+  lib,
+  SDL,
+  SDL_mixer,
+  fetchurl,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "barrage";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "horazont";
     repo = "aiosasl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JIuNPb/l4QURMQc905H2iNGCfMz+zM/QJhDQOR8LPdc=";
   };
 

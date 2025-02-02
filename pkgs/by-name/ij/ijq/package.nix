@@ -1,22 +1,24 @@
 {
   buildGoModule,
-  fetchFromSourcehut,
+  fetchFromGitea,
   lib,
   jq,
   installShellFiles,
   makeBinaryWrapper,
   scdoc,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ijq";
-  version = "1.1.1";
+  version = "1.1.2";
 
-  src = fetchFromSourcehut {
-    owner = "~gpanders";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "gpanders";
     repo = "ijq";
     rev = "v${version}";
-    hash = "sha256-rnSpXMadZW6I+7tIYqr1Cb4z00gdREsqin/r6OXaDMA=";
+    hash = "sha256-7vG9T+gC6HeSGwFDf3m7nM0hBz32n6ATiM30AKNC1Og=";
   };
 
   vendorHash = "sha256-zRa8MPWFvcoVm+LstbSAl1VY3oWMujZPjWS/ti1VXjE=";
@@ -43,10 +45,12 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [ jq ]}"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Interactive wrapper for jq";
     mainProgram = "ijq";
-    homepage = "https://git.sr.ht/~gpanders/ijq";
+    homepage = "https://codeberg.org/gpanders/ijq";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       justinas

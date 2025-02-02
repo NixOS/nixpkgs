@@ -16,14 +16,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.22.1";
+  version = "2.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2xexWvjUfaDPj7DjZfqvvNEfmqYngc4EjCmYiAiz3H0=";
+    pname = "google_cloud_monitoring";
+    inherit version;
+    hash = "sha256-KQQf3/2y24bIvlRayYXHSQwXDpEQtDZfC9YIjGhEGIQ=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pandas = [ pandas ];
   };
 
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-asyncio
-  ] ++ passthru.optional-dependencies.pandas;
+  ] ++ optional-dependencies.pandas;
 
   disabledTests = [
     # Test requires credentials

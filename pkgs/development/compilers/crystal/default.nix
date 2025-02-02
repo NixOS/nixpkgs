@@ -19,11 +19,13 @@
 , libffi
 , llvmPackages_13
 , llvmPackages_15
+, llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
 , pcre
 , pkg-config
+, installShellFiles
 , readline
 , tzdata
 , which
@@ -144,7 +146,7 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
+      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
@@ -165,7 +167,7 @@ let
 
 
       strictDeps = true;
-      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm installShellFiles ];
       buildInputs = [
         boehmgc
         (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
@@ -175,7 +177,7 @@ let
         libxml2
         openssl
       ] ++ extraBuildInputs
-      ++ lib.optionals stdenv.isDarwin [ libiconv ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -217,15 +219,18 @@ let
         cp -r docs/* $out/share/doc/crystal/api/
         cp -r samples $out/share/doc/crystal/
 
-        install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
-        install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
+        installShellCompletion --cmd ${finalAttrs.meta.mainProgram} etc/completion.*
 
-        install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
+        installManPage man/crystal.1
 
         install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
         mkdir -p $out
         ln -s $bin/bin $out/bin
+        ln -s $bin/share/bash-completion $out/share/bash-completion
+        ln -s $bin/share/zsh $out/share/zsh
+        # fish completion was introduced in 1.6.0
+        test -f etc/completion.fish && ln -s $bin/share/fish $out/share/fish
         ln -s $lib $out/lib
 
         runHook postInstall
@@ -246,6 +251,7 @@ let
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = finalAttrs.finalPackage;
       };
+      passthru.llvmPackages = llvmPackages;
 
       meta = with lib; {
         inherit (binary.meta) platforms;
@@ -314,5 +320,21 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_11;
+  crystal_1_12 = generic {
+    version = "1.12.1";
+    sha256 = "sha256-Q6uI9zPZ3IOGyUuWdC179GPktPGFPRbRWKtOF4YWCBw=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+  };
+
+  crystal_1_14 = generic {
+    version = "1.14.1";
+    sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+    doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
+  };
+
+
+  crystal = crystal_1_14;
 }

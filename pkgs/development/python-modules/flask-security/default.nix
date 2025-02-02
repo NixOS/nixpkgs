@@ -22,7 +22,7 @@
 
   # extras: mfa
   cryptography,
-  phonenumbers,
+  phonenumberslite,
   webauthn,
   qrcode,
 
@@ -46,6 +46,7 @@
   peewee,
   pony,
   pytestCheckHook,
+  requests,
   zxcvbn,
 }:
 
@@ -59,14 +60,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-security";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers
-  '';
+  patches = [
+    # https://github.com/pallets-eco/flask-security/pull/1040
+    ./fix_test_basic.patch
+  ];
 
   build-system = [ flit-core ];
 
@@ -103,7 +104,7 @@ buildPythonPackage rec {
     ];
     mfa = [
       cryptography
-      phonenumbers
+      phonenumberslite
       webauthn
       qrcode
     ];
@@ -119,6 +120,7 @@ buildPythonPackage rec {
       peewee
       pony
       pytestCheckHook
+      requests
       zxcvbn
     ]
     ++ optional-dependencies.babel

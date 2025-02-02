@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conkeyscan";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CompassSecurity";
     repo = "conkeyscan";
-    rev = "refs/tags/${version}";
-    hash = "sha256-F5lYpETzv03O9I4vi4qnLgQLvBlv8bLtJQArxliO8JI=";
+    tag = "v${version}";
+    hash = "sha256-xYCms+Su7FmaG7KVHZpzfD/wx9Gepz11t8dEK/YDfvI=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to scan Confluence for keywords";
     homepage = "https://github.com/CompassSecurity/conkeyscan";
-    changelog = "https://github.com/CompassSecurity/conkeyscan/releases/tag/${version}";
+    changelog = "https://github.com/CompassSecurity/conkeyscan/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "conkeyscan";

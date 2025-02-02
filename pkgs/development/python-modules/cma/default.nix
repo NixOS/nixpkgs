@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cma";
-  version = "3.4.0";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CMA-ES";
     repo = "pycma";
-    rev = "refs/tags/r${version}";
-    hash = "sha256-wbAH0A5vpnnXqt7TTvLDPnCp6M3QjeCwD6l6LoTVu1w=";
+    tag = "r${version}";
+    hash = "sha256-W4KDtX/Ho/XUrZr2cmS66Q0q90FEHRJN0VF4sMgonRw=";
   };
 
   build-system = [ setuptools ];

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "rlax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-v2Lbzya+E9d7tlUVlQQa4fuPp2q3E309Qvyt70mcdb0=";
   };
 

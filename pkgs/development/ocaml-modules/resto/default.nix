@@ -1,14 +1,19 @@
-{ lib, fetchFromGitLab, buildDunePackage, uri }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  uri,
+}:
 
 buildDunePackage rec {
   pname = "resto";
-  version = "1.0";
+  version = "1.2";
   duneVersion = "3";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "resto";
     rev = "v${version}";
-    hash = "sha256-DIm7fmISsCgRDi4p3NsUk7Cvs/dHpIKMdAOVdYLX2mc=";
+    hash = "sha256-VdkYUy7Fi53ku6F/1FV55/VcyF/tDZKN4NTMabDd/T4=";
   };
 
   propagatedBuildInputs = [

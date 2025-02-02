@@ -192,7 +192,7 @@ let
             script =
               ''
                 state="/run/nixos/network/addresses/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ip link set dev "${i.name}" up
 
@@ -206,14 +206,14 @@ let
                     if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     else
-                      echo "'ip addr replace "${cidr}" dev "${i.name}"' failed: $out"
+                      echo "'ip addr replace \"${cidr}\" dev \"${i.name}\"' failed: $out"
                       exit 1
                     fi
                   ''
                 )}
 
                 state="/run/nixos/network/routes/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
@@ -228,7 +228,7 @@ let
                      if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} \"${cidr}\" ${options} ${via} dev \"${i.name}\"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -237,7 +237,7 @@ let
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
               if [ -e "$state" ]; then
-                while read cidr; do
+                while read -r cidr; do
                   echo -n "deleting route $cidr... "
                   ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
                 done < "$state"
@@ -246,7 +246,7 @@ let
 
               state="/run/nixos/network/addresses/${i.name}"
               if [ -e "$state" ]; then
-                while read cidr; do
+                while read -r cidr; do
                   echo -n "deleting address $cidr... "
                   ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
                 done < "$state"
@@ -260,7 +260,6 @@ let
             bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
             after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
-            partOf = [ "network-setup.service" ];
             before = [ "network-setup.service" ];
             path = [ pkgs.iproute2 ];
             serviceConfig = {
@@ -411,7 +410,6 @@ let
           { description = "Bond Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ map (i: "network-addresses-${i}.service") v.interfaces;
             before = [ "network-setup.service" ];
@@ -447,10 +445,9 @@ let
           (let
             deps = deviceDependency v.interface;
           in
-          { description = "Vlan Interface ${n}";
+          { description = "MACVLAN Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -485,7 +482,6 @@ let
           { description = "FOU endpoint ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -508,7 +504,6 @@ let
           { description = "6-to-4 Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -542,7 +537,6 @@ let
           { description = "GRE Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -567,7 +561,7 @@ let
           (let
             deps = deviceDependency v.interface;
           in
-          { description = "Vlan Interface ${n}";
+          { description = "VLAN Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];

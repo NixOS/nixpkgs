@@ -4,11 +4,17 @@ let
 in
 buildGoModule {
   pname = "woodpecker-server";
-  inherit (common) version src ldflags postInstall vendorHash;
+  inherit (common)
+    version
+    src
+    ldflags
+    postInstall
+    vendorHash
+    ;
 
   subPackages = "cmd/server";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   passthru = {
     updateScript = ./update.sh;

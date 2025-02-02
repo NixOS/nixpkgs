@@ -5,7 +5,7 @@
   flac,
   libogg,
   libvorbis,
-  substituteAll,
+  replaceVars,
   lame,
   opusTools,
 }:
@@ -13,12 +13,16 @@ mkKdeDerivation {
   pname = "audiocd-kio";
 
   patches = [
-    (substituteAll {
-      src = ./encoder-paths.patch;
+    (replaceVars ./encoder-paths.patch {
       lame = lib.getExe lame;
       opusenc = "${opusTools}/bin/opusenc";
     })
   ];
 
-  extraBuildInputs = [cdparanoia flac libogg libvorbis];
+  extraBuildInputs = [
+    cdparanoia
+    flac
+    libogg
+    libvorbis
+  ];
 }

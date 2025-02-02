@@ -1,8 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  nix-update-script,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,15 +20,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Lredw/Fez+2U2++ShZcKTFCv8Qpai9YUvqvpGjG5W0o=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/google/json5format/commit/32914546e7088b3d9173ae9a2f307effa87917bf.patch";
+      hash = "sha256-kAbRUL/FuhnxkC9Xo4J2bXt9nkMOLeJvgMmOoKnSxKc=";
+    })
+  ];
+
   cargoHash = "sha256-zPgaZPDyNVPmBXz6QwOYnmh/sbJ8aPST8znLMfIWejk=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoBuildFlags = [
-    "--example formatjson5"
-  ];
+  cargoBuildFlags = [ "--example formatjson5" ];
 
   postInstall =
     let
@@ -34,6 +40,8 @@ rustPlatform.buildRustPackage rec {
     ''
       install -D target/${cargoTarget}/release/examples/formatjson5 $out/bin/formatjson5
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "JSON5 formatter";

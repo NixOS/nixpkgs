@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, buildPackages
-, callPackage
-, sqlite
-, libtiff
-, curl
-, gtest
-, nlohmann_json
-, python3
-, cacert
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  buildPackages,
+  callPackage,
+  sqlite,
+  libtiff,
+  curl,
+  gtest,
+  nlohmann_json,
+  python3,
+  cacert,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.4.1";
+  version = "9.5.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = finalAttrs.version;
-    hash = "sha256-sLlG9NNHST9d0G5hV1tOGpTSv4rbUxERW3kwGC+t1iU=";
+    hash = "sha256-gKfsuznAhq29sOw78gpQ7TNZ6xCgmDBad3TcqFzoWVc=";
   };
 
   patches = [
@@ -30,13 +31,27 @@ stdenv.mkDerivation (finalAttrs: {
     ./only-add-curl-for-static-builds.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ sqlite libtiff curl nlohmann_json ];
+  buildInputs = [
+    sqlite
+    libtiff
+    curl
+    nlohmann_json
+  ];
 
-  nativeCheckInputs = [ cacert gtest ];
+  nativeCheckInputs = [
+    cacert
+    gtest
+  ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -51,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck =
     let
-      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
-      ''
-        export HOME=$TMPDIR
-        export TMP=$TMPDIR
-        export ${libPathEnvVar}=$PWD/lib
-      '';
+    ''
+      export HOME=$TMPDIR
+      export TMP=$TMPDIR
+      export ${libPathEnvVar}=$PWD/lib
+    '';
 
   doCheck = true;
 

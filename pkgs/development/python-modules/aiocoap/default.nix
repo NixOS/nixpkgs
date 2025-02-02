@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.10";
+  version = "0.4.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,13 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = "aiocoap";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sKDkbv8OyPewfQpunFxezP0wjy3EAQxsQ0UfUm0REPM=";
+    tag = version;
+    hash = "sha256-yy9TsNTdk7kfLilXsjDCVAe1C3O70P09It71zU26PKo=";
   };
 
   build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     oscore = [
       cbor2
       cryptography

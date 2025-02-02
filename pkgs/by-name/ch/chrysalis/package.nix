@@ -45,7 +45,6 @@ appimageTools.wrapType2 {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       aw
-      eclairevoyant
       nshalman
     ];
     platforms = [ "x86_64-linux" ];

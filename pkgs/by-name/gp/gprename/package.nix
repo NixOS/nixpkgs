@@ -45,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/gprename \
       --set PERL5LIB ${
         perlPackages.makeFullPerlPath (
-          with perlPackages; [
+          with perlPackages;
+          [
             Pango
             Glib
             Gtk3

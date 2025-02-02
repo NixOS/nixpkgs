@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixtures";
-  version = "1.0.7";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
-    rev = version;
-    hash = "sha256-BOKUg5HPBQfteKOEsdZ30h/hWbVZPuHMhtGXF3KfMXg=";
+    tag = version;
+    hash = "sha256-2gaGIv4vfMdhLXQeYMbbx9B6tIsCGw4rytaO8bfRuEI=";
   };
 
   build-system = [ poetry-core ];

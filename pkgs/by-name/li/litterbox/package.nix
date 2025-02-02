@@ -1,4 +1,11 @@
-{ lib, stdenv, libressl, fetchzip, pkg-config, sqlite }:
+{
+  lib,
+  stdenv,
+  libressl,
+  fetchzip,
+  pkg-config,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "litterbox";
@@ -9,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-w4qW7J5CKm+hXHsNNbl9roBslHD14JOe0Nj5WntETqM=";
   };
 
-  buildInputs = [ libressl sqlite ];
+  buildInputs = [
+    libressl
+    sqlite
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

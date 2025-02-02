@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  nixosTests,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  version = "unstable-2023-04-13";
+  version = "0-unstable-2024-12-22";
 
   src = fetchgit {
     url = "https://git.tt-rss.org/fox/tt-rss.git";
-    rev = "0578bf802571781a0a7e3debbbec66437a7d28b4";
-    hash = "sha256-j6R1QoH8SzUtyI3rGE6rHriboAfApAo/Guw8WbJ7LqU=";
+    rev = "fc89d2e6333d6d828f2b07a53be53677caf3d638";
+    hash = "sha256-z+sWplOExqtkWPEBJ+WOb4CPDX1iLj14KwrGSojFp0A=";
   };
 
   installPhase = ''
@@ -18,16 +24,25 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "23.04" > $out/version_static.txt
+    echo "${version}" > $out/version_static.txt
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (nixosTests) tt-rss;
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+  };
 
   meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
     homepage = "https://tt-rss.org";
-    maintainers = with maintainers; [ globin zohl ];
+    maintainers = with maintainers; [
+      gileri
+      globin
+      zohl
+    ];
     platforms = platforms.all;
   };
 }

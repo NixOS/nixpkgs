@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.i3lock;
 
-in {
+in
+{
 
   ###### interface
 
@@ -20,9 +26,9 @@ in {
         '';
       };
       u2fSupport = lib.mkOption {
-        type        = lib.types.bool;
-        default     = false;
-        example     = true;
+        type = lib.types.bool;
+        default = false;
+        example = true;
         description = ''
           Whether to enable U2F support in the i3lock program.
           U2F enables authentication using a hardware device, such as a security key.

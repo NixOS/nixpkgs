@@ -1,4 +1,8 @@
-{ buildDunePackage, trace, mtime }:
+{
+  buildDunePackage,
+  trace,
+  mtime,
+}:
 
 buildDunePackage {
   pname = "trace-tef";
@@ -13,7 +17,10 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.12";
 
-  propagatedBuildInputs = [ mtime trace ];
+  propagatedBuildInputs = [
+    mtime
+    trace
+  ];
 
   doCheck = true;
 

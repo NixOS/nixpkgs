@@ -2,56 +2,71 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
-  pythonOlder,
+
+  # dependencies
   aiohttp,
   dataclasses-json,
+  httpx-sse,
   langchain,
   langchain-core,
-  langchain-standard-tests,
   langsmith,
-  httpx,
-  lark,
+  pydantic-settings,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+
+  # optional-dependencies
+  typer,
   numpy,
+
+  # tests
+  httpx,
+  langchain-tests,
+  lark,
   pandas,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyyaml,
-  requests,
   requests-mock,
   responses,
-  sqlalchemy,
   syrupy,
-  tenacity,
   toml,
-  typer,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.12";
+  version = "0.3.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-HsKWGiWA6uKmRQOMw3efXkjwbBuvDHhf5waNvnvBdG4=";
+    tag = "langchain-community==${version}";
+    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "pydantic-settings"
+    "tenacity"
+  ];
+
   dependencies = [
     aiohttp
     dataclasses-json
-    langchain-core
+    httpx-sse
     langchain
+    langchain-core
     langsmith
+    pydantic-settings
     pyyaml
     requests
     sqlalchemy
@@ -67,7 +82,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     httpx
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio
@@ -82,7 +97,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    inherit (langchain-core) updateScript;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -90,10 +105,17 @@ buildPythonPackage rec {
   disabledTests = [
     # Test require network access
     "test_ovhcloud_embed_documents"
+    "test_yandex"
     # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
     "test_sql_database_run"
+    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
+    "test_create_sql_agent"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_proper_inputs"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_variable_key_naming"
   ];
 
   meta = {

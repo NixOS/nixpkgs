@@ -1,6 +1,15 @@
-{ system ? builtins.currentSystem, pkgs, handleTestOn, ... }:
+{
+  system ? builtins.currentSystem,
+  pkgs,
+  handleTestOn,
+  ...
+}:
 let
-  supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+  supportedSystems = [
+    "x86_64-linux"
+    "i686-linux"
+    "aarch64-linux"
+  ];
 
 in
 {

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.42";
+  version = "0.2.51";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2iS//v5KKxoY6FQTyZ4A4hm7yR31Y5BqTRauUElxOd0=";
+    tag = version;
+    hash = "sha256-H4DrbatteETvxtDjz2kYGTMvGFbmmgbb5wMKWSUkOGc=";
   };
 
   build-system = [ setuptools ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     nospam = [
       requests-cache
       requests-ratelimiter

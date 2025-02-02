@@ -1,0 +1,22 @@
+{
+  "idea-community": {
+    "version": "2024.3.1.1",
+    "buildNumber": "243.22562.218",
+    "buildType": "idea",
+    "ideaHash": "sha256-QKFUg6C+ZVgPrgd6jwWSkBVMHAF30ja0Uqezy9syo5k=",
+    "androidHash": "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=",
+    "jpsHash": "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
+    "mvnDeps": "idea_maven_artefacts.json"
+  },
+  "pycharm-community": {
+    "version": "2024.3.1.1",
+    "buildNumber": "243.22562.220",
+    "buildType": "pycharm",
+    "ideaHash": "sha256-QKFUg6C+ZVgPrgd6jwWSkBVMHAF30ja0Uqezy9syo5k=",
+    "androidHash": "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=",
+    "jpsHash": "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
+    "mvnDeps": "pycharm_maven_artefacts.json"
+  }
+}

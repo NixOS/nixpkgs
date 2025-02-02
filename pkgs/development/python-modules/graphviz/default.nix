@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IqjqcBEL4BK/VfRjdxJ9t/DkG8OMAoXJxbW5JXpALuw=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   '';
 
   # Too many failures due to attempting to connect to com.apple.fonts daemon
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";

@@ -5,7 +5,7 @@
 , makeWrapper
 , wrapGAppsHook3
 
-, withOpenGL ? true
+, withOpenGL ? !stdenv.hostPlatform.isDarwin
 
 , bison
 , blas
@@ -23,12 +23,13 @@
 , libsvm
 , libtiff
 , libxml2
+, llvmPackages
 , netcdf
 , pdal
 , pkg-config
 , postgresql
 , proj
-, python311Packages
+, python3Packages
 , readline
 , sqlite
 , wxGTK32
@@ -36,10 +37,6 @@
 , zstd
 }:
 
-let
-  pyPackages = python311Packages;
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
   version = "8.4.0";
@@ -61,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for `geos-config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -75,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libsvm
     libtiff
-    (libxml2.override { enableHttp = true; })
+    libxml2
     netcdf
     pdal
     postgresql
@@ -86,14 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ] ++ lib.optionals withOpenGL [ libGLU ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
-
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix conversion of const char* to unsigned int.
-    ./clang-integer-conversion.patch
-  ];
 
   configureFlags = [
     "--with-blas"
@@ -120,14 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-odbc"
   ] ++ lib.optionals (! withOpenGL) [
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--without-cairo"
     "--without-freetype"
     "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
@@ -142,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${pyPackages.python.interpreter} \
+    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include

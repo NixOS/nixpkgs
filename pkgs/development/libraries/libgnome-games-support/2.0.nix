@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
-, gtk4
-, libgee
-, gettext
-, vala
-, gnome
-, libintl
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gtk4,
+  libgee,
+  gettext,
+  vala,
+  gnome,
+  libintl,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {

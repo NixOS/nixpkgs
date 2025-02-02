@@ -1,25 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
 
-, autoreconfHook
-, pkg-config
+  autoreconfHook,
+  pkg-config,
 
-, waylandSupport ? true
-, x11Support ? true
+  waylandSupport ? true,
+  x11Support ? true,
 
-, cairo
-, glib
-, libnotify
-, rofi-unwrapped
-, wl-clipboard
-, xclip
-, xdotool
-, wtype
+  cairo,
+  glib,
+  libnotify,
+  rofi-unwrapped,
+  wl-clipboard,
+  xclip,
+  xdotool,
+  wtype,
 }:
 
-import ./versions.nix ({ version, hash, patches}:
+import ./versions.nix (
+  {
+    version,
+    hash,
+    patches,
+  }:
   stdenv.mkDerivation rec {
     pname = "rofi-emoji";
     inherit version;
@@ -40,11 +46,20 @@ import ./versions.nix ({ version, hash, patches}:
     postFixup = ''
       chmod +x $out/share/rofi-emoji/clipboard-adapter.sh
       wrapProgram $out/share/rofi-emoji/clipboard-adapter.sh \
-       --prefix PATH ":" ${lib.makeBinPath ([ libnotify ]
-         ++ lib.optionals waylandSupport [ wl-clipboard wtype ]
-         ++ lib.optionals x11Support [ xclip xdotool ])}
+       --prefix PATH ":" ${
+         lib.makeBinPath (
+           [ libnotify ]
+           ++ lib.optionals waylandSupport [
+             wl-clipboard
+             wtype
+           ]
+           ++ lib.optionals x11Support [
+             xclip
+             xdotool
+           ]
+         )
+       }
     '';
-
 
     nativeBuildInputs = [
       autoreconfHook
@@ -52,20 +67,27 @@ import ./versions.nix ({ version, hash, patches}:
       makeWrapper
     ];
 
-    buildInputs = [
-      cairo
-      glib
-      libnotify
-      rofi-unwrapped
-    ]
-      ++ lib.optionals waylandSupport [ wl-clipboard wtype ]
+    buildInputs =
+      [
+        cairo
+        glib
+        libnotify
+        rofi-unwrapped
+      ]
+      ++ lib.optionals waylandSupport [
+        wl-clipboard
+        wtype
+      ]
       ++ lib.optionals x11Support [ xclip ];
 
     meta = with lib; {
       description = "Emoji selector plugin for Rofi (built against ${rofi-unwrapped.pname})";
       homepage = "https://github.com/Mange/rofi-emoji";
       license = licenses.mit;
-      maintainers = with maintainers; [ cole-h Mange ];
+      maintainers = with maintainers; [
+        cole-h
+        Mange
+      ];
       platforms = platforms.linux;
     };
   }

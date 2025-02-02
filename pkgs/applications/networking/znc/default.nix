@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch2, openssl, pkg-config
-, withPerl ? false, perl
-, withPython ? false, python3
-, withTcl ? false, tcl
-, withCyrus ? true, cyrus_sasl
-, withUnicode ? true, icu
-, withZlib ? true, zlib
-, withIPv6 ? true
-, withDebug ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  openssl,
+  pkg-config,
+  withPerl ? false,
+  perl,
+  withPython ? false,
+  python3,
+  withTcl ? false,
+  tcl,
+  withCyrus ? true,
+  cyrus_sasl,
+  withUnicode ? true,
+  icu,
+  withZlib ? true,
+  zlib,
+  withIPv6 ? true,
+  withDebug ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +40,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [ openssl ]
     ++ lib.optional withPerl perl
     ++ lib.optional withPython python3
     ++ lib.optional withTcl tcl
@@ -36,13 +49,15 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUnicode icu
     ++ lib.optional withZlib zlib;
 
-  configureFlags = [
-    (lib.enableFeature withPerl "perl")
-    (lib.enableFeature withPython "python")
-    (lib.enableFeature withTcl "tcl")
-    (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
-    (lib.enableFeature withCyrus "cyrus")
-  ] ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
+  configureFlags =
+    [
+      (lib.enableFeature withPerl "perl")
+      (lib.enableFeature withPython "python")
+      (lib.enableFeature withTcl "tcl")
+      (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
+      (lib.enableFeature withCyrus "cyrus")
+    ]
+    ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
     ++ lib.optionals withDebug [ "--enable-debug" ];
 
   enableParallelBuilding = true;
@@ -50,7 +65,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";
-    maintainers = with maintainers; [ schneefux lnl7 ];
+    maintainers = with maintainers; [
+      schneefux
+      lnl7
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
   };

@@ -1,10 +1,14 @@
-{ appimageTools, fetchurl, lib }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+}:
 let
   pname = "protonup-qt";
-  version = "2.10.2";
+  version = "2.11.1";
   src = fetchurl {
     url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-    hash = "sha256-WWLAA5FryvqwgEQysnE1w2k9Wq4y7yNJ4Drojg1SKYg=";
+    hash = "sha256-xHkeAqveXF8YLFvKHTZtSvINIIoiqhNbwVuKfnaHcQI=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

@@ -40,9 +40,12 @@ mkKdeDerivation {
 
   patches = [
     # fwupdmgr is provided through NixOS' module
-    (substituteAll ({
-      src = ./0001-tool-paths.patch;
-    } // tools))
+    (substituteAll (
+      {
+        src = ./0001-tool-paths.patch;
+      }
+      // tools
+    ))
   ];
 
   postPatch = ''
@@ -50,7 +53,7 @@ mkKdeDerivation {
       --replace-fail " aha " " ${lib.getExe aha} "
   '';
 
-  extraBuildInputs = [libusb1];
+  extraBuildInputs = [ libusb1 ];
 
   # fix wrong symlink of infocenter pointing to a 'systemsettings5' binary in
   # the same directory, while it is actually located in a completely different

@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "5.1.0";
-  format = "pyproject";
+  version = "7.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SnmI1/lB1p/zldgn9jIid4yJ5+ubr5mh/IAqXY/1Wbc=";
+    repo = "ntc-templates";
+    tag = "v${version}";
+    hash = "sha256-N25XKFlTcxOczjOBsTvyYLYSLJLTFnn2hG5KnsHVKOc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [ textfsm ];
 

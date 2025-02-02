@@ -1,4 +1,8 @@
-{ mkTmuxPlugin, thumbs, substituteAll }:
+{
+  mkTmuxPlugin,
+  thumbs,
+  replaceVars,
+}:
 
 mkTmuxPlugin {
 
@@ -8,8 +12,7 @@ mkTmuxPlugin {
   rtpFilePath = "tmux-thumbs.tmux";
 
   patches = [
-    (substituteAll {
-      src = ./fix.patch;
+    (replaceVars ./fix.patch {
       tmuxThumbsDir = "${thumbs}/bin";
     })
   ];

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "logdy";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "logdyhq";
     repo = "logdy-core";
     rev = "v${version}";
-    hash = "sha256-HlIl/4C1wheAxc0ReUN8xQrXJ0djoO7E0qhRwyFHEiE=";
+    hash = "sha256-lLQM9/QD/vB/KjyzSxVJzSMw0SQWyv/1qXbBBXatnCg=";
   };
 
   vendorHash = "sha256-kFhcbBMymzlJ+2zw7l09LJfCdps26Id+VzOehqrLDWU=";

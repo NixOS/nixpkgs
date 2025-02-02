@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, frei0r }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  pkg-config,
+  frei0r,
+}:
 
 buildDunePackage rec {
   pname = "frei0r";

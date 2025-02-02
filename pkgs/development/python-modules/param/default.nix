@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rGfFLDl5Y8D0OiO/1G05w2l3hAHZC368LuNADDzfBFs=";
   };
 

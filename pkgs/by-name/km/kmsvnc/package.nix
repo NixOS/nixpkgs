@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libdrm
-, libvncserver
-, libxkbcommon
-, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libdrm,
+  libvncserver,
+  libxkbcommon,
+  libva,
 }:
 
 stdenv.mkDerivation rec {

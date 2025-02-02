@@ -6,7 +6,9 @@
   protobuf,
   pycryptodomex,
   pyogg,
+  pythonOlder,
   requests,
+  setuptools,
   websocket-client,
   zeroconf,
 }:
@@ -14,19 +16,24 @@
 buildPythonPackage rec {
   pname = "librespot";
   version = "0.0.9";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "kokarare1212";
     repo = "librespot-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k9qVsxjRlUZ7vCBx00quiAR7S+YkfyoZiAKVnOOG4xM=";
   };
 
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
   pythonRelaxDeps = true;
 
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     protobuf
     pycryptodomex

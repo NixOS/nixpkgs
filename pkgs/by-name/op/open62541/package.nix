@@ -30,13 +30,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.4";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S0hMxP+jIosI6siw0vt2KO84AQuL7JIPLPTBBXZPwpQ=";
+    hash = "sha256-wPSsEM/vdsCvvbOmJRZMzvvUnWbGSMjWL/loQ2Lvn3s=";
     fetchSubmodules = true;
   };
 
@@ -168,6 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/open62541/open62541/releases/tag/v${finalAttrs.version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ panicgh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

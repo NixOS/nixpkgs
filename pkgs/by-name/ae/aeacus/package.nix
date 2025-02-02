@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "elysium-suite";
     repo = "aeacus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LMsfogcz3CoShQDqyshMshb+iz2r0k5I7NDLXevMakI=";
   };
 

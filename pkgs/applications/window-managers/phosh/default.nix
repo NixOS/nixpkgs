@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , python3
+, wayland-scanner
 , wrapGAppsHook4
 , libadwaita
 , libhandy
@@ -15,9 +16,13 @@
 , pulseaudio
 , evince
 , glib
+, modemmanager
 , gtk4
-, gnome
+, gnome-bluetooth
+, gnome-control-center
 , gnome-desktop
+, gnome-session
+, gnome-shell
 , gcr
 , pam
 , systemd
@@ -37,12 +42,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.41.0";
+  version = "0.44.1";
 
   src = fetchurl {
     # Release tarball which includes subprojects gvc and libcall-ui
     url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-HXuD9YC7gqGqAq2YmhXI3WRGsvyBc6PgSW3YSYTOdI4=";
+    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -65,14 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
     evolution-data-server
     pulseaudio
     glib
+    modemmanager
     gcr
     networkmanager
     polkit
     gmobile
-    gnome.gnome-bluetooth
-    gnome.gnome-control-center
+    gnome-bluetooth
+    gnome-control-center
     gnome-desktop
-    gnome.gnome-session
+    gnome-session
     gtk4
     pam
     systemd
@@ -107,8 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
-      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gnome-shell}"
+      --set GNOME_SESSION "${gnome-session}/bin/gnome-session"
     )
   '';
 

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
@@ -9,17 +8,14 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "1.7.2";
-
-  disabled = pythonOlder "3.5";
-
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KW6YyArM3rHOkhXJCRWWy9OSwMwRFr16njeN+EcSGz0=";
+    tag = "v${version}";
+    hash = "sha256-tlShiI90PAbWztrL5PgmE1D+/h6bUoSxAHxwGlQHvus=";
   };
 
   build-system = [ setuptools ];

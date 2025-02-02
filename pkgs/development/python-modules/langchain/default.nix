@@ -1,46 +1,53 @@
 {
   lib,
-  aiohttp,
-  async-timeout,
-  bash,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  poetry-core,
+
+  # buildInputs
+  bash,
+
+  # dependencies
+  aiohttp,
   langchain-core,
   langchain-text-splitters,
   langsmith,
-  lark,
-  numpy,
-  pandas,
-  poetry-core,
   pydantic,
+  pyyaml,
+  requests,
+  sqlalchemy,
+  tenacity,
+
+  # optional-dependencies
+  numpy,
+
+  # tests
+  freezegun,
+  httpx,
+  lark,
+  pandas,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
-  pyyaml,
   requests-mock,
-  requests,
   responses,
-  sqlalchemy,
   syrupy,
-  tenacity,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.14";
+  version = "0.3.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain==${version}";
-    hash = "sha256-dgXcZu7dtmwlXp8dzHSNfbBnK7RWvrSwqYELm1fczzc=";
+    tag = "langchain==${version}";
+    hash = "sha256-lANGoMABH1f9Tl/GgMMr7eTCji9q3uqD+Mwjr4nd2Dg=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -48,6 +55,11 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   buildInputs = [ bash ];
+
+  pythonRelaxDeps = [
+    "numpy"
+    "tenacity"
+  ];
 
   dependencies = [
     aiohttp
@@ -59,7 +71,7 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   optional-dependencies = {
     numpy = [ numpy ];
@@ -67,6 +79,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio
@@ -102,6 +115,21 @@ buildPythonPackage rec {
     "test_serializable_mapping"
     "test_person"
     "test_aliases_hidden"
+  ];
+
+  disabledTestPaths = [
+    # pydantic.errors.PydanticUserError: `ConversationSummaryMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryMemory.model_rebuild()`.
+    "tests/unit_tests/chains/test_conversation.py"
+    # pydantic.errors.PydanticUserError: `ConversationSummaryMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryMemory.model_rebuild()`.
+    "tests/unit_tests/chains/test_memory.py"
+    # pydantic.errors.PydanticUserError: `ConversationSummaryBufferMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryBufferMemory.model_rebuild()`.
+    "tests/unit_tests/chains/test_summary_buffer_memory.py"
+    "tests/unit_tests/output_parsers/test_fix.py"
+    "tests/unit_tests/chains/test_llm_checker.py"
+    # TypeError: Can't instantiate abstract class RunnableSerializable[RetryOutputParserRetryChainInput, str] without an implementation for abstract method 'invoke'
+    "tests/unit_tests/output_parsers/test_retry.py"
+    # pydantic.errors.PydanticUserError: `LLMSummarizationCheckerChain` is not fully defined; you should define `BaseCache`, then call `LLMSummarizationCheckerChain.model_rebuild()`.
+    "tests/unit_tests/chains/test_llm_summarization_checker.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];

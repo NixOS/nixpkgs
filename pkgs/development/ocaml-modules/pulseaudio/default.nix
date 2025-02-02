@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, pkg-config, pulseaudio }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  pkg-config,
+  pulseaudio,
+}:
 
 buildDunePackage rec {
   pname = "pulseaudio";

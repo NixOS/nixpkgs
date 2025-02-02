@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20240722";
+  version = "20241124";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-FlS9DK0oQ2CElmmh6amTGB/tE3iWqsJpS4LqmjX3CeQ=";
+    hash = "sha256-T2ZAYJHC+F6pZLI41p649xq0uqydykaHpxiDum3k3bI=";
   };
 
   patches = [
@@ -29,7 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ getopt ];
+  nativeBuildInputs = [
+    getopt
+  ];
 
   nativeCheckInputs = [
     bc

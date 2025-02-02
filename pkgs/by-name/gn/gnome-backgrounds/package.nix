@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/gnome-backgrounds-${version}.tar.xz";
-    hash = "sha256-Td06xDmkoGeHaAWSG7dfTTyLhaIY1Hwnbd3eiShEPC4=";
+    hash = "sha256-h0pKOcQmFzb2qFRyKDNAC2EkQcRoGqWYLZCxWryckf0=";
   };
 
   patches = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Default wallpaper set for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-backgrounds";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-backgrounds/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.cc-by-sa-30;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

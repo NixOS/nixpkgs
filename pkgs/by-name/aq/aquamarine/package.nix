@@ -11,7 +11,7 @@
   libffi,
   libGL,
   libinput,
-  mesa,
+  libgbm,
   nix-update-script,
   pixman,
   pkg-config,
@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.3.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zushuLkBblDZGVo2qbiMTJ51LSkqYJpje/R2dvfec1U=";
+    hash = "sha256-ldWD4ci3LcBIfUN41qlBO/oR5chcsRLejMbSW8eH628=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libGL
     libinput
-    mesa
+    libgbm
     pixman
     seatd
     udev
@@ -71,10 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A very light linux rendering backend library";
     homepage = "https://github.com/hyprwm/aquamarine";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    maintainers = lib.teams.hyprland.members;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

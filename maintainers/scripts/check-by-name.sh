@@ -1,1 +1,1 @@
-../../pkgs/test/check-by-name/run-local.sh
+../../ci/nixpkgs-vet.sh

@@ -1,25 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, gettext
-, gobject-introspection
-, evince
-, glib
-, gnome
-, gtksourceview4
-, gjs
-, libsoup_3
-, webkitgtk_4_1
-, icu
-, wrapGAppsHook3
-, gst_all_1
-, gdk-pixbuf
-, librsvg
-, gtk3
-, harfbuzz
-, ninja
-, libepoxy
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  gettext,
+  gobject-introspection,
+  evince,
+  glib,
+  gnome,
+  gtksourceview4,
+  gjs,
+  libsoup_3,
+  webkitgtk_4_1,
+  icu,
+  wrapGAppsHook3,
+  gst_all_1,
+  gdk-pixbuf,
+  librsvg,
+  gtk3,
+  harfbuzz,
+  ninja,
+  libepoxy,
 }:
 
 stdenv.mkDerivation rec {
@@ -76,7 +78,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://en.wikipedia.org/wiki/Sushi_(software)";
+    homepage = "https://gitlab.gnome.org/GNOME/sushi";
+    changelog = "https://gitlab.gnome.org/GNOME/sushi/-/blob/${version}/NEWS?ref_type=tags";
     description = "Quick previewer for Nautilus";
     mainProgram = "sushi";
     maintainers = teams.gnome.members;

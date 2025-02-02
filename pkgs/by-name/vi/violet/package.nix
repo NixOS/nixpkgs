@@ -4,19 +4,18 @@
   fetchFromGitHub,
   nix-update-script,
   stdenv,
-  violet,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "violet";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "violet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+cAgcGOMlhDdep8VuqP8DeELbMRXydRsD0xTyHqOuYM=";
+    hash = "sha256-A/OBp5IsExRymX8TFG62EbWexu9InYbcLwB6mCpyYhg=";
     fetchSubmodules = true;
   };
 
@@ -24,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = testers.testVersion { package = violet; };
+    tests = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {

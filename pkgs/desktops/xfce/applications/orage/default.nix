@@ -1,31 +1,34 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, libical
-, libnotify
-, libxfce4ui
-, popt
-, tzdata
+{
+  lib,
+  mkXfceDerivation,
+  glib,
+  gtk3,
+  libical,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  tzdata,
 }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "orage";
-  version = "4.18.0";
+  version = "4.20.0";
 
-  sha256 = "sha256-vL9zexPbQKPqIzK5UqUIxkE9I7hEupkDOJehMgj2Leo=";
+  sha256 = "sha256-VaabhMRgH/q9HiFXBPQ90HbMLW21BXTvZtxd8bhYYnw=";
 
   buildInputs = [
+    glib
     gtk3
     libical
     libnotify
     libxfce4ui
-    popt
+    libxfce4util
   ];
 
   postPatch = ''
-    substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    substituteInPlace src/tz_zoneinfo_read.c  --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/parameters.c        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/tz_zoneinfo_read.c  --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   meta = with lib; {

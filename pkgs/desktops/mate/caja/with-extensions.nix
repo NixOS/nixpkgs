@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, glib
-, wrapGAppsHook3
-, xorg
-, caja
-, cajaExtensions
-, extensions ? [ ]
-, useDefaultExtensions ? true
+{
+  stdenv,
+  lib,
+  glib,
+  wrapGAppsHook3,
+  xorg,
+  caja,
+  cajaExtensions,
+  extensions ? [ ],
+  useDefaultExtensions ? true,
 }:
 
 let
@@ -23,8 +24,11 @@ stdenv.mkDerivation {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.forEach selectedExtensions (x: x.buildInputs) ++ selectedExtensions
-    ++ [ caja ] ++ caja.buildInputs;
+  buildInputs =
+    lib.forEach selectedExtensions (x: x.buildInputs)
+    ++ selectedExtensions
+    ++ [ caja ]
+    ++ caja.buildInputs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -53,9 +57,11 @@ stdenv.mkDerivation {
 
   preFixup = lib.optionalString (selectedExtensions != [ ]) ''
     gappsWrapperArgs+=(
-      --set CAJA_EXTENSION_DIRS ${lib.concatMapStringsSep ":" (x: "${x.outPath}/lib/caja/extensions-2.0") selectedExtensions}
+      --set CAJA_EXTENSION_DIRS ${
+        lib.concatMapStringsSep ":" (x: "${x.outPath}/lib/caja/extensions-2.0") selectedExtensions
+      }
     )
   '';
 
-  inherit (caja.meta);
+  inherit (caja.meta) ;
 }

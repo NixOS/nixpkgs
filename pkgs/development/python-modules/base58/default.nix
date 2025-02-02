@@ -5,18 +5,22 @@
   pyhamcrest,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "base58";
   version = "2.1.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c5d0cb3f5b6e81e8e35da5754388ddcc6d0d14b6c6a132cb93d69ed580a7278c";
+    hash = "sha256-xdDLP1tugejjXaV1Q4jdzG0NFLbGoTLLk9ae1YCnJ4w=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pyhamcrest
@@ -33,9 +37,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Base58 and Base58Check implementation";
-    mainProgram = "base58";
     homepage = "https://github.com/keis/base58";
+    changelog = "https://github.com/keis/base58/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];
+    mainProgram = "base58";
   };
 }

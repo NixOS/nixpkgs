@@ -2,14 +2,12 @@
   lib,
   callPackage,
   pkg-config,
-  stdenv,
-  hyprland,
 }:
 let
   mkHyprlandPlugin =
     hyprland:
     args@{ pluginName, ... }:
-    stdenv.mkDerivation (
+    hyprland.stdenv.mkDerivation (
       args
       // {
         pname = "${pluginName}";
@@ -32,6 +30,7 @@ let
     { hyprgrass = import ./hyprgrass.nix; }
     { hyprscroller = import ./hyprscroller.nix; }
     { hyprspace = import ./hyprspace.nix; }
+    { hyprsplit = import ./hyprsplit.nix; }
     (import ./hyprland-plugins.nix)
   ];
 in

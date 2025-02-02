@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchPypi,
   buildPythonPackage,
@@ -20,20 +21,19 @@
   # for passthru.tests
   dulwich,
   gunicorn,
-  opentracing,
   pika,
 }:
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "24.2.1";
+  version = "24.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qy/Hb2gKz3zxiMLuD106tztjwfAxFMfNijTOu+WqIFY=";
+    hash = "sha256-i9FBkRTp5KPtM6W612av/5o892XLRApYKhs6m8gMGso=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,10 @@ buildPythonPackage rec {
     zope-interface
   ] ++ lib.optionals (!isPyPy) [ greenlet ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   # Bunch of failures.
   doCheck = false;
 
@@ -66,7 +70,6 @@ buildPythonPackage rec {
     inherit
       dulwich
       gunicorn
-      opentracing
       pika
       ;
   } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;

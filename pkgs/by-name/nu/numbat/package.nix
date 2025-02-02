@@ -1,28 +1,24 @@
-{ lib
-, stdenv
-, testers
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, numbat
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  tzdata,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "numbat";
-  version = "1.12.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
-    rev = "v${version}";
-    hash = "sha256-MYoNziQiyppftLPNM8cqEuNwUA4KCmtotQqDhgyef1E=";
+    tag = "v${version}";
+    hash = "sha256-5XsrOAvBrmCG6k7YRwGZZtBP/o1jVVtBBTrwIT5CDX8=";
   };
 
-  cargoHash = "sha256-t6vxJ0UIQJILCGv4PO5V4/QF5de/wtMQDkb8gPtE70E=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-RMON7JThY6Ad1QHQFiNbTb2PUsfviR2t+55k1ZtlOd8=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
@@ -31,11 +27,20 @@ rustPlatform.buildRustPackage rec {
     cp -r $src/numbat/modules $out/share/numbat/
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = numbat;
-  };
+  preCheck = ''
+    # The datetime library used by Numbat, "jiff", always attempts to use the
+    # system TZDIR on Unix and doesn't fall back to the embedded tzdb when not
+    # present.
+    export TZDIR=${tzdata}/share/zoneinfo
+  '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "High precision scientific calculator with full support for physical units";
     longDescription = ''
       A statically typed programming language for scientific computations
@@ -43,8 +48,14 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://numbat.dev";
     changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
-    license = with licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      giomf
+      atemu
+    ];
     mainProgram = "numbat";
-    maintainers = with maintainers; [ giomf atemu ];
   };
 }

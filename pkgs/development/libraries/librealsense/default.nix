@@ -8,7 +8,7 @@
 , ninja
 , pkg-config
 , gcc
-, mesa
+, libgbm
 , gtk3
 , glfw
 , libGLU
@@ -23,7 +23,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.55.1";
+  version = "2.56.3";
 
   outputs = [ "out" "dev" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MNHvfWk58WRtu6Xysfvn+lx8J1+HlNw5AmmgaTAzuok=";
+    sha256 = "sha256-Stx337mGcpMCg9DlZmvX4LPQmCSzLRFcUQPxaD/Y0Ds=";
   };
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     nlohmann_json
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
-    ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
+    ++ lib.optionals enableGUI [ libgbm gtk3 glfw libGLU curl ];
 
   patches = [
     ./py_pybind11_no_external_download.patch

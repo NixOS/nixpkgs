@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "2.0.4-unstable-2023-10-27";
+  version = "2.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhatto";
     repo = "autopep8";
-    rev = "af7399d90926f2fe99a71f15197a08fa197f73a1";
-    hash = "sha256-psGl9rXxTQGHyXf1VskJ/I/goVH5hRRP5bUXQdaT/8M=";
+    tag = "v${version}";
+    hash = "sha256-9OJ5XbzpHMHsFjf5oVyHjn5zqmAxRuSItWP4sQx8jD4=";
   };
 
   build-system = [ setuptools ];

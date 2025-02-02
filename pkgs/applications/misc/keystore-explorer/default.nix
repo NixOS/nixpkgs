@@ -1,10 +1,20 @@
-{ fetchzip, lib, stdenv, jdk, runtimeShell, glib, wrapGAppsHook3 }:
+{
+  fetchzip,
+  lib,
+  stdenv,
+  jdk,
+  runtimeShell,
+  glib,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   version = "5.5.3";
   pname = "keystore-explorer";
   src = fetchzip {
-    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${lib.replaceStrings ["."] [""] version}.zip";
+    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }.zip";
     sha256 = "sha256-oShVfmien4HMpAfSa9rPr18wLu7RN8ZWEZEUtiBHyBs=";
   };
 

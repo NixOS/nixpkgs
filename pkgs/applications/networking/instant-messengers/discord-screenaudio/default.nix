@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, cmake
-, pkg-config
-, qtbase
-, qtwebengine
-, qtwayland
-, pipewire
-, kdePackages
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtwebengine,
+  qtwayland,
+  pipewire,
+  kdePackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {

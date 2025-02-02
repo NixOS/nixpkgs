@@ -10,9 +10,11 @@
   hatchling,
   httpx,
   jiter,
+  nest-asyncio,
   pydantic,
   pytest-asyncio,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   respx,
   sniffio,
@@ -22,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.34.0";
+  version = "0.42.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UjwBxuhXuwJfWewg9si/oIuXgiqbNAYm4lK2f+C6VJU=";
+    tag = "v${version}";
+    hash = "sha256-7cRXKXiyq3ty21klkitjjnm9rzBRmAXGYvvVxTNWeZ4=";
   };
 
   build-system = [
@@ -50,23 +52,29 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vertex = [ google-auth ];
   };
 
   nativeCheckInputs = [
     dirty-equals
     pytest-asyncio
+    nest-asyncio
     pytestCheckHook
     respx
   ];
 
   pythonImportsCheck = [ "anthropic" ];
 
-  disabledTests = [
-    # Test require network access
-    "test_copy_build_request"
-  ];
+  disabledTests =
+    [
+      # Test require network access
+      "test_copy_build_request"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # Fails on RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
+      "test_multi_byte_character_multiple_chunks[async]"
+    ];
 
   disabledTestPaths = [
     # Test require network access

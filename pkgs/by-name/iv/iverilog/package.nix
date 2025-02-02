@@ -1,33 +1,40 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoconf
-, bison
-, bzip2
-, flex
-, gperf
-, ncurses
-, perl
-, python3
-, readline
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  bison,
+  bzip2,
+  flex,
+  gperf,
+  ncurses,
+  perl,
+  python3,
+  readline,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "iverilog";
+  pname = "iverilog";
   version = "12.0";
 
   src = fetchFromGitHub {
-    owner  = "steveicarus";
-    repo   = pname;
-    rev    = "v${lib.replaceStrings ["."] ["_"] version}";
-    hash   = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
+    owner = "steveicarus";
+    repo = pname;
+    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
   };
 
-  nativeBuildInputs = [ autoconf bison flex gperf ];
+  nativeBuildInputs = [
+    autoconf
+    bison
+    flex
+    gperf
+  ];
 
-  CC_FOR_BUILD="${stdenv.cc}/bin/cc";
-  CXX_FOR_BUILD="${stdenv.cc}/bin/c++";
+  CC_FOR_BUILD = "${stdenv.cc}/bin/cc";
+  CXX_FOR_BUILD = "${stdenv.cc}/bin/c++";
 
   patches = [
     # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix
@@ -38,13 +45,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ bzip2 ncurses readline zlib ];
+  buildInputs = [
+    bzip2
+    ncurses
+    readline
+    zlib
+  ];
 
   preConfigure = "sh autoconf.sh";
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
@@ -54,13 +66,15 @@ stdenv.mkDerivation rec {
   # (see https://github.com/steveicarus/iverilog/issues/917)
   # so disable the full suite for now.
   doCheck = true;
-  doInstallCheck = !stdenv.isAarch64;
+  doInstallCheck = !stdenv.hostPlatform.isAarch64;
 
   nativeInstallCheckInputs = [
     perl
-    (python3.withPackages (pp: with pp; [
-      docopt
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        docopt
+      ]
+    ))
   ];
 
   installCheckPhase = ''
@@ -72,9 +86,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Icarus Verilog compiler";
-    homepage    = "http://iverilog.icarus.com/";  # https does not work
-    license     = with licenses; [ gpl2Plus lgpl21Plus ];
+    homepage = "https://steveicarus.github.io/iverilog";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qttools, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "molequeue";

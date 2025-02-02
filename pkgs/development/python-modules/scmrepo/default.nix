@@ -20,16 +20,16 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "3.3.7";
+  version = "3.3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "scmrepo";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Z9HUeZPsskEPTwRRwK4z4p2Lv7Ukg7du6OAxvDwEcPc=";
+    tag = version;
+    hash = "sha256-BiLxILHbq5Q8iIE2yMBNlnqqFMoRe9z+Bn/FMaA7gtI=";
   };
 
   build-system = [

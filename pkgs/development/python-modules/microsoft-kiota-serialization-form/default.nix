@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-serialization-form-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yOdrqj8QPz497VWS4427zDRRFc/S5654JeYkO1ZcUcQ=";
   };
 

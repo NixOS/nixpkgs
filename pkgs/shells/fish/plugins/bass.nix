@@ -1,8 +1,13 @@
-{ lib, buildFishPlugin, fetchFromGitHub, python3 }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  python3,
+}:
 
 buildFishPlugin rec {
   pname = "bass";
-  version = "unstable-2021-02-18";
+  version = "1.0-unstable-2021-02-18";
 
   src = fetchFromGitHub {
     owner = "edc";

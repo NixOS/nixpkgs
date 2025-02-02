@@ -1,19 +1,20 @@
-{ lib
-, linuxHeaders # Linux source tree
-, makeWrapper
-, stdenvNoCC
+{
+  lib,
+  linuxHeaders, # Linux source tree
+  makeWrapper,
+  stdenvNoCC,
 
-, binutils
-, coreutils
-, gnugrep
+  binutils,
+  coreutils,
+  gnugrep,
 
   # decompressors for possible kernel image formats
-, bzip2
-, gzip
-, lz4
-, lzop
-, xz
-, zstd
+  bzip2,
+  gzip,
+  lz4,
+  lzop,
+  xz,
+  zstd,
 }:
 
 let
@@ -34,8 +35,7 @@ let
     wrapProgram $out/bin/${scriptName} --prefix PATH : ${lib.makeBinPath commonDeps}
   '';
 in
-stdenvNoCC.mkDerivation
-{
+stdenvNoCC.mkDerivation {
   inherit (linuxHeaders) version;
   pname = "linux-scripts";
 

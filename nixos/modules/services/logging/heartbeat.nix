@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.heartbeat;
 
@@ -18,32 +20,32 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption "heartbeat, uptime monitoring";
+      enable = lib.mkEnableOption "heartbeat, uptime monitoring";
 
-      package = mkPackageOption pkgs "heartbeat" {
+      package = lib.mkPackageOption pkgs "heartbeat" {
         example = "heartbeat7";
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "heartbeat";
         description = "Name of the beat";
       };
 
-      tags = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      tags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 
-      stateDir = mkOption {
-        type = types.str;
+      stateDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/heartbeat";
         description = "The state directory. heartbeat's own logs and other data are stored here.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = ''
           heartbeat.monitors:
           - type: http
@@ -56,7 +58,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - nobody nogroup - -"

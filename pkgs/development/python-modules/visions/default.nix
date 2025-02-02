@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, attrs
-, imagehash
-, matplotlib
-, multimethod
-, networkx
-, numpy
-, pandas
-, pillow
-, pydot
-, pygraphviz
-, shapely
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  attrs,
+  imagehash,
+  matplotlib,
+  multimethod,
+  networkx,
+  numpy,
+  pandas,
+  pillow,
+  pydot,
+  pygraphviz,
+  shapely,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dylan-profiler";
     repo = "visions";
-    rev = "5fe9dd0c2a5ada0162a005c880bac5296686a5aa";  # no 0.7.6 tag in github
+    rev = "5fe9dd0c2a5ada0162a005c880bac5296686a5aa"; # no 0.7.6 tag in github
     hash = "sha256-SZzDXm+faAvrfSOT0fwwAf9IH7upNybwKxbjw1CrHj8=";
   };
 
@@ -42,15 +43,22 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     type-geometry = [ shapely ];
-    type-image-path = [ imagehash pillow ];
-    plotting = [ matplotlib pydot pygraphviz ];
+    type-image-path = [
+      imagehash
+      pillow
+    ];
+    plotting = [
+      matplotlib
+      pydot
+      pygraphviz
+    ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # requires running Apache Spark:

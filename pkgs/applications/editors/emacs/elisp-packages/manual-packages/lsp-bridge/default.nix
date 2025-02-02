@@ -3,7 +3,7 @@
   python3,
   melpaBuild,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   acm,
   markdown-mode,
   basedpyright,
@@ -19,30 +19,31 @@ let
     ps: with ps; [
       epc
       orjson
+      packaging
       paramiko
       rapidfuzz
       setuptools
       sexpdata
       six
+      watchdog
     ]
   );
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-08-17";
+  version = "0-unstable-2025-01-22";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "fe7a0729f9f46a0713b7049d20b25bb78d93f68f";
-    hash = "sha256-lbtg1n72xNePs1DNpjy6Hvg4OhACk9vSfVwFffkeb0I=";
+    rev = "c87e6ac6d452b3bd94583a5c5edb16f37edadb94";
+    hash = "sha256-+6qU8KGdti/pji1d+024bnT7+oFP5Ve3jToURautKzE=";
   };
 
   patches = [
     # Hardcode the python dependencies needed for lsp-bridge, so users
     # don't have to modify their global environment
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
       python = python.interpreter;
     })
   ];
@@ -77,7 +78,6 @@ melpaBuild {
   checkPhase = ''
     runHook preCheck
 
-    cd "$sourceRoot"
     mkfifo test.log
     cat < test.log &
     HOME=$(mktemp -d) python -m test.test
@@ -86,8 +86,6 @@ melpaBuild {
   '';
 
   __darwinAllowLocalNetworking = true;
-
-  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 

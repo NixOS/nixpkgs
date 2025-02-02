@@ -8,13 +8,15 @@
   gtk3,
   pythonOlder,
   pytest,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
-  format = "setuptools";
   pname = "liblarch";
-  disabled = pythonOlder "3.5.0";
+  version = "3.2.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
@@ -22,6 +24,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     gobject-introspection # for setup hook

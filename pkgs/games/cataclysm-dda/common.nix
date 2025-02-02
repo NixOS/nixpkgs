@@ -1,5 +1,5 @@
-{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses, CoreFoundation
-, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
+{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses
+, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, zlib
 , debug
 , useXdgDir
 }:
@@ -7,15 +7,26 @@
 let
   inherit (lib) optionals optionalString;
 
-  cursesDeps = [ gettext ncurses ]
-    ++ optionals stdenv.isDarwin [ CoreFoundation ];
+  commonDeps = [
+    gettext
+    zlib
+  ];
 
-  tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
-    ++ optionals stdenv.isDarwin [ Cocoa ];
+  cursesDeps = commonDeps ++ [ ncurses ];
+
+  tilesDeps =
+    commonDeps
+    ++ [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+      SDL2_ttf
+      freetype
+    ];
 
   patchDesktopFile = ''
     substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
-      --replace "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
+      --replace-fail "Exec=cataclysm-tiles" "Exec=$out/bin/cataclysm-tiles"
   '';
 
   installMacOSAppLauncher = ''
@@ -37,7 +48,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = cursesDeps ++ optionals tiles tilesDeps;
+  buildInputs = if tiles then tilesDeps else cursesDeps;
 
   postPatch = ''
     patchShebangs lang/compile_mo.sh
@@ -50,14 +61,14 @@ stdenv.mkDerivation {
     "RELEASE=1"
   ] ++ optionals tiles [
     "TILES=1" "SOUND=1"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
     "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   postInstall = optionalString tiles
-  ( if !stdenv.isDarwin
+  ( if !stdenv.hostPlatform.isDarwin
     then patchDesktopFile
     else installMacOSAppLauncher
   );

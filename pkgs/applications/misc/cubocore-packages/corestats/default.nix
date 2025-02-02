@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, lm_sensors, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  lm_sensors,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corestats";

@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace ", 'pytest-cov'" ""
   '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     KidMagic = [
       # TODO: kid
     ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     webtest
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     changelog = "https://github.com/rmohr/static3/releases/tag/v${version}";

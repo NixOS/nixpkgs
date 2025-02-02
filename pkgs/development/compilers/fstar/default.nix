@@ -1,29 +1,37 @@
-{ callPackage
-, fetchFromGitHub
-, installShellFiles
-, lib
-, makeWrapper
-, ocamlPackages
-, removeReferencesTo
-, stdenv
-, writeScript
-, z3
+{
+  callPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  makeWrapper,
+  ocamlPackages,
+  removeReferencesTo,
+  stdenv,
+  writeScript,
+  z3,
 }:
 
 let
 
-  version = "2024.01.13";
+  version = "2024.09.05";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    hash = "sha256-xjSWDP8mSjLcn+0hsRpEdzsBgBR+mKCZB8yLmHl+WqE=";
+    hash = "sha256-yaA6WpP2XIQhjK7kpXBdBFUgKZyvtThd6JmSchUCfbI=";
   };
 
   fstar-dune = ocamlPackages.callPackage ./dune.nix { inherit version src; };
 
-  fstar-ulib = callPackage ./ulib.nix { inherit version src fstar-dune z3; };
+  fstar-ulib = callPackage ./ulib.nix {
+    inherit
+      version
+      src
+      fstar-dune
+      z3
+      ;
+  };
 
 in
 
@@ -76,7 +84,9 @@ stdenv.mkDerivation {
     homepage = "https://www.fstar-lang.org";
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ gebner pnmadelaine ];
+    maintainers = with maintainers; [
+      gebner
+    ];
     mainProgram = "fstar.exe";
     platforms = with platforms; darwin ++ linux;
   };

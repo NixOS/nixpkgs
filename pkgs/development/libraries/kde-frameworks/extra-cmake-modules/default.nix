@@ -1,4 +1,10 @@
-{ mkDerivation, lib, fetchpatch, cmake, pkg-config }:
+{
+  mkDerivation,
+  lib,
+  fetchpatch,
+  cmake,
+  pkg-config,
+}:
 
 mkDerivation {
   pname = "extra-cmake-modules";
@@ -11,9 +17,12 @@ mkDerivation {
     })
   ];
 
-  outputs = [ "out" ];  # this package has no runtime components
+  outputs = [ "out" ]; # this package has no runtime components
 
-  propagatedBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   setupHook = ./setup-hook.sh;
 

@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
-  version = "1.9.18";
+  version = "1.9.20";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
     rev = "v${version}";
-    sha256 = "sha256-fibk58X0YtQ8vh8Lyqp9ZAsC79BjCptiqUA5t5Hiisg=";
+    hash = "sha256-nEDvG2Q6uMYWyb49EKOZimkOfEavCjvfFgucwi3u64k=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib cups libpng libjpeg ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation SystemConfiguration ];
 
   # do not generate universal binary on Darwin
   # because it is not supported by Nix's clang
   postPatch = ''
-    substituteInPlace configure --replace "-arch x86_64 -arch arm64" ""
+    substituteInPlace configure --replace-fail "-arch x86_64 -arch arm64" ""
   '';
 
   passthru.tests = testers.testVersion {

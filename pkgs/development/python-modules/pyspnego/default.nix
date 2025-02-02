@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.10.2";
+  version = "0.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,15 +23,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-60aIRrhRynbuuFZzzBhJTlmU74CWuao8jWhr126cPrc=";
+    tag = "v${version}";
+    hash = "sha256-8u4gAIM2HZiDooUoIM0zAUq6IJkJHMzr16p42v6ekBQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ cryptography ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     kerberos = [
       gssapi
       krb5

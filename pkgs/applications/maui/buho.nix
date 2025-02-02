@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, applet-window-buttons
-, karchive
-, kcoreaddons
-, ki18n
-, kio
-, kirigami2
-, mauikit
-, mauikit-filebrowsing
-, mauikit-accounts
-, mauikit-texteditor
-, qtmultimedia
-, qtquickcontrols2
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  applet-window-buttons,
+  karchive,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kirigami2,
+  mauikit,
+  mauikit-filebrowsing,
+  mauikit-accounts,
+  mauikit-texteditor,
+  qtmultimedia,
+  qtquickcontrols2,
 }:
 
 mkDerivation {

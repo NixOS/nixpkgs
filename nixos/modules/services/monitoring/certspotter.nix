@@ -1,7 +1,9 @@
-{ config
-, lib
-, pkgs
-, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.certspotter;
@@ -13,16 +15,21 @@ let
     }
     ++ lib.optional (cfg.emailRecipients != [ ]) {
       name = "email_recipients";
-      path = pkgs.writeText "certspotter-email_recipients" (builtins.concatStringsSep "\n" cfg.emailRecipients);
+      path = pkgs.writeText "certspotter-email_recipients" (
+        builtins.concatStringsSep "\n" cfg.emailRecipients
+      );
     }
     # always generate hooks dir when no emails are provided to allow running cert spotter with no hooks/emails
     ++ lib.optional (cfg.emailRecipients == [ ] || cfg.hooks != [ ]) {
       name = "hooks.d";
-      path = pkgs.linkFarm "certspotter-hooks" (lib.imap1 (i: path: {
-        inherit path;
-        name = "hook${toString i}";
-      }) cfg.hooks);
-    });
+      path = pkgs.linkFarm "certspotter-hooks" (
+        lib.imap1 (i: path: {
+          inherit path;
+          name = "hook${toString i}";
+        }) cfg.hooks
+      );
+    }
+  );
 in
 {
   options.services.certspotter = {
@@ -52,7 +59,10 @@ in
       type = with lib.types; listOf str;
       description = "Domain names to watch. To monitor a domain with all subdomains, prefix its name with `.` (e.g. `.example.org`).";
       default = [ ];
-      example = [ ".example.org" "another.example.com" ];
+      example = [
+        ".example.org"
+        "another.example.com"
+      ];
     };
 
     emailRecipients = lib.mkOption {
@@ -65,7 +75,9 @@ in
       type = with lib.types; listOf path;
       description = ''
         Scripts to run upon the detection of a new certificate. See `man 8 certspotter-script` or
-        [the GitHub page](https://github.com/SSLMate/certspotter/blob/${pkgs.certspotter.src.rev or "master"}/man/certspotter-script.md)
+        [the GitHub page](https://github.com/SSLMate/certspotter/blob/${
+          pkgs.certspotter.src.rev or "master"
+        }/man/certspotter-script.md)
         for more info.
       '';
       default = [ ];
@@ -97,13 +109,17 @@ in
       }
     ];
 
-    services.certspotter.sendmailPath = let
-      inherit (config.security) wrapperDir;
-      inherit (config.services.mail) sendmailSetuidWrapper;
-    in lib.mkMerge [
-      (lib.mkIf (sendmailSetuidWrapper != null) (lib.mkOptionDefault "${wrapperDir}/${sendmailSetuidWrapper.program}"))
-      (lib.mkIf (sendmailSetuidWrapper == null) (lib.mkOptionDefault null))
-    ];
+    services.certspotter.sendmailPath =
+      let
+        inherit (config.security) wrapperDir;
+        inherit (config.services.mail) sendmailSetuidWrapper;
+      in
+      lib.mkMerge [
+        (lib.mkIf (sendmailSetuidWrapper != null) (
+          lib.mkOptionDefault "${wrapperDir}/${sendmailSetuidWrapper.program}"
+        ))
+        (lib.mkIf (sendmailSetuidWrapper == null) (lib.mkOptionDefault null))
+      ];
 
     users.users.certspotter = {
       description = "Cert Spotter user";
@@ -118,7 +134,8 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment.CERTSPOTTER_CONFIG_DIR = configDir;
-      environment.SENDMAIL_PATH = if cfg.sendmailPath != null then cfg.sendmailPath else "/run/current-system/sw/bin/false";
+      environment.SENDMAIL_PATH =
+        if cfg.sendmailPath != null then cfg.sendmailPath else "/run/current-system/sw/bin/false";
       script = ''
         export CERTSPOTTER_STATE_DIR="$STATE_DIRECTORY"
         cd "$CERTSPOTTER_STATE_DIR"

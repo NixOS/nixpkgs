@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-klotski/${lib.versions.majorMinor version}/gnome-klotski-${version}.tar.xz";
-    sha256 = "1qm01hdd5yp8chig62bj10912vclbdvywwczs84sfg4zci2phqwi";
+    hash = "sha256-kWN4RWSfPKcJ0p9x7ndblG0REghyCfMiZOj60hoMoOI=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-klotski";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-klotski/-/blob/${version}/NEWS?ref_type=tags";
     description = "Slide blocks to solve the puzzle";
     mainProgram = "gnome-klotski";
     maintainers = teams.gnome.members;

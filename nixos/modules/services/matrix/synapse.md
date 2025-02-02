@@ -188,7 +188,7 @@ or [OpenID](https://element-hq.github.io/synapse/latest/openid.html).
 
 ## Element (formerly known as Riot) Web Client {#module-services-matrix-element-web}
 
-[Element Web](https://github.com/vector-im/riot-web/) is
+[Element Web](https://github.com/element-hq/element-web) is
 the reference web client for Matrix and developed by the core team at
 matrix.org. Element was formerly known as Riot.im, see the
 [Element introductory blog post](https://element.io/blog/welcome-to-element/)
@@ -228,6 +228,6 @@ the example, this means that you should not reuse the
 `myhostname.example.org` virtualHost to also serve Element,
 but instead serve it on a different subdomain, like
 `element.example.org` in the example. See the
-[Element Important Security Notes](https://github.com/vector-im/element-web/tree/v1.10.0#important-security-notes)
+[Element Important Security Notes](https://github.com/element-hq/element-web/tree/v1.10.0#important-security-notes)
 for more information on this subject.
 :::

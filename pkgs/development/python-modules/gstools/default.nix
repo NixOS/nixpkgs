@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QpdOARzcSRVFl/DbnE2JLBFZmTSh/fBOmzweuf+zfEs=";
   };
 
@@ -43,13 +43,6 @@ buildPythonPackage rec {
     pyevtk
     scipy
   ];
-
-  # scipy derivation dont support numpy_2 and is patched to use version 1
-  # Using numpy_2 in the derivation will cause a clojure duplicate error
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
-  '';
 
   pythonImportsCheck = [ "gstools" ];
   nativeCheckInputs = [ pytestCheckHook ];

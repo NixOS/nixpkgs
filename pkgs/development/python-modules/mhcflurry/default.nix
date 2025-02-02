@@ -1,30 +1,44 @@
 {
-  appdirs,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # dependencies
+  appdirs,
   keras,
-  lib,
   mhcgnomes,
-  nose,
   pandas,
-  pytestCheckHook,
   pyyaml,
   scikit-learn,
   tensorflow,
+  tf-keras,
   tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mhcflurry";
-  version = "2.1.1";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-absIKvcFo6I1Uu0t+l8OLOU/AQ4kD295P4+KVwMAWMc=";
+    tag = "v${version}";
+    hash = "sha256-dxCGCPnk1IFKg8ZVqMJsojQL0KlNirKlHJoaaOYIzMU=";
   };
+
+  patches = [
+    # TODO: this has been merged in master and will thus be included in the next release.
+    (fetchpatch {
+      name = "migrate-from-nose-to-pytest";
+      url = "https://github.com/openvax/mhcflurry/commit/8e9f35381a476362ca41cb71eb0a90f6573fe4b3.patch";
+      hash = "sha256-PyyxGrjE3OZR8dKHEQBQGiRG9A8kcz/e14PRyrVvqrE=";
+    })
+  ];
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
   dependencies = [
@@ -35,11 +49,13 @@ buildPythonPackage rec {
     pyyaml
     scikit-learn
     tensorflow
+    tf-keras
     tqdm
   ];
 
+  # Tests currently depend on nose; see
+  # <https://github.com/openvax/mhcflurry/pull/244>.
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 
@@ -88,7 +104,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/openvax/mhcflurry/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    # ModuleNotFoundError: No module named 'keras.api._v2' as tensorflow is too outdated
-    broken = true;
   };
 }

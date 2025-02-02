@@ -27,7 +27,8 @@ in
 
 with haskellLib;
 
-self: super: {
+self: super:
+{
   # COMMON ARM OVERRIDES
 
   # moved here from configuration-common.nix, no reason given.
@@ -39,11 +40,18 @@ self: super: {
   happy_1_19_12 = doDistribute (dontCheck super.happy_1_19_12);
 
   # add arm specific library
-  wiringPi = overrideCabal ({librarySystemDepends ? [], ...}: {
-    librarySystemDepends = librarySystemDepends ++ [pkgs.wiringpi];
-  }) super.wiringPi;
+  wiringPi = overrideCabal (
+    {
+      librarySystemDepends ? [ ],
+      ...
+    }:
+    {
+      librarySystemDepends = librarySystemDepends ++ [ pkgs.wiringpi ];
+    }
+  ) super.wiringPi;
 
-} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
+}
+// lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
 
   # Corrupted store path https://github.com/NixOS/nixpkgs/pull/272097#issuecomment-1848414265
@@ -108,7 +116,8 @@ self: super: {
   # Similar RTS issue in test suite:
   # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
   # These still fail sporadically on ghc 9.2
-} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
+}
+// lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
   # KAT/ECB/D2 test segfaults on armv7l

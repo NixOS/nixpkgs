@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sybil
-, pytest
-, pytestCheckHook
-, mpi
-, mpi4py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  sybil,
+  pytest,
+  pytestCheckHook,
+  mpi,
+  mpi4py,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +43,8 @@ buildPythonPackage rec {
   doCheck = false;
   pytestFlagsArray = [
     # https://github.com/aragilar/pytest-mpi/issues/4#issuecomment-634614337
-    "-p" "pytester"
+    "-p"
+    "pytester"
   ];
 
   pythonImportsCheck = [ "pytest_mpi" ];

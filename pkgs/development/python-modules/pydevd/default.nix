@@ -62,6 +62,8 @@ buildPythonPackage rec {
       "test_tracing_other_threads"
       # subprocess.CalledProcessError
       "test_find_main_thread_id"
+      # numpy 2 compat
+      "test_evaluate_numpy"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       "test_case_handled_and_unhandled_exception_generator"
@@ -72,7 +74,7 @@ buildPythonPackage rec {
       # https://github.com/fabioz/PyDev.Debugger/issues/269
       "test_evaluate_expression"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_multiprocessing_simple"
       "test_evaluate_exception_trace"
     ];

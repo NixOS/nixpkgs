@@ -1,11 +1,13 @@
-{ fetchFromGitHub
-, rustPlatform
-, pkg-config
-, python3
-, cmake
-, libmysqlclient
-, makeBinaryWrapper
-, lib
+{
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  python3,
+  cmake,
+  libmysqlclient,
+  makeBinaryWrapper,
+  lib,
+  nix-update-script,
 }:
 
 let
@@ -20,13 +22,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.17.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-8MxGrE8BaqSN0vPORKupKQuqHiv2vcqQhTX+SnmWFoM=";
+    tag = version;
+    hash = "sha256-YIj9yoZrVRMcWFczyy5RR2Djwhu1/CyQuumzPoApp3I=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +49,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "deadpool-0.7.0" = "sha256-yQwn45EuzmPBwuT+iLJ/LLWAkBkW2vF+GLswdbpFVAY=";
-    };
   };
 
   # almost all tests need a DB to test against
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mozilla Sync Storage built with Rust";

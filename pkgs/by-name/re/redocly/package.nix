@@ -1,23 +1,24 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, redocly
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  redocly,
+  testers,
 }:
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.18.1";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-Y09tGm3Sje8gd+6tUyBTCt7HjL2CQ/vo/ExLDnywvcQ=";
+    hash = "sha256-jBfAMrmJ9+k1Fx2gZoQ8UiTT13tSvxXUKXNCW3vmuUY=";
   };
 
-  npmDepsHash = "sha256-WzMFKMW/YyAH3ZoOeIcXIum15cJmPGp96xSYb9QCaWI=";
+  npmDepsHash = "sha256-IcyX+LmMduE8CY6wNSTv0D4c3vCZu48EXsUSsqfOqFQ=";
 
   npmBuildScript = "prepare";
 
@@ -36,10 +37,7 @@ buildNpmPackage rec {
     makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
       $out/bin/redocly \
       --set-default REDOCLY_TELEMETRY off \
-      --set-default CI true # Silence update messages
-
-    # Symlink for backwards compatibility. Remove after 24.05.
-    ln -s $out/bin/redocly $out/bin/redocly-cli
+      --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
   '';
 
   passthru = {

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "lxml-html-clean";
-  version = "0.2.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "lxml_html_clean";
-    rev = "refs/tags/${version}";
-    hash = "sha256-3ifuEgjCLDj0dBh9AbjAT/hNFGfINbvyjgRuxIRuarw=";
+    tag = version;
+    hash = "sha256-tZDFpJg7YySJ6CrSesD9+WWZS/guQFNmpSVsMzfzbpU=";
   };
 
   build-system = [ setuptools ];

@@ -1,19 +1,19 @@
-{ lib
-, writeScript
+{
+  lib,
+  writeScript,
 }:
 
-{ name ? ""
-, owner ? ""
-, repo ? ""
-, page ? "releases/latest"
-, filter ? ".tag_name | split(\"-\") | .[1]"
+{
+  name ? "",
+  owner ? "",
+  repo ? "",
+  page ? "releases/latest",
+  filter ? ".tag_name | split(\"-\") | .[1]",
 }:
 
 let
   pname =
-    if lib.hasPrefix "rocm-llvm-" name
-    then "llvm.${lib.removePrefix "rocm-llvm-" name}"
-    else name;
+    if lib.hasPrefix "rocm-llvm-" name then "llvm.${lib.removePrefix "rocm-llvm-" name}" else name;
 
   updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
@@ -34,4 +34,5 @@ let
 
     update-source-version rocmPackages_5.${pname} "$version" --ignore-same-hash
   '';
-in [ updateScript ]
+in
+[ updateScript ]

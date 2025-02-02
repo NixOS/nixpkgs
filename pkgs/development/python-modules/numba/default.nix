@@ -7,7 +7,8 @@
   python,
   buildPythonPackage,
   setuptools,
-  numpy_2,
+  numpy,
+  numpy_1,
   llvmlite,
   libcxx,
   importlib-metadata,
@@ -44,7 +45,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numba";
     repo = "numba";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses .gitattributes to inject information about the revision
     # hash and the refname into `numba/_version.py`, see:
     #
@@ -77,10 +78,11 @@ buildPythonPackage rec {
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   build-system = [
     setuptools
+    numpy
   ];
 
   nativeBuildInputs = lib.optionals cudaSupport [
@@ -88,12 +90,10 @@ buildPythonPackage rec {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs = [
-    # Not propagating it, because it numba can work with either numpy_2 or numpy_1
-    numpy_2
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
+  buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
   dependencies = [
+    numpy
     llvmlite
     setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-metadata ];
@@ -160,6 +160,9 @@ buildPythonPackage rec {
       cudaSupport = false;
       doFullCheck = true;
       testsWithoutSandbox = false;
+    };
+    numpy_1 = numba.override {
+      numpy = numpy_1;
     };
   };
 

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "3.7";
+  version = "3.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ao/zqt8GCcH9J42OowiSmUEqeoub0AXdCLn4KFvLXPw=";
+    hash = "sha256-EvZcm0cKvabcNc+OY8xXSxxSsR3yyGAwrwrAmwGxPqk=";
   };
 
   build-system = [ flit-core ];

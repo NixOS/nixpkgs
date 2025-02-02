@@ -5,7 +5,7 @@
   fetchFromGitHub,
   gssapi,
   impacket,
-  ldap3,
+  ldap3-bleeding-edge,
   lxml,
   pyasn1,
   pycryptodome,
@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.6.1";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,17 +23,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "the-useless-one";
     repo = "pywerview";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hsilBqk73txYIlgRtbn/l/kWORMGft7ne5BffchDLPc=";
+    tag = "v${version}";
+    hash = "sha256-1JDohgEowOlbLsqzX5aAmMSfS6LffXwz1t3361IYq60=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     gssapi
     impacket
-    ldap3
+    ldap3-bleeding-edge
     lxml
     pycryptodome
     pyasn1
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for PowerSploit's PowerView support";
-    mainProgram = "pywerview";
     homepage = "https://github.com/the-useless-one/pywerview";
     changelog = "https://github.com/the-useless-one/pywerview/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pywerview";
   };
 }

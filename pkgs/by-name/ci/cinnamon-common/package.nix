@@ -1,83 +1,88 @@
-{ atk
-, cacert
-, dbus
-, cinnamon-control-center
-, cinnamon-desktop
-, cinnamon-menus
-, cinnamon-session
-, cinnamon-translations
-, cjs
-, evolution-data-server
-, fetchFromGitHub
-, gdk-pixbuf
-, gettext
-, libgnomekbd
-, glib
-, gobject-introspection
-, gsound
-, gtk3
-, intltool
-, json-glib
-, callPackage
-, libstartup_notification
-, libXtst
-, libXdamage
-, mesa
-, muffin
-, networkmanager
-, pkg-config
-, polkit
-, lib
-, stdenv
-, wrapGAppsHook3
-, libxml2
-, gtk-doc
-, caribou
-, python3
-, keybinder3
-, cairo
-, xapp
-, upower
-, nemo
-, libnotify
-, accountsservice
-, gnome-online-accounts
-, glib-networking
-, pciutils
-, timezonemap
-, libnma
-, meson
-, ninja
-, gst_all_1
-, perl
+{
+  atk,
+  cacert,
+  dbus,
+  cinnamon-control-center,
+  cinnamon-desktop,
+  cinnamon-menus,
+  cinnamon-session,
+  cinnamon-translations,
+  cjs,
+  evolution-data-server,
+  fetchFromGitHub,
+  gcr,
+  gdk-pixbuf,
+  gettext,
+  libgnomekbd,
+  glib,
+  gobject-introspection,
+  gsound,
+  gtk3,
+  intltool,
+  json-glib,
+  libsecret,
+  libstartup_notification,
+  libXtst,
+  libXdamage,
+  libgbm,
+  muffin,
+  networkmanager,
+  pkg-config,
+  polkit,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  libxml2,
+  gtk-doc,
+  caribou,
+  python3,
+  keybinder3,
+  cairo,
+  xapp,
+  upower,
+  nemo,
+  libnotify,
+  accountsservice,
+  gnome-online-accounts,
+  glib-networking,
+  pciutils,
+  timezonemap,
+  libnma,
+  meson,
+  ninja,
+  gst_all_1,
+  perl,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    dbus-python
-    setproctitle
-    pygobject3
-    pycairo
-    python-xapp
-    pillow
-    pyinotify # for looking-glass
-    pytz
-    tinycss2
-    python-pam
-    pexpect
-    distro
-    requests
-  ]);
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      dbus-python
+      setproctitle
+      pygobject3
+      pycairo
+      python-xapp
+      pillow
+      pyinotify # for looking-glass
+      pytz
+      tinycss2
+      python-pam
+      pexpect
+      distro
+      requests
+    ]
+  );
 in
+# TODO (after 25.05 branch-off): Rename to pkgs.cinnamon
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.2.9";
+  version = "6.4.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-CW87zZogjdTOCp6mx5ctV6T9YQVQGo3yw0lPTkiCNkE=";
+    hash = "sha256-hvQINRvEqTDWV0ja1tHzkpJMexc0htL0IlCHuy8QCQk=";
   };
 
   patches = [
@@ -94,15 +99,17 @@ stdenv.mkDerivation rec {
     cjs
     dbus
     evolution-data-server # for calendar-server
+    gcr
     gdk-pixbuf
     glib
     gsound
     gtk3
     json-glib
+    libsecret
     libstartup_notification
     libXtst
     libXdamage
-    mesa
+    libgbm
     muffin
     networkmanager
     polkit
@@ -136,6 +143,7 @@ stdenv.mkDerivation rec {
     intltool
     gtk-doc
     perl
+    python3.pkgs.libsass # for pysassc
     python3.pkgs.wrapPython
     pkg-config
   ];
@@ -160,12 +168,13 @@ stdenv.mkDerivation rec {
       substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
       substituteInPlace ./modules/cs_keyboard.py          --replace-fail "/usr/bin/cinnamon-dbus-command" "$out/bin/cinnamon-dbus-command"
       substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
+      substituteInPlace ./modules/cs_user.py              --replace-fail "/usr/bin/passwd" "/run/wrappers/bin/passwd"
     popd
 
     substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
       --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
-    patchShebangs src/data-to-c.pl
+    patchShebangs src/data-to-c.pl data/theme/parse-sass.sh
   '';
 
   postInstall = ''
@@ -192,7 +201,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" "cinnamon-wayland" ];
+    providedSessions = [
+      "cinnamon"
+      "cinnamon2d"
+      "cinnamon-wayland"
+    ];
   };
 
   meta = with lib; {

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, file
-, glibmm
-, gst_all_1
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  file,
+  glibmm,
+  gst_all_1,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config

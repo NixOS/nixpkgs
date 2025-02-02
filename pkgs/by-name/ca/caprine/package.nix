@@ -6,22 +6,23 @@
   makeDesktopItem,
   copyDesktopItems,
   electron,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "caprine";
-  version = "2.60.1";
+  version = "2.60.3";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "caprine";
     rev = "v${version}";
-    hash = "sha256-y4W295i7FhgJC3SlwSr801fLOGJY1WF136bbkkBUvyw=";
+    hash = "sha256-yfCilJ62m7nKe8B+4puwAbNgr2g1P7HaKIhFINdv0/k=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  npmDepsHash = "sha256-JHaUc2p+wHsqWtls8xquHK9qnypuCrR0AQMGxcrTsC0=";
+  npmDepsHash = "sha256-hNOAplCSXrO4NZqDTkmhf0oZVeGRUHr2Y/Qdx2RIV9c=";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -37,23 +38,25 @@ buildNpmPackage rec {
         -c.electronVersion=${electron.version}
   '';
 
+  patches = [ ./001-disable-auto-update.patch ];
+
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/caprine
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/caprine
 
       makeWrapper ${lib.getExe electron} $out/bin/caprine \
           --add-flags $out/share/caprine/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --set-default ELECTRON_IS_DEV 0 \
           --inherit-argv0
 
       install -Dm644 build/icon.png $out/share/icons/hicolor/512x512/apps/caprine.png
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Caprine.app" $out/Applications
       makeWrapper "$out/Applications/Caprine.app/Contents/MacOS/Caprine" $out/bin/caprine
@@ -79,12 +82,17 @@ buildNpmPackage rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/sindresorhus/caprine/releases/tag/${src.rev}";
     description = "Elegant Facebook Messenger desktop app";
     homepage = "https://github.com/sindresorhus/caprine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ astronaut0212 ];
+    maintainers = with lib.maintainers; [
+      astronaut0212
+      khaneliman
+    ];
     inherit (electron.meta) platforms;
   };
 }

@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, cairo, pango, pkg-config, wayland-protocols
-, glib, wayland, libxkbcommon, makeWrapper, wayland-scanner
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  cairo,
+  pango,
+  pkg-config,
+  wayland-protocols,
+  glib,
+  wayland,
+  libxkbcommon,
+  makeWrapper,
+  wayland-scanner,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,11 +27,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-dqFvU2mRYEw7n8Fmbudwi5XMLQ7mQXFkug9D9j4FIrU=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config makeWrapper wayland-scanner ];
-  buildInputs = [ cairo pango wayland-protocols glib wayland libxkbcommon ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+    wayland-scanner
+  ];
+  buildInputs = [
+    cairo
+    pango
+    wayland-protocols
+    glib
+    wayland
+    libxkbcommon
+  ];
 
   patches = [
     # can be removed when https://github.com/nyyManni/dmenu-wayland/pull/23 is included

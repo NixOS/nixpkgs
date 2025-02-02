@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [ aiofiles ];
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
       pytestCheckHook
     ]
     ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "w1thermsensor" ];
 

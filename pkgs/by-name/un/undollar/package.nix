@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  nodejs
+  nodejs,
 }:
 
 stdenvNoCC.mkDerivation {

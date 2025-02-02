@@ -6,6 +6,7 @@
   geopy,
   imageio,
   lxml,
+  numpy,
   pandas,
   pillow,
   pytestCheckHook,
@@ -17,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.7.2";
+  version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3SVpzWii9/ViJ7mbrqzKmN5FkOOYTeYdhJll6q/IseU=";
+    tag = "v${version}";
+    hash = "sha256-4PztYdQmMH2n3dlV8arJ2UFGp08nkIK80L460UdNhV8=";
   };
 
   build-system = [ setuptools ];
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     geopy
     imageio
     lxml
+    numpy
     pandas
     pillow
     python-dateutil
@@ -55,6 +57,7 @@ buildPythonPackage rec {
     "test_get_loop"
     "test_get_ec_sites"
     "test_ecradar"
+    "test_historical_number_values"
   ];
 
   pythonImportsCheck = [ "env_canada" ];

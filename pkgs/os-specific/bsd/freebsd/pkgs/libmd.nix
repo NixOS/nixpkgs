@@ -2,48 +2,76 @@
   lib,
   stdenv,
   mkDerivation,
-  freebsdSetupHook,
-  bsdSetupHook,
+  libcMinimal,
+  include,
+  libgcc,
   makeMinimal,
+  bsdSetupHook,
+  freebsdSetupHook,
+  compatIfNeeded,
+  csu,
+  # this is set to true when used as the dependency of install
+  # this is set to false when used as the dependency of libc
+  bootstrapInstallation ? false,
+  extraSrc ? [ ],
 }:
-mkDerivation {
-  path = "lib/libmd";
-  extraPaths = [
-    "sys/sys/md5.h"
-    "sys/crypto/sha2"
-    "sys/crypto/skein"
-  ];
-  nativeBuildInputs = [
-    makeMinimal
-    bsdSetupHook
-    freebsdSetupHook
-  ];
 
-  makeFlags = [
-    "STRIP=-s" # flag to install, not command
-    "RELDIR=."
-  ] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
+mkDerivation (
+  {
+    pname = "libmd" + lib.optionalString bootstrapInstallation "-boot";
+    path = "lib/libmd";
+    extraPaths = [
+      "sys/crypto"
+      "sys/sys"
+    ] ++ extraSrc;
 
-  preBuild = ''
-    mkdir sys
-  '';
+    outputs = [
+      "out"
+      "man"
+      "debug"
+    ];
 
-  installPhase = ''
-    # libmd is used by install. do it yourself!
-    mkdir -p $out/include $out/lib $man/share/man
-    cp libmd.a $out/lib/libmd.a
-    for f in $(make $makeFlags -V INCS); do
-      if [ -e "$f" ]; then cp "$f" "$out/include/$f"; fi
-      if [ -e "$BSDSRCDIR/sys/crypto/sha2/$f" ]; then cp "$BSDSRCDIR/sys/crypto/sha2/$f" "$out/include/$f"; fi
-      if [ -e "$BSDSRCDIR/sys/crypto/skein/$f" ]; then cp "$BSDSRCDIR/sys/crypto/skein/$f" "$out/include/$f"; fi
-    done
-    for f in $(make $makeFlags -V MAN); do
-      cp "$f" "$man/share/man/$f"
-    done
-  '';
+    noLibc = !bootstrapInstallation;
 
-  outputs = [
-    "out"
-    "man"
-  ];
-}
+    buildInputs =
+      lib.optionals (!bootstrapInstallation) [
+        libcMinimal
+        include
+        libgcc
+      ]
+      ++ compatIfNeeded;
+
+    preBuild =
+      ''
+        mkdir $BSDSRCDIR/lib/libmd/sys
+      ''
+      + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+      '';
+
+    installPhase =
+      if (!bootstrapInstallation) then
+        null
+      else
+        ''
+          # libmd is used by install. do it yourself!
+          mkdir -p $out/include $out/lib $man/share/man
+          cp libmd.a $out/lib/libmd.a
+          for f in $(make $makeFlags -V INCS); do
+            if [ -e "$f" ]; then cp "$f" "$out/include/$f"; fi
+            if [ -e "$BSDSRCDIR/sys/crypto/sha2/$f" ]; then cp "$BSDSRCDIR/sys/crypto/sha2/$f" "$out/include/$f"; fi
+            if [ -e "$BSDSRCDIR/sys/crypto/skein/$f" ]; then cp "$BSDSRCDIR/sys/crypto/skein/$f" "$out/include/$f"; fi
+          done
+          for f in $(make $makeFlags -V MAN); do
+            cp "$f" "$man/share/man/$f"
+          done
+        '';
+  }
+  // lib.optionalAttrs bootstrapInstallation {
+    nativeBuildInputs = [
+      makeMinimal
+      bsdSetupHook
+      freebsdSetupHook
+    ];
+  }
+)

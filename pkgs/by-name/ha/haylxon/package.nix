@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-6vVsm4gdcFCxKvvmOi3wlHkFoZp8CG+u50NfxIZqCl8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = {
     description = "Save screenshots of urls and webpages from terminal";

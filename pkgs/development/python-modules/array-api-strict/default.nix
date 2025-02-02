@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "array-api-strict";
-  version = "2.0.1";
+  version = "2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "data-apis";
     repo = "array-api-strict";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sGuMhtxhXXFD6KAiujuWdDe2+gKYN3ijiXvi07a2AgA=";
+    tag = version;
+    hash = "sha256-9WIKN2mekJIOD076946xkNqMlfeTaLuuB9qqAJN8Xwc=";
   };
 
   build-system = [ setuptools ];

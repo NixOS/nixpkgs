@@ -14,22 +14,20 @@ rec {
       pkgs.alacritty
     ];
 
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = "alice";
+    };
+
     services.xserver = {
       enable = true;
-
-      displayManager = {
-        lightdm.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
-      };
-
+      displayManager.lightdm.enable = true;
       desktopManager.xfce.enable = true;
     };
 
     i18n.inputMethod = {
-      enabled = "fcitx5";
+      enable = true;
+      type = "fcitx5";
       fcitx5.addons = [
         pkgs.fcitx5-chinese-addons
         pkgs.fcitx5-hangul
@@ -162,7 +160,7 @@ rec {
 
             ### Verify that file contents are as expected
             file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
-            assert file_content == "☺一下한कか\n"
+            assert file_content == "☺一下한कか\n", f'output does not match input:\n{file_content}'
       ''
   ;
 })

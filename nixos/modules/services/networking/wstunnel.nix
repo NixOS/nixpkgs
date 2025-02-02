@@ -48,6 +48,13 @@ let
       };
     };
 
+    # The original argument name `websocketPingFrequency` is a misnomer, as the frequency is the inverse of the interval.
+    websocketPingInterval = lib.mkOption {
+      description = "Frequency at which the client will send websocket ping to the server.";
+      type = lib.types.nullOr lib.types.ints.unsigned;
+      default = null;
+    };
+
     loggingLevel = lib.mkOption {
       description = ''
         Passed to --log-lvl
@@ -161,7 +168,7 @@ let
         };
 
         localToRemote = lib.mkOption {
-          description = ''Listen on local and forwards traffic from remote.'';
+          description = "Listen on local and forwards traffic from remote.";
           type = lib.types.listOf (lib.types.str);
           default = [ ];
           example = [
@@ -230,13 +237,6 @@ let
           description = "Whether to verify the TLS certificate of the server. It might be useful to set this to `false` when working with the `tlsSNI` option.";
           type = lib.types.bool;
           default = true;
-        };
-
-        # The original argument name `websocketPingFrequency` is a misnomer, as the frequency is the inverse of the interval.
-        websocketPingInterval = lib.mkOption {
-          description = "Frequency at which the client will send websocket ping to the server.";
-          type = lib.types.nullOr lib.types.ints.unsigned;
-          default = null;
         };
 
         upgradeCredentials = lib.mkOption {
@@ -318,9 +318,21 @@ let
               lib.cli.toGNUCommandLineShell { } (
                 lib.recursiveUpdate {
                   restrict-to = map hostPortToString restrictTo;
+                  websocket-ping-frequency-sec = websocketPingInterval;
                   tls-certificate =
-                    if useACMEHost != null then "${certConfig.directory}/fullchain.pem" else "${tlsCertificate}";
-                  tls-private-key = if useACMEHost != null then "${certConfig.directory}/key.pem" else "${tlsKey}";
+                    if !enableHTTPS then
+                      null
+                    else if useACMEHost != null then
+                      "${certConfig.directory}/fullchain.pem"
+                    else
+                      "${tlsCertificate}";
+                  tls-private-key =
+                    if !enableHTTPS then
+                      null
+                    else if useACMEHost != null then
+                      "${certConfig.directory}/key.pem"
+                    else
+                      "${tlsKey}";
                 } extraArgs
               )
             } \
@@ -456,10 +468,11 @@ in
 
         (lib.mapAttrsToList (name: serverCfg: {
           assertion =
-            (serverCfg.tlsCertificate == null && serverCfg.tlsKey == null)
-            || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
+            serverCfg.enableHTTPS
+            ->
+              (serverCfg.useACMEHost != null) || (serverCfg.tlsCertificate != null && serverCfg.tlsKey != null);
           message = ''
-            services.wstunnel.servers."${name}".tlsCertificate and services.wstunnel.servers."${name}".tlsKey need to be set together.
+            If services.wstunnel.servers."${name}".enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".tlsKey and services.wstunnel.servers."${name}".tlsCertificate need to be set.
           '';
         }) cfg.servers)
       ++
@@ -474,6 +487,7 @@ in
 
   meta.maintainers = with lib.maintainers; [
     alyaeanyx
+    raylas
     rvdp
     neverbehave
   ];

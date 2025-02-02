@@ -1,57 +1,44 @@
-{ lib
-, buildPackages
-, clang
-, fetchFromGitHub
-, libclang
-, libiconv
-, llvmPackages_12
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
-let
-  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
-  # Forcing it to clang 12 fixes the issue.
-  buildRustPackage =
-    if stdenv.isDarwin then
-      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
-    else
-      rustPlatform.buildRustPackage;
-in
-buildRustPackage rec {
+
+rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-udQxFfLkAysDtD6P3TsW0xEcENA77l+GaDUSnkIBGXo=";
+    hash = "sha256-0MM5xpxBam95vSepDvVtpt/997XyC8aOqDiyPykHRRc=";
   };
 
-  cargoHash = "sha256-w1yQOEoumyam4JsDarAQffTs8Ype4VUyGJ0vgJfuHaU=";
+  cargoHash = "sha256-y0vD4LrFv9bclCuA1xiFciO+lNY/MFw4aMk4/0USibA=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
-    clang
-    libclang.lib
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
   ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin
@@ -79,7 +66,6 @@ buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 

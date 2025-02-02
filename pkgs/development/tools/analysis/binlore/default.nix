@@ -1,29 +1,30 @@
-{ lib
-, fetchFromGitHub
-, runCommand
-, yallback
-, yara
+{
+  lib,
+  fetchFromGitHub,
+  runCommand,
+  yallback,
+  yara,
 }:
 
-/* TODO/CAUTION:
+/*
+  TODO/CAUTION:
 
-I don't want to discourage use, but I'm not sure how stable
-the API is. Have fun, but be prepared to track changes! :)
+  I don't want to discourage use, but I'm not sure how stable
+  the API is. Have fun, but be prepared to track changes! :)
 
-For _now_, binlore is basically a thin wrapper around
-`<invoke yara> | <postprocess with yallback>` with support
-for running it on a derivation, saving the result in the
-store, and aggregating results from a set of packages.
+  For _now_, binlore is basically a thin wrapper around
+  `<invoke yara> | <postprocess with yallback>` with support
+  for running it on a derivation, saving the result in the
+  store, and aggregating results from a set of packages.
 
-In the longer term, I suspect there are more uses for this
-general pattern (i.e., run some analysis tool that produces
-a deterministic output and cache the result per package...).
+  In the longer term, I suspect there are more uses for this
+  general pattern (i.e., run some analysis tool that produces
+  a deterministic output and cache the result per package...).
 
-I'm not sure how that'll look and if it'll be the case that
-binlore automatically collects all of them, or if you'll be
-configuring which "kind(s)" of lore it generates. Nailing
-that down will almost certainly mean reworking the API.
-
+  I'm not sure how that'll look and if it'll be the case that
+  binlore automatically collects all of them, or if you'll be
+  configuring which "kind(s)" of lore it generates. Nailing
+  that down will almost certainly mean reworking the API.
 */
 
 let
@@ -34,20 +35,23 @@ let
     hash = "sha256-4Fs6HThfDhKRskuDJx2+hucl8crMRm10K6949JdIwPY=";
   };
   /*
-  binlore has one one more yallbacks responsible for
-  routing the appropriate lore to a named file in the
-  appropriate format. At some point I might try to do
-  something fancy with this, but for now the answer to
-  *all* questions about the lore are: the bare minimum
-  to get resholve over the next feature hump in time to
-  hopefully slip this feature in before the branch-off.
+    binlore has one one more yallbacks responsible for
+    routing the appropriate lore to a named file in the
+    appropriate format. At some point I might try to do
+    something fancy with this, but for now the answer to
+    *all* questions about the lore are: the bare minimum
+    to get resholve over the next feature hump in time to
+    hopefully slip this feature in before the branch-off.
   */
   # TODO: feeling really uninspired on the API
   loreDef = {
     # YARA rule file
     rules = (src + "/execers.yar");
     # output filenames; "types" of lore
-    types = [ "execers" "wrappers" ];
+    types = [
+      "execers"
+      "wrappers"
+    ];
     # shell rule callbacks; see github.com/abathur/yallback
     yallback = (src + "/execers.yall");
     # TODO:
@@ -70,7 +74,8 @@ let
     '';
   };
 
-in rec {
+in
+rec {
   /*
     Output a directory containing lore for multiple drvs.
 
@@ -83,13 +88,23 @@ in rec {
     uses a chain of two or more derivations where the output of one
     is the source for the next. See resholve for an example.)
   */
-  collect = { lore ? loreDef, drvs, strip ? [ ] }: (runCommand "more-binlore" { } ''
-    mkdir $out
-    for lorefile in ${toString lore.types}; do
-      cat ${lib.concatMapStrings (x: x + "/$lorefile ") (map (make lore) (map lib.getBin (builtins.filter lib.isDerivation drvs)))} > $out/$lorefile
-      substituteInPlace $out/$lorefile ${lib.concatMapStrings (x: "--replace-quiet '${x}/' '' ") strip}
-    done
-  '');
+  collect =
+    {
+      lore ? loreDef,
+      drvs,
+      strip ? [ ],
+    }:
+    (runCommand "more-binlore" { } ''
+      mkdir $out
+      for lorefile in ${toString lore.types}; do
+        cat ${
+          lib.concatMapStrings (x: x + "/$lorefile ") (
+            map (make lore) (map lib.getBin (builtins.filter lib.isDerivation drvs))
+          )
+        } > $out/$lorefile
+        substituteInPlace $out/$lorefile ${lib.concatMapStrings (x: "--replace-quiet '${x}/' '' ") strip}
+      done
+    '');
 
   /*
     Output a directory containing lore for a single drv.
@@ -105,29 +120,40 @@ in rec {
     Since the last entry wins, the effective priority is:
     drv.binlore.<outputName> > $drv/nix-support > lore generated here by callback
   */
-  make = lore: drv: runCommand "${drv.name}-binlore" {
-      drv = drv;
-    } (''
-    mkdir $out
-    touch $out/{${builtins.concatStringsSep "," lore.types}}
+  make =
+    lore: drv:
+    runCommand "${drv.name}-binlore"
+      {
+        drv = drv;
+      }
+      (
+        ''
+          mkdir $out
+          touch $out/{${builtins.concatStringsSep "," lore.types}}
 
-    ${lore.callback lore drv}
-    '' +
-    # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
-    ''
-    for lore_type in ${builtins.toString lore.types}; do
-      if [[ -f "${drv}/nix-support/$lore_type" ]]; then
-        cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
-      fi
-      '' + lib.optionalString (builtins.hasAttr "binlore" drv && builtins.hasAttr drv.outputName drv.binlore) ''
-      if [[ -f "${drv.binlore."${drv.outputName}"}/$lore_type" ]]; then
-        cat "${drv.binlore."${drv.outputName}"}/$lore_type" >> "$out/$lore_type"
-      fi
-      '' + ''
-    done
+          ${lore.callback lore drv}
+        ''
+        +
+          # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
+          ''
+            for lore_type in ${builtins.toString lore.types}; do
+              if [[ -f "${drv}/nix-support/$lore_type" ]]; then
+                cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
+              fi
+          ''
+        +
+          lib.optionalString (builtins.hasAttr "binlore" drv && builtins.hasAttr drv.outputName drv.binlore)
+            ''
+              if [[ -f "${drv.binlore."${drv.outputName}"}/$lore_type" ]]; then
+                cat "${drv.binlore."${drv.outputName}"}/$lore_type" >> "$out/$lore_type"
+              fi
+            ''
+        + ''
+          done
 
-    echo binlore for $drv written to $out
-  '');
+          echo binlore for $drv written to $out
+        ''
+      );
 
   /*
     Utility function for creating override lore for drv.
@@ -179,46 +205,53 @@ in rec {
     glob can match new executables added in future package versions
     before anyone can audit them.
   */
-  synthesize = drv: loreSynthesizingScript: runCommand "${drv.name}-lore-override" {
-    drv = drv;
-  } (''
-    execer(){
-      local verdict="$1"
+  synthesize =
+    drv: loreSynthesizingScript:
+    runCommand "${drv.name}-lore-override"
+      {
+        drv = drv;
+      }
+      (
+        ''
+          execer(){
+            local verdict="$1"
 
-      shift
+            shift
 
-      for path in "$@"; do
-        if [[ -f "$PWD/$path" ]]; then
-          echo "$verdict:$PWD/$path"
-        else
-          echo "error: Tried to synthesize execer lore for missing file: $PWD/$path" >&2
-          exit 2
-        fi
-      done
-    } >> $out/execers
+            for path in "$@"; do
+              if [[ -f "$PWD/$path" ]]; then
+                echo "$verdict:$PWD/$path"
+              else
+                echo "error: Tried to synthesize execer lore for missing file: $PWD/$path" >&2
+                exit 2
+              fi
+            done
+          } >> $out/execers
 
-    wrapper(){
-      local wrapper="$1"
-      local original="$2"
+          wrapper(){
+            local wrapper="$1"
+            local original="$2"
 
-      if [[ ! -f "$wrapper" ]]; then
-        echo "error: Tried to synthesize wrapper lore for missing wrapper: $PWD/$wrapper" >&2
-        exit 2
-      fi
+            if [[ ! -f "$wrapper" ]]; then
+              echo "error: Tried to synthesize wrapper lore for missing wrapper: $PWD/$wrapper" >&2
+              exit 2
+            fi
 
-      if [[ ! -f "$original" ]]; then
-        echo "error: Tried to synthesize wrapper lore for missing original: $PWD/$original" >&2
-        exit 2
-      fi
+            if [[ ! -f "$original" ]]; then
+              echo "error: Tried to synthesize wrapper lore for missing original: $PWD/$original" >&2
+              exit 2
+            fi
 
-      echo "$PWD/$wrapper:$PWD/$original"
+            echo "$PWD/$wrapper:$PWD/$original"
 
-    } >> $out/wrappers
+          } >> $out/wrappers
 
-    mkdir $out
+          mkdir $out
 
-    # lore override commands are relative to the drv root
-    cd $drv
+          # lore override commands are relative to the drv root
+          cd $drv
 
-  '' + loreSynthesizingScript);
+        ''
+        + loreSynthesizingScript
+      );
 }

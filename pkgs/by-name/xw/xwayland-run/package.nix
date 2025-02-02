@@ -1,22 +1,28 @@
-{ fetchFromGitLab
-, lib
-, meson
-, ninja
-, python3
-, weston
-, xorg
-, xwayland
-, withCage ? false , cage
-, withKwin ? false , kdePackages
-, withMutter ? false, gnome
-, withDbus ? withMutter , dbus # Since 0.0.3, mutter compositors run with their own DBUS sessions
+{
+  fetchFromGitLab,
+  lib,
+  meson,
+  ninja,
+  python3,
+  weston,
+  xorg,
+  xwayland,
+  withCage ? false,
+  cage,
+  withKwin ? false,
+  kdePackages,
+  withMutter ? false,
+  gnome,
+  withDbus ? withMutter,
+  dbus, # Since 0.0.3, mutter compositors run with their own DBUS sessions
 }:
 let
-  compositors = [ weston ]
+  compositors =
+    [ weston ]
     ++ lib.optional withCage cage
     ++ lib.optional withKwin kdePackages.kwin
-    ++ lib.optional withMutter gnome.mutter ++ lib.optional withDbus dbus
-  ;
+    ++ lib.optional withMutter gnome.mutter
+    ++ lib.optional withDbus dbus;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "xwayland-run";
@@ -32,7 +38,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pyproject = false;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -43,9 +52,22 @@ python3.pkgs.buildPythonApplication rec {
     wrapProgram $out/bin/wlheadless-run \
       --prefix PATH : ${lib.makeBinPath compositors}
     wrapProgram $out/bin/xwayland-run \
-      --prefix PATH : ${lib.makeBinPath [ xwayland xorg.xauth ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xwayland
+          xorg.xauth
+        ]
+      }
     wrapProgram $out/bin/xwfb-run \
-      --prefix PATH : ${lib.makeBinPath (compositors ++ [ xwayland xorg.xauth ])}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          compositors
+          ++ [
+            xwayland
+            xorg.xauth
+          ]
+        )
+      }
   '';
 
   meta = {

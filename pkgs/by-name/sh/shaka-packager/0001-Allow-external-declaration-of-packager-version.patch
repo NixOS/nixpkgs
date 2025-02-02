@@ -1,0 +1,21 @@
+diff --git a/packager/version/CMakeLists.txt b/packager/version/CMakeLists.txt
+index fba4fb8282..ad56e0a23b 100644
+--- a/packager/version/CMakeLists.txt
++++ b/packager/version/CMakeLists.txt
+@@ -4,6 +4,7 @@
+ # license that can be found in the LICENSE file or at
+ # https://developers.google.com/open-source/licenses/bsd
+ 
++if(NOT DEFINED PACKAGER_VERSION)
+ execute_process(
+     COMMAND "${Python3_EXECUTABLE}" generate_version_string.py
+     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+@@ -14,6 +15,7 @@ execute_process(
+ if(NOT STATUS EQUAL 0)
+   message(FATAL_ERROR "Failed to generate Packager version")
+ endif()
++endif()
+ 
+ add_library(version STATIC version.cc)
+ target_compile_definitions(version PRIVATE
+

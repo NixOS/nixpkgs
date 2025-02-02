@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 

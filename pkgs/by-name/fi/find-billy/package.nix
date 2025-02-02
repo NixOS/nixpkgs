@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, godot3-headless
-, godot3-export-templates
-, godot3
-, makeWrapper
-, just
-, inkscape
-, imagemagick
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  godot3-headless,
+  godot3-export-templates,
+  godot3,
+  makeWrapper,
+  just,
+  inkscape,
+  imagemagick,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ godot3-headless makeWrapper just inkscape imagemagick ];
+  nativeBuildInputs = [
+    godot3-headless
+    makeWrapper
+    just
+    inkscape
+    imagemagick
+  ];
 
   postPatch = ''
     substituteInPlace export_presets.cfg --replace 'res://build/icons/usr/share/icons/hicolor' $out/share/icons/hicolor

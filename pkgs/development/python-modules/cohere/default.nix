@@ -1,18 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   poetry-core,
 
   # dependencies
-  boto3,
   fastavro,
   httpx,
   httpx-sse,
-  parameterized,
   pydantic,
   pydantic-core,
   requests,
@@ -23,26 +20,22 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.8.1";
+  version = "5.13.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IU+6X2lyH+5SeWSfzogLLj0D5t1rRwkNbb8AyaaIxnA=";
+    tag = version;
+    hash = "sha256-vDf5EoXCnYJhPnn9uj9L2cAnj7z1HVG1KxtxXByjwt8=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    boto3
     fastavro
     httpx
     httpx-sse
-    parameterized
     pydantic
     pydantic-core
     requests

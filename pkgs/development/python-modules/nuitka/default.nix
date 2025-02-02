@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  ccache,
   fetchFromGitHub,
   isPyPy,
   ordered-set,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
     setuptools
     wheel
   ];
-  nativeCheckInputs = [ ccache ];
 
   dependencies = [
     ordered-set

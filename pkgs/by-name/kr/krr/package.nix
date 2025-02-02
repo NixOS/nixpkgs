@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, krr
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  testers,
+  krr,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -13,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "krr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Bc1Ql3z/UmOXE2RJYC5/sE4a3MFdE06I3HwKY+SdSlk=";
   };
 

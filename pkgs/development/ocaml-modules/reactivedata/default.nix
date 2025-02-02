@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, react }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  react,
+}:
 
 buildDunePackage rec {
   pname = "reactiveData";

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchgit
-, cmake
-, doxygen
-, python3
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  doxygen,
+  python3,
 }:
 stdenv.mkDerivation {
   pname = "tclap";

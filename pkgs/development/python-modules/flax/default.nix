@@ -1,7 +1,7 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -22,27 +22,31 @@
   # checks
   cloudpickle,
   einops,
+  flaxlib,
   keras,
-  pytest-xdist,
   pytestCheckHook,
+  pytest-xdist,
+  sphinx,
   tensorflow,
+  treescope,
 
   # optional-dependencies
   matplotlib,
+
+  writeScript,
+  tomlq,
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.8.5";
+  version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6WOFq0758gtNdrlWqSQBlKmWVIGe5e4PAaGrvHoGjr0=";
+    tag = "v${version}";
+    hash = "sha256-+URbQGnmqmSNgucEyWvI5DMnzXjpmJzLA+Pho2lX+S4=";
   };
 
   build-system = [
@@ -62,7 +66,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ matplotlib ];
   };
 
@@ -71,10 +75,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cloudpickle
     einops
+    flaxlib
     keras
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
+    sphinx
     tensorflow
+    treescope
   ];
 
   pytestFlagsArray = [
@@ -95,14 +102,29 @@ buildPythonPackage rec {
     "flax/nnx/examples/*"
     # See https://github.com/google/flax/issues/3232.
     "tests/jax_utils_test.py"
-    # Requires tree
-    "tests/tensorboard_test.py"
   ];
 
-  disabledTests = [
-    # ValueError: Checkpoint path should be absolute
-    "test_overwrite_checkpoints0"
-  ];
+  disabledTests =
+    [
+      # Failing with AssertionError since the jax update to 0.5.0
+      "test_basic_demo_single"
+      "test_batch_norm_multi_init"
+      "test_multimetric"
+      "test_split_merge"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+      "test_ref_changed"
+      "test_structure_changed"
+    ];
+
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      nix-update flax # does not --build by default
+      nix-build . -A flax.src # src is essentially a passthru
+      nix-update flaxlib --version="$(${lib.getExe tomlq} <result/Cargo.toml .something.version)" --commit
+    '';
+  };
 
   meta = {
     description = "Neural network library for JAX";

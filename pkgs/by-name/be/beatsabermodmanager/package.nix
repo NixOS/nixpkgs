@@ -5,11 +5,6 @@
 
   dotnetCorePackages,
 
-  libX11,
-  libICE,
-  libSM,
-  fontconfig,
-
   xdg-utils,
 }:
 
@@ -26,24 +21,23 @@ buildDotnetModule rec {
   };
 
   dotnet-sdk = with dotnetCorePackages; combinePackages [
-    sdk_7_0
-    sdk_6_0
+    sdk_7_0-bin
+    sdk_6_0-bin
   ];
 
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0-bin;
 
   projectFile = [ "BeatSaberModManager/BeatSaberModManager.csproj" ];
 
   executables = [ "BeatSaberModManager" ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  runtimeDeps = [
-    libX11
-    libICE
-    libSM
-    fontconfig
-  ];
+  preConfigureNuGet = ''
+    # This should really be in the upstream nuget.config
+    dotnet nuget add source https://api.nuget.org/v3/index.json \
+      -n nuget.org --configfile nuget.config
+  '';
 
   # Required for OneClick
   makeWrapperArgs = [

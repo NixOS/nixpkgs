@@ -3,12 +3,15 @@
   callPackage,
   writeText,
   symlinkJoin,
-  targetPlatform,
-  buildPlatform,
   darwin,
   clang,
   llvm,
-  tools ? callPackage ./tools.nix { inherit buildPlatform; },
+  tools ? callPackage ./tools.nix {
+    inherit (stdenv)
+      hostPlatform
+      buildPlatform
+      ;
+  },
   stdenv,
   stdenvNoCC,
   dart,
@@ -53,7 +56,7 @@ let
 
   expandDeps = deps: lib.flatten (map expandSingleDep deps);
 
-  constants = callPackage ./constants.nix { platform = targetPlatform; };
+  constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
 
   python3 = if lib.versionAtLeast flutterVersion "3.20" then python312 else python39;
 
@@ -64,8 +67,11 @@ let
       version
       hashes
       url
-      targetPlatform
+      ;
+    inherit (stdenv)
+      hostPlatform
       buildPlatform
+      targetPlatform
       ;
   };
 
@@ -114,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     paths =
       expandDeps (
-        lib.optionals (stdenv.isLinux) [
+        lib.optionals (stdenv.hostPlatform.isLinux) [
           gtk3
           wayland
           libepoxy
@@ -139,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
           xorg.xorgproto
           zlib
         ]
-        ++ lib.optionals (stdenv.isDarwin) [
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
           clang
           llvm
         ]
@@ -161,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-I${finalAttrs.toolchain}/include"
   ] ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
-  nativeCheckInputs = lib.optionals stdenv.isLinux [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
     openbox
   ];
@@ -175,8 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       dart
     ]
-    ++ lib.optionals (stdenv.isLinux) [ patchelf ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ patchelf ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       darwin.system_cmds
       darwin.xcode
       tools.xcode-select
@@ -214,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p src/${dartPath}/tools/sdks
     ln -s ${dart} src/${dartPath}/tools/sdks/dart-sdk
 
-    ${lib.optionalString (stdenv.isLinux) ''
+    ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
       for patchtool in ''${patchtools[@]}; do
         patchelf src/$patchtool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
       done
@@ -253,7 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--embedder-for-target"
       "--no-goma"
     ]
-    ++ lib.optionals (targetPlatform.isx86_64 == false) [
+    ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
       "--linux"
       "--linux-cpu ${constants.alt-arch}"
     ]
@@ -269,7 +275,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       export PYTHONPATH=$src/src/build
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export PATH=${darwin.xcode}/Contents/Developer/usr/bin/:$PATH
     ''
     + ''
@@ -278,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
         --out-dir $out \
         --target-sysroot $toolchain \
         --target-dir $outName \
-        --target-triple ${targetPlatform.config} \
+        --target-triple ${stdenv.targetPlatform.config} \
         --enable-fontconfig
 
       runHook postConfigure
@@ -303,35 +309,41 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/out/run_tests.log
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    rm -rf $out/out/$outName/{obj,gen,exe.unstripped,lib.unstripped,zip_archives}
-    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
-    find $out/out/$outName -name '*_unittests' -delete
-    find $out/out/$outName -name '*_benchmarks' -delete
-  '' + lib.optionalString (finalAttrs.doCheck) ''
-    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
-  '' + ''
-    runHook postInstall
-  '';
+      rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
+      rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
+      find $out/out/$outName -name '*_unittests' -delete
+      find $out/out/$outName -name '*_benchmarks' -delete
+    ''
+    + lib.optionalString (finalAttrs.doCheck) ''
+      rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru = {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
-    # Very broken on Darwin
-    broken = stdenv.isDarwin;
-    description = "The Flutter engine";
-    homepage = "https://flutter.dev";
-    maintainers = with maintainers; [ RossComputerGuy ];
-    license = licenses.bsd3;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-  } // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta =
+    with lib;
+    {
+      # Very broken on Darwin
+      broken = stdenv.hostPlatform.isDarwin;
+      description = "The Flutter engine";
+      homepage = "https://flutter.dev";
+      maintainers = with maintainers; [ RossComputerGuy ];
+      license = licenses.bsd3;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    }
+    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

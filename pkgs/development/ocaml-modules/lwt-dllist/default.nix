@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchurl, lwt, ocaml }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  lwt,
+  ocaml,
+}:
 
 buildDunePackage rec {
   pname = "lwt-dllist";

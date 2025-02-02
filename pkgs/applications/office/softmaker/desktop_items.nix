@@ -1,4 +1,8 @@
-{ makeDesktopItem, pname, suiteName }:
+{
+  makeDesktopItem,
+  pname,
+  suiteName,
+}:
 
 {
   planmaker = makeDesktopItem {

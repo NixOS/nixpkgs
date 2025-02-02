@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexander-akhmetov";
     repo = "python-telegram";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JnU59DZXpnaZXIY/apXQ2gBgiwT12rJIeVqzaP0l7Zk=";
   };
 

@@ -13,19 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.17.4";
+  version = "1.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ocZ41cEZVjSfFMVoNiPOxwaymn9eylWmw6qlp/R/yMQ=";
+    pname = "google_cloud_os_config";
+    inherit version;
+    hash = "sha256-P5yHBm5FGxpzQuJsVDBAuhidu6PzXlJ6k62kr7XKnIU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

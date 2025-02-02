@@ -6,15 +6,17 @@
   nltk,
   numpy,
   pandas,
+  plotly,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
+  scikit-learn,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.9";
+  version = "0.3.13";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,9 +24,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaARM";
-    rev = "refs/tags/${version}";
-    hash = "sha256-J3126RSJYBCSyxoPsvsDgmx9E+9fP2h6avPiCHISL7c=";
+    tag = version;
+    hash = "sha256-nDgGX5KbthOBXX5jg99fGT28ZuBx0Hxb+aHak3Uvjoc=";
   };
+
+  pythonRelaxDeps = [
+    "numpy"
+    "scikit-learn"
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -33,6 +40,8 @@ buildPythonPackage rec {
     nltk
     numpy
     pandas
+    plotly
+    scikit-learn
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   disabledTests = [

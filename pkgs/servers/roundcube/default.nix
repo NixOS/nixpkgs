@@ -1,12 +1,20 @@
-{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins, nixosTests }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  buildEnv,
+  roundcube,
+  roundcubePlugins,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
-  version = "1.6.8";
+  version = "1.6.9";
 
   src = fetchurl {
     url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
-    sha256 = "sha256-hGi+AgSnNMV0re9L4BV4x9xPq5wv40ADvzQaK9IO/So=";
+    sha256 = "sha256-thpfXCL4kMKZ6TWqz88IcGdpkNiuv/DWzf8HW/F8708=";
   };
 
   patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
@@ -22,16 +30,22 @@ stdenv.mkDerivation rec {
     rm $out/composer.json-dist
   '';
 
-  passthru.withPlugins = f: buildEnv {
-    name = "${roundcube.name}-with-plugins";
-    paths = (f roundcubePlugins) ++ [ roundcube ];
-  };
+  passthru.withPlugins =
+    f:
+    buildEnv {
+      name = "${roundcube.name}-with-plugins";
+      paths = (f roundcubePlugins) ++ [ roundcube ];
+    };
 
   passthru.tests = { inherit (nixosTests) roundcube; };
 
   meta = {
     description = "Open Source Webmail Software";
-    maintainers = with lib.maintainers; [ vskilet globin ma27 ];
+    maintainers = with lib.maintainers; [
+      vskilet
+      globin
+      ma27
+    ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };

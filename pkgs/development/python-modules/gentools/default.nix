@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ariebovenberg";
     repo = "gentools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+6KTFxOpwvGOCqy6JU87gOZmDa6MvjR10qES5wIfrjI=";
   };
 
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://gentools.readthedocs.io/";
     changelog = "https://github.com/ariebovenberg/gentools/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -65,5 +65,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pulumi/pulumi";
     license = licenses.asl20;
     maintainers = with maintainers; [ teto ];
+    # https://github.com/pulumi/pulumi/issues/16828
+    broken = versionAtLeast protobuf.version "5";
   };
 }

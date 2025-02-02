@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   qtdeclarative,
-  kirigami-addons,
   pkg-config,
   bison,
   flex,
@@ -12,10 +11,13 @@
 mkKdeDerivation {
   pname = "kalk";
 
-  extraNativeBuildInputs = [pkg-config bison flex];
+  extraNativeBuildInputs = [
+    pkg-config
+    bison
+    flex
+  ];
   extraBuildInputs = [
     qtdeclarative
-    kirigami-addons
     gmp
     mpfr
     libqalculate

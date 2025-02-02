@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpvalente";
     repo = "stupidArtnet";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6vEzInt1ofVVjTZAOH0Zw3BdwpX//1ZWwJqWPP5fIC8=";
   };
 

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, qtModule
-, qtdeclarative
-, qtwebengine
-, WebKit
+{
+  lib,
+  stdenv,
+  qtModule,
+  qtdeclarative,
+  qtwebengine,
 }:
 
 qtModule {
   pname = "qtwebview";
-  propagatedBuildInputs = [ qtdeclarative ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwebengine ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ WebKit ];
+  propagatedBuildInputs = [
+    qtdeclarative
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwebengine ];
 }

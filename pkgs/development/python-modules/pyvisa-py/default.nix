@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UFAKLrZ1ZrTmFXwVuyTCPVo3Y1YIDOvkx5krpsz71BM=";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gpib-ctypes = [ gpib-ctypes ];
     serial = [ pyserial ];
     usb = [ pyusb ];

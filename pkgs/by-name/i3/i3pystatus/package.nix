@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "enkore";
     repo = "i3pystatus";
     rev = "f3c539ad78ad1c54fc36e8439bf3905a784ccb34";
-    sha256 = "3AGREY+elHQk8kaoFp8AHEzk2jNC/ICGYPh2hXo2G/w=";
+    hash = "sha256-3AGREY+elHQk8kaoFp8AHEzk2jNC/ICGYPh2hXo2G/w=";
   };
 
   patches = [

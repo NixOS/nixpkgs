@@ -130,7 +130,7 @@ with tempfile.TemporaryDirectory() as work_dir:
         old_yarn_hash: new_yarn_hash,
     })
 
-    # Generate nuget-to-nix dependency lock file.
+    # Generate nuget-to-json dependency lock file.
     fetch_deps = os.path.join(work_dir, "fetch-deps")
     subprocess.run(
         [

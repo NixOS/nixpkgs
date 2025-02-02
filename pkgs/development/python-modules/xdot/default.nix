@@ -60,8 +60,6 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Interactive viewer for graphs written in Graphviz's dot";
     mainProgram = "xdot";

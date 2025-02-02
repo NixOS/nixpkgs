@@ -13,19 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.15.4";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vG8+mL1A5j9Cuwzmz+aYbjmYXWlGCzriDNtQoLbwmoU=";
+    pname = "google_cloud_redis";
+    inherit version;
+    hash = "sha256-DYSwTUq3JUZPe7gfQMHwV0/B9wrEoM2vgkIHV3RYTF4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

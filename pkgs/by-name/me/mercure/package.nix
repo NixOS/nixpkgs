@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, testers
-, mercure
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  mercure,
 }:
 
 buildGoModule rec {
   pname = "mercure";
-  version = "0.16.2";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "mercure";
     rev = "v${version}";
-    hash = "sha256-HqeF/Wr5ngf6hpFrZAL8kdHcMuxUslWsjtlOq4+C48s=";
+    hash = "sha256-BJVCVvz8AdkQwLD37oQc7YPaZ7l74o9Dik9u/ZBSRro=";
   };
 
   sourceRoot = "${src.name}/caddy";
 
-  vendorHash = "sha256-mRyzih46M635uQ9kIQ1vIe/ToN92xlvUcxQ7Bw/Qxiw=";
+  vendorHash = "sha256-QqG8rxGQW+Lmd2L+wKiKUV+GXcxoO04yhJhDvMqwTVc=";
 
   subPackages = [ "mercure" ];
   excludedPackages = [ "../cmd/mercure" ];

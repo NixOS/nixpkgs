@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chtd";
     repo = "psycopg2cffi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9r5MYxw9cvdbLVj8StmMmn0AKQepOpCc7TIBGXZGWe4=";
   };
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   # FATAL: could not create shared memory segment: Operation not permitted
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     postgresqlTestHook

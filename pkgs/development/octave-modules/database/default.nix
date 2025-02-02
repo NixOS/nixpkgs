@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, struct
-, postgresql
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  struct,
+  postgresql,
 }:
 
 buildOctavePackage rec {

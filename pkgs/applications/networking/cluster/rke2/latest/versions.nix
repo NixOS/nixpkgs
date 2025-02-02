@@ -1,14 +1,14 @@
 {
-  rke2Version = "1.30.3+rke2r1";
-  rke2RepoSha256 = "1ix7mm11j9ir9xz0yypznja5mcbizibclh314sgcsfxhg39w4a70";
-  rke2Commit = "e742dc53b463d205773cfb25633309671ce6777c";
-  rke2VendorHash = "sha256-6ma0t0ElZ13VTS/aK5AknJ00F45kZXn36b5sePK2wh0=";
-  k8sVersion = "v1.30.3";
-  k8sImageTag = "v1.30.3-rke2r1-build20240717";
-  etcdVersion = "v3.5.13-k3s1";
+  rke2Version = "1.32.0+rke2r1";
+  rke2Commit = "1182e7eb91b27b1686e69306eb2e227928a27a38";
+  rke2TarballHash = "sha256-mmHQxiNcfgZTTdYPJPO7WTIlaCRM4CWsWwfRUcAR8ho=";
+  rke2VendorHash = "sha256-6Y3paEQJ8yHzONqalzoe15TjWhF3zGsM92LS1AcJ2GM=";
+  k8sVersion = "v1.32.0";
+  k8sImageTag = "v1.32.0-rke2r1-build20241212";
+  etcdVersion = "v3.5.16-k3s1-build20241106";
   pauseVersion = "3.6";
-  ccmVersion = "v1.29.3-build20240515";
-  dockerizedVersion = "v1.30.3-dev.";
-  golangVersion = "go1.22.5";
-  eol = "2025-06-28";
+  ccmVersion = "v1.32.0-rc3.0.20241220224140-68fbd1a6b543-build20250101";
+  dockerizedVersion = "v1.32.0-rke2r1";
+  golangVersion = "go1.23.3";
+  eol = "2026-02-28";
 }

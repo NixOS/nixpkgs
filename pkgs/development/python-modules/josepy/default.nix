@@ -2,23 +2,22 @@
   lib,
   buildPythonPackage,
   cryptography,
-  fetchPypi,
+  fetchFromGitHub,
   poetry-core,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "josepy";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MIs7+c6CWtTUu6djcs8ZtdwcLOlqnSmPlkKXXmS9E90=";
+  src = fetchFromGitHub {
+    owner = "certbot";
+    repo = "josepy";
+    tag = "v${version}";
+    hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
   };
 
   nativeBuildInputs = [ poetry-core ];

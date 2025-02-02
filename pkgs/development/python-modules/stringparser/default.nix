@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hgrecco";
     repo = "stringparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gj0ooeb869JhlB9Mf5nBydiV2thTes8ys+BLJ516iSA=";
   };
 

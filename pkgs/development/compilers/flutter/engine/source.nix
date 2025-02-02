@@ -1,9 +1,6 @@
 {
   lib,
   callPackage,
-  buildPlatform,
-  targetPlatform,
-  hostPlatform,
   fetchgit,
   tools ? null,
   curl,
@@ -17,6 +14,9 @@
   version,
   hashes,
   url,
+  hostPlatform,
+  targetPlatform,
+  buildPlatform,
 }@pkgs:
 let
   target-constants = callPackage ./constants.nix { platform = targetPlatform; };
@@ -101,7 +101,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
 
     rm -rf $out/src/{buildtools,fuchsia}
     rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
-    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja}
+    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
     rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
 
     rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "falconry";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dazqJRpC8FUHOhgKFzDnIl5CT2L74J2o2Hsm0IQf4Cg=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Token Bucket Implementation for Python Web Apps";

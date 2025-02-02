@@ -1,55 +1,56 @@
-{ lib
-, stdenv
-, cmake
-, ninja
-, intltool
-, fetchurl
-, libxml2
-, webkitgtk_4_1
-, highlight
-, pkg-config
-, gtk3
-, glib
-, libnotify
-, libpst
-, gspell
-, evolution-data-server
-, libgweather
-, glib-networking
-, gsettings-desktop-schemas
-, wrapGAppsHook3
-, itstool
-, shared-mime-info
-, libical
-, db
-, sqlite
-, adwaita-icon-theme
-, gnome
-, gnome-desktop
-, librsvg
-, gdk-pixbuf
-, libsecret
-, nss
-, nspr
-, icu
-, libcanberra-gtk3
-, geocode-glib_2
-, cmark
-, bogofilter
-, gst_all_1
-, procps
-, p11-kit
-, openldap
-, spamassassin
+{
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  intltool,
+  fetchurl,
+  libxml2,
+  webkitgtk_4_1,
+  highlight,
+  pkg-config,
+  gtk3,
+  glib,
+  libnotify,
+  libpst,
+  gspell,
+  evolution-data-server,
+  libgweather,
+  glib-networking,
+  gsettings-desktop-schemas,
+  wrapGAppsHook3,
+  itstool,
+  shared-mime-info,
+  libical,
+  db,
+  sqlite,
+  adwaita-icon-theme,
+  gnome,
+  gnome-desktop,
+  librsvg,
+  gdk-pixbuf,
+  libsecret,
+  nss,
+  nspr,
+  icu,
+  libcanberra-gtk3,
+  geocode-glib_2,
+  cmark,
+  bogofilter,
+  gst_all_1,
+  procps,
+  p11-kit,
+  openldap,
+  spamassassin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.52.4";
+  version = "3.54.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-9XkpgB1uQBphHWUh71kiTYGzBQA1ekuePkYkXslGGBk=";
+    hash = "sha256-dGz4HvXDJa8X9Tsvq0bWcmDzsT2gFNiZTUrZ6Ea4Ves=";
   };
 
   nativeBuildInputs = [

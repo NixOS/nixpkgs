@@ -1,4 +1,8 @@
-{ lib, htop, fetchFromGitHub }:
+{
+  lib,
+  htop,
+  fetchFromGitHub,
+}:
 
 htop.overrideAttrs (oldAttrs: rec {
   pname = "htop-vim";

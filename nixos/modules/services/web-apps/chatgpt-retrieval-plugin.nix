@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -41,7 +46,14 @@ in
     };
 
     datastore = mkOption {
-      type = types.enum [ "pinecone" "weaviate" "zilliz" "milvus" "qdrant" "redis" ];
+      type = types.enum [
+        "pinecone"
+        "weaviate"
+        "zilliz"
+        "milvus"
+        "qdrant"
+        "redis"
+      ];
       default = "qdrant";
       description = "This specifies the vector database provider you want to use to store and query embeddings.";
     };

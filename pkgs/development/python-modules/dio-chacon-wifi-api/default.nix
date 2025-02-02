@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cnico";
     repo = "dio-chacon-wifi-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4qE4laKQyfnAq2f/bkAqIfY/LnEmW+LTvNOCkTNFbAo=";
   };
 

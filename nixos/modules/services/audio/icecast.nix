@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.icecast;
   configFile = pkgs.writeText "icecast.xml" ''
@@ -36,7 +38,8 @@ let
       ${cfg.extraConf}
     </icecast>
   '';
-in {
+in
+{
 
   ###### interface
 
@@ -44,62 +47,62 @@ in {
 
     services.icecast = {
 
-      enable = mkEnableOption "Icecast server";
+      enable = lib.mkEnableOption "Icecast server";
 
-      hostname = mkOption {
-        type = types.nullOr types.str;
+      hostname = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         description = "DNS name or IP address that will be used for the stream directory lookups or possibly the playlist generation if a Host header is not provided.";
         default = config.networking.domain;
-        defaultText = literalExpression "config.networking.domain";
+        defaultText = lib.literalExpression "config.networking.domain";
       };
 
       admin = {
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           description = "Username used for all administration functions.";
           default = "admin";
         };
 
-        password = mkOption {
-          type = types.str;
+        password = lib.mkOption {
+          type = lib.types.str;
           description = "Password used for all administration functions.";
         };
       };
 
-      logDir = mkOption {
-        type = types.path;
+      logDir = lib.mkOption {
+        type = lib.types.path;
         description = "Base directory used for logging.";
         default = "/var/log/icecast";
       };
 
       listen = {
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           description = "TCP port that will be used to accept client connections.";
           default = 8000;
         };
 
-        address = mkOption {
-          type = types.str;
+        address = lib.mkOption {
+          type = lib.types.str;
           description = "Address Icecast will listen on.";
           default = "::";
         };
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         description = "User privileges for the server.";
         default = "nobody";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         description = "Group privileges for the server.";
         default = "nogroup";
       };
 
-      extraConf = mkOption {
-        type = types.lines;
+      extraConf = lib.mkOption {
+        type = lib.types.lines;
         description = "icecast.xml content.";
         default = "";
       };
@@ -108,10 +111,9 @@ in {
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.icecast = {
       after = [ "network.target" ];

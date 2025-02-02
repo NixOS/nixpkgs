@@ -1,11 +1,13 @@
-{ lib, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, itstool
-, libxml2
-, libxslt
-, gnome
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  itstool,
+  libxml2,
+  libxslt,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-xsl/${lib.versions.major version}/yelp-xsl-${version}.tar.xz";
-    sha256 = "sha256-I4vhULFlMIDOE5lxMw/TbTomWV4NagQKLAML89IAW80=";
+    hash = "sha256-I4vhULFlMIDOE5lxMw/TbTomWV4NagQKLAML89IAW80=";
   };
 
   nativeBuildInputs = [

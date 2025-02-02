@@ -1,4 +1,10 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qtbase }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+}:
 
 mkDerivation {
   pname = "rocket";

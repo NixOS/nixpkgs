@@ -2,43 +2,40 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
+  installShellFiles,
   pkg-config,
   cmake,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rmpc";
-  version = "0.2.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mierak";
     repo = "rmpc";
     rev = "v${version}";
-    hash = "sha256-g+yzW0DfaBhJKTikYZ8eqe4pX8nJvbpJ1xaZ3W/O/bo=";
+    hash = "sha256-IgkYUl1ccwzFgooqZGxmpJFzACEz3wmblostPsTnzSQ=";
   };
 
-  cargoHash = "sha256-wFrHgB4wYGeXvfdGf4SJAAL8fE6dAKDLL51Ohmn+1HQ=";
-
-  cargoPatches = [
-    # Patch Cargo.lock to make rmpc compile with older versions of rustc
-    # Remove when Rust 1.79.0 is in master
-    ./Cargo.lock.patch
-  ];
-
-  patches = [
-    # Fix release mode tests compilation issues
-    # Remove when next rmpc version comes out
-    (fetchpatch {
-      url = "https://github.com/mierak/rmpc/commit/f12be6f606f5319523f41576e7c463b6008b9069.patch";
-      hash = "sha256-4L/MrdC/ydTqnkt3qd5H8hLZimiqct6sOkEq8rJN0F4=";
-    })
-  ];
+  cargoHash = "sha256-dNmHgPjZL+33kgA04+KQj42LrSXAFVQukml1Wy/HpHQ=";
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     cmake
   ];
+
+  env.VERGEN_GIT_DESCRIBE = version;
+
+  postInstall = ''
+    installManPage target/man/rmpc.1
+
+    installShellCompletion --cmd rmpc \
+      --bash target/completions/rmpc.bash \
+      --fish target/completions/rmpc.fish \
+      --zsh target/completions/_rmpc
+  '';
 
   meta = {
     changelog = "https://github.com/mierak/rmpc/releases/tag/${src.rev}";
@@ -51,7 +48,11 @@ rustPlatform.buildRustPackage rec {
       album art through kitty image protocol without any ugly hacks. It also features ranger/lf
       inspired browsing of songs and other goodies.
     '';
-    maintainers = with lib.maintainers; [ donovanglover ];
+    maintainers = with lib.maintainers; [
+      donovanglover
+      bloxx12
+    ];
     mainProgram = "rmpc";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

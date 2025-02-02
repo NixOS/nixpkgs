@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, octave ? null, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  octave ? null,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nlopt";
@@ -11,21 +18,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TgieCX7yUdTAEblzXY/gCN0r6F9TVDh4RdNDjQdXZ1o=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
   buildInputs = [ octave ];
 
-  configureFlags = [
-    "--with-cxx"
-    "--enable-shared"
-    "--with-pic"
-    "--without-guile"
-    "--without-python"
-    "--without-matlab"
-  ] ++ lib.optionals (octave != null) [
-    "--with-octave"
-    "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
-    "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
-  ];
+  configureFlags =
+    [
+      "--with-cxx"
+      "--enable-shared"
+      "--with-pic"
+      "--without-guile"
+      "--without-python"
+      "--without-matlab"
+    ]
+    ++ lib.optionals (octave != null) [
+      "--with-octave"
+      "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
+      "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
+    ];
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/nlopt/NLoptLibraryDepends.cmake --replace \

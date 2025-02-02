@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.step-ca;
   settingsFormat = (pkgs.formats.json { });
@@ -73,22 +78,24 @@ in
 
   config = lib.mkIf config.services.step-ca.enable (
     let
-      configFile = settingsFormat.generate "ca.json" (cfg.settings // {
-        address = cfg.address + ":" + toString cfg.port;
-      });
+      configFile = settingsFormat.generate "ca.json" (
+        cfg.settings
+        // {
+          address = cfg.address + ":" + toString cfg.port;
+        }
+      );
     in
     {
-      assertions =
-        [
-          {
-            assertion = !lib.isStorePath cfg.intermediatePasswordFile;
-            message = ''
-              <option>services.step-ca.intermediatePasswordFile</option> points to
-              a file in the Nix store. You should use a quoted absolute path to
-              prevent this.
-            '';
-          }
-        ];
+      assertions = [
+        {
+          assertion = !lib.isStorePath cfg.intermediatePasswordFile;
+          message = ''
+            <option>services.step-ca.intermediatePasswordFile</option> points to
+            a file in the Nix store. You should use a quoted absolute path to
+            prevent this.
+          '';
+        }
+      ];
 
       systemd.packages = [ cfg.package ];
 
@@ -132,7 +139,7 @@ in
         isSystemUser = true;
       };
 
-      users.groups.step-ca = {};
+      users.groups.step-ca = { };
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.port ];

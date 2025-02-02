@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "milvus-io";
     repo = "pymilvus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K7k3MTOEm9+HDwMps9C8Al0Jmp1ptJw3pN1LEBOUz0U=";
   };
 

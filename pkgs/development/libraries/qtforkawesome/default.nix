@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, perl
-, cpp-utilities
-, qtutilities
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  perl,
+  cpp-utilities,
+  qtutilities,
+  qtbase,
 }:
 
 let
@@ -16,7 +17,8 @@ let
     rev = "1.2.0";
     sha256 = "sha256-zG6/0dWjU7/y/oDZuSEv+54Mchng64LVyV8bluskYzc=";
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtforkawesome";
   version = "0.1.0";
 
@@ -55,7 +57,6 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "Library that bundles ForkAwesome for use within Qt applications";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })
-

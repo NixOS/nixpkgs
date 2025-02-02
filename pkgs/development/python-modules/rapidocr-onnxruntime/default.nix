@@ -1,38 +1,42 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   fetchzip,
-  substitute,
-  pytestCheckHook,
+  replaceVars,
 
   setuptools,
   pyclipper,
-  opencv4,
+  opencv-python,
   numpy,
   six,
   shapely,
   pyyaml,
   pillow,
   onnxruntime,
+  tqdm,
+
+  pytestCheckHook,
+  requests,
 }:
 let
-  version = "1.3.24";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+iY+/IdOgsn+LPZQ4Kdzxuh31csQ7dyh5Zf552ne3N0=";
+    tag = "v${version}";
+    hash = "sha256-6ohh4NSYqJ+i1JRdsKbcJZns07c+roVJ87r0lvBbExU=";
   };
 
-  models = fetchzip {
-    url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
-    hash = "sha256-j/0nzyvu/HfNTt5EZ+2Phe5dkyPOdQw/OZTz0yS63aA=";
-    stripRoot = false;
-  } + "/required_for_whl_v1.3.0/resources/models";
+  models =
+    fetchzip {
+      url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
+      hash = "sha256-j/0nzyvu/HfNTt5EZ+2Phe5dkyPOdQw/OZTz0yS63aA=";
+      stripRoot = false;
+    }
+    + "/required_for_whl_v1.3.0/resources/models";
 in
 buildPythonPackage {
   pname = "rapidocr-onnxruntime";
@@ -52,13 +56,8 @@ buildPythonPackage {
   # This is not allowed in the Nix build environment as we do not have internet access,
   # hence we patch that out and get the version from the build environment directly.
   patches = [
-    (substitute {
-      src = ./setup-py-override-version-checking.patch;
-      substitutions = [
-        "--subst-var-by"
-        "version"
-        version
-      ];
+    (replaceVars ./setup-py-override-version-checking.patch {
+      inherit version;
     })
   ];
 
@@ -90,21 +89,22 @@ buildPythonPackage {
 
   dependencies = [
     pyclipper
-    opencv4
+    opencv-python
     numpy
     six
     shapely
     pyyaml
     pillow
     onnxruntime
+    tqdm
   ];
-
-  # Remove because we have adopted the `opencv4` as an attribute name.
-  pythonRemoveDeps = [ "opencv-python" ];
 
   pythonImportsCheck = [ "rapidocr_onnxruntime" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
 
   # These are tests for different backends.
   disabledTestPaths = [
@@ -112,10 +112,15 @@ buildPythonPackage {
     "tests/test_paddle.py"
   ];
 
+  disabledTests = [
+    # Needs Internet access
+    "test_long_img"
+  ];
+
   meta = {
     # This seems to be related to https://github.com/microsoft/onnxruntime/issues/10038
     # Also some related issue: https://github.com/NixOS/nixpkgs/pull/319053#issuecomment-2167713362
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    badPlatforms = [ "aarch64-linux" ];
     changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/v${version}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";

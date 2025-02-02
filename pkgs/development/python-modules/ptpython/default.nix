@@ -4,30 +4,32 @@
   pythonOlder,
   fetchPypi,
   appdirs,
-  importlib-metadata,
   jedi,
   prompt-toolkit,
   pygments,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ptpython";
-  version = "3.0.28";
-  format = "setuptools";
+  version = "3.0.29";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vFBvVNuvRHykdMhRytNx5J4rdg2JGcQidAMH+tIqUIc=";
+    hash = "sha256-udYlGDrvk6Zz/DLL4cH8r1FBLnpPGVkFIc2syt8lGG4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
     jedi
     prompt-toolkit
     pygments
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   # no tests to run
   doCheck = false;

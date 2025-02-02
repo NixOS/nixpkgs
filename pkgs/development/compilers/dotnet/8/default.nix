@@ -1,9 +1,9 @@
 { callPackage
 , dotnetCorePackages
-, bootstrapSdk
 }: callPackage ../dotnet.nix {
   releaseManifestFile = ./release.json;
   releaseInfoFile = ./release-info.json;
-  depsFile = ./deps.nix;
-  inherit bootstrapSdk;
+  bootstrapSdkFile = ./bootstrap-sdk.nix;
+  depsFile = ./deps.json;
+  fallbackTargetPackages = dotnetCorePackages.sdk_8_0-bin.targetPackages;
 }

@@ -257,7 +257,8 @@ in
 
       allowedTCPPorts = [ (attrByPath [ "druid.plaintextPort" ] 8083 cfg."${name}".config) ];
 
-      extraConfig.services.druid.historical.internalConfig."druid.segmentCache.locations" = builtins.toJSON cfg.historical.segmentLocations;
+      extraConfig.services.druid.historical.internalConfig."druid.segmentCache.locations" =
+        builtins.toJSON cfg.historical.segmentLocations;
     })
 
     (druidServiceConfig rec {

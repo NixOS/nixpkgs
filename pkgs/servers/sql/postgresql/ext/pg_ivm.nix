@@ -1,23 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_ivm";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "sraoss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HncWX3jx9sEvxGGMMZ9QT4tDQ4JYbkNrFw2aZHgCVE8=";
+    hash = "sha256-Qcie7sbXcMbQkMoFIYBfttmvlYooESdSk2DyebHKPlk=";
   };
-
-  buildInputs = [ postgresql ];
-
-  installPhase = ''
-    install -D -t $out/lib pg_ivm${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
 
   meta = with lib; {
     description = "Materialized views with IVM (Incremental View Maintenance) for PostgreSQL";

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.6.7";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZHRU8dJjKQFLIB1t2VK/COy6a3nShUeWR8iAM9YJdto=";
+    hash = "sha256-RtEL4ZVtNSqQShgHpjd1O/wgsXJOvceV+NhIWqexVAI=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       yarnBuildHook
       nodejs
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       copyDesktopItems
       wrapGAppsHook3
     ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       install -Dm644 assets/icons/256x256.png $out/share/icons/hicolor/256x256/apps/koodo-reader.png
       install -Dm644 ${./mime-types.xml} $out/share/mime/packages/koodo-reader.xml
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/lib/koodo-reader
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Koodo Reader.app" $out/Applications
       makeWrapper "$out/Applications/Koodo Reader.app/Contents/MacOS/Koodo Reader" $out/bin/koodo-reader
@@ -77,11 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeShellWrapper ${lib.getExe electron} $out/bin/koodo-reader \
       --add-flags $out/share/lib/koodo-reader/resources/app.asar \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
   '';

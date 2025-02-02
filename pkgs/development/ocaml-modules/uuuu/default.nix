@@ -1,10 +1,11 @@
-{ angstrom
-, buildDunePackage
-, fetchurl
-, findlib
-, lib
-, ocaml
-, re
+{
+  angstrom,
+  buildDunePackage,
+  fetchurl,
+  findlib,
+  lib,
+  ocaml,
+  re,
 }:
 
 buildDunePackage rec {

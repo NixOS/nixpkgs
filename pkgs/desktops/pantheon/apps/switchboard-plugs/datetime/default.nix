@@ -1,40 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, substituteAll
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, granite7
-, gtk4
-, libxml2
-, switchboard
-, tzdata
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  replaceVars,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  libical,
+  granite7,
+  gettext,
+  gtk4,
+  libxml2,
+  switchboard,
+  tzdata,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PE1ig8p9H4MfipIpN3ubXAJNzLwGVW89adn+SF3rEuQ=";
+    sha256 = "sha256-VOL0F0obuXVz0G5hMI/hpUf2T3H8XUw64wu4MxRi57g=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       tzdata = tzdata;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     libxml2
     meson
     ninja
@@ -47,6 +50,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libgee
+    libical
     switchboard
   ];
 

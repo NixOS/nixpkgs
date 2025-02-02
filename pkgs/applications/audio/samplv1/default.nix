@@ -1,6 +1,16 @@
-{ mkDerivation, lib, fetchurl, pkg-config, libjack2
-, alsa-lib, liblo, libsndfile, lv2, qtbase, qttools
-, rubberband
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  alsa-lib,
+  liblo,
+  libsndfile,
+  lv2,
+  qtbase,
+  qttools,
+  rubberband,
 }:
 
 mkDerivation rec {
@@ -12,9 +22,20 @@ mkDerivation rec {
     sha256 = "sha256-eJA6ixH20Wv+cD2CKGomncyfJ4tfpOL3UrTeCkb5/q0=";
   };
 
-  nativeBuildInputs = [ qttools pkg-config ];
+  nativeBuildInputs = [
+    qttools
+    pkg-config
+  ];
 
-  buildInputs = [ libjack2 alsa-lib liblo libsndfile lv2 qtbase rubberband ];
+  buildInputs = [
+    libjack2
+    alsa-lib
+    liblo
+    libsndfile
+    lv2
+    qtbase
+    rubberband
+  ];
 
   meta = with lib; {
     description = "Old-school all-digital polyphonic sampler synthesizer with stereo fx";

@@ -1,4 +1,9 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libusb1 }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libusb1,
+}:
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "peripheral.steamcontroller";

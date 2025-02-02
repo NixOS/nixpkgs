@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gemmi";
-  version = "0.6.6";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "project-gemmi";
     repo = "gemmi";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-S31oCp6kLSYgmRaW7Q9/dMhjJ5Y0sK3WPpg2/ZMPyMg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XOu//yY5CnnzjvGu7IIC5GvecYsnZQV3Y2wvGVTwWzU=";
   };
 
   nativeBuildInputs =
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals enablePython (
       with python3Packages;
       [
-        pybind11
+        nanobind
         python
         pythonImportsCheckHook
       ]
@@ -44,7 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = enablePython;
 
-  nativeInstallCheckInputs = [ python3Packages.pytestCheckHook ];
+  nativeInstallCheckInputs = with python3Packages; [
+    # biopython
+    numpy
+    pytestCheckHook
+  ];
+
+  preInstallCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
 
   pytestFlagsArray = [ "../tests" ];
 

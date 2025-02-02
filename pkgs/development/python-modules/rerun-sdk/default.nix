@@ -1,48 +1,51 @@
 {
-  buildPythonPackage,
   lib,
-  rustPlatform,
   stdenv,
+  buildPythonPackage,
+  rerun,
+  python,
+
+  # nativeBuildInputs
+  rustPlatform,
+
+  # dependencies
   attrs,
-  darwin,
   numpy,
+  opencv4,
   pillow,
   pyarrow,
-  rerun,
-  torch,
+  semver,
   typing-extensions,
+
+  # tests
   pytestCheckHook,
-  python,
-  libiconv,
+  torch,
 }:
 
 buildPythonPackage {
   pname = "rerun-sdk";
-  inherit (rerun) version;
   pyproject = true;
 
-  inherit (rerun) src;
-  inherit (rerun) cargoDeps;
+  inherit (rerun)
+    src
+    version
+    cargoDeps
+    postPatch
+    ;
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    rerun
   ];
 
-  buildInputs =
-    [
-      libiconv # No-op on Linux, necessary on Darwin.
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     numpy
+    opencv4
     pillow
     pyarrow
+    semver
     typing-extensions
   ];
 
@@ -66,7 +69,7 @@ buildPythonPackage {
   ];
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
-  postPhases = lib.optionals stdenv.isLinux [ "addDlopenRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"

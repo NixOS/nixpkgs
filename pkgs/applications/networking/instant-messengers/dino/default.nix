@@ -3,7 +3,7 @@
 , vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
 , gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
 , libadwaita
-, libnotify, libsoup, libgee
+, libnotify, libsoup_2_4, libgee
 , libsignal-protocol-c
 , libgcrypt
 , sqlite
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     gpgme
     libgcrypt
-    libsoup
+    libsoup_2_4
     pcre2
     icu
     libsignal-protocol-c
@@ -90,11 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DXGETTEXT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/xgettext"
     "-DMSGFMT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/msgfmt"
     "-DGLIB_COMPILE_RESOURCES_EXECUTABLE=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-    "-DSOUP_VERSION=${lib.versions.major libsoup.version}"
+    "-DSOUP_VERSION=${lib.versions.major libsoup_2_4.version}"
   ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lgpg-error";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lgpg-error";
 
   doCheck = true;
   checkPhase = ''
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   # will load
   #
   # See https://github.com/dino/dino/wiki/macOS
-  postFixup = lib.optionalString (stdenv.isDarwin) ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     cd "$out/lib/dino/plugins/"
     for f in *.dylib; do
       mv "$f" "$(basename "$f" .dylib).so"
@@ -125,6 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ qyliss tomfitzhenry ];
+    maintainers = with maintainers; [ qyliss ];
   };
 })

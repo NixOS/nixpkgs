@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, xorg
-, nspr
-, nss
-, autoPatchelfHook
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  xorg,
+  nspr,
+  nss,
+  autoPatchelfHook,
+  unzip,
 }:
 
 version: hashes:
@@ -26,15 +27,26 @@ let
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ liammurphy14 yayayayaka ];
-    platforms = ["x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" "aarch64-darwin"];
+    maintainers = with maintainers; [
+      liammurphy14
+      yayayayaka
+    ];
+    platforms = [
+      "x86_64-darwin"
+      "x86_64-linux"
+      "armv7l-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "chromedriver";
   };
 
-  fetcher = vers: tag: hash: fetchurl {
-    url = "https://github.com/electron/electron/releases/download/v${vers}/chromedriver-v${vers}-${tag}.zip";
-    sha256 = hash;
-  };
+  fetcher =
+    vers: tag: hash:
+    fetchurl {
+      url = "https://github.com/electron/electron/releases/download/v${vers}/chromedriver-v${vers}-${tag}.zip";
+      sha256 = hash;
+    };
 
   tags = {
     x86_64-linux = "linux-x64";
@@ -51,7 +63,7 @@ let
     src = fetcher version (get tags platform) (get hashes platform);
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       glib
       xorg.libxcb
       nspr
@@ -60,7 +72,10 @@ let
   };
 
   linux = {
-    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      unzip
+    ];
 
     dontUnpack = true;
     dontBuild = true;
@@ -90,7 +105,6 @@ let
     '';
   };
 in
-  stdenv.mkDerivation (
-    (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
-  )
+stdenv.mkDerivation (
+  (common stdenv.hostPlatform) // (if stdenv.hostPlatform.isDarwin then darwin else linux)
+)

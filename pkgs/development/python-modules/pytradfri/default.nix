@@ -19,20 +19,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CWv3ebDulZuiFP+nJ2Xr7U/HTDFTqA9VYC0USLkpWR0=";
   };
 
   propagatedBuildInputs = [ pydantic ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiocoap
       dtlssocket
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.async;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
 
   pythonImportsCheck = [ "pytradfri" ];
 

@@ -69,7 +69,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     patchShebangs ./src/device/generate.py
   '';
 
-  makeFlagsArray =
+  makeFlags =
     [
       "PREFIX=$(out)"
       "NVCC_GENCODE=${cudaFlags.gencodeString}"

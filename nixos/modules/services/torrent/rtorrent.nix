@@ -1,4 +1,10 @@
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -7,7 +13,8 @@ let
   cfg = config.services.rtorrent;
   opt = options.services.rtorrent;
 
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ thiagokokada ];
 
   options.services.rtorrent = {
@@ -94,7 +101,7 @@ in {
   config = mkIf cfg.enable {
 
     users.groups = mkIf (cfg.group == "rtorrent") {
-      rtorrent = {};
+      rtorrent = { };
     };
 
     users.users = mkIf (cfg.user == "rtorrent") {
@@ -188,49 +195,61 @@ in {
 
     systemd = {
       services = {
-        rtorrent = let
-          rtorrentConfigFile = pkgs.writeText "rtorrent.rc" cfg.configText;
-        in {
-          description = "rTorrent system service";
-          after = [ "network.target" ];
-          path = [ cfg.package pkgs.bash ];
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            Type = "simple";
-            Restart = "on-failure";
-            WorkingDirectory = cfg.dataDir;
-            ExecStartPre=''${pkgs.bash}/bin/bash -c "if test -e ${cfg.dataDir}/session/rtorrent.lock && test -z $(${pkgs.procps}/bin/pidof rtorrent); then rm -f ${cfg.dataDir}/session/rtorrent.lock; fi"'';
-            ExecStart="${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
-            RuntimeDirectory = "rtorrent";
-            RuntimeDirectoryMode = 750;
+        rtorrent =
+          let
+            rtorrentConfigFile = pkgs.writeText "rtorrent.rc" cfg.configText;
+          in
+          {
+            description = "rTorrent system service";
+            after = [ "network.target" ];
+            path = [
+              cfg.package
+              pkgs.bash
+            ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              User = cfg.user;
+              Group = cfg.group;
+              Type = "simple";
+              Restart = "on-failure";
+              WorkingDirectory = cfg.dataDir;
+              ExecStartPre = ''${pkgs.bash}/bin/bash -c "if test -e ${cfg.dataDir}/session/rtorrent.lock && test -z $(${pkgs.procps}/bin/pidof rtorrent); then rm -f ${cfg.dataDir}/session/rtorrent.lock; fi"'';
+              ExecStart = "${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
+              RuntimeDirectory = "rtorrent";
+              RuntimeDirectoryMode = 750;
 
-            CapabilityBoundingSet = [ "" ];
-            LockPersonality = true;
-            NoNewPrivileges = true;
-            PrivateDevices = true;
-            PrivateTmp = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            # If the default user is changed, there is a good chance that they
-            # want to store data in e.g.: $HOME directory
-            # Relax hardening in this case
-            ProtectHome = lib.mkIf (cfg.user == "rtorrent") true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            ProtectSystem = "full";
-            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            RestrictSUIDSGID = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = [ "@system-service" "~@privileged" ];
+              CapabilityBoundingSet = [ "" ];
+              LockPersonality = true;
+              NoNewPrivileges = true;
+              PrivateDevices = true;
+              PrivateTmp = true;
+              ProtectClock = true;
+              ProtectControlGroups = true;
+              # If the default user is changed, there is a good chance that they
+              # want to store data in e.g.: $HOME directory
+              # Relax hardening in this case
+              ProtectHome = lib.mkIf (cfg.user == "rtorrent") true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              ProtectSystem = "full";
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+              RestrictNamespaces = true;
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              SystemCallArchitectures = "native";
+              SystemCallFilter = [
+                "@system-service"
+                "~@privileged"
+              ];
+            };
           };
-        };
       };
 
       tmpfiles.rules = [ "d '${cfg.dataDir}' ${cfg.dataPermissions} ${cfg.user} ${cfg.group} -" ];

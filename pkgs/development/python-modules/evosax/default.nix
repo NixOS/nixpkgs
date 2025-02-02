@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RobertTLange";
     repo = "evosax";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-v8wRiWZlJPF9pIXocQ6/caHl1W4QBNjkmuImJ6MAueo=";
   };
 

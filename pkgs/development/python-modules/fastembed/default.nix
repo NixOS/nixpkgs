@@ -32,12 +32,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IdIGht4RcejXoBTJ8eHi5fNw2ffxIi/chuoQBNjA98g=";
   };
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     huggingface-hub
@@ -56,7 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastembed" ];
 
-  pythonRelaxDeps = [ "onnxruntime" ];
+  pythonRelaxDeps = [
+    "onnxruntime"
+    "pillow"
+  ];
 
   # there is one test and it requires network
   doCheck = false;

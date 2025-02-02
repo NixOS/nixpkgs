@@ -289,11 +289,8 @@ let
 
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
-  bootStage1 = pkgs.substituteAll {
+  bootStage1 = pkgs.replaceVarsWith {
     src = ./stage-1-init.sh;
-
-    shell = "${extraUtils}/bin/ash";
-
     isExecutable = true;
 
     postInstall = ''
@@ -304,35 +301,39 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit linkUnits udevRules extraUtils;
+    replacements = {
+      shell = "${extraUtils}/bin/ash";
 
-    inherit (config.boot) resumeDevice;
+      inherit linkUnits udevRules extraUtils;
 
-    inherit (config.system.nixos) distroName;
+      inherit (config.boot) resumeDevice;
 
-    inherit (config.system.build) earlyMountScript;
+      inherit (config.system.nixos) distroName;
 
-    inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
+      inherit (config.system.build) earlyMountScript;
 
-    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
+      inherit (config.boot.initrd) checkJournalingFS verbose
+        preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
 
-    fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
-      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+      resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
+                      (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
+                               # Don't include zram devices
+                               && !(hasPrefix "/dev/zram" sd.device)
+                              ) config.swapDevices);
 
-    setHostId = optionalString (config.networking.hostId != null) ''
-      hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
-        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
-      '' else ''
-        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
-      ''}
-    '';
+      fsInfo =
+        let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
+        in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+
+      setHostId = optionalString (config.networking.hostId != null) ''
+        hi="${config.networking.hostId}"
+        ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
+          echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
+        '' else ''
+          echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
+        ''}
+      '';
+    };
   };
 
 
@@ -349,13 +350,7 @@ let
         { object = "${modulesClosure}/lib";
           symlink = "/lib";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+        { object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = config.environment.etc."modprobe.d/nixos.conf".source;
@@ -411,7 +406,7 @@ let
         ${lib.optionalString (config.boot.initrd.secrets == {})
             "exit 0"}
 
-        export PATH=${pkgs.coreutils}/bin:${pkgs.libarchive}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
         function cleanup {
           if [ -n "$tmp" -a -d "$tmp" ]; then
@@ -432,7 +427,7 @@ let
          }
 
         # mindepth 1 so that we don't change the mode of /
-        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 

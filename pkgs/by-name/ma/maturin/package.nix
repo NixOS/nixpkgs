@@ -13,18 +13,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-SjINeNtCbyMp3U+Op7ey+8lV7FYxLVpmO5g1a01ouBs=";
+    hash = "sha256-Ix1UTVYJRPTii/LqJQto+und+BrSAIZeHlTA6biysm0=";
   };
 
-  cargoHash = "sha256-xJafCgpCeihyORj3gIVUus74vu9h3N1xuyKvkxSqYK4=";
+  cargoHash = "sha256-xC0zCDGE0AynMUc5qSkgOYB3JqOWDlc8oz4yi6cGCJs=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     libiconv
   ];

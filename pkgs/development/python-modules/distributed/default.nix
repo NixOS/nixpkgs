@@ -1,40 +1,41 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+  versioneer,
+
+  # dependencies
   click,
   cloudpickle,
   dask,
-  fetchFromGitHub,
   jinja2,
   locket,
   msgpack,
   packaging,
   psutil,
-  pythonOlder,
   pyyaml,
-  setuptools,
-  setuptools-scm,
   sortedcontainers,
   tblib,
   toolz,
   tornado,
   urllib3,
-  versioneer,
   zict,
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.8.1";
+  version = "2024.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LKf0z/xGvMVjoG02G2doS/XOiDN2/PmR72rCmwaQqtM=";
+    tag = version;
+    hash = "sha256-R8DTiatme99afA6enTpC3AFN0KRmDbd+VGpXRNqvE8w=";
   };
 
   postPatch = ''

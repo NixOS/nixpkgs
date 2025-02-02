@@ -5,11 +5,16 @@
   fetchFromGitHub,
   hatchling,
   aiohttp,
+  mashumaro,
+  aioresponses,
+  pytest-aio,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "solarlog-cli";
-  version = "0.1.6";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -17,18 +22,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dontinelli";
     repo = "solarlog_cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Bliq1n6xH0cZQHueiGDyalIo0zms8zCSpUGq2KH5xZY=";
+    tag = "v${version}";
+    hash = "sha256-G7DZHFg0NH3rY/tbWpXDchYHkrvG8dUvINNxBIUKnzk=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    mashumaro
+  ];
 
   pythonImportsCheck = [ "solarlog_cli" ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-aio
+    pytestCheckHook
+    syrupy
+  ];
 
   meta = {
     changelog = "https://github.com/dontinelli/solarlog_cli/releases/tag/v${version}";

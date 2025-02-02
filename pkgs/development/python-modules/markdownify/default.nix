@@ -2,26 +2,32 @@
   lib,
   beautifulsoup4,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "markdownify";
-  version = "0.12.1";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H7CMYYsw4O56MaObmY9EoY+yirJU9V9K8GttNaIXnic=";
+  src = fetchFromGitHub {
+    owner = "matthewwithanm";
+    repo = "python-markdownify";
+    tag = version;
+    hash = "sha256-YJdR1wV72f9/tWQhuhGwScuRcE243fCP+wnYAzBOoV8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     beautifulsoup4

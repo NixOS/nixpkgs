@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.7.0";
+  version = "5.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Blx0pr73uZA8eHd2iZ9WY+aozBFWsQhWpxoQKtjtJSk=";
+    hash = "sha256-Eg2eakri5+1hPuKyq9+f4dL33il6G4LYLZvoWYfU4LY=";
   };
 
   build-system = [

@@ -1,20 +1,21 @@
-{ fetchFromGitHub
-, stdenvNoCC
-, lib
-, vcpkg-tool
-, makeWrapper
-, doWrap ? true
+{
+  fetchFromGitHub,
+  stdenvNoCC,
+  lib,
+  vcpkg-tool,
+  makeWrapper,
+  doWrap ? true,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "vcpkg";
-  version = "2024.07.12";
+  version = "2024.12.16";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg";
     rev = finalAttrs.version;
-    hash = "sha256-WE+BeF9BYR9/Gmi60g6ApXsWQ2vch2N6XhH1A9HAHsc=";
+    hash = "sha256-4Xk71JPklq7qwYXPE+EzNvD5rTfPvgyV/O7nSvgjKVo=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -50,28 +51,32 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p "$out/bin" "$out/share/vcpkg/scripts/buildsystems"
-      cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt,vcpkg-bundle.json} "$out/share/vcpkg/"
+    mkdir -p "$out/bin" "$out/share/vcpkg/scripts/buildsystems"
+    cp --preserve=mode -r ./{docs,ports,triplets,scripts,.vcpkg-root,versions,LICENSE.txt,vcpkg-bundle.json} "$out/share/vcpkg/"
 
-      ${lib.optionalString doWrap ''
-        makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
-          --set-default VCPKG_ROOT "$out/share/vcpkg"
-      ''}
+    ${lib.optionalString doWrap ''
+      makeWrapper "${vcpkg-tool}/bin/vcpkg" "$out/bin/vcpkg" \
+        --set-default VCPKG_ROOT "$out/share/vcpkg"
+    ''}
 
-      ln -s "$out/bin/vcpkg" "$out/share/vcpkg/vcpkg"
-      touch "$out/share/vcpkg/vcpkg.disable-metrics"
+    ln -s "$out/bin/vcpkg" "$out/share/vcpkg/vcpkg"
+    touch "$out/share/vcpkg/vcpkg.disable-metrics"
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   meta = {
     description = "C++ Library Manager for Windows, Linux, and macOS";
     mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ guekka gracicot h7x4 ];
+    maintainers = with lib.maintainers; [
+      guekka
+      gracicot
+      h7x4
+    ];
     platforms = lib.platforms.all;
   };
 })

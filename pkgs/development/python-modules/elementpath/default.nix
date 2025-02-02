@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "4.4.0";
+  version = "4.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-n1Ps0CybeLeDR5E4UnqmSkbFe0SXyplomEGDchAweSY=";
+    tag = "v${version}";
+    hash = "sha256-lFUrY3LOSc2OROkzotGSW9N3h9dJA4EnCvLNU41BPA0=";
   };
 
   build-system = [ setuptools ];

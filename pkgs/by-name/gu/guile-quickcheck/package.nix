@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, guile
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  guile,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +16,13 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ guile pkg-config ];
+  nativeBuildInputs = [
+    guile
+    pkg-config
+  ];
   buildInputs = [ guile ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     homepage = "https://ngyro.com/software/guile-quickcheck.html";

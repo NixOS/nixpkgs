@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-task";
-  version = "0.4.0";
+  version = "0.40.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc-task";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zSPv+eMGSsGXKtgi9r4EiGY1ZURXeJXWBKvR2GnfP8I=";
+    tag = version;
+    hash = "sha256-bRQJLncxCigYPEtlvKjUtKqhcBkB7erEtoJQ30yGamE=";
   };
 
   build-system = [ setuptools-scm ];

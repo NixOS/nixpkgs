@@ -5,6 +5,8 @@
   setuptools,
   pandas,
   pythonOlder,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,31 +19,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DynamicsAndNeuralSystems";
     repo = "pycatch22";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NvZrjOdC6rV4hwCuGcc2Br/VDhLwZcYpfnNvQpqU134=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ pandas ];
-
-  # This packages does not have real tests
-  # But we can run this file as smoketest
-  checkPhase = ''
-    runHook preCheck
-
-    python tests/testing.py
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    pandas
+    numpy
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pycatch22" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of catch22";
     homepage = "https://github.com/DynamicsAndNeuralSystems/pycatch22";
     changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

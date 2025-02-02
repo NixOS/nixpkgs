@@ -12,40 +12,29 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonAtLeast,
   sqlalchemy,
   thrift,
   requests,
   urllib3,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "3.3.0";
+  version = "3.7.1";
   format = "pyproject";
 
-  # Depends on thrift that at the moment do not work in Python 3.12
-  # see PR 328415 fix this.
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-a3OeKJ3c2UCClsPMah7iJY2YvIVLfHmmBuHAx8vdXZs=";
+    tag = "v${version}";
+    hash = "sha256-nq8+rkwY6WyxtdqWcSncyzeC8x50Iu6747f4J79mTws=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-pandas.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/databricks/databricks-sql-python/pull/416.patch";
-      sha256 = "sha256-sNCp8xSSmKP2yNzDK4wyWC5Hoe574AeHnKTeNcIxaek=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "pyarrow"
+    "thrift"
   ];
 
   nativeBuildInputs = [

@@ -1,50 +1,137 @@
 {
+  buildGoModule,
+  fetchFromGitHub,
+  fetchYarnDeps,
   lib,
+  nixosTests,
+  nodejs,
+  stash,
   stdenv,
-  fetchurl,
+  testers,
+  yarnBuildHook,
+  yarnConfigHook,
 }:
 let
-
-  version = "0.25.1";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux";
-      hash = "sha256-Rb4x6iKx6T9NPuWWDbNaz+35XPzLqZzSm0psv+k2Gw4=";
-    };
-    aarch64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux-arm64v8";
-      hash = "sha256-6qPyIYKFkhmBNO47w9E91FSKlByepBOnl0MNJighGSc=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-macos";
-      hash = "sha256-W8+rgqWUDTOB8ykGO2GL9tKEjaDXdx9LpFg0TAtJsxM=";
-    };
-  };
-in
-stdenv.mkDerivation (finalAttrs: {
-  inherit version;
+  inherit (lib.importJSON ./version.json)
+    gitHash
+    srcHash
+    vendorHash
+    version
+    yarnHash
+    ;
 
   pname = "stash";
 
-  src = fetchurl { inherit (sources.${stdenv.system}) url hash; };
+  src = fetchFromGitHub {
+    owner = "stashapp";
+    repo = "stash";
+    tag = "v${version}";
+    hash = srcHash;
+  };
 
-  dontUnpack = true;
+  frontend = stdenv.mkDerivation (final: {
+    inherit version;
+    pname = "${pname}-ui";
+    src = "${src}/ui/v2.5";
 
-  installPhase = ''
-    runHook preInstall
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = "${final.src}/yarn.lock";
+      hash = yarnHash;
+    };
 
-    install -Dm755 $src $out/bin/stash
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      # Needed for executing package.json scripts
+      nodejs
+    ];
 
-    runHook postInstall
+    postPatch = ''
+      substituteInPlace codegen.ts \
+        --replace-fail "../../graphql/" "${src}/graphql/"
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME=$(mktemp -d)
+      export VITE_APP_DATE='1970-01-01 00:00:00'
+      export VITE_APP_GITHASH=${gitHash}
+      export VITE_APP_STASH_VERSION=v${version}
+      export VITE_APP_NOLEGACY=true
+
+      yarn --offline run gqlgen
+      yarn --offline build
+
+      mv build $out
+
+      runHook postBuild
+    '';
+
+    dontInstall = true;
+    dontFixup = true;
+  });
+in
+buildGoModule {
+  inherit
+    pname
+    src
+    version
+    vendorHash
+    ;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X 'github.com/stashapp/stash/internal/build.buildstamp=1970-01-01 00:00:00'"
+    "-X 'github.com/stashapp/stash/internal/build.githash=${gitHash}'"
+    "-X 'github.com/stashapp/stash/internal/build.version=v${version}'"
+    "-X 'github.com/stashapp/stash/internal/build.officialBuild=false'"
+  ];
+  tags = [
+    "sqlite_stat4"
+    "sqlite_math_functions"
+  ];
+
+  subPackages = [ "cmd/stash" ];
+
+  preBuild = ''
+    cp -a ${frontend} ui/v2.5/build
+    # `go mod tidy` requires internet access and does nothing
+    echo "skip_mod_tidy: true" >> gqlgen.yml
+    # remove `-trimpath` fron `GOFLAGS` because `gqlgen` does not work with it
+    GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
   '';
 
-  meta = with lib; {
-    description = "Stash is a self-hosted porn app";
-    homepage = "https://github.com/stashapp/stash";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Golo300 ];
-    platforms = builtins.attrNames sources;
-    mainProgram = "stash";
+  strictDeps = true;
+
+  passthru = {
+    inherit frontend;
+    updateScript = ./update.py;
+    tests = {
+      inherit (nixosTests) stash;
+      version = testers.testVersion {
+        package = stash;
+        version = "v${version} (${gitHash}) - Unofficial Build - 1970-01-01 00:00:00";
+      };
+    };
   };
-})
+
+  meta = {
+    mainProgram = "stash";
+    description = "Organizer for your adult videos/images";
+    license = lib.licenses.agpl3Only;
+    homepage = "https://stashapp.cc/";
+    changelog = "https://github.com/stashapp/stash/blob/v${version}/ui/v2.5/src/docs/en/Changelog/v${lib.versions.major version}${lib.versions.minor version}0.md";
+    maintainers = with lib.maintainers; [
+      Golo300
+      DrakeTDL
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  };
+}

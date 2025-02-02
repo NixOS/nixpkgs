@@ -1,27 +1,31 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, unixODBC
-, icu
-, nix-update-script
-, testers
-, usql
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  unixODBC,
+  icu,
+  nix-update-script,
+  testers,
+  usql,
 }:
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.19.3";
+  version = "0.19.16";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-VenqDYkBJ4XJ2zV7kaVvwlgDyCaTY77zQ5hPq5cOZKg=";
+    hash = "sha256-zV/6AIglY1tEeOe2bYZqpOOkuS8O+YklXkwsDidap0U=";
   };
 
-  buildInputs = [ unixODBC icu ];
+  buildInputs = [
+    unixODBC
+    icu
+  ];
 
-  vendorHash = "sha256-KdLUxgNGMkkWBhUpXSecu0m3fsKl7Qj8Aw3z8WcdnSs=";
+  vendorHash = "sha256-NTbsyoKL5lyY7sUjmKFGH1USCGa1EwtjWOhxQEohQr4=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group
@@ -69,7 +73,10 @@ buildGoModule rec {
     changelog = "https://github.com/xo/usql/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "usql";
-    maintainers = with maintainers; [ georgyo anthonyroussel ];
+    maintainers = with maintainers; [
+      georgyo
+      anthonyroussel
+    ];
     platforms = with platforms; linux ++ darwin;
   };
 }

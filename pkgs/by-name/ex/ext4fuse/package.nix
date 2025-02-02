@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [ (if stdenv.isDarwin then macfuse-stubs else fuse) ];
+  buildInputs = [ (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse) ];
 
   installPhase = ''
     runHook preInstall

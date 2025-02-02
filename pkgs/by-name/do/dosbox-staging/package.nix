@@ -4,7 +4,6 @@
   SDL2_image,
   SDL2_net,
   alsa-lib,
-  darwin,
   fetchFromGitHub,
   fetchpatch,
   fluidsynth,
@@ -80,15 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       speexdsp
       zlib-ng
     ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AudioUnit
-        Carbon
-        Cocoa
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   outputs = [ "out" "man" ];
 

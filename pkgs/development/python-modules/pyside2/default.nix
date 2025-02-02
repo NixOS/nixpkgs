@@ -1,6 +1,5 @@
 {
   python,
-  pythonAtLeast,
   fetchurl,
   lib,
   stdenv,
@@ -12,11 +11,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.14";
+  version = "5.15.16";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    hash = "sha256-MmURlPamt7zkLwTmixQBrSCH5HiaTI8/uGSehhicY3I=";
+    hash = "sha256-bT7W/RcnXqdIKatW35wudkG/ymtbIBzyRJmPqBzwc2A=";
   };
 
   patches = [
@@ -35,28 +34,9 @@ stdenv.mkDerivation rec {
     ./Modify-sendCommand-signatures.patch
   ];
 
-  postPatch =
-    (lib.optionalString (pythonAtLeast "3.12") ''
-      substituteInPlace \
-        ez_setup.py \
-        build_scripts/main.py \
-        build_scripts/options.py \
-        build_scripts/utils.py \
-        build_scripts/wheel_override.py \
-        build_scripts/wheel_utils.py \
-        sources/pyside2/CMakeLists.txt \
-        --replace-fail "from distutils" "import setuptools; from distutils"
-      substituteInPlace \
-        build_scripts/config.py \
-        build_scripts/main.py \
-        build_scripts/options.py \
-        build_scripts/setup_runner.py \
-        build_scripts/utils.py \
-        --replace-fail "import distutils" "import setuptools; import distutils"
-    '')
-    + ''
-      cd sources/pyside2
-    '';
+  postPatch = ''
+    cd sources/pyside2
+  '';
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
@@ -69,8 +49,12 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     qt5.qmake
-    python
-    python.pkgs.setuptools
+    (python.withPackages (
+      ps: with ps; [
+        distutils
+        setuptools
+      ]
+    ))
   ];
 
   buildInputs =
@@ -113,6 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

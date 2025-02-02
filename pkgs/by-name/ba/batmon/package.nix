@@ -11,11 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "6543";
     repo = "batmon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+kjDNQKlaoI5fQ5FqYF6IPCKeE92WKxIhVCKafqfE0o=";
   };
 
-  cargoHash = "sha256-DJpWBset6SW7Ahg60+Tu1VpH34LcVOyrEs9suKyTE9g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0SXb8jBAYKnNFguamSMosPE6gH9aUzydF16w3SLhOU4=";
 
   meta = with lib; {
     description = "Interactive batteries viewer";
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     mainProgram = "batmon";
     platforms = with platforms; unix ++ windows;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ _6543 ];
   };
 }

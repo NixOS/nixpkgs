@@ -1,6 +1,6 @@
 { callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
+  automake, autoconf, libiconv, libtool, intltool, gettext, gzip, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress, updateAutotoolsGnuConfigScriptsHook,
@@ -11,7 +11,7 @@
 }:
 
 let
-  inherit (stdenv) isDarwin;
+  inherit (stdenv.hostPlatform) isDarwin;
 
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
@@ -87,7 +87,7 @@ self: super:
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
     setupHook = ./imake-setup-hook.sh;
-    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
+    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.hostPlatform.isDarwin
       then "${tradcpp}/bin/cpp"
       else "gcc"}\"'";
 
@@ -149,6 +149,14 @@ self: super:
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
+    patches = [
+      # Fix spurious Xerror when running synchronized
+      # https://gitlab.freedesktop.org/xorg/lib/libx11/-/merge_requests/264
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/commit/f3d6ebac35301d4ad068e307f0fbe6aa12ccbccb.patch";
+        hash = "sha256-wQNMsbQ+h9VlNiWr+r34AxvViC8fq02ZhcARRnw7O9k=";
+      })
+    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag
       ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
@@ -164,15 +172,16 @@ self: super:
       # Remove useless DocBook XML files.
       rm -rf $out/share/doc
     '';
-    CPP = lib.optionalString stdenv.isDarwin "clang -E -";
+    CPP = lib.optionalString stdenv.hostPlatform.isDarwin "clang -E -";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.xorgproto ];
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
-    preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
-    '';
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    meta = attrs.meta // {
+      platforms = lib.platforms.darwin;
+    };
   });
 
   libXau = super.libXau.overrideAttrs (attrs: {
@@ -263,18 +272,9 @@ self: super:
       ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
+    CPP = if stdenv.hostPlatform.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
     outputDoc = "devdoc";
     outputs = [ "out" "dev" "devdoc" ];
-  });
-
-  luit = super.luit.overrideAttrs (attrs: {
-    # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
-    # Once the bug is fixed upstream, this can be removed.
-    configureFlags = [ "--disable-selective-werror" ];
-
-    buildInputs = attrs.buildInputs ++ [libiconv];
-    meta = attrs.meta // { mainProgram = "luit"; };
   });
 
   libICE = super.libICE.overrideAttrs (attrs: {
@@ -397,6 +397,8 @@ self: super:
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
     XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
+    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
+    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
     meta = attrs.meta // { mainProgram = "sxpm"; };
   });
 
@@ -581,8 +583,13 @@ self: super:
   });
 
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
-    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      autoreconfHook
+      buildPackages.xorg.utilmacros # For xorg-utils.m4 macros
+      buildPackages.xorg.xorgserver # For xorg-server.m4 macros
+    ];
+    # fixes `implicit declaration of function 'wfbScreenInit'; did you mean 'fbScreenInit'?
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   });
 
   xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
@@ -794,7 +801,7 @@ self: super:
           ./dont-create-logdir-during-build.patch
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libpciaccess ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.hostPlatform.isLinux [
           udev
         ];
         depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -879,6 +886,7 @@ self: super:
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
+          "--disable-libunwind" # libunwind on darwin is missing unw_strerror
           "--disable-glamor"
           "--with-default-font-path="
           "--with-apple-application-name=XQuartz"
@@ -926,7 +934,7 @@ self: super:
       "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
       "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
       "--with-xkb-output=$out/share/X11/xkb/compiled"
-    ] ++ lib.optional stdenv.isDarwin [
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin [
       "--without-dtrace"
     ];
 
@@ -935,7 +943,7 @@ self: super:
       xorg.libXfont2
       xorg.xtrans
       xorg.libxcvt
-    ] ++ lib.optional stdenv.isDarwin [ Xplugin ];
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin [ Xplugin ];
   });
 
   lndir = super.lndir.overrideAttrs (attrs: {
@@ -1009,26 +1017,10 @@ self: super:
     meta = attrs.meta // { mainProgram = "xinit"; };
   });
 
-  xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
-    # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2021-01-15";
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      group = "xorg";
-      owner = "driver";
-      repo = "xf86-video-intel";
-      rev = "31486f40f8e8f8923ca0799aea84b58799754564";
-      sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
-    };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
-    configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
-    patches = [ ./use_crocus_and_iris.patch ];
-
-    meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
-    };
-  });
+  xf86videointel = throw ''
+    xf86videointel has been removed as the package is unmaintained and the driver is no longer functional.
+    Please remove "intel" from `services.xserver.videoDrivers` and switch to the "modesetting" driver.
+  ''; # Added 2024-12-16;
 
   xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.libXv ];
@@ -1083,7 +1075,7 @@ self: super:
   xmore = addMainProgram super.xmore { };
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
   });

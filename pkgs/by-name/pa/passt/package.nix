@@ -1,18 +1,26 @@
 { lib
 , stdenv
+, buildPackages
 , fetchurl
+, getconf
 , gitUpdater
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2024_07_26.57a21d2";
+  version = "2024_12_11.09478d5";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UK3Klpo3cp4EH42W16qh5WbZlCxb+ETQtWbpgatL/Dc=";
+    hash = "sha256-IE0BMM24lrl5NHeQGkAZZVwmAsvkhDN64pARdEiOM6s=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail \
+      'PAGE_SIZE=$(shell getconf PAGE_SIZE)' \
+      "PAGE_SIZE=$(${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe getconf} PAGE_SIZE)"
+  '';
 
   makeFlags = [
     "prefix=${placeholder "out"}"

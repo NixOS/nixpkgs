@@ -13,5 +13,5 @@ mkShell {
       clippy
       rustfmt
     ]
-    ++ lib.optional stdenv.isDarwin pkgs.libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv;
 }

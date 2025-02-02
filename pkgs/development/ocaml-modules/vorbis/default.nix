@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, ogg, libvorbis }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  ogg,
+  libvorbis,
+}:
 
 buildDunePackage rec {
   pname = "vorbis";
@@ -14,7 +21,10 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ogg libvorbis ];
+  propagatedBuildInputs = [
+    ogg
+    libvorbis
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-vorbis";

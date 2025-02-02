@@ -1,4 +1,8 @@
-{ lib, python, fetchPypi }:
+{
+  lib,
+  python,
+  fetchPypi,
+}:
 
 with python.pkgs;
 
@@ -11,7 +15,10 @@ buildPythonApplication rec {
     sha256 = "689e57e42f43bdc73ea4e893d9676819980d17968696826b69fbd951f59772de";
   };
 
-  propagatedBuildInputs = [ redis python-lzf ];
+  propagatedBuildInputs = [
+    redis
+    python-lzf
+  ];
 
   # No tests in published package
   doCheck = false;

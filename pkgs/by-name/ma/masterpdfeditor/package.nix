@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
-    sha256 = "sha256-CbrhhQJ0iiXz8hUJEi+/xb2ZGbunuPuIIgmCRgJhNVU=";
+    hash = "sha256-CbrhhQJ0iiXz8hUJEi+/xb2ZGbunuPuIIgmCRgJhNVU=";
   };
 
   nativeBuildInputs = [

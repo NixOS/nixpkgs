@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, llvmPackages
-, fetchurl
-, pkg-config
-, freetype
-, cmake
-, static ? stdenv.hostPlatform.isStatic
-, testers
+{
+  lib,
+  stdenv,
+  llvmPackages,
+  fetchurl,
+  pkg-config,
+  freetype,
+  cmake,
+  static ? stdenv.hostPlatform.isStatic,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,20 +15,30 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "graphite2";
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/silnrsi/graphite/releases/download/${version}/${pname}-${version}.tgz";
+    url =
+      with finalAttrs;
+      "https://github.com/silnrsi/graphite/releases/download/${version}/${pname}-${version}.tgz";
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ freetype ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false)
-      (llvmPackages.compiler-rt.override {
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
+  buildInputs =
+    [ freetype ]
+    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+      llvmPackages.compiler-rt.override {
         doFakeLibgcc = true;
-      });
+      }
+    );
 
-  patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
     # disable broken 'nametabletest' test, fails on gcc-13:
     #   https://github.com/silnrsi/graphite/pull/74

@@ -27,6 +27,7 @@
   nixosTests,
   opensearch-py,
   publicsuffixlist,
+  pygelf,
   pythonOlder,
   requests,
   tqdm,
@@ -41,14 +42,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.12.0";
+  version = "8.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mscc3TRMYuaTqrrxGPCVVKa2fg5sXwK/BglpbvLXbLc=";
+    hash = "sha256-yoDvEja9UIubfWfpfEE/LhPa085QM3B5TmiwOPRBDDA=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +83,7 @@ buildPythonPackage rec {
     mailsuite
     msgraph-core
     publicsuffixlist
+    pygelf
     requests
     tqdm
     xmltodict

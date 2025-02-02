@@ -1,14 +1,15 @@
-{ buildDunePackage
-, happy-eyeballs
-, cmdliner
-, dns
-, duration
-, domain-name
-, ipaddr
-, fmt
-, logs
-, lwt
-, mtime
+{
+  buildDunePackage,
+  happy-eyeballs,
+  cmdliner,
+  dns,
+  duration,
+  domain-name,
+  ipaddr,
+  fmt,
+  logs,
+  lwt,
+  mtime,
 }:
 
 buildDunePackage {

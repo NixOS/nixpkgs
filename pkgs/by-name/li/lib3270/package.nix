@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, autoconf
-, automake
-, libtool
-, gettext
-, openssl
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  openssl,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 sh autogen.sh
   '';
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "TN3270 client Library";

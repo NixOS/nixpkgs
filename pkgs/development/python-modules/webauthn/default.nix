@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "webauthn";
-  version = "2.2.0";
+  version = "2.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duo-labs";
     repo = "py_webauthn";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NBCR5GwmXA6COP9NOYnoD3l1vuOpym/kyNawd8FstLc=";
+    tag = "v${version}";
+    hash = "sha256-XIL2rejPp/5zaPFuWHgn696sugNB3E/BRc7DuP0oI4Q=";
   };
 
   build-system = [ setuptools ];
@@ -37,11 +37,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "webauthn" ];
-
-  disabledTests = [
-    # TypeError: X509StoreContextError.__init__() missing 1 required...
-    #"test_throws_on_bad_root_cert"
-  ];
 
   meta = with lib; {
     description = "Implementation of the WebAuthn API";

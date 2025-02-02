@@ -6,6 +6,7 @@
   fetchFromGitHub,
   darwin,
   libiconv,
+  openssl,
   pkg-config,
   protobuf,
   attrs,
@@ -28,18 +29,15 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    rev = "refs/tags/python-v${version}";
-    hash = "sha256-LDxq49aFxUmRAw8tQvFxnExtU0IKKqMbxIBuY95cBHU=";
+    tag = "python-v${version}";
+    hash = "sha256-lw2tZ26Py6JUxuetaokJKnxOv/WoLK4spxssLKxvxJA=";
   };
-
-  # ratelimiter only support up to python310 and it has been removed from nixpkgs
-  patches = [ ./remove-ratelimiter.patch ];
 
   buildAndTestSubdir = "python";
 
@@ -53,15 +51,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.cargoSetupHook
   ];
 
   buildInputs =
     [
       libiconv
-      protobuf
+      openssl
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         IOKit
@@ -69,8 +68,6 @@ buildPythonPackage rec {
         SystemConfiguration
       ]
     );
-
-  pythonRemoveDeps = [ "ratelimiter" ];
 
   dependencies = [
     attrs
@@ -101,10 +98,21 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not slow'" ];
 
-  disabledTests = [
-    # require tantivy which is not packaged in nixpkgs
-    "test_basic"
-  ];
+  disabledTests =
+    [
+      # require tantivy which is not packaged in nixpkgs
+      "test_basic"
+
+      # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
+      # https://github.com/lancedb/lancedb/issues/1539
+      "test_polars"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fail with darwin sandbox
+      "test_async_remote_db"
+      "test_http_error"
+      "test_retry_error"
+    ];
 
   disabledTestPaths = [
     # touch the network

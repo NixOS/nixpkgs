@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "frozenlist";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ICPJKN6P9ezTiDVoEVBQvJlXqF7aHE6aXFx0jzntdEA=";
   };
 

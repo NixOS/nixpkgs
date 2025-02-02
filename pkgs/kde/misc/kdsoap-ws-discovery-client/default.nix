@@ -13,7 +13,7 @@ mkKdeDerivation rec {
     hash = "sha256-LNJHwBPnX0EGWbrDcq/5PSLXHFpUwFnhN7lESvizQno=";
   };
 
-  extraNativeBuildInputs = [doxygen];
+  extraNativeBuildInputs = [ doxygen ];
 
-  meta.license = [lib.licenses.gpl3Plus];
+  meta.license = [ lib.licenses.gpl3Plus ];
 }

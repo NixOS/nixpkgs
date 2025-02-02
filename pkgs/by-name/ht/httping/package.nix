@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httping";
-  version = "3.6";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "HTTPing";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-lDgQC3VzfcLqMOQSaRZ/znMamAAGYq/9C9bHgI4G7B8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6PXus8lg+2L9RoRe4nPI1+2iYDKKEhVfJJZMoKWSCb0=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     ncurses
     openssl
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
   ];
 
   installPhase = ''

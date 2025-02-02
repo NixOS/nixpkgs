@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.50.0";
+  version = "1.53.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GXpyO+Qd6NP5yxWn1kw34x+P5uyR0rcNlzwivT6eHdE=";
+    tag = "v${version}";
+    hash = "sha256-4OiXri1u4co1cuDm7bLyw8XfMg2S3sKrkPWF2tD8zg8=";
   };
 
   postPatch = ''

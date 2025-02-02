@@ -16,6 +16,7 @@
   requests,
   ruyaml,
   setuptools,
+  toml,
   types-pyyaml,
   types-requests,
   typeshed-client,
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.32.1";
+  version = "4.36.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,15 +32,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DardzvEiydlsaOY60p2fNR6cGGvombSSUXCxHHFT7b0=";
+    tag = "v${version}";
+    hash = "sha256-wtYE6DQ6EgTFJjzx3IdavnV6TUIGmvPM3PR/+9oeJAk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pyyaml ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       argcomplete
       fsspec
@@ -65,6 +66,7 @@ buildPythonPackage rec {
       docstring-parser
       typeshed-client
     ];
+    toml = [ toml ];
     urls = [ requests ];
   };
 
@@ -78,9 +80,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonargparse" ];
 
   meta = with lib; {
-    description = "Module to mplement minimal boilerplate CLIs derived from various sources";
+    description = "Module to implement minimal boilerplate CLIs derived from various sources";
     homepage = "https://github.com/omni-us/jsonargparse";
-    changelog = "https://github.com/omni-us/jsonargparse/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/omni-us/jsonargparse/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

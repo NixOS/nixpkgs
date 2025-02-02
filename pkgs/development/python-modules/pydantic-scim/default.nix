@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chalk-ai";
     repo = "pydantic-scim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Hbc94v/+slXRGDKKbMui8WPwn28/1XcKvHkbLebWtj0=";
   };
 

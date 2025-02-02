@@ -1,30 +1,32 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
-  stdenv,
-  darwin,
+  fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  systemctl-tui,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "systemctl-tui";
-  version = "0.3.7";
+  version = "0.4.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-i0yCVXip1RcvKqxidflgW4wJFxAmUPRO04CeETzUgms=";
+  src = fetchFromGitHub {
+    owner = "rgwood";
+    repo = "systemctl-tui";
+    tag = "v${version}";
+    hash = "sha256-1KYaw4q1+dPHImjjCnUPXNu7ihdEfNuzQfHfPi1uDOw=";
   };
 
-  cargoHash = "sha256-4gY9pQO2ljbyviaL20ikEqwdAHS4bqpzE6YyaBW/b7c=";
+  cargoHash = "sha256-QogpwX/s2469h24WO9B84D4ezHD0Rln5lt8naUAZ5rY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script;
-    tests.version = testers.testVersion { package = systemctl-tui; };
   };
 
   meta = {

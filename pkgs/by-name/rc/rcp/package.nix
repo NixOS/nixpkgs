@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.12.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-TQTn91FDqDpdPv6dn2cwseGF+3EcJ17sglHKD7EQLeY=";
+    hash = "sha256-gFkrUqG3GXPAg9Zqv7Wr3axQ30axYGXw8bo+P1kmSJM=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    IOKit
-  ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks;
+    [
+      IOKit
+    ]
+  );
 
-  cargoHash = "sha256-uhE1AphdYKL6pFY8vsmdMGxHxFiVw75oDXNP8qGykBc=";
+  cargoHash = "sha256-loS55mQUVbIm+5VcQnPf6olERNTm3dbnQu5SPXe6a8I=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -37,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rcp";
     maintainers = with maintainers; [ wykurz ];
     # = note: Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

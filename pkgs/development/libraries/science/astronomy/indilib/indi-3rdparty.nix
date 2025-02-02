@@ -24,6 +24,7 @@
   libexif,
   libftdi1,
   libgphoto2,
+  libgpiod_1,
   libpng,
   libraw,
   ninja,
@@ -44,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-0M+k3A2Lw9EU9V5bX9dGztmdcJzc71XQZv8srmY5NmY=";
+    hash = "sha256-J9WPoaULH6UXL1q1O76+IDW97ydQWkHIID6n7wvOdE4=";
   };
 
   buildIndi3rdParty =
@@ -168,9 +169,16 @@ let
 
   libasi = buildIndi3rdParty {
     pname = "libasi";
+
+    postPatch = ''
+      substituteInPlace 99-asi.rules \
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
+    '';
+
     buildInputs = [
       libusb1
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = with lib; {
@@ -181,7 +189,7 @@ let
 
   libastroasis = buildIndi3rdParty {
     pname = "libastroasis";
-    buildInputs = [ stdenv.cc.cc.lib ];
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     nativeBuildInputs = [ autoPatchelfHook ];
     meta = with lib; {
       license = licenses.unfreeRedistributable;
@@ -192,7 +200,7 @@ let
   libatik = buildIndi3rdParty {
     pname = "libatik";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
       systemd
       libdc1394
@@ -217,7 +225,7 @@ let
     pname = "libfishcamp";
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
     '';
 
     buildInputs = [
@@ -246,7 +254,7 @@ let
   libinovasdk = buildIndi3rdParty {
     pname = "libinovasdk";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -327,7 +335,7 @@ let
 
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace "set (PK_DATADIR /usr/share/pktriggercord)" "set (PK_DATADIR $out/share/pkgtriggercord)"
+        --replace-fail "set (PK_DATADIR /usr/share/pktriggercord)" "set (PK_DATADIR $out/share/pkgtriggercord)"
     '';
 
     buildInputs = [ indilib ];
@@ -342,12 +350,12 @@ let
     pname = "libplayerone";
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
-        --replace "/bin/echo" "${coreutils}/bin/echo" \
-        --replace "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
     '';
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
       systemd
     ];
@@ -362,14 +370,13 @@ let
     pname = "libqhy";
 
     postPatch = ''
-      sed -ie 's/LIBQHY_SOVERSION "24"/LIBQHY_SOVERSION "20"/' CMakeLists.txt
       substituteInPlace CMakeLists.txt \
-        --replace "/lib/firmware" "lib/firmware"
+        --replace-fail "/lib/firmware" "lib/firmware"
 
       substituteInPlace 85-qhyccd.rules \
-        --replace "/sbin/fxload" "${fxload}/sbin/fxload" \
-        --replace "/lib/firmware" "$out/lib/firmware" \
-        --replace "/bin/sleep" "${coreutils}/bin/sleep"
+        --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
+        --replace-fail "/lib/firmware" "$out/lib/firmware" \
+        --replace-fail "/bin/sleep" "${coreutils}/bin/sleep"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 85-qhyccd.rules
     '';
@@ -377,7 +384,7 @@ let
     cmakeFlags = [ "-DQHY_FIRMWARE_INSTALL_DIR=\${CMAKE_INSTALL_PREFIX}/lib/firmware/qhy" ];
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -404,7 +411,7 @@ let
   libricohcamerasdk = buildIndi3rdParty {
     pname = "libricohcamerasdk";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -418,10 +425,10 @@ let
     pname = "libsbig";
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
       substituteInPlace 51-sbig-debian.rules \
-        --replace "/sbin/fxload" "${fxload}/sbin/fxload" \
-        --replace "/lib/firmware" "$out/lib/firmware"
+        --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
+        --replace-fail "/lib/firmware" "$out/lib/firmware"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 51-sbig-debian.rules
     '';
@@ -447,7 +454,7 @@ let
   libsvbony = buildIndi3rdParty {
     pname = "libsvbony";
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -506,6 +513,7 @@ in
       libapogee
       zlib
     ];
+    propagatedBuildInputs = [ libapogee ];
     meta.platforms = libapogee.meta.platforms;
   };
 
@@ -516,7 +524,7 @@ in
       libnova
     ];
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
@@ -529,6 +537,7 @@ in
       libusb1
       zlib
     ];
+    propagatedBuildInputs = [ libasi ];
     meta.platforms = libasi.meta.platforms;
   };
 
@@ -540,6 +549,11 @@ in
     meta.broken = true;
   };
 
+  indi-astarbox = buildIndi3rdParty {
+    pname = "indi-astarbox";
+    buildInputs = [ indilib ];
+  };
+
   indi-astroasis = buildIndi3rdParty {
     pname = "indi-astroasis";
     buildInputs = [
@@ -549,20 +563,8 @@ in
       libusb1
       zlib
     ];
+    propagatedBuildInputs = [ libastroasis ];
     meta.platforms = libastroasis.meta.platforms;
-  };
-
-  indi-astrolink4 = buildIndi3rdParty {
-    pname = "indi-astrolink4";
-    buildInputs = [ indilib ];
-  };
-
-  indi-astromechfoc = buildIndi3rdParty {
-    pname = "indi-astromechfoc";
-    buildInputs = [
-      indilib
-      zlib
-    ];
   };
 
   indi-atik = buildIndi3rdParty {
@@ -620,11 +622,6 @@ in
     ];
   };
 
-  indi-dreamfocuser = buildIndi3rdParty {
-    pname = "indi-dreamfocuser";
-    buildInputs = [ indilib ];
-  };
-
   indi-dsi = buildIndi3rdParty {
     pname = "indi-dsi";
     buildInputs = [
@@ -637,11 +634,11 @@ in
 
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
-        --replace "/lib/firmware" "lib/firmware"
+        --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace-fail "/lib/firmware" "lib/firmware"
       substituteInPlace 99-meadedsi.rules \
-        --replace "/sbin/fxload" "${fxload}/sbin/fxload" \
-        --replace "/lib/firmware" "$out/lib/firmware"
+        --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
+        --replace-fail "/lib/firmware" "$out/lib/firmware"
 
       sed -e 's|-D $env{DEVNAME}|-p $env{BUSNUM},$env{DEVNUM}|' -i 99-meadedsi.rules
     '';
@@ -723,6 +720,16 @@ in
       zlib
     ];
     propagatedBuildInputs = [ libgphoto2 ];
+  };
+
+  indi-gpio = buildIndi3rdParty {
+    pname = "indi-gpio";
+    buildInputs = [
+      indilib
+      libgpiod_1
+      libnova
+      zlib
+    ];
   };
 
   indi-gpsd = buildIndi3rdParty {
@@ -862,7 +869,7 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
@@ -918,7 +925,7 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
 
     meta.platforms = libqsi.meta.platforms;
@@ -968,15 +975,6 @@ in
     buildInputs = [ indilib ];
   };
 
-  indi-spectracyber = buildIndi3rdParty {
-    pname = "indi-spectracyber";
-    buildInputs = [
-      indilib
-      libnova
-      zlib
-    ];
-  };
-
   indi-starbook = buildIndi3rdParty {
     pname = "indi-starbook";
     buildInputs = [
@@ -1015,7 +1013,7 @@ in
       libusb1
     ];
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 

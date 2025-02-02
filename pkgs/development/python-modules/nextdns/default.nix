@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "nextdns";
-  version = "3.2.0";
+  version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/gBNJYCkDQ5SeM4q/4rWdsSldrMeo5GdUBaG57NiEIY=";
+    tag = version;
+    hash = "sha256-2BT47Dg+1TLDUccdb0Q/r3QzpRURTwFlUORbQpmIJzc=";
   };
 
   build-system = [ setuptools ];

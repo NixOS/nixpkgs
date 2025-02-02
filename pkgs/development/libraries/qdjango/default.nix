@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, testers
-, doxygen
-, qmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  testers,
+  doxygen,
+  qmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,18 +18,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5MfRfsIlv73VMvKMBCLviXFovyGH0On5ukLIEy7zwkk=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
-  postPatch = ''
-    # HTML docs depend on regular docs
-    substituteInPlace qdjango.pro \
-      --replace 'dist.depends = docs' 'htmldocs.depends = docs'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # tst_Auth:constIterator (tests/db/auth/tst_auth.cpp:624) fails on Darwin?
-    # QVERIFY(&*(it += 2) == 0) evals to false
-    substituteInPlace tests/db/db.pro \
-      --replace 'auth' ""
-  '';
+  postPatch =
+    ''
+      # HTML docs depend on regular docs
+      substituteInPlace qdjango.pro \
+        --replace 'dist.depends = docs' 'htmldocs.depends = docs'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # tst_Auth:constIterator (tests/db/auth/tst_auth.cpp:624) fails on Darwin?
+      # QVERIFY(&*(it += 2) == 0) evals to false
+      substituteInPlace tests/db/db.pro \
+        --replace 'auth' ""
+    '';
 
   qmakeFlags = [
     # Uses Qt testing infrastructure via QMake CONFIG testcase,

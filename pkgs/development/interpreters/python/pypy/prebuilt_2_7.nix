@@ -71,15 +71,15 @@ in with passthru; stdenv.mkDerivation {
     sqlite
     zlib
     stdenv.cc.cc.libgcc or null
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     tcl-8_5
     tk-8_5
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     tcl-8_6
     tk-8_6
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -88,7 +88,7 @@ in with passthru; stdenv.mkDerivation {
     echo "Moving files to $out"
     mv -t $out bin include lib-python lib_pypy site-packages
     mv $out/bin/libpypy*-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mv lib/libffi.so.6* $out/lib/
       rm $out/bin/*.debug
     ''}
@@ -102,12 +102,12 @@ in with passthru; stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (stdenv.isLinux) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     find $out/{lib,lib_pypy*} -name "*.so" \
       -exec patchelf \
         --replace-needed libtinfow.so.6 libncursesw.so.6 \
         --replace-needed libgdbm.so.4 libgdbm_compat.so.4 {} \;
-  '' + lib.optionalString (stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     install_name_tool \
       -change \
         @rpath/lib${executable}-c.dylib \
@@ -115,12 +115,12 @@ in with passthru; stdenv.mkDerivation {
         $out/bin/${executable}
     install_name_tool \
       -change \
-        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtcl8.6.dylib \
+        /opt/homebrew${lib.optionalString stdenv.hostPlatform.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtcl8.6.dylib \
         ${tcl-8_6}/lib/libtcl8.6.dylib \
         $out/lib_pypy/_tkinter/*.so
     install_name_tool \
       -change \
-        /opt/homebrew${lib.optionalString stdenv.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtk8.6.dylib \
+        /opt/homebrew${lib.optionalString stdenv.hostPlatform.isx86_64 "_x86_64"}/opt/tcl-tk/lib/libtk8.6.dylib \
         ${tk-8_6}/lib/libtk8.6.dylib \
         $out/lib_pypy/_tkinter/*.so
   '';

@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+  ];
+
   installPhase = ''
     runHook preInstall
     install -Dm755 bluesnarfer $out/bin/bluesnarfer
@@ -29,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Bluetooth bluesnarfing utility";
-    homepage = "http://www.alighieri.org/project.html";
+    homepage = "https://www.alighieri.org/project.html";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.linux;

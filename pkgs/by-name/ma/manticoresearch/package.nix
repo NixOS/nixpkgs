@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-UD/r7rlJ5mR3wg4doKT/nTwTWzlulngUjOPNEjmykB8=";
   };
 

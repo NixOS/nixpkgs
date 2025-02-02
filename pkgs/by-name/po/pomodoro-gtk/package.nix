@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gjs
-, gobject-introspection
-, blueprint-compiler
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, libgda6
-, gsound
-, gst_all_1
-, libportal-gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gjs,
+  gobject-introspection,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  libgda6,
+  gsound,
+  gst_all_1,
+  libportal-gtk4,
 }:
 
 stdenv.mkDerivation {

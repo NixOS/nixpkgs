@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "configparser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OqlmAmBt4x+cJtK89dxsU7+Vn9wmGR9Djc59/ewHSxs=";
+    tag = "v${version}";
+    hash = "sha256-6B1I/kS60opMDpCzy2tnlnV65Qo500G0zPHP1I5TDWA=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   preConfigure = ''
-    export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8
+    export LC_ALL=${if stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8
   '';
 
   meta = with lib; {

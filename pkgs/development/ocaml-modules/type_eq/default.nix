@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -29,4 +30,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
 }
-

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xIswmHQMl5pAqvcTNqeuO3P6MynKt3ahzUgGQroaqmw=";
   };
 

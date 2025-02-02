@@ -17,12 +17,12 @@ buildPythonPackage rec {
   version = "21.4.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || stdenv.isDarwin;
+  disabled = pythonOlder "3.7" || stdenv.hostPlatform.isDarwin;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dZgs+G2vJQIKnN9xHcNeNViG7mOIdKb+Ms2AKE+FC4M=";
   };
 

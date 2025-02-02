@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "shortcut-overlay";
     rev = version;
-    sha256 = "sha256-HqF2eSNwAzgzwyfNQIeumaGkPYiSc+2OfaD3JRQp4/4=";
+    sha256 = "sha256-RWFzs4rw/KC0MXkNfA178FejMbuIBh5FVox1RxmxCJA=";
   };
 
   nativeBuildInputs = [

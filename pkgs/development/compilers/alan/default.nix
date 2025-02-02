@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cgreen, openjdk, pkg-config, which
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cgreen,
+  openjdk,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +41,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cgreen
-    openjdk pkg-config which
+    openjdk
+    pkg-config
+    which
   ];
 
   meta = with lib; {

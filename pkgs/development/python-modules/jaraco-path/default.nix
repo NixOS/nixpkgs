@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.path";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i6FPM4aPfpwLdde1COXZNoKel3sRK8PXnkzy50XvVdw=";
   };
 
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/jaraco.path";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
-    broken = stdenv.isDarwin; # pyobjc is missing
+    broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
   };
 }

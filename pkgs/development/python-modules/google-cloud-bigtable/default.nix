@@ -17,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.24.0";
+  version = "2.28.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rOdfYso8UtZhnU/3rtmCEpyuUIuvd22BszMT9PnqXtQ=";
+    pname = "google_cloud_bigtable";
+    inherit version;
+    hash = "sha256-FH3TTVNeZiZKbRbkOxQK4x2tNhcd2RxWN9n9mhYHaqA=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 

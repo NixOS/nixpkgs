@@ -5,20 +5,17 @@
   isPyPy,
   lib,
   defusedxml,
-  future,
-  ujson,
   packaging,
   psutil,
   setuptools,
   pydantic,
+  nixosTests,
   # Optional dependencies:
   fastapi,
   jinja2,
-  orjson,
   pysnmp,
   hddtemp,
   netifaces, # IP module
-  py-cpuinfo,
   uvicorn,
   requests,
   prometheus-client,
@@ -26,49 +23,57 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.1.2.1";
+  version = "4.2.1";
+  pyproject = true;
+
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SlKt+wjzI9QRmMVvbIERuhQuCCaOh7L89WuNUXNhkuI=";
+    tag = "v${version}";
+    hash = "sha256-8Jm6DE3B7OQkaNwX/KwXMNZHUyvPtln8mJYaD6yzJRM=";
   };
+
+  build-system = [ setuptools ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
-  makeWrapperArgs = lib.optionals stdenv.isDarwin [
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
     "--set"
     "DYLD_FRAMEWORK_PATH"
     "/System/Library/Frameworks"
   ];
 
-  doCheck = true;
-  preCheck = lib.optionalString stdenv.isDarwin ''
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
+  # some tests fail in darwin sandbox
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  checkPhase = ''
+    runHook preCheck
+
+    python unittest-core.py
+
+    runHook postCheck
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
-    future
-    ujson
     netifaces
     packaging
     psutil
     pysnmp
-    setuptools
-    py-cpuinfo
-    pydantic
     fastapi
     uvicorn
     requests
     jinja2
-    orjson
     prometheus-client
-  ] ++ lib.optional stdenv.isLinux hddtemp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+
+  passthru.tests = {
+    service = nixosTests.glances;
+  };
 
   meta = {
     homepage = "https://nicolargo.github.io/glances/";

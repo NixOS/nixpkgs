@@ -3,16 +3,22 @@
   lib,
   python3,
   fetchzip,
+  testers,
+  valgrind,
   librandombytes,
   libcpucycles,
+  lib25519,
 }:
+let
+  version = "20241004";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib25519";
-  version = "20240321";
+  inherit version;
 
   src = fetchzip {
     url = "https://lib25519.cr.yp.to/lib25519-${finalAttrs.version}.tar.gz";
-    hash = "sha256-R10Q803vCjIZCS4Z/uErsx547RaXfAELGQm9NuNhw+I=";
+    hash = "sha256-gKLMk+yZ/nDlwohZiCFurSZwHExX3Ge2W1O0JoGQf8M=";
   };
 
   patches = [ ./environment-variable-tools.patch ];
@@ -31,13 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    valgrind
+  ];
   buildInputs = [
     librandombytes
     libcpucycles
   ];
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id "$out/lib/lib25519.1.dylib" "$out/lib/lib25519.1.dylib"
     for f in $out/bin/*; do
       install_name_tool -change "lib25519.1.dylib" "$out/lib/lib25519.1.dylib" "$f"
@@ -45,12 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # failure: crypto_pow does not handle p=q overlap
-  doInstallCheck = !stdenv.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/lib25519-test
     runHook postInstallCheck
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      package = lib25519;
+      command = "lib25519-test | head -n 2 | grep version";
+      version = "lib25519 version ${version}";
+    };
+  };
 
   meta = {
     homepage = "https://randombytes.cr.yp.to/";

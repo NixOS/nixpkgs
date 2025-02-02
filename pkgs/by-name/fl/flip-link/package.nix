@@ -1,19 +1,25 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "flip-link";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-slidPVL0LAUtmCI2rlAwfGVUmB4WRF9bHqQhdgbO2oc=";
+    hash = "sha256-Nw43I8EIlNGPptsLVxFBapFp6qdFoUOEicHc9FTcm2g=";
   };
 
-  cargoHash = "sha256-x3JnqztoLol5dNMact/qMveQuvcMTg/jqHxW0lksB7Y=";
+  cargoHash = "sha256-OxmRIJ2LtAz+Paxzy1ppxnLliMocKbiJXf/io8mGPNQ=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   checkFlags = [
     # requires embedded toolchains
@@ -27,7 +33,13 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "flip-link";
     homepage = "https://github.com/knurling-rs/flip-link";
     changelog = "https://github.com/knurling-rs/flip-link/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ FlorianFranzen newam ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      FlorianFranzen
+      newam
+    ];
   };
 }

@@ -1,5 +1,10 @@
-{ buildDunePackage, qcheck-core
-, qcheck, ppxlib, ppx_deriving }:
+{
+  buildDunePackage,
+  qcheck-core,
+  qcheck,
+  ppxlib,
+  ppx_deriving,
+}:
 
 buildDunePackage {
   pname = "ppx_deriving_qcheck";
