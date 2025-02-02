@@ -207,10 +207,9 @@ in
   ...
 }@attrs:
 
-assert (pyproject != null) -> (format == null);
-
 let
   format' =
+    assert (pyproject != null) -> (format == null);
     if pyproject != null then
       if pyproject then "pyproject" else "other"
     else if format != null then
@@ -276,6 +275,7 @@ let
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (
     stdenv.mkDerivation (
+      finalAttrs:
       (cleanAttrs attrs)
       // {
 
@@ -402,13 +402,12 @@ let
           {
             inherit disabled;
           }
-          // attrs.passthru or { }
           // {
             updateScript =
               let
-                filename = head (splitString ":" self.meta.position);
+                filename = head (splitString ":" finalAttrs.finalPackage.meta.position);
               in
-              attrs.passthru.updateScript or [
+              [
                 update-python-libraries
                 filename
               ];
@@ -421,7 +420,8 @@ let
           }
           // optionalAttrs (build-system != [ ]) {
             inherit build-system;
-          };
+          }
+          // attrs.passthru or { };
 
         meta = {
           # default to python's platforms
