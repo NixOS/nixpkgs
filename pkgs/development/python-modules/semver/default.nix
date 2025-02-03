@@ -38,11 +38,6 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  disabledTestPaths = [
-    # Don't test the documentation
-    "docs/*.rst"
-  ];
-
   pythonImportsCheck = [ "semver" ];
 
   meta = with lib; {
