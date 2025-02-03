@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
     owner = "imvaskel";
     repo = "soteria";
     tag = "v${version}";
-    hash = "sha256-CinJEzH4GsCAzU8FiInulPHLm73KI4nLlAcskkjgeJM=";
+    hash = "sha256-T6bJOXSXFWZYAxZ+nTDu+H8Wi75QRKddXkXdSOPwHbI=";
   };
 
   cargoHash = "sha256-vv7gK0ZfwO2AHXXQcXfkne9wZl+8JH9h8vELdRjg8WM=";
