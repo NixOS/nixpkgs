@@ -7,20 +7,26 @@
 
 let
 
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    ;
   inherit (lib.types)
+    attrsOf
     bool
     enum
     ints
     lines
-    attrsOf
     nonEmptyStr
     nullOr
     path
     str
     submodule
     ;
-  inherit (lib.modules) mkDefault mkIf mkMerge;
 
   commonDescr = ''
     Values can be either strings or integers
