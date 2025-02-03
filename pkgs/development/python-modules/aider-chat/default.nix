@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.72.1";
+  version = "0.73.0";
   aider-chat = python3.pkgs.buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-5dV1EW4qx2tXDlbzyS8CT3p0MXgdKVdIGVLDEQF/4Zc=";
+      hash = "sha256-wcrwm4mn4D6pYgoCa5iKcKmt4QmhOXOfObUl7Gevukg=";
     };
 
     pythonRelaxDeps = true;
@@ -191,7 +191,7 @@ let
       homepage = "https://github.com/paul-gauthier/aider";
       changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ taha-yassine ];
+      maintainers = with lib.maintainers; [ happysalada ];
       mainProgram = "aider";
     };
   };

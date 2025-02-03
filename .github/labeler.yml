@@ -476,6 +476,12 @@
         - pkgs/development/tcl-modules/**/*
         - pkgs/top-level/tcl-packages.nix
 
+"6.topic: teams":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+          - maintainers/team-list.nix
+
 "6.topic: TeX":
   - any:
     - changed-files:
