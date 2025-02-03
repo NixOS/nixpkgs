@@ -24,7 +24,6 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  # pypi archive does not have tests
   src = fetchFromGitHub {
     owner = "crate";
     repo = "crate-python";
