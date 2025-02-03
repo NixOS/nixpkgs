@@ -3554,6 +3554,12 @@ with pkgs;
     xenPvhSupport = true;
   };
 
+  grub2_pvgrub_image = callPackage ../by-name/gr/grub2_xen_images/package.nix {
+    grubPlatform = "xen";
+  };
+
+  grub2_pvhgrub_image = callPackage ../by-name/gr/grub2_xen_images/package.nix {};
+
   grub4dos = callPackage ../tools/misc/grub4dos {
     stdenv = stdenv_32bit;
   };
