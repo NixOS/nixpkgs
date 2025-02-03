@@ -3031,6 +3031,18 @@ final: prev:
     meta.homepage = "https://github.com/hat0uma/csvview.nvim/";
   };
 
+  ctags-lsp-nvim = buildVimPlugin {
+    pname = "ctags-lsp.nvim";
+    version = "2024-12-08";
+    src = fetchFromGitHub {
+      owner = "netmute";
+      repo = "ctags-lsp.nvim";
+      rev = "aaae7b5d8dc7aeb836c63301b8eb7311af49bb2a";
+      sha256 = "06h388vkp8nv15wbh96pza85994xf979s7kjqrli4s6y5ygw6m02";
+    };
+    meta.homepage = "https://github.com/netmute/ctags-lsp.nvim/";
+  };
+
   ctrlp-cmatcher = buildVimPlugin {
     pname = "ctrlp-cmatcher";
     version = "2015-10-15";
