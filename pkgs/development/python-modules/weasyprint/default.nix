@@ -78,6 +78,18 @@ buildPythonPackage rec {
     "test_tabulation_character"
     "test_linear_gradients_5"
     "test_linear_gradients_12"
+    # rounding issues in sandbox
+    "test_images_transparent_text"
+    "test_visibility_1"
+    "test_visibility_3"
+    "test_visibility_4"
+    "test_empty_inline_auto_margins"
+    "test_vertical_align_4"
+    "test_margin_boxes_element"
+    "test_running_elements"
+    "test_layout_table_auto_44"
+    "test_layout_table_auto_45"
+    "test_woff_simple"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

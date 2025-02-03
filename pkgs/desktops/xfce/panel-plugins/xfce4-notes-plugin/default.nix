@@ -14,8 +14,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-notes-plugin";
-  version = "1.11.1";
-  sha256 = "sha256-LeKQCsnHVataTP0rYn09x0Ddx8lMtVC0WW/jje7yXag=";
+  version = "1.11.2";
+  sha256 = "sha256-qORKaqpLVPIB5t1JtClP3Ey8yBTKY46YsMIc/fGV688=";
   odd-unstable = false;
 
   nativeBuildInputs = [

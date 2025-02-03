@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "galaxy-buds-client";
-  version = "5.1.1";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "ThePBone";
     repo = "GalaxyBudsClient";
     rev = version;
-    hash = "sha256-Cie8dInNzqMS6k2XP2P3fwMxSc6AabZHiIc6vcA7VhM=";
+    hash = "sha256-ygxrtRapduvK7qAHZzdHnCijm8mcqOviMl2ddf9ge+Y=";
   };
 
   projectFile = [ "GalaxyBudsClient/GalaxyBudsClient.csproj" ];

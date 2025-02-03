@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace openslide/lowlevel.py \
-      --replace-fail "return cdll.LoadLibrary(name)" "return cdll.LoadLibrary(f'${lib.getLib openslide}/lib/{name}')"
+      --replace-fail "return cdll.LoadLibrary(names[0])" "return cdll.LoadLibrary(f'${lib.getLib openslide}/lib/{names[0]}')"
   '';
 
   build-system = [ setuptools ];
