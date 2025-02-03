@@ -11,6 +11,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -20,7 +21,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "ThePBone";
     repo = "GalaxyBudsClient";
-    rev = version;
+    tag = version;
     hash = "sha256-ygxrtRapduvK7qAHZzdHnCijm8mcqOviMl2ddf9ge+Y=";
   };
 
@@ -71,12 +72,16 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
-    mainProgram = "GalaxyBudsClient";
-    description = "Unofficial Galaxy Buds Manager for Windows and Linux";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Unofficial Galaxy Buds Manager";
     homepage = "https://github.com/ThePBone/GalaxyBudsClient";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.icy-thought ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ icy-thought ];
+    platforms = lib.platforms.linux;
+    mainProgram = "GalaxyBudsClient";
   };
 }
