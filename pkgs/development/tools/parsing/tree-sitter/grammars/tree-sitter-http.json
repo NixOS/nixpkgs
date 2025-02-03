@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/ntbbloodbath/tree-sitter-http",
+  "rev": "b639716df0698940b53de81e6fcefa2b6cd30724",
+  "date": "2024-03-16T17:35:45-04:00",
+  "path": "/nix/store/ynn327dwmxxakcbfrpq94b7m6sl5301h-tree-sitter-http",
+  "sha256": "0l2yzq0j3w20m9vy9z627jgnfylk1d8crldz3n8xmhisaxwl47ia",
+  "hash": "sha256-Kh5CeVc6wtqRHb/RzFALk3pnnzzC/OR3qkDwIQH+XlA=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

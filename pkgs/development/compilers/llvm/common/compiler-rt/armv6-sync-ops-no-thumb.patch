@@ -1,0 +1,52 @@
+From 5017de8ba4b1fe985169cf54590e858a9019a91f Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 11 Mar 2022 16:25:49 -0800
+Subject: [PATCH] [builtins] Do not force thumb mode directive in
+ arm/sync-ops.h
+
+.thumb_func was not switching mode until [1]
+so it did not show up but now that .thumb_func (without argument) is
+switching mode, its causing build failures on armv6 ( rpi0 ) even when
+build is explicitly asking for this file to be built with -marm (ARM
+mode), therefore use DEFINE_COMPILERRT_FUNCTION macro to add function
+header which considers arch and mode from compiler cmdline to decide if
+the function is built using thumb mode or arm mode.
+
+[1] https://reviews.llvm.org/D101975
+
+Note that it also needs https://reviews.llvm.org/D99282
+
+Reviewed By: peter.smith, MaskRay
+
+Differential Revision: https://reviews.llvm.org/D104183
+---
+ compiler-rt/lib/builtins/arm/sync-ops.h | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/lib/builtins/arm/sync-ops.h b/lib/builtins/arm/sync-ops.h
+index 7a26170741ad2..d914f9d3a1093 100644
+--- a/lib/builtins/arm/sync-ops.h
++++ b/lib/builtins/arm/sync-ops.h
+@@ -16,9 +16,8 @@
+ 
+ #define SYNC_OP_4(op)                                                          \
+   .p2align 2;                                                                  \
+-  .thumb;                                                                      \
+   .syntax unified;                                                             \
+-  DEFINE_COMPILERRT_THUMB_FUNCTION(__sync_fetch_and_##op)                      \
++  DEFINE_COMPILERRT_FUNCTION(__sync_fetch_and_##op)                            \
+   DMB;                                                                         \
+   mov r12, r0;                                                                 \
+   LOCAL_LABEL(tryatomic_##op) : ldrex r0, [r12];                               \
+@@ -31,9 +30,8 @@
+ 
+ #define SYNC_OP_8(op)                                                          \
+   .p2align 2;                                                                  \
+-  .thumb;                                                                      \
+   .syntax unified;                                                             \
+-  DEFINE_COMPILERRT_THUMB_FUNCTION(__sync_fetch_and_##op)                      \
++  DEFINE_COMPILERRT_FUNCTION(__sync_fetch_and_##op)                            \
+   push {r4, r5, r6, lr};                                                       \
+   DMB;                                                                         \
+   mov r12, r0;                                                                 \
+

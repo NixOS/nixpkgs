@@ -1,0 +1,18 @@
+diff -ur gmrun-0.9.2-orig/src/prefs.cc gmrun-0.9.2/src/prefs.cc
+--- gmrun-0.9.2-orig/src/prefs.cc	2019-05-02 12:56:39.025088361 +0200
++++ gmrun-0.9.2/src/prefs.cc	2019-05-02 13:21:51.179778620 +0200
+@@ -31,9 +31,11 @@
+ 
+ Prefs::Prefs()
+ {
+-  string file_name = PACKAGE_DATA_DIR"/";
+-  file_name += GMRUNRC;
+-  init(file_name);
++  string file_name = "/etc/" GMRUNRC;
++  if (!init(file_name)) {
++    file_name = PACKAGE_DATA_DIR "/" GMRUNRC;;
++    init(file_name);
++  }
+ 
+   file_name = getenv("HOME");
+   if (!file_name.empty()) {

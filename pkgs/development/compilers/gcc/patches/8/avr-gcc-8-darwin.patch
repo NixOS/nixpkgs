@@ -1,0 +1,16 @@
+From https://gist.githubusercontent.com/DavidEGrayson/88bceb3f4e62f45725ecbb9248366300/raw/c1f515475aff1e1e3985569d9b715edb0f317648/gcc-11-arm-darwin.patch
+
+diff -ur a/gcc/config/host-darwin.c b/gcc/config/host-darwin.c
+--- a/gcc/config/host-darwin.c	2021-04-27 03:00:13.000000000 -0700
++++ b/gcc/config/host-darwin.c	2021-06-11 14:49:13.754000000 -0700
+@@ -22,6 +22,10 @@
+ #include "coretypes.h"
+ #include "diagnostic-core.h"
+ #include "config/host-darwin.h"
++#include "hosthooks.h"
++#include "hosthooks-def.h"
++
++const struct host_hooks host_hooks = HOST_HOOKS_INITIALIZER;
+ 
+ /* Yes, this is really supposed to work.  */
+ /* This allows for a pagesize of 16384, which we have on Darwin20, but should

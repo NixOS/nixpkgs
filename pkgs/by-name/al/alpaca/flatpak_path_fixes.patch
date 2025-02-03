@@ -1,0 +1,159 @@
+diff --git a/src/internal.py b/src/internal.py
+new file mode 100644
+index 0000000..b41e415
+--- /dev/null
++++ b/src/internal.py
+@@ -0,0 +1,22 @@
++import os
++
++app_id = "com.jeffser.Alpaca"
++
++in_flatpak = True if os.getenv("FLATPAK_ID") else False
++
++def get_xdg_home(env, default):
++    if in_flatpak:
++        return os.getenv(env)
++    else:
++        base = os.getenv(env) or os.path.expanduser(default)
++        path = os.path.join(base, app_id)
++        if not os.path.exists(path):
++            os.makedirs(path)
++        return path
++
++
++data_dir = get_xdg_home("XDG_DATA_HOME", "~/.local/share")
++config_dir = get_xdg_home("XDG_CONFIG_HOME", "~/.config")
++cache_dir = get_xdg_home("XDG_CACHE_HOME", "~/.cache")
++
++source_dir = os.path.abspath(os.path.dirname(__file__))
+diff --git a/src/local_instance.py b/src/local_instance.py
+index cb3ee51..1866f83 100644
+--- a/src/local_instance.py
++++ b/src/local_instance.py
+@@ -2,24 +2,24 @@
+ import subprocess, os, threading
+ from time import sleep
+ from logging import getLogger
++from .internal import data_dir, cache_dir
+ 
+ 
+ logger = getLogger(__name__)
+ 
+ instance = None
+ port = 11435
+-data_dir = os.getenv("XDG_DATA_HOME")
+ overrides = {}
+ 
+ def start():
+-    if not os.path.isdir(os.path.join(os.getenv("XDG_CACHE_HOME"), 'tmp/ollama')):
+-        os.mkdir(os.path.join(os.getenv("XDG_CACHE_HOME"), 'tmp/ollama'))
++    if not os.path.isdir(os.path.join(cache_dir, 'tmp/ollama')):
++        os.mkdir(os.path.join(cache_dir, 'tmp/ollama'))
+     global instance, overrides
+     params = overrides.copy()
+     params["OLLAMA_HOST"] = f"127.0.0.1:{port}" # You can't change this directly sorry :3
+     params["HOME"] = data_dir
+-    params["TMPDIR"] = os.path.join(os.getenv("XDG_CACHE_HOME"), 'tmp/ollama')
+-    instance = subprocess.Popen(["/app/bin/ollama", "serve"], env={**os.environ, **params}, stderr=subprocess.PIPE, text=True)
++    params["TMPDIR"] = os.path.join(cache_dir, 'tmp/ollama')
++    instance = subprocess.Popen(["ollama", "serve"], env={**os.environ, **params}, stderr=subprocess.PIPE, text=True)
+     logger.info("Starting Alpaca's Ollama instance...")
+     logger.debug(params)
+     sleep(1)
+diff --git a/src/main.py b/src/main.py
+index 278914f..eeb54cd 100644
+--- a/src/main.py
++++ b/src/main.py
+@@ -27,6 +27,7 @@ gi.require_version('Adw', '1')
+ 
+ from gi.repository import Gtk, Gio, Adw, GLib
+ from .window import AlpacaWindow
++from .internal import cache_dir, data_dir
+ 
+ 
+ logger = logging.getLogger(__name__)
+@@ -63,7 +64,7 @@ class AlpacaApplication(Adw.Application):
+             issue_url='https://github.com/Jeffser/Alpaca/issues',
+             license_type=3,
+             website="https://jeffser.com/alpaca",
+-            debug_info=open(os.path.join(os.getenv("XDG_DATA_HOME"), 'tmp.log'), 'r').read())
++            debug_info=open(os.path.join(data_dir, 'tmp.log'), 'r').read())
+         about.present(parent=self.props.active_window)
+ 
+     def create_action(self, name, callback, shortcuts=None):
+@@ -75,16 +76,16 @@ class AlpacaApplication(Adw.Application):
+ 
+ 
+ def main(version):
+-    if os.path.isfile(os.path.join(os.getenv("XDG_DATA_HOME"), 'tmp.log')):
+-        os.remove(os.path.join(os.getenv("XDG_DATA_HOME"), 'tmp.log'))
+-    if os.path.isdir(os.path.join(os.getenv("XDG_CACHE_HOME"), 'tmp')):
+-        os.system('rm -rf ' + os.path.join(os.getenv("XDG_CACHE_HOME"), "tmp/*"))
++    if os.path.isfile(os.path.join(data_dir, 'tmp.log')):
++        os.remove(os.path.join(data_dir, 'tmp.log'))
++    if os.path.isdir(os.path.join(cache_dir, 'tmp')):
++        os.system('rm -rf ' + os.path.join(cache_dir, "tmp/*"))
+     else:
+-        os.mkdir(os.path.join(os.getenv("XDG_CACHE_HOME"), 'tmp'))
++        os.mkdir(os.path.join(cache_dir, 'tmp'))
+     logging.basicConfig(
+         format="%(levelname)s\t[%(filename)s | %(funcName)s] %(message)s",
+         level=logging.INFO,
+-        handlers=[logging.FileHandler(filename=os.path.join(os.getenv("XDG_DATA_HOME"), 'tmp.log')), logging.StreamHandler(stream=sys.stdout)]
++        handlers=[logging.FileHandler(filename=os.path.join(data_dir, 'tmp.log')), logging.StreamHandler(stream=sys.stdout)]
+     )
+     app = AlpacaApplication(version)
+     logger.info(f"Alpaca version: {app.version}")
+diff --git a/src/meson.build b/src/meson.build
+index 1781b7a..b212cbf 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -44,7 +44,8 @@ alpaca_sources = [
+   'local_instance.py',
+   'available_models.json',
+   'available_models_descriptions.py',
+-  'table_widget.py'
++  'table_widget.py',
++  'internal.py'
+ ]
+ 
+ install_data(alpaca_sources, install_dir: moduledir)
+diff --git a/src/window.py b/src/window.py
+index 0771919..0f3b892 100644
+--- a/src/window.py
++++ b/src/window.py
+@@ -29,20 +29,21 @@ from pypdf import PdfReader
+ from datetime import datetime
+ from . import dialogs, local_instance, connection_handler, available_models_descriptions
+ from .table_widget import TableWidget
++from .internal import config_dir, data_dir, cache_dir, source_dir
+ 
+ logger = logging.getLogger(__name__)
+ 
+ 
+ @Gtk.Template(resource_path='/com/jeffser/Alpaca/window.ui')
+ class AlpacaWindow(Adw.ApplicationWindow):
+-    config_dir = os.getenv("XDG_CONFIG_HOME")
+-    data_dir = os.getenv("XDG_DATA_HOME")
+     app_dir = os.getenv("FLATPAK_DEST")
+-    cache_dir = os.getenv("XDG_CACHE_HOME")
++    config_dir = config_dir
++    data_dir = data_dir
++    cache_dir = cache_dir
+ 
+     __gtype_name__ = 'AlpacaWindow'
+ 
+-    localedir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'locale')
++    localedir = os.path.join(source_dir, 'locale')
+ 
+     gettext.bindtextdomain('com.jeffser.Alpaca', localedir)
+     gettext.textdomain('com.jeffser.Alpaca')
+@@ -1602,7 +1603,7 @@ Generate a title following these rules:
+     def __init__(self, **kwargs):
+         super().__init__(**kwargs)
+         GtkSource.init()
+-        with open('/app/share/Alpaca/alpaca/available_models.json', 'r') as f:
++        with open(os.path.join(source_dir, 'available_models.json'), 'r') as f:
+             self.available_models = json.load(f)
+         if not os.path.exists(os.path.join(self.data_dir, "chats")):
+             os.makedirs(os.path.join(self.data_dir, "chats"))

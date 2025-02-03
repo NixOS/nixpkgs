@@ -1,0 +1,13 @@
+diff --git a/cmake/scripts/linux/Install.cmake b/cmake/scripts/linux/Install.cmake
+index 9c45c91774..763d6acab4 100644
+--- a/cmake/scripts/linux/Install.cmake
++++ b/cmake/scripts/linux/Install.cmake
+@@ -199,8 +199,6 @@ install(FILES ${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/scripts/${APP_NAME}Config.cm
+ 
+ if(ENABLE_EVENTCLIENTS)
+   find_package(PythonInterpreter REQUIRED)
+-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix=''))"
+-                  OUTPUT_VARIABLE PYTHON_LIB_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+   # Install kodi-eventclients-common BT python files
+   install(PROGRAMS ${CMAKE_SOURCE_DIR}/tools/EventClients/lib/python/bt/__init__.py
+                    ${CMAKE_SOURCE_DIR}/tools/EventClients/lib/python/bt/bt.py

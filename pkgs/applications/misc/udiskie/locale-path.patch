@@ -1,0 +1,17 @@
+diff --git a/udiskie/locale.py b/udiskie/locale.py
+index f12bea9..450e38b 100644
+--- a/udiskie/locale.py
++++ b/udiskie/locale.py
+@@ -10,10 +10,8 @@ from gettext import translation
+ testdirs = [
+     # manual override:
+     os.environ.get('TEXTDOMAINDIR'),
+-    # editable installation:
+-    os.path.join(os.path.dirname(__file__), '../build/locale'),
+-    # user or virtualenv installation:
+-    os.path.join(sys.prefix, 'share/locale'),
++    # Nix installation:
++    os.path.join('@out@', 'share/locale'),
+ ]
+ testfile = 'en_US/LC_MESSAGES/udiskie.mo'
+ localedir = next(

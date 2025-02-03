@@ -1,0 +1,54 @@
+From 8b822ab0060acdf4217f589411fe71574cbb09c0 Mon Sep 17 00:00:00 2001
+From: Daniel Trebbien <dtrebbien@gmail.com>
+Date: Fri, 3 Jul 2015 12:08:18 -0400
+Subject: [PATCH] quartz: Bug 557780 - Missing support for depth == 1 in
+ gdk_image_new_for_depth()
+
+When the gtk2 client of Freeciv is started, an assertion failure is seen
+immediately and the client stops:
+"Gdk:ERROR:gdkimage-quartz.c:325:_gdk_image_new_for_depth: assertion
+failed: (depth == 24 || depth == 32)"
+
+In this case, _gdk_image_new_for_depth() is being called from
+_gdk_quartz_image_copy_to_image(). The GdkImage passed to this function
+is NULL so a new GdkImage is created. However, the depth of the passed
+GdkDrawable is 1 and this is passed directly as the `depth' parameter to
+_gdk_image_new_for_depth(), leading to the assertion failure.
+
+In _gdk_quartz_image_copy_to_image(), rather than directly pass the
+GdkDrawable's depth to _gdk_image_new_for_depth(), if the depth is 1,
+then create the new GdkImage with depth 24. The case where the depth is
+1 is already handled in _gdk_quartz_image_copy_to_image().
+
+This allows the Freeciv 2.5.0 gtk2 client to start and play a game.
+---
+ gdk/quartz/gdkimage-quartz.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/gdk/quartz/gdkimage-quartz.c b/gdk/quartz/gdkimage-quartz.c
+index 493efba..853ef61 100644
+--- a/gdk/quartz/gdkimage-quartz.c
++++ b/gdk/quartz/gdkimage-quartz.c
+@@ -43,10 +43,15 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
+ 
+   screen = gdk_drawable_get_screen (drawable);
+   if (!image)
+-    image = _gdk_image_new_for_depth (screen, GDK_IMAGE_FASTEST, NULL, 
+-				      width, height,
+-				      gdk_drawable_get_depth (drawable));
+-  
++    {
++      gint drawable_depth = gdk_drawable_get_depth (drawable);
++      if (drawable_depth == 1)
++        drawable_depth = 24;
++      image = _gdk_image_new_for_depth (screen, GDK_IMAGE_FASTEST, NULL,
++                                        width, height,
++                                        drawable_depth);
++    }
++
+   if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
+     {
+       GdkPixmapImplQuartz *pix_impl;
+-- 
+2.3.2 (Apple Git-55)
+
