@@ -1302,6 +1302,18 @@ final: prev:
     meta.homepage = "https://github.com/giuxtaposition/blink-cmp-copilot/";
   };
 
+  blink-cmp-spell = buildVimPlugin {
+    pname = "blink-cmp-spell";
+    version = "2025-02-01";
+    src = fetchFromGitHub {
+      owner = "ribru17";
+      repo = "blink-cmp-spell";
+      rev = "38d6797dea6f72baa6e8b3bfca6da96d8fcac64d";
+      sha256 = "19pnasa446iiapgsr3z2fpk0nnrzh8g5wrzrq8n0y4q0z6spc9f6";
+    };
+    meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
+  };
+
   blink-compat = buildVimPlugin {
     pname = "blink.compat";
     version = "2025-01-20";
