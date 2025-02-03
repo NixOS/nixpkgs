@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.0.2";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AquAVoEqlsBVxd41hG2sVo9UoSS+255eCQzIfGkC/Tk=";
+    hash = "sha256-METwagek17/DdZGaOTQqvyU6xGt7OBMLHk4YM4KmgtA=";
   };
 
   nativeBuildInputs =
