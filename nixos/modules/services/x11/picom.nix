@@ -20,6 +20,9 @@ let
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 
+  # Basically a tinkered lib.generators.mkKeyValueDefault
+  # It either serializes a top-level definition "key: { values };"
+  # or an expression "key = { values };"
   mkAttrsString = 
     top: toList:
       mapAttrsToList (
