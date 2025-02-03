@@ -13733,6 +13733,8 @@ self: super: with self; {
 
   qasync = callPackage ../development/python-modules/qasync { };
 
+  qbusmqttapi = callPackage ../development/python-modules/qbusmqttapi { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
