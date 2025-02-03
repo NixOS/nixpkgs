@@ -8,16 +8,16 @@
 }:
 let
   pname = "cursor";
-  version = "0.44.11";
+  version = "0.45.8";
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-x86_64.AppImage";
-      hash = "sha256-eOZuofnpED9F6wic0S9m933Tb7Gq7cb/v0kRDltvFVg=";
+      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.8-build-250201b44xw1x2k-x86_64.AppImage";
+      hash = "sha256-H+9cisa1LWJleqzwaB0WIzJpioYZyfLghelcZthCOvg=";
     };
     aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-arm64.AppImage";
-      hash = "sha256-mxq7tQJfDccE0QsZDZbaFUKO0Xc141N00ntX3oEYRcc=";
+      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.8-build-250201b44xw1x2k-arm64.AppImage";
+      hash = "sha256-GgPt9SvuCA9Hxm7nxm7mz0AvPKaLWCkYXO225taXnLA=";
     };
   };
 
