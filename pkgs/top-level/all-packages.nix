@@ -12268,9 +12268,17 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
-  inherit (callPackages ../servers/web-apps/matomo {})
-    matomo
-    matomo_5;
+
+  matomo_5 = callPackage ../servers/web-apps/matomo {};
+  # Matomo 4 reached EOL and will be replaced by matomo_5 in NixOS 25.05
+  matomo = matomo_5.overrideAttrs rec {
+    version = "4.16.1";
+    # fetchurl does not support `.override`
+    src = fetchurl {
+      url = "https://builds.matomo.org/matomo-${version}.tar.gz";
+      hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
+    };
+  };
 
   inherit (callPackages ../servers/unifi { })
     unifi8;
