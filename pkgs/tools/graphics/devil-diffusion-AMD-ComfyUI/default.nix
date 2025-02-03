@@ -5,8 +5,9 @@ let
     Devil-Diffusion-AMD-ComfyUI = stdenv.mkDerivation rec {
         pname = "devil-diffusion-AMD-ComfyUI";
         name = pname;
+        version = "ec810ad";
         src = fetchurl {
-        url = "https://github.com/Mephist0phel3s/Devil-Diffusion/archive/refs/tags/ec810ad.tar.gz";
+        url = "https://github.com/Mephist0phel3s/Devil-Diffusion/archive/refs/tags/${version}.tar.gz";
         hash = "sha256-BItgMEw/gr4rmeFY2jx5zYtK4oKVg1wBAGFqixuDF2w=";
         };
 
@@ -35,7 +36,7 @@ let
     mkdir -p $out/share/pixmaps
     echo "where i be?"
     echo $PWD/
-    cd Devil-Diffusion-ec810ad
+    cd Devil-Diffusion-${version}
     ls -al
     echo "where am i"
     echo $PWD
@@ -46,9 +47,8 @@ let
     ln -s $out/devil-Comfy-CPU.sh $out/bin
     ln -s $out/devil-Comfy-AMD.sh $out/bin
 
-
-    install -m755 -D $out/devil-diffusion-icon.icon $out/share/icons/hicolor/1024x1024/apps
-    install -m755 -D $out/devil-diffusion-icon.icon $out/share/pixmaps
+    install -m755 -D $out/devil-diffusion-icon.icon $out/share/icons/hicolor/1024x1024/apps/devil-diffusion-icon.png
+    install -m755 -D $out/devil-diffusion-icon.icon $out/share/pixmaps/devil-diffusion-icon.png
 
     runHook postInstall
   '';
