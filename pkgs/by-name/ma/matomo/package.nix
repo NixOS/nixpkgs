@@ -6,12 +6,14 @@
   php,
   nixosTests,
 }:
-
+let
+  fetchurl' = lib.makeOverridable fetchurl;
+in
 stdenv.mkDerivation (finalAttrs: {
   name = "matomo";
   version = "5.2.2";
 
-  src = fetchurl {
+  src = fetchurl' {
     url = "https://builds.matomo.org/matomo-${finalAttrs.version}.tar.gz";
     hash = "sha256-ZEwz/KKZZwTFsKfwR0iKZM1ta4CUXJsWgBXika+pjb0=";
   };
