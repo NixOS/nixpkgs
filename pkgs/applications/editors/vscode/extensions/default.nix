@@ -309,6 +309,8 @@ let
         };
       };
 
+      anweber.vscode-httpyac = callPackage ./anweber.vscode-httpyac { };
+
       apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-apollo";
