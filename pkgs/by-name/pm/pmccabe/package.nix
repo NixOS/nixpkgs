@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     ./getopt_on_darwin.patch
   ];
 
+  # GCC 14 made implicit function declarations an error. With this switch we turn them
+  # back into a warning.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   configurePhase = ''
     sed -i -r Makefile \
       -e 's,/usr/,/,g' \
@@ -50,3 +54,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
+
