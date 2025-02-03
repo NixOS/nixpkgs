@@ -16091,8 +16091,6 @@ with pkgs;
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
-  doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
-
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
   slade = callPackage ../games/doom-ports/slade {
