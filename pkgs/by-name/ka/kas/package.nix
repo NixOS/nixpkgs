@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "siemens";
     repo = pname;
     tag = version;
-    hash = "sha256-WSK9H3X6t4lgNk+PDGQgzYlheeclz9BjEQcHg7ktDZI=";
+    hash = "sha256-P2I3lLa8kuCORdlrwcswrWFwOA8lW2WL4Apv/2T7+f8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
