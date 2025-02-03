@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waytrogen";
-  version = "0.6.3";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = version;
-    hash = "sha256-jkrvtwkzlsQgbw8/N4uzeqQ3fVSur2oa21IOXRRgh9I=";
+    hash = "sha256-6wvuIeIp/BDo2ws1CWpSfDUhoBeiKGYQHjkIVDfkTjk=";
   };
 
   useFetchCargoVendor = true;
