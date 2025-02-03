@@ -102,7 +102,10 @@ stdenvNoCC.mkDerivation {
     changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ sarahec ];
+    maintainers = with lib.maintainers; [
+      sarahec
+      aspauldingcode
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "cursor";
   };
