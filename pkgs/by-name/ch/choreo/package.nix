@@ -8,8 +8,6 @@
   nodejs_22,
   openssl,
   pkg-config,
-  wrapGAppsHook3,
-  gobject-introspection,
   at-spi2-atk,
   atkmm,
   cairo,
@@ -46,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = lib.fakeHash;
+    hash = "sha256-/6vo0wei+a4Uz5qxhXkGJA6+gEJX8qjjVHzsArduK2Q=";
   };
 
   nativeBuildInputs =
@@ -57,9 +55,6 @@ rustPlatform.buildRustPackage rec {
       pnpm_9.configHook
 
       pkg-config
-      wrapGAppsHook3
-
-      gobject-introspection
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rustPlatform.bindgenHook
