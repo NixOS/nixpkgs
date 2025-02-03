@@ -100,7 +100,6 @@ self: super: {
   #
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
-  bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
