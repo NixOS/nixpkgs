@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (replaceVars ./passbook-openssl.patch {
+    (replaceVars ./openssl.patch {
       openssl = lib.getExe openssl;
     })
   ];

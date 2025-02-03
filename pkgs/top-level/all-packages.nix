@@ -15576,8 +15576,6 @@ with pkgs;
     onlyLibVLC = true;
   };
 
-  vmpk = libsForQt5.callPackage ../applications/audio/vmpk { };
-
   vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
