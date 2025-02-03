@@ -23,7 +23,6 @@
   libxml2,
   sqlite,
   pytestCheckHook,
-  darwin,
   sparsehash,
 }:
 
