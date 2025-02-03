@@ -7,8 +7,12 @@
 
 let
 
-  inherit (lib) mkIf mkMerge;
-  inherit (lib) concatStringsSep optionalString;
+  inherit (lib)
+    concatStringsSep
+    mkIf
+    mkMerge
+    optionalString
+    ;
 
   cfg = config.services.hylafax;
   mapModems = lib.forEach (lib.attrValues cfg.modems);
