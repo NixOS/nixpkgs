@@ -55,7 +55,8 @@ buildPythonPackage rec {
     rm -r tests/static
     mv tests/runtime/* tests/
     rmdir tests/runtime
-    substituteInPlace tests/conftest.py --replace-fail '"pytest-revealtype-injector",' "" \
+    substituteInPlace tests/conftest.py \
+      --replace-fail '"pytest-revealtype-injector",' "" \
       --replace-fail 'runtime.register_strategy' 'tests.register_strategy'
   '';
 
