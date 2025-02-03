@@ -70,7 +70,6 @@ buildGoModule rec {
     mainProgram = "ipfs";
     maintainers = with maintainers; [
       Luflosi
-      fpletz
     ];
   };
 }
