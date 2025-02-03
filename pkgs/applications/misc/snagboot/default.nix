@@ -2,25 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python3Packages,
   snagboot,
   testers,
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "snagboot";
   version = "2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1WyCzfvcvDpYybxV2Jt/Ty4i2ywapJmEAZtlvxe3dpQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   pythonRemoveDeps = [
@@ -28,17 +29,20 @@ python3.pkgs.buildPythonApplication rec {
     "swig"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    setuptools
+  dependencies = with python3Packages; [
+    pyyaml
     pyusb
     pyserial
-    crccheck
-    six
-    xmodem
-    pyyaml
-    libfdt
     tftpy
+    crccheck
+    # pylibfdt
+    # swig
+    packaging
   ];
+
+  optional-dependencies = with python3Packages; {
+    gui = [ kivy ];
+  };
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     rules="src/snagrecover/50-snagboot.rules"
