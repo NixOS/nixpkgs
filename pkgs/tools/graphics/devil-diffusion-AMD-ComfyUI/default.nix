@@ -53,6 +53,16 @@ in
     runScript = "devil-Comfy-AMD.sh" ;
     targetPkgs = pkgs: [Devil-Diffusion-AMD-ComfyUI];}
 
+    makeDesktopItem {
+      name = "Devil Diffusion";
+      exec = "devil-Comfy-AMD.sh";
+      desktopName = "Devil Diffusion Comfy AMD";
+      categories = [ "Development" ];
+      icon = "devil-diffusion-icon.png";
+      terminal = true;
+
+    }
+
 
 
 #  meta = with lib; {
