@@ -35,6 +35,7 @@
   h5py,
   llvmPackages,
   typing-extensions,
+  customSrc ? null,
 }:
 
 # We keep this binary build for three reasons:
@@ -54,17 +55,24 @@ let
 in
 buildPythonPackage rec {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
-  version = packages."${"version" + lib.optionalString isCudaJetson "_jetson"}";
+  version =
+    if customSrc == null then
+      packages."${"version" + lib.optionalString isCudaJetson "_jetson"}"
+    else
+      customSrc.version;
   format = "wheel";
 
   src =
-    let
-      pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-      platform = stdenv.system;
-      cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
-      key = "${platform}_${pyVerNoDot}${cuda}";
-    in
-    fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
+    if customSrc == null then
+      let
+        pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+        platform = stdenv.system;
+        cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
+        key = "${platform}_${pyVerNoDot}${cuda}";
+      in
+      fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"))
+    else
+      customSrc.src;
 
   buildInputs = [ llvmPackages.openmp ];
 
@@ -142,7 +150,7 @@ buildPythonPackage rec {
     # Then, in each package requiring `tensorflow`, our pythonRuntimeDepsCheck will fail with:
     # importlib.metadata.PackageNotFoundError: No package metadata was found for tensorflow
     # Hence, we manually rename the package to `tensorflow`.
-    lib.optionalString ((builtins.match ".*tensorflow_cpu.*" src.url) != null) ''
+    lib.optionalString ((builtins.match ".*tensorflow_cpu.*" src.url or "") != null) ''
       (
         cd $out/${python.sitePackages}
 
