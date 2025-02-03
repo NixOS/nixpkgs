@@ -7424,6 +7424,18 @@ final: prev:
     meta.homepage = "https://github.com/wfxr/minimap.vim/";
   };
 
+  minuet-ai-nvim = buildVimPlugin {
+    pname = "minuet-ai.nvim";
+    version = "2025-02-03";
+    src = fetchFromGitHub {
+      owner = "milanglacier";
+      repo = "minuet-ai.nvim";
+      rev = "9a264284573b837dc0202049166a0564a70deaed";
+      sha256 = "06d7s9949aylda4vq36h4s9hnnp3lycwm2nrjid5vxb98gy3d3xn";
+    };
+    meta.homepage = "https://github.com/milanglacier/minuet-ai.nvim/";
+  };
+
   mkdir-nvim = buildVimPlugin {
     pname = "mkdir.nvim";
     version = "2022-07-23";

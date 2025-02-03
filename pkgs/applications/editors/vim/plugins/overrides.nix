@@ -1809,6 +1809,24 @@ in
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
   };
 
+  minuet-ai-nvim = super.minuet-ai-nvim.overrideAttrs {
+    checkInputs = [
+      # optional cmp integration
+      self.nvim-cmp
+    ];
+    dependencies = with self; [ plenary-nvim ];
+    nvimSkipModule = [
+      # Backends require configuration
+      "minuet.backends.claude"
+      "minuet.backends.codestral"
+      "minuet.backends.gemini"
+      "minuet.backends.huggingface"
+      "minuet.backends.openai"
+      "minuet.backends.openai_compatible"
+      "minuet.backends.openai_fim_compatible"
+    ];
+  };
+
   mkdnflow-nvim = super.mkdnflow-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     # Requires setup call and has optional nvim-cmp dependency
