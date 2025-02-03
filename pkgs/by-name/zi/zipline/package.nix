@@ -29,13 +29,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "3.7.11";
+  version = "3.7.12";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sogsPx6vh+1+ew9o3/0B4yU9I/Gllo9XLJqvMvGZ89Q=";
+    hash = "sha256-i3IGcSxIhy8jmCMsDJGGszYoFsShBfbv7SjTQL1dDM0=";
   };
 
   patches = [
@@ -87,18 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  YARN_ENABLE_TELEMETRY = "0";
-
-  ZIPLINE_DOCKER_BUILD = "true";
+  env = {
+    YARN_ENABLE_TELEMETRY = "0";
+    ZIPLINE_DOCKER_BUILD = "true";
+  } // environment;
 
   configurePhase = ''
     export HOME="$NIX_BUILD_TOP"
     yarn config set enableGlobalCache false
     yarn config set cacheFolder $yarnOfflineCache
-
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: value: "export ${name}=${lib.escapeShellArg value}") environment
-    )}
   '';
 
   buildPhase = ''

@@ -1,6 +1,7 @@
 {
   lib,
   clangStdenv,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -18,6 +19,8 @@
   withQtWebview ? true,
   withQtErrorWindow ? true,
   fetchzip,
+  zenity,
+  xdg-utils,
 }:
 
 # gcc doesn't support __has_feature
@@ -50,6 +53,16 @@ clangStdenv.mkDerivation (finalAttrs: {
       extraPrefix = "mcpelauncher-client/";
     })
   ];
+
+  # Path hard-coded paths.
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace mcpelauncher-client/src/jni/main_activity.cpp \
+      --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open \
+      --replace-fail /usr/bin/zenity ${zenity}/bin/zenity
+
+    substituteInPlace file-picker/src/file_picker_zenity.cpp \
+      --replace-fail /usr/bin/zenity ${zenity}/bin/zenity
+  '';
 
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile
   hardeningDisable = [ "fortify" ];

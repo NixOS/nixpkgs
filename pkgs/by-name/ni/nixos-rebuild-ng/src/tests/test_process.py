@@ -1,6 +1,8 @@
 from typing import Any
 from unittest.mock import patch
 
+from pytest import MonkeyPatch
+
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
@@ -94,7 +96,7 @@ def test_run(mock_run: Any) -> None:
     )
 
 
-def test_remote_from_name(monkeypatch: Any) -> None:
+def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("NIX_SSHOPTS", "")
     assert m.Remote.from_arg("user@localhost", None, False) == m.Remote(
         "user@localhost",

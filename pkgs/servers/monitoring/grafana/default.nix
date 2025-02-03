@@ -16,11 +16,22 @@
   nixosTests,
   xcbuild,
   faketty,
+  git,
 }:
 
+let
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  patchGoVersion = ''
+    substituteInPlace go.{mod,work} apps/alerting/notifications/go.mod pkg/storage/unified/apistore/go.mod pkg/storage/unified/resource/go.mod \
+      --replace-fail "go 1.23.5" "go 1.23.4"
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.23.5" "GO_VERSION = 1.23.4"
+  '';
+in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.4.0";
+  version = "11.5.0";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -32,7 +43,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-47jQ+ksq6zdS73o884q0xKLtOHssTnaIPdDOejlv/gU=";
+    hash = "sha256-c0C+/mH5PojwE86ni5huLPoymloeLOGCiutvSPcKobs=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -49,7 +60,9 @@ buildGoModule rec {
       cacert
       jq
       moreutils
-      python3
+      # required to run old node-gyp
+      (python3.withPackages (ps: [ ps.distutils ]))
+      git
       # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
@@ -68,9 +81,9 @@ buildGoModule rec {
     outputHashMode = "recursive";
     outputHash =
       rec {
-        x86_64-linux = "sha256-5/l0vXVjHC4oG7ahVscJOwS74be7F8jei9nq6m2v2tQ=";
+        x86_64-linux = "sha256-ZGsEAyvAMUKJoNRArtS3fZUoC4c8WDizwugzJY89+dE=";
         aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-+texKSlcvtoi83ySEXy2E4SqnfyQ0l4MixTBpdemWvI=";
+        aarch64-darwin = "sha256-NbbX8cewI7fA/8rJjZArU+pYWiVam3vMKXCMiotcqJ0=";
         x86_64-darwin = aarch64-darwin;
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -78,7 +91,9 @@ buildGoModule rec {
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
+  postPatch = patchGoVersion;
+
+  vendorHash = "sha256-Pt87hb0+EuGd62ld65jTszeTy7GZZbviH8X9qCGOaJQ=";
 
   proxyVendor = true;
 
@@ -88,7 +103,8 @@ buildGoModule rec {
     jq
     moreutils
     removeReferencesTo
-    python3
+    # required to run old node-gyp
+    (python3.withPackages (ps: [ ps.distutils ]))
     faketty
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 

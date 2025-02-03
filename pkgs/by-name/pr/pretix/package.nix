@@ -3,7 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch2,
   nodejs,
   python3,
   gettext,
@@ -43,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.11.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vmk7oW9foXkZdt3XOLJDbPldX2TruJOgd8mmi5tGqNw=";
+    hash = "sha256-azJFXuoV+9qs5MJQTkc1+ZiJb6UKwEa0Ow0p31CkHqI=";
   };
 
   npmDeps = buildNpmPackage {
@@ -57,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-4PrOrI2cykkuzob+DMeAu/GF5OMCho40G3BjCwVW/tE=";
+    npmDepsHash = "sha256-oo9fo3MjwKYA8gueJ5otIPawORaVNj/Js3y8ZuCZ4qQ=";
 
     dontBuild = true;
 
@@ -79,12 +78,6 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
-
-    (fetchpatch2 {
-      # fix tests after 2025-01-01
-      url = "https://github.com/pretix/pretix/commit/5a5a551c21461d9ef36337480c9874d65a9fdba9.patch";
-      hash = "sha256-ZtSVI6nVlJtNrnBZ9ktIqFGtNf+oWtvNsgCWwOUwVug=";
-    })
   ];
 
   pythonRelaxDeps = [
@@ -273,8 +266,9 @@ python.pkgs.buildPythonApplication rec {
       python
       ;
     plugins = lib.recurseIntoAttrs (
-      python.pkgs.callPackage ./plugins {
+      lib.packagesFromDirectoryRecursive {
         inherit (python.pkgs) callPackage;
+        directory = ./plugins;
       }
     );
     tests = {

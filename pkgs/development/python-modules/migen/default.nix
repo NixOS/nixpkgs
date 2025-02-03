@@ -10,14 +10,14 @@
 
 buildPythonPackage {
   pname = "migen";
-  version = "0.9.2-unstable-2024-12-25";
+  version = "0.9.2-unstable-2025-01-16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "migen";
-    rev = "4c2ae8dfeea37f235b52acb8166f12acaaae4f7c";
-    hash = "sha256-P4vaF+9iVekRAC2/mc9G7IwI6baBpPAxiDQ8uye4sAs=";
+    rev = "28e913e7114dae485747ccd8f9fd436ada2195f0";
+    hash = "sha256-5Rv7R8OO/CsjdDreo+vCUO7dIrTD+70meV5rIvHOGDk=";
   };
 
   nativeBuildInputs = [ setuptools ];

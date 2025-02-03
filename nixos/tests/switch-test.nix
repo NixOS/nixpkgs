@@ -612,8 +612,10 @@ in {
       system.switch.enable = true;
       users.mutableUsers = true;
       system.preSwitchChecks.succeeds = ''
-        echo this will succeed
-        true
+        config="$1"
+        action="$2"
+        echo "this should succeed (config: $config, action: $action)"
+        [ "$action" == "check" ] || [ "$action" == "test" ]
       '';
       specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
         echo this will fail

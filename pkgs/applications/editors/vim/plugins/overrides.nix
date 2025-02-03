@@ -11,6 +11,7 @@
   fetchurl,
   neovimUtils,
   replaceVars,
+  symlinkJoin,
   # Language dependencies
   fetchYarnDeps,
   mkYarnModules,
@@ -43,12 +44,14 @@
   nodejs,
   notmuch,
   openscad,
+  openssh,
   parinfer-rust,
   phpactor,
   ranger,
   ripgrep,
   skim,
   sqlite,
+  sshfs,
   statix,
   stylish-haskell,
   tabnine,
@@ -125,6 +128,36 @@ let
   luaPackages = neovim-unwrapped.lua.pkgs;
 in
 {
+  corePlugins = symlinkJoin {
+    name = "core-vim-plugins";
+    paths = with self; [
+      # plugin managers
+      lazy-nvim
+      mini-deps
+      packer-nvim
+      vim-plug
+
+      # core dependencies
+      plenary-nvim
+
+      # popular plugins
+      mini-nvim
+      nvim-cmp
+      nvim-lspconfig
+      nvim-treesitter
+      vim-airline
+      vim-fugitive
+      vim-surround
+    ];
+
+    meta = {
+      description = "Collection of popular vim plugins (for internal testing purposes)";
+    };
+  };
+
+  #######################
+  # Regular overrides
+
   aerial-nvim = super.aerial-nvim.overrideAttrs {
     # optional dependencies
     nvimSkipModule = [
@@ -2763,6 +2796,17 @@ in
       plenary-nvim
     ];
     nvimSkipModule = "repro";
+  };
+
+  remote-sshfs-nvim = super.remote-sshfs-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+    runtimeDeps = [
+      openssh
+      sshfs
+    ];
   };
 
   renamer-nvim = super.renamer-nvim.overrideAttrs {

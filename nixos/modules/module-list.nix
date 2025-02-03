@@ -417,6 +417,7 @@
   ./services/audio/squeezelite.nix
   ./services/audio/tts.nix
   ./services/audio/ympd.nix
+  ./services/autotierfs.nix
   ./services/backup/automysqlbackup.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
@@ -928,6 +929,7 @@
   ./services/monitoring/grafana-agent.nix
   ./services/monitoring/grafana-image-renderer.nix
   ./services/monitoring/grafana-reporter.nix
+  ./services/monitoring/grafana-to-ntfy.nix
   ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/hdaps.nix
@@ -1266,6 +1268,7 @@
   ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
+  ./services/networking/g3proxy.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/sslh.nix
   ./services/networking/strongswan-swanctl/module.nix
@@ -1497,6 +1500,7 @@
   ./services/web-apps/hedgedoc.nix
   ./services/web-apps/hledger-web.nix
   ./services/web-apps/homebox.nix
+  ./services/web-apps/homer.nix
   ./services/web-apps/honk.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix

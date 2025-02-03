@@ -793,7 +793,7 @@ let
       then import ../development/ocaml-modules/janestreet/0.17.nix
          {
            inherit self;
-           inherit (pkgs) bash fzf lib openssl zstd;
+           inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
          }
       else if lib.versionOlder "4.13.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.16.nix {
@@ -1086,6 +1086,8 @@ let
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
+
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -1675,6 +1677,8 @@ let
     readline = callPackage ../development/ocaml-modules/readline {
       readline = pkgs.readline;
     };
+
+    reanalyze = callPackage ../development/tools/ocaml/reanalyze { };
 
     reason = callPackage ../development/compilers/reason { };
 

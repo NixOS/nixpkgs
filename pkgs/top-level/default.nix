@@ -46,6 +46,11 @@
   ...
 } @ args:
 
+# Passing fully elaborated systems to localSystem or crossSystem will break composability
+# of package sets.
+assert builtins.isAttrs localSystem -> !(localSystem ? parsed);
+assert builtins.isAttrs crossSystem -> !(crossSystem ? parsed);
+
 let # Rename the function arguments
   config0 = config;
   crossSystem0 = crossSystem;
@@ -122,22 +127,18 @@ in let
   config = lib.showWarnings configEval.config.warnings configEval.config;
 
   # A few packages make a new package set to draw their dependencies from.
-  # (Currently to get a cross tool chain, or forced-i686 package.) Rather than
-  # give `all-packages.nix` all the arguments to this function, even ones that
-  # don't concern it, we give it this function to "re-call" nixpkgs, inheriting
-  # whatever arguments it doesn't explicitly provide. This way,
-  # `all-packages.nix` doesn't know more than it needs too.
+  # Rather than give `all-packages.nix` all the arguments to this function,
+  # even ones that don't concern it, we give it this function to "re-call"
+  # nixpkgs, inheriting whatever arguments it doesn't explicitly provide. This
+  # way, `all-packages.nix` doesn't know more than it needs to.
   #
   # It's OK that `args` doesn't include default arguments from this file:
   # they'll be deterministically inferred. In fact we must *not* include them,
   # because it's important that if some parameter which affects the default is
   # substituted with a different argument, the default is re-inferred.
   #
-  # To put this in concrete terms, this function is basically just used today to
-  # use package for a different platform for the current platform (namely cross
-  # compiling toolchains and 32-bit packages on x86_64). In both those cases we
-  # want the provided non-native `localSystem` argument to affect the stdenv
-  # chosen.
+  # To put this in concrete terms, we want the provided non-native `localSystem`
+  # and `crossSystem` arguments to affect the stdenv chosen.
   #
   # NB!!! This thing gets its `config` argument from `args`, i.e. it's actually
   # `config0`. It is important to keep it to `config0` format (as opposed to the
@@ -146,7 +147,7 @@ in let
   # via `evalModules` is not idempotent. In other words, if you add `config` to
   # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
   # experience here.)
-  nixpkgsFun = newArgs: import ./. (args // newArgs);
+  nixpkgsFun = f0: import ./. (args // f0 args);
 
   # Partially apply some arguments for building bootstraping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.

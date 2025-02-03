@@ -205,253 +205,260 @@ in
   ...
 }@attrs:
 
-assert (pyproject != null) -> (format == null);
-
 let
-  format' =
-    if pyproject != null then
-      if pyproject then "pyproject" else "other"
-    else if format != null then
-      format
-    else
-      "setuptools";
-
-  withDistOutput = withDistOutput' format';
-
-  validatePythonMatches =
+  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
+  self = stdenv.mkDerivation (
+    finalAttrs:
     let
-      throwMismatch =
-        attrName: drv:
+      format' =
+        assert (pyproject != null) -> (format == null);
+        if pyproject != null then
+          if pyproject then "pyproject" else "other"
+        else if format != null then
+          format
+        else
+          "setuptools";
+
+      withDistOutput = withDistOutput' format';
+
+      validatePythonMatches =
         let
-          myName = "'${namePrefix}${name}'";
-          theirName = "'${drv.name}'";
-          optionalLocation =
+          throwMismatch =
+            attrName: drv:
             let
-              pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+              myName = "'${namePrefix}${name}'";
+              theirName = "'${drv.name}'";
+              optionalLocation =
+                let
+                  pos = unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+                in
+                optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
             in
-            optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+            throw ''
+              Python version mismatch in ${myName}:
+
+              The Python derivation ${myName} depends on a Python derivation
+              named ${theirName}, but the two derivations use different versions
+              of Python:
+
+                  ${leftPadName myName theirName} uses ${python}
+                  ${leftPadName theirName myName} uses ${toString drv.pythonModule}
+
+              Possible solutions:
+
+                * If ${theirName} is a Python library, change the reference to ${theirName}
+                  in the ${attrName} of ${myName} to use a ${theirName} built from the same
+                  version of Python
+
+                * If ${theirName} is used as a tool during the build, move the reference to
+                  ${theirName} in ${myName} from ${attrName} to nativeBuildInputs
+
+                * If ${theirName} provides executables that are called at run time, pass its
+                  bin path to makeWrapperArgs:
+
+                      makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${getName drv} ] }" ];
+
+              ${optionalLocation}
+            '';
+
+          checkDrv =
+            attrName: drv:
+            if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
+
         in
-        throw ''
-          Python version mismatch in ${myName}:
+        attrName: inputs: map (checkDrv attrName) inputs;
 
-          The Python derivation ${myName} depends on a Python derivation
-          named ${theirName}, but the two derivations use different versions
-          of Python:
+      isBootstrapInstallPackage = isBootstrapInstallPackage' (attrs.pname or null);
 
-              ${leftPadName myName theirName} uses ${python}
-              ${leftPadName theirName myName} uses ${toString drv.pythonModule}
+      isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (attrs.pname or null);
 
-          Possible solutions:
-
-            * If ${theirName} is a Python library, change the reference to ${theirName}
-              in the ${attrName} of ${myName} to use a ${theirName} built from the same
-              version of Python
-
-            * If ${theirName} is used as a tool during the build, move the reference to
-              ${theirName} in ${myName} from ${attrName} to nativeBuildInputs
-
-            * If ${theirName} provides executables that are called at run time, pass its
-              bin path to makeWrapperArgs:
-
-                  makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${getName drv} ] }" ];
-
-          ${optionalLocation}
-        '';
-
-      checkDrv =
-        attrName: drv:
-        if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch attrName drv else drv;
+      isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
     in
-    attrName: inputs: map (checkDrv attrName) inputs;
+    (cleanAttrs attrs)
+    // {
 
-  isBootstrapInstallPackage = isBootstrapInstallPackage' (attrs.pname or null);
+      name = namePrefix + name;
 
-  isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (attrs.pname or null);
+      nativeBuildInputs =
+        [
+          python
+          wrapPython
+          ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+          pythonRemoveTestsDirHook
+        ]
+        ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+          #
+          # 1. When building a package that is also part of the bootstrap chain, we
+          #    must ignore conflicts after installation, because there will be one with
+          #    the package in the bootstrap.
+          #
+          # 2. When a package is a dependency of setuptools, we must ignore conflicts
+          #    because the hook that checks for conflicts uses setuptools.
+          #
+          pythonCatchConflictsHook
+        ]
+        ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
+          pythonRelaxDepsHook
+        ]
+        ++ optionals removeBinBytecode [
+          pythonRemoveBinBytecodeHook
+        ]
+        ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
+          unzip
+        ]
+        ++ optionals (format' == "setuptools") [
+          setuptoolsBuildHook
+        ]
+        ++ optionals (format' == "pyproject") [
+          (
+            if isBootstrapPackage then
+              pypaBuildHook.override {
+                inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
+                wheel = null;
+              }
+            else
+              pypaBuildHook
+          )
+          (
+            if isBootstrapPackage then
+              pythonRuntimeDepsCheckHook.override {
+                inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+              }
+            else
+              pythonRuntimeDepsCheckHook
+          )
+        ]
+        ++ optionals (format' == "wheel") [
+          wheelUnpackHook
+        ]
+        ++ optionals (format' == "egg") [
+          eggUnpackHook
+          eggBuildHook
+          eggInstallHook
+        ]
+        ++ optionals (format' != "other") [
+          (
+            if isBootstrapInstallPackage then
+              pypaInstallHook.override {
+                inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
+              }
+            else
+              pypaInstallHook
+          )
+        ]
+        ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+          # This is a test, however, it should be ran independent of the checkPhase and checkInputs
+          pythonImportsCheckHook
+        ]
+        ++ optionals (python.pythonAtLeast "3.3") [
+          # Optionally enforce PEP420 for python3
+          pythonNamespacesHook
+        ]
+        ++ optionals withDistOutput [
+          pythonOutputDistHook
+        ]
+        ++ nativeBuildInputs
+        ++ build-system;
 
-  isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
+      buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = toPythonModule (
-    stdenv.mkDerivation (
-      (cleanAttrs attrs)
-      // {
+      propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
+        propagatedBuildInputs
+        ++ dependencies
+        ++ [
+          # we propagate python even for packages transformed with 'toPythonApplication'
+          # this pollutes the PATH but avoids rebuilds
+          # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
+          python
+        ]
+      );
 
-        name = namePrefix + name;
+      inherit strictDeps;
 
-        nativeBuildInputs =
-          [
-            python
-            wrapPython
-            ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
-            pythonRemoveTestsDirHook
-          ]
-          ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
-            #
-            # 1. When building a package that is also part of the bootstrap chain, we
-            #    must ignore conflicts after installation, because there will be one with
-            #    the package in the bootstrap.
-            #
-            # 2. When a package is a dependency of setuptools, we must ignore conflicts
-            #    because the hook that checks for conflicts uses setuptools.
-            #
-            pythonCatchConflictsHook
-          ]
-          ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
-            pythonRelaxDepsHook
-          ]
-          ++ optionals removeBinBytecode [
-            pythonRemoveBinBytecodeHook
-          ]
-          ++ optionals (hasSuffix "zip" (attrs.src.name or "")) [
-            unzip
-          ]
-          ++ optionals (format' == "setuptools") [
-            setuptoolsBuildHook
-          ]
-          ++ optionals (format' == "pyproject") [
-            (
-              if isBootstrapPackage then
-                pypaBuildHook.override {
-                  inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
-                  wheel = null;
-                }
-              else
-                pypaBuildHook
-            )
-            (
-              if isBootstrapPackage then
-                pythonRuntimeDepsCheckHook.override {
-                  inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-                }
-              else
-                pythonRuntimeDepsCheckHook
-            )
-          ]
-          ++ optionals (format' == "wheel") [
-            wheelUnpackHook
-          ]
-          ++ optionals (format' == "egg") [
-            eggUnpackHook
-            eggBuildHook
-            eggInstallHook
-          ]
-          ++ optionals (format' != "other") [
-            (
-              if isBootstrapInstallPackage then
-                pypaInstallHook.override {
-                  inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
-                }
-              else
-                pypaInstallHook
-            )
-          ]
-          ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-            # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-            pythonImportsCheckHook
-          ]
-          ++ optionals (python.pythonAtLeast "3.3") [
-            # Optionally enforce PEP420 for python3
-            pythonNamespacesHook
-          ]
-          ++ optionals withDistOutput [
-            pythonOutputDistHook
-          ]
-          ++ nativeBuildInputs
-          ++ build-system;
+      LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
 
-        buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
+      # Python packages don't have a checkPhase, only an installCheckPhase
+      doCheck = false;
+      doInstallCheck = attrs.doCheck or true;
+      nativeInstallCheckInputs = nativeCheckInputs;
+      installCheckInputs = checkInputs;
 
-        propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (
-          propagatedBuildInputs
-          ++ dependencies
-          ++ [
-            # we propagate python even for packages transformed with 'toPythonApplication'
-            # this pollutes the PATH but avoids rebuilds
-            # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
-            python
-          ]
-        );
+      postFixup =
+        optionalString (!dontWrapPythonPrograms) ''
+          wrapPythonPrograms
+        ''
+        + attrs.postFixup or "";
 
-        inherit strictDeps;
+      # Python packages built through cross-compilation are always for the host platform.
+      disallowedReferences = optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [
+        python.pythonOnBuildForHost
+      ];
 
-        LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
+      outputs = outputs ++ optional withDistOutput "dist";
 
-        # Python packages don't have a checkPhase, only an installCheckPhase
-        doCheck = false;
-        doInstallCheck = attrs.doCheck or true;
-        nativeInstallCheckInputs = nativeCheckInputs;
-        installCheckInputs = checkInputs;
+      passthru =
+        {
+          inherit disabled;
+        }
+        // {
+          updateScript =
+            let
+              filename = head (splitString ":" finalAttrs.finalPackage.meta.position);
+            in
+            [
+              update-python-libraries
+              filename
+            ];
+        }
+        // optionalAttrs (dependencies != [ ]) {
+          inherit dependencies;
+        }
+        // optionalAttrs (optional-dependencies != { }) {
+          inherit optional-dependencies;
+        }
+        // optionalAttrs (build-system != [ ]) {
+          inherit build-system;
+        }
+        // attrs.passthru or { };
 
-        postFixup =
-          optionalString (!dontWrapPythonPrograms) ''
-            wrapPythonPrograms
-          ''
-          + attrs.postFixup or "";
-
-        # Python packages built through cross-compilation are always for the host platform.
-        disallowedReferences = optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [
-          python.pythonOnBuildForHost
-        ];
-
-        outputs = outputs ++ optional withDistOutput "dist";
-
-        passthru =
-          {
-            inherit disabled;
-          }
-          // attrs.passthru or { }
-          // {
-            updateScript =
-              let
-                filename = head (splitString ":" self.meta.position);
-              in
-              attrs.passthru.updateScript or [
-                update-python-libraries
-                filename
-              ];
-          }
-          // optionalAttrs (dependencies != [ ]) {
-            inherit dependencies;
-          }
-          // optionalAttrs (optional-dependencies != { }) {
-            inherit optional-dependencies;
-          }
-          // optionalAttrs (build-system != [ ]) {
-            inherit build-system;
-          };
-
-        meta = {
-          # default to python's platforms
-          platforms = python.meta.platforms;
-          isBuildPythonPackage = python.meta.platforms;
-        } // meta;
+      meta = {
+        # default to python's platforms
+        platforms = python.meta.platforms;
+        isBuildPythonPackage = python.meta.platforms;
+      } // meta;
+    }
+    // optionalAttrs (attrs ? checkPhase) {
+      # If given use the specified checkPhase, otherwise use the setup hook.
+      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+      installCheckPhase = attrs.checkPhase;
+    }
+    // optionalAttrs (attrs.doCheck or true) (
+      optionalAttrs (disabledTestPaths != [ ]) {
+        disabledTestPaths = escapeShellArgs disabledTestPaths;
       }
-      // optionalAttrs (attrs ? checkPhase) {
-        # If given use the specified checkPhase, otherwise use the setup hook.
-        # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-        installCheckPhase = attrs.checkPhase;
+      // optionalAttrs (attrs ? disabledTests) {
+        # `escapeShellArgs` should be used as well as `disabledTestPaths`,
+        # but some packages rely on existing raw strings.
+        disabledTests = attrs.disabledTests;
       }
-      // optionalAttrs (attrs.doCheck or true) (
-        optionalAttrs (disabledTestPaths != [ ]) {
-          disabledTestPaths = escapeShellArgs disabledTestPaths;
-        }
-        // optionalAttrs (attrs ? disabledTests) {
-          # `escapeShellArgs` should be used as well as `disabledTestPaths`,
-          # but some packages rely on existing raw strings.
-          disabledTests = attrs.disabledTests;
-        }
-        // optionalAttrs (attrs ? pytestFlagsArray) {
-          pytestFlagsArray = attrs.pytestFlagsArray;
-        }
-        // optionalAttrs (attrs ? unittestFlagsArray) {
-          unittestFlagsArray = attrs.unittestFlagsArray;
-        }
-      )
+      // optionalAttrs (attrs ? pytestFlagsArray) {
+        pytestFlagsArray = attrs.pytestFlagsArray;
+      }
+      // optionalAttrs (attrs ? unittestFlagsArray) {
+        unittestFlagsArray = attrs.unittestFlagsArray;
+      }
     )
   );
 
+  # This derivation transformation function must be independent to `attrs`
+  # for fixed-point arguments support in the future.
+  transformDrv =
+    drv:
+    extendDerivation (
+      drv.disabled
+      -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+    ) { } (toPythonModule drv);
+
 in
-extendDerivation (
-  disabled -> throw "${name} not supported for interpreter ${python.executable}"
-) { } self
+transformDrv self

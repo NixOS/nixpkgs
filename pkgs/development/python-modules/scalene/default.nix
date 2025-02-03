@@ -31,22 +31,22 @@ let
     owner = "mpaland";
     repo = "printf";
     name = "printf";
-    rev = "v4.0.0";
+    tag = "v4.0.0";
     sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
   };
 in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.49";
+  version = "1.5.51";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
-    rev = "v${version}";
-    hash = "sha256-Ivce90+W9NBMQjebj3zCB5eqDJydT8OTPYy4fjbybgI=";
+    tag = "v${version}";
+    hash = "sha256-507auU1uy3StmDWruwd/sgJDpV1WhbneSj/bTxUuAN0=";
   };
 
   patches = [
@@ -109,5 +109,15 @@ buildPythonPackage rec {
     mainProgram = "scalene";
     license = licenses.asl20;
     maintainers = with maintainers; [ sarahec ];
+    badPlatforms = [
+      # The scalene doesn't seem to account for arm64 linux
+      "aarch64-linux"
+
+      # On darwin, builds 1) assume aarch64 and 2) mistakenly compile one part as
+      # x86 and the other as arm64 then tries to link them into a single binary
+      # which fails.
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
