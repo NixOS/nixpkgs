@@ -67,7 +67,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (
       '';
 
     inherit packageRequires;
-    buildInputs = finalAttrs.packageRequires ++ buildInputs;
+    buildInputs = [ emacs ] ++ finalAttrs.packageRequires ++ buildInputs;
     nativeBuildInputs = [
       emacs
       texinfo
@@ -76,6 +76,8 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (
     propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
     setupHook = args.setupHook or setupHook;
+
+    strictDeps = args.strictDeps or true;
 
     inherit turnCompilationWarningToError ignoreCompilationError;
 
