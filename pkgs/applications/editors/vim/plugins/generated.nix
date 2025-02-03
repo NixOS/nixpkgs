@@ -1314,6 +1314,18 @@ final: prev:
     meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
   };
 
+  blink-cmp-git = buildVimPlugin {
+    pname = "blink-cmp-git";
+    version = "2025-01-27";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-git";
+      rev = "7c6cfa3d427f50a6eae5c38628b31b8675bab05d";
+      sha256 = "08hfwnjgsl88bkphpdxkdswdnc10mlxpsrk084kgzk4j19w55gyq";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-git/";
+  };
+
   blink-compat = buildVimPlugin {
     pname = "blink.compat";
     version = "2025-01-20";
