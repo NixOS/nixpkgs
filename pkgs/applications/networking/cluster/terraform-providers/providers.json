@@ -705,11 +705,11 @@
     "vendorHash": "sha256-5cqj1O57snU+NoVqmWc/KIGnowQNMww+rJxYfIPvHWU="
   },
   "keycloak": {
-    "hash": "sha256-hdTZ+UEpmv4T8Kxk8cf1QACUKyOoRbD1X3OxwhmrRiI=",
+    "hash": "sha256-mlPq3sOaGN/fFAxMmK9ahcupwWd/4gYdNTLGRqDjPLc=",
     "homepage": "https://registry.terraform.io/providers/keycloak/keycloak",
     "owner": "keycloak",
     "repo": "terraform-provider-keycloak",
-    "rev": "v5.0.0",
+    "rev": "v5.1.1",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-51sFU6P4Ynyu9NpQxlbSV7EoB/Lk1da4O0bOuoeMujI="
   },
