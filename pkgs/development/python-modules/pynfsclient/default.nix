@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
   setuptools,
 }:
 
@@ -9,6 +10,8 @@ buildPythonPackage rec {
   pname = "pynfsclient";
   version = "0.1.5";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     pname = "pyNfsClient";
