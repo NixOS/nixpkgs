@@ -6252,6 +6252,8 @@ self: super: with self; {
     inherit (pkgs) cgal libxml2;
   };
 
+  igloohome-api = callPackage ../development/python-modules/igloohome-api { };
+
   ignite = callPackage ../development/python-modules/ignite { };
 
   igraph = callPackage ../development/python-modules/igraph {
@@ -9520,6 +9522,8 @@ self: super: with self; {
   python-bugzilla = callPackage ../development/python-modules/python-bugzilla { };
 
   python-debian = callPackage ../development/python-modules/python-debian { };
+
+  python-google-drive-api = callPackage ../development/python-modules/python-google-drive-api { };
 
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 
@@ -13754,6 +13758,8 @@ self: super: with self; {
   qbittorrent-api = callPackage ../development/python-modules/qbittorrent-api { };
 
   qasync = callPackage ../development/python-modules/qasync { };
+
+  qbusmqttapi = callPackage ../development/python-modules/qbusmqttapi { };
 
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
