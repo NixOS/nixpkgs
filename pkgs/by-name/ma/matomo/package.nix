@@ -95,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [
         "--url"
         "https://github.com/matomo-org/matomo"
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
