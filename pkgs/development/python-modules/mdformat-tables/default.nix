@@ -2,10 +2,17 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  mdformat,
-  pytestCheckHook,
   pythonOlder,
+
+  # build dependencies
+  flit-core,
+
+  # dependencies
+  mdformat,
+  wcwidth,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-7MbpGBGprhGrQ9P31HUU2h0bjyHWap6DETVN/dCDA1w=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ mdformat ];
+  dependencies = [
+    mdformat
+    wcwidth
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
