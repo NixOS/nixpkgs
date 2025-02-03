@@ -10,7 +10,8 @@
   version ? null,
 }:
 
-(mkCoqDerivation {
+let
+derivation = mkCoqDerivation {
 
   pname = "CoqEAL";
 
@@ -100,7 +101,6 @@
   propagatedBuildInputs = [
     mathcomp.algebra
     bignums
-    paramcoq
     multinomials
   ];
 
@@ -108,9 +108,17 @@
     description = "CoqEAL - The Coq Effective Algebra Library";
     license = lib.licenses.mit;
   };
-}).overrideAttrs
+};
+patched-derivation1 = derivation.overrideAttrs
   (o: {
     propagatedBuildInputs =
       o.propagatedBuildInputs
       ++ lib.optional (lib.versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
-  })
+  });
+patched-derivation = patched-derivation1.overrideAttrs
+  (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versions.isLe "2.0.3" o.version && o.version != "dev") paramcoq;
+  });
+in patched-derivation
