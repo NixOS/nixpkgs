@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
     # Detect DM type from config file.
     # `readlink display-manager.service` won't return any of the candidates.
     ./get-dm-type-from-config.patch
+
+    # Don't assert on the existence of a path in /var/log, which will
+    # never exist inside the sandbox.
+    # Upstream is on board, but it's stalled:
+    # https://gitlab.freedesktop.org/accountsservice/accountsservice/-/merge_requests/97#note_1756635
+    ./no-check-wtmp-path.patch
   ];
 
   nativeBuildInputs =
