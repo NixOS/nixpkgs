@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libzip,
   libiconv,
+  zlib,
   autoreconfHook,
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     libiconv
-    libzip
+    zlib
   ];
 
   src = fetchFromGitHub {
@@ -23,6 +23,17 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0l5zbb5hswxczigvyal877j0aiq3fc01j3gv88bvy7ikyvw3lc07";
   };
+
+  postPatch = ''
+    patchShebangs tests/check-runzip.sh
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=incompatible-pointer-types"
+  ];
+
+  doCheck = true;
 
   meta = {
     description = "Tool to convert filename encoding inside a ZIP archive";

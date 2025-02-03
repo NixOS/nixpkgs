@@ -4351,9 +4351,6 @@ with pkgs;
 
   inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
-    nomad_1_4
-    nomad_1_5
-    nomad_1_6
     nomad_1_7
     nomad_1_8
     nomad_1_9
@@ -17235,8 +17232,6 @@ with pkgs;
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
-
-  flatcam = python39.pkgs.callPackage ../applications/science/electronics/flatcam { };
 
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_2;

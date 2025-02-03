@@ -30,13 +30,13 @@
 
 buildDotnetModule rec {
   pname = "ryubing";
-  version = "1.2.80";
+  version = "1.2.81";
 
   src = fetchFromGitHub {
     owner = "Ryubing";
     repo = "Ryujinx";
     rev = version;
-    hash = "sha256-BIiqXXtkc55FQL0HAXxtyx3rA42DTcTxG2pdNmEa5jE=";
+    hash = "sha256-P/lTXhdSXhoseBYC5NcSZDCQCUL9z2yt5LuGj8V0BdU=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin [
