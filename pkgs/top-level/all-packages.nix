@@ -12270,8 +12270,7 @@ with pkgs;
   tt-rss = callPackage ../servers/tt-rss { };
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo
-    matomo_5
-    matomo-beta;
+    matomo_5;
 
   inherit (callPackages ../servers/unifi { })
     unifi8;
