@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hydra-check";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "hydra-check";
     tag = "v${version}";
-    hash = "sha256-FfeT6oxhHORbd4uR4gRNhI6W9YOkG8ieiL0Co3GWzb4=";
+    hash = "sha256-h8bs6oe8zkzEDCoC9F6IzTaTkNf4eAAjt663V0qn73I=";
   };
 
-  cargoHash = "sha256-35e+ACUyp5sQiHz9fgDXXz365XbxHMLcX2aTA41rJN0=";
+  cargoHash = "sha256-AUIm8OLN+BgEtlYCFQkozEwkp0Iwfkj+l5ttSAoCz60=";
 
   nativeBuildInputs = [
     pkg-config
