@@ -53,7 +53,12 @@ let
   };
 in
 flutter324.buildFlutterApplication {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    libclash
+    ;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -95,6 +100,8 @@ flutter324.buildFlutterApplication {
   postInstall = ''
     install -Dm644 ./assets/images/icon.png $out/share/pixmaps/flclash.png
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
