@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
-    rev = version;
+    tag = version;
     hash = "sha256-odJDE1A0WZ9vBXPxaUdthjTgmbmbdHjbyY1PkaM4+vI=";
   };
 
