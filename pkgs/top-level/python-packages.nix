@@ -3214,6 +3214,8 @@ self: super: with self; {
 
   deprecation-alias = callPackage ../development/python-modules/deprecation-alias { };
 
+  depyf = callPackage ../development/python-modules/depyf { };
+
   derpconf = callPackage ../development/python-modules/derpconf { };
 
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
