@@ -2,7 +2,7 @@
   lib,
   fetchFromGitLab,
   stdenv,
-  llvmPackages_12,
+  llvmPackages,
   cargo,
   libiconv,
 }:
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    llvmPackages_12.llvm
+    llvmPackages.llvm
     cargo
   ];
-  propagatedBuildInputs = [ llvmPackages_12.libllvm ];
+  propagatedBuildInputs = [ llvmPackages.libllvm ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildPhase = ''
