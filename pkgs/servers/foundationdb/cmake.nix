@@ -2,7 +2,7 @@
 
 { lib, fetchFromGitHub
 , cmake, ninja, python3, openjdk, mono, pkg-config
-, msgpack-cxx, toml11, jemalloc, doctest
+, msgpack-cxx, toml11, jemalloc, doctest, zlib
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -37,7 +37,7 @@ let
           inherit rev hash;
         };
 
-        buildInputs = [ ssl boost msgpack-cxx toml11 jemalloc ];
+        buildInputs = [ ssl boost msgpack-cxx toml11 jemalloc zlib ];
 
         checkInputs = [ doctest ];
 
