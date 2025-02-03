@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libjaylink";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
     tag = version;
-    hash = "sha256-odJDE1A0WZ9vBXPxaUdthjTgmbmbdHjbyY1PkaM4+vI=";
+    hash = "sha256-PghPVgovNo/HhNg7c6EGXrqi6jMrb8p/uLqGDIZ7t+s=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm644 contrib/99-libjaylink.rules $out/lib/udev/rules.d/libjaylink.rules
+    install -Dm644 contrib/60-libjaylink.rules $out/lib/udev/rules.d/60-libjaylink.rules
   '';
 
   passthru.updateScript = nix-update-script { };
