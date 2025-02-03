@@ -327,7 +327,7 @@ with pkgs;
 
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
-  devil-diffusion = callPackage ../tools/graphics/devil-diffusion-AMD-ComfyUI { };
+  Devil-Diffusion-AMD-ComfyUI = callPackage ../tools/graphics/devil-diffusion-AMD-ComfyUI { };
 
   dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
 
