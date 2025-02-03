@@ -114,6 +114,7 @@ buildPythonPackage rec {
       "test_geometry_type"
       "test_passing_pycairo_context_pdf"
       "test_pdf_printing"
+      "test_raster_warping"
       "test_render_with_scale_factor"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -134,6 +135,5 @@ buildPythonPackage rec {
     maintainers = [ ];
     homepage = "https://mapnik.org";
     license = licenses.lgpl21Plus;
-    broken = true; # At 2024-11-13, test_raster_warping fails.
   };
 }

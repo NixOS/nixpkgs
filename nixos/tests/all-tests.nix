@@ -675,6 +675,7 @@ in {
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
+  nik4 = runTest ./nik4.nix;
   nimdow = handleTest ./nimdow.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
