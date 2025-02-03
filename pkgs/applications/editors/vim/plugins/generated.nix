@@ -12876,6 +12876,18 @@ final: prev:
     meta.homepage = "https://github.com/chomosuke/term-edit.nvim/";
   };
 
+  terminal-nvim = buildVimPlugin {
+    pname = "terminal.nvim";
+    version = "2024-10-14";
+    src = fetchFromGitHub {
+      owner = "rebelot";
+      repo = "terminal.nvim";
+      rev = "95cdb0c22cd2d2f8c2b33a55ec07f0bcbd6cad9e";
+      sha256 = "0bp6m6b7bsw9d4iyn1b8bw3avnvjlk7pi8h941m68fw54n3mf06f";
+    };
+    meta.homepage = "https://github.com/rebelot/terminal.nvim/";
+  };
+
   terminus = buildVimPlugin {
     pname = "terminus";
     version = "2024-07-30";

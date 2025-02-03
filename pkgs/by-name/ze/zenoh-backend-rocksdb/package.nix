@@ -5,21 +5,21 @@
   pkg-config,
   bzip2,
   zstd,
-  rocksdb_8_11,
+  rocksdb,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zenoh-backend-rocksdb";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-rocksdb";
     tag = version;
-    hash = "sha256-+dA/4VA1oHhTiMcSXful2Z1B+IYykPMC/2p0mjEbako=";
+    hash = "sha256-YZf3riWMzcyguZbfGheIbAlCijML7zPG+XAJso6ku9E=";
   };
 
-  cargoHash = "sha256-bQQWewhKibUKmJ9sJGcgvsNJhdCu67qOwFTNsCkjlO0=";
+  cargoHash = "sha256-bzUY9iARGAXErYOH0S6q6JlfdFQJDDg5q1D2miMrzNE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    ROCKSDB_INCLUDE_DIR = "${rocksdb_8_11}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb_8_11}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
