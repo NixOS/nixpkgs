@@ -16,6 +16,11 @@
 }:
 let
   latestVersionForNc = {
+    "31" = {
+      version = "9.0.0";
+      appHash = "sha256-hhHWCzaSfV41Ysuq4WXjy63mflgEsb2qdGapHE8fuA8=";
+      modelHash = "sha256-WzK9StICup/YuRcuM575DiPYHsvXGt9CRrAoBVGbXHI=";
+    };
     "30" = {
       version = "8.2.0";
       appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
@@ -29,9 +34,9 @@ let
     "28" = {
       # Once this version is no longer supported, we can remove the getAppValue replacements below
       # The getAppValueString stuff will need to remain
-      version = "6.1.0";
-      appHash = "sha256-225r2JnDOoURvLmzpmHp/QL6GDx9124/YTywbxH3/rk=";
-      modelHash = "sha256-4mhQM/ajpwjqTb8jSbEIdtSRrWZEOaMZQXAwcfSRQ/M=";
+      version = "6.1.1";
+      appHash = "sha256-pQy262t2kZ7SzciFclgU7BxYc1oSy5B8ycmE/Hq5FyY=";
+      modelHash = "sha256-hJB+1s1UHkw4n4yHeHHD5tNn7fcZNniDnjpyNkc9d3w=";
     };
   };
   currentVersionInfo = latestVersionForNc.${ncVersion};
