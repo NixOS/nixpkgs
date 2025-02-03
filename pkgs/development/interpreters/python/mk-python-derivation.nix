@@ -104,12 +104,6 @@ let
     "catchConflicts"
     "pyproject"
     "format"
-    "disabledTestPaths"
-    "disabledTests"
-    "pytestFlags"
-    "pytestFlagsArray"
-    "unittestFlags"
-    "unittestFlagsArray"
     "outputs"
     "stdenv"
     "dependencies"
@@ -198,8 +192,6 @@ in
   meta ? { },
 
   doCheck ? true,
-
-  disabledTestPaths ? [ ],
 
   # Allow passing in a custom stdenv to buildPython*
   stdenv ? python.stdenv,
@@ -434,26 +426,6 @@ let
         # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
         installCheckPhase = attrs.checkPhase;
       }
-      // optionalAttrs (attrs.doCheck or true) (
-        optionalAttrs (disabledTestPaths != [ ]) {
-          disabledTestPaths = disabledTestPaths;
-        }
-        // optionalAttrs (attrs ? disabledTests) {
-          disabledTests = attrs.disabledTests;
-        }
-        // optionalAttrs (attrs ? pytestFlags) {
-          pytestFlags = attrs.pytestFlags;
-        }
-        // optionalAttrs (attrs ? pytestFlagsArray) {
-          pytestFlagsArray = attrs.pytestFlagsArray;
-        }
-        // optionalAttrs (attrs ? unittestFlags) {
-          unittestFlags = attrs.unittestFlags;
-        }
-        // optionalAttrs (attrs ? unittestFlagsArray) {
-          unittestFlagsArray = attrs.unittestFlagsArray;
-        }
-      )
     )
   );
 
