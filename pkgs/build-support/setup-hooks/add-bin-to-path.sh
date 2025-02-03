@@ -9,5 +9,4 @@ addBinToPath () {
     export PATH
 }
 
-# shellcheck disable=SC2154
-addEnvHooks "$targetOffset" addBinToPath
+postHooks+=(addBinToPath)
