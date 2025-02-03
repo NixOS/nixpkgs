@@ -25,6 +25,7 @@
   pytest-mock,
   pytestCheckHook,
   tensorflow-probability,
+  writableTmpDirAsHomeHook,
   pythonAtLeast,
 
   nix-update-script,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.26.4";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-pREyBedkF9MW7g3Bctnk8C9vVbRTsLLreldxlqDdHVI=";
+    hash = "sha256-jwx7fcMiFNvnwP746nM2rqo2BD6PEbKkfEwIz8MenN4=";
   };
 
   pythonRelaxDeps = [
@@ -69,11 +70,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     tensorflow-probability
+    writableTmpDirAsHomeHook
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "pytensor" ];
 
@@ -94,6 +92,10 @@ buildPythonPackage rec {
 
       # Failure reported upstream: https://github.com/pymc-devs/pytensor/issues/980
       "test_choose_signature"
+
+      # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
+      # Mismatched elements: 9 / 81 (11.1%)
+      "test_jax_pad"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
@@ -187,8 +189,5 @@ buildPythonPackage rec {
       bcdarwin
       ferrine
     ];
-    # Not yet compatible with numpy >= 2.0
-    # https://github.com/pymc-devs/pytensor/issues/688
-    broken = true;
   };
 }
