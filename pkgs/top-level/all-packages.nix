@@ -17238,8 +17238,6 @@ with pkgs;
 
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
 
-  flatcam = python39.pkgs.callPackage ../applications/science/electronics/flatcam { };
-
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_2;
   };
