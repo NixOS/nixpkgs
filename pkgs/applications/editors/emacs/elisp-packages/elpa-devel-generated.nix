@@ -1509,10 +1509,10 @@
     elpaBuild {
       pname = "consult-hoogle";
       ename = "consult-hoogle";
-      version = "0.4.0.0.20250130.54523";
+      version = "0.4.1.0.20250202.52435";
       src = fetchurl {
-        url = "https://elpa.gnu.org/devel/consult-hoogle-0.4.0.0.20250130.54523.tar";
-        sha256 = "0jbhqhnx5aaayhva9d5fvs3llcf7s4pg46h1949chacy3bp48bbh";
+        url = "https://elpa.gnu.org/devel/consult-hoogle-0.4.1.0.20250202.52435.tar";
+        sha256 = "sha256-9ywpFbFtrGZG52Qxp5dN8HxA3I+gjnHxlGUh31gUjto=";
       };
       packageRequires = [ consult ];
       meta = {
