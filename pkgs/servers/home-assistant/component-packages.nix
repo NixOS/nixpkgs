@@ -4103,7 +4103,8 @@
       ];
     "ourgroceries" =
       ps: with ps; [
-      ]; # missing inputs: ourgroceries
+        ourgroceries
+      ];
     "overkiz" =
       ps: with ps; [
         pyoverkiz
@@ -7065,6 +7066,7 @@
     "oralb"
     "otbr"
     "otp"
+    "ourgroceries"
     "overkiz"
     "ovo_energy"
     "owntracks"
