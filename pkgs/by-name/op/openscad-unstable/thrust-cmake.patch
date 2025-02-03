@@ -1,0 +1,13 @@
+diff --git a/thrust/thrust/cmake/thrust-header-search.cmake.in b/thrust/thrust/cmake/thrust-header-search.cmake.in
+index 8529d89fe..94879ee01 100644
+--- a/thrust/thrust/cmake/thrust-header-search.cmake.in
++++ b/thrust/thrust/cmake/thrust-header-search.cmake.in
+@@ -7,7 +7,6 @@ set(from_install_prefix "@from_install_prefix@")
+ find_path(_THRUST_VERSION_INCLUDE_DIR thrust/version.h
+   NO_CMAKE_FIND_ROOT_PATH # Don't allow CMake to re-root the search
+   NO_DEFAULT_PATH # Only search explicit paths below:
+-  PATHS
+-    "${CMAKE_CURRENT_LIST_DIR}/${from_install_prefix}/@CMAKE_INSTALL_INCLUDEDIR@"
++  PATHS "@CMAKE_INSTALL_INCLUDEDIR@"
+ )
+ set_property(CACHE _THRUST_VERSION_INCLUDE_DIR PROPERTY TYPE INTERNAL)

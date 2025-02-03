@@ -1,0 +1,11 @@
+--- src/Makefile.in	2012-01-18 10:02:40.000000000 +0100
++++ src/Makefile.in	2022-01-27 19:29:19.324662149 +0100
+@@ -63,7 +63,7 @@
+ 80211.o: globule.o sql.o builder.o crc.o
+ 	$(CC) $(CFLAGS) $(INC) 80211.c -c
+ 
+-iface.o: globule.o
++iface.o: globule.o libiw
+ 	$(CC) $(CFLAGS) iface.c -c
+ 
+ sigalrm.o: globule.o

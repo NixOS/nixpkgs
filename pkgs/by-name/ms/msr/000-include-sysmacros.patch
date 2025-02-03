@@ -1,0 +1,11 @@
+diff -Naur msr-old/msr.c msr-20060208/msr.c
+--- msr-old/msr.c	1969-12-31 21:00:01.000000000 -0300
++++ msr-20060208/msr.c	2021-11-02 21:19:34.576722617 -0300
+@@ -19,6 +19,7 @@
+ #include <stdio.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <unistd.h>

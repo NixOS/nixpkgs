@@ -1,0 +1,18 @@
+diff --git a/gpaw/__init__.py b/gpaw/__init__.py
+index b5c029e13..518c16b13 100644
+--- a/gpaw/__init__.py
++++ b/gpaw/__init__.py
+@@ -201,12 +201,7 @@ def initialize_data_paths():
+     try:
+         setup_paths[:0] = os.environ['GPAW_SETUP_PATH'].split(os.pathsep)
+     except KeyError:
+-        if len(setup_paths) == 0:
+-            if os.pathsep == ';':
+-                setup_paths[:] = [r'C:\gpaw-setups']
+-            else:
+-                setup_paths[:] = ['/usr/local/share/gpaw-setups',
+-                                  '/usr/share/gpaw-setups']
++        setup_paths[:0] = ["@gpawSetupPath@"]
+ 
+ 
+ read_rc_file()

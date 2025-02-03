@@ -1,0 +1,35 @@
+--- a/daemons/lircd.cpp
++++ b/daemons/lircd.cpp
+@@ -110,6 +110,17 @@ int clock_gettime(int clk_id, struct timespec *t){
+ #endif
+ #define WHITE_SPACE " \t"
+ 
++/* Defines removed in linux-headers-5.18:
++     https://sourceforge.net/p/lirc/git/merge-requests/45/
++ */
++#ifndef LIRC_CAN_SET_REC_FILTER
++#    define LIRC_CAN_SET_REC_FILTER 0x08000000
++#endif
++
++#ifndef LIRC_CAN_NOTIFY_DECODE
++#    define LIRC_CAN_NOTIFY_DECODE 0x01000000
++#endif
++
+ static const logchannel_t logchannel = LOG_APP;
+ 
+ /** How long we sleep while waiting for busy write sockets. */
+--- a/tools/lirc-lsplugins.cpp
++++ b/tools/lirc-lsplugins.cpp
+@@ -21,6 +21,12 @@
+ #include "config.h"
+ #include "lirc_private.h"
+ 
++/* Defines removed in linux-headers-5.18:
++     https://sourceforge.net/p/lirc/git/merge-requests/45/
++ */
++#ifndef LIRC_CAN_NOTIFY_DECODE
++#    define LIRC_CAN_NOTIFY_DECODE 0x01000000
++#endif
+ 
+ #define USAGE \
+ 	"\nSynopsis:\n" \
