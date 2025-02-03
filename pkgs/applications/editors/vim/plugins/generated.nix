@@ -1314,6 +1314,18 @@ final: prev:
     meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
   };
 
+  blink-cmp-git = buildVimPlugin {
+    pname = "blink-cmp-git";
+    version = "2025-01-27";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-git";
+      rev = "7c6cfa3d427f50a6eae5c38628b31b8675bab05d";
+      sha256 = "08hfwnjgsl88bkphpdxkdswdnc10mlxpsrk084kgzk4j19w55gyq";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-git/";
+  };
+
   blink-compat = buildVimPlugin {
     pname = "blink.compat";
     version = "2025-01-20";
@@ -3017,6 +3029,18 @@ final: prev:
       sha256 = "1d4r12j5vx4hac8nf0d0j0bqdh9jjsij0cdlr8x9acbq3p0lcwv0";
     };
     meta.homepage = "https://github.com/hat0uma/csvview.nvim/";
+  };
+
+  ctags-lsp-nvim = buildVimPlugin {
+    pname = "ctags-lsp.nvim";
+    version = "2024-12-08";
+    src = fetchFromGitHub {
+      owner = "netmute";
+      repo = "ctags-lsp.nvim";
+      rev = "aaae7b5d8dc7aeb836c63301b8eb7311af49bb2a";
+      sha256 = "06h388vkp8nv15wbh96pza85994xf979s7kjqrli4s6y5ygw6m02";
+    };
+    meta.homepage = "https://github.com/netmute/ctags-lsp.nvim/";
   };
 
   ctrlp-cmatcher = buildVimPlugin {
