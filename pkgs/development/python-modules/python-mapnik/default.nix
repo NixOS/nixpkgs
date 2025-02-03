@@ -129,10 +129,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mapnik" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Mapnik";
-    maintainers = [ ];
     homepage = "https://mapnik.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.geospatial.members;
   };
 }
