@@ -40,9 +40,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir -p "$out"/bin/bin/x86_64-linux
 
-    mv dmMediaConverter bin --target-directory $out/bin
+    mv dmMediaConverter "$out"/bin
+
+    ln -s "${lib.getExe ffmpeg}" "$out"/bin/bin/x86_64-linux/ffmpeg
+    ln -s "${lib.getExe ffmpeg}" "$out"/bin/bin/x86_64-linux/ffmpeg.mfx
+	  ln -s "${lib.getExe' ffmpeg "ffprobe"}" "$out"/bin/bin/x86_64-linux/ffprobe
 
     runHook postInstall
   '';
