@@ -84,8 +84,14 @@ buildPythonPackage rec {
 
   optional-dependencies = lib.fix (self: {
     all =
-      with self;
-      accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui;
+      self.accelerate
+      ++ self.compress
+      ++ self.encryption
+      ++ self.nvx
+      ++ self.serialization
+      ++ self.scram
+      ++ self.twisted
+      ++ self.ui;
     accelerate = [
       # wsaccel
     ];
