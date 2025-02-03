@@ -157,7 +157,7 @@ in
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
-        RESTIC_CACHE_DIR = "/var/cache/restic-exporter";
+        RESTIC_CACHE_DIR = "$CACHE_DIRECTORY";
       }
       // (mapAttrs' (
         name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
