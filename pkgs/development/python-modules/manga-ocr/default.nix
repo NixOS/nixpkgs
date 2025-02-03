@@ -1,15 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  fire,
+  fugashi,
+  jaconv,
+  loguru,
+  numpy,
+  pillow,
+  pyperclip,
+  torch,
+  transformers,
+  unidic-lite,
 }:
-
-with python3Packages;
 
 buildPythonPackage rec {
   pname = "manga-ocr";
   version = "0.1.14";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kha-white";
