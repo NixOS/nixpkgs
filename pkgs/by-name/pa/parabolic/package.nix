@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-B8/e5urhy5tAgHNd/PR3HlNQd0M0CxgC56nArFGlQ9c=";
   };
 
