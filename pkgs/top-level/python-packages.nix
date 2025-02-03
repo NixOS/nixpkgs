@@ -14441,6 +14441,8 @@ self: super: with self; {
 
   rules = callPackage ../development/python-modules/rules { };
 
+  rumps = callPackage ../development/python-modules/rumps { };
+
   runs = callPackage ../development/python-modules/runs { };
 
   runstats = callPackage ../development/python-modules/runstats { };
