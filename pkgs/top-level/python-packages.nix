@@ -10699,6 +10699,8 @@ self: super: with self; {
 
   pylsl = callPackage ../development/python-modules/pylsl { };
 
+  pynfsclient = callPackage ../development/python-modules/pynfsclient { };
+
   pyngo = callPackage ../development/python-modules/pyngo { };
 
   pyngrok = callPackage ../development/python-modules/pyngrok { };
