@@ -35,18 +35,18 @@ rustPlatform.buildRustPackage rec {
     owner = "SleipnirGroup";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0000000000000000000000000000000000000000000000000000";
+    hash = lib.fakeSha256;
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = cargoRoot;
 
   sourceRoot = src.name;
-  cargoHash = "sha256-w2Rw3oakZ46NaYG/mkjpO1t6MqSeF1is24sB4RbDAOc=";
+  cargoHash = lib.fakeSha256;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-E1dfaEezU1EOGEqH+bURxgDx7mEUseKGQcVnhvoED7k=";
+    hash = lib.fakeSha256;
   };
 
   nativeBuildInputs =
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://choreo.autos/";
     description = "A graphical tool for planning time-optimized trajectories for autonomous mobile robots in the FIRST Robotics Competition.";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ supercoolspy ];
+    # maintainers = with lib.maintainers; [ supercoolspy ];
     mainProgram = "choreo";
   };
 }
