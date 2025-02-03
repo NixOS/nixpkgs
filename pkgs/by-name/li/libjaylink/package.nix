@@ -3,6 +3,7 @@
   fetchFromGitLab,
   lib,
   libusb1,
+  nix-update-script,
   pkg-config,
   stdenv,
 }:
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     install -Dm644 contrib/99-libjaylink.rules $out/lib/udev/rules.d/libjaylink.rules
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
