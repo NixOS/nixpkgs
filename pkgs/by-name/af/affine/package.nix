@@ -41,17 +41,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.18.1";
+  version = "0.19.6";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TWwojG3lqQlQFX3BKoFjJ27a3T/SawXgNDO6fP6gW4k=";
+    hash = "sha256-BydTNE36oRIxr2lTnc2+EY0lvMXn4NTLB4EjqzhdjGk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-5s/X9CD/H9rSn7SqMHioLg1KRP7y9fsozdFRY3hNiP8=";
+    hash = "sha256-racjpf0VgNod6OxWKSaCbKS9fEkInpDyhVbAHfYWIDo=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-HueTia+1ApfvbBK/b+iE84TB1DCWIDLoQ9XhjYlGCUs=";
+    outputHash = "sha256-E9l5zjOOfyDBzYJOU94VrRvt7Hi4XkRTDav9bVlXvlQ=";
   };
   nativeBuildInputs =
     [
@@ -124,13 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     BACKEND_SERVER_PACKAGE_JSON="$(jq 'del(.scripts.postinstall)' packages/backend/server/package.json)"
     rm -rf packages/backend/server/{.*,*}
     echo "$BACKEND_SERVER_PACKAGE_JSON" > packages/backend/server/package.json
-  '';
-  patchPhase = ''
-    runHook prePatchPhase
-
-    sed -i '/packagerConfig/a \    electronZipDir: process.env.ELECTRON_FORGE_ELECTRON_ZIP_DIR,' packages/frontend/apps/electron/forge.config.mjs
-
-    runHook postPatchPhase
   '';
 
   configurePhase = ''
@@ -161,16 +154,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # first build
-    yarn workspaces focus @affine/electron @affine/monorepo
-    CARGO_NET_OFFLINE=true yarn workspace @affine/native build
-    GITHUB_SHA=ffffffffffffffffffffffffffffffffffffffff BUILD_TYPE=${buildType} SKIP_NX_CACHE=1 yarn workspace @affine/electron generate-assets
+    yarn install
+    CARGO_NET_OFFLINE=true yarn affine @affine/native build
+    GITHUB_SHA=ffffffffffffffffffffffffffffffffffffffff BUILD_TYPE=${buildType} SKIP_NX_CACHE=1 yarn affine @affine/electron generate-assets
 
     # second build
     yarn config set nmMode classic
     yarn config set nmHoistingLimits workspaces
     find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
-    yarn workspaces focus @affine/electron @affine/monorepo
-    BUILD_TYPE=${buildType} SKIP_WEB_BUILD=1 SKIP_BUNDLE=1 HOIST_NODE_MODULES=1 yarn workspace @affine/electron make
+    yarn install
+    BUILD_TYPE=${buildType} SKIP_WEB_BUILD=1 SKIP_BUNDLE=1 HOIST_NODE_MODULES=1 yarn affine @affine/electron make
 
     runHook postBuild
   '';
