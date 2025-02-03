@@ -126,9 +126,6 @@ self: super:
   #   A factor of 100 is insufficent, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  # Doctest comments have bogus imports.
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
-
   # This can be removed once https://github.com/typeclasses/ascii-predicates/pull/1
   # is merged and in a release that's being tracked.
   ascii-predicates = appendPatch (pkgs.fetchpatch {
