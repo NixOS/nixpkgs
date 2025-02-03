@@ -437,11 +437,9 @@ let
     }
     // optionalAttrs (attrs.doCheck or true) (
       optionalAttrs (disabledTestPaths != [ ]) {
-        disabledTestPaths = escapeShellArgs disabledTestPaths;
+        disabledTestPaths = disabledTestPaths;
       }
       // optionalAttrs (attrs ? disabledTests) {
-        # `escapeShellArgs` should be used as well as `disabledTestPaths`,
-        # but some packages rely on existing raw strings.
         disabledTests = attrs.disabledTests;
       }
       // optionalAttrs (attrs ? pytestFlags) {
