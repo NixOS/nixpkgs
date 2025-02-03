@@ -1,10 +1,10 @@
 {
+  autoreconfHook,
   fetchFromGitLab,
   lib,
-  stdenv,
-  autoreconfHook,
-  pkg-config,
   libusb1,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
