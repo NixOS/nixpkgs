@@ -12269,16 +12269,26 @@ with pkgs;
 
   tt-rss = callPackage ../servers/tt-rss { };
 
-  matomo_5 = callPackage ../servers/web-apps/matomo {};
-  # Matomo 4 reached EOL and will be replaced by matomo_5 in NixOS 25.05
-  matomo = matomo_5.overrideAttrs rec {
-    version = "4.16.1";
-    # fetchurl does not support `.override`
-    src = fetchurl {
-      url = "https://builds.matomo.org/matomo-${version}.tar.gz";
-      hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
-    };
-  };
+  inherit
+    ({
+      # To allow automatic backports of Matomo 5 PRs, the path must match what we
+      # have on `master`.
+      # We still want to provide the contents of this package as `matomo_5` in 24.11
+      # to not introduce a breaking change while preserving `matomo` as the EOL
+      # Matomo 4.x.
+      matomo_5 = callPackage ../by-name/ma/matomo/package.nix { };
+      # Matomo 4 reached EOL and will be replaced by matomo_5 in NixOS 25.05
+      matomo = matomo_5.overrideAttrs rec {
+        version = "4.16.1";
+        # fetchurl does not support `.override`
+        src = fetchurl {
+          url = "https://builds.matomo.org/matomo-${version}.tar.gz";
+          hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
+        };
+      };
+    })
+    matomo_5
+    matomo;
 
   inherit (callPackages ../servers/unifi { })
     unifi8;
