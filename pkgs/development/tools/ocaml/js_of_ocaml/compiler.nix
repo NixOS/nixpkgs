@@ -10,7 +10,7 @@
   menhir,
   menhirLib,
   sedlex,
-  version ? if lib.versionAtLeast ocaml.version "4.11" then "5.9.1" else "5.8.2",
+  version ? if lib.versionAtLeast ocaml.version "4.11" then "6.0.0" else "5.8.2",
 }:
 
 buildDunePackage {
@@ -22,7 +22,7 @@ buildDunePackage {
     url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";
     hash =
       {
-        "5.9.1" = "sha256-aMlcYIcdjpyaVMgvNeLtUEE7y0QPIg0LNRayoe4ccwc=";
+        "6.0.0" = "sha256-MnQex8uh1MbW/JgDkBeUH/hXbkbkTS38+RX64FdAyd4=";
         "5.8.2" = "sha256-ciAZS9L5sU2VgVOlogZ1A1nXtJ3hL+iNdFDThc7L8Eo=";
       }
       ."${version}";
