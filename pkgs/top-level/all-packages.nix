@@ -5586,17 +5586,18 @@ with pkgs;
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bash;
+  runtimeShellPackage = bashNonInteractive;
 
-  bash = lowPrio (callPackage ../shells/bash/5.nix { });
+  bash = callPackage ../shells/bash/5.nix { };
+  bashNonInteractive = lowPrio (callPackage ../shells/bash/5.nix {
+    interactive = false;
+  });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/5.nix {
-    interactive = true;
-  };
-  bashInteractiveFHS = callPackage ../shells/bash/5.nix {
-    interactive = true;
+  bashInteractive = bash;
+  bashFHS = callPackage ../shells/bash/5.nix {
     forFHSEnv = true;
   };
+  bashInteractiveFHS = bashFHS;
 
   carapace = callPackage ../shells/carapace {
     buildGoModule = buildGo123Module;
