@@ -137,6 +137,8 @@ buildPythonPackage {
     "hyp2f1_test_case47"
     "hyp2f1_test_case3"
     "test_uint64_max"
+    # https://github.com/scipy/scipy/issues/22466
+    "test_large_m4"
   ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
