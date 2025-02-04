@@ -103,6 +103,7 @@ python.pkgs.buildPythonApplication rec {
     "django-csp"
     "django-filter"
     "django-hierarkey"
+    "django-i18nfield"
     "djangorestframework"
     "markdown"
     "pillow"
