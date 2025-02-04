@@ -7,9 +7,10 @@
 let
   pname = "vrcx";
   version = "2025.01.31";
+  filename = builtins.replaceStrings [ "." ] [ "" ] version;
   src = fetchurl {
     hash = "sha256-hrAsy/yv8GW0mIDA5PJLUs4EYNufPiOplLlmb9pFwX4=";
-    url = "https://github.com/vrcx-team/VRCX/releases/download/v${version}/VRCX_20250131.AppImage";
+    url = "https://github.com/vrcx-team/VRCX/releases/download/v${version}/VRCX_${filename}.AppImage";
   };
   appimageContents = appimageTools.extract {
     inherit pname src version;
