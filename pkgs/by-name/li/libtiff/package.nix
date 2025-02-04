@@ -43,7 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
-    ./static.patch
+
+    # https://gitlab.com/libtiff/libtiff/-/merge_requests/685
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/e6f3d60187a699507d6c85c5c63a8f258d8b8ebc.patch";
+      hash = "sha256-TZE7nyOPojxnR9/jiZbv2LgKS2Yz+Db9lbLgeefrQsc=";
+    })
   ];
 
   postPatch = ''
