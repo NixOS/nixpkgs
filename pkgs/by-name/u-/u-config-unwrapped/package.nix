@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,22 +15,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r1zcXKLqw/gK+9k3SX7OCBaZhvV2ya5VC9O3h+WdkyY=";
   };
 
-  makeFlags = [
-    "CROSS=${stdenv.cc.targetPrefix}"
-    "CC=${lib.getExe stdenv.cc}"
-  ];
+  dontConfigure = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  buildPhase = ''
+    runHook preBuild
 
-  buildFlags = [ "pkg-config" ];
+    $CC -Os -o ${finalAttrs.meta.mainProgram} generic_main.c
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 pkg-config -t $out/bin
-
-    runHook postInstall
+    runHook postBuild
   '';
+
+  installPhase =
+    let
+      binName = "${finalAttrs.meta.mainProgram}${stdenv.hostPlatform.extensions.executable}";
+    in
+    ''
+      runHook preInstall
+
+      install -Dm755 ${binName} -t $out/bin
+
+      runHook postInstall
+    '';
 
   meta = {
     description = "Smaller, simpler, portable pkg-config clone";
@@ -39,5 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
+    mainProgram = "pkg-config";
   };
 })
