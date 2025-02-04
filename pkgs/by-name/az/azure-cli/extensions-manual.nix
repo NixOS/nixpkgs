@@ -96,9 +96,9 @@
 
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
-    version = "1.0.6";
+    version = "1.0.7";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/rdbms_connect-${version}-py2.py3-none-any.whl";
-    hash = "sha256-Scvo2bfqB6iXSimtkCR+hk7XmL7V8o0OOleks39ZOec=";
+    hash = "sha256-66mX1K1azQvbuApyKBwvVuiKCbLaqezCDdrv0lhvVD0=";
     description = "Support for testing connection to Azure Database for MySQL & PostgreSQL servers";
     propagatedBuildInputs =
       (with python3Packages; [
