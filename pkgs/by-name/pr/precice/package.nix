@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
-  gcc,
   boost,
   eigen,
   libxml2,
@@ -24,26 +24,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-KpmcQj8cv5V5OXCMhe2KLTsqUzKWtTeQyP+zg+Y+yd0=";
   };
 
-  cmakeFlags = [
-    "-DPRECICE_PETScMapping=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DPYTHON_LIBRARIES=${python3.libPrefix}"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+  patches = lib.optionals (!lib.versionOlder "3.1.2" version) [
+    (fetchpatch {
+      name = "boost-187-fixes.patch";
+      url = "https://github.com/precice/precice/commit/23788e9eeac49a2069e129a0cb1ac846e8cbeb9f.patch";
+      hash = "sha256-Z8qOGOkXoCui8Wy0H/OeE+NaTDvyRuPm2A+VJKtjH4s=";
+    })
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [ "-D_GNU_SOURCE" ]
-    # libxml2-2.12 changed const qualifiers
-    ++ [ "-fpermissive" ]
-  );
+  cmakeFlags = [
+    (lib.cmakeBool "PRECICE_PETScMapping" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeFeature "PYTHON_LIBRARIES" python3.libPrefix)
+    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
+  ];
 
   nativeBuildInputs = [
     cmake
-    gcc
     pkg-config
     python3
     python3.pkgs.numpy
   ];
+
   buildInputs = [
     boost
     eigen

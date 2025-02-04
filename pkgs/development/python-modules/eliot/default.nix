@@ -14,6 +14,7 @@
   zope-interface,
 
   daemontools,
+  addBinToPathHook,
   dask,
   distributed,
   hypothesis,
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     dask
     distributed
     hypothesis
@@ -59,11 +61,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "eliot" ];
-
-  # Tests run eliot-prettyprint in out/bin.
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
 
   disabledTests = [
     # Fails since dask's bump to 2024.12.2
