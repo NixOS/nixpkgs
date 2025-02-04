@@ -16,9 +16,9 @@
 {
   application-insights = mkAzExtension rec {
     pname = "application-insights";
-    version = "1.2.1";
+    version = "1.2.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
-    hash = "sha256-4fqCTrWH4r7H9MtNHEzhAzqz0/rGWvQt1iGPZzsBnO4=";
+    hash = "sha256-ijmPj8jG+s+855jly3m5wEz5myS8pxU/Scf7lRP2VvI=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
