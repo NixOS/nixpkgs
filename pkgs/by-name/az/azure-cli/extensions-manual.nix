@@ -136,9 +136,9 @@
 
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "2.0.0";
+    version = "2.0.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    hash = "sha256-mBa0SgKyGdxrTtrSVDp78Z0yXUMywL/9o0osKeUbhdU=";
+    hash = "sha256-ts7ByTWI1Chtx9kFQ3sfw4TWP8X5b1hYscudnYJDdOs=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = with lib.maintainers; [ ];
