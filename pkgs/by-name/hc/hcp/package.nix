@@ -54,11 +54,12 @@ buildGoModule rec {
   meta = {
     description = "HashiCorp Cloud Platform CLI";
     homepage = "https://github.com/hashicorp/hcp";
-    changelog = "https://github.com/hashicorp/hcp/releases/tag/v${version}";
+    changelog = "https://github.com/hashicorp/hcp/releases/tag/${src.tag}";
     mainProgram = "hcp";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       dbreyfogle
+      getchoo
     ];
   };
 }
