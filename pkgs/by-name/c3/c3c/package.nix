@@ -23,8 +23,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
+    substituteInPlace CMakeLists.txt --replace-fail "\''${LLVM_LIBRARY_DIR}/clang/\''${LLVM_MAJOR_VERSION}" "${llvmPackages.compiler-rt}"
+    substituteInPlace CMakeLists.txt --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -35,7 +35,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
+  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar llvmPackages.compiler-rt ];
 
   nativeCheckInputs = [ python3 ];
 
