@@ -21,6 +21,8 @@ buildGoModule rec {
     hash = "sha256-YOOaQh1OsRn5EV9RmUdWWdHx5bMFC+a1qFzUGb6lpew=";
   };
 
+  patches = [ ./remove-update-check.patch ];
+
   vendorHash = "sha256-/Nf180odZB5X3Fj4cfz0TdYEfGKtkkh4qI9eRfz+meQ=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
