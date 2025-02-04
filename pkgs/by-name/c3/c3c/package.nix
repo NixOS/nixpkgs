@@ -29,13 +29,18 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    llvmPackages.llvm
-    llvmPackages.lld
-    curl
-    libxml2
-    libffi
-  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar llvmPackages.compiler-rt ];
+  buildInputs =
+    [
+      llvmPackages.llvm
+      llvmPackages.lld
+      curl
+      libxml2
+      libffi
+    ]
+    ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [
+      xar
+      llvmPackages.compiler-rt
+    ];
 
   nativeCheckInputs = [ python3 ];
 
