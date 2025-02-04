@@ -1228,7 +1228,6 @@ mapAliases {
   rnix-hashes = throw "'rnix-hashes' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
   rr-unstable = rr; # Added 2022-09-17
-  rs-git-fsmonitor = throw "'rs-git-fsmonitor' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rtx = mise; # Added 2024-01-05
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;

@@ -16565,6 +16565,12 @@
     githubId = 1224006;
     name = "Roberto Abdelkader Martínez Pérez";
   };
+  nilscc = {
+    email = "mail@nils.cc";
+    github = "nilscc";
+    githubId = 92021;
+    name = "Nils";
+  };
   nils-degroot = {
     email = "nils@peeko.nl";
     github = "nils-degroot";
