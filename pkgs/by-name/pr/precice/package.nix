@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  gcc,
   boost,
   eigen,
   libxml2,
@@ -40,19 +39,13 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [ "-D_GNU_SOURCE" ]
-    # libxml2-2.12 changed const qualifiers
-    ++ [ "-fpermissive" ]
-  );
-
   nativeBuildInputs = [
     cmake
-    gcc
     pkg-config
     python3
     python3.pkgs.numpy
   ];
+
   buildInputs = [
     boost
     eigen
