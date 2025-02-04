@@ -2,15 +2,15 @@
   lib,
   stdenv,
   rustPlatform,
-  fetchNpmDeps,
   cargo-tauri_1,
   glib-networking,
   nodejs,
-  npmHooks,
   openssl,
   pkg-config,
   webkitgtk_4_0,
   wrapGAppsHook4,
+  fetchFromGitHub,
+  pnpm_9
 }:
 
 rustPlatform.buildRustPackage rec {
