@@ -10,7 +10,7 @@
   webkitgtk_4_0,
   wrapGAppsHook4,
   fetchFromGitHub,
-  pnpm_9
+  pnpm_9,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
 
       pkg-config
       wrapGAppsHook4
+      vite
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rustPlatform.bindgenHook
@@ -54,6 +55,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       webkitgtk_4_0
+      nodejs
+      pnpm_9
     ];
 
   meta = {
