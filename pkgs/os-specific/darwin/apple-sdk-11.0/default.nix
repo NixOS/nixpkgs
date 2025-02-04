@@ -257,7 +257,6 @@ lib.genAttrs [
   inherit (pkgs)
     callPackage
     stdenv
-    llvmPackages_12
     llvmPackages_13
     llvmPackages_14
     llvmPackages_15
