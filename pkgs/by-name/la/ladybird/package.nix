@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   fetchurl,
   cacert,
   unicode-emoji,
@@ -97,16 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w build/Caches/AdobeICCProfiles
   '';
 
-  nativeBuildInputs = with qt6Packages; [
+  nativeBuildInputs = [
     cmake
     ninja
     pkg-config
     python3
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs =
-    with qt6Packages;
+
     [
       curl
       ffmpeg
@@ -117,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
       libwebp
       libxcrypt
       openssl
-      qtbase
-      qtmultimedia
+      qt6Packages.qtbase
+      qt6Packages.qtmultimedia
       simdutf
       (skia.overrideAttrs (prev: {
         gnFlags = prev.gnFlags ++ [
@@ -132,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux [
       libpulseaudio.dev
-      qtwayland
+      qt6Packages.qtwayland
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
