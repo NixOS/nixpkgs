@@ -22,8 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bksTk6Zbj8/4FQ7gUGXfJa+kkJE/bFbJF7A4AY6zIRk=";
   };
 
-  disabled = python3.pythonOlder "3.11";
-
   nativeBuildInputs = [
     copyDesktopItems
     python3.pkgs.pyinstaller
@@ -102,6 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pixelflasher";
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = lib.versionOlder python3.version "3.11" || stdenv.hostPlatform.isDarwin;
   };
 })
