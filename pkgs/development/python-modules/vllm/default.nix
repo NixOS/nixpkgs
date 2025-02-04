@@ -55,6 +55,7 @@
   oneDNN,
   blake3,
   depyf,
+  opencv-python-headless,
 
   config,
 
@@ -294,6 +295,7 @@ buildPythonPackage rec {
       lm-format-enforcer
       numpy
       openai
+      opencv-python-headless
       outlines
       pandas
       prometheus-fastapi-instrumentator
