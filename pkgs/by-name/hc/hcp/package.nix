@@ -2,8 +2,10 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  getent,
+  makeBinaryWrapper,
   nix-update-script,
-  hcp,
+  xdg-utils,
 }:
 
 buildGoModule rec {
@@ -19,8 +21,21 @@ buildGoModule rec {
 
   vendorHash = "sha256-/Nf180odZB5X3Fj4cfz0TdYEfGKtkkh4qI9eRfz+meQ=";
 
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
   preCheck = ''
     export HOME=$TMPDIR
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/hcp \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          getent
+          # Uses xdg-open for links in `hcp auth login`, etc.
+          xdg-utils
+        ]
+      }
   '';
 
   passthru.updateScript = nix-update-script { };
