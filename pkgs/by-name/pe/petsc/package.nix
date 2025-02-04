@@ -4,7 +4,10 @@
   fetchzip,
   cctools,
   gfortran,
+  replaceVars,
   python3,
+  python3Packages,
+  withPetsc4py ? false,
   blas,
   lapack,
   mpiSupport ? true,
@@ -51,11 +54,19 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    python3
-    gfortran
-    pkg-config
-  ] ++ lib.optional mpiSupport mpi;
+
+  nativeBuildInputs =
+    [
+      python3
+      gfortran
+      pkg-config
+    ]
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optionals withPetsc4py [
+      python3Packages.setuptools
+      python3Packages.cython
+    ];
+
   buildInputs =
     [
       blas
@@ -68,6 +79,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPtscotch scotch
     ++ lib.optional withScalapack scalapack
     ++ lib.optional withMumps mumps_par;
+
+  propagatedBuildInputs = lib.optional withPetsc4py python3Packages.numpy;
+
+  patches = [
+    (replaceVars ./fix-petsc4py-install-prefix.patch {
+      PYTHON_SITEPACKAGES = python3.sitePackages;
+    })
+  ];
 
   postPatch =
     ''
@@ -86,6 +105,7 @@ stdenv.mkDerivation rec {
       "--with-precision=${petsc-precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
+    ++ lib.optional withPetsc4py "--with-petsc4py=1"
     ++ lib.optionals mpiSupport [
       "--CC=mpicc"
       "--with-cxx=mpicxx"

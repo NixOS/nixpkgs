@@ -10342,6 +10342,12 @@ self: super: with self; {
 
   pesq = callPackage ../development/python-modules/pesq { };
 
+  petsc4py = toPythonModule (pkgs.petsc.override {
+    python3 = python;
+    python3Packages = self;
+    withPetsc4py = true;
+  });
+
   pex = callPackage ../development/python-modules/pex { };
 
   pexif = callPackage ../development/python-modules/pexif { };
