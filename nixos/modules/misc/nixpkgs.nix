@@ -99,10 +99,7 @@ let
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
-        isCross =
-          !(lib.systems.equals (lib.systems.elaborate cfg.buildPlatform) (
-            lib.systems.elaborate cfg.hostPlatform
-          ));
+        isCross = cfg.buildPlatform != cfg.hostPlatform;
         systemArgs =
           if isCross then
             {
@@ -244,8 +241,20 @@ in
       example = {
         system = "x86_64-linux";
       };
-      # Make sure that the final value has all fields for sake of other modules
-      # referring to this.
+      apply =
+        buildPlatform:
+        let
+          elaborated = builtins.mapAttrs (_: lib.systems.elaborate) {
+            inherit (cfg) hostPlatform;
+            inherit buildPlatform;
+          };
+        in
+        # If equivalent to `hostPlatform`, make it actually identical so that `==` can be used
+        # See https://github.com/NixOS/nixpkgs/issues/278001
+        if lib.systems.equals elaborated.hostPlatform elaborated.buildPlatform then
+          cfg.hostPlatform
+        else
+          buildPlatform;
       defaultText = lib.literalExpression ''config.nixpkgs.hostPlatform'';
       description = ''
         Specifies the platform on which NixOS should be built.
