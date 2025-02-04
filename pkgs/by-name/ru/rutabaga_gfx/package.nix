@@ -40,7 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # Install the dylib on Darwin.
     ./darwin-install.patch
+    # Patch for libc++, drop in next update
+    # https://chromium.googlesource.com/crosvm/crosvm/+/8ae3c23b2e3899de33b973fc636909f1eb3dc98c
+    ./link-cxx.patch
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.useLLVM {
+    USE_CLANG = true;
+  };
 
   nativeBuildInputs = [
     cargo
