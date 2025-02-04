@@ -18357,6 +18357,8 @@ self: super: with self; {
     inherit (pkgs) xgboost;
   };
 
+  xgrammar = callPackage ../development/python-modules/xgrammar { };
+
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
 
   xiaomi-ble = callPackage ../development/python-modules/xiaomi-ble { };
