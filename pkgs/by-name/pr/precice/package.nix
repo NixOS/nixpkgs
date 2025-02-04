@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DPRECICE_PETScMapping=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DPYTHON_LIBRARIES=${python3.libPrefix}"
-    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+    (lib.cmakeBool "PRECICE_PETScMapping" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    (lib.cmakeFeature "PYTHON_LIBRARIES" python3.libPrefix)
+    (lib.cmakeFeature "PYTHON_INCLUDE_DIR" "${python3}/include/${python3.libPrefix}")
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
