@@ -1,6 +1,7 @@
 {
   android-tools,
   cacert,
+  copyDesktopItems,
   fetchFromGitHub,
   lib,
   makeDesktopItem,
@@ -23,7 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   disabled = python3.pythonOlder "3.11";
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+  ];
 
   buildInputs = with python3.pkgs; [
     android-tools
@@ -71,18 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  desktopItem = makeDesktopItem {
-    desktopName = "PixelFlasher";
-    name = "pixelflasher";
-    exec = "pixelflasher";
-    icon = "pixelflasher";
-    categories = [ "Utility" ];
-    genericName = finalAttrs.meta.description;
-    noDisplay = false;
-    startupNotify = true;
-    terminal = false;
-    type = "Application";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "PixelFlasher";
+      name = "pixelflasher";
+      exec = "pixelflasher";
+      icon = "pixelflasher";
+      categories = [ "Utility" ];
+      genericName = finalAttrs.meta.description;
+      noDisplay = false;
+      startupNotify = true;
+      terminal = false;
+      type = "Application";
+    })
+  ];
 
   passthru.updateScript = nix-update-script { };
 
