@@ -1,0 +1,25 @@
+From df2ce9fb48a3790407646a388e0d220a75496c52 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Wed, 3 Nov 2021 14:23:38 +0100
+Subject: [PATCH] /var/run -> /run
+
+---
+ lxd_image_server/tools/config.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lxd_image_server/tools/config.py b/lxd_image_server/tools/config.py
+index 60e8973..23d392a 100644
+--- a/lxd_image_server/tools/config.py
++++ b/lxd_image_server/tools/config.py
+@@ -9,7 +9,7 @@ import confight
+ class Config():
+ 
+     _lock = Lock()
+-    pidfile = Path('/var/run/lxd-image-server/pidfile')
++    pidfile = Path('/run/lxd-image-server/pidfile')
+     data = {}
+ 
+     @classmethod
+-- 
+2.33.0
+

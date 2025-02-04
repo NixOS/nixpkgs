@@ -1,0 +1,94 @@
+--- a/platforms/unix/config/Makefile.install
++++ b/platforms/unix/config/Makefile.install
+@@ -101,10 +101,10 @@ uninstall-image : getversion
+ 
+ install-sources :
+ 	$(MKINSTALLDIRS) $(ROOT)$(imgdir)
+-	$(INSTALL_DATA) $(topdir)/SqueakV$(SQ_MAJOR).sources $(ROOT)$(imgdir)
++	$(INSTALL_DATA) $(topdir)/SqueakV$(SQ_SRC_VERSION).sources $(ROOT)$(imgdir)
+ 
+ uninstall-sources :
+-	@$(UNINSTALL) $(ROOT)$(imgdir) SqueakV$(SQ_MAJOR).sources
++	@$(UNINSTALL) $(ROOT)$(imgdir) SqueakV$(SQ_SRC_VERSION).sources
+ 
+ # npsqueak
+ 
+--- a/platforms/unix/config/configure.ac
++++ b/platforms/unix/config/configure.ac
+@@ -122,7 +122,7 @@ AC_SUBST(vmpdir)
+ AC_SUBST(vmmcfg)
+ AC_SUBST(blddir)
+ 
+-SQ_VERSION=${SQ_MAJOR}.${SQ_MINOR}-${SQ_UPDATE}
++AS_VAR_SET_IF([SQ_VERSION], [], [SQ_VERSION=${SQ_MAJOR}.${SQ_MINOR}-${SQ_UPDATE}])
+ 
+ AC_DEFINE_UNQUOTED(SQ_VERSION, "${SQ_VERSION}", [Squeak version])
+ 
+@@ -131,21 +131,24 @@ AC_SUBST(SQ_MINOR)
+ AC_SUBST(SQ_UPDATE)
+ AC_SUBST(SQ_VERSION)
+ 
++AS_VAR_SET_IF([SQ_SRC_VERSION], [], [SQ_SRC_VERSION=${SQ_MAJOR}])
++AC_SUBST(SQ_SRC_VERSION)
++
+ #VM_VERSION=${VM_MAJOR}.${VM_MINOR}-${VM_RELEASE}
+ 
+ #AC_DEFINE_UNQUOTED(VM_VERSION, "${VM_VERSION}", [VM version])
+ 
+-#AC_SUBST(VM_MAJOR)
+-#AC_SUBST(VM_MINOR)
+-#AC_SUBST(VM_RELEASE)
+-#AC_SUBST(VM_VERSION)
++AC_SUBST(VM_MAJOR)
++AC_SUBST(VM_MINOR)
++AC_SUBST(VM_RELEASE)
++AC_SUBST(VM_VERSION)
+ 
+ # libdir contains ${exec_prefix}, so we have to default and expand early
+ test "x$prefix" = xNONE && prefix=$ac_default_prefix
+ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
+ imgdir=`eval echo ${libdir}/squeak`
+ expanded_relative_imgdir=`eval echo lib/squeak/${VM_VERSION}`
+-plgdir='${imgdir}/`${blddir}/getversion VERSION_TAG`'
++plgdir=`eval echo '${imgdir}'/${VM_VERSION}`
+ 
+ AC_SUBST(imgdir)
+ AC_SUBST(expanded_relative_imgdir)
+--- a/platforms/unix/config/inisqueak.in
++++ b/platforms/unix/config/inisqueak.in
+@@ -32,6 +32,7 @@
+ 
+ MAJOR=@SQ_MAJOR@
+ VERSION=@SQ_VERSION@
++SRC_VERSION=@SQ_SRC_VERSION@
+ 
+ prefix=@prefix@
+ exec_prefix=@exec_prefix@
+@@ -77,7 +78,7 @@ if test "$1" != ""; then
+ fi
+ 
+ SQUEAK=${bindir}/squeak
+-SOURCES=SqueakV${MAJOR}.sources
++SOURCES=SqueakV${SRC_VERSION}.sources
+ IMAGE=squeak.image.gz
+ CHANGES=squeak.changes.gz
+ 
+--- a/platforms/unix/config/make.cfg.in
++++ b/platforms/unix/config/make.cfg.in
+@@ -96,6 +96,16 @@ X_INCLUDES=	@X_INCLUDES@
+ X_LIBS=		@X_LIBS@
+ 
+ 
++SQ_MAJOR=	@SQ_MAJOR@
++SQ_MINOR=	@SQ_MINOR@
++SQ_UPDATE=	@SQ_UPDATE@
++SQ_VERSION=	@SQ_VERSION@
++SQ_SRC_VERSION=	@SQ_SRC_VERSION@
++VM_MAJOR=	@VM_MAJOR@
++VM_MINOR=	@VM_MINOR@
++VM_RELEASE=	@VM_RELEASE@
++VM_VERSION=	@VM_VERSION@
++
+ INTERP=		@INTERP@
+ 
+ VM_APP_ICONS=	@VM_APP_ICONS@

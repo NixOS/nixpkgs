@@ -1,0 +1,11 @@
+--- a/src/pl.h
++++ b/src/pl.h
+@@ -8,7 +8,7 @@
+ #include <stdlib.h>
+ #include "plg.h"
+ 
+-#define PREFABS_DIR ""  	 /* INSTALLERS can set this to a valid pathname, so that users don't need to set PLOTICUS_PREFABS env var */
++#define PREFABS_DIR "@out@/share/ploticus/prefabs"  	 /* INSTALLERS can set this to a valid pathname, so that users don't need to set PLOTICUS_PREFABS env var */
+ 
+ #define PLVERSION "2.42-May2013" /* see also the Copyright page, and page headers and footers */
+ 
