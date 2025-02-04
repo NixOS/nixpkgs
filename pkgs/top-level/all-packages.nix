@@ -10746,6 +10746,8 @@ with pkgs;
     openexr = openexr_3;
   };
 
+  vllm = with python3Packages; toPythonApplication vllm;
+
   vte-gtk4 = vte.override {
     gtkVersion = "4";
   };
