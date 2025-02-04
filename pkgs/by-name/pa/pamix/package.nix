@@ -7,17 +7,18 @@
   cmake,
   libpulseaudio,
   ncurses,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pamix";
   version = "1.6";
 
   src = fetchFromGitHub {
     owner = "patroclos";
     repo = "pamix";
-    rev = version;
-    sha256 = "1d44ggnwkf2gff62959pj45v3a2k091q8v154wc5pmzamam458wp";
+    tag = finalAttrs.version;
+    hash = "sha256-l6NCqqrq11sYJyVshEMCU6ixC5E3lSSMc0+4ye17hLQ=";
   };
 
   patches = [
@@ -35,24 +36,28 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc/xdg"
+    substituteInPlace CMakeLists.txt --replace-fail "/etc" "$out/etc/xdg"
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libpulseaudio
     ncurses
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Pulseaudio terminal mixer";
     homepage = "https://github.com/patroclos/PAmix";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ericsagnes ];
+    changelog = "https://github.com/patroclos/PAmix/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ericsagnes ];
     mainProgram = "pamix";
   };
-}
+})
