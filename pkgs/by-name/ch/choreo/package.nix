@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     [
       cargo-tauri_1.hook
 
-      nodejs_22
+      nodejs
       pnpm_9.configHook
 
       pkg-config
