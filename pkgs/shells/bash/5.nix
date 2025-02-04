@@ -6,8 +6,7 @@
 , bison
 , util-linux
 
-  # patch for cygwin requires readline support
-, interactive ? stdenv.hostPlatform.isCygwin
+, interactive ? true
 , readline
 , withDocs ? null
 , forFHSEnv ? false
