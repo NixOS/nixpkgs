@@ -928,6 +928,7 @@ in {
   rsyslogd = handleTest ./rsyslogd.nix {};
   rtkit = runTest ./rtkit.nix;
   rtorrent = handleTest ./rtorrent.nix {};
+  rustic = handleTest ./rustic.nix {};
   rustls-libssl = handleTest ./rustls-libssl.nix {};
   rxe = handleTest ./rxe.nix {};
   sabnzbd = handleTest ./sabnzbd.nix {};
