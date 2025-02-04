@@ -6,10 +6,10 @@
 }:
 let
   pname = "vrcx";
-  version = "2025-01-27T00.10-0ee8137";
+  version = "2025-02-03T13.01-cea4f7b";
   src = fetchurl {
     url = "https://github.com/Natsumi-sama/VRCX/releases/download/${version}/VRCX_${version}.AppImage";
-    hash = "sha256-kaQOME3jBLr7QJjc7rubNqFu3z+LmiP+UHe2EWYC7ek=";
+    hash = "sha256-bfx2dTsMX/i4uUQVIR1lpt1IKQPJWY17WU6nOv57gYY=";
   };
   appimageContents = appimageTools.extract {
     inherit pname src version;
