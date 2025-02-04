@@ -47,7 +47,9 @@ stdenv.mkDerivation rec {
     lapack
   ] ++ lib.optional hdf5-support hdf5 ++ lib.optional petsc-withp4est p4est ++ lib.optionals withParmetis [ metis parmetis ];
 
-  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postPatch = ''
+    patchShebangs ./lib/petsc/bin
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config/install.py \
       --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
   '';
@@ -67,6 +69,15 @@ stdenv.mkDerivation rec {
     "--with-metis-dir=${metis}"
     "--with-parmetis=1"
     "--with-parmetis-dir=${parmetis}"
+  ] ++ lib.optionals petsc-withp4est [
+    "--with-p4est=1"
+    "--with-zlib-include=${zlib.dev}/include"
+    "--with-zlib-lib=[-L${zlib}/lib,-lz]"
+  ] ++ lib.optionals hdf5-support [
+    "--with-hdf5=1"
+    "--with-hdf5-fortran-bindings=1"
+    "--with-hdf5-include=${hdf5.dev}/include"
+    "--with-hdf5-lib=[-L${hdf5}/lib,-lhdf5]"
   ] ++ lib.optionals petsc-optimized [
     "--with-debugging=0"
     "COPTFLAGS=-O3"
@@ -74,22 +85,6 @@ stdenv.mkDerivation rec {
     "CXXOPTFLAGS=-O3"
     "CXXFLAGS=-O3"
   ];
-  preConfigure = ''
-    patchShebangs ./lib/petsc/bin
-  '' + lib.optionalString petsc-withp4est ''
-    configureFlagsArray+=(
-      "--with-p4est=1"
-      "--with-zlib-include=${zlib.dev}/include"
-      "--with-zlib-lib=-L${zlib}/lib -lz"
-    )
-  '' + lib.optionalString hdf5-support ''
-    configureFlagsArray+=(
-      "--with-hdf5=1"
-      "--with-hdf5-fortran-bindings=1"
-      "--with-hdf5-include=${hdf5.dev}/include"
-      "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
-    )
-  '';
 
   hardeningDisable = lib.optionals (!petsc-optimized) [
     "fortify"
