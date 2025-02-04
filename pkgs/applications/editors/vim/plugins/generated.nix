@@ -1398,6 +1398,18 @@ final: prev:
     meta.homepage = "https://github.com/kwkarlwang/bufjump.nvim/";
   };
 
+  bufresize-nvim = buildVimPlugin {
+    pname = "bufresize.nvim";
+    version = "2022-03-21";
+    src = fetchFromGitHub {
+      owner = "kwkarlwang";
+      repo = "bufresize.nvim";
+      rev = "3b19527ab936d6910484dcc20fb59bdb12322d8b";
+      sha256 = "1s0zmpwg7z76l3ca1p426mkh33cw94m18q7rfsvnz4h4xwlsafpa";
+    };
+    meta.homepage = "https://github.com/kwkarlwang/bufresize.nvim/";
+  };
+
   bullets-vim = buildVimPlugin {
     pname = "bullets.vim";
     version = "2024-08-04";
