@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.4.3";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    hash = "sha256-eI4sqzTaA4iRmhEY3SgySxWiCzGJ7nVebC2RVlk7OHk=";
+    hash = "sha256-1MLF5nurs4Yz5jZKIA2wLLbLuYjS+gY1ZZEL4h1C3Xw=";
   };
 
   outputs = [
