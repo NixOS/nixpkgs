@@ -1302,6 +1302,18 @@ final: prev:
     meta.homepage = "https://github.com/giuxtaposition/blink-cmp-copilot/";
   };
 
+  blink-cmp-dictionary = buildVimPlugin {
+    pname = "blink-cmp-dictionary";
+    version = "2025-01-12";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-dictionary";
+      rev = "07cc2e49bb52ebff4e8b83d1801ad6441edf90a2";
+      sha256 = "17c41flnjp25c5gry4lq8ik8mk3pbh1qwj86rby57jr4f4wvfykk";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-dictionary/";
+  };
+
   blink-cmp-spell = buildVimPlugin {
     pname = "blink-cmp-spell";
     version = "2025-02-01";
@@ -7422,6 +7434,18 @@ final: prev:
       sha256 = "05k4cgcrz0gj92xy685bd4p6nh2jmaywc2f5sw1lap0v685h7n79";
     };
     meta.homepage = "https://github.com/wfxr/minimap.vim/";
+  };
+
+  minuet-ai-nvim = buildVimPlugin {
+    pname = "minuet-ai.nvim";
+    version = "2025-02-03";
+    src = fetchFromGitHub {
+      owner = "milanglacier";
+      repo = "minuet-ai.nvim";
+      rev = "9a264284573b837dc0202049166a0564a70deaed";
+      sha256 = "06d7s9949aylda4vq36h4s9hnnp3lycwm2nrjid5vxb98gy3d3xn";
+    };
+    meta.homepage = "https://github.com/milanglacier/minuet-ai.nvim/";
   };
 
   mkdir-nvim = buildVimPlugin {
