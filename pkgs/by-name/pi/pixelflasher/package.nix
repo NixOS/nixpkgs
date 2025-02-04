@@ -26,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     copyDesktopItems
+    python3.pkgs.pyinstaller
     wrapGAppsHook3
   ];
 
@@ -44,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     platformdirs
     protobuf
     psutil
-    pyinstaller
     pyperclip
     requests
     rsa
