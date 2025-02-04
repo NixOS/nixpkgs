@@ -1322,6 +1322,8 @@ let
 
       dendron.dendron-paste-image = callPackage ./dendron.dendron-paste-image { };
 
+      dendron.dendron-snippet-maker = callPackage ./dendron.dendron-snippet-maker { };
+
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-deno";
