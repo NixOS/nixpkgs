@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,19 +15,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r1zcXKLqw/gK+9k3SX7OCBaZhvV2ya5VC9O3h+WdkyY=";
   };
 
-  makeFlags = [
-    "CROSS=${stdenv.cc.targetPrefix}"
-    "CC=${lib.getExe stdenv.cc}"
-  ];
+  dontConfigure = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  buildPhase = ''
+    runHook preBuild
 
-  buildFlags = [ "pkg-config" ];
+    $CC -Os -o pkg-config generic_main.c
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 pkg-config -t $out/bin
+    install -Dm755 pkg-config${stdenv.hostPlatform.extensions.executable} -t $out/bin
 
     runHook postInstall
   '';
