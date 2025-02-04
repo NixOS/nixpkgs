@@ -367,6 +367,12 @@ buildPythonPackage rec {
       VLLM_TARGET_DEVICE = "cpu";
     };
 
+  preConfigure = ''
+    # See: https://github.com/vllm-project/vllm/blob/v0.7.1/setup.py#L75-L109
+    # There's also NVCC_THREADS but Nix/Nixpkgs doesn't really have this concept.
+    export MAX_JOBS="$NIX_BUILD_CORES"
+  '';
+
   pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "vllm" ];
