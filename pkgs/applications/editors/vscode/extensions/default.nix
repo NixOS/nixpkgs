@@ -1288,6 +1288,8 @@ let
         callPackage ./dendron.dendron-markdown-preview-enhanced
           { };
 
+      dendron.dendron-paste-image = callPackage ./dendron.dendron-paste-image { };
+
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-deno";
