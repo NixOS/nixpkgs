@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3,
   cacert,
+  addBinToPathHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -43,16 +44,17 @@ python3.pkgs.buildPythonApplication rec {
 
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      pytestCheckHook
+      pytest-asyncio
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pythonImportsCheck = [ "gallia" ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
 
   meta = with lib; {
     description = "Extendable Pentesting Framework for the Automotive Domain";
