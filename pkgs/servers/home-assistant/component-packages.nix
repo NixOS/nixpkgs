@@ -3823,7 +3823,8 @@
       ];
     "nmbs" =
       ps: with ps; [
-      ]; # missing inputs: pyrail
+        pyrail
+      ];
     "no_ip" =
       ps: with ps; [
       ];
@@ -3894,7 +3895,8 @@
       ];
     "nyt_games" =
       ps: with ps; [
-      ]; # missing inputs: nyt_games
+        nyt-games
+      ];
     "nzbget" =
       ps: with ps; [
       ]; # missing inputs: pynzbgetapi
@@ -4082,7 +4084,8 @@
       ]; # missing inputs: pyosoenergyapi
     "osramlightify" =
       ps: with ps; [
-      ]; # missing inputs: lightify
+        lightify
+      ];
     "otbr" =
       ps: with ps; [
         aiohasupervisor
@@ -4103,7 +4106,8 @@
       ];
     "ourgroceries" =
       ps: with ps; [
-      ]; # missing inputs: ourgroceries
+        ourgroceries
+      ];
     "overkiz" =
       ps: with ps; [
         pyoverkiz
@@ -7037,6 +7041,7 @@
     "nut"
     "nws"
     "nx584"
+    "nyt_games"
     "obihai"
     "octoprint"
     "ohme"
@@ -7065,6 +7070,7 @@
     "oralb"
     "otbr"
     "otp"
+    "ourgroceries"
     "overkiz"
     "ovo_energy"
     "owntracks"

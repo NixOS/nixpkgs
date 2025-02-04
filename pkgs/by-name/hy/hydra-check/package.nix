@@ -6,20 +6,22 @@
   openssl,
   stdenv,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hydra-check";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "hydra-check";
-    rev = "v${version}";
-    hash = "sha256-QdCXToHNymOdlTyQjk9eo7LTznGKB+3pIOgjjaGoTXg=";
+    tag = "v${version}";
+    hash = "sha256-h8bs6oe8zkzEDCoC9F6IzTaTkNf4eAAjt663V0qn73I=";
   };
 
-  cargoHash = "sha256-iqFUMok36G1qSUbfY7WD6etY0dtfro3F7mLoOELzxbs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aV4URx9bGAOLWRh/kFDU67GiXk7RdCqfahG+fZPfdUo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,6 +38,12 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/hydra-check --shell-completion fish) \
       --zsh <($out/bin/hydra-check --shell-completion zsh)
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Check hydra for the build status of a package";
