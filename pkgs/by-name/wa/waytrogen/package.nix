@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waytrogen";
-  version = "0.6.3";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = version;
-    hash = "sha256-jkrvtwkzlsQgbw8/N4uzeqQ3fVSur2oa21IOXRRgh9I=";
+    hash = "sha256-JlqRlB/iMeFp229bF4u7M+Z9m9zlizHgqbfmszNwd9k=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iCcYlBqXo76QLuzdd1/YbLL99eCOnniHDAOllX8XyXQ=";
+  cargoHash = "sha256-S4DPvQ2unFt13eLFS91z7TyfFz7uwMMIgsEQ/JPe0e8=";
 
   nativeBuildInputs = [
     pkg-config
