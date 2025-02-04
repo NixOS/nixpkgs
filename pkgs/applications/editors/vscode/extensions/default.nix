@@ -1282,6 +1282,8 @@ let
         };
       };
 
+      dendron.dendron = callPackage ./dendron.dendron { };
+
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-deno";
