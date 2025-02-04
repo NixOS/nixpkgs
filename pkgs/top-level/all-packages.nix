@@ -5592,11 +5592,9 @@ with pkgs;
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = callPackage ../shells/bash/5.nix {
     interactive = true;
-    withDocs = true;
   };
   bashInteractiveFHS = callPackage ../shells/bash/5.nix {
     interactive = true;
-    withDocs = true;
     forFHSEnv = true;
   };
 
