@@ -298,6 +298,7 @@ mapAliases {
   dart_stable = throw "'dart_stable' has been renamed to/replaced by 'dart'"; # Converted to throw 2024-10-17
   dart-sass-embedded = throw "dart-sass-embedded has been removed from nixpkgs, as is now included in Dart Sass itself.";
   dat = nodePackages.dat;
+  dave = throw "'dave' has been removed as it has been archived upstream. Consider using 'webdav' instead"; # Added 2025-02-03
   dbeaver = throw "'dbeaver' has been renamed to/replaced by 'dbeaver-bin'"; # Added 2024-05-16
   dbus-map = throw "'dbus-map' has been dropped as it is unmaintained"; # Added 2024-11-01
   deadpixi-sam = deadpixi-sam-unstable;

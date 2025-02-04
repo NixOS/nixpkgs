@@ -296,6 +296,10 @@ in
     dependencies = [ self.blink-cmp ];
   };
 
+  blink-cmp-git = super.blink-cmp-git.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };
