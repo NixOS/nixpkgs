@@ -5,6 +5,7 @@
   cctools,
   gfortran,
   python3,
+  withPetsc4py ? false,
   blas,
   lapack,
   mpiSupport ? true,
@@ -37,11 +38,19 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    python3
-    gfortran
-    pkg-config
-  ] ++ lib.optional mpiSupport mpi;
+
+  nativeBuildInputs =
+    [
+      python3
+      gfortran
+      pkg-config
+    ]
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optionals withPetsc4py [
+      python3.pkgs.setuptools
+      python3.pkgs.cython
+    ];
+
   buildInputs =
     [
       blas
@@ -53,6 +62,8 @@ stdenv.mkDerivation rec {
       metis
       parmetis
     ];
+
+  propagatedBuildInputs = lib.optional withPetsc4py python3.pkgs.numpy;
 
   postPatch =
     ''
@@ -71,6 +82,7 @@ stdenv.mkDerivation rec {
       "--with-precision=${petsc-precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
+    ++ lib.optional withPetsc4py "--with-petsc4py=1"
     ++ lib.optionals mpiSupport [
       "--CC=mpicc"
       "--with-cxx=mpicxx"
