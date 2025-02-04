@@ -2,30 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hashrat";
-  version = "1.22";
+  version = "1.23";
 
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "Hashrat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mjjK315OUUFVdUY+zcCvm7yeo7XxourR1sghWbeFT7c=";
+    hash = "sha256-dDtn01eoODgRtsbEdtuXhib3fZLosP8ajJBGaG8Skss=";
   };
-
-  patches = [
-    # fix cross compilation by replacing hardcoded ar with AC_PROG_AR
-    # https://github.com/ColumPaget/Hashrat/pull/27
-    (fetchpatch {
-      url = "https://github.com/ColumPaget/Hashrat/commit/a82615e02021245850a1703e613055da2520c8fd.patch";
-      hash = "sha256-tjyhM2ahZBRoRP8WjyQhrI3l20oaqMtfYmOeAZVEZqU=";
-    })
-  ];
 
   configureFlags = [ "--enable-xattr" ];
 
