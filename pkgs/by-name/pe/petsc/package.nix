@@ -20,6 +20,10 @@
   withParmetis ? false,
   scotch,
   withPtscotch ? false,
+  scalapack,
+  withScalapack ? false,
+  mumps_par,
+  withMumps ? false,
   pkg-config,
   p4est,
   zlib, # propagated by p4est but required by petsc
@@ -35,6 +39,8 @@ assert petsc-withp4est -> p4est.mpiSupport;
 assert withParmetis -> (withMetis && mpiSupport);
 
 assert withPtscotch -> mpiSupport;
+assert withScalapack -> mpiSupport;
+assert withMumps -> withScalapack;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
@@ -68,7 +74,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional petsc-withp4est p4est
     ++ lib.optional withMetis metis
     ++ lib.optional withParmetis parmetis
-    ++ lib.optional withPtscotch scotch;
+    ++ lib.optional withPtscotch scotch
+    ++ lib.optional withScalapack scalapack
+    ++ lib.optional withMumps mumps_par;
 
   propagatedBuildInputs = lib.optional withPetsc4py python3.pkgs.numpy;
 
@@ -107,6 +115,14 @@ stdenv.mkDerivation rec {
       "--with-ptscotch=1"
       "--with-ptscotch-include=${scotch.dev}/include"
       "--with-ptscotch-lib=[-L${scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
+    ]
+    ++ lib.optionals withScalapack [
+      "--with-scalapack=1"
+      "--with-scalapack-dir=${scalapack}"
+    ]
+    ++ lib.optionals withMumps [
+      "--with-mumps=1"
+      "--with-mumps-dir=${mumps_par}"
     ]
     ++ lib.optionals petsc-withp4est [
       "--with-p4est=1"
