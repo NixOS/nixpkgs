@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     owner = "SleipnirGroup";
     repo = pname;
     rev = "v${version}";
-    hash = lib.fakeHash;
+    hash = "sha256-/6vo0wei+a4Uz5qxhXkGJA6+gEJX8qjjVHzsArduK2Q=";
   };
 
   cargoRoot = "src-tauri";
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-/6vo0wei+a4Uz5qxhXkGJA6+gEJX8qjjVHzsArduK2Q=";
+    hash = lib.fakeHash;
   };
 
   nativeBuildInputs =
