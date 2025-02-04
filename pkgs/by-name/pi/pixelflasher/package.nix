@@ -61,9 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D dist/PixelFlasher $out/bin/pixelflasher
     install -D images/icon-dark-256.png $out/share/pixmaps/pixelflasher.png
-    ln -s ${finalAttrs.desktopItem}/share/applications $out/share/
+    runHook postInstall
   '';
 
   preFixup = ''
