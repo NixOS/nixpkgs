@@ -292,6 +292,10 @@ in
     dependencies = [ self.copilot-lua ];
   };
 
+  blink-cmp-dictionary = super.blink-cmp-dictionary.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
   };
