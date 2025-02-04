@@ -26,7 +26,15 @@ import ./make-test-python.nix (
           authrpc = {
             enable = true;
             port = 18551;
+            jwtsecret = "/etc/geth/jwt";
           };
+        };
+        environment.etc."geth/jwt" = {
+          # Make this unreadable by the service's dynamic user, to ensure it's loaded via LoadCredential.
+          mode = "0400";
+          user = "root";
+          # openssl rand -hex 32 | tr -d "\n"
+          text = "39327aa201f12b31c9f955328025a69abfa6e8ab6e74b13d95dae6a98f963332";
         };
       };
 

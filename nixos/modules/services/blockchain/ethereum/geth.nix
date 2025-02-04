@@ -212,6 +212,9 @@ in
             DynamicUser = true;
             Restart = "always";
             StateDirectory = stateDir;
+            LoadCredential = lib.optionalString (
+              cfg.authrpc.jwtsecret != ""
+            ) "jwtsecret:${cfg.authrpc.jwtsecret}";
 
             # Hardening measures
             PrivateTmp = "true";
@@ -244,7 +247,7 @@ in
               --authrpc.addr ${cfg.authrpc.address} --authrpc.port ${toString cfg.authrpc.port} --authrpc.vhosts ${lib.concatStringsSep "," cfg.authrpc.vhosts} \
               ${
                 if (cfg.authrpc.jwtsecret != "") then
-                  ''--authrpc.jwtsecret ${cfg.authrpc.jwtsecret}''
+                  ''--authrpc.jwtsecret "$CREDENTIALS_DIRECTORY"/jwtsecret''
                 else
                   ''--authrpc.jwtsecret ${dataDir}/geth/jwtsecret''
               } \
