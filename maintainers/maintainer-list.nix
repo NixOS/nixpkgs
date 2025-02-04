@@ -6876,6 +6876,12 @@
     github = "emilytrau";
     githubId = 13267947;
   };
+  Emin017 = {
+    email = "cchuqiming@gmail.com";
+    github = "Emin017";
+    githubId = 99674037;
+    name = "Qiming Chu";
+  };
   emmabastas = {
     email = "emma.bastas@protonmail.com";
     matrix = "@emmabastas:matrix.org";
