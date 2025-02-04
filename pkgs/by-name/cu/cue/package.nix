@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-/2oVu1zij+8/qdDl4gApsNqdKwb1O7q5Xcdc3/djGn8=";
   };
 
