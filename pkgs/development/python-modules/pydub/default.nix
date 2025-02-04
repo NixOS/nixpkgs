@@ -1,5 +1,6 @@
 {
   lib,
+  audioop-lts,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -40,7 +41,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    audioop-lts
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
