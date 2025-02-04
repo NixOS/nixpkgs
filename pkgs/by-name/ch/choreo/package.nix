@@ -2,27 +2,15 @@
   lib,
   stdenv,
   rustPlatform,
+  fetchNpmDeps,
   cargo-tauri_1,
-  darwin,
   glib-networking,
-  nodejs_22,
+  nodejs,
+  npmHooks,
   openssl,
   pkg-config,
-  at-spi2-atk,
-  atkmm,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  harfbuzz,
-  librsvg,
-  libsoup_3,
-  pango,
-  webkitgtk_4_1,
-  alsa-lib,
-  zlib,
-  pnpm_9,
-  fetchFromGitHub,
+  webkitgtk_4_0,
+  wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -55,6 +43,7 @@ rustPlatform.buildRustPackage rec {
       pnpm_9.configHook
 
       pkg-config
+      wrapGAppsHook4
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rustPlatform.bindgenHook
@@ -64,19 +53,7 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
-      at-spi2-atk
-      atkmm
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      harfbuzz
-      librsvg
-      libsoup_3
-      pango
-      webkitgtk_4_1
-      zlib
-      alsa-lib
+      webkitgtk_4_0
     ];
 
   meta = {
