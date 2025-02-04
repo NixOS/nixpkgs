@@ -15,6 +15,7 @@
   hdf5-support ? false,
   hdf5,
   metis,
+  withMetis ? false,
   parmetis,
   withParmetis ? false,
   pkg-config,
@@ -27,6 +28,9 @@
 
 # This version of PETSc does not support a non-MPI p4est build
 assert petsc-withp4est -> p4est.mpiSupport;
+
+# Package parmetis depend on metis and mpi support
+assert withParmetis -> (withMetis && mpiSupport);
 
 stdenv.mkDerivation rec {
   pname = "petsc";
@@ -58,10 +62,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional hdf5-support hdf5
     ++ lib.optional petsc-withp4est p4est
-    ++ lib.optionals withParmetis [
-      metis
-      parmetis
-    ];
+    ++ lib.optional withMetis metis
+    ++ lib.optional withParmetis parmetis;
 
   propagatedBuildInputs = lib.optional withPetsc4py python3.pkgs.numpy;
 
@@ -88,9 +90,11 @@ stdenv.mkDerivation rec {
       "--with-cxx=mpicxx"
       "--with-fc=mpif90"
     ]
-    ++ lib.optionals (mpiSupport && withParmetis) [
+    ++ lib.optionals withMetis [
       "--with-metis=1"
       "--with-metis-dir=${metis}"
+    ]
+    ++ lib.optionals withParmetis [
       "--with-parmetis=1"
       "--with-parmetis-dir=${parmetis}"
     ]
