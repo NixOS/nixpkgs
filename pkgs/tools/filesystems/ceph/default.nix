@@ -19,6 +19,7 @@
   nasm,
   pkg-config,
   which,
+  openssl,
 
   # Tests
   nixosTests,
@@ -261,6 +262,9 @@ let
           propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
             self.flaky
           ];
+          # hack: avoid building docs due to incompatibility with current sphinx
+          nativeBuildInputs = [ openssl ]; # old.nativeBuildInputs but without sphinx*
+          outputs = lib.filter (o: o != "doc") old.outputs;
         });
 
         fastapi = super.fastapi.overridePythonAttrs (old: rec {
