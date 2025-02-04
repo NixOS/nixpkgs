@@ -4625,6 +4625,11 @@
     githubId = 87764;
     name = "Ben Ford";
   };
+  commiterate = {
+    github = "commiterate";
+    githubId = 111539270;
+    name = "commiterate";
+  };
   CompEng0001 = {
     email = "sb1501@canterbury.ac.uk";
     github = "CompEng0001";
@@ -6875,6 +6880,12 @@
     email = "emily+nix@downunderctf.com";
     github = "emilytrau";
     githubId = 13267947;
+  };
+  Emin017 = {
+    email = "cchuqiming@gmail.com";
+    github = "Emin017";
+    githubId = 99674037;
+    name = "Qiming Chu";
   };
   emmabastas = {
     email = "emma.bastas@protonmail.com";
@@ -15850,6 +15861,12 @@
     github = "mudrii";
     githubId = 220262;
     name = "Ion Mudreac";
+  };
+  MulliganSecurity = {
+    email = "mulligansecurity@riseup.net";
+    github = "MulliganSecurity";
+    githubId = 196982523;
+    name = "MulliganSecurity";
   };
   multisn8 = {
     email = "all-things-nix@multisamplednight.com";
