@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
     description = "Keyboard and hardware I/O driver for TUXEDO Computers laptops";
     homepage = "https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Drivers for several platform devices for TUXEDO notebooks:
       - Driver for Fn-keys
