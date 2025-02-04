@@ -11,7 +11,7 @@
   */
   cargoSetupHook = stdenv.mkDerivation {
     name = "test-cargoSetupHook";
-    src = ./hello;
+    src = ./example-rust-project;
     cargoVendorDir = "hello";
     nativeBuildInputs = [
       rustPlatform.cargoSetupHook
@@ -28,7 +28,7 @@
 
   cargoBuildHook = stdenv.mkDerivation {
     name = "test-cargoBuildHook";
-    src = ./hello;
+    src = ./example-rust-project;
     cargoBuildType = "release";
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
       "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
@@ -44,7 +44,7 @@
 
   cargoInstallHook = stdenv.mkDerivation {
     name = "test-cargoInstallHook";
-    src = ./hello;
+    src = ./example-rust-project;
     cargoBuildType = "release";
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
       "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
@@ -60,7 +60,7 @@
 
   cargoCheckHook = stdenv.mkDerivation {
     name = "test-cargoCheckHook";
-    src = ./hello;
+    src = ./example-rust-project;
     cargoBuildType = "release";
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
       "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
@@ -82,7 +82,7 @@
 
   cargoNextestHook = stdenv.mkDerivation {
     name = "test-cargoNextestHook";
-    src = ./hello;
+    src = ./example-rust-project;
     cargoBuildType = "release";
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
       "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
