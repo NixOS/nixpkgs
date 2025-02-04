@@ -40,11 +40,11 @@ rustPlatform.buildRustPackage rec {
   buildAndTestSubdir = cargoRoot;
 
   sourceRoot = src.name;
-  cargoHash = lib.fakeHash;
+  cargoHash = "sha256-saJPtBSc9aiBTawTnRfnv+88YlTUxZkFyxnFDdadTUU=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = lib.fakeHash;
+    hash = "sha256-aB02TFERyohQA+RTMdZTu/MBclqw6fXVSVGtt0g6vhs=";
   };
 
   nativeBuildInputs =
