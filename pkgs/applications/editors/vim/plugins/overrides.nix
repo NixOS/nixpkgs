@@ -313,6 +313,10 @@ in
     nvimSkipModule = [ "bufferline.commands" ];
   };
 
+  bufresize-nvim = super.bufresize-nvim.overrideAttrs {
+    meta.license = lib.licenses.mit;
+  };
+
   catppuccin-nvim = super.catppuccin-nvim.overrideAttrs {
     nvimSkipModule = [
       "catppuccin.groups.integrations.noice"
