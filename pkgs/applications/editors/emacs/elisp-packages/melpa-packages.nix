@@ -214,8 +214,10 @@ let
         });
 
         erlang = super.erlang.overrideAttrs (attrs: {
-          buildInputs = attrs.buildInputs ++ [
+          nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [
             pkgs.perl
+          ];
+          buildInputs = attrs.buildInputs or [ ] ++ [
             pkgs.ncurses
           ];
         });
@@ -595,11 +597,13 @@ let
             export EZMQ_LIBDIR=$(mktemp -d)
             make
           '';
-          nativeBuildInputs = old.nativeBuildInputs ++ [
+          nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
             pkgs.autoconf
             pkgs.automake
             pkgs.pkg-config
             pkgs.libtool
+          ];
+          buildInputs = old.buildInputs or [ ] ++ [
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
           postInstall = (old.postInstall or "") + "\n" + ''
