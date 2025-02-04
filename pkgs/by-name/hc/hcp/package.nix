@@ -3,8 +3,10 @@
   buildGoModule,
   fetchFromGitHub,
   getent,
+  hcp,
   makeBinaryWrapper,
   nix-update-script,
+  testers,
   xdg-utils,
 }:
 
@@ -38,7 +40,14 @@ buildGoModule rec {
       }
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = hcp;
+      command = "HOME=$TMPDIR hcp version";
+      version = src.tag;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "HashiCorp Cloud Platform CLI";
