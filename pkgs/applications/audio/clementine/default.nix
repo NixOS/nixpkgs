@@ -30,7 +30,7 @@
   pkg-config,
   sparsehash,
   config,
-  makeWrapper,
+  wrapQtAppsHook,
   gst_plugins,
   util-linux,
   libunwind,
@@ -49,19 +49,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
-  version = "1.4.rc2-unstable-2024-05-12";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "clementine-player";
     repo = "Clementine";
-    rev = "7607ddcb96e79d373c4b60d9de21f3315719c7d8";
-    hash = "sha256-yOG/Je6N8YEsu5AOtxOFgDl3iqb97assYMZYMSwQqqk=";
+    tag = finalAttrs.version;
+    hash = "sha256-ges7PHsv/J0R5dqmKvS5BpYxOgy9YB8hZMXOIe16M6A=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    wrapQtAppsHook
     util-linux
     libunwind
     libselinux
@@ -125,8 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSPOTIFY_BLOB=OFF"
   ];
 
+  dontWrapQtApps = true;
+
   postInstall = ''
-    wrapProgram $out/bin/clementine \
+    wrapQtApp $out/bin/clementine \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
