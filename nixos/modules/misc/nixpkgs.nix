@@ -57,6 +57,32 @@ let
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
   };
 
+  # Additional check applied to platformType definitions, intended to guard
+  # against using elaborated platforms as option definitions.
+  # We guess whether a platform is elaborated by checking for a `parsed` attr.
+  checkPlatformDef =
+    platform:
+    if platform ? parsed then
+      builtins.trace
+        ''
+          Passing fully elaborated systems to `nixpkgs.localSystem`, `nixpkgs.crossSystem`, `nixpkgs.buildPlatform` or `nixpkgs.hostPlatform` will break composability of package sets in nixpkgs.
+          For example, `pkgs.pkgsStatic` would not work in modules anymore.
+          In practice, this usually means you have assigned `pkgs.stdenv.hostPlatform` or `pkgs.stdenv.buildPlatform` to the `nixpkgs` platform options.
+          If so, you should instead assign `pkgs.stdenv.hostPlatform.system` or `pkgs.stdenv.buildPlatform.system`.''
+        false
+    else
+      true;
+
+  platformType =
+    lib.types.coercedTo lib.types.str (system: { inherit system; }) (
+      lib.types.addCheck lib.types.attrs checkPlatformDef
+    )
+    // {
+      name = "platform-input";
+      description = "platform argument, as accepted by lib.systems.elaborate";
+      descriptionClass = "nonRestrictiveClause";
+    };
+
   hasBuildPlatform = opt.buildPlatform.highestPrio < (lib.mkOptionDefault { }).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
   hasPlatform = hasHostPlatform || hasBuildPlatform;
@@ -198,7 +224,7 @@ in
     };
 
     hostPlatform = lib.mkOption {
-      type = lib.types.either lib.types.str lib.types.attrs;
+      type = platformType;
       example = {
         system = "aarch64-linux";
       };
@@ -213,7 +239,7 @@ in
     };
 
     buildPlatform = lib.mkOption {
-      type = lib.types.either lib.types.str lib.types.attrs;
+      type = platformType;
       default = cfg.hostPlatform;
       example = {
         system = "x86_64-linux";
@@ -402,18 +428,6 @@ in
 
             Defined in:
             ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.config.files}
-          '';
-        }
-        {
-          assertion =
-            (opt.hostPlatform.isDefined -> builtins.isAttrs cfg.buildPlatform -> !(cfg.buildPlatform ? parsed))
-            && (opt.hostPlatform.isDefined -> builtins.isAttrs cfg.hostPlatform -> !(cfg.hostPlatform ? parsed))
-            && (builtins.isAttrs cfg.localSystem -> !(cfg.localSystem ? parsed))
-            && (builtins.isAttrs cfg.crossSystem -> !(cfg.crossSystem ? parsed));
-          message = ''
-            Passing fully elaborated systems to `nixpkgs.localSystem`, `nixpkgs.crossSystem`, `nixpkgs.buildPlatform`
-            or `nixpkgs.hostPlatform` will break composability of package sets in nixpkgs. For example, pkgs.pkgsStatic
-            would not work in modules anymore.
           '';
         }
       ];
