@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/6vo0wei+a4Uz5qxhXkGJA6+gEJX8qjjVHzsArduK2Q=";
   };
 
-  cargoRoot = "src-tauri";
+  cargoRoot = "";
   buildAndTestSubdir = cargoRoot;
 
   sourceRoot = src.name;
