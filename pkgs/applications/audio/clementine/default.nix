@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   boost,
   cmake,
@@ -47,7 +47,7 @@ let
   withCD = config.clementine.cd or true;
   withCloud = config.clementine.cloud or true;
 in
-mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clementine";
   version = "1.4.rc2-unstable-2024-05-12";
 
@@ -55,7 +55,7 @@ mkDerivation {
     owner = "clementine-player";
     repo = "Clementine";
     rev = "7607ddcb96e79d373c4b60d9de21f3315719c7d8";
-    sha256 = "sha256-yOG/Je6N8YEsu5AOtxOFgDl3iqb97assYMZYMSwQqqk=";
+    hash = "sha256-yOG/Je6N8YEsu5AOtxOFgDl3iqb97assYMZYMSwQqqk=";
   };
 
   nativeBuildInputs = [
@@ -130,11 +130,11 @@ mkDerivation {
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.clementine-player.org";
     description = "Multiplatform music player";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ttuegel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})
