@@ -17,6 +17,8 @@
   withMetis ? false,
   parmetis,
   withParmetis ? false,
+  scotch,
+  withPtscotch ? false,
   pkg-config,
   p4est,
   zlib, # propagated by p4est but required by petsc
@@ -30,6 +32,8 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
+
+assert withPtscotch -> mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
@@ -54,7 +58,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional hdf5-support hdf5
     ++ lib.optional petsc-withp4est p4est
     ++ lib.optional withMetis metis
-    ++ lib.optional withParmetis parmetis;
+    ++ lib.optional withParmetis parmetis
+    ++ lib.optional withPtscotch scotch;
 
   postPatch =
     ''
@@ -85,6 +90,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withParmetis [
       "--with-parmetis=1"
       "--with-parmetis-dir=${parmetis}"
+    ]
+    ++ lib.optionals withPtscotch [
+      "--with-ptscotch=1"
+      "--with-ptscotch-include=${scotch.dev}/include"
+      "--with-ptscotch-lib=[-L${scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
     ]
     ++ lib.optionals petsc-withp4est [
       "--with-p4est=1"
