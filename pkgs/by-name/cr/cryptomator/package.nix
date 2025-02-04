@@ -9,6 +9,7 @@
   makeShellWrapper,
   maven,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 
 let
@@ -16,23 +17,18 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.14.2";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
-    rev = version;
-    hash = "sha256-TSE83QYFry8O6MKAoggJBjqonYiGax5GG/a7sm7aHf8=";
+    tag = version;
+    hash = "sha256-fGn8jsPHwGHSiXgIfkMtSYut6pVg8p9+N/uDUlj2Wwc=";
   };
-
-  patches = [
-    # https://github.com/cryptomator/cryptomator/pull/3621
-    ./string-template-removal-and-jdk23.patch
-  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-LFD150cGW6OdwkK28GYI9j44GtVE0pwFMaQ8dQqArLo=";
+  mvnHash = "sha256-w0mIeSFRSGl3EorrGcxqnXF6C0SowjWUMYT/NN1erwM=";
 
   preBuild = ''
     VERSION=${version}
@@ -114,9 +110,12 @@ maven.buildMavenPackage rec {
     libayatana-appindicator
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Free client-side encryption for your cloud files";
     homepage = "https://cryptomator.org";
+    changelog = "https://github.com/cryptomator/cryptomator/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "cryptomator";
     maintainers = with lib.maintainers; [
