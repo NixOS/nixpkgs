@@ -13,6 +13,7 @@
   setuptools,
   setuptools-scm,
   ufolib2,
+  ufomerge,
   vfblib,
 }:
 
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     openstep-plist
     orjson
     ufolib2
+    ufomerge
     vfblib
   ];
 
