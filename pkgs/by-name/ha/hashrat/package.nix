@@ -3,16 +3,18 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hashrat";
   version = "1.22";
 
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "Hashrat";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mjjK315OUUFVdUY+zcCvm7yeo7XxourR1sghWbeFT7c=";
   };
 
@@ -29,16 +31,23 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command-line hash-generation utility";
     mainProgram = "hashrat";
     longDescription = ''
       Hashing tool supporting md5,sha1,sha256,sha512,whirlpool,jh and hmac versions of these.
       Includes recursive file hashing and other features.
     '';
-    homepage = "http://www.cjpaget.co.uk/Code/Hashrat";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    homepage = "https://github.com/ColumPaget/Hashrat";
+    changelog = "https://github.com/ColumPaget/Hashrat/blob/v${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})
