@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.11.3";
+  version = "4.12.1";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ylHREVzQY9U/YHmVYQ4qO+A8tUcWXOTspS4g9qn314o=";
+    hash = "sha256-ZsfPs8VvvgguyNLSVi6n5hs0OzNwiK3bkooQ267mKtA=";
   };
 
   buildInputs = [ pahole ];
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       blanky0230
       keksgesicht
       xaverdh
+      XBagon
     ];
     platforms = lib.platforms.linux;
   };
