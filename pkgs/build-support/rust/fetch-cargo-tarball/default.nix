@@ -119,7 +119,7 @@ stdenv.mkDerivation (
       ${cargoUpdateHook}
 
       # Override the `http.cainfo` option usually specified in `.cargo/config`.
-      export CARGO_HTTP_CAINFO=${cacert}/etc/ssl/certs/ca-bundle.crt
+      export CARGO_HTTP_CAINFO="''${NIX_SSL_CERT_FILE:-${cacert}/etc/ssl/certs/ca-bundle.crt}
 
       if grep '^source = "git' Cargo.lock; then
           echo
