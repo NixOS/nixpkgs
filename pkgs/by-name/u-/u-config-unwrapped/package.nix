@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,22 +16,37 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r1zcXKLqw/gK+9k3SX7OCBaZhvV2ya5VC9O3h+WdkyY=";
   };
 
-  makeFlags = [
-    "CROSS=${stdenv.cc.targetPrefix}"
-    "CC=${lib.getExe stdenv.cc}"
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  dontConfigure = true;
 
-  buildFlags = [ "pkg-config" ];
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase = ''
-    runHook preInstall
+    # Every pkg-config implementation needs distro-specific configuration for where the .pc
+    # files are installed, hence the default Makefile does not contain target for building
+    # and installation, only for development. Instead of using it, we build the u-config via
+    # manual CC invocation. Since on NixOS there is no global pc-path we set it to /var/empty
+    # and rely on pkg-config-wrapper to provide the correct search path at runtime.
+    $CC -DPKG_CONFIG_LIBDIR=\"/var/empty\" -Os \
+      -o ${finalAttrs.meta.mainProgram} generic_main.c
 
-    install -Dm755 pkg-config -t $out/bin
-
-    runHook postInstall
+    runHook postBuild
   '';
+
+  installPhase =
+    let
+      binName = "${finalAttrs.meta.mainProgram}${stdenv.hostPlatform.extensions.executable}";
+    in
+    ''
+      runHook preInstall
+
+      installBin ${binName}
+
+      runHook postInstall
+    '';
 
   meta = {
     description = "Smaller, simpler, portable pkg-config clone";
@@ -39,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
+    mainProgram = "pkg-config";
   };
 })
