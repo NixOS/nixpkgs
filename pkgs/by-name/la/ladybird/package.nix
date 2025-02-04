@@ -96,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +w build/Caches/AdobeICCProfiles
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
