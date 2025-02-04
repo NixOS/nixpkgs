@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpiboot";
-  version = "20240926-102326";
+  version = "20250129-123632";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "usbboot";
     rev = version;
-    hash = "sha256-9m7PAw1WNQlfqOr5hDXrCsZlZLBmvoGUT58NN2cVolw=";
+    hash = "sha256-nUwero1BLSx+JORqJVWIXi2ElnN17al1jA+I4Cqe9hM=";
   };
 
   buildInputs = [ libusb1 ];
