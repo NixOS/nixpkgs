@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  cargo-tauri,
+  cargo-tauri_1,
   darwin,
   glib-networking,
   nodejs_22,
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs =
     [
-      cargo-tauri.hook
+      cargo-tauri_1.hook
 
       nodejs_22
       pnpm_9.configHook
