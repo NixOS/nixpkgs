@@ -8,9 +8,10 @@
   openssl,
   pkg-config,
   webkitgtk_4_0,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   fetchFromGitHub,
   pnpm_9,
+  cmake,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,18 +38,23 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs =
     [
-      cargo-tauri_1.hook
-
       nodejs
       pnpm_9.configHook
 
+      cargo-tauri_1.hook
+
       pkg-config
-      wrapGAppsHook4
-      vite
+      wrapGAppsHook3
+      cmake
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rustPlatform.bindgenHook
     ];
+
+  preConfigure = ''
+    export PATH="$PWD/node_modules/.bin:$PATH"
+  '';
+
 
   buildInputs =
     [ openssl ]
