@@ -13073,6 +13073,12 @@
     githubId = 80920;
     name = "Levi Gross";
   };
+  Levizor = {
+    email = "levizorri@protonmail.com";
+    github = "Levizor";
+    githubId = 132144514;
+    name = "Lev Sauliak";
+  };
   lewo = {
     email = "lewo@abesis.fr";
     matrix = "@lewo:matrix.org";
