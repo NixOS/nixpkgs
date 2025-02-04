@@ -1302,6 +1302,18 @@ final: prev:
     meta.homepage = "https://github.com/giuxtaposition/blink-cmp-copilot/";
   };
 
+  blink-cmp-dictionary = buildVimPlugin {
+    pname = "blink-cmp-dictionary";
+    version = "2025-01-12";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-dictionary";
+      rev = "07cc2e49bb52ebff4e8b83d1801ad6441edf90a2";
+      sha256 = "17c41flnjp25c5gry4lq8ik8mk3pbh1qwj86rby57jr4f4wvfykk";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-dictionary/";
+  };
+
   blink-cmp-spell = buildVimPlugin {
     pname = "blink-cmp-spell";
     version = "2025-02-01";
