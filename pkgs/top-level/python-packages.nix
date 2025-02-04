@@ -1470,6 +1470,8 @@ self: super: with self; {
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
+  pulumi-yandex-unofficial = pkgs.pulumiPackages.pulumi-yandex-unofficial.sdks.python;
+
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };
