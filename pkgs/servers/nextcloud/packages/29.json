@@ -269,6 +269,16 @@
       "agpl"
     ]
   },
+  "quota_warning": {
+    "hash": "sha256-hQpbARBAKYakjwp/LGYMIFhjVRxqfQj36x6QF8HIfEA=",
+    "url": "https://github.com/nextcloud-releases/quota_warning/releases/download/v1.20.0/quota_warning-v1.20.0.tar.gz",
+    "version": "1.20.0",
+    "description": "This app sends notifications to users when they reached 85, 90 and 95% of their quota (checked once a day).\nIn addition an email can be sent to the users. The three percentages can be changed in the admin settings.\nIt is also possible to have a link in the email and the notification for upsell options.",
+    "homepage": "https://github.com/nextcloud/quota_warning",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "registration": {
     "hash": "sha256-LHrs6kCawIj7Te/OftUOEw8khgGnAP0nm9y/JaP8KkE=",
     "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.5.0/registration-v2.5.0.tar.gz",
