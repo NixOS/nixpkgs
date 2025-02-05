@@ -81,6 +81,35 @@ let
       ) (lib.length parts)
     );
 
+  # Takes a fix point as its input (pkgs.haskell.packages or pkgs.haskell.compiler)
+  # and returns an attribute set of aliases that should be merged into them, e.g.
+  # { ghc810 = …; ghc90 = …; … }. Which version to use is determined by ghcRules:
+  # Every rule describing a release series (see above) should have a defaultVersion
+  # attribute that describes which actual version (e.g. 8.10.7) to use.
+  generateDefaultVersions =
+    set:
+    let
+      isReleaseSeries = v: lib.match "[0-9]+\\.[0-9]+" v != null;
+      versionToAttr = v: "ghc${lib.replaceStrings [ "." ] [ "" ] v}";
+    in
+    lib.mapAttrs'
+      (
+        series:
+        { defaultVersion, ... }:
+        {
+          name = versionToAttr series;
+          value = set.${versionToAttr defaultVersion};
+        }
+      )
+      (
+        lib.filterAttrs (
+          version: rule:
+          # ghcHEAD's rule is expressed as a release series, but obviosuly it
+          # doesn't have a default version
+          isReleaseSeries version && rule ? defaultVersion
+        ) ghcRules
+      );
+
   # Given a list of version components (think builtins.splitVersion) return
   # all matching rules from ghcRules, merged by precedence.
   #
@@ -172,6 +201,7 @@ let
   #   the GHC configure script (if necessary) and sphinx.
   ghcRules = {
     "8.10" = {
+      defaultVersion = "8.10.7";
       bootPkgsAttr =
         # the oldest ghc with aarch64-darwin support is 8.10.5
         if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
@@ -184,6 +214,7 @@ let
       python3Attr = "python311";
     };
     "9.0" = {
+      defaultVersion = "9.0.2";
       bootPkgsAttr =
         # the oldest ghc with aarch64-darwin support is 8.10.5
         if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
@@ -195,6 +226,7 @@ let
       python3Attr = "python311";
     };
     "9.2" = {
+      defaultVersion = "9.2.8";
       bootPkgsAttr =
         if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
           "ghc810"
@@ -205,6 +237,7 @@ let
       python3Attr = "python311";
     };
     "9.4" = {
+      defaultVersion = "9.4.8";
       bootPkgsAttr =
         # Building with 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
@@ -223,6 +256,7 @@ let
       llvmVersion = 12;
     };
     "9.6" = {
+      defaultVersion = "9.6.6";
       bootPkgsAttr =
         # For GHC 9.2 no armv7l bindists are available.
         if stdenv.buildPlatform.isAarch32 then
@@ -235,6 +269,7 @@ let
       llvmVersion = 15;
     };
     "9.8" = {
+      defaultVersion = "9.8.4";
       bootPkgsAttr =
         # For GHC 9.6 no armv7l bindists are available.
         if stdenv.buildPlatform.isAarch32 then
@@ -247,6 +282,7 @@ let
       llvmVersion = 15;
     };
     "9.10" = {
+      defaultVersion = "9.10.1";
       bootPkgsAttr =
         # For GHC 9.6 no armv7l bindists are available.
         if stdenv.buildPlatform.isAarch32 then
@@ -266,6 +302,7 @@ let
       llvmVersion = 15;
     };
     "9.12" = {
+      defaultVersion = "9.12.1";
       bootPkgsAttr =
         # No suitable bindist packaged yet
         "ghc9101";
@@ -344,15 +381,6 @@ in
         stage0 = ../development/compilers/ghcjs/8.10/stage0.nix;
       };
 
-      # TODO(sterni): default via ghcRules
-      ghc810 = compiler.ghc8107;
-      ghc90 = compiler.ghc902;
-      ghc92 = compiler.ghc928;
-      ghc94 = compiler.ghc948;
-      ghc96 = compiler.ghc966;
-      ghc98 = compiler.ghc984;
-      ghc910 = compiler.ghc9101;
-      ghc912 = compiler.ghc9121;
       ghcHEAD =
         let
           # TODO(@sternensemann): can we avoid tracking the version in two places?
@@ -366,6 +394,7 @@ in
         assert lib.hasPrefix majorMinor ghc.version;
         ghc;
     }
+    // generateDefaultVersions compiler
     // ghcsByVersion;
 
   # Default overrides that are applied to all package sets.
@@ -441,17 +470,8 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
         packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.x.nix { };
       };
-
-      # TODO(sterni): default via ghcRules
-      ghc810 = packages.ghc8107;
-      ghc90 = packages.ghc902;
-      ghc92 = packages.ghc928;
-      ghc94 = packages.ghc948;
-      ghc96 = packages.ghc966;
-      ghc98 = packages.ghc984;
-      ghc910 = packages.ghc9101;
-      ghc912 = packages.ghc9121;
     }
+    // generateDefaultVersions packages
     // lib.mapAttrs (
       name: compiler:
       callPackage ../development/haskell-modules {
