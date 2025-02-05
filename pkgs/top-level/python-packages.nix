@@ -15375,6 +15375,8 @@ self: super: with self; {
 
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
+  sphinxcontrib-images = callPackage ../development/python-modules/sphinxcontrib-images { };
+
   sphinx-design = callPackage ../development/python-modules/sphinx-design { };
 
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
