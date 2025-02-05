@@ -5764,6 +5764,7 @@ with pkgs;
     crystal_1_11
     crystal_1_12
     crystal_1_14
+    crystal_1_15
     crystal;
 
   crystalline = callPackage ../development/tools/language-servers/crystalline {
