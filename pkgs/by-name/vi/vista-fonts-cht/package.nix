@@ -11,16 +11,22 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://download.microsoft.com/download/7/6/b/76bd7a77-be02-47f3-8472-fa1de7eda62f/VistaFont_CHT.EXE";
-    sha256 = "sha256-fSnbbxlMPzbhFSQyKxQaS5paiWji8njK7tS8Eppsj6g=";
+    hash = "sha256-fSnbbxlMPzbhFSQyKxQaS5paiWji8njK7tS8Eppsj6g=";
   };
 
   nativeBuildInputs = [ cabextract ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     cabextract --lowercase --filter '*.TTF' $src
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
 
@@ -29,17 +35,19 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/etc/fonts/conf.d
     substitute ${./no-op.conf} $out/etc/fonts/conf.d/30-msjhenghei.conf \
       --subst-var-by fontname "Microsoft JhengHei"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "TrueType fonts from Microsoft Windows Vista For Traditional Chinese (Microsoft JhengHei)";
     homepage = "https://www.microsoft.com/typography/fonts/family.aspx";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ atkinschang ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ atkinschang ];
 
     # Set a non-zero priority to allow easy overriding of the
     # fontconfig configuration files.
     priority = 5;
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

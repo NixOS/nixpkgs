@@ -11,18 +11,24 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/mscorefonts2/cabs/PowerPointViewer.exe";
-    sha256 = "07vhjdw8iip7gxk6wvp4myhvbn9619g10j9qvpbzz4ihima57ry4";
+    hash = "sha256-xOdTVI0wkv/X3ThJEF4KJtm1oa/kbm5mf+fGiHiTcB8=";
   };
 
   nativeBuildInputs = [ cabextract ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     cabextract --lowercase --filter ppviewer.cab $src
     cabextract --lowercase --filter '*.TTF' ppviewer.cab
     cabextract --lowercase --filter '*.TTC' ppviewer.cab
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf *.ttc $out/share/fonts/truetype
 
@@ -33,6 +39,8 @@ stdenvNoCC.mkDerivation {
       substitute ${./no-op.conf} $out/etc/fonts/conf.d/30-''${name,,}.conf \
         --subst-var-by fontname $name
     done
+
+    runHook postInstall
   '';
 
   meta = {
