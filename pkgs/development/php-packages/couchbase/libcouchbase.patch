@@ -1,0 +1,11 @@
+--- a/config.m4
++++ b/config.m4
+@@ -28,7 +28,7 @@ if test "$PHP_COUCHBASE" != "no"; then
+
+   dnl fallback on standard directory
+   else
+-    for i in /usr/local /usr; do
++    for i in @libcouchbase@; do
+       if test -r $i/include/libcouchbase/couchbase.h; then
+         LIBCOUCHBASE_DIR=$i
+         AC_MSG_RESULT(found in $i)

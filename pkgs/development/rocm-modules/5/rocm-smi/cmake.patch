@@ -1,0 +1,89 @@
+diff --git a/rocm_smi-backward-compat.cmake b/rocm_smi-backward-compat.cmake
+index aa8fd9c..59afce5 100644
+--- a/rocm_smi-backward-compat.cmake
++++ b/rocm_smi-backward-compat.cmake
+@@ -72,7 +72,12 @@ function(generate_wrapper_header)
+     set(include_guard "${include_guard}COMGR_WRAPPER_INCLUDE_${INC_GAURD_NAME}_H")
+     #set #include statement
+     get_filename_component(file_name ${header_file} NAME)
+-    set(include_statements "${include_statements}#include \"../../../${CMAKE_INSTALL_INCLUDEDIR}/${ROCM_SMI}/${file_name}\"\n")
++    if(IS_ABSOLUTE ${CMAKE_INSTALL_INCLUDEDIR})
++      set(include_dir "${CMAKE_INSTALL_INCLUDEDIR}")
++    else()
++      set(include_dir "../../../${CMAKE_INSTALL_INCLUDEDIR}")
++    endif()
++    set(include_statements "${include_statements}#include \"${include_dir}/${ROCM_SMI}/${file_name}\"\n")
+     configure_file(${RSMI_WRAPPER_DIR}/header.hpp.in ${RSMI_WRAPPER_INC_DIR}/${file_name})
+     unset(include_guard)
+     unset(include_statements)
+@@ -90,7 +95,12 @@ function(generate_wrapper_header)
+     set(include_guard "${include_guard}COMGR_WRAPPER_INCLUDE_${INC_GAURD_NAME}_H")
+     #set #include statement
+     get_filename_component(file_name ${header_file} NAME)
+-    set(include_statements "${include_statements}#include \"../../../${CMAKE_INSTALL_INCLUDEDIR}/${OAM_TARGET_NAME}/${file_name}\"\n")
++    if(IS_ABSOLUTE ${CMAKE_INSTALL_INCLUDEDIR})
++      set(include_dir "${CMAKE_INSTALL_INCLUDEDIR}")
++    else()
++      set(include_dir "../../../${CMAKE_INSTALL_INCLUDEDIR}")
++    endif()
++    set(include_statements "${include_statements}#include \"${include_dir}/${OAM_TARGET_NAME}/${file_name}\"\n")
+     configure_file(${RSMI_WRAPPER_DIR}/header.hpp.in ${OAM_WRAPPER_INC_DIR}/${file_name})
+     unset(include_guard)
+     unset(include_statements)
+@@ -123,11 +133,16 @@ function(create_library_symlink)
+     set(library_files "${LIB_RSMI}")
+   endif()
+ 
++  if(IS_ABSOLUTE ${CMAKE_INSTALL_LIBDIR})
++    set(install_libdir "${CMAKE_INSTALL_LIBDIR}")
++  else()
++    set(install_libdir "../../${CMAKE_INSTALL_LIBDIR}")
++  endif()
+   foreach(file_name ${library_files})
+      add_custom_target(link_${file_name} ALL
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                  ../../${CMAKE_INSTALL_LIBDIR}/${file_name} ${RSMI_WRAPPER_LIB_DIR}/${file_name})
++                  ${install_libdir}/${file_name} ${RSMI_WRAPPER_LIB_DIR}/${file_name})
+   endforeach()
+ 
+   file(MAKE_DIRECTORY ${OAM_WRAPPER_LIB_DIR})
+@@ -151,11 +166,16 @@ function(create_library_symlink)
+     set(library_files "${LIB_OAM}")
+   endif()
+ 
++  if(IS_ABSOLUTE ${CMAKE_INSTALL_LIBDIR})
++    set(install_libdir "${CMAKE_INSTALL_LIBDIR}")
++  else()
++    set(install_libdir "../../${CMAKE_INSTALL_LIBDIR}")
++  endif()
+   foreach(file_name ${library_files})
+      add_custom_target(link_${file_name} ALL
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                  ../../${CMAKE_INSTALL_LIBDIR}/${file_name} ${OAM_WRAPPER_LIB_DIR}/${file_name})
++                  ${install_libdir}/${file_name} ${OAM_WRAPPER_LIB_DIR}/${file_name})
+   endforeach()
+ 
+ endfunction()
+diff --git a/rocm_smi/CMakeLists.txt b/rocm_smi/CMakeLists.txt
+index c594eeb..d3ed39d 100755
+--- a/rocm_smi/CMakeLists.txt
++++ b/rocm_smi/CMakeLists.txt
+@@ -105,10 +105,15 @@ endif ()
+ #file reorganization changes
+ #rocm_smi.py moved to libexec/rocm_smi. so creating rocm-smi symlink
+ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
++if(IS_ABSOLUTE ${CMAKE_INSTALL_LIBEXECDIR})
++  set(install_libexecdir "${CMAKE_INSTALL_LIBEXECDIR}")
++else()
++  set(install_libexecdir "../${CMAKE_INSTALL_LIBEXECDIR}")
++endif()
+ add_custom_target(link-rocm-smi ALL
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                  ../${CMAKE_INSTALL_LIBEXECDIR}/${ROCM_SMI}/rocm_smi.py ${CMAKE_CURRENT_BINARY_DIR}/bin/rocm-smi)
++                  ${install_libexecdir}/${ROCM_SMI}/rocm_smi.py ${CMAKE_CURRENT_BINARY_DIR}/bin/rocm-smi)
+ 
+ ## Add the install directives for the runtime library.
+ install(TARGETS ${ROCM_SMI_TARGET}

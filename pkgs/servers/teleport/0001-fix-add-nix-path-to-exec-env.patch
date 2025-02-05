@@ -1,0 +1,28 @@
+From e3651ca79c0edb66c04e0d3381f3b0b6f76d37d2 Mon Sep 17 00:00:00 2001
+From: 5aaee9 <jiduye@gmail.com>
+Date: Thu, 24 Mar 2022 17:34:38 +0800
+Subject: [PATCH] fix: add nix path to exec env
+
+---
+ lib/srv/exec.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/srv/exec.go b/lib/srv/exec.go
+index 253fbafef..815a2e1e0 100644
+--- a/lib/srv/exec.go
++++ b/lib/srv/exec.go
+@@ -41,9 +41,9 @@ import (
+ )
+ 
+ const (
+-	defaultPath          = "/bin:/usr/bin:/usr/local/bin:/sbin"
++	defaultPath          = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/bin:/usr/bin:/usr/local/bin:/sbin"
+ 	defaultEnvPath       = "PATH=" + defaultPath
+-	defaultRootPath      = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
++	defaultRootPath      = "/run/wrappers/bin:/etc/profiles/per-user/root/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ 	defaultEnvRootPath   = "PATH=" + defaultRootPath
+ 	defaultTerm          = "xterm"
+ 	defaultLoginDefsPath = "/etc/login.defs"
+-- 
+2.32.0 (Apple Git-132)
+

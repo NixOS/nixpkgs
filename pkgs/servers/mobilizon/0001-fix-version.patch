@@ -1,0 +1,13 @@
+diff --git a/mix.exs b/mix.exs
+index 8338abf8..883e6987 100644
+--- a/mix.exs
++++ b/mix.exs
+@@ -1,7 +1,7 @@
+ defmodule Mobilizon.Mixfile do
+   use Mix.Project
+ 
+-  @version "5.1.0"
++  @version "5.1.1"
+ 
+   def project do
+     [
