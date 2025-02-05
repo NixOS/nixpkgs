@@ -46,7 +46,7 @@ let
           If not specified, the amount of data to read from `source` will be
           determined by cryptsetup.
 
-          See `{manpage}`cryptsetup-open(8)`` for details.
+          See {manpage}`cryptsetup-open(8)` for details.
         '';
       };
 
@@ -60,7 +60,7 @@ let
           If not specified, the default sector size is determined from the
           underlying block device.
 
-          See `{manpage}`cryptsetup-open(8)`` for details.
+          See {manpage}`cryptsetup-open(8)` for details.
         '';
       };
 
