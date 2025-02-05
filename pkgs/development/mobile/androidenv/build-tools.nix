@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, stdenv, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall}:
+{deployAndroidPackage, lib, stdenv, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall, meta}:
 
 deployAndroidPackage {
   inherit package;
@@ -24,4 +24,6 @@ deployAndroidPackage {
     cd $out/libexec/android-sdk
   '' + postInstall;
   noAuditTmpdir = true; # The checker script gets confused by the build-tools path that is incorrectly identified as a reference to /build
+
+  inherit meta;
 }
