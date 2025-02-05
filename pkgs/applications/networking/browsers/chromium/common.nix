@@ -15,6 +15,7 @@
 
   # Native build inputs:
   ninja,
+  bashInteractive,
   pkg-config,
   python3,
   perl,
@@ -213,6 +214,7 @@ let
   };
 
   isElectron = packageName == "electron";
+  needsCompgen = chromiumVersionAtLeast "133";
 
   chromiumDeps = lib.mapAttrs (
     path: args:
@@ -290,6 +292,11 @@ let
     nativeBuildInputs =
       [
         ninja
+      ]
+      ++ lib.optionals needsCompgen [
+        bashInteractive # needed for compgen in buildPhase -> process_template
+      ]
+      ++ [
         pkg-config
         python3WithPackages
         perl
@@ -797,12 +804,12 @@ let
       let
         buildCommand = target: ''
           TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
-          (
+          ${lib.optionalString needsCompgen "bash -s << EOL\n"}(
             source chrome/installer/linux/common/installer.include
             PACKAGE=$packageName
             MENUNAME="Chromium"
             process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-          )
+          )${lib.optionalString needsCompgen "\nEOL"}
         '';
         targets = extraAttrs.buildTargets or [ ];
         commands = map buildCommand targets;
