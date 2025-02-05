@@ -7,21 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.13.6";
+  version = "3.13.25";
   pyproject = true;
 
-  # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     tag = "v${version}";
-    hash = "sha256-I6AQtoGk/YUDM5DzegvLi8QmVvoma16zJGZ8BMUUN3c=";
+    hash = "sha256-4VDMVJPzp6mCiO092iRn9e/3Jed3g29tLZa+TNYkYoI=";
   };
 
-  # relax dep constrains, keep environment constraints
   pythonRelaxDeps = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
