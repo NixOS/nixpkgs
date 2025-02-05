@@ -13,16 +13,22 @@ stdenvNoCC.mkDerivation {
     url = "https://web.archive.org/web/20161221192937if_/http://download.microsoft.com/download/d/6/e/d6e2ff26-5821-4f35-a18b-78c963b1535d/VistaFont_CHS.EXE";
     # Alternative mirror:
     # http://www.eeo.cn/download/font/VistaFont_CHS.EXE
-    sha256 = "1qwm30b8aq9piyqv07hv8b5bac9ms40rsdf8pwix5dyk8020i8xi";
+    hash = "sha256-saMIBEDTt9Ijv8g1nQHRNTG1ykIbHrCxjzdhhRYYleM=";
   };
 
   nativeBuildInputs = [ cabextract ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     cabextract --lowercase --filter '*.TTF' $src
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
 
@@ -31,6 +37,8 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/etc/fonts/conf.d
     substitute ${./no-op.conf} $out/etc/fonts/conf.d/30-msyahei.conf \
       --subst-var-by fontname "Microsoft YaHei"
+
+    runHook postInstall
   '';
 
   meta = {
