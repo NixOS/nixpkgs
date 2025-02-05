@@ -417,7 +417,12 @@ stdenv.mkDerivation (finalAttrs: {
       licenses.mit
       licenses.asl20
     ];
-    platforms = rustc.tier1TargetPlatforms;
+    # if we do cross compilation, we can target platforms with no host compiler support, too
+    platforms =
+      if (stdenv.buildPlatform != stdenv.hostPlatform) then
+        rustc.targetPlatforms
+      else
+        rustc.tier1TargetPlatforms;
     # If rustc can't target a platform, we also can't build rustc for
     # that platform.
     badPlatforms = rustc.badTargetPlatforms;
