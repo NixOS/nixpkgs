@@ -85,8 +85,8 @@ buildPythonPackage rec {
     # Replace bundled font configuration with nixpkgs-packaged font configuration
     rm -rf $out/${python.sitePackages}/kaleido/executable/etc/fonts
     mkdir -p $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d
-    ln -s ${fontconfig}/etc/fonts/fonts.conf $out/${python.sitePackages}/kaleido/executable/etc/fonts/
-    ls -s ${fontconfig}/etc/fonts/conf.d/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
+    ln -s ${fontconfig.out}/etc/fonts/fonts.conf $out/${python.sitePackages}/kaleido/executable/etc/fonts/
+    ls -s ${fontconfig.out}/etc/fonts/conf.d/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
     ln -s ${sbclPackages.cl-dejavu}/dejavu-fonts-ttf-2.37/fontconfig/* $out/${python.sitePackages}/kaleido/executable/etc/fonts/conf.d/
 
     # Replace bundled fonts with nixpkgs-packaged fonts
