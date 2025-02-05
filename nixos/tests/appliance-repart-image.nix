@@ -53,7 +53,7 @@ in
           "esp" = {
             contents =
               let
-                efiArch = pkgs.stdenv.hostPlatform.efiArch;
+                efiArch = config.nixpkgs.hostPlatform.efiArch;
               in
               {
                 "/EFI/BOOT/BOOT${lib.toUpper efiArch}.EFI".source =
@@ -70,7 +70,7 @@ in
               # aarch64 kernel seems to generally be a little bigger than the
               # x86_64 kernel. To stay on the safe side, leave some more slack
               # for every platform other than x86_64.
-              SizeMinBytes = if pkgs.stdenv.hostPlatform.isx86_64 then "64M" else "96M";
+              SizeMinBytes = if config.nixpkgs.hostPlatform.isx86_64 then "64M" else "96M";
             };
           };
           "swap" = {
