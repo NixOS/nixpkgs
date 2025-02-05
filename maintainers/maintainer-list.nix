@@ -4625,6 +4625,11 @@
     githubId = 87764;
     name = "Ben Ford";
   };
+  commiterate = {
+    github = "commiterate";
+    githubId = 111539270;
+    name = "commiterate";
+  };
   CompEng0001 = {
     email = "sb1501@canterbury.ac.uk";
     github = "CompEng0001";
