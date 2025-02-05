@@ -89,6 +89,10 @@ let
       export LIBVA_DRIVERS_PATH=/run/opengl-driver/lib/dri:/run/opengl-driver-32/lib/dri
       export VDPAU_DRIVER_PATH=/run/opengl-driver/lib/vdpau:/run/opengl-driver-32/lib/vdpau
 
+      # This is needed on KDE Plasma + Wayland + SDL 2 Stable to find the cursors properly. Already fixed in SDL3 (cursor-shape-v1) and in Gnome.
+      # https://forums.factorio.com/113202
+      export XCURSOR_PATH=$(readlink -f /run/current-system/sw)/share/icons
+
       set -a
       ${lib.toShellVars extraEnv}
       set +a
