@@ -1086,8 +1086,8 @@ rec {
       "sha256-afWYZZR8qCp3f19RodsHltXxAfSwFmTYaoGSHMV5MvI=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.36.0"
-      "sha256-PU7Q82QjOwMVu+LkK803MnfHpIloffrlWTI48mpr+1M=";
+    buildMypyBoto3Package "rds" "1.36.11"
+      "sha256-b5Yd6uUChgJFf4cZEtaVnmCL0gPKIDX6EWY4qa8WPLU=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.36.0"
