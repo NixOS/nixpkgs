@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "andreasKroepelin";
+    owner = "polylux-typ";
     repo = "polylux";
     rev = "v${version}";
     sparseCheckout = [ dirname ];
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Tool to make pdfpc interpret slides created by polylux correctly";
-    homepage = "https://github.com/andreasKroepelin/polylux/tree/main/pdfpc-extractor";
+    homepage = "https://github.com/polylux-typ/polylux/tree/main/pdfpc-extractor";
     license = licenses.mit;
     mainProgram = "polylux2pdfpc";
     maintainers = [ maintainers.diogotcorreia ];
