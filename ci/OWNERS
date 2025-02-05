@@ -395,8 +395,8 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/development/ocaml-modules     @ulrikstrid
 
 # Zig
-/pkgs/development/compilers/zig @figsoda
-/doc/hooks/zig.section.md       @figsoda
+/pkgs/development/compilers/zig @figsoda @RossComputerGuy
+/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
