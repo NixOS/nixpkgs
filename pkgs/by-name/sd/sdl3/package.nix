@@ -51,6 +51,10 @@
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 
+assert lib.assertMsg (
+  waylandSupport -> openglSupport
+) "SDL3 requires OpenGL support to enable Wayland";
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
   version = "3.2.2";
