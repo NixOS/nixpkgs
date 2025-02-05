@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.73";
+  version = "4.0.2";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-bqxUlxpIH1IAx9RbnaMq4dZW8fy+M/Q02Q7VrW/AKNQ=";
+    npmDepsHash = "sha256-SgKqo0SCDEv4wAdOTSJ8gOIy/F8STxxTjnkHb+A5nrA=";
 
     dontBuild = true;
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-QlC2k2rhF3/Pz+knnrlBDV8AfHHBSlGr7b9Ae6TNsxY=";
+    hash = "sha256-yoJzTg6hun1FFdqpuobW17i8khSh14rwUBLVJUfq+Vw=";
     rev = version;
   };
 
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 3.1.67 requires LLVM tip-of-tree instead of LLVM 18
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 20/EXPECTED_LLVM_VERSION = 19/g" tools/shared.py
+    # emscripten 4 requires LLVM tip-of-tree instead of LLVM 20
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 21/EXPECTED_LLVM_VERSION = 20.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
