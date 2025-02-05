@@ -1282,6 +1282,8 @@ let
         };
       };
 
+      dendron.adjust-heading-level = callPackage ./dendron.adjust-heading-level { };
+
       dendron.dendron = callPackage ./dendron.dendron { };
 
       dendron.dendron-markdown-preview-enhanced =
