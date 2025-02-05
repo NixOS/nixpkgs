@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     lua -e "" || {
         luajit -e "" && {
             export LUA_SUFFIX=jit
-            appendToVar configureFlags "--lua-suffix=$LUA_SUFFIX"
+            configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
         }
     }
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
-        appendToVar configureFlags "--with-lua-include=$lua_inc"
+        configureFlags="$configureFlags --with-lua-include=$lua_inc"
     fi
   '';
 
@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
                 --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
                 --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
                 --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-                --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
+                --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
           }
       done
     '';
 
-  propagatedNativeBuildInputs = [
+  propagatedBuildInputs = [
     zip
     unzip
     cmake
@@ -134,7 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
       teto
     ];
     mainProgram = "luarocks";
-    platforms = platforms.linux ++ platforms.darwin;
+    #Python has a patch to cross-compile specifically for x86_64-freebsd.
+    #Other BSDs must be compiled natively
+    platforms =
+      platforms.linux
+      ++ platforms.darwin
+      ++ [ "x86_64-freebsd" ]
+      ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) (
+        platforms.netbsd ++ platforms.openbsd
+      );
     downloadPage = "http://luarocks.org/releases/";
   };
 })
