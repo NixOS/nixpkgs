@@ -20,6 +20,7 @@
   nixosTests,
   nix-update-script,
   darwin,
+  zlib,
 }:
 
 let
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage {
       rust-jemalloc-sys
       libiconv
       coreutils
+      zlib
     ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
