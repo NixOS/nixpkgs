@@ -1,0 +1,14 @@
+--- a/src/Test/L0/TestUtil.cs
++++ b/src/Test/L0/TestUtil.cs
+@@ -27,11 +27,8 @@
+
+         public static string GetSrcPath()
+         {
+-            string L0dir = Path.GetDirectoryName(GetTestFilePath());
+-            string testDir = Path.GetDirectoryName(L0dir);
+-            string srcDir = Path.GetDirectoryName(testDir);
++            string srcDir = "../../../../..";
+             ArgUtil.Directory(srcDir, nameof(srcDir));
+-            Assert.Equal(Src, Path.GetFileName(srcDir));
+             return srcDir;
+         }

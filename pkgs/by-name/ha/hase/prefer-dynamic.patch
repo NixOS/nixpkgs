@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 95d894e..3c561c1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -35,7 +35,7 @@ endif
+ LIB += -L$(SPARROW_LIB)
+ INCLUDE += -I$(SPARROW_FOLDER)
+ 
+-HASE_STATIC = $(SPARROW_LIB)/$(SPARROW3D_STATIC_LIB) $(SPARROW_LIB)/$(SPARROWSOUND_STATIC_LIB) $(SPARROW_LIB)/$(SPARROWNET_STATIC_LIB) $(STATIC)
++DYNAMIC += -lsparrow3d -lsparrowSound -lsparrowNet
+ 
+ ifneq ($(TARGET),win32)
+ DYNAMIC += -lz

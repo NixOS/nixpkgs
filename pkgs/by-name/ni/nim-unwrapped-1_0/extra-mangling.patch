@@ -1,0 +1,52 @@
+diff --git a/compiler/modulepaths.nim b/compiler/modulepaths.nim
+index fa8fab08a..63b0cb44d 100644
+--- a/compiler/modulepaths.nim
++++ b/compiler/modulepaths.nim
+@@ -73,6 +73,17 @@ proc checkModuleName*(conf: ConfigRef; n: PNode; doLocalError=true): FileIndex =
+   else:
+     result = fileInfoIdx(conf, fullPath)
+ 
++proc rot13(result: var string) =
++  # don't mangle .nim
++  let finalIdx =
++    if result.endsWith(".nim"): result.len - 4
++    else: result.len
++  for i, c in result[0..<finalIdx]:
++    case c
++    of 'a'..'m', 'A'..'M': result[i] = char(c.uint8 + 13)
++    of 'n'..'z', 'N'..'Z': result[i] = char(c.uint8 - 13)
++    else: discard
++
+ proc mangleModuleName*(conf: ConfigRef; path: AbsoluteFile): string =
+   ## Mangle a relative module path to avoid path and symbol collisions.
+   ##
+@@ -81,9 +92,11 @@ proc mangleModuleName*(conf: ConfigRef; path: AbsoluteFile): string =
+   ##
+   ## Example:
+   ## `foo-#head/../bar` becomes `@foo-@hhead@s..@sbar`
+-  "@m" & relativeTo(path, conf.projectPath).string.multiReplace(
++  result = "@m" & relativeTo(path, conf.projectPath).string.multiReplace(
+     {$os.DirSep: "@s", $os.AltSep: "@s", "#": "@h", "@": "@@", ":": "@c"})
++  rot13(result)
+ 
+ proc demangleModuleName*(path: string): string =
+   ## Demangle a relative module path.
+   result = path.multiReplace({"@@": "@", "@h": "#", "@s": "/", "@m": "", "@c": ":"})
++  rot13(result)
+diff --git a/compiler/msgs.nim b/compiler/msgs.nim
+index ae4bcfcb8..1ad7e5c08 100644
+--- a/compiler/msgs.nim
++++ b/compiler/msgs.nim
+@@ -661,8 +661,10 @@ proc uniqueModuleName*(conf: ConfigRef; fid: FileIndex): string =
+   for i in 0..<trunc:
+     let c = rel[i]
+     case c
+-    of 'a'..'z':
+-      result.add c
++    of 'a'..'m':
++      result.add char(c.uint8 + 13)
++    of 'n'..'z':
++      result.add char(c.uint8 - 13)
+     of {os.DirSep, os.AltSep}:
+       result.add 'Z' # because it looks a bit like '/'
+     of '.':
