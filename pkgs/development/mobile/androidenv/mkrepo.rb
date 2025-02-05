@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'json'
+require 'rubygems'
 require 'nokogiri'
 require 'slop'
 
@@ -465,6 +466,18 @@ opts[:addons].each do |filename|
   merge result['licenses'], licenses
   merge result['addons'], addons
   merge result['extras'], extras
+end
+
+result['latest'] = {}
+result['packages'].each do |name, versions|
+  max_version = Gem::Version.new('0')
+  versions.each do |version, package|
+    if package['license'] == 'android-sdk-license' && Gem::Version.correct?(package['revision'])
+      package_version = Gem::Version.new(package['revision'])
+      max_version = package_version if package_version > max_version
+    end
+  end
+  result['latest'][name] = max_version.to_s
 end
 
 # As we keep the old packages in the repo JSON file, we should have
