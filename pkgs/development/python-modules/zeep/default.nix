@@ -59,8 +59,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    async_require = [ httpx ];
-    xmlsec_require = [ xmlsec ];
+    async = [ httpx ];
+    xmlsec = [ xmlsec ];
   };
 
   pythonImportsCheck = [ "zeep" ];
