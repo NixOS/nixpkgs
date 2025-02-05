@@ -18123,6 +18123,12 @@
     githubId = 301903;
     name = "Chip Collier";
   };
+  phrmendes = {
+    name = "Pedro Mendes";
+    email = "pedrohrmendes@proton.me";
+    github = "phrmendes";
+    githubId = 22376151;
+  };
   phrogg = {
     name = "Phil Roggenbuck";
     email = "nixpkgs@phrogg.de";
