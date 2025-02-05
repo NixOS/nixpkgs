@@ -160,6 +160,121 @@ let
       mouse_click(20, 30)
 
   '';
+
+  makeIndicatorTest =
+    {
+      name,
+      left,
+      ocr,
+      extraCheck ? null,
+
+      titleOcr,
+    }:
+
+    makeTest (
+      { pkgs, lib, ... }:
+      {
+        name = "lomiri-desktop-ayatana-indicator-${name}";
+
+        meta = {
+          maintainers = lib.teams.lomiri.members;
+        };
+
+        nodes.machine =
+          { config, ... }:
+          {
+            imports = [
+              ./common/auto.nix
+              ./common/user-account.nix
+            ];
+
+            virtualisation.memorySize = 2047;
+
+            users.users.${user} = {
+              inherit description password;
+            };
+
+            test-support.displayManager.auto = {
+              enable = true;
+              inherit user;
+            };
+
+            # To control mouse via scripting
+            programs.ydotool.enable = true;
+
+            services.desktopManager.lomiri.enable = lib.mkForce true;
+            services.displayManager.defaultSession = lib.mkForce "lomiri";
+
+            # Not setting wallpaper, as it breaks indicator OCR(?)
+          };
+
+        enableOCR = true;
+
+        testScript =
+          { nodes, ... }:
+          sharedTestFunctions
+          + ''
+            start_all()
+            machine.wait_for_unit("multi-user.target")
+
+            # The session should start, and not be stuck in i.e. a crash loop
+            with subtest("lomiri starts"):
+                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+                # Output rendering from Lomiri has started when it starts printing performance diagnostics
+                machine.wait_for_console_text("Last frame took")
+                # Look for datetime's clock, one of the last elements to load
+                wait_for_text(r"(AM|PM)")
+                machine.screenshot("lomiri_launched")
+
+            # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
+            # There's a test app we could use that also displays their contents, but it's abit inconsistent.
+            mouse_click(735, 0) # the cog in the top-right, for the session indicator
+            wait_for_text(${titleOcr})
+            machine.screenshot("indicators_open")
+
+            # Indicator order within the menus *should* be fixed based on per-indicator order setting
+            # Session is the one we clicked, but it might not be the one we want to test right now.
+            # Go as far left as necessary.
+            ${lib.strings.replicate left "machine.send_key(\"left\")\n"}
+
+            with subtest("ayatana indicator session works"):
+                wait_for_text(r"(${lib.strings.concatStringsSep "|" ocr})")
+                machine.screenshot("indicator_${name}")
+          ''
+          + lib.optionalString (extraCheck != null) extraCheck;
+      }
+    );
+
+  makeIndicatorTests =
+    {
+      titles,
+      details,
+    }:
+    let
+      titleOcr = "r\"(${builtins.concatStringsSep "|" titles})\"";
+    in
+    builtins.listToAttrs (
+      builtins.map (
+        {
+          name,
+          left,
+          ocr,
+          extraCheck ? null,
+        }:
+        {
+          name = "desktop-ayatana-indicator-${name}";
+          value = makeIndicatorTest {
+            inherit
+              name
+              left
+              ocr
+              extraCheck
+              titleOcr
+              ;
+          };
+        }
+      ) details
+    );
 in
 {
   greeter = makeTest (
@@ -563,126 +678,6 @@ in
     }
   );
 
-  desktop-ayatana-indicators = makeTest (
-    { pkgs, lib, ... }:
-    {
-      name = "lomiri-desktop-ayatana-indicators";
-
-      meta = {
-        maintainers = lib.teams.lomiri.members;
-      };
-
-      nodes.machine =
-        { config, ... }:
-        {
-          imports = [
-            ./common/auto.nix
-            ./common/user-account.nix
-          ];
-
-          virtualisation.memorySize = 2047;
-
-          users.users.${user} = {
-            inherit description password;
-          };
-
-          test-support.displayManager.auto = {
-            enable = true;
-            inherit user;
-          };
-
-          # To control mouse via scripting
-          programs.ydotool.enable = true;
-
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
-
-          environment.systemPackages = with pkgs; [ qt5.qttools ];
-
-          # Not setting wallpaper, as it breaks indicator OCR(?)
-        };
-
-      enableOCR = true;
-
-      testScript =
-        { nodes, ... }:
-        sharedTestFunctions
-        + ''
-          start_all()
-          machine.wait_for_unit("multi-user.target")
-
-          # The session should start, and not be stuck in i.e. a crash loop
-          with subtest("lomiri starts"):
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
-
-          # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
-          # There's a test app we could use that also displays their contents, but it's abit inconsistent.
-          with subtest("ayatana indicators work"):
-              mouse_click(735, 0) # the cog in the top-right, for the session indicator
-              wait_for_text(r"(Notifications|Rotation|Battery|Sound|Time|Date|System)")
-              machine.screenshot("indicators_open")
-
-              # Indicator order within the menus *should* be fixed based on per-indicator order setting
-              # Session is the one we clicked, but the last we should test (logout). Go as far left as we can test.
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              machine.send_key("left")
-              # Notifications are usually empty, nothing to check there
-
-              with subtest("ayatana indicator display works"):
-                  # We start on this, don't go right
-                  wait_for_text("Lock")
-                  machine.screenshot("indicators_display")
-
-              with subtest("ayatana indicator bluetooth works"):
-                  machine.send_key("right")
-                  wait_for_text("Bluetooth settings")
-                  machine.screenshot("indicators_bluetooth")
-
-              with subtest("lomiri indicator network works"):
-                  machine.send_key("right")
-                  wait_for_text(r"(Flight|Wi-Fi)")
-                  machine.screenshot("indicators_network")
-
-              with subtest("ayatana indicator sound works"):
-                  machine.send_key("right")
-                  wait_for_text(r"(Silent|Volume)")
-                  machine.screenshot("indicators_sound")
-
-              with subtest("ayatana indicator power works"):
-                  machine.send_key("right")
-                  wait_for_text(r"(Charge|Battery settings)")
-                  machine.screenshot("indicators_power")
-
-              with subtest("ayatana indicator datetime works"):
-                  machine.send_key("right")
-                  wait_for_text("Time and Date Settings")
-                  machine.screenshot("indicators_timedate")
-
-              with subtest("ayatana indicator session works"):
-                  machine.send_key("right")
-                  wait_for_text("Log Out")
-                  machine.screenshot("indicators_session")
-
-                  # We should be able to log out and return to the greeter
-                  mouse_click(720, 280) # "Log Out"
-                  mouse_click(400, 240) # confirm logout
-                  machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-        '';
-    }
-  );
-
   keymap =
     let
       pwInput = "qwerty";
@@ -802,4 +797,71 @@ in
           '';
       }
     );
+}
+// makeIndicatorTests {
+  titles = [
+    "Notifications" # messages
+    "Rotation" # display
+    "Battery" # power
+    "Sound" # sound
+    "Time" # datetime
+    "Date" # datetime
+    "System" # session
+  ];
+  details = [
+    # messages normally has no contents
+    ({
+      name = "display";
+      left = 6;
+      ocr = [ "Lock" ];
+    })
+    ({
+      name = "bluetooth";
+      left = 5;
+      ocr = [ "Bluetooth" ];
+    })
+    ({
+      name = "network";
+      left = 4;
+      ocr = [
+        "Flight"
+        "Wi-Fi"
+      ];
+    })
+    ({
+      name = "sound";
+      left = 3;
+      ocr = [
+        "Silent"
+        "Volume"
+      ];
+    })
+    ({
+      name = "power";
+      left = 2;
+      ocr = [
+        "Charge"
+        "Battery"
+      ];
+    })
+    ({
+      name = "datetime";
+      left = 1;
+      ocr = [
+        "Time"
+        "Date"
+      ];
+    })
+    ({
+      name = "session";
+      left = 0;
+      ocr = [ "Log Out" ];
+      extraCheck = ''
+        # We should be able to log out and return to the greeter
+        mouse_click(720, 280) # "Log Out"
+        mouse_click(400, 240) # confirm logout
+        machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+      '';
+    })
+  ];
 }
