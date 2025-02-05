@@ -8,7 +8,7 @@
   darwin,
 }:
 let
-  version = "0.19.0";
+  version = "0.19.2";
 in
 rustPlatform.buildRustPackage {
   pname = "markuplinkchecker";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "becheran";
     repo = "mlc";
     rev = "v${version}";
-    hash = "sha256-Nh+P5+dvl2gBQuvo0iKjsJgz/2OYQqAWSIJBzE7yO6I=";
+    hash = "sha256-NsGgUAe8CYAZhQMR/Jg+MGGKmL2ziFqK+MalrDSLcJQ=";
   };
 
-  cargoHash = "sha256-1WB8J3AMK4DVHrrrdwV7nFmNJfiIndC2k2VQXzKxEy8=";
+  cargoHash = "sha256-q+Z+ldU8iRKaUQKyERYzoAQxex7HsXw7/RJHVLab2z8=";
 
   nativeBuildInputs = [ pkg-config ];
 
