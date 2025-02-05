@@ -1,0 +1,13 @@
+diff --git a/gradle/hasPythonPackage.gradle b/gradle/hasPythonPackage.gradle
+index 2d83cf0cd3..8f3205f9ff 100644
+--- a/gradle/hasPythonPackage.gradle
++++ b/gradle/hasPythonPackage.gradle
+@@ -44,7 +44,7 @@ task buildPyPackage {
+ 	doLast {
+ 		File setuptools = project(":Debugger-rmi-trace").findPyDep(".")
+ 		exec {
+-			workingDir { "build/pypkg" }
++			workingDir { file("build/pypkg") }
+ 			commandLine	rootProject.PYTHON3, "-m", "pip"
+ 			args "wheel", "-w", "dist/", "--no-index", "--no-deps"
+ 			args "-f", setuptools

@@ -1,0 +1,31 @@
+From d20c7039316ea7c76da86963b266d3c34001b9f7 Mon Sep 17 00:00:00 2001
+From: Marcel <me@m4rc3l.de>
+Date: Sat, 2 Nov 2024 21:13:37 +0100
+Subject: [PATCH] setup: remove nose, coverage
+
+---
+ setup.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index b880f27..7a47360 100644
+--- a/setup.py
++++ b/setup.py
+@@ -70,7 +70,7 @@ setup(
+         'Programming Language :: Python :: 3',
+         'Programming Language :: Python :: 3.6'
+     ],
+-    setup_requires=["nose", "coverage", "mock"],
++    setup_requires=["mock"],
+     install_requires=["py-radix==0.10.0"] + (
+         ["future", "ipaddress"] if sys.version_info.major == 2 else []
+     ),
+@@ -78,5 +78,4 @@ setup(
+     entry_points={'console_scripts':
+                   ['aggregate6 = aggregate6.aggregate6:main']},
+     data_files = [('man/man7', ['aggregate6.7'])],
+-    test_suite='nose.collector'
+ )
+-- 
+2.44.1
+

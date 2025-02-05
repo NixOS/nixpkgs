@@ -1,0 +1,36 @@
+From 6276136de0fc567d3a2cc2ecff6effc27688d1a4 Mon Sep 17 00:00:00 2001
+From: Lyze <11274700+lyze237@users.noreply.github.com>
+Date: Fri, 20 Sep 2024 20:04:13 +0200
+Subject: [PATCH] Fix eevee getting renamed to eevee_next
+
+---
+ LogicReinc.BlendFarm.Server/render.py | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/LogicReinc.BlendFarm.Server/render.py b/LogicReinc.BlendFarm.Server/render.py
+index dcff178..f0cf304 100644
+--- a/LogicReinc.BlendFarm.Server/render.py
++++ b/LogicReinc.BlendFarm.Server/render.py
+@@ -19,6 +19,7 @@
+ from multiprocessing import cpu_count
+ 
+ isPre3 = bpy.app.version < (3,0,0);
++isPreEeveeRename = bpy.app.version < (4, 2, 0);
+ 
+ if(isPre3):
+     print('Detected Blender >= 3.0.0\n');
+@@ -218,8 +219,12 @@ def renderWithSettings(renderSettings, id, path):
+             scn.render.fps = fps;
+ 
+         if(engine == 1): #Eevee
+-            print("Using EEVEE");
+-            scn.render.engine = "BLENDER_EEVEE";
++            if(isPreEeveeRename):
++                print("Using EEVEE");
++                scn.render.engine = "BLENDER_EEVEE";
++            else:
++                print("Using EEVEE_NEXT");
++                scn.render.engine = "BLENDER_EEVEE_NEXT";
+         else:
+             scn.render.engine = "CYCLES";
+ 
