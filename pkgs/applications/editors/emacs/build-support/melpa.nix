@@ -7,7 +7,6 @@
   fetchFromGitHub,
   emacs,
   texinfo,
-  writeText,
 }:
 
 let
@@ -17,7 +16,6 @@ let
       stdenv
       emacs
       texinfo
-      writeText
       ;
   };
   libBuildHelper = import ./lib-build-helper.nix;

@@ -5,26 +5,11 @@
   stdenv,
   emacs,
   texinfo,
-  writeText,
   ...
 }:
 
 let
   inherit (lib) optionalAttrs;
-
-  setupHook = writeText "setup-hook.sh" ''
-    source ${./emacs-funcs.sh}
-
-    if [[ ! -v emacsHookDone ]]; then
-      emacsHookDone=1
-
-      # If this is for a wrapper derivation, emacs and the dependencies are all
-      # run-time dependencies. If this is for precompiling packages into bytecode,
-      # emacs is a compile-time dependency of the package.
-      addEnvHooks "$hostOffset" addEmacsVars
-      addEnvHooks "$targetOffset" addEmacsVars
-    fi
-  '';
 
   libBuildHelper = import ./lib-build-helper.nix;
 
@@ -75,8 +60,6 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (
     propagatedBuildInputs = finalAttrs.packageRequires ++ propagatedBuildInputs;
     propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
-    setupHook = args.setupHook or setupHook;
-
     strictDeps = args.strictDeps or true;
 
     inherit turnCompilationWarningToError ignoreCompilationError;
@@ -102,7 +85,6 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (
         # the current package's elisp files are in the load path, otherwise
         # (require 'file-b) from file-a.el in the same package will fail.
         mkdir -p $out/share/emacs/native-lisp
-        source ${./emacs-funcs.sh}
         addEmacsVars "$out"
 
         # package-activate-all is used to activate packages.  In other builder
