@@ -10315,6 +10315,10 @@ self: super: with self; {
     callPackage ../development/python-modules/opentelemetry-instrumentation-sqlalchemy
       { };
 
+  opentelemetry-instrumentation-threading =
+    callPackage ../development/python-modules/opentelemetry-instrumentation-threading
+      { };
+
   opentelemetry-instrumentation-wsgi =
     callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi
       { };
