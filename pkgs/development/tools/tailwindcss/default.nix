@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tailwindcss";
-  version = "3.4.17";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "https://github.com/tailwindlabs/tailwindcss/releases/download/v${version}/tailwindcss-${plat}";
