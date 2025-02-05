@@ -1,0 +1,25 @@
+commit d575077527d448ee45b923fa8c6b0cb7216ca5c5
+Author: Dimitry Andric <dim@FreeBSD.org>
+Date:   Tue Jul 30 20:28:51 2024 +0200
+
+    bsd.sys.mk: for clang >= 19, similar to gcc >= 8.1, turn off -Werror for
+    -Wcast-function-type-mismatch.
+    
+    PR:             280562
+    MFC after:      1 month
+
+diff --git a/share/mk/bsd.sys.mk b/share/mk/bsd.sys.mk
+index 52c3d07746c7..1934a79a5427 100644
+--- a/share/mk/bsd.sys.mk
++++ b/share/mk/bsd.sys.mk
+@@ -88,6 +88,10 @@ CWARNFLAGS.clang+=	-Wno-unused-const-variable
+ .if ${COMPILER_TYPE} == "clang" && ${COMPILER_VERSION} >= 150000
+ CWARNFLAGS.clang+=	-Wno-error=unused-but-set-parameter
+ .endif
++.if ${COMPILER_TYPE} == "clang" && ${COMPILER_VERSION} >= 190000
++# Similar to gcc >= 8.1 -Wno-error=cast-function-type below
++CWARNFLAGS.clang+=	-Wno-error=cast-function-type-mismatch
++.endif
+ .endif # WARNS <= 6
+ .if ${WARNS} <= 3
+ CWARNFLAGS.clang+=	-Wno-tautological-compare -Wno-unused-value\

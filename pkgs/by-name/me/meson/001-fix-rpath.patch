@@ -1,0 +1,24 @@
+--- a/mesonbuild/backend/backends.py
++++ b/mesonbuild/backend/backends.py
+@@ -723,6 +723,21 @@
+     @staticmethod
+     def get_rpath_dirs_from_link_args(args: T.List[str]) -> T.Set[str]:
+         dirs: T.Set[str] = set()
++
++        nix_ldflags = os.environ.get('NIX_LDFLAGS', '').split()
++        next_is_path = False
++        # Try to add rpaths set by user or ld-wrapper so that they are not removed.
++        # Based on https://github.com/NixOS/nixpkgs/blob/69711a2f5ffe8cda208163be5258266172ff527f/pkgs/build-support/bintools-wrapper/ld-wrapper.sh#L148-L177
++        for flag in nix_ldflags:
++            if flag == '-rpath' or flag == '-L':
++                next_is_path = True
++            elif next_is_path or flag.startswith('-L/'):
++                if flag.startswith('-L/'):
++                    flag = flag[2:]
++                if flag.startswith('@storeDir@'):
++                    dirs.add(flag)
++                next_is_path = False
++
+         # Match rpath formats:
+         # -Wl,-rpath=
+         # -Wl,-rpath,

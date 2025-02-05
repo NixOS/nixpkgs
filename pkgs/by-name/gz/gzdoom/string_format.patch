@@ -1,0 +1,13 @@
+diff --git a/src/common/engine/i_net.cpp b/src/common/engine/i_net.cpp
+index ad106bbc4..0a67062a0 100644
+--- a/src/common/engine/i_net.cpp
++++ b/src/common/engine/i_net.cpp
+@@ -1072,7 +1072,7 @@ void I_NetError(const char* error)
+ {
+ 	doomcom.numnodes = 0;
+ 	StartWindow->NetClose();
+-	I_FatalError(error);
++	I_FatalError("%s", error);
+ }
+ 
+ // todo: later these must be dispatched by the main menu, not the start screen.
