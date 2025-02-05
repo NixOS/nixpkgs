@@ -67,7 +67,7 @@ libBuildHelper.extendMkDerivation' stdenv.mkDerivation (
       '';
 
     inherit packageRequires;
-    buildInputs = [ emacs ] ++ finalAttrs.packageRequires ++ buildInputs;
+    buildInputs = [ emacs ] ++ buildInputs;
     nativeBuildInputs = [
       emacs
       texinfo
