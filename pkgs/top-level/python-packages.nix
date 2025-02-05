@@ -471,6 +471,8 @@ self: super: with self; {
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
+  aiousbwatcher = callPackage ../development/python-modules/aiousbwatcher { };
+
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
   aiovodafone = callPackage ../development/python-modules/aiovodafone { };
