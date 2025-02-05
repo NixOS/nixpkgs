@@ -20,7 +20,7 @@ buildGo123Module rec {
 
   subPackages = [ "cmd/traefik" ];
 
-  env.CGO_ENABLED = 0;
+  CGO_ENABLED = 0;
 
   preBuild = ''
     GOOS= GOARCH= go generate
