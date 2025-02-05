@@ -1,4 +1,5 @@
 {
+  rescript-editor-analysis,
   lib,
   stdenv,
   vscode-utils,
@@ -6,7 +7,6 @@
 }:
 let
   version = "1.60.0";
-  rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
   arch =
     if stdenv.hostPlatform.isLinux then
       "linux"

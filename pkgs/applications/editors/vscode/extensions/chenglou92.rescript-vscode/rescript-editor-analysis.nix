@@ -1,16 +1,16 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  ocaml,
   ocamlPackages,
-  dune_3,
   version,
 }:
 
-stdenv.mkDerivation {
-  pname = "rescript-editor-analysis";
+ocamlPackages.buildDunePackage rec {
   inherit version;
+
+  pname = "analysis";
+
+  minimalOCamlVersion = "4.10";
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
@@ -20,26 +20,16 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    ocaml
-    dune_3
     ocamlPackages.cppo
   ];
 
-  buildPhase = ''
-    dune build -p analysis
-  '';
-
-  installPhase = ''
-    install -D -m0555 _build/default/analysis/bin/main.exe $out/bin/rescript-editor-analysis.exe
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Analysis binary for the ReScript VSCode plugin";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
     maintainers = [
-      lib.maintainers.dlip
-      lib.maintainers.jayesh-bhoot
+      maintainers.dlip
+      maintainers.jayesh-bhoot
     ];
-    license = lib.licenses.mit;
+    license = licenses.mit;
   };
 }

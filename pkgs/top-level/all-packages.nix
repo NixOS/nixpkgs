@@ -8212,6 +8212,8 @@ with pkgs;
   inherit (callPackage ../development/tools/replay-io { })
     replay-io replay-node-cli;
 
+  rescript-editor-analysis = callPackage ../applications/editors/vscode/extensions/chenglou92.rescript-vscode/rescript-editor-analysis.nix { version = "1.60.0"; };
+
   rnginline = with python3Packages; toPythonApplication rnginline;
 
   rr = callPackage ../development/tools/analysis/rr { };
