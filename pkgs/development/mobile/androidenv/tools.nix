@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, stdenv, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, postInstall}:
+{deployAndroidPackage, lib, stdenv, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, postInstall, meta}:
 
 deployAndroidPackage {
   name = "androidsdk-tools";
@@ -40,5 +40,5 @@ deployAndroidPackage {
     ${postInstall}
   '';
 
-  meta.license = lib.licenses.unfree;
+  inherit meta;
 }

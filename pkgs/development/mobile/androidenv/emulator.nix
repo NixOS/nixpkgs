@@ -1,4 +1,4 @@
-{ deployAndroidPackage, lib, stdenv, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall }:
+{ deployAndroidPackage, lib, stdenv, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall, meta }:
 
 deployAndroidPackage {
   inherit package;
@@ -69,4 +69,6 @@ deployAndroidPackage {
     ${postInstall}
   '';
   dontMoveLib64 = true;
+
+  inherit meta;
 }

@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs}:
+{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs, meta}:
 
 deployAndroidPackage {
   inherit package;
@@ -17,4 +17,5 @@ deployAndroidPackage {
         ln -s $i
     done
   '';
+  inherit meta;
 }

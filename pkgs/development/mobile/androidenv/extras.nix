@@ -6,6 +6,7 @@
   autoPatchelfHook,
   makeWrapper,
   pkgs,
+  meta,
 }:
 
 deployAndroidPackage {
@@ -36,4 +37,6 @@ deployAndroidPackage {
         }
     fi
   '';
+
+  inherit meta;
 }
