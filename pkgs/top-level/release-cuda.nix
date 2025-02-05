@@ -70,7 +70,7 @@ let
 
   # Package sets to evaluate whole
   packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
+  evalPackageSet = pset: packagePlatforms pkgs.${pset};
 
   jobs =
     mapTestOn {
@@ -159,6 +159,6 @@ let
         vllm = linux;
       };
     }
-    // (lib.genAttrs packageSets evalPackageSet);
+    // mapTestOn (lib.genAttrs packageSets evalPackageSet);
 in
 jobs
