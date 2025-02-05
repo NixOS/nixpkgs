@@ -10346,6 +10346,8 @@ self: super: with self; {
     python3 = python;
     python3Packages = self;
     withPetsc4py = true;
+    withFullDeps = true;
+    petsc-optimized = true;
   });
 
   pex = callPackage ../development/python-modules/pex { };

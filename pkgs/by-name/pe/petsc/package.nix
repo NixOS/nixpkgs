@@ -13,25 +13,26 @@
   mpiSupport ? true,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  petsc-withp4est ? false,
-  hdf5-support ? false,
+  petsc-withp4est ? withFullDeps,
+  hdf5-support ? withFullDeps,
   hdf5,
   metis,
-  withMetis ? false,
+  withMetis ? withFullDeps,
   parmetis,
-  withParmetis ? false,
+  withParmetis ? false, # parmetis is unfree and should be enabled manualy
   scotch,
-  withPtscotch ? false,
+  withPtscotch ? withFullDeps,
   scalapack,
-  withScalapack ? false,
+  withScalapack ? withFullDeps,
   mumps_par,
-  withMumps ? false,
+  withMumps ? withFullDeps,
   pkg-config,
   p4est,
   zlib, # propagated by p4est but required by petsc
   petsc-optimized ? false,
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
+  withFullDeps ? false
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
