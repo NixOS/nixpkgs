@@ -9688,6 +9688,8 @@ self: super: with self; {
 
   onecache = callPackage ../development/python-modules/onecache { };
 
+  onedrive-personal-sdk = callPackage ../development/python-modules/onedrive-personal-sdk { };
+
   onetimepass = callPackage ../development/python-modules/onetimepass { };
 
   onigurumacffi = callPackage ../development/python-modules/onigurumacffi { };
