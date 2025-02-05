@@ -9,10 +9,12 @@
 
   # dependencies
   httpx,
+  langchain-core,
   orjson,
   pydantic,
   requests,
   requests-toolbelt,
+  zstandard,
 
   # tests
   anthropic,
@@ -28,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.2.11";
+  version = "0.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-fhmPbA2SyyBJDPS1XCv2mIUsFqWRt6wvNFg8i1QQf9s=";
+    hash = "sha256-mJS9Sdt4ESh9YRyjiUdVHC6R400SKhTeSdTjnbtY61I=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -50,6 +52,7 @@ buildPythonPackage rec {
     pydantic
     requests
     requests-toolbelt
+    zstandard
   ];
 
   nativeCheckInputs = [
@@ -86,6 +89,7 @@ buildPythonPackage rec {
     "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/evaluation/test_runner.py"
     "tests/unit_tests/test_client.py"
+    "tests/unit_tests/evaluation/test_runner.py"
     # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
     "tests/external/test_instructor_evals.py"
@@ -100,7 +104,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "langsmith";
   };
 }
