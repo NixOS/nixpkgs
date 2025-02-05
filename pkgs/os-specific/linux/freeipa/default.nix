@@ -189,7 +189,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.freeipa.org/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.s1341 ];
+    maintainers = with maintainers; [
+      s1341
+      benley
+    ];
     platforms = platforms.linux;
     mainProgram = "ipa";
   };
