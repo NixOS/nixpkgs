@@ -228,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f $out/nix-support/propagated-build-inputs
   '' + lib.optionalString finalAttrs.separateDebugInfo ''
     # HACK: remove broken symlink created by hook
-    rm $debug/lib/debug/s390-ccw.img
+    rm -f $debug/lib/debug/s390-ccw.img
   '';
   preBuild = "cd build";
 
