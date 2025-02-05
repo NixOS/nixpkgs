@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    hash = "sha256-9K04g2DCADkRwjo55rDwVwkvmypqujdN1fqOmHmC09E=";
+    hash = "sha256-ZipFcwTpKKFnQWOPxXg07V71jitG0NSLpGLEzUSsUFA=";
   };
 
-  cargoHash = "sha256-GBqxA49H3KG63hn8QfM4U8m9uZ1YAhJio6bGziyLvV0=";
+  cargoHash = "sha256-iCAPhCn4dKm+uheF0DvGyLBeZXlKhr+J6LRxsOUg1xU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

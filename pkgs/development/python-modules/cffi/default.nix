@@ -11,12 +11,32 @@
   pycparser,
 }:
 
+let
+  version = "1.17.1";
+in
 if isPyPy then
-  null
+  buildPythonPackage {
+    pname = "cffi";
+    inherit version;
+    pyproject = false;
+
+    # cffi is bundled with PyPy.
+    dontUnpack = true;
+
+    # Some dependent packages expect to have pycparser available when using cffi.
+    dependencies = [ pycparser ];
+
+    meta = {
+      description = "Foreign Function Interface for Python calling C code (bundled with PyPy, placeholder package)";
+      homepage = "https://cffi.readthedocs.org/";
+      license = lib.licenses.mit;
+      maintainers = lib.teams.python.members;
+    };
+  }
 else
   buildPythonPackage rec {
     pname = "cffi";
-    version = "1.17.1";
+    inherit version;
     pyproject = true;
 
     src = fetchPypi {

@@ -15,18 +15,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tsukimi";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     tag = "v${version}";
-    hash = "sha256-MbGWPvCq4nzrp8ArXud9A+6uPcnbxs42M2QwjZxUn5w=";
+    hash = "sha256-5hOOIkH0VhZwlsNKAyOI714ueGcSMagoLGi5ECfqXk4=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-59JakfFFM4Tpi1J3ja0aDhC5oty/0QKNLcU58nRewTg=";
+  cargoHash = "sha256-rgTrPJydS4685BlSEwNvmEajZEksqQicscOq/Uu9JJ4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace build.rs \
       --replace-fail 'i18n/locale' "$out/share/locale"
 
-    substituteInPlace src/main.rs \
+    substituteInPlace src/lib.rs \
       --replace-fail '/usr/share/locale' "$out/share/locale"
   '';
 
@@ -81,8 +81,5 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
-    # libmpv2 crate fail to compile
-    # expected raw pointer `*const u8` found raw pointer `*const i8`
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

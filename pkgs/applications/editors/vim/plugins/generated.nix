@@ -1302,6 +1302,42 @@ final: prev:
     meta.homepage = "https://github.com/giuxtaposition/blink-cmp-copilot/";
   };
 
+  blink-cmp-dictionary = buildVimPlugin {
+    pname = "blink-cmp-dictionary";
+    version = "2025-01-12";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-dictionary";
+      rev = "07cc2e49bb52ebff4e8b83d1801ad6441edf90a2";
+      sha256 = "17c41flnjp25c5gry4lq8ik8mk3pbh1qwj86rby57jr4f4wvfykk";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-dictionary/";
+  };
+
+  blink-cmp-spell = buildVimPlugin {
+    pname = "blink-cmp-spell";
+    version = "2025-02-01";
+    src = fetchFromGitHub {
+      owner = "ribru17";
+      repo = "blink-cmp-spell";
+      rev = "38d6797dea6f72baa6e8b3bfca6da96d8fcac64d";
+      sha256 = "19pnasa446iiapgsr3z2fpk0nnrzh8g5wrzrq8n0y4q0z6spc9f6";
+    };
+    meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
+  };
+
+  blink-cmp-git = buildVimPlugin {
+    pname = "blink-cmp-git";
+    version = "2025-01-27";
+    src = fetchFromGitHub {
+      owner = "Kaiser-Yang";
+      repo = "blink-cmp-git";
+      rev = "7c6cfa3d427f50a6eae5c38628b31b8675bab05d";
+      sha256 = "08hfwnjgsl88bkphpdxkdswdnc10mlxpsrk084kgzk4j19w55gyq";
+    };
+    meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-git/";
+  };
+
   blink-compat = buildVimPlugin {
     pname = "blink.compat";
     version = "2025-01-20";
@@ -3005,6 +3041,18 @@ final: prev:
       sha256 = "1d4r12j5vx4hac8nf0d0j0bqdh9jjsij0cdlr8x9acbq3p0lcwv0";
     };
     meta.homepage = "https://github.com/hat0uma/csvview.nvim/";
+  };
+
+  ctags-lsp-nvim = buildVimPlugin {
+    pname = "ctags-lsp.nvim";
+    version = "2024-12-08";
+    src = fetchFromGitHub {
+      owner = "netmute";
+      repo = "ctags-lsp.nvim";
+      rev = "aaae7b5d8dc7aeb836c63301b8eb7311af49bb2a";
+      sha256 = "06h388vkp8nv15wbh96pza85994xf979s7kjqrli4s6y5ygw6m02";
+    };
+    meta.homepage = "https://github.com/netmute/ctags-lsp.nvim/";
   };
 
   ctrlp-cmatcher = buildVimPlugin {
@@ -7386,6 +7434,18 @@ final: prev:
       sha256 = "05k4cgcrz0gj92xy685bd4p6nh2jmaywc2f5sw1lap0v685h7n79";
     };
     meta.homepage = "https://github.com/wfxr/minimap.vim/";
+  };
+
+  minuet-ai-nvim = buildVimPlugin {
+    pname = "minuet-ai.nvim";
+    version = "2025-02-03";
+    src = fetchFromGitHub {
+      owner = "milanglacier";
+      repo = "minuet-ai.nvim";
+      rev = "9a264284573b837dc0202049166a0564a70deaed";
+      sha256 = "06d7s9949aylda4vq36h4s9hnnp3lycwm2nrjid5vxb98gy3d3xn";
+    };
+    meta.homepage = "https://github.com/milanglacier/minuet-ai.nvim/";
   };
 
   mkdir-nvim = buildVimPlugin {

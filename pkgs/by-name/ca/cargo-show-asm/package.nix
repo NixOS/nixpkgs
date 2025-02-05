@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-show-asm";
-  version = "0.2.46";
+  version = "0.2.47";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-MiODtrEE/arK5SiSs/YuFWBkSQkSUrPqUZcjFd+HNbg=";
+    hash = "sha256-ZXqcBAB6gxtukQ51JPVl7qUM7eAhiBgmeZZD2pF5q2g=";
   };
 
-  cargoHash = "sha256-VUqANn4ykAYB4+7h3lHY2UvqduHJPd3P29wsxLpPXFg=";
+  cargoHash = "sha256-Gd9Zdeww5iBh6N49jBlDVYZFYqhmMlKkuadw83fSYcY=";
 
   nativeBuildInputs = [
     installShellFiles
