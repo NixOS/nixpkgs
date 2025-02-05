@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   selenium-manager,
   setuptools,
@@ -32,7 +33,14 @@ buildPythonPackage rec {
     hash = "sha256-b5xwuZ4lcwLbGhJuEmHYrFXoaTW/M0ABdK3dvbpj8oM=";
   };
 
-  patches = [ ./dont-build-the-selenium-manager.patch ];
+  patches = [
+    ./dont-build-the-selenium-manager.patch
+    # https://github.com/SeleniumHQ/selenium/pull/14823
+    (fetchpatch {
+      url = "https://github.com/SeleniumHQ/selenium/commit/0e5bc8ebd648a60087112e3dfedbeb2bfe41f4e8.diff?full_index=1";
+      sha256 = "sha256-8RkleNFskobF2oVeveRTYSgO2P3Npws3GsyvUTvVqL0=";
+    })
+  ];
 
   preConfigure = ''
     cd py
