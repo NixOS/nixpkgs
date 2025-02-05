@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, overrideSDK, buildPackages
 , pixman, vde2, alsa-lib, flex, pcre2
-, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson, perl
+, bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, dtc, ninja, meson, perl, shadow
 , sigtool
 , makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
@@ -210,6 +210,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f $out/share/applications/qemu.desktop
   '' + lib.optionalString guestAgentSupport ''
     # move qemu-ga (guest agent) to separate output
+    wrapProgram $out/bin/qemu-ga \
+      --prefix PATH : "${lib.makeBinPath [ shadow ]}"
     mkdir -p $ga/bin
     mv $out/bin/qemu-ga $ga/bin/
     ln -s $ga/bin/qemu-ga $out/bin
