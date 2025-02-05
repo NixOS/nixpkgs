@@ -13,8 +13,8 @@
   mpiSupport ? true,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  petsc-withp4est ? withFullDeps,
-  hdf5-support ? withFullDeps,
+  withP4est ? withFullDeps,
+  withHdf5 ? withFullDeps,
   hdf5,
   metis,
   withMetis ? withFullDeps,
@@ -36,7 +36,7 @@
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
-assert petsc-withp4est -> p4est.mpiSupport;
+assert withP4est -> (p4est.mpiSupport && mpiSupport);
 
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       blas
       lapack
     ]
-    ++ lib.optional hdf5-support hdf5
-    ++ lib.optional petsc-withp4est p4est
+    ++ lib.optional withHdf5 hdf5
+    ++ lib.optional withP4est p4est
     ++ lib.optional withMetis metis
     ++ lib.optional withParmetis parmetis
     ++ lib.optional withPtscotch scotch
@@ -133,12 +133,12 @@ stdenv.mkDerivation rec {
       "--with-mumps=1"
       "--with-mumps-dir=${mumps_par}"
     ]
-    ++ lib.optionals petsc-withp4est [
+    ++ lib.optionals withP4est [
       "--with-p4est=1"
       "--with-zlib-include=${zlib.dev}/include"
       "--with-zlib-lib=[-L${zlib}/lib,-lz]"
     ]
-    ++ lib.optionals hdf5-support [
+    ++ lib.optionals withHdf5 [
       "--with-hdf5=1"
       "--with-hdf5-fortran-bindings=1"
       "--with-hdf5-include=${hdf5.dev}/include"
