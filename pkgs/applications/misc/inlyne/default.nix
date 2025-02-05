@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Inlyne-Project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-j4DEau7LZxIoVIIYwCUgqmkSgdRxWzF5/vOS0lvjgUk=";
+    hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9Ev/D58MU0aMleM6NFG7MsXqGlhi0eAujqYaLDuPjIY=";
+  cargoHash = "sha256-jSUqpryUgOL0qo0gbbH4s24krrPsLOSNc6FQUEUeeUQ=";
 
   nativeBuildInputs =
     [
