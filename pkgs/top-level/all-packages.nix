@@ -17075,7 +17075,7 @@ with pkgs;
   ### SCIENCE/GEOLOGY
   pflotran = callPackage ../by-name/pf/pflotran/package.nix {
     petsc = petsc.override {
-      hdf5-support = true;
+      withHdf5 = true;
       hdf5 = hdf5-fortran-mpi;
       petsc-optimized = true;
     };
