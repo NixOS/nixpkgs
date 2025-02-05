@@ -10,14 +10,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polylux2pdfpc";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "andreasKroepelin";
     repo = "polylux";
     rev = "v${version}";
     sparseCheckout = [ dirname ];
-    hash = "sha256-GefX7XsUfOMCp2THstSizRGpKAoq7yquVukWQjGuFgc=";
+    hash = "sha256-41FgRejonvVTmE89WGm0Cqumm8lb6kkfxtkWV74UKJA=";
   };
   sourceRoot = "${src.name}/${dirname}";
 
