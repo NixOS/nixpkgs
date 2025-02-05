@@ -316,9 +316,7 @@ let
         });
 
         # tries to write a log file to $HOME
-        insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
+        insert-shebang = mkHome super.insert-shebang;
 
         ivy-rtags = ignoreCompilationError (fix-rtags super.ivy-rtags); # elisp error
 
@@ -665,9 +663,7 @@ let
         helm-rtags = ignoreCompilationError (fix-rtags super.helm-rtags); # elisp error
 
         # tries to write to $HOME
-        php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
+        php-auto-yasnippets = mkHome super.php-auto-yasnippets;
 
         racer = super.racer.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''

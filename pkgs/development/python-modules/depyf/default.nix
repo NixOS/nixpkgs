@@ -5,6 +5,7 @@
   astor,
   dill,
   filelock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +29,9 @@ buildPythonPackage rec {
     filelock
   ];
 
-  pythonImportCheck = [ "depyf" ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "depyf" ];
 
   meta = with lib; {
     description = "Decompile python functions, from bytecode to source code";

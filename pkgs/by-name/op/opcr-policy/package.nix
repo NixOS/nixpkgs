@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "opcr-policy";
-  version = "0.2.22";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "opcr-io";
     repo = "policy";
     rev = "v${version}";
-    sha256 = "sha256-I7KjJpm7dw8rWl1Da53bK/iJvdWY1dHKKfdz6e64wVk=";
+    sha256 = "sha256-vTUlC/LQTQEpzd1AXgcJJBZXmbSuX8JACbM60KVuT9E=";
   };
-  vendorHash = "sha256-cmhg//MlRsScn0yCInp6g/HG4SawMO9qhfaD14ODzyE=";
+  vendorHash = "sha256-3KBHK9CKn9h45eq0wAwLivm3Lj3COGYn/zGltonLP9k=";
 
   ldflags = [
     "-s"
