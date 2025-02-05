@@ -65,8 +65,11 @@ crystal_1_14.buildCrystalPackage {
   '';
 
   preBuild = ''
-    cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug
-    cd ../.. && mkdir bin/ && cp lib/gi-crystal/bin/gi-crystal bin/
+    cd lib/gi-crystal
+    shards build -Dpreview_mt --release --no-debug
+    cd ../..
+    mkdir bin/
+    cp lib/gi-crystal/bin/gi-crystal bin/
   '';
 
   buildTargets = [ "all" ];
