@@ -293,6 +293,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DQT_FEATURE_rpath=OFF"
+      "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
     ]
     ++ lib.optionals isCrossBuild [
       "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
