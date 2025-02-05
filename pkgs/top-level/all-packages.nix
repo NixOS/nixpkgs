@@ -4349,9 +4349,6 @@ with pkgs;
 
   inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
-    nomad_1_4
-    nomad_1_5
-    nomad_1_6
     nomad_1_7
     nomad_1_8
     nomad_1_9
@@ -4972,9 +4969,7 @@ with pkgs;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
-  shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
-  };
+  shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust { };
 
   shellify = haskellPackages.shellify.bin;
 
@@ -10744,6 +10739,8 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
     openexr = openexr_3;
   };
+
+  vllm = with python3Packages; toPythonApplication vllm;
 
   vte-gtk4 = vte.override {
     gtkVersion = "4";
@@ -17231,8 +17228,6 @@ with pkgs;
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
-
-  flatcam = python39.pkgs.callPackage ../applications/science/electronics/flatcam { };
 
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_2;

@@ -292,8 +292,16 @@ in
     dependencies = [ self.copilot-lua ];
   };
 
+  blink-cmp-dictionary = super.blink-cmp-dictionary.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
+  };
+
+  blink-cmp-git = super.blink-cmp-git.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
   };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
@@ -1803,6 +1811,24 @@ in
       sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
+  minuet-ai-nvim = super.minuet-ai-nvim.overrideAttrs {
+    checkInputs = [
+      # optional cmp integration
+      self.nvim-cmp
+    ];
+    dependencies = with self; [ plenary-nvim ];
+    nvimSkipModule = [
+      # Backends require configuration
+      "minuet.backends.claude"
+      "minuet.backends.codestral"
+      "minuet.backends.gemini"
+      "minuet.backends.huggingface"
+      "minuet.backends.openai"
+      "minuet.backends.openai_compatible"
+      "minuet.backends.openai_fim_compatible"
+    ];
   };
 
   mkdnflow-nvim = super.mkdnflow-nvim.overrideAttrs {

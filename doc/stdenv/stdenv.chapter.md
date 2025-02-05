@@ -1394,8 +1394,7 @@ hook, as they might introduce unexpected behavior in some specific cases.
 This setup hook ensures that the directory specified by the `HOME` environment
 variable is writable. If it is not, the hook assigns `HOME` to a writable
 directory (in `.home` in `$NIX_BUILD_TOP`). This adjustment is necessary for
-certain packages that require write access to a home directory. This hook can
-be added to any phase.
+certain packages that require write access to a home directory.
 
 By setting `HOME` to a writable directory, this setup hook prevents failures in
 packages that attempt to write to the home directory.
