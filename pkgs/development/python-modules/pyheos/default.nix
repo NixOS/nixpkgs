@@ -5,18 +5,19 @@
   setuptools,
   pytest-asyncio,
   pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "pyheos";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pyheos";
     tag = version;
-    hash = "sha256-0td3Xv2BwOwcuU0ZlPA86eQd326vRjB7UMysN/RGjMU=";
+    hash = "sha256-2hrWK3nRFnRtv4dfXXELOxKwttG9Oo2I2+eSXcfgUi8=";
   };
 
   build-system = [ setuptools ];
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   disabledTests = [
