@@ -425,6 +425,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/311930
     # https://github.com/rust-lang/rust/issues/55120
     # https://github.com/rust-lang/rust/issues/82521
-    broken = stdenv.hostPlatform.useLLVM;
+    broken = stdenv.targetPlatform.useLLVM;
   };
 })
