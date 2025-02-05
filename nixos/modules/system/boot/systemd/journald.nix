@@ -116,6 +116,8 @@ in
         "syslog.socket"
       ];
 
+    systemd.sockets.systemd-journald-audit.wantedBy = [ "systemd-journald.service" "sockets.target" ];
+
     environment.etc = {
       "systemd/journald.conf".text = ''
         [Journal]
