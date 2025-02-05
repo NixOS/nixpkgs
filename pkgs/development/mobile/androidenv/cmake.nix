@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs, stdenv}:
+{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs, stdenv, meta}:
 
 deployAndroidPackage {
   inherit package;
@@ -7,4 +7,8 @@ deployAndroidPackage {
   patchInstructions = lib.optionalString (os == "linux") ''
     autoPatchelf $packageBaseDir/bin
   '';
+
+  meta = meta // {
+    license = lib.licenses.bsd3;
+  };
 }

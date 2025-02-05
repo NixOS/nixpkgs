@@ -24,28 +24,6 @@
 
 # Copy this file to your Android project.
 let
-  # Declaration of versions for everything. This is useful since these
-  # versions may be used in multiple places in this Nix expression.
-  android = {
-    versions = {
-      cmdLineToolsVersion = "13.0";
-      platformTools = "35.0.2";
-      buildTools = "35.0.0";
-      ndk = [
-        "27.0.12077973"
-      ];
-      cmake = "3.6.4111459";
-      emulator = "35.1.4";
-    };
-
-    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" ];
-    abis = [ "x86_64" ];
-    extras = [
-      "extras;google;gcm"
-      "extras;google;auto"
-    ];
-  };
-
   # If you copy this example out of nixpkgs, something like this will work:
   /*androidEnvNixpkgs = fetchTarball {
     name = "androidenv";
@@ -64,23 +42,13 @@ let
   };
 
   androidComposition = androidEnv.composeAndroidPackages {
-    cmdLineToolsVersion = android.versions.cmdLineToolsVersion;
-    platformToolsVersion = android.versions.platformTools;
-    buildToolsVersions = [android.versions.buildTools];
-    platformVersions = android.platforms;
-    abiVersions = android.abis;
-
     includeSources = true;
     includeSystemImages = true;
     includeEmulator = true;
-    emulatorVersion = android.versions.emulator;
-
     includeNDK = true;
-    ndkVersions = android.versions.ndk;
-    cmakeVersions = [android.versions.cmake];
-
     useGoogleAPIs = true;
-    includeExtras = android.extras;
+
+    platformVersions = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" ];
 
     # If you want to use a custom repo JSON:
     # repoJson = ../repo.json;
@@ -98,6 +66,11 @@ let
       ];
       addons = [ ../xml/addon2-1.xml ];
     };*/
+
+    includeExtras = [
+      "extras;google;gcm"
+      "extras;google;auto"
+    ];
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -132,12 +105,12 @@ pkgs.mkShell rec {
   ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
   ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
 
-  # Ensures that we don't have to use a FHS env by using the nix store's aapt2.
-  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${android.versions.buildTools}/aapt2";
-
   shellHook = ''
+    # Ensures that we don't have to use a FHS env by using the nix store's aapt2.
+    export GRADLE_OPTS="-Dorg.gradle.project.android.aapt2FromMavenOverride=$(echo "$ANDROID_SDK_ROOT/build-tools/"*"/aapt2")"
+
     # Add cmake to the path.
-    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/${android.versions.cmake}"*/)"
+    cmake_root="$(echo "$ANDROID_SDK_ROOT/cmake/"*/)"
     export PATH="$cmake_root/bin:$PATH"
 
     # Write out local.properties for Android Studio.
@@ -169,7 +142,7 @@ pkgs.mkShell rec {
 
       # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
       packages=(
-        "build-tools;35.0.0" "platform-tools" \
+        "build-tools" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
         "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-35" \
