@@ -1002,6 +1002,17 @@ in {
               exit 1
             fi
 
+            # Check if systemd-tmpfiles setup worked correctly
+            for i in config data; do
+              if [[ ! -O "${datadir}/$i" ]]; then
+                echo "${datadir}/$i is not owned by user 'nextcloud'!"
+                echo "Please check the logs via 'journalctl -u systemd-tmpfiles-setup'"
+                echo "and make sure there are no unsafe path transitions."
+                echo "(https://nixos.org/manual/nixos/stable/#module-services-nextcloud-pitfalls-during-upgrade)"
+                exit 1
+              fi
+            done
+
             ${concatMapStrings (name: ''
               if [ -d "${cfg.home}"/${name} ]; then
                 echo "Cleaning up ${name}; these are now bundled in the webroot store-path!"
