@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  setuptools,
   bleak,
   construct,
   construct-typing,
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-JPmIKj8IL3i7QWiMTmGQzqb4h0VqLlhILPAOqMucsuM=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bleak
