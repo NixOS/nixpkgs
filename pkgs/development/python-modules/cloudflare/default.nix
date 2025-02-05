@@ -48,7 +48,10 @@ buildPythonPackage rec {
     description = "Official Python library for the Cloudflare API";
     homepage = "https://github.com/cloudflare/cloudflare-python";
     changelog = "https://github.com/cloudflare/cloudflare-python/blob/${version}/CHANGELOG.md";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      marie
+      jemand771
+    ];
     license = lib.licenses.asl20;
   };
 }
