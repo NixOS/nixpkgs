@@ -66,7 +66,7 @@
 
 let
   pname = "ray";
-  version = "2.41.0";
+  version = "2.42.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -85,16 +85,16 @@ buildPythonPackage rec {
       # curl https://pypi.org/pypi/ray/${version}/json | jq -r '.urls[] | "\(.digests.sha256)  \(.filename)"'
       hashes = {
         aarch64-linux = {
-          cp39 = "782f29c8d743304fb3b67ed825db6caf5e5bd9263d628a6ff67a61bccde9f176";
-          cp310 = "fbb2cf4a86f4705faea6334356faa4dc7f454210e6eb085d63b7f1ae6e9c12e1";
-          cp311 = "68c9cc50af0dfafa78e5047890018cf3115fae8702ab083ac78b59b349989d45";
-          cp312 = "c9712ee4c52b7764b2ec9c693419ffde1313dd79cb186173dae6e25db44993de";
+          cp39 = "sha256-NlE3pzeWzz6DlS2Y6Gv8W+1DRMjK1a9T2R9lvq5nL7g=";
+          cp310 = "sha256-MxCDruyfxiqy/Fkn0YM1idpZNUvChx8Xt6EBie7Q2uY=";
+          cp311 = "sha256-eb9KDQIX6i2O/UfeZ9nCKTBAGc6ZZ427FI9WXZakRuI=";
+          cp312 = "sha256-PnKHZmINbjEYajepBsB7gH2i86rPSxZ/bos3xy7U3mM=";
         };
         x86_64-linux = {
-          cp39 = "fe837e717a642a648f6fa8cc285e3ccc6782d126b8af793a25903fa3ac8d5c22";
-          cp310 = "3932d6db3a8982c5196db08cf56e2ed0bf50b8568508cfe486be8de63ba2d95d";
-          cp311 = "fff5e9cc5a53815d3b586a261e34bd0fef1c324b2cded4c9b8e790e1e3dc3997";
-          cp312 = "3d76acb070fa8bd4ebdb011acdfa22bb89bdbe9b35fb78aec5981db76eac2b60";
+          cp39 = "sha256-rGz4bKRemxRdHCLPpHBpzdyq3ms/3Bsd5adhEJfZbX4=";
+          cp310 = "sha256-i+C9U2ErZEbDm09OnLS9NUhknVISR3NJzPvcklCHgik=";
+          cp311 = "sha256-6JJLbtCGZVsr+LP/KaxFPR6Kp6TW0s6WW7ql+xfRNk8=";
+          cp312 = "sha256-4+3gNnqyj72GiiL05M2sRFQ8ZU4svFo7SCF45/cl6iw=";
         };
       };
     in
