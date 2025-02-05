@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
