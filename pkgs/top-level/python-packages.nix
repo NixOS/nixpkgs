@@ -15409,6 +15409,8 @@ self: super: with self; {
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
+  sphinx-versions = callPackage ../development/python-modules/sphinx-versions { };
+
   sphinxawesome-theme = callPackage ../development/python-modules/sphinxawesome-theme { };
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
