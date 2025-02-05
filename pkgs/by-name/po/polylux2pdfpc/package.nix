@@ -10,18 +10,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polylux2pdfpc";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "andreasKroepelin";
     repo = "polylux";
     rev = "v${version}";
     sparseCheckout = [ dirname ];
-    hash = "sha256-GefX7XsUfOMCp2THstSizRGpKAoq7yquVukWQjGuFgc=";
+    hash = "sha256-41FgRejonvVTmE89WGm0Cqumm8lb6kkfxtkWV74UKJA=";
   };
   sourceRoot = "${src.name}/${dirname}";
 
-  cargoHash = "sha256-vmCaQxPkzz1ZVmtX7L3VeQb3kWhVqyPoQ1NrTSiJN9Y=";
+  cargoHash = "sha256-M5NGHDbGk8bz0RRfzA1o/6vWpc2FkGF0jdlJG7LY9cI=";
 
   passthru.updateScript = nix-update-script { };
 
