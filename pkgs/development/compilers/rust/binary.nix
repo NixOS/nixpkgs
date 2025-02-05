@@ -119,6 +119,7 @@ rec {
         "armv6l-netbsd"
         "mipsel-netbsd"
         "riscv64-netbsd"
+        "x86_64-none"
         "x86_64-redox"
         "wasm32-wasi"
       ];
