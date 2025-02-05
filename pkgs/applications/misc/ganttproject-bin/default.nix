@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ganttproject-bin";
-  version = "3.3.3312";
+  version = "3.3.3316";
 
   src = fetchzip {
     url = "https://dl.ganttproject.biz/ganttproject-${version}/ganttproject-${version}.zip";
     stripRoot = false;
-    hash = "sha256-mvup4yMfFfzL2iLMj9vlFFrJT0wLmeadNEnf2QO53H0=";
+    hash = "sha256-tiEq/xdC0gXiUInLS9xGR/vI/BpdSA+mSf5yukuejc4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
