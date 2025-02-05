@@ -6,18 +6,18 @@
 
 buildNpmPackage rec {
   pname = "syn2mas";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     rev = "v${version}";
-    hash = "sha256-QLtyYxV2yXHJtwWgGcyi7gRcKypYoy9Z8bkEuTopVXc=";
+    hash = "sha256-rFex6stw++xNrcCYnYn3N0HrUQd91DAw9QU0R2MUzyQ=";
   };
 
   sourceRoot = "${src.name}/tools/syn2mas";
 
-  npmDepsHash = "sha256-pRa5qqLsI8Hx9v5tMPDkehczXZjWWAOjfDfLLh2V6Q4=";
+  npmDepsHash = "sha256-liwFM3HkZtZTJmaqF/7WvYxf2EKgjNF5xCHP/OxFK/k=";
 
   dontBuild = true;
 
