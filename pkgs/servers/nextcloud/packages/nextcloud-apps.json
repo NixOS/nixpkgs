@@ -15,6 +15,7 @@
 , "groupfolders": "agpl3Plus"
 , "impersonate": "agpl3Plus"
 , "integration_openai": "agpl3Only"
+, "integration_deepl": "agpl3Plus"
 , "integration_paperless": "agpl3Plus"
 , "mail": "agpl3Plus"
 , "maps": "agpl3Plus"
