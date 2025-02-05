@@ -1,27 +1,62 @@
-{ callPackage, stdenv, lib, fetchurl, ruby, writeText
-, licenseAccepted ? false
+{ callPackage, stdenv, stdenvNoCC, lib, fetchurl, ruby, writeText
+, licenseAccepted ? false, meta
 }:
 
-{ cmdLineToolsVersion ? "13.0"
-, toolsVersion ? "26.1.1"
-, platformToolsVersion ? "35.0.2"
-, buildToolsVersions ? [ "35.0.0" ]
+{ repoJson ? ./repo.json
+, repoXmls ? null
+, repo ? (
+  # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
+  if repoXmls != null then
+    let
+      # Uses mkrepo.rb to create a repo spec.
+      mkRepoJson = { packages ? [], images ? [], addons ? [] }: let
+        mkRepoRuby = (ruby.withPackages (pkgs: with pkgs; [ slop nokogiri ]));
+        mkRepoRubyArguments = lib.lists.flatten [
+          (map (package: ["--packages" "${package}"]) packages)
+          (map (image: ["--images" "${image}"]) images)
+          (map (addon: ["--addons" "${addon}"]) addons)
+        ];
+      in
+      stdenvNoCC.mkDerivation {
+        name = "androidenv-repo-json";
+        buildInputs = [ mkRepoRuby ];
+        preferLocalBuild = true;
+        unpackPhase = "true";
+        buildPhase = ''
+          ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
+        '';
+        installPhase = ''
+          mv repo.json $out
+        '';
+      };
+       repoXmlSpec = {
+         packages = repoXmls.packages or [];
+         images = repoXmls.images or [];
+         addons = repoXmls.addons or [];
+       };
+    in
+      lib.importJSON "${mkRepoJson repoXmlSpec}"
+  else
+    lib.importJSON repoJson
+  )
+, cmdLineToolsVersion ? repo.latest.cmdline-tools
+, toolsVersion ? repo.latest.tools
+, platformToolsVersion ? repo.latest.platform-tools
+, buildToolsVersions ? [ repo.latest.build-tools ]
 , includeEmulator ? false
-, emulatorVersion ? "35.5.2"
-, platformVersions ? []
+, emulatorVersion ? repo.latest.emulator
+, platformVersions ? [ repo.latest.platforms ]
 , includeSources ? false
 , includeSystemImages ? false
 , systemImageTypes ? [ "google_apis" "google_apis_playstore" ]
 , abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
-, cmakeVersions ? [ ]
+, cmakeVersions ? [ repo.latest.cmake ]
 , includeNDK ? false
-, ndkVersion ? "27.0.12077973"
-, ndkVersions ? [ndkVersion]
+, ndkVersion ? repo.latest.ndk
+, ndkVersions ? [ ndkVersion ]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
 , includeExtras ? []
-, repoJson ? ./repo.json
-, repoXmls ? null
 , extraLicenses ? []
 }:
 
@@ -41,41 +76,6 @@ let
       aarch64-linux = "aarch64";
       aarch64-darwin = "aarch64";
   }.${stdenv.hostPlatform.system} or "all";
-
-  # Uses mkrepo.rb to create a repo spec.
-  mkRepoJson = { packages ? [], images ? [], addons ? [] }: let
-    mkRepoRuby = (ruby.withPackages (pkgs: with pkgs; [ slop nokogiri ]));
-    mkRepoRubyArguments = lib.lists.flatten [
-      (builtins.map (package: ["--packages" "${package}"]) packages)
-      (builtins.map (image: ["--images" "${image}"]) images)
-      (builtins.map (addon: ["--addons" "${addon}"]) addons)
-    ];
-  in
-  stdenv.mkDerivation {
-    name = "androidenv-repo-json";
-    buildInputs = [ mkRepoRuby ];
-    preferLocalBuild = true;
-    unpackPhase = "true";
-    buildPhase = ''
-      ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
-    '';
-    installPhase = ''
-      mv repo.json $out
-    '';
-  };
-
-  # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
-  repo = if repoXmls != null then
-           let
-             repoXmlSpec = {
-               packages = repoXmls.packages or [];
-               images = repoXmls.images or [];
-               addons = repoXmls.addons or [];
-             };
-           in
-           lib.importJSON "${mkRepoJson repoXmlSpec}"
-         else
-           lib.importJSON repoJson;
 
   # Converts all 'archives' keys in a repo spec to fetchurl calls.
   fetchArchives = attrSet:
@@ -137,9 +137,9 @@ let
     "android-sdk-license"
   ] ++ extraLicenses);
 in
-rec {
+lib.recurseIntoAttrs rec {
   deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
-    inherit stdenv lib mkLicenses;
+    inherit stdenv lib mkLicenses meta;
   };
 
   deployAndroidPackage = ({package, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
@@ -164,12 +164,12 @@ rec {
       '';
 
   platform-tools = callPackage ./platform-tools.nix {
-    inherit deployAndroidPackage os;
+    inherit deployAndroidPackage os meta;
     package = check-version packages "platform-tools" platformToolsVersion;
   };
 
   tools = callPackage ./tools.nix {
-    inherit deployAndroidPackage os;
+    inherit deployAndroidPackage os meta;
     package = check-version packages "tools" toolsVersion;
 
     postInstall = ''
@@ -180,7 +180,7 @@ rec {
 
   build-tools = map (version:
     callPackage ./build-tools.nix {
-      inherit deployAndroidPackage os;
+      inherit deployAndroidPackage os meta;
       package = check-version packages "build-tools" version;
 
       postInstall = ''
@@ -190,7 +190,7 @@ rec {
   ) buildToolsVersions;
 
   emulator = lib.optionals includeEmulator (callPackage ./emulator.nix {
-    inherit deployAndroidPackage os;
+    inherit deployAndroidPackage os meta;
     package = check-version packages "emulator" emulatorVersion;
 
     postInstall = ''
@@ -248,7 +248,7 @@ rec {
 
   cmake = map (version:
     callPackage ./cmake.nix {
-      inherit deployAndroidPackage os;
+      inherit deployAndroidPackage os meta;
       package = check-version packages "cmake" version;
     }
   ) cmakeVersions;
@@ -256,7 +256,7 @@ rec {
   # Creates a NDK bundle.
   makeNdkBundle = ndkVersion:
     callPackage ./ndk-bundle {
-      inherit deployAndroidPackage os platform-tools;
+      inherit deployAndroidPackage os platform-tools meta;
       package = packages.ndk-bundle.${ndkVersion} or packages.ndk.${ndkVersion};
     };
 
@@ -344,7 +344,7 @@ rec {
       by an environment variable for a single invocation of the nix tools.
         $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
-    inherit deployAndroidPackage os;
+    inherit deployAndroidPackage os meta;
 
     package = cmdline-tools-package;
 
@@ -369,7 +369,7 @@ rec {
           package = addons.extras.${identifier};
           path = package.path;
           extras = callPackage ./extras.nix {
-            inherit deployAndroidPackage package os;
+            inherit deployAndroidPackage package os meta;
           };
         in
         ''

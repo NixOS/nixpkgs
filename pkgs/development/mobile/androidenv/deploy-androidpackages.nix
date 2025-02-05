@@ -1,5 +1,5 @@
-{stdenv, lib, unzip, mkLicenses}:
-{packages, nativeBuildInputs ? [], buildInputs ? [], patchesInstructions ? {}, meta ? {}, ...}@args:
+{stdenv, lib, unzip, mkLicenses, meta}:
+{packages, nativeBuildInputs ? [], buildInputs ? [], patchesInstructions ? {}, ...}@args:
 
 let
   extraParams = removeAttrs args [ "packages" "os" "buildInputs" "nativeBuildInputs" "patchesInstructions" ];
@@ -108,7 +108,5 @@ stdenv.mkDerivation ({
   dontPatchELF = true;
   dontAutoPatchelf = true;
 
-  meta = {
-    description = lib.concatMapStringsSep "\n" (package: package.displayName) packages;
-  } // meta;
+  inherit meta;
 } // extraParams)
