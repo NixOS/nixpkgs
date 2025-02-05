@@ -1,0 +1,79 @@
+From 3bca69d889fe545dda4ed9a8fab8ff3fe38ba487 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Wed, 5 Feb 2025 19:37:27 +0100
+Subject: [PATCH] build: fix linking with libtiff with lerc support
+
+Lerc is written in C++.  When C and C++ objects are linked, a C++
+linker should be used to ensure C++-specific things are correctly
+handled.  See e.g. this comment in the Meson source for reference[1].
+One symptom of using a C linker to link with C++ objects is that
+libstdc++ won't be linked when building static executables, causing
+link failures.
+
+Unfortunately, Meson does not know whether dependencies found by
+pkg-config are C++, and therefore require a C++ linker, so we have to
+tell it ourselves to use a C++ linker.  There's no way to check
+whether libtiff is built with Lerc support, so we always use a C++
+linker if one is available and libtiff support is enabled.  If a C++
+linker ends up being used to link only C objects, it shouldn't do any
+harm.
+
+[1]: https://github.com/mesonbuild/meson/blob/9fd5281befe7881c9d1210c9e6865382bc0f2b08/mesonbuild/build.py#L1558-L1565
+---
+Link: https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/181
+
+ gdk-pixbuf/meson.build | 6 ++++++
+ meson.build            | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/gdk-pixbuf/meson.build b/gdk-pixbuf/meson.build
+index 570625bfe..5cc11355f 100644
+--- a/gdk-pixbuf/meson.build
++++ b/gdk-pixbuf/meson.build
+@@ -333,6 +333,11 @@ gdkpixbuf_bin = [
+   [ 'gdk-pixbuf-query-loaders', [ 'queryloaders.c' ] ],
+ ]
+ 
++bin_link_language = 'c'
++if loaders_cpp
++  bin_link_language = 'cpp'
++endif
++
+ foreach bin: gdkpixbuf_bin
+   bin_name = bin[0]
+   bin_source = bin.get(1, bin_name + '.c')
+@@ -342,6 +347,7 @@ foreach bin: gdkpixbuf_bin
+                    dependencies: gdk_pixbuf_deps + [ gdkpixbuf_dep ],
+                    include_directories: [ root_inc, gdk_pixbuf_inc ],
+                    c_args: common_cflags + gdk_pixbuf_cflags,
++                   link_language : bin_link_language,
+                    install: true)
+   meson.override_find_program(bin_name, bin)
+ 
+diff --git a/meson.build b/meson.build
+index f0d4812f4..31b3197fc 100644
+--- a/meson.build
++++ b/meson.build
+@@ -345,6 +345,8 @@ endif
+ 
+ # Don't check and build the tiff loader if native_windows_loaders is true
+ tiff_opt = get_option('tiff')
++tiff_dep = dependency('', required: false)
++loaders_cpp = false
+ if not tiff_opt.disabled() and not native_windows_loaders
+   # We currently don't have a fallback subproject, but this handles error
+   # reporting if tiff_opt is enabled.
+@@ -353,6 +355,10 @@ if not tiff_opt.disabled() and not native_windows_loaders
+   if tiff_dep.found()
+     enabled_loaders += 'tiff'
+     loaders_deps += tiff_dep
++
++    # If libtiff is built with LERC support, it should be linked with
++    # a C++ linker.
++    loaders_cpp = loaders_cpp or add_languages('cpp', required: false, native: false)
+   endif
+ endif
+ 
+-- 
+GitLab
+
