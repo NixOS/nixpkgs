@@ -14593,6 +14593,8 @@ self: super: with self; {
 
   scim2-tester = callPackage ../development/python-modules/scim2-tester { };
 
+  scikit-base = callPackage ../development/python-modules/scikit-base { };
+
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
