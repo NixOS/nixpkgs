@@ -14,19 +14,19 @@ let
   testsuite = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "testsuite";
-    rev = "e05365077e13a1d86ffe77acfb1a835b7aa78422";
-    hash = "sha256-yvZ5AZTPUA6nsD3xpFC0VLthiu2CxVto66RTXBXXeJM=";
+    rev = "cbc54d77065e5202bcb69e0d1c53ceccc29a7984";
+    hash = "sha256-/Mr1cuWb2zf1CqpRIQrbSPychTWoERKcPqYbzkyLgNw=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "120_b";
+  version = "122";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-gdqjsAQp4NTHROAf6i44GjkbtNyLPQZ153k3veK7eYs=";
+    hash = "sha256-5pNLkim1LjKn6Pa7V4d1x3TBY3fJIPjMY8VVB2tBbs0=";
   };
 
   nativeBuildInputs = [
