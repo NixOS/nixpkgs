@@ -75,7 +75,8 @@ rec {
     passthru = rec {
       tier1TargetPlatforms = [
         # Platforms with host tools from
-        # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-1-with-host-tools
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-2-with-host-tools
         "x86_64-darwin"
         "i686-darwin"
         "aarch64-darwin"
@@ -104,7 +105,8 @@ rec {
       ];
       targetPlatforms = tier1TargetPlatforms ++ [
         # Platforms without host tools from
-        # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-2-without-host-tools
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html#tier-3
         "armv7a-darwin"
         "armv5tel-linux"
         "armv7a-linux"
