@@ -1,0 +1,11 @@
+--- a/common/slp_xmalloc.c
++++ b/common/slp_xmalloc.c
+@@ -206,7 +206,7 @@ void * _xrealloc(const char * file, int line, void * ptr, size_t size)
+          if (newptr == 0)
+             return 0;
+          memcpy(newptr, ptr, x->size);
+-         _xfree(file, line, x);
++         _xfree(file, line, ptr);
+       }
+       return newptr;
+    }

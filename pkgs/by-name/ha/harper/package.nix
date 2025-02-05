@@ -1,0 +1,29 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "harper";
+  version = "0.18.1";
+
+  src = fetchFromGitHub {
+    owner = "Automattic";
+    repo = "harper";
+    rev = "v${version}";
+    hash = "sha256-UzsRiEYDKvOQR1jlD5KVZlJjhqzF1Digii85HI3vuOc=";
+  };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TrABsTBO0Tn7V6Ev2GDsHguB792S7FSK3bBoi0JbhcI=";
+
+  meta = {
+    description = "Grammar Checker for Developers";
+    homepage = "https://github.com/Automattic/harper";
+    changelog = "https://github.com/Automattic/harper/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
+    mainProgram = "harper-cli";
+  };
+}
