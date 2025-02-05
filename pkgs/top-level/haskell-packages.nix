@@ -148,11 +148,13 @@ let
       # that stage1's host platform is the same as stage0: build. Consequently,
       # stage0 needs to be build->build.
       #
-      # Note that we use bb.haskell.packages.*. haskell.packages.*.ghc is similar to
-      # stdenv: The ghc comes from the previous package set, i.e. this predicate holds:
-      # `name: pkgs: pkgs.haskell.packages.${name}.ghc == pkgs.buildPackages.haskell.compiler.${name}.ghc`.
-      # This isn't problematic since pkgsBuildBuild.buildPackages is also build->build,
-      # just something to keep in mind.
+      # Note that we use pkgsBuildBuild.haskell.packages.*.
+      # haskell.packages.*.ghc is similar to stdenv: The ghc comes from the
+      # previous package set, i.e. this predicate holds: `name: pkgs:
+      # pkgs.haskell.packages.${name}.ghc ==
+      # pkgs.buildPackages.haskell.compiler.${name}.ghc`. This isn't problematic
+      # since pkgsBuildBuild.buildPackages is also build->build, just something
+      # to keep in mind.
       bootPkgs = pkgsBuildBuild.haskell.packages.${bootPkgsAttr};
       llvmPackages = pkgs."llvmPackages_${toString llvmVersion}";
       buildTargetLlvmPackages = pkgsBuildTarget."llvmPackages_${toString llvmVersion}";
@@ -328,8 +330,6 @@ in
 
   compiler =
     let
-      # See Note [GHC boot pkgsBuildBuild]
-      bb = pkgsBuildBuild.haskell;
     in
     {
       # The integer-simple attribute set contains all the GHC compilers
@@ -372,7 +372,8 @@ in
       };
       ghcjs = compiler.ghcjs810;
       ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
-        bootPkgs = bb.packages.ghc810;
+        # See Note [GHC boot pkgsBuildBuild]
+        bootPkgs = pkgsBuildBuild.haskell.packages.ghc810;
         ghcjsSrcJson = ../development/compilers/ghcjs/8.10/git.json;
         stage0 = ../development/compilers/ghcjs/8.10/stage0.nix;
       };
