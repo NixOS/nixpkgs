@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "0-unstable-2024-12-26";
+  version = "0-unstable-2025-01-23";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "effe0a8783937c5a3cfe7a72cf6f81152150b6cb";
+    rev = "d37c9e7a4bc41f2b636282064eb39efb9e50d48b";
     fetchSubmodules = true;
-    hash = "sha256-SV8E+4qu5J7MueHmdsdTDKNx4CH085fidgIJyewj8RQ=";
+    hash = "sha256-Bc+lQdQeiojaHjglj7gZhXB5BMho0vb/HErfh50pcmA=";
   };
 
   nativeBuildInputs = [

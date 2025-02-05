@@ -88,7 +88,10 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    cpio
+    perl
+  ];
 
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
@@ -98,13 +101,15 @@ stdenv.mkDerivation rec {
     gawk
     zlib
     bzip2
-    cpio
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
+
+  strictDeps = true;
+
   hardeningDisable = [ "format" ];
 
   postInstall = ''
     substituteInPlace $out/bin/get_species_taxids.sh \
-        --replace /bin/rm ${coreutils}/bin/rm
+        --replace /bin/rm ${lib.getExe' coreutils "rm"}
   '';
   patches = [ ./no_slash_bin.patch ];
 

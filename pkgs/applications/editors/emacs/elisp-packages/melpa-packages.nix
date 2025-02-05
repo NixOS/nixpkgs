@@ -1315,7 +1315,7 @@ let
         mastodon = ignoreCompilationError super.mastodon; # elisp error
 
         # https://github.com/org2blog/org2blog/issues/339
-        metaweblog = addPackageRequires super.metaweblog [ self.xml-rpc ];
+        metaweblog = addPackageRequiresIfOlder super.metaweblog [ self.xml-rpc ] "20250204.1820";
 
         mu-cite = ignoreCompilationError super.mu-cite; # elisp error
 
