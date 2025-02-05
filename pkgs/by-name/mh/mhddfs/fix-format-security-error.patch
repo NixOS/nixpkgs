@@ -1,0 +1,12 @@
+--- mhddfs-0.1.39/src/usage.c.old	2017-02-28 15:00:25.435438622 +0100
++++ mhddfs-0.1.39/src/usage.c	2017-02-28 15:00:33.847454958 +0100
+@@ -43,7 +43,7 @@
+ 		"\n"
+ 		" see fusermount(1) for information about other options\n"
+ 		"";
+-	fprintf(to, usage);
++	fputs(usage, to);
+ 	if (to==stdout) exit(0);
+ 	exit(-1);
+ }
+

@@ -1,0 +1,40 @@
+diff --git a/Makefile.am b/Makefile.am
+index 1df20d1..b355d59 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -152,35 +152,6 @@ uninstall-doc:
+ 	@true
+ endif
+
+-# ------------------------------------------------------------
+-# Testing
+-#
+-
+-LOG_DRIVER = $(top_srcdir)/build/tap-driver
+-LOG_COMPILER = sh -c '"$$0" "$$@" --tap'
+-
+-VALGRIND_ARGS = --trace-children=no --quiet --error-exitcode=33 \
+-	--suppressions=valgrind-suppressions --gen-suppressions=all \
+-	--num-callers=16
+-
+-VALGRIND_SUPPRESSIONS = \
+-	build/glib.supp \
+-	$(NULL)
+-
+-valgrind-suppressions: $(VALGRIND_SUPPRESSIONS)
+-	$(AM_V_GEN) cat $^ > $@
+-
+-check-memory: valgrind-suppressions
+-	$(MAKE) LOG_FLAGS="-- libtool --mode=execute valgrind $(VALGRIND_ARGS)" \
+-		$(AM_MAKEFLAGS) check
+-recheck-memory: valgrind-suppressions
+-	$(MAKE) LOG_FLAGS="-- libtool --mode=execute valgrind $(VALGRIND_ARGS)" \
+-		$(AM_MAKEFLAGS) recheck
+-
+-EXTRA_DIST += \
+-	$(LOG_DRIVER) \
+-	$(VALGRIND_SUPPRESSIONS) \
+-	$(NULL)
+
+ if WITH_COVERAGE
+ coverage:
