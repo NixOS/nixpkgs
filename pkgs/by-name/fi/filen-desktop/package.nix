@@ -46,7 +46,7 @@ appimageTools.wrapType2 rec {
       Sync your data, mount network drives, collaborate with others and access files natively — powered by robust encryption and seamless integration.
     '';
     mainProgram = "filen-desktop";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     license = lib.licenses.agpl3Only;
     maintainers = with maintainers; [ smissingham ];
   };
