@@ -27,14 +27,6 @@
 
 # Copy this file to your Android project.
 let
-  # Declaration of versions for everything. This is useful since these
-  # versions may be used in multiple places in this Nix expression.
-  android = {
-    platforms = [ "35" ];
-    systemImageTypes = [ "google_apis" ];
-    abis = [ "x86_64" ];
-  };
-
   # If you copy this example out of nixpkgs, something like this will work:
   /*
     androidEnvNixpkgs = fetchTarball {
@@ -55,10 +47,6 @@ let
   };
 
   sdkArgs = {
-    platformVersions = android.platforms;
-    abiVersions = android.abis;
-    systemImageTypes = android.systemImageTypes;
-
     includeSystemImages = true;
     includeEmulator = true;
 
@@ -133,7 +121,7 @@ pkgs.mkShell rec {
           echo "installed_packages_section: ''${installed_packages_section}"
 
           packages=(
-            "build-tools;35.0.0" "cmdline-tools;13.0" \
+            "build-tools" "cmdline-tools" \
             "emulator" "platform-tools" "platforms;android-35" \
             "system-images;android-35;google_apis;x86_64"
           )
