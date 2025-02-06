@@ -43,6 +43,7 @@ buildPythonPackage rec {
     # code changes were required for NumPy 2.0. Thus Thinc should be compatible
     # with NumPy 1.0 and 2.0.
     substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "blis>=1.0.0,<1.1.0" blis \
       --replace-fail "numpy>=2.0.0,<2.1.0" numpy
     substituteInPlace setup.cfg \
       --replace-fail "numpy>=2.0.1,<2.1.0" numpy

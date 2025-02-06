@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "miniupnpc";
-  version = "2.2.8";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KwpNVl+tZTZHHZKW9p3a/S0nZJW6lZftjBK9ECkRUMo=";
+    hash = "sha256-AvnUqth2igy4xGvDC+C6jOwUi2005NDvmfrbec+JrzE=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

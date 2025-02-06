@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5VbxQDK69If5N8EiS8sIKNqHkCAfquOz8nUS7ynp+nA=";
   };
 
-  cargoHash = "sha256-ohfza2ti7Ar/9TV/WoTL5g6CPaONrxtr7nW0qmLdB/8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QkdnmeXor2K0c5m/TV5hYl1oSPWpykPfZy/ZRqFUt1s=";
 
   postPatch = ''
     substituteInPlace tests/utils.rs --replace-fail \

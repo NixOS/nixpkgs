@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+Cx+2v4JrQflDBaNZ9Fu8734Zr4rrgtnojUS4dkx7Ck=";
   };
 
-  cargoHash = "sha256-crVEtMzjg9T0oiS13URevPuRYqod4d2Ylb1IWRPVpa8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HpQQLFb9vUAGIEKrkGKOfUUNALYGnKCR3/HqA+qvamw=";
 
   meta = with lib; {
     description = "Massively parallel, optimal functional runtime in Rust";

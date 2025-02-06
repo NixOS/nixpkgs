@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-serializinghtml";
-  version = "1.1.10";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_serializinghtml";
     inherit version;
-    hash = "sha256-k/P13EWLkbGS/hDDl+Mk8mLPFj158ygsFY6ENqLEUR8=";
+    hash = "sha256-6dkSgn+HLAKQF6U/DvIYCzJ8P3/SPIcin3qOi3ADHU0=";
   };
 
   nativeBuildInputs = [ flit-core ];

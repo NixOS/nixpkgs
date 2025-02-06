@@ -14,6 +14,7 @@ tectonic-unwrapped.override (old: {
             hash = "sha256-ap7fEPHsASAphIQkjcvk1CC7egTdxaUh7IpSS5os4W8=";
             fetchSubmodules = true;
           };
+          useFetchCargoVendor = true;
           cargoHash = "sha256-mqhbIv5r/5EDRDfP2BymXv9se2NCKxzRGqNqwqbD9A0=";
           # binary has a different name, bundled tests won't work
           doCheck = false;

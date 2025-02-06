@@ -25,11 +25,11 @@ flutterPackages.stable.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-S3Yy0IIMiRUUpFNlLvS1PGwpvxePMB1sO5M6mpm1OgY=";
+    hash = "sha256-1j1maTrR7V/Tlu7uimTJuoEtxhn5Hn0VmR0GnJuKIoo=";
   };
   cargoRoot = "intiface-engine-flutter-bridge";
 

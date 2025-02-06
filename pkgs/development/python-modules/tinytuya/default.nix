@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Tuya WiFi smart devices using a direct local area network (LAN) connection or the cloud (TuyaCloud API)";
     homepage = "https://github.com/jasonacox/tinytuya";
-    changelog = "https://github.com/jasonacox/tinytuya/releases/tag/v${version}";
+    changelog = "https://github.com/jasonacox/tinytuya/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ pathob ];
   };

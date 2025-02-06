@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-redirects";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-zv/tCsC2wrD0iH7Kvlq4nXJMPMGQ7+l68Y/q/x66LBg=";
+    hash = "sha256-YsMA00yajeGSqSB6CdKxGqyClC9Cgc3ImRBTucHEHhs=";
   };
 
   propagatedBuildInputs = [ mkdocs ];

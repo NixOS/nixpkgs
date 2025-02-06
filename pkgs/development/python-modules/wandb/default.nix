@@ -75,26 +75,27 @@
 }:
 
 let
-  version = "0.18.5";
+  version = "0.19.5";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-nx50baneYSSIWPAIOkUk4cGCNpWAhv7IwFDQJ4vUMiw=";
+    hash = "sha256-NkwXHogHBsDdaWdATWujdvnSr0oXp3RbWq5hQX53WR8=";
   };
 
-  gpu-stats = rustPlatform.buildRustPackage rec {
+  gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.2.0";
+    version = "0.3.0";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-eeL486wQappwWG1De+RUIWe8JuBDx0clyU79eyZmf8M=";
+    cargoHash = "sha256-KrwZh8OoVwImfYDmvT2Je2MYyiTZVQYngwvVC+7fTzI=";
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.IOKit
+    checkFlags = [
+      # fails in sandbox
+      "--skip=gpu_amd::tests::test_gpu_amd_new"
     ];
 
     nativeInstallCheckInputs = [
@@ -241,9 +242,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  # test_matplotlib_image_with_multiple_axes may take >60s
+  pytestFlagsArray = [
+    "--timeout=1024"
+  ];
+
   disabledTestPaths = [
     # Require docker access
-    "tests/release_tests/test_launch"
     "tests/system_tests"
   ];
 
@@ -299,6 +304,26 @@ buildPythonPackage rec {
       "test_disabled_can_pickle"
       "test_disabled_context_manager"
       "test_mode_disabled"
+
+      # AssertionError: "one of name or plugin needs to be specified"
+      "test_opener_works_across_filesystem_boundaries"
+      "test_md5_file_hashes_on_mounted_filesystem"
+
+      # AttributeError: 'bytes' object has no attribute 'read'
+      "test_rewinds_on_failure"
+      "test_smoke"
+      "test_handles_multiple_calls"
+
+      # wandb.sdk.launch.errors.LaunchError: Found invalid name for agent MagicMock
+      "test_monitor_preempted"
+      "test_monitor_failed"
+      "test_monitor_running"
+      "test_monitor_job_deleted"
+
+      # Timeout >1024.0s
+      "test_log_media_prefixed_with_multiple_slashes"
+      "test_log_media_saves_to_run_directory"
+      "test_log_media_with_path_traversal"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # AssertionError: assert not copy2_mock.called

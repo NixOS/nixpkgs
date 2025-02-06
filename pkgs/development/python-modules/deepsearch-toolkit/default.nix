@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "deepsearch-toolkit";
-  version = "1.1.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "deepsearch-toolkit";
     tag = "v${version}";
-    hash = "sha256-7XiI/VtXX4lRMreqUh6hJvdIULGvsCEdrd+zV5Jrne0=";
+    hash = "sha256-ObVil+0d5RIYwkz7OHJIziD3gANh9ZGN+pY9pqhY+Yg=";
   };
 
   build-system = [
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/deepsearch-toolkit/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/deepsearch-toolkit/blob/${src.tag}/CHANGELOG.md";
     description = "Interact with the Deep Search platform for new knowledge explorations and discoveries";
     homepage = "https://github.com/DS4SD/deepsearch-toolkit";
     license = lib.licenses.mit;

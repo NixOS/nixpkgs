@@ -24,10 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-0hIwFJn/cwtKHKoD+upeorC52YnDlej3TrWf3PmAQAQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Gdypi9DJAXQgNaRCLEt4LTqUhBJC8plH0YhgNOIOGvA=";
+    hash = "sha256-CU1z+N9GK/mcMomkyQI+gNsYQbE2MQ/tg7lKhj949kw=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

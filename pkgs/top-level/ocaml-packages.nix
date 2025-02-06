@@ -418,7 +418,7 @@ let
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     dune-release = callPackage ../development/tools/ocaml/dune-release {
-      inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
+      inherit (pkgs) opam gitMinimal mercurial coreutils gnutar bzip2;
     };
 
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
@@ -1544,7 +1544,7 @@ let
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
-      inherit (pkgs) postgresql;
+      inherit (pkgs) libpq;
     };
 
     pp = callPackage ../development/ocaml-modules/pp { };

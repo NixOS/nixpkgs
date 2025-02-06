@@ -97,6 +97,7 @@
       [[ -e $out/bin/foo ]]
     '';
   };
+  no-broken-symlinks = import ./no-broken-symlinks.nix { inherit stdenv lib pkgs; };
   # TODO: add multiple-outputs
   patch-shebangs = import ./patch-shebangs.nix { inherit stdenv lib pkgs; };
   prune-libtool-files =

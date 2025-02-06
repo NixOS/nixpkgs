@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-1z4jbtzUB3SH79dDXAITf7Vup1YZdTLHBieSrhrvSXc=";
   };
 
-  cargoHash = "sha256-+SQ0HpURBjnnwH1Ue7IUReOtI4LxVPK9AGSAihs0qsc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aHqH7SQBIe0oqD3MegWvAR3UvzRBm2X92lP931nVVtA=";
 
   postInstall = ''
     mkdir -p $out/share/doc/git-vanity-hash

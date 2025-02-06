@@ -6,8 +6,10 @@
   colorama,
   fetchPypi,
   glibcLocales,
+  gnureadline,
   importlib-metadata,
   pyperclip,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -18,35 +20,40 @@
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.4.3";
-  format = "setuptools";
+  version = "2.5.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cYc8Efcr0Z4rHbV4IUcW8NT3yPolAJPGASZamnF97lI=";
+    hash = "sha256-CbsTY3gyvIGKrVV3zN9dvrDJ++W5QS/3jVCE94Rvg6s=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fake the impure dependencies pbpaste and pbcopy
+    mkdir bin
+    echo '#!${stdenv.shell}' > bin/pbpaste
+    echo '#!${stdenv.shell}' > bin/pbcopy
+    chmod +x bin/{pbcopy,pbpaste}
+    export PATH=$(realpath bin):$PATH
+  '';
 
-  buildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs =
-    [
-      attrs
-      colorama
-      pyperclip
-      wcwidth
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      typing-extensions
-      importlib-metadata
-    ];
+  dependencies = [
+    attrs
+    colorama
+    pyperclip
+    wcwidth
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
-    pytestCheckHook
     glibcLocales
+    pytestCheckHook
+    pytest-cov-stub
     pytest-mock
   ];
 
@@ -55,21 +62,6 @@ buildPythonPackage rec {
     "test_find_editor_not_specified"
     "test_transcript"
   ];
-
-  postPatch =
-    ''
-      sed -i "/--cov/d" setup.cfg
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fake the impure dependencies pbpaste and pbcopy
-      mkdir bin
-      echo '#!${stdenv.shell}' > bin/pbpaste
-      echo '#!${stdenv.shell}' > bin/pbcopy
-      chmod +x bin/{pbcopy,pbpaste}
-      export PATH=$(realpath bin):$PATH
-    '';
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "cmd2" ];
 

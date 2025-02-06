@@ -245,6 +245,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
+/pkgs/by-name/ps/psqlodbc @NixOS/postgres
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /pkgs/development/tools/rust/cargo-pgrx @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres

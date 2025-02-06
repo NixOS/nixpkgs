@@ -28,14 +28,14 @@ buildPythonPackage rec {
     fi
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-RPbMHnRdJaWKLU9Rkz39lmfibO20dnfZmLZqehHM3w4=";
+    hash = "sha256-CN/ZbDxdCQPEuLfxPh/m+JtlFDkerO8aWgAaUwhixjQ=";
   };
 
   nativeBuildInputs = [

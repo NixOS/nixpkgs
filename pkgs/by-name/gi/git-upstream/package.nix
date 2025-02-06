@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-GnsqZSztDLXMO4T16nfcOKMKXap88CJzJ5nObzGwhMA=";
   };
 
-  cargoHash = "sha256-a12C/fpeo0ZJ0MFQlKHVZER9dVrXF95YI1i8MwCTCJo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DzRiRUCsTslldnSNByaCr5eQGKxyTSifL2duZnMTmNk=";
 
   meta = {
     homepage = "https://github.com/9999years/git-upstream";

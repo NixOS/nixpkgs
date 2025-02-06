@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "24.2.0";
+  version = "24.3.0";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XPsbkUi1sIZWm67APyDXtr87ysyaQr6/h/+qyjYvY0Y=";
+    hash = "sha256-j1wHMz1UMQNUG6e+Dizhbu7oEwyws/kjirkEzh6Fuv8=";
   };
 
   patches = [

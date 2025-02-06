@@ -26,7 +26,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-o91p/m06pm9qoYZZVh+qHulqHO2G7xVJQPpEvRsq+8Q=";
   };
 
-  cargoHash = "sha256-vTUiagI0eTrADr6zCMI5btLRvXgZSaohldg4jYmjfyA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TQsqZhgmbHqNFgUddtRRKYkob0L40dJiSq8FxKnpPEE=";
 
   # Patch to disable prompt change of the shell when a target machine is run. Needed due to Nix declarative nature
   patches = [

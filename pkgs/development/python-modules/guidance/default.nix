@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.1.16";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
     tag = version;
-    hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
+    hash = "sha256-dZfz/P4+dTHdGFhLAdwX0D/QRdojqNy8+UCbFk0QeTM=";
   };
 
   build-system = [

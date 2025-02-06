@@ -35,7 +35,14 @@ rustPlatform.buildRustPackage {
     hash = "sha256-5J1ZfPNyniUK5D3Pt1aKuJ+/8vad3JPxCztBRY591N8=";
   };
 
-  cargoHash = "sha256-kuZ1zvb6H5QWjJSUYMq5tEywsQMC6187YJPUT1r4S5o=";
+  useFetchCargoVendor = true;
+
+  cargoPatches = [
+    # <https://github.com/jj-vcs/jj/pull/5315>
+    ./libgit2-1.9.0.patch
+  ];
+
+  cargoHash = "sha256-RiiIF9XFwXDgGSPvUMFOft4nH8PR1L3nZ+0s4QPobs8=";
 
   nativeBuildInputs = [
     installShellFiles

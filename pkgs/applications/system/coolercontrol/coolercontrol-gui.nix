@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrol-ui/src-tauri";
 
-  cargoHash = "sha256-gjR54dZjVonyznfBGb3iNNdmPalE+a53MmkOEZj3+sY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-C0oVtU6esXOkssKyJ4XzLV2vGCPbvVKgvf3wXo9L158=";
 
   buildFeatures = [ "custom-protocol" ];
 

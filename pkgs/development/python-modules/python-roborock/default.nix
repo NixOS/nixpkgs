@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.9.0";
+  version = "2.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-xPbq31mp1XM1WtmrknF9ZXyolxXu+iCMCqJccxC+Qd0=";
+    hash = "sha256-TWV28Uok2plDJsG5RsgTp1xzvGJ/zUy1lUcGZApDReE=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/humbertogontijo/python-roborock";
-    changelog = "https://github.com/humbertogontijo/python-roborock/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/humbertogontijo/python-roborock/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "roborock";

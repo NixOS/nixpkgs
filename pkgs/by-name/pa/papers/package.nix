@@ -64,14 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoRoot = "shell-rs";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
       src
       pname
       version
       cargoRoot
       ;
-    hash = "sha256-/5IySNEUkwiQezLx4n4jlPJdqJhlcgt5bXIelUFftZI=";
+    hash = "sha256-66pOdZxgzbvXkvF07rNvWtcF/dJ2+RuS24IeI/VWykE=";
   };
 
   nativeBuildInputs = [

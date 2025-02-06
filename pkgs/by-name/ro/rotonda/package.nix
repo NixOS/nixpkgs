@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  cargoHash = "sha256-/9ge2FcCc1t2MP32juMa7yHyeOqhk9e5b5LEgjKryYc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gzIoqUrlONKn0JEu/F8zEQrG8gLbFPofFWJTkOfpoAU=";
 
   meta = {
     description = "Rotonda - composable, programmable BGP Engine";

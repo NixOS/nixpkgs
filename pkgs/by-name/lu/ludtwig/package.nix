@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  cargoHash = "sha256-czofgV5a9aQoLn4JaBUbytY/aHfgJv3Q8RU2j+fbXo8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oS4YepJWqmbjAhitHOCBUrLEyVo3UpZ8UNOESuG4C2M=";
 
   meta = with lib; {
     description = "Linter / Formatter for Twig template files which respects HTML and your time";

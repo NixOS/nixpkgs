@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-1UjIye+btsNtf9Klti/3frgO7M+D05WkC1iP+TPQkZk=";
   };
 
-  cargoHash = "sha256-dQkT4AAbzvT8J8RocWOrdOaPCe8/Sn/5ZelRDPMGLIU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-N5mgd2c/eD0QEUQ4Oe7JI/2yI0B1pawYfc4ZKZAu4Sk=";
 
   patches = [
     # https://github.com/threathunters-io/laurel/commit/d2fc51c83e78aecd5c4ce922582df649c2600e1e

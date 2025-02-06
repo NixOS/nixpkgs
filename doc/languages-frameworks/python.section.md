@@ -183,7 +183,15 @@ following are specific to `buildPythonPackage`:
   [`makeWrapper`](#fun-makeWrapper) set `PATH` and `PYTHONPATH` environment variables before calling
   the binary. Additional arguments here can allow a developer to set environment
   variables which will be available when the binary is run. For example,
-  `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
+  `makeWrapperArgs = ["--set" "FOO" "BAR" "--set" "BAZ" "QUX"]`.
+
+  ::: {.note}
+  When `__structuredAttrs = false`, the attribute `makeWrapperArgs` is passed as a space-separated string to the build script. Developers should use `prependToVar` or `appendToVar` to add arguments to it in build phases, or use `__structuredAttrs = true` to ensure that `makeWrapperArgs` is passed as a Bash array.
+
+  For compatibility purposes,
+  when `makeWrapperArgs` shell variable is specified as a space-separated string (instead of a Bash array) in the build script, the string content is Bash-expanded before concatenated into the `wrapProgram` command. Still, developers should not rely on such behaviours, but use `__structuredAttrs = true` to specify flags containing spaces (e.g. `makeWrapperArgs = [ "--set" "GREETING" "Hello, world!" ]`), or use -pre and -post phases to specify flags with Bash-expansions (e.g. `preFixup = ''makeWrapperArgs+=(--prefix PATH : "$SOME_PATH")`'').
+  :::
+
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications to `""`.
 * `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python -m build --wheel`.
@@ -1273,7 +1281,7 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
   ];
 
   # requires additional data
-  pytestFlagsArray = [
+  pytestFlags = [
     "tests/"
     "--ignore=tests/integration"
   ];
@@ -1433,7 +1441,7 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s" "tests" "-v"
   ];
 }
@@ -2002,7 +2010,7 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 * Non-working tests can often be deselected. Most Python modules
   do follow the standard test protocol where the pytest runner can be used.
-  `pytest` supports the `-k` and `--ignore` parameters to ignore test
+  `pytest` supports the `-k` and `--ignore-glob` parameters to ignore test
   methods or classes as well as whole files. For `pytestCheckHook` these are
   conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
 
@@ -2019,10 +2027,16 @@ Occasionally packages don't make use of a common test framework, which may then 
     ];
 
     disabledTestPaths = [
-      "this/file.py"
+      "path/to/performance.py"
+      "path/to/connect-*.py"
     ];
   }
   ```
+
+  ::: {.note}
+  If the test path to disable contains characters like `*`, `?`, `[`, and `]`,
+  quote them with square brackets (`[*]`, `[?]`, `[[]`, and `[]]`) to match literally.
+  :::
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
