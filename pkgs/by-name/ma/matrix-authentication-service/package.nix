@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rFex6stw++xNrcCYnYn3N0HrUQd91DAw9QU0R2MUzyQ=";
   };
 
-  cargoHash = "sha256-iUAdVnIeBxURqEmqom8MTMLuNnggDxoeVHVlNN8dyJ0=";
+  cargoHash = "sha256-0RqCgIiH7O4bAuzy1To0+8wfvZWnZ8irZNSCthaKqAk=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
