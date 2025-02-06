@@ -7012,7 +7012,6 @@ with pkgs;
   };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
     zig = buildPackages.zig_0_12;
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
