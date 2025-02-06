@@ -124,7 +124,12 @@ let
               ];
               "llvm/gnu-install-dirs.patch" = [
                 {
+                  after = "20";
+                  path = ../20;
+                }
+                {
                   after = "18";
+                  before = "20";
                   path = ../18;
                 }
               ];
@@ -494,7 +499,12 @@ let
                   hash = "sha256-EX+PYGicK73lsL/J0kSZ4S5y1/NHIclBddhsnV6NPPI=";
                   stripLen = 1;
                 })
-              ];
+              ]
+          ++
+            lib.optional (lib.versions.major metadata.release_version == "20")
+              # Fix OrcJIT
+              # PR: https://github.com/llvm/llvm-project/pull/125431
+              (metadata.getVersionFile "llvm/orcjit.patch");
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -1076,7 +1086,12 @@ let
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
           hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
           relative = "compiler-rt";
-        });
+        })
+        # Fixes baremetal
+        # PR: https://github.com/llvm/llvm-project/pull/125922
+        ++ lib.optional (lib.versionAtLeast metadata.release_version "20") (
+          metadata.getVersionFile "compiler-rt/libc-free.patch"
+        );
     in
     (
       {
