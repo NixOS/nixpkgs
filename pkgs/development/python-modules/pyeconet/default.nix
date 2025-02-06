@@ -24,6 +24,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  pythonRelaxDeps = [ "paho-mqtt" ];
+
   propagatedBuildInputs = [
     paho-mqtt
     aiohttp
