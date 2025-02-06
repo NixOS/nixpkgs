@@ -45,6 +45,17 @@ let
         ];
       });
 
+      aiomqtt = super.aiomqtt.overridePythonAttrs (rec {
+        version = "2.0.1";
+        src = fetchFromGitHub {
+          owner = "sbtinstruments";
+          repo = "aiomqtt";
+          tag = "v${version}";
+          hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
+        };
+        meta.broken = false;
+      });
+
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
         src = fetchFromGitHub {
