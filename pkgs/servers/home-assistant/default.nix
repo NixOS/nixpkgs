@@ -235,6 +235,18 @@ let
         };
       });
 
+      pyrail = super.pyrail.overridePythonAttrs (rec {
+        version = "0.0.3";
+        src = fetchPypi {
+          pname = "pyrail";
+          inherit version;
+          hash = "sha256-XxcVcRXMjYAKevANAqNJkGDUWfxDaLqgCL6XL9Lhsf4=";
+        };
+        env.CI_JOB_ID = version;
+        build-system = [ self.setuptools ];
+        dependencies = [ self.requests ];
+      });
+
       # snmp component does not support pysnmp 7.0+
       pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
         version = "6.2.6";
