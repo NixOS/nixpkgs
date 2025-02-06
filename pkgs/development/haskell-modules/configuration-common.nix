@@ -2659,6 +2659,10 @@ self: super: {
   serialise = dontCheck super.serialise;
   # https://github.com/Bodigrim/data-array-byte/issues/1
   data-array-byte = doJailbreak super.data-array-byte;
+  # 2025-02-06: Allow tasty-quickcheck == 0.11.*
+  # https://github.com/google/ghc-source-gen/issues/120
+  ghc-source-gen = doJailbreak super.ghc-source-gen;
+  ghc-source-gen_0_4_5_0 = doJailbreak super.ghc-source-gen_0_4_5_0;
 
   psqueues = lib.pipe super.psqueues [
     (overrideCabal { editedCabalFile = null; revision = null; } )
