@@ -2019,6 +2019,12 @@
     githubId = 21687187;
     name = "Mirza Arnaut";
   };
+  asappia = {
+    email = "asappia@gmail.com";
+    github = "asappia";
+    githubId = 891399;
+    name = "Alessandro Sappia";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
