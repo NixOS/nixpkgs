@@ -10,7 +10,6 @@ lib:
   pauseVersion,
   ccmVersion,
   dockerizedVersion,
-  ...
 }:
 
 # Build dependencies
