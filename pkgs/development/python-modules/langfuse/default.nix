@@ -12,6 +12,7 @@
   packaging,
   poetry-core,
   pydantic,
+  requests,
   wrapt,
 }:
 
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     idna
     packaging
     pydantic
+    requests
     wrapt
   ];
 
