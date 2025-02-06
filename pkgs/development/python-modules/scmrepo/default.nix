@@ -1,10 +1,9 @@
 {
   lib,
+  aiohttp-retry,
   asyncssh,
   buildPythonPackage,
   dulwich,
-  dvc-http,
-  dvc-objects,
   fetchFromGitHub,
   fsspec,
   funcy,
@@ -15,7 +14,7 @@
   pythonOlder,
   setuptools,
   setuptools-scm,
-  shortuuid,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -38,17 +37,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp-retry
     asyncssh
     dulwich
-    dvc-http
-    dvc-objects
     fsspec
     funcy
     gitpython
     pathspec
     pygit2
     pygtrie
-    shortuuid
+    tqdm
   ];
 
   # Requires a running Docker instance
