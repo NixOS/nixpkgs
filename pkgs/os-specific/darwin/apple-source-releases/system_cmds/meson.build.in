@@ -176,10 +176,6 @@ executable(
     'fs_usage',
     # Requires 'ktrace/session.h'
     build_by_default : false,
-    c_args : [
-        '-DTARGET_OS_EXCLAVECORE=0',
-        '-DTARGET_OS_EXCLAVEKIT=0',
-    ],
     # dependencies : [ libutil ],
     install : false,
     sources : 'fs_usage/fs_usage.c',
@@ -381,7 +377,6 @@ install_man(
 executable(
     'nvram',
     c_args : [
-        '-DTARGET_OS_BRIDGE=0',
         '-DkIONVRAMDeletePropertyKeyWRet="IONVRAM-DELETEWRET-PROPERTY"',
     ],
     dependencies : [ core_foundation, iokit ],

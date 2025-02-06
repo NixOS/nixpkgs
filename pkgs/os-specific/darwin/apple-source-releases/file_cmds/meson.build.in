@@ -3,10 +3,6 @@
 
 # Project settings
 project('file_cmds', 'c', version : '@version@')
-add_global_arguments(
-    '-DTARGET_OS_BRIDGE=0',
-    language : 'c',
-)
 
 # Dependencies
 cc = meson.get_compiler('c')
