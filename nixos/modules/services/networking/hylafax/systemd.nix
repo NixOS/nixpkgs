@@ -22,7 +22,7 @@ let
   mkSpoolCmd =
     prefix: program: posArg: options:
     let
-      start = "${prefix}${pkgs.hylafaxplus}/spool/bin/${program}";
+      start = "${prefix}${cfg.package}/spool/bin/${program}";
       optionsList = toGNUCommandLine { mkOptionName = k: "-${k}"; } (
         { q = cfg.spoolAreaPath; } // options
       );
@@ -54,7 +54,7 @@ let
         { name, type, ... }@modem:
         ''
           # check if modem config file exists:
-          test -f "${pkgs.hylafaxplus}/spool/config/${type}"
+          test -f "${cfg.package}/spool/config/${type}"
           ln \
             --symbolic \
             --no-target-directory \
@@ -75,8 +75,8 @@ let
       faxgroup = "uucp";
       lockPath = "/var/lock";
       inherit globalConfigPath modemConfigPath;
-      inherit (cfg) spoolAreaPath userAccessFile;
-      inherit (pkgs) hylafaxplus runtimeShell;
+      inherit (cfg) package spoolAreaPath userAccessFile;
+      inherit (pkgs) runtimeShell;
     };
   };
 
