@@ -11845,6 +11845,8 @@ self: super: with self; {
 
   pyezviz = callPackage ../development/python-modules/pyezviz { };
 
+  pyezvizapi = callPackage ../development/python-modules/pyezvizapi { };
+
   pyface = callPackage ../development/python-modules/pyface { };
 
   pyfaidx = callPackage ../development/python-modules/pyfaidx { };
