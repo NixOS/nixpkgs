@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.25.0";
+  version = "0.26.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${version}";
-    hash = "sha256-5J1ZfPNyniUK5D3Pt1aKuJ+/8vad3JPxCztBRY591N8=";
+    hash = "sha256-jGy+0VDxQrgNhj+eX06FRhPP31V8QZVAM4j4yBosAGE=";
   };
 
   useFetchCargoVendor = true;
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage {
     ./libgit2-1.9.0.patch
   ];
 
-  cargoHash = "sha256-RiiIF9XFwXDgGSPvUMFOft4nH8PR1L3nZ+0s4QPobs8=";
+  cargoHash = "sha256-CtyRekrbRwUvQq2HsFwNo46RCDEGwy9e4ZU8/TwGxSU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -96,8 +96,8 @@ rustPlatform.buildRustPackage {
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
     in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      ${jj} util mangen > ./jj.1
-      installManPage ./jj.1
+      mkdir -p $out/share/man
+      ${jj} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
         --bash <(COMPLETE=bash ${jj}) \
