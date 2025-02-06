@@ -24,14 +24,4 @@ in
       ];
     }
   ) extraArgs;
-
-  rke2_testing = common (
-    (import ./testing/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "testing"
-      ];
-    }
-  ) extraArgs;
 }
