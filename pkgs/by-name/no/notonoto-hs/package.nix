@@ -16,7 +16,7 @@ let
 in
 
 stdenvNoCC.mkDerivation rec {
-  pname = "notonoto";
+  pname = "notonoto-hs";
   version = "0.0.3";
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    fontforge --script fontforge_script.py
+    fontforge --script fontforge_script.py --hidden-zenkaku-space
     python3 ./fonttools_script.py
 
     runHook postBuild
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 build/*.ttf -t $out/share/fonts/truetype/notonoto
+    install -Dm444 build/*.ttf -t $out/share/fonts/truetype/notonoto-hs
 
     runHook postInstall
   '';
