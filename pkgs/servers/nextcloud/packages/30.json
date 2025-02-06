@@ -109,6 +109,16 @@
       "agpl"
     ]
   },
+  "files_retention": {
+    "hash": "sha256-krJOb925AjmnwmkFYg00eC4KmICr4Tf3jUANYWTRJdA=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v1.19.0/files_retention-v1.19.0.tar.gz",
+    "version": "1.19.0",
+    "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
+    "homepage": "https://github.com/nextcloud/files_retention",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "forms": {
     "hash": "sha256-Fso4vxcn+4lCuWpgPMmp4dUMMeDaZrXne3CCnt4p7Rg=",
     "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.6/forms-v4.3.6.tar.gz",
