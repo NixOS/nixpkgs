@@ -8,8 +8,6 @@
   pkg-config,
   openssl,
   stdenv,
-  CoreServices,
-  Security,
   zig,
   nix-update-script,
 }:
@@ -39,8 +37,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      CoreServices
-      Security
     ];
 
   # Remove files that don't make builds reproducible:
