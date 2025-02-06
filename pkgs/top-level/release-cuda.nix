@@ -188,6 +188,13 @@ let
         && knownBrokenConditions [ "CUDA version is too old" "CUDA version is too new" ] drv
       )
 
+      # NVIDIA Nsight Systems requires CUDA version >=11.8, so all prior versions are marked
+      # as broken, but we don't want to count these derivations as eval errors
+      (
+        drv: path:
+        matchCudaPackageByName "nsight_systems" path && knownBrokenConditions [ "CUDA too old (<11.8)" ] drv
+      )
+
       # Getting NVIDIA drivers from cudaPackages instead of linuxPackages is unsupported,
       # so we don't want to count these "broken" derivations as eval errors
       (drv: matchCudaPackageByName "nvidia_driver")
