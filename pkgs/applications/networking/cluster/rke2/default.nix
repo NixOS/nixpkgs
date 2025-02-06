@@ -5,6 +5,16 @@ let
   extraArgs = builtins.removeAttrs args [ "callPackage" ];
 in
 {
+  rke2_1_29 = common (
+    (import ./1_29/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "29"
+      ];
+    }
+  ) extraArgs;
+
   rke2_stable = common (
     (import ./stable/versions.nix)
     // {
