@@ -15,7 +15,7 @@
   readosm,
   sqlite,
   testers,
-  spatialite_tools,
+  spatialite-tools,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests.version = testers.testVersion {
-    package = spatialite_tools;
+    package = spatialite-tools;
     command = "! spatialite_tool --version";
     version = "${libspatialite.version}";
   };
