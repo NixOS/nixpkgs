@@ -6,9 +6,10 @@
   httpx,
   mashumaro,
   orjson,
-  pytest-asyncio,
-  pytest-httpx,
   poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-httpx,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -29,7 +30,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i '/addopts =/d' pyproject.toml
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpx
     pytestCheckHook
     respx
