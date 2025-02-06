@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   matplotlib,
@@ -21,7 +20,7 @@
   pytest,
   scipy,
 
-  # checks
+  # tests
   pytestCheckHook,
   corner,
 }:
@@ -31,8 +30,6 @@ buildPythonPackage rec {
   version = "2.2.3";
   pyproject = true;
 
-  disable = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "corner.py";
@@ -41,8 +38,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [ matplotlib ];
@@ -70,6 +67,7 @@ buildPythonPackage rec {
 
   # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
   disabledTests = [
+    "test_1d_fig_argument"
     "test_arviz"
     "test_basic"
     "test_bins"
@@ -104,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Make some beautiful corner plots";
     homepage = "https://github.com/dfm/corner.py";
-    changelog = "https://github.com/dfm/corner.py/releases/tag/${src.tag}";
+    changelog = "https://github.com/dfm/corner.py/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
