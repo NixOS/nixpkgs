@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
   version = "1.5.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "cargo-lambda";
+    repo = "cargo-lambda";
+    tag = "v${version}";
     hash = "sha256-58kVtwBZEAlv9eVesqmWMZ+KxAwEiGMm8mCf9X5tPMI=";
   };
 
