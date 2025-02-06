@@ -24,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-JjzBFVgPNnU0q5hL+RZJMs3WxbeZbBKyvsV6clUFjpE=";
   };
 
+  # pythonRuntimeDepsCheck evaluates the more complex expression to 1.10.16 (!) and fails
+  configurePhase = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "pydantic>=2,<3,!=2.0.*" "pydantic>=2.10.0,<3"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
