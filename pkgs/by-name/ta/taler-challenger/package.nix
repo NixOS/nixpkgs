@@ -13,7 +13,7 @@
   libmicrohttpd,
   libsodium,
   libtool,
-  postgresql,
+  libpq,
   taler-exchange,
   taler-merchant,
   runtimeShell,
@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgnurl
     libmicrohttpd
+    libpq
     libsodium
     libtool
-    postgresql
     taler-exchange
     taler-merchant
   ];

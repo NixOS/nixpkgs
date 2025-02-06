@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.12.2";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = "qdrant-client";
     tag = "v${version}";
-    hash = "sha256-oQrT3J+A0FvggAYhZ25MwOpfN3WryTG/Tkgygc7g3Ew=";
+    hash = "sha256-0SEIRAcaPLdJhPsjFaSuacj5JSHZVebj1iFrSXKqzto=";
   };
 
   build-system = [ poetry-core ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for Qdrant vector search engine";
     homepage = "https://github.com/qdrant/qdrant-client";
-    changelog = "https://github.com/qdrant/qdrant-client/releases/tag/v${version}";
+    changelog = "https://github.com/qdrant/qdrant-client/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

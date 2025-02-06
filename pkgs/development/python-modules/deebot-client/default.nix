@@ -35,9 +35,9 @@ buildPythonPackage rec {
     hash = "sha256-/lGLrFlKKneauC15eFQYQxxHY7Py5s626yrThkqNAps=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-ECueacYZjfe8PLdhCA7qrhK7qewEsujEddmFpPOvuFw=";
+    hash = "sha256-oSvosZsGM0R5DRc43KvCNcqNIh4gbvzqgnrIJjAN+/k=";
   };
 
   pythonRelaxDeps = [

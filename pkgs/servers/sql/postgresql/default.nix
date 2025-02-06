@@ -30,6 +30,8 @@ let
       )
     ) versions;
 
+  libpq = self.callPackage ./libpq.nix { };
+
 in
 # variations without and with JIT
-(mkAttributes false) // (mkAttributes true)
+(mkAttributes false) // (mkAttributes true) // { inherit libpq; }

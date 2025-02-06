@@ -32,16 +32,16 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.6.2";
+  version = "4.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-8QLOAjQpiNtbd+YSHfqcBVdtMSGJFRevOcacZErKuso=";
+    hash = "sha256-CwoU52W5MspzGAekTkFyUY88pqbY+68qCbck3neI2jE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -51,9 +51,11 @@ buildPythonPackage rec {
       idna
       sniffio
     ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      typing-extensions
+    ]
     ++ lib.optionals (pythonOlder "3.11") [
       exceptiongroup
-      typing-extensions
     ];
 
   optional-dependencies = {
@@ -106,7 +108,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";
+    changelog = "https://github.com/agronholm/anyio/blob/${src.tag}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
     license = licenses.mit;

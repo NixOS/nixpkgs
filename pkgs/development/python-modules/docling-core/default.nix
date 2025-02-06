@@ -68,7 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-core/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-core/blob/${src.tag}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/DS4SD/docling-core";
     license = lib.licenses.mit;

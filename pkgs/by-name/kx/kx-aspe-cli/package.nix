@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-ZZwb5WHKFMAP5yPT1DDi+nWy7rjM/UI6ahagNqTDDMM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wOg81NvChOLPiCyhJ5dGn5sRskevpf0QdKwmgZa2/1s=";
 
   meta = {
     homepage = "https://codeberg.org/keyoxide/kx-aspe-cli";

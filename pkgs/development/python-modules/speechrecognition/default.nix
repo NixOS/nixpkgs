@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.12.0";
+  version = "3.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Uberi";
     repo = "speech_recognition";
     tag = version;
-    hash = "sha256-2yc5hztPBOysHxUQcS76ioCXmqNqjid6QUF4qPlIt24=";
+    hash = "sha256-1tZ3w77VYPO7BK6y572MwY1BV2+UeSwEL1E3mpdkqJg=";
   };
 
   postPatch = ''
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${src.tag}";
     license = with licenses; [
       gpl2Only
       bsd3

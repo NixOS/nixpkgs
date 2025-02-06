@@ -84,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-parse/blob/${src.tag}/CHANGELOG.md";
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;

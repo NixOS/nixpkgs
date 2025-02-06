@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Yj2PvAlAkwLaSE27KnzEmiRAD5K/YVGbF4+N3uhDVT8=";
   };
 
-  cargoHash = "sha256-nlYkFgm5r6nAbJvtrXW2VxzVYq1GrSs8bzHYWOglL1c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OBGDnhpVLOPdYhofWfeaueklt7KBkLhM02JNvuvUQ2Q=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys

@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
-  cargoHash = "sha256-c+LOmUUt8t1x5Pp8yGHSeLcJNs/lJzq29KMX/i7Cscs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+ko1ltt3a5rst4qbIMUeiq0/0Vmqf0cHt6wv8GSmC70=";
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to poll Intergas boilers via a Lan2RF gateway";
     homepage = "https://github.com/zxdavb/incomfort-client";
-    changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/v${version}";
+    changelog = "https://github.com/jbouwh/incomfort-client/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

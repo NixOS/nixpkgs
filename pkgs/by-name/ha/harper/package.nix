@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3W/pFtI8G9GOEXt1nCpoy+vp6+59Ya3oqlx2EttGEIk=";
   };
 
-  cargoHash = "sha256-+QIVT5PRo2cseZDK6fBCWS893dG8PSRH1sNAdMY60qY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xPppf2YRgvGqmFBFLZl8XF5apGUX6kICE0jp2nx++io=";
 
   meta = {
     description = "Grammar Checker for Developers";

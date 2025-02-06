@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-73738Vei7rQ67LQIOrHPGOtsBnHClaXClRWDmA5pP58=";
   };
 
-  cargoHash = "sha256-TQBjgQaoI88xGdhkffNWRH6aZ99WWbkkpiPu4LqBD3g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6BR/xXo5pBv7n5beqgY9kEe24o/lZl1sit0uumSEbe8=";
 
   meta = with lib; {
     description = "mdbook preprocessor to add a open-on-github link on every page";

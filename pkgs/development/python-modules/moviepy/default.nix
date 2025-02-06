@@ -8,6 +8,8 @@
   matplotlib,
   numpy,
   proglog,
+  python-dotenv,
+  pytest-timeout,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -21,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "1.0.3";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,15 +32,12 @@ buildPythonPackage rec {
     owner = "Zulko";
     repo = "moviepy";
     tag = "v${version}";
-    hash = "sha256-l7AwzAKSaEV+pPbltKgwllK6X54oruU2w0AvoCsrESE=";
+    hash = "sha256-dha+rPBkcEyqQ7EfnFg81GDq0Lc2uoQ3meCTjdajaBM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "decorator>=4.0.2,<5.0" "decorator>=4.0.2,<6.0"
-  '';
-
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "pillow" ];
 
   dependencies = [
     decorator
@@ -46,6 +45,7 @@ buildPythonPackage rec {
     imageio-ffmpeg
     numpy
     proglog
+    python-dotenv
     requests
     tqdm
   ];
@@ -61,38 +61,42 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [ "--timeout=30" ];
 
   pythonImportsCheck = [ "moviepy" ];
 
   disabledTests = [
-    "test_cuts1"
-    "test_issue"
-    "test_PR"
-    "test_setup"
-    "test_subtitles"
-    "test_sys_write_flush"
-    # media duration mismatch: assert 2.9 == 3.0
-    "test_ffmpeg_parse_infos"
+    # stalls
+    "test_doc_examples"
+    # video orientation mismatch, 0 != 180
+    "test_PR_529"
+    # video orientation [1920, 1080] != [1080, 1920]
+    "test_ffmpeg_parse_video_rotation"
+    "test_correct_video_rotation"
+    # media duration mismatch: assert 230.0 == 30.02
+    "test_ffmpeg_parse_infos_decode_file"
+    # Failed: DID NOT RAISE <class 'OSError'>
+    "test_ffmpeg_resize"
+    "test_ffmpeg_stabilize_video"
   ];
 
   disabledTestPaths = [
     "tests/test_compositing.py"
     "tests/test_fx.py"
     "tests/test_ImageSequenceClip.py"
-    "tests/test_resourcerelease.py"
-    "tests/test_resourcereleasedemo.py"
     "tests/test_TextClip.py"
     "tests/test_VideoClip.py"
-    "tests/test_Videos.py"
     "tests/test_videotools.py"
   ];
 
   meta = with lib; {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
-    changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Zulko/moviepy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ ];
   };

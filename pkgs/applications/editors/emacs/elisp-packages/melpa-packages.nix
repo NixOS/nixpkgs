@@ -1599,6 +1599,8 @@ let
 
         tramp-hdfs = ignoreCompilationError super.tramp-hdfs; # elisp error
 
+        twtxt = ignoreCompilationError super.twtxt; # needs to read ~/twtxt.txt
+
         universal-emotions-emoticons = ignoreCompilationError super.universal-emotions-emoticons; # elisp error
 
         use-package-el-get = addPackageRequires super.use-package-el-get [ self.el-get ];

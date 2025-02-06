@@ -36,7 +36,8 @@ let
       hash = "sha256-Uxko2TRIjqQvd7n9C+P7oMUrm3YY5j7TVzvijEjDwOM=";
     };
 
-    cargoHash = "sha256-DR2JU+QcGWliNoRMjSjJns7FsicpNAX5gTariFuQ/dw=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-lYS/G3mHNqKcI6XRAtESzgBiUHnNfV0ct0W6E75a7J4=";
 
     nativeBuildInputs = [
       gobject-introspection

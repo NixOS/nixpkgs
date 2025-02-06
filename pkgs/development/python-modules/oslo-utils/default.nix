@@ -7,16 +7,20 @@
   eventlet,
   fixtures,
   iso8601,
+  libxcrypt-legacy,
   netaddr,
   netifaces,
   oslo-i18n,
   oslotest,
   packaging,
   pbr,
+  psutil,
   pyparsing,
   pytz,
   qemu-utils,
+  replaceVars,
   setuptools,
+  stdenv,
   stestr,
   testscenarios,
   tzdata,
@@ -27,14 +31,20 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "7.3.0";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    hash = "sha256-WaXT5Oe7x42AHM68K4I+QptiTBK7bjtudvccKfK/Id8=";
+    hash = "sha256-kG/PHIb2cfIkwZJbKo03WgU5FD+2FYsT4gKnndjmxpQ=";
   };
+
+  patches = [
+    (replaceVars ./ctypes.patch {
+      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests
@@ -54,6 +64,7 @@ buildPythonPackage rec {
     netifaces
     oslo-i18n
     packaging
+    psutil
     pyparsing
     pytz
     tzdata

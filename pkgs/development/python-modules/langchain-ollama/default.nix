@@ -57,6 +57,8 @@ buildPythonPackage rec {
       "langchain-ollama==(.*)"
     ];
   };
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";

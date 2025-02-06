@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ez27IEdOPryyIQCGATjKGeos3stLHP4BkwnJBLk+1W8=";
   };
 
-  cargoHash = "sha256-zPFKOm2iTKdOIHh4Cle6eMGES6LLsiCR3OtCj/YyC1c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4F54N+r/er3j9zAzfSkXiwl5iEjh47PPzHByMZ0jA+Y=";
 
   doCheck = false; # test result: FAILED. 5 passed; 3 failed;
 

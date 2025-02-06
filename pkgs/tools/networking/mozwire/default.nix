@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-YXVH7kx5CiurTeXiphjDgcYxxovKtTF3Q9y/XOyVPUA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UEo/CSRg1hS/BIEQTEgqfwwz1LAMDdjKwV8bDyspX7o=";
 
   meta = with lib; {
     description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";

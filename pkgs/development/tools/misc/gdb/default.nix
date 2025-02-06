@@ -53,11 +53,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "15.2";
+  version = "16.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-gzUMzTW1taDLprM0xBKU6paBWMVzlAkE8AuS92NFMU0=";
+    hash = "sha256-wsxczKApt6fDh5zoqWUo/f0Fa02ITysFEej3vHIzVcY=";
   };
 
   postPatch =

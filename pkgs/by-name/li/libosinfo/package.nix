@@ -19,7 +19,7 @@
   perl,
   hwdata,
   osinfo-db,
-  substituteAll,
+  replaceVars,
   vala ? null,
 }:
 
@@ -61,8 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./osinfo-db-data-dir.patch;
+    (replaceVars ./osinfo-db-data-dir.patch {
       osinfo_db_data_dir = "${osinfo-db}/share";
     })
 

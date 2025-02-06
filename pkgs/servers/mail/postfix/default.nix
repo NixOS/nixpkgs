@@ -21,7 +21,7 @@
   withLDAP ? true,
   openldap,
   withPgSQL ? false,
-  postgresql,
+  libpq,
   withMySQL ? false,
   libmysqlclient,
   withSQLite ? false,
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       libnsl
       pcre2
     ]
-    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withPgSQL libpq
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withSQLite sqlite
     ++ lib.optional withLDAP openldap;

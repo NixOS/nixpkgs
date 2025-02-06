@@ -152,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pixz
     boost
-    postgresql
     nlohmann_json
     prometheus-cpp
   ];
@@ -195,6 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     libressl.nc
     openldap
+    postgresql
   ];
 
   env = {

@@ -36,6 +36,12 @@ buildPythonPackage rec {
       url = "https://github.com/mwaskom/seaborn/commit/58f170fe799ef496adae19925d7d4f0f14f8da95.patch";
       hash = "sha256-/a3G+kNIRv8Oa4a0jPGnL2Wvx/9umMoiq1BXcXpehAg=";
     })
+    # https://github.com/mwaskom/seaborn/pull/3802
+    (fetchpatch2 {
+      name = "matplotlib_3_10-compatibility.patch";
+      url = "https://github.com/mwaskom/seaborn/commit/385e54676ca16d0132434bc9df6bc41ea8b2a0d4.patch";
+      hash = "sha256-nwGwTkP7W9QzgbbAVdb2rASgsMxqFnylMk8GnTE445w=";
+    })
   ];
 
   nativeBuildInputs = [ flit-core ];

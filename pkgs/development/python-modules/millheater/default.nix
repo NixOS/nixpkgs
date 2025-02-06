@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
-    tag = "012.2"; # https://github.com/Danielhiversen/pymill/issues/87
+    tag = version; # https://github.com/Danielhiversen/pymill/issues/87
     hash = "sha256-tR6MZIgCazGcXRIaSXyDYIEp+kD6xyrpOXORbi8LV7E=";
   };
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Mill heater devices";
     homepage = "https://github.com/Danielhiversen/pymill";
-    changelog = "https://github.com/Danielhiversen/pymill/releases/tag/${version}";
+    changelog = "https://github.com/Danielhiversen/pymill/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

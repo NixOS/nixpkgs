@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/starkillerOG/reolink_aio";
-    changelog = "https://github.com/starkillerOG/reolink_aio/releases/tag/${version}";
+    changelog = "https://github.com/starkillerOG/reolink_aio/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

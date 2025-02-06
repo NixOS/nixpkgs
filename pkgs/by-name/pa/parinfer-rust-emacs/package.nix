@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JYKFfbfpkvBRxYUDw2d6DD1mO27OKzdquSOhBk0lXr0=";
   };
 
-  cargoHash = "sha256-E3x/Jy21qP1onABRmbrq51ZKrlqwiWIwSaqOCh28lKw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NUoBaaoPDpt19Avxyl6G9mmbcinm24aAvq6Z9Orb9a8=";
 
   meta = with lib; {
     description = "Emacs centric fork of parinfer-rust";

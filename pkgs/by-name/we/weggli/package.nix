@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6XSedsTUjcZzFXaNitsXlUBpxC6TYVMCB+AfH3x7c5E=";
   };
 
-  cargoHash = "sha256-Cj/m4GRaqI/lHYFruj047B7FdGoVl/wC8I2o1dzhOTs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vJd+4cZuDSGThnkUULhwEUFbHlkiIGyxT+1fWRUsIJk=";
 
   passthru.tests.version = testers.testVersion {
     package = weggli;

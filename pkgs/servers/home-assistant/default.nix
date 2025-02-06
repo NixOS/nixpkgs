@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
+  fetchpatch2,
   python313,
   substituteAll,
   ffmpeg-headless,
@@ -204,6 +205,34 @@ let
         };
       });
 
+      # snmp component does not support pysnmp 7.0+
+      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
+        version = "6.2.6";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmp";
+          tag = "v${version}";
+          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
+        };
+      });
+
+      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.4";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmpcrypto";
+          tag = "v${version}";
+          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
+        };
+        build-system = with self; [ setuptools ];
+        postPatch = ''
+          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
+          substituteInPlace setup.py --replace \
+            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
+            "observed_version = [36, 2, 0]"
+        '';
+      });
+
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -331,19 +360,23 @@ python.pkgs.buildPythonApplication rec {
     "bcrypt"
     "ciso8601"
     "cryptography"
-    "jinja2"
+    "fnv-hash-fast"
     "hass-nabucasa"
     "httpx"
+    "jinja2"
     "orjson"
     "pillow"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
     "requests"
+    "securetar"
     "sqlalchemy"
     "typing-extensions"
+    "ulid-transform"
     "urllib3"
     "uv"
+    "voluptuous-openapi"
     "yarl"
   ];
 
@@ -361,6 +394,12 @@ python.pkgs.buildPythonApplication rec {
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getExe ffmpeg-headless}";
+    })
+
+    (fetchpatch2 {
+      # python-matter-server 7.0 compat
+      url = "https://github.com/home-assistant/core/commit/ea4931ca3a91920b66a747a18a2dece2c8215d4f.patch";
+      hash = "sha256-evfMdBdEYsVSu2iDZ5xgNTg/QljJ+MXrV69g9liNcN4=";
     })
   ];
 
