@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   mock,
   pytestCheckHook,
   cryptography,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "py-vapid";
   version = "1.9.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-PIlzts+DhK0MmuZNYnDMxIDguSxwLY9eoswD5rUSR/k=";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     mock
