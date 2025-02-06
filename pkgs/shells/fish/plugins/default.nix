@@ -21,6 +21,8 @@ lib.makeScope newScope (self: with self; {
 
   done = callPackage ./done.nix { };
 
+  editor-updater = callPackage ./editor-updater.nix { };
+
   fifc = callPackage ./fifc.nix { };
 
   fish-bd = callPackage ./fish-bd.nix { };
@@ -52,6 +54,14 @@ lib.makeScope newScope (self: with self; {
 
   hydro = callPackage ./hydro.nix { };
 
+  node-binpath = callPackage ./node-binpath.nix { };
+
+  node-version = callPackage ./node-version.nix { };
+
+  nvm = callPackage ./nvm.nix { };
+
+  osx = callPackage ./osx.nix { };
+
   pisces = callPackage ./pisces.nix { };
 
   plugin-git = callPackage ./plugin-git.nix { };
@@ -63,6 +73,8 @@ lib.makeScope newScope (self: with self; {
   pure = callPackage ./pure.nix { };
 
   sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
+
+  shell-integrations = callPackage ./shell-integrations.nix { };
 
   spark = callPackage ./spark.nix { };
 
