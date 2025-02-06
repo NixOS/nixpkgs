@@ -175,6 +175,10 @@ let
         conds: drv: builtins.any (cond: drv.brokenConditions.${cond} or false) conds;
     in
     [
+      # TensorRT currently can't be built on hydra/nix-community builders due to requiring the user
+      # to explicitly agree to the NVIDIA TensorRT License (and a developer account on developer.nvidia.com)
+      # See https://docs.nvidia.com/deeplearning/tensorrt/latest/reference/sla.html
+      (drv: matchCudaPackageByName "tensorrt[^\.]*")
     ];
   filterPackageFn =
     path: platforms:
