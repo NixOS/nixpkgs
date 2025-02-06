@@ -211,5 +211,5 @@ with pkgs;
 
   build-environment-info = callPackage ./build-environment-info { };
 
-  rust-hooks = recurseIntoAttrs (callPackages ./rust-hooks { });
+  rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
 }
