@@ -15,7 +15,9 @@
   libcanberra,
   ninja,
   xvfb-run,
+  libadwaita,
   libxcvt,
+  libGL,
   libICE,
   libX11,
   libXcomposite,
@@ -28,7 +30,6 @@
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
-  libXrender,
   libxcb,
   libXrandr,
   libXinerama,
@@ -68,7 +69,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "46.4";
+  version = "47.4";
 
   outputs = [
     "out"
@@ -79,13 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YRvZz5gq21ZZfOKzQiQnL9phm7O7kSpoTXXG8sN1AuQ=";
+    hash = "sha256-9TH8AObsbbtXCzv5QrZJD3qT35HEwmepGLTSr+khG9o=";
   };
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
-    "-Dtests=false"
+    "-Dtests=disabled"
+    # For NVIDIA proprietary driver up to 470.
+    # https://src.fedoraproject.org/rpms/mutter/pull-request/49
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
@@ -98,13 +101,14 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
+    mesa  # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
+    glib
     libxcvt
-    mesa # needed for gbm
     meson
     ninja
     xvfb-run
@@ -131,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libei
     libdisplay-info
+    libGL
     libgudev
     libinput
     libstartup_notification
@@ -159,7 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     xkeyboard_config
     libxkbcommon
-    libXrender
     libxcb
     libXrandr
     libXinerama
@@ -168,25 +172,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
-  '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3981
+    substituteInPlace src/frames/main.c \
+      --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-14/doc" "$devdoc"
+    moveToOutput "share/mutter-15/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   separateDebugInfo = true;
+  strictDeps = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-15";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" { } ''

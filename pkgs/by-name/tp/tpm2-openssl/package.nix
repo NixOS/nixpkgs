@@ -4,6 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   autoconf-archive,
+  nix-update-script,
   pkg-config,
   openssl,
   tpm2-tss,
@@ -11,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-openssl";
-  version = "1.2.0";
+  version = "1.3.0";
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-openssl";
     rev = finalAttrs.version;
-    hash = "sha256-mZ4Z/GxJFwwfyFd1SAiVlQqOjkFSzsZePeuEZtq8Mcg=";
+    hash = "sha256-CCTR7qBqI/y+jLBEEcgRanYOBNUYM/sH/hCqOLGA4QM=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo ${finalAttrs.version} > VERSION
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "OpenSSL Provider for TPM2 integration";

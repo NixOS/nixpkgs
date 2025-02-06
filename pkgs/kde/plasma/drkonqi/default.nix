@@ -4,7 +4,7 @@
   systemd,
   gdb,
   python3,
-  substituteAll,
+  replaceVars,
 }:
 let
   gdb' = gdb.override {
@@ -20,8 +20,7 @@ mkKdeDerivation {
   pname = "drkonqi";
 
   patches = [
-    (substituteAll {
-      src = ./gdb-path.patch;
+    (replaceVars ./gdb-path.patch {
       gdb = "${gdb'}/bin/gdb";
     })
   ];
@@ -33,4 +32,10 @@ mkKdeDerivation {
     "-DWITH_GDB12=1"
     "-DWITH_PYTHON_VENDORING=0"
   ];
+
+  # Hardcoded as QString, which is UTF-16 so Nix can't pick it up automatically
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${gdb'}" > $out/nix-support/depends
+  '';
 }

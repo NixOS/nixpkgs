@@ -52,9 +52,7 @@ stdenv.mkDerivation rec {
 
     for f in $out/share/applications/* ; do
       substituteInPlace $f \
-        --replace Qt4                   Qt5 \
-        --replace Exec=nmapsi4          Exec=$out/bin/nmapsi4 \
-        --replace "Exec=kdesu nmapsi4" "Exec=kdesu $out/bin/nmapsi4"
+        --replace Qt4                   Qt5
     done
   '';
 

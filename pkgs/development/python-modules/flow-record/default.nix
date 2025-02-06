@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.17";
+  version = "3.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fFP2bdO4wTR9Y+9no3FabtVmLicTD76Jw5aWDMPOB0w=";
+    tag = version;
+    hash = "sha256-tEKmwDZOoGIXfJqxIat6WTbEv4EkiwkJGMpNxfv2Zd0=";
   };
 
   build-system = [

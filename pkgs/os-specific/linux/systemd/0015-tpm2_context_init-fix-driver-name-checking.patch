@@ -27,10 +27,10 @@ filename_is_valid with path_is_valid.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/shared/tpm2-util.c b/src/shared/tpm2-util.c
-index 10a78adfaf..6493d5d270 100644
+index 36a0f906da..e0f42abca2 100644
 --- a/src/shared/tpm2-util.c
 +++ b/src/shared/tpm2-util.c
-@@ -670,7 +670,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {
+@@ -721,7 +721,7 @@ int tpm2_context_new(const char *device, Tpm2Context **ret_context) {
                  fn = strjoina("libtss2-tcti-", driver, ".so.0");
  
                  /* Better safe than sorry, let's refuse strings that cannot possibly be valid driver early, before going to disk. */
@@ -38,4 +38,4 @@ index 10a78adfaf..6493d5d270 100644
 +                if (!path_is_valid(fn))
                          return log_debug_errno(SYNTHETIC_ERRNO(EINVAL), "TPM2 driver name '%s' not valid, refusing.", driver);
  
-                 context->tcti_dl = dlopen(fn, RTLD_NOW);
+                 context->tcti_dl = dlopen(fn, RTLD_NOW|RTLD_NODELETE);

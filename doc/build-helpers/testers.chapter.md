@@ -169,7 +169,7 @@ The build will fail if `shellcheck` finds any issues.
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+NOTE: This is a check you add to `passthru.tests` which is mainly run by OfBorg, but not in Hydra. If you want a version check failure to block the build altogether, then [`versionCheckHook`](#versioncheckhook) is the tool you're looking for (and recommended for quick builds). The motivation for adding either of these checks would be:
 
 - Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
 - Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
@@ -364,7 +364,7 @@ including `nativeBuildInputs` to specify dependencies available to the `script`.
 ```nix
 testers.runCommand {
   name = "access-the-internet";
-  command = ''
+  script = ''
     curl -o /dev/null https://example.com
     touch $out
   '';

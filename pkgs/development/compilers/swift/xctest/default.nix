@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, callPackage
-, cmake
-, ninja
-, swift
-, Foundation
-, DarwinTools
+{
+  lib,
+  stdenv,
+  callPackage,
+  cmake,
+  ninja,
+  swift,
+  Foundation,
+  DarwinTools,
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-xctest";
 
   inherit (sources) version;
@@ -18,8 +20,11 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ cmake ninja swift ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
+  nativeBuildInputs = [
+    cmake
+    ninja
+    swift
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
   buildInputs = [ Foundation ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

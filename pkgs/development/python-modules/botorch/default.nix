@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.11.3";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AtRU5KC8KlkxMCU0OUAHDFK7BsPO3TbRmmzDGV7+yVk=";
+    tag = "v${version}";
+    hash = "sha256-CKlerCUadObpPq4jQAiFDBOZMHZ4QccAKQz30OFe64E=";
   };
 
   build-system = [
@@ -58,6 +58,11 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
       # stuck tests on hydra
       "test_moo_predictive_entropy_search"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Numerical error slightly above threshold
+      # AssertionError: Tensor-likes are not close!
+      "test_model_list_gpytorch_model"
     ];
 
   pythonImportsCheck = [ "botorch" ];
@@ -65,11 +70,11 @@ buildPythonPackage rec {
   # needs lots of undisturbed CPU time or prone to getting stuck
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

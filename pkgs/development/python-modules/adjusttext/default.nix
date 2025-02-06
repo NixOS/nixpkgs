@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "adjusttext";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,16 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Phlya";
     repo = "adjusttext";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2EaFKvRdFPGnDlO8owjP1vCIY1hTQ3tep5oXV/JeU9M=";
+    tag = "v${version}";
+    hash = "sha256-WMWT2os3ADQOc1ogoCFKBEWnb6/CxgtiWmY45bYomks=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     packaging
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     scipy

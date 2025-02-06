@@ -42,7 +42,11 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [ "scipy" ];
+  pythonRelaxDeps = [
+    "beartype"
+    "hyppo"
+    "scipy"
+  ];
 
   dependencies = [
     anytree
@@ -83,8 +87,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://graspologic-org.github.io/graspologic";
     description = "Package for graph statistical algorithms";
+    homepage = "https://graspologic-org.github.io/graspologic";
+    changelog = "https://github.com/graspologic-org/graspologic/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

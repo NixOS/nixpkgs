@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "dsnap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yKch+tKjFhvZfzloazMH378dkERF8gnZEX1Som+d670=";
   };
 

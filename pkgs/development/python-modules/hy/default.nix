@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-o6txdC8TOdaILAJP9LDAhJ587p+mw0bUEGLneQQYW9c=";
   };
 
@@ -66,7 +66,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       mazurel
       nixy
-      thiagokokada
     ];
   };
 }

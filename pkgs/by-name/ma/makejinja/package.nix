@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "makejinja";
-  version = "2.6.2";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xrXyXFmh9df04I/zcSvQXsyUPrAvbOyyrhx8RNS3Ojs=";
+    tag = "v${version}";
+    hash = "sha256-WyTv4eTsEPn3pCCXUB0YUfv9SyR/6Ml4UU4zt1k5z2c=";
   };
 
-  build-system = with python3Packages; [ poetry-core ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies =
     with python3Packages;
@@ -46,5 +46,6 @@ python3Packages.buildPythonApplication rec {
       mirkolenz
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    changelog = "https://github.com/mirkolenz/makejinja/blob/${src.tag}/CHANGELOG.md";
   };
 }

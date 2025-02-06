@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "crytic-compile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-SMkFzGZg/6akclQ0XLUvjK3uoypsHfRru+B4VurjOrM=";
   };
 

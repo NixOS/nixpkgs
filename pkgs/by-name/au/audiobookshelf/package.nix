@@ -6,6 +6,7 @@
   buildNpmPackage,
   nodejs_18,
   ffmpeg-full,
+  nunicode,
   util-linux,
   python3,
   getopt,
@@ -21,7 +22,7 @@ let
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
-    rev = "refs/tags/v${source.version}";
+    tag = "v${source.version}";
     inherit (source) hash;
   };
 
@@ -45,8 +46,7 @@ let
     inherit
       stdenv
       ffmpeg-full
-      pname
-      nodejs
+      nunicode
       getopt
       ;
   };

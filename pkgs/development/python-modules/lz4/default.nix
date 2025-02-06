@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lz4";
     repo = "python-lz4";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZvGUkb9DoheYY2/sejUhxgh2lS5eoBrFCXR4E0IcFcs=";
   };
 

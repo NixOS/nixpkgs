@@ -7,12 +7,13 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  poetry-core,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "incomfort-client";
-  version = "0.6.3-1";
+  version = "0.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "incomfort-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-I6MAFvODkw2QadzXJacFl/TwA6exfBB1PSDslmT7Ysw=";
+    tag = "v${version}";
+    hash = "sha256-ySE2J6h1EeoN7/Y3OK6mrDrXivv9saq9ghHEFGlVlQw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [ aiohttp ];
 

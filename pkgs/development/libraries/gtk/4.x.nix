@@ -4,6 +4,7 @@
 , substituteAll
 , fetchurl
 , pkg-config
+, docutils
 , gettext
 , graphene
 , gi-docgen
@@ -33,11 +34,10 @@
 , gst_all_1
 , sassc
 , trackerSupport ? stdenv.hostPlatform.isLinux
-, tracker
+, tinysparql
 , x11Support ? stdenv.hostPlatform.isLinux
 , waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
-# experimental and can cause crashes in inspector
 , vulkanSupport ? stdenv.hostPlatform.isLinux
 , shaderc
 , vulkan-loader
@@ -50,11 +50,10 @@
 , cupsSupport ? stdenv.hostPlatform.isLinux
 , compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
-, AppKit
-, Cocoa
 , libexecinfo
 , broadwaySupport ? true
 , testers
+, darwinMinVersionHook
 }:
 
 let
@@ -69,7 +68,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.14.5";
+  version = "4.16.7";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -81,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-VUfyufAGsTOZPgcLh8F4BOBR79o5E/6soRCPor5B4k0=";
+    hash = "sha256-UwPHYk4VpIiAWRud3UM4mvuj3k+5KiGXGVGbsWQs49w=";
   };
 
   depsBuildBuild = [
@@ -89,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
     gettext
     gobject-introspection
     makeWrapper
@@ -130,10 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
     libXrandr
     libXrender
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-  ] ++ lib.optionals trackerSupport [
-    tracker
+  ]) ++ lib.optionals trackerSupport [
+    tinysparql
   ] ++ lib.optionals waylandSupport [
     libGL
     wayland
@@ -142,8 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
   ] ++ lib.optionals cupsSupport [
     cups
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     libexecinfo
   ];

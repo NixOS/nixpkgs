@@ -4,30 +4,27 @@
   fetchFromGitHub,
   setuptools,
   swig,
-  wheel,
   msgpack,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ihm";
-  version = "1.6";
+  version = "1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-G6u1z0bPC6EDVMLL9oCWi2B7AEj4UikGnSDQ8AOpuMA=";
+    tag = version;
+    hash = "sha256-Uz/4Egd7swY4kDl6FR564eiaYEdY9IUoz2Lv5pJ1C30=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    swig
-    wheel
-  ];
+  nativeBuildInputs = [ swig ];
 
-  propagatedBuildInputs = [ msgpack ];
+  build-system = [ setuptools ];
+
+  dependencies = [ msgpack ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

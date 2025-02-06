@@ -3,7 +3,8 @@
 }: callPackage ../dotnet.nix {
   releaseManifestFile = ./release.json;
   releaseInfoFile = ./release-info.json;
+  bootstrapSdkFile = ./bootstrap-sdk.nix;
   allowPrerelease = true;
-  depsFile = ./deps.nix;
-  bootstrapSdk = dotnetCorePackages.sdk_9_0;
+  depsFile = ./deps.json;
+  fallbackTargetPackages = dotnetCorePackages.sdk_9_0-bin.targetPackages;
 }

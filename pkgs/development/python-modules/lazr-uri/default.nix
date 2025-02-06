@@ -1,28 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "lazr.uri";
-  version = "1.0.6";
-
-  disabled = isPy27; # namespace is broken for python2
+  pname = "lazr-uri";
+  version = "1.0.7";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "5026853fcbf6f91d5a6b11ea7860a641fe27b36d4172c731f4aa16b900cf8464";
+    pname = "lazr_uri";
+    inherit version;
+    hash = "sha256-7Qz28zPkUBFHUq+xzgwpnDasSxCQY+tQNUxPh/glo+4=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [ setuptools ];
+
+  pythonImportsCheck = [ "lazr.uri" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonNamespaces = [ "lazr" ];
+
+  meta = {
     description = "Self-contained, easily reusable library for parsing, manipulating";
     homepage = "https://launchpad.net/lazr.uri";
-    license = licenses.lgpl3;
+    changelog = "https://git.launchpad.net/lazr.uri/tree/NEWS.rst?h=${version}";
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

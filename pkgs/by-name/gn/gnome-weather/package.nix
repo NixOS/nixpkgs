@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/gnome-weather-${version}.tar.xz";
-    hash = "sha256-FTgmcFzPZy4U8v5N/Hgvjom3xMvkqv6VpVMvveej1J0=";
+    hash = "sha256-UV9YYjdN00bLyFqd3wMGstMnZXhQu2C2ycmGD86WIOY=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +55,7 @@ stdenv.mkDerivation rec {
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Weather.service.in" \
-        --replace "Exec=@DATA_DIR@/@APP_ID@" \
-                  "Exec=$out/bin/gnome-weather"
+        --replace-fail "Exec=@DATA_DIR@/@APP_ID@" "Exec=$out/bin/gnome-weather"
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py

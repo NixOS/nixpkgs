@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl git gnugrep gnused yq-go nix-prefetch go
+#!nix-shell -i bash -p curl git gnugrep gnused yq-go nurl go
 
 SHELL_FLAGS=$(set +o)
 set -x -eu -o pipefail
@@ -54,8 +54,7 @@ cat << EOF > "${WORKDIR}/${CHANNEL_NAME}/versions.nix"
 EOF
 
 set +e
-RKE2_VENDOR_HASH=$(nix-prefetch -I nixpkgs=$(git rev-parse --show-toplevel) \
-        "{ sha256 }: rke2_${CHANNEL_NAME}.goModules.overrideAttrs (_: { vendorHash = sha256; })")
+RKE2_VENDOR_HASH=$(nurl -e "(import $(git rev-parse --show-toplevel) {}).rke2_${CHANNEL_NAME}.goModules")
 set -e
 
 if [ -n "${RKE2_VENDOR_HASH:-}" ]; then

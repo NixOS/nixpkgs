@@ -14,3 +14,7 @@ development.md
 contributing.md
 interoperability.md
 ```
+
+```{=include=} appendix html:into-file=//release-notes.html
+release-notes/release-notes.md
+```

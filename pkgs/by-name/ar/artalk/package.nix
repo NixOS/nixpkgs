@@ -2,61 +2,94 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  artalk,
-  fetchurl,
+  nodejs,
+  pnpm_9,
   installShellFiles,
+  versionCheckHook,
   stdenv,
-  testers,
   nixosTests,
 }:
-buildGoModule rec {
+
+let
   pname = "artalk";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5tUUlkGeT4kY/81EQ29M6z+JnBT4YCa8gecbV9WMuDo=";
-  };
-  web = fetchurl {
-    url = "https://github.com/${src.owner}/${src.repo}/releases/download/v${version}/artalk_ui.tar.gz";
-    hash = "sha256-Cx3fDpnl52kwILzH9BBLfsWe5qEbIl/ecJd1wJEB/Hc=";
+    tag = "v${version}";
+    hash = "sha256-gzagE3muNpX/dwF45p11JAN9ElsGXNFQ3fCvF1QhvdU=";
   };
 
-  CGO_ENABLED = 1;
+  frontend = stdenv.mkDerivation (finalAttrs: {
+    pname = "${pname}-frontend";
 
-  vendorHash = "sha256-edqmv/Q99pgnScJqCmLwjHd7uKMNPGfCSujNTUQtpLc=";
+    inherit src version;
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm_9.configHook
+    ];
+
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-QIfadS2gNPtH006O86EndY/Hx2ml2FoKfUXJF5qoluw=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm build:all
+      pnpm build:auth
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/{dist/{i18n,plugins},sidebar}
+
+      # dist
+      cp ./ui/artalk/dist/{Artalk,ArtalkLite}.{css,js} $out/dist
+      cp ./ui/artalk/dist/i18n/*.js $out/dist/i18n
+      cp ./ui/plugin-*/dist/*.js $out/dist/plugins
+
+      # sidebar
+      cp -r ./ui/artalk-sidebar/dist/* $out/sidebar
+
+      runHook postInstall
+    '';
+  });
+in
+buildGoModule {
+  inherit src pname version;
+
+  vendorHash = "sha256-oAqYQzOUjly97H5L5PQ9I2SO2KqiUVxdJA+eoPrHD6Q=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ArtalkJS/Artalk/internal/config.Version=${version}"
-    "-X github.com/ArtalkJS/Artalk/internal/config.CommitHash=${version}"
   ];
 
   preBuild = ''
-    tar -xzf ${web}
-    cp -r ./artalk_ui/* ./public
+    cp -r ${frontend}/* ./public
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    ''
-      # work around case insensitive file systems
-      mv $out/bin/Artalk $out/bin/artalk.tmp
-      mv $out/bin/artalk.tmp $out/bin/artalk
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd artalk \
-        --bash <($out/bin/artalk completion bash) \
-        --fish <($out/bin/artalk completion fish) \
-        --zsh <($out/bin/artalk completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd artalk \
+      --bash <($out/bin/artalk completion bash) \
+      --fish <($out/bin/artalk completion fish) \
+      --zsh <($out/bin/artalk completion zsh)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
 
   passthru.tests = {
-    version = testers.testVersion { package = artalk; };
     inherit (nixosTests) artalk;
   };
 

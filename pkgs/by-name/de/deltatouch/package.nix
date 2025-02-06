@@ -1,27 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, cmake
-, intltool
-, libdeltachat
-, lomiri
-, qt5
-, quirc
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  cmake,
+  intltool,
+  libdeltachat,
+  lomiri,
+  qt5,
+  quirc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "1.6.0";
+  version = "1.10.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lk108";
     repo = "deltatouch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mOs5WlWOkH9A+BZK6hvKq/JKS4k8tzvvov4CYFHyMfA=";
-    fetchSubmodules = true;
+    hash = "sha256-QcrBo7lrMYkOZGSyS5fLAwNxZwKFrylU5P5my2Jl93k=";
   };
-
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
@@ -36,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri.lomiri-ui-toolkit
     lomiri.lomiri-ui-extras
     lomiri.lomiri-api
-    lomiri.lomiri-indicator-network # Lomiri.Connectivity module
     lomiri.qqc2-suru-style
   ];
 
@@ -48,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'assets/logo.svg DESTINATION assets' 'assets/logo.svg DESTINATION ''${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps RENAME deltatouch.svg' \
       --replace-fail "\''${DESKTOP_FILE_NAME} DESTINATION \''${DATA_DIR}" "\''${DESKTOP_FILE_NAME} DESTINATION \''${CMAKE_INSTALL_DATAROOTDIR}/applications"
 
-    substituteInPlace plugins/{DeltaHandler,HtmlMsgEngineProfile,WebxdcEngineProfile}/CMakeLists.txt \
+    substituteInPlace plugins/{DeltaHandler,HtmlMsgEngineProfile,WebxdcEngineProfile,XdcPickerEngineProfile}/CMakeLists.txt \
       --replace-fail 'set(QT_IMPORTS_DIR "/lib/''${ARCH_TRIPLET}")' 'set(QT_IMPORTS_DIR "${placeholder "out"}/${qt5.qtbase.qtQmlPrefix}")'
 
     # Fix import of library dependencies
-    substituteInPlace plugins/{DeltaHandler,WebxdcEngineProfile}/CMakeLists.txt \
+    substituteInPlace plugins/{DeltaHandler,HtmlMsgEngineProfile,WebxdcEngineProfile,XdcPickerEngineProfile}/CMakeLists.txt \
       --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libdeltachat.so"' 'IMPORTED_LOCATION "${lib.getLib libdeltachat}/lib/libdeltachat.so"'
     substituteInPlace plugins/DeltaHandler/CMakeLists.txt \
       --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libquirc.so.1.2"' 'IMPORTED_LOCATION "${lib.getLib quirc}/lib/libquirc.so"'

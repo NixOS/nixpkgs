@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.29.7";
+  version = "0.29.11";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-4GjCV/Z9al7Hrj7Ik/EvmLy5jPCsU/3Ti9HwOjzPKYc=";
+    hash = "sha256-MIXuqDnK8kXjQOSTALVPQHIE1eMk1Dl1M+/GMbw92bg=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ mkDerivation rec {
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
   };
 }
 

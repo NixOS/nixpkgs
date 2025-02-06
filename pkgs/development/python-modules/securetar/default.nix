@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2024.2.1";
+  version = "2024.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,13 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "securetar";
-    rev = "refs/tags/${version}";
-    hash = "sha256-D50ceRlK+v5Uo3qBBpVtKwI8zKU/qh1Njn3qeKM4LiY=";
+    tag = version;
+    hash = "sha256-h0GubDuwINDNfDxBVJv74yu/OnzMasq5f0lPoIrNNCA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ cryptography ];
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

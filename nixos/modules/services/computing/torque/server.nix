@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.torque.server;
   torque = pkgs.torque;
@@ -18,7 +23,12 @@ in
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-server-init = {
-      path = with pkgs; [ torque util-linux procps inetutils ];
+      path = with pkgs; [
+        torque
+        util-linux
+        procps
+        inetutils
+      ];
 
       script = ''
         tmpsetup=$(mktemp -t torque-XXXX)
@@ -63,10 +73,16 @@ in
       path = [ torque ];
 
       wantedBy = [ "multi-user.target" ];
-      wants = [ "torque-scheduler.service" "trqauthd.service" ];
+      wants = [
+        "torque-scheduler.service"
+        "trqauthd.service"
+      ];
       before = [ "trqauthd.service" ];
       requires = [ "torque-server-init.service" ];
-      after = [ "torque-server-init.service" "network.target" ];
+      after = [
+        "torque-server-init.service"
+        "network.target"
+      ];
 
       serviceConfig = {
         Type = "forking";

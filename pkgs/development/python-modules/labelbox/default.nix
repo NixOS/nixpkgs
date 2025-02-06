@@ -10,7 +10,7 @@
   nbconvert,
   nbformat,
   numpy,
-  opencv4,
+  opencv-python-headless,
   pillow,
   pydantic,
   pyproj,
@@ -39,15 +39,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
 
   sourceRoot = "${src.name}/libs/labelbox";
 
-  pythonRelaxDeps = [ "python-dateutil" ];
-
-  pythonRemoveDeps = [ "opencv-python-headless" ];
+  pythonRelaxDeps = [
+    "mypy"
+    "python-dateutil"
+  ];
 
   build-system = [ hatchling ];
 
@@ -67,7 +68,7 @@ buildPythonPackage rec {
       shapely
       numpy
       pillow
-      opencv4
+      opencv-python-headless
       typeguard
       imagesize
       pyproj

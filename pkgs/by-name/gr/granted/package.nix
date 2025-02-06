@@ -1,27 +1,29 @@
-{ bash
-, buildGoModule
-, fetchFromGitHub
+{
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 
-, withFish ? false
-, fish
+  withFish ? false,
+  fish,
 
-, lib
-, makeWrapper
-, xdg-utils
+  lib,
+  makeWrapper,
+  xdg-utils,
 }:
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.34.1";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iNGagF4+Lz73Ctvh8Qs90E+xvuGi7LWHV/VbjjqMqRY=";
+    sha256 = "sha256-dy56xrn2BiVoFoQMnkl9jglecY9HAoRU/yubv5ddNU8=";
   };
 
-  vendorHash = "sha256-uKzs+plk1W2S7iPv2J1Mi1Ff88+82zrIXLy2eTzD/Hc=";
+  vendorHash = "sha256-xL4+N1+Jb8KI9UbLfPV4R/MrIqL+6Lgpzsgq86J9cnE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,29 +40,61 @@ buildGoModule rec {
     "cmd/granted"
   ];
 
-  postInstall = ''
-    ln -s $out/bin/granted $out/bin/assumego
+  postInstall =
+    let
+      # assume depends on assumego, so we add (placeholder "out") to its path
+      addToAssumePath = lib.makeBinPath [
+        xdg-utils
+        (placeholder "out")
+      ];
+    in
+    ''
+      ln -s $out/bin/granted $out/bin/assumego
 
-    # Install shell script
-    install -Dm755 $src/scripts/assume $out/bin/assume
-    substituteInPlace $out/bin/assume \
-      --replace /bin/bash ${bash}/bin/bash
+      # Create script with correct permissions
+      install -Dm755 /dev/null $out/bin/assume
 
-    wrapProgram $out/bin/assume \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      # assume is a script that must be sourced
+      # We can't wrap it because it inspects $0 and calls return, which can only
+      # be done in sourced scripts.
+      # So instead we insert the following snippet into the beginning of the
+      # script to add to PATH.
+      # This is borrowed from wrapProgram --suffix PATH :
+      addToPath="$(cat << 'EOF'
 
-  '' + lib.optionalString withFish ''
-    # Install fish script
-    install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
-    substituteInPlace $out/share/assume.fish \
-      --replace /bin/fish ${fish}/bin/fish
-  '';
+      PATH=''${PATH:+':'$PATH':'}
+      if [[ $PATH != *':'''${addToAssumePath}''':'* ]]; then
+          PATH=$PATH'${addToAssumePath}'
+      fi
+      PATH=''${PATH#':'}
+      PATH=''${PATH%':'}
+      export PATH
+
+      EOF
+      )"
+
+      # Insert below the #!/bin/sh shebang
+      echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
+    ''
+    + lib.optionalString withFish ''
+      # Install fish script
+      install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
+      substituteInPlace $out/share/assume.fish \
+        --replace /bin/fish ${fish}/bin/fish
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with maintainers; [
+      jlbribeiro
+    ];
   };
 }

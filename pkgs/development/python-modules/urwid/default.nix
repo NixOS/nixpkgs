@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.15";
+  version = "2.6.16";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "urwid";
     repo = "urwid";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bBgzhNNYxNZKaSo43I3fMoR+j6XDV6UBNrZfQyZ/f7c=";
+    tag = version;
+    hash = "sha256-D5NHtU7XQRh8OqkwrN5r8U/VGF87LGwdnaqGhdjN8AE=";
   };
 
   postPatch = ''
@@ -67,6 +67,11 @@ buildPythonPackage rec {
   env.LC_ALL = "en_US.UTF8";
 
   pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # Flaky tests
+    "TwistedEventLoopTest"
+  ];
 
   disabledTestPaths = [
     # expect call hangs

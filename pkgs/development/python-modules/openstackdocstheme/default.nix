@@ -11,21 +11,18 @@
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
-  version = "3.3.0";
+  version = "3.4.1";
   pyproject = true;
 
-  # breaks on import due to distutils import through pbr.packaging
-  disabled = pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wmZJmX5bQKM1uwqWxynkY5jPJaBn+Y2eqSRkE2Ub0qM=";
+    hash = "sha256-OPT2rGO967RlJ17iEm5oMuaxqZ8Y8ya+gKMzU0qaGzk=";
   };
 
   postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
+    patchShebangs bin/
   '';
 
   build-system = [ setuptools ];

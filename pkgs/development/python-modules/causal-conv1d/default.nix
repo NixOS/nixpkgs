@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "causal-conv1d";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p5x5u3zEmEMN3mWd88o3jmcpKUnovTvn7I9jIOj/ie0=";
   };
 

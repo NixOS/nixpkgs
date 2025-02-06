@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "hnswlib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pjz5SGg2drO6fkml9ojFG7/Gq3/Y7vPaOHc+3LKnjUw=";
   };
 

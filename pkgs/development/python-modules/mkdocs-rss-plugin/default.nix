@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sGm6uWlZeW65uorfTK8pk8ZT2AE9nmsZhe+UYVrSr+8=";
+    tag = version;
+    hash = "sha256-6FTOJQqK9lKYt6cVpKvMcNUrhSwX26032Vr4JyZ6sI8=";
   };
 
   postPatch = ''

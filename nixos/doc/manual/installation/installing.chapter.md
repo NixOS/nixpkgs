@@ -31,6 +31,7 @@ To begin the installation, you have to boot your computer from the install drive
 
      ::: {.note}
      If your computer supports both BIOS and UEFI boot, choose the UEFI option.
+     You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
      :::
 
      ::: {.note}

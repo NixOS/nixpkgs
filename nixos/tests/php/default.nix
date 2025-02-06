@@ -1,7 +1,8 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../../.. { inherit system config; }
-, php ? pkgs.php
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../../.. { inherit system config; },
+  php ? pkgs.php,
 }:
 
 let
@@ -10,7 +11,16 @@ let
   };
 in
 {
-  fpm = import ./fpm.nix { inherit system pkgs; php = php'; };
-  httpd = import ./httpd.nix { inherit system pkgs; php = php'; };
-  pcre = import ./pcre.nix { inherit system pkgs; php = php'; };
+  fpm = import ./fpm.nix {
+    inherit system pkgs;
+    php = php';
+  };
+  httpd = import ./httpd.nix {
+    inherit system pkgs;
+    php = php';
+  };
+  pcre = import ./pcre.nix {
+    inherit system pkgs;
+    php = php';
+  };
 }

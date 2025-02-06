@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, home-assistant
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  home-assistant,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2024.10.2";
+  version = "2025.1.4";
   pyproject = true;
 
   disabled = python.version != home-assistant.python.version;
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "KapJI";
     repo = "homeassistant-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-6aFZiJKPuUdnC3YzSHyJgn2iTHfP8MCwx17I7uxVTNg=";
+    hash = "sha256-ysebkp0wrCGHRuHZMY6P4ftcth3gsHwtRcSGUN/7noI=";
   };
 
   build-system = [

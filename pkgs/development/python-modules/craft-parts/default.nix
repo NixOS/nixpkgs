@@ -9,7 +9,6 @@
   pyyaml,
   requests,
   requests-unixsocket,
-  urllib3,
   pytestCheckHook,
   pytest-check,
   pytest-mock,
@@ -25,15 +24,15 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.1.2";
+  version = "2.1.4";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-parts";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QSD43rTy0GsGoUymhoBv1gdS6TMoln5PNsmeycKnXnw=";
+    tag = version;
+    hash = "sha256-z0Om1/0Y6fDFHXB0GKFelmYwNwTH7loTtRjXtmjsjkY=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     pyyaml
     requests
     requests-unixsocket
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_parts" ];

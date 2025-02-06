@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "rich_theme_manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nSNG+lWOPmh66I9EmPvWqbeceY/cu+zBpgVlDTNuHc0=";
   };
 

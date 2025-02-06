@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   nodejs,
-  pnpm_8,
+  pnpm_9,
   prisma-engines,
   jq,
   makeWrapper,
@@ -13,26 +13,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma";
-  version = "5.18.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
     rev = finalAttrs.version;
-    hash = "sha256-BLD2nKryigXr03BCgGwb3PnCcBLMyDfSFb9Snj0VPKI=";
+    hash = "sha256-Buu+E0xxjcrPOyEHkQTp7IVS9kymmR1PTegeOXxb2PA=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_8.configHook
+    pnpm_9.configHook
     jq
     makeWrapper
     moreutils
   ];
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-lgdJk7HCfX3cAvdEI8xG/IVBiLWezdUN0q+e/0LtVUQ=";
+    hash = "sha256-rAEUkk3uWVuUDrSRz6d2Ewr3vi4rzYmO0yLTCl21qZ4=";
   };
 
   patchPhase = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Remove unnecessary external dependencies
     rm -rf node_modules
-    pnpm install --offline --ignore-scripts --frozen-lockfile --prod --filter ./packages/cli
+    pnpm install --offline --ignore-scripts --frozen-lockfile --prod
     cp -r node_modules $out/lib/prisma
 
     # Only install cli and its workspace dependencies

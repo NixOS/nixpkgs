@@ -11,10 +11,11 @@
   albucore,
   eval-type-backport,
   numpy,
-  opencv4,
+  opencv-python,
   pydantic,
   pyyaml,
   scikit-image,
+  scipy,
 
   # optional dependencies
   huggingface-hub,
@@ -30,19 +31,23 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.17";
+  version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albumentations";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4JOqaSpBXSrAR3qrOeab+PvhXPcoEnblO0n9TSqW0bY=";
+    tag = version;
+    hash = "sha256-8WEOI2J2H4PNhyb9LoIUMofGKx9AHPiPddkQCSdh8/A=";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  patches = [
+    ./dont-check-for-updates.patch
+  ];
+
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
@@ -50,10 +55,11 @@ buildPythonPackage rec {
     albucore
     eval-type-backport
     numpy
-    opencv4
+    opencv-python
     pydantic
     pyyaml
     scikit-image
+    scipy
   ];
 
   optional-dependencies = {

@@ -12,13 +12,16 @@
 
   cmake,
   gcc12,
+  gitMinimal,
   clblast,
   libdrm,
   rocmPackages,
   cudaPackages,
   darwin,
   autoAddDriverRunpath,
+  versionCheckHook,
 
+  # passthru
   nixosTests,
   testers,
   ollama,
@@ -40,17 +43,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.3.12";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
-    rev = "v${version}";
-    hash = "sha256-K1FYXEP0bTZa8M+V4/SxI+Q+LWs2rsAMZ/ETJCaO7P8=";
+    tag = "v${version}";
+    hash = "sha256-DW7gHNyW1ML8kqgMFsqTxS/30bjNlWmYmeov2/uZn00=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-hSxcREAujhvzHVNwnRTfhi0MKI3s8HNavER2VLz6SYk=";
+  vendorHash = "sha256-1uk3Oi0n4Q39DVZe3PnZqqqmlwwoHmEolcRrib0uu4I=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
@@ -85,13 +88,21 @@ let
     cudaPackages.libcublas
     cudaPackages.cuda_cccl
   ];
+
+  # Extract the major version of CUDA. e.g. 11 12
+  cudaMajorVersion = lib.versions.major cudaPackages.cuda_cudart.version;
+
   cudaToolkit = buildEnv {
-    name = "cuda-merged";
+    # ollama hardcodes the major version in the Makefile to support different variants.
+    # - https://github.com/ollama/ollama/blob/v0.4.4/llama/Makefile#L17-L18
+    name = "cuda-merged-${cudaMajorVersion}";
     paths = map lib.getLib cudaLibs ++ [
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
   };
+
+  cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
 
   metalFrameworks = with darwin.apple_sdk_11_0.frameworks; [
     Accelerate
@@ -118,7 +129,10 @@ let
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
   goBuild =
-    if enableCuda then buildGoModule.override { stdenv = overrideCC stdenv gcc12; } else buildGoModule;
+    if enableCuda then
+      buildGoModule.override { stdenv = cudaPackages.backendStdenv; }
+    else
+      buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
 goBuild {
@@ -133,12 +147,19 @@ goBuild {
     lib.optionalAttrs enableRocm {
       ROCM_PATH = rocmPath;
       CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
+      HIP_PATH = rocmPath;
     }
-    // lib.optionalAttrs enableCuda { CUDA_LIB_DIR = "${cudaToolkit}/lib"; };
+    // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
   nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals enableRocm [ rocmPackages.llvm.bintools ]
+    [
+      cmake
+      gitMinimal
+    ]
+    ++ lib.optionals enableRocm [
+      rocmPackages.llvm.bintools
+      rocmLibs
+    ]
     ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
     ++ lib.optionals (enableRocm || enableCuda) [
       makeWrapper
@@ -151,25 +172,10 @@ goBuild {
     ++ lib.optionals enableCuda cudaLibs
     ++ lib.optionals stdenv.hostPlatform.isDarwin metalFrameworks;
 
-  patches = [
-    # disable uses of `git` in the `go generate` script
-    # ollama's build script assumes the source is a git repo, but nix removes the git directory
-    # this also disables necessary patches contained in `ollama/llm/patches/`
-    # those patches are applied in `postPatch`
-    ./disable-git.patch
-
-    # we provide our own deps at runtime
-    ./skip-rocm-cp.patch
-  ];
-
+  # replace inaccurate version number with actual release version
   postPatch = ''
-    # replace inaccurate version number with actual release version
-    substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
-
-    # apply ollama's patches to `llama.cpp` submodule
-    for diff in llm/patches/*; do
-      patch -p1 -d llm/llama.cpp < $diff
-    done
+    substituteInPlace version/version.go \
+      --replace-fail 0.0.0 '${version}'
   '';
 
   overrideModAttrs = (
@@ -179,20 +185,35 @@ goBuild {
     }
   );
 
-  preBuild = ''
-    # disable uses of `git`, since nix removes the git directory
-    export OLLAMA_SKIP_PATCHING=true
+  preBuild =
+    let
+      dist_cmd =
+        if cudaRequested then
+          "dist_cuda_v${cudaMajorVersion}"
+        else if rocmRequested then
+          "dist_rocm"
+        else
+          "dist";
+    in
     # build llama.cpp libraries for ollama
-    go generate ./...
+    ''
+      make ${dist_cmd} -j $NIX_BUILD_CORES
+    '';
+
+  postInstall = lib.optionalString (stdenv.hostPlatform.isx86 || enableRocm || enableCuda) ''
+    # copy libggml_*.so and runners into lib
+    # https://github.com/ollama/ollama/blob/v0.4.4/llama/make/gpu.make#L90
+    mkdir -p $out/lib
+    cp -r dist/*/lib/* $out/lib/
   '';
 
   postFixup =
+    # the app doesn't appear functional at the moment, so hide it
     ''
-      # the app doesn't appear functional at the moment, so hide it
       mv "$out/bin/app" "$out/bin/.ollama-app"
     ''
+    # expose runtime libraries necessary to use the gpu
     + lib.optionalString (enableRocm || enableCuda) ''
-      # expose runtime libraries necessary to use the gpu
       wrapProgram "$out/bin/ollama" ${wrapperArgs}
     '';
 
@@ -202,6 +223,12 @@ goBuild {
     "-X=github.com/ollama/ollama/version.Version=${version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheck = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests =

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.7.4";
+  version = "3.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit version;
-    hash = "sha256-gLZ/Ci3Fh6MddILT0mkqdz8l+9CUaP2d5F0AtnGq2Zk=";
+    hash = "sha256-ISJqrJy0ukW/icwuEHrqGeT3j5c26x3laDfgwpif7P8=";
   };
 
   build-system = [ setuptools ];

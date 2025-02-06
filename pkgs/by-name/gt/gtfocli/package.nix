@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cmd-tools";
     repo = "gtfocli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yvL9H9yOiYTaWtm5cj9A8y+kKXLQgLqUMu9JMnm1llI=";
   };
 

@@ -11,6 +11,7 @@
 , expat
 , fdk_aac
 , ffmpeg-headless
+, ffmpeg_6-headless
 , geoip
 , libbsd
 , libiconv
@@ -438,7 +439,6 @@ let self = {
     };
 
     inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
-    disableIPC = true;
 
     meta = with lib; {
       description = "Open source, cross platform web application firewall (WAF)";
@@ -504,11 +504,11 @@ let self = {
 
   njs = rec {
     name = "njs";
-    src = fetchhg {
-      url = "https://hg.nginx.org/njs";
-      rev = "0.8.1";
-      sha256 = "sha256-bFHrcA1ROMwYf+s0EWOXzkru6wvfRLvjvN8BV/r2tMc=";
-      name = "nginx-njs";
+    src = fetchFromGitHub {
+      owner = "nginx";
+      repo = "njs";
+      rev = "0.8.7";
+      hash = "sha256-VEXzP+cN5hnDeniccwY7GIi4x460rnWO/o7ja3DyRCc=";
     };
 
     # njs module sources have to be writable during nginx build, so we copy them
@@ -852,8 +852,8 @@ let self = {
       name = "subsFilter";
       owner = "yaoweibin";
       repo = "ngx_http_substitutions_filter_module";
-      rev = "b8a71eacc7f986ba091282ab8b1bbbc6ae1807e0";
-      sha256 = "027jxzx66q9a6ycn47imjh40xmnqr0z423lz0ds3w4rf1c2x130f";
+      rev = "e12e965ac1837ca709709f9a26f572a54d83430e";
+      sha256 = "sha256-3sWgue6QZYwK69XSi9q8r3WYGVyMCIgfqqLvPBHqJKU=";
     };
 
     meta = with lib; {
@@ -991,7 +991,7 @@ let self = {
       '';
     };
 
-    inputs = [ ffmpeg-headless fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg_6-headless fdk_aac openssl libxml2 libiconv ];
 
     meta = with lib; {
       description = "VOD packager";

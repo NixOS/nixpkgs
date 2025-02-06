@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GKrgUK2nSZi+8oJoS45MjpU9+INEgcla9Kaw6ceNVp0=";
   };
 

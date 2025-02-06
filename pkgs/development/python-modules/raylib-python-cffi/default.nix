@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "electronstudio";
     repo = "raylib-python-cffi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R/w39zYkoOF5JqHDyqVIdON9yXFo2PeosyEQZOd4aYo=";
   };
 

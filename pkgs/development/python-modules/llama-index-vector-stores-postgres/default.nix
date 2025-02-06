@@ -7,23 +7,24 @@
   pgvector,
   poetry-core,
   psycopg2,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-postgres";
-  version = "0.2.6";
+  version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_postgres";
     inherit version;
-    hash = "sha256-x6KOZMZ5W8F8FATH3ZAwAeyrZ/rvjzrEooaFgQsSATQ=";
+    hash = "sha256-RxmlwcxPmqc4ILzG0112Pp16960Lbf2113aDavDqDgA=";
   };
 
   pythonRemoveDeps = [ "psycopg2-binary" ];
+
+  pythonRelaxDeps = [
+    "pgvector"
+  ];
 
   build-system = [
     poetry-core
@@ -38,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.vector_stores.postgres" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Vector Store Integration for Postgres";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/vector_stores/llama-index-vector-stores-postgres";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

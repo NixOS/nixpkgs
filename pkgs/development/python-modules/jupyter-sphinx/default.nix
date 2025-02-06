@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter-sphinx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o/i3WravKZPf7uw2H4SVYfAyaZGf19ZJlkmeHCWcGtE=";
   };
 
@@ -44,6 +44,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # https://github.com/jupyter/jupyter-sphinx/issues/280"
+    "test_builder_priority"
+  ];
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
@@ -53,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
-    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/v${version}";
     license = licenses.bsd3;
   };
 }

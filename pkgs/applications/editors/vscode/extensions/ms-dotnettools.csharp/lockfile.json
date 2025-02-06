@@ -1,0 +1,46 @@
+{
+  "version": "2.61.28",
+  "linux-x64": {
+    "hash": "sha256-lyP/NCvpaVW8dbZp/8OS9qrBa7yuO4rTo8Wwo/7wD7g=",
+    "binaries": [
+      ".debugger/createdump",
+      ".debugger/vsdbg",
+      ".debugger/vsdbg-ui",
+      ".razor/rzls",
+      ".roslyn/Microsoft.CodeAnalysis.LanguageServer"
+    ]
+  },
+  "linux-arm64": {
+    "hash": "sha256-bZ5ABDh3MnO33MQEXhLlF4UVGTCrcj5pCYgQDS6AP58=",
+    "binaries": [
+      ".debugger/createdump",
+      ".debugger/vsdbg",
+      ".debugger/vsdbg-ui",
+      ".razor/rzls",
+      ".roslyn/Microsoft.CodeAnalysis.LanguageServer"
+    ]
+  },
+  "darwin-x64": {
+    "hash": "sha256-5yDTJp3GDb7HYAG9q8wvr4QKwjGJ214ifUjwxZMwIts=",
+    "binaries": [
+      ".debugger/x86_64/createdump",
+      ".debugger/x86_64/vsdbg",
+      ".debugger/x86_64/vsdbg-ui",
+      ".razor/rzls",
+      ".roslyn/Microsoft.CodeAnalysis.LanguageServer"
+    ]
+  },
+  "darwin-arm64": {
+    "hash": "sha256-58fz7IFzYgvC9Eruz1JgF4/ftHQV4FGdcfOODlCmGBA=",
+    "binaries": [
+      ".debugger/arm64/createdump",
+      ".debugger/arm64/vsdbg",
+      ".debugger/arm64/vsdbg-ui",
+      ".debugger/x86_64/createdump",
+      ".debugger/x86_64/vsdbg",
+      ".debugger/x86_64/vsdbg-ui",
+      ".razor/rzls",
+      ".roslyn/Microsoft.CodeAnalysis.LanguageServer"
+    ]
+  }
+}

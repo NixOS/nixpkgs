@@ -2,36 +2,43 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  asgiref,
+  baize,
   httpx,
   pdm-backend,
   pytest-asyncio,
   pytestCheckHook,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "a2wsgi";
-  version = "1.10.4";
+  version = "1.10.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UOgaxVqmCfosZm5CuswlxCTIiEzmBy8afpAhFLfuXWM=";
+    hash = "sha256-zkYv9+HarAvFcYPG+ADwmnHCp6mN3VzeyhSePqvzM44=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
+
+  dependencies = [
+    starlette
+    baize
+  ];
 
   nativeCheckInputs = [
-    asgiref
+    baize
     httpx
     pytest-asyncio
     pytestCheckHook
+    starlette
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert WSGI app to ASGI app or ASGI app to WSGI app";
     homepage = "https://github.com/abersheeran/a2wsgi";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

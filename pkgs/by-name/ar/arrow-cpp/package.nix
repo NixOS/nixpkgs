@@ -35,6 +35,7 @@
   nlohmann_json,
   openssl,
   perl,
+  pkg-config,
   protobuf,
   python3,
   rapidjson,
@@ -49,44 +50,40 @@
   zstd,
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  enableFlight ? true,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin,
+  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
+  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
   enableS3 ? true,
   enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
-
-assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.hostPlatform.isDarwin)
-  -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-) "S3 on Darwin requires Boost != 1.69";
 
 let
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "735ae7128d571398dd798d7ff004adebeb342883";
-    hash = "sha256-67KwnSt+EeEDvk+9kxR51tErL2wJqEPRITKb/dN+HMQ=";
+    rev = "4d209492d514c2d3cb2d392681b9aa00e6d8da1c";
+    hash = "sha256-IkiCbuy0bWyClPZ4ZEdkEP7jFYLhM7RCuNLd6Lazd4o=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
-    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
+    rev = "c7cf1374cf284c0c73024cd1437becea75558bf8";
+    hash = "sha256-DThjyZ34LajHwXZy1IhYKUGUG/ejQ9WvBNuI8eUKmSs=";
   };
 
+  version = "19.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "17.0.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "arrow";
-    rev = "apache-arrow-17.0.0";
-    hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
+    rev = "apache-arrow-${version}";
+    hash = "sha256-rjU/D362QfmejzjIsYaEwTMcLADbNf/pQohb323ifZI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -125,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
@@ -171,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+      --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags =
@@ -179,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
       "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-      "-DARROW_BUILD_TESTS=ON"
+      "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_INTEGRATION=ON"
       "-DARROW_BUILD_UTILITIES=ON"
       "-DARROW_EXTRA_ERROR_CONTEXT=ON"
@@ -259,11 +257,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    perl
-    which
-    sqlite
-  ] ++ lib.optionals enableS3 [ minio ] ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs =
+    [
+      perl
+      which
+      sqlite
+    ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let

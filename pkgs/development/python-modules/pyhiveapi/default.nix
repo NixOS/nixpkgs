@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyhiveapi";
-  version = "0.5.16";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gPou5KGLFEFP29qSpRg+6sCiXOwfoF1gyhBVERYJ1LI=";
+    tag = "v${version}";
+    hash = "sha256-/Q6nQb6JyjjWJv7Yj+EJdqOMy+j3cYPIkRpXa3Q48Oo=";
   };
 
   postPatch = ''

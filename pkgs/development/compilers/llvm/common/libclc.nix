@@ -17,16 +17,30 @@ let
   spirv-llvm-translator = buildPackages.spirv-llvm-translator.override {
     inherit (buildLlvmTools) llvm;
   };
+
+  # The build requires an unwrapped clang but wrapped clang++ thus we need to
+  # split the unwrapped clang out to prevent the build from finding the
+  # unwrapped clang++
+  clang-only = runCommand "clang-only" { } ''
+    mkdir -p "$out"/bin
+    ln -s "${lib.getExe' buildLlvmTools.clang.cc "clang"}" "$out"/bin
+  '';
 in
 stdenv.mkDerivation rec {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" { } ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${pname} "$out"
-  '';
+  src = runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
+    ''
+      mkdir -p "$out"
+    ''
+    + lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
+    ''
+    + ''
+      cp -r ${monorepoSrc}/${pname} "$out"
+    ''
+  );
 
   sourceRoot = "${src.name}/${pname}";
 
@@ -49,21 +63,31 @@ stdenv.mkDerivation rec {
   postPatch =
     lib.optionalString (lib.versionOlder release_version "19") ''
       substituteInPlace CMakeLists.txt \
-        --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_CLANG clang PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_CLANG clang PATHS "${buildLlvmTools.clang.cc}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_AS llvm-as PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_AS llvm-as PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_AS llvm-as PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_LINK llvm-link PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_LINK llvm-link PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_LINK llvm-link PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_OPT opt PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_OPT opt PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_OPT opt PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
-        --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
+        --replace-fail 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
     ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      substituteInPlace CMakeLists.txt \
-        --replace 'COMMAND prepare_builtins' 'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
-    '';
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+      if (lib.versionOlder release_version "19") then
+        ''
+          substituteInPlace CMakeLists.txt \
+            --replace-fail 'COMMAND prepare_builtins' \
+                           'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
+        ''
+      else
+        ''
+          substituteInPlace CMakeLists.txt \
+            --replace-fail 'set( prepare_builtins_exe prepare_builtins )' \
+                           'set( prepare_builtins_exe ${buildLlvmTools.libclc.dev}/bin/prepare_builtins )'
+        ''
+    );
 
   nativeBuildInputs =
     [
@@ -72,7 +96,7 @@ stdenv.mkDerivation rec {
       python3
     ]
     ++ lib.optional (lib.versionAtLeast release_version "19") [
-      buildLlvmTools.clang.cc
+      clang-only
       buildLlvmTools.llvm
       spirv-llvm-translator
     ];

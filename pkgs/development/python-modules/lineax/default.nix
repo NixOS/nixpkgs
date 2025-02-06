@@ -16,19 +16,31 @@
   beartype,
   pytest,
   python,
+
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "lineax";
-  version = "0.0.6";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "lineax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rM3H+q75F98eEIJkEszWgxD5C5vGK5RlYtVv8GD/VC0=";
+    tag = "v${version}";
+    hash = "sha256-HcFI55Ww/y7ZaUkawj7xWSb7VDTBec3u0ulWL8kTm2c=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Reported upstream: https://github.com/patrick-kidger/lineax/issues/118
+      # Fixed by https://github.com/patrick-kidger/lineax/pull/119
+      name = "fix-vmap-tests";
+      url = "https://github.com/patrick-kidger/lineax/pull/119/commits/d21552ac4c504d7b139ad8e4f15d5f102b54d705.patch";
+      hash = "sha256-pBejiqIVNjXi7dXuDBQdAy892wro1WxzwbI7v07N86c=";
+    })
+  ];
 
   build-system = [ hatchling ];
 
@@ -59,7 +71,7 @@ buildPythonPackage rec {
   meta = {
     description = "Linear solvers in JAX and Equinox";
     homepage = "https://github.com/patrick-kidger/lineax";
-    changelog = "https://github.com/patrick-kidger/lineax/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/lineax/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

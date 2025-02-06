@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.4.0";
+  version = "0.4.3";
 in
 rustPlatform.buildRustPackage rec {
   pname = "schemamap";
@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
     owner = "schemamap";
     repo = "schemamap";
     rev = "v${version}";
-    hash = "sha256-L5p7Kh5sQAlDHrXgWUuiYZb3sV0Mp2ODEOMQsaB0iMs=";
+    hash = "sha256-YR7Ucd8/Z1hOUNokmfSVP2ZxDL7qLb6SZ86/S7V/GKk=";
   };
 
   sourceRoot = "${src.name}/rust";
 
-  cargoHash = "sha256-rwAujQC/zV5nH5YQdjPRyf1L7SYSbdS3FJ5SAVMlhRE=";
+  cargoHash = "sha256-iq1/8oWVgiqdYfmJKzrIe9gkCz7fDw08QcaQgfd7vuo=";
 
   buildInputs =
     [ openssl ]

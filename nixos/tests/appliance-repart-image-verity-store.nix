@@ -29,13 +29,6 @@
           options = [ "mode=0755" ];
         };
 
-        "/usr" = {
-          device = "/dev/mapper/usr";
-          # explicitly mount it read-only otherwise systemd-remount-fs will fail
-          options = [ "ro" ];
-          fsType = config.image.repart.partitions.${partitionIds.store}.repartConfig.Format;
-        };
-
         # bind-mount the store
         "/nix/store" = {
           device = "/usr/nix/store";

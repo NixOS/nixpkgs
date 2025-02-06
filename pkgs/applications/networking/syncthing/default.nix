@@ -3,26 +3,26 @@
 , buildGoModule
 , stdenv
 , lib
-, procps
 , fetchFromGitHub
 , nixosTests
 , autoSignDarwinBinariesHook
+, nix-update-script
 }:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.27.12";
+      version = "1.29.2";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "v${version}";
-        hash = "sha256-/HPq71KkWUE0vG7qUBD3JON4N5KBkuRWc4SvX/JA2nQ=";
+        tag = "v${version}";
+        hash = "sha256-1IQdwnP4nUcDtSeqrnTF8OtlIZTnPlgP1NLnLJnOAbk=";
       };
 
-      vendorHash = "sha256-R5GlsCkfoMc5km+NaV+TNUlM3Ot1ARcXfEFimcZOLI4=";
+      vendorHash = "sha256-eLUHYpAjq+viRwNiqC+42FKswdItBA0QriHn3JK1B5M=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -43,7 +43,7 @@ let
         (
           export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
           go build build.go
-          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
         )
         ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
@@ -57,8 +57,11 @@ let
 
       inherit postInstall;
 
-      passthru.tests = {
-        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+      passthru = {
+        tests = {
+          inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+        };
+        updateScript = nix-update-script { };
       };
 
       meta = {

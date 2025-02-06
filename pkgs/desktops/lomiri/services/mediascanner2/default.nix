@@ -4,7 +4,9 @@
   fetchFromGitLab,
   gitUpdater,
   testers,
-  boost,
+  # dbus-cpp not compatible with Boost 1.87
+  # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
+  boost186,
   cmake,
   cmake-extras,
   dbus,
@@ -58,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      boost
+      boost186
       cmake-extras
       dbus
       dbus-cpp

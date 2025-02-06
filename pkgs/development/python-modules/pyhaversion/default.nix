@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "pyhaversion";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UZ9236mERoz3WG9MfeN1ALKc8OjqpcbbIhiEsRYzn4I=";
   };
 

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.9";
+  version = "1.0.14";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-iWZXile3hCUMx2q3VHJasX7rlJmT0OKBm9rkCXuWISw=";
+    tag = "v${version}";
+    hash = "sha256-mQd4xsKuAKj77lG6r14iHrkaBclRmBwICXuHs7pQoGI=";
   };
 
   build-system = [ pdm-backend ];

@@ -1,29 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm
-, nodejs
-, electron_32
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pnpm_9,
+  nodejs,
+  electron_32,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
-  version = "1.0.0";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     rev = "v${version}";
-    hash = "sha256-/HwKxl3wiLSS7gmEQSddBkE2z1mmcexMgacUynLhdtg=";
+    hash = "sha256-VjEvW5vM6ByZUzQw21iH347M1KmED+zRrRiS2glyJ1w=";
   };
 
-  nativeBuildInputs = [ pnpm.configHook nodejs makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    pnpm_9.configHook
+    nodejs
+    makeWrapper
+    copyDesktopItems
+  ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-e6plwWf5eFaGsP3/cvIkGTV1nbcw8VRM30E5rwVX1RI=";
+    hash = "sha256-cgoFvCCjfR9HP1mJZJ0n/GELATO2lm0tDexSQE8fJGw=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -52,7 +59,7 @@ stdenv.mkDerivation rec {
     makeShellWrapper "${lib.getExe electron_32}" "$out/bin/legcord" \
       --add-flags "$out/share/lib/legcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
@@ -72,13 +79,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
     homepage = "https://legcord.app";
     downloadPage = "https://github.com/Legcord/Legcord";
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling water-sucks ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      wrmilling
+      water-sucks
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "legcord";
   };
 }

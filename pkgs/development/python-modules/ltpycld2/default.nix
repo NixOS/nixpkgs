@@ -21,11 +21,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycld2" ];
 
-  meta = with lib; {
+  # Fix build with gcc14
+  # https://github.com/aboSamoor/pycld2/pull/62
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
+  meta = {
     description = "Python bindings around Google Chromium's embedded compact language detection library (CLD2)";
     homepage = "https://github.com/LibreTranslate/pycld2";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ misuzu ];
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
 }

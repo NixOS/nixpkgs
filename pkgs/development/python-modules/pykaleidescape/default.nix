@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pykaleidescape";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
   };
 

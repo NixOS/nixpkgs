@@ -7,9 +7,8 @@
   lib,
   libsecret,
   makeDesktopItem,
-  openjdk17,
+  openjdk21,
   stdenvNoCC,
-  swt,
   webkitgtk_4_0,
   wrapGAppsHook3,
   gitUpdater,
@@ -29,17 +28,16 @@ let
     glib-networking
     gtk3
     libsecret
-    swt
     webkitgtk_4_0
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.71.2";
+  version = "0.74.0";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-TVrxYz6hFWn2C0CrBnNCPxkfQkTjCXkNSeQp6eC/fjc=";
+    hash = "sha256-RP+5mUoE7L+koS5AvI2J+H/7093+yAy9KXfgWedKAGQ=";
   };
 
   nativeBuildInputs = [
@@ -51,19 +49,54 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/portfolio
     cp -av ./* $out/portfolio
 
+    # Remove all jna plugins that does not match the system
+    rm -fR $out/portfolio/plugins/com.sun.jna*/com/sun/jna/{\
+    aix-ppc,\
+    aix-ppc64,\
+    darwin-aarch64,\
+    darwin-x86-64,\
+    dragonflybsd-x86-64,\
+    freebsd-aarch64,\
+    freebsd-x86,\
+    freebsd-x86-64,\
+    linux-aarch64,\
+    linux-arm,\
+    linux-armel,\
+    linux-loongarch64,\
+    linux-mips64el,\
+    linux-ppc,\
+    linux-ppc64le,\
+    linux-riscv64,\
+    linux-s390x,\
+    linux-x86,\
+    openbsd-x86,\
+    openbsd-x86-64,\
+    sunos-sparc,\
+    sunos-sparcv9,\
+    sunos-x86,\
+    sunos-x86-64,\
+    win32,\
+    win32-aarch64,\
+    win32-x86,\
+    win32-x86-64\
+    }
+
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar" \
-      --prefix PATH : ${openjdk17}/bin
+      --prefix PATH : ${openjdk21}/bin
 
     # Create desktop item
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };

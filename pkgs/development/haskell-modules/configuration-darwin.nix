@@ -94,6 +94,12 @@ self: super: ({
     '';
   }) super.git-annex;
 
+  # on*Finish tests rely on a threadDelay timing differential of 0.1s.
+  # You'd think that's plenty of time even though immediate rescheduling
+  # after threadDelay is not guaranteed. However, it appears that these
+  # tests are quite flaky on Darwin.
+  immortal = dontCheck super.immortal;
+
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
   #
@@ -132,6 +138,8 @@ self: super: ({
       substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
     '' + (oldAttrs.preCompileBuildDriver or "");
   }) super.llvm-hs;
+
+  sym = markBroken super.sym;
 
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
@@ -324,6 +332,26 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  http-streams = super.http-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams = super.io-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams-haproxy = super.io-streams-haproxy.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  openssl-streams = super.openssl-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  snap = super.snap.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   warp = super.warp.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
   });
@@ -355,6 +383,10 @@ self: super: ({
         "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
     '';
   }) super.di-core;
+
+  # Require /usr/bin/security which breaks sandbox
+  http-reverse-proxy = dontCheck super.http-reverse-proxy;
+  servant-auth-server = dontCheck super.servant-auth-server;
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 

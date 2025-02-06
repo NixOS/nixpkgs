@@ -26,7 +26,7 @@ let
 in
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.11";
+  version = "4.8.12";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GganbfRkuSaFd5qqpu0CpXe91zpKsyly6BNFgQNNNL8=";
+    hash = "sha256-M/0Z+yVwoDxN1wSM0yqurUl2AKAIDNZV5nvRy8bwBSQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-im/TPxnT8c2QbWlzCY60wVwJFRIhSnVW7E4kv6bm0p4=";
+    hash = "sha256-5MCAnWtbs6+UkJLcxyfwwxnSA4wcbDWewgNqKqu42n0=";
   };
 
   nativeBuildInputs = with rustPlatform; [

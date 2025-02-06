@@ -20,6 +20,7 @@
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
 , sysctl
+, deterministic-host-uname # trick Makefile into targeting the host platform when cross-compiling
 , doInstallCheck ? !stdenv.hostPlatform.isDarwin  # extremely slow on darwin
 , tests
 }:
@@ -29,7 +30,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.46.1";
+  version = "2.47.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-iIyvuL1qtMu+vBaAQKiFDrCI+B3DrCYXGVz8CHfw9UM=";
+    hash = "sha256-89j5uyOuOSN06RzZ05WXDavFucXucvOYhGE82Epu0xA=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -84,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl makeWrapper pkg-config ]
+  nativeBuildInputs = [ deterministic-host-uname gettext perlPackages.perl makeWrapper pkg-config ]
     ++ lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [ curl openssl zlib expat cpio (if stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv) bash ]
@@ -130,8 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
-  ++ lib.optional (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform) "uname_S=FreeBSD";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
@@ -245,10 +245,11 @@ stdenv.mkDerivation (finalAttrs: {
 
    + (if svnSupport then ''
         # wrap git-svn
-        wrapProgram $out/libexec/git-core/git-svn                                                                                \
-                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
-                     --prefix PATH : "${svn.out}/bin" ''
-       else '' # replace git-svn by notification script
+        wrapProgram $out/libexec/git-core/git-svn \
+          --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
+          --prefix PATH : "${svn.out}/bin"
+      '' else ''
+        # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
      '')
 
@@ -261,9 +262,11 @@ stdenv.mkDerivation (finalAttrs: {
         notSupported $out/libexec/git-core/git-send-email
       '')
 
-   + lib.optionalString withManual ''# Install man pages
+   + lib.optionalString withManual ''
+       # Install man pages
        make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
-         -C Documentation ''
+         -C Documentation
+     ''
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs

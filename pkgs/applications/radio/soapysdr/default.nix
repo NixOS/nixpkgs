@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   makeWrapper,
@@ -18,22 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
-  version = "0.8.1";
+  version = "0.8.2-pre";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
-    rev = "soapy-sdr-${finalAttrs.version}";
-    sha256 = "19f2x0pkxvf9figa0pl6xqlcz8fblvqb19mcnj632p0l8vk6qdv2";
-  };
 
-  patches = [
-    # Fix for https://github.com/pothosware/SoapySDR/issues/352
-    (fetchpatch {
-      url = "https://github.com/pothosware/SoapySDR/commit/10c05b3e52caaa421147d6b4623eccd3fc3be3f4.patch";
-      hash = "sha256-D7so6NSZiU6SXbzns04Q4RjSZW0FJ+MYobvvVpVMjws=";
-    })
-  ];
+    # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
+    # use old get python lib for v2 (#437)
+    rev = "8c6cb7c5223fad995e355486527589c63aa3b21e";
+    hash = "sha256-CKasL1mlpeuxXyPe6VDdAvb1l5a1cwWgyP7XX1aM73I=";
+  };
 
   nativeBuildInputs = [
     cmake
@@ -79,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
-    maintainers = with maintainers; [ markuskowa ];
+    maintainers = with maintainers; [
+      markuskowa
+      numinit
+    ];
     mainProgram = "SoapySDRUtil";
     pkgConfigModules = [ "SoapySDR" ];
     platforms = platforms.unix;

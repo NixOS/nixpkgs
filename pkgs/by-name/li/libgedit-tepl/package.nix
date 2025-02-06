@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-tepl";
-  version = "6.11.0";
+  version = "6.12.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "gedit";
     repo = "libgedit-tepl";
     rev = version;
-    hash = "sha256-8y3EQZKYRcx2ocG7aR7tGBCE/68yPdrBcPNm6O2lM4c=";
+    hash = "sha256-s3b7wj6b2SM0+i0vXUDDhnspgPcsRAsA5kLblh0orJE=";
   };
 
   strictDeps = true;

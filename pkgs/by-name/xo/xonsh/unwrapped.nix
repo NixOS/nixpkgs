@@ -2,25 +2,27 @@
   lib,
   coreutils,
   fetchFromGitHub,
-  git,
-  gitUpdater,
+  gitMinimal,
   glibcLocales,
+  nix-update-script,
   pythonPackages,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
 
   argset = {
     pname = "xonsh";
-    version = "0.18.3";
+    version = "0.19.1";
     pyproject = true;
 
     # PyPI package ships incomplete tests
     src = fetchFromGitHub {
       owner = "xonsh";
       repo = "xonsh";
-      rev = "refs/tags/${argset.version}";
-      hash = "sha256-MJTsYnuFENHLDDMIWcs0IRcBmWs4XyfDWDG7AY2P6cM=";
+      tag = argset.version;
+      hash = "sha256-20egNKlJjJO1wdy1anApz0ADBnaHPUSqhfrsPe3QQIs=";
     };
 
     nativeBuildInputs = with pythonPackages; [
@@ -39,8 +41,10 @@ let
 
     nativeCheckInputs =
       [
-        git
+        addBinToPathHook
+        gitMinimal
         glibcLocales
+        writableTmpDirAsHomeHook
       ]
       ++ (with pythonPackages; [
         pip
@@ -77,6 +81,9 @@ let
 
       # https://github.com/xonsh/xonsh/issues/5569
       "test_spec_decorator_alias_output_format"
+
+      # Broken test
+      "test_repath_backslash"
     ];
 
     disabledTestPaths = [
@@ -94,25 +101,20 @@ let
     env.LC_ALL = "en_US.UTF-8";
 
     postPatch = ''
-      sed -ie 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
-      sed -ie 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/test_integrations.py
+      sed -i -e 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
+      sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/test_integrations.py
 
       for script in tests/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
-        sed -ie 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
+        sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
       done
       patchShebangs .
-    '';
-
-    preCheck = ''
-      export HOME=$TMPDIR
-      export PATH=$out/bin:$PATH
     '';
 
     passthru = {
       shellPath = "/bin/xonsh";
       python = pythonPackages.python; # To the wrapper
       wrapper = throw "The top-level xonsh package is now wrapped. Use it directly.";
-      updateScript = gitUpdater { };
+      updateScript = nix-update-script { };
     };
 
     meta = {

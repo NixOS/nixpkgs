@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "mapclassify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VClkMOR8P9sX3slVjJ2xYYLVnvZuOgVYZiCGrBxoZEc=";
   };
 

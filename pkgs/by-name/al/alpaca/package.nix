@@ -14,18 +14,20 @@
   xdg-utils,
   ollama,
   vte-gtk4,
+  libspelling,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "2.6.0";
+  version = "3.5.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XXxfbchQ1l6L8KflqjlGIiyRbG/dI5ok0ExlROavXYg=";
+    tag = version;
+    hash = "sha256-YheyeT9KiH9LphFfExie7RU7q/qVni5pFdpz32rM8RQ=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
     gtksourceview5
     vte-gtk4
+    libspelling
   ];
 
   dependencies = with python3Packages; [
@@ -49,19 +52,30 @@ python3Packages.buildPythonApplication rec {
     requests
     pillow
     pypdf
-    pytube
     html2text
+    youtube-transcript-api
+    pydbus
+    odfpy
+    pyicu
+    matplotlib
   ];
 
   dontWrapGApps = true;
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ollama ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        xdg-utils
+        ollama
+      ]
+    }"
     # Declared but not used in src/window.py, for later reference
     # https://github.com/flatpak/flatpak/issues/3229
     "--set FLATPAK_DEST ${placeholder "out"}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ollama client made with GTK4 and Adwaita";
@@ -77,7 +91,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "alpaca";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      Gliczy
+    ];
     platforms = lib.platforms.linux;
   };
 }

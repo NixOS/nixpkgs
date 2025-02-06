@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchgit
+, fetchpatch
 , cmake
 , pkg-config
 , libusb1
@@ -28,6 +29,16 @@ stdenv.mkDerivation rec {
     rev = "de9f01ece34d2fe6e842e0250a38f4b16eda2429";
     hash = "sha256-U37M5P7itTF1262oW+txbKxcw2lhYHAwy1ML51SDVMs=";
   };
+
+  patches = [
+    (fetchpatch {
+      # http://developer.intra2net.com/mailarchive/html/libftdi/2024/msg00024.html
+      # https://bugzilla.redhat.com/show_bug.cgi?id=2319133
+      name = "swig-4.3.0-fix.patch";
+      url = "https://src.fedoraproject.org/rpms/libftdi/raw/9051ea9ea767eced58b69d855a5d700a5d4602cc/f/libftdi-1.5-swig-4.3.patch";
+      hash = "sha256-X5tqiPewnyAyvLzR6s0VbNpZKLd0idtPGU4ro36CZHI=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -57,14 +68,6 @@ stdenv.mkDerivation rec {
   '' + optionalString docSupport ''
     cp -r doc/man "$out/share/"
     cp -r doc/html "$out/share/doc/libftdi1/"
-  '';
-
-  postFixup = optionalString cppSupport ''
-    # This gets misassigned to the C++ version's path for some reason
-    for fileToFix in $out/{bin/libftdi1-config,lib/pkgconfig/libftdi1.pc}; do
-      substituteInPlace $fileToFix \
-        --replace "$out/include/libftdipp1" "$out/include/libftdi1"
-    done
   '';
 
   meta = with lib; {

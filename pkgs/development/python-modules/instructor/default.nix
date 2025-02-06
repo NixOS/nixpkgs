@@ -5,6 +5,7 @@
 
   # build-system
   poetry-core,
+  hatchling,
 
   # dependencies
   aiohttp,
@@ -24,19 +25,20 @@
   jinja2,
   pytest-asyncio,
   pytestCheckHook,
+  python-dotenv,
   redis,
 }:
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.5.0";
+  version = "1.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UrLbKDaQu2ioQHqKKS8SdRTpQj+Z0w+bcLrRuZT3DC0=";
+    tag = version;
+    hash = "sha256-65qNalbcg9MR5QhUJeutp3Y2Uox7cKX+ffo21LACeXE=";
   };
 
   pythonRelaxDeps = [
@@ -46,7 +48,7 @@ buildPythonPackage rec {
     "tenacity"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -67,6 +69,7 @@ buildPythonPackage rec {
     jinja2
     pytest-asyncio
     pytestCheckHook
+    python-dotenv
     redis
   ];
 
@@ -80,6 +83,10 @@ buildPythonPackage rec {
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
+
+    # Checks magic values and this fails on Python 3.13
+    "test_raw_base64_autodetect_jpeg"
+    "test_raw_base64_autodetect_png"
   ];
 
   disabledTestPaths = [
@@ -89,9 +96,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    broken = lib.versionOlder pydantic.version "2"; # ImportError: cannot import name 'TypeAdapter' from 'pydantic'
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/v${version}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

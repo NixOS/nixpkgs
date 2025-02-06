@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
-, substituteAll
+, replaceVars
 , coreutils
 , curl
 , gnugrep
@@ -107,15 +107,17 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" ];
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
-      cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
-    ''}
-    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
-    cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
-  )'';
+  postUnpack = ''
+    (
+      cd "$sourceRoot/subprojects"
+      ${lib.optionalString finalAttrs.finalPackage.doCheck ''
+        cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
+      ''}
+      cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
+      cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+      cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+    )
+  '';
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the preload
@@ -125,8 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Hard code dependencies. Can't use makeWrapper since the Vulkan
     # layer can be used without the mangohud executable by setting MANGOHUD=1.
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
 
       path = lib.makeBinPath [
         coreutils

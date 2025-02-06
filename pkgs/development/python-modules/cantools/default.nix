@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "39.4.5";
+  version = "40.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WU8q6A3q24xrCOjhMi1C4lj0DULIDWiG2E4BQ/kLWiM=";
+    hash = "sha256-Wy0tfFAe2JA7vIEE4ojO9MKd7m9Yu2Yrx0vYvgPVmsI=";
   };
 
   nativeBuildInputs = [

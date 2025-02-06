@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Zulko";
     repo = "moviepy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l7AwzAKSaEV+pPbltKgwllK6X54oruU2w0AvoCsrESE=";
   };
 

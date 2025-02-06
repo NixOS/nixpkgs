@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, qt6
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  qt6,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unexpectedpanda";
     repo = "retool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KGBpGZAC0SjStp0aulxVRJMmNwlpvSG0i0rtZgvFCpc=";
   };
 
@@ -26,12 +27,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  buildInputs = [
-    qt6.qtbase
-  ] ++
-  lib.optionals (stdenv.hostPlatform.isLinux) [
-    qt6.qtwayland
-  ];
+  buildInputs =
+    [
+      qt6.qtbase
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      qt6.qtwayland
+    ];
 
   propagatedBuildInputs = with python3.pkgs; [
     alive-progress

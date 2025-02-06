@@ -6,12 +6,12 @@
 }:
 buildNpmPackage rec {
   pname = "ares-cli";
-  version = "3.1.2";
+  version = "3.2.0";
   src = fetchFromGitHub {
     owner = "webos-tools";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-xiyXJ95MVG06ZoAsC4fIZHQn7lnKumlM3f9MB4uQ7Xc=";
+    hash = "sha256-tSnmIDDDEhhQBrjZ5bujmCaYpetTjpdCGUjKomue+Bc=";
   };
 
   postPatch = ''
@@ -19,7 +19,7 @@ buildNpmPackage rec {
   '';
 
   dontNpmBuild = true;
-  npmDepsHash = "sha256-QtCssL8LLDafRbdB9sWWjP49fjOk+9y3h9xdQ1hIudg=";
+  npmDepsHash = "sha256-eTuAi+32pK8rGQ5UDWesDFvlkjWj/ERevD+aYXYYr0Q=";
 
   passthru.updateScript = nix-update-script { };
 

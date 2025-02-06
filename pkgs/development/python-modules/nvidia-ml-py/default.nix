@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "nvidia-ml-py";
-  version = "12.560.30";
+  version = "12.570.86";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-8CVNx0AGR2gKBy7gJQm/1GECtgvf7KMhV21NSBfn/pc=";
+    pname = "nvidia_ml_py";
+    inherit version;
+    hash = "sha256-BQjUoMe20BXPV0UwuVpi7U/InaO4tH4a7+Z3fbFw7Is=";
   };
 
   patches = [
@@ -40,10 +40,20 @@ buildPythonPackage rec {
   passthru.tests.tester-nvmlInit =
     cudaPackages.writeGpuTestPython { libraries = [ nvidia-ml-py ]; }
       ''
-        import pynvml
-        from pynvml.smi import nvidia_smi  # noqa: F401
+        from pynvml import (
+          nvmlInit,
+          nvmlSystemGetDriverVersion,
+          nvmlDeviceGetCount,
+          nvmlDeviceGetHandleByIndex,
+          nvmlDeviceGetName,
+        )
 
-        print(f"{pynvml.nvmlInit()=}")
+        nvmlInit()
+        print(f"Driver Version: {nvmlSystemGetDriverVersion()}")
+
+        for i in range(nvmlDeviceGetCount()):
+            handle = nvmlDeviceGetHandleByIndex(i)
+            print(f"Device {i} : {nvmlDeviceGetName(handle)}")
       '';
 
   meta = {

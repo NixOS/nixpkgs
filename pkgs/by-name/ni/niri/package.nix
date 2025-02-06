@@ -1,6 +1,5 @@
 {
   lib,
-  clang,
   dbus,
   eudev,
   fetchFromGitHub,
@@ -8,7 +7,7 @@
   libglvnd,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
   nix-update-script,
   pango,
   pipewire,
@@ -25,13 +24,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.9";
+  version = "25.01";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4YDrKMwXGVOBkeaISbxqf24rLuHvO98TnqxWYfgiSeg=";
+    tag = "v${version}";
+    hash = "sha256-AJ1rlgNOPb3/+DbS5hkhm21t6Oz8IgqLllwmZt0lyzk=";
   };
 
   postPatch = ''
@@ -40,18 +39,12 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/bin' "$out/bin"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-0.3.0" = "sha256-/3BO66yVoo63+5rwrZzoxhSTncvLyHdvtSaApFj3fBg=";
-      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eGI3i7FnjZGEfcGvEpNLOog8cgExBJuGoXM/oHsui0M=";
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang
     pkg-config
     rustPlatform.bindgenHook
   ];
@@ -62,7 +55,7 @@ rustPlatform.buildRustPackage rec {
       libglvnd # For libEGL
       libinput
       libxkbcommon
-      mesa # For libgbm
+      libgbm
       pango
       seatd
       wayland # For libwayland-client
@@ -86,9 +79,14 @@ rustPlatform.buildRustPackage rec {
     + lib.optionalString withDbus ''
       install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     ''
-    + lib.optionalString withSystemd ''
+    + lib.optionalString (withSystemd || withDinit) ''
       install -Dm0755 resources/niri-session -t $out/bin
-      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
+    ''
+    + lib.optionalString withSystemd ''
+      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+    ''
+    + lib.optionalString withDinit ''
+      install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
     '';
 
   env = {
@@ -103,6 +101,12 @@ rustPlatform.buildRustPackage rec {
       ]
     );
   };
+
+  preCheck = ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+    # See https://github.com/YaLTeR/niri/issues/953
+    export RAYON_NUM_THREADS=1
+  '';
 
   passthru = {
     providedSessions = [ "niri" ];

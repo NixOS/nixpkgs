@@ -1,51 +1,39 @@
 {
   lib,
-  cmake,
-  darwin,
-  fetchFromGitHub,
-  installShellFiles,
-  libiconv,
-  pkg-config,
-  python3Packages,
-  rustPlatform,
   stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
+  installShellFiles,
+  pkg-config,
+
+  buildPackages,
   versionCheckHook,
+  python3Packages,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.4.20";
-  pyproject = true;
+  version = "0.5.27";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PfjYGCPPRZVm4H9oxkWdjW7kHu4CqdkenFgL61dOU5k=";
+    tag = version;
+    hash = "sha256-UqwXLAo99ZtvNNIfd5eO+IfdL2fksf0LTrRU2G1/j/8=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async_zip-0.0.17" = "sha256-3k9rc4yHWhqsCUJ17K55F8aQoCKdVamrWAn6IDWo3Ss=";
-      "pubgrub-0.2.1" = "sha256-pU+F6hwqy+r6tz5OBoB6gU0+vdH6F3ikUaPrcvYRX2c=";
-      "reqwest-middleware-0.3.3" = "sha256-csQN7jZTifliSTsOm6YrjPVgsXBOfelY7LkHD1HkNGQ=";
-      "tl-0.7.8" = "sha256-F06zVeSZA4adT6AzLzz1i9uxpI1b8P1h+05fFfjm3GQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TS823jBGtHNUZzeRJpir6G8F8Cgq7fuxw6pPk8RrE3o=";
 
   nativeBuildInputs = [
     cmake
     installShellFiles
     pkg-config
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
   ];
-
-  buildInputs = [
-    libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   dontUseCmakeConfigure = true;
 
@@ -54,29 +42,35 @@ python3Packages.buildPythonApplication rec {
     "uv"
   ];
 
-  postInstall = ''
-    export HOME=$TMPDIR
-    installShellCompletion --cmd uv \
-      --bash <($out/bin/uv --generate-shell-completion bash) \
-      --fish <($out/bin/uv --generate-shell-completion fish) \
-      --zsh <($out/bin/uv --generate-shell-completion zsh)
-  '';
+  # Tests require python3
+  doCheck = false;
 
-  pythonImportsCheck = [ "uv" ];
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd uv \
+        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+    '';
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
+    tests.uv-python = python3Packages.uv;
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
-    changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/astral-sh/uv/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

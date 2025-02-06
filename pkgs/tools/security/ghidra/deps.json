@@ -38,37 +38,37 @@
   }
  },
  "https://github.com": {
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2012_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2012_x64": {
    "fidb": "sha256-1OmKs/eQuDF5MhhDC7oNiySl+/TaZbDB/6jLDPvrDNw="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2012_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2012_x86": {
    "fidb": "sha256-pJDtfi7SHlh0Wf6urOcDa37eTOhOcuEN/YxXQ0ppGLY="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2015_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2015_x64": {
    "fidb": "sha256-4E6eQPnstgHIX02E7Zv2a0U2O+HR6CwWLkyZArjLUI8="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2015_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2015_x86": {
    "fidb": "sha256-tm7mlmU+LtNlkZ3qrviFEDEgx5LiLnmvcNEgnX4dhkQ="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2017_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2017_x64": {
    "fidb": "sha256-1fpfaXKYF0+lPSR9NZnmoSiEYFrRgce5VOI4DsHwvYk="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2017_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2017_x86": {
    "fidb": "sha256-04nLjXb/SlnKNfiRuFIccq1fDfluJTlzotIahhSkzIE="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2019_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2019_x64": {
    "fidb": "sha256-FQAHeW/DakBpZgrWJEmq2q890Rs4ZKXvIeeYMcnOkRg="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2019_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vs2019_x86": {
    "fidb": "sha256-62MKNvqlhqNx63NNwLvY0TzK72l/PbWHJZY1jz3SQyo="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vsOlder_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vsOlder_x64": {
    "fidb": "sha256-jDtR9GYM0n4aDWEKnz8tX7yDOmasnuQ5PuLySB6FWGY="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vsOlder_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/FunctionID/vsOlder_x86": {
    "fidb": "sha256-mGBca2uSFKlF2ETkHIWGDVRkmkW8p4c+9pkcDpNyB4c="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/lib/java-sarif-2.1-modified": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2.1/lib/java-sarif-2.1-modified": {
    "jar": "sha256-f3NlZklHVtJxql5LGvbIncUNB0qxxjdKR9+CImQiawE="
   },
   "pxb1988/dex2jar/releases/download/v2.1/dex2jar-2.1": {

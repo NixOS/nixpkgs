@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   poetry-core,
   poetry-dynamic-versioning,
@@ -27,19 +26,24 @@
 
 buildPythonPackage rec {
   pname = "diffenator2";
-  version = "0.4.3";
+  version = "0.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "diffenator2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zeNcNR14ieY6Inp4kOwIPXd6S+/wFdMFp6wbiqgB/iA=";
+    tag = "v${version}";
+    hash = "sha256-Iu6ZA8s6XnOYSOwlt8WTmYW6oUTvcm4vLhYvVATOlBA=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
-  pythonRelaxDeps = [ "protobuf" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "python-bidi"
+    "youseedee"
+    "unicodedata2"
+  ];
 
   build-system = [
     poetry-core

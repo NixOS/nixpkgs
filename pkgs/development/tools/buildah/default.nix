@@ -1,48 +1,61 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
-, testers
-, buildah
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  gpgme,
+  lvm2,
+  btrfs-progs,
+  libapparmor,
+  libselinux,
+  libseccomp,
+  testers,
+  buildah,
 }:
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.37.3";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-YYmgxlW80y6HOlRQbG3N+wTZM5pB58ZzZHEOa6vWbRw=";
+    hash = "sha256-R2iZpZkofg6kMTQ/kOjgKLQYw+yQQ5P3AAyBeo81lGU=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   vendorHash = null;
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+  # /nix/store/.../bin/ld: internal/mkcw/embed/entrypoint_amd64.o: relocation R_X86_64_32S against `.rodata.1' can not be used when making a PIE object; recompile with -fPIE
+  hardeningDisable = [ "pie" ];
 
-  buildInputs = [
-    gpgme
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    btrfs-progs
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      gpgme
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      btrfs-progs
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -77,4 +90,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }
-

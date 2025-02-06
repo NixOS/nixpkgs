@@ -1,20 +1,21 @@
-{ lib
-, SDL2
-, fetchFromGitHub
-, sqlite
-, pkg-config
-, stdenv
+{
+  lib,
+  SDL2,
+  fetchFromGitHub,
+  sqlite,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stella";
-  version = "7.0";
+  version = "7.0c";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = "stella";
     rev = finalAttrs.version;
-    hash = "sha256-c7A1gFvYkxxwuwrntw/w8FYD24l5m1Uip+44Pe664lE=";
+    hash = "sha256-AbZBBg4P0qnB+mZpiG8/kHixBfkKQptyLrF4lwgRr/Y=";
   };
 
   nativeBuildInputs = [

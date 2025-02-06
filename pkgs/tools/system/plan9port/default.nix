@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub
-, fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, perl # For building web manuals
-, which, ed
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools # For building on Darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXt,
+  xorgproto,
+  perl, # For building web manuals
+  which,
+  ed,
+  Carbon,
+  Cocoa,
+  IOKit,
+  Metal,
+  QuartzCore,
+  DarwinTools, # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2023-03-31";
+  version = "2025-01-29";
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
-    rev = "cc4571fec67407652b03d6603ada6580de2194dc";
-    hash = "sha256-PZWjf0DJCNs5mjxtXgK4/BcstaOqG2WBKRo+Bh/9U7w=";
+    rev = "a5d6857a3b912b43c88ef298c28d13d4623f9ef0";
+    sha256 = "0c23z56zygrsyr96ml7907mpfgx80vnsy99nqr3nmfw1a045mjgv";
   };
 
   postPatch = ''
@@ -35,13 +49,31 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs = [ perl which ] ++ (if !stdenv.hostPlatform.isDarwin then [
-    fontconfig freetype # fontsrv uses these
-    libX11 libXext libXt xorgproto
-  ] else [
-    Carbon Cocoa IOKit Metal QuartzCore
-    DarwinTools
-  ]);
+  buildInputs =
+    [
+      perl
+      which
+    ]
+    ++ (
+      if !stdenv.hostPlatform.isDarwin then
+        [
+          fontconfig
+          freetype # fontsrv uses these
+          libX11
+          libXext
+          libXt
+          xorgproto
+        ]
+      else
+        [
+          Carbon
+          Cocoa
+          IOKit
+          Metal
+          QuartzCore
+          DarwinTools
+        ]
+    );
 
   configurePhase = ''
     runHook preConfigure
@@ -113,7 +145,12 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [
-      AndersonTorres bbarker ehmry ftrvxmtrx kovirobi ylh
+      bbarker
+      ehmry
+      ftrvxmtrx
+      kovirobi
+      matthewdargan
+      ylh
     ];
     mainProgram = "9";
     platforms = platforms.unix;

@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, pkg-config
-, python3
-, xmlto
-, zip
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  pkg-config,
+  python3,
+  xmlto,
+  zip,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zziplib";
-  version = "0.13.74";
+  version = "0.13.78";
 
   src = fetchFromGitHub {
     owner = "gdraheim";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MjqGHzb+dsAq2PrcBhU3sv4eMX3afkgFWUbhDp+5o/s=";
+    hash = "sha256-8QxQrxqYO4LtB8prMqgz5a0QqvSKL7KzTkgi+VdHp6A=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
       The implementation is based only on the (free) subset of compression with
       the zlib algorithm which is actually used by the zip/unzip tools.
     '';
-    license = with licenses; [ lgpl2Plus mpl11 ];
+    license = with licenses; [
+      lgpl2Plus
+      mpl11
+    ];
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };

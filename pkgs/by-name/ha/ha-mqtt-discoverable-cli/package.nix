@@ -6,20 +6,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ha-mqtt-discoverable-cli";
-  version = "0.4.1";
+  version = "0.16.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rGRsB5kAtzI5KP4tMiQqLJQZs7z5k657V8Di0OzB6F8=";
+    tag = "v${version}";
+    hash = "sha256-VjHsiF4HxGscG1pysxegPyM+Y18CWW06D3WezD+BLss=";
   };
 
   pythonRelaxDeps = [ "ha-mqtt-discoverable" ];
 
   build-system = with python3.pkgs; [ poetry-core ];
-
 
   dependencies = with python3.pkgs; [ ha-mqtt-discoverable ];
 

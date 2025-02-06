@@ -17,6 +17,9 @@
 , vulkan-headers
 , vulkan-memory-allocator
 , xcbuild
+, cctools
+, zlib
+, fixDarwinDylibNames
 
 , enableVulkan ? !stdenv.hostPlatform.isDarwin
 }:
@@ -46,7 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools.libtool
+    zlib
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     expat
@@ -61,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableVulkan [
     vulkan-headers
     vulkan-memory-allocator
-  ];
+  ] ;
 
   gnFlags = let
     cpu = {
@@ -90,7 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
     "libwebp"
   ] ++ lib.optionals enableVulkan [
     "skia_use_vulkan=true"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "skia_use_fontconfig=true"
+    "skia_use_freetype=true"
+    "skia_use_metal=true"
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lz";
 
   # Somewhat arbitrary, but similar to what other distros are doing
   installPhase = ''
@@ -98,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Libraries
     mkdir -p $out/lib
-    cp *.so *.a $out/lib
+    cp *.so *.a *.dylib $out/lib
 
     # Includes
     pushd ../../include
@@ -144,7 +158,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = with lib.platforms; arm ++ aarch64 ++ x86 ++ x86_64;
     pkgConfigModules = [ "skia" ];
-    # https://github.com/NixOS/nixpkgs/pull/325871#issuecomment-2220610016
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -1,12 +1,16 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "plemoljp-nf";
-  version = "1.7.1";
+  version = "2.0.3";
 
   src = fetchzip {
     url = "https://github.com/yuru7/PlemolJP/releases/download/v${version}/PlemolJP_NF_v${version}.zip";
-    hash = "sha256-nxGvaHLs65z4CSy/smy+koQyuYcDXJKjPZt5NusUN3E=";
+    hash = "sha256-FPWA85z0IjVk1Pa/pwsj510sKAZa8i8vgEvrKRu9GGI=";
   };
 
   installPhase = ''

@@ -1,11 +1,11 @@
-{ lib
-, buildFishPlugin
-, fetchFromGitHub
-,
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
 }:
 buildFishPlugin rec {
   pname = "fzf";
-  version = "unstable-2021-05-12";
+  version = "0.16.6-unstable-2021-05-12";
 
   src = fetchFromGitHub {
     owner = "jethrokuan";

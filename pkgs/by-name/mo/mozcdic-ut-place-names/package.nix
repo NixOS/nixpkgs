@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-place-names";
-  version = "0-unstable-2024-09-03";
+  version = "0-unstable-2024-10-12";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-place-names";
-    rev = "4525819546a26fc994d7ca4a2e883fde14bf908c";
-    hash = "sha256-oiSBR2QhOYyurftdEn2w6hNK1ucddlvLqGTiZk9G/4k=";
+    rev = "888a977a3f30451e8f286ef8eaf2f9be169234cb";
+    hash = "sha256-UL3ik/CxmRM7m0AXS+UNQEipCDS8pH+AheIMx6xqAaU=";
   };
 
   installPhase = ''

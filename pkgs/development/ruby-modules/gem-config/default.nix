@@ -17,17 +17,17 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+{ lib, fetchurl, fetchpatch, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, lerc, buildRubyGem
+, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
+, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk3, lerc, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
-, cargo, rustc, rustPlatform
+, cargo, rustc, rustPlatform, libsysprof-capture
 , autoSignDarwinBinariesHook
 }@args:
 
@@ -71,13 +71,13 @@ in
   cairo = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre2 xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [ cairo expat glib libsysprof-capture pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs = [ cairo expat pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
+    buildInputs = [ cairo expat libsysprof-capture pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   charlock_holmes = attrs: {
@@ -257,7 +257,7 @@ in
   gio2 = attrs: {
     nativeBuildInputs = [ pkg-config gobject-introspection ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux libselinux libsepol ];
+    buildInputs = [ glib libsysprof-capture pcre2 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -308,7 +308,7 @@ in
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     cargoRoot = "ext/fast_mmaped_file_rs";
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = stdenv.mkDerivation {
         inherit (buildRubyGem { inherit (attrs) gemName version source; })
           name
@@ -321,9 +321,12 @@ in
           cp -R ext/fast_mmaped_file_rs $out
         '';
       };
-      hash = if lib.versionAtLeast attrs.version "1.1.1"
-        then "sha256-RsN5XWX7Mj2ORccM0eczY+44WXsbXNTnJVcCMvnOATk="
-        else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+      hash = if lib.versionAtLeast attrs.version "1.1.2"
+        then "sha256-8EpYU6MSzMG3RzneDx0GwZ2N46Po8FdA/7Khy/7KHWo="
+        else
+          if lib.versionAtLeast attrs.version "1.1.1"
+          then "sha256-V4NlFgVJy+V9fdbZWObn52H91IFSIU1seErMcxh1x5w="
+          else "sha256-GFRIjvBPhqT4h6gE+GF32WW1wgZTaaHXRF7tIXnRM1Q=";
     };
     nativeBuildInputs = [
       cargo
@@ -346,29 +349,7 @@ in
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre2 ];
-  };
-
-  gtk2 = attrs: {
-    nativeBuildInputs = [
-      binutils pkg-config
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-      util-linux libselinux libsepol
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [
-      atk
-      gdk-pixbuf
-      fribidi
-      gobject-introspection
-      gtk2
-      harfbuzz
-      libdatrie
-      libthai
-      pcre pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
-    ];
-    dontStrip = stdenv.hostPlatform.isDarwin;
+    buildInputs = [ glib libsysprof-capture pcre2 ];
   };
 
   gtk3 = attrs: {
@@ -390,8 +371,8 @@ in
       harfbuzz
       lerc
       libdatrie
+      libsysprof-capture
       libthai
-      pcre
       pcre2
       xorg.libpthreadstubs
       xorg.libXdmcp
@@ -403,9 +384,9 @@ in
   };
 
   gobject-introspection = attrs: {
-    nativeBuildInputs = [ pkg-config pcre2 ]
+    nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 glib ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 glib pcre2 libsysprof-capture ];
   };
 
   gollum = attrs: {
@@ -429,15 +410,18 @@ in
       ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    env.NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=stringop-overflow"
-      "-Wno-error=implicit-fallthrough"
-      "-Wno-error=sizeof-pointer-memaccess"
-      "-Wno-error=cast-function-type"
-      "-Wno-error=class-memaccess"
-      "-Wno-error=ignored-qualifiers"
-      "-Wno-error=tautological-compare"
-      "-Wno-error=stringop-truncation"
+    env = lib.optionalAttrs (lib.versionOlder attrs.version "1.68.1") {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
+    patches = lib.optionals (lib.versionOlder attrs.version "1.65.0") [
+      (fetchpatch {
+        name = "gcc-14-fixes.patch";
+        url = "https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen=1;
+        extraPrefix = "third_party/boringssl-with-bazel/src/";
+        hash = "sha256-1QyQm5s55op268r72dfExNGV+UyV5Ty6boHa9DQq40U=";
+       })
     ];
     dontBuild = false;
     postPatch = ''
@@ -648,20 +632,16 @@ in
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
     dontBuild = false;
+    meta.broken = stdenv.hostPlatform.isDarwin; # At least until releasing https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/17
   };
 
   pango = attrs: {
     nativeBuildInputs = [
       pkg-config
-      fribidi
-      harfbuzz
-      pcre pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs = [ libdatrie libthai ]
+    buildInputs = [ libdatrie libthai fribidi harfbuzz libsysprof-capture pcre2 xorg.libpthreadstubs xorg.libXdmcp ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [ libselinux libsepol util-linux ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gtk2 ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
   };
 
   patron = attrs: {
@@ -852,6 +832,10 @@ in
     buildFlags = [
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
+    ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
     ];
   };
 

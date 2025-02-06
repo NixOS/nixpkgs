@@ -6,15 +6,18 @@
   mkNugetDeps,
   nix,
   cacert,
-  nuget-to-nix,
+  nuget-to-json,
+  jq,
   dotnetCorePackages,
   xmlstarlet,
   patchNupkgs,
   symlinkJoin,
 
+  baseName ? "dotnet",
   releaseManifestFile,
   tarballHash,
   depsFile,
+  fallbackTargetPackages,
   bootstrapSdk,
 }:
 
@@ -34,7 +37,12 @@ let
 
   vmr =
     (mkVMR {
-      inherit releaseManifestFile tarballHash bootstrapSdk;
+      inherit
+        baseName
+        releaseManifestFile
+        tarballHash
+        bootstrapSdk
+        ;
     }).overrideAttrs
       (old: rec {
         prebuiltPackages = mkNugetDeps {
@@ -69,7 +77,7 @@ let
         buildFlags =
           old.buildFlags
           ++ lib.optionals (lib.versionAtLeast old.version "9") [
-            # We need to set this as long as we have something in deps.nix. Currently
+            # We need to set this as long as we have something in deps.json. Currently
             # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
             # artifacts.
             "-p:SkipErrorOnPrebuilts=true"
@@ -87,7 +95,8 @@ let
                 nativeBuildInputs = old.nativeBuildInputs ++ [
                   nix
                   cacert
-                  nuget-to-nix
+                  nuget-to-json
+                  jq
                 ];
                 postPatch =
                   old.postPatch or ""
@@ -126,16 +135,18 @@ let
                 configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
                 genericBuild
 
-              depsFiles=(./src/*/deps.nix)
+              depsFiles=(./src/*/deps.json)
 
-              cat $(nix-build ${toString ./combine-deps.nix} \
+              jq . $(nix-build ${toString ./combine-deps.nix} \
                 --arg list "[ ''${depsFiles[*]} ]" \
                 --argstr baseRid ${targetRid} \
                 --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
-                ) > "${toString prebuiltPackages.sourceFile}"
+                ) > deps.json
+
+              mv deps.json "${toString prebuiltPackages.sourceFile}"
               EOF
             '';
         };
       });
 in
-mkPackages { inherit vmr; }
+mkPackages { inherit baseName vmr; }

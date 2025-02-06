@@ -134,6 +134,10 @@ let
         extraFlags+=("--network-bridge=$HOST_BRIDGE")
       fi
 
+      if [ -n "$NETWORK_NAMESPACE_PATH" ]; then
+        extraFlags+=("--network-namespace-path=$NETWORK_NAMESPACE_PATH")
+      fi
+
       extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
       for iface in $INTERFACES; do
@@ -345,7 +349,7 @@ let
           Device node access modifier. Takes a combination
           `r` (read), `w` (write), and
           `m` (mknod). See the
-          `systemd.resource-control(5)` man page for more
+          {manpage}`systemd.resource-control(5)` man page for more
           information.'';
       };
     };
@@ -559,7 +563,7 @@ in
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
               description = ''
                 Grant additional capabilities to the container.  See the
-                capabilities(7) and systemd-nspawn(1) man pages for more
+                {manpage}`capabilities(7)` and {manpage}`systemd-nspawn(1)` man pages for more
                 information.
               '';
             };
@@ -629,6 +633,20 @@ in
                 on the host.  If this option is not set, then the
                 container shares the network interfaces of the host,
                 and can bind to any port on any interface.
+              '';
+            };
+
+            networkNamespace = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                Takes the path to a file representing a kernel network namespace that the container
+                shall run in. The specified path should refer to a (possibly bind-mounted) network
+                namespace file, as exposed by the kernel below /proc/<PID>/ns/net. This makes the
+                container enter the given network namespace. One of the typical use cases is to give
+                a network namespace under /run/netns created by {manpage}`ip-netns(8)`.
+                Note that this option cannot be used together with other network-related options,
+                such as --private-network or --network-interface=.
               '';
             };
 
@@ -705,7 +723,7 @@ in
             allowedDevices = mkOption {
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
-              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              example = [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
               '';
@@ -719,7 +737,7 @@ in
                 Mounts a set of tmpfs file systems into the container.
                 Multiple paths can be specified.
                 Valid items must conform to the --tmpfs argument
-                of systemd-nspawn. See systemd-nspawn(1) for details.
+                of systemd-nspawn. See {manpage}`systemd-nspawn(1)` for details.
               '';
             };
 
@@ -729,7 +747,7 @@ in
               example = [ "--drop-capability=CAP_SYS_CHROOT" ];
               description = ''
                 Extra flags passed to the systemd-nspawn command.
-                See systemd-nspawn(1) for details.
+                See {manpage}`systemd-nspawn(1)` for details.
               '';
             };
 
@@ -793,6 +811,11 @@ in
     {
       warnings = optional (!config.boot.enableContainers && config.containers != {})
         "containers.<name> is used, but boot.enableContainers is false. To use containers.<name>, set boot.enableContainers to true.";
+
+      assertions = let
+        mapper = name: cfg: optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != []))
+          "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+      in mkMerge (mapAttrsToList mapper config.containers);
     }
 
     (mkIf (config.boot.enableContainers) (let
@@ -835,7 +858,7 @@ in
             optionalAttrs cfg.enableTun
               {
                 allowedDevices = cfg.allowedDevices
-                  ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
                 additionalCapabilities = cfg.additionalCapabilities
                   ++ [ "CAP_NET_ADMIN" ];
               }
@@ -896,6 +919,9 @@ in
                 ${optionalString (cfg.localAddress6 != null) ''
                   LOCAL_ADDRESS6=${cfg.localAddress6}
                 ''}
+              ''}
+              ${optionalString (cfg.networkNamespace != null) ''
+                NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
               ''}
               INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"

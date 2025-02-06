@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, git
-, nix-update-script
-, pkg-config
-, openssl
-, dbus
-, AppKit
-, Security
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  git,
+  nix-update-script,
+  pkg-config,
+  openssl,
+  dbus,
+  AppKit,
+  Security,
 }:
 
 let
   pname = "ockam";
-  version = "0.134.0";
+  version = "0.138.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,13 +23,23 @@ rustPlatform.buildRustPackage {
     owner = "build-trust";
     repo = pname;
     rev = "ockam_v${version}";
-    hash = "sha256-6HZI0Gsxn3GmklHl9zJ6yY73FlqcLiyMAqJg8BBmzqg=";
+    hash = "sha256-AY0i7qXA7JXfIEY0htmL+/yn71xAuh7WowXOs2fD6n8=";
   };
 
-  cargoHash = "sha256-VZt7tDewvz7eGpAKzD8pYOnH/3BtH6cULp6uX7CPxX8=";
-  nativeBuildInputs = [ git pkg-config ];
-  buildInputs = [ openssl dbus ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Security ];
+  cargoHash = "sha256-gAl2es8UFVFv40sMY++SiDGjCMdL0XDN4PeSV7VlGmQ=";
+  nativeBuildInputs = [
+    git
+    pkg-config
+  ];
+  buildInputs =
+    [
+      openssl
+      dbus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Security
+    ];
 
   passthru.updateScript = nix-update-script { };
 

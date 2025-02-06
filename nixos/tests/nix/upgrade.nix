@@ -7,17 +7,6 @@ let
       ${pkgs.system} = "${nixVersions.latest}";
     }'';
 
-  inputDrv = import ../.. {
-    configuration = {
-      imports = [ nixos-module ];
-      nix.package = nixVersions.latest;
-      boot.isContainer = true;
-
-      users.users.alice.isNormalUser = true;
-    };
-    system = pkgs.system;
-  };
-
   nixos-module = builtins.toFile "nixos-module.nix" ''
     { lib, pkgs, modulesPath, ... }:
     {
@@ -53,8 +42,13 @@ pkgs.testers.nixosTest {
     nix.package = nixVersions.stable;
     system.extraDependencies = [
       fallback-paths-external
-      inputDrv.system
     ];
+
+    specialisation.newer-nix.configuration = {
+      nix.package = lib.mkForce nixVersions.latest;
+
+      users.users.alice.isNormalUser = true;
+    };
   };
 
   testScript = ''
@@ -91,7 +85,7 @@ pkgs.testers.nixosTest {
 
     with subtest("upgrade-via-switch-to-configuration"):
         # not using nixos-rebuild due to nix-instantiate being called and forcing all drv's to be rebuilt
-        print(machine.succeed("${inputDrv.system.outPath}/bin/switch-to-configuration switch"))
+        print(machine.succeed("/run/current-system/specialisation/newer-nix/bin/switch-to-configuration switch"))
         result = machine.succeed("nix --version")
         print(result)
 

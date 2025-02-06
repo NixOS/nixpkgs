@@ -210,7 +210,8 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ lib.optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" ];
+        wants = [ "network.target"  "resolvconf.service" ];
+        after = [ "resolvconf.service" ];
         before = [ "network-online.target" ];
 
         restartTriggers = [ cfg.runHook ];
@@ -248,8 +249,10 @@ in
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
             AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
-            ReadWritePaths = [ "/proc/sys/net/ipv6" ]
-              ++ lib.optionals useResolvConf [ "/etc/resolv.conf" "/run/resolvconf" ];
+            CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv4" ]
+              ++ lib.optional cfgN.enableIPv6 "/proc/sys/net/ipv6"
+              ++ lib.optionals useResolvConf ([ "/run/resolvconf" ] ++ config.networking.resolvconf.subscriberFiles);
             DeviceAllow = "";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
@@ -274,7 +277,7 @@ in
             RestrictSUIDSGID = true;
             SystemCallFilter = [
               "@system-service"
-              "~@aio" "~@chown" "~@keyring" "~@memlock"
+              "~@aio" "~@keyring" "~@memlock" "~@mount" "~@privileged" "~@resources"
             ];
             SystemCallArchitectures = "native";
             UMask = "0027";
@@ -300,6 +303,18 @@ in
         # Tell dhcpcd to rebind its interfaces if it's running.
         /run/current-system/systemd/bin/systemctl reload dhcpcd.service
       '';
+
+    security.polkit.extraConfig = lib.mkIf config.services.resolved.enable ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == 'org.freedesktop.resolve1.revert' ||
+              action.id == 'org.freedesktop.resolve1.set-dns-servers' ||
+              action.id == 'org.freedesktop.resolve1.set-domains') {
+              if (subject.user == '${config.systemd.services.dhcpcd.serviceConfig.User}') {
+                  return polkit.Result.YES;
+              }
+          }
+      });
+    '';
 
   };
 

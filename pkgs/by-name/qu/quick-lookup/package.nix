@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quick-lookup";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "johnfactotum";
     repo = "quick-lookup";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-I6a8J/Z1yJhdqWES+1mIlvJq6FBOX0GiW0muNP/iSjE=";
+    tag = finalAttrs.version;
+    hash = "sha256-KENHYdhB1OHIB1RKyv78QFdsq3fYRqKgBDCFPLxHZ+k=";
   };
 
   postPatch = ''

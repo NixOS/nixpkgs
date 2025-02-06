@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  separateDebugInfo = true;
+
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
@@ -92,6 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
       extraPrefix = "plugins/obs-websocket/";
       stripLen = 1;
       hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
+    })
+
+    # Fix lossless audio, ffmpeg 7,1 compatibility issue
+    (fetchpatch {
+      name = "fix-lossless-audio.patch";
+      url = "https://github.com/obsproject/obs-studio/commit/dfc3a69c5276edf84c933035ff2a7e278fa13c9a.patch";
+      hash = "sha256-wiF3nolBpZKp7LR7NloNfJ+v4Uq/nBgwCVoKZX+VEMA=";
     })
   ];
 
@@ -169,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
     "-Wno-error=stringop-overflow="
   ];

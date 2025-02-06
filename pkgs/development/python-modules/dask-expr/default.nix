@@ -15,19 +15,19 @@
   # checks
   distributed,
   pytestCheckHook,
-  xarray
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.15";
+  version = "1.1.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-expr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b5nY3srMADzYZ0GYCeyUfxhJLm7E4dTbM7qrsCR9d7A=";
+    tag = "v${version}";
+    hash = "sha256-t1vPlTxV5JYArg/a7CzPP13NHbstEoCgHRmd8Y9mDfA=";
   };
 
   postPatch = ''

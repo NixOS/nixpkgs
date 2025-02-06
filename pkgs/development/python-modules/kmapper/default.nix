@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "kepler-mapper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i909J0yI8v8BqGbCkcjBAdA02Io+qpILdDkojZj0wv4=";
   };
 

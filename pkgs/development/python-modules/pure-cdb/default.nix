@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bbayles";
     repo = "python-pure-cdb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7zxQO+oTZJhXfM2yijGXchLixiQRuFTOSESVlEc+T0s=";
   };
 

@@ -25,25 +25,23 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.33.2";
+  version = "0.34.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1/eLJFXACn1W5Yz43BIhdqqUVk3t9285d8aLwH+VmAE=";
+    tag = version;
+    hash = "sha256-ffmyTVeQKzV/sssxFuIckmBW6wmjnTWkHbVQ1v7fmGg=";
   };
 
   pythonRelaxDeps = [ "boto3" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-fsutil
     python-slugify
     requests

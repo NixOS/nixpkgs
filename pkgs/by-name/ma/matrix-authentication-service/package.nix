@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QLtyYxV2yXHJtwWgGcyi7gRcKypYoy9Z8bkEuTopVXc=";
   };
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ] ++ lib.optional stdenv.isDarwin cctools; # libtool used by gyp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
   buildInputs =
     [
@@ -99,8 +99,5 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
-    # Note: broken on x86_64-darwin because of aligned_alloc, can be revisited after
-    # https://github.com/NixOS/nixpkgs/pull/346043 is merged
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

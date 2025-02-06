@@ -7,7 +7,7 @@
 
   html5lib,
   jsonschema,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pytest-recording,
   python-dateutil,
@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pystac";
-  version = "1.11.0";
+  version = "1.12.1";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "pystac";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yuAam/sXaGMFp1Kwxd28v3nOV05GC3sUY+gKJ4nLwTs=";
+    tag = "v${version}";
+    hash = "sha256-VTpkQdPydKUb/FGZhfFM/2IDUbsVz903q6s5MxLRlYM=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     html5lib
     jsonschema
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     pytest-recording
     requests-mock

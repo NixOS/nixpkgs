@@ -5,22 +5,27 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
+  IOKit,
+  Foundation,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_units";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     repo = "nu_plugin_units";
     owner = "JosephTLyons";
     rev = "v${version}";
-    hash = "sha256-PS16n4j/dg5/+RaliYA18bStNpAecv9aaY2YKXsgLWY=";
+    hash = "sha256-iDRrA8bvufV92ADeG+eF3xu7I/4IinJcSxEkwuhkHlg=";
   };
-  cargoHash = "sha256-pxA+6E5luFHq/N0K/8Xk2LapwDnPqDUEpTYqP/jcc3s=";
+  cargoHash = "sha256-if8uvDRwr6p5VENdls9mIfECiu/zDybcpkphZLHRHe8=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    IOKit
+    Foundation
+  ];
   cargoBuildFlags = [ "--package nu_plugin_units" ];
 
   passthru.updateScript = nix-update-script { };

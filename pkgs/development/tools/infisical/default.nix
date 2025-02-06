@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, testers, installShellFiles }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  testers,
+  installShellFiles,
+}:
 
 # this expression is mostly automated, and you are STRONGLY
 # RECOMMENDED to use to nix-update for updating this expression when new
@@ -15,19 +21,21 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.31.1";
+  version = "0.34.2";
 
   # the platform-specific, statically linked binary
   src =
     let
-      suffix = {
-        # map the platform name to the golang toolchain suffix
-        # NOTE: must be synchronized with update.sh!
-        x86_64-linux = "linux_amd64";
-        x86_64-darwin = "darwin_amd64";
-        aarch64-linux = "linux_arm64";
-        aarch64-darwin = "darwin_arm64";
-      }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      suffix =
+        {
+          # map the platform name to the golang toolchain suffix
+          # NOTE: must be synchronized with update.sh!
+          x86_64-linux = "linux_amd64";
+          x86_64-darwin = "darwin_amd64";
+          aarch64-linux = "linux_arm64";
+          aarch64-darwin = "darwin_arm64";
+        }
+        ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
       name = "infisical_${version}_${suffix}.tar.gz";
       hash = buildHashes."${stdenv.hostPlatform.system}";

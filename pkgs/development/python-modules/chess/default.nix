@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "chess";
-  version = "1.11.0";
+  version = "1.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+YNEm1QppXeeIjOKfCSQoQmuSzBsW4ws0ej/whjTAPg=";
+    tag = "v${version}";
+    hash = "sha256-OAYQ/XtM4AHfbpA+gVa/AjB3tyMtvgykpHc39WaU2CI=";
   };
 
   build-system = [ setuptools ];

@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
@@ -17,8 +17,7 @@ mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       inherit mediainfo mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
@@ -40,4 +39,6 @@ mkKdeDerivation {
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
   ];
+
+  meta.mainProgram = "kdenlive";
 }

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RPaBUj/BJCO+10maGDmugeEXxaIrlk2UHIvkbrQVM8c=";
   };
 

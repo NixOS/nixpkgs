@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pandantic";
-  version = "0.3.1";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "wesselhuising";
     repo = "pandantic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JRhnDVRYX0OV/dZkfqNoS2qFcoHOZHm9QZphF/JhgxM=";
+    tag = version;
+    hash = "sha256-c108zoKBnjlELCDia8XSsdG8Exa/k7HKyRvcTocndss=";
   };
 
   build-system = [ poetry-core ];

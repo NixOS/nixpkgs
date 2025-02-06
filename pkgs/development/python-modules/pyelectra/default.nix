@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jafar-atili";
     repo = "pyelectra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3g+6AXbHMStk77k+1Qh5kgDswUZ8I627YiA/PguUGBg=";
   };
 

@@ -1,24 +1,26 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, installShellFiles
-, testers
-, cue
-, callPackage
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  installShellFiles,
+  testers,
+  cue,
+  callPackage,
 }:
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.10.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
-    hash = "sha256-GvReoBP8QCdrKxox8yPLZEk5YvTvwr7kflpS/jN8GTg=";
+    hash = "sha256-OSsDgwjtjQw5YRuXi1K/HQtHyLh1aHtYDlQDAtdYeZM=";
   };
 
-  vendorHash = "sha256-sLTpra7JwgF4l1UCrUtzQA4xrP4OqxBcZ1qEssBdFtk=";
+  vendorHash = "sha256-jl8TR1kxame30l7DkfOEioWA9wK/ACTNofiTi++vjuI=";
 
   subPackages = [ "cmd/*" ];
 
@@ -30,7 +32,7 @@ buildGoModule rec {
     "-X cuelang.org/go/cmd/cue/cmd.version=v${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cue \
       --bash <($out/bin/cue completion bash) \
       --fish <($out/bin/cue completion fish) \
@@ -49,11 +51,11 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib;  {
+  meta = {
     description = "Data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "cue";
   };
 }

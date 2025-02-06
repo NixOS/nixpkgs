@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.119";
+  version = "9.2.139";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GwfQj8KU6M5ylgJPN1Blz8Chz2zEDTZayFdvjXXWoHY=";
+    tag = "v${version}";
+    hash = "sha256-zhLeBJeJpoW4JAX77EfXyvfIUL3ZBHALoVJkzSrKMP0=";
   };
 
   postPatch = ''

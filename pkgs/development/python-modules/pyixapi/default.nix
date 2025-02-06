@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peering-manager";
     repo = "pyixapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IiLjxOtyxGSaItxgEbsF8AER/j4Qe7SP9ZAEPjTiYI4=";
   };
 

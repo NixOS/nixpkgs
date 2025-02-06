@@ -6,6 +6,7 @@
   deprecated,
   dirtyjson,
   fetchFromGitHub,
+  filetype,
   fsspec,
   jsonpath-ng,
   llamaindex-py-client,
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.11.16";
+  version = "0.12.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -43,8 +44,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-t4hQMlORpdWXkbKQhVSxD/pdxFtu+sJ4FQQxIXLoH94=";
+    tag = "v${version}";
+    hash = "sha256-GcY7AuyUYniEbjsMTMcRe4ulpR5kMvAW+XDoPzgjblw=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -63,6 +64,8 @@ buildPythonPackage rec {
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
+  pythonRelaxDeps = [ "tenacity" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -70,6 +73,7 @@ buildPythonPackage rec {
     dataclasses-json
     deprecated
     dirtyjson
+    filetype
     fsspec
     jsonpath-ng
     llamaindex-py-client
@@ -127,6 +131,14 @@ buildPythonPackage rec {
     # Tests require network access
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
+    "test_context_extraction_basic"
+    "test_context_extraction_oversized_document"
+    "test_context_extraction_custom_prompt"
+    "test_multiple_documents_context"
+    "test_mimetype_raw_data"
+    # asyncio.exceptions.InvalidStateError: invalid state
+    "test_workflow_context_to_dict_mid_run"
+    "test_SimpleDirectoryReader"
   ];
 
   meta = with lib; {

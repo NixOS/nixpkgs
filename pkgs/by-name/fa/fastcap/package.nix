@@ -1,8 +1,9 @@
-{ stdenv
-, fetchzip
-, ghostscript
-, lib
-, texliveMedium
+{
+  stdenv,
+  fetchzip,
+  ghostscript,
+  lib,
+  texliveMedium,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,13 @@ stdenv.mkDerivation rec {
     "all"
   ];
 
-  outputs = [ "out" "doc" ];
+  # GCC 14 makes these errors by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=return-mismatch -Wno-error=implicit-int";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postBuild = ''
     make manual
@@ -84,7 +91,7 @@ stdenv.mkDerivation rec {
       Fastcap is  a three dimensional capacitance extraction program that
       compute self and mutual capacitances between conductors of arbitrary
       shapes, sizes and orientations.
-      '';
+    '';
     homepage = "https://www.rle.mit.edu/cpg/research_codes.htm";
     license = licenses.mit;
     maintainers = with maintainers; [ fbeffa ];

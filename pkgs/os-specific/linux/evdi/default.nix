@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, libdrm
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  libdrm,
+  python3,
 }:
 
 let
-  python3WithLibs = python3.withPackages (ps: with ps; [
-    pybind11
-  ]);
+  python3WithLibs = python3.withPackages (
+    ps: with ps; [
+      pybind11
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.6";
+  version = "1.14.8";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-/XIWacrsB7qBqlLUwIGuDdahvt2dAwiK7dauFaYh7lU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-57DP8kKsPEK1C5A6QfoZZDmm76pn4SaUKEKu9cicyKI=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -36,12 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     python3WithLibs
   ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  hardeningDisable = [ "format" "pic" "fortify" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+    "fortify"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -52,13 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = kernel.kernelOlder "4.19";
     changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${finalAttrs.version}";
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
-    license = with licenses; [ lgpl21Only gpl2Only ];
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    maintainers = with lib.maintainers; [ drupol ];
+    platforms = lib.platforms.linux;
   };
 })

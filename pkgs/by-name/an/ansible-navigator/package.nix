@@ -7,7 +7,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "ansible-navigator";
-  version = "24.9.0";
+  version = "25.1.0";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "ansible_navigator";
-    hash = "sha256-eW38/n3vh2l2hKrh1xpW2fiB5yOkTnK77AnevDStD7s=";
+    hash = "sha256-WcA14CiUUNXa+yR1IzoyQ7LWBXFI8yzV+xpRj2W8lzQ=";
   };
 
   build-system = with python3Packages; [

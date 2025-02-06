@@ -10,14 +10,13 @@
   nixosTests,
   enableLocalIcons ? false,
   nix-update-script,
-  git,
 }:
 let
   dashboardIcons = fetchFromGitHub {
-    owner = "walkxcode";
+    owner = "homarr-labs";
     repo = "dashboard-icons";
-    rev = "be82e22c418f5980ee2a13064d50f1483df39c8c"; # Until 2024-07-21
-    hash = "sha256-z69DKzKhCVNnNHjRM3dX/DD+WJOL9wm1Im1nImhBc9Y=";
+    rev = "51a2ae7b101c520bcfb5b44e5ddc99e658bc1e21"; # Until 2025-01-06
+    hash = "sha256-rKXeMAhHV0Ax7mVFyn6hIZXm5RFkbGakjugU0DG0jLM=";
   };
 
   installLocalIcons = ''
@@ -29,16 +28,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.9.10";
+  version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-qDbYgitMbjOMIZUyQuFSNAyb/ZRAcStm/jDrsIutKno=";
+    hash = "sha256-q8+uoikHMQVuTrVSH8tPsoI5655ZStMc/7tmoAfoZIY=";
   };
 
-  npmDepsHash = "sha256-gAti4y4Ios7XjJ3nVOhzjwPzcAC2upODZ64qQjx17JE=";
+  npmDepsHash = "sha256-N39gwct2U4UxlIL5ceDzzU7HpA6xh2WksrZNxGz04PU=";
 
   preBuild = ''
     mkdir -p config
@@ -50,7 +49,7 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
   buildInputs = [
     nodePackages.node-gyp-build
@@ -76,16 +75,14 @@ buildNpmPackage rec {
     # write its prerender cache.
     #
     # This patch ensures that the cache implementation respects the env
-    # variable `HOMEPAGE_CACHE_DIR`, which is set by default in the
+    # variable `NIXPKGS_HOMEPAGE_CACHE_DIR`, which is set by default in the
     # wrapper below.
-    pushd $out
-    git apply ${./prerender_cache_path.patch}
-    popd
+    (cd "$out" && patch -p1 <${./prerender_cache_path.patch})
 
     makeWrapper $out/share/homepage/server.js $out/bin/homepage \
       --set-default PORT 3000 \
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
-      --set-default HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard
+      --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard
 
     ${if enableLocalIcons then installLocalIcons else ""}
 

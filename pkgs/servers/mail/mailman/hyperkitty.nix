@@ -7,27 +7,27 @@
 with python3.pkgs;
 
 buildPythonPackage rec {
-  pname = "HyperKitty";
-  version = "1.3.9";
+  pname = "hyperkitty";
+  version = "1.3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchurl {
     url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
-    hash = "sha256-BfhCh4zZcfwoIfubW/+MUWXwh1yFOH/jpRdQdsj6lME=";
+    hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-gravatar2
     django-haystack
     django-mailman3
-    django-q
+    django-q2
     django-compressor
     django-extensions
     djangorestframework

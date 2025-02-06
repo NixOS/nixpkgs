@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-edict2";
-  version = "0-unstable-2024-07-28";
+  version = "0-unstable-2024-10-12";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-edict2";
-    rev = "b2112277d0d479b9218f42772356da3601b3e8cf";
-    hash = "sha256-DIIp8FooWxyHMrQmq+2KUGEmYHKy+H6NtHrvRldxXqc=";
+    rev = "f68299b7113080d5e1981c97db490b3075874445";
+    hash = "sha256-PdHGVudApWgQaxvAsdVui1XQR+4JHjGkhGHfcwL3wjc=";
   };
 
   installPhase = ''

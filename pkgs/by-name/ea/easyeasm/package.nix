@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, amass
-, alterx
-, oam-tools
-, subfinder
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  amass,
+  alterx,
+  oam-tools,
+  subfinder,
 }:
 
 buildGoModule rec {
@@ -15,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "EasyEASM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/PhoH+5k63rJL1N3V3IL1TP1oacsBfGfVw/OueN9j8M=";
   };
 
@@ -32,12 +33,14 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/easyeasm \
-      --prefix PATH : "${lib.makeBinPath [
-        amass
-        alterx
-        oam-tools
-        subfinder
-      ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          amass
+          alterx
+          oam-tools
+          subfinder
+        ]
+      }"
   '';
 
   meta = with lib; {

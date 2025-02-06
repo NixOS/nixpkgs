@@ -1,20 +1,27 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sway-assign-cgroups";
-  version = "0.4.0";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    rev = "v${version}";
-    hash = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
+    tag = "v${version}";
+    hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
   format = "other";
 
-  propagatedBuildInputs = with python3Packages; [ dbus-next i3ipc psutil tenacity xlib ];
+  propagatedBuildInputs = with python3Packages; [
+    dbus-next
+    i3ipc
+    psutil
+    tenacity
+    xlib
+  ];
 
   installPhase = ''
     runHook preInstall

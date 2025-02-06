@@ -1,40 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, arcan
-, audit
-, dbus
-, libepoxy
-, fontutil
-, libGL
-, libX11
-, libXau
-, libXdmcp
-, libXfont2
-, libdrm
-, libgcrypt
-, libmd
-, libselinux
-, libtirpc
-, libxcb
-, libxkbfile
-, libxshmfence
-, mesa
-, meson
-, nettle
-, ninja
-, openssl
-, pixman
-, pkg-config
-, systemd
-, xcbutil
-, xcbutilwm
-, xcbutilimage
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  arcan,
+  audit,
+  dbus,
+  libepoxy,
+  fontutil,
+  libGL,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXfont2,
+  libdrm,
+  libgcrypt,
+  libmd,
+  libselinux,
+  libtirpc,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  libgbm,
+  mesa,
+  meson,
+  nettle,
+  ninja,
+  openssl,
+  pixman,
+  pkg-config,
+  systemd,
+  xcbutil,
+  xcbutilwm,
+  xcbutilimage,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalPackages: {
@@ -73,7 +75,8 @@ stdenv.mkDerivation (finalPackages: {
     libxcb
     libxkbfile
     libxshmfence
-    mesa
+    libgbm
+    mesa # uses dri_interface.h
     nettle
     openssl
     pixman
@@ -106,9 +109,9 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta =  {
+  meta = {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
     mainProgram = "Xarcan";

@@ -2,33 +2,29 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  colour,
   fetchFromGitHub,
   poetry-core,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ttls";
-  version = "1.8.3";
-  format = "pyproject";
+  version = "1.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jschlyter";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1RctamOSnpZ+bcfwnCsj4OAR7KYzf0XQtSe7MTFMGy4=";
+    repo = "ttls";
+    tag = "v${version}";
+    hash = "sha256-itGXZbQZ+HYpiwySLeGN3mPy3fgsxx0A9byOxIVpRBc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    colour
-    setuptools
   ];
 
   # Module has no tests

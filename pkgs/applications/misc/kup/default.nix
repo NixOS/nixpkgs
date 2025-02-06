@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchFromGitLab,
   extra-cmake-modules,
@@ -15,7 +16,7 @@
   kinit,
   kjobwidgets,
   plasma-framework,
-  libgit2
+  libgit2,
 }:
 
 stdenv.mkDerivation rec {

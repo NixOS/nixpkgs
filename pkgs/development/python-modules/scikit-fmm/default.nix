@@ -9,27 +9,27 @@
 
 buildPythonPackage rec {
   pname = "scikit-fmm";
-  version = "2024.5.29";
+  version = "2025.1.29";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_fmm";
     inherit version;
-    hash = "sha256-sy7J5UKXhuL5K8zr3lBulUMekwNlBFfC8C2VzguVTUE=";
+    hash = "sha256-7gTKuObCAahEjfmIL8Azbby3nxJPPh4rjb4x1O4xBQw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "oldest-supported-numpy" "numpy"
-  '';
 
   build-system = [ meson-python ];
 
   dependencies = [ numpy ];
 
   checkPhase = ''
+    runHook preCheck
+    # "Do not run the tests from the source directory"
     mkdir testdir; cd testdir
-    ${python.interpreter} -c "import skfmm, sys; sys.exit(skfmm.test())"
+    (set -x
+      ${python.interpreter} -c "import skfmm, sys; sys.exit(skfmm.test())"
+    )
+    runHook postCheck
   '';
 
   meta = with lib; {

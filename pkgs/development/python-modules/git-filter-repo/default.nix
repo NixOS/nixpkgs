@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "git-filter-repo";
-  version = "2.45.0";
+  version = "2.47.0";
   docs_version = "71d71d4be238628bf9cb9b27be79b8bb824ed1a9";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "git_filter_repo";
     inherit version;
-    hash = "sha256-L6gP+NpUOCpuGJvBUi3Jhu56UqvL6eKBkvc8D2yLXqk=";
+    hash = "sha256-QRsn5ooIDAemnCM8tSbbwthIsJpy8QR39ERN0IIs8pA=";
   };
 
   docs = fetchFromGitHub {
@@ -34,10 +34,9 @@ buildPythonPackage rec {
     installManPage ${docs}/man1/git-filter-repo.1
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-    installShellFiles
-  ];
+  build-system = [ setuptools-scm ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Project has no tests
   doCheck = false;

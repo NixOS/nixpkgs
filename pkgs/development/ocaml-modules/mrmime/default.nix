@@ -1,26 +1,27 @@
-{ afl-persistent
-, alcotest
-, angstrom
-, base64
-, bigarray-overlap
-, bigstringaf
-, buildDunePackage
-, cmdliner
-, emile
-, fetchurl
-, fpath
-, hxd
-, ipaddr
-, jsonm
-, ke
-, lib
-, mirage-crypto-rng
-, pecu
-, prettym
-, ptime
-, rosetta
-, unstrctrd
-, uutf
+{
+  afl-persistent,
+  alcotest,
+  angstrom,
+  base64,
+  bigarray-overlap,
+  bigstringaf,
+  buildDunePackage,
+  cmdliner,
+  emile,
+  fetchurl,
+  fpath,
+  hxd,
+  ipaddr,
+  jsonm,
+  ke,
+  lib,
+  mirage-crypto-rng,
+  pecu,
+  prettym,
+  ptime,
+  rosetta,
+  unstrctrd,
+  uutf,
 }:
 
 buildDunePackage rec {
@@ -57,7 +58,8 @@ buildDunePackage rec {
     jsonm
     mirage-crypto-rng
   ];
-  doCheck = true;
+  # Checks are not compatible with mirage-crypto-rng ≥ 1.0
+  doCheck = false;
 
   meta = {
     description = "Parser and generator of mail in OCaml";

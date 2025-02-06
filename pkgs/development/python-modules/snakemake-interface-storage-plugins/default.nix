@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qjQZc7DIXIPmqXq+Fjslgrq2LbjbdRS/twGsp/jrxRY=";
   };
 

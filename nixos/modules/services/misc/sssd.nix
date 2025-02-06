@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.sssd;
   nscd = config.services.nscd;
@@ -7,13 +11,14 @@ let
   dataDir = "/var/lib/sssd";
   settingsFile = "${dataDir}/sssd.conf";
   settingsFileUnsubstituted = pkgs.writeText "${dataDir}/sssd-unsubstituted.conf" cfg.config;
-in {
+in
+{
   options = {
     services.sssd = {
-      enable = mkEnableOption "the System Security Services Daemon";
+      enable = lib.mkEnableOption "the System Security Services Daemon";
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         description = "Contents of {file}`sssd.conf`.";
         default = ''
           [sssd]
@@ -34,8 +39,8 @@ in {
         '';
       };
 
-      sshAuthorizedKeysIntegration = mkOption {
-        type = types.bool;
+      sshAuthorizedKeysIntegration = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to make sshd look up authorized keys from SSS.
@@ -43,16 +48,16 @@ in {
         '';
       };
 
-      kcm = mkOption {
-        type = types.bool;
+      kcm = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use SSS as a Kerberos Cache Manager (KCM).
           Kerberos will be configured to cache credentials in SSS.
         '';
       };
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
@@ -75,18 +80,27 @@ in {
       };
     };
   };
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       # For `sssctl` to work.
       environment.etc."sssd/sssd.conf".source = settingsFile;
       environment.etc."sssd/conf.d".source = "${dataDir}/conf.d";
 
       systemd.services.sssd = {
         description = "System Security Services Daemon";
-        wantedBy    = [ "multi-user.target" ];
-        before = [ "systemd-user-sessions.service" "nss-user-lookup.target" ];
-        after = [ "network-online.target" "nscd.service" ];
-        requires = [ "network-online.target" "nscd.service" ];
+        wantedBy = [ "multi-user.target" ];
+        before = [
+          "systemd-user-sessions.service"
+          "nss-user-lookup.target"
+        ];
+        after = [
+          "network-online.target"
+          "nscd.service"
+        ];
+        requires = [
+          "network-online.target"
+          "nscd.service"
+        ];
         wants = [ "nss-user-lookup.target" ];
         restartTriggers = [
           config.environment.etc."nscd.conf".source
@@ -126,7 +140,7 @@ in {
       services.dbus.packages = [ pkgs.sssd ];
     })
 
-    (mkIf cfg.kcm {
+    (lib.mkIf cfg.kcm {
       systemd.services.sssd-kcm = {
         description = "SSSD Kerberos Cache Manager";
         requires = [ "sssd-kcm.socket" ];
@@ -148,19 +162,20 @@ in {
       security.krb5.settings.libdefaults.default_ccache_name = "KCM:";
     })
 
-    (mkIf cfg.sshAuthorizedKeysIntegration {
-    # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
-    # So indirect by a symlink.
-    environment.etc."ssh/authorized_keys_command" = {
-      mode = "0755";
-      text = ''
-        #!/bin/sh
-        exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
-      '';
-    };
-    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
-    services.openssh.authorizedKeysCommandUser = "nobody";
-  })];
+    (lib.mkIf cfg.sshAuthorizedKeysIntegration {
+      # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
+      # So indirect by a symlink.
+      environment.etc."ssh/authorized_keys_command" = {
+        mode = "0755";
+        text = ''
+          #!/bin/sh
+          exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
+        '';
+      };
+      services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
+      services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+  ];
 
-  meta.maintainers = with maintainers; [ bbigras ];
+  meta.maintainers = with lib.maintainers; [ bbigras ];
 }

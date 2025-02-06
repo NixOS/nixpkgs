@@ -13,6 +13,7 @@ Here are some common neovim flags used in the tests:
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal
+, testers
 , pkgs
 }:
 let
@@ -55,9 +56,15 @@ let
   nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
     plugins = [ {
         plugin = vimPlugins.luasnip;
-
       }
     ];
+  });
+
+  # build should fail with a wrong
+  nvim-run-failing-check = (wrapNeovimUnstable neovim-unwrapped {
+    luaRcContent = "this is an invalid lua statement to break the build";
+  }).overrideAttrs({
+    doCheck = true;
   });
 
   nvimAutoDisableWrap = makeNeovimConfig { };
@@ -74,7 +81,12 @@ let
     sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
   };
 
-  # neovim-drv must be a wrapped neovim
+  /* neovim-drv must be a wrapped neovim
+    - exposes lua config in $luarcGeneric
+    - exposes vim config in $vimrcGeneric
+
+  */
+
   runTest = neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}" ({
       nativeBuildInputs = [ ];
@@ -95,6 +107,8 @@ in
   pkgs.recurseIntoAttrs (rec {
 
   inherit nmt;
+
+  failed_check = testers.testBuildFailure nvim-run-failing-check;
 
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
@@ -154,6 +168,25 @@ in
   run_nvim_with_plug = runTest nvim_with_plug ''
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
+
+  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs(oa: {
+    plugins = [
+      vimPlugins.unicode-vim
+      vimPlugins.fzf-hoogle-vim
+    ];
+    autoconfigure = true;
+    # legacy wrapper sets it to false
+    wrapRc = true;
+  });
+
+  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs({
+    plugins = [
+      pkgs.vimPlugins.hex-nvim
+    ];
+    autowrapRuntimeDeps = true;
+    # legacy wrapper sets it to false
+    wrapRc = true;
+  });
 
   nvim_with_ftplugin = let
     # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
@@ -313,14 +346,27 @@ in
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
 
-  inherit nvim-with-luasnip;
 
+  autoconfigure = runTest nvim_with_autoconfigure ''
+      assertFileContains \
+        "$luarc" \
+        '${vimPlugins.unicode-vim.passthru.initLua}'
+  '';
+
+  autowrap_runtime_deps = runTest nvim_with_runtimeDeps ''
+      assertFileContains \
+        "${nvim_with_runtimeDeps}/bin/nvim" \
+        '${pkgs.xxd}/bin'
+  '';
+
+  inherit nvim-with-luasnip;
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
-    cat ${nvim-with-luasnip}/bin/nvim
+    cat ${nvim-with-luasnip}/nvim
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
+  inherit (vimPlugins) corePlugins;
 })

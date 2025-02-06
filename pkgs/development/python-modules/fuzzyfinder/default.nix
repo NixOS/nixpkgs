@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amjith";
     repo = "fuzzyfinder";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QWUABljgtzsZONl1klCrxEh0tPYodMOXokEb3YvWsyg=";
   };
 

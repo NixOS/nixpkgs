@@ -1,13 +1,3 @@
-From 4c7743f4fd231648d7bd1513c9db71a651ef7553 Mon Sep 17 00:00:00 2001
-From: Niklas Korz <niklas@niklaskorz.de>
-Date: Wed, 4 Sep 2024 14:52:23 +0200
-Subject: [PATCH 2/3] Unvendor dependencies
-
----
- CMakeLists.txt          | 24 ++++++++++++++++++++++++
- packager/CMakeLists.txt |  1 -
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 5b96a2429e..181df0bf2d 100644
 --- a/CMakeLists.txt
@@ -62,6 +52,27 @@ index 7238d243bb..722217bbc4 100644
  add_subdirectory(tools)
  add_subdirectory(utils)
  add_subdirectory(version)
--- 
-2.46.0
+diff --git a/packager/tools/pssh/CMakeLists.txt b/packager/tools/pssh/CMakeLists.txt
+index 9ec3a39d26..0b981cec29 100644
+--- a/packager/tools/pssh/CMakeLists.txt
++++ b/packager/tools/pssh/CMakeLists.txt
+@@ -14,7 +14,6 @@ set(PSSH_BOX_OUTPUTS
+ 
+ add_custom_command(
+     DEPENDS
+-        protobuf_py
+         widevine_protos
+         pssh-box.py
+     OUTPUT ${PSSH_BOX_OUTPUTS}
+@@ -26,10 +25,6 @@ add_custom_command(
+         ${CMAKE_BINARY_DIR}/packager/media/base/widevine_common_encryption_pb2.py
+         ${CMAKE_BINARY_DIR}/packager/media/base/widevine_pssh_data_pb2.py
+         ${CMAKE_BINARY_DIR}/packager/pssh-box-protos/
+-    COMMAND
+-        ${CMAKE_COMMAND} -E copy_directory
+-        ${CMAKE_BINARY_DIR}/packager/third_party/protobuf/py/google
+-        ${CMAKE_BINARY_DIR}/packager/pssh-box-protos/google
+     COMMAND
+         ${CMAKE_COMMAND} -E copy
+         ${CMAKE_CURRENT_SOURCE_DIR}/pssh-box.py
 

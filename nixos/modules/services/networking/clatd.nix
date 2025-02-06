@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.clatd;
 
-  settingsFormat = pkgs.formats.keyValue {};
+  settingsFormat = pkgs.formats.keyValue { };
 
   configFile = settingsFormat.generate "clatd.conf" cfg.settings;
 in
@@ -13,10 +18,18 @@ in
 
       package = lib.mkPackageOption pkgs "clatd" { };
 
+      enableNetworkManagerIntegration = lib.mkEnableOption "NetworkManager integration" // {
+        default = config.networking.networkmanager.enable;
+        defaultText = "config.networking.networkmanager.enable";
+      };
+
       settings = lib.mkOption {
-        type = lib.types.submodule ({ name, ... }: {
-          freeformType = settingsFormat.type;
-        });
+        type = lib.types.submodule (
+          { name, ... }:
+          {
+            freeformType = settingsFormat.type;
+          }
+        );
         default = { };
         example = lib.literalExpression ''
           {
@@ -75,5 +88,17 @@ in
         ];
       };
     };
+
+    networking.networkmanager.dispatcherScripts = lib.optionals cfg.enableNetworkManagerIntegration [
+      {
+        type = "basic";
+        # https://github.com/toreanderson/clatd/blob/master/scripts/clatd.networkmanager
+        source = pkgs.writeShellScript "restart-clatd" ''
+          [ "$DEVICE_IFACE" = "${cfg.settings.clat-dev or "clat"}" ] && exit 0
+          [ "$2" != "up" ] && [ "$2" != "down" ] && exit 0
+          ${pkgs.systemd}/bin/systemctl restart clatd.service
+        '';
+      }
+    ];
   };
 }

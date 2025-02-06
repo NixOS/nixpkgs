@@ -13,17 +13,16 @@
   semver,
   crcmod,
   hidapi,
-  ecdsa,
 }:
 
 buildPythonPackage rec {
   pname = "nitrokey";
-  version = "0.2.0";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oWfhy7Mj1UnrC70G7fpkl4q4uG0CdvO0BHwfJYszR30=";
+    hash = "sha256-XDlcOfOTGgYsg5DLsy1wJd3AzuvWSvqyFSEYrDOp0Ic=";
   };
 
   disabled = pythonOlder "3.9";
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     crcmod
     cryptography
     hidapi
-    ecdsa
     protobuf5
     pyserial
   ];

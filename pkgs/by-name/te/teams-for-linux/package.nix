@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_30,
+  electron_32,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -15,16 +15,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "1.11.0";
+  version = "1.12.7";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UNe4stYEOTcQc+ap1/v9EXjHTwKvLYd4t8EPuojDyqw=";
+    tag = "v${version}";
+    hash = "sha256-26YNDXZUMQA3AuRPTxB+X8hg2IEYvAGBHvzIAxSL3nk=";
   };
 
-  npmDepsHash = "sha256-OpoPXcSiHnK4UYFimY+yOM6M3dAOcvZ82DdGc++oNLM=";
+  npmDepsHash = "sha256-Vu7VAV8hoQKqa8d2hMaNlBB4e8HA0h4ySc1qsYn8M6o=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,7 +42,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_30.dist} electron-dist
+    cp -r ${electron_32.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -50,7 +50,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_30.version}
+        -c.electronVersion=${electron_32.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ buildNpmPackage rec {
       popd
 
       # Linux needs 'aplay' for notification sounds
-      makeWrapper '${lib.getExe electron_30}' "$out/bin/teams-for-linux" \
+      makeWrapper '${lib.getExe electron_32}' "$out/bin/teams-for-linux" \
         --prefix PATH : ${
           lib.makeBinPath [
             alsa-utils
@@ -80,7 +80,7 @@ buildNpmPackage rec {
           ]
         } \
         --add-flags "$out/share/teams-for-linux/app.asar" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
@@ -108,6 +108,8 @@ buildNpmPackage rec {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";

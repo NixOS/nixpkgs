@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "zope.testrunner";
-  version = "6.4";
+  version = "6.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C4Wfx01vK2xd2K353uTsdAX3PykOyrJXCsY2+DYSKMg=";
+    hash = "sha256-sReX6XWocHseM7ZUTKz5A3KHiG7leA7P7UvxiZ1CFe8=";
   };
 
   propagatedBuildInputs = [

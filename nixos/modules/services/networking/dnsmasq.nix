@@ -133,6 +133,11 @@ in
         dnsmasq_conf=/etc/dnsmasq-conf.conf
         dnsmasq_resolv=/etc/dnsmasq-resolv.conf
       '';
+
+      subscriberFiles = [
+        "/etc/dnsmasq-conf.conf"
+        "/etc/dnsmasq-resolv.conf"
+      ];
     };
 
     systemd.services.dnsmasq = {

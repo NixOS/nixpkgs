@@ -23,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-yXPHQP4B83PuRNvDBnRTx/MaPaQxCl1g5Xrle+N/d7I=";
     };
 

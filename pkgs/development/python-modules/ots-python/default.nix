@@ -32,7 +32,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ opentype-sanitizer ];
   nativeBuildInputs = [ setuptools-scm ];
 
-  doCheck = true;
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {

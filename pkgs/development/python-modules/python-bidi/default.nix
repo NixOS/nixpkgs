@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MeirKriheli";
     repo = "python-bidi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LrXt9qaXfy8Rn9HjU4YSTFT4WsqzwCgh0flcxXOTF6E=";
   };
 

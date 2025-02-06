@@ -24,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.23.2";
+  version = "3.25.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KL3kIntydUAOS7qGq6ZDrShEcyME1Qwf2VjM/9mw96Q=";
+    tag = "v${version}";
+    hash = "sha256-hBQ90OtqRWVgr9EHf2EWm1KSy7di1PcrOJ7O+5bLK6I=";
   };
 
   postPatch = ''

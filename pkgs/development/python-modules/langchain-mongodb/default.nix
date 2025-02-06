@@ -28,13 +28,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-mongodb==${version}";
+    tag = "langchain-mongodb==${version}";
     hash = "sha256-Jd9toXkS9dGtSIrJQ/5W+swV1z2BJOJKBtkyGzj3oSc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mongodb";
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     langchain-core
@@ -65,6 +69,9 @@ buildPythonPackage rec {
     description = "Integration package connecting MongoDB and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mongodb";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

@@ -68,7 +68,9 @@ rustPlatform.buildRustPackage rec {
 
   PROTOC = "${protobuf}/bin/protoc";
 
-  passthru.tests = [ nixosTests.crabfit ];
+  passthru.tests = {
+    inherit (nixosTests) crabfit;
+  };
 
   meta = {
     description = "Enter your availability to find a time that works for everyone";

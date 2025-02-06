@@ -14,7 +14,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus-python";
   version = "4.0.1";
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs:{
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [

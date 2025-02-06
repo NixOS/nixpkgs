@@ -26,6 +26,8 @@ in
   options.services.trilium-server = with lib; {
     enable = mkEnableOption "trilium-server";
 
+    package = mkPackageOption pkgs "trilium-server" {};
+
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/trilium";
@@ -117,7 +119,7 @@ in
       wantedBy = [ "multi-user.target" ];
       environment.TRILIUM_DATA_DIR = cfg.dataDir;
       serviceConfig = {
-        ExecStart = "${pkgs.trilium-server}/bin/trilium-server";
+        ExecStart = lib.getExe cfg.package;
         User = "trilium";
         Group = "trilium";
         PrivateTmp = "true";

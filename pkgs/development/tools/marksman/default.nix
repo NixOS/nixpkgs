@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, marksman
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  marksman,
+  testers,
 }:
 
 buildDotnetModule rec {
   pname = "marksman";
-  version = "2024-10-07";
+  version = "2024-12-18";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     rev = version;
-    sha256 = "sha256-BU9ttJsAQ8du9NUs69c7/FxZodUS/BhzKm+P1RocCms=";
+    sha256 = "sha256-2OisUZHmf7k8vLkBGJG1HXNxaXmRF64x//bDK57S9to=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
@@ -25,9 +26,9 @@ buildDotnetModule rec {
   doCheck = true;
   testProjectFile = "Tests/Tests.fsproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   postInstall = ''
@@ -54,7 +55,10 @@ buildDotnetModule rec {
     '';
     homepage = "https://github.com/artempyanykh/marksman";
     license = licenses.mit;
-    maintainers = with maintainers; [ stasjok plusgut ];
+    maintainers = with maintainers; [
+      stasjok
+      plusgut
+    ];
     platforms = dotnet-sdk.meta.platforms;
     mainProgram = "marksman";
   };

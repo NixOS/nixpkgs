@@ -14,13 +14,13 @@ let
             mkHyprlandPlugin,
           }:
           let
-            version = "0.44.0";
+            version = "0.47.0";
 
             hyprland-plugins-src = fetchFromGitHub {
               owner = "hyprwm";
               repo = "hyprland-plugins";
               rev = "refs/tags/v${version}";
-              hash = "sha256-/SeOrMuPEOjngI+MBlzqxQ/sJxkJFIYoef+wJ/PmX2w=";
+              hash = "sha256-zys4H2zSSIw54ecnYnBh2NUKZQraWD4B7qftuClrXho=";
             };
           in
           mkHyprlandPlugin hyprland {
@@ -33,10 +33,7 @@ let
               homepage = "https://github.com/hyprwm/hyprland-plugins";
               description = "Hyprland ${description} plugin";
               license = lib.licenses.bsd3;
-              maintainers = with lib.maintainers; [
-                fufexan
-                johnrtitor
-              ];
+              maintainers = lib.teams.hyprland.members;
               inherit (hyprland.meta) platforms;
             };
           }

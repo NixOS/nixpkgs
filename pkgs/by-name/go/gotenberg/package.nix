@@ -28,7 +28,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y54DtOYIzFAk05TvXFcLdStfAXim3sVHBkW+R8CrtMM=";
   };
 

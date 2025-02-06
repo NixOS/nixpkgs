@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-classifier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DH8I4Lbbs2TVMvYlvh/P2I/7O4+VechP2JDDVHNsTSg=";
   };
 

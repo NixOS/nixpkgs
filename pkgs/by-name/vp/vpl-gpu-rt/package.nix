@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vpl-gpu-rt";
-  version = "24.2.5";
+  version = "25.1.0";
 
   outputs = [ "out" "dev" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "vpl-gpu-rt";
     rev = "intel-onevpl-${version}";
-    hash = "sha256-WYlA8+i8TTFHsU4+doLcv75F9MR2V/BEuNGGLgM4p1s=";
+    hash = "sha256-J3yp9KbAmXVE0jhFcNkEIsPdMe/LsWxLes3zC56FS08=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -29,10 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/vpl-gpu-rt";
     changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${src.rev}";
     license = [ lib.licenses.mit ];
-    platforms = lib.platforms.linux;
-    # CMake adds x86 specific compiler flags in <source>/builder/FindGlobals.cmake
-    # NOTE: https://github.com/oneapi-src/oneVPL-intel-gpu/issues/303
-    broken = !stdenv.hostPlatform.isx86;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ evanrichter pjungkamp ];
   };
 }

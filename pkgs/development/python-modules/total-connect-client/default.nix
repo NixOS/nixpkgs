@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2024.5";
+  version = "2024.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NGiI4gn59U7NiRYtB6UydxOu+lVtmbl8qF3nbAjiYwk=";
+    tag = version;
+    hash = "sha256-FcPm2Nc6pUGC86K3GLAiQRot0JXYqoZh19dXMCl99eI=";
   };
 
   build-system = [ setuptools ];

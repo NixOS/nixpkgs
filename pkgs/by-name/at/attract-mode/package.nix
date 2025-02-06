@@ -13,7 +13,6 @@
   zlib,
   openal,
   fontconfig,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -43,13 +42,6 @@ stdenv.mkDerivation {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       openal
       fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Carbon
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.CoreVideo
-      darwin.apple_sdk.frameworks.OpenAL
     ];
 
   makeFlags = [

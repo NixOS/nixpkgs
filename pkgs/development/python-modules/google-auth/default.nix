@@ -27,14 +27,15 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.30.0";
+  version = "2.36.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q2MKEyD2cgkJrXan29toQc31xmsyjWkAJ+SGe9+xZog=";
+    pname = "google_auth";
+    inherit version;
+    hash = "sha256-VF6WGPLfC8u33LxFpUZIWxISYkcWl1oepa6BSc52mrE=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -69,7 +70,11 @@ buildPythonPackage rec {
       freezegun
       grpcio
       mock
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
       oauth2client
+    ]
+    ++ [
       pytest-asyncio
       pytest-localserver
       pytestCheckHook
@@ -82,6 +87,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  pytestFlagsArray = [
+    # cryptography 44 compat issue
+    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [

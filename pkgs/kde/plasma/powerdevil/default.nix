@@ -1,11 +1,15 @@
 {
   mkKdeDerivation,
   pkg-config,
+  ddcutil,
   qtwayland,
 }:
 mkKdeDerivation {
   pname = "powerdevil";
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [ qtwayland ];
+  extraBuildInputs = [
+    ddcutil
+    qtwayland
+  ];
 }

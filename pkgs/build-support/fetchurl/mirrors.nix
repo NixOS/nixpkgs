@@ -123,14 +123,8 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
-  # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
-    "https://cdn.download.kde.org/"
-    "https://download.kde.org/download.php?url="
-    "https://ftp.gwdg.de/pub/linux/kde/"
-    "https://mirrors.ocf.berkeley.edu/kde/"
-    "https://mirrors.mit.edu/kde/"
-    "https://mirrors.ustc.edu.cn/kde/"
+    "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 

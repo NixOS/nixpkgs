@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, flutterPackages
-, corrosion
-, rustPlatform
-, cargo
-, rustc
-, udev
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  fetchFromGitHub,
+  flutterPackages,
+  corrosion,
+  rustPlatform,
+  cargo,
+  rustc,
+  udev,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-flutterPackages.v3_19.buildFlutterApplication rec {
+flutterPackages.stable.buildFlutterApplication rec {
   pname = "intiface-central";
-  version = "2.6.0";
+  version = "2.6.4";
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
     rev = "v${version}";
-    hash = "sha256-7+rw0cD8MJPFOkgmfHD6y+EojTGQhb15o1mn2p14eoE=";
+    hash = "sha256-QBNEKhjBfKxArBykUq/fE4lftCYzGdAaWYD1F7rar5Y=";
   };
   patches = [
     ./corrosion.patch
@@ -28,7 +29,7 @@ flutterPackages.v3_19.buildFlutterApplication rec {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
     sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-tPkLZmHReY1TU2qcY4aGWsQPhLFowrqxTPwmTHZ5fDE=";
+    hash = "sha256-S3Yy0IIMiRUUpFNlLvS1PGwpvxePMB1sO5M6mpm1OgY=";
   };
   cargoRoot = "intiface-engine-flutter-bridge";
 
@@ -50,11 +51,13 @@ flutterPackages.v3_19.buildFlutterApplication rec {
 
   # without this, only the splash screen will be shown and the logs will contain the
   # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`
-  extraWrapProgramArgs = "--chdir $out/app";
+  # Environmental variables don't quite eval outside of hooks so use pname and
+  # version directly.
+  extraWrapProgramArgs = "--chdir $out/app/${pname}";
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
-    cp $out/app/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
+    cp $out/app/$pname/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
   '';
 
   desktopItems = [

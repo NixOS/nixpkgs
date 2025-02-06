@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchFromGitHub
-, nix-update-script
-, runCommand
-, which
-, rustPlatform
-, emscripten
-, Security
-, callPackage
-, linkFarm
-, substitute
-, CoreServices
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? stdenv.hostPlatform.isStatic
-, webUISupport ? false
-, extraGrammars ? { }
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchFromGitHub,
+  nix-update-script,
+  runCommand,
+  which,
+  rustPlatform,
+  emscripten,
+  callPackage,
+  linkFarm,
+  substitute,
+  installShellFiles,
+  buildPackages,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  webUISupport ? false,
+  extraGrammars ? { },
 
-# tests
-, lunarvim
+  # tests
+  lunarvim,
 }:
 
 let
@@ -27,33 +28,48 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.23.0";
-  hash = "sha256-QNi2u6/jtiMo1dLYoA8Ev1OvZfa8mXCMibSD70J4vVI=";
+  version = "0.24.6";
+  hash = "sha256-L7F2/S22knqEdB2hxfqLe5Tcgk0WQqBdFQ7BvHFl4EI=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit hash;
     fetchSubmodules = true;
   };
 
   update-all-grammars = callPackage ./update.nix { };
 
-  fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
+  fetchGrammar = (
+    v:
+    fetchgit {
+      inherit (v)
+        url
+        rev
+        sha256
+        fetchSubmodules
+        ;
+    }
+  );
 
-  grammars =
-    runCommand "grammars" { } (''
+  grammars = runCommand "grammars" { } (
+    ''
       mkdir $out
-    '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
-      (import ./grammars { inherit lib; }))));
+    ''
+    + (lib.concatStrings (
+      lib.mapAttrsToList (
+        name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n"
+      ) (import ./grammars { inherit lib; })
+    ))
+  );
 
   buildGrammar = callPackage ./grammar.nix { };
 
   builtGrammars =
     let
-      build = name: grammar:
+      build =
+        name: grammar:
         buildGrammar {
           language = grammar.language or name;
           inherit version;
@@ -62,17 +78,59 @@ let
           generate = grammar.generate or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
-      grammars = grammars' //
-        { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
-        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
-        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
-        { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
-        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
-        { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
-        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; };
+      grammars =
+        grammars'
+        // {
+          tree-sitter-latex = grammars'.tree-sitter-latex // {
+            generate = true;
+          };
+        }
+        // {
+          tree-sitter-ocaml = grammars'.tree-sitter-ocaml // {
+            location = "grammars/ocaml";
+          };
+        }
+        // {
+          tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // {
+            location = "grammars/interface";
+          };
+        }
+        // {
+          tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // {
+            language = "tree-sitter-org";
+          };
+        }
+        // {
+          tree-sitter-typescript = grammars'.tree-sitter-typescript // {
+            location = "typescript";
+          };
+        }
+        // {
+          tree-sitter-tsx = grammars'.tree-sitter-typescript // {
+            location = "tsx";
+          };
+        }
+        // {
+          tree-sitter-markdown = grammars'.tree-sitter-markdown // {
+            location = "tree-sitter-markdown";
+          };
+        }
+        // {
+          tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // {
+            language = "tree-sitter-markdown_inline";
+            location = "tree-sitter-markdown-inline";
+          };
+        }
+        // {
+          tree-sitter-php = grammars'.tree-sitter-php // {
+            location = "php";
+          };
+        }
+        // {
+          tree-sitter-sql = grammars'.tree-sitter-sql // {
+            generate = true;
+          };
+        };
     in
     lib.mapAttrs build (grammars);
 
@@ -83,26 +141,27 @@ let
   # pkgs.tree-sitter.withPlugins (_: allGrammars)
   # which is equivalent to
   # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
-  withPlugins = grammarFn:
+  withPlugins =
+    grammarFn:
     let
       grammars = grammarFn builtGrammars;
     in
-    linkFarm "grammars"
-      (map
-        (drv:
-          let
-            name = lib.strings.getName drv;
-          in
-          {
-            name =
-              (lib.strings.replaceStrings [ "-" ] [ "_" ]
-                (lib.strings.removePrefix "tree-sitter-"
-                  (lib.strings.removeSuffix "-grammar" name)))
-              + ".so";
-            path = "${drv}/parser";
-          }
-        )
-        grammars);
+    linkFarm "grammars" (
+      map (
+        drv:
+        let
+          name = lib.strings.getName drv;
+        in
+        {
+          name =
+            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
+              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
+            ))
+            + ".so";
+          path = "${drv}/parser";
+        }
+      ) grammars
+    );
 
   allGrammars = builtins.attrValues builtGrammars;
 
@@ -111,28 +170,20 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-H4baEmGsQx+W9EXblt8R1CTYfkgR+dQDAsIwPVsqR68=";
+  cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
-  nativeBuildInputs =
-    [ which ]
-    ++ lib.optionals webUISupport [ emscripten ];
+  buildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
 
-  patches = lib.optionals webUISupport [
+  patches = lib.optionals (!webUISupport) [
     (substitute {
-      src = ./fix-paths.patch;
-      substitutions = [ "--subst-var-by" "emcc" "${emscripten}/bin/emcc" ];
+      src = ./remove-web-interface.patch;
     })
   ];
 
-  postPatch = lib.optionalString (!webUISupport) ''
-    # remove web interface
-    sed -e '/pub mod playground/d' \
-        -i cli/src/lib.rs
-    sed -e 's/playground,//' \
-        -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
-        -i cli/src/main.rs
+  postPatch = lib.optionalString webUISupport ''
+    substituteInPlace cli/loader/src/lib.rs \
+        --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
@@ -144,11 +195,24 @@ rustPlatform.buildRustPackage {
     bash ./script/build-wasm --debug
   '';
 
-  postInstall = ''
-    PREFIX=$out make install
-    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
-    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
-  '';
+  postInstall =
+    ''
+      PREFIX=$out make install
+      ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+      ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd tree-sitter \
+        --bash <("$out/bin/tree-sitter" complete --shell bash) \
+        --zsh <("$out/bin/tree-sitter" complete --shell zsh) \
+        --fish <("$out/bin/tree-sitter" complete --shell fish)
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd tree-sitter \
+        --bash "${buildPackages.tree-sitter}"/share/bash-completion/completions/*.bash \
+        --zsh "${buildPackages.tree-sitter}"/share/zsh/site-functions/* \
+        --fish "${buildPackages.tree-sitter}"/share/fish/*/*
+    '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
   doCheck = false;
@@ -157,7 +221,13 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+    inherit
+      grammars
+      buildGrammar
+      builtGrammars
+      withPlugins
+      allGrammars
+      ;
 
     updateScript = nix-update-script { };
 
@@ -169,7 +239,7 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
@@ -185,7 +255,10 @@ rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      Profpatsch
+      uncenter
+    ];
   };
 }

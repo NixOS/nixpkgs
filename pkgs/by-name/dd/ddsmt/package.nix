@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 let
@@ -30,6 +31,6 @@ python3Packages.buildPythonApplication {
     description = "Delta debugger for SMT benchmarks in SMT-LIB v2";
     homepage = "https://ddsmt.readthedocs.io/";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

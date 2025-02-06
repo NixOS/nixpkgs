@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "celery";
     repo = "billiard";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9LuAlIn6hNiZGvWuaaDQxx9g0aBVF6Z2krxEOrssqRs=";
   };
 
@@ -30,6 +30,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "billiard" ];
+
+  disabledTests = [
+    # time sensitive
+    "test_on_ready_counter_is_synchronized"
+  ];
 
   meta = {
     description = "Python multiprocessing fork with improvements and bugfixes";

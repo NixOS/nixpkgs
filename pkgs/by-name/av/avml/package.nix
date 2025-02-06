@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "avml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MIqQ5NRWAfXm7AblsKCrUiaYN5IGUo2jWJMJZL+w3V4=";
   };
 

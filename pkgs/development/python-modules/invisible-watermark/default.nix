@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  opencv4,
+  opencv-python,
   torch,
   onnx,
   onnxruntime,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [
-      opencv4
+      opencv-python
       torch
       pillow
       pywavelets
@@ -42,8 +42,6 @@ buildPythonPackage rec {
     ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'opencv-python>=4.1.0.25' 'opencv'
     substituteInPlace imwatermark/rivaGan.py --replace \
       'You can install it with pip: `pip install onnxruntime`.' \
       'You can install it with an override: `python3Packages.invisible-watermark.override { withOnnx = true; };`.'

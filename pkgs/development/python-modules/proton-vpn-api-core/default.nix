@@ -2,12 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cryptography,
   setuptools,
+  jinja2,
   proton-core,
-  proton-vpn-connection,
-  proton-vpn-logger,
-  proton-vpn-killswitch,
-  proton-vpn-session,
+  pynacl,
+  aiohttp,
+  pyopenssl,
+  pytest-asyncio,
+  requests,
   sentry-sdk,
   distro,
   pytestCheckHook,
@@ -16,36 +19,47 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.32.2";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-n4TZkp2ZMSJ1w1wQUMsAhX8kmWu59udlsXXEhIM83mI=";
+    hash = "sha256-1GmLrX3FLwPoj+RGzPxzw1O7Q7r5M1coJelPhn2CTLI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
+    cryptography
     distro
+    jinja2
+    pynacl
     proton-core
-    proton-vpn-connection
-    proton-vpn-logger
-    proton-vpn-killswitch
-    proton-vpn-session
     sentry-sdk
   ];
 
-  pythonImportsCheck = [ "proton.vpn.core" ];
+  pythonImportsCheck = [
+    "proton.vpn.core"
+    "proton.vpn.connection"
+    "proton.vpn.killswitch.interface"
+    "proton.vpn.logging"
+    "proton.vpn.session"
+  ];
 
   nativeCheckInputs = [
+    aiohttp
+    pyopenssl
+    pytest-asyncio
+    requests
     pytestCheckHook
     pytest-cov-stub
   ];
 
-  preCheck = ''
+  postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
   '';
@@ -53,6 +67,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Permission denied: '/run'
     "test_ensure_configuration_file_is_created"
+    "test_ovpnconfig_with_certificate"
     "test_ovpnconfig_with_settings"
     "test_wireguard_config_content_generation"
     "test_wireguard_with_non_certificate"
@@ -65,6 +80,10 @@ buildPythonPackage rec {
     description = "Acts as a facade to the other Proton VPN components, exposing a uniform API to the available Proton VPN services";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-api-core";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ sebtm ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

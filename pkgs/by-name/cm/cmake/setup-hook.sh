@@ -57,9 +57,6 @@ cmakeConfigurePhase() {
     # because we usually do not package the framework
     prependToVar cmakeFlags "-DCMAKE_FIND_FRAMEWORK=LAST"
 
-    # we never want to use the global macOS SDK
-    prependToVar cmakeFlags "-DCMAKE_OSX_SYSROOT="
-
     # correctly detect our clang compiler
     prependToVar cmakeFlags "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
 

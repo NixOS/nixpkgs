@@ -12,6 +12,8 @@
   requests,
 
   # tests
+  langchain-openai,
+  openai,
   pyfakefs,
   pytestCheckHook,
   pytest-mock,
@@ -20,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.34.0";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pbOm1aTHtIAwk/TJ5CCT9/CqSTuHTWkRgJuflObkU54=";
+    tag = "v${version}";
+    hash = "sha256-mKytUMPipee/sg5VWBTfCg0sZwNg69pI+Uuqu1EhNIc=";
   };
 
   build-system = [
@@ -44,6 +46,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    langchain-openai
+    openai
     pyfakefs
     pytestCheckHook
     pytest-mock
@@ -78,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

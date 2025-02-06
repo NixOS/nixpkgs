@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AXBhCe7AvhQkGZaLMTGExwgUYQGdRkk14Rtceugexag=";
   };
 

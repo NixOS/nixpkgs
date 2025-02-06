@@ -6,12 +6,12 @@
 }:
 let
   pname = "bazecor";
-  version = "1.5.1";
+  version = "1.6.3";
   src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-Vnbyq6NVJ/QtDqXT6IY/sjqsWqxs34C+ibebbx8Vp4E=";
+      hash = "sha256-wlPuQGfMq3rHWHMZ30xm5MGWu/ddnajz7GM3QUSrZPo=";
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370
@@ -41,7 +41,7 @@ appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/bazecor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
     install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps

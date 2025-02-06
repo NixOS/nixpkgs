@@ -153,6 +153,8 @@ in
         '';
       };
 
+      package = lib.mkPackageOption pkgs "keepalived" { };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -308,7 +310,7 @@ in
 
     systemd.timers.keepalived-boot-delay = {
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       timerConfig = {
@@ -321,7 +323,7 @@ in
       finalConfigFile = if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
     in {
       description = "Keepalive Daemon (LVS and VRRP)";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {
         Type = "forking";
@@ -334,7 +336,7 @@ in
           umask 077
           ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
         '');
-        ExecStart = "${pkgs.keepalived}/sbin/keepalived"
+        ExecStart = "${lib.getExe cfg.package}"
           + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";

@@ -4,23 +4,33 @@
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
+  postgresql,
 }:
 buildGoModule rec {
   pname = "headscale";
-  version = "0.23.0";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    hash = "sha256-5tlnVNpn+hJayxHjTpbOO3kRInOYOFz0pe9pwjXZlBE=";
+    hash = "sha256-LNTXXzCly0FMriS+J6VhSbvRmo7ILKOjNmfgp3h4SYo=";
   };
 
-  vendorHash = "sha256-+8dOxPG/Q+wuHgRwwWqdphHOuop0W9dVyClyQuh7aRc=";
+  vendorHash = "sha256-SBfeixT8DQOrK2SWmHHSOBtzRdSZs+pwomHpw6Jd+qc=";
 
-  ldflags = ["-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"];
+  subPackages = [ "cmd/headscale" ];
 
-  nativeBuildInputs = [installShellFiles];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ postgresql ];
+
   checkFlags = ["-short"];
 
   postInstall = ''
@@ -30,7 +40,7 @@ buildGoModule rec {
       --zsh <($out/bin/headscale completion zsh)
   '';
 
-  passthru.tests = {inherit (nixosTests) headscale;};
+  passthru.tests = { inherit (nixosTests) headscale; };
 
   meta = with lib; {
     homepage = "https://github.com/juanfont/headscale";
@@ -53,6 +63,9 @@ buildGoModule rec {
     '';
     license = licenses.bsd3;
     mainProgram = "headscale";
-    maintainers = with maintainers; [nkje jk kradalby misterio77 ghuntley];
+    maintainers = with maintainers; [
+      kradalby
+      misterio77
+    ];
   };
 }

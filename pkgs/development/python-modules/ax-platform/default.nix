@@ -1,34 +1,41 @@
 {
   lib,
+  botorch,
   buildPythonPackage,
   fetchFromGitHub,
-  botorch,
+  hypothesis,
   ipywidgets,
   jinja2,
+  jupyter,
+  mercurial,
   pandas,
   plotly,
-  setuptools,
-  setuptools-scm,
-  typeguard,
-  hypothesis,
-  mercurial,
   pyfakefs,
-  pytestCheckHook,
-  yappi,
   pyre-extensions,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  sqlalchemy,
+  typeguard,
+  yappi,
 }:
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ygMMMKY5XsoQGp9yUMFAQqkSUlXNBJCb8xgGE10db4U=";
+    tag = version;
+    hash = "sha256-jmBjrtxqg4Iu3Qr0HRqjVfwURXzbJaGm+DBFNHYk/vA=";
   };
+
+  env.ALLOW_BOTORCH_LATEST = "1";
 
   build-system = [
     setuptools
@@ -45,7 +52,10 @@ buildPythonPackage rec {
     pyre-extensions
   ];
 
-  env.ALLOW_BOTORCH_LATEST = "1";
+  optional-dependencies = {
+    mysql = [ sqlalchemy ];
+    notebook = [ jupyter ];
+  };
 
   nativeCheckInputs = [
     hypothesis
@@ -53,20 +63,23 @@ buildPythonPackage rec {
     pyfakefs
     pytestCheckHook
     yappi
-  ];
-  pytestFlagsArray = [
-    "--ignore=ax/benchmark"
-    "--ignore=ax/runners/tests/test_torchx.py"
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  disabledTestPaths = [
+    "ax/benchmark"
+    "ax/runners/tests/test_torchx.py"
     # requires pyre_extensions
-    "--ignore=ax/telemetry/tests"
-    "--ignore=ax/core/tests/test_utils.py"
-    "--ignore=ax/early_stopping/tests/test_strategies.py"
+    "ax/telemetry/tests"
+    "ax/core/tests/test_utils.py"
+    "ax/early_stopping/tests/test_strategies.py"
     # broken with sqlalchemy 2
-    "--ignore=ax/service/tests/test_ax_client.py"
-    "--ignore=ax/service/tests/test_scheduler.py"
-    "--ignore=ax/service/tests/test_with_db_settings_base.py"
-    "--ignore=ax/storage"
+    "ax/core/tests/test_experiment.py"
+    "ax/service/tests/test_ax_client.py"
+    "ax/service/tests/test_scheduler.py"
+    "ax/service/tests/test_with_db_settings_base.py"
+    "ax/storage"
   ];
+
   disabledTests = [
     # exact comparison of floating points
     "test_optimize_l0_homotopy"
@@ -77,13 +90,14 @@ buildPythonPackage rec {
     # uses torch.equal
     "test_convert_observations"
   ];
+
   pythonImportsCheck = [ "ax" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/facebook/Ax/releases/tag/${version}";
-    description = "Ax is an accessible, general-purpose platform for understanding, managing, deploying, and automating adaptive experiments";
+  meta = {
+    description = "Platform for understanding, managing, deploying, and automating adaptive experiments";
     homepage = "https://ax.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/facebook/Ax/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

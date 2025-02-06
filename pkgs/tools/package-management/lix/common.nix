@@ -1,21 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  version,
   suffix ? "",
-  hash ? null,
-  src ? fetchFromGitHub {
-    owner = "lix-project";
-    repo = "lix";
-    rev = version;
-    inherit hash;
-  },
-  docCargoHash ? null,
-  docCargoLock ? null,
+  version,
+  src,
+  docCargoDeps,
   patches ? [ ],
   maintainers ? lib.teams.lix.members,
 }@args:
-assert (hash == null) -> (src != null);
 {
   stdenv,
   meson,
@@ -60,8 +52,7 @@ assert (hash == null) -> (src != null);
   lix-doc ? callPackage ./doc {
     inherit src;
     version = "${version}${suffix}";
-    cargoHash = docCargoHash;
-    cargoLock = docCargoLock;
+    cargoDeps = docCargoDeps;
   },
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
@@ -76,8 +67,6 @@ assert (hash == null) -> (src != null);
   stateDir,
   storeDir,
 }:
-assert lib.assertMsg (docCargoHash != null || docCargoLock != null)
-  "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
 let
   isLegacyParser = lib.versionOlder version "2.91";
 in
@@ -169,7 +158,7 @@ stdenv.mkDerivation {
       rm -f $out/lib/*.a
       ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
-        patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+        patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
       ''}
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         for LIB in $out/lib/*.dylib; do
@@ -190,12 +179,14 @@ stdenv.mkDerivation {
     [
       # Enable LTO, since it improves eval performance a fair amount
       # LTO is disabled on static due to strange linking errors
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic))
+      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && stdenv.cc.isGNU))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
       (lib.mesonEnable "internal-api-docs" enableDocumentation)
-      (lib.mesonBool "enable-embedded-sandbox-shell" (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic))
+      (lib.mesonBool "enable-embedded-sandbox-shell" (
+        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+      ))
       (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
 
       (lib.mesonOption "store-dir" storeDir)
@@ -265,13 +256,14 @@ stdenv.mkDerivation {
     meson test --no-rebuild "''${flagsArray[@]}"
     runHook postInstallCheck
   '';
-  hardeningDisable = [
-    "shadowstack"
-    # strictoverflow is disabled because we trap on signed overflow instead
-    "strictoverflow"
-  ]
-  # fortify breaks the build with lto and musl for some reason
-  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable =
+    [
+      "shadowstack"
+      # strictoverflow is disabled because we trap on signed overflow instead
+      "strictoverflow"
+    ]
+    # fortify breaks the build with lto and musl for some reason
+    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;

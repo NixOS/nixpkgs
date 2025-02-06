@@ -11,23 +11,23 @@
 
 buildGoModule rec {
   pname = "kyverno-chainsaw";
-  version = "0.2.8";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
     rev = "v${version}";
-    hash = "sha256-elszVinOGL4IbMNK3RTtzJPRRqs7qgqITQqj0g/wyk8=";
+    hash = "sha256-BxSJu71/KhVtWEOw2V+nteZnvyyoGvrbWQmHGqDtLa0=";
   };
 
-  vendorHash = "sha256-HDmnI+WVv4cUia+IXrBdFBFnrxKMSFjKD6LUZ393sqs=";
+  vendorHash = "sha256-zB2HkY8ryPWln0HcKZPMCSKUnbCh/2UivteN6danNJU=";
+
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildHash=${version}"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

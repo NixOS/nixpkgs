@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "khdlr";
     repo = "augmax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FXgkhZEAR1Y2LvVvV+IWMSQDWrLulLDsSKKuw4ER5wg=";
   };
 

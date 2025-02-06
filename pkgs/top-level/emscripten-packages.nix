@@ -66,10 +66,9 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
-        ./.libs/''
-      + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin "libxml2.dylib "
-      + pkgs.lib.optionalString (!pkgs.stdenv.hostPlatform.isDarwin) "libxml2.a "
-      + '' `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
+        ./.libs/${
+          if pkgs.stdenv.hostPlatform.isDarwin then "libxml2.dylib" else "libxml2.a"
+        } `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
         --embed-file ./test/xmlid/id_err1.xml
 
         echo "Using node to execute the test which basically outputs an error on stderr which we grep for"

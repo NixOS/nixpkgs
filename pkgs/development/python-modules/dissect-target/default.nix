@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.19";
+  version = "3.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
-    rev = "refs/tags/${version}";
-    hash = "sha256-D5YgCAKcnPyBrZTpcSuvKfWfIIcCxKGxn+mj8Jqzmws=";
+    tag = version;
+    hash = "sha256-/7pXOyhhFAKZJYgeW8QLriSicR1mB8pwK8EHkTz0Gko=";
   };
 
   postPatch = ''

@@ -10,27 +10,27 @@
   openssl,
   libepoxy,
   wrapGAppsHook4,
-  makeDesktopItem,
-  copyDesktopItems,
   stdenv,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tsukimi";
-  version = "0.12.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
-    rev = "v${version}";
-    hash = "sha256-pJ+SUNGQS/kqBdOg21GgDeZThcjnB0FhgG00qLfqxYA=";
+    tag = "v${version}";
+    hash = "sha256-5hOOIkH0VhZwlsNKAyOI714ueGcSMagoLGi5ECfqXk4=";
+    fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-PCJiSyfEgK8inzoRmRvnAU50kLnyVhNrgLrwtBUFpIU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rgTrPJydS4685BlSEwNvmEajZEksqQicscOq/Uu9JJ4=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
-    copyDesktopItems
   ];
 
   buildInputs =
@@ -52,32 +52,24 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # tests require networking
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Tsukimi";
-      exec = "tsukimi";
-      type = "Application";
-      icon = "tsukimi";
-      categories = [ "AudioVideo" ];
-      startupWMClass = "moe.tsuna.tsukimi";
-      desktopName = "Tsukimi";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace build.rs \
       --replace-fail 'i18n/locale' "$out/share/locale"
 
-    substituteInPlace src/main.rs \
+    substituteInPlace src/lib.rs \
       --replace-fail '/usr/share/locale' "$out/share/locale"
   '';
 
   postInstall = ''
-    install -Dm644 moe.tsuna.tsukimi.gschema.xml -t $out/share/glib-2.0/schemas
+    install -Dm644 resources/moe.tsuna.tsukimi.gschema.xml -t $out/share/glib-2.0/schemas
     glib-compile-schemas $out/share/glib-2.0/schemas
 
-    install -Dm644 resources/ui/icons/tsukimi.png -t $out/share/pixmaps
+    install -Dm644 resources/icons/tsukimi.png -t $out/share/pixmaps
+
+    install -Dm644 resources/moe.tsuna.tsukimi.desktop.in $out/share/applications/moe.tsuna.tsukimi.desktop
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple third-party Emby client, featured with GTK4-RS, MPV and GStreamer";
@@ -89,8 +81,5 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
-    # libmpv2 crate fail to compile
-    # expected raw pointer `*const u8` found raw pointer `*const i8`
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

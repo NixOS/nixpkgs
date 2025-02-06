@@ -7,11 +7,14 @@
   cymem,
   cython_0,
   fetchPypi,
+  git,
   hypothesis,
   jinja2,
   langcodes,
   mock,
   murmurhash,
+  nix-update,
+  nix,
   numpy,
   packaging,
   preshed,
@@ -22,6 +25,8 @@
   setuptools,
   spacy-legacy,
   spacy-loggers,
+  spacy-lookups-data,
+  spacy-transformers,
   srsly,
   thinc,
   tqdm,
@@ -29,27 +34,24 @@
   wasabi,
   weasel,
   writeScript,
-  nix,
-  git,
-  nix-update,
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.2";
+  version = "3.8.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Szfr0lraQFmw3J4Ik+cN3l34NIUymgaO8EWA5wiSpl0=";
+    hash = "sha256-galn3D1qWgqaslBVlIP+IJIwZYKpGS+Yvnpjvc4nl/c=";
   };
 
   postPatch = ''
-    # spaCy is compatible with NumPy v1 and v2
+    # unpin numpy, cannot use pythonRelaxDeps because it's in build-system
     substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "numpy>=2.0.0,<2.1.0" numpy
+      --replace-fail ",<2.1.0" ""
   '';
 
   build-system = [
@@ -57,12 +59,11 @@ buildPythonPackage rec {
     cython_0
     murmurhash
     numpy
+    preshed
     thinc
   ];
 
-  pythonRelaxDeps = [
-    "thinc"
-  ];
+  pythonRelaxDeps = [ "thinc" ];
 
   dependencies = [
     catalogue
@@ -91,6 +92,11 @@ buildPythonPackage rec {
     hypothesis
     mock
   ];
+
+  optional-dependencies = {
+    transformers = [ spacy-transformers ];
+    lookups = [ spacy-lookups-data ];
+  };
 
   # Fixes ModuleNotFoundError when running tests on Cythonized code. See #255262
   preCheck = ''
@@ -130,10 +136,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
-    mainProgram = "spacy";
     homepage = "https://github.com/explosion/spaCy";
     changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "spacy";
   };
 }

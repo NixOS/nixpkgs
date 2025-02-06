@@ -6,7 +6,9 @@
   craft-cli,
   craft-grammar,
   craft-parts,
+  craft-platforms,
   craft-providers,
+  jinja2,
   fetchFromGitHub,
   git,
   hypothesis,
@@ -23,11 +25,12 @@
   responses,
   setuptools-scm,
   snap-helpers,
+  freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.2.5";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -35,13 +38,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Y/Eci0ByE1HxUcxWhpQq0F2Ef1xkXZMBDGmUSIyPKII=";
+    tag = version;
+    hash = "sha256-ywGXzcnWYynmDXjDbSpzn8SroQ7z5fajhlE3JqI3PNk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==74.1.1" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];
@@ -56,7 +59,9 @@ buildPythonPackage rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
+    jinja2
     license-expression
     pygit2
     pyyaml
@@ -64,6 +69,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     git
     hypothesis
     pyfakefs
@@ -97,6 +103,10 @@ buildPythonPackage rec {
       "test_to_yaml_file"
       # Tests expecting pytest-time
       "test_monitor_builds_success"
+      # Temporary fix until new release to support Python 3.13
+      "test_grammar_aware_part_error"
+      "test_grammar_aware_part_error[part2]"
+      "test_grammar_aware_project_error[project0]"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64

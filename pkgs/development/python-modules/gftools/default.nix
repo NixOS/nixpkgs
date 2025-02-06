@@ -61,14 +61,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.71";
+  version = "0.9.77";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YVuTozuONZbBtrst4Q+NmHxqEZa/YPVRMiagjmjcW9U=";
+    tag = "v${version}";
+    hash = "sha256-j3UeycBq04jy6uKd7HY+wLlmYAbjYbot630qRy/vG60=";
   };
 
   postPatch = ''
@@ -114,6 +114,8 @@ buildPythonPackage rec {
       --replace-fail "'gftools" "'${placeholder "out"}t/bin/gftools"
   '';
 
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
   pythonRelaxDeps = [
     "protobuf"
     "pygit2"
@@ -124,47 +126,50 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    absl-py
-    afdko
-    axisregistry
-    babelfont
-    beautifulsoup4
-    brotli
-    bumpfontversion
-    font-v
-    fontfeatures
-    fontmake
-    fonttools
-    gflanguages
-    gfsubsets
-    glyphsets
-    glyphslib
-    jinja2
-    nanoemoji
-    networkx
-    ninja
-    ots-python
-    packaging
-    pillow
-    protobuf
-    pygit2
-    pygithub
-    pyyaml
-    requests
-    rich
-    ruamel-yaml
-    setuptools
-    skia-pathops
-    statmake
-    strictyaml
-    tabulate
-    ttfautohint-py
-    ufomerge
-    unidecode
-    vharfbuzz
-    vttlib
-  ] ++ fonttools.optional-dependencies.ufo ++ fontmake.optional-dependencies.json;
+  dependencies =
+    [
+      absl-py
+      afdko
+      axisregistry
+      babelfont
+      beautifulsoup4
+      brotli
+      bumpfontversion
+      font-v
+      fontfeatures
+      fontmake
+      fonttools
+      gflanguages
+      gfsubsets
+      glyphsets
+      glyphslib
+      jinja2
+      nanoemoji
+      networkx
+      ninja
+      ots-python
+      packaging
+      pillow
+      protobuf
+      pygit2
+      pygithub
+      pyyaml
+      requests
+      rich
+      ruamel-yaml
+      setuptools
+      skia-pathops
+      statmake
+      strictyaml
+      tabulate
+      ttfautohint-py
+      ufomerge
+      unidecode
+      vharfbuzz
+      vttlib
+    ]
+    ++ fonttools.optional-dependencies.ufo
+    ++ fontmake.optional-dependencies.json;
 
   optional-dependencies = {
     qa = [

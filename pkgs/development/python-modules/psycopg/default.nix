@@ -12,7 +12,6 @@
   setuptools,
 
   # propagates
-  backports-zoneinfo,
   typing-extensions,
 
   # psycopg-c
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Udysl00lB6rxmQByME6PI3KL4tlzIZ0/CZNWLVKssS8=";
+    tag = version;
+    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
   };
 
   patches = [
@@ -153,7 +152,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   pythonImportsCheck = [
     "psycopg"
@@ -211,8 +210,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o"
-    "cache_dir=$TMPDIR"
+    "-o cache_dir=.cache"
     "-m"
     "'not refcount and not timing and not flakey'"
     # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect

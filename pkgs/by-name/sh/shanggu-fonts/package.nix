@@ -23,24 +23,29 @@ let
         Sans = "sha256-x5z6GYsfQ+8a8W0djJTY8iutuLNYvaemIpdYh94krk0=";
         Serif = "sha256-3WK7vty3zZFNKkwViEsozU3qa+5hymYwXk6ta9AxmNM=";
       };
+
+  extraOutputs = builtins.attrNames source;
 in
 stdenvNoCC.mkDerivation {
   pname = "shanggu-fonts";
   inherit version;
 
-  outputs = [ "out" ] ++ builtins.attrNames source;
+  outputs = [ "out" ] ++ extraOutputs;
 
   nativeBuildInputs = [ p7zip ];
 
-  unpackPhase = ''
-    runHook preUnpack
-  '' + lib.strings.concatLines (
-    lib.attrsets.mapAttrsToList (name: value: ''
-      7z x ${value} -o${name}
-    '') source
-  ) + ''
-    runHook postUnpack
-  '';
+  unpackPhase =
+    ''
+      runHook preUnpack
+    ''
+    + lib.strings.concatLines (
+      lib.attrsets.mapAttrsToList (name: value: ''
+        7z x ${value} -o${name}
+      '') source
+    )
+    + ''
+      runHook postUnpack
+    '';
 
   installPhase =
     ''
@@ -49,14 +54,12 @@ stdenvNoCC.mkDerivation {
       mkdir -p $out/share/fonts/truetype
     ''
     + lib.strings.concatLines (
-      lib.lists.forEach (builtins.attrNames source) (
-        name: (''
-          install -Dm444 ${name}/*.ttc -t $'' + name + ''/share/fonts/truetype
-          ln -s $'' + name + ''/share/fonts/truetype/*.ttc $out/share/fonts/truetype
-          ''
-        )
-      )
-    ) + ''
+      lib.lists.forEach extraOutputs (name: ''
+        install -Dm444 ${name}/*.ttc -t ${placeholder name}/share/fonts/truetype
+        ln -s "${placeholder name}" /share/fonts/truetype/*.ttc $out/share/fonts/truetype
+      '')
+    )
+    + ''
       runHook postInstall
     '';
 

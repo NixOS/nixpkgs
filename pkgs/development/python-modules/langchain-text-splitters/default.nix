@@ -17,23 +17,21 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.0";
+  version = "0.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-Z0UAUhOjC0wgCY/f1aWsnjFyOPYz/6JnloEKT6b6Ii0=";
+    tag = "langchain-text-splitters==${version}";
+    hash = "sha256-2IoNUixZ/+o6ONJpqFa3Z5CLpxj6b6z8dh89kxh2rP4=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    langchain-core
-  ];
+  dependencies = [ langchain-core ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
@@ -54,6 +52,9 @@ buildPythonPackage rec {
     description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      sarahec
+    ];
   };
 }

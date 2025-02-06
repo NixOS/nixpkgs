@@ -1,6 +1,5 @@
 {
   stdenv,
-  darwin,
   lib,
   fetchFromGitHub,
   cmake,
@@ -90,8 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
-    ++ lib.optional enableVncRenderer libvncserver
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.libs.xpc;
+    ++ lib.optional enableVncRenderer libvncserver;
 
   cmakeFlags =
     lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"

@@ -22,17 +22,18 @@
 }@packageSetArgs:
 let
   versions = {
+    "12.0.1".officialRelease.sha256 = "08s5w2db9imb2yaqsvxs6pg21csi1cf6wa35rf8x6q07mam7j8qv";
     "13.0.1".officialRelease.sha256 = "06dv6h5dmvzdxbif2s8njki6h32796v368dyb5945x8gjj72xh7k";
     "14.0.6".officialRelease.sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE=";
     "15.0.7".officialRelease.sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s=";
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.1".officialRelease.sha256 = "sha256-xTo44+vH1Bz49fEl4bIpU3eIgQtFuBTGbgU7mzeY33s=";
+    "19.1.6".officialRelease.sha256 = "sha256-LD4nIjZTSZJtbgW6tZopbTF5Mq0Tenj2gbuPXhtOeUI=";
     "20.0.0-git".gitRelease = {
-      rev = "0e8555d4dbfdfeddc01dc2ecf9a9b6e804f7b645";
-      rev-version = "20.0.0-unstable-2024-10-07";
-      sha256 = "sha256-Rn8TkTUJKGFZ7uM1RiFOHIDTfpwEhLDpDh1zxVtTYG8=";
+      rev = "6383a12e3b4339fa4743bb97da4d51dea6d2e2ea";
+      rev-version = "20.0.0-unstable-2025-01-25";
+      sha256 = "sha256-LMew+lFm+HrR5iwFDnoXA6B2LiU/pVqsy1YrP9xr5GU=";
     };
   } // llvmVersions;
 
@@ -63,7 +64,9 @@ let
             inherit (stdenvAdapters) overrideCC;
             buildLlvmTools = buildPackages."llvmPackages_${attrName}".tools;
             targetLlvmLibraries =
-              targetPackages."llvmPackages_${attrName}".libraries or llvmPackages."${attrName}".libraries;
+              # Allow overriding targetLlvmLibraries; this enables custom runtime builds.
+              packageSetArgs.targetLlvmLibraries or targetPackages."llvmPackages_${attrName}".libraries
+                or llvmPackages."${attrName}".libraries;
             targetLlvm = targetPackages."llvmPackages_${attrName}".llvm or llvmPackages."${attrName}".llvm;
             inherit
               officialRelease

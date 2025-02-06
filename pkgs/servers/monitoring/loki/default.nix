@@ -10,14 +10,14 @@
 }:
 
 buildGoModule rec {
-  version = "3.2.0";
+  version = "3.3.2";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-dche8MbVSlwKMD/znOCj80FNf5KZmEuI3uodrFLrmjM=";
+    hash = "sha256-Xz8157x6cjKbQWyJUYPcOixYMfWr5QzVfxAXEFQxY9w=";
   };
 
   vendorHash = null;
@@ -65,6 +65,6 @@ buildGoModule rec {
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
-    maintainers = with maintainers; [ willibutz globin mmahut emilylange ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ];
   };
 }

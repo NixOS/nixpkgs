@@ -12,13 +12,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "1.0.4";
+    version = "1.1.1";
 
     src = fetchFromGitHub {
       owner = "arduino";
-      repo = pname;
+      repo = "arduino-cli";
       rev = "refs/tags/v${version}";
-      hash = "sha256-0a2YlgswjiZT1aPO513IZTb/Pba0IydvB0je3e6rN9M=";
+      hash = "sha256-eHDU1aoLBs3vDfFyM23R5wKNbbCmXrUgavP/JcdNCuM=";
     };
 
     nativeBuildInputs = [ installShellFiles ];
@@ -27,7 +27,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-53gQrYgdQ/54+KAQwfUZWebz7Tb1cEt8jGd9PbhS87s=";
+    vendorHash = "sha256-3NG5+2qgCtmMxOmYS0RROoxajNiZorYL8+qXcDu4e+w=";
 
     postPatch =
       let
@@ -94,17 +94,13 @@ if stdenv.hostPlatform.isLinux then
   # toolchains from the internet that have their interpreters pointed at
   # /lib64/ld-linux-x86-64.so.2
   buildFHSEnv {
-    inherit (pkg) name meta;
+    inherit (pkg) pname version meta;
 
     runScript = "${pkg.outPath}/bin/arduino-cli";
 
-    extraInstallCommands =
-      ''
-        mv $out/bin/$name $out/bin/arduino-cli
-      ''
-      + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        cp -r ${pkg.outPath}/share $out/share
-      '';
+    extraInstallCommands = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      cp -r ${pkg.outPath}/share $out/share
+    '';
     passthru.pureGoPkg = pkg;
 
     targetPkgs = pkgs: with pkgs; [ zlib ];

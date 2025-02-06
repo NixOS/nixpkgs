@@ -6,7 +6,8 @@
 }:
 
 buildFHSEnv {
-  name = "heroic";
+  pname = "heroic";
+  inherit (heroic-unwrapped) version;
 
   runScript = "heroic";
 
@@ -25,7 +26,7 @@ buildFHSEnv {
       curl
       gawk
       zenity
-      plasma5Packages.kdialog
+      kdePackages.kdialog
       mangohud
       nettools
       opencl-headers
@@ -44,6 +45,7 @@ buildFHSEnv {
     let
       xorgDeps =
         pkgs: with pkgs.xorg; [
+          libICE
           libpthreadstubs
           libSM
           libX11
@@ -53,11 +55,15 @@ buildFHSEnv {
           libXcursor
           libXdmcp
           libXext
+          libXfixes
           libXi
           libXinerama
           libXmu
           libXrandr
           libXrender
+          libXScrnSaver
+          libXt
+          libXtst
           libXv
           libXxf86vm
         ];
@@ -106,7 +112,7 @@ buildFHSEnv {
       libpulseaudio
       libselinux
       libsndfile
-      libsoup
+      libsoup_2_4
       libtheora
       libtiff
       libunwind

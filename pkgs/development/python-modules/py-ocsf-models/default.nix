@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "py-ocsf-models";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cFtWPO78KRh7IY+ePTzXpLPbZm+EtNvuJkhZZzKKjaA=";
   };
 

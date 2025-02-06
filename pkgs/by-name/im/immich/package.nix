@@ -1,8 +1,8 @@
 {
   lib,
-  stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch2,
   python3,
   nodejs,
   node-gyp,
@@ -17,12 +17,13 @@
   cacert,
   unzip,
   # runtime deps
-  ffmpeg-headless,
+  exiftool,
+  jellyfin-ffmpeg, # Immich depends on the jellyfin customizations, see https://github.com/NixOS/nixpkgs/issues/351943
   imagemagick,
   libraw,
   libheif,
-  vips,
   perl,
+  vips,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
@@ -48,9 +49,15 @@ let
 
   # The geodata website is not versioned, so we use the internet archive
   geodata =
+    let
+      inherit (sources.components.geonames) timestamp;
+      date =
+        "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
+        + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
+    in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-imqSfzXaEMNo9T9tZr80sr/89n19kiFc8qwidFzRUaY=";
+        outputHash = sources.components.geonames.hash;
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -62,21 +69,21 @@ let
       }
       ''
         mkdir $out
-        url="https://web.archive.org/web/20240724153050/http://download.geonames.org/export/dump"
+        url="https://web.archive.org/web/${timestamp}/http://download.geonames.org/export/dump"
         curl -Lo ./cities500.zip "$url/cities500.zip"
         curl -Lo $out/admin1CodesASCII.txt "$url/admin1CodesASCII.txt"
         curl -Lo $out/admin2Codes.txt "$url/admin2Codes.txt"
         curl -Lo $out/ne_10m_admin_0_countries.geojson \
-          https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
+          https://github.com/nvkelso/natural-earth-vector/raw/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
 
         unzip ./cities500.zip -d $out/
-        echo "2024-07-24T15:30:50Z" > $out/geodata-date.txt
+        echo "${date}" > $out/geodata-date.txt
       '';
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit (sources) hash;
   };
 
@@ -101,8 +108,8 @@ let
 
   web = buildNpmPackage' {
     pname = "immich-web";
-    inherit version;
-    src = "${src}/web";
+    inherit version src;
+    sourceRoot = "${src.name}/web";
     inherit (sources.components.web) npmDepsHash;
 
     preBuild = ''
@@ -121,21 +128,6 @@ let
     '';
   };
 
-  node-addon-api = stdenvNoCC.mkDerivation rec {
-    pname = "node-addon-api";
-    version = "8.0.0";
-    src = fetchFromGitHub {
-      owner = "nodejs";
-      repo = "node-addon-api";
-      rev = "v${version}";
-      hash = "sha256-k3v8lK7uaEJvcaj1sucTjFZ6+i5A6w/0Uj9rYlPhjCE=";
-    };
-    installPhase = ''
-      mkdir $out
-      cp -r *.c *.h *.gyp *.gypi index.js package-support.json package.json tools $out/
-    '';
-  };
-
   vips' = vips.overrideAttrs (prev: {
     mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
   });
@@ -146,16 +138,23 @@ buildNpmPackage' {
   src = "${src}/server";
   inherit (sources.components.server) npmDepsHash;
 
+  postPatch = ''
+    # pg_dumpall fails without database root access
+    # see https://github.com/immich-app/immich/issues/13971
+    substituteInPlace src/services/backup.service.ts \
+      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     python3
     makeWrapper
     glib
-    node-gyp
+    node-gyp # for building node_modules/sharp from source
   ];
 
   buildInputs = [
-    ffmpeg-headless
+    jellyfin-ffmpeg
     imagemagick
     libraw
     libheif
@@ -165,18 +164,11 @@ buildNpmPackage' {
   # Required because vips tries to write to the cache dir
   makeCacheWritable = true;
 
+  env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+
   preBuild = ''
-    cd node_modules/sharp
-
-    mkdir node_modules
-    ln -s ${node-addon-api} node_modules/node-addon-api
-
-    ${lib.getExe nodejs} install/check
-
-    rm -r node_modules
-
-    cd ../..
-    rm -r node_modules/@img/sharp*
+    # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
+    rm -r node_modules/exiftool-vendored.*
   '';
 
   installPhase = ''
@@ -184,6 +176,9 @@ buildNpmPackage' {
 
     npm config delete cache
     npm prune --omit=dev
+
+    # remove build artifacts that bloat the closure
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
 
     mkdir -p $out/build
     mv package.json package-lock.json node_modules dist resources $out/
@@ -197,8 +192,9 @@ buildNpmPackage' {
       --set IMMICH_BUILD_DATA $out/build --set NODE_ENV production \
       --suffix PATH : "${
         lib.makeBinPath [
-          perl
-          ffmpeg-headless
+          exiftool
+          jellyfin-ffmpeg
+          perl # exiftool-vendored checks for Perl even if exiftool comes from $PATH
         ]
       }"
 
@@ -222,10 +218,19 @@ buildNpmPackage' {
   };
 
   meta = {
+    changelog = "https://github.com/immich-app/immich/releases/tag/${src.tag}";
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    license = with lib.licenses; [
+      agpl3Only
+      cc-by-40 # geonames
+    ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      jvanbruegge
+      Scrumplex
+      titaniumtown
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "server";
   };

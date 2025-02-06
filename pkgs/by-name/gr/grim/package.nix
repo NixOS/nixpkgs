@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    homepage = "https://github.com/emersion/grim";
+    homepage = "https://sr.ht/~emersion/grim";
     description = "Grab images from a Wayland compositor";
     license = lib.licenses.mit;
     mainProgram = "grim";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    inherit (wayland.meta) platforms;
+    maintainers = with lib.maintainers; [ khaneliman ];
+    platforms = lib.platforms.linux;
   };
 })

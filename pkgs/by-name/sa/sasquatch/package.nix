@@ -23,7 +23,7 @@ let
       hash = "sha256-0itva+j5WMKvueiUaO253UQ1S6W29xgtFvV4i3yvMtU=";
     };
 
-    patches = lib.optional stdenv.isDarwin ./darwin.patch;
+    patches = lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
     strictDeps = true;
     nativeBuildInputs = [ which ];
@@ -51,6 +51,7 @@ let
       "LZO_SUPPORT=1"
       "XZ_SUPPORT=1"
       "ZSTD_SUPPORT=1"
+      "AR:=$(AR)"
     ];
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString bigEndian "-DFIX_BE";

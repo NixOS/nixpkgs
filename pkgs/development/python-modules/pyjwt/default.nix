@@ -5,7 +5,6 @@
   setuptools,
   cryptography,
   pytestCheckHook,
-  pythonOlder,
   sphinxHook,
   sphinx-rtd-theme,
   zope-interface,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.9.0";
+  version = "2.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jpadilla";
     repo = "pyjwt";
-    rev = "refs/tags/${version}";
-    hash = "sha256-z1sqaSeign0ZDFcg94cli0fIVBxcK14VUlgP+mSaxRA=";
+    tag = version;
+    hash = "sha256-BPVythRLpglYtpLEoaC7+Q4l9izYXH2M9JEbxdyQZqU=";
   };
 
   outputs = [

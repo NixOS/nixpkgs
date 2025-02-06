@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Toblerity";
     repo = "Fiona";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-5NN6PBh+6HS9OCc9eC2TcBvkcwtI4DV8qXnz4tlaMXc=";
   };
 

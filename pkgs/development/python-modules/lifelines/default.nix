@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "lifelines";
-  version = "0.29.0";
+  version = "0.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9ZmecbFjUnWGNf4P3yphiMqG+/ktOYyvMtoZ6sEp1xY=";
+    tag = "v${version}";
+    hash = "sha256-rbt0eON8Az5jDvj97RDn3ppWyjbrSa/xumbwhq21g6g=";
   };
 
   propagatedBuildInputs = [

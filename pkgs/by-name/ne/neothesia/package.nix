@@ -1,15 +1,15 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
-, ffmpeg
-, pkg-config
-, alsa-lib
-, wayland
-, makeWrapper
-, llvmPackages
-, libxkbcommon
-, vulkan-loader
-, xorg
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  ffmpeg,
+  pkg-config,
+  alsa-lib,
+  wayland,
+  makeWrapper,
+  libxkbcommon,
+  vulkan-loader,
+  xorg,
 }:
 let
   version = "0.2.1";
@@ -33,8 +33,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    llvmPackages.clang
     makeWrapper
+    rustPlatform.bindgenHook
   ];
 
   cargoLock = {
@@ -49,14 +49,20 @@ rustPlatform.buildRustPackage {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/neothesia --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland libxkbcommon vulkan-loader xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrender ]}"
+    wrapProgram $out/bin/neothesia --prefix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [
+        wayland
+        libxkbcommon
+        vulkan-loader
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrender
+      ]
+    }"
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.desktop $out/share/applications/com.github.polymeilex.neothesia.desktop
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.png $out/share/icons/hicolor/256x256/apps/com.github.polymeilex.neothesia.png
   '';
-
-  env = {
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  };
 
   meta = {
     description = "Flashy Synthesia Like Software For Linux, Windows and macOS";

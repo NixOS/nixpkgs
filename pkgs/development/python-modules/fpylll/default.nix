@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-M3ZnDL0Ui3UAa5Jn/Wr5pAHhghP7EAaQD/sx5QZ58ZQ=";
   };
 

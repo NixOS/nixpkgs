@@ -7,29 +7,33 @@
   curl-impersonate-chrome,
   cffi,
   certifi,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.7.1";
+  version = "0.7.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "yifeikong";
+    owner = "lexiforest";
     repo = "curl_cffi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fVmZ5DKgkjnO1CPYVSa9qei26B0mXqZMtVGhtNGfEpY=";
+    tag = "v${version}";
+    hash = "sha256-Q1VppzQ1Go+ia1D1BemTf40o9wV0miWyoGy/tY+95qE==";
   };
 
   patches = [ ./use-system-libs.patch ];
   buildInputs = [ curl-impersonate-chrome ];
 
-  format = "pyproject";
-  build-system = [ setuptools ];
+  build-system = [
+    cffi
+    setuptools
+  ];
 
-  nativeBuildInputs = [ cffi ];
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     certifi
+    typing-extensions
   ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {

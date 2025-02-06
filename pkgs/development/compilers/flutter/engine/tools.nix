@@ -1,12 +1,12 @@
 {
   stdenv,
+  buildPlatform,
+  hostPlatform,
   callPackage,
   fetchgit,
   fetchurl,
   writeText,
   runCommand,
-  buildPlatform,
-  hostPlatform,
   darwin,
   writeShellScriptBin,
   depot_toolsCommit ? "7d95eb2eb054447592585c73a8ff7adad97ecba1",
@@ -73,6 +73,10 @@ in
 
             sed -i 's/''${platform}/${host-constants.platform}/g' "$ensureFile"
             sed -i 's/gn\/gn\/${stdenv-constants.platform}/gn\/gn\/${constants.platform}/g' "$ensureFile"
+
+            if grep flutter/java/openjdk "$ensureFile" >/dev/null; then
+              sed -i '/src\/flutter\/third_party\/java\/openjdk/,+2 d' "$ensureFile"
+            fi
           else
             params="$params $1"
             shift 1

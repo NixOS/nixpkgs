@@ -98,7 +98,10 @@ stdenv.mkDerivation {
     bpftools
   ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "pic" "zerocallusedregs" ];
+  hardeningDisable = [
+    "pic"
+    "zerocallusedregs"
+  ];
 
   postUnpack = ''
     cp -r ${
@@ -188,7 +191,7 @@ stdenv.mkDerivation {
       mit
     ];
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     broken =
       kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
     homepage = "https://sysdig.com/opensource/";

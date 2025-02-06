@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   boolToStr = value: if value then "on" else "off";
   cfg = config.vmware;
@@ -11,7 +16,25 @@ let
     "streamOptimized"
   ];
 
-in {
+in
+{
+  imports = [
+    ../image/file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "virtualisation"
+        "vmware"
+        "vmFileName"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
+
+  ];
+
   options = {
     vmware = {
       baseImageSize = lib.mkOption {
@@ -29,13 +52,6 @@ in {
           The name of the derivation for the VMWare appliance.
         '';
       };
-      vmFileName = lib.mkOption {
-        type = lib.types.str;
-        default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vmdk";
-        description = ''
-          The file name of the VMWare appliance.
-        '';
-      };
       vmSubformat = lib.mkOption {
         type = lib.types.enum subformats;
         default = "monolithicSparse";
@@ -51,10 +67,14 @@ in {
   };
 
   config = {
+    system.nixos.tags = [ "vmware" ];
+    image.extension = "vmdk";
+    system.build.image = config.system.build.vmwareImage;
     system.build.vmwareImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
+      baseName = config.image.baseName;
       postVM = ''
-        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o compat6=${boolToStr cfg.vmCompat6},subformat=${cfg.vmSubformat} -O vmdk $diskImage $out/${cfg.vmFileName}
+        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o compat6=${boolToStr cfg.vmCompat6},subformat=${cfg.vmSubformat} -O vmdk $diskImage $out/${config.image.fileName}
         rm $diskImage
       '';
       format = "raw";

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cr3eperall";
     repo = "dynisland";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HqwykR6BXxtYSxNUYdegmjCwSVTW29pqP7qLWbcqLeg=";
     fetchSubmodules = true;
   };

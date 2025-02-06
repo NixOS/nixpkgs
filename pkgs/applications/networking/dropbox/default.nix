@@ -29,7 +29,8 @@ let
 in
 
 buildFHSEnv {
-  name = "dropbox";
+  inherit version;
+  pname = "dropbox";
 
   # The dropbox-cli command `dropbox start` starts the dropbox daemon in a
   # separate session, and wants the daemon to outlive the launcher.  Enabling
@@ -42,10 +43,10 @@ buildFHSEnv {
   unsharePid = false;
 
   targetPkgs = pkgs: with pkgs; with xorg; [
-    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
+    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender libXmu
     libXxf86vm libGL libxcb xkeyboardconfig
     curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
-    procps zlib mesa libxshmfence libpthreadstubs libappindicator
+    procps zlib libgbm libxshmfence libpthreadstubs libappindicator
   ];
 
   extraInstallCommands = ''
@@ -86,7 +87,7 @@ buildFHSEnv {
 
   meta = with lib; {
     description = "Online stored folders (daemon version)";
-    homepage    = "http://www.dropbox.com/";
+    homepage    = "https://www.dropbox.com/";
     license     = licenses.unfree;
     maintainers = with maintainers; [ ttuegel ];
     platforms   = [ "i686-linux" "x86_64-linux" ];

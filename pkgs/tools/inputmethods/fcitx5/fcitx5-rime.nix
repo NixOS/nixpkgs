@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, cmake
-, extra-cmake-modules
-, gettext
-, zstd
-, fcitx5
-, librime
-, rime-data
-, symlinkJoin
-, rimeDataPkgs ? [ rime-data ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  cmake,
+  extra-cmake-modules,
+  gettext,
+  zstd,
+  fcitx5,
+  librime,
+  rime-data,
+  symlinkJoin,
+  rimeDataPkgs ? [ rime-data ],
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   rimeDataDrv = symlinkJoin {
     name = "fcitx5-rime-data";
     paths = rimeDataPkgs;
+    postBuild = "mkdir -p $out/share/rime-data";
   };
 
   postInstall = ''

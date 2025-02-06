@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-quakes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RZ+wgLYMl7y3CdmlipsfZGcew1pYSMEhkyyeLqIwVwI=";
   };
 

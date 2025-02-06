@@ -14,7 +14,6 @@
   aiorun,
   async-timeout,
   coloredlogs,
-  dacite,
   orjson,
   home-assistant-chip-clusters,
 
@@ -92,7 +91,6 @@ buildPythonPackage rec {
     aiorun
     async-timeout
     coloredlogs
-    dacite
     orjson
     home-assistant-chip-clusters
   ];
@@ -118,12 +116,6 @@ buildPythonPackage rec {
     ''
       export PYTHONPATH=${pythonEnv}/${python.sitePackages}
     '';
-
-  pytestFlagsArray = [
-    # Upstream theymselves limit the test scope
-    # https://github.com/home-assistant-libs/python-matter-server/blob/main/.github/workflows/test.yml#L65
-    "tests/server"
-  ];
 
   meta = with lib; {
     changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${version}";

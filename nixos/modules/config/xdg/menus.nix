@@ -10,7 +10,7 @@
       default = true;
       description = ''
         Whether to install files to support the
-        [XDG Desktop Menu specification](https://specifications.freedesktop.org/menu-spec/menu-spec-latest.html).
+        [XDG Desktop Menu specification](https://specifications.freedesktop.org/menu-spec/latest).
       '';
     };
   };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "psychrometrics";
     repo = "psychrolib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OkjoYIakF7NXluNTaJnUHk5cI5t8GnpqrbqHYwnLOts=";
   };
 

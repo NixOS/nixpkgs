@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, dnspython
-, m2crypto
-, pygraphviz
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  dnspython,
+  m2crypto,
+  pygraphviz,
 }:
 
 buildPythonApplication rec {

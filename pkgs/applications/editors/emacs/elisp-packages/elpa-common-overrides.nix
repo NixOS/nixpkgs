@@ -217,6 +217,7 @@ in
 
   preview-tailor = mkHome super.preview-tailor;
 
+  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73325
   psgml = ignoreCompilationError super.psgml; # elisp error
 
   # native-ice https://github.com/mattiase/relint/issues/15
@@ -256,6 +257,10 @@ in
   tex-parens = mkHomeIfOlder super.tex-parens "0.4.0.20240630.70456";
 
   timerfunctions = ignoreCompilationErrorIfOlder super.timerfunctions "1.4.2.0.20201129.225252";
+
+  # kv is required in triples-test.el
+  # Alternatively, we can delete that file.  But adding a dependency is easier.
+  triples = addPackageRequires super.triples [ self.kv ];
 
   wisitoken-grammar-mode = ignoreCompilationError super.wisitoken-grammar-mode; # elisp error
 

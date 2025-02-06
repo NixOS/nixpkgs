@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JuanBindez";
     repo = "pytubefix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FbmVQ+nt/WEwE5vRMo2610TO463CT8nCseqB30uXjSM=";
   };
 

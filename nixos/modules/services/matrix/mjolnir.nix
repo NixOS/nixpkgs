@@ -186,6 +186,10 @@ in
       }
     ];
 
+    # This defaults to true in the application,
+    # which breaks older configs using pantalaimon or access tokens
+    services.mjolnir.settings.encryption.use = lib.mkDefault false;
+
     services.pantalaimon-headless.instances."mjolnir" = lib.mkIf cfg.pantalaimon.enable
       {
         homeserver = cfg.homeserverUrl;

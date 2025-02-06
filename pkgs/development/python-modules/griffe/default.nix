@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "1.3.2";
+  version = "1.5.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
-    rev = "refs/tags/${version}";
-    hash = "sha256-IDIacG1FM/JidHV76PGTaPnkIfulAli8+YLuiuPHdZ8=";
+    tag = version;
+    hash = "sha256-TQSQ+gW79GV3lkdPAYsJb2stvVY4CktjjS3yO7S8o2E=";
   };
 
   build-system = [ pdm-backend ];

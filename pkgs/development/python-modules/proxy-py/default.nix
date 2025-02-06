@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.5";
+  version = "2.4.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abhinavsingh";
     repo = "proxy.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pn4YYGntG9C8mhECb7PYgN5wwicdlPcZu6Xn2M3iIKA=";
+    tag = "v${version}";
+    hash = "sha256-VQjK4wNOuUk3KhlvSlDbyclC+RUjeEIVvPN+bKq0fFc=";
   };
 
   postPatch = ''
@@ -62,6 +62,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
@@ -77,6 +79,8 @@ buildPythonPackage rec {
     "test_gen_public_key"
     # Tests run into a timeout
     "integration"
+    # Crashes
+    "test_grout"
   ];
 
   pythonImportsCheck = [ "proxy" ];

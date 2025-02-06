@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kor";
-  version = "0.5.5";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "yonahd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/GXTfArNaD1Y6hpec3tNUSSNVqIq6QLpsZS7jWFi5g4=";
+    hash = "sha256-SMy7oAOKSvUrqIh11kdsREySsxJHmwSUhpW++DB0M2Y=";
   };
 
-  vendorHash = "sha256-FrO+ZyisuDLplpoKsGOwpxz+jXd36MEs5bFz3RujZDY=";
+  vendorHash = "sha256-OAPilV4/usbejE/e6vVjvyuIIHCRiomPeg8RfzAmwWc=";
 
   preCheck = ''
     HOME=$(mktemp -d)

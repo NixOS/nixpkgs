@@ -50,6 +50,7 @@ buildPythonPackage rec {
       "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
       "test_parallel_call_cached_function_defined_in_jupyter" # jupyter not available during tests
       "test_nested_parallel_warnings" # tests is flaky under load
+      "test_memory" # tests - and the module itself - assume strictatime mount for build directory
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.

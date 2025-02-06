@@ -1,23 +1,30 @@
-{ runCommand, lib, type ? "zstd", zstd }:
+{
+  runCommand,
+  lib,
+  type ? "zstd",
+  zstd,
+}:
 
 firmware:
 
 let
-  compressor = {
-    xz = {
-      ext = "xz";
-      nativeBuildInputs = [ ];
-      cmd = file: target: ''xz -9c -T1 -C crc32 --lzma2=dict=2MiB "${file}" > "${target}"'';
-    };
-    zstd = {
-      ext = "zst";
-      nativeBuildInputs = [ zstd ];
-      cmd = file: target: ''zstd -T1 -19 --long --check -f "${file}" -o "${target}"'';
-    };
-  }.${type} or (throw "Unsupported compressor type for firmware.");
+  compressor =
+    {
+      xz = {
+        ext = "xz";
+        nativeBuildInputs = [ ];
+        cmd = file: target: ''xz -9c -T1 -C crc32 --lzma2=dict=2MiB "${file}" > "${target}"'';
+      };
+      zstd = {
+        ext = "zst";
+        nativeBuildInputs = [ zstd ];
+        cmd = file: target: ''zstd -T1 -19 --long --check -f "${file}" -o "${target}"'';
+      };
+    }
+    .${type} or (throw "Unsupported compressor type for firmware.");
 
   args = {
-    allowedRequisites = [];
+    allowedRequisites = [ ];
     inherit (compressor) nativeBuildInputs;
   } // lib.optionalAttrs (firmware ? meta) { inherit (firmware) meta; };
 in

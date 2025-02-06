@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YqvtOwd00TXD4I3fIQolvjHnjREvQgbdrEO9Z96v1Kk=";
   };
 
@@ -37,15 +37,16 @@ buildPythonPackage rec {
     "packaging"
   ];
 
-  dependencies = [
-    build
-    coloredlogs
-    packaging
-    pip
-    urllib3
-  ] ++ lib.optionals (pythonOlder "3.11") [ toml ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-  ;
+  dependencies =
+    [
+      build
+      coloredlogs
+      packaging
+      pip
+      urllib3
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ toml ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [
     "bork"

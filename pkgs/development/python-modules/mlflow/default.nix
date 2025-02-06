@@ -59,6 +59,7 @@
   pytestCheckHook,
   pytorch-lightning,
   sentence-transformers,
+  shap,
   starlette,
   statsmodels,
   tensorflow,
@@ -70,19 +71,26 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.16.2";
+  version = "2.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7W1gpVgJSN/iXoW987eCHfcOeE3D/ZJ2W/eilDdzOww=";
+    tag = "v${version}";
+    hash = "sha256-672lKzYkWpUuUB2hiVtOqMhQltzRMGhoff2ZimLWJC8=";
   };
 
-  build-system = [
-    setuptools
+  pythonRelaxDeps = [
+    "gunicorn"
+    "importlib-metadata"
+    "packaging"
+    "protobuf"
+    "pytz"
+    "pyarrow"
   ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     alembic
@@ -106,10 +114,12 @@ buildPythonPackage rec {
     pandas
     protobuf
     pyarrow
+    pydantic
     pyyaml
     requests
     scikit-learn
     scipy
+    shap
     sqlalchemy
     sqlparse
   ];

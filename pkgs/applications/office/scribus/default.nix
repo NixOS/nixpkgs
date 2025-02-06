@@ -1,43 +1,42 @@
-{ boost
-, cairo
-, cmake
-, cups
-, fetchurl
-, fontconfig
-, freetype
-, harfbuzzFull
-, hunspell
-, lcms2
-, libjpeg
-, libtiff
-, libxml2
-, pixman
-, pkg-config
-, podofo
-, poppler
-, poppler_data
-, python3
-, lib
-, stdenv
-, qt5
+{
+  boost,
+  cairo,
+  cmake,
+  cups,
+  fetchurl,
+  fontconfig,
+  freetype,
+  harfbuzzFull,
+  hunspell,
+  lcms2,
+  libjpeg,
+  libtiff,
+  libxml2,
+  pixman,
+  pkg-config,
+  podofo,
+  poppler,
+  poppler_data,
+  python3,
+  lib,
+  stdenv,
+  qt5,
 }:
 
 let
-  pythonEnv = python3.withPackages (
-    ps: [
-      ps.pillow
-      ps.tkinter
-    ]
-  );
+  pythonEnv = python3.withPackages (ps: [
+    ps.pillow
+    ps.tkinter
+  ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "scribus";
 
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus-devel/scribus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fv+bH0fjcuVrs2nx2+GP5JEBeJtea8/beJDgNGtkE4M=";
+    hash = "sha256-CuWM7UEBAegmVeO0wgoHDPF2cUWtojPc73wguLpr1Ic=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iTaybb";
     repo = "pySmartDL";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Etyv3xCB1cGozWDsskygwcTHJfC+V5hvqBNQAF8SIMM=";
   };
 

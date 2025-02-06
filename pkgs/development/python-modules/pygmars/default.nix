@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pygmars";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "pygmars";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RwAZ1ZLh0zgGshSv7LleBHMotKapDFtD69ptqQnr0EA=";
+    tag = "v${version}";
+    hash = "sha256-OhmTD83p/4tCMoCXy35/0fy8Tw1usn27dJyzpOeGlkU=";
   };
 
   dontConfigure = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python lexing and parsing library";
     homepage = "https://github.com/nexB/pygmars";
-    changelog = "https://github.com/nexB/pygmars/releases/tag/v${version}";
+    changelog = "https://github.com/aboutcode-org/pygmars/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

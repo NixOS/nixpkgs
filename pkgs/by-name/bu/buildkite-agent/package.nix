@@ -1,28 +1,29 @@
-{ fetchFromGitHub
-, lib
-, buildGoModule
-, makeWrapper
-, coreutils
-, git
-, openssh
-, bash
-, gnused
-, gnugrep
-, gitUpdater
-, nixosTests
+{
+  fetchFromGitHub,
+  lib,
+  buildGoModule,
+  makeWrapper,
+  coreutils,
+  git,
+  openssh,
+  bash,
+  gnused,
+  gnugrep,
+  gitUpdater,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "buildkite-agent";
-  version = "3.82.1";
+  version = "3.87.1";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-xTF8zmpwEFHkLwDYBICXJZ4gjJYpcH5i76kPQM6qt5o=";
+    hash = "sha256-L7ruto57E4uUEwo18krZgCQYl+9aJoIGgeecNEeVt54=";
   };
 
-  vendorHash = "sha256-xKAQ2yvFYl9ld3H6IGafYgCdA8jn9xig/AAej56ACns=";
+  vendorHash = "sha256-Snms9jzQ8+Tw+pJJth7AndskebF31bHKviJBA6Qu52I=";
 
   postPatch = ''
     substituteInPlace clicommand/agent_start.go --replace /bin/bash ${bash}/bin/bash
@@ -38,7 +39,15 @@ buildGoModule rec {
 
     # These are runtime dependencies
     wrapProgram $out/bin/buildkite-agent \
-      --prefix PATH : '${lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
+      --prefix PATH : '${
+        lib.makeBinPath [
+          openssh
+          git
+          coreutils
+          gnused
+          gnugrep
+        ]
+      }'
   '';
 
   passthru = {
@@ -59,7 +68,12 @@ buildGoModule rec {
     '';
     homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ pawelpacana zimbatm jsoo1 techknowlogick ];
+    maintainers = with maintainers; [
+      pawelpacana
+      zimbatm
+      jsoo1
+      techknowlogick
+    ];
     platforms = with platforms; unix ++ darwin;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zlacelle";
     repo = "nagios_check_zfs_linux";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "gPLCNt6hp4E94s9/PRgsnBN5XXQQ+s2MGcgRFeknXg4=";
   };
 

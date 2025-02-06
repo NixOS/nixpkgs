@@ -79,5 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "flaresolverr";
     maintainers = with maintainers; [ paveloom ];
     inherit (undetected-chromedriver.meta) platforms;
+    # See https://github.com/NixOS/nixpkgs/issues/332776
+    broken = true;
   };
 })

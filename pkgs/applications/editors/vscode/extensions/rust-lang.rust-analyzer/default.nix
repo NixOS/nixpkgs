@@ -72,8 +72,7 @@ let
   };
 in
 vscode-utils.buildVscodeExtension {
-  inherit version vsix;
-  name = "${pname}-${version}";
+  inherit version vsix pname;
   src = "${vsix}/${pname}.zip";
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paypal";
     repo = "paypalhttp_python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3ihcpYtpcejPkiyf4g4jveyNU6flQB2sv9EZ5Pd7tUc=";
   };
 

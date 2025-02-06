@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asymworks";
     repo = "pyairnow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KjOu9V92n2rq8iOkgutlK7EMRvirFAEK8oxseI+dr2s=";
   };
 

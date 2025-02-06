@@ -118,7 +118,7 @@ in runBuildTests {
     '';
   };
 
-  yamlAtoms = shouldPass {
+  yaml_1_1Atoms = shouldPass {
     format = formats.yaml {};
     input = {
       null = null;
@@ -129,6 +129,8 @@ in runBuildTests {
       attrs.foo = null;
       list = [ null null ];
       path = ./formats.nix;
+      no = "no";
+      time = "22:30:00";
     };
     expected = ''
       attrs:
@@ -138,9 +140,11 @@ in runBuildTests {
       list:
       - null
       - null
+      'no': 'no'
       'null': null
       path: ${./formats.nix}
       str: foo
+      time: '22:30:00'
       'true': true
     '';
   };
@@ -529,6 +533,40 @@ in runBuildTests {
     '';
   };
 
+  cdnAtoms = shouldPass {
+    format = formats.cdn { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        1
+        null
+      ];
+      path = ./formats.nix;
+    };
+    expected = ''
+      attrs {
+        "foo": null
+      }
+      "false": false
+      "float": 3.141
+      "int": 10
+      list [
+        1,
+        null
+      ]
+      "null": null
+      "path": "${./formats.nix}"
+      "str": "foo"
+      "true": true
+    '';
+  };
+
   # This test is responsible for
   #   1. testing type coercions
   #   2. providing a more readable example test
@@ -606,4 +644,31 @@ in runBuildTests {
     '';
   };
 
+  badgerfishToXmlGenerate = shouldPass {
+    format = formats.xml { };
+    input = {
+      root = {
+        "@id" = "123";
+        "@class" = "example";
+        child1 = {
+          "@name" = "child1Name";
+          "#text" = "text node";
+        };
+        child2 = {
+          grandchild = "This is a grandchild text node.";
+        };
+        nulltest = null;
+      };
+    };
+    expected = ''
+      <?xml version="1.0" encoding="utf-8"?>
+      <root class="example" id="123">
+        <child1 name="child1Name">text node</child1>
+        <child2>
+          <grandchild>This is a grandchild text node.</grandchild>
+        </child2>
+        <nulltest></nulltest>
+      </root>
+    '';
+  };
 }

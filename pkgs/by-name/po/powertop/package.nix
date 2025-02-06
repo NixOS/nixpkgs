@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fenrus75";
     repo = "powertop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
 

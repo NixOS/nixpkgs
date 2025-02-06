@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, qtbase, qttools, sqlcipher, wrapQtAppsHook, qtmacextras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  sqlcipher,
+  wrapQtAppsHook,
+  qtmacextras,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlitebrowser";
-  version = "3.13.0";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "sqlitebrowser";
     repo = "sqlitebrowser";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2U0jnL2hmrxynMxEiObl10bKFAFlCrY2hulZ/Ggqimw=";
+    sha256 = "sha256-bpZnO8i8MDgOm0f93pBmpy1sZLJQ9R4o4ZLnGfT0JRg=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isDarwin ./macos.patch;
@@ -19,9 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
   # but qscintilla is currently in a bit of a mess as some consumers expect a
   # -qt4 or -qt5 prefix while others do not.
   # We *really* should get that cleaned up.
-  buildInputs = [ qtbase sqlcipher ] ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
+  buildInputs = [
+    qtbase
+    sqlcipher
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   cmakeFlags = [
     "-Dsqlcipher=1"

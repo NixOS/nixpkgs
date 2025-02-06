@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   hatchling,
@@ -12,10 +11,12 @@
   boto3,
   cloudpickle,
   docker,
+  fastapi,
   google-pasta,
   importlib-metadata,
   jsonschema,
   numpy,
+  omegaconf,
   packaging,
   pandas,
   pathos,
@@ -30,6 +31,7 @@
   tblib,
   tqdm,
   urllib3,
+  uvicorn,
 
   # optional-dependencies
   scipy,
@@ -38,37 +40,28 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.232.1";
+  version = "2.239.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-I+iZKx1CnZIGYgYuYhhs8BnY84KPyKOGw8M0He26DGU=";
+    tag = "v${version}";
+    hash = "sha256-KE3EWCxl4Q90pChswYjmBwtPazAjVw2MaAjNesQoWiM=";
   };
-
-  patches = [
-    # Distutils removal, fix build with python 3.12
-    # https://github.com/aws/sagemaker-python-sdk/pull/4544
-    (fetchpatch {
-      url = "https://github.com/aws/sagemaker-python-sdk/commit/84447ba59e544c810aeb842fd058e20d89e3fc74.patch";
-      hash = "sha256-B8Q18ViB7xYy1F5LoL1NvXj2lnFPgt+C9wssSODyAXM=";
-    })
-    (fetchpatch {
-      url = "https://github.com/aws/sagemaker-python-sdk/commit/e9e08a30cb42d4b2d7299c1c4b42d680a8c78110.patch";
-      hash = "sha256-uGPtXSXfeaIvt9kkZZKQDuiZfoRgw3teffuxai1kKlY=";
-    })
-  ];
 
   build-system = [
     hatchling
   ];
 
   pythonRelaxDeps = [
+    "attrs"
     "boto3"
     "cloudpickle"
     "importlib-metadata"
+    "numpy"
+    "omegaconf"
+    "protobuf"
   ];
 
   dependencies = [
@@ -76,10 +69,12 @@ buildPythonPackage rec {
     boto3
     cloudpickle
     docker
+    fastapi
     google-pasta
     importlib-metadata
     jsonschema
     numpy
+    omegaconf
     packaging
     pandas
     pathos
@@ -94,6 +89,7 @@ buildPythonPackage rec {
     tblib
     tqdm
     urllib3
+    uvicorn
   ];
 
   doCheck = false; # many test dependencies are not available in nixpkgs

@@ -1,25 +1,33 @@
 {
   rustPlatform,
+  glib-networking,
   gpauth,
+  makeWrapper,
   openconnect,
   openssl,
   perl,
+  pkg-config,
   vpnc-scripts,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "gpclient";
 
   inherit (gpauth) version src meta;
 
   buildAndTestSubdir = "apps/gpclient";
-  cargoHash = "sha256-aJYFBvVrj1n2+9WLLBH5WTRRzTle19LsdJ2DielJYik=";
+  cargoHash = "sha256-aanC0iwitvpKWCZSyaGVIkrWo/Hi1gjS19t3PfW+w4U=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+    pkg-config
+  ];
   buildInputs = [
     gpauth
     openconnect
     openssl
+    glib-networking
   ];
 
   preConfigure = ''
@@ -34,8 +42,13 @@ rustPlatform.buildRustPackage rec {
     cp packaging/files/usr/share/applications/gpgui.desktop $out/share/applications/gpgui.desktop
   '';
 
+  preFixup = ''
+    wrapProgram "$out/bin/gpclient" \
+      --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
+  '';
+
   postFixup = ''
     substituteInPlace $out/share/applications/gpgui.desktop \
-      --replace-fail /usr/bin/gpclient $out/bin/gpclient
+      --replace-fail /usr/bin/gpclient gpclient
   '';
 }

@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ugm";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ariasmn";
     repo = "ugm";
     rev = "v${version}";
-    hash = "sha256-Ui/JYU/ZbMP8E20vWHah1GFFVu5E4xf0RaVv9X0QnR4=";
+    hash = "sha256-FTgu5bzhX+B71dj4wHcgwbtrde5fzF98zMV1lRO++AE=";
   };
 
-  vendorHash = "sha256-34D9fQnmKnOyUqshduLmFiVgcVKi7mDKBs3X5ZQxsuw=";
+  vendorHash = "sha256-Nz9Be2Slfan6FmV9/OxVh7GrLgHBhmt5nOOuXNfjy48=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -26,7 +27,7 @@ buildGoModule rec {
         --set RUNEWIDTH_EASTASIAN 0
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Terminal based UNIX user and group browser";

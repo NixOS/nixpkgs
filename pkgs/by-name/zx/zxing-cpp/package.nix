@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-teFspdATn9M7Z1vSr/7PdJx/xAv+TVai8rIekxqpBZk=";
   };
+
+  # c++ 20 needed for char8_t or clang-19 build fails
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_CXX_STANDARD 17" "CMAKE_CXX_STANDARD 20"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -51,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       formats.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
+    maintainers = with lib.maintainers; [ lukegb ];
     platforms = lib.platforms.unix;
   };
 })

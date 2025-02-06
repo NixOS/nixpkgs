@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.1";
+  version = "2.25.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
+    hash = "sha256-XunvADSdLA6jFVjXTAtmYvC1i5ZE7WYaCTvlAd8C1ko=";
   };
   patches = [ ];
 
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
+    hash = "sha256-HaOqhjDodn9z0XQMsxJAMKrs1s7l2cJCIzHECjwnA5A=";
   };
 
   buildInputs = [
@@ -76,13 +76,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace scripts/cmake/addons.cmake \
+      --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
+
     substituteInPlace src/cmake/linux.cmake \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+      --replace-fail '/etc' "$out/etc"
+
+    substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
   '';

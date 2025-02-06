@@ -31,29 +31,25 @@
 
 let
   pname = "anki";
-  version = "24.06.3";
-  rev = "d678e39350a2d243242a69f4e22f5192b04398f2";
+  version = "24.11";
+  rev = "87ccd24efd0ea635558b1679614b6763e4f514eb";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-ap8WFDDSGonk5kgXXIsADwAwd7o6Nsy6Wxsa7r1iUIM=";
+    hash = "sha256-pAQBl5KbTu7LD3gKBaiyn4QiWeGYoGmxD3sDJfCZVdA=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
-      "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-4V75+jS250XfUH6B4VBxtL2t308nyKzhDoq86kq6rp4=";
   };
-  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-Dbd7RtE0td7li7oqPPfBmAsbXPM8ed9NTAhM5gytpG8=";
+    hash = "sha256-4KQKWwlr+FuUmomKO3TEoDoSStjnyLutDxCfqGr6jzk=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [ mypy-protobuf ]);
@@ -135,8 +131,6 @@ python3.pkgs.buildPythonApplication {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
-    # Also remove from anki/sync-server.nix on next update
-    ./patches/Cargo.lock-update-time-for-rust-1.80.patch
   ];
 
   inherit cargoDeps yarnOfflineCache;
@@ -224,15 +218,14 @@ python3.pkgs.buildPythonApplication {
     astroid
   ];
 
-  # tests fail with to many open files
+  # tests fail with too many open files
   # TODO: verify if this is still true (I can't, no mac)
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
-    # these two tests are flaky, see https://github.com/ankitects/anki/issues/3353
-    # Also removed from anki-sync-server when removing this.
-    "--skip=media::check::test::unicode_normalization"
-    "--skip=scheduler::answering::test::state_application"
+    # this test is flaky, see https://github.com/ankitects/anki/issues/3619
+    # also remove from anki-sync-server when removing this
+    "--skip=deckconfig::update::test::should_keep_at_least_one_remaining_relearning_step"
   ];
 
   dontUseNinjaInstall = false;
@@ -316,8 +309,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   passthru = {
-    # cargoLock is reused in anki-sync-server
-    inherit cargoLock;
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 

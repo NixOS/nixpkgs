@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   appstream-glib,
   calf,
   deepfilternet,
   desktop-file-utils,
+  fetchFromGitHub,
   fftw,
   fftwFloat,
   fmt_9,
@@ -45,15 +45,16 @@ let
   # Fix crashes with speexdsp effects
   speexdsp' = speexdsp.override { withFftw3 = false; };
 in
+
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.1.9";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-It+kldlhThWF9y/rTgKt9QlIouH1cQcCtSHQTsaGjfo=";
+    tag = "v${version}";
+    hash = "sha256-bTyPStOQusIho8x6RI+2Z+4wHSG9ERjo4NuvLUILIm8=";
   };
 
   nativeBuildInputs = [
@@ -102,6 +103,7 @@ stdenv.mkDerivation rec {
         mda_lv2 # loudness
         zam-plugins # maximizer
       ];
+
       ladspaPlugins = [
         deepfilternet # deep noise remover
         rubberband # pitch shifting
@@ -125,7 +127,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wwmm/easyeffects";
     changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      aleksana
+    ];
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;
   };

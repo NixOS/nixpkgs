@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dodgyville";
     repo = "pygltflib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rUAg05M5biVsdG2yEH0Olng/0jH1R/Jo5/+j4ToKkTI=";
   };
 

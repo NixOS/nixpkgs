@@ -14,18 +14,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-09-26";
+  version = "0-unstable-2025-01-13";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "0b6e4958d8ea66b54bc67f0b5aa005fa3eaa4f6f";
-    hash = "sha256-cyE7ZxesAmnepW7kI6b9Gp7R/v+yG2//EQAj4/X6c+c=";
+    rev = "ca5c05145d440c7e96a3521af327da91bb1ac539";
+    hash = "sha256-mglmmIZz1bbRT15/Xr1vrYBy+PVgIaKpjRfAAFT5OcQ=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail 'pkg-config' ''${PKG_CONFIG}
+      --replace-fail pkg-config ''${PKG_CONFIG}
+    substituteInPlace src/main.cpp \
+      --replace-fail /usr/share/sys64/hud/config.conf $out/share/sys64/hud/config.conf
+    substituteInPlace src/window.cpp \
+      --replace-fail /usr/share/sys64/hud/style.css $out/share/sys64/hud/style.css
   '';
 
   nativeBuildInputs = [

@@ -36,11 +36,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  expo-cli = prev."expo-cli".override (oldAttrs: {
-    # The traveling-fastlane-darwin optional dependency aborts build on Linux.
-    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.hostPlatform.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
-  });
-
   fast-cli = prev.fast-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     prePatch = ''
@@ -73,10 +68,6 @@ final: prev: {
       export npm_config_zmq_external=true
     '';
     buildInputs = oldAttrs.buildInputs ++ [ final.node-gyp-build pkgs.zeromq ];
-  });
-
-  insect = prev.insect.override (oldAttrs: {
-    nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package final.pulp ];
   });
 
   joplin = prev.joplin.override (oldAttrs:{
@@ -265,27 +256,6 @@ final: prev: {
 
   rush = prev."@microsoft/rush".override {
     name = "rush";
-  };
-
-  tailwindcss = prev.tailwindcss.override {
-    plugins = [ ];
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      nodePath=""
-      for p in "$out" "${final.postcss}" $plugins; do
-        nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
-      done
-      wrapProgram "$out/bin/tailwind" \
-        --prefix NODE_PATH : "$nodePath"
-      wrapProgram "$out/bin/tailwindcss" \
-        --prefix NODE_PATH : "$nodePath"
-      unset nodePath
-    '';
-    passthru.tests = {
-      simple-execution = callPackage ./package-tests/tailwindcss.nix {
-        inherit (final) tailwindcss;
-      };
-    };
   };
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {

@@ -1,30 +1,26 @@
 {
   lib,
-  stdenv,
   linkFarm,
   fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
 
   # nativeBuildInputs
-  pkg-config,
-  setuptools-rust,
-  rustPlatform,
   cargo,
+  pkg-config,
+  rustPlatform,
   rustc,
+  setuptools-rust,
 
   # buildInputs
   openssl,
-  libiconv,
-  Security,
 
   # dependencies
   huggingface-hub,
-  numpy,
 
   # tests
   datasets,
+  numpy,
   pytestCheckHook,
   requests,
   tiktoken,
@@ -74,44 +70,48 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.20.1";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QTe1QdmJHSoosNG9cCJS7uQNdoMwgL+CJHQQUX5VtSY=";
+    tag = "v${version}";
+    hash = "sha256-G65XiVlvJXOC9zqcVr9vWamUnpC0aa4kyYkE2v1K2iY=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-5cw63ydyhpMup2tOe/hpG2W6YZ+cvT75MJBkE5Wap4s=";
+  };
 
   sourceRoot = "${src.name}/bindings/python";
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
+    cargo
     pkg-config
-    setuptools-rust
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
     rustc
+    setuptools-rust
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   dependencies = [
     huggingface-hub
-    numpy
   ];
 
   nativeCheckInputs = [
     datasets
+    numpy
     pytestCheckHook
     requests
     tiktoken

@@ -21,7 +21,6 @@
 , nukeReferences
 , git
 , nlohmann_json
-, docbook_xsl
 , openssh
 , openldap
 , gnused
@@ -35,13 +34,14 @@
 , cdrkit
 , pixz
 , boost
-, autoreconfHook
 , mdbook
 , foreman
 , python3
 , libressl
 , cacert
 , glibcLocales
+, meson
+, ninja
 , fetchFromGitHub
 , nixosTests
 , unstableGitUpdater
@@ -81,6 +81,7 @@ let
         DigestSHA1
         EmailMIME
         EmailSender
+        FileCopyRecursive
         FileLibMagic
         FileSlurper
         FileWhich
@@ -124,14 +125,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-10-08";
+  version = "0-unstable-2024-12-05";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "c69e30122bf7e7a7d3de70dc2418263c6e44159b";
-    hash = "sha256-khkY1GG43/VUBt6g7Egt0Zz0V/rXxnDUpOLtanFum7Y=";
+    rev = "250668a19fa4d8ff9a6176ee6c44ca3003adedf1";
+    hash = "sha256-r+t/0U8Pp6/Lvi3s3v8nDB9xCggvxFsnCEJ9TuZvVJc=";
   };
+
+  outputs = [ "out" "doc" ];
 
   buildInputs = [
     unzip
@@ -177,7 +180,8 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     makeWrapper
     pkg-config
     mdbook
@@ -193,10 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
     openldap
   ];
 
-  configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
-
   env = {
-    NIX_CFLAGS_COMPILE = "-pthread";
     OPENLDAP_ROOT = openldap;
   };
 
@@ -205,10 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
-  enableParallelBuilding = true;
+  mesonBuildType = "release";
+
+  postPatch = ''
+    patchShebangs .
+  '';
 
   preCheck = ''
-    patchShebangs .
     export LOGNAME=''${LOGNAME:-foo}
     # set $HOME for bzr so it can create its trace file
     export HOME=$(mktemp -d)

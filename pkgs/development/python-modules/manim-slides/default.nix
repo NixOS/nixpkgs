@@ -10,12 +10,12 @@
   ffmpeg,
 
   av,
+  beautifulsoup4,
   click,
   click-default-group,
   jinja2,
   lxml,
   numpy,
-  opencv4,
   pillow,
   pydantic,
   pydantic-extra-types,
@@ -35,7 +35,7 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.1.8";
+  version = "5.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -43,16 +43,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "manim-slides";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0csCUJpIeq3EyER9gqiUgqrfHL9WSzX144Y0djL3dqQ=";
+    tag = "v${version}";
+    hash = "sha256-LUnHv6Yr4le7B0OjA9m8s7tCd2OvUsjX0YR+5dv+Bjg=";
   };
 
   build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
-
-  pythonRemoveDeps = [ "opencv-python" ];
 
   pythonRelaxDeps = [
     "rtoml"
@@ -62,12 +60,12 @@ buildPythonPackage rec {
   dependencies =
     [
       av
+      beautifulsoup4
       click
       click-default-group
       jinja2
       lxml
       numpy
-      opencv4
       pillow
       pydantic
       pydantic-extra-types
@@ -91,12 +89,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "manim_slides" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jeertmans/manim-slides/blob/${src.rev}/CHANGELOG.md";
     description = "Tool for live presentations using manim";
     homepage = "https://github.com/jeertmans/manim-slides";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "manim-slides";
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with lib.maintainers; [ soispha ];
   };
 }

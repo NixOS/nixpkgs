@@ -71,7 +71,7 @@ let
     # these are the only ones that are currently not
     inherit (builtins) addErrorContext isPath trace typeOf unsafeGetAttrPos;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
-      bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
+      bitNot boolToString mergeAttrs flip defaultTo mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease oldestSupportedReleaseIsAtLeast
       mod compare splitByAndCompare seq deepSeq lessThan add sub
@@ -94,13 +94,14 @@ let
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
-      reverseList listDfs toposort sort sortOn naturalSort compareLists take
-      drop sublist last init crossLists unique allUnique intersectLists
+      reverseList listDfs toposort sort sortOn naturalSort compareLists
+      take drop dropEnd sublist last init
+      crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength substring isString replaceStrings
-      intersperse concatStringsSep concatMapStringsSep
+      intersperse concatStringsSep concatMapStringsSep concatMapAttrsStringSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
@@ -120,8 +121,9 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope makeScopeWithSplicing makeScopeWithSplicing';
-    inherit (self.derivations) lazyDerivation optionalDrvAttr;
+      makeScope makeScopeWithSplicing makeScopeWithSplicing'
+      extendMkDerivation;
+    inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet licensesSpdx getLicenseFromSpdxId getLicenseFromSpdxIdOr
@@ -152,7 +154,7 @@ let
       scrubOptionValue literalExpression literalExample
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
-      mdDoc literalMD;
+      literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapGAppsHook3
-, python3
-, gobject-introspection
-, gsettings-desktop-schemas
-, gettext
-, gtk3
-, glib
-, common-licenses
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  python3,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gettext,
+  gtk3,
+  glib,
+  common-licenses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "3.4";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    hash = "sha256-YByzRDL/LuI/VwBHLRZ3+S2VnttYeuMgJpRLPhR/NCA=";
+    hash = "sha256-+mA8b1PEfp151hks4T/I+dMYlJa6yYz1wWnafe+w9y8=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +31,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
+    (python3.withPackages (
+      p: with p; [
+        pygobject3
+        magic
+        setproctitle
+        unidecode
+      ]
+    ))
     gsettings-desktop-schemas
     gtk3
     glib

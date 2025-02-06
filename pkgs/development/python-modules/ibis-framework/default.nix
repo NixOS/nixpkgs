@@ -7,7 +7,6 @@
   atpublic,
   black,
   clickhouse-connect,
-  dask,
   datafusion,
   db-dtypes,
   duckdb,
@@ -58,7 +57,6 @@ let
   testBackends = [
     "duckdb"
     "sqlite"
-    "datafusion"
   ];
 
   ibisTestingData = fetchFromGitHub {
@@ -67,7 +65,7 @@ let
     repo = "testing-data";
     # https://github.com/ibis-project/ibis/blob/9.5.0/nix/overlay.nix#L20-L26
     rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
-    sha256 = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
+    hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
 in
 
@@ -82,7 +80,7 @@ buildPythonPackage rec {
     name = "ibis-source";
     repo = "ibis";
     owner = "ibis-project";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6ebw/E3jZFMHKqC5ZY//2Ke0NrklyoGp5JGKBfDxy40=";
   };
 
@@ -93,9 +91,20 @@ buildPythonPackage rec {
       url = "https://github.com/ibis-project/ibis/commit/a54eceabac1d6592e9f6ab0ca7749e37a748c2ad.patch";
       hash = "sha256-j5BPYVqnEF9GQV5N3/VhFUCdsEwAIOQC0KfZ5LNBSRg=";
     })
+
+    # remove after the 10.0 release
+    (fetchpatch {
+      name = "ibis-framework-arrow-18.patch";
+      url = "https://github.com/ibis-project/ibis/commit/5dc549b22c2eca29a11a31fb29deef7c1466a204.patch";
+      hash = "sha256-4i/g2uixdlkbE6x659wzZJ91FZpzwOVkF6ZeXkiCP3I=";
+      excludes = [
+        "poetry.lock"
+        "requirements-dev.txt"
+      ];
+    })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
@@ -103,7 +112,11 @@ buildPythonPackage rec {
   dontBypassPoetryDynamicVersioning = true;
   env.POETRY_DYNAMIC_VERSIONING_BYPASS = lib.head (lib.strings.splitString "-" version);
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "toolz"
+  ];
+
+  dependencies = [
     atpublic
     parsy
     python-dateutil
@@ -129,12 +142,9 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
 
-  dontUsePytestXdist = true;
-
   pytestFlagsArray = [
     "-m"
-    # tpcds and tpch are slow, so disable them
-    "'not tpcds and not tpch and (${lib.concatStringsSep " or " testBackends} or core)'"
+    "'${lib.concatStringsSep " or " testBackends} or core'"
   ];
 
   disabledTests = [
@@ -213,6 +223,7 @@ buildPythonPackage rec {
       pyarrow
       pyarrow-hotfix
       numpy
+      packaging
       pandas
       rich
     ];

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gleitz";
     repo = "howdoi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u0k+h7Sp2t/JUnfPqRzDpEA+vNXB7CpyZ/SRvk+B9t0=";
   };
 

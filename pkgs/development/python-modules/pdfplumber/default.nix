@@ -9,40 +9,36 @@
   pandas-stubs,
   pdfminer-six,
   pillow,
+  pypdfium2,
+  pytest-cov,
   pytest-parallel,
   pytestCheckHook,
-  pythonOlder,
   types-pillow,
-  wand,
 }:
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.4";
+  version = "0.11.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "pdfplumber";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-62S5DMQwSgehl0BcjeRaTocko8xg72pQQ5YLoL3+QbU=";
+    tag = "v${version}";
+    hash = "sha256-oe6lZyQKXASzG7Ho6o7mlXY+BOgVBaACebxbYD+1+x0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=pdfplumber --cov-report xml:coverage.xml --cov-report term" ""
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     pdfminer-six
     pillow
-    wand
+    pypdfium2
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    # test_issue_1089 assumes the soft limit on open files is "low", otherwise it never completes
+    # reported at: https://github.com/jsvine/pdfplumber/issues/1263
+    ulimit -n 1024
   '';
 
   nativeCheckInputs = [
@@ -51,6 +47,7 @@ buildPythonPackage rec {
     nbexec
     pandas
     pandas-stubs
+    pytest-cov
     pytest-parallel
     pytestCheckHook
     types-pillow
@@ -58,24 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdfplumber" ];
 
-  disabledTests = [
-    # flaky
-    "test__repr_png_"
-  ];
-
-  disabledTestPaths = [
-    # Tests requires pypdfium2
-    "tests/test_display.py"
-    # Tests requires pypdfium2
-    "tests/test_issues.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     mainProgram = "pdfplumber";
     homepage = "https://github.com/jsvine/pdfplumber";
     changelog = "https://github.com/jsvine/pdfplumber/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

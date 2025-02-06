@@ -22,15 +22,20 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.35.2";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
-    rev = "v${version}";
-    hash = "sha256-jMbCxqIn9f9+16rFwpQdkBHj6NwTNkQxnSVV4qQ1fjM=";
+    tag = version;
+    hash = "sha256-R/nRHsz4z4phG51YYDwkGqvnXssGoiJxIPexuhAf0BI=";
   };
+
+  patches = [
+    # https://github.com/eventlet/eventlet/pull/988
+    ./python-3.13-compat.patch
+  ];
 
   nativeBuildInputs = [
     hatch-vcs
@@ -63,6 +68,8 @@ buildPythonPackage rec {
     # Tests requires network access
     "test_getaddrinfo"
     "test_hosts_no_network"
+    # flaky test, depends on builder performance
+    "test_server_connection_timeout_exception"
   ];
 
   pythonImportsCheck = [ "eventlet" ];

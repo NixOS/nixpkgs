@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, kernel, kmod, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kernelModuleMakeFlags,
+  kmod,
+  zlib,
+}:
 
 let
   version = "3.1";
@@ -13,7 +21,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  buildInputs = [ kmod zlib ];
+  buildInputs = [
+    kmod
+    zlib
+  ];
 
   hardeningDisable = [ "pic" ];
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
@@ -38,7 +49,7 @@ stdenv.mkDerivation {
     kmod=${kmod} substituteAllInPlace netatop.service
   '';
 
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   preInstall = ''
     mkdir -p $out/lib/systemd/system $out/bin $out/sbin $out/share/man/man{4,8}

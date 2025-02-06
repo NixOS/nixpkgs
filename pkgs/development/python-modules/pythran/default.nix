@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wiQmShniYZmB8hk/MC5FWFf1s5vqEHiYBkXTo4OeZ+E=";
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./0001-hardcode-path-to-libgomp.patch;
       gomp = "${
-        if stdenv.cc.isClang then openmp else stdenv.cc.cc.lib
+        if stdenv.cc.isClang then openmp else (lib.getLib stdenv.cc.cc)
       }/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

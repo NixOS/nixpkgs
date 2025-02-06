@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.22.0";
+  version = "0.25.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -29,13 +29,13 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
-    hash = "sha256-GbKmX1Ev/8di3A1XT5ZIRjzn2zP6DMye2NpA26PGVIs=";
+    tag = "v${version}";
+    hash = "sha256-5J1ZfPNyniUK5D3Pt1aKuJ+/8vad3JPxCztBRY591N8=";
   };
 
-  cargoHash = "sha256-+3oO2M2293Nba6P8bejgZD5OxgCpkIRdcPICDswJyEU=";
+  cargoHash = "sha256-kuZ1zvb6H5QWjJSUYMq5tEywsQMC6187YJPUT1r4S5o=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -93,9 +93,9 @@ rustPlatform.buildRustPackage {
       installManPage ./jj.1
 
       installShellCompletion --cmd jj \
-        --bash <(${jj} util completion bash) \
-        --fish <(${jj} util completion fish) \
-        --zsh <(${jj} util completion zsh)
+        --bash <(COMPLETE=bash ${jj}) \
+        --fish <(COMPLETE=fish ${jj}) \
+        --zsh <(COMPLETE=zsh ${jj})
     '';
 
   passthru = {
@@ -110,8 +110,8 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F

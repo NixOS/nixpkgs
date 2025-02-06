@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gz2VczAgVbvISzvY/v0GvZ/Erv6ipZwPU61r6OJ+3Fo=";
   };
 

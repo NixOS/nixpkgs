@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QUEnWFhf42ppoXoz3H/2SHtoPZOi6lbopsrbmEAk+1U=";
   };
 
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ploomber/core";
     changelog = "https://github.com/ploomber/core/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }

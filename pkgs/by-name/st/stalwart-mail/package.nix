@@ -25,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.10.3";
+  version = "0.10.7";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xpNSMZWWiFU6OOooAD7ENzOggqYHdU88baPsXnovpXU=";
+    tag = "v${version}";
+    hash = "sha256-BATkLgfkz94u2M+Xy6PYQi+7EIxBe86VLYTnBI8PzzY=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-qiKfHrxQ4TSSomDLlPJ2+GOEri/ZuMCvUNdxRVoplgg=";
+  cargoHash = "sha256-4MUw9nBx4uZgUOGQksiurFuyStmWXwYuOOGT1e9AoLg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -149,6 +149,7 @@ rustPlatform.buildRustPackage {
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
+    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;

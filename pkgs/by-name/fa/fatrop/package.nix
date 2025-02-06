@@ -11,25 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fatrop";
-  version = "0.0.1";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "meco-group";
     repo = "fatrop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-c4qYh8RutRsMIx3m0oxXy73fnLTBGVZ1QjFcLEJ413Y=";
+    hash = "sha256-XVOS9L2vQeFkPXZieX1ZJiVagR0f2BtiRmSDPB9LQeI=";
   };
-
-  postPatch = lib.optionalString pythonSupport ''
-    # avoid submodule
-    rmdir external/pybind11
-    ln -s ${python3Packages.pybind11.src} external/pybind11
-
-    # install python module
-    echo ""  >> fatropy/CMakeLists.txt
-    echo "install(DIRECTORY fatropy DESTINATION ${python3Packages.python.sitePackages})" >> fatropy/CMakeLists.txt
-    echo "install(TARGETS _fatropy DESTINATION ${python3Packages.python.sitePackages}/fatropy)" >> fatropy/CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs =

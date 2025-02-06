@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-libsass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-54AlRVmit0rtG1jx7O+XyA1vXLHCfoNPjHkHCQaaybA=";
   };
 

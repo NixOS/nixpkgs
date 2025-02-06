@@ -296,7 +296,7 @@ Usually, we need to create a `shell.nix` file and do our development inside of t
 
 with pkgs;
 let
-  elixir = beam.packages.erlang_24.elixir_1_12;
+  elixir = beam.packages.erlang_27.elixir_1_18;
 in
 mkShell {
   buildInputs = [ elixir ];
@@ -311,18 +311,18 @@ If you need to use an overlay to change some attributes of a derivation, e.g. if
 
 ```nix
 let
-  elixir_1_13_1_overlay = (self: super: {
-      elixir_1_13 = super.elixir_1_13.override {
-        version = "1.13.1";
-        sha256 = "sha256-t0ic1LcC7EV3avWGdR7VbyX7pGDpnJSW1ZvwvQUPC3w=";
+  elixir_1_18_1_overlay = (self: super: {
+      elixir_1_18 = super.elixir_1_18.override {
+        version = "1.18.1";
+        sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
       };
     });
-  pkgs = import <nixpkgs> { overlays = [ elixir_1_13_1_overlay ]; };
+  pkgs = import <nixpkgs> { overlays = [ elixir_1_18_1_overlay ]; };
 in
 with pkgs;
 mkShell {
   buildInputs = [
-    elixir_1_13
+    elixir_1_18
   ];
 }
 ```
@@ -338,7 +338,7 @@ let
   # define packages to install
   basePackages = [
     git
-    # replace with beam.packages.erlang.elixir_1_13 if you need
+    # replace with beam.packages.erlang.elixir_1_18 if you need
     beam.packages.erlang.elixir
     nodejs
     postgresql_14

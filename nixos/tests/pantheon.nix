@@ -56,11 +56,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
     with subtest("Check if Pantheon components actually start"):
-        for i in ["gala", "io.elementary.wingpanel", "plank", "gsd-media-keys", "io.elementary.desktop.agent-polkit"]:
+        for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock", "gsd-media-keys", "io.elementary.desktop.agent-polkit"]:
             machine.wait_until_succeeds(f"pgrep -f {i}")
-        for i in ["gala", "io.elementary.wingpanel", "plank"]:
+        for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock"]:
             machine.wait_for_window(i)
-        for i in ["bamfdaemon.service", "io.elementary.files.xdg-desktop-portal.service"]:
+        for i in ["io.elementary.files.xdg-desktop-portal.service"]:
             machine.wait_for_unit(i, "${user.name}")
 
     with subtest("Check if various environment variables are set"):
@@ -70,8 +70,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed(f"{cmd} | grep 'XDG_DATA_DIRS' | grep 'gsettings-schemas/pantheon-agent-geoclue2'")
         # Hopefully from login shell.
         machine.succeed(f"{cmd} | grep '__NIXOS_SET_ENVIRONMENT_DONE' | grep '1'")
-        # See elementary-session-settings packaging.
-        machine.succeed(f"{cmd} | grep 'XDG_CONFIG_DIRS' | grep 'elementary-default-settings'")
 
     with subtest("Open elementary videos"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.videos >&2 &'")
@@ -101,6 +99,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
         machine.sleep(5)
         machine.screenshot("multitasking")
+        machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")

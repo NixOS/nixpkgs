@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "plux";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M4N3Ccuw95OcLsWQVtITv4QShBJKliTh5QIoqji8x9o=";
   };
 

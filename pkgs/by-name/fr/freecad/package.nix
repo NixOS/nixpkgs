@@ -1,11 +1,11 @@
 { lib
+, callPackage
 , cmake
 , coin3d
 , doxygen
 , eigen
 , fetchFromGitHub
 , fmt
-, freecad
 , gfortran
 , gts
 , hdf5
@@ -22,8 +22,8 @@
 , opencascade-occt_7_6
 , pkg-config
 , python311Packages
-, runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.hostPlatform.isLinux
+, ifcSupport ? false
 , stdenv
 , swig
 , vtk
@@ -48,6 +48,7 @@ let
   inherit (python311Packages)
     boost
     gitpython
+    ifcopenshell
     matplotlib
     pivy
     ply
@@ -60,16 +61,17 @@ let
     scipy
     shiboken2
     ;
+  freecad-utils = callPackage ./freecad-utils.nix { };
 in
-stdenv.mkDerivation (finalAttrs: {
+freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "1.0rc2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-kPmfx/C1fCYwBqh6ZOKZAVNVR9m3VryPmBKu3ksDD5E=";
+    hash = "sha256-u7RYSImUMAgKaAQSAGCFha++RufpZ/QuHAirbSFOUCI=";
     fetchSubmodules = true;
   };
 
@@ -126,11 +128,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals spaceNavSupport [
       libspnav
       qtx11extras
+    ]
+    ++ lib.optionals ifcSupport [
+      ifcopenshell
     ];
 
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
     ./0002-FreeCad-OndselSolver-pkgconfig.patch
+    ./0003-Gui-take-in-account-module-path-argument.patch
   ];
 
   cmakeFlags = [
@@ -154,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
-    export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
+    export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
   '';
 
   preConfigure = ''
@@ -174,22 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
-  passthru.tests = {
-    # Check that things such as argument parsing still work correctly with
-    # the above PYTHONPATH patch. Previously the patch used above changed
-    # the `PyConfig_InitIsolatedConfig` to `PyConfig_InitPythonConfig`,
-    # which caused the built-in interpreter to attempt (and fail) to doubly
-    # parse argv. This should catch if that ever regresses and also ensures
-    # that PYTHONPATH is still respected enough for the FreeCAD console to
-    # successfully run and check that it was included in `sys.path`.
-    python-path =
-      runCommand "freecad-test-console"
-        {
-          nativeBuildInputs = [ freecad ];
-        } ''
-        HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
-      '';
-  };
+  passthru.tests = callPackage ./tests {};
 
   meta = {
     homepage = "https://www.freecad.org";
@@ -211,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ gebner AndersonTorres srounce ];
+    maintainers = with lib.maintainers; [ gebner srounce ];
     platforms = lib.platforms.linux;
   };
-})
+}))

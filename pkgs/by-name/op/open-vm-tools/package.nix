@@ -39,6 +39,15 @@
   xmlsec,
   withX ? true,
 }:
+let
+  inherit (lib)
+    licenses
+    maintainers
+    makeBinPath
+    optional
+    optionals
+    ;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
@@ -83,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       xercesc
       xmlsec
     ]
-    ++ lib.optionals withX [
+    ++ optionals withX [
       gdk-pixbuf-xlib
       gtk3
       gtkmm3
@@ -119,15 +128,15 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
 
     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
-     --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
-     --replace "/bin/mount" "${util-linux}/bin/mount"
+     --replace-fail "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
+     --replace-fail "/bin/mount" "${util-linux}/bin/mount"
   '';
 
   configureFlags = [
     "--without-kernel-modules"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
     "--with-fuse=fuse3"
-  ] ++ lib.optional (!withX) "--without-x";
+  ] ++ optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
 
@@ -138,17 +147,17 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
       --prefix PATH ':' "${
-        lib.makeBinPath [
+        makeBinPath [
           iproute2
           dbus
           systemd
           which
         ]
       }"
-    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${bash}/bin/sh"
+    substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace-fail "/bin/sh" "${bash}/bin/sh"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vmware/open-vm-tools";
     changelog = "https://github.com/vmware/open-vm-tools/releases/tag/stable-${finalAttrs.version}";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
@@ -156,7 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
       A set of services and modules that enable several features in VMware products for
       better management of, and seamless user interactions with, guests.
     '';
-    license = licenses.gpl2;
+    license = with licenses; [
+      gpl2
+      lgpl21Only
+    ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

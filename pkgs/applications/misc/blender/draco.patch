@@ -1,26 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 97596dbee8d..d1ad6ac5de0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -898,11 +898,6 @@ set_and_warn_dependency(WITH_PYTHON WITH_CYCLES        OFF)
+@@ -1237,13 +1237,6 @@ set_and_warn_dependency(WITH_PYTHON WITH_CYCLES        OFF)
  set_and_warn_dependency(WITH_PYTHON WITH_DRACO         OFF)
  set_and_warn_dependency(WITH_PYTHON WITH_MOD_FLUID     OFF)
  
--if(WITH_DRACO AND NOT WITH_PYTHON_INSTALL)
--  message(STATUS "WITH_DRACO requires WITH_PYTHON_INSTALL to be ON, disabling WITH_DRACO for now")
--  set(WITH_DRACO OFF)
+-if(NOT WITH_PYTHON_MODULE)
+-  if(WITH_DRACO AND NOT WITH_PYTHON_INSTALL)
+-    message(STATUS "WITH_DRACO requires WITH_PYTHON_INSTALL to be ON, disabling WITH_DRACO for now")
+-    set(WITH_DRACO OFF)
+-  endif()
 -endif()
 -
  # enable boost for cycles, audaspace or i18n
  # otherwise if the user disabled
  
---- a/scripts/addons_core/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
-+++ b/scripts/addons_core/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
-@@ -17,7 +17,7 @@ def dll_path() -> Path:
+diff --git a/scripts/addons_core/io_scene_gltf2/io/com/draco.py b/scripts/addons_core/io_scene_gltf2/io/com/draco.py
+index 75e23162c67..875596c3d2f 100644
+--- a/scripts/addons_core/io_scene_gltf2/io/com/draco.py
++++ b/scripts/addons_core/io_scene_gltf2/io/com/draco.py
+@@ -31,8 +31,8 @@ def dll_path() -> Path:
+     :return: DLL path.
      """
      lib_name = 'extern_draco'
 -    blender_root = Path(bpy.app.binary_path).parent
-+    blender_root = Path(bpy.app.binary_path).parent.parent
 -    python_lib = Path('{v[0]}.{v[1]}/python/lib'.format(v=bpy.app.version))
-+    python_lib = Path('share/blender/{v[0]}.{v[1]}/python-ext/lib'.format(v=bpy.app.version))
++    blender_root = Path(bpy.app.binary_path).parent.parent
++    python_lib = Path('share/blender/{v[0]}.{v[1]}/python/lib'.format(v=bpy.app.version))
      python_version = 'python{v[0]}.{v[1]}'.format(v=sys.version_info)
  
      path = os.environ.get('BLENDER_EXTERN_DRACO_LIBRARY_PATH')

@@ -195,7 +195,7 @@ in
           SystemCallFilter = [
             "@pkey"
             "@system-service"
-            "~@chown"
+            "@chown"
             "~@keyring"
             "~@memlock"
             "~@privileged"

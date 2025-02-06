@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libxkbcommon
-, cairo
-, gdk-pixbuf
-, pam
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libxkbcommon,
+  cairo,
+  gdk-pixbuf,
+  pam,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +27,26 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
+    sed -i "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner];
-  buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+    libxkbcommon
+    cairo
+    gdk-pixbuf
+    pam
+  ];
 
   mesonFlags = [
     "-Dpam=enabled"

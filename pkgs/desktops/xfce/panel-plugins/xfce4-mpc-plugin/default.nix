@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, libxfce4util
-, xfce4-panel
-, libxfce4ui
-, glib
-, gtk3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  pkg-config,
+  libxfce4util,
+  xfce4-panel,
+  libxfce4ui,
+  glib,
+  gtk3,
+  gitUpdater,
 }:
 
 let
@@ -17,16 +18,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xfce4-mpc-plugin";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-BGf7TRrNmC08PguJy0EBmUaFBST/Ge0PZYqNVse3Zk0=";
+    sha256 = "sha256-TOfXdmeiY+6ZFsDKsqczsX471lcFzU7VzsPL3m5ymM8=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [

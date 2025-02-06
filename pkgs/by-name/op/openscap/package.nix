@@ -10,7 +10,6 @@
   openssl,
   util-linux,
   pcre2,
-  pcre,
   libselinux,
   graphviz,
   glib,
@@ -29,7 +28,6 @@
   installShellFiles,
   rpm,
   system-sendmail,
-  hyperscan,
   gnome2,
   curl,
   procps,
@@ -42,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openscap";
-  version = "1.3.10";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "OpenSCAP";
     repo = "openscap";
     rev = version;
-    hash = "sha256-P7k+Ygz/XmpTSKBEqbyJsd1bIDVJ1HA/RJdrEtjYD5g=";
+    hash = "sha256-omPGm3VSLmwEIzInIORLfJf7wreRyxbDOXTRl05mAz0=";
   };
 
   strictDeps = true;
@@ -76,10 +74,8 @@ stdenv.mkDerivation rec {
       openssl
       valgrind
       pcre2
-      pcre
       libxslt
       xmlsec
-      hyperscan
       libselinux
       libyaml
       xmlbird
@@ -107,8 +103,7 @@ stdenv.mkDerivation rec {
       --replace-fail "DESTINATION ''${PERL_VENDORLIB}" "DESTINATION ''${SWIG_PERL_DIR}''${PERL_VERSION}" \
       --replace-fail "DESTINATION ''${PERL_VENDORARCH}" "DESTINATION ''${SWIG_PERL_DIR}"
     substituteInPlace src/common/oscap_pcre.c \
-      --replace-fail "#include <pcre2.h>" "#include <${pcre2.dev}/include/pcre2.h>" \
-      --replace-fail "#include <pcre.h>" "#include <${pcre.dev}/include/pcre.h>"
+      --replace-fail "#include <pcre2.h>" "#include <${pcre2.dev}/include/pcre2.h>"
   '';
 
   cmakeFlags = [
@@ -139,7 +134,7 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    make docs
+    make $makeFlags docs
   '';
 
   installPhase = ''
@@ -155,6 +150,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "oscap";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 }

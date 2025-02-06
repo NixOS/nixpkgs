@@ -12,7 +12,7 @@ let
   tlsCfg = optionalString (cfg.tlsCertificate != null)
     "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
   logCfg = optionalString cfg.enableMessageLogging
-    "log fs ${stateDir}/logs";
+    "message-store fs ${stateDir}/logs";
 
   configFile = pkgs.writeText "soju.conf" ''
     ${listenCfg}

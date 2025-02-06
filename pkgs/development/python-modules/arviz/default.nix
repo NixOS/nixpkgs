@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6toqOGwk8YbatfiDCTEG4r0z3zZAA8zcNVZJqqssYrY=";
   };
 
@@ -101,7 +101,7 @@ buildPythonPackage rec {
   ];
 
   # Tests segfault on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "arviz" ];
 

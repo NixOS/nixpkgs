@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
 
@@ -11,11 +12,11 @@
   oniguruma,
   openssl,
   mkl,
-  stdenv,
-  darwin,
 
   # env
   fetchurl,
+
+  versionCheckHook,
 
   testers,
   mistral-rs,
@@ -66,37 +67,26 @@ let
     (acceleration == "metal")
     || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
 
-  darwinBuildInputs =
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      CoreVideo
-      CoreGraphics
-    ]
-    ++ lib.optionals metalSupport [
-      MetalKit
-      MetalPerformanceShaders
-    ];
 in
-
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ljGr8V6WkpXPV90SiHJ0t7wzBPx0J0FOB52YdLLIeoM=";
+    tag = "v${version}";
+    hash = "sha256-dsqW0XpZN2FGZlmNKgAEYGcdY5iGvRwNUko2OuU87Gw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
-      "candle-core-0.6.1" = "sha256-AtKjMTtbMBI2DbZXoWimhqcHmsz2DnRXJorqA0QYNHw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Fp/5xQ1ib2TTBSayxR5EDKkk7G+5c1QdnVW+kzcE5Jo=";
+
+  # Otherwise, fails with
+  # failed to get `anyhow` as a dependency of package
+  postPatch = ''
+    rm "$cargoDepsCopy"/llguidance-*/build.rs
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -114,19 +104,12 @@ rustPlatform.buildRustPackage rec {
       cudaPackages.libcublas
       cudaPackages.libcurand
     ]
-    ++ lib.optionals mklSupport [ mkl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinBuildInputs;
+    ++ lib.optionals mklSupport [ mkl ];
 
-  cargoBuildFlags =
-    [
-      # This disables the plotly crate which fails to build because of the kaleido feature requiring
-      # network access at build-time.
-      # See https://github.com/NixOS/nixpkgs/pull/323788#issuecomment-2206085825
-      "--no-default-features"
-    ]
-    ++ lib.optionals cudaSupport [ "--features=cuda" ]
-    ++ lib.optionals mklSupport [ "--features=mkl" ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "--features=metal" ];
+  buildFeatures =
+    lib.optionals cudaSupport [ "cuda" ]
+    ++ lib.optionals mklSupport [ "mkl" ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "metal" ];
 
   env =
     {
@@ -166,24 +149,29 @@ rustPlatform.buildRustPackage rec {
     rm -rf target/${stdenv.hostPlatform.config}/release/build/
   '';
 
+  # Prevent checkFeatures from inheriting buildFeatures because
+  # - `cargo check ... --features=cuda` requires access to a real GPU
+  # - `cargo check ... --features=metal` (on darwin) requires the sandbox to be completely disabled
+  checkFeatures = [ ];
+
   # Try to access internet
   checkFlags = [
-    "--skip=gguf::gguf_tokenizer::tests::test_decode_gpt2"
-    "--skip=gguf::gguf_tokenizer::tests::test_decode_llama"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
-    "--skip=gguf::gguf_tokenizer::tests::test_encode_gpt2"
-    "--skip=gguf::gguf_tokenizer::tests::test_encode_llama"
-    "--skip=sampler::tests::test_argmax"
-    "--skip=sampler::tests::test_gumbel_speculative"
     "--skip=util::tests::test_parse_image_url"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/mistralrs-server";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {
       version = testers.testVersion { package = mistral-rs; };
 
-      # TODO: uncomment when mkl support will be fixed
       withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
         mistral-rs.override { acceleration = "mkl"; }
       );

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "latexrestricted";
-  version = "0.4.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AMfDTruJKejDdXW98VkeeEwELql5566bsL1SutLDpso=";
+    hash = "sha256-1R0hpBGXpYH/KcD4GFUfFvoOaJDe+Sl5msC952KnqmA=";
   };
 
   build-system = [ setuptools ];

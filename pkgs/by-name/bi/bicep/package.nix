@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.30.23";
+  version = "0.32.4";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-EQMSqEvBdOEnntv2glVp19LsjC4Zvh5U0zx0h3n8Okc=";
+    hash = "sha256-SONzxKT+kVQTvkc4mKZcSGborXR4L9wadgss7j5PgmA=";
   };
 
   postPatch = ''
@@ -24,9 +24,9 @@ buildDotnetModule rec {
 
   projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
 
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 

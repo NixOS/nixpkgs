@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "eigenpy";
-  version = "3.10.0";
+  version = "3.10.2";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ac667pEKXcbLLzCVGKYpyCQO805qhCEf8dCnC4QwxBs=";
+    tag = "v${version}";
+    hash = "sha256-MronJ6yJc+bPIVAgZyFF/VtTig3OWPhpUw9oNB9Ez+o=";
   };
 
   outputs = [
@@ -50,7 +50,6 @@ buildPythonPackage rec {
     numpy
   ];
 
-  doCheck = true;
   pythonImportsCheck = [ "eigenpy" ];
 
   meta = with lib; {

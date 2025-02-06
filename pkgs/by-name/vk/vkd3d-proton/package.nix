@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/HansKristian-Work/vkd3d-proton";
     description = "A fork of VKD3D, which aims to implement the full Direct3D 12 API on top of Vulkan";
     license = with lib.licenses; [ lgpl21Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wine.meta) platforms;
   };
 })

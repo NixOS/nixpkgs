@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AviYqdr+r5ya4mFJKGUatBsaMMmCQGqE3YtDJwTuaY0=";
   };
 

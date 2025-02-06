@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   callPackage,
 }:
 
@@ -35,8 +35,7 @@ in
 
     patches = [
       # Upstream asks that we change the bug tracker URL to not point to the upsteam bug tracker
-      (substituteAll {
-        src = ./support-url.patch;
+      (replaceVars ./support-url.patch {
         assignees = "TomaSajt"; # should be a comma separated list of the github usernames of the maintainers
       })
       # Change how duplicate locales differentiate themselves (the store paths were too long)
