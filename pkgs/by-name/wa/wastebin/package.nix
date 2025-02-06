@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wastebin";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "matze";
     repo = "wastebin";
     rev = version;
-    hash = "sha256-OMczHUAhEIdstX4h5Luhx4Ud7oNNM579pP59hj0fnc0=";
+    hash = "sha256-O0nWjRiQBDclfbeulGjCZANXwQypV8uHHR5syuki5xE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-2D4j6dH+qmr4JmZDh25SJaNwZs7lEbYqY/RvTUe+S8Y=";
+  cargoHash = "sha256-WMofTTkJCcx+6vicrYfxJWTo1YCzheeGOE7LC5JQ8mM=";
 
   nativeBuildInputs = [
     pkg-config
