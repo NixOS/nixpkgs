@@ -13,6 +13,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  pytz,
   time-machine,
 }:
 
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     pytest-mockservers
     pytest-resource-path
     pytestCheckHook
+    pytz
     time-machine
   ];
 
