@@ -3,23 +3,19 @@
   buildPythonApplication,
   fetchFromGitHub,
   isPyPy,
-  pythonOlder,
   lib,
   defusedxml,
   packaging,
   psutil,
   setuptools,
+  pydantic,
   nixosTests,
-  pytestCheckHook,
-  which,
-  podman,
-  selenium,
   # Optional dependencies:
   fastapi,
   jinja2,
   pysnmp,
   hddtemp,
-  netifaces2, # IP module
+  netifaces, # IP module
   uvicorn,
   requests,
   prometheus-client,
@@ -27,16 +23,16 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.3.0.6";
+  version = "4.2.1";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.9";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${version}";
-    hash = "sha256-r4wDuV7WS3BQ5hidp2x6JqvHQLf6FchoHisMMEye1PM=";
+    hash = "sha256-8Jm6DE3B7OQkaNwX/KwXMNZHUyvPtln8mJYaD6yzJRM=";
   };
 
   build-system = [ setuptools ];
@@ -54,9 +50,17 @@ buildPythonApplication rec {
   # some tests fail in darwin sandbox
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  checkPhase = ''
+    runHook preCheck
+
+    python unittest-core.py
+
+    runHook postCheck
+  '';
+
   dependencies = [
     defusedxml
-    netifaces2
+    netifaces
     packaging
     psutil
     pysnmp
@@ -64,25 +68,12 @@ buildPythonApplication rec {
     uvicorn
     requests
     jinja2
-    which
     prometheus-client
   ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
   passthru.tests = {
     service = nixosTests.glances;
   };
-
-  nativeCheckInputs = [
-    which
-    pytestCheckHook
-    selenium
-    podman
-  ];
-
-  disabledTestPaths = [
-    # Message: Unable to obtain driver for chrome
-    "tests/test_webui.py"
-  ];
 
   meta = {
     homepage = "https://nicolargo.github.io/glances/";
