@@ -35,15 +35,17 @@ rec {
     }
   ) extraArgs;
 
-  rke2_latest = common (
-    (import ./latest/versions.nix)
+  rke2_1_32 = common (
+    (import ./1_32/versions.nix)
     // {
       updateScript = [
         ./update-script.sh
-        "latest"
+        "32"
       ];
     }
   ) extraArgs;
 
+  # Automatically set by update script
   rke2_stable = rke2_1_31;
+  rke2_latest = rke2_1_32;
 }
