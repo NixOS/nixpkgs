@@ -11,6 +11,7 @@
 , "files_automatedtagging" : "agpl3Plus"
 , "files_markdown": "agpl3Plus"
 , "files_mindmap": "agpl3Plus"
+, "files_retention": "agpl3Plus"
 , "files_texteditor": "agpl3Plus"
 , "forms": "agpl3Plus"
 , "gpoddersync": "agpl3Only"
