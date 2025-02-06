@@ -97,8 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preBuild = ''
-    mkdir -p ./vendor
-    tar -xzf ${finalAttrs.cargoDeps} -C ./vendor --strip-components=1
+    ln -s ${finalAttrs.cargoDeps} ./vendor
   '';
 
   configureFlags =
