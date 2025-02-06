@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stb";
-  version = "unstable-2023-01-29";
+  version = "unstable-2024-11-09";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "5736b15f7ea0ffb08dd38af21067c314d6a3aae9";
-    hash = "sha256-s2ASdlT3bBNrqvwfhhN6skjbmyEnUgvNOrvhgUSRj98=";
+    rev = "5c205738c191bcb0abc65c4febfa9bd25ff35234";
+    hash = "sha256-JeVkoaGZnxSE3EAIwImz/ArPcOee2++5Q8c3mwfLCr0=";
   };
 
   nativeBuildInputs = [ copyPkgconfigItems ];
