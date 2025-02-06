@@ -376,7 +376,7 @@
     "arwn" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "aseko_pool_live" =
       ps: with ps; [
@@ -471,7 +471,7 @@
       ps: with ps; [
         aiohasupervisor
         axis
-        paho-mqtt_1
+        paho-mqtt
       ];
     "azure_data_explorer" =
       ps:
@@ -1242,7 +1242,7 @@
       ps: with ps; [
         aiohasupervisor
         dropmqttapi
-        paho-mqtt_1
+        paho-mqtt
       ];
     "dsmr" =
       ps: with ps; [
@@ -1251,7 +1251,7 @@
     "dsmr_reader" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "dublin_bus_transport" =
       ps: with ps; [
@@ -1854,7 +1854,7 @@
     "fully_kiosk" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
         python-fullykiosk
       ];
     "futurenow" =
@@ -3280,7 +3280,7 @@
     "manual_mqtt" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "marantz" =
       ps: with ps; [
@@ -3646,27 +3646,27 @@
     "mqtt" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_eventstream" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_json" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_room" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "mqtt_statestream" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "msteams" =
       ps: with ps; [
@@ -3698,7 +3698,7 @@
     "mysensors" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
         pymysensors
       ];
     "mystrom" =
@@ -4173,7 +4173,7 @@
         hassil
         home-assistant-intents
         mutagen
-        paho-mqtt_1
+        paho-mqtt
         pymicro-vad
         pynacl
         pyspeex-noise
@@ -4460,7 +4460,7 @@
     "qbus" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
         qbusmqttapi
       ];
     "qingping" =
@@ -5239,7 +5239,7 @@
     "snips" =
       ps: with ps; [
         aiohasupervisor
-        paho-mqtt_1
+        paho-mqtt
       ];
     "snmp" =
       ps: with ps; [
@@ -5583,7 +5583,7 @@
       ps: with ps; [
         aiohasupervisor
         hatasmota
-        paho-mqtt_1
+        paho-mqtt
       ];
     "tautulli" =
       ps: with ps; [

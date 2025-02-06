@@ -161,6 +161,8 @@ let
         };
       });
 
+      paho-mqtt = super.paho-mqtt_1;
+
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
         version = "2.5.9";
         src = fetchFromGitHub {
