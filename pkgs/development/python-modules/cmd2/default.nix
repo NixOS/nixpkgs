@@ -6,6 +6,7 @@
   colorama,
   fetchPypi,
   glibcLocales,
+  gnureadline,
   importlib-metadata,
   pyperclip,
   pytest-cov-stub,
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     colorama
     pyperclip
     wcwidth
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

@@ -31,6 +31,22 @@ let
   pname = "legends-of-equestria";
   version = "2024.06.02";
   description = "Free-to-play MMORPG";
+
+  srcOptions = {
+    x86_64-linux = {
+      url = "https://mega.nz/file/Z3oAGYDa#01EfQICR4k5BK56hWFckYKsfgdV36KoU91TvSBwKgxY";
+      outputHash = "vpVIaRPrZih+ydWszsBF/JgO0AXh2rF/yOpBuI+V0m4=";
+    };
+    x86_64-darwin = {
+      url = "https://mega.nz/file/p6JQUDYC#lBRUK7lmxMHh4OvEyKjfl0W1mOL2VVzAH9rXL5ViiN0";
+      outputHash = "bvFg4wjltiilCP1oKfgUWThcEq8tzCIP3W/eAd3SxFo=";
+    };
+    aarch64-darwin = {
+      url = "https://mega.nz/file/cvxSzZ4b#eJHLvVHz_zxBiRxGMCBcsl1gV6M6ebQf2tQbNpEqCvk";
+      outputHash = "1aZGuOgXTLFxwF2FcYEwKA/LRT26uiXupBoqmzq9pFM=";
+    };
+  };
+
   runtimeDeps =
     [
       dbus.lib
@@ -67,17 +83,19 @@ stdenv.mkDerivation {
   inherit pname version;
   src =
     runCommand "mega-loe"
-      {
-        inherit pname version;
-        nativeBuildInputs = [
-          megacmd
-          unzip
-        ];
-        url = "https://mega.nz/file/Z3oAGYDa#01EfQICR4k5BK56hWFckYKsfgdV36KoU91TvSBwKgxY";
-        outputHashAlgo = "sha256";
-        outputHash = "vpVIaRPrZih+ydWszsBF/JgO0AXh2rF/yOpBuI+V0m4=";
-        outputHashMode = "recursive";
-      }
+      (
+        srcOptions.${stdenv.hostPlatform.system}
+        // {
+          pname = "${pname}-source";
+          inherit version;
+          nativeBuildInputs = [
+            megacmd
+            unzip
+          ];
+          outputHashAlgo = "sha256";
+          outputHashMode = "recursive";
+        }
+      )
       ''
         export HOME=$(mktemp -d)
         dest=$HOME/mega-loe
@@ -91,28 +109,42 @@ stdenv.mkDerivation {
   buildInputs = [
     libgcc
   ];
-  nativeBuildInputs = [
-    makeWrapper
-    copyDesktopItems
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+      autoPatchelfHook
+    ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        runHook preInstall
 
-    loeHome=$out/lib/${pname}
-    mkdir -p $loeHome
-    cp -r Linux/* $loeHome
+        loeHome=$out/lib/${pname}
+        mkdir -p $loeHome
+        cp -r Linux/* $loeHome
 
-    makeWrapper $loeHome/LoE.x86_64 $out/bin/LoE \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
+        makeWrapper $loeHome/LoE.x86_64 $out/bin/LoE \
+          --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}"
 
-    icon=$out/share/icons/hicolor/128x128/apps/legends-of-equestria.png
-    mkdir -p $(dirname $icon)
-    ln -s $loeHome/LoE_Data/Resources/UnityPlayer.png $icon
+        icon=$out/share/icons/hicolor/128x128/apps/legends-of-equestria.png
+        mkdir -p $(dirname $icon)
+        ln -s $loeHome/LoE_Data/Resources/UnityPlayer.png $icon
 
-    runHook postInstall
-  '';
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
+
+        mkdir -p $out/Applications
+        cp -r *.app $out/Applications
+
+        runHook postInstall
+      '';
 
   passthru.updateScript = ./update.sh;
 
@@ -131,7 +163,7 @@ stdenv.mkDerivation {
   meta = {
     inherit description;
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.attrNames srcOptions;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     mainProgram = "LoE";
     homepage = "https://www.legendsofequestria.com";
