@@ -1316,6 +1316,18 @@ let
         };
       };
 
+      dendron.adjust-heading-level = callPackage ./dendron.adjust-heading-level { };
+
+      dendron.dendron = callPackage ./dendron.dendron { };
+
+      dendron.dendron-markdown-preview-enhanced =
+        callPackage ./dendron.dendron-markdown-preview-enhanced
+          { };
+
+      dendron.dendron-paste-image = callPackage ./dendron.dendron-paste-image { };
+
+      dendron.dendron-snippet-maker = callPackage ./dendron.dendron-snippet-maker { };
+
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-deno";

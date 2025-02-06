@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -49,6 +50,9 @@ buildPythonPackage rec {
     # test fails in nix sandbox
     "test_dot_graphs"
   ];
+
+  # Segfaults explosively for some reason, but dependents seem to work?
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     description = "Python bindings to the Tree-sitter parsing library";

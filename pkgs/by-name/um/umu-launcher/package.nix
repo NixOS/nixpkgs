@@ -4,6 +4,7 @@
   umu-launcher-unwrapped,
   extraPkgs ? pkgs: [ ],
   extraLibraries ? pkgs: [ ],
+  withMultiArch ? true, # Many Wine games need 32-bit libraries.
 }:
 buildFHSEnv {
   pname = "umu-launcher";
@@ -17,6 +18,7 @@ buildFHSEnv {
     ]
     ++ extraPkgs pkgs;
   multiPkgs = extraLibraries;
+  multiArch = withMultiArch;
 
   executableName = umu-launcher-unwrapped.meta.mainProgram;
   runScript = lib.getExe umu-launcher-unwrapped;

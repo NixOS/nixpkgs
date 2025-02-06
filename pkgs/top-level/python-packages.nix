@@ -3814,6 +3814,8 @@ self: super: with self; {
 
   dockerspawner = callPackage ../development/python-modules/dockerspawner { };
 
+  docling = callPackage ../development/python-modules/docling { };
+
   docling-core = callPackage ../development/python-modules/docling-core { };
 
   docling-ibm-models = callPackage ../development/python-modules/docling-ibm-models { };
@@ -4653,6 +4655,8 @@ self: super: with self; {
   fire = callPackage ../development/python-modules/fire { };
 
   firebase-messaging = callPackage ../development/python-modules/firebase-messaging { };
+
+  firebase-admin = callPackage ../development/python-modules/firebase-admin { };
 
   fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
 
@@ -6706,6 +6710,8 @@ self: super: with self; {
   jmp = callPackage ../development/python-modules/jmp { };
 
   joblib = callPackage ../development/python-modules/joblib { };
+
+  jobspy = callPackage ../development/python-modules/jobspy { };
 
   johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt {
     inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
@@ -14618,6 +14624,8 @@ self: super: with self; {
   scim2-server = callPackage ../development/python-modules/scim2-server { };
 
   scim2-tester = callPackage ../development/python-modules/scim2-tester { };
+
+  scikit-base = callPackage ../development/python-modules/scikit-base { };
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 

@@ -318,9 +318,7 @@ let
         });
 
         # tries to write a log file to $HOME
-        insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
+        insert-shebang = mkHome super.insert-shebang;
 
         ivy-rtags = ignoreCompilationError (fix-rtags super.ivy-rtags); # elisp error
 
@@ -669,9 +667,7 @@ let
         helm-rtags = ignoreCompilationError (fix-rtags super.helm-rtags); # elisp error
 
         # tries to write to $HOME
-        php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
+        php-auto-yasnippets = mkHome super.php-auto-yasnippets;
 
         racer = super.racer.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
@@ -1323,7 +1319,7 @@ let
         mastodon = ignoreCompilationError super.mastodon; # elisp error
 
         # https://github.com/org2blog/org2blog/issues/339
-        metaweblog = addPackageRequires super.metaweblog [ self.xml-rpc ];
+        metaweblog = addPackageRequiresIfOlder super.metaweblog [ self.xml-rpc ] "20250204.1820";
 
         mu-cite = ignoreCompilationError super.mu-cite; # elisp error
 

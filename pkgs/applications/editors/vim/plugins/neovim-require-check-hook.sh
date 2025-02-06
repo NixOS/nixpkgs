@@ -107,6 +107,7 @@ print_summary() {
         for module in "${failed_modules[@]}"; do
             echo -e "  ${RED}- $module${NC}"
         done
+        echo -e "\n${RED}Checkout https://nixos.org/manual/nixpkgs/unstable/#testing-neovim-plugins-neovim-require-check${NC}"
     fi
     echo "======================================================"
 

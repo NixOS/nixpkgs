@@ -7,26 +7,30 @@
   cxxopts,
   poetry-core,
   pybind11,
-  tabulate,
   zlib,
   nlohmann_json,
   utf8cpp,
   libjpeg,
   qpdf,
   loguru-cpp,
+  # python dependencies
+  tabulate,
+  pillow,
+  pydantic,
+  docling-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-parse";
     tag = "v${version}";
-    hash = "sha256-DfuVfEneYLSTPml+I4coN5arzlmajdoosuismVe+5PI=";
+    hash = "sha256-SgVLk1kruUSjtzuo/5YFY4Keha8zMzovm/UeCtfGaNY=";
   };
 
   dontUseCmakeConfigure = true;
@@ -61,6 +65,14 @@ buildPythonPackage rec {
 
   dependencies = [
     tabulate
+    pillow
+    pydantic
+    docling-core
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
+    "pillow"
   ];
 
   pythonImportsCheck = [
