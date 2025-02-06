@@ -21,6 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-1n5HPFI/E/I4eepnpQg8hhIksr48igVy56gQ0UiMYHU=";
   };
 
+  postPatch = ''
+    # dont depend on poetry at runtime
+    # https://github.com/Galorhallen/govee-local-api/pull/75/files#r1943826599
+    sed -i '/poetry = "^1.8.5"/d' pyproject.toml
+  '';
+
   build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];

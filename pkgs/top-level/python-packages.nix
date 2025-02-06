@@ -259,6 +259,8 @@ self: super: with self; {
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
 
+  aiohttp-asyncmdnsresolver = callPackage ../development/python-modules/aiohttp-asyncmdnsresolver { };
+
   aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
 
   aiohttp-client-cache = callPackage ../development/python-modules/aiohttp-client-cache { };
@@ -468,6 +470,8 @@ self: super: with self; {
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
+
+  aiousbwatcher = callPackage ../development/python-modules/aiousbwatcher { };
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
@@ -8065,6 +8069,8 @@ self: super: with self; {
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
 
+  mcp = callPackage ../development/python-modules/mcp { };
+
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   mcuuid = callPackage ../development/python-modules/mcuuid { };
@@ -9683,6 +9689,8 @@ self: super: with self; {
   ondilo = callPackage ../development/python-modules/ondilo { };
 
   onecache = callPackage ../development/python-modules/onecache { };
+
+  onedrive-personal-sdk = callPackage ../development/python-modules/onedrive-personal-sdk { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
 
@@ -11836,6 +11844,8 @@ self: super: with self; {
   pyexploitdb = callPackage ../development/python-modules/pyexploitdb { };
 
   pyezviz = callPackage ../development/python-modules/pyezviz { };
+
+  pyezvizapi = callPackage ../development/python-modules/pyezvizapi { };
 
   pyface = callPackage ../development/python-modules/pyface { };
 
