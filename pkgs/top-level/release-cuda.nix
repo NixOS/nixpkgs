@@ -72,9 +72,13 @@ let
     ;
 
   # Package sets to evaluate whole
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
   packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: packagePlatforms pkgs.${pset};
+  evalPackageSetPlatforms = lib.genAttrs packageSets (pset: packagePlatforms pkgs.${pset});
 
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
   jobs =
     mapTestOn {
       blas = linux;
@@ -160,6 +164,6 @@ let
         vllm = linux;
       };
     }
-    // mapTestOn (lib.genAttrs packageSets evalPackageSet);
+    // mapTestOn evalPackageSetPlatforms;
 in
 jobs
