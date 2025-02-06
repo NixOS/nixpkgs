@@ -72,94 +72,99 @@ let
     ;
 
   # Package sets to evaluate whole
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
   packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: packagePlatforms pkgs.${pset};
+  evalPackageSetPlatforms = lib.genAttrs packageSets (pset: packagePlatforms pkgs.${pset});
 
-  jobs =
-    mapTestOn {
-      blas = linux;
-      blender = linux;
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
+  evalIndividualPackagePlatforms = {
+    blas = linux;
+    blender = linux;
+    faiss = linux;
+    lapack = linux;
+    magma = linux;
+    mpich = linux;
+    openmpi = linux;
+    ucx = linux;
+
+    opencv = linux;
+    cctag = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+
+    cholmod-extra = linux;
+    colmap = linux;
+    ctranslate2 = linux;
+    ffmpeg-full = linux;
+    gimp = linux;
+    gpu-screen-recorder = linux;
+    gst_all_1.gst-plugins-bad = linux;
+    lightgbm = linux;
+    llama-cpp = linux;
+    meshlab = linux;
+    monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+    noisetorch = linux;
+    obs-studio-plugins.obs-backgroundremoval = linux;
+    ollama = linux;
+    onnxruntime = linux;
+    openmvg = linux;
+    openmvs = linux;
+    opentrack = linux;
+    openvino = linux;
+    pixinsight = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+    qgis = linux;
+    rtabmap = linux;
+    saga = linux;
+    suitesparse = linux;
+    truecrack-cuda = linux;
+    tts = linux;
+    ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+    wyoming-faster-whisper = linux;
+    xgboost = linux;
+
+    python3Packages = {
+      catboost = linux;
+      cupy = linux;
       faiss = linux;
-      lapack = linux;
-      magma = linux;
-      mpich = linux;
-      openmpi = linux;
-      ucx = linux;
+      faster-whisper = linux;
+      flax = linux;
+      gpt-2-simple = linux;
+      grad-cam = linux;
+      jaxlib = linux;
+      jax = linux;
+      keras = linux;
+      kornia = linux;
+      mmcv = linux;
+      mxnet = linux;
+      numpy = linux; # Only affected by MKL?
+      onnx = linux;
+      triton = linux;
+      openai-whisper = linux;
+      opencv4 = linux;
+      opensfm = linux;
+      pycuda = linux;
+      pymc = linux;
+      pyrealsense2WithCuda = linux;
+      pytorch-lightning = linux;
+      scikit-image = linux;
+      scikit-learn = linux; # Only affected by MKL?
+      scipy = linux; # Only affected by MKL?
+      spacy-transformers = linux;
+      tensorflow = linux;
+      tensorflow-probability = linux;
+      tesserocr = linux;
+      tiny-cuda-nn = linux;
+      torchaudio = linux;
+      torch = linux;
+      torchvision = linux;
+      transformers = linux;
+      ttstokenizer = linux;
+      vidstab = linux;
+      vllm = linux;
+    };
+  };
 
-      opencv = linux;
-      cctag = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-
-      cholmod-extra = linux;
-      colmap = linux;
-      ctranslate2 = linux;
-      ffmpeg-full = linux;
-      gimp = linux;
-      gpu-screen-recorder = linux;
-      gst_all_1.gst-plugins-bad = linux;
-      lightgbm = linux;
-      llama-cpp = linux;
-      meshlab = linux;
-      monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-      noisetorch = linux;
-      obs-studio-plugins.obs-backgroundremoval = linux;
-      ollama = linux;
-      onnxruntime = linux;
-      openmvg = linux;
-      openmvs = linux;
-      opentrack = linux;
-      openvino = linux;
-      pixinsight = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-      qgis = linux;
-      rtabmap = linux;
-      saga = linux;
-      suitesparse = linux;
-      truecrack-cuda = linux;
-      tts = linux;
-      ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-      wyoming-faster-whisper = linux;
-      xgboost = linux;
-
-      python3Packages = {
-        catboost = linux;
-        cupy = linux;
-        faiss = linux;
-        faster-whisper = linux;
-        flax = linux;
-        gpt-2-simple = linux;
-        grad-cam = linux;
-        jaxlib = linux;
-        jax = linux;
-        keras = linux;
-        kornia = linux;
-        mmcv = linux;
-        mxnet = linux;
-        numpy = linux; # Only affected by MKL?
-        onnx = linux;
-        triton = linux;
-        openai-whisper = linux;
-        opencv4 = linux;
-        opensfm = linux;
-        pycuda = linux;
-        pymc = linux;
-        pyrealsense2WithCuda = linux;
-        pytorch-lightning = linux;
-        scikit-image = linux;
-        scikit-learn = linux; # Only affected by MKL?
-        scipy = linux; # Only affected by MKL?
-        spacy-transformers = linux;
-        tensorflow = linux;
-        tensorflow-probability = linux;
-        tesserocr = linux;
-        tiny-cuda-nn = linux;
-        torchaudio = linux;
-        torch = linux;
-        torchvision = linux;
-        transformers = linux;
-        ttstokenizer = linux;
-        vidstab = linux;
-        vllm = linux;
-      };
-    }
-    // mapTestOn (lib.genAttrs packageSets evalPackageSet);
+  evalPackagePlatforms = lib.recursiveUpdate evalPackageSetPlatforms evalIndividualPackagePlatforms;
+  jobs = mapTestOn evalPackagePlatforms;
 in
 jobs
