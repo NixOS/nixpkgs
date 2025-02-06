@@ -2,7 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cacert,
+  faster-whisper,
   flac,
+  google-cloud-speech,
   groq,
   httpx,
   openai-whisper,
@@ -15,6 +18,7 @@
   respx,
   setuptools,
   soundfile,
+  standard-aifc,
   typing-extensions,
 }:
 
@@ -43,11 +47,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ typing-extensions ];
+  dependencies = [
+    standard-aifc
+    typing-extensions
+  ];
 
   optional-dependencies = {
     assemblyai = [ requests ];
     audio = [ pyaudio ];
+    faster-whisper = [ faster-whisper ];
+    google-cloud = [ google-cloud-speech ];
     groq = [
       groq
       httpx
@@ -68,7 +77,12 @@ buildPythonPackage rec {
     pytestCheckHook
     pocketsphinx
     respx
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  preCheck = ''
+    # httpx since 0.28.0+ depends on SSL_CERT_FILE
+    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   pythonImportsCheck = [ "speech_recognition" ];
 
