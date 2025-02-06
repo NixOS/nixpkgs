@@ -9,6 +9,8 @@ CHANNEL_NAME="${1:?Must provide a release channel, like 'stable', as the only ar
 WORKDIR=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd -P)
 mkdir --parents --verbose "${WORKDIR}/${CHANNEL_NAME}"
 
+NIXPKGS_ROOT="$(git rev-parse --show-toplevel)/"
+OLD_VERSION="$(nix-instantiate --eval -E "($NIXPKGS_ROOT. {}).rke2_1_${MINOR_VERSION}.version or \"0\"" | tr -d '"')"
 LATEST_TAG_NAME=$(curl -sS --fail https://update.rke2.io/v1-release/channels | \
     yq ".data[] | select(.id == \"${CHANNEL_NAME}\") | .latest")
 
@@ -53,9 +55,7 @@ cat << EOF > "${WORKDIR}/${CHANNEL_NAME}/versions.nix"
 }
 EOF
 
-set +e
-RKE2_VENDOR_HASH=$(nurl -e "(import $(git rev-parse --show-toplevel) {}).rke2_${CHANNEL_NAME}.goModules")
-set -e
+RKE2_VENDOR_HASH=$(nurl -e "(import $NIXPKGS_ROOT. {}).rke2_${CHANNEL_NAME}.goModules")
 
 if [ -n "${RKE2_VENDOR_HASH:-}" ]; then
     sed -i "s#${FAKE_HASH}#${RKE2_VENDOR_HASH}#g" ${WORKDIR}/${CHANNEL_NAME}/versions.nix
@@ -66,12 +66,11 @@ fi
 
 # Implement commit
 # See: https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
-set +u
 cat << EOF
 [
   {
     "attrPath": "rke2_${CHANNEL_NAME}",
-    "oldVersion": "${UPDATE_NIX_OLD_VERSION}",
+    "oldVersion": "${OLD_VERSION}",
     "newVersion": "${RKE2_VERSION}",
     "files": [
       "${WORKDIR}/${CHANNEL_NAME}/versions.nix"
