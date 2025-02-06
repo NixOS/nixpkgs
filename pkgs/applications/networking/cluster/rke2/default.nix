@@ -4,7 +4,7 @@ let
   common = opts: callPackage (import ./builder.nix lib opts);
   extraArgs = builtins.removeAttrs args [ "callPackage" ];
 in
-{
+rec {
   rke2_1_29 = common (
     (import ./1_29/versions.nix)
     // {
@@ -25,12 +25,12 @@ in
     }
   ) extraArgs;
 
-  rke2_stable = common (
-    (import ./stable/versions.nix)
+  rke2_1_31 = common (
+    (import ./1_31/versions.nix)
     // {
       updateScript = [
         ./update-script.sh
-        "stable"
+        "31"
       ];
     }
   ) extraArgs;
@@ -44,4 +44,6 @@ in
       ];
     }
   ) extraArgs;
+
+  rke2_stable = rke2_1_31;
 }
