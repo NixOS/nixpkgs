@@ -709,6 +709,8 @@ let
 
     httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
 
+    httpun-lwt = callPackage ../development/ocaml-modules/httpun/lwt.nix { };
+
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
 
     httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
