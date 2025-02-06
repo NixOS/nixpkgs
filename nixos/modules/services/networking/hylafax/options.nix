@@ -15,6 +15,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mkPackageOption
     ;
   inherit (lib.types)
     attrsOf
@@ -142,6 +143,8 @@ in
   options.services.hylafax = {
 
     enable = mkEnableOption "HylaFAX server";
+
+    package = mkPackageOption pkgs "HylaFAX" { default = "hylafaxplus"; };
 
     autostart = mkOption {
       type = bool;

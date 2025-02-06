@@ -13,7 +13,7 @@
   ];
 
   config = lib.modules.mkIf config.services.hylafax.enable {
-    environment.systemPackages = [ pkgs.hylafaxplus ];
+    environment.systemPackages = [ config.services.hylafax.package ];
     users.users.uucp = {
       uid = config.ids.uids.uucp;
       group = "uucp";
