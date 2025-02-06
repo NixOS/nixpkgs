@@ -131,6 +131,16 @@ let
         ];
       });
 
+      letpot = super.letpot.overridePythonAttrs (rec {
+        version = "0.3.0";
+        src = fetchFromGitHub {
+          owner = "jpelgrom";
+          repo = "python-letpot";
+          tag = "v${version}";
+          hash = "sha256-OFLQ0DV7roqUlm6zJWAzMRpcmAi/oco8lEHbmfqNaVs=";
+        };
+      });
+
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
