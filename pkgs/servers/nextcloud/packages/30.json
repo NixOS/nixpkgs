@@ -89,6 +89,16 @@
       "agpl"
     ]
   },
+  "files_automatedtagging": {
+    "hash": "sha256-eXLTCtdIW/D0nigyYKnHj9iFQNAxWs8F46vivCUgVYs=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v1.20.0/files_automatedtagging-v1.20.0.tar.gz",
+    "version": "1.20.0",
+    "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
+    "homepage": "https://github.com/nextcloud/files_automatedtagging",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "files_mindmap": {
     "hash": "sha256-SRHkK3oaSEBsrQPhjgWy9WSliubYkrOc89lix5O/fZM=",
     "url": "https://github.com/ACTom/files_mindmap/releases/download/v0.0.33/files_mindmap-0.0.33.tar.gz",
