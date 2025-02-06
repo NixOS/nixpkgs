@@ -5682,6 +5682,12 @@
     githubId = 523628;
     name = "Jonathan Strickland";
   };
+  djds = {
+    email = "git@djds.dev";
+    github = "djds";
+    githubId = 4218822;
+    name = "djds";
+  };
   Dje4321 = {
     email = "dje4321@gmail.com";
     github = "dje4321";
