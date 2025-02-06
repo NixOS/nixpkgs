@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "2.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bdraco";
@@ -33,7 +33,6 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    async-timeout
     aiodns
     cached-ipaddress
     dnspython
