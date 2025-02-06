@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "0.8.1";
+  version = "0.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "vault-tasks";
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage {
     owner = "louis-thevenet";
     repo = "vault-tasks";
     rev = "v${version}";
-    hash = "sha256-4sg1v541NknaOClZAkYC6tGlpItBT6RzUK9Itniu7OQ=";
+    hash = "sha256-IjpmvoibxDwbdq4SyPXWxhsUTzaRKH1qUXwskCWOqm4=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-ocRf+orNwp5+iDQR6Vyc85O9oguUFcVabwINRYDCXe0=";
+  cargoHash = "sha256-VgLGpyjbRL2W1oCqTjl0+thi+HYdcB8g/mwkeYA/85E=";
 
   postInstall = "install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications";
 
