@@ -66,9 +66,6 @@ melpaBuild {
     go
     gopls
     python
-  ];
-
-  nativeCheckInputs = [
     writableTmpDirAsHomeHook
   ];
 
