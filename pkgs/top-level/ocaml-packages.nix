@@ -711,6 +711,8 @@ let
 
     httpun-lwt = callPackage ../development/ocaml-modules/httpun/lwt.nix { };
 
+    httpun-lwt-unix = callPackage ../development/ocaml-modules/httpun/lwt-unix.nix { };
+
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
 
     httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
