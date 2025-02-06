@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ispc";
-  version = "1.25.3";
+  version = "1.26.0";
 
   dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-baTJNfhOSYfJJnrutkW06AIMXpVP3eBpEes0GSI1yGY=";
+    sha256 = "sha256-PjETaRBrg3d86y6fguePTovq+3GaYw6eLqcY59+vIr8=";
   };
 
   nativeBuildInputs = [

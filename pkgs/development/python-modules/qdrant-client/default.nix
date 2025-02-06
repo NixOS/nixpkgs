@@ -32,6 +32,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "portalocker"
+  ];
+
   dependencies = [
     grpcio
     grpcio-tools
