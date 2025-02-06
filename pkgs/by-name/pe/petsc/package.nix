@@ -122,8 +122,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withPtscotch [
       "--with-ptscotch=1"
-      "--with-ptscotch-include=${scotch.dev}/include"
-      "--with-ptscotch-lib=[-L${scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
+      "--with-ptscotch-include=${lib.getDev scotch}/include"
+      "--with-ptscotch-lib=[-L${lib.getLib scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
     ]
     ++ lib.optionals withScalapack [
       "--with-scalapack=1"
@@ -135,14 +135,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withP4est [
       "--with-p4est=1"
-      "--with-zlib-include=${zlib.dev}/include"
-      "--with-zlib-lib=[-L${zlib}/lib,-lz]"
+      "--with-zlib-include=${lib.getDev zlib}/include"
+      "--with-zlib-lib=[-L${lib.getLib zlib}/lib,-lz]"
     ]
     ++ lib.optionals withHdf5 [
       "--with-hdf5=1"
       "--with-hdf5-fortran-bindings=1"
-      "--with-hdf5-include=${hdf5.dev}/include"
-      "--with-hdf5-lib=[-L${hdf5}/lib,-lhdf5]"
+      "--with-hdf5-include=${lib.getDev hdf5}/include"
+      "--with-hdf5-lib=[-L${lib.getLib hdf5}/lib,-lhdf5]"
     ]
     ++ lib.optionals petsc-optimized [
       "--with-debugging=0"
