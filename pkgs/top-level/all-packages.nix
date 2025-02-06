@@ -7010,7 +7010,7 @@ with pkgs;
   cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
+  cargo-lambda = callPackage ../by-name/ca/cargo-lambda/package.nix {
     zig = buildPackages.zig_0_12;
   };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
