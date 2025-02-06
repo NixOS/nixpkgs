@@ -187,6 +187,10 @@ let
         matchCudaPackageByName "cudnn[^\.]*" path
         && knownBrokenConditions [ "CUDA version is too old" "CUDA version is too new" ] drv
       )
+
+      # Getting NVIDIA drivers from cudaPackages instead of linuxPackages is unsupported,
+      # so we don't want to count these "broken" derivations as eval errors
+      (drv: matchCudaPackageByName "nvidia_driver")
     ];
   filterPackageFn =
     path: platforms:
