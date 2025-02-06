@@ -48,14 +48,14 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/python";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-WzgOQgD1dbpi/WR6LPbPVaYv11DF/sjeSUPVLVCchzI=";
+    hash = "sha256-D9+rKV4rF5AVMxFfEohHufHC2mO75M80TuZaHDI0XMU=";
   };
 
   nativeBuildInputs = [
