@@ -48,6 +48,13 @@ let
 
     # For Cortex-M0 firmware in RK3399
     nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+    # Make the new toolchain guessing (from 2.11+) happy
+    # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
+    rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
+
+    # Some platforms like sun50i_a64 have ENABLE_LTO := 1, which requires $(ARCH)-ld/cc-id == "gnu-gcc"
+    aarch64-cc-id = "gnu-gcc";
+    aarch64-ld-id = "gnu-gcc";
 
     buildInputs = [ openssl ];
 
@@ -55,10 +62,12 @@ let
       "HOSTCC=$(CC_FOR_BUILD)"
       "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      # binutils 2.39 regression
-      # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
-      # See also: https://developer.trustedfirmware.org/T996
-      "LDFLAGS=-no-warn-rwx-segments"
+      # Make the new toolchain guessing (from 2.11+) happy
+      "AS=${stdenv.cc.targetPrefix}cc"
+      "OC=${stdenv.cc.targetPrefix}objcopy"
+      "OD=${stdenv.cc.targetPrefix}objdump"
+      # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
+      "OPENSSL_DIR=${openssl}"
     ] ++ (lib.optional (platform != null) "PLAT=${platform}")
       ++ extraMakeFlags;
 
