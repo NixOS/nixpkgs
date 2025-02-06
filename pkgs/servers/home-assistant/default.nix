@@ -427,6 +427,9 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+
+    substituteInPlace tests/components/hassio/test_backup.py \
+      --replace-fail setup_integration setup_backup_integration
   '';
 
   dependencies = with python.pkgs; [
