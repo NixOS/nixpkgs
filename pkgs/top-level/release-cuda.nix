@@ -140,7 +140,6 @@ let
         pymc = linux;
         pyrealsense2WithCuda = linux;
         pytorch-lightning = linux;
-        pytorch = linux;
         scikitimage = linux;
         scikit-learn = linux; # Only affected by MKL?
         scipy = linux; # Only affected by MKL?
