@@ -120,6 +120,11 @@ buildPythonPackage rec {
     "${python.sitePackages}/numba/tests/test_usecases.py"
   ];
 
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # captured stderr: Fatal Python error: Segmentation fault
+    "test_sum1d_pyobj"
+  ];
+
   disabledTestPaths = lib.optionals (!testsWithoutSandbox) [
     # See NOTE near passthru.tests.withoutSandbox
     "${python.sitePackages}/numba/cuda/tests"
