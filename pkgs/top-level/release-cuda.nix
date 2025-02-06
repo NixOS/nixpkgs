@@ -179,6 +179,14 @@ let
       # to explicitly agree to the NVIDIA TensorRT License (and a developer account on developer.nvidia.com)
       # See https://docs.nvidia.com/deeplearning/tensorrt/latest/reference/sla.html
       (drv: matchCudaPackageByName "tensorrt[^\.]*")
+
+      # It is expected that some combinations of CUDA and cuDNN versions aren't compatible,
+      # so we don't want to count these "broken" derivations as eval errors
+      (
+        drv: path:
+        matchCudaPackageByName "cudnn[^\.]*" path
+        && knownBrokenConditions [ "CUDA version is too old" "CUDA version is too new" ] drv
+      )
     ];
   filterPackageFn =
     path: platforms:
