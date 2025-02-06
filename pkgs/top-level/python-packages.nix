@@ -7185,6 +7185,8 @@ self: super: with self; {
 
   language-tags = callPackage ../development/python-modules/language-tags { };
 
+  language-tool-python = callPackage ../development/python-modules/language-tool-python { };
+
   lanms-neo = callPackage ../development/python-modules/lanms-neo { };
 
   lark = callPackage ../development/python-modules/lark { };
