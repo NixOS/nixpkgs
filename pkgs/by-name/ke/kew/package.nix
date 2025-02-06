@@ -63,7 +63,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ravachol/kew";
     platforms = platforms.unix;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ demine ];
+    maintainers = with maintainers; [
+      demine
+      matteopacini
+    ];
     mainProgram = "kew";
   };
 }
