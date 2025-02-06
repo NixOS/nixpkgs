@@ -388,6 +388,9 @@ let
         # Keep linker scripts (they are required for out-of-tree modules on aarch64)
         find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
+        # Keep devicetree source include files (they are required for out-of-tree dts compile)
+        find arch/"$arch" -type f -name '*.dtsi' -print0 | xargs -0 -r chmod u-w
+
         # Keep root and arch-specific Makefiles
         chmod u-w Makefile arch/"$arch"/Makefile*
 
