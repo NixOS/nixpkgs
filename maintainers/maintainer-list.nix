@@ -21372,6 +21372,11 @@
     githubId = 19472270;
     name = "Sebastian";
   };
+  sebaguardian = {
+    name = "Sebaguardian";
+    github = "Sebaguardian";
+    githubId = 68247013;
+  };
   sebastianblunt = {
     name = "Sebastian Blunt";
     email = "nix@sebastianblunt.com";
