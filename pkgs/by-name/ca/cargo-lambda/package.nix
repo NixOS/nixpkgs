@@ -53,6 +53,14 @@ rustPlatform.buildRustPackage rec {
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in darwin sandbox, first because of trying to listen to a port on
+    # localhost. While this would be fixed by `__darwinAllowLocalNetworking = true;`,
+    # they then fail with other I/O issues.
+    "--skip=test::test_download_example"
+    "--skip=test::test_download_example_with_cache"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
