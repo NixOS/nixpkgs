@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2024.08.0";
+  version = "2025.02.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aioambient";
     tag = version;
-    hash = "sha256-GedGwG4Lm28BvfSBOGcspUQ3LCmdb2IC2rLifuKGOes=";
+    hash = "sha256-F1c2S0c/CWHeCd24Zc8ib3aPR7yj9gCPBJpmpgoddQY=";
   };
 
   build-system = [ poetry-core ];
