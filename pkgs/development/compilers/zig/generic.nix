@@ -87,18 +87,17 @@ stdenv.mkDerivation (finalAttrs: {
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
   # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch =
-    (
-      if lib.versionAtLeast finalAttrs.version "0.12" then
-        ''
-          substituteInPlace lib/std/zig/system.zig \
-            --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
-        ''
-      else
-        ''
-          substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
-            --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
-        ''
-    )
+    let
+      zigSystemPath =
+        if lib.versionAtLeast finalAttrs.version "0.12" then
+          "lib/std/zig/system.zig"
+        else
+          "lib/std/zig/system/NativeTargetInfo.zig";
+    in
+    ''
+      substituteInPlace ${zigSystemPath} \
+        --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
+    ''
     # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
     # location, which does not work in the darwin sandbox.
     # Upstream issue: https://github.com/ziglang/zig/issues/22600
