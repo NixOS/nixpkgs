@@ -1162,6 +1162,16 @@
     githubId = 30437811;
     name = "Alex Andrews";
   };
+  alikindsys = {
+    email = "alice@blocovermelho.org";
+    github = "alikindsys";
+    githubId = 36565196;
+    name = "Alikind System";
+
+    keys = [{
+      fingerprint = "7D31 15DC D912 C15A 2781  F7BB 511C B44B C752 2A89";
+    }];
+  };
   alirezameskin = {
     email = "alireza.meskin@gmail.com";
     github = "alirezameskin";
