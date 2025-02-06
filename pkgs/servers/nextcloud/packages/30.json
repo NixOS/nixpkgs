@@ -1,4 +1,14 @@
 {
+  "app_api": {
+    "hash": "sha256-Ke0uGO+57JG39OoQdi+xa/w+l9ldhp2ZRy6bzJXv65g=",
+    "url": "https://github.com/cloud-py-api/app_api/releases/download/v3.2.0/app_api-v3.2.0.tar.gz",
+    "version": "3.2.0",
+    "description": "### Boost your Nextcloud with AppAPI and its specially designed applications.\n\n\nThe AppAPI is a project within the Nextcloud ecosystem designed to streamline and enhance the process of\napplication development, deployment, and management.\n\nIt introduces a new methodology that allows developers to create\napplications using a variety of programming languages, not limited to PHP, which was traditionally used in Nextcloud development.\n\n### Bundled App\n\n**Starting with Nextcloud 30.0.1, this application is included in the default Nextcloud package.**\n\n### Support\n\nWe appreciate any support for this project:\n\n- ⭐ Star our work on GitHub\n- ❗ Create an Issue or feature request\n- 💁 Resolve an Issue and create a Pull Request\n- 🧑‍💻 Develop your own application using AppAPI\n\nWe are genuinely excited about the future of the AppAPI project and its potential to transform\nthe way applications are developed and experienced within Nextcloud.\n\nAs we embark on this journey, we warmly invite you - developers, thinkers, creators, and visionaries -\nto join us in shaping a more versatile, stable, and secure app landscape.\n\n*Your insights, suggestions, and contributions are invaluable to us.*",
+    "homepage": "https://github.com/nextcloud/app_api",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "bookmarks": {
     "hash": "sha256-KsRj0AjSQ1Z7ej+BPWLqP2LMGg7NnL7o8/mI4mTNJRs=",
     "url": "https://github.com/nextcloud/bookmarks/releases/download/v15.0.5/bookmarks-15.0.5.tar.gz",
