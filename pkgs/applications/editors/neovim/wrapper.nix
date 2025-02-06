@@ -124,10 +124,6 @@ let
               # vim accepts a limited number of commands so we join all the provider ones
               "--add-flags" ''--cmd "lua ${providerLuaRc}"''
             ]
-            ++ lib.optionals (finalAttrs.packpathDirs.myNeovimPackages.start != [] || finalAttrs.packpathDirs.myNeovimPackages.opt != []) [
-              "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
-              "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
-            ]
             ++ lib.optionals finalAttrs.withRuby [
               "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
             ] ++ lib.optionals (finalAttrs.runtimeDeps != []) [
@@ -148,8 +144,15 @@ let
     finalMakeWrapperArgs =
       [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ lib.optionals finalAttrs.wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
       ++ finalAttrs.generatedWrapperArgs
+      # for home-manager scenario or case the user wants full control over plugins folder/init.lua
+      ++ lib.optionals finalAttrs.wrapRc (
+        [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
+        ++ lib.optionals (finalAttrs.packpathDirs.myNeovimPackages.start != [] || finalAttrs.packpathDirs.myNeovimPackages.opt != []) [
+          "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
+          "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
+        ]
+        )
       ;
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
