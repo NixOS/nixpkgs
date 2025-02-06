@@ -165,6 +165,29 @@ let
   };
 
   evalPackagePlatforms = lib.recursiveUpdate evalPackageSetPlatforms evalIndividualPackagePlatforms;
-  jobs = mapTestOn evalPackagePlatforms;
+
+  # Packages that match the following predicates won't be evaluated on any platforms
+  # Each predicate takes a human-readable, dot-delimited attribute path and the derivation itself
+  filterPackagePredicates =
+    let
+      matchCudaPackageByName = name: path: null != builtins.match "cudaPackages[^\.]*\.${name}" path;
+      knownBrokenConditions =
+        conds: drv: builtins.any (cond: drv.brokenConditions.${cond} or false) conds;
+    in
+    [
+    ];
+  filterPackageFn =
+    path: platforms:
+    if
+      builtins.any (
+        pred: pred (lib.getAttrFromPath path pkgs) (lib.showAttrPath path)
+      ) filterPackagePredicates
+    then
+      [ ]
+    else
+      platforms;
+  filteredEvalPackagePlatforms = lib.mapAttrsRecursive filterPackageFn evalPackagePlatforms;
+
+  jobs = mapTestOn filteredEvalPackagePlatforms;
 in
 jobs
