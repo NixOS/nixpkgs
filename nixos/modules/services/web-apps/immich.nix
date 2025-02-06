@@ -20,7 +20,8 @@ let
     NoNewPrivileges = true;
     PrivateUsers = true;
     PrivateTmp = true;
-    PrivateDevices = true;
+    PrivateDevices = cfg.accelerationDevices == [ ];
+    DeviceAllow = mkIf (cfg.accelerationDevices != null) cfg.accelerationDevices;
     PrivateMounts = true;
     ProtectClock = true;
     ProtectControlGroups = true;
@@ -159,6 +160,17 @@ in
           Extra configuration environment variables. Refer to the [documentation](https://immich.app/docs/install/environment-variables) for options tagged with 'machine-learning'.
         '';
       };
+    };
+
+    accelerationDevices = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = [ ];
+      example = [ "/dev/dri/renderD128" ];
+      description = ''
+        A list of device paths to hardware acceleration devices that immich should
+        have access to. This is useful when transcoding media files.
+        The special value `[ ]` will disallow all devices using `PrivateDevices`. `null` will give access to all devices.
+      '';
     };
 
     database = {

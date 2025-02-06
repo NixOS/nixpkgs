@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with ocamlPackages; [
     camlzip
     menhirLib
-    num
+    (if lib.versionAtLeast version "1.8.0" then zarith else num)
     re
     sexplib
   ];

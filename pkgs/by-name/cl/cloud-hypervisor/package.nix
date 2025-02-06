@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   dtc,
@@ -11,25 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "43.0";
+  version = "44.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-drxJtlvBpkK3I7Ob3+pH4KLUq53GWXe1pmv7CI3bbP4=";
+    hash = "sha256-2nA8bhezmGa6Gu420nxDrgW0SonTQv1WoGYmBwm7/bI=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "kvm-ioctls-0.19.1.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/eaa21946993276434403d41419a34e564935c8e9.patch";
-      hash = "sha256-G7B0uGl/RAkwub8x1jNNgBrC0dwq/Gv46XpbtTZWD5M=";
-    })
-  ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-F6ukvSwMHRHXoZKgXEFnTAN1B80GsQDW8iqZAvsREr4=";
+  cargoHash = "sha256-e2VbzBPfoy5+YrqZ5mkbxMLpQIOG0x5tIhNG6Tv+u0M=";
 
   separateDebugInfo = true;
 

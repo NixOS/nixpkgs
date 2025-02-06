@@ -146,6 +146,12 @@ in
           proxyPass = "http://unix:${cfg.socketPath}";
           proxyWebsockets = true;
           recommendedProxySettings = true;
+          extraConfig = # nginx
+            ''
+              # disable in case it was configured on a higher level
+              keepalive_timeout 0;
+              proxy_buffering off;
+            '';
         };
       }
 

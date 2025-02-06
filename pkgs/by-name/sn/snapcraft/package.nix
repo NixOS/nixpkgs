@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  git,
+  gitMinimal,
   glibc,
   lib,
   makeWrapper,
@@ -8,6 +8,7 @@
   python3Packages,
   squashfsTools,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -138,16 +139,12 @@ python3Packages.buildPythonApplication rec {
       pytestCheckHook
       responses
       setuptools
+      writableTmpDirAsHomeHook
     ]
     ++ [
-      git
+      gitMinimal
       squashfsTools
     ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 

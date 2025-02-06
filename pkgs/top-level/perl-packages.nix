@@ -992,11 +992,11 @@ with self; {
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.4.1";
+    version = "1.5.0";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.4.1.tar.gz";
-      hash = "sha256-yvMcyPdy46TJ1LP/Oo9oSm61sbPCYfTdwPkKiMNgB8Y=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.0.tar.gz";
+      hash = "sha256-oViHFpPt8en/460D55i1ZQBze4AcCiiMY/gR75oUAYQ=";
     };
     buildInputs = [ CaptureTiny TestExit TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl AlgorithmBackoff ];

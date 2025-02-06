@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "6.1.5";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     tag = version;
-    hash = "sha256-fIypWohefKS4X/obiPHNF4QPuGBzitcvf7fXBpUZotY=";
+    hash = "sha256-j3L0U4dcmU35eHyrB8ZASGso8lWFwSD3PGq5fRSGOg0=";
   };
 
   build-system = [ setuptools ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for Google Nest Device Access using the Smart Device Management API";
     homepage = "https://github.com/allenporter/python-google-nest-sdm";
-    changelog = "https://github.com/allenporter/python-google-nest-sdm/releases/tag/${version}";
+    changelog = "https://github.com/allenporter/python-google-nest-sdm/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "google_nest";

@@ -20,6 +20,9 @@
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -826,6 +829,12 @@
   ],
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
+  ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
   ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
@@ -2342,6 +2351,12 @@
   ],
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
+  ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
   ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"

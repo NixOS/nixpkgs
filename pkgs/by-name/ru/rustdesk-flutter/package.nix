@@ -38,7 +38,8 @@ let
       hash = "sha256-SbwqWapJbt6+RoqRKi+wkSH1D+Wz7JmnVbfcfKkjt8Q=";
     };
 
-    cargoHash = "sha256-dDyiptG9TKes+fXx2atwx697SWH7Rltx6xVubtTn7FM=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-4khuq/DK4sP98AMHyr/lEo1OJdqLujOIi8IgbKBY60Y=";
     cargoBuildFlags = [
       "--package"
       "flutter_rust_bridge_codegen"

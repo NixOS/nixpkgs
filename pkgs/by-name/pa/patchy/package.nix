@@ -6,7 +6,7 @@
   versionCheckHook,
 }:
 let
-  version = "1.2.7";
+  version = "1.3.0";
 in
 rustPlatform.buildRustPackage {
   pname = "patchy";
@@ -16,9 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "nik-rev";
     repo = "patchy";
     tag = "v${version}";
-    hash = "sha256-Npb+qcguxZAvWggJC5NtxCeUCU/nOtjCbK5gfkDTkfw=";
+    hash = "sha256-7WAdfbnvsmaD8fMCJQ8dQenCDmLLxjVTj2DGcAhMxcg=";
   };
-  cargoHash = "sha256-vtKIDmfKSSZjorIGQ13OYrdmzabS5//j2/n7kJC9O7k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QaFIu7YVixQsDGL5fjQ3scKMyr0hw8lEWVc80EMTBB8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";

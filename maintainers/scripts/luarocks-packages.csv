@@ -101,10 +101,10 @@ luaunbound,,,,,,
 luaunit,,,,,,lockejan
 luautf8,,,,,,pstn
 luazip,,,,,,
+lusc_luv,,,,,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 luuid,,,,20120509-2,,
 luv,,,,1.48.0-2,,
-lusc_luv,,,,,,
 lyaml,,,,,,lblasc
 lz.n,,,,,,mrcjkb
 lze,,,,,,birdee
@@ -123,8 +123,8 @@ nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,,
 nvim-nio,,,,,,mrcjkb
 orgmode,,,,,,
-pathlib.nvim,,,,,,
 papis-nvim,,,,,,GaetanLepage
+pathlib.nvim,,,,,,
 penlight,,,,,,alerque
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
 psl,,,,0.3,,
@@ -148,6 +148,7 @@ telescope.nvim,,,,,5.1,
 tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml-edit,,,,,5.1,mrcjkb
+tree-sitter-http,,,,0.0.33-1,,
 tree-sitter-norg,,,,,5.1,mrcjkb
 tree-sitter-orgmode,,,,,,
 vstruct,,,,,,

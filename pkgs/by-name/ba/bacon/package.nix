@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-TniEPcY3mK5LO9CBXi5kgnUQkOeDwF9n1K0kSn4ucKk=";
   };
 
-  cargoHash = "sha256-5pY43PH2I4L/QsNnJffBGiRtuZrnLVCxjo0YseLsEMc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6vR8Bxv/A6do4+oGAI0kx1yUyht7YOi1pP/mnIiBPmc=";
 
   buildFeatures = lib.optionals withSound [
     "sound"

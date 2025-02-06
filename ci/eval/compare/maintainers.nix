@@ -11,17 +11,13 @@ let
   changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
 
   anyMatchingFile =
-    filename:
-    let
-      matching = builtins.filter (changed: lib.strings.hasSuffix changed filename) changedpaths;
-    in
-    (builtins.length matching) > 0;
+    filename: builtins.any (changed: lib.strings.hasSuffix changed filename) changedpaths;
 
-  anyMatchingFiles = files: (builtins.length (builtins.filter anyMatchingFile files)) > 0;
+  anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  enrichedAttrs = builtins.map (path: {
-    path = path;
-    name = builtins.concatStringsSep "." path;
+  enrichedAttrs = builtins.map (name: {
+    path = lib.splitString "." name;
+    name = name;
   }) changedattrs;
 
   validPackageAttributes = builtins.filter (
@@ -44,14 +40,6 @@ let
   attrsWithMaintainers = builtins.map (
     pkg: pkg // { maintainers = (pkg.package.meta or { }).maintainers or [ ]; }
   ) attrsWithPackages;
-
-  attrsWeCanPing = builtins.filter (
-    pkg:
-    if (builtins.length pkg.maintainers) > 0 then
-      true
-    else
-      builtins.trace "Package has no maintainers: ${pkg.name}" false
-  ) attrsWithMaintainers;
 
   relevantFilenames =
     drv:
@@ -88,33 +76,16 @@ let
 
   attrsWithModifiedFiles = builtins.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
-  listToPing = lib.lists.flatten (
-    builtins.map (
-      pkg:
-      builtins.map (maintainer: {
-        id = maintainer.githubId;
-        packageName = pkg.name;
-        dueToFiles = pkg.filenames;
-      }) pkg.maintainers
-    ) attrsWithModifiedFiles
-  );
+  listToPing = lib.concatMap (
+    pkg:
+    builtins.map (maintainer: {
+      id = maintainer.githubId;
+      packageName = pkg.name;
+      dueToFiles = pkg.filenames;
+    }) pkg.maintainers
+  ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.lists.foldr (
-    ping: collector:
-    collector
-    // {
-      "${toString ping.id}" = [
-        { inherit (ping) packageName dueToFiles; }
-      ] ++ (collector."${toString ping.id}" or [ ]);
-    }
-  ) { } listToPing;
-
-  textForPackages =
-    packages: lib.strings.concatStringsSep ", " (builtins.map (pkg: pkg.packageName) packages);
-
-  textPerMaintainer = lib.attrsets.mapAttrs (
-    maintainer: packages: "- @${maintainer} for ${textForPackages packages}"
-  ) byMaintainer;
+  byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: builtins.map (pkg: pkg.packageName) packages

@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-agent";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VuyfKIfOJ6+LTiNCO/SQMHk81KffF/dUfxMGT2go6RM=";
+    hash = "sha256-KiADf4vjdMMbD5edSEE4LPphaDP64E0nqLLJ0lVnLDE=";
   };
 
   nativeBuildInputs = [

@@ -11,6 +11,7 @@
   fetchurl,
   neovimUtils,
   replaceVars,
+  symlinkJoin,
   # Language dependencies
   fetchYarnDeps,
   mkYarnModules,
@@ -43,12 +44,14 @@
   nodejs,
   notmuch,
   openscad,
+  openssh,
   parinfer-rust,
   phpactor,
   ranger,
   ripgrep,
   skim,
   sqlite,
+  sshfs,
   statix,
   stylish-haskell,
   tabnine,
@@ -125,6 +128,36 @@ let
   luaPackages = neovim-unwrapped.lua.pkgs;
 in
 {
+  corePlugins = symlinkJoin {
+    name = "core-vim-plugins";
+    paths = with self; [
+      # plugin managers
+      lazy-nvim
+      mini-deps
+      packer-nvim
+      vim-plug
+
+      # core dependencies
+      plenary-nvim
+
+      # popular plugins
+      mini-nvim
+      nvim-cmp
+      nvim-lspconfig
+      nvim-treesitter
+      vim-airline
+      vim-fugitive
+      vim-surround
+    ];
+
+    meta = {
+      description = "Collection of popular vim plugins (for internal testing purposes)";
+    };
+  };
+
+  #######################
+  # Regular overrides
+
   aerial-nvim = super.aerial-nvim.overrideAttrs {
     # optional dependencies
     nvimSkipModule = [
@@ -259,8 +292,16 @@ in
     dependencies = [ self.copilot-lua ];
   };
 
+  blink-cmp-dictionary = super.blink-cmp-dictionary.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
     dependencies = [ self.blink-cmp ];
+  };
+
+  blink-cmp-git = super.blink-cmp-git.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
   };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
@@ -270,6 +311,10 @@ in
   bufferline-nvim = super.bufferline-nvim.overrideAttrs {
     # depends on bufferline.lua being loaded first
     nvimSkipModule = [ "bufferline.commands" ];
+  };
+
+  bufresize-nvim = super.bufresize-nvim.overrideAttrs {
+    meta.license = lib.licenses.mit;
   };
 
   catppuccin-nvim = super.catppuccin-nvim.overrideAttrs {
@@ -314,6 +359,8 @@ in
       plenary-nvim
     ];
   };
+
+  clangd_extensions-nvim = callPackage ./non-generated/clangd_extensions-nvim { };
 
   clang_complete = super.clang_complete.overrideAttrs {
     # In addition to the arguments you pass to your compiler, you also need to
@@ -366,9 +413,7 @@ in
     ];
   };
 
-  cmp-async-path = super.cmp-async-path.overrideAttrs {
-    checkInputs = [ self.nvim-cmp ];
-  };
+  cmp-async-path = callPackage ./non-generated/cmp-async-path { };
 
   cmp-beancount = super.cmp-beancount.overrideAttrs {
     checkInputs = [ self.nvim-cmp ];
@@ -1199,6 +1244,8 @@ in
     configurePhase = "cd plugins/nvim";
   };
 
+  gitlab-vim = callPackage ./non-generated/gitlab-vim { };
+
   gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -1267,6 +1314,8 @@ in
       "overseer.component.hardhat.refresh_gas_extmarks"
     ];
   };
+
+  hare-vim = callPackage ./non-generated/hare-vim { };
 
   harpoon = super.harpoon.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
@@ -1585,6 +1634,8 @@ in
     luaAttr = luaPackages.lsp-progress-nvim;
   };
 
+  lsp_lines-nvim = callPackage ./non-generated/lsp_lines-nvim { };
+
   lspecho-nvim = super.lspecho-nvim.overrideAttrs {
     meta.license = lib.licenses.mit;
   };
@@ -1764,6 +1815,24 @@ in
       sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
+  minuet-ai-nvim = super.minuet-ai-nvim.overrideAttrs {
+    checkInputs = [
+      # optional cmp integration
+      self.nvim-cmp
+    ];
+    dependencies = with self; [ plenary-nvim ];
+    nvimSkipModule = [
+      # Backends require configuration
+      "minuet.backends.claude"
+      "minuet.backends.codestral"
+      "minuet.backends.gemini"
+      "minuet.backends.huggingface"
+      "minuet.backends.openai"
+      "minuet.backends.openai_compatible"
+      "minuet.backends.openai_fim_compatible"
+    ];
   };
 
   mkdnflow-nvim = super.mkdnflow-nvim.overrideAttrs {
@@ -2297,6 +2366,8 @@ in
     dependencies = [ self.nvim-java-core ];
   };
 
+  nvim-julia-autotest = callPackage ./non-generated/nvim-julia-autotest { };
+
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -2721,14 +2792,7 @@ in
   quicker-nvim = super.quicker-nvim.overrideAttrs {
   };
 
-  rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs {
-    nvimSkipModule = [
-      # rainbow-delimiters.types.lua
-      "rainbow-delimiters.types"
-      # Test that requires an unpackaged dependency
-      "rainbow-delimiters._test.highlight"
-    ];
-  };
+  rainbow-delimiters-nvim = callPackage ./non-generated/rainbow-delimiters-nvim { };
 
   range-highlight-nvim = super.range-highlight-nvim.overrideAttrs {
     dependencies = [ self.cmd-parser-nvim ];
@@ -2762,6 +2826,17 @@ in
       plenary-nvim
     ];
     nvimSkipModule = "repro";
+  };
+
+  remote-sshfs-nvim = super.remote-sshfs-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+    runtimeDeps = [
+      openssh
+      sshfs
+    ];
   };
 
   renamer-nvim = super.renamer-nvim.overrideAttrs {
@@ -3641,6 +3716,8 @@ in
   vim-speeddating = super.vim-speeddating.overrideAttrs {
     dependencies = [ self.vim-repeat ];
   };
+
+  vim-stationeers-ic10-syntax = callPackage ./non-generated/vim-stationeers-ic10-syntax { };
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
     postPatch =

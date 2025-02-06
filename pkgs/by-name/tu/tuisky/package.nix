@@ -10,16 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuisky";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "sugyan";
     repo = "tuisky";
     tag = "v${version}";
-    hash = "sha256-phadkJgSvizSNPvrVaYu/+y1uAj6fmb9JQLdj0dEQIg=";
+    hash = "sha256-s0eKWP4cga82Fj7KGIG6yLk67yOqGoAqfhvJINzytTw=";
   };
 
-  cargoHash = "sha256-jI4HKn8HalEnBCuFR8/auTqi8M1qt25MS3h/b1pf3BA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-F/gEBEpcgNT0Q55zUTf8254yYIZI6RmiW9heCuljAEY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TUI client for bluesky";
     homepage = "https://github.com/sugyan/tuisky";
-    changelog = "https://github.com/sugyan/tuisky/blob/${lib.removePrefix "refs/tags/" src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/sugyan/tuisky/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "tuisky";

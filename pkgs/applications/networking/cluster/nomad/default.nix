@@ -74,10 +74,6 @@ let
       }
       // attrs'
     );
-
-  throwUnsupportaed =
-    version:
-    "${version} is no longer supported upstream. You can switch to using a newer version of the nomad package, or revert to older nixpkgs if you cannot upgrade";
 in
 rec {
   # Nomad never updates major go versions within a release series and is unsupported
@@ -87,12 +83,6 @@ rec {
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
   nomad = nomad_1_8;
-
-  nomad_1_4 = throwUnsupportaed "nomad_1_4";
-
-  nomad_1_5 = throwUnsupportaed "nomad_1_5";
-
-  nomad_1_6 = throwUnsupportaed "nomad_1_6";
 
   nomad_1_7 = generic {
     buildGoModule = buildGo122Module;

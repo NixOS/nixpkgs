@@ -23,7 +23,6 @@
   libxml2,
   sqlite,
   pytestCheckHook,
-  darwin,
   sparsehash,
 }:
 
@@ -115,6 +114,7 @@ buildPythonPackage rec {
       "test_passing_pycairo_context_pdf"
       "test_pdf_printing"
       "test_render_with_scale_factor"
+      "test_raster_warping"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_passing_pycairo_context_png"
@@ -129,11 +129,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mapnik" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Mapnik";
-    maintainers = [ ];
     homepage = "https://mapnik.org";
-    license = licenses.lgpl21Plus;
-    broken = true; # At 2024-11-13, test_raster_warping fails.
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.geospatial.members;
   };
 }

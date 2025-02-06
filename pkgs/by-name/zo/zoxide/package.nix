@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoHash = "sha256-ZRsnoLysNzDIi9hDOqwAzbxcyFQgn2Wv3gRNAjV5HfE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+Vip7MjVV23dZdD8GxmNFrfnsjmucohMDUZE9vbpG5w=";
 
   postInstall = ''
     installManPage man/man*/*

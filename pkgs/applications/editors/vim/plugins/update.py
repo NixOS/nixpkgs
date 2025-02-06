@@ -82,7 +82,7 @@ class VimEditor(pluginupdate.Editor):
             f.write(
                 textwrap.dedent(
                     """
-                { lib, buildVimPlugin, buildNeovimPlugin, fetchFromGitHub, fetchgit }:
+                { lib, buildVimPlugin, buildNeovimPlugin, fetchFromGitHub }:
 
                 final: prev:
                 {
@@ -112,6 +112,7 @@ class VimEditor(pluginupdate.Editor):
     version = "{plugin.version}";
     src = {src_nix};
     meta.homepage = "{repo.uri}";
+    meta.hydraPlatforms = [ ];
   }};
 
 """.format(

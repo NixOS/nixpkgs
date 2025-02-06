@@ -110,6 +110,8 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
       nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
     '';
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   disabledTests =

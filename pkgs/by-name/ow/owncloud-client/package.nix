@@ -2,45 +2,47 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  qt6Packages,
+  # nativeBuildInputs
   pkg-config,
   cmake,
   extra-cmake-modules,
-  qt6,
-  qt6Packages,
+  # buildInputs
   sqlite,
   libsecret,
   libre-graph-api-cpp-qt-client,
   kdsingleapplication,
-  # darwin only:
+  ## darwin only
   libinotify-kqueue,
   sparkleshare,
 }:
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "5.3.1";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
     tag = "v${version}";
-    hash = "sha256-ot+2hxipeZ5eI6nPJ8XGE8gFMNQoblUq+koAFZpZDv4=";
+    hash = "sha256-HEnjtedmdNJTpc/PmEyoEsLGUydFkVF3UAsSdzQ4L1Q=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
     extra-cmake-modules
-    qt6.qttools
-    qt6.wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs =
     [
       sqlite
       libsecret
-      qt6.qtbase
-      qt6.qtsvg # Needed for the systray icon
+      qt6Packages.qtbase
+      qt6Packages.qtsvg # Needed for the systray icon
       qt6Packages.qtkeychain
       libre-graph-api-cpp-qt-client
       kdsingleapplication
@@ -49,6 +51,8 @@ stdenv.mkDerivation rec {
       libinotify-kqueue
       sparkleshare
     ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";

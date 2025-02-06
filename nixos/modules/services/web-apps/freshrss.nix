@@ -131,7 +131,7 @@ in
     };
 
     webserver = mkOption {
-      type = types.enum [ "nginx" "caddy" "none"];
+      type = types.enum [ "nginx" "caddy" ];
       default = "nginx";
       description = ''
         Whether to use nginx or caddy for virtual host management.

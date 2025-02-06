@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yash";
-  version = "2.57";
+  version = "2.58";
 
   src = fetchFromGitHub {
     owner = "magicant";
     repo = pname;
     rev = version;
-    hash = "sha256-TqQWbwNk2P2vETJ2294bd689WBry0xRdz7xz/NnMBrk=";
+    hash = "sha256-d0Dt/+TxAtfKndXao6Cd9IEujHwi6H5HQjgY774UEFY=";
   };
 
   strictDeps = true;

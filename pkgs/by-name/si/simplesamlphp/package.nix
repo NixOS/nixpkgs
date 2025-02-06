@@ -3,18 +3,18 @@
   fetchFromGitHub,
   lib,
 }:
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "simplesamlphp";
   version = "1.19.7";
 
   src = fetchFromGitHub {
     owner = "simplesamlphp";
     repo = "simplesamlphp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qmy9fuZq8MBqvYV6/u3Dg92pHHicuUhdNeB22u4hwwA=";
   };
 
-  vendorHash = "sha256-FMFD0AXmD7Rq4d9+aNtGVk11YuOt40FWEqxvf+gBjmI=";
+  vendorHash = "sha256-kFRvOxSfqlM+xzFFlEm9YrbQDOvC4AA0BtztFQ1xxDU=";
 
   meta = {
     description = "SimpleSAMLphp is an application written in native PHP that deals with authentication (SQL, .htpasswd, YubiKey, LDAP, PAPI, Radius)";

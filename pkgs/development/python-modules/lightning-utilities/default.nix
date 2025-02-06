@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.11.9";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-7fRn7KvB7CEq8keVR8nrf6IY2G8omAQqNX+DPEf+7nc=";
+    hash = "sha256-Uu5VhrETDOYnTwjSSKkJx08yjt7cpgP2fmkpRyDepaI=";
   };
 
   postPatch = ''

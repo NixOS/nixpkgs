@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/datafusion-cli";
 
-  cargoHash = "sha256-jqL/o4vSTJfQEFurtmNoi8pNzCLslhqlNKISm8dp6hs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hRnVwFhqPq7NiwRPeXzrhv/n58QHEIS9YgXZAFbvn6M=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security

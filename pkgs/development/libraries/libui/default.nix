@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     lib.optional stdenv.hostPlatform.isLinux gtk3
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
+  postPatch = ''
+    substituteInPlace darwin/text.m unix/text.c \
+      --replace-fail "strcasecmp" "g_strcasecmp"
+  '';
+
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's/set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")//' ./CMakeLists.txt
   '';

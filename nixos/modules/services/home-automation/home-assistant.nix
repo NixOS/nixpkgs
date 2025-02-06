@@ -6,17 +6,22 @@ let
     attrByPath
     attrValues
     concatMap
+    concatStrings
     converge
     elem
     escapeShellArg
     escapeShellArgs
     filter
     filterAttrsRecursive
+    flatten
     hasAttrByPath
     isAttrs
     isDerivation
     isList
+    isStorePath
     literalExpression
+    mapAttrsToList
+    mergeAttrsList
     mkEnableOption
     mkIf
     mkMerge
@@ -28,6 +33,7 @@ let
     recursiveUpdate
     singleton
     splitString
+    substring
     types
     unique
   ;
@@ -502,6 +508,41 @@ in {
       type = types.bool;
       description = "Whether to open the firewall for the specified port.";
     };
+
+    blueprints = mergeAttrsList (
+      map
+        (domain: {
+          ${domain} = mkOption {
+            default = [ ];
+            description = ''
+              List of ${domain}
+              [blueprints](https://www.home-assistant.io/docs/blueprint/) to
+              install into {file}`''${configDir}/blueprints/${domain}`.
+            '';
+            example =
+              if domain == "automation" then
+                literalExpression ''
+                  [
+                    (pkgs.fetchurl {
+                      url = "https://github.com/home-assistant/core/raw/2025.1.4/homeassistant/components/automation/blueprints/motion_light.yaml";
+                      hash = "sha256-4HrDX65ycBMfEY2nZ7A25/d3ZnIHdpHZ+80Cblp+P5w=";
+                    })
+                  ]
+                ''
+              else if domain == "template" then
+                literalExpression "[ \"\${pkgs.home-assistant.src}/homeassistant/components/template/blueprints/inverted_binary_sensor.yaml\" ]"
+              else
+                literalExpression "[ ./blueprint.yaml ]";
+            type = types.listOf (types.coercedTo types.path (x: "${x}") types.pathInStore);
+          };
+        })
+        # https://www.home-assistant.io/docs/blueprint/schema/#domain
+        [
+          "automation"
+          "script"
+          "template"
+        ]
+    );
   };
 
   config = mkIf cfg.enable {
@@ -576,11 +617,36 @@ in {
             ln -fns "''${paths[@]}" "${cfg.configDir}/custom_components/"
           done
         '';
+        removeBlueprints = ''
+          # remove blueprints symlinked in from below the /nix/store
+          readarray -d "" blueprints < <(find "${cfg.configDir}/blueprints" -maxdepth 2 -type l -print0)
+          for blueprint in "''${blueprints[@]}"; do
+            if [[ "$(readlink "$blueprint")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
+              rm "$blueprint"
+            fi
+          done
+        '';
+        copyBlueprint =
+          domain: blueprint:
+          let
+            filename =
+              if isStorePath blueprint then substring 33 (-1) (baseNameOf blueprint) else baseNameOf blueprint;
+            path = "${cfg.configDir}/blueprints/${domain}";
+          in
+          ''
+            mkdir -p ${escapeShellArg path}
+            ln -s ${escapeShellArg blueprint} ${escapeShellArg "${path}/${filename}"}
+          '';
+        copyBlueprints = concatStrings (
+          flatten (mapAttrsToList (domain: map (copyBlueprint domain)) cfg.blueprints)
+        );
       in
         (optionalString (cfg.config != null) copyConfig) +
         (optionalString (cfg.lovelaceConfig != null) copyLovelaceConfig) +
         copyCustomLovelaceModules +
-        copyCustomComponents
+        copyCustomComponents +
+        removeBlueprints +
+        copyBlueprints
       ;
       environment.PYTHONPATH = package.pythonPath;
       serviceConfig = let

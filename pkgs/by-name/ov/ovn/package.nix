@@ -47,14 +47,16 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure
+    ./configure --with-dbdir=/var/lib/openvswitch
     make -j $NIX_BUILD_CORES
     popd
   '';
 
   configureFlags = [
     "--localstatedir=/var"
+    "--sharedstatedir=/var"
     "--with-dbdir=/var/lib/ovn"
+    "--sbindir=$(out)/bin"
     "--enable-ssl"
   ];
 
@@ -71,14 +73,20 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -vp $out/share/openvswitch/scripts
     mkdir -vp $out/etc/ovn
-    cp ovs/ovsdb/ovsdb-client $out/share/openvswitch/scripts
-    cp ovs/ovsdb/ovsdb-server $out/share/openvswitch/scripts
-    cp ovs/ovsdb/ovsdb-tool $out/share/openvswitch/scripts
-    cp ovs/utilities/ovs-appctl $out/share/openvswitch/scripts
-    cp ovs/utilities/ovs-vsctl $out/share/openvswitch/scripts
+    cp ovs/ovsdb/ovsdb-client $out/bin
+    cp ovs/ovsdb/ovsdb-server $out/bin
+    cp ovs/ovsdb/ovsdb-tool $out/bin
+    cp ovs/vswitchd/ovs-vswitchd $out/bin
+    cp ovs/utilities/ovs-appctl $out/bin
+    cp ovs/utilities/ovs-vsctl $out/bin
+    cp ovs/utilities/ovs-ctl $out/share/openvswitch/scripts
     cp ovs/utilities/ovs-lib $out/share/openvswitch/scripts
-    sed -i "s#/usr/local/bin#$out/share/openvswitch/scripts#g" $out/share/openvswitch/scripts/ovs-lib
-    sed -i "s#/usr/local/sbin#$out/share/openvswitch/scripts#g" $out/share/openvswitch/scripts/ovs-lib
+    cp ovs/utilities/ovs-kmod-ctl $out/share/openvswitch/scripts
+    cp ovs/vswitchd/vswitch.ovsschema $out/share/openvswitch
+    sed -i "s#/usr/local/etc#/var/lib#g" $out/share/openvswitch/scripts/ovs-lib
+    sed -i "s#/usr/local/bin#$out/bin#g" $out/share/openvswitch/scripts/ovs-lib
+    sed -i "s#/usr/local/sbin#$out/bin#g" $out/share/openvswitch/scripts/ovs-lib
+    sed -i "s#/usr/local/share#$out/share#g" $out/share/openvswitch/scripts/ovs-lib
     sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
   '';
 

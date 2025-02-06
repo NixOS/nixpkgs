@@ -5,6 +5,7 @@
   cmake,
   zlib,
   enablePython ? true,
+  addBinToPathHook,
   python3Packages,
   testers,
 }:
@@ -44,15 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = enablePython;
 
-  nativeInstallCheckInputs = with python3Packages; [
-    # biopython
-    numpy
-    pytestCheckHook
-  ];
-
-  preInstallCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  nativeInstallCheckInputs =
+    with python3Packages;
+    [
+      # biopython
+      numpy
+      pytestCheckHook
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pytestFlagsArray = [ "../tests" ];
 

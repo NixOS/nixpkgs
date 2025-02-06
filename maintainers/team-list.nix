@@ -46,10 +46,11 @@ with lib.maintainers;
 
   android = {
     members = [
-      numinit
-      hadilq
-      RossComputerGuy
       adrian-gierakowski
+      hadilq
+      johnrtitor
+      numinit
+      RossComputerGuy
     ];
     scope = "Maintain Android-related tooling in nixpkgs.";
     githubTeams = [ "android" ];
@@ -469,7 +470,6 @@ with lib.maintainers;
   gnome-circle = {
     members = [
       aleksana
-      dawidd6
       getchoo
       michaelgrahamevans
     ];
@@ -1159,7 +1159,10 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [ figsoda ];
+    members = [
+      figsoda
+      RossComputerGuy
+    ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;

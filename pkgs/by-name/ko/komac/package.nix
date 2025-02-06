@@ -17,12 +17,12 @@
 }:
 
 let
-  version = "2.9.0";
+  version = "2.10.0";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
     tag = "v${version}";
-    hash = "sha256-5mGjzWuArEIl5+SHUaOFIRBEjdeCKQOAsUVepPBbsFM=";
+    hash = "sha256-qlaNJ9pgQe1gjPW4gjEJys/SqgKzpO3H8SenowsUi4o=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage {
 
   pname = "komac";
 
-  cargoHash = "sha256-IM+swMrLoHeY/sk9w6CB66IGCNNioVJzNyKKtXimN5g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sTYR8e6RX/kXZDlRA1uMvJGpg9amDj2oEjbGEE9wh60=";
 
   nativeBuildInputs =
     [

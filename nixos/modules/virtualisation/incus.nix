@@ -9,6 +9,8 @@ let
   cfg = config.virtualisation.incus;
   preseedFormat = pkgs.formats.yaml { };
 
+  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
+
   serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
     lib.makeBinPath (
       with pkgs;
@@ -26,6 +28,7 @@ let
         e2fsprogs
         findutils
         getent
+        gawk
         gnugrep
         gnused
         gnutar
@@ -35,7 +38,6 @@ let
         iptables
         iw
         kmod
-        libnvidia-container
         libxfs
         lvm2
         lxcfs
@@ -72,6 +74,9 @@ let
       ++ lib.optionals config.boot.zfs.enabled [
         config.boot.zfs.package
         "${config.boot.zfs.package}/lib/udev"
+      ]
+      ++ lib.optionals nvidiaEnabled [
+        libnvidia-container
       ]
     )
   }'';
@@ -309,7 +314,7 @@ in
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    ] ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
 
     environment.systemPackages = [
       cfg.clientPackage

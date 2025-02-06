@@ -1,48 +1,44 @@
 {
   lib,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
   libsixel,
-  stdenv,
-  nix-update-script,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
     tag = "v${version}";
-    hash = "sha256-BFL0Y6v1v15WLSvA5i+l47bR9+1qDHPWSMMuEaLdhPY=";
+    hash = "sha256-giTEDk5bj1x0cE53zEkQ0SU3SQJZabhr1X3keV07rN4=";
   };
 
   buildInputs = [
     libsixel
   ];
 
-  cargoHash = "sha256-IC72l1xbH/AdCHdcgY8ODv6+YZUmT5NYVisP9oIMpGA=";
-
-  # Crashes at runtime on darwin with:
-  # Library not loaded: .../out/lib/libsixel.1.dylib
-  buildFeatures = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "sixel" ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-N3g7QHgsfr8QH6HWA3/Ar7ZZYN8JPE7D7+/2JVJzW9o=";
 
   checkFlags = [
     # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
     "--skip=external_snippet"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Terminal based slideshow tool";

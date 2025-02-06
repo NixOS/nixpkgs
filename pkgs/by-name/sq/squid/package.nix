@@ -16,15 +16,16 @@
   cppunit,
   esi ? false,
   ipv6 ? true,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "6.12";
+  version = "6.13";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8986uyYDpRMmbySl1Gmanw12ufVU0YSLZ/nFHNOzy1A=";
+    hash = "sha256-Iy4FZ5RszAEVZTw8GPAeg/LZzEnEPZ3q2LMZrws1rVI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "/bin/true" "$(realpath fake-true)"
     done
   '';
+
+  passthru.tests.squid = nixosTests.squid;
 
   meta = with lib; {
     description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";

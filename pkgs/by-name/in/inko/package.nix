@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Iojv8pTyILYpLFnoTlgUGmlfWWH0DgsGBRxzd3oRNwA=";
   };
 
-  cargoHash = "sha256-PaZD7wwcami6EWvOHLislNkwQhCZItN9XZkPSExwo0U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BTfg3uPLvbeKPgb7qF9WFYLzUCZ6AVRk9I0T2hxuVqU=";
 
   buildInputs = [
     libffi

@@ -273,15 +273,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     etcLayoutsFile = "lomiri/keymaps";
-    tests = {
-      inherit (nixosTests.lomiri)
-        greeter
-        desktop-basics
-        desktop-appinteractions
-        desktop-ayatana-indicators
-        keymap
-        ;
-    };
+    tests = nixosTests.lomiri;
     updateScript = gitUpdater { };
     greeter = linkFarm "lomiri-greeter" [
       {

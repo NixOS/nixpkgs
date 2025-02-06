@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-AUtue1xkhrhlF7PtqsCQ9rdhV0/0i85DWrp7YL9SAYk=";
   };
 
-  cargoHash = "sha256-y6lLwk40hmFQKDU7sYz3+QQzdn5eGoEX7izmloK22dg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yNHVhnJiawUrWncrIC8cAS25OYIZX7wVM9zMaupfTKM=";
 
   meta = with lib; {
     description = "Tool to check that your Cargo.toml dependencies are sorted alphabetically";

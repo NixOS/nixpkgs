@@ -17,28 +17,28 @@
 # FIXME: unpin when fixed upstream
 buildGo122Module rec {
   pname = "grafana-agent";
-  version = "0.43.4";
+  version = "0.44.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
-    rev = "v${version}";
-    hash = "sha256-VmGxe2bwp7It1Po+6kLia952PcT2MIg60qp3V/uRvUM=";
+    tag = "v${version}";
+    hash = "sha256-dAfiTJ0DlChriYOl/bPCEHj/UpbZ2a8BZBCQ82H+O9I=";
   };
 
-  vendorHash = "sha256-aFGxRw0l56tO3NxpzAKKj8fl4Uj4tSVWqCK3YcZjjMc=";
+  vendorHash = "sha256-6nXUeRpaezzfRykqMCtwP0FQZchRdxLmtupVAMNAjmY=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/internal/web/ui/yarn.lock";
-    hash = "sha256-kThqcjQ7qdSSs6bItSfLSW1WXpEYEA9BSLmyRfeCLyw=";
+    hash = "sha256-uqKOGSEnR9CU4vlahldrLxDb3z7Yt1DebyRB91NQMRc=";
   };
 
   ldflags = let
     prefix = "github.com/grafana/agent/internal/build";
   in [
     "-s" "-w"
-    # https://github.com/grafana/agent/blob/v0.41.0/Makefile#L132-L137
+    # https://github.com/grafana/agent/blob/v0.44.2/Makefile#L132-L137
     "-X ${prefix}.Version=${version}"
     "-X ${prefix}.Branch=v${version}"
     "-X ${prefix}.Revision=v${version}"

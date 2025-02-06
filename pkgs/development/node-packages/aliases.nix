@@ -39,6 +39,7 @@ mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
   "@astrojs/language-server" = pkgs.astro-language-server; # Added 2024-02-12
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
+  "@commitlint/config-conventional" = throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
@@ -96,6 +97,7 @@ mapAliases {
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
+  inherit (pkgs) eas-cli; # added 2025-01-08
   expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
@@ -132,6 +134,8 @@ mapAliases {
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
+  less = pkgs.lessc; # added 2024-06-15
+  less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
   inherit (pkgs) lv_font_conv; # added 2024-06-28
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
@@ -182,6 +186,7 @@ mapAliases {
   surge = pkgs.surge-cli; # Added 2023-09-08
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  inherit (pkgs) tailwindcss; # added 2024-12-04
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31

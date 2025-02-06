@@ -1,6 +1,7 @@
 {
   self,
   bash,
+  fetchpatch,
   fzf,
   lib,
   openssl,
@@ -211,6 +212,10 @@ with self;
       ctypes-foreign
       openssl
     ];
+    patches = fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-source-archives/main/patches/async_ssl/no-incompatible-pointer-types-017.patch";
+      hash = "sha256-bpfIi97/b1hIwsFzsmhFAZV1w8CdaMxXoi72ScSYMjY=";
+    };
   };
 
   async_unix = janePackage {
@@ -498,6 +503,13 @@ with self;
       patchShebangs unix_pseudo_terminal/src/discover.sh
     '';
     doCheck = false; # command_validate_parsing.exe is not specified in test build deps
+
+    # Compatibility with OCaml 5.3
+    patches = lib.optional (lib.versionAtLeast ocaml.version "5.3") (fetchpatch {
+      url = "https://github.com/janestreet/core_unix/commit/ebce389ac68e098f542e34400e114ac992f415af.patch";
+      includes = [ "bigstring_unix/src/bigstring_unix_stubs.c" ];
+      hash = "sha256-FGg2zlyp3aZFu1VeFdm7pgSPiW0HAkLYgMGTj+tqju8=";
+    });
   };
 
   csvfields = janePackage {
@@ -1545,8 +1557,8 @@ with self;
     // (
       if lib.versionAtLeast ocaml.version "5.3" then
         {
-          version = "0.17.1";
-          hash = "sha256-kcGXqO1kFYds8KwLvpIQ7OKhqnp6JZs8WYYLi7o/nBw=";
+          version = "0.17.2";
+          hash = "sha256-AQJSdKtF6p/aG5Lx8VHVEOsisH8ep+iiml6DtW+Hdik=";
         }
       else
         {

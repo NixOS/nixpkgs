@@ -9,8 +9,8 @@
   fmt,
   libidn,
   pkg-config,
-  spidermonkey_78,
-  boost183,
+  spidermonkey_115,
+  boost,
   icu,
   libxml2,
   libpng,
@@ -32,6 +32,8 @@
   SDL2,
   gloox,
   nvidia-texture-tools,
+  premake5,
+  cxxtest,
   freetype,
   withEditor ? true,
   wxGTK,
@@ -40,28 +42,13 @@
 # You can find more instructions on how to build 0ad here:
 #    https://trac.wildfiregames.com/wiki/BuildInstructions
 
-let
-  # the game requires a special version 78.6.0 of spidermonkey, otherwise
-  # we get compilation errors. We override the src attribute of spidermonkey_78
-  # in order to reuse that declaration, while giving it a different source input.
-  spidermonkey_78_6 = spidermonkey_78.overrideAttrs (old: rec {
-    version = "78.6.0";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-      sha256 = "0lyg65v380j8i2lrylwz8a5ya80822l8vcnlx3dfqpd3s6zzjsay";
-    };
-    patches = (old.patches or [ ]) ++ [
-      ./spidermonkey-cargo-toml.patch
-    ];
-  });
-in
 stdenv.mkDerivation rec {
   pname = "0ad";
-  version = "0.0.26";
+  version = "0.27.0";
 
   src = fetchurl {
-    url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "Lhxt9+MxLnfF+CeIZkz/w6eNO/YGBsAAOSdeHRPA7ks=";
+    url = "http://releases.wildfiregames.com/0ad-${version}-unix-build.tar.xz";
+    hash = "sha256-qpSFcAl1DV9h2/AWvBUOO9y9s6zfyK0gtzq4tD6aG6Y=";
   };
 
   nativeBuildInputs = [
@@ -71,10 +58,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    spidermonkey_78_6
-    # boost 1.86 fails with the following error:
-    # error: 'boost::filesystem::wpath' {aka 'class boost::filesystem::path'} has no member named 'leaf'
-    boost183
+    spidermonkey_115
+    boost
     icu
     libxml2
     libpng
@@ -99,6 +84,8 @@ stdenv.mkDerivation rec {
     libsodium
     fmt
     freetype
+    premake5
+    cxxtest
   ] ++ lib.optional withEditor wxGTK;
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -108,8 +95,6 @@ stdenv.mkDerivation rec {
     "-I${SDL2}/include/SDL2"
     "-I${fmt.dev}/include"
     "-I${nvidia-texture-tools.dev}/include"
-    # TODO: drop with next update
-    "-Wno-error=implicit-function-declaration"
   ];
 
   NIX_CFLAGS_LINK = toString [
@@ -118,39 +103,34 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rootdir_env.patch
-
-    # Fix build with libxml v2.12
+    # Fix build script when using system premake
+    # https://gitea.wildfiregames.com/0ad/0ad/pulls/7571
     # FIXME: Remove with next package update
-    (fetchpatch {
-      name = "libxml-2.12-fix.patch";
-      url = "https://github.com/0ad/0ad/commit/d242631245edb66816ef9960bdb2c61b68e56cec.patch";
-      hash = "sha256-Ik8ThkewB7wyTPTI7Y6k88SqpWUulXK698tevfSBr6I=";
-    })
-    # Fix build with GCC 13
-    # FIXME: Remove with next package update
-    (fetchpatch {
-      name = "gcc-13-fix.patch";
-      url = "https://github.com/0ad/0ad/commit/093e1eb23519ab4a4633a999a555a58e4fd5343e.patch";
-      hash = "sha256-NuWO64narU1JID/F3cj7lJKjo96XR7gSW0w8I3/hhuw=";
-    })
-    # Fix build with miniupnpc 2.2.8
-    # https://github.com/0ad/0ad/pull/45
-    (fetchpatch2 {
-      url = "https://github.com/0ad/0ad/commit/1575580bbc5278576693f3fbbb32de0b306aa27e.patch?full_index=1";
-      hash = "sha256-iXiUYTJCWwJpb2U3P58jTV4OpyW6quofu8Jq6xNEq48=";
-    })
+    ./fix-build-script.patch
   ];
 
   configurePhase = ''
     # Delete shipped libraries which we don't need.
-    rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
+    rm -rf libraries/source/{cxxtest-4.4,nvtt,premake-core,spidermonkey,spirv-reflect}
+
+    # Build remaining library dependencies (should be fcollada only)
+    pushd libraries
+    ./build-source-libs.sh \
+      --with-system-cxxtest \
+      --with-system-nvtt \
+      --with-system-mozjs \
+      --with-system-premake \
+      -j$NIX_BUILD_CORES
+    popd
 
     # Update Makefiles
     pushd build/workspaces
     ./update-workspaces.sh \
+      --with-system-premake5 \
+      --with-system-cxxtest \
       --with-system-nvtt \
       --with-system-mozjs \
-      ${lib.optionalString withEditor "--enable-atlas"} \
+      ${lib.optionalString (!withEditor) "--without-atlas"} \
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
       --without-tests \

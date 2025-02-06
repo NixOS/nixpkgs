@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-h4Z0Gb4lf/KXrBxU6gEGcRvuhqjUABsggcv/A+AFclo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-I8Is6jjBgxcqHkLrA/hesa7z3rrDVK6sjyw2/mQoRVs=";
 
   checkFlags = [
     # Skip interactive tests

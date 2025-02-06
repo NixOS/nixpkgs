@@ -26,7 +26,7 @@ let
         };
       }
       ''
-        buildPythonPath $plugins
+        buildPythonPath "$plugins"
         makeWrapper ${lib.getExe python.pkgs.mdformat} $out/bin/mdformat \
           --suffix PYTHONPATH : "$program_PYTHONPATH"
       '';

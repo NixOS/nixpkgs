@@ -22,7 +22,6 @@ buildPostgresqlExtension (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    postgresql
     perl
     perlPackages.TAPParserSourceHandlerpgTAP
     which

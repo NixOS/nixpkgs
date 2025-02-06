@@ -309,6 +309,8 @@ let
         };
       };
 
+      anweber.vscode-httpyac = callPackage ./anweber.vscode-httpyac { };
+
       apollographql.vscode-apollo = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-apollo";
@@ -1313,6 +1315,18 @@ let
           maintainers = [ lib.maintainers.datafoo ];
         };
       };
+
+      dendron.adjust-heading-level = callPackage ./dendron.adjust-heading-level { };
+
+      dendron.dendron = callPackage ./dendron.dendron { };
+
+      dendron.dendron-markdown-preview-enhanced =
+        callPackage ./dendron.dendron-markdown-preview-enhanced
+          { };
+
+      dendron.dendron-paste-image = callPackage ./dendron.dendron-paste-image { };
+
+      dendron.dendron-snippet-maker = callPackage ./dendron.dendron-snippet-maker { };
 
       denoland.vscode-deno = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -4039,6 +4053,8 @@ let
         };
       };
 
+      platformio.platformio-vscode-ide = callPackage ./platformio.platformio-vscode-ide { };
+
       pollywoggames.pico8-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "pico8-ls";
@@ -5397,8 +5413,8 @@ let
         mktplcRef = {
           name = "vscode-icons";
           publisher = "vscode-icons-team";
-          version = "12.10.0";
-          hash = "sha256-GNDLuszuJN3P0V25F4gm7yUJsFEQgFMMPMTFLWLIvSo=";
+          version = "12.11.0";
+          hash = "sha256-RpuCHJBLqhAXAdvC0qGDUJIy5ww1yqlSb7hKwCALidM=";
         };
         meta = {
           description = "Bring real icons to your Visual Studio Code";

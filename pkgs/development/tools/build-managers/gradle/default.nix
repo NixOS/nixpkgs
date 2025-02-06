@@ -48,6 +48,7 @@ rec {
       runCommand,
       writeText,
       autoPatchelfHook,
+      buildPackages,
 
       # The JDK/JRE used for running Gradle.
       java ? defaultJava,
@@ -78,7 +79,6 @@ rec {
         ];
 
       buildInputs = [
-        java
         stdenv.cc.cc
         ncurses5
         ncurses6
@@ -123,6 +123,8 @@ rec {
           newFileEvents = toString (lib.versionAtLeast version "8.12");
         in
         ''
+          # get the correct jar executable for cross
+          export PATH="${buildPackages.jdk}/bin:$PATH"
           . ${./patching.sh}
 
           nativeVersion="$(extractVersion native-platform $out/lib/gradle/lib/native-platform-*.jar)"
@@ -244,7 +246,7 @@ rec {
       lib,
       callPackage,
       mitm-cache,
-      substituteAll,
+      replaceVars,
       symlinkJoin,
       concatTextFile,
       makeSetupHook,
@@ -264,11 +266,10 @@ rec {
             name = "setup-hook.sh";
             files = [
               (mitm-cache.setupHook)
-              (substituteAll {
-                src = ./setup-hook.sh;
+              (replaceVars ./setup-hook.sh {
                 # jdk used for keytool
                 inherit (gradle) jdk;
-                init_script = ./init-build.gradle;
+                init_script = "${./init-build.gradle}";
               })
             ];
           }))

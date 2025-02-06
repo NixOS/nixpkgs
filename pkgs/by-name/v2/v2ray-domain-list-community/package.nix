@@ -9,12 +9,12 @@
 let
   generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-domain-list-community";
-    version = "20241221105938";
+    version = "20250124154827";
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "domain-list-community";
       rev = version;
-      hash = "sha256-k42qnHQY9bfSjyGGtaqKdIxlvU/C7TiN8sD0AiRQmVU=";
+      hash = "sha256-E69X6ktgZvW3xrZl+jmQMoPwRQlqU+0RW2epJHyFgeQ=";
     };
     vendorHash = "sha256-NLh14rXRci4hgDkBJVJDIDvobndB7KYRKAX7UjyqSsg=";
     meta = with lib; {

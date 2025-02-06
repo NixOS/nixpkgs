@@ -8,7 +8,7 @@
 
 let
   pname = "mbrola";
-  version = "3.3";
+  version = "3.3-unstable-2024-01-29";
 
   meta = with lib; {
     license = licenses.agpl3Plus;
@@ -25,18 +25,9 @@ let
     src = fetchFromGitHub {
       owner = "numediart";
       repo = "MBROLA";
-      rev = version;
-      sha256 = "1w86gv6zs2cbr0731n49z8v6xxw0g8b0hzyv2iqb9mqcfh38l8zy";
+      rev = "bf17e9e1416a647979ac683657a536e8ca5d880e";
+      hash = "sha256-ZjCl1gx/6sGtpXAYO4sAh6dutjwzClQ7kZoq0WaaBlU=";
     };
-
-    postPatch = ''
-      substituteInPlace Makefile \
-        --replace-fail 'O6' 'O3'
-      substituteInPlace Misc/common.h \
-        --replace-fail '|| defined(TARGET_OS_MAC)' ""
-      substituteInPlace Misc/common.c \
-        --replace-fail '|| defined(TARGET_OS_MAC)' ""
-    '';
 
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

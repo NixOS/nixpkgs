@@ -1,11 +1,12 @@
 {
   fetchgit,
-  installShellFiles,
   lib,
   libftdi1,
   libgpiod,
   libjaylink,
   libusb1,
+  meson,
+  ninja,
   pciutils,
   pkg-config,
   stdenv,
@@ -24,9 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    installShellFiles
+    meson
+    ninja
     pkg-config
   ];
+
   buildInputs =
     [
       libftdi1
@@ -40,21 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (withGpio) [
       libgpiod
-    ];
-
-  makeFlags =
-    let
-      yesNo = flag: if flag then "yes" else "no";
-    in
-    [
-      "libinstall"
-      "PREFIX=$(out)"
-      "CONFIG_JLINK_SPI=${yesNo withJlink}"
-      "CONFIG_LINUX_GPIO_SPI=${yesNo withGpio}"
-      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.hostPlatform.isDarwin)}"
-      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
-      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
     ];
 
   meta = with lib; {

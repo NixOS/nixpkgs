@@ -95,23 +95,22 @@ rec {
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "565.57.01";
-    sha256_64bit = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
-    sha256_aarch64 = "sha256-aDVc3sNTG4O3y+vKW87mw+i9AqXCY29GVqEIUlsvYfE=";
-    openSha256 = "sha256-/tM3n9huz1MTE6KKtTCBglBMBGGL/GOHi5ZSUag4zXA=";
-    settingsSha256 = "sha256-H7uEe34LdmUFcMcS6bz7sbpYhg9zPCb/5AmZZFTx1QA=";
-    persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
-    patchesOpen = [ drm_fop_flags_linux_612_patch ];
+    version = "570.86.16";
+    sha256_64bit = "sha256-RWPqS7ZUJH9JEAWlfHLGdqrNlavhaR1xMyzs8lJhy9U=";
+    sha256_aarch64 = "sha256-RiO2njJ+z0DYBo/1DKa9GmAjFgZFfQ1/1Ga+vXG87vA=";
+    openSha256 = "sha256-DuVNA63+pJ8IB7Tw2gM4HbwlOh1bcDg2AN2mbEU9VPE=";
+    settingsSha256 = "sha256-9rtqh64TyhDF5fFAYiWl3oDHzKJqyOW3abpcf2iNRT8=";
+    persistencedSha256 = "sha256-3mp9X/oV8o2TH9720NnoXROxQ4g98nNee+DucXpQy3w=";
   });
 
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "550.40.82";
+    version = "550.40.83";
     persistencedVersion = "550.54.14";
     settingsVersion = "550.54.14";
-    sha256_64bit = "sha256-+lvADY8k3Wfc1wuDLHC8xP1BPK/la3ZJmHvZ3zqQJ+I=";
-    openSha256 = "sha256-wTNAMI3J83v3lhKJ1yKgrL2V+mzLr3MeCT7oLlEasFw=";
+    sha256_64bit = "sha256-2zfiVA7H4erkdbqyNH+2MHexclT+ZF2PifYkD5Dmo7M=";
+    openSha256 = "sha256-Tqj8g/KUOtUc815tZo1wOrj7XMbDp7JL7oq7t3h1r+I=";
     settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
     persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";

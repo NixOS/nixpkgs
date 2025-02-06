@@ -103,7 +103,7 @@ if (($ENV{"NIXOS_NO_CHECK"} // "") ne "1") {
     chomp(my $pre_switch_checks = <<'EOFCHECKS');
 @preSwitchCheck@
 EOFCHECKS
-    system("$pre_switch_checks $out") == 0 or exit 1;
+    system("$pre_switch_checks $out $action") == 0 or exit 1;
     if ($action eq "check") {
         exit 0;
     }

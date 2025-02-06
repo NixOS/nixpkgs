@@ -15,13 +15,13 @@
 
 buildNpmPackage rec {
   pname = "voicevox";
-  version = "0.22.3";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox";
     tag = version;
-    hash = "sha256-6z+A4bJIDfN/K8IjEdt2TqEa/EDt4uQpGh+zSWfP74I=";
+    hash = "sha256-IOs3wBcFYpO4AHiWFOQWd5hp6EmwyA7Rcc8wjHKvYNQ=";
   };
 
   patches = [

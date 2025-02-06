@@ -780,9 +780,19 @@
     "hash": "sha256-idb2hvuDlxl83x0yttGHnTgEQmwLLdUT7QfMeGDXVJE="
   },
   {
+    "pname": "Jamarino.IntervalTree",
+    "version": "1.2.2",
+    "hash": "sha256-L8vFWl+1OUviHB+TOkw7Po0+IBLnJMZ1fnvqcYQOuRQ="
+  },
+  {
     "pname": "JetBrains.Annotations",
     "version": "2024.3.0",
     "hash": "sha256-BQYhE7JDJ9Bw588KyWzOvQFvQTiRa0K9maVkI9lZgBc="
+  },
+  {
+    "pname": "Jitbit.FastCache",
+    "version": "1.1.0",
+    "hash": "sha256-UJjNHEyBsi+XRkTF/D5EIIhVMchybD9INtXthXo49bg="
   },
   {
     "pname": "K4os.Compression.LZ4",
@@ -798,6 +808,11 @@
     "pname": "LinqGen",
     "version": "0.3.1",
     "hash": "sha256-Yyt1uShHigHVCIjPT8jL2Kth9L9yq1MGrCM5w2+tj9o="
+  },
+  {
+    "pname": "LinuxDesktopUtils.XDGDesktopPortal",
+    "version": "1.0.0",
+    "hash": "sha256-DTxWI/DI01Flb4yfSxukaEw6roSzD9iy4Twy1I8/5Mg="
   },
   {
     "pname": "LiveChartsCore",
@@ -893,6 +908,11 @@
     "pname": "Microsoft.Bcl.AsyncInterfaces",
     "version": "7.0.0",
     "hash": "sha256-1e031E26iraIqun84ad0fCIR4MJZ1hcQo4yFN+B7UfE="
+  },
+  {
+    "pname": "Microsoft.Bcl.AsyncInterfaces",
+    "version": "8.0.0",
+    "hash": "sha256-9aWmiwMJKrKr9ohD1KSuol37y+jdDxPGJct3m2/Bknw="
   },
   {
     "pname": "Microsoft.Build.Tasks.Git",
@@ -1606,18 +1626,18 @@
   },
   {
     "pname": "NexusMods.MnemonicDB",
-    "version": "0.9.97",
-    "hash": "sha256-b0k/hM6UYvMTZN2QMk53QN9Fw/pomXJ88k9QqfrAF+s="
+    "version": "0.9.98",
+    "hash": "sha256-1B1PBH/iUuLOPsUo5WAsSAkDGWQBTlY8sk/sAiugpB0="
   },
   {
     "pname": "NexusMods.MnemonicDB.Abstractions",
-    "version": "0.9.97",
-    "hash": "sha256-EnWQMeXMKwziMoBXKf7t+Ru6EHZBml4Pt3h1eSP1Ud0="
+    "version": "0.9.98",
+    "hash": "sha256-rZ9UP6BcxYPlHKqyGj0G5q+woEjvpRS/jg69UY4aWDE="
   },
   {
     "pname": "NexusMods.MnemonicDB.SourceGenerator",
-    "version": "0.9.97",
-    "hash": "sha256-KOZVhS3H/qY6bRW9HmSF1Ud4fXv5oEWORDdYET9Ochw="
+    "version": "0.9.98",
+    "hash": "sha256-jP07gJZQ9ZT9DXyWIQOlgmZx0onqiUe3w2JiN55NA94="
   },
   {
     "pname": "NexusMods.Paths",
@@ -1638,6 +1658,11 @@
     "pname": "NexusMods.Paths.TestingHelpers",
     "version": "0.15.0",
     "hash": "sha256-xUZIAND1Ob0SRuoTTuJqw7N2j/4ncIlck3lgfeWxd5M="
+  },
+  {
+    "pname": "NLog",
+    "version": "5.2.8",
+    "hash": "sha256-IrCChiy703DRIebN//M4wwXW7gayuCVD/dHKXCoQcPw="
   },
   {
     "pname": "NLog",
@@ -2163,6 +2188,11 @@
     "pname": "SkiaSharp.NativeAssets.Win32",
     "version": "2.88.9",
     "hash": "sha256-kP5XM5GgwHGfNJfe4T2yO5NIZtiF71Ddp0pd1vG5V/4="
+  },
+  {
+    "pname": "SmartFormat",
+    "version": "3.5.1",
+    "hash": "sha256-NwvJBCT2BBfJgGa/LMbvan0XqZhRBYzlpMLtC3l5SOM="
   },
   {
     "pname": "Spectre.Console",
@@ -3078,6 +3108,11 @@
     "pname": "TextMateSharp.Grammars",
     "version": "1.0.64",
     "hash": "sha256-ykBZOyvaX1/iFmZjue754qJG4jfPx38ZdHevEZvh7w8="
+  },
+  {
+    "pname": "Tmds.DBus.Protocol",
+    "version": "0.18.0",
+    "hash": "sha256-u5bRK7XbxU/NdMu8PZqxb3fmRdPTbimQ/YIe5/scPOo="
   },
   {
     "pname": "Tmds.DBus.Protocol",

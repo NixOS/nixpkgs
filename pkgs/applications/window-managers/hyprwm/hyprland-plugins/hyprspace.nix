@@ -8,13 +8,13 @@
 
 mkHyprlandPlugin hyprland {
   pluginName = "hyprspace";
-  version = "0-unstable-2024-12-08";
+  version = "0-unstable-2025-01-18";
 
   src = fetchFromGitHub {
     owner = "KZDKM";
     repo = "hyprspace";
-    rev = "e2d561c933cd085d68bf0b39c4f78870ad0abbc2";
-    hash = "sha256-YiLUDw14NaavML8y9rxXxO7q+j3b/ghQhBmIy0+/Zmk=";
+    rev = "1b5865f4ac9a04ba614df50de7acfaa40dcb852f";
+    hash = "sha256-YQgW4QifYIcNaFF4nMw0LpllXn0rhk/Yb6cwyH3PB9o=";
   };
 
   dontUseCmakeConfigure = true;
@@ -36,5 +36,6 @@ mkHyprlandPlugin hyprland {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ donovanglover ];
+    broken = true; # Doesn't work on Hyprland v0.47.0+
   };
 }

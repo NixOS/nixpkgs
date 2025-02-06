@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   pythonAtLeast,
@@ -65,21 +66,36 @@
 
 let
   pname = "ray";
-  version = "2.41.0";
+  version = "2.42.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hashes = {
-        cp310 = "sha256-OTLW2zqJgsUZbbCM9W4u0L9QuFaFCM/khr6N5jui2V0=";
-        cp311 = "sha256-//XpzFpTgV07WGomHjS9D+8cMkss3tTJuOeQ4ePcOZc=";
-        cp312 = "sha256-PXassHD6i9Tr2wEazfoiu4m9vps1+3iuxZgdt26sK2A=";
+      platforms = {
+        aarch64-linux = "manylinux2014_aarch64";
+        x86_64-linux = "manylinux2014_x86_64";
+      };
+      # hashes retrieved via the following command
+      # curl https://pypi.org/pypi/ray/${version}/json | jq -r '.urls[] | "\(.digests.sha256)  \(.filename)"'
+      hashes = {
+        aarch64-linux = {
+          cp39 = "sha256-NlE3pzeWzz6DlS2Y6Gv8W+1DRMjK1a9T2R9lvq5nL7g=";
+          cp310 = "sha256-MxCDruyfxiqy/Fkn0YM1idpZNUvChx8Xt6EBie7Q2uY=";
+          cp311 = "sha256-eb9KDQIX6i2O/UfeZ9nCKTBAGc6ZZ427FI9WXZakRuI=";
+          cp312 = "sha256-PnKHZmINbjEYajepBsB7gH2i86rPSxZ/bos3xy7U3mM=";
+        };
+        x86_64-linux = {
+          cp39 = "sha256-rGz4bKRemxRdHCLPpHBpzdyq3ms/3Bsd5adhEJfZbX4=";
+          cp310 = "sha256-i+C9U2ErZEbDm09OnLS9NUhknVISR3NJzPvcklCHgik=";
+          cp311 = "sha256-6JJLbtCGZVsr+LP/KaxFPR6Kp6TW0s6WW7ql+xfRNk8=";
+          cp312 = "sha256-4+3gNnqyj72GiiL05M2sRFQ8ZU4svFo7SCF45/cl6iw=";
+        };
       };
     in
     fetchPypi {
@@ -87,8 +103,8 @@ buildPythonPackage rec {
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
-      platform = "manylinux2014_x86_64";
-      hash = binary-hashes.${pyShortVersion} or { };
+      platform = platforms.${stdenv.hostPlatform.system} or { };
+      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
     };
 
   nativeBuildInputs = [
@@ -192,6 +208,9 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

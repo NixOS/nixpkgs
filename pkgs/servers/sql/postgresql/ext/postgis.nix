@@ -51,7 +51,6 @@ buildPostgresqlExtension (finalAttrs: {
 
   buildInputs =
     [
-      libxml2
       geos
       proj
       gdal
@@ -65,8 +64,10 @@ buildPostgresqlExtension (finalAttrs: {
     autoconf
     automake
     libtool
+    libxml2
     perl
     pkg-config
+    protobufc
     which
   ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;

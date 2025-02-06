@@ -165,6 +165,7 @@ in {
   boot = handleTestOn ["x86_64-linux" "aarch64-linux"] ./boot.nix {};
   bootspec = handleTestOn ["x86_64-linux"] ./bootspec.nix {};
   boot-stage1 = handleTest ./boot-stage1.nix {};
+  boot-stage2 = handleTest ./boot-stage2.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
   borgmatic = handleTest ./borgmatic.nix {};
   botamusique = handleTest ./botamusique.nix {};
@@ -436,6 +437,7 @@ in {
   hedgedoc = handleTest ./hedgedoc.nix {};
   herbstluftwm = handleTest ./herbstluftwm.nix {};
   homebox = handleTest ./homebox.nix {};
+  homer = handleTest ./homer {};
   homepage-dashboard = handleTest ./homepage-dashboard.nix {};
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
@@ -570,6 +572,7 @@ in {
   lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
   lomiri-system-settings = handleTest ./lomiri-system-settings.nix {};
   lorri = handleTest ./lorri/default.nix {};
+  lxqt = handleTest ./lxqt.nix {};
   ly = handleTest ./ly.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });
   maestral = handleTest ./maestral.nix {};
@@ -975,6 +978,7 @@ in {
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   spiped = runTest ./spiped.nix;
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
+  squid = handleTest ./squid.nix {};
   sslh = handleTest ./sslh.nix {};
   ssh-agent-auth = handleTest ./ssh-agent-auth.nix {};
   ssh-audit = handleTest ./ssh-audit.nix {};

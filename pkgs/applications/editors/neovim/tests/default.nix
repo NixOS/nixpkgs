@@ -368,4 +368,5 @@ in
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
+  inherit (vimPlugins) corePlugins;
 })

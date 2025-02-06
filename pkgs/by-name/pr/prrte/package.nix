@@ -35,6 +35,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./autogen.pl ./config
+
+    # This is needed for multi-node jobs.
+    # mpirun/srun/prterun does not have "prted" in its path unless
+    # it is actively pulled in. Hard-coding the nix store path
+    # as a default universally solves this issue.
+    substituteInPlace src/runtime/prte_mca_params.c --replace-fail \
+      "prte_launch_agent = \"prted\"" "prte_launch_agent = \"$out/bin/prted\""
   '';
 
   preConfigure = ''

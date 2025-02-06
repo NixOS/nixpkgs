@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "1.5.3";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Galorhallen";
     repo = "govee-local-api";
     tag = "v${version}";
-    hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
+    hash = "sha256-1n5HPFI/E/I4eepnpQg8hhIksr48igVy56gQ0UiMYHU=";
   };
 
   build-system = [ poetry-core ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to communicate with Govee local API";
     homepage = "https://github.com/Galorhallen/govee-local-api";
-    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/v${version}";
+    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

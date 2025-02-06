@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dxM6bqgHp4IaG03NriHvoT3al2u5Sz/I5ajlgzpjG1c=";
   };
 
-  cargoHash = "sha256-QwydecdQaxvh6vWZvO30zgvvgUT6T5dvGRSmcuTUJmc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8waVWCyjulMrXRc1nXZsiP4tMg70VZJ4wbgCQUgpX4A=";
 
   meta = with lib; {
     description = "Book auto-summary for gitbook and mdBook";

@@ -89,15 +89,15 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.9.2";
+  version = "3.10.0";
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lqtDkGJpymSmNmk0EG+gFTRFSmnkcbe/PXkIOYGqq5I=";
+    hash = "sha256-uIbQKlgblnBMnR/+VXCeSbTS1ScJzOvEvkLbhW5REng=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -110,6 +110,9 @@ buildPythonPackage rec {
   # script.
   postPatch =
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''

@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  cmake,
   installShellFiles,
   testers,
   yara-x,
@@ -11,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yara-x";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     tag = "v${version}";
-    hash = "sha256-gIYqWRJI/IZwEyc1Fke/CD8PPoSZvwtvOT0rnK+LFIo=";
+    hash = "sha256-ZSJHvpRZO6Tbw7Ct4oD6QmuV4mJ4RGW5gnT6PTX+nC8=";
   };
 
-  cargoHash = "sha256-hlwHF6ESrRpXduXZmC/svldzYuoIwwOllf5pSbvEpCM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pD4qyw+TTpmcoX1N3C65VelYszYifm9sFOsEkXEysvo=";
 
   nativeBuildInputs = [
-    cmake
     installShellFiles
   ];
 
