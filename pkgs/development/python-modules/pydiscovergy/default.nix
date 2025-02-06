@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "pydiscovergy";
     tag = "v${version}";
-    hash = "sha256-g6KWX7APdqB0dNe7p6WGualxSj5fiw+jRq+0qfqTs4w=";
+    hash = "sha256-OrMuMGN1zB4q6t4fWyZeQ9WRmNZHFyq+wIRq1kG2N30=";
   };
 
   postPatch = ''
