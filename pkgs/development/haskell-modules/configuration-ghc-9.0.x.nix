@@ -63,6 +63,11 @@ self: super: {
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Only required for ghc >= 9.2
+  nothunks = super.nothunks.override {
+    wherefrom-compat = null;
+  };
+
   # Jailbreaks & Version Updates
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
