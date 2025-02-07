@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioshelly";
-  version = "12.3.2";
+  version = "12.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "aioshelly";
     tag = version;
-    hash = "sha256-Xuh1iOQHoFU1pTehPVmwS6bNTelnYMHW8wnkhxTSrnw=";
+    hash = "sha256-OhfLl/IJUSmzVHoYjJszxwN4RZEr5zCfxxh5T0/z2Bg=";
   };
 
   build-system = [ setuptools ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to control Shelly";
     homepage = "https://github.com/home-assistant-libs/aioshelly";
-    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/aioshelly/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
