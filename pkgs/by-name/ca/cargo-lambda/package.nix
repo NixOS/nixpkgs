@@ -8,8 +8,6 @@
   pkg-config,
   openssl,
   stdenv,
-  CoreServices,
-  Security,
   zig,
   nix-update-script,
 }:
@@ -19,9 +17,9 @@ rustPlatform.buildRustPackage rec {
   version = "1.6.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "cargo-lambda";
+    repo = "cargo-lambda";
+    tag = "v${version}";
     hash = "sha256-GiV5yjlzU4iU4BJ8Fq8I9uOchVCF2UGb+WLMMr7n8pc=";
   };
 
@@ -39,8 +37,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      CoreServices
-      Security
     ];
 
   # Remove files that don't make builds reproducible:
@@ -57,14 +53,22 @@ rustPlatform.buildRustPackage rec {
 
   CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in darwin sandbox, first because of trying to listen to a port on
+    # localhost. While this would be fixed by `__darwinAllowLocalNetworking = true;`,
+    # they then fail with other I/O issues.
+    "--skip=test::test_download_example"
+    "--skip=test::test_download_example_with_cache"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to help you work with AWS Lambda";
     mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       taylor1791
       calavera
       matthiasbeyer
