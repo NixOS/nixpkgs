@@ -290,7 +290,7 @@ python3.pkgs.buildPythonApplication rec {
         substituteInPlace $f --replace "00:37:42" "00:00:00"
       done
     ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
       # We want to use asciidoc from the build platform to build the documentation.
       substituteInPlace Makefile.in \
         --replace "python3 -m asciidoc.a2x" "${buildPackages.asciidoc}/bin/a2x"

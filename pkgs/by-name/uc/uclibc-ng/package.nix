@@ -11,7 +11,7 @@
 
 let
   stdenv = stdenvNoLibc;
-  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+  isCross = (stdenv.buildPlatform.notEquals stdenv.hostPlatform);
   configParser = ''
     function parseconfig {
         set -x

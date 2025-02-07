@@ -14,7 +14,7 @@
 }:
 
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
 
   # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
   # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.

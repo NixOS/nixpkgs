@@ -13,10 +13,10 @@
   linuxHeaders ? stdenv.cc.libc.linuxHeaders,
   gawk,
   withPerl ?
-    stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
+    stdenv.hostPlatform.equals stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
   perl,
   withPython ?
-    stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python3,
+    stdenv.hostPlatform.equals stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python3,
   python3,
   swig,
   ncurses,

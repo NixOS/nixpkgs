@@ -49,7 +49,7 @@ buildGoModule rec {
     ''
       wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
     ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.hostPlatform.equals stdenv.buildPlatform) ''
       $out/bin/restic generate \
         --bash-completion restic.bash \
         --fish-completion restic.fish \

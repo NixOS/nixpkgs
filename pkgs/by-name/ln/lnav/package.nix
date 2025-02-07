@@ -20,7 +20,7 @@
   rustPlatform,
   rustc,
   libunistring,
-  prqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
+  prqlSupport ? stdenv.hostPlatform.equals stdenv.buildPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

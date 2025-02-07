@@ -221,7 +221,7 @@ let
           patchelf --set-rpath $out/lib $i
         done
 
-        if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
+        if [ -z "${toString (pkgs.stdenv.hostPlatform.notEquals pkgs.stdenv.buildPlatform)}" ]; then
         # Make sure that the patchelf'ed binaries still work.
         echo "testing patched programs..."
         $out/bin/ash -c 'echo hello world' | grep "hello world"

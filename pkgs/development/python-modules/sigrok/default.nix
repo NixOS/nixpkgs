@@ -33,7 +33,7 @@ toPythonModule (
         swig
         numpy
       ]
-      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [
         pythonImportsCheckHook
         pythonCatchConflictsHook
       ];

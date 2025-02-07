@@ -60,7 +60,7 @@ let
         '';
       in
       "${
-        if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile
+        if pkgs.stdenv.buildPlatform.equals pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile
       }/Caddyfile";
 
   etcConfigFile = "caddy/caddy_config";

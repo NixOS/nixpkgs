@@ -116,6 +116,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
     platforms = platforms.linux;
     # gst-inspect-1.0 is not smart enough for cross compiling
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   };
 }

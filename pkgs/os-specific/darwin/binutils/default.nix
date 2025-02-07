@@ -7,12 +7,12 @@
   llvm,
   llvm-manpages,
   makeWrapper,
-  enableManpages ? stdenvNoCC.targetPlatform == stdenvNoCC.hostPlatform,
+  enableManpages ? stdenvNoCC.targetPlatform.equals stdenvNoCC.hostPlatform,
 }:
 
 let
   inherit (stdenvNoCC) targetPlatform hostPlatform;
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (targetPlatform.notEquals hostPlatform) "${targetPlatform.config}-";
 
   llvm_cmds = [
     "addr2line"

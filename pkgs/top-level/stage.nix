@@ -278,7 +278,7 @@ let
               pkgsMusl = super';
             })
           ] ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+          ${if stdenv.hostPlatform.equals stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
             config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
           };
         }
@@ -295,7 +295,7 @@ let
               pkgsi686Linux = super';
             })
           ] ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+          ${if stdenv.hostPlatform.equals stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
             config = lib.systems.parse.tripleFromSystem (
               stdenv.hostPlatform.parsed
               // {

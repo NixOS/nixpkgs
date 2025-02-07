@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     [
       "--disable-csharp"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # On cross building, gettext supposes that the wchar.h from libc
       # does not fulfill gettext needs, so it tries to work with its
       # own wchar.h file, which does not cope well with the system's

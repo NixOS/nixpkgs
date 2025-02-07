@@ -23,7 +23,7 @@ let
     builtins.map (gpu: {
       name = gpu;
       value =
-        (gpu == "apple" && stdenv.buildPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform)
+        (gpu == "apple" && stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.equals stdenv.buildPlatform)
         || (gpu != "apple" && stdenv.buildPlatform.isLinux);
     }) defaultGPUFamilies
   );

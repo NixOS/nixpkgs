@@ -4,7 +4,7 @@
   fetchurl,
 }:
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   cross = "${stdenv.hostPlatform.config}";
   static = stdenv.hostPlatform.isStatic;
 

@@ -62,9 +62,7 @@
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  malloc0ReturnsNullCrossFlag = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
+  malloc0ReturnsNullCrossFlag = lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "--enable-malloc0returnsnull";
 
   addMainProgram =
     pkg:
@@ -367,7 +365,7 @@ self: super:
         "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
       ]
       ++
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+        lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform)
           # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
           [
             "ac_cv_file__dev_urandom=true"
@@ -493,7 +491,7 @@ self: super:
       xorg.libXext
     ];
     configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
         "xorg_cv_malloc0_returns_null=no"
       ]
       ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";

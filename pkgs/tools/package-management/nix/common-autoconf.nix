@@ -214,7 +214,7 @@ let
         # removes config.nix entirely and is not present in 2.3.x, we need to
         # patch around an issue where the Nix configure step pulls in the build
         # system's bash and other utilities when cross-compiling.
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast224) ''
+        lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform && !atLeast224) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -246,7 +246,7 @@ let
       ++
         lib.optionals
           (
-            stdenv.hostPlatform != stdenv.buildPlatform
+            stdenv.hostPlatform.notEquals stdenv.buildPlatform
             && stdenv.hostPlatform ? nix
             && stdenv.hostPlatform.nix ? system
           )
@@ -269,7 +269,7 @@ let
         "--jobserver-style=pipe"
         "profiledir=$(out)/etc/profile.d"
       ]
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
+      ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
       ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
 
     installFlags = [ "sysconfdir=$(out)/etc" ];

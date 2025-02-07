@@ -7,7 +7,7 @@
   crossOverlays ? [ ],
 }:
 
-assert crossSystem == localSystem;
+assert crossSystem.equals localSystem;
 
 let
   inherit (localSystem) system;

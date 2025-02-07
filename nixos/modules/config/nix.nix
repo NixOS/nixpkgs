@@ -145,7 +145,7 @@ let
         ${cfg.extraOptions}
       '';
       checkPhase = lib.optionalString cfg.checkConfig (
-        if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
+        if pkgs.stdenv.hostPlatform.notEquals pkgs.stdenv.buildPlatform then
           ''
             echo "Ignoring validation for cross-compilation"
           ''

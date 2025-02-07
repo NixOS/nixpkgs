@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
     ++ lib.optional stdenv.hostPlatform.isLinux "-DSYSCONFDIR=${addDriverRunpath.driverLink}/share"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
+    ++ lib.optional (stdenv.buildPlatform.notEquals stdenv.hostPlatform) "-DUSE_GAS=OFF";
 
   outputs = [
     "out"

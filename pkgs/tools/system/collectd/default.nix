@@ -56,7 +56,9 @@ stdenv.mkDerivation rec {
       "--disable-werror"
     ]
     ++ plugins.configureFlags
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
+      "--with-fp-layout=nothing"
+    ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''

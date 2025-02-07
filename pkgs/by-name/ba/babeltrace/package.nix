@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       # --enable-debug-info (default) requires the configure script to run host
       # executables to determine the elfutils library version, which cannot be done
       # while cross compiling.
-      (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "debug-info")
+      (lib.enableFeature (stdenv.hostPlatform.equals stdenv.buildPlatform) "debug-info")
     ]
     ++ lib.optionals enablePython [
       # Using (lib.enableFeature enablePython "python-bindings") makes the

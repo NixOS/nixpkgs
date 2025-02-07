@@ -30,7 +30,7 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
+  targetPrefix = optionalString (targetPlatform.notEquals hostPlatform) (targetPlatform.config + "-");
 
   # See description in cc-wrapper.
   suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;

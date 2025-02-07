@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.42";
 
   doCheck =
-    stdenv.hostPlatform == stdenv.buildPlatform
+    stdenv.hostPlatform.equals stdenv.buildPlatform
     &&
       # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
       stdenv.hostPlatform.linker == "bfd"

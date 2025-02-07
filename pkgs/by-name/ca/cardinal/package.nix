@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       "SYSDEPS=true"
       "PREFIX=$(out)"
     ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILING=true"
+    ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "CROSS_COMPILING=true"
     ++ lib.optional headless "HEADLESS=true";
 
   postInstall = ''

@@ -73,7 +73,7 @@ let
   defaultPkgs =
     if opt.hostPlatform.isDefined then
       let
-        isCross = cfg.buildPlatform != cfg.hostPlatform;
+        isCross = cfg.buildPlatform.notEquals cfg.hostPlatform;
         systemArgs =
           if isCross then
             {

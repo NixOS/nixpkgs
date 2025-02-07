@@ -12,8 +12,8 @@
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
   enableStatic ? static,
   # these need to be ran on the host, thus disable when cross-compiling
-  buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform,
-  doCheck ? stdenv.hostPlatform == stdenv.buildPlatform,
+  buildContrib ? stdenv.hostPlatform.equals stdenv.buildPlatform,
+  doCheck ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   nix-update-script,
 
   # for passthru.tests

@@ -102,7 +102,7 @@ rustPlatform.buildRustPackage.override
         ];
         platforms = platforms.unix;
         # https://github.com/alexcrichton/nghttp2-rs/issues/2
-        broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
+        broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform.notEquals stdenv.hostPlatform;
       };
     }
     //

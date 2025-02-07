@@ -131,7 +131,7 @@ let
             docSupport = false;
             rubygemsSupport = false;
           },
-          useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform,
+          useBaseRuby ? stdenv.hostPlatform.notEquals stdenv.buildPlatform,
           gitUpdater,
         }:
         stdenv.mkDerivation (finalAttrs: {

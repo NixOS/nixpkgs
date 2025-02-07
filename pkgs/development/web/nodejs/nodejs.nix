@@ -253,7 +253,7 @@ let
       outputs = [
         "out"
         "libv8"
-      ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "dev" ];
+      ] ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [ "dev" ];
       setOutputFlags = false;
       moveToDev = false;
 
@@ -457,7 +457,7 @@ let
             else
               "{bytecode_builtins_list_generator,mksnapshot,torque,node_js2c,gen-regexp-special-case}";
         in
-        lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+        lib.optionalString (stdenv.hostPlatform.equals stdenv.buildPlatform) ''
           mkdir -p $dev/bin
           cp out/Release/${tools} $dev/bin
         ''

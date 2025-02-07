@@ -56,7 +56,7 @@ with pkgs;
     };
 
   stdenvNoLibs =
-    if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform then
+    if stdenvNoCC.hostPlatform.notEquals stdenvNoCC.buildPlatform then
       # We cannot touch binutils or cc themselves, because that will cause
       # infinite recursion. So instead, we just choose a libc based on the
       # current platform. That means we won't respect whatever compiler was
@@ -78,7 +78,7 @@ with pkgs;
       mkStdenvNoLibs stdenv;
 
   stdenvNoLibc =
-    if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform then
+    if stdenvNoCC.hostPlatform.notEquals stdenvNoCC.buildPlatform then
       (
         if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false then
           overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
@@ -504,7 +504,7 @@ with pkgs;
 
   fetchcvs =
     if
-      stdenv.buildPlatform != stdenv.hostPlatform
+      stdenv.buildPlatform.notEquals stdenv.hostPlatform
     # hack around splicing being crummy with things that (correctly) don't eval.
     then
       buildPackages.fetchcvs
@@ -603,7 +603,7 @@ with pkgs;
 
   fetchsvn =
     if
-      stdenv.buildPlatform != stdenv.hostPlatform
+      stdenv.buildPlatform.notEquals stdenv.hostPlatform
     # hack around splicing being crummy with things that (correctly) don't eval.
     then
       buildPackages.fetchsvn
@@ -624,7 +624,7 @@ with pkgs;
 
   # `fetchurl' downloads a file from the network.
   fetchurl =
-    if stdenv.buildPlatform != stdenv.hostPlatform then
+    if stdenv.buildPlatform.notEquals stdenv.hostPlatform then
       buildPackages.fetchurl # No need to do special overrides twice,
     else
       makeOverridable (import ../build-support/fetchurl) {
@@ -1759,7 +1759,7 @@ with pkgs;
     if stdenv.hostPlatform.isDarwin then
       callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
         localSystem = stdenv.buildPlatform;
-        crossSystem = if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
+        crossSystem = if stdenv.buildPlatform.equals stdenv.hostPlatform then null else stdenv.hostPlatform;
       }
     else if stdenv.hostPlatform.isLinux then
       callPackage ../stdenv/linux/make-bootstrap-tools.nix { }
@@ -5992,7 +5992,7 @@ with pkgs;
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc =
-    assert stdenv.targetPlatform != stdenv.hostPlatform;
+    assert stdenv.targetPlatform.notEquals stdenv.hostPlatform;
     let
       libcCross1 = binutilsNoLibc.libc;
     in
@@ -6058,14 +6058,16 @@ with pkgs;
       # should be done with a (native) compiler of the same version.
       # If we are cross-compiling GNAT, we may as well do the same.
       gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+        if
+          stdenv.hostPlatform.equals stdenv.targetPlatform && stdenv.buildPlatform.equals stdenv.hostPlatform
+        then
           buildPackages.gnat-bootstrap11
         else
           buildPackages.gnat11;
       stdenv =
         if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
+          stdenv.hostPlatform.equals stdenv.targetPlatform
+          && stdenv.buildPlatform.equals stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
           && stdenv.buildPlatform.isx86_64
         then
@@ -6086,14 +6088,16 @@ with pkgs;
       # should be done with a (native) compiler of the same version.
       # If we are cross-compiling GNAT, we may as well do the same.
       gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+        if
+          stdenv.hostPlatform.equals stdenv.targetPlatform && stdenv.buildPlatform.equals stdenv.hostPlatform
+        then
           buildPackages.gnat-bootstrap12
         else
           buildPackages.gnat12;
       stdenv =
         if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
+          stdenv.hostPlatform.equals stdenv.targetPlatform
+          && stdenv.buildPlatform.equals stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
           && stdenv.buildPlatform.isx86_64
         then
@@ -6114,14 +6118,16 @@ with pkgs;
       # should be done with a (native) compiler of the same version.
       # If we are cross-compiling GNAT, we may as well do the same.
       gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+        if
+          stdenv.hostPlatform.equals stdenv.targetPlatform && stdenv.buildPlatform.equals stdenv.hostPlatform
+        then
           buildPackages.gnat-bootstrap13
         else
           buildPackages.gnat13;
       stdenv =
         if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
+          stdenv.hostPlatform.equals stdenv.targetPlatform
+          && stdenv.buildPlatform.equals stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
           && stdenv.buildPlatform.isx86_64
         then
@@ -6142,14 +6148,16 @@ with pkgs;
       # should be done with a (native) compiler of the same version.
       # If we are cross-compiling GNAT, we may as well do the same.
       gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+        if
+          stdenv.hostPlatform.equals stdenv.targetPlatform && stdenv.buildPlatform.equals stdenv.hostPlatform
+        then
           buildPackages.gnat-bootstrap14
         else
           buildPackages.gnat14;
       stdenv =
         if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
+          stdenv.hostPlatform.equals stdenv.targetPlatform
+          && stdenv.buildPlatform.equals stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
           && stdenv.buildPlatform.isx86_64
         then
@@ -7040,8 +7048,8 @@ with pkgs;
     callPackage ../build-support/cc-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+          nativeTools = stdenv.targetPlatform.equals stdenv.hostPlatform && stdenv.cc.nativeTools or false;
+          nativeLibc = stdenv.targetPlatform.equals stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
           nativePrefix = stdenv.cc.nativePrefix or "";
           noLibc = !self.nativeLibc && (self.libc == null);
 
@@ -7073,14 +7081,14 @@ with pkgs;
   wrapBintoolsWith =
     {
       bintools,
-      libc ? if stdenv.targetPlatform != stdenv.hostPlatform then libcCross else stdenv.cc.libc,
+      libc ? if stdenv.targetPlatform.notEquals stdenv.hostPlatform then libcCross else stdenv.cc.libc,
       ...
     }@extraArgs:
     callPackage ../build-support/bintools-wrapper (
       let
         self = {
-          nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
-          nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
+          nativeTools = stdenv.targetPlatform.equals stdenv.hostPlatform && stdenv.cc.nativeTools or false;
+          nativeLibc = stdenv.targetPlatform.equals stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
           nativePrefix = stdenv.cc.nativePrefix or "";
 
           noLibc = (self.libc == null);
@@ -7900,12 +7908,12 @@ with pkgs;
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
-    noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
+    noSysDirs = (stdenv.targetPlatform.notEquals stdenv.hostPlatform) || noSysDirs;
   };
   binutils-unwrapped-all-targets = callPackage ../development/tools/misc/binutils {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
-    noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
+    noSysDirs = (stdenv.targetPlatform.notEquals stdenv.hostPlatform) || noSysDirs;
     withAllTargets = true;
   };
   binutils = wrapBintoolsWith {
@@ -7929,7 +7937,7 @@ with pkgs;
   binutils-unwrapped_2_38 = callPackage ../development/tools/misc/binutils/2.38 {
     autoreconfHook = autoreconfHook269;
     # FHS sys dirs presumably only have stuff for the build platform
-    noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
+    noSysDirs = (stdenv.targetPlatform.notEquals stdenv.hostPlatform) || noSysDirs;
   };
 
   libbfd_2_38 = callPackage ../development/tools/misc/binutils/2.38/libbfd.nix {
@@ -8157,7 +8165,7 @@ with pkgs;
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
     if
-      stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
+      stdenv.targetPlatform.equals stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
     # Can only do this is in the native case, otherwise we might get infinite
     # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
     then
@@ -9359,7 +9367,7 @@ with pkgs;
       throw "Unknown libc ${name}";
 
   libcCross =
-    if stdenv.targetPlatform == stdenv.buildPlatform then
+    if stdenv.targetPlatform.equals stdenv.buildPlatform then
       null
     else
       libcCrossChooser stdenv.targetPlatform.libc;
@@ -10045,7 +10053,7 @@ with pkgs;
         "fblibc"
       ]
     then
-      libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform then libcCross else stdenv.cc.libc)
+      libcIconv (if stdenv.hostPlatform.notEquals stdenv.buildPlatform then libcCross else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin then
       darwin.libiconv
     else

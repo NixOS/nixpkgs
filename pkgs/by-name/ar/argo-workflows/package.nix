@@ -79,7 +79,7 @@ buildGoModule rec {
   postInstall = ''
     for shell in bash zsh; do
       ${
-        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+        if (stdenv.buildPlatform.equals stdenv.hostPlatform) then
           "$out/bin/argo"
         else
           "${pkgsBuildBuild.argo}/bin/argo"

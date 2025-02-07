@@ -864,7 +864,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   disallowedReferences =
-    lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform)
       # 'or p' is for manually specified buildPackages as they dont have __spliced
       (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
 

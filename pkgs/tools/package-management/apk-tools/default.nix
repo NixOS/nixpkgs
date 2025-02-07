@@ -6,7 +6,7 @@
   scdoc,
   openssl,
   zlib,
-  luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
+  luaSupport ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   lua,
 }:
 

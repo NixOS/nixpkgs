@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     }
   );
 
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     substituteInPlace Jambase \
       --replace "-m64" ""
   '';

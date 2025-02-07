@@ -9,7 +9,7 @@
   withTests ? stdenv.hostPlatform.isLinux,
   libffi,
   epoll-shim,
-  withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  withDocumentation ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   graphviz-nox,
   doxygen,
   libxslt,

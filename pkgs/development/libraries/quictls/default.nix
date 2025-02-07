@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
           throw "unsupported ABI for ${stdenv.hostPlatform.system}";
     }
     .${stdenv.hostPlatform.system} or (
-      if stdenv.hostPlatform == stdenv.buildPlatform then
+      if stdenv.hostPlatform.equals stdenv.buildPlatform then
         "./config"
       else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64 then
         "./Configure BSD-x86_64"

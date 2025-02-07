@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       "ASCIIDOC=${buildPackages.asciidoc}/bin/asciidoc"
       "XMLTO=${buildPackages.xmlto}/bin/xmlto"
     ]
-    ++ (lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ (lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "ARCH=${linuxArchMapping."${stdenv.hostPlatform.linuxArch}"}"
       "CROSS_COMPILE=${stdenv.hostPlatform.config}-"
     ]);

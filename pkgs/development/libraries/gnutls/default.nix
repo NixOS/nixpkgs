@@ -55,7 +55,7 @@ let
   doCheck =
     !stdenv.hostPlatform.isFreeBSD
     && !stdenv.hostPlatform.isDarwin
-    && stdenv.buildPlatform == stdenv.hostPlatform;
+    && stdenv.buildPlatform.equals stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
 in

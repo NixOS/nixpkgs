@@ -14,7 +14,7 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withDocs ? stdenv.hostPlatform == stdenv.buildPlatform,
+  withDocs ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   gobject-introspection,
 }:
 

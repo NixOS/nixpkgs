@@ -11,7 +11,7 @@ let
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
   validationPackage =
-    if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then
+    if pkgs.stdenv.buildPlatform.equals pkgs.stdenv.hostPlatform then
       cfg.package
     else
       pkgs.buildPackages.openssh;

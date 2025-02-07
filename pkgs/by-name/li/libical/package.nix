@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  depsBuildBuild = lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     # provides ical-glib-src-generator that runs during build
     libical
   ];
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
       "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev pkgsBuildBuild.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
     ];
 

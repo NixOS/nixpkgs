@@ -38,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.bbenno ];
     # llvm-sys crate locates llvm by calling llvm-config
     # which is not available when cross compiling
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   };
 }

@@ -80,6 +80,6 @@ buildGoModule rec {
       selfuryon
     ];
     mainProgram = "kcl";
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   };
 }

@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = testsSupport && stdenv.hostPlatform.equals stdenv.buildPlatform;
 
   postPatch = ''
     patchShebangs \

@@ -95,6 +95,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
     # bespoke ./configure does not like cross
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   };
 }

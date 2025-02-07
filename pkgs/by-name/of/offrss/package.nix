@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       curl
       libmrss
     ]
-    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
+    ++ lib.optional (stdenv.hostPlatform.equals stdenv.buildPlatform) podofo
     ++ lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 
   # Workaround build failure on -fno-common toolchains:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString (!stdenv.hostPlatform.isLinux) ''
       sed 's/#EXTRA/EXTRA/' -i Makefile
     ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    + lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
       sed 's/^PDF/#PDF/' -i Makefile
     '';
 

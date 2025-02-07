@@ -238,7 +238,7 @@ let
       #
       # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
       configurePlatforms ?
-        optionals (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
+        optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform || config.configurePlatformsByDefault)
           [
             "build"
             "host"
@@ -254,7 +254,7 @@ let
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
       strictDeps ?
-        if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform,
+        if config.strictDepsByDefault then true else stdenv.hostPlatform.notEquals stdenv.buildPlatform,
 
       enableParallelBuilding ? config.enableParallelBuildingByDefault,
 
@@ -443,7 +443,7 @@ let
                 # just used for their side-affects. Those might as well since the
                 # hash can't be the same. See #32986.
                 hostSuffix = optionalString (
-                  stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix
+                  stdenv.hostPlatform.notEquals stdenv.buildPlatform && !dontAddHostSuffix
                 ) "-${stdenv.hostPlatform.config}";
 
                 # Disambiguate statically built packages. This was originally

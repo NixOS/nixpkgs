@@ -131,7 +131,7 @@ in
   ),
   overrideCC,
   buildPackages,
-  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform),
+  pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.equals stdenv.buildPlatform),
   xvfb-run,
   elfhackSupport ?
     isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64),

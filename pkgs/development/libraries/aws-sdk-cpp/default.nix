@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
       "-DBUILD_DEPS=OFF"
     ]
     ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "-DENABLE_TESTING=OFF"
       "-DCURL_HAS_H2=1"
       "-DCURL_HAS_TLS_PROXY=1"

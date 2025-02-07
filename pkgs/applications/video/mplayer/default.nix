@@ -114,7 +114,7 @@ let
     else
       null;
 
-  crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuild = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
 
 in
 

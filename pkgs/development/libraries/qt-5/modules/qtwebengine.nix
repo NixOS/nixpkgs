@@ -105,7 +105,7 @@ qtModule (
         gn
         nodejs
       ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
         perl
         lndir
         (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
@@ -289,7 +289,7 @@ qtModule (
     env =
       {
         NIX_CFLAGS_COMPILE = toString (
-          lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
             "-w "
           ]
           ++ lib.optionals stdenv.cc.isGNU [
@@ -312,7 +312,7 @@ qtModule (
           ]
         );
       }
-      // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+      // lib.optionalAttrs (stdenv.buildPlatform.notEquals stdenv.hostPlatform) {
         NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
         "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
       };
@@ -325,7 +325,7 @@ qtModule (
             QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
         fi
       ''
-      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      + lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
         export QMAKE_CC=$CC
         export QMAKE_CXX=$CXX
         export QMAKE_LINK=$CXX
@@ -338,7 +338,7 @@ qtModule (
         "-system-ffmpeg"
       ]
       ++ lib.optional (
-        pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
+        pipewireSupport && stdenv.buildPlatform.equals stdenv.hostPlatform
       ) "-webengine-webrtc-pipewire"
       ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
@@ -434,7 +434,7 @@ qtModule (
     dontUseNinjaInstall = true;
 
     postInstall =
-      lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
         mkdir -p $out/libexec
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -478,7 +478,7 @@ qtModule (
     };
 
   }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  // lib.optionalAttrs (stdenv.buildPlatform.notEquals stdenv.hostPlatform) {
     configurePlatforms = [ ];
     # to get progress output in `nix-build` and `nix build -L`
     preBuild = ''

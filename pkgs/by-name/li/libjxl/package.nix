@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
         gdk-pixbuf-query-loaders --update-cache
     ''
     # Cross-compiled gdk-pixbuf doesn't support thumbnailers
-    + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (enablePlugins && stdenv.hostPlatform.equals stdenv.buildPlatform) ''
       mkdir -p "$out/bin"
       makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
         --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"

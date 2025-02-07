@@ -15,7 +15,7 @@
   pythonSupport ?
     enableShared
     && (
-      stdenv.hostPlatform == stdenv.buildPlatform
+      stdenv.hostPlatform.equals stdenv.buildPlatform
       || stdenv.hostPlatform.isCygwin
       || stdenv.hostPlatform.isLinux
       || stdenv.hostPlatform.isWasi
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
+  doCheck = (stdenv.hostPlatform.equals stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
   preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
   '';

@@ -168,13 +168,13 @@ stdenv.mkDerivation (finalAttrs: {
           # (build!=target): When cross-building a compiler we need to add
           # the build platform as well so rustc can compile build.rs
           # scripts.
-          ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
+          ++ optionals (stdenv.buildPlatform.notEquals stdenv.targetPlatform && !fastCross) [
             stdenv.buildPlatform.rust.rustcTargetSpec
           ]
           # (host!=target): When building a cross-targeting compiler we
           # need to add the host platform as well so rustc can compile
           # build.rs scripts.
-          ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
+          ++ optionals (stdenv.hostPlatform.notEquals stdenv.targetPlatform && !fastCross) [
             stdenv.hostPlatform.rust.rustcTargetSpec
           ]
         )

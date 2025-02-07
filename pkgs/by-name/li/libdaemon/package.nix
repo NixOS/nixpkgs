@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--disable-lynx" ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # Can't run this test while cross-compiling
       "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
     ];

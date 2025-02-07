@@ -72,7 +72,7 @@ assert lib.assertMsg (
     cargoDeps = docCargoDeps;
   },
 
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  enableDocumentation ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableStrictLLVMChecks ? true,
   withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),

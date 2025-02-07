@@ -47,7 +47,7 @@ let
 
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (targetPlatform.notEquals hostPlatform) "${targetPlatform.config}-";
 in
 
 stdenv.mkDerivation {
@@ -240,14 +240,14 @@ stdenv.mkDerivation {
 
   # Break dependency on pkgsBuildBuild.gcc when building a cross-binutils
   stripDebugList =
-    if stdenv.hostPlatform != stdenv.targetPlatform then
+    if stdenv.hostPlatform.notEquals stdenv.targetPlatform then
       "bin lib ${stdenv.hostPlatform.config}"
     else
       null;
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`
-  doInstallCheck = (buildPlatform == hostPlatform) && (hostPlatform == targetPlatform);
+  doInstallCheck = (buildPlatform.equals hostPlatform) && (hostPlatform.equals targetPlatform);
 
   enableParallelBuilding = true;
 

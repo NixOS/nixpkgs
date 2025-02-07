@@ -33,7 +33,7 @@ let
                 # allow 'perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig; }; }' like in python3Packages
                 # most perl packages aren't called with callPackage so it's not possible to override their arguments individually
                 # the conditional is because the // above won't be applied to __splicedPackages and hopefully no one is doing that when cross-compiling
-                pkgs = if stdenv.buildPlatform != stdenv.hostPlatform then pkgs.__splicedPackages else pkgs;
+                pkgs = if stdenv.buildPlatform.notEquals stdenv.hostPlatform then pkgs.__splicedPackages else pkgs;
                 inherit stdenv;
                 perl = self;
               };
