@@ -43,7 +43,6 @@
   uwimap,
   valgrind,
   zlib,
-  fetchpatch,
 }:
 
 lib.makeScope pkgs.newScope (
@@ -544,6 +543,7 @@ lib.makeScope pkgs.newScope (
                   zlib
                   openssl
                 ];
+                configureFlags = [ "--with-mysqlnd-ssl" ];
                 # The configure script doesn't correctly add library link
                 # flags, so we add them to the variable used by the Makefile
                 # when linking.
