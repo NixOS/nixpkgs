@@ -8556,6 +8556,8 @@ self: super: with self; {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
+  mpire = callPackage ../development/python-modules/mpire { };
+
   mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
 
   mplcursors = callPackage ../development/python-modules/mplcursors { };
@@ -14763,6 +14765,8 @@ self: super: with self; {
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
+  semchunk = callPackage ../development/python-modules/semchunk { };
+
   semgrep = callPackage ../development/python-modules/semgrep {
     semgrep-core = callPackage ../development/python-modules/semgrep/semgrep-core.nix { };
   };
@@ -15375,6 +15379,8 @@ self: super: with self; {
 
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
+  sphinxcontrib-images = callPackage ../development/python-modules/sphinxcontrib-images { };
+
   sphinx-design = callPackage ../development/python-modules/sphinx-design { };
 
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
@@ -15406,6 +15412,8 @@ self: super: with self; {
   sphinx-tabs = callPackage ../development/python-modules/sphinx-tabs { };
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
+
+  sphinx-versions = callPackage ../development/python-modules/sphinx-versions { };
 
   sphinxawesome-theme = callPackage ../development/python-modules/sphinxawesome-theme { };
 
