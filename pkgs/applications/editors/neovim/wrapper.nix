@@ -48,6 +48,11 @@ let
     # set to false if you want to control where to save the generated config
     # (e.g., in ~/.config/init.vim or project/.nvimrc)
     , wrapRc ? true
+
+    # appends `--set packpath=... --set rtp^=...` to the wrapper
+    # hopefully we can get rid of it
+    , wrapPackpath ? true
+
     # vimL code that should be sourced as part of the generated init.lua file
     , neovimRcContent ? null
     # lua code to put into the generated init.lua file
@@ -146,13 +151,11 @@ let
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
       ++ finalAttrs.generatedWrapperArgs
       # for home-manager scenario or case the user wants full control over plugins folder/init.lua
-      ++ lib.optionals finalAttrs.wrapRc (
-        [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
-        ++ lib.optionals (finalAttrs.packpathDirs.myNeovimPackages.start != [] || finalAttrs.packpathDirs.myNeovimPackages.opt != []) [
+      ++ lib.optionals finalAttrs.wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
+      ++ lib.optionals (wrapPackpath && (finalAttrs.packpathDirs.myNeovimPackages.start != [] || finalAttrs.packpathDirs.myNeovimPackages.opt != [])) [
           "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
           "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
         ]
-        )
       ;
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
