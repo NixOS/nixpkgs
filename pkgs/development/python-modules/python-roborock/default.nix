@@ -9,6 +9,7 @@
   construct,
   dacite,
   fetchFromGitHub,
+  freezegun,
   paho-mqtt,
   poetry-core,
   pycryptodome,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.9.2";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-TWV28Uok2plDJsG5RsgTp1xzvGJ/zUy1lUcGZApDReE=";
+    hash = "sha256-uFZ+d4MehZbK7xZdmWnZrsbK2f5UsA4J/vVRLZXyI8E=";
   };
 
   postPatch = ''
@@ -42,7 +43,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     click
@@ -55,6 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];

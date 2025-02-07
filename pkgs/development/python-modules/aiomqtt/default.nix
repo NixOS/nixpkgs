@@ -3,7 +3,7 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  paho-mqtt_2,
+  paho-mqtt,
   poetry-core,
   poetry-dynamic-versioning,
   pytestCheckHook,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    paho-mqtt_2
+    paho-mqtt
     typing-extensions
   ];
 
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = lib.versionOlder "paho-mqtt" "2";
     description = "Idiomatic asyncio MQTT client, wrapped around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/aiomqtt";
     changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.tag}/CHANGELOG.md";
