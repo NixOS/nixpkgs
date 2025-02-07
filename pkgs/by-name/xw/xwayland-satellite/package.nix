@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-KnkU+uLToD0cBNgPnRiR34XHIphQWoATjim1E/MVf48=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1IsKt+OfezILaDklHts74TnS0/FVogu6Ds/7JG+ataY=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

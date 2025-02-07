@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Vz2/Y8o6fiVdLElgytUqLfa1oK/kyu1+dks4aiDHMAY=";
   };
 
-  cargoHash = "sha256-8qDeOY4yfDE7YX06W3QKSOws+F53XM8M3dclEbYMRsI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OrqhGTHd6gi6nMqvM/znQSwNoN5VSBRzcdgY3LbpYWU=";
 
   nativeBuildInputs = [ installShellFiles mandown protobuf go-md2man ];
 

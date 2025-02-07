@@ -9,7 +9,7 @@
   pcre,
   libssh,
   libmysqlclient,
-  postgresql,
+  libpq,
   samba,
   withGUI ? false,
   makeWrapper,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     pcre
     libssh
     libmysqlclient
-    postgresql
+    libpq
     samba
   ] ++ lib.optional withGUI gtk2;
 

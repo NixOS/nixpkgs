@@ -17,10 +17,10 @@
   harfbuzz,
   libjpeg,
   libpng,
+  libpq,
   librsvg,
   libxml2,
   pkg-config,
-  postgresql,
   proj,
   protobufc,
   python3,
@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
     harfbuzz
     libjpeg
     libpng
+    libpq
     librsvg
     libxml2
-    postgresql
     proj
     protobufc
     zlib

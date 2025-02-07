@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.4.1";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "frozenlist";
     tag = "v${version}";
-    hash = "sha256-ICPJKN6P9ezTiDVoEVBQvJlXqF7aHE6aXFx0jzntdEA=";
+    hash = "sha256-yhoJc9DR3vL2E9srN3F4VksIor324H9dUarzzmoc4/A=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Python module for list-like structure";
     homepage = "https://github.com/aio-libs/frozenlist";
     changelog = "https://github.com/aio-libs/frozenlist/blob/v${version}/CHANGES.rst";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

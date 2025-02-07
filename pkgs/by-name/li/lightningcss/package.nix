@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xnsTYOjnfcaPHlLpf83efD3w5cjqyFV5bCV89zG1GaA=";
   };
 
-  cargoHash = "sha256-cip1ZhHR39PE6ZX8PhGJ3oXCkR5LE/OWyjMqiG+lHvY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/q4XX/tN7scv0W04NexYLuOvKc09f1w+Je5UEN9Tv9g=";
 
   patches = [
     # Backport fix for build error for lightningcss-napi

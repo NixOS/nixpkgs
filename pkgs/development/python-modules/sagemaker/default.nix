@@ -113,7 +113,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
-    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nequissimus ];
   };

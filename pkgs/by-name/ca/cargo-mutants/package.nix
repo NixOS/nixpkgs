@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JwRMXFXYXPg/grFqeGIcWpDPI5/wFIldx4ORE8ODyk8=";
   };
 
-  cargoHash = "sha256-8sAyQ858brL6EFW8gRAPrlpSPW7lYrd4dFOyUDOnIaU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K3O5o69ogkCFs6sjTPLLRq2CmBaH2eeFXBjvvwBBhQE=";
 
   # too many tests require internet access
   doCheck = false;

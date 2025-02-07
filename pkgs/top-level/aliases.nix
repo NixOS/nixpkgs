@@ -1228,7 +1228,6 @@ mapAliases {
   rnix-hashes = throw "'rnix-hashes' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
   rr-unstable = rr; # Added 2022-09-17
-  rs-git-fsmonitor = throw "'rs-git-fsmonitor' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rtx = mise; # Added 2024-01-05
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
@@ -1483,6 +1482,9 @@ mapAliases {
   viper4linux-gui = throw "'viper4linux-gui' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
   viper4linux = throw "'viper4linux' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
   virtscreen = throw "'virtscreen' has been removed, as it was broken and unmaintained"; # Added 2024-10-17
+  vistafonts = vista-fonts; # Added 2025-02-03
+  vistafonts-chs = vista-fonts-chs; # Added 2025-02-03
+  vistafonts-cht = vista-fonts-cht; # Added 2025-02-03
   vkBasalt = vkbasalt; # Added 2022-11-22
   vkdt-wayland = vkdt; # Added 2024-04-19
   void = throw "'void' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
@@ -1568,6 +1570,8 @@ mapAliases {
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zfs_2_1 = throw "zfs 2.1 has been removed as it is EOL. Please upgrade to a newer version"; # Added 2024-12-25
+  zig_0_9 = throw "zig 0.9 has been removed, upgrade to a newer version instead"; # Added 2025-01-24
+  zig_0_10 = throw "zig 0.10 has been removed, upgrade to a newer version instead"; # Added 2025-01-24
   zinc = zincsearch; # Added 2023-05-28
   zk-shell = throw "zk-shell has been removed as it was broken and unmaintained"; # Added 2024-08-10
   zkg = throw "'zkg' has been replaced by 'zeek'";

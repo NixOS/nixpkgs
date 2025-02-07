@@ -53,6 +53,7 @@
   libjpeg,
   libjxl,
   libmysqlclient,
+  libpq,
   libpng,
   libspatialite,
   libtiff,
@@ -66,7 +67,6 @@
   pcre2,
   pkg-config,
   poppler,
-  postgresql,
   proj,
   python3,
   qhull,
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
         libhwy
       ];
       mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
-      postgresDeps = lib.optionals usePostgres [ postgresql ];
+      postgresDeps = lib.optionals usePostgres [ libpq ];
       popplerDeps = lib.optionals usePoppler [ poppler ];
       arrowDeps = lib.optionals useArrow [ arrow-cpp ];
       hdfDeps = lib.optionals useHDF [

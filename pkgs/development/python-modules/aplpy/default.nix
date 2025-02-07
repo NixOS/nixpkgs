@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aplpy";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aplpy";
     inherit version;
-    hash = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
+    hash = "sha256-oUylUM7/6OyEJFrpkr9MjXilXC/ZIdBQ5au4cvyZiA0=";
   };
 
   # Fix build with Astropy 6.1, Python 3.12 and matplotlib 3.9

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
-  version = "2.2.0";
+  version = "2.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-X2g/wgWLIY2ZIwH1l83EApyoeYQU5/MWq5S0qmYz+CA=";
+    hash = "sha256-a9wSw25q0blgAkR2s3brW7jGHJSLjx1yXjMmhMJNUFk=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "Static configuration extractor for the Karton framework";
     mainProgram = "karton-config-extractor";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
-    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/v${version}";
+    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${src.tag}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

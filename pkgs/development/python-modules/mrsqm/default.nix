@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mrsqm";
-  version = "0.0.7";
+  version = "4";
   pyproject = true;
 
   build-system = [
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlgig";
     repo = "mrsqm";
-    tag = "v.${version}";
-    hash = "sha256-5K6vCU0HExnmYNThZNDCbEtII9bUGauxDtKkJXe/85Q=";
+    tag = "r${version}";
+    hash = "sha256-59f18zItV3K6tXcg1v1q2Z8HYrQB8T0ntaaqjxeAEbM=";
   };
 
   buildInputs = [ fftw ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";
     homepage = "https://pypi.org/project/mrsqm";
-    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${version}";
+    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mbalatsko ];
   };

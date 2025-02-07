@@ -100,7 +100,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "vat-moss-forked" # we provide a patched vat-moss package
+    "vat_moss_forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''

@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mYFvqzSnTljzRbb9W4/hY7fOO35UF31P5M49JkM58R8=";
   };
 
-  cargoHash = "sha256-aG0J9hnkGvz42gOczU3uF3GsmKZWgrLtx8lXOkDwt0c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7UKdnq5xmkO95Sf9YR3LqS2RoUYGbvWqRYUXNQXfkf0=";
 
   meta = with lib; {
     description = "Command line utility to render templates from json|toml|yaml and ENV, using the tera templating engine";

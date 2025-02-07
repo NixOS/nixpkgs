@@ -2,7 +2,7 @@
   lib,
   fetchurl,
   stdenv,
-  substituteAll,
+  replaceVars,
   vim,
   sendmailPath ? "/usr/sbin/sendmail",
 }:
@@ -17,8 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0000-nixpkgs-specific.diff;
+    (replaceVars ./0000-nixpkgs-specific.diff {
       inherit sendmailPath;
       viPath = lib.getExe' vim "vim";
       defPath = lib.concatStringsSep ":" [

@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString useP11kit ''
     # Replace built-in trust with p11-kit connection
-    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
+    ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libnssckbi${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   postFixup =

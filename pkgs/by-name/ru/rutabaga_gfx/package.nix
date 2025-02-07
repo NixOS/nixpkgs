@@ -66,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-wuF3Isrp+u5J8jPQoPsIOWYGNKLSNa2pLfvladAWkLs=";
+    hash = "sha256-53xCzKuXtnnbS0TWdQrh4Rwy+V+D9soK41ycYd656Uc=";
   };
 
   CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;

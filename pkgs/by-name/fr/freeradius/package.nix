@@ -21,7 +21,7 @@
   withMysql ? false,
   libmysqlclient,
   withPostgresql ? false,
-  postgresql,
+  libpq,
   withPcap ? true,
   libpcap,
   withRedis ? false,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLdap openldap
     ++ lib.optional withMemcached libmemcached
     ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withPostgresql postgresql
+    ++ lib.optional withPostgresql libpq
     ++ lib.optional withPcap libpcap
     ++ lib.optional withRedis hiredis
     ++ lib.optional withRest curl

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gitpython";
-  version = "3.1.43";
+  version = "3.1.44";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gitpython-developers";
     repo = "GitPython";
     tag = version;
-    hash = "sha256-HO6t5cOHyDJVz+Bma4Lkn503ZfDmiQxUfSLaSZtUrTk=";
+    hash = "sha256-KnKaBv/tKk4wiGWUWCEgd1vgrTouwUhqxJ1/nMjRaWk=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
-    changelog = "https://github.com/gitpython-developers/GitPython/blob/${version}/doc/source/changes.rst";
+    changelog = "https://github.com/gitpython-developers/GitPython/blob/${src.tag}/doc/source/changes.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

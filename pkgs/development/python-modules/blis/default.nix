@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "1.0.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,15 +24,8 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cython-blis";
     tag = "release-v${version}";
-    hash = "sha256-J/EaJNmImcK4zScpbYPlQuoLyjoUkUgxUp6926P6rUQ=";
+    hash = "sha256-TyyB0kPGX517fe0rI4T+VkSnFvTRCFR06BLwo67X9zQ=";
   };
-
-  postPatch = ''
-    # See https://github.com/numpy/numpy/issues/21079
-    # has no functional difference as the name is only used in log output
-    substituteInPlace blis/benchmark.py \
-      --replace-fail 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
-  '';
 
   preCheck = ''
     # remove src module, so tests use the installed module instead
@@ -66,7 +59,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-v${version}";
+    changelog = "https://github.com/explosion/cython-blis/releases/tag/release-${src.tag}";
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;

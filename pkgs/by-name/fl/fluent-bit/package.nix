@@ -6,7 +6,7 @@
   flex,
   bison,
   systemd,
-  postgresql,
+  libpq,
   openssl,
   libyaml,
   darwin,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       openssl
       libyaml
-      postgresql
+      libpq
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

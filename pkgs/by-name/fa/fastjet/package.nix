@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
   };
 
+  postPatch = ''
+    patchShebangs --build fastjet-config.in
+  '';
+
   buildInputs = lib.optional withPython python;
 
   configureFlags = [

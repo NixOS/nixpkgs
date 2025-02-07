@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
   # no such file or directory errors
   doCheck = false;
 
-  cargoHash = "sha256-P6A1tO+XlZobvptwfJ4KH6iE/p/T1Md1sOSKZ/H/xt4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-X3zXCiMZAolPLjCKSKocc00t3/P2tS57a2+BWW3VaD0=";
 
   meta = with lib; {
     description = "Extended cp(1)";

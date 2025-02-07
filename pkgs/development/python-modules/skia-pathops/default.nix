@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.8.0.post1";
-  format = "setuptools";
+  version = "0.8.0.post2";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "skia-pathops";
+    pname = "skia_pathops";
     inherit version;
     extension = "zip";
-    hash = "sha256-oFYkneL2H6VRFrnuVVE8aja4eK7gDJFFDkBNFgZIXLs=";
+    hash = "sha256-niUs3rbE0WLoKYbTHb2JxnXRZ3y4AZwuE+YpXUpVcmk=";
   };
 
   postPatch =
@@ -54,11 +54,15 @@ buildPythonPackage rec {
           EOF
         '';
 
+  build-system = [
+    cython
+    setuptools
+    setuptools-scm
+  ];
+
   nativeBuildInputs =
     [
-      cython
       ninja
-      setuptools-scm
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
@@ -69,8 +73,6 @@ buildPythonPackage rec {
     ApplicationServices
     OpenGL
   ];
-
-  propagatedBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

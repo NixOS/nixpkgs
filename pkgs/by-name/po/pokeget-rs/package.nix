@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-VYF2uhgxUFH/VAy/ttQOULRFFiPRf0D+0WfGlQyYDGc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nP5NPBnqEaGo1QvhdMHSPtDjJqOxF+TodvqmMgTfQ8M=";
 
   meta = with lib; {
     description = "Better rust version of pokeget";

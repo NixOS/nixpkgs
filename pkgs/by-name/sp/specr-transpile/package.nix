@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yB4b7VaZ22zk8jhQijBOWRks22TV19q9IQNlVXyBlss=";
   };
 
-  cargoHash = "sha256-pD+Llzt4ekkQgKGidEL6jIbbFpuqjuFTmQM29FtReTY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pMkvyMGfvLdj406xH/1+ZHE33iZDcmUUBjeSiIro0xY=";
 
   meta = with lib; {
     description = "Converts Specr lang code to Rust";
