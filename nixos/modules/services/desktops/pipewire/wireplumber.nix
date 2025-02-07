@@ -109,7 +109,7 @@ in
 
           [docs-the-conf-file]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/conf_file.html
           [docs-modifying-config]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/modifying_configuration.html
-          [docs-file-locations]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration/locations.html
+          [docs-file-locations]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/locations.html
           [docs-config-section]: https://pipewire.pages.freedesktop.org/wireplumber/daemon/configuration.html
         '';
       };
