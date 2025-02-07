@@ -5,7 +5,7 @@
   dataDir ? "/var/lib/agorakit",
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "agorakit";
   version = "1.9.2";
 
@@ -26,7 +26,7 @@ php.buildComposerProject (finalAttrs: {
     runHook postInstall
   '';
 
-  vendorHash = "sha256-5ypBA9Qb8jHzAtvNBHkJfsLIf3Pfw1LvYmHP/hED2ig=";
+  vendorHash = "sha256-EepkEMqzRJUqw4PrPclY9BM4AGlQZJpYLWjIyaX15PA=";
   composerStrictValidation = false;
 
   meta = {
