@@ -19,12 +19,12 @@
   prefetch-yarn-deps,
 }:
 let
-  version = "4.0.11.2680";
+  version = "4.0.12.2823";
   src = fetchFromGitHub {
     owner = "Sonarr";
     repo = "Sonarr";
     tag = "v${version}";
-    hash = "sha256-+Ezr+O5BeOAf21l1TjHSQ7OoHPuQ9HXVvmuQvo8V9ss=";
+    hash = "sha256-gAvbA3Idx73QEDthLwrM8Jbt6YhXxK8LzEJI6eF2k20=";
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
@@ -46,7 +46,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-S1USzvQ/BcIr+od+gQd+uWxaEz5/qtyOkuIIVK5b7lg=";
+    hash = "sha256-ejAf8/zWX9TbC645vbpyLwa6mrnitU7ByImrJ1d/uX0=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");
@@ -107,7 +107,7 @@ buildDotnetModule {
     "--property:TargetFramework=net6.0"
     "--property:EnableAnalyzers=false"
     # Override defaults in src/Directory.Build.props that use current time.
-    "--property:Copyright=Copyright 2014-2024 sonarr.tv (GNU General Public v3)"
+    "--property:Copyright=Copyright 2014-2025 sonarr.tv (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
     "--property:AssemblyConfiguration=main"
     "--property:RuntimeIdentifier=${rid}"
