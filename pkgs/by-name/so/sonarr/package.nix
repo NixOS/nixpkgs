@@ -1,21 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, buildDotnetModule
-, dotnetCorePackages
-, sqlite
-, withFFmpeg ? true # replace bundled ffprobe binary with symlink to ffmpeg package.
-, ffmpeg
-, fetchYarnDeps
-, yarn
-, fixup-yarn-lock
-, nodejs
-, nixosTests
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  sqlite,
+  withFFmpeg ? true, # replace bundled ffprobe binary with symlink to ffmpeg package.
+  ffmpeg,
+  fetchYarnDeps,
+  yarn,
+  fixup-yarn-lock,
+  nodejs,
+  nixosTests,
   # update script
-, writers
-, python3Packages
-, nix
-, prefetch-yarn-deps
+  writers,
+  python3Packages,
+  nix,
+  prefetch-yarn-deps,
 }:
 let
   version = "4.0.11.2680";
@@ -36,7 +37,12 @@ buildDotnetModule {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps fixup-yarn-lock ];
+  nativeBuildInputs = [
+    nodejs
+    yarn
+    prefetch-yarn-deps
+    fixup-yarn-lock
+  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
@@ -54,12 +60,14 @@ buildDotnetModule {
   postBuild = ''
     yarn --offline run build --env production
   '';
-  postInstall = lib.optionalString withFFmpeg ''
-    rm -- "$out/lib/sonarr/ffprobe"
-    ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
-  '' + ''
-    cp -a -- _output/UI "$out/lib/sonarr/UI"
-  '';
+  postInstall =
+    lib.optionalString withFFmpeg ''
+      rm -- "$out/lib/sonarr/ffprobe"
+      ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
+    ''
+    + ''
+      cp -a -- _output/UI "$out/lib/sonarr/UI"
+    '';
   # Add an alias for compatibility with Sonarr v3 package.
   postFixup = ''
     ln -s -- Sonarr "$out/bin/NzbDrone"
@@ -107,32 +115,34 @@ buildDotnetModule {
 
   # Skip manual, integration, automation and platform-dependent tests.
   dotnetTestFlags = [
-    "--filter:${lib.concatStringsSep "&" [
-      "TestCategory!=ManualTest"
-      "TestCategory!=IntegrationTest"
-      "TestCategory!=AutomationTest"
+    "--filter:${
+      lib.concatStringsSep "&" [
+        "TestCategory!=ManualTest"
+        "TestCategory!=IntegrationTest"
+        "TestCategory!=AutomationTest"
 
-      # setgid tests
-      "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
-      "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
+        # setgid tests
+        "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
+        "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
 
-      # we do not set application data directory during tests (i.e. XDG data directory)
-      "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+        # we do not set application data directory during tests (i.e. XDG data directory)
+        "FullyQualifiedName!=NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
 
-      # attempts to read /etc/*release and fails since it does not exist
-      "FullyQualifiedName!=NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
+        # attempts to read /etc/*release and fails since it does not exist
+        "FullyQualifiedName!=NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
-      # fails to start test dummy because it cannot locate .NET runtime for some reason
-      "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
-      "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+        # fails to start test dummy because it cannot locate .NET runtime for some reason
+        "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
+        "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
 
-      # makes real HTTP requests
-      "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
-      "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+        # makes real HTTP requests
+        "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
+        "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
 
-      # fails on macOS
-      "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-    ]}"
+        # fails on macOS
+        "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+      ]
+    }"
   ];
 
   passthru = {
@@ -140,24 +150,29 @@ buildDotnetModule {
       inherit (nixosTests) sonarr;
     };
 
-    updateScript = writers.writePython3 "sonarr-updater"
-      {
-        libraries = with python3Packages; [ requests ];
-        makeWrapperArgs = [
-          "--prefix"
-          "PATH"
-          ":"
-          (lib.makeBinPath [ nix prefetch-yarn-deps ])
-        ];
-      }
-      ./update.py;
+    updateScript = writers.writePython3 "sonarr-updater" {
+      libraries = with python3Packages; [ requests ];
+      makeWrapperArgs = [
+        "--prefix"
+        "PATH"
+        ":"
+        (lib.makeBinPath [
+          nix
+          prefetch-yarn-deps
+        ])
+      ];
+    } ./update.py;
   };
 
   meta = {
     description = "Smart PVR for newsgroup and bittorrent users";
     homepage = "https://sonarr.tv";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ fadenb purcell tie ];
+    maintainers = with lib.maintainers; [
+      fadenb
+      purcell
+      tie
+    ];
     mainProgram = "Sonarr";
     # platforms inherited from dotnet-sdk.
   };
