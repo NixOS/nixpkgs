@@ -37,7 +37,7 @@ def dict_to_flags(d: Args | None) -> list[str]:
             case int() if len(key) == 1:
                 flags.append(f"-{key * value}")
             case int():
-                for i in range(value):
+                for _ in range(value):
                     flags.append(flag)
             case str():
                 flags.append(flag)
