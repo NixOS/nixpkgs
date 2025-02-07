@@ -31,7 +31,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
   };
 
