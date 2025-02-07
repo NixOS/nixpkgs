@@ -41,6 +41,8 @@ ignore_missing_imports = true
 extend-select = [
     # don't shadow built-in names
     "A",
+    # Better list/set/dict comprehensions
+    "C4",
     # ensure imports are sorted
     "I",
     # Automatically upgrade syntax for newer versions
