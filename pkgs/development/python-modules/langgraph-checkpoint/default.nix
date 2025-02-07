@@ -53,6 +53,9 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = langgraph-sdk.updateScript;
+
+    # multiple tags confuse the bulk updater
+    skipBulkUpdate = true;
   };
 
   meta = {
