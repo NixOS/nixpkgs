@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       "dev"
     ]
     ++ lib.optionals withDocumentation [ "devdoc" ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "installedTests" ];
+    ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [ "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ebassi";

@@ -23,7 +23,7 @@
   ),
 }:
 
-assert crossSystem == localSystem;
+assert crossSystem.equals localSystem;
 
 let
   inherit (localSystem) system;
@@ -1202,7 +1202,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 // {
                   inherit (prevStage.darwin) libSystem locale sigtool;
                 }
-                // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                // lib.optionalAttrs (super.stdenv.targetPlatform.equals localSystem) {
                   inherit (prevStage.darwin) binutils binutils-unwrapped;
                 }
               );
@@ -1210,7 +1210,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             # These have to be dropped from the overlay when cross-compiling. Wrappers are obviously target-specific.
             # darwin.binutils is not yet ready to be target-independent.
             (
-              lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (bintoolsPackages prevStage)
+              lib.optionalAttrs (super.stdenv.targetPlatform.equals localSystem) (bintoolsPackages prevStage)
               // {
                 inherit (prevStage.llvmPackages) clang;
               }
@@ -1232,7 +1232,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                     // {
                       inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
                     }
-                    // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                    // lib.optionalAttrs (super.stdenv.targetPlatform.equals localSystem) {
                       inherit (prevStage.llvmPackages) clang;
                     }
                   );

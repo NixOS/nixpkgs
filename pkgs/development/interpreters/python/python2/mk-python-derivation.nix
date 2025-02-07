@@ -58,7 +58,7 @@
   # Raise an error if two packages are installed with the same name
   # TODO: For cross we probably need a different PYTHONPATH, or not
   # add the runtime deps until after buildPhase.
-  catchConflicts ? (python.stdenv.hostPlatform == python.stdenv.buildPlatform),
+  catchConflicts ? (python.stdenv.hostPlatform.equals python.stdenv.buildPlatform),
 
   # Additional arguments to pass to the makeWrapper function, which wraps
   # generated binaries.
@@ -226,7 +226,7 @@ let
           ++ lib.optionals (format != "other") [
             (pipInstallHook)
           ]
-          ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+          ++ lib.optionals (stdenv.buildPlatform.equals stdenv.hostPlatform) [
             # This is a test, however, it should be ran independent of the checkPhase and checkInputs
             pythonImportsCheckHook
           ]
@@ -264,9 +264,11 @@ let
           + attrs.postFixup or "";
 
         # Python packages built through cross-compilation are always for the host platform.
-        disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [
-          python.pythonOnBuildForHost
-        ];
+        disallowedReferences =
+          lib.optionals (python.stdenv.hostPlatform.notEquals python.stdenv.buildPlatform)
+            [
+              python.pythonOnBuildForHost
+            ];
 
         outputs = outputs ++ lib.optional withDistOutput "dist";
 

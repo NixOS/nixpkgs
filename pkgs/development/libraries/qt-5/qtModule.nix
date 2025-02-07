@@ -42,14 +42,14 @@ mkDerivation (
         perl
         qmake
       ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
         pkgsHostTarget.qt5.qtbase.dev
       ];
     propagatedBuildInputs =
       (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
   }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  // lib.optionalAttrs (stdenv.buildPlatform.notEquals stdenv.hostPlatform) {
     depsBuildBuild = [ buildPackages.stdenv.cc ] ++ (args.depsBuildBuild or [ ]);
   }
   // {

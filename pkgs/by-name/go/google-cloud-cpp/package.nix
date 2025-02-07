@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (apis != [ "*" ]) [
       "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "-DGOOGLE_CLOUD_CPP_GRPC_PLUGIN_EXECUTABLE=${lib.getBin pkgsBuildHost.grpc}/bin/grpc_cpp_plugin"
     ];
 

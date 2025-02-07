@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --replace '<arpa/nameser.h>' '<arpa/nameser_compat.h>'
   '';
 
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];

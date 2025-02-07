@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       executablePrefix =
-        if stdenv.buildPlatform == stdenv.hostPlatform then "$out" else buildPackages.libgphoto2;
+        if stdenv.buildPlatform.equals stdenv.hostPlatform then "$out" else buildPackages.libgphoto2;
     in
     ''
       mkdir -p $out/lib/udev/{rules.d,hwdb.d}

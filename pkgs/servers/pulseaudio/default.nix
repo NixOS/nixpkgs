@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
       (lib.mesonEnable "elogind" false)
       # gsettings does not support cross-compilation
       (lib.mesonEnable "gsettings" (
-        stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
+        stdenv.hostPlatform.isLinux && (stdenv.buildPlatform.equals stdenv.hostPlatform)
       ))
       (lib.mesonEnable "gstreamer" false)
       (lib.mesonEnable "gtk" false)
@@ -256,11 +256,13 @@ stdenv.mkDerivation rec {
     '';
 
   preFixup =
-    lib.optionalString (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
-      wrapProgram $out/libexec/pulse/gsettings-helper \
-       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
-       --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
-    ''
+    lib.optionalString
+      (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.equals stdenv.buildPlatform))
+      ''
+        wrapProgram $out/libexec/pulse/gsettings-helper \
+         --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
+         --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
+      ''
     # add .so symlinks for modules to be found under macOS
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for file in $out/lib/pulseaudio/modules/*.dylib; do

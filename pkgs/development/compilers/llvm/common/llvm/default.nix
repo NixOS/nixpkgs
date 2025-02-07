@@ -33,7 +33,7 @@
     )
     && (!stdenv.hostPlatform.isMusl)
     && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-    && (stdenv.hostPlatform == stdenv.buildPlatform),
+    && (stdenv.hostPlatform.equals stdenv.buildPlatform),
   enableManpages ? false,
   enableSharedLibraries ? !stdenv.hostPlatform.isStatic,
   enablePFM ?
@@ -330,7 +330,7 @@ stdenv.mkDerivation (
 
     propagatedBuildInputs =
       (lib.optional (
-        lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform
+        lib.versionAtLeast release_version "14" || stdenv.buildPlatform.equals stdenv.hostPlatform
       ) ncurses)
       ++ [ zlib ];
 
@@ -668,7 +668,7 @@ stdenv.mkDerivation (
       ++
         optionals
           (
-            (stdenv.hostPlatform != stdenv.buildPlatform)
+            (stdenv.hostPlatform.notEquals stdenv.buildPlatform)
             && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
           )
           [
@@ -737,7 +737,7 @@ stdenv.mkDerivation (
       + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
         ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
       ''
-      + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
+      + optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) (
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           ''
             ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native

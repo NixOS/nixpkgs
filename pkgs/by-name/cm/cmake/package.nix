@@ -189,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
 
   # make install attempts to use the just-built cmake
-  preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preInstall = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 

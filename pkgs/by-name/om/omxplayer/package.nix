@@ -60,7 +60,7 @@ let
         "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
         "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
       ]
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
         "--cross-prefix=${stdenv.cc.targetPrefix}"
         "--enable-cross-compile"
       ];

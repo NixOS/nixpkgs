@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     "TARGET=${stdenv.hostPlatform.config}"
   ];
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     make rtlib -j$buildJobs \
       "FBC=$PWD/bin/fbc${stdenv.buildPlatform.extensions.executable} -i $PWD/inc" \
       ${
-        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+        if (stdenv.buildPlatform.equals stdenv.hostPlatform) then
           "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
         else
           "TARGET=${stdenv.hostPlatform.config}"
@@ -84,11 +84,7 @@ stdenv.mkDerivation rec {
 
     echo Install patched build compiler and host rtlib to local directory
     make install-compiler prefix=$PWD/patched-fbc
-    make install-rtlib prefix=$PWD/patched-fbc ${
-      lib.optionalString (
-        stdenv.buildPlatform != stdenv.hostPlatform
-      ) "TARGET=${stdenv.hostPlatform.config}"
-    }
+    make install-rtlib prefix=$PWD/patched-fbc ${lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) "TARGET=${stdenv.hostPlatform.config}"}
     make clean
 
     echo Compile patched host everything with previous patched stage
@@ -101,7 +97,7 @@ stdenv.mkDerivation rec {
 
   # Tests do not work when cross-compiling even if build platform can execute
   # host binaries, compiler struggles to find the cross compiler's libgcc_s
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.equals stdenv.hostPlatform;
 
   checkTarget = "unit-tests warning-tests log-tests";
 

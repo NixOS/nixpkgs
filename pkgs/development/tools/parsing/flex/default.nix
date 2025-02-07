@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ''
       patchShebangs tests
     ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
       substituteInPlace Makefile.in --replace "tests" " "
 
       substituteInPlace doc/Makefile.am --replace 'flex.1: $(top_srcdir)/configure.ac' 'flex.1: '
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison ];
   propagatedBuildInputs = [ m4 ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     export ac_cv_func_malloc_0_nonnull=yes
     export ac_cv_func_realloc_0_nonnull=yes
   '';
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
-  dontDisableStatic = stdenv.buildPlatform != stdenv.hostPlatform;
+  dontDisableStatic = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
 
   postInstall = ''
     ln -s $out/bin/flex $out/bin/lex

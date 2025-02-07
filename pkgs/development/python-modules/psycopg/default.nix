@@ -125,7 +125,7 @@ buildPythonPackage rec {
     [
       "out"
     ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [
       "doc"
     ];
 
@@ -152,7 +152,7 @@ buildPythonPackage rec {
     ]
     # building the docs fails with the following error when cross compiling
     #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [
       sphinx-autodoc-typehints
       sphinxHook
     ];

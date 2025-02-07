@@ -45,7 +45,7 @@
   glib,
   testers,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  enableDocumentation ? stdenv.hostPlatform.equals stdenv.buildPlatform,
   hotdoc,
 }:
 
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "doc" enableDocumentation)
       (lib.mesonEnable "libvisual" false)
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "-Dtests=disabled"
     ]
     ++ lib.optional (!enableX11) "-Dx11=disabled"

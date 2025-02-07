@@ -9,7 +9,7 @@ let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
   sanitizersWorking =
-    (stdenv.buildPlatform == stdenv.hostPlatform)
+    (stdenv.buildPlatform.equals stdenv.hostPlatform)
     && !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isMusl
     && (

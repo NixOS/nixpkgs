@@ -279,6 +279,6 @@ let
     };
 
 in
-lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
+lib.optionalAttrs (stdenv.hostPlatform.equals stdenv.buildPlatform) (
   environmentTests // integrationTests // overrideTests // condaTests // editableTests
 )

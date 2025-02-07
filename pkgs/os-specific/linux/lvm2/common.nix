@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       "--with-dmeventd-pidfile=/run/dmeventd/pid"
       "--with-default-dm-run-dir=/run/dmeventd"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "ac_cv_func_malloc_0_nonnull=yes"
       "ac_cv_func_realloc_0_nonnull=yes"
     ]

@@ -114,6 +114,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # checking for a Python interpreter with version >= 2.4... none
     # configure: error: no suitable Python interpreter found
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
   };
 }

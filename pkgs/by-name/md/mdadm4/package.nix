@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       "RUN_DIR=/dev/.mdadm"
       "STRIP="
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ];
 

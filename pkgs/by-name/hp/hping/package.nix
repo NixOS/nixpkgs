@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       sed -i -e 's|#include <net/bpf.h>|#include <pcap/bpf.h>|' \
         libpcap_stuff.c script.c
     ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    + lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
       substituteInPlace configure --replace 'BYTEORDER=`./byteorder -m`' BYTEORDER=${
         {
           littleEndian = "__LITTLE_ENDIAN_BITFIELD";
