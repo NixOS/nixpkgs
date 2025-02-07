@@ -67,7 +67,9 @@ let
         mkdir $out/plugins
         ${lib.optionalString (plugins != { }) ''
           ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (name: value: "ln -s ${value} $out/plugins/${name}") plugins
+            lib.mapAttrsToList (name: value: ''
+              ln -s ${value} $out/plugins/${name}.yazi
+            '') plugins
           )}
         ''}
 
