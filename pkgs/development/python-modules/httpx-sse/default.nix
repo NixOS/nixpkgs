@@ -52,6 +52,8 @@ buildPythonPackage rec {
     sse-starlette
   ];
 
+  disabledTestPaths = [ "tests/test_asgi.py" ]; # tests/test_asgi.py::test_asgi_test - TypeError: AsyncClient.__init__() got an unexpected keyword argument 'app'
+
   meta = with lib; {
     description = "Consume Server-Sent Event (SSE) messages with HTTPX";
     homepage = "https://github.com/florimondmanca/httpx-sse";
