@@ -132,7 +132,7 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: MonkeyPatch) 
                     Path("/path/to/file"),
                 ],
                 extra_env={
-                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                    "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
                 },
             ),
             call(
@@ -206,7 +206,7 @@ def test_build_remote_flake(
                     Path("/path/to/file"),
                 ],
                 extra_env={
-                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                    "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh opts"])
                 },
             ),
             call(
@@ -247,14 +247,14 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         mock_run.assert_called_with(
             ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
             extra_env={
-                "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
+                "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-opt"])
             },
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     monkeypatch.setattr(n, "WITH_NIX_2_18", True)
     extra_env = {
-        "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
+        "NIX_SSHOPTS": " ".join([*p.SSH_DEFAULT_OPTS, "--ssh build-target-opt"])
     }
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
