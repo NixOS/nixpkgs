@@ -37,7 +37,7 @@
   settings ? { },
   plugins ? { },
   flavors ? { },
-  initLua ? null,
+  mainLua ? null,
 }:
 
 let
@@ -52,7 +52,7 @@ let
   ];
 
   configHome =
-    if (settings == { } && initLua == null && plugins == { } && flavors == { }) then
+    if (settings == { } && mainLua == null && plugins == { } && flavors == { }) then
       null
     else
       runCommand "YAZI_CONFIG_HOME" { } ''
@@ -79,7 +79,7 @@ let
         ''}
 
 
-        ${lib.optionalString (initLua != null) "ln -s ${initLua} $out/init.lua"}
+        ${lib.optionalString (mainLua != null) "ln -s ${mainLua} $out/main.lua"}
       '';
 in
 runCommand yazi-unwrapped.name
