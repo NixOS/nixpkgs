@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck =
-    !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
+    !(with stdenv.hostPlatform; isCygwin || isFreeBSD)
+    && stdenv.hostPlatform.equals stdenv.buildPlatform;
   # XXX: test failure on Cygwin
   # we are running out of stack on both freeBSDs on Hydra
 

@@ -58,7 +58,7 @@ let
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
 
-  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform.equals stdenv.buildPlatform then
     "$out/bin/python"
   else pythonOnBuildForHost.interpreter;
 
@@ -171,7 +171,7 @@ let
       # only works for GCC and Apple Clang. This makes distutils to call C++
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       ./cross-compile.patch
     ];
 
@@ -203,7 +203,7 @@ let
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-toolbox-glue"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     "PYTHON_FOR_BUILD=${lib.getBin buildPackages.python27}/bin/python"
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -238,7 +238,7 @@ let
     ++ lib.optionals x11Support [ tcl tk libX11 ];
   nativeBuildInputs =
     [ autoreconfHook ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform)
       [ buildPackages.stdenv.cc buildPackages.python27 ];
 
   mkPaths = paths: {
@@ -247,7 +247,7 @@ let
   };
 
   # Python 2.7 needs this
-  crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
+  crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform.notEquals stdenv.buildPlatform)
                       { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config; };
 
   # Build the basic Python interpreter without modules that have

@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.hostPlatform.isLinux [
       buildPackages.stdenv.cc
     ]
-    ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) samba # asn1_compile/compile_et
+    ++ optional (stdenv.buildPlatform.notEquals stdenv.hostPlatform) samba # asn1_compile/compile_et
     ++ optionals stdenv.hostPlatform.isDarwin [
       fixDarwinDylibNames
     ];
@@ -220,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam"
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "--bundled-libraries=!asn1_compile,!compile_et"
       "--cross-compile"
       "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
@@ -253,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Save asn1_compile and compile_et so they are available to run on the build
   # platform when cross-compiling
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.equals stdenv.buildPlatform) ''
     mkdir -p "$dev/bin"
     cp bin/asn1_compile bin/compile_et "$dev/bin"
   '';

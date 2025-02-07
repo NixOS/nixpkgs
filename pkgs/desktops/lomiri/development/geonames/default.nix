@@ -118,7 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Cross requires hostPlatform emulation during build
     # https://gitlab.com/ubports/development/core/geonames/-/issues/1
     broken =
-      stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.emulatorAvailable buildPackages;
+      stdenv.buildPlatform.notEquals stdenv.hostPlatform
+      && !stdenv.hostPlatform.emulatorAvailable buildPackages;
     pkgConfigModules = [
       "geonames"
     ];

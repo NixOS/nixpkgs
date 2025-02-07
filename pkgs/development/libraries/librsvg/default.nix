@@ -118,9 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-always-build-tests"
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-Bsymbolic"
-    ++ lib.optional (
-      stdenv.buildPlatform != stdenv.hostPlatform
-    ) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
+    ++ lib.optional (stdenv.buildPlatform.notEquals stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
@@ -160,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     +
       lib.optionalString
         (
-          (stdenv.buildPlatform != stdenv.hostPlatform)
+          (stdenv.buildPlatform.notEquals stdenv.hostPlatform)
           && (stdenv.hostPlatform.emulatorAvailable buildPackages)
         )
         ''

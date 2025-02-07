@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "out"
     "man"
     "dev"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
+  ] ++ lib.optional (stdenv.hostPlatform.equals stdenv.buildPlatform) "devdoc";
 
   patches = [
     (substituteAll {
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    (lib.enableFeature (stdenv.buildPlatform == stdenv.hostPlatform) "gtk-doc")
+    (lib.enableFeature (stdenv.buildPlatform.equals stdenv.hostPlatform) "gtk-doc")
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"

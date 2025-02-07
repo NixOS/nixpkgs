@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change liblinear.so.5 ${liblinear.out}/lib/liblinear.5.dylib $out/bin/nmap
   '';
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
     "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
     "CC=${stdenv.cc.targetPrefix}gcc"

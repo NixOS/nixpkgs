@@ -155,7 +155,7 @@ let
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
     autoreconfHook
     pkg-config
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
@@ -195,7 +195,7 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform.equals stdenv.buildPlatform then
     "$out/bin/python"
   else pythonOnBuildForHost.interpreter;
 
@@ -252,7 +252,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
+  ] ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
     # since this diff, consider submitting this patch upstream!
@@ -377,7 +377,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (libxcrypt != null) [
     "CFLAGS=-I${libxcrypt}/include"
     "LIBS=-L${libxcrypt}/lib"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
     "ac_cv_little_endian_double=yes"
@@ -399,7 +399,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
     "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
     "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
+  ] ++ optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonOnBuildForHostInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
     # Never even try to use lchmod on linux,
@@ -568,7 +568,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     linkDLLsInfolder $out/lib/python*/lib-dynload/
   '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
     export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
   '';
@@ -608,7 +608,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # explicitly specify in our configure flags above.
   disallowedReferences = lib.optionals (openssl != null && !static && !enableFramework) [
     openssl.dev
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonOnBuildForHost buildPackages.bash

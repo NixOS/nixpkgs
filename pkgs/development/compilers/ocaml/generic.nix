@@ -109,10 +109,12 @@ stdenv.mkDerivation (
         "DEFAULT_STRING=unsafe"
       ]
       ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
-      ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
-        "-host ${stdenv.hostPlatform.config}"
-        "-target ${stdenv.targetPlatform.config}"
-      ];
+      ++
+        optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform && lib.versionOlder version "4.08")
+          [
+            "-host ${stdenv.hostPlatform.config}"
+            "-target ${stdenv.targetPlatform.config}"
+          ];
     dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
     # on aarch64-darwin using --host and --target causes the build to invoke

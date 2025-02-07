@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       executablePrefix =
-        if stdenv.buildPlatform == stdenv.hostPlatform then
+        if stdenv.buildPlatform.equals stdenv.hostPlatform then
           "$out"
         else
           buildPackages.libgphoto2;

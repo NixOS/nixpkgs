@@ -231,4 +231,4 @@ let
       '';
     };
 
-in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests // editableTests)
+in lib.optionalAttrs (stdenv.hostPlatform.equals stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests // editableTests)

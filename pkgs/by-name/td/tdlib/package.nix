@@ -62,7 +62,7 @@ stdenv.mkDerivation {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  preConfigure = lib.optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) ''
     cmake -B native-build \
       -DCMAKE_C_COMPILER=$CC_FOR_BUILD \
       -DCMAKE_CXX_COMPILER=$CXX_FOR_BUILD \

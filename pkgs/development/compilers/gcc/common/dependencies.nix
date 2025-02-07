@@ -55,12 +55,12 @@ in
   # same for all gcc's
   depsBuildTarget =
     (
-      if hostPlatform == buildPlatform then
+      if hostPlatform.equals buildPlatform then
         [
           targetPackages.stdenv.cc.bintools # newly-built gcc will be used
         ]
       else
-        assert targetPlatform == hostPlatform;
+        assert targetPlatform.equals hostPlatform;
         [
           # build != host == target
           stdenv.cc

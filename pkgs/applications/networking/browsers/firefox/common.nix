@@ -114,7 +114,7 @@ in
 , jackSupport ? stdenv.hostPlatform.isLinux, libjack2
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
-, pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.equals stdenv.buildPlatform), xvfb-run
 , elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio

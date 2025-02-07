@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # protoc of the same version must be available for build. For non-cross builds, it's able to
       # re-use the executable generated as part of the build
       buildPackages."protobuf_${lib.versions.major version}"

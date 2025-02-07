@@ -387,7 +387,7 @@ let
         makeSetupHook {
           name = "qmake-hook";
           ${
-            if stdenv.buildPlatform == stdenv.hostPlatform then
+            if stdenv.buildPlatform.equals stdenv.hostPlatform then
               "propagatedBuildInputs"
             else
               "depsTargetTargetPropagated"
@@ -433,7 +433,7 @@ let
       # qttranslations causes eval-time infinite recursion when
       # cross-compiling; disabled for now.
       qttranslations =
-        if stdenv.buildPlatform == stdenv.hostPlatform then bootstrapScope.qttranslations else null;
+        if stdenv.buildPlatform.equals stdenv.hostPlatform then bootstrapScope.qttranslations else null;
     }
   );
 in

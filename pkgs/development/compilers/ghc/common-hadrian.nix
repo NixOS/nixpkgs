@@ -58,7 +58,7 @@
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform.notEquals stdenv.hostPlatform
 
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
@@ -75,8 +75,8 @@
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
                      || stdenv.targetPlatform.isGhcjs
                      # terminfo can't be built for cross
-                     || (stdenv.buildPlatform != stdenv.hostPlatform)
-                     || (stdenv.hostPlatform != stdenv.targetPlatform))
+                     || (stdenv.buildPlatform.notEquals stdenv.hostPlatform)
+                     || (stdenv.hostPlatform.notEquals stdenv.targetPlatform))
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -258,17 +258,17 @@
 assert !enableNativeBignum -> gmp != null;
 
 # GHC does not support building when all 3 platforms are different.
-assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
+assert stdenv.buildPlatform.equals stdenv.hostPlatform || stdenv.hostPlatform.equals stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert stdenv.buildPlatform == stdenv.hostPlatform;
+assert stdenv.buildPlatform.equals stdenv.hostPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString
-    (targetPlatform != hostPlatform)
+    (targetPlatform.notEquals hostPlatform)
     "${targetPlatform.config}-";
 
   hadrianSettings =
@@ -377,7 +377,7 @@ let
   #    target.
   targetLibs = {
     inherit
-      (if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget)
+      (if hostPlatform.notEquals targetPlatform then targetPackages else pkgsHostTarget)
       elfutils
       gmp
       libffi
@@ -510,7 +510,7 @@ stdenv.mkDerivation ({
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+    ++ lib.optional (targetPlatform.notEquals hostPlatform) "target";
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
@@ -522,13 +522,13 @@ stdenv.mkDerivation ({
     "--with-system-libffi"
     "--with-ffi-includes=${targetLibs.libffi.dev}/include"
     "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
-  ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
+  ] ++ lib.optionals (targetPlatform.equals hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetLibs.gmp.dev}/include"
     "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
-  ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
+  ] ++ lib.optionals (targetPlatform.equals hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
-  ] ++ lib.optionals (targetPlatform != hostPlatform) [
+  ] ++ lib.optionals (targetPlatform.notEquals hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
@@ -702,7 +702,7 @@ stdenv.mkDerivation ({
 
     # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
     # so haddock isn't available for GHC cross-compilers. Can we fix that?
-    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
+    hasHaddock = stdenv.hostPlatform.equals stdenv.targetPlatform;
   };
 
   meta = {

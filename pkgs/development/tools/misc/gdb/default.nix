@@ -25,7 +25,7 @@
   sourceHighlight,
   libiconv,
 
-  pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
+  pythonSupport ? stdenv.hostPlatform.equals stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
   python3 ? null,
   enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
   elfutils,
@@ -44,9 +44,7 @@
 
 let
   basename = "gdb";
-  targetPrefix = lib.optionalString (
-    stdenv.targetPlatform != stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (stdenv.targetPlatform.notEquals stdenv.hostPlatform) "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;

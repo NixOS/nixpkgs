@@ -20,7 +20,7 @@
 , libvpx
 , python3
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, enableDocumentation ? stdenv.hostPlatform.equals stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {

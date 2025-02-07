@@ -26,8 +26,8 @@ let
             inherit majorMinorVersion;
             reproducibleBuild = true;
             profiledCompiler = false;
-            libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
-            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+            libcCross = if stdenv.targetPlatform.notEquals stdenv.buildPlatform then args.libcCross else null;
+            threadsCross = if stdenv.targetPlatform.notEquals stdenv.buildPlatform then threadsCross else { };
             isl = if stdenv.hostPlatform.isDarwin then null else isl_0_20;
             # do not allow version skew when cross-building gcc
             #
@@ -49,7 +49,10 @@ let
             # cross-case.
             stdenv =
               if
-                (stdenv.targetPlatform != stdenv.buildPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+                (
+                  stdenv.targetPlatform.notEquals stdenv.buildPlatform
+                  || stdenv.hostPlatform.notEquals stdenv.targetPlatform
+                )
                 && stdenv.cc.isGNU
               then
                 pkgs."gcc${majorVersion}Stdenv"

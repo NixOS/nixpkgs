@@ -129,7 +129,7 @@ stdenv.mkDerivation {
       "--disable-carbon_check"
       "--disable-gtktest"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "vim_cv_toupper_broken=no"
       "--with-tlib=ncurses"
       "vim_cv_terminfo=yes"

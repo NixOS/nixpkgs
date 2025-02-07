@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.enableFeature enablePython "python-bindings")
     (lib.enableFeature enablePython "python-plugins")
-    (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "debug-info")
+    (lib.enableFeature (stdenv.hostPlatform.equals stdenv.buildPlatform) "debug-info")
   ];
 
   # For cross-compilation of Python bindings
