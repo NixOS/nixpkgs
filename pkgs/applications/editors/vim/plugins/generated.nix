@@ -13652,6 +13652,18 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  telescope-emoji-nvim = buildVimPlugin {
+    pname = "telescope-emoji.nvim";
+    version = "2022-12-08";
+    src = fetchFromGitHub {
+      owner = "xiyaowong";
+      repo = "telescope-emoji.nvim";
+      rev = "86248d97be84a1ce83f0541500ef9edc99ea2aa1";
+      sha256 = "18m46gj68xv6basaqzbschr60sc9xzi4dx21cvnx401bk97cqpgi";
+    };
+    meta.homepage = "https://github.com/xiyaowong/telescope-emoji.nvim/";
+  };
+
   telescope-file-browser-nvim = buildVimPlugin {
     pname = "telescope-file-browser.nvim";
     version = "2024-10-24";
@@ -13742,6 +13754,18 @@ final: prev:
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-github.nvim/";
     meta.hydraPlatforms = [ ];
+  };
+
+  telescope-glyph-nvim = buildVimPlugin {
+    pname = "telescope-glyph.nvim";
+    version = "2022-08-22";
+    src = fetchFromGitHub {
+      owner = "ghassan0";
+      repo = "telescope-glyph.nvim";
+      rev = "f63f01e129e71cc25b79637610674bbf0be5ce9d";
+      sha256 = "0n1mdiwkkciqpxjad1nngrc7px5yziyan0daxgs9jsgdqmy1lzp8";
+    };
+    meta.homepage = "https://github.com/ghassan0/telescope-glyph.nvim/";
   };
 
   telescope-live-grep-args-nvim = buildVimPlugin {

@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
   numpy,
   poetry-core,
-  pythonOlder,
-  tqdm,
   pyyaml,
+  sentencepiece,
+  tqdm,
 }:
 buildPythonPackage rec {
   pname = "gguf";
@@ -23,9 +24,12 @@ buildPythonPackage rec {
   dependencies = [
     numpy
     poetry-core
-    tqdm
     pyyaml
+    sentencepiece
+    tqdm
   ];
+
+  pythonImportsCheck = [ "gguf" ];
 
   meta = with lib; {
     description = "Module for writing binary files in the GGUF format";
