@@ -57,6 +57,9 @@ buildPythonPackage rec {
     ];
   };
 
+  # multiple tags confuse the bulk updater
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Official CLI for LangGraph API";
     homepage = "https://github.com/langchain-ai/langgraph/libs/cli";
