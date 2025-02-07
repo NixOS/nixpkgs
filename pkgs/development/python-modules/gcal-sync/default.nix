@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-8VUXW6tIX43TV7UIxeforZIxAUqGY9uqpz6WGyH4d8E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     ical
     pydantic

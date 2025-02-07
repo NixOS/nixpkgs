@@ -11,6 +11,7 @@
   myst-parser,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sphinx-rtd-theme,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.21.0";
+  version = "0.21.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,13 +31,8 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     tag = "v${version}";
-    hash = "sha256-DQaxjSajO3SfmogWtstT6xcsUgUW80jJ5prfIajJW/s=";
+    hash = "sha256-JUh4v9YeqMeecJh/eTpmLMwNsxbc/oqZY2CrEJUO418=";
   };
-
-  postPatch = ''
-    # Drop pytest arguments (coverage, ...)
-    sed -i '/addopts/d' pyproject.toml
-  '';
 
   outputs = [
     "out"
@@ -63,6 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

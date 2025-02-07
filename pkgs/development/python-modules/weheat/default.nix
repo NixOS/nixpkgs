@@ -1,6 +1,8 @@
 {
   lib,
   aenum,
+  aiohttp-retry,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   pydantic,
@@ -33,6 +35,8 @@ buildPythonPackage rec {
 
   dependencies = [
     aenum
+    aiohttp
+    aiohttp-retry
     pydantic
     python-dateutil
     urllib3
