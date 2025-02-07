@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   undmg,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -28,10 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/rxhanson/Rectangle";
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Move and resize windows in macOS using keyboard shortcuts or snap areas";
