@@ -274,6 +274,8 @@ lib.runTests (
                 canExecute = null;
                 emulator = null;
                 emulatorAvailable = null;
+                equals = null;
+                notEquals = null;
                 staticEmulatorAvailable = null;
                 isCompatible = null;
               } ? ${platformAttrName};
