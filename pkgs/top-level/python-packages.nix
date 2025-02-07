@@ -17541,6 +17541,8 @@ self: super: with self; {
 
   types-futures = callPackage ../development/python-modules/types-futures { };
 
+  types-greenlet = callPackage ../development/python-modules/types-greenlet { };
+
   types-html5lib = callPackage ../development/python-modules/types-html5lib { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
