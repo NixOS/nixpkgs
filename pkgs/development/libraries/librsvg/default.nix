@@ -89,12 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
       cargo-c
       cargo-auditable-cargo-wrapper
       python3Packages.docutils
-      vala
       rustPlatform.cargoSetupHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection
       gi-docgen
+      vala # vala bindings require GObject introspection
     ];
 
   buildInputs =
@@ -104,7 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
       dav1d
       pango
       freetype
-      vala
+    ]
+    ++ lib.optionals withIntrospection [
+      vala # for share/vala/Makefile.vapigen
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Foundation
