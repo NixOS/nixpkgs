@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    python3.pythonOnBuildForHost
   ];
 
   buildInputs = [
@@ -34,6 +35,8 @@ stdenv.mkDerivation rec {
     python3
     zlib
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Collection of parsers and import filters for spreadsheet documents";
