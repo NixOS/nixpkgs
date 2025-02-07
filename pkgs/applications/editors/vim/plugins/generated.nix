@@ -12401,14 +12401,14 @@ final: prev:
 
   roslyn-nvim = buildVimPlugin {
     pname = "roslyn.nvim";
-    version = "2025-01-27";
+    version = "2025-02-05";
     src = fetchFromGitHub {
-      owner = "seblj";
+      owner = "seblyng";
       repo = "roslyn.nvim";
-      rev = "490fd2d0f76249032ef6ce503e43ccdaeed9616e";
-      sha256 = "15jqg907fnnxh3415yls90cwly75im1awi4bqs2jf94ssirnn4fc";
+      rev = "4c55dedb5e47ba551c8c1ef9acd4896cdc29158c";
+      sha256 = "0ga08bny1vi6h9cki6cmr84qzl7rdc4yglp8i4lcqvxxjys0qg19";
     };
-    meta.homepage = "https://github.com/seblj/roslyn.nvim/";
+    meta.homepage = "https://github.com/seblyng/roslyn.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
