@@ -8164,6 +8164,8 @@ self: super: with self; {
 
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
 
+  mkdocs-glightbox = callPackage ../development/python-modules/mkdocs-glightbox { };
+
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
