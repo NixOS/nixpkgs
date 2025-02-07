@@ -433,14 +433,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
         try:
             nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get nixos-version: %s", ex)
             nixos_version = "Unknown"
         try:
             kernel_version = next(
                 (generation_path / "kernel-modules/lib/modules").iterdir()
             ).name
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get kernel version: %s", ex)
             kernel_version = "Unknown"
         specialisations = [
@@ -451,7 +451,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
             ).stdout.strip()
-        except (CalledProcessError, IOError) as ex:
+        except (OSError, CalledProcessError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
