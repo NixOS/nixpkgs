@@ -1,13 +1,13 @@
 import logging
 from collections.abc import Mapping, Sequence
-from typing import Any, assert_never, override
+from typing import Any, ClassVar, assert_never, override
 
 type Arg = bool | str | list[str] | list[list[str]] | int | None
 type Args = dict[str, Arg]
 
 
 class LogFormatter(logging.Formatter):
-    formatters = {
+    formatters: ClassVar = {
         logging.INFO: logging.Formatter("%(message)s"),
         logging.DEBUG: logging.Formatter("%(levelname)s: %(name)s: %(message)s"),
         "DEFAULT": logging.Formatter("%(levelname)s: %(message)s"),
