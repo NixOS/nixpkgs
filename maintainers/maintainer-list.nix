@@ -14857,6 +14857,11 @@
     githubId = 20619776;
     name = "moni";
   };
+  monkieeboi = {
+    name = "MonkieeBoi";
+    github = "MonkieeBoi";
+    githubId = 53400613;
+  };
   monsieurp = {
     email = "monsieurp@gentoo.org";
     github = "monsieurp";
