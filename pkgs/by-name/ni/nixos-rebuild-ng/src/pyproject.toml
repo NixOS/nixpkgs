@@ -43,6 +43,8 @@ extend-select = [
     "I",
     # Automatically upgrade syntax for newer versions
     "UP",
+    # detect common sources of bugs
+    "B",
     # require `check` argument for `subprocess.run`
     "PLW1510",
     # check for needless exception names in raise statements
