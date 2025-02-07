@@ -1,11 +1,14 @@
 {
   lib,
   stdenv,
+  replaceVars,
+  bash,
+  buildBazelPackage,
   buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
+  buildNpmPackage,
   python,
-  fetchPypi,
+  python39,
+  fetchFromGitHub,
   autoPatchelfHook,
 
   # dependencies
@@ -17,6 +20,7 @@
   msgpack,
   packaging,
   protobuf,
+  psutil,
   pyyaml,
   requests,
   watchfiles,
@@ -62,70 +66,223 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # build dependencies
+  bazel,
+  colorama,
+  coreutils,
+  cython,
+  git,
+  perl,
+  setproctitle,
+  # test dependencies
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-aiohttp,
+  pytest-benchmark,
+  pytest-httpserver,
+  pytest-rerunfailures,
+  pytest-sugar,
+  pytest-lazy-fixture,
+  pytest-timeout,
+  pytest-docker-tools,
+  mypy,
+  joblib,
+  torch,
+  boto3,
+  httplib2,
+  jsonpatch,
+  pyspark,
+  pexpect,
+  numba,
+  scikit-learn,
 }:
+
+# Ray is a Python library with C extensions, built using Bazel.
+# The official build process, defined in `python/setup.py`,
+# combines the following steps in a single script:
+# 1. Downloading Bazel
+# 2. Parse the input to get Bazel flags and targets
+# 3. Building the C extensions with Bazel
+# 4. Building the Python package
+#
+# However, this process is incompatible with nixpkgs.
+# To work around this, we must build the C extensions with Bazel separately from the Python package.
 
 let
   pname = "ray";
   version = "2.42.0";
+  src = fetchFromGitHub {
+    owner = "ray-project";
+    repo = "ray";
+    rev = "ray-${version}";
+    sha256 = "sha256-VWb+osUz/OlR5eoy+TX16Z2OL0xcNAOR04A8qFqhNto=";
+  };
+
+  dashboard = buildNpmPackage {
+    inherit version src;
+    pname = "ray-dashboard";
+    sourceRoot = "${src.name}/python/ray/dashboard/client";
+    npmDepsHash = "sha256-LceXVhoUlJjXxLwFfRqqH636FkdT34EWKAgie26txj8=";
+    installPhase = ''
+      cp -r build $out
+    '';
+  };
+
+  # Bazel 6.x.x uses a built-in rules_python / rules_perl,
+  # which downloads a standalone glibc python / perl interpreter.
+  # This patch hooks into the download process to use the nixpkgs version instead.
+  # This step is needed here because
+  # 1. the python interpreter is used in the middle of the fetch phase in buildBazelPackage,
+  # so it must be patched before the buildBazelPackage call.
+  # 2. bazel doesn't have arm version of perl interpreter, causing the build to fail on arm.
+  patched_rules_python = stdenv.mkDerivation {
+    pname = "patched-rules-python";
+    version = "0.9.0";
+    src = fetchFromGitHub {
+      owner = "bazelbuild";
+      repo = "rules_python";
+      rev = "0.9.0";
+      sha256 = "sha256-TATs8LZF4cBKXvFYlFnXQBdXswpQ+ngdwe/bj+cieQI=";
+    };
+    dontBuild = true;
+    patches = [
+      (replaceVars ./rules_python_patchelf.patch {
+        nixpkgs-python = "${python39}";
+      })
+    ];
+
+    installPhase = ''
+      cp -r . $out
+    '';
+  };
+
+  patched_rules_perl = stdenv.mkDerivation {
+    pname = "patched-rules-perl";
+    version = "0.1.0";
+    src = fetchFromGitHub {
+      owner = "bazel-contrib";
+      repo = "rules_perl";
+      rev = "0.1.0";
+      sha256 = "sha256-SrN2qHl6mDJ92Ohtisc1ZGw7PnxUWYhLFIwvzpfYgYs=";
+    };
+    dontBuild = true;
+    patches = [
+      (replaceVars ./rules_perl_patchelf.patch {
+        nixpkgs-perl = "${perl}";
+      })
+    ];
+
+    installPhase = ''
+      cp -r . $out
+    '';
+  };
+
+  bazel-build = buildBazelPackage {
+    inherit pname version src;
+
+    bazelFlags = [
+      # override the builtin rules_python / rules_perl with the patched version
+      "--override_repository=rules_python=${patched_rules_python}"
+      "--override_repository=rules_perl=${patched_rules_perl}"
+    ];
+
+    patches = [
+      # By default ray has -Werror flag enabled, which will cause the build to fail on warning.
+      ./disable-werror.patch
+    ];
+
+    # the upstream support bazel 6.5.0
+    # https://docs.ray.io/en/latest/ray-contribute/development.html#preparing-to-build-ray-on-linux
+    bazel = bazel;
+    bazelTargets = [ "//:ray_pkg" ];
+    # required by ray
+    PYTHON3_BIN_PATH = "${python}/bin/python";
+
+    removeRulesCC = false;
+
+    fetchAttrs = {
+      # bazel will fetch different toolchains for different platforms
+      # therefore it has different hash on different platforms
+      sha256 =
+        {
+          x86_64-linux = "sha256-TRiHX+KkSaNdSgxAboqBpXhA51zTlNcwKtce2MrHZCE=";
+          aarch64-linux = "sha256-Y84fGIidZDk8qFu6RG9R2detFyx4PZL5C8Q8t9cYEkk=";
+        }
+        .${stdenv.hostPlatform.system};
+
+      nativeBuildInputs = [
+        autoPatchelfHook
+        git
+        # for patchShebangs
+        python39
+        perl
+      ];
+
+      preInstall = ''
+        # buildBazelPackages has dontFixup=true, so manually patch the output
+        patchShebangs --build $bazelOut
+        autoPatchelf $bazelOut
+
+        # These files contain hard-coded paths, so patch them inplace.
+        substituteInPlace $bazelOut/external/rules_foreign_cc/foreign_cc/private/framework/toolchains/linux_commands.bzl \
+          --replace-fail "#!/usr/bin/env bash" "#!${bash}/bin/bash"
+        substituteInPlace $bazelOut/external/openssl/config \
+          --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
+      '';
+    };
+
+    nativeBuildInputs = [
+      git
+    ];
+
+    buildAttrs = {
+      installPhase = ''
+        # remove the broken symlinks
+        rm python/ray/air/examples/*.ipynb
+
+        mkdir -p $out
+        # python/ray/rllib is a symlink to rllib
+        cp -r rllib $out/
+        cp -r python $out/
+        cp {README.rst,LICENSE,pyproject.toml} $out/
+      '';
+    };
+  };
 in
 buildPythonPackage rec {
   inherit pname version;
-  format = "wheel";
 
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
+  src = bazel-build;
 
-  src =
-    let
-      pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      platforms = {
-        aarch64-darwin = "macosx_11_0_arm64";
-        aarch64-linux = "manylinux2014_aarch64";
-        x86_64-darwin = "macosx_10_15_x86_64";
-        x86_64-linux = "manylinux2014_x86_64";
-      };
-      # hashes retrieved via the following command
-      # curl https://pypi.org/pypi/ray/${version}/json | jq -r '.urls[] | "\(.digests.sha256)  \(.filename)"'
-      hashes = {
-        aarch64-darwin = {
-          cp39 = "4835c58b2e14f70badc059e9a6310cbfb51dec7a5b20fe712a4d193c85c9b2c5";
-          cp310 = "4bb3d88c478dd2cc3a17a66f0c47a73978608ce5579f92f77a468720763c2331";
-          cp311 = "7de151d403f351bb0fe3ed6f3f0e0258ce989871c60e4ccca2ab5bab7e9fc820";
-          cp312 = "4a3ab3d73541c4e1b8c0dca31d4006ba18b20ccf7eb7a7428f5dbf96e9736a83";
-        };
-        aarch64-linux = {
-          cp39 = "sha256-NlE3pzeWzz6DlS2Y6Gv8W+1DRMjK1a9T2R9lvq5nL7g=";
-          cp310 = "sha256-MxCDruyfxiqy/Fkn0YM1idpZNUvChx8Xt6EBie7Q2uY=";
-          cp311 = "sha256-eb9KDQIX6i2O/UfeZ9nCKTBAGc6ZZ427FI9WXZakRuI=";
-          cp312 = "sha256-PnKHZmINbjEYajepBsB7gH2i86rPSxZ/bos3xy7U3mM=";
-        };
-        x86_64-darwin = {
-          cp39 = "aa5692cc8f584c5f531074fd7283004acfbc538b36101f6c403d4ff1837aca52";
-          cp310 = "515bc5d9811cc4bb982daf6c7b2c82453cccc886e41514e03bc3342293acb109";
-          cp311 = "6e2b8ad794729f068742ffc2547fd322fa6ef31e46e886ac6e53690b86415cf0";
-          cp312 = "6b117e01d0304305e459cccc78e1b46dc1ee60227a2afd8569d97b7a2bc516ed";
-        };
-        x86_64-linux = {
-          cp39 = "sha256-rGz4bKRemxRdHCLPpHBpzdyq3ms/3Bsd5adhEJfZbX4=";
-          cp310 = "sha256-i+C9U2ErZEbDm09OnLS9NUhknVISR3NJzPvcklCHgik=";
-          cp311 = "sha256-6JJLbtCGZVsr+LP/KaxFPR6Kp6TW0s6WW7ql+xfRNk8=";
-          cp312 = "sha256-4+3gNnqyj72GiiL05M2sRFQ8ZU4svFo7SCF45/cl6iw=";
-        };
-      };
-    in
-    fetchPypi {
-      inherit pname version format;
-      dist = pyShortVersion;
-      python = pyShortVersion;
-      abi = pyShortVersion;
-      platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 = hashes.${stdenv.hostPlatform.system}.${pyShortVersion} or { };
-    };
+  patchPhase = ''
+    cd python
+    # skip bazel build
+    # otherwise it will try to call bazel again
+    export SKIP_THIRDPARTY_INSTALL=1
+    export SKIP_BAZEL_BUILD=1
+    # patch the setup.py inplace to skip the `build` function entirely
+    substituteInPlace setup.py \
+      --replace-fail "build(False, False, False)" "pass"
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
+    cp -r ${dashboard} ray/dashboard/client/build
+  '';
+
+  postBuildPhase = ''
+    # mv dist/*.whl ./
+  '';
+
+  build-system = [
+    cython
   ];
 
   dependencies = [
+    # embedded dependencies
+    psutil
+    setproctitle
+    colorama
+    aiohttp
+    # listed dependencies
     click
     aiosignal
     filelock
@@ -209,10 +366,6 @@ buildPythonPackage rec {
     ];
   };
 
-  postInstall = ''
-    chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}
-  '';
-
   pythonImportsCheck = [ "ray" ];
 
   meta = {
@@ -221,7 +374,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"

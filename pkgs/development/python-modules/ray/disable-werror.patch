@@ -1,0 +1,12 @@
+diff --git a/.bazelrc b/.bazelrc
+index 68964ff59a..36a1553489 100644
+--- a/.bazelrc
++++ b/.bazelrc
+@@ -43,7 +43,6 @@ build:windows --enable_runfiles
+ #                 for compiling assembly files is fixed on Windows:
+ #                 https://github.com/bazelbuild/bazel/issues/8924
+ # Warnings should be errors
+-build:linux    --per_file_copt="-\\.(asm|S)$@-Werror"
+ build:macos    --per_file_copt="-\\.(asm|S)$@-Werror"
+ build:clang-cl --per_file_copt="-\\.(asm|S)$@-Werror"
+ build:msvc-cl     --per_file_copt="-\\.(asm|S)$@-WX"

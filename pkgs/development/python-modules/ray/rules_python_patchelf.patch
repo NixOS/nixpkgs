@@ -1,0 +1,72 @@
+diff --git a/python/repositories.bzl b/python/repositories.bzl
+index 687388c6..5abe1aa4 100644
+--- a/python/repositories.bzl
++++ b/python/repositories.bzl
+@@ -45,63 +45,10 @@ def _python_repository_impl(rctx):
+     release_filename = rctx.attr.release_filename
+     url = rctx.attr.url
+ 
+-    if release_filename.endswith(".zst"):
+-        rctx.download(
+-            url = url,
+-            sha256 = rctx.attr.sha256,
+-            output = release_filename,
+-        )
+-        unzstd = rctx.which("unzstd")
+-        if not unzstd:
+-            url = rctx.attr.zstd_url.format(version = rctx.attr.zstd_version)
+-            rctx.download_and_extract(
+-                url = url,
+-                sha256 = rctx.attr.zstd_sha256,
+-            )
+-            working_directory = "zstd-{version}".format(version = rctx.attr.zstd_version)
+-            make_result = rctx.execute(
+-                ["make", "--jobs=4"],
+-                timeout = 600,
+-                quiet = True,
+-                working_directory = working_directory,
+-            )
+-            if make_result.return_code:
+-                fail(make_result.stderr)
+-            zstd = "{working_directory}/zstd".format(working_directory = working_directory)
+-            unzstd = "./unzstd"
+-            rctx.symlink(zstd, unzstd)
+-
+-        exec_result = rctx.execute([
+-            "tar",
+-            "--extract",
+-            "--strip-components=2",
+-            "--use-compress-program={unzstd}".format(unzstd = unzstd),
+-            "--file={}".format(release_filename),
+-        ])
+-        if exec_result.return_code:
+-            fail(exec_result.stderr)
+-    else:
+-        rctx.download_and_extract(
+-            url = url,
+-            sha256 = rctx.attr.sha256,
+-            stripPrefix = rctx.attr.strip_prefix,
+-        )
+-
+-    # Write distutils.cfg to the Python installation.
+-    if "windows" in rctx.os.name:
+-        distutils_path = "Lib/distutils/distutils.cfg"
+-    else:
+-        distutils_path = "lib/python{}/distutils/distutils.cfg".format(python_short_version)
+-    if rctx.attr.distutils:
+-        rctx.file(distutils_path, rctx.read(rctx.attr.distutils))
+-    elif rctx.attr.distutils_content:
+-        rctx.file(distutils_path, rctx.attr.distutils_content)
+-
+-    # Make the Python installation read-only.
+-    if "windows" not in rctx.os.name:
+-        exec_result = rctx.execute(["chmod", "-R", "ugo-w", "lib"])
+-        if exec_result.return_code:
+-            fail(exec_result.stderr)
++    rctx.symlink("@nixpkgs-python@/bin", "bin")
++    rctx.symlink("@nixpkgs-python@/include", "include")
++    rctx.symlink("@nixpkgs-python@/lib", "lib")
++    rctx.symlink("@nixpkgs-python@/share", "share")
+ 
+     python_bin = "python.exe" if ("windows" in platform) else "bin/python3"
+ 
