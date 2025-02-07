@@ -562,6 +562,11 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
+  adamjhf = {
+    github = "adamjhf";
+    githubId = 50264672;
+    name = "Adam Freeth";
+  };
   adamt = {
     email = "mail@adamtulinius.dk";
     github = "adamtulinius";
