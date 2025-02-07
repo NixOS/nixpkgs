@@ -116,6 +116,9 @@ buildPythonPackage rec {
 
   passthru.updateScript = langgraph-sdk.updateScript;
 
+  # multiple tags confuse the bulk updater
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
