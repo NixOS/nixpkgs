@@ -17,24 +17,47 @@
   python3Packages,
   nix,
   prefetch-yarn-deps,
+  fetchpatch,
+  applyPatches,
 }:
 let
   version = "4.0.12.2823";
-  src = fetchFromGitHub {
-    owner = "Sonarr";
-    repo = "Sonarr";
-    tag = "v${version}";
-    hash = "sha256-gAvbA3Idx73QEDthLwrM8Jbt6YhXxK8LzEJI6eF2k20=";
+  # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
+  # the already patched lockfile to `fetchYarnDeps`.
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "Sonarr";
+      repo = "Sonarr";
+      tag = "v${version}";
+      hash = "sha256-gAvbA3Idx73QEDthLwrM8Jbt6YhXxK8LzEJI6eF2k20=";
+    };
+    patches =
+      [
+        ./nuget-config.patch
+      ]
+      ++ lib.optionals (lib.versionOlder version "5.0") [
+        # See https://github.com/Sonarr/Sonarr/issues/7442 and
+        # https://github.com/Sonarr/Sonarr/pull/7443.
+        # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
+        # and it may take some time for that to become stable.
+        # However, the patches cleanly apply to v4 as well.
+        (fetchpatch {
+          name = "dotnet8-compatibility";
+          url = "https://github.com/Sonarr/Sonarr/commit/518f1799dca96a7481004ceefe39be465de3d72d.patch";
+          hash = "sha256-e+/rKZrTf6lWq9bmCAwnZrbEPRkqVmI7qNavpLjfpUE=";
+        })
+        (fetchpatch {
+          name = "dotnet8-darwin-compatibility";
+          url = "https://github.com/Sonarr/Sonarr/commit/1a5fa185d11d2548f45fefb8a0facd3731a946d0.patch";
+          hash = "sha256-6Lzo4ph1StA05+B1xYhWH+BBegLd6DxHiEiaRxGXn7k=";
+        })
+      ];
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule {
   pname = "sonarr";
   inherit version src;
-
-  patches = [
-    ./nuget-config.patch
-  ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -46,7 +69,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ejAf8/zWX9TbC645vbpyLwa6mrnitU7ByImrJ1d/uX0=";
+    hash = "sha256-YkBFvv+g4p22HdM/GQAHVGGW1yLYGWpNtRq7+QJiLIw=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");
@@ -77,8 +100,8 @@ buildDotnetModule {
 
   runtimeDeps = [ sqlite ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   doCheck = true;
 
@@ -104,7 +127,7 @@ buildDotnetModule {
   ];
 
   dotnetFlags = [
-    "--property:TargetFramework=net6.0"
+    "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
     # Override defaults in src/Directory.Build.props that use current time.
     "--property:Copyright=Copyright 2014-2025 sonarr.tv (GNU General Public v3)"
