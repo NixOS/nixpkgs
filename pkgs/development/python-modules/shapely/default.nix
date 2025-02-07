@@ -3,10 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
-  cython_0,
+  cython,
   geos,
   numpy,
   oldest-supported-numpy,
@@ -16,18 +17,26 @@
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.4";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xcc2En+scACbjTCaDut08+CJeeUwz3AX8vUH72Lmz7g=";
+    hash = "sha256-mX9hWbFIQFnsI5ysqlNGf9i1Vk2r4YbNhKwpRGY7C/Y=";
   };
 
+  patches = [
+    # fixes build error with GCC 14
+    (fetchpatch {
+      url = "https://github.com/shapely/shapely/commit/05455886750680728dc751dc5888cd02086d908e.patch";
+      hash = "sha256-YnmiWFfjHHFZCxrmabBINM4phqfLQ+6xEc30EoV5d98=";
+    })
+  ];
+
   nativeBuildInputs = [
-    cython_0
+    cython
     geos # for geos-config
     oldest-supported-numpy
     setuptools
@@ -46,7 +55,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # FIXME(lf-): these logging tests are broken, which is definitely our
     # fault. I've tried figuring out the cause and failed.
     #

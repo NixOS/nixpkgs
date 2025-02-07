@@ -10,7 +10,7 @@
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 buildLua {
   pname = "mpv_sponsorblock";
-  version = "unstable-2023-01-30";
+  version = "0-unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "po5";
@@ -47,6 +47,6 @@ buildLua {
     description = "Script for mpv to skip sponsored segments of YouTube videos";
     homepage = "https://github.com/po5/mpv_sponsorblock";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }

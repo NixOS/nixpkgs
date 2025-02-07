@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   pythonOlder,
   hatchling,
@@ -16,6 +15,8 @@ buildPythonPackage {
   disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   build-system = [ hatchling ];
 

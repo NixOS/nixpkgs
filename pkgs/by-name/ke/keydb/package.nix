@@ -12,7 +12,7 @@
   jemalloc,
   which,
   tcl,
-  tcltls,
+  tclPackages,
   ps,
   getconf,
   nixosTests,
@@ -48,23 +48,26 @@ stdenv.mkDerivation (finalAttrs: {
       "PREFIX=${placeholder "out"}"
       "AR=${stdenv.cc.targetPrefix}ar"
       "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-      "USEASM=${if stdenv.isx86_64 then "true" else "false"}"
+      "USEASM=${if stdenv.hostPlatform.isx86_64 then "true" else "false"}"
     ]
     ++ lib.optionals (!tlsSupport) [ "BUILD_TLS=no" ]
     ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals (!stdenv.isx86_64) [ "MALLOC=libc" ];
+    ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "MALLOC=libc" ];
 
   enableParallelBuilding = true;
 
-  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [
-    which
-    tcl
-    ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ] ++ lib.optionals tlsSupport [ tcltls ];
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs =
+    [
+      which
+      tcl
+      ps
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ]
+    ++ lib.optionals tlsSupport [ tclPackages.tcltls ];
   checkPhase = ''
     runHook preCheck
 
@@ -81,12 +84,23 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs ./utils/gen-test-certs.sh
     ${if tlsSupport then "./utils/gen-test-certs.sh" else ""}
-
-    ./runtest \
-      --no-latency \
-      --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
-      --tags -leaks ${if tlsSupport then "--tls" else ""}
+    ./runtest --clients $NIX_BUILD_CORES ${
+      lib.escapeShellArgs (
+        [
+          "--no-latency"
+          "--timeout"
+          "2000"
+          "--tags"
+          "-leaks"
+        ]
+        ++ lib.optional tlsSupport "--tls"
+        # skips flaky test on x86_64
+        ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+          "--skiptest"
+          "Active defrag edge case"
+        ]
+      )
+    }
 
     runHook postCheck
   '';

@@ -5,7 +5,7 @@ Nix packages can declare *meta-attributes* that contain information about a pack
 ```nix
 {
   meta = {
-    description = "A program that produces a familiar, friendly greeting";
+    description = "Program that produces a familiar, friendly greeting";
     longDescription = ''
       GNU Hello is a program that prints "Hello, world!" when you run it.
       It is fully customizable.
@@ -80,6 +80,12 @@ The license, or licenses, for the package. One from the attribute set defined in
 - Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) `"asl20 free ofl"`.
 
 For details, see [Licenses](#sec-meta-license).
+
+### `sourceProvenance` {#var-meta-sourceProvenance}
+
+A list containing the type or types of source inputs from which the package is built, e.g. original source code, pre-built binaries, etc.
+
+For details, see [Source provenance](#sec-meta-sourceProvenance).
 
 ### `maintainers` {#var-meta-maintainers}
 

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.26.0";
+  version = "0.30.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ywqZggn1k7zezk5CS1y6EWZfLoIWMHmGO8mvqxBaB9g=";
+    tag = "v${version}";
+    hash = "sha256-qoSg9+Lld0YyyC8a6Fs/OSnJ9rbXk5Jkvi4jboiM+Bo=";
   };
 
   build-system = [ setuptools-scm ];
@@ -64,6 +64,8 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
+    # flaky, timing sensitive
+    "test_visualiser"
   ];
 
   disabledTestPaths = [
@@ -85,7 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ arjan-s ];
   };

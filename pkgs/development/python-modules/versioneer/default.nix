@@ -17,13 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-versioneer";
     repo = "python-versioneer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3b7Wfhd24Vym5XCeN/M1832Q1VzvlWi3quTRaZrID2s=";
   };
 
   nativeBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     toml = lib.optionals (pythonOlder "3.11") [ tomli ];
   };
 

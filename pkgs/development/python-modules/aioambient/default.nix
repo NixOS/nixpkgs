@@ -13,20 +13,21 @@
   python-socketio,
   pythonOlder,
   websockets,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2024.01.0";
+  version = "2025.02.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioambient";
-    rev = "refs/tags/${version}";
-    hash = "sha256-eqZVY0L+2BWF7cCXW/VLQYYXNPtUF6tJHQmeZNW1W5o=";
+    tag = version;
+    hash = "sha256-F1c2S0c/CWHeCd24Zc8ib3aPR7yj9gCPBJpmpgoddQY=";
   };
 
   build-system = [ poetry-core ];
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     python-engineio
     python-socketio
     websockets
+    yarl
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -57,7 +59,7 @@ buildPythonPackage rec {
     description = "Python library for the Ambient Weather API";
     homepage = "https://github.com/bachya/aioambient";
     changelog = "https://github.com/bachya/aioambient/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

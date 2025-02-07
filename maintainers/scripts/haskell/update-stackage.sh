@@ -8,7 +8,7 @@ set -eu -o pipefail
 # (should be capitalized like the display name)
 SOLVER=LTS
 # Stackage solver verson, if any. Use latest if empty
-VERSION=
+VERSION=22
 TMP_TEMPLATE=update-stackage.XXXXXXX
 readonly SOLVER
 readonly VERSION
@@ -63,6 +63,7 @@ sed -r \
     -e '/ language-nix /d' \
     -e '/ hackage-db /d' \
     -e '/ cabal-install /d' \
+    -e '/ cabal-install-solver /d' \
     -e '/ lsp /d' \
     -e '/ lsp-types /d' \
     -e '/ lsp-test /d' \

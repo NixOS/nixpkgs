@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openturns";
-  version = "1.22";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ku3/mPoa1YJVJB99R/kWlOubIO+OZAiKfPqS/DrtJQk=";
+    hash = "sha256-88wxgifLuF/P/qeMLVP0S5Agutf022Dsysu38mh9+8w=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.psutil
     python3Packages.python
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
   ];
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SPHINX" enablePython)
     (lib.cmakeFeature "CMAKE_UNITY_BUILD_BATCH_SIZE" "32")
     (lib.cmakeFeature "SWIG_COMPILE_FLAGS" "-O1")
-    (lib.cmakeOptionType "PATH" "OPENTURNS_SYSCONFIG_PATH" "$out/etc")
+    (lib.cmakeOptionType "PATH" "OPENTURNS_SYSCONFIG_PATH" "${placeholder "out"}/etc")
   ];
 
   checkTarget = lib.concatStringsSep " " [

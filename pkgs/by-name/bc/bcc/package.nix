@@ -1,57 +1,69 @@
-{ audit
-, bash
-, bison
-, cmake
-, elfutils
-, fetchFromGitHub
-, flex
-, iperf
-, lib
-, libbpf
-, llvmPackages
-, luajit
-, makeWrapper
-, netperf
-, nixosTests
-, python3
-, stdenv
-, zip
+{
+  audit,
+  bash,
+  bison,
+  cmake,
+  elfutils,
+  fetchFromGitHub,
+  flex,
+  iperf,
+  lib,
+  libbpf,
+  llvmPackages,
+  luajit,
+  makeWrapper,
+  netperf,
+  nixosTests,
+  python3Packages,
+  readline,
+  stdenv,
+  zip,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.30.0";
+  version = "0.33.0";
 
-  disabled = !stdenv.isLinux;
+  disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
-    rev = "v${version}";
-    hash = "sha256-ngGLGfLv2prnjhgaRPf8ea3oyy4129zGodR0Yz1QtCw=";
+    tag = "v${version}";
+    hash = "sha256-6dT3seLuEVQNKWiYGLK1ajXzW7pb62S/GQ0Lp4JdGjc=";
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang
-    elfutils luajit netperf iperf
-    flex bash libbpf
+    llvm
+    llvm.dev
+    libclang
+    elfutils
+    luajit
+    netperf
+    iperf
+    flex
+    bash
+    libbpf
   ];
 
   patches = [
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
+    # Quick & dirty fix for bashreadline
+    # https://github.com/NixOS/nixpkgs/issues/328743
+    ./bashreadline.py-remove-dependency-on-elftools.patch
   ];
 
-  propagatedBuildInputs = [ python3.pkgs.netaddr ];
+  propagatedBuildInputs = [ python3Packages.netaddr ];
   nativeBuildInputs = [
     bison
     cmake
     flex
     llvmPackages.llvm.dev
     makeWrapper
-    python3.pkgs.setuptools
+    python3Packages.setuptools
     zip
   ];
 
@@ -77,12 +89,15 @@ python3.pkgs.buildPythonApplication rec {
 
     # https://github.com/iovisor/bcc/issues/3996
     substituteInPlace src/cc/libbcc.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      --replace-fail '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+
+    substituteInPlace tools/bashreadline.py \
+      --replace-fail '/bin/bash' '${readline}/lib/libreadline.so'
   '';
 
   preInstall = ''
     # required for setuptool during install
-    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
   '';
   postInstall = ''
     mkdir -p $out/bin $out/share
@@ -107,7 +122,10 @@ python3.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -115,9 +133,15 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
-    platforms   = platforms.linux;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      ragge
+      mic92
+      thoughtpolice
+      martinetd
+      ryan4yin
+    ];
+    platforms = platforms.linux;
   };
 }

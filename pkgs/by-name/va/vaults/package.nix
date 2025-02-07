@@ -1,40 +1,40 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, cargo
-, wrapGAppsHook3
-, glib
-, gtk4
-, libadwaita
-, wayland
-, gocryptfs
-, cryfs
-, cmake
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook3,
+  glib,
+  gtk4,
+  libadwaita,
+  wayland,
+  gocryptfs,
+  cryfs,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vaults";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
     repo = "Vaults";
-    rev = version;
-    hash = "sha256-jA7OeyRqc5DxkS4sMx9cIbVlZwd++aCQi09uBQik1oA=";
+    rev = "v${version}";
+    hash = "sha256-USVP/7TNdpUNx1kDsCReGYIP8gHUeij2dqy8TR4R+CE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-l9Zer6d6kgjIUNiQ1VdQQ57caVNWfzCkdsMf79X8Ar4=";
+    hash = "sha256-93X2BCn6Ih2DqYJNvYvUCYrC1E6wpCT5X8Hyux/8mno=";
   };
 
   postPatch = ''
@@ -47,7 +47,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gocryptfs cryfs ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gocryptfs
+          cryfs
+        ]
+      }"
     )
   '';
 
@@ -78,7 +83,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mpobaschnig.github.io/vaults/";
     changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ benneti ];
+    maintainers = with lib.maintainers; [
+      benneti
+      aleksana
+    ];
     mainProgram = "vaults";
     platforms = lib.platforms.linux;
   };

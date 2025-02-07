@@ -13,34 +13,48 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.6";
+  version = "0.2.7.post0";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-AZNIrmtqg8ekBtFFN8J3zs96OlOyY+w0LIHe1YRaZ+4=";
+    hash = "sha256-t6iz+PuxvLu2OC2IfiHRdC1PELXqIJ5K2VVo/pfhx8Y=";
   };
+  patches = [ ./dotnet-8-upgrade.patch ];
 
   # This buildDotnetModule is used only to get nuget sources, the actual
   # build is done in `buildPythonPackage` below.
   dotnet-build = buildDotnetModule {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      patches
+      ;
     projectFile = [
       "netfx_loader/ClrLoader.csproj"
       "example/example.csproj"
     ];
-    nugetDeps = ./deps.nix;
+    nugetDeps = ./deps.json;
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
   };
 in
 buildPythonPackage {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    patches
+    ;
 
   format = "pyproject";
+
+  buildInputs = dotnetCorePackages.sdk_8_0.packages ++ dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     wheel
-    dotnetCorePackages.sdk_6_0
+    dotnetCorePackages.sdk_8_0
   ];
 
   propagatedBuildInputs = [ cffi ];
@@ -59,13 +73,11 @@ buildPythonPackage {
   preConfigure = ''
     dotnet restore "netfx_loader/ClrLoader.csproj" \
       -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      --source "${dotnet-build.nuget-source}"
+      -p:Deterministic=true
 
     dotnet restore "example/example.csproj" \
       -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      --source "${dotnet-build.nuget-source}"
+      -p:Deterministic=true
   '';
 
   passthru.fetch-deps = dotnet-build.fetch-deps;

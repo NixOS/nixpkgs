@@ -3,7 +3,6 @@
   buildPythonPackage,
   cmake,
   setuptools,
-  wheel,
   xrootd,
 }:
 
@@ -15,10 +14,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/bindings/python";
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     setuptools
-    wheel
   ];
 
   buildInputs = [ xrootd ];
@@ -30,11 +28,11 @@ buildPythonPackage rec {
   # Tests are only compatible with Python 2
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "XRootD central repository";
     homepage = "https://github.com/xrootd/xrootd";
     changelog = "https://github.com/xrootd/xrootd/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

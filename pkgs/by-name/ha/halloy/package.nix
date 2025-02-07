@@ -13,27 +13,22 @@
   vulkan-loader,
   wayland,
   xorg,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.7";
+  version = "2025.1";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CXuodMndUvltwjIiEdJuIazCYKqD/azROgSBTM6g87A=";
+    tag = version;
+    hash = "sha256-QBuZFlZf9ORXJU9CXi0a7IQcmTqHgOi4Eqd5pKWdU1g=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "glyphon-0.5.0" = "sha256-e1jTuaWh9eFdk2pDE4Ov/l3b/Q7GA3hqx6dPoOde1hM=";
-      "iced-0.13.0-dev" = "sha256-K1B9rVkShxQC97kwebHPsqJsJmxjEsFCKpg+p2lt09U=";
-      "winit-0.29.15" = "sha256-9i2i4KcEv7vIImJtcw2NALQ3uDb4EAZXjShG6tfmhkc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+nNJPeQno6xTa42jBIaNWTzvoKWMSrfdCKBgMs1vPYU=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,15 +38,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      alsa-lib
       libxkbcommon
       openssl
       vulkan-loader
       xorg.libX11
       xorg.libXcursor
       xorg.libXi
-      xorg.libXrandr
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreGraphics
@@ -61,7 +56,7 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.QuartzCore
       darwin.apple_sdk.frameworks.Security
     ]
-    ++ lib.optionals stdenv.isLinux [ wayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -74,6 +69,7 @@ rustPlatform.buildRustPackage rec {
       mimeTypes = [
         "x-scheme-handler/irc"
         "x-scheme-handler/ircs"
+        "x-scheme-handler/halloy"
       ];
       categories = [
         "Network"
@@ -87,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  postFixup = lib.optional stdenv.isLinux (
+  postFixup = lib.optional stdenv.hostPlatform.isLinux (
     let
       rpathWayland = lib.makeLibraryPath [
         wayland
@@ -104,7 +100,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
     mkdir -p "$APP_DIR/MacOS"
@@ -122,7 +118,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab iivusly ];
+    maintainers = with maintainers; [ fab iivusly ivyfanchiang];
     mainProgram = "halloy";
   };
 }

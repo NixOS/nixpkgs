@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cmake-modules-webos";
@@ -27,6 +32,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CMake modules needed to build Open WebOS components";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

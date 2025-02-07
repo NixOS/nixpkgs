@@ -12,6 +12,9 @@ let
     version
     versionSuffix
     warn;
+  inherit (lib)
+    isString
+    ;
 in {
 
   ## Simple (higher order) functions
@@ -314,6 +317,40 @@ in {
   flip = f: a: b: f b a;
 
   /**
+    Return `maybeValue` if not null, otherwise return `default`.
+
+
+    # Inputs
+
+    `default`
+
+    : 1\. Function argument
+
+    `maybeValue`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.defaultTo` usage example
+
+    ```nix
+    defaultTo "default" null
+    => "default"
+    defaultTo "default" "foo"
+    => "foo"
+    defaultTo "default" false
+    => false
+    ```
+
+    :::
+  */
+  defaultTo = default: maybeValue:
+    if maybeValue != null then maybeValue
+    else default;
+
+  /**
     Apply function if the supplied argument is non-null.
 
 
@@ -379,7 +416,7 @@ in {
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2405;
+    2411;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
@@ -394,6 +431,15 @@ in {
     Set it to the upcoming release, matching the nixpkgs/.version file.
   */
   isInOldestRelease =
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2411)
+      "lib.isInOldestRelease is deprecated. Use lib.oldestSupportedReleaseIsAtLeast instead."
+    lib.oldestSupportedReleaseIsAtLeast;
+
+  /**
+    Alias for `isInOldestRelease` introduced in 24.11.
+    Use `isInOldestRelease` in expressions outside of Nixpkgs for greater compatibility.
+   */
+  oldestSupportedReleaseIsAtLeast =
     release:
       release <= lib.trivial.oldestSupportedRelease;
 
@@ -403,7 +449,7 @@ in {
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Vicuna";
+  codeName = "Warbler";
 
   /**
     Returns the current nixpkgs version suffix as string.
@@ -718,98 +764,97 @@ in {
   importTOML = path:
     builtins.fromTOML (builtins.readFile path);
 
-  ## Warnings
-
-  # See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
-  # to expand to Nix builtins that carry metadata so that Nix can filter out
-  # the INFO messages without parsing the message string.
-  #
-  # Usage:
-  # {
-  #   foo = lib.warn "foo is deprecated" oldFoo;
-  #   bar = lib.warnIf (bar == "") "Empty bar is deprecated" bar;
-  # }
-  #
-  # TODO: figure out a clever way to integrate location information from
-  # something like __unsafeGetAttrPos.
-
   /**
-    Print a warning before returning the second argument. This function behaves
-    like `builtins.trace`, but requires a string message and formats it as a
-    warning, including the `warning: ` prefix.
 
-    To get a call stack trace and abort evaluation, set the environment variable
-    `NIX_ABORT_ON_WARN=true` and set the Nix options `--option pure-eval false --show-trace`
+    `warn` *`message`* *`value`*
+
+    Print a warning before returning the second argument.
+
+    See [`builtins.warn`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-warn) (Nix >= 2.23).
+    On older versions, the Nix 2.23 behavior is emulated with [`builtins.trace`](https://nix.dev/manual/nix/latest/language/builtins.html#builtins-warn), including the [`NIX_ABORT_ON_WARN`](https://nix.dev/manual/nix/latest/command-ref/conf-file#conf-abort-on-warn) behavior, but not the `nix.conf` setting or command line option.
 
     # Inputs
 
-    `msg`
+    *`message`* (String)
 
-    : Warning message to print.
+    : Warning message to print before evaluating *`value`*.
 
-    `val`
+    *`value`* (any value)
 
     : Value to return as-is.
 
     # Type
 
     ```
-    string -> a -> a
+    String -> a -> a
     ```
   */
   warn =
-    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
-    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-    else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+    # Since Nix 2.23, https://github.com/NixOS/nix/pull/10592
+    builtins.warn or (
+      let mustAbort = lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"];
+      in
+        # Do not eta reduce v, so that we have the same strictness as `builtins.warn`.
+        msg: v:
+          # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
+          assert isString msg;
+          if mustAbort
+          then builtins.trace "[1;31mevaluation warning:[0m ${msg}" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+          else builtins.trace "[1;35mevaluation warning:[0m ${msg}" v
+    );
 
   /**
-    Like warn, but only warn when the first argument is `true`.
 
+    `warnIf` *`condition`* *`message`* *`value`*
+
+    Like `warn`, but only warn when the first argument is `true`.
 
     # Inputs
 
-    `cond`
+    *`condition`* (Boolean)
 
-    : 1\. Function argument
+    : `true` to trigger the warning before continuing with *`value`*.
 
-    `msg`
+    *`message`* (String)
 
-    : 2\. Function argument
+    : Warning message to print before evaluating
 
-    `val`
+    *`value`* (any value)
 
     : Value to return as-is.
 
     # Type
 
     ```
-    bool -> string -> a -> a
+    Bool -> String -> a -> a
     ```
   */
   warnIf = cond: msg: if cond then warn msg else x: x;
 
   /**
-    Like warnIf, but negated (warn if the first argument is `false`).
 
+    `warnIfNot` *`condition`* *`message`* *`value`*
+
+    Like `warnIf`, but negated: warn if the first argument is `false`.
 
     # Inputs
 
-    `cond`
+    *`condition`*
 
-    : 1\. Function argument
+    : `false` to trigger the warning before continuing with `val`.
 
-    `msg`
+    *`message`*
 
-    : 2\. Function argument
+    : Warning message to print before evaluating *`value`*.
 
-    `val`
+    *`value`*
 
     : Value to return as-is.
 
     # Type
 
     ```
-    bool -> string -> a -> a
+    Boolean -> String -> a -> a
     ```
   */
   warnIfNot = cond: msg: if cond then x: x else warn msg;
@@ -1073,6 +1118,32 @@ in {
     if isFunction v
     then v
     else k: v;
+
+  /**
+    Convert a hexadecimal string to it's integer representation.
+
+    # Type
+
+    ```
+    fromHexString :: String -> [ String ]
+    ```
+
+    # Examples
+
+    ```nix
+    fromHexString "FF"
+    => 255
+
+    fromHexString (builtins.hashString "sha256" "test")
+    => 9223372036854775807
+    ```
+  */
+  fromHexString = value:
+  let
+    noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower value);
+  in let
+    parsed = builtins.fromTOML "v=0x${noPrefix}";
+  in parsed.v;
 
   /**
     Convert the given positive integer to a string of its hexadecimal

@@ -2,11 +2,9 @@
   mkDerivation,
   pkgsBuildBuild,
   libjail,
-  libmd,
   libnetbsd,
   libcapsicum,
   libcasper,
-  libelf,
   libxo,
   libncurses-tinfo,
   libedit,
@@ -36,11 +34,9 @@ mkDerivation {
   ];
   buildInputs = [
     libjail
-    libmd
     libnetbsd
     libcapsicum
     libcasper
-    libelf
     libxo
     libncurses-tinfo
     libedit
@@ -81,7 +77,7 @@ mkDerivation {
   '';
 
   preInstall = ''
-    makeFlags="$makeFlags ROOTDIR=$out/root"
+    appendToVar makeFlags "ROOTDIR=$out/root"
   '';
 
   outputs = [

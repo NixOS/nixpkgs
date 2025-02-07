@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, m4, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m4,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autoconf";
@@ -9,14 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "113nlmidxy9kjr45kg9x3ngar4951mvag1js2a3j8nxcz34wxsv4";
   };
 
-  nativeBuildInputs = [ m4 perl ];
+  nativeBuildInputs = [
+    m4
+    perl
+  ];
   buildInputs = [ m4 ];
 
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
   # There are many test failures on `i386-pc-solaris2.11'.
-  #doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
+  #doCheck = ((!stdenv.hostPlatform.isCygwin) && (!stdenv.hostPlatform.isSunOS));
   doCheck = false;
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the

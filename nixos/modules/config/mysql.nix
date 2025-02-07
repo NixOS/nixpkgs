@@ -1,47 +1,49 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.users.mysql;
 in
 {
-  meta.maintainers = [ maintainers.netali ];
+  meta.maintainers = [ lib.maintainers.netali ];
 
   options = {
     users.mysql = {
-      enable = mkEnableOption "authentication against a MySQL/MariaDB database";
-      host = mkOption {
-        type = types.str;
+      enable = lib.mkEnableOption "authentication against a MySQL/MariaDB database";
+      host = lib.mkOption {
+        type = lib.types.str;
         example = "localhost";
         description = "The hostname of the MySQL/MariaDB server";
       };
-      database = mkOption {
-        type = types.str;
+      database = lib.mkOption {
+        type = lib.types.str;
         example = "auth";
         description = "The name of the database containing the users";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         example = "nss-user";
         description = "The username to use when connecting to the database";
       };
-      passwordFile = mkOption {
-        type = types.path;
+      passwordFile = lib.mkOption {
+        type = lib.types.path;
         example = "/run/secrets/mysql-auth-db-passwd";
         description = "The path to the file containing the password for the user";
       };
-      pam = mkOption {
+      pam = lib.mkOption {
         description = "Settings for `pam_mysql`";
-        type = types.submodule {
+        type = lib.types.submodule {
           options = {
-            table = mkOption {
-              type = types.str;
+            table = lib.mkOption {
+              type = lib.types.str;
               example = "users";
               description = "The name of table that maps unique login names to the passwords.";
             };
-            updateTable = mkOption {
-              type = types.nullOr types.str;
+            updateTable = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               example = "users_updates";
               description = ''
@@ -49,18 +51,18 @@ in
                 of the `table` option will be used instead.
               '';
             };
-            userColumn = mkOption {
-              type = types.str;
+            userColumn = lib.mkOption {
+              type = lib.types.str;
               example = "username";
               description = "The name of the column that contains a unix login name.";
             };
-            passwordColumn = mkOption {
-              type = types.str;
+            passwordColumn = lib.mkOption {
+              type = lib.types.str;
               example = "password";
               description = "The name of the column that contains a (encrypted) password string.";
             };
-            statusColumn = mkOption {
-              type = types.nullOr types.str;
+            statusColumn = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               example = "status";
               description = ''
@@ -79,19 +81,29 @@ in
                    This ends up requiring that the user enter a new password.
               '';
             };
-            passwordCrypt = mkOption {
+            passwordCrypt = lib.mkOption {
               example = "2";
-              type = types.enum [
-                "0" "plain"
-                "1" "Y"
-                "2" "mysql"
-                "3" "md5"
-                "4" "sha1"
-                "5" "drupal7"
-                "6" "joomla15"
-                "7" "ssha"
-                "8" "sha512"
-                "9" "sha256"
+              type = lib.types.enum [
+                "0"
+                "plain"
+                "1"
+                "Y"
+                "2"
+                "mysql"
+                "3"
+                "md5"
+                "4"
+                "sha1"
+                "5"
+                "drupal7"
+                "6"
+                "joomla15"
+                "7"
+                "ssha"
+                "8"
+                "sha512"
+                "9"
+                "sha256"
               ];
               description = ''
                 The method to encrypt the user's password:
@@ -99,7 +111,7 @@ in
                 - `0` (or `"plain"`):
                   No encryption. Passwords are stored in plaintext. HIGHLY DISCOURAGED.
                 - `1` (or `"Y"`):
-                  Use crypt(3) function.
+                  Use {manpage}`crypt(3)` function.
                 - `2` (or `"mysql"`):
                   Use the MySQL PASSWORD() function. It is possible that the encryption function used
                   by `pam_mysql` is different from that of the MySQL server, as
@@ -121,28 +133,35 @@ in
                   Use sha256 hashed passwords.
               '';
             };
-            cryptDefault = mkOption {
-              type = types.nullOr (types.enum [ "md5" "sha256" "sha512" "blowfish" ]);
+            cryptDefault = lib.mkOption {
+              type = lib.types.nullOr (
+                lib.types.enum [
+                  "md5"
+                  "sha256"
+                  "sha512"
+                  "blowfish"
+                ]
+              );
               default = null;
               example = "blowfish";
               description = "The default encryption method to use for `passwordCrypt = 1`.";
             };
-            where = mkOption {
-              type = types.nullOr types.str;
+            where = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               example = "host.name='web' AND user.active=1";
               description = "Additional criteria for the query.";
             };
-            verbose = mkOption {
-              type = types.bool;
+            verbose = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 If enabled, produces logs with detailed messages that describes what
                 `pam_mysql` is doing. May be useful for debugging.
               '';
             };
-            disconnectEveryOperation = mkOption {
-              type = types.bool;
+            disconnectEveryOperation = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 By default, `pam_mysql` keeps the connection to the MySQL
@@ -152,34 +171,34 @@ in
               '';
             };
             logging = {
-              enable = mkOption {
-                type = types.bool;
+              enable = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = "Enables logging of authentication attempts in the MySQL database.";
               };
-              table = mkOption {
-                type = types.str;
+              table = lib.mkOption {
+                type = lib.types.str;
                 example = "logs";
                 description = "The name of the table to which logs are written.";
               };
-              msgColumn = mkOption {
-                type = types.str;
+              msgColumn = lib.mkOption {
+                type = lib.types.str;
                 example = "msg";
                 description = ''
                   The name of the column in the log table to which the description
                   of the performed operation is stored.
                 '';
               };
-              userColumn = mkOption {
-                type = types.str;
+              userColumn = lib.mkOption {
+                type = lib.types.str;
                 example = "user";
                 description = ''
                   The name of the column in the log table to which the name of the
                   user being authenticated is stored.
                 '';
               };
-              pidColumn = mkOption {
-                type = types.str;
+              pidColumn = lib.mkOption {
+                type = lib.types.str;
                 example = "pid";
                 description = ''
                   The name of the column in the log table to which the pid of the
@@ -187,16 +206,16 @@ in
                   service is stored.
                 '';
               };
-              hostColumn = mkOption {
-                type = types.str;
+              hostColumn = lib.mkOption {
+                type = lib.types.str;
                 example = "host";
                 description = ''
                   The name of the column in the log table to which the name of the user
                   being authenticated is stored.
                 '';
               };
-              rHostColumn = mkOption {
-                type = types.str;
+              rHostColumn = lib.mkOption {
+                type = lib.types.str;
                 example = "rhost";
                 description = ''
                   The name of the column in the log table to which the name of the remote
@@ -204,8 +223,8 @@ in
                   set by the PAM-aware application with `pam_set_item(PAM_RHOST)`.
                 '';
               };
-              timeColumn = mkOption {
-                type = types.str;
+              timeColumn = lib.mkOption {
+                type = lib.types.str;
                 example = "timestamp";
                 description = ''
                   The name of the column in the log table to which the timestamp of the
@@ -216,19 +235,19 @@ in
           };
         };
       };
-      nss = mkOption {
+      nss = lib.mkOption {
         description = ''
           Settings for `libnss-mysql`.
 
           All examples are from the [minimal example](https://github.com/saknopper/libnss-mysql/tree/master/sample/minimal)
           of `libnss-mysql`, but they are modified with NixOS paths for bash.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           options = {
-            getpwnam = mkOption {
-              type = types.nullOr types.str;
+            getpwnam = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT username,'x',uid,'5000','MySQL User', CONCAT('/home/',username),'/run/sw/current-system/bin/bash' \
                 FROM users \
                 WHERE username='%1$s' \
@@ -239,10 +258,10 @@ in
                 syscall.
               '';
             };
-            getpwuid = mkOption {
-              type = types.nullOr types.str;
+            getpwuid = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT username,'x',uid,'5000','MySQL User', CONCAT('/home/',username),'/run/sw/current-system/bin/bash' \
                 FROM users \
                 WHERE uid='%1$u' \
@@ -253,10 +272,10 @@ in
                 syscall.
               '';
             };
-            getspnam = mkOption {
-              type = types.nullOr types.str;
+            getspnam = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT username,password,'1','0','99999','0','0','-1','0' \
                 FROM users \
                 WHERE username='%1$s' \
@@ -267,10 +286,10 @@ in
                 syscall.
               '';
             };
-            getpwent = mkOption {
-              type = types.nullOr types.str;
+            getpwent = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT username,'x',uid,'5000','MySQL User', CONCAT('/home/',username),'/run/sw/current-system/bin/bash' FROM users
               '';
               description = ''
@@ -278,10 +297,10 @@ in
                 syscall.
               '';
             };
-            getspent = mkOption {
-              type = types.nullOr types.str;
+            getspent = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT username,password,'1','0','99999','0','0','-1','0' FROM users
               '';
               description = ''
@@ -289,10 +308,10 @@ in
                 syscall.
               '';
             };
-            getgrnam = mkOption {
-              type = types.nullOr types.str;
+            getgrnam = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT name,password,gid FROM groups WHERE name='%1$s' LIMIT 1
               '';
               description = ''
@@ -300,10 +319,10 @@ in
                 syscall.
               '';
             };
-            getgrgid = mkOption {
-              type = types.nullOr types.str;
+            getgrgid = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT name,password,gid FROM groups WHERE gid='%1$u' LIMIT 1
               '';
               description = ''
@@ -311,10 +330,10 @@ in
                 syscall.
               '';
             };
-            getgrent = mkOption {
-              type = types.nullOr types.str;
+            getgrent = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT name,password,gid FROM groups
               '';
               description = ''
@@ -322,10 +341,10 @@ in
                 syscall.
               '';
             };
-            memsbygid = mkOption {
-              type = types.nullOr types.str;
+            memsbygid = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT username FROM grouplist WHERE gid='%1$u'
               '';
               description = ''
@@ -333,10 +352,10 @@ in
                 syscall.
               '';
             };
-            gidsbymem = mkOption {
-              type = types.nullOr types.str;
+            gidsbymem = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 SELECT gid FROM grouplist WHERE username='%1$s'
               '';
               description = ''
@@ -350,7 +369,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     system.nssModules = [ pkgs.libnss-mysql ];
     system.nssDatabases.shadow = [ "mysql" ];
     system.nssDatabases.group = [ "mysql" ];
@@ -361,64 +380,81 @@ in
       group = "root";
       mode = "0600";
       # password will be added from password file in systemd oneshot
-      text = ''
-        users.host=${cfg.host}
-        users.db_user=${cfg.user}
-        users.database=${cfg.database}
-        users.table=${cfg.pam.table}
-        users.user_column=${cfg.pam.userColumn}
-        users.password_column=${cfg.pam.passwordColumn}
-        users.password_crypt=${cfg.pam.passwordCrypt}
-        users.disconnect_every_operation=${if cfg.pam.disconnectEveryOperation then "1" else "0"}
-        verbose=${if cfg.pam.verbose then "1" else "0"}
-      '' + optionalString (cfg.pam.cryptDefault != null) ''
-        users.use_${cfg.pam.cryptDefault}=1
-      '' + optionalString (cfg.pam.where != null) ''
-        users.where_clause=${cfg.pam.where}
-      '' + optionalString (cfg.pam.statusColumn != null) ''
-        users.status_column=${cfg.pam.statusColumn}
-      '' + optionalString (cfg.pam.updateTable != null) ''
-        users.update_table=${cfg.pam.updateTable}
-      '' + optionalString cfg.pam.logging.enable ''
-        log.enabled=true
-        log.table=${cfg.pam.logging.table}
-        log.message_column=${cfg.pam.logging.msgColumn}
-        log.pid_column=${cfg.pam.logging.pidColumn}
-        log.user_column=${cfg.pam.logging.userColumn}
-        log.host_column=${cfg.pam.logging.hostColumn}
-        log.rhost_column=${cfg.pam.logging.rHostColumn}
-        log.time_column=${cfg.pam.logging.timeColumn}
-      '';
+      text =
+        ''
+          users.host=${cfg.host}
+          users.db_user=${cfg.user}
+          users.database=${cfg.database}
+          users.table=${cfg.pam.table}
+          users.user_column=${cfg.pam.userColumn}
+          users.password_column=${cfg.pam.passwordColumn}
+          users.password_crypt=${cfg.pam.passwordCrypt}
+          users.disconnect_every_operation=${if cfg.pam.disconnectEveryOperation then "1" else "0"}
+          verbose=${if cfg.pam.verbose then "1" else "0"}
+        ''
+        + lib.optionalString (cfg.pam.cryptDefault != null) ''
+          users.use_${cfg.pam.cryptDefault}=1
+        ''
+        + lib.optionalString (cfg.pam.where != null) ''
+          users.where_clause=${cfg.pam.where}
+        ''
+        + lib.optionalString (cfg.pam.statusColumn != null) ''
+          users.status_column=${cfg.pam.statusColumn}
+        ''
+        + lib.optionalString (cfg.pam.updateTable != null) ''
+          users.update_table=${cfg.pam.updateTable}
+        ''
+        + lib.optionalString cfg.pam.logging.enable ''
+          log.enabled=true
+          log.table=${cfg.pam.logging.table}
+          log.message_column=${cfg.pam.logging.msgColumn}
+          log.pid_column=${cfg.pam.logging.pidColumn}
+          log.user_column=${cfg.pam.logging.userColumn}
+          log.host_column=${cfg.pam.logging.hostColumn}
+          log.rhost_column=${cfg.pam.logging.rHostColumn}
+          log.time_column=${cfg.pam.logging.timeColumn}
+        '';
     };
 
     environment.etc."libnss-mysql.cfg" = {
       mode = "0600";
       user = config.services.nscd.user;
       group = config.services.nscd.group;
-      text = optionalString (cfg.nss.getpwnam != null) ''
-        getpwnam ${cfg.nss.getpwnam}
-      '' + optionalString (cfg.nss.getpwuid != null) ''
-        getpwuid ${cfg.nss.getpwuid}
-      '' + optionalString (cfg.nss.getspnam != null) ''
-        getspnam ${cfg.nss.getspnam}
-      '' + optionalString (cfg.nss.getpwent != null) ''
-        getpwent ${cfg.nss.getpwent}
-      '' + optionalString (cfg.nss.getspent != null) ''
-        getspent ${cfg.nss.getspent}
-      '' + optionalString (cfg.nss.getgrnam != null) ''
-        getgrnam ${cfg.nss.getgrnam}
-      '' + optionalString (cfg.nss.getgrgid != null) ''
-        getgrgid ${cfg.nss.getgrgid}
-      '' + optionalString (cfg.nss.getgrent != null) ''
-        getgrent ${cfg.nss.getgrent}
-      '' + optionalString (cfg.nss.memsbygid != null) ''
-        memsbygid ${cfg.nss.memsbygid}
-      '' + optionalString (cfg.nss.gidsbymem != null) ''
-        gidsbymem ${cfg.nss.gidsbymem}
-      '' + ''
-        host ${cfg.host}
-        database ${cfg.database}
-      '';
+      text =
+        lib.optionalString (cfg.nss.getpwnam != null) ''
+          getpwnam ${cfg.nss.getpwnam}
+        ''
+        + lib.optionalString (cfg.nss.getpwuid != null) ''
+          getpwuid ${cfg.nss.getpwuid}
+        ''
+        + lib.optionalString (cfg.nss.getspnam != null) ''
+          getspnam ${cfg.nss.getspnam}
+        ''
+        + lib.optionalString (cfg.nss.getpwent != null) ''
+          getpwent ${cfg.nss.getpwent}
+        ''
+        + lib.optionalString (cfg.nss.getspent != null) ''
+          getspent ${cfg.nss.getspent}
+        ''
+        + lib.optionalString (cfg.nss.getgrnam != null) ''
+          getgrnam ${cfg.nss.getgrnam}
+        ''
+        + lib.optionalString (cfg.nss.getgrgid != null) ''
+          getgrgid ${cfg.nss.getgrgid}
+        ''
+        + lib.optionalString (cfg.nss.getgrent != null) ''
+          getgrent ${cfg.nss.getgrent}
+        ''
+        + lib.optionalString (cfg.nss.memsbygid != null) ''
+          memsbygid ${cfg.nss.memsbygid}
+        ''
+        + lib.optionalString (cfg.nss.gidsbymem != null) ''
+          gidsbymem ${cfg.nss.gidsbymem}
+        ''
+        + ''
+          host ${cfg.host}
+          database ${cfg.database}
+        '';
     };
 
     environment.etc."libnss-mysql-root.cfg" = {

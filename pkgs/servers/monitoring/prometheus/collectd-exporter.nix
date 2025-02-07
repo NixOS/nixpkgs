@@ -1,19 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "collectd-exporter";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "collectd_exporter";
     rev = "v${version}";
-    sha256 = "sha256-8oibunEHPtNdbhVgF3CL6D/xE7bR8hee6+D2IJMzaqY=";
+    sha256 = "sha256-MxgHJ9+e94ReY/8ISPfGEX9Z9ZHDyNsV0AqlPfsjXvc=";
   };
 
-  vendorHash = "sha256-fQO2fiotqv18xewXVyh6sA4zx5ZNUR6mCebYenryrKI=";
+  vendorHash = "sha256-kr8mHprIfXc/Yj/w2UKBkqIYZHmWtBLjqYDvKSXlozQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) collectd; };
 

@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub, }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-quattro";
@@ -17,6 +21,7 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/share/fonts/truetype
     cp -R $src/iA\ Writer\ Quattro/Static/*.ttf $out/share/fonts/truetype
+    cp -R $src/iA\ Writer\ Quattro/Variable/*.ttf $out/share/fonts/truetype
 
     runHook postInstall
   '';

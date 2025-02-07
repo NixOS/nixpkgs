@@ -7,12 +7,12 @@ let
   cfg = config.services.xserver.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
-  nixos-gsettings-overrides = pkgs.cinnamon.cinnamon-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.cinnamon-gsettings-overrides.override {
     extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cinnamon.excludePackages;
 in
 
 {
@@ -51,7 +51,7 @@ in
 
     environment.cinnamon.excludePackages = mkOption {
       default = [];
-      example = literalExpression "[ pkgs.cinnamon.blueberry ]";
+      example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
     };
@@ -60,23 +60,23 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+        theme = mkIf (notExcluded pkgs.mint-themes) {
           name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-themes;
+          package = mkDefault pkgs.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+        iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
-          package = mkDefault pkgs.cinnamon.mint-y-icons;
+          package = mkDefault pkgs.mint-y-icons;
         };
-        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+        cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
-          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+          package = mkDefault pkgs.mint-cursor-themes;
         };
       };
 
@@ -97,11 +97,10 @@ in
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.dbus.packages = with pkgs.cinnamon; [
+      services.dbus.packages = with pkgs; [
         cinnamon-common
         cinnamon-screensaver
         nemo-with-extensions
@@ -112,6 +111,7 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
@@ -134,7 +134,18 @@ in
         cinnamon-screensaver = {};
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
+      environment.systemPackages = with pkgs; ([
+        # Teach nemo-desktop how to launch file browser.
+        # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
+        (writeTextFile {
+          name = "x-cinnamon-mimeapps";
+          destination = "/share/applications/x-cinnamon-mimeapps.list";
+          text = ''
+            [Default Applications]
+            inode/directory=nemo.desktop
+          '';
+        })
+
         desktop-file-utils
 
         # common-files
@@ -151,9 +162,6 @@ in
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
-
-        # For a polkit authentication agent
-        polkit_gnome
 
         # packages
         nemo-with-extensions
@@ -173,7 +181,6 @@ in
       ] ++ utils.removePackagesByName [
         # accessibility
         onboard
-        orca
 
         # theme
         sound-theme-freedesktop
@@ -194,13 +201,12 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-xapp
-        (pkgs.xdg-desktop-portal-gtk.override {
-          # Do not build portals that we already have.
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
+
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -214,17 +220,10 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Qt application style
-      qt = {
-        enable = mkDefault true;
-        style = mkDefault "gtk2";
-        platformTheme = mkDefault "gtk2";
-      };
-
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
-        ubuntu_font_family # required for default theme
+        ubuntu-classic # required for default theme
       ];
     })
 
@@ -233,7 +232,7 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator
@@ -242,10 +241,10 @@ in
         xviewer
         xreader
         xed-editor
-        xplayer
         pix
 
         # external apps shipped with linux-mint
+        celluloid
         gnome-calculator
         gnome-calendar
         gnome-screenshot

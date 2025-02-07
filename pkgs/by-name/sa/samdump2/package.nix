@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, openssl
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  openssl,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YCZZrzDFZXUPoBZQ4KIj0mNVtd+Y8vvDDjpsWT7U5SY=";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+  ];
   buildInputs = [
     openssl
   ];
@@ -63,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Dump password hashes from a Windows NT/2k/XP installation";
     mainProgram = "samdump2";
     homepage = "https://sourceforge.net/projects/ophcrack/files/samdump2";
-    license =  licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ d3vil0p3r ];
     platforms = platforms.unix;
   };

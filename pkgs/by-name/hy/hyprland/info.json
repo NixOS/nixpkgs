@@ -1,7 +1,7 @@
 {
-  "branch": "main",
-  "commit_hash": "918d8340afd652b011b937d29d5eea0be08467f5",
-  "commit_message": "flake.lock: update",
-  "date": "2024-06-25",
-  "tag": "v0.41.2"
+  "branch": "v0.47.2-b",
+  "commit_hash": "882f7ad7d2bbfc7440d0ccaef93b1cdd78e8e3ff",
+  "commit_message": "version: bump to 0.47.2",
+  "date": "2025-02-02",
+  "tag": "v0.47.2"
 }

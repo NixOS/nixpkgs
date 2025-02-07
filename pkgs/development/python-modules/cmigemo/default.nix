@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cmigemo" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/mooz/python-cmigemo";
     description = "Pure python binding for C/Migemo";
     license = licenses.mit;

@@ -1,34 +1,33 @@
-{ lib
-, fetchFromGitHub
-, buildPgrxExtension
-, postgresql
-, nixosTests
-, cargo-pgrx_0_10_2
-, nix-update-script
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  buildPgrxExtension,
+  postgresql,
+  nixosTests,
+  cargo-pgrx_0_12_6,
+  nix-update-script,
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     rev = version;
-    hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
+    hash = "sha256-7yUbtWbYL4AnuUX8OXG4OVqYCY2Lf0pISSTlcFdPqog=";
   };
 
-  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-g5pIIifsJAs0C02o/+y+ILLnTXFqwG9tZcvY6NqfnDA=";
   buildAndTestSubdir = "extension";
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      timescaledb_toolkit = nixosTests.timescaledb;
-    };
+    tests = nixosTests.postgresql.timescaledb.passthru.override postgresql;
   };
 
   # tests take really long
@@ -39,9 +38,6 @@
     homepage = "https://github.com/timescale/timescaledb-toolkit";
     maintainers = with maintainers; [ typetetris ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
-
-    # as it needs to be used with timescaledb, simply use the condition from there
-    broken = stdenv.isDarwin;
+    license = licenses.tsl;
   };
 }

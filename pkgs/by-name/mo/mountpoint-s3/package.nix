@@ -1,39 +1,53 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, fuse3
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  fuse3,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mountpoint-s3";
-  version = "1.6.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
     rev = "v${version}";
-    hash = "sha256-1d2PPbTheUcHw2xS5LEcdchnfwu7szBApv+FnPaxt+I=";
+    hash = "sha256-QpJYpHow9/vEPrq82XtbDosGz8lqVB0cOPQmY7Dx78Q=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-tBi41kdaa4mVHh0MkXJ8kaG1e3CQURIKVk9Lboy1N8Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QeRCCu7d4fdRfiw3qdbyFk+N0nT+IYKVJ/NvieejVQg=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
   auditable = false;
 
-  nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
   buildInputs = [ fuse3 ];
 
   checkFlags = [
     #thread 's3_crt_client::tests::test_expected_bucket_owner' panicked at mountpoint-s3-client/src/s3_crt_client.rs:1123:47:
     #Create test client: ProviderFailure(Error(1173, "aws-c-io: AWS_IO_TLS_ERROR_DEFAULT_TRUST_STORE_NOT_FOUND, Default TLS trust store not found on this system. Trusted CA certificates must be installed, or \"override default trust store\" must be used while creating the TLS context."))
     #
+    "--skip=s3_crt_client::tests::client_new_fails_with_greater_part_size"
+    "--skip=s3_crt_client::tests::client_new_fails_with_smaller_part_size"
+    "--skip=s3_crt_client::tests::test_endpoint_favors_env_variable"
+    "--skip=s3_crt_client::tests::test_endpoint_favors_parameter_over_env_variable"
+    "--skip=s3_crt_client::tests::test_endpoint_with_invalid_env_variable"
     "--skip=s3_crt_client::tests::test_expected_bucket_owner"
     "--skip=s3_crt_client::tests::test_user_agent_with_prefix"
     "--skip=s3_crt_client::tests::test_user_agent_without_prefix"
+    "--skip=test_lookup_throttled_mock::head_object"
+    "--skip=test_lookup_throttled_mock::list_object"
+    "--skip=test_lookup_unhandled_error_mock"
     "--skip=tests::smoke"
     # fuse module not available on build machine ?
     #

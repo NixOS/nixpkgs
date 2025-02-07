@@ -9,7 +9,6 @@
 , clang
 , cmake
 , curl
-, darwin
 , dbus
 , dbus-glib
 , fontconfig
@@ -34,7 +33,7 @@
 , openssl
 , pango
 , pkg-config
-, postgresql
+, libpq
 , protobuf
 , python3
 , rdkafka
@@ -43,12 +42,10 @@
 , udev
 , webkitgtk_4_1
 , zlib
+, buildPackages
 , ...
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-in
 {
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
@@ -62,6 +59,7 @@ in
   cairo-sys-rs = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   capnp-rpc = attrs: {
@@ -69,8 +67,7 @@ in
   };
 
   cargo = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    buildInputs = [ openssl zlib curl ];
   };
 
   libz-sys = attrs: {
@@ -134,6 +131,7 @@ in
   glib-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ glib ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   gobject-sys = attrs: {
@@ -229,7 +227,7 @@ in
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
   };
 
   openssl = attrs: {
@@ -256,7 +254,7 @@ in
 
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   prost-build = attr: {
@@ -275,10 +273,6 @@ in
   rink = attrs: {
     buildInputs = [ gmp ];
     crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
-  };
-
-  security-framework-sys = attr: {
-    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
   };
 
   sequoia-openpgp = attrs: {
@@ -316,10 +310,6 @@ in
     buildInputs = [ sqlite gmp ];
   };
 
-  serde_derive = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin Security;
-  };
-
   servo-fontconfig-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ freetype fontconfig ];
@@ -328,6 +318,7 @@ in
   soup3-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsoup_3 ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   thrussh-libsodium = attrs: {
@@ -342,6 +333,7 @@ in
   webkit2gtk-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ webkitgtk_4_1 ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   xcb = attrs: {
@@ -353,4 +345,15 @@ in
     buildInputs = [ atk ];
   };
 
+  # Assumes it can run Command::new(env::var("CARGO")).arg("locate-project")
+  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L244
+  proc-macro-crate = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
+    prePatch = (attrs.prePatch or "") + ''
+      substituteInPlace \
+        src/lib.rs \
+        --replace-fail \
+        'env::var("CARGO").map_err(|_| Error::CargoEnvVariableNotSet)?' \
+        '"${lib.getBin buildPackages.cargo}/bin/cargo"'
+    '';
+  };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "repo-helper";
     repo = "hatch-requirements-txt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Kd3rDfTBn/t/NiSJMPkHRWD5solUF7MAN8EiZokxHrk=";
   };
 
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Hatchling plugin to read project dependencies from requirements.txt";
     homepage = "https://github.com/repo-helper/hatch-requirements-txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, ffmpeg
-, libopus
-, makeBinaryWrapper
-, unstableGitUpdater
-, openssl
-, pkg-config
-, stdenv
-, yt-dlp
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  ffmpeg,
+  libopus,
+  makeBinaryWrapper,
+  unstableGitUpdater,
+  openssl,
+  pkg-config,
+  stdenv,
+  yt-dlp,
+  Security,
 }:
 rustPlatform.buildRustPackage {
   pname = "parrot";
@@ -23,16 +24,28 @@ rustPlatform.buildRustPackage {
     hash = "sha256-3YTXIKj1iqCB+tN7/0v1DAaMM6aJiSxBYHO98uK8KFo=";
   };
 
-  cargoHash = "sha256-3G7NwSZaiocjgfdtmJVWfMZOHCNhC08NgolPa9AvPfE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-be/gGKCd8/VgcjzhyMKDl5TzAuavm1rPNYBm8RLTP90=";
 
-  nativeBuildInputs = [ cmake makeBinaryWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ libopus openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    libopus
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram $out/bin/parrot \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg yt-dlp ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          yt-dlp
+        ]
+      }
   '';
 
   passthru.updateScript = unstableGitUpdater {

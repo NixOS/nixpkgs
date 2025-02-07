@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bmcfee";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LOWpOPAEK+ga7c3bR15QvnHmON6ARS1Qee/7U/VMlTY=";
   };
 
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Efficient signal resampling";
     homepage = "https://github.com/bmcfee/resampy";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

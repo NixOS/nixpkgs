@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, cmdliner
-, ctypes
-, ctypes-foreign
-, dune-configurator
-, npy
-, ocaml-compiler-libs
-, ppx_custom_printf
-, ppx_expect
-, ppx_sexp_conv
-, sexplib
-, stdio
-, torch
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cmdliner,
+  ctypes,
+  ctypes-foreign,
+  dune-configurator,
+  npy,
+  ocaml-compiler-libs,
+  ppx_custom_printf,
+  ppx_expect,
+  ppx_sexp_conv,
+  sexplib,
+  stdio,
+  torch,
 }:
 
 buildDunePackage rec {
@@ -57,7 +58,7 @@ buildDunePackage rec {
 
   preBuild = "export LIBTORCH=${torch.dev}/";
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     inherit (src.meta) homepage;

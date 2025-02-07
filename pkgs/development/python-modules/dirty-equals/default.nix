@@ -13,23 +13,24 @@
 let
   dirty-equals = buildPythonPackage rec {
     pname = "dirty-equals";
-    version = "0.7.1-post0";
-    format = "pyproject";
+    version = "0.9.0";
+    pyproject = true;
 
     disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "samuelcolvin";
-      repo = pname;
-      rev = "refs/tags/v${version}";
-      hash = "sha256-U6DNluthDgxzh6IOaKrN/JhX4u+ztY/jVp9IKh0iP34=";
+      repo = "dirty-equals";
+      tag = "v${version}";
+      hash = "sha256-V+Ef/X4xQNSp2PiiXHHIAZT7v2sjU4vDBd9hNOqiRQw=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
-    propagatedBuildInputs = [ pytz ];
+    dependencies = [ pytz ];
 
     doCheck = false;
+
     passthru.tests.pytest = dirty-equals.overrideAttrs { doCheck = true; };
 
     nativeCheckInputs = [
@@ -43,7 +44,7 @@ let
     meta = with lib; {
       description = "Module for doing dirty (but extremely useful) things with equals";
       homepage = "https://github.com/samuelcolvin/dirty-equals";
-      changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/v${version}";
+      changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/${src.tag}";
       license = with licenses; [ mit ];
       maintainers = with maintainers; [ fab ];
     };

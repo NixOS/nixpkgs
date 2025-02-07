@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  git,
+  gitMinimal,
   glibc,
   lib,
   makeWrapper,
@@ -8,23 +8,20 @@
   python3Packages,
   squashfsTools,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.2.5";
+  version = "8.5.1";
 
   pyproject = true;
-
-  # Somewhere deep in the dependency tree is 'versioningit', which depends
-  # on pydantic 2. Snapcraft will soon migrate to pydantic 2, and disabling
-  # this doesn't seem to affect the functionality of the application.
-  catchConflicts = false;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "snapcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+1Gzseuq402m5FvlRAGXl7Lsy2VnRmd1cXNXhkMDDDE=";
+    tag = version;
+    hash = "sha256-7kIVWbVj5qse3JIdlCvRtVUfSa/rSjn4e8HJdVY3sOA=";
   };
 
   patches = [
@@ -67,11 +64,14 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace snapcraft/elf/elf_utils.py \
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     attrs
     catkin-pkg
     click
@@ -80,9 +80,10 @@ python3Packages.buildPythonApplication rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
-    debian
+    python-debian
     docutils
     jsonschema
     launchpadlib
@@ -90,51 +91,60 @@ python3Packages.buildPythonApplication rec {
     lxml
     macaroonbakery
     mypy-extensions
+    overrides
+    packaging
     progressbar
     pyelftools
     pygit2
     pylxd
+    pymacaroons
     python-apt
     python-gnupg
+    pyxdg
+    pyyaml
     raven
     requests-toolbelt
+    requests-unixsocket2
     simplejson
     snap-helpers
     tabulate
+    toml
     tinydb
+    typing-extensions
+    urllib3
+    validators
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
     "jsonschema"
     "pygit2"
     "urllib3"
+    "validators"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-cov
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [
-    git
-    squashfsTools
-  ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-cov-stub
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+      writableTmpDirAsHomeHook
+    ]
+    ++ [
+      gitMinimal
+      squashfsTools
+    ];
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -143,9 +153,11 @@ python3Packages.buildPythonApplication rec {
     "test_classic_linter_filter"
     "test_classic_linter"
     "test_complex_snap_yaml"
+    "test_core24_try_command"
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"
+    "test_get_build_commands"
     "test_get_extensions_data_dir"
     "test_get_os_platform_alternative_formats"
     "test_get_os_platform_linux"
@@ -155,14 +167,13 @@ python3Packages.buildPythonApplication rec {
     "test_lifecycle_write_component_metadata"
     "test_parse_info_integrated"
     "test_patch_elf"
+    "test_project_platform_unknown_name"
     "test_remote_builder_init"
     "test_setup_assets_remote_icon"
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_load_project"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

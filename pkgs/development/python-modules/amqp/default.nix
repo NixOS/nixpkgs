@@ -1,7 +1,7 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
-  case,
   fetchPypi,
   pytestCheckHook,
   pytest-rerunfailures,
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "5.2.0";
+  version = "5.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oez/QlrQY61CpIbJAoB9FIIxFIHIrZWnJpSyl1519/0=";
+    hash = "sha256-zdwAxyVElSICO62Un3D/97SPCxredNFwpvEKsERzlDI=";
   };
 
   propagatedBuildInputs = [ vine ];
@@ -26,15 +26,19 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    case
     pytestCheckHook
     pytest-rerunfailures
   ];
 
-  disabledTests = [
-    # Requires network access
-    "test_rmq.py"
-  ];
+  disabledTests =
+    [
+      # Requires network access
+      "test_rmq.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Requires network access but fails on macos only
+      "test_connection.py"
+    ];
 
   pythonImportsCheck = [ "amqp" ];
 

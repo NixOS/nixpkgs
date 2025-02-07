@@ -1,8 +1,6 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
-  django,
   dnspython,
   fetchFromGitHub,
   protobuf,
@@ -20,10 +18,11 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   setupPyBuildFlags = [
-    "--with-mysql-capi=\"${mysql80}\""
-    "--with-openssl-include-dir=\"${openssl.dev}/include\""
-    "--with-openssl-lib-dir=\"${lib.getLib openssl}/lib\""
-    "-L \"${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib\""
+    "--with-mysql-capi=${mysql80}"
+    "--with-openssl-include-dir=${openssl.dev}/include"
+    "--with-openssl-lib-dir=${lib.getLib openssl}/lib"
+    "-L"
+    "${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib"
   ];
 
   src = fetchFromGitHub {
@@ -68,7 +67,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       neosimsim
-      turion
     ];
   };
 }

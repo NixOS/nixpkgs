@@ -1,39 +1,40 @@
-{ lib
-, alsa-lib
-, aubio
-, cmake
-, dssi
-, fetchurl
-, flac
-, libjack2
-, ladspaH
-, ladspaPlugins
-, liblo
-, libmad
-, libsamplerate
-, libsndfile
-, libtool
-, libvorbis
-, lilv
-, lv2
-, opusfile
-, pkg-config
-, qt6
-, rubberband
-, serd
-, stdenv
-, sord
-, sratom
-, suil
+{
+  lib,
+  alsa-lib,
+  aubio,
+  cmake,
+  dssi,
+  fetchurl,
+  flac,
+  libjack2,
+  ladspaH,
+  ladspaPlugins,
+  liblo,
+  libmad,
+  libsamplerate,
+  libsndfile,
+  libtool,
+  libvorbis,
+  lilv,
+  lv2,
+  opusfile,
+  pkg-config,
+  qt6,
+  rubberband,
+  serd,
+  stdenv,
+  sord,
+  sratom,
+  suil,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtractor";
-  version = "0.9.39";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/qtractor/qtractor-${version}.tar.gz";
-    hash = "sha256-5gyPNxthrBbSHvlvJbQ0rvxVEq68uQEg+qnxHQb+NVU=";
+    hash = "sha256-Z32fOS8Um7x2iFy+2SlmsU8mrDLwboNSI4dm0RligBo=";
   };
 
   nativeBuildInputs = [
@@ -70,12 +71,13 @@ stdenv.mkDerivation rec {
     suil
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
-    license = licenses.gpl2Plus;
+    changelog = "https://github.com/rncbc/qtractor/blob/v${version}/ChangeLog";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "qtractor";
-    maintainers = with maintainers; [ goibhniu ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

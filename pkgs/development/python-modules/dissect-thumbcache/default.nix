@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.8";
+  version = "1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.thumbcache";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LcuuRVSnZVFtht03MD8qVNNPljVUzGa8vXu9GQPOgjs=";
+    tag = version;
+    hash = "sha256-ab7Ci64eeeUcmY2opa16weuVvsWn5UgvSauE55gVH/w=";
   };
 
   build-system = [

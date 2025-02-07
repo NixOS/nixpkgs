@@ -1,16 +1,15 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, ocaml
-, hpack
-, angstrom
-, faraday
-, base64
-, psq
-, httpaf
-, alcotest
-, yojson
-, hex
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  hpack,
+  angstrom,
+  faraday,
+  base64,
+  psq,
+  httpun-types,
+  alcotest,
+  yojson,
+  hex,
 }:
 
 let
@@ -36,7 +35,7 @@ buildDunePackage rec {
     base64
     psq
     hpack
-    httpaf
+    httpun-types
   ];
 
   doCheck = true;

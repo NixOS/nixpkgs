@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchpatch,
   fetchPypi,
+  setuptools,
   flake8,
   mock,
   pep8,
@@ -12,14 +13,16 @@
 buildPythonPackage rec {
   pname = "flake8-polyfill";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1nlf1mkqw856vi6782qcglqhaacb23khk9wkcgn55npnjxshhjz4";
   };
 
-  propagatedBuildInputs = [ flake8 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ flake8 ];
 
   nativeCheckInputs = [
     mock
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   postPatch = ''
     # Failed: [pytest] section in setup.cfg files is no longer supported, change to [tool:pytest] instead.
     substituteInPlace setup.cfg \
-      --replace pytest 'tool:pytest'
+      --replace-fail pytest 'tool:pytest'
   '';
 
   pythonImportsCheck = [ "flake8_polyfill" ];

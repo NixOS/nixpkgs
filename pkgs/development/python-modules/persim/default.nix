@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.3.5";
+  version = "0.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qyly3kIx9HQ7zDT0SfUlsqZGqibdXsfW1dL9HNpQZJg=";
+    hash = "sha256-dvcpj7ekbNvsc2+FSXfx4Xlt3y1pdO2n2FnKKEf032Q=";
   };
 
   propagatedBuildInputs = [
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://persim.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

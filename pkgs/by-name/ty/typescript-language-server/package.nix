@@ -1,13 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, makeWrapper
-, nodejs
-, prefetch-yarn-deps
-, yarn
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  makeWrapper,
+  nodejs,
+  prefetch-yarn-deps,
+  replaceVars,
+  yarn,
+  testers,
+  typescript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-FCv0+tA7AuCdGeG6FEiMyRAHcl0WbezhNYLL7xp5FWU=";
   };
+
+  patches = [
+    (replaceVars ./default-fallbackTsserverPath.diff {
+      typescript = "${typescript}/lib/node_modules/typescript/lib/tsserver.js";
+    })
+  ];
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
@@ -78,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/typescript-language-server/typescript-language-server/releases/tag/v${finalAttrs.version}";
     description = "Language Server Protocol implementation for TypeScript using tsserver";
     homepage = "https://github.com/typescript-language-server/typescript-language-server";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "typescript-language-server";
     maintainers = with lib.maintainers; [ marcel ];
   };

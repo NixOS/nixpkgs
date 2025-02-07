@@ -17,7 +17,6 @@
   pkgs-systemd,
   python,
   xdg-utils,
-  makeWrapper,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-n3jfBHMYqyQZgvFFJcylNbTWZ3teuqhdelTfpNrwWuA=";
   };
 

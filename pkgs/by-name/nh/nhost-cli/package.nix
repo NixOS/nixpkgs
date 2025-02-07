@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "nhost-cli";
-  version = "1.18.3";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "nhost";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-TYi0Cth4GWEIT9QRUC4z3Uwnh4EmywY+XCOM5oJP+4g=";
+    tag = "v${version}";
+    hash = "sha256-WuDAHZVY7zleDBcHiT5nVgiIDvxT/LD3PM+gEREQjL0=";
   };
 
   vendorHash = null;
@@ -27,9 +27,13 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/nhost
   '';
 
+  # require network access
+  checkFlags = [ "-skip=^TestMakeJSONRequest$" ];
+
   meta = {
-    description = "A tool for setting up a local development environment for Nhost";
+    description = "Tool for setting up a local development environment for Nhost";
     homepage = "https://github.com/nhost/cli";
+    changelog = "https://github.com/nhost/cli/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nhost";

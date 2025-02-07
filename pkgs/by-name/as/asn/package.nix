@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, curl
-, whois
-, bind
-, mtr
-, jq
-, ipcalc
-, grepcidr
-, nmap
-, aha
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  whois,
+  bind,
+  mtr,
+  jq,
+  ipcalc,
+  grepcidr,
+  nmap,
+  aha,
 }:
 
 stdenv.mkDerivation rec {
   pname = "asn";
-  version = "0.76.1";
+  version = "0.78.3";
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9UDd0tgRKEFC1V1+1s9Ghev0I48L8UR9/YbZKX3F1MU=";
+    tag = "v${version}";
+    hash = "sha256-ydCpCmW6NK3LM05YLw6KtJWo7UtMcsxQt2RH/Xl+bFw=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +33,19 @@ stdenv.mkDerivation rec {
     install -Dv asn "$out/bin/asn"
 
     wrapProgram $out/bin/asn \
-      --prefix PATH : "${lib.makeBinPath [ curl whois bind mtr jq ipcalc grepcidr nmap aha ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          curl
+          whois
+          bind
+          mtr
+          jq
+          ipcalc
+          grepcidr
+          nmap
+          aha
+        ]
+      }"
   '';
 
   meta = with lib; {

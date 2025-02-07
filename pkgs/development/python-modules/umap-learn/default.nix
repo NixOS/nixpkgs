@@ -5,6 +5,7 @@
   colorcet,
   datashader,
   fetchFromGitHub,
+  setuptools,
   holoviews,
   matplotlib,
   numba,
@@ -12,12 +13,10 @@
   pandas,
   pynndescent,
   pytestCheckHook,
-  pythonOlder,
   scikit-image,
   scikit-learn,
   scipy,
   seaborn,
-  tbb,
   tensorflow,
   tensorflow-probability,
   tqdm,
@@ -25,19 +24,19 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.6";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.5.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-fqYl8T53BgCqsquY6RJHqpDFsdZA0Ihja69E/kG3YGU=";
+    tag = "release-${version}";
+    hash = "sha256-hPYmRDSeDa4JWGekUVq3CWf5NthHTpMpyuUQ1yIkVAE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numba
     numpy
     pynndescent
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     plot = [
       bokeh
       colorcet
@@ -92,7 +91,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,12 +1,21 @@
-{ lib, stdenv, qtModule, qtdeclarative, qtwebengine, CoreFoundation, WebKit }:
+{
+  lib,
+  stdenv,
+  qtModule,
+  qtdeclarative,
+  qtwebengine,
+}:
 
 qtModule {
   pname = "qtwebview";
-  propagatedBuildInputs = [ qtdeclarative qtwebengine ];
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    WebKit
+  propagatedBuildInputs = [
+    qtdeclarative
+    qtwebengine
   ];
-  outputs = [ "out" "dev" "bin" ];
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation -framework WebKit";
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation -framework WebKit";
 }

@@ -1,23 +1,42 @@
-{ lib, fetchFromGitHub, stdenv, nodejs, pnpm, buildGoModule, mage, writeShellScriptBin, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  nodejs,
+  pnpm,
+  buildGoModule,
+  mage,
+  writeShellScriptBin,
+  nixosTests,
+}:
 
 let
-  version = "0.23.0";
+  version = "0.24.6";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-DGdJ/qO86o4LDB2Soio6/zd5S0su6ffrtT+iOn1eQnA=";
+    hash = "sha256-yUUZ6gPI2Bte36HzfUE6z8B/I1NlwWDSJA2pwkuzd34=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "vikunja-frontend";
     inherit version src;
 
+    patches = [
+      ./nodejs-22.12-tailwindcss-update.patch
+    ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
     pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src sourceRoot;
-      hash = "sha256-awQgOLkb46v2aWfw6yv+zGPoOnczalkzg02tBgMTyMY=";
+      inherit (finalAttrs)
+        pname
+        version
+        patches
+        src
+        sourceRoot
+        ;
+      hash = "sha256-94ZlywOZYmW/NsvE0dtEA81MeBWGUrJsBXTUauuOmZM=";
     };
 
     nativeBuildInputs = [
@@ -41,10 +60,12 @@ let
   });
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
-  skipTest = lineOffset: testCase: file:
+  skipTest =
+    lineOffset: testCase: file:
     let
       jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
-    in ''
+    in
+    ''
       sed -i -e '/${testCase}/{
       ${jumpAndAppend} t.Skip();
       }' ${file}
@@ -65,14 +86,17 @@ buildGoModule {
         fi
       '';
     in
-    [ fakeGit mage ];
+    [
+      fakeGit
+      mage
+    ];
 
-  vendorHash = "sha256-d4AeQEAtPqMDe5a5aKhCe3i3pDXAMZJkJXxfcAFTx7A=";
+  vendorHash = "sha256-OsKejno8QGg7HzRsrftngiWGiWHFc1jDLi5mQ9/NjI4=";
 
   inherit frontend;
 
   prePatch = ''
-    cp -r $frontend frontend/dist
+    cp -r ${frontend} frontend/dist
   '';
 
   postConfigure = ''

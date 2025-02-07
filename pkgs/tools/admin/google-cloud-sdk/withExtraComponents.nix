@@ -1,4 +1,9 @@
-{ lib, google-cloud-sdk, symlinkJoin, components }:
+{
+  lib,
+  google-cloud-sdk,
+  symlinkJoin,
+  components,
+}:
 
 comps_:
 
@@ -6,19 +11,34 @@ let
   # Remove components which are already installed by default
   filterPreInstalled =
     let
-      preInstalledComponents = with components; [ bq bq-nix core core-nix gcloud-deps gcloud gsutil gsutil-nix ];
+      preInstalledComponents = with components; [
+        bq
+        bq-nix
+        core
+        core-nix
+        gcloud-deps
+        gcloud
+        gsutil
+        gsutil-nix
+      ];
     in
     builtins.filter (drv: !(builtins.elem drv preInstalledComponents));
 
   # Recursively build a list of components with their dependencies
   # TODO this could be made faster, it checks the dependencies too many times
-  findDepsRecursive = lib.converge
-    (drvs: lib.unique (drvs ++ (builtins.concatMap (drv: drv.dependencies) drvs)));
+  findDepsRecursive = lib.converge (
+    drvs: lib.unique (drvs ++ (builtins.concatMap (drv: drv.dependencies) drvs))
+  );
 
   # Components to install by default
-  defaultComponents = with components; [ alpha beta ];
+  defaultComponents = with components; [
+    alpha
+    beta
+  ];
 
-  comps = [ google-cloud-sdk ] ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
+  comps = [
+    google-cloud-sdk
+  ] ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
 
   installCheck =
     let

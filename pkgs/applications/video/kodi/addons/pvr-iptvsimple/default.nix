@@ -1,18 +1,26 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub
-, xz, pugixml, zlib
-, inputstream-adaptive, inputstream-ffmpegdirect, inputstream-rtmp
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  xz,
+  pugixml,
+  zlib,
+  inputstream-adaptive,
+  inputstream-ffmpegdirect,
+  inputstream-rtmp,
 }:
 
 buildKodiBinaryAddon rec {
   pname = "pvr-iptvsimple";
   namespace = "pvr.iptvsimple";
-  version = "21.8.4";
+  version = "21.8.5";
 
   src = fetchFromGitHub {
     owner = "kodi-pvr";
     repo = "pvr.iptvsimple";
     rev = "${version}-${rel}";
-    sha256 = "sha256-uuqk1kJnioCaRWIkC5liPSVRQPpviuaE+wmE4rq6fJw=";
+    sha256 = "sha256-UFEZZr7Z6GqnN8ZSA+JkdsiAlf7p5xPwDOcwLzJc9v8=";
   };
 
   extraBuildInputs = [

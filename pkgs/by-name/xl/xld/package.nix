@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
-, writeShellApplication
-, curl
-, xmlstarlet
-, common-updater-scripts
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
+  writeShellApplication,
+  curl,
+  xmlstarlet,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "20240511";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.dmg";
+    url = "mirror://sourceforge/xld/xld-${finalAttrs.version}.dmg";
     hash = "sha256-8xfjAWgtSdbD8gGlkGzT8QRz7egIf4PE/rFsFEDX0+c=";
   };
 
@@ -22,13 +23,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   sourceRoot = ".";
 
   installPhase = ''
-  runHook preInstall
+    runHook preInstall
 
-  mkdir -p "$out/Applications" "$out/bin"
-  cp -r *.app "$out/Applications"
-  cp -r CLI/xld "$out/bin"
+    mkdir -p "$out/Applications" "$out/bin"
+    cp -r *.app "$out/Applications"
+    cp -r CLI/xld "$out/bin"
 
-  runHook postInstall
+    runHook postInstall
   '';
 
   postPatch = ''

@@ -18,6 +18,8 @@
 
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
+  obs-color-monitor = qt6Packages.callPackage ./obs-color-monitor.nix { };
+
   obs-command-source = callPackage ./obs-command-source.nix { };
 
   obs-composite-blur = callPackage ./obs-composite-blur.nix { };

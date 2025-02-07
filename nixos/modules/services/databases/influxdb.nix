@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.influxdb;
 
-  configOptions = recursiveUpdate {
+  configOptions = lib.recursiveUpdate {
     meta = {
       bind-address = ":8088";
       commit-timeout = "50ms";
@@ -110,36 +107,36 @@ in
 
     services.influxdb = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
         description = "Whether to enable the influxdb server";
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      package = mkPackageOption pkgs "influxdb" { };
+      package = lib.mkPackageOption pkgs "influxdb" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "influxdb";
         description = "User account under which influxdb runs";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "influxdb";
         description = "Group under which influxdb runs";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         default = "/var/db/influxdb";
         description = "Data directory for influxd data files.";
-        type = types.path;
+        type = lib.types.path;
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = {};
         description = "Extra configuration options for influxdb";
-        type = types.attrs;
+        type = lib.types.attrs;
       };
     };
   };
@@ -147,7 +144,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.influxdb.enable {
+  config = lib.mkIf config.services.influxdb.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
@@ -166,16 +163,16 @@ in
       postStart =
         let
           scheme = if configOptions.http.https-enabled then "-k https" else "http";
-          bindAddr = (ba: if hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}")(toString configOptions.http.bind-address);
+          bindAddr = (ba: if lib.hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}")(toString configOptions.http.bind-address);
         in
-        mkBefore ''
+        lib.mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null ${scheme}://${bindAddr}/ping; do
             sleep 1;
           done
         '';
     };
 
-    users.users = optionalAttrs (cfg.user == "influxdb") {
+    users.users = lib.optionalAttrs (cfg.user == "influxdb") {
       influxdb = {
         uid = config.ids.uids.influxdb;
         group = "influxdb";
@@ -183,7 +180,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "influxdb") {
+    users.groups = lib.optionalAttrs (cfg.group == "influxdb") {
       influxdb.gid = config.ids.gids.influxdb;
     };
   };

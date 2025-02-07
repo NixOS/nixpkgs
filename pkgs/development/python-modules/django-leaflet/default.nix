@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-leaflet";
-  version = "0.30.1";
+  version = "0.31.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_leaflet";
     inherit version;
-    hash = "sha256-jsG2RcUe0Zob9GAZVKSIr8iPPubqqsh679uhUioNR0Y=";
+    hash = "sha256-+yt1+Er/YNQFhlkwDzGnEVVMZdEout5fqAiGN/sHUfc=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/makinacorpus/django-leaflet";
     changelog = "https://github.com/makinacorpus/django-leaflet/blob/${version}/CHANGES";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

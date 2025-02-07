@@ -10,38 +10,32 @@
 
 buildPythonPackage rec {
   pname = "jsonpath-ng";
-  version = "1.6.1";
-  format = "setuptools";
+  version = "1.7.0";
+  pypropject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0ErTGxGlMn/k2KMwRV26WJpx85yJUfn6Hgp5pU4RZA4=";
+    repo = "jsonpath-ng";
+    tag = "v${version}";
+    hash = "sha256-sfIqEc5SsNQYxK+Ur00fFdVoC0ysOkHrx4Cq/3SpGHw=";
   };
 
-  propagatedBuildInputs = [
-    ply
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ply ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTestPaths = [
-    # Exclude tests that require oslotest
-    "tests/test_jsonpath_rw_ext.py"
-  ];
 
   pythonImportsCheck = [ "jsonpath_ng" ];
 
   meta = with lib; {
     description = "JSONPath implementation";
-    mainProgram = "jsonpath_ng";
     homepage = "https://github.com/h2non/jsonpath-ng";
     changelog = "https://github.com/h2non/jsonpath-ng/blob/v${version}/History.md";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "jsonpath_ng";
   };
 }

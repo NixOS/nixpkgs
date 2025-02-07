@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, rustPlatform
-, installShellFiles
-, scdoc
-, Security
-, nixosTests
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  installShellFiles,
+  scdoc,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-pYize+MGChi1GxCNaQsNlHELtsPUvfFZMPl0Q+pOTp0=";
+    hash = "sha256-0vbQDHuLrgrsWiOb2hb6lYylJm5o/wOzoDIw85H8Eh0=";
   };
 
-  cargoHash = "sha256-KmVNRVyKD5q4/vWtnHM4nfiGg+uZvRl+l+Zk5hjWg9E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KdHYyuH1RMLRueqYbfADUktBx9aL8yTagB0KxEGQsCs=";
 
-  doCheck = false; # Uses external testing framework that requires network
-
-  passthru.tests = {
-    basic-functionality = nixosTests.stargazer;
+  passthru = {
+    tests.basic-functionality = nixosTests.stargazer;
+    updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
-
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postInstall = ''
     scdoc < doc/stargazer.scd  > stargazer.1

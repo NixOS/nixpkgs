@@ -156,13 +156,17 @@ filterAndCreateOverrides {
     {
       cudaAtLeast,
       gmp,
+      expat,
+      stdenv,
       lib,
     }:
     prevAttrs: {
       buildInputs =
         prevAttrs.buildInputs
         # x86_64 only needs gmp from 12.0 and on
-        ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ];
+        ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ]
+        # aarch64,sbsa needs expat
+        ++ lib.lists.optionals (stdenv.hostPlatform.isAarch64) [ expat ];
     };
 
   cuda_nvcc =
@@ -243,7 +247,7 @@ filterAndCreateOverrides {
       libcurand,
       libGLU,
       libglvnd,
-      mesa,
+      libgbm,
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -252,7 +256,7 @@ filterAndCreateOverrides {
         libcurand
         libGLU
         libglvnd
-        mesa
+        libgbm
       ];
     };
 
@@ -316,7 +320,7 @@ filterAndCreateOverrides {
         "nsight-systems/*/*/libexec"
         "nsight-systems/*/*/libQt*"
         "nsight-systems/*/*/libstdc*"
-        "nsight-systems/*/*/Mesa"
+        "nsight-systems/*/*/libgbm"
         "nsight-systems/*/*/Plugins"
         "nsight-systems/*/*/python/bin/python"
       ];

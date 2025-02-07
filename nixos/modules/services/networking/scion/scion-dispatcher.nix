@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-dispatcher;
   toml = pkgs.formats.toml { };
   defaultConfig = {
@@ -44,7 +50,7 @@ in
   };
   config = mkIf cfg.enable {
     # Needed for group ownership of the dispatcher socket
-    users.groups.scion = {};
+    users.groups.scion = { };
 
     # scion programs hardcode path to dispatcher in /run/shm, and is not
     # configurable at runtime upstream plans to obsolete the dispatcher in
@@ -64,11 +70,10 @@ in
         DynamicUser = true;
         BindPaths = [ "/dev/shm:/run/shm" ];
         ExecStartPre = "${pkgs.coreutils}/bin/rm -rf /run/shm/dispatcher";
-        ExecStart = "${pkgs.scion}/bin/scion-dispatcher --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-dispatcher --config ${configFile}";
         Restart = "on-failure";
-        RuntimeDirectory = "scion-dispatcher";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-dispatcher";
       };
     };
   };
 }
-

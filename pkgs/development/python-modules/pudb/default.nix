@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   jedi,
+  packaging,
   pygments,
   urwid,
   urwid-readline,
@@ -13,18 +15,21 @@
 
 buildPythonPackage rec {
   pname = "pudb";
-  version = "2024.1";
-  format = "setuptools";
+  version = "2024.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/J1ql2pZtZB2TIN57CAP7NR/qoQlm2Tv2M2GBmoK8zg=";
+    hash = "sha256-Jk8jngU45S6D09AgFDEAsxccrhcidnS7G5+LB180hJw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jedi
+    packaging
     pygments
     urwid
     urwid-readline
@@ -47,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/inducer/pudb";
     changelog = "https://github.com/inducer/pudb/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

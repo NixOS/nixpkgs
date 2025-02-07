@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "model-bakery";
-  version = "1.18.1";
+  version = "1.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QsfVKPasGFzcLIwx7t9H9I2o2JNUFLKbKc86tntltg8=";
+    tag = version;
+    hash = "sha256-VA3rRzu1FhgCRCSRBQ+cZkwHVZr5/e++twk3hOWuc2c=";
   };
 
   build-system = [ hatchling ];

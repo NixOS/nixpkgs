@@ -1,4 +1,10 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake, qtbase }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  qtbase,
+}:
 
 mkDerivation rec {
   pname = "enyo-launcher";
@@ -8,7 +14,7 @@ mkDerivation rec {
     owner = "sdcofer70";
     repo = "enyo-launcher";
     rev = version;
-    sha256 = "sha256-k6Stc1tQOcdS//j+bFUNfnOUlwuhIPKxf9DHU+ng164=";
+    hash = "sha256-k6Stc1tQOcdS//j+bFUNfnOUlwuhIPKxf9DHU+ng164=";
   };
 
   nativeBuildInputs = [ cmake ];

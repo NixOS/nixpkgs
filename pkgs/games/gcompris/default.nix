@@ -11,6 +11,7 @@
 , qtcharts
 , qtdeclarative
 , qtgraphicaleffects
+, qtimageformats
 , qtmultimedia
 , qtquickcontrols2
 , qtsensors
@@ -21,16 +22,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "4.1";
+  version = "4.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Pz0cOyBfiexKHUsHXm18Zw2FKu7b7vVuwy4Vu4daBoU=";
+    hash = "sha256-x+oTh0Nu7MnCnKGR2vkALDclG59576u/+HPdftsDtcc=";
   };
 
   cmakeFlags = [
     (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1")
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules gettext ninja qttools wrapQtAppsHook ];
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtcharts
     qtdeclarative
     qtgraphicaleffects
+    qtimageformats
     qtmultimedia
     qtquickcontrols2
     qtsensors

@@ -1,8 +1,45 @@
 { config, lib, utils, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    any
+    attrNames
+    attrValues
+    concatMap
+    concatMapStringsSep
+    concatStrings
+    elem
+    filter
+    filterAttrs
+    flatten
+    flip
+    foldr
+    generators
+    getAttr
+    hasAttr
+    id
+    length
+    listToAttrs
+    literalExpression
+    mapAttrs'
+    mapAttrsToList
+    match
+    mkAliasOptionModuleMD
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    mkRenamedOptionModule
+    optional
+    optionals
+    sort
+    stringAfter
+    stringLength
+    trace
+    types
+    xor
+    ;
+
   ids = config.ids;
   cfg = config.users;
 
@@ -16,37 +53,71 @@ let
         "*"    # password unset
       ]);
 
+  overrideOrderMutable = ''{option}`initialHashedPassword` -> {option}`initialPassword` -> {option}`hashedPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
+
+  overrideOrderImmutable = ''{option}`initialHashedPassword` -> {option}`hashedPassword` -> {option}`initialPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
+
+  overrideOrderText = isMutable: ''
+    If the option {option}`users.mutableUsers` is
+    `${if isMutable then "true" else "false"}`, then the order of precedence is as shown
+    below, where values on the left are overridden by values on the right:
+    ${if isMutable then overrideOrderMutable else overrideOrderImmutable}
+  '';
+
+  multiplePasswordsWarning = ''
+    If multiple of these password options are set at the same time then a
+    specific order of precedence is followed, which can lead to surprising
+    results. The order of precedence differs depending on whether the
+    {option}`users.mutableUsers` option is set.
+  '';
+
+  overrideDescription = ''
+    ${multiplePasswordsWarning}
+
+    ${overrideOrderText false}
+
+    ${overrideOrderText true}
+  '';
+
   passwordDescription = ''
-    The options {option}`hashedPassword`,
-    {option}`password` and {option}`hashedPasswordFile`
-    controls what password is set for the user.
-    {option}`hashedPassword` overrides both
-    {option}`password` and {option}`hashedPasswordFile`.
-    {option}`password` overrides {option}`hashedPasswordFile`.
-    If none of these three options are set, no password is assigned to
-    the user, and the user will not be able to do password logins.
-    If the option {option}`users.mutableUsers` is true, the
-    password defined in one of the three options will only be set when
-    the user is created for the first time. After that, you are free to
-    change the password with the ordinary user management commands. If
-    {option}`users.mutableUsers` is false, you cannot change
-    user passwords, they will always be set according to the password
-    options.
+    The {option}`initialHashedPassword`, {option}`hashedPassword`,
+    {option}`initialPassword`, {option}`password` and
+    {option}`hashedPasswordFile` options all control what password is set for
+    the user.
+
+    In a system where [](#opt-systemd.sysusers.enable) is `false`, typically
+    only one of {option}`hashedPassword`, {option}`password`, or
+    {option}`hashedPasswordFile` will be set.
+
+    In a system where [](#opt-systemd.sysusers.enable) is `true`, typically
+    only one of {option}`initialPassword`, {option}`initialHashedPassword`,
+    or {option}`hashedPasswordFile` will be set.
+
+    If the option {option}`users.mutableUsers` is true, the password defined
+    in one of the above password options will only be set when the user is
+    created for the first time. After that, you are free to change the
+    password with the ordinary user management commands. If
+    {option}`users.mutableUsers` is false, you cannot change user passwords,
+    they will always be set according to the password options.
+
+    If none of the password options are set, then no password is assigned to
+    the user, and the user will not be able to do password-based logins.
+
+    ${overrideDescription}
   '';
 
   hashedPasswordDescription = ''
     To generate a hashed password run `mkpasswd`.
 
-    If set to an empty string (`""`), this user will
-    be able to log in without being asked for a password (but not via remote
-    services such as SSH, or indirectly via {command}`su` or
-    {command}`sudo`). This should only be used for e.g. bootable
-    live systems. Note: this is different from setting an empty password,
-    which can be achieved using {option}`users.users.<name?>.password`.
+    If set to an empty string (`""`), this user will be able to log in without
+    being asked for a password (but not via remote services such as SSH, or
+    indirectly via {command}`su` or {command}`sudo`). This should only be used
+    for e.g. bootable live systems. Note: this is different from setting an
+    empty password, which can be achieved using
+    {option}`users.users.<name?>.password`.
 
-    If set to `null` (default) this user will not
-    be able to log in using a password (i.e. via {command}`login`
-    command).
+    If set to `null` (default) this user will not be able to log in using a
+    password (i.e. via {command}`login` command).
   '';
 
   userOpts = { name, config, ... }: {
@@ -55,7 +126,7 @@ let
 
       name = mkOption {
         type = types.passwdEntry types.str;
-        apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -113,7 +184,7 @@ let
 
       group = mkOption {
         type = types.str;
-        apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "";
         description = "The user's primary group.";
       };
@@ -133,7 +204,7 @@ let
       homeMode = mkOption {
         type = types.strMatching "[0-7]{1,5}";
         default = "700";
-        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
+        description = "The user's home directory mode in numeric format. See {manpage}`chmod(1)`. The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
       cryptHomeLuks = mkOption {
@@ -244,6 +315,7 @@ let
         default = null;
         description = ''
           Specifies the hashed password for the user.
+
           ${passwordDescription}
           ${hashedPasswordDescription}
         '';
@@ -257,6 +329,7 @@ let
           Warning: do not set confidential information here
           because it is world-readable in the Nix store. This option
           should only be used for public accounts.
+
           ${passwordDescription}
         '';
       };
@@ -270,6 +343,7 @@ let
           password. The password file is read on each system activation. The
           file should contain exactly one line, which should be the password in
           an encrypted form that is suitable for the `chpasswd -e` command.
+
           ${passwordDescription}
         '';
       };
@@ -292,9 +366,7 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
-          Note that the {option}`hashedPassword` option will override
-          this option if both are set.
-
+          ${passwordDescription}
           ${hashedPasswordDescription}
         '';
       };
@@ -314,8 +386,7 @@ let
           used for guest accounts or passwords that will be changed
           promptly.
 
-          Note that the {option}`password` option will override this
-          option if both are set.
+          ${passwordDescription}
         '';
       };
 
@@ -462,13 +533,13 @@ let
 
   idsAreUnique = set: idAttr: !(foldr (name: args@{ dup, acc }:
     let
-      id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
-      exists = builtins.hasAttr id acc;
-      newAcc = acc // (builtins.listToAttrs [ { name = id; value = true; } ]);
+      id = toString (getAttr idAttr (getAttr name set));
+      exists = hasAttr id acc;
+      newAcc = acc // (listToAttrs [ { name = id; value = true; } ]);
     in if dup then args else if exists
-      then builtins.trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
+      then trace "Duplicate ${idAttr} ${id}" { dup = true; acc = null; }
       else { dup = false; acc = newAcc; }
-    ) { dup = false; acc = {}; } (builtins.attrNames set)).dup;
+    ) { dup = false; acc = {}; } (attrNames set)).dup;
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
@@ -696,7 +767,7 @@ in {
       '';
     } else ""; # keep around for backwards compatibility
 
-    systemd.services.linger-users = lib.mkIf ((builtins.length lingeringUsers) > 0) {
+    systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
       wantedBy = ["multi-user.target"];
       after = ["systemd-logind.service"];
       requires = ["systemd-logind.service"];
@@ -862,7 +933,7 @@ in {
       [
         {
         assertion = (user.hashedPassword != null)
-        -> (builtins.match ".*:.*" user.hashedPassword == null);
+        -> (match ".*:.*" user.hashedPassword == null);
         message = ''
             The password hash of user "${user.name}" contains a ":" character.
             This is invalid and would break the login system because the fields
@@ -909,25 +980,33 @@ in {
 
     warnings =
       flip concatMap (attrValues cfg.users) (user: let
-        unambiguousPasswordConfiguration = 1 >= length (filter (x: x != null) ([
-          user.hashedPassword
-          user.hashedPasswordFile
-          user.password
+        passwordOptions = [
+          "hashedPassword"
+          "hashedPasswordFile"
+          "password"
         ] ++ optionals cfg.mutableUsers [
           # For immutable users, initialHashedPassword is set to hashedPassword,
           # so using these options would always trigger the assertion.
-          user.initialHashedPassword
-          user.initialPassword
-        ]));
+          "initialHashedPassword"
+          "initialPassword"
+        ];
+        unambiguousPasswordConfiguration = 1 >= length
+          (filter (x: x != null) (map (flip getAttr user) passwordOptions));
       in optional (!unambiguousPasswordConfiguration) ''
         The user '${user.name}' has multiple of the options
-        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
-        & `initialHashedPassword` set to a non-null value.
-        The options silently discard others by the order of precedence
-        given above which can lead to surprising results. To resolve this warning,
-        set at most one of the options above to a non-`null` value.
+        `initialHashedPassword`, `hashedPassword`, `initialPassword`, `password`
+        & `hashedPasswordFile` set to a non-null value.
+
+        ${multiplePasswordsWarning}
+        ${overrideOrderText cfg.mutableUsers}
+        The values of these options are:
+        ${concatMapStringsSep
+          "\n"
+          (value:
+            "* users.users.\"${user.name}\".${value}: ${generators.toPretty {} user.${value}}")
+          passwordOptions}
       '')
-      ++ builtins.filter (x: x != null) (
+      ++ filter (x: x != null) (
         flip mapAttrsToList cfg.users (_: user:
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the
@@ -950,7 +1029,7 @@ in {
         in
         if (allowsLogin user.hashedPassword
             && user.hashedPassword != ""  # login without password
-            && builtins.match mcf user.hashedPassword == null)
+            && match mcf user.hashedPassword == null)
         then ''
           The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please

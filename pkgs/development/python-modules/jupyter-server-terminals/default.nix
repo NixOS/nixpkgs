@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "jupyter_server_terminals";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-af7jBscGkbekXgfDxwAfrJSY1uEuIGfzzSsjaPdlYcY=";
     };
 
@@ -51,7 +51,7 @@ let
       description = "Jupyter Server Extension Providing Support for Terminals";
       homepage = "https://github.com/jupyter-server/jupyter_server_terminals";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

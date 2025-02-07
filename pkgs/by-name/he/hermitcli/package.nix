@@ -1,20 +1,21 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
   pname = "hermit";
-  version = "0.39.3";
+  version = "0.42.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "cashapp";
     repo = "hermit";
-    hash = "sha256-Cp96OOAEwBz83Fsex7DeI5LSp1gBhP8VP0I6bJAZC4U=";
+    hash = "sha256-OaYZMqe1bU5CKfs9IfFmTb3LUvJTFDAkU2uojZ9aRmw=";
   };
 
-  vendorHash = "sha256-vEv/sciynvxQE7KpxqpaSO1p5R3xYBK6o4EeuJ2JYmg=";
+  vendorHash = "sha256-GPIJ3IvTM2da962M1FLHKn8OitHDPZ9zp8nSLaeRq10=";
 
   subPackages = [ "cmd/hermit" ];
 

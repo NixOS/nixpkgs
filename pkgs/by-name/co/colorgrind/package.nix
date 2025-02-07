@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  perl
+  perl,
 }:
 stdenvNoCC.mkDerivation {
   pname = "colorgrind";

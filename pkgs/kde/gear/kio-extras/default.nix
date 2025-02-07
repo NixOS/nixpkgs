@@ -9,7 +9,7 @@
   libimobiledevice,
   gperf,
   libtirpc,
-  openexr,
+  openexr_3,
   taglib,
   shared-mime-info,
   libappimage,
@@ -19,7 +19,11 @@
 mkKdeDerivation {
   pname = "kio-extras";
 
-  extraNativeBuildInputs = [pkg-config shared-mime-info];
+  extraNativeBuildInputs = [
+    pkg-config
+    gperf
+    shared-mime-info
+  ];
   extraBuildInputs = [
     qt5compat
     qtsvg
@@ -30,7 +34,7 @@ mkKdeDerivation {
     libimobiledevice
     gperf
     libtirpc
-    openexr
+    openexr_3
     taglib
     libappimage
     xorg.libXcursor

@@ -15,13 +15,11 @@
   scipy,
   setuptools-scm,
   setuptools,
-  tomli,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "asdf-astropy";
-  version = "0.6.1";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "asdf-astropy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dOd9QdBOu7QotRiHkXJoIqaHG6U9odTlRmy22/nvvuw=";
+    tag = version;
+    hash = "sha256-xtDpKlAExMTYNopS9cAhLU2ZnHhtHHaV3KjWCq0yapE=";
   };
 
   nativeBuildInputs = [

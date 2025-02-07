@@ -1,12 +1,27 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre_headless,
+  linkFarm,
+  makeWrapper,
+  plugins ? [ ],
+}:
+let
+  pluginsDir = linkFarm "reposilite-plugins" (
+    builtins.map (p: {
+      name = (builtins.parseDrvName p.name).name + ".jar";
+      path = p.outPath or p;
+    }) plugins
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
-  version = "3.5.13";
+  version = "3.5.20";
 
   src = fetchurl {
     url = "https://maven.reposilite.com/releases/com/reposilite/reposilite/${finalAttrs.version}/reposilite-${finalAttrs.version}-all.jar";
-    hash = "sha256-G9J1nOK1dM8XC+3Mj8uUnNvM5BiUPzOIRT/T5CZzvqo=";
+    hash = "sha256-IdUHtulkSKvXatAs+BmzXgwv9oJz1XeRVtpEyIZ7BY4=";
   };
 
   dontUnpack = true;
@@ -19,7 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib
     cp $src $out/lib/reposilite
     makeWrapper ${jre_headless}/bin/java $out/bin/reposilite \
-      --add-flags "-Xmx40m -jar $out/lib/reposilite"
+      --add-flags "-Xmx40m -jar $out/lib/reposilite ${
+        lib.optionalString (plugins != [ ]) "--plugin-directory ${pluginsDir}"
+      }"
 
     runHook postInstall
   '';
@@ -29,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dzikoysk/reposilite";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jamalam ];
+    maintainers = with lib.maintainers; [
+      jamalam
+      uku3lig
+    ];
     inherit (jre_headless.meta) platforms;
     mainProgram = "reposilite";
   };

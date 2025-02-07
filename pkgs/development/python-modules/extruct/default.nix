@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "extruct";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "extruct";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6lAb17EoR0FKyIOb9hk1jcpmPtZ7vClfuCrDZ83XBeg=";
+    tag = "v${version}";
+    hash = "sha256-CfhIqbhrZkJ232grhHxrmj4H1/Bq33ZXe8kovSOWSK0=";
   };
 
   nativeBuildInputs = [ setuptools ];

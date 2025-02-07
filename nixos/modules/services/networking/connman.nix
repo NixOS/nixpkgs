@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.connman;
@@ -9,8 +14,9 @@ let
     ${cfg.extraConfig}
   '';
   enableIwd = cfg.wifi.backend == "iwd";
-in {
-  meta.maintainers = with lib.maintainers; [ AndersonTorres ];
+in
+{
+  meta.maintainers = with lib.maintainers; [ ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
@@ -54,7 +60,13 @@ in {
 
       networkInterfaceBlacklist = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
+        default = [
+          "vmnet"
+          "vboxnet"
+          "virbr"
+          "ifb"
+          "ve"
+        ];
         description = ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
@@ -62,7 +74,10 @@ in {
 
       wifi = {
         backend = lib.mkOption {
-          type = lib.types.enum [ "wpa_supplicant" "iwd" ];
+          type = lib.types.enum [
+            "wpa_supplicant"
+            "iwd"
+          ];
           default = "wpa_supplicant";
           description = ''
             Specify the Wi-Fi backend used.
@@ -85,33 +100,39 @@ in {
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = !config.networking.useDHCP;
-      message = "You can not use services.connman with networking.useDHCP";
-    }{
-      # TODO: connman seemingly can be used along network manager and
-      # connmanFull supports this - so this should be worked out somehow
-      assertion = !config.networking.networkmanager.enable;
-      message = "You can not use services.connman with networking.networkmanager";
-    }];
+    assertions = [
+      {
+        assertion = !config.networking.useDHCP;
+        message = "You can not use services.connman with networking.useDHCP";
+      }
+      {
+        # TODO: connman seemingly can be used along network manager and
+        # connmanFull supports this - so this should be worked out somehow
+        assertion = !config.networking.networkmanager.enable;
+        message = "You can not use services.connman with networking.networkmanager";
+      }
+    ];
 
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ] ++ lib.optional enableIwd "iwd.service";
+      after = lib.optional enableIwd "iwd.service";
       requires = lib.optional enableIwd "iwd.service";
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
-        ExecStart = toString ([
-          "${cfg.package}/sbin/connmand"
-          "--config=${configFile}"
-          "--nodaemon"
-        ] ++ lib.optional enableIwd "--wifi=iwd_agent"
-          ++ cfg.extraFlags);
+        ExecStart = toString (
+          [
+            "${cfg.package}/sbin/connmand"
+            "--config=${configFile}"
+            "--nodaemon"
+          ]
+          ++ lib.optional enableIwd "--wifi=iwd_agent"
+          ++ cfg.extraFlags
+        );
         StandardOutput = "null";
       };
     };
@@ -119,7 +140,6 @@ in {
     systemd.services.connman-vpn = lib.mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ];
       before = [ "connman.service" ];
       serviceConfig = {
         Type = "dbus";

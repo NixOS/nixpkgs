@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vnote";
-  version = "3.18.0";
+  version = "3.18.2";
 
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = "vnote";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OpQjMngSEnmtTMLXLllDlIzucdSLSqdFU4ZtPb7ytvQ=";
+    hash = "sha256-2yNhWDExxg5A6DgGtKAtql3HsJuYG1YM/NjUJ718jRw=";
   };
 
   nativeBuildInputs = [

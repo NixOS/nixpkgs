@@ -6,6 +6,7 @@
   fetchFromGitHub,
   incremental,
   pythonOlder,
+  pytest-asyncio,
   pytestCheckHook,
   setuptools,
 }:
@@ -20,11 +21,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "aiolyric";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pN/F4Rdov06sm1yfJQEzmWyujWVeVU+bNGGkgnN4jYw=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
+  '';
+
+  build-system = [
+    incremental
+    setuptools
+  ];
 
   dependencies = [
     aiohttp
@@ -33,12 +42,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # AssertionError, https://github.com/timmo001/aiolyric/issues/61
-    "test_priority"
   ];
 
   pythonImportsCheck = [ "aiolyric" ];

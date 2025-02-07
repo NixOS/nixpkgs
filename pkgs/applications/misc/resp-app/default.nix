@@ -1,21 +1,21 @@
-{ stdenv
-, mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, brotli
-, lz4
-, pyotherside
-, python3
-, python3Packages
-, qtbase
-, qtcharts
-, qmake
-, qttools
-, rdbtools
-, snappy
-, wrapQtAppsHook
-, zstd
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  brotli,
+  lz4,
+  pyotherside,
+  python3,
+  python3Packages,
+  qtbase,
+  qtcharts,
+  qmake,
+  qttools,
+  rdbtools,
+  snappy,
+  wrapQtAppsHook,
+  zstd,
 }:
 
 let
@@ -39,7 +39,7 @@ mkDerivation rec {
     repo = "RedisDesktopManager";
     fetchSubmodules = true;
     rev = version;
-    sha256 = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
+    hash = "sha256-5eI3J2RsYE5Ejb1r8YkgzmGX2FyaCLFD0lc10J+fOT4=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,6 @@ mkDerivation rec {
     snappy
     zstd
   ] ++ pythonPath;
-
 
   pythonPath = with python3Packages; [
     bitstring
@@ -100,6 +99,6 @@ mkDerivation rec {
     homepage = "https://resp.app/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

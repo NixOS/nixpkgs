@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-workflows";
-  version = "1.14.3";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IUC5f3gDe5Z9QYVXaIZ3L+F7530q6ZltIHozTtWnf/4=";
+    pname = "google_cloud_workflows";
+    inherit version;
+    hash = "sha256-R53c1m6VYhkLlWl1jTR++R5ahWUTvEvtsRUPQ1F3Das=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

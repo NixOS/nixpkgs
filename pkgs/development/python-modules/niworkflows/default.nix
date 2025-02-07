@@ -30,26 +30,24 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.10.2";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
-    rev = "refs/tags/${version}";
-    hash = "sha256-29ZxLuKrvgCIOMMCUpi0HHhlNlgqUrUrSCiikwecmKw=";
+    tag = version;
+    hash = "sha256-OWsfz5YDPy1qPpXomr4YiuCDf40Fy1pW8cNHPjHfqp4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace '"traits < 6.4"' '"traits"'
-  '';
+  pythonRelaxDeps = [ "traits" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     importlib-resources
     jinja2
@@ -96,7 +94,7 @@ buildPythonPackage rec {
     description = "Common workflows for MRI (anatomical, functional, diffusion, etc.)";
     mainProgram = "niworkflows-boldref";
     homepage = "https://github.com/nipreps/niworkflows";
-    changelog = "https://github.com/nipreps/niworkflows/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/nipreps/niworkflows/blob/${src.tag}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

@@ -5,12 +5,10 @@
   nix-update-script,
   packaging,
   platformdirs,
-  pydantic_1,
+  pydantic,
   pyyaml,
   requests-unixsocket,
-  setuptools,
   setuptools-scm,
-  urllib3,
   pytest-check,
   pytest-mock,
   pytestCheckHook,
@@ -22,15 +20,15 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "1.24.0";
+  version = "2.1.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-providers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CkaJ8taTsnBpCffe/Eu4/FGpMwKcg3yeLVAahCyEsII=";
+    tag = version;
+    hash = "sha256-+j3uwvecffl8cK+yNidWbL243VnPkX72DMYv8RXMaXE=";
   };
 
   patches = [
@@ -52,24 +50,19 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>=" \
-      --replace-fail "urllib3<2" "urllib3"
+      --replace-fail "setuptools==73.0.1" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     platformdirs
-    pydantic_1
+    pydantic
     pyyaml
     requests-unixsocket
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_providers" ];
@@ -109,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

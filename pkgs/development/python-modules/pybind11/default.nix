@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   ninja,
   setuptools,
@@ -27,52 +26,18 @@ let
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
   } ./setup-hook.sh;
-
-  # clang 16 defaults to C++17, which results in the use of aligned allocations by pybind11.
-  # libc++ supports aligned allocations via `posix_memalign`, which is available since 10.6,
-  # but clang has a check hard-coded requiring 10.13 because that’s when Apple first shipped a
-  # support for C++17 aligned allocations on macOS.
-  # Tell clang we’re targeting 10.13 on x86_64-darwin while continuing to use the default SDK.
-  stdenv' =
-    if stdenv.isDarwin && stdenv.isx86_64 then
-      python.stdenv.override (oldStdenv: {
-        buildPlatform = oldStdenv.buildPlatform // {
-          darwinMinVersion = "10.13";
-        };
-        targetPlatform = oldStdenv.targetPlatform // {
-          darwinMinVersion = "10.13";
-        };
-        hostPlatform = oldStdenv.hostPlatform // {
-          darwinMinVersion = "10.13";
-        };
-      })
-    else
-      python.stdenv;
 in
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.12.0";
+  version = "2.13.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    rev = "v${version}";
-    hash = "sha256-DVkI5NxM5uME9m3PFYVpJOOa2j+yjL6AJn76fCTv2nE=";
+    tag = "v${version}";
+    hash = "sha256-SNLdtrOjaC3lGHN9MAqTf51U9EzNKQLyTMNPe0GcdrU=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/pybind/pybind11/pull/5127
-      url = "https://github.com/pybind/pybind11/commit/540bef2d2c9fb54fa7c1474ee1af959ce90f2b32.patch";
-      hash = "sha256-0ZWlH/5kQ3An/tu6ulOXO2k32asATrr1mlI4nGjIqaI=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "timeout=300" ""
-  '';
 
   build-system = [
     cmake
@@ -82,8 +47,6 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
   propagatedNativeBuildInputs = [ setupHook ];
-
-  stdenv = stdenv';
 
   dontUseCmakeBuildDir = true;
 
@@ -129,7 +92,7 @@ buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # expects KeyError, gets RuntimeError
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"

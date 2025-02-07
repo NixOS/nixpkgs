@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, cargo
-, desktop-file-utils
-, itstool
-, meson
-, ninja
-, pkg-config
-, jq
-, moreutils
-, rustc
-, wrapGAppsHook4
-, gtk4
-, lcms2
-, libadwaita
-, libgweather
-, libseccomp
-, glycin-loaders
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cargo,
+  desktop-file-utils,
+  itstool,
+  meson,
+  ninja,
+  pkg-config,
+  jq,
+  moreutils,
+  rustc,
+  wrapGAppsHook4,
+  gtk4,
+  lcms2,
+  libadwaita,
+  libgweather,
+  libseccomp,
+  glycin-loaders,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "46.2";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OhWj+c+PiJp+ZC45AimfeSGKkAHAjFY3TgWRT/71qzA=";
+    hash = "sha256-jckmgpqcM4gAyPQytaNHJG5ty9mtLdGiTEmOr90+ias=";
   };
 
   patches = [
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
+    changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Simple image viewer application written with GTK4 and Rust";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jk ] ++ teams.gnome.members;

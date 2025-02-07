@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "beanhub-extract";
-  version = "0.1.3";
+  version = "0.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-extract";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Uw9bSVOpiIALkgA77OrqAcDWcEafVSnp4iILa4Jkykc=";
+    tag = version;
+    hash = "sha256-L3TM3scBJGlOXXxeJAkiqMkpBmhJZB6b+IQT2DGIfO0=";
   };
 
   build-system = [ poetry-core ];

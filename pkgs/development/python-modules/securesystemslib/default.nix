@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "0.31.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,18 +27,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-REi38rIVZmWawFGcrPl9QzSthW4jHZDr/0ug7kJRz3Y=";
+    tag = "v${version}";
+    hash = "sha256-HAYsmsW5GKLmfq9FVVsME+tE7Qg0jx9YIWw1UQWwV2c=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.18.0" "hatchling"
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ hatchling ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     PySPX = [ pyspx ];
     awskms = [
       boto3
@@ -70,7 +65,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "securesystemslib" ];
 

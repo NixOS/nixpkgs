@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "objax";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
 
@@ -77,5 +77,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/google/objax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    # Tests test_syncbn_{0,1,2}d and other tests from tests/parallel.py fail
+    broken = true;
   };
 }

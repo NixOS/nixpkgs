@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alt-tab-macos";
-  version = "6.70.1";
+  version = "7.19.1";
 
   src = fetchurl {
     url = "https://github.com/lwouis/alt-tab-macos/releases/download/v${finalAttrs.version}/AltTab-${finalAttrs.version}.zip";
-    hash = "sha256-4LdlLoc6hMF1jIlHeC89m1unStCsID6/nWJuuYUX96o=";
+    hash = "sha256-eT/HZDBDtOh9uQEffLhlBXfWuPSM/bnpgp5OFnSuCBk=";
   };
 
   sourceRoot = ".";
@@ -37,7 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       donteatoreo
       emilytrau
-      Enzime
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

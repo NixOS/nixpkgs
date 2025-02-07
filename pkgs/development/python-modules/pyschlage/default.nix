@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2024.6.0";
+  version = "2024.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,16 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pyschlage";
-    rev = "refs/tags/${version}";
-    hash = "sha256-mfrESWXkGV6r+VNw1dHRpIEtfZsLdsCf3D74ydgcy58=";
+    tag = version;
+    hash = "sha256-ftoBchKK3I0kzw70MPaAlo/M2YLUx8OFwMNkJQ3itbo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycognito
     requests
   ];

@@ -1,25 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, makeDesktopItem
-, copyDesktopItems
-, unzip
-, xdg-utils
-, gtk3
-, jdk
-, gradle
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  xdg-utils,
+  gtk3,
+  jdk,
+  gradle_8,
+  python3,
 }:
-
 let
-  versionReplace = {
-    easybind = {
-      snapshot = "2.2.1-SNAPSHOT";
-      pin = "2.2.1-20230117.075740-16";
-    };
-  };
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 in
 stdenv.mkDerivation rec {
   version = "5.13";
@@ -47,36 +42,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version postPatch;
-
-    nativeBuildInputs = [ gradle perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon downloadDependencies -Dos.arch=amd64
-      gradle --no-daemon downloadDependencies -Dos.arch=aarch64
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2/ -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
-        | sh
-      mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
-        $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashMode = "recursive";
-    outputHash = "sha256-lpFIhvPgkzIsHR6IVnn+oPhdSjo0yOIw7USo2+SJCVQ=";
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
   };
 
   postPatch = ''
-    # Pin the version
-    substituteInPlace build.gradle \
-      --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
-        'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
-
     # Disable update check
     substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
       --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
@@ -85,30 +56,6 @@ stdenv.mkDerivation rec {
     # Find OpenOffice/LibreOffice binary
     substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
       --replace '/usr' '/run/current-system/sw'
-
-    # Add back downloadDependencies task for deps download which is removed upstream in https://github.com/JabRef/jabref/pull/10326
-    cat <<EOF >> build.gradle
-    task downloadDependencies {
-      description "Pre-downloads *most* dependencies"
-      doLast {
-        configurations.getAsMap().each { name, config ->
-          println "Retrieving dependencies for $name"
-          try {
-            config.files
-          } catch (e) {
-            // some cannot be resolved, just log them
-            project.logger.info e.message
-          }
-        }
-      }
-    }
-    EOF
-  '';
-
-  preBuild = ''
-    # Use the local packages from -deps
-    sed -i -e '/repositories {/a maven { url uri("${deps}") }' build.gradle
-    sed -i -e '1i pluginManagement { repositories { maven { url uri("${deps}") } } }' settings.gradle
   '';
 
   nativeBuildInputs = [
@@ -124,19 +71,13 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  gradleFlags = [
+    "-PprojVersion=${version}"
+    "-Dorg.gradle.java.home=${jdk}"
+  ];
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle \
-      --offline \
-      --no-daemon \
-      -PprojVersion="${version}" \
-      -PprojVersionInfo="${version} NixOS" \
-      -Dorg.gradle.java.home=${jdk} \
-      assemble
-
-    runHook postBuild
+  preBuild = ''
+    gradleFlagsArray+=(-PprojVersionInfo="${version} NixOS")
   '';
 
   dontWrapGApps = true;
@@ -161,6 +102,9 @@ stdenv.mkDerivation rec {
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 
+    # Temp fix: openjfx doesn't build with webkit
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
+
     runHook postInstall
   '';
 
@@ -178,6 +122,13 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/JabRef $out/bin/jabref
   '';
 
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle nixDownloadDeps -Dos.arch=amd64
+    gradle nixDownloadDeps -Dos.arch=aarch64
+  '';
+
   meta = with lib; {
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
@@ -187,7 +138,13 @@ stdenv.mkDerivation rec {
       binaryNativeCode # source bundles dependencies as jars
     ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ gebner linsui ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      gebner
+      linsui
+    ];
   };
 }

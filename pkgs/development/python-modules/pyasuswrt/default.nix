@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ollo69";
     repo = "pyasuswrt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kg475AWmc0i/W4dBg8jFmNyz3V67xjvzPkSlS09/9Oc=";
   };
 
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ollo69/pyasuswrt";
     changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

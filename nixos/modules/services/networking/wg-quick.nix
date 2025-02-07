@@ -57,6 +57,15 @@ let
         '';
       };
 
+      generatePrivateKeyFile = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Automatically generate a private key with
+          {command}`wg genkey`, at the privateKeyFile location.
+        '';
+      };
+
       privateKeyFile = mkOption {
         example = "/private/wireguard_key";
         type = with types; nullOr str;
@@ -185,7 +194,8 @@ let
       allowedIPs = mkOption {
         example = [ "10.192.122.3/32" "10.192.124.1/24" ];
         type = with types; listOf str;
-        description = ''List of IP (v4 or v6) addresses with CIDR masks from
+        description = ''
+        List of IP (v4 or v6) addresses with CIDR masks from
         which this peer is allowed to send incoming traffic and to which
         outgoing traffic for this peer is directed. The catch-all 0.0.0.0/0 may
         be specified for matching all IPv4 addresses, and ::/0 may be specified
@@ -196,7 +206,8 @@ let
         default = null;
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
-        description = ''Endpoint IP or hostname of the peer, followed by a colon,
+        description = ''
+        Endpoint IP or hostname of the peer, followed by a colon,
         and then a port number of the peer.'';
       };
 
@@ -204,7 +215,8 @@ let
         default = null;
         type = with types; nullOr int;
         example = 25;
-        description = ''This is optional and is by default off, because most
+        description = ''
+        This is optional and is by default off, because most
         users will not need it. It represents, in seconds, between 1 and 65535
         inclusive, how often to send an authenticated empty packet to the peer,
         for the purpose of keeping a stateful firewall or NAT mapping valid
@@ -218,9 +230,24 @@ let
 
   writeScriptFile = name: text: ((pkgs.writeShellScriptBin name text) + "/bin/${name}");
 
+  generatePrivateKeyScript = privateKeyFile: ''
+    set -e
+
+    # If the parent dir does not already exist, create it.
+    # Otherwise, does nothing, keeping existing permissions intact.
+    mkdir -p --mode 0755 "${dirOf privateKeyFile}"
+
+    if [ ! -f "${privateKeyFile}" ]; then
+      # Write private key file with atomically-correct permissions.
+      (set -e; umask 077; wg genkey > "${privateKeyFile}")
+    fi
+  '';
+
   generateUnit = name: values:
     assert assertMsg (values.configFile != null || ((values.privateKey != null) != (values.privateKeyFile != null))) "Only one of privateKey, configFile or privateKeyFile may be set";
+    assert assertMsg (values.generatePrivateKeyFile == false || values.privateKeyFile != null) "generatePrivateKeyFile requires privateKeyFile to be set";
     let
+      generateKeyScriptFile = if values.generatePrivateKeyFile then writeScriptFile "generatePrivateKey.sh" (generatePrivateKeyScript values.privateKeyFile) else null;
       preUpFile = if values.preUp != "" then writeScriptFile "preUp.sh" values.preUp else null;
       postUp =
             optional (values.privateKeyFile != null) "wg set ${name} private-key <(cat ${values.privateKeyFile})" ++
@@ -247,6 +274,7 @@ let
         optionalString (values.mtu != null) "MTU = ${toString values.mtu}\n" +
         optionalString (values.privateKey != null) "PrivateKey = ${values.privateKey}\n" +
         optionalString (values.listenPort != null) "ListenPort = ${toString values.listenPort}\n" +
+        optionalString (generateKeyScriptFile != null) "PreUp = ${generateKeyScriptFile}\n" +
         optionalString (preUpFile != null) "PreUp = ${preUpFile}\n" +
         optionalString (postUpFile != null) "PostUp = ${postUpFile}\n" +
         optionalString (preDownFile != null) "PreDown = ${preDownFile}\n" +

@@ -10,7 +10,7 @@
   pyinstaller-versionfile,
   pytest-order,
   pytestCheckHook,
-  python3,
+  python,
   pythonOlder,
   requests,
   setuptools,
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "tabcmd";
-  version = "2.0.14";
+  version = "2.0.17";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wyfKy0g2btdNMNviCd7brB+lwZvPcZ3/DnymdVjCGFg=";
+    hash = "sha256-7qVh8FSor6ZcHGMB/h25RQjMIOwCUgKfr+QDuGa7mas=";
   };
 
   prePatch = ''
@@ -45,7 +45,6 @@ buildPythonPackage rec {
     "tableauserverclient"
     "urllib3"
   ];
-
 
   build-system = [ setuptools ];
 
@@ -79,7 +78,7 @@ buildPythonPackage rec {
     cp -r build/lib/tabcmd/__main__.py $out/bin/
 
     # Create a 'tabcmd' script with python3 shebang
-    echo "#!${python3}/bin/python3" > $out/bin/tabcmd
+    echo "#!${python.interpreter}" > $out/bin/tabcmd
 
     # Append __main__.py contents
     cat $out/bin/__main__.py >> $out/bin/tabcmd
@@ -91,11 +90,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tabcmd" ];
 
   meta = with lib; {
+    broken = true;
     description = "Command line client for working with Tableau Server";
     homepage = "https://github.com/tableau/tabcmd";
     changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tabcmd";
   };
 }

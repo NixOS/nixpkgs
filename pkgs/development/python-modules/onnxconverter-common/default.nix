@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   numpy,
   packaging,
   protobuf,
@@ -14,16 +15,22 @@ buildPythonPackage rec {
   pname = "onnxconverter-common";
   version = "1.14.0";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxconverter-common";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NbHyjLcr/Gq1zRiJW3ZBpEVQGVQGhp7SmfVd5hBIi2o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [ "protobuf" ];
+
+  dependencies = [
     numpy
     packaging
     protobuf

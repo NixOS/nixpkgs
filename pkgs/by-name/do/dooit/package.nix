@@ -1,43 +1,58 @@
-{ lib
-, fetchFromGitHub
-, dooit
-, python3
-, testers
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  dooit,
+  python311,
+  testers,
+  nix-update-script,
+  extraPackages ? [ ],
 }:
-
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "2.2.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "kraanzu";
+    owner = "dooit-org";
     repo = "dooit";
-    rev = "v${version}";
-    hash = "sha256-GtXRzj+o+FClleh73kqelk0JrSyafZhf847lX1BiS9k=";
+    tag = "v${version}";
+    hash = "sha256-tqSWDW3nj+nMt7t5vgSqWvtx7YA3y2GV29gI1MYFMhc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = [
-    "textual"
     "tzlocal"
+    "textual"
+    "sqlalchemy"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    pyperclip
-    python-dateutil
-    pyyaml
-    textual
-    tzlocal
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      pyperclip
+      textual
+      pyyaml
+      python-dateutil
+      sqlalchemy
+      platformdirs
+      tzlocal
+      click
+    ]
+    ++ extraPackages;
 
-  # No tests available
-  doCheck = false;
+  # /homeless-shelter
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+    faker
+  ];
 
   passthru = {
     tests.version = testers.testVersion {
@@ -50,10 +65,14 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "TUI todo manager";
-    homepage = "https://github.com/kraanzu/dooit";
-    changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/dooit-org/dooit";
+    changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ khaneliman wesleyjrz ];
+    maintainers = with maintainers; [
+      khaneliman
+      wesleyjrz
+      kraanzu
+    ];
     mainProgram = "dooit";
   };
 }

@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbader/schedule";
     changelog = "https://github.com/dbader/schedule/blob/${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,103 +1,81 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeBinaryWrapper
-, pkg-config
-, libGL
-, libxkbcommon
-, xorg
-, wayland
-, vulkan-headers
-, wine64Packages
-, fetchpatch
-, fetchFromGitLab
-, fetchurl
-,
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchurl,
+  pkg-config,
+  xorg,
+  wayland,
+  vulkan-headers,
+  wine64Packages,
+  libGL,
+  libxkbcommon,
+  makeBinaryWrapper,
+  nix-update-script,
 }:
 let
-  stagingPatch = fetchFromGitLab {
-    sha256 = "sha256-VQ4j4PuXRoXbCUZ16snVO+jRvuKD4Rjn14R7bhwdAco=";
-    domain = "gitlab.winehq.org";
-    owner = "wine";
-    repo = "wine-staging";
-    rev = "v9.2";
-  };
-
-  wine = wine64Packages.staging.overrideDerivation (oldAttrs: {
-    prePatch = ''
-      patchShebangs tools
-      cp -r ${stagingPatch}/patches ${stagingPatch}/staging .
-      chmod +w patches
-      patchShebangs ./patches/gitapply.sh
-      python3 ./staging/patchinstall.py --destdir="$PWD" --all
-    '';
-    patches = (oldAttrs.patches or [ ])
-      ++ [
+  wine = (wine64Packages.staging.override { embedInstallers = true; }).overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches or [ ] ++ [
       (fetchurl {
-        name = "childwindow.patch";
-        hash = "sha256-u3mDvlbhQnfh2tUKb8jNJA0tTcLIaKVLfY8ktJmeRns=";
-        url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/9f43ce33a691afb50562d95adfc6719a3b58ddb7/patches/wine/childwindow.patch";
-      })
-      (fetchpatch {
-        name = "mouselock.patch";
-        hash = "sha256-0AGA4AQbxTL5BGVbm072moav7xVA3zpotYqM8pcEDa4=";
-        url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/9f43ce33a691afb50562d95adfc6719a3b58ddb7/patches/wine/mouselock.patch";
-      })
-      (fetchpatch {
-        name = "segregrevert.patch";
-        hash = "sha256-+3Nld81nG3GufI4jAF6yrWfkJmsSCOku39rx0Hov29c=";
-        url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/9f43ce33a691afb50562d95adfc6719a3b58ddb7/patches/wine/segregrevert.patch";
+        name = "loader-prefer-winedllpath.patch";
+        url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/3e07606350d803fa386eb4c358836a230819380d/patches/wine/loader-prefer-winedllpath.patch";
+        hash = "sha256-89wnr2rIbyw490hHwckB9g1GKCXm6BERnplfwEUlNOg=";
       })
     ];
-    src = fetchFromGitLab rec {
-      sha256 = "sha256-GlPH34dr9aHx7xvlcbtDMn/wrY//DP58ilXjhQXgihQ=";
-      domain = "gitlab.winehq.org";
-      owner = "wine";
-      repo = "wine";
-      rev = "wine-9.2";
-    };
   });
 in
 buildGoModule rec {
   pname = "vinegar";
-  version = "1.7.4";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     rev = "v${version}";
-    hash = "sha256-4tkcrUzW8la5WiDtGUvvsRzFqZM1gqnWWAzXc82hirM=";
+    hash = "sha256-qyBYPBXQgjnGA2LnghPFOd0AO6+sQcZPzPI0rlJvGHE=";
   };
 
-  vendorHash = "sha256-pi9FjKYXH8cqTx2rTRCyT4+pOM5HnIKosEcmcpbuywQ=";
+  vendorHash = "sha256-SDJIoZf/Doa/NrEBRL1WXvz+fyTDGRyG0bvQ0S8A+KA=";
 
-  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
-  buildInputs = [ libGL libxkbcommon xorg.libX11 xorg.libXcursor xorg.libXfixes wayland vulkan-headers wine ];
+  nativeBuildInputs = [
+    pkg-config
+    makeBinaryWrapper
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-    make PREFIX=$out
-    runHook postBuild
-  '';
+  buildInputs = [
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXfixes
+    wayland
+    vulkan-headers
+    wine
+    libGL
+    libxkbcommon
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    make PREFIX=$out install
-    runHook postInstall
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/vinegar \
-      --prefix PATH : ${lib.makeBinPath [wine]}
+      --prefix PATH : ${lib.makeBinPath [ wine ]}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Open-source, minimal, configurable, fast bootstrapper for running Roblox on Linux";
     homepage = "https://github.com/vinegarhq/vinegar";
     changelog = "https://github.com/vinegarhq/vinegar/releases/tag/v${version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "vinegar";
-    license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nyanbinary ];
   };
 }

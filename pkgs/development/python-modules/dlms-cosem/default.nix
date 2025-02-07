@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pwitab";
     repo = "dlms-cosem";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NeTaU8i18Zb39Y2JnYzr87Ozt7Rj074xusL4xaNe0q0=";
   };
 

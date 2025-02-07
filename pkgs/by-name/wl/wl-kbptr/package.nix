@@ -10,18 +10,19 @@
   stdenv,
   wayland,
   wayland-protocols,
+  wayland-scanner,
 }:
 let
   pname = "wl-kbptr";
-  version = "0.2.1";
+  version = "0.2.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "moverest";
     repo = "wl-kbptr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bA4PbWJNM4qWDF5KfNEgeQ5Z/r/Aw3wL8YUMSnzUo0w=";
+    tag = "v${version}";
+    hash = "sha256-4OWy5Q+NSKgzDn12aflZ+YAfacLeOTIhOojiJ2WiqQg=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

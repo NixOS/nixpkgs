@@ -1,20 +1,21 @@
-{ lib
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, directoryListingUpdater
-, fetchurl
-, stdenv
+{
+  lib,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  directoryListingUpdater,
+  fetchurl,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3WZ77KVDNitdIcXPFf0CMXtjDvEXi91Jr7mpeV09Wt4=";
+    hash = "sha256-HIzZcH/yGBRX/9UyFuRyusAkzgzhREkMRNaP+6vQC+E=";
   };
 
   buildInputs = [
@@ -39,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lbreakouthd";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

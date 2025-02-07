@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "2.23.0";
+  version = "3.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UrX8b3CxY1FvrWEKr8CI++eI9QHVu+HV9FjNw/y6/Sw=";
+    pname = "google_cloud_kms";
+    inherit version;
+    hash = "sha256-20ooqpQU2GdAKlRxEeVZgDhfkgo9kt2smE4ANqQXtwQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -57,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-kms-v${version}/packages/google-cloud-kms/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

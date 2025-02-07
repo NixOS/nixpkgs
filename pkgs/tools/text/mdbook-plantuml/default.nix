@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, stdenv
-, rustPlatform
-, pkg-config
-, openssl
-, CoreServices
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  stdenv,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,18 +29,21 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-3HlnhRexfFcAuk1RoatWORMJvYRrnoEft5ys6j3t9S0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JI5UdLb2ZcPcAIvprVdpQRGMzc0Qu0awIUpMjNyaAPQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
     mainProgram = "mdbook-plantuml";
     homepage = "https://github.com/sytsereitsma/mdbook-plantuml";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ jcouyang matthiasbeyer ];
+    maintainers = with maintainers; [
+      jcouyang
+      matthiasbeyer
+    ];
   };
 }

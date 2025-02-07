@@ -1,64 +1,71 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, ninja
-, clangStdenv
-, pkg-config
-, alsa-lib
-, avahi
-, avahi-compat
-, bluez
-, boost185
-, fmt
-, ffmpeg
-, fftw
-, flac
-, git
-, gnutls
-, lame
-, libcoap
-, libjack2
-, libopus
-, libsamplerate
-, libsndfile
-, libvorbis
-, lilv
-, lv2
-, mpg123
-, pipewire
-, portaudio
-, qt6
-, rapidfuzz-cpp
-, re2
-, rubberband
-, snappy
-, SDL2
-, spdlog
-, suil
-, udev
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  clangStdenv,
+  pkg-config,
+  alsa-lib,
+  avahi,
+  avahi-compat,
+  bluez,
+  boost,
+  fmt,
+  ffmpeg,
+  fftw,
+  flac,
+  git,
+  gnutls,
+  lame,
+  libcoap,
+  libjack2,
+  libopus,
+  libsamplerate,
+  libsndfile,
+  libvorbis,
+  lilv,
+  lv2,
+  mpg123,
+  pipewire,
+  portaudio,
+  qt6,
+  rapidfuzz-cpp,
+  re2,
+  rubberband,
+  snappy,
+  SDL2,
+  spdlog,
+  suil,
+  udev,
 }:
 
 # TODO: figure out LLVM jit
 # assert lib.versionAtLeast llvm.version "15";
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.2.3-3";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
-    rev = "v3.2.3-3";
-    hash = "sha256-xRqsMKwuejbl+5ljYMFhQv/j1MfnFH5MGIn9rCQG/ro=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PpIGlw3MmJYiLaKX+oHM7QUjlk6Bw/W2GwdkLgPK1Hg=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja git pkg-config qt6.qttools qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    git
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
-    boost185
+    boost
     avahi
     avahi-compat
     bluez
@@ -112,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSuil_INCLUDE_DIR=${suil}/include/suil-0"
   ];
 
-  # Needed for libraries that get dlopen'd
+  # Needed for libraries that get dlopen'd
   env.NIX_LDFLAGS = toString [
     "-lasound"
     "-llilv-0"
@@ -152,8 +159,11 @@ stdenv.mkDerivation (finalAttrs: {
       the creation of interactive shows, museum installations, intermedia
       digital artworks, interactive music and more in an intuitive user interface.
     '';
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jcelerier minijackson ];
+    maintainers = with maintainers; [
+      jcelerier
+      minijackson
+    ];
   };
 })

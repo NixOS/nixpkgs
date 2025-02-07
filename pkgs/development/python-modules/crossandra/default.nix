@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   result,
-  mypy
+  mypy,
 }:
 
 buildPythonPackage rec {
@@ -15,11 +15,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "crossandra";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/JhrjXRH7Rs2bUil9HRneBC9wlVYEyfwivjzb+eyRv8=";
   };
 
-  build-system = [ setuptools mypy ];
+  build-system = [
+    setuptools
+    mypy
+  ];
   dependencies = [ result ];
 
   pythonImportsCheck = [ "crossandra" ];
@@ -29,11 +32,11 @@ buildPythonPackage rec {
       --replace-fail "result ~= 0.9.0" "result >= 0.9.0"
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/crossandra/blob/${src.rev}/CHANGELOG.md";
     description = "Fast and simple enum/regex-based tokenizer with decent configurability";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://trag1c.github.io/crossandra";
-    maintainers = with maintainers; [ sigmanificient ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

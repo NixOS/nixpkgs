@@ -1,14 +1,17 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "9.1.0509";
+  version = "9.1.1046";
 
-  outputs = [ "out" "xxd" ];
+  outputs = [
+    "out"
+    "xxd"
+  ];
 
   src = fetchFromGitHub {
     owner = "vim";
     repo = "vim";
     rev = "v${version}";
-    hash = "sha256-CATjUalRjvVjEfWT5evFAk//Oj4iB1fDBsRU5MhDyn4=";
+    hash = "sha256-bH3p78fWUNQRhluUvqQ5uJ+PxNhz7T7wA/4zxUDH130=";
   };
 
   enableParallelBuilding = true;
@@ -34,11 +37,18 @@ rec {
 
   meta = with lib; {
     description = "Most popular clone of the VI editor";
-    homepage    = "http://www.vim.org";
-    license     = licenses.vim;
-    maintainers = with maintainers; [ das_j equirosa philiptaron ];
-    platforms   = platforms.unix;
+    homepage = "https://www.vim.org";
+    license = licenses.vim;
+    maintainers = with maintainers; [
+      das_j
+      equirosa
+      philiptaron
+    ];
+    platforms = platforms.unix;
     mainProgram = "vim";
-    outputsToInstall = [ "out" "xxd" ];
+    outputsToInstall = [
+      "out"
+      "xxd"
+    ];
   };
 }

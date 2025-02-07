@@ -1,11 +1,12 @@
+# shellcheck shell=bash
+
 premakeConfigurePhase() {
     runHook preConfigure
 
     local flagsArray=(
         ${premakefile:+--file=$premakefile}
-        $premakeFlags ${premakeFlagsArray[@]}
-        ${premakeBackend:-gmake}
     )
+    concatTo flagsArray premakeFlags premakeFlagsArray premakeBackend=gmake
 
     echoCmd 'configure flags' "${flagsArray[@]}"
 

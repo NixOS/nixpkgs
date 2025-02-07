@@ -1,10 +1,9 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, makeWrapper
-, wasm-pack
-, CoreServices
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  makeWrapper,
+  wasm-pack,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,13 +12,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
+    hash = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
   };
 
-  cargoSha256 = "sha256-i7MPmO9MoANZLzmR5gsD+v0gyDtFbzhsmE9xOsb88L0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9McjhdS6KrFgtWIaP0qKsUYpPxGQjNX7SM9gJ/aJGwc=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   postInstall = ''
     wrapProgram $out/bin/perseus \

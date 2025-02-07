@@ -14,16 +14,17 @@ rustPlatform.buildRustPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zwUiUDWdrmLF+Qj9Jy6JGXHaBskRnm+pMKW2GKGGeN8=";
+    hash = "sha256-zwUiUDWdrmLF+Qj9Jy6JGXHaBskRnm+pMKW2GKGGeN8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-O9/YvvFOaZ1F7HYO/AplWLz1vw0hysJEvGketk8zb9w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UnXWBq+oS7tXFCsOhlTkq0L1j8pqzXZ0QKrdYayLunA=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit Security ];
 
   cargoBuildFlags = [ "--package" "oxigraph_server" ];
 

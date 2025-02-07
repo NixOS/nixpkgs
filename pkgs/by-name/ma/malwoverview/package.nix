@@ -1,25 +1,26 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "malwoverview";
-  version = "5.4.5";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexandreborges";
     repo = "malwoverview";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8miPlWBQSOf153l70C4Ya7gWF6D/gTArzJ5FyR0nVwA=";
+    tag = "v${version}";
+    hash = "sha256-43LcrP89vhVFDRRRItFL6hl++mvdGoPugMwD3TEOSE0=";
   };
 
   pythonRemoveDeps = [
     "pathlib"
   ];
 
-  build-system  = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 

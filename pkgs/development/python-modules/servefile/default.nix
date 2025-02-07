@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sebageek";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hIqXwhmvstCslsCO973oK5FF2c8gZJ0wNUI/z8W+OjU=";
   };
 

@@ -4,31 +4,35 @@
   fetchFromGitHub,
   pythonOlder,
   stdenv,
+  bidict,
   packaging,
   setuptools,
-  dbus-next,
+  dbus-fast,
   rubicon-objc,
 }:
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "5.0.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qv63aX96iUzxZPKr3FZq7fuWh2fYmKV3JMmy7txT05w=";
+    repo = "desktop-notifier";
+    tag = "v${version}";
+    hash = "sha256-HynREkiPxv/1y1/ICVwqANIe9tAkIvdpDy4oXxQarec=";
   };
 
   build-system = [ setuptools ];
 
   dependencies =
-    [ packaging ]
-    ++ lib.optionals stdenv.isLinux [ dbus-next ]
+    [
+      bidict
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus-fast ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   # no tests available, do the imports check instead

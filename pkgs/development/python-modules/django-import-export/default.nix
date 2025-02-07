@@ -7,7 +7,6 @@
   fetchFromGitHub,
   psycopg2,
   python,
-  pythonOlder,
   pytz,
   setuptools-scm,
   tablib,
@@ -15,22 +14,19 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "4.0.9";
+  version = "4.3.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
-    rev = "refs/tags/${version}";
-    hash = "sha256-T7XnPxvqnLI3rd0xSZb2iOsgcOqiA/JrRh3rjCm5gG4=";
+    tag = version;
+    hash = "sha256-o21xT+gu1vuar/QJbXhg2hpHkrBCVOMhGAFngi32d10=";
   };
 
   pythonRelaxDeps = [ "tablib" ];
 
   build-system = [ setuptools-scm ];
-
 
   dependencies = [
     diff-match-patch
@@ -38,7 +34,7 @@ buildPythonPackage rec {
     tablib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ tablib ] ++ tablib.optional-dependencies.all;
     cli = [ tablib ] ++ tablib.optional-dependencies.cli;
     ods = [ tablib ] ++ tablib.optional-dependencies.ods;
@@ -52,7 +48,7 @@ buildPythonPackage rec {
     chardet
     psycopg2
     pytz
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   checkPhase = ''
     runHook preCheck

@@ -6,6 +6,7 @@
   cryptography,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   pytz,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.9.3";
+  version = "3.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,14 +23,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-T6R3w8ZatgB73/rM5GLS9dBp3E1rvbqHo+QS6GHHI4w=";
+    tag = "v${version}";
+    hash = "sha256-1Kr+KKL8o1qsu/ncwclsokPcO1QHYadul/f+/Nnv6SQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -41,7 +37,10 @@ buildPythonPackage rec {
     pytz
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bthome_ble" ];
 

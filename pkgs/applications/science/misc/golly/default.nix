@@ -1,15 +1,36 @@
-{lib, stdenv, fetchurl, wxGTK, perl, python3, zlib, libGLU, libGL, libX11, SDL2}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wxGTK,
+  python3,
+  zlib,
+  libGLU,
+  libGL,
+  libX11,
+  SDL2,
+}:
 stdenv.mkDerivation rec {
   pname = "golly";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
-    hash = "sha256-VpEoqSPaZMP/AGIYZAbk5R/f8Crqvx8pKYN1O9Bl6V0=";
-    url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
+    hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
+    url = "mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
   buildInputs = [
-    wxGTK perl python3 zlib libGLU libGL libX11 SDL2
+    wxGTK
+    python3
+    zlib
+    libGLU
+    libGL
+    libX11
+    SDL2
+  ];
+
+  nativeBuildInputs = [
+    (python3.withPackages (ps: [ ps.setuptools ]))
   ];
 
   setSourceRoot = ''
@@ -18,16 +39,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
-    sed -e 's@PERL_SHLIB@'"$(find "${perl}/lib/" -name libperl.so)"'@' -i wxprefs.cpp
     ! grep _SHLIB *.cpp
 
     grep /lib/libpython wxprefs.cpp
-    grep /libperl wxprefs.cpp
   '';
 
-  makeFlags=[
-    "-f" "makefile-gtk"
-    "ENABLE_SOUND=1" "ENABLE_PERL=1"
+  makeFlags = [
+    "-f"
+    "makefile-gtk"
+    "ENABLE_SOUND=1"
     "GOLLYDIR=${placeholder "out"}/share/golly"
   ];
 
@@ -45,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cellular automata simulation program";
     license = lib.licenses.gpl2;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };

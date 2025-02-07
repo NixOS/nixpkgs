@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Alir3z4";
     repo = "html2text";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1CLkTFR+/XQ428WjMF7wliyAG6CB+n8JSsLDdLHPO7I=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Alir3z4/html2text/";
     changelog = "https://github.com/Alir3z4/html2text/blob/${src.rev}/ChangeLog.rst";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "html2text";
   };
 }

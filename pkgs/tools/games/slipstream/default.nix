@@ -1,8 +1,12 @@
-{ lib, fetchFromGitHub, makeWrapper, maven, jdk }:
-let
-  mavenWithJdk = maven.override { inherit jdk; };
-in
-mavenWithJdk.buildMavenPackage rec {
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  maven,
+  jdk,
+}:
+
+maven.buildMavenPackage rec {
   pname = "slipstream";
   version = "1.9.1";
 
@@ -13,6 +17,7 @@ mavenWithJdk.buildMavenPackage rec {
     hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 
+  mvnJdk = jdk;
   mvnHash = "sha256-woOSkF5TuzaJ84EndryMoXTMbbK/V/BShM1k+WB8D/c=";
 
   nativeBuildInputs = [ makeWrapper ];

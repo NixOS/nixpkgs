@@ -21,7 +21,7 @@
   mitmproxy-rs,
   msgpack,
   passlib,
-  protobuf,
+  protobuf5,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -30,7 +30,7 @@
   setuptools,
   sortedcontainers,
   tornado,
-  urwid-mitmproxy,
+  urwid,
   wsproto,
   zstandard,
   # Additional check requirements
@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.3.1";
+  version = "11.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,16 +53,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rIyRY1FolbdoaI4OgFG7D2/mot8NiRHalgittPzledw=";
+    tag = "v${version}";
+    hash = "sha256-8PqyxTwDk8pJjBh+NUB5BkuTeeA51gxmzqT450Y1d4Q=";
   };
 
-
   pythonRelaxDeps = [
-    "aioquic"
-    "cryptography"
-    "pyperclip"
-    "tornado"
+    "passlib"
+    "protobuf"
+    "urwid"
   ];
 
   propagatedBuildInputs = [
@@ -81,7 +79,7 @@ buildPythonPackage rec {
     mitmproxy-rs
     msgpack
     passlib
-    protobuf
+    protobuf5
     publicsuffix2
     pyopenssl
     pyparsing
@@ -90,10 +88,10 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid-mitmproxy
+    urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis
@@ -125,7 +123,25 @@ buildPythonPackage rec {
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
+    "test_tun_mode"
     "test_wireguard"
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test_errorcheck"
+    "test_errorcheck"
+    "test_dns"
+    "test_order"
+  ];
+
+  disabledTestPaths = [
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test/mitmproxy/addons/test_dns_resolver.py"
+    "test/mitmproxy/tools/test_dump.py"
+    "test/mitmproxy/tools/test_main.py"
+    "test/mitmproxy/tools/web/test_app.py"
+    "test/mitmproxy/tools/web/test_app.py" # 2 out of 31 tests work
+    "test/mitmproxy/tools/web/test_master.py"
   ];
 
   dontUsePytestXdist = true;
@@ -135,7 +151,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.2.3";
+  version = "3.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-J+68YwjVhaMPlvLCMI/BdnUCQPDYU9u0pIvOYlbzWvs=";
+    tag = "v${version}";
+    hash = "sha256-ldeosRAjh60aB5db/ojtttvevhpKQa3wk7u8MpTq13Q=";
   };
 
   build-system = [ setuptools ];
@@ -101,12 +101,12 @@ buildPythonPackage rec {
       # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
       "test_functional_relation_extraction"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_parallel_execution"
       "test_py3k_jobs_option"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Bug and style checker for Python";
     homepage = "https://pylint.readthedocs.io/en/stable/";
     changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
@@ -119,7 +119,8 @@ buildPythonPackage rec {
       - symilar: an independent similarities checker
       - epylint: Emacs and Flymake compatible Pylint
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    mainProgram = "pylint";
   };
 }

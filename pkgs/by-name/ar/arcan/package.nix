@@ -2,6 +2,7 @@
   lib,
   SDL2,
   callPackage,
+  fetchpatch2,
   cmake,
   espeak-ng,
   ffmpeg,
@@ -28,7 +29,7 @@
   libxcb,
   libxkbcommon,
   makeWrapper,
-  mesa,
+  libgbm,
   mupdf,
   openal,
   openjpeg,
@@ -41,13 +42,14 @@
   valgrind,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   xcbutil,
   xcbutilwm,
   xz,
   # Boolean flags
   buildManPages ? true,
   useBuiltinLua ? true,
-  useEspeak ? !stdenv.isDarwin,
+  useEspeak ? !stdenv.hostPlatform.isDarwin,
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,
@@ -59,10 +61,19 @@
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.letoram-arcan) pname version src;
 
+  patches = [
+    # (encode) remove deprecated use of pts/channel-layout
+    (fetchpatch2 {
+      url = "https://github.com/letoram/arcan/commit/e717c1b5833bdc2dea7dc6f64eeaf39c683ebd26.patch?full_index=1";
+      hash = "sha256-nUmOWfphGtGiLehUa78EJWqTlD7SvqJgl8lnn90vTFU=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     makeWrapper
     pkg-config
+    wayland-scanner
   ] ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
@@ -90,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvncserver
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     mupdf
     openal
     openjpeg
@@ -118,7 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     "../src"
   ];
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   hardeningDisable = [ "format" ];
 

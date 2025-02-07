@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Module for stubbing";
     homepage = "https://github.com/alex/pretend";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

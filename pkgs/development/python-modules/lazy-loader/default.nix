@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "lazy_loader";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4Kid6yhm9C2liPoW+NlCsOiBZvv6iYt7hDunARc4PRY=";
   };
 
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scientific-python/lazy_loader";
     changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

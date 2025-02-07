@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, alsa-lib
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xoC1PtDQjkvoWb9x8A43ITo6xyYOv9hxH2pxiZBBvKI=";
   };
 
-  cargoHash = "sha256-cRAFnmgvzWLFAjB7H1rU4FdxMwm0J6d76kdFPoXpPMw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wD6djP2FQgJNL9EryRrv6NrEex0bnqDJmfYw+S2x508=";
 
   meta = {
     description = "Background CLI-based alarm system for *nix";

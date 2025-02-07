@@ -1,13 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
   versioningit,
-  wheel,
 
   # dependencies
   broadbean,
@@ -36,19 +34,16 @@
   websockets,
   wrapt,
   xarray,
-  importlib-metadata,
 
   # optional-dependencies
+  furo,
   jinja2,
   nbsphinx,
   pyvisa-sim,
   scipy,
   sphinx,
   sphinx-issues,
-  sphinx-rtd-theme,
   towncrier,
-  opencensus,
-  opencensus-ext-azure,
 
   # checks
   deepdiff,
@@ -64,22 +59,19 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.46.0";
+  version = "0.50.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CeAX3sBE21v68KnCe8z28WTc7zMPA7usRRGh+dNijjo=";
+    tag = "v${version}";
+    hash = "sha256-oNJVOz2FMMhUkYIajeWwRmHzLcXu5qTSQzjk0gciOnE=";
   };
 
   build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
   dependencies = [
@@ -108,11 +100,12 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     docs = [
       # autodocsumm
+      furo
       jinja2
       nbsphinx
       pyvisa-sim
@@ -122,16 +115,11 @@ buildPythonPackage rec {
       # sphinx-favicon
       sphinx-issues
       # sphinx-jsonschema
-      sphinx-rtd-theme
       # sphinxcontrib-towncrier
       towncrier
     ];
     loop = [
       # qcodes-loop
-    ];
-    opencensus = [
-      opencensus
-      opencensus-ext-azure
     ];
     refactor = [
       libcst
@@ -160,8 +148,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
     # Follow upstream with settings
     "-m 'not serial'"
     "--hypothesis-profile ci"
@@ -196,9 +182,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes" ];
 
+  # Remove the `asyncio_default_fixture_loop_scope` option as it has been introduced in newer `pytest-asyncio` v0.24
+  # which is not in nixpkgs yet:
+  # pytest.PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"' \
+      --replace-fail 'asyncio_default_fixture_loop_scope = "function"' ""
   '';
 
   postInstall = ''

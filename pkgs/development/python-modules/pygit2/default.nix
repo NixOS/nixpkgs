@@ -16,25 +16,25 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.14.1";
+  version = "1.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7FlYVxuCpjUXhcpkXlOUwxrkXuxThLL6nE4F3eNZetY=";
+    hash = "sha256-+ivAULLC0+c7VNbVQceSF4Vho0TwfkCfUy1buXrHuJQ=";
   };
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ libgit2 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cached-property
     pycparser
   ] ++ lib.optionals (!isPyPy) [ cffi ];
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/libgit2/pygit2";
     changelog = "https://github.com/libgit2/pygit2/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

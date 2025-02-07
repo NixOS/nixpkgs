@@ -1,10 +1,14 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       lark = super.lark.overridePythonAttrs (old: rec {
         # gdtoolkit needs exactly this lark version
@@ -23,13 +27,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
-  version = "4.2.2";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Scony";
     repo = "godot-gdscript-toolkit";
-    rev = version;
-    hash = "sha256-SvEKKuDnfxV+5AArg5ssrQzgIwRITdek4KYEs3d0n4Y=";
+    tag = version;
+    hash = "sha256-XK6s/WnbTzjCAtV8dbRPLe5olpKUglPLQdttRRMvX70=";
   };
 
   disabled = python.pythonOlder "3.7";
@@ -43,18 +47,16 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytestCheckHook
-    hypothesis
-  ];
-
-  preCheck = ''
-      # The tests want to run the installed executables
-      export PATH=$out/bin:$PATH
-
-      # gdtoolkit tries to write cache variables to $HOME/.cache
-      export HOME=$TMP
-    '';
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      pytestCheckHook
+      hypothesis
+    ]
+    ++ [
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ];
 
   # The tests are not working on NixOS
   disabledTestPaths = [
@@ -62,7 +64,12 @@ python.pkgs.buildPythonApplication rec {
     "tests/gdradon/test_executable.py"
   ];
 
-  pythonImportsCheck = [ "gdtoolkit" "gdtoolkit.formatter" "gdtoolkit.linter" "gdtoolkit.parser" ];
+  pythonImportsCheck = [
+    "gdtoolkit"
+    "gdtoolkit.formatter"
+    "gdtoolkit.linter"
+    "gdtoolkit.parser"
+  ];
 
   meta = with lib; {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";

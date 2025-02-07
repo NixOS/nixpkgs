@@ -2,12 +2,13 @@
 , fetchFromGitHub
 , makeWrapper
 , mkDerivation
-, substituteAll
+, replaceVars
 , wrapGAppsHook3
 , wrapQtAppsHook
 
-, withGrass ? true
-, withWebKit ? false
+, withGrass
+, withServer
+, withWebKit
 
 , bison
 , cmake
@@ -26,7 +27,7 @@
 , ninja
 , openssl
 , pdal
-, postgresql
+, libpq
 , proj
 , protobuf
 , python3
@@ -49,6 +50,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
@@ -78,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.38.0";
+  version = "3.40.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-vL9Go8Kn6VFOeztD/LZi5QHpZVPFfOFarTsCLTf4D2s=";
+    hash = "sha256-AUDohf71NIuEjFrzRQ8QsdvmEjYsZK9aI4j0msVJgcQ=";
   };
 
   passthru = {
@@ -117,7 +119,7 @@ in mkDerivation rec {
     netcdf
     openssl
     pdal
-    postgresql
+    libpq
     proj
     protobuf
     qca-qt5
@@ -139,8 +141,7 @@ in mkDerivation rec {
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+    (replaceVars ./set-pyqt-package-dirs.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
@@ -151,13 +152,15 @@ in mkDerivation rec {
   env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
     "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    ++ lib.optional withServer [
+    "-DWITH_SERVER=True"
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
@@ -174,9 +177,11 @@ in mkDerivation rec {
     # the path at build time using GRASS_PREFIX.
     # Using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS.
-    wrapProgram $out/bin/qgis \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ grass ]}
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        "''${gappsWrapperArgs[@]}" \
+        --prefix PATH : ${lib.makeBinPath [ grass ]}
+    done
   '';
 
   meta = with lib; {

@@ -13,12 +13,15 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  wrapt,
+  semgrep,
   setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "whispers";
-  version = "2.2.1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,14 +29,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adeptex";
     repo = "whispers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YPfTe2txQY/sVEIGSMTA1b3Ye3j8qT+YdWp3AVqpdLI=";
+    tag = version;
+    hash = "sha256-hmFz6RI52CylsBIqO14hFX+2bvrPjpUBnfoDyVh9TbU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail '"pytest-runner"' ""
   '';
+
+  pythonRelaxDeps = [
+    "jellyfish"
+    "lxml"
+    "pyyaml"
+    "semgrep"
+    "six"
+    "wrapt"
+  ];
 
   build-system = [ setuptools ];
 
@@ -46,6 +58,9 @@ buildPythonPackage rec {
     luhn
     lxml
     pyyaml
+    semgrep
+    six
+    wrapt
   ];
 
   nativeCheckInputs = [
@@ -53,7 +68,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # pinning tests highly sensitive to semgrep version
+    "tests/unit/plugins/test_semgrep.py"
+  ];
+
   preCheck = ''
+    # pinning test highly sensitive to semgrep version
+    substituteInPlace tests/unit/test_main.py \
+      --replace-fail '("--ast", 421),' ""
+
     # Some tests need the binary available in PATH
     export PATH=$out/bin:$PATH
   '';
@@ -63,7 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to identify hardcoded secrets in static structured text";
     homepage = "https://github.com/adeptex/whispers";
-    changelog = "https://github.com/adeptex/whispers/releases/tag/${version}";
+    changelog = "https://github.com/adeptex/whispers/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "whispers";

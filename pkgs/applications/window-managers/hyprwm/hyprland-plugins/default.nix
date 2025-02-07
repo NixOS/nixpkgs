@@ -2,14 +2,12 @@
   lib,
   callPackage,
   pkg-config,
-  stdenv,
-  hyprland,
 }:
 let
   mkHyprlandPlugin =
     hyprland:
     args@{ pluginName, ... }:
-    stdenv.mkDerivation (
+    hyprland.stdenv.mkDerivation (
       args
       // {
         pname = "${pluginName}";
@@ -26,6 +24,13 @@ let
 
   plugins = lib.mergeAttrsList [
     { hy3 = import ./hy3.nix; }
+    { hycov = import ./hycov.nix; }
+    { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
+    { hyprfocus = import ./hyprfocus.nix; }
+    { hyprgrass = import ./hyprgrass.nix; }
+    { hyprscroller = import ./hyprscroller.nix; }
+    { hyprspace = import ./hyprspace.nix; }
+    { hyprsplit = import ./hyprsplit.nix; }
     (import ./hyprland-plugins.nix)
   ];
 in

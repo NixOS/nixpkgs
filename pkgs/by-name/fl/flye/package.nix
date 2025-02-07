@@ -1,24 +1,26 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-, zlib
-, curl
-, libdeflate
-, bash
-, coreutils
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+  zlib,
+  curl,
+  libdeflate,
+  bash,
+  coreutils,
+  addBinToPathHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "flye";
-  version = "2.9.4";
+  version = "2.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fenderglass";
     repo = "flye";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lwiY0VTEsLMMXt1VowsS3jj44v30Z766xNRwQtQKr10=";
+    tag = version;
+    hash = "sha256-448PTdGueQVHFIDS5zMy+XKZCtEb0SqP8bspPLHMJn0=";
   };
 
   patches = [
@@ -33,12 +35,6 @@ python3Packages.buildPythonApplication rec {
       name = "remove-distutils.patch";
       url = "https://github.com/mikolmogorov/Flye/commit/fb34f1ccfdf569d186a4ce822ee18eced736636b.patch";
       hash = "sha256-52bnZ8XyP0HsY2OpNYMU3xJgotNVdQc/O2w3XIReUdQ=";
-    })
-    (fetchpatch {
-      # https://github.com/mikolmogorov/Flye/pull/670
-      name = "remove-find_module.patch";
-      url = "https://github.com/mikolmogorov/Flye/commit/441b1c6eb0f60b7c4fb1a40d659c7dabb7ad41b6.patch";
-      hash = "sha256-RytFIN1STK33/nvXpck6woQcwV/e1fmA8AgmptiIiDU=";
     })
   ];
 
@@ -59,11 +55,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "flye" ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  nativeCheckInputs = [
+    addBinToPathHook
+    python3Packages.pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "De novo assembler for single molecule sequencing reads using repeat graphs";

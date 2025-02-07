@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "2.0.6";
+  version = "2.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "amoffat";
     repo = "sh";
-    rev = "refs/tags/${version}";
-    hash = "sha256-c4Ms4ydcW7LgmAI1WuYD74nzILuY/Xg+JePJe0q5AQQ=";
+    tag = version;
+    hash = "sha256-LeqhnQD3CqvKauf9JYN2jFO4gfNyVGeHNU9XzNrHHlk=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # https://github.com/amoffat/sh/issues/684
       "test_general_signal"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable tests that fail on Darwin sandbox
       "test_background_exception"
       "test_cwd"

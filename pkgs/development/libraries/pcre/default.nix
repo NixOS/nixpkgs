@@ -1,12 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, pcre, windows ? null
-, variant ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  updateAutotoolsGnuConfigScriptsHook,
+  pcre,
+  windows ? null,
+  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
+  enableJit ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  variant ? null,
 }:
 
-assert lib.elem variant [ null "cpp" "pcre16" "pcre32" ];
+assert lib.elem variant [
+  null
+  "cpp"
+  "pcre16"
+  "pcre32"
+];
 
 stdenv.mkDerivation rec {
-  pname = "pcre"
+  pname =
+    "pcre"
     + lib.optionalString (variant == "cpp") "-cpp"
     + lib.optionalString (variant != "cpp" && variant != null) variant;
   version = "8.45";
@@ -16,13 +30,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Ta5v3NK7C7bDe1+Xwzwr6VTadDmFNpzdrDVG4yGL/7g=";
   };
 
-  outputs = [ "bin" "dev" "out" "doc" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+    "man"
+  ];
 
-  # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  configureFlags = lib.optional (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--enable-jit=auto" ++ [
-    "--enable-unicode-properties"
-    "--disable-cpp"
-  ]
+  hardeningDisable = lib.optional enableJit "shadowstack";
+
+  configureFlags =
+    [
+      "--enable-unicode-properties"
+      "--disable-cpp"
+    ]
+    ++ lib.optional enableJit "--enable-jit=auto"
     ++ lib.optional (variant != null) "--enable-${variant}";
 
   patches = [
@@ -37,19 +60,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
   preCheck = ''
     patchShebangs RunGrepTest
   '';
 
-  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
-    # XXX: test failure on Cygwin
-    # we are running out of stack on both freeBSDs on Hydra
+  doCheck =
+    !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
+  # XXX: test failure on Cygwin
+  # we are running out of stack on both freeBSDs on Hydra
 
-  postFixup = ''
-    moveToOutput bin/pcre-config "$dev"
-  '' + lib.optionalString (variant != null) ''
-    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
-  '';
+  postFixup =
+    ''
+      moveToOutput bin/pcre-config "$dev"
+    ''
+    + lib.optionalString (variant != null) ''
+      ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib,*a}
+    '';
 
   meta = {
     homepage = "http://www.pcre.org/";
@@ -65,7 +95,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     pkgConfigModules = [
       "libpcre"
       "libpcreposix"

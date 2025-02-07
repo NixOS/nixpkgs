@@ -1,27 +1,26 @@
 {
   lib,
-  aioredis,
   aiosmtplib,
   blinker,
   buildPythonPackage,
   email-validator,
   fakeredis,
-  fastapi,
   fetchFromGitHub,
   httpx,
   jinja2,
   poetry-core,
-  pydantic,
   pydantic-settings,
+  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  python-multipart,
   pythonOlder,
+  redis,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,32 +28,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2iTZqZIxlt1GKhElasTcnys18UbNNDwHoZziHBOIGBo=";
+    tag = version;
+    hash = "sha256-QypW7yE5jBkS1Q4XPIOktWnCmCXGoUzZF/SdWmFsPX8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "1.2.5"' 'version = "${version}"' \
-      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
-      --replace 'pydantic = "^2.0"' 'pydantic = "*"' \
-  '';
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "pydantic"
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aioredis
+  dependencies = [
     aiosmtplib
     blinker
     email-validator
     fakeredis
-    fastapi
-    httpx
     jinja2
     pydantic
     pydantic-settings
-    python-multipart
+    starlette
   ];
+
+  optional-dependencies = {
+    httpx = [ httpx ];
+    redis = [ redis ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio

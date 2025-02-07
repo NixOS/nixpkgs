@@ -1,56 +1,64 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   asyncclick,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatchling,
   kasa-crypt,
+  mashumaro,
   orjson,
-  poetry-core,
-  pydantic,
+  ptpython,
   pytest-asyncio,
   pytest-freezer,
   pytest-mock,
+  pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
+  rich,
   voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.7.0.3";
+  version = "0.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jbyc4YeUKjioUFXL5SVdgeUlSIiOCJ7D0cZRWPiKZII=";
+    tag = version;
+    hash = "sha256-GqFWQRORU1CBtw+xasvGl0NZlVgD+mV37uWkwhOphF0=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
-    async-timeout
     asyncclick
     cryptography
-    pydantic
+    mashumaro
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-freezer
     pytest-mock
+    pytest-socket
+    pytest-xdist
     pytestCheckHook
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
+    shell = [
+      ptpython
+      rich
+    ];
     speedups = [
       kasa-crypt
       orjson
@@ -61,17 +69,17 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Skip the examples tests
-    "kasa/tests/test_readme_examples.py"
+    "tests/test_readme_examples.py"
   ];
 
   pythonImportsCheck = [ "kasa" ];
 
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
-    mainProgram = "kasa";
     homepage = "https://python-kasa.readthedocs.io/";
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kasa";
   };
 }

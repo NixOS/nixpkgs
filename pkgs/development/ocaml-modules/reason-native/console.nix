@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, callPackage, reason, console, src }:
+{
+  lib,
+  buildDunePackage,
+  callPackage,
+  reason,
+  console,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -19,6 +26,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/console";
     homepage = "https://reason-native.com/docs/console/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

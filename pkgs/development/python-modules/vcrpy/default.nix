@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "vcrpy";
-  version = "6.0.1";
+  version = "7.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ngI/7n+JK6oLvaL32nyKxRFlwcbjj/hohoOhKkvekng=";
+    hash = "sha256-F2ORrQQl7d4WgMWyBzjqPcf7lCUgpI0pk0SAUJhrOlA=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kevin1024/vcrpy";
     changelog = "https://github.com/kevin1024/vcrpy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

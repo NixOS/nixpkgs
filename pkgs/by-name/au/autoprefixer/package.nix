@@ -5,16 +5,17 @@
   pnpm_9,
   fetchFromGitHub,
   callPackage,
-  nix-update-script
-}: stdenv.mkDerivation (finalAttrs: {
+  nix-update-script,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
-  version = "10.4.19";
+  version = "10.4.20";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
     rev = finalAttrs.version;
-    hash = "sha256-Br0z573QghkYHLgF9/OFp8FL0bIW2frW92ohJnHhgHE=";
+    hash = "sha256-CGAUv6qzpcjDPcW7Vsak0iYC6GOJAkKLciVnxYcOeus=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +25,7 @@
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-sGcqM87xR9XTL/MUO7fGpI1cPK7EgJNpeYwBmqVNB6I=";
+    hash = "sha256-Gu2DRDx0YRlSb+EInOfmAOYKvOba6Lq1wkOW9t9fnbA=";
   };
 
   installPhase = ''

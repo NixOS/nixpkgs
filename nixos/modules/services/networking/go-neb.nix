@@ -1,24 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.go-neb;
 
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" cfg.config;
-in {
+in
+{
   options.services.go-neb = {
-    enable = mkEnableOption "an extensible matrix bot written in Go";
+    enable = lib.mkEnableOption "an extensible matrix bot written in Go";
 
-    bindAddress = mkOption {
-      type = types.str;
+    bindAddress = lib.mkOption {
+      type = lib.types.str;
       description = "Port (and optionally address) to listen on.";
       default = ":4050";
     };
 
-    secretFile = mkOption {
-      type = types.nullOr types.path;
+    secretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/keys/go-neb.env";
       description = ''
@@ -30,12 +33,12 @@ in {
       '';
     };
 
-    baseUrl = mkOption {
-      type = types.str;
+    baseUrl = lib.mkOption {
+      type = lib.types.str;
       description = "Public-facing endpoint that can receive webhooks.";
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       inherit (settingsFormat) type;
       description = ''
         Your {file}`config.yaml` as a Nix attribute set.
@@ -45,34 +48,41 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.go-neb = let
-      finalConfigFile = if cfg.secretFile == null then configFile else "/var/run/go-neb/config.yaml";
-    in {
-      description = "Extensible matrix bot written in Go";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      environment = {
-        BASE_URL = cfg.baseUrl;
-        BIND_ADDRESS = cfg.bindAddress;
-        CONFIG_FILE = finalConfigFile;
-      };
+  config = lib.mkIf cfg.enable {
+    systemd.services.go-neb =
+      let
+        finalConfigFile = if cfg.secretFile == null then configFile else "/var/run/go-neb/config.yaml";
+      in
+      {
+        description = "Extensible matrix bot written in Go";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment = {
+          BASE_URL = cfg.baseUrl;
+          BIND_ADDRESS = cfg.bindAddress;
+          CONFIG_FILE = finalConfigFile;
+        };
 
-      serviceConfig = {
-        ExecStartPre = lib.optional (cfg.secretFile != null)
-          ("+" + pkgs.writeShellScript "pre-start" ''
-            umask 077
-            export $(xargs < ${cfg.secretFile})
-            ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > ${finalConfigFile}
-            chown go-neb ${finalConfigFile}
-          '');
-        RuntimeDirectory = "go-neb";
-        ExecStart = "${pkgs.go-neb}/bin/go-neb";
-        User = "go-neb";
-        DynamicUser = true;
+        serviceConfig = {
+          ExecStartPre = lib.optional (cfg.secretFile != null) (
+            "+"
+            + pkgs.writeShellScript "pre-start" ''
+              umask 077
+              export $(xargs < ${cfg.secretFile})
+              ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > ${finalConfigFile}
+              chown go-neb ${finalConfigFile}
+            ''
+          );
+          RuntimeDirectory = "go-neb";
+          ExecStart = "${pkgs.go-neb}/bin/go-neb";
+          User = "go-neb";
+          DynamicUser = true;
+        };
       };
-    };
   };
 
-  meta.maintainers = with maintainers; [ hexa maralorn ];
+  meta.maintainers = with lib.maintainers; [
+    hexa
+    maralorn
+  ];
 }

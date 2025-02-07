@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, pythonPackages
-, mopidy
+{
+  lib,
+  fetchFromGitHub,
+  pythonPackages,
+  mopidy,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -26,6 +27,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/pimusicbox/mopidy-musicbox-webclient";
     changelog = "https://github.com/pimusicbox/mopidy-musicbox-webclient/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

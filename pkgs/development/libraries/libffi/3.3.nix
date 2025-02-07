@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-, doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
-, dejagnu
+  doCheck ? true, # test suite depends on dejagnu which cannot be used during bootstrapping
+  dejagnu,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +16,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
   };
 
-  patches = [];
+  patches = [ ];
 
-  outputs = [ "out" "dev" "man" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "info"
+  ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
@@ -63,6 +71,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ armeenm ];
     platforms = platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

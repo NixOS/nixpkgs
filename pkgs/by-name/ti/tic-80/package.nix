@@ -1,39 +1,36 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, python3
-, ruby
-, rake
-, git
-, curl
-, fetchFromGitHub
-, libGL
-, libGLU
-, alsa-lib
-, libX11
-, xorgproto
-, libICE
-, libXi
-, libXScrnSaver
-, libXcursor
-, libXinerama
-, libXext
-, libXxf86vm
-, libXrandr
-, libxkbcommon
-, wayland
-, wayland-protocols
-, wayland-scanner
-, dbus
-, udev
-, libdecor
-, pipewire
-, libpulseaudio
-, libiconv
-# Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
-# that enables some additional features. It is, however, fully open source.
-, withPro ? false
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  python3,
+  rake,
+  curl,
+  fetchFromGitHub,
+  libGL,
+  libGLU,
+  alsa-lib,
+  libX11,
+  libICE,
+  libXi,
+  libXScrnSaver,
+  libXcursor,
+  libXinerama,
+  libXext,
+  libXxf86vm,
+  libXrandr,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  dbus,
+  udev,
+  libdecor,
+  pipewire,
+  libpulseaudio,
+  # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
+  # that enables some additional features. It is, however, fully open source.
+  withPro ? false,
 }:
 let
   major = "1";
@@ -50,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "nesbox";
     repo = "TIC-80";
     rev = "v" + version;
-    sha256 = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
+    hash = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
     # TIC-80 vendors its dependencies as submodules, so to use its current build system,
     # we need to fetch them. Managing the dependencies ourselves would require a lot of
     # changes in the build system, which doesn't seem worth it right now. In future versions,
@@ -133,8 +130,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description =
-      "A free and open source fantasy computer for making, playing and sharing tiny games";
+    description = "A free and open source fantasy computer for making, playing and sharing tiny games";
     longDescription = ''
       TIC-80 is a free and open source fantasy computer for making, playing and
       sharing tiny games.

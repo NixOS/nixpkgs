@@ -7,7 +7,6 @@
   copyDesktopItems,
   SDL2,
   libGL,
-  mesa,
   systemd,
   libpulseaudio,
   libselinux,
@@ -32,7 +31,7 @@ buildDotnetModule rec {
   projectFile = "Celeste64.csproj";
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   strictDeps = true;
   executables = [ "Celeste64" ];
   nativeBuildInputs = [ copyDesktopItems ];
@@ -79,7 +78,7 @@ buildDotnetModule rec {
   meta = {
     license = with lib.licenses; [ unfree mit ];
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
-    maintainers = with lib.maintainers; [ lychee ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "Celeste64";
     homepage = "https://github.com/ExOK/Celeste64";
     description = "Celeste 64: Fragments of the Mountain";

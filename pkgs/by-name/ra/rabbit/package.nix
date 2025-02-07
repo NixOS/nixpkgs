@@ -1,38 +1,39 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "1.0.5";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ykvI5qW4toNYKAnrk3ADwat1gAUazbDGGKZEZAvKngQ=";
+    tag = version;
+    hash = "sha256-QmP6yfVnlYoNVa4EUtKR9xbCnQW2V6deV0+hN9IGtic=";
   };
 
-  pythonRelaxDeps = true;
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
-  build-system = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
   dependencies = with python3.pkgs; [
+    joblib
     numpy
     pandas
-    pip
     python-dateutil
     requests
     scikit-learn
     scipy
     tqdm
     urllib3
-    xgboost
   ];
 
   pythonImportsCheck = [ "rabbit" ];

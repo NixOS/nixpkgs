@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, runtimeShell
-, bcftools
-, htslib
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  runtimeShell,
+  bcftools,
+  htslib,
 }:
 
 let
@@ -13,16 +14,17 @@ let
     rev = "d21f7f928a167fca6e2eb31616673444d15e6fd0";
     hash = "sha256-zecZHEnfhDtT44VMbHLHOhRtNsIMWeaBASupVXtmrks=";
   };
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "4.1.0";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ACEnglish";
     repo = "truvari";
     rev = "v${version}";
-    hash = "sha256-HFVAv1TTL/nMjr62tQKhMdwh25P/y4nBGzSbxoJxMmo=";
+    hash = "sha256-SFBVatcVavBfQtFbBcXifBX3YnKsxJS669vCcyjsBA4=";
   };
 
   postPatch = ''
@@ -31,11 +33,11 @@ in python3Packages.buildPythonApplication rec {
     patchShebangs repo_utils/test_files
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     python3Packages.setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pywfa
     rich
     edlib
@@ -46,20 +48,29 @@ in python3Packages.buildPythonApplication rec {
     pytabix
     bwapy
     pandas
+    pyabpoa
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ bcftools htslib ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bcftools
+      htslib
+    ])
   ];
 
   pythonImportsCheck = [ "truvari" ];
 
-  nativeCheckInputs = [
-    bcftools
-    htslib
-  ] ++ (with python3Packages; [
-    coverage
-  ]);
+  nativeCheckInputs =
+    [
+      bcftools
+      htslib
+    ]
+    ++ (with python3Packages; [
+      coverage
+    ]);
 
   checkPhase = ''
     runHook preCheck
@@ -75,7 +86,10 @@ in python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ACEnglish/truvari";
     changelog = "https://github.com/ACEnglish/truvari/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ natsukium scalavision ];
+    maintainers = with maintainers; [
+      natsukium
+      scalavision
+    ];
     longDescription = ''
       Truvari is a benchmarking tool for comparison sets of SVs.
       It can calculate the recall, precision, and f-measure of a

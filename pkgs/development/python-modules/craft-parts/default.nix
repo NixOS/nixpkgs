@@ -4,63 +4,54 @@
   fetchFromGitHub,
   nix-update-script,
   overrides,
-  pydantic_1,
-  pydantic-yaml-0,
+  pydantic,
   pyxdg,
   pyyaml,
   requests,
   requests-unixsocket,
-  types-pyyaml,
-  urllib3,
   pytestCheckHook,
   pytest-check,
   pytest-mock,
   pytest-subprocess,
   requests-mock,
   hypothesis,
+  jsonschema,
   git,
   squashfsTools,
-  setuptools,
   setuptools-scm,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "1.31.0";
+  version = "2.2.2";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-parts";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DohH81xhUfZI3NfmX6aDaOC/QLiddsxPzrc1vgFECTg=";
+    tag = version;
+    hash = "sha256-6ufcay1C2Qv3nnG0augnPWzwBVDMj1ypRwzHRAhHARA=";
   };
 
   patches = [ ./bash-path.patch ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pydantic-yaml[pyyaml]>=0.11.0,<1.0.0" "pydantic-yaml[pyyaml]" \
-      --replace-fail "urllib3<2" "urllib3"
-  '';
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  pythonRelaxDeps = [
+    "requests"
+    "urllib3"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     overrides
-    pydantic_1
-    pydantic-yaml-0
+    pydantic
     pyxdg
     pyyaml
     requests
     requests-unixsocket
-    types-pyyaml
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_parts" ];
@@ -68,6 +59,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     hypothesis
+    jsonschema
     pytest-check
     pytest-mock
     pytest-subprocess
@@ -103,7 +95,7 @@ buildPythonPackage rec {
       "tests/unit/packages/test_deb.py"
       "tests/unit/packages/test_chisel.py"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"
@@ -114,7 +106,7 @@ buildPythonPackage rec {
   meta = {
     description = "Software artifact parts builder from Canonical";
     homepage = "https://github.com/canonical/craft-parts";
-    changelog = "https://github.com/canonical/craft-parts/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

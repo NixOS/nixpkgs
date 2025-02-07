@@ -1,32 +1,52 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
   jupyterhub,
   ldap3,
-  fetchPypi,
+  traitlets,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterhub-ldapauthenticator";
-  version = "1.3.2";
-  format = "setuptools";
+  version = "2.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "758081bbdb28b26313bb18c9d8aa2b8fcdc9162e4d3ab196c626567e64f1ab8b";
+  src = fetchFromGitHub {
+    owner = "jupyterhub";
+    repo = "ldapauthenticator";
+    tag = version;
+    hash = "sha256-xixgry/++E6RimB8wo1NF8SsfzxKL1ZlNQVrlBhQ674=";
   };
 
-  # No tests implemented
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyterhub
     ldap3
+    traitlets
+  ];
+
+  pythonImportsCheck = [ "ldapauthenticator" ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # touch the socket
+    "test_allow_config"
+    "test_ldap_auth"
   ];
 
   meta = with lib; {
     description = "Simple LDAP Authenticator Plugin for JupyterHub";
     homepage = "https://github.com/jupyterhub/ldapauthenticator";
+    changelog = "https://github.com/jupyterhub/ldapauthenticator/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
   };
 }

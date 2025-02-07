@@ -1,14 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "simplotask";
-  version = "1.16.0";
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "spot";
     rev = "v${version}";
-    hash = "sha256-VnQIg5HXZZwvYpaYDF1CIphLtE4S+1zADE1WnicXOSQ=";
+    hash = "sha256-pSYYYUzChK/GNAdCybd4KMNXwkTZo/0w6CtsYOvbKj8=";
   };
 
   vendorHash = null;

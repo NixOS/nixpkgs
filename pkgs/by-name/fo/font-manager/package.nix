@@ -1,37 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, python3
-, pkg-config
-, libxml2
-, json-glib
-, sqlite
-, itstool
-, yelp-tools
-, vala
-, gsettings-desktop-schemas
-, gtk3
-, adwaita-icon-theme
-, desktop-file-utils
-, nix-update-script
-, wrapGAppsHook3
-, gobject-introspection
-# withWebkit enables the "webkit" feature, also known as Google Fonts
-, withWebkit ? true, glib-networking, libsoup, webkitgtk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gettext,
+  python3,
+  pkg-config,
+  libxml2,
+  json-glib,
+  sqlite,
+  itstool,
+  yelp-tools,
+  vala,
+  gsettings-desktop-schemas,
+  gtk4,
+  adwaita-icon-theme,
+  desktop-file-utils,
+  nix-update-script,
+  wrapGAppsHook4,
+  gobject-introspection,
+  # withWebkit enables the "webkit" feature, also known as Google Fonts
+  withWebkit ? true,
+  glib-networking,
+  libsoup_3,
+  webkitgtk_6_0,
 }:
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.8.9";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
     rev = version;
-    hash = "sha256-LsQry6CjvVcJFRutKOaqA4lLP7Ek09Q/D/TPnSvx59Q=";
+    hash = "sha256-x7ZRC/xwF6Y2BhbtApVZ4hPZGNGaJiilqpxLyax9r2g=";
   };
 
   nativeBuildInputs = [
@@ -44,33 +48,30 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     vala
     yelp-tools
-    wrapGAppsHook3
+    wrapGAppsHook4
     # For https://github.com/FontManager/master/blob/master/lib/unicode/meson.build
     gobject-introspection
   ];
 
-  buildInputs = [
-    libxml2
-    json-glib
-    sqlite
-    gsettings-desktop-schemas # for font settings
-    gtk3
-    adwaita-icon-theme
-  ] ++ lib.optionals withWebkit [
-    glib-networking # for SSL so that Google Fonts can load
-    libsoup
-    webkitgtk
-  ];
+  buildInputs =
+    [
+      libxml2
+      json-glib
+      sqlite
+      gsettings-desktop-schemas # for font settings
+      gtk4
+      adwaita-icon-theme
+    ]
+    ++ lib.optionals withWebkit [
+      glib-networking # for SSL so that Google Fonts can load
+      libsoup_3
+      webkitgtk_6_0
+    ];
 
   mesonFlags = [
     "-Dreproducible=true" # Do not hardcode build directory…
     (lib.mesonBool "webkit" withWebkit)
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru.updateScript = nix-update-script { };
 

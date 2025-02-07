@@ -9,19 +9,20 @@
   pyyaml,
   requests,
   rfc3986,
+  setuptools,
   stevedore,
   callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "9.4.0";
-  format = "setuptools";
+  version = "9.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.config";
     inherit version;
-    hash = "sha256-NbEaZhtgjttQMF2tkeTjCBnZDveUt9fbpb2LLvLrjA0=";
+    hash = "sha256-s3Hr8/mmPpK4HVxyuE0vlvQFU1MmmcaOHFzYyp7KCIs=";
   };
 
   postPatch = ''
@@ -30,7 +31,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     debtcollector
     netaddr
     oslo-i18n

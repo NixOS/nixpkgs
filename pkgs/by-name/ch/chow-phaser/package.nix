@@ -1,8 +1,37 @@
-{ alsa-lib, at-spi2-core, cmake, curl, dbus, libepoxy, fetchFromGitHub, libglut
-, freetype, gcc-unwrapped, gtk3, lib, libGL, libXcursor, libXdmcp, libXext
-, libXinerama, libXrandr, libXtst, libdatrie, libjack2, libpsl, libselinux
-, libsepol, libsysprof-capture, libthai, libxkbcommon, pcre, pkg-config
-, python3, sqlite, stdenv }:
+{
+  alsa-lib,
+  at-spi2-core,
+  cmake,
+  curl,
+  dbus,
+  libepoxy,
+  fetchFromGitHub,
+  libglut,
+  freetype,
+  gcc-unwrapped,
+  gtk3,
+  lib,
+  libGL,
+  libXcursor,
+  libXdmcp,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  libdatrie,
+  libjack2,
+  libpsl,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libxkbcommon,
+  pcre,
+  pkg-config,
+  python3,
+  sqlite,
+  stdenv,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chow-phaser";
@@ -13,10 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "ChowPhaser";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-9wo7ZFMruG3QNvlpILSvrFh/Sx6J1qnlWc8+aQyS4tQ=";
+    hash = "sha256-9wo7ZFMruG3QNvlpILSvrFh/Sx6J1qnlWc8+aQyS4tQ=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs = [
     alsa-lib

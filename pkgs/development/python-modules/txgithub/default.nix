@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "GitHub API client implemented using Twisted";
     homepage = "https://github.com/tomprince/txgithub";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

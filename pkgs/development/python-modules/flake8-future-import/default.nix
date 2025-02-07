@@ -6,6 +6,7 @@
   isPy38,
   isPy39,
   pythonAtLeast,
+  setuptools,
   flake8,
   six,
   python,
@@ -14,13 +15,13 @@
 buildPythonPackage rec {
   pname = "flake8-future-import";
   version = "0.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   # PyPI tarball doesn't include the test suite
   src = fetchFromGitHub {
     owner = "xZise";
     repo = "flake8-future-import";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 
@@ -36,10 +37,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace "test_flake8_future_import.py" \
-      --replace "'flake8'" "'${lib.getExe flake8}'"
+      --replace-fail "'flake8'" "'${lib.getExe flake8}'"
   '';
 
-  propagatedBuildInputs = [ flake8 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ flake8 ];
 
   nativeCheckInputs = [ six ];
 

@@ -9,14 +9,14 @@
 }:
 let
   pname = "tuya-device-sharing-sdk";
-  version = "0.2.0";
+  version = "0.2.1";
 in
 buildPythonPackage {
   inherit pname version;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fu8zh59wlnxtstNbNL8mIm10tiXy22oPbi6oUy5x8c8=";
+    hash = "sha256-cuLJfCIQmnySCN1yezxyqtFmnTUdhD9tY9sBYNh9iUI=";
   };
 
   # workaround needed, upstream issue: https://github.com/tuya/tuya-device-sharing-sdk/issues/10

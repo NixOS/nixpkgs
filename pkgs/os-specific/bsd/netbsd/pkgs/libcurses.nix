@@ -16,12 +16,12 @@ mkDerivation {
       "-D__va_list=va_list"
       "-D__warn_references(a,b)="
     ]
-    ++ lib.optional stdenv.isDarwin "-D__strong_alias(a,b)="
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-D__strong_alias(a,b)="
   );
   propagatedBuildInputs = compatIfNeeded;
   MKDOC = "no"; # missing vfontedpr
   makeFlags = defaultMakeFlags ++ [ "LIBDO.terminfo=${libterminfo}/lib" ];
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace $COMPONENT_PATH/printw.c \
       --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
       --replace "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'

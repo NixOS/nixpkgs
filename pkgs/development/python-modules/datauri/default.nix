@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "datauri";
-  version = "2.1.1";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+R1J4IjJ+Vf/+V2kiZyIyAqTAgGLTMJjGePyVRuO5rs=";
+    tag = "v${version}";
+    hash = "sha256-WrOQPUZ9vaLSR0hxIvCK8kBnARiOLh6qqWBw/h6XpaY=";
   };
 
   build-system = [ setuptools ];
@@ -34,15 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datauri" ];
 
-  disabledTests = [
-    # Test is incompatible with pydantic >=2
-    "test_pydantic"
-  ];
-
   meta = with lib; {
     description = "Module for Data URI manipulation";
     homepage = "https://github.com/fcurella/python-datauri";
-    changelog = "https://github.com/fcurella/python-datauri/releases/tag/v${version}";
+    changelog = "https://github.com/fcurella/python-datauri/releases/tag/${src.tag}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ yuu ];
   };

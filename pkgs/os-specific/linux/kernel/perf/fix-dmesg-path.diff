@@ -1,0 +1,11 @@
+--- a/tools/perf/util/evsel.c	2023-10-20 15:50:53.011023294 +0200
++++ b/tools/perf/util/evsel.c	2023-10-20 15:51:03.205997633 +0200
+@@ -3076,7 +3076,7 @@
+ 
+ 	return scnprintf(msg, size,
+ 	"The sys_perf_event_open() syscall returned with %d (%s) for event (%s).\n"
+-	"/bin/dmesg | grep -i perf may provide additional information.\n",
++	"\"dmesg | grep -i perf\" may provide additional information.\n",
+ 			 err, str_error_r(err, sbuf, sizeof(sbuf)), evsel__name(evsel));
+ }
+ 

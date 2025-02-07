@@ -1,21 +1,22 @@
-{ lib
-, buildNpmPackage
-, rustPlatform
-, dbus
-, freetype
-, gtk3
-, libsoup
-, openssl
-, pkg-config
-, webkitgtk
-, libappindicator
-, makeWrapper
-, coolercontrol
+{
+  lib,
+  rustPlatform,
+  dbus,
+  freetype,
+  gtk3,
+  libsoup_3,
+  openssl,
+  pkg-config,
+  webkitgtk_4_1,
+  libappindicator,
+  makeWrapper,
+  coolercontrol,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 rustPlatform.buildRustPackage {
@@ -23,12 +24,8 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrol-ui/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-localhost-0.1.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-C0oVtU6esXOkssKyJ4XzLV2vGCPbvVKgvf3wXo9L158=";
 
   buildFeatures = [ "custom-protocol" ];
 
@@ -41,9 +38,9 @@ rustPlatform.buildRustPackage {
     dbus
     openssl
     freetype
-    libsoup
+    libsoup_3
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     libappindicator
   ];
 
@@ -54,7 +51,7 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     mkdir -p ui-build
     cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
-    substituteInPlace tauri.conf.json --replace '"distDir": "../dist"' '"distDir": "ui-build"'
+    substituteInPlace tauri.conf.json --replace-fail '"frontendDist": "../dist"' '"frontendDist": "ui-build"'
   '';
 
   postInstall = ''

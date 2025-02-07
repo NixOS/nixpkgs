@@ -1,8 +1,14 @@
-{ lib, buildNimPackage, fetchFromGitHub, pcre, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  pcre,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "mosdepth";
-  version = "0.3.8";
+  version = "0.3.10";
 
   requiredNimVersion = 1;
 
@@ -10,7 +16,7 @@ buildNimPackage (finalAttrs: {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IkCLlIugnOO2LpS79gakURvPR1ZuayFtrOOoPyNKLMQ=";
+    hash = "sha256-RAE3k2yA2zsIr5JFYb5bPaMzdoEKms7TKaqVhPS5LzY=";
   };
 
   lockFile = ./lock.json;

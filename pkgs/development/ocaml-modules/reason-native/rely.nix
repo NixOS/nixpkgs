@@ -1,4 +1,13 @@
-{ lib, buildDunePackage, re, reason, cli, file-context-printer, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  re,
+  reason,
+  cli,
+  file-context-printer,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -22,6 +31,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/rely";
     homepage = "https://reason-native.com/docs/rely/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

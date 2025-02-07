@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "24.2.0";
+  version = "24.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "awesomeversion";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bpLtHhpWc1VweVl5G8mM473Js3bXT11N3Zc0jiVqq5c=";
+    tag = version;
+    hash = "sha256-lpG42Be0MVinWX5MyDvBPdoZFx66l6tpUxpAJRqEf88=";
   };
 
   postPatch = ''

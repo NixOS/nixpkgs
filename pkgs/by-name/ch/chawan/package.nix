@@ -7,33 +7,38 @@
 , ncurses
 , nim
 , pandoc
-, perl
 , pkg-config
 , zlib
+, unstableGitUpdater
+, libseccomp
+, replaceVars
 }:
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-03-01";
+  version = "0-unstable-2025-01-06";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "87ba9a87be15abbe06837f1519cfb76f4bf759f3";
-    hash = "sha256-Xs+Mxe5/uoxPMf4FuelpO+bRJ1KdfASVI7rWqtboJZw=";
+    rev = "30a933adb2bade2ceee08a9b36371cecf554d648";
+    hash = "sha256-EepSEN66GTdWfCSiR/p69pN5bvTEiUFOMErCxedrq+g=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Include chawan's man pages in mancha's search path
-    ./mancha-augment-path.diff
-  ];
+  patches = [ ./mancha-augment-path.diff ];
+
+  # Include chawan's man pages in mancha's search path
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace adapter/protocol/man.nim \
+      --replace-fail '@out@' "$out"
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
   );
 
-  buildInputs = [ curlMinimal ncurses perl zlib ];
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
@@ -41,10 +46,12 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  postPatch = ''
-    substituteInPlace adapter/protocol/man \
-      --replace-fail "OUT" $out
-  '';
+  buildInputs = [
+    curlMinimal
+    libseccomp
+    ncurses
+    zlib
+  ];
 
   buildFlags = [ "all" "manpage" ];
   installFlags = [
@@ -64,6 +71,8 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/mancha ${makeWrapperArgs}
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
@@ -71,6 +80,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jtbx ];
     mainProgram = "cha";
-    broken = stdenv.isDarwin; # pending PR #292043
+    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
 }

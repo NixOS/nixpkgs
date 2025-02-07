@@ -11,7 +11,7 @@
   # check inputs
   pytestCheckHook,
   parameterized,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-timeout,
   remote-pdb,
 }:
@@ -28,7 +28,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "fairscale";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L2Rl/qL6l0OLAofygzJBGQdp/2ZrgDFarwZRjyAR3dw=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytestCheckHook
     parameterized
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     remote-pdb
   ];

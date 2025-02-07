@@ -1,8 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl
-, clang-tools, cmake, bzip2, zlib, expat, boost, git, pandoc, nlohmann_json
-# Nominatim needs to be built with the same postgres version it will target
-, postgresql
-, python3, php, lua
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  clang-tools,
+  cmake,
+  bzip2,
+  zlib,
+  expat,
+  boost,
+  git,
+  pandoc,
+  nlohmann_json,
+  # Nominatim needs to be built with the same postgres version it will target
+  libpq,
+  python3,
+  php,
+  lua,
 }:
 
 let
@@ -21,7 +35,7 @@ stdenv.mkDerivation rec {
     repo = "Nominatim";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-GPMDbvTPl9SLpZi5gyRAPQ84NSTIRoSfGJeqWs1e9Oo=";
+    hash = "sha256-GPMDbvTPl9SLpZi5gyRAPQ84NSTIRoSfGJeqWs1e9Oo=";
   };
 
   nativeBuildInputs = [
@@ -39,22 +53,24 @@ stdenv.mkDerivation rec {
     expat
     boost
     nlohmann_json
-    (python3.withPackages (ps: with ps; [
-      pyyaml
-      python-dotenv
-      psycopg2
-      sqlalchemy
-      asyncpg
-      psutil
-      jinja2
-      pyicu
-      datrie
-      pyosmium
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pyyaml
+        python-dotenv
+        psycopg2
+        sqlalchemy
+        asyncpg
+        psutil
+        jinja2
+        pyicu
+        datrie
+        pyosmium
+      ]
+    ))
     # python3Packages.pylint  # We don't want to run pylint because the package could break on pylint bumps which is really annoying.
     # python3Packages.pytest  # disabled since I can't get it to run tests anyway
     # python3Packages.behave  # disabled since I can't get it to run tests anyway
-    postgresql
+    libpq
   ];
 
   postPatch = ''

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sensein";
     repo = "etelemetry-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UaE5JQhv2AtzXKY7YD2/g6Kj1igKhmnY3zlf1P9B/iQ=";
   };
 
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sensein/etelemetry-client";
     changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

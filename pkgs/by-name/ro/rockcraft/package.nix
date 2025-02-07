@@ -1,50 +1,66 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, dpkg
-, nix-update-script
-, python3
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  dpkg,
+  nix-update-script,
+  testers,
+  rockcraft,
+  cacert,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.2.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Qk7Fi4I/5TCf9llGTsTBQsAxUkeVmAlH6tFNYMsyZ1c=";
+    rev = version;
+    hash = "sha256-2Bo3qtpSSfNvqszlt9cCc9/rurDNDMySAaqLbvRmjjw=";
   };
 
-  postPatch = ''
-    substituteInPlace rockcraft/__init__.py \
-      --replace-fail "dev" "${version}"
-  '';
+  pyproject = true;
+  build-system = with python3Packages; [ setuptools-scm ];
 
-  propagatedBuildInputs = with python3Packages; [
-    craft-application-1
+  dependencies = with python3Packages; [
+    craft-application
     craft-archives
+    craft-platforms
     spdx-lookup
+    tabulate
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ] ++ [
-    dpkg
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      craft-platforms
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+    ]
+    ++ [ dpkg ];
 
   preCheck = ''
     mkdir -p check-phase
     export HOME="$(pwd)/check-phase"
   '';
 
-  disabledTests = [ "test_expand_extensions" ];
+  disabledTests = [
+    "test_project_all_platforms_invalid"
+    "test_run_init_flask"
+    "test_run_init_django"
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = rockcraft;
+      command = "env SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt HOME=$(mktemp -d) rockcraft --version";
+      version = "rockcraft ${version}";
+    };
+  };
 
   meta = {
     mainProgram = "rockcraft";

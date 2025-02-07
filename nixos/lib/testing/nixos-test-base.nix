@@ -3,13 +3,16 @@
 # even in `inheritParentConfig = false` specialisations.
 { lib, ... }:
 let
-  inherit (lib) mkForce;
+  inherit (lib) mkDefault mkForce;
 in
 {
   imports = [
     ../../modules/virtualisation/qemu-vm.nix
     ../../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
-    { key = "no-manual"; documentation.nixos.enable = false; }
+    {
+      key = "no-manual";
+      documentation.nixos.enable = false;
+    }
     {
       key = "no-revision";
       # Make the revision metadata constant, in order to avoid needless retesting.
@@ -22,6 +25,16 @@ in
         label = mkForce "test";
       };
     }
-
+    (
+      { config, ... }:
+      {
+        # Don't pull in switch-to-configuration by default, except when specialisations or early boot shenanigans are involved.
+        # This is mostly a Hydra optimization, so we don't rebuild all the tests every time switch-to-configuration-ng changes.
+        key = "no-switch-to-configuration";
+        system.switch.enable = mkDefault (
+          config.isSpecialisation || config.specialisation != { } || config.virtualisation.installBootLoader
+        );
+      }
+    )
   ];
 }

@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://cssselect.readthedocs.io/";
     changelog = "https://github.com/scrapy/cssselect/v${version}//CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

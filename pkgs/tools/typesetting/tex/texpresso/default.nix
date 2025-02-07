@@ -1,23 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, writeScript
-, mupdf
-, SDL2
-, re2c
-, freetype
-, jbig2dec
-, harfbuzz
-, openjpeg
-, gumbo
-, libjpeg
-, texpresso-tectonic
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  writeScript,
+  mupdf,
+  SDL2,
+  re2c,
+  freetype,
+  jbig2dec,
+  harfbuzz,
+  openjpeg,
+  gumbo,
+  libjpeg,
+  texpresso-tectonic,
 }:
 
 stdenv.mkDerivation rec {
   pname = "texpresso";
-  version = "0-unstable-2024-05-23";
+  version = "0-unstable-2025-01-29";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc" \
+      --replace-fail "LDCC=g++" "LDCC=${stdenv.cc.targetPrefix}c++"
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -35,11 +42,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "01cafac1ec6d33d5e169a0202f23a6f565cc55b8";
-    hash = "sha256-uLGanGEUGzxIYFbU3U8LLV3bpn/IN9XltvWCmwSlD7E=";
+    rev = "c42a5912f501f180984840fa8adf9ffc09c5ac13";
+    hash = "sha256-T/vou7OcGtNoodCrznmjBLxg6ZAFDCjhpYgNyZaf44g=";
   };
 
   buildFlags = [ "texpresso" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
@@ -70,5 +83,6 @@ stdenv.mkDerivation rec {
     description = "Live rendering and error reporting for LaTeX";
     maintainers = with lib.maintainers; [ nickhu ];
     license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

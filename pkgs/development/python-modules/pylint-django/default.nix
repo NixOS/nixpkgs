@@ -14,23 +14,23 @@
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.4";
+  version = "2.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MNgu3LvFoohXA+JzUiHIaYFw0ssEe+H5T8Ea56LcGuI=";
+    tag = "v${version}";
+    hash = "sha256-9b0Sbo6E036UmUmP/CVPrS9cxxKtkMMZtqJsI53g4sU=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pylint-plugin-utils ];
+  dependencies = [ pylint-plugin-utils ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     with_django = [ django ];
   };
 

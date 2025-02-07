@@ -4,20 +4,19 @@
   fetchFromGitHub,
   unstableGitUpdater,
   nodejs,
-  bash,
   asar,
   unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openasar";
-  version = "0-unstable-2024-01-13";
+  version = "0-unstable-2025-01-20";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "4f264d860a5a6a32e1862ce26178b9cf6402335d";
-    hash = "sha256-NPUUDqntsMxnT/RN5M9DtLDwJXDyjOED4GlXa1oU8l8=";
+    rev = "e88eebf440866a06f3eca3b4fe2a8cc07818ee61";
+    hash = "sha256-SejlIm9AIK09grP8j5h0O8DxIv85zGssr170xskGx2I=";
   };
 
   postPatch = ''

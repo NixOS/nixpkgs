@@ -3,7 +3,6 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
 }:
 
@@ -17,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "savon-noir";
     repo = "python-libnmap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cI8wdOvTmRy2cxLBkJn7vXRBRvewDMNl/tkIiRGhZJ8=";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     defusedxml = [ defusedxml ];
   };
 

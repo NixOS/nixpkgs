@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitLab,
   fetchpatch,
   wrapGAppsHook4,
@@ -15,6 +14,7 @@
   ninja,
   pkg-config,
   python3Packages,
+  nix-update-script,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "letterpress";
@@ -66,8 +66,12 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${ lib.makeBinPath runtimeDeps })
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Create beautiful ASCII art";
@@ -78,7 +82,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://apps.gnome.org/Letterpress/";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.dawidd6 ];
+    maintainers = [ maintainers.dawidd6 ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.linux;
     mainProgram = "letterpress";
   };

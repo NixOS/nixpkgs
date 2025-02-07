@@ -1,15 +1,24 @@
-{ boost
-, faust
-, lv2
-, qtbase
-, which
+{
+  bash,
+  boost,
+  faust,
+  lv2,
+  qtbase,
 }:
 
 faust.wrapWithBuildEnv {
 
   baseName = "faust2lv2";
 
-  propagatedBuildInputs = [ boost lv2 qtbase ];
+  buildInputs = [
+    bash
+  ];
+
+  propagatedBuildInputs = [
+    boost
+    lv2
+    qtbase
+  ];
 
   dontWrapQtApps = true;
 

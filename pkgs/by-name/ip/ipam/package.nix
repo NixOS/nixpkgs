@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-l8eeeYv41yUPQ1dyJY4Jo3uvULrc1B/buGlMxYSdhCA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd ipam \
@@ -36,7 +40,7 @@ buildGoModule rec {
     homepage = "https://ipam.lauka.net/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ipam";
   };
 }

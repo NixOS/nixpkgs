@@ -12,17 +12,22 @@
 
 buildPythonPackage rec {
   pname = "securityreporter";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Ddq1qjaQemawK+u3ArlsChrkzRbcuaj5LrswyTGwTrg=";
+    tag = "v${version}";
+    hash = "sha256-fpsvjbPE6iaOmLxykGSkCjkhFTmb8xhXa8pDrWN66KM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
   build-system = [ poetry-core ];
 

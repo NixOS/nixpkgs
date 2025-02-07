@@ -15,7 +15,7 @@
   more-itertools,
   numba,
   numpy,
-  openai-triton,
+  triton,
   tiktoken,
   torch,
   tqdm,
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20231117";
+  version = "20240930-unstable-2025-01-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MJ1XjB/GuYUiECCuuHS0NWHvvs+ko0oTvLuDI7zLNiY=";
+    repo = "whisper";
+    rev = "517a43ecd132a2089d85f4ebc044728a71d49f6e";
+    hash = "sha256-RYcQC70E27gtW4gzoPJU132Dm7CnSg8d2/GEfyUyXU4=";
   };
 
   patches = [
@@ -44,16 +44,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     more-itertools
     numba
     numpy
     tiktoken
     torch
     tqdm
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [ openai-triton ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
   preCheck = ''
     export HOME=$TMPDIR

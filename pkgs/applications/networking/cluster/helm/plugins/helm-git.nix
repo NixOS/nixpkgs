@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, coreutils
-, findutils
-, gitMinimal
-, gnugrep
-, gnused
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  findutils,
+  gitMinimal,
+  gnugrep,
+  gnused,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "helm-git";
-  version = "0.16.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "aslafy-z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XM51pbi3BZWzdGEiQAbGlZcMJYjLEeIiexqlmSR0+AI=";
+    sha256 = "sha256-o9y1C4O1uG2Z7f3kCEoK1tSmSuQh1zJxB/CZBv/GPus=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,7 +33,15 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/helm-git/helm-git{,-plugin.sh}
     wrapProgram $out/helm-git/helm-git \
-        --prefix PATH : ${lib.makeBinPath [ coreutils findutils gitMinimal gnugrep gnused ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            findutils
+            gitMinimal
+            gnugrep
+            gnused
+          ]
+        }
 
     runHook postInstall
   '';

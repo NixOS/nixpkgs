@@ -3,8 +3,16 @@
 with pkgs;
 
 runCommand "nixpkgs-metrics"
-  { nativeBuildInputs = with pkgs.lib; map getBin [ nix time jq ];
-    requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
+  {
+    nativeBuildInputs =
+      with pkgs.lib;
+      map getBin [
+        nix
+        time
+        jq
+      ];
+    # see https://github.com/NixOS/nixpkgs/issues/52436
+    #requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
   }
   ''
     export NIX_STORE_DIR=$TMPDIR/store

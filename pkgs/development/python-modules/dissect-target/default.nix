@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.17";
+  version = "3.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UIgHjSTHaxo8jCqe+R6rRxQXX8RUFKAI5+zscInAtgg=";
+    tag = version;
+    hash = "sha256-kB1RhLnmsK77V5uI/GesRQX//awWKVAtWUGgtj38URM=";
   };
 
   postPatch = ''
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       asn1crypto
       dissect-btrfs
@@ -102,12 +102,12 @@ buildPythonPackage rec {
       yara-python
       zstandard
     ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-    yara = [ yara-python ] ++ passthru.optional-dependencies.full;
-    smb = [ impacket ] ++ passthru.optional-dependencies.full;
-    mqtt = [ paho-mqtt ] ++ passthru.optional-dependencies.full;
+    yara = [ yara-python ] ++ optional-dependencies.full;
+    smb = [ impacket ] ++ optional-dependencies.full;
+    mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "dissect.target" ];
 
@@ -138,6 +138,8 @@ buildPythonPackage rec {
       "test_systemd_basic_syntax"
       "test_target_cli_unicode_argparse"
       "test_target_query"
+      "test_target_info"
+      "test_yara"
     ]
     ++
     # test is broken on Darwin
@@ -161,7 +163,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
-    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

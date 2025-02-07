@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-jupyterbook-latex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-jupyterbook-latex";
     changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

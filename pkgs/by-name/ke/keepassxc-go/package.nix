@@ -1,7 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,7 +21,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-jscyNyVr+RDN1EaxIOc3aYCAVT+1eO/c+dxEsIorDIs=";
 
-  postInstall = ''
+  checkFlags = [
+    # Test tries to monkey-patch the stdlib, fails with permission denied error.
+    "-skip=TestKeystore"
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/keepassxc-go"
     installShellCompletion --cmd keepassxc-go \
       --bash <($out/bin/keepassxc-go completion bash) \

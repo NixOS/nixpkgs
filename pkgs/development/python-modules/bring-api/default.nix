@@ -4,36 +4,48 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
   pythonOlder,
   setuptools,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "bring-api";
-  version = "0.7.2";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "bring-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-941IAVlLwfHCyqUu0AhdIfBjuT3pZpk98ZUssBVjEUA=";
+    tag = version;
+    hash = "sha256-1K8CijA2cSyofH/qanOsDRLqnQZyBTqsnrUtvZYBS2c=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    # https://github.com/miaucl/bring-api/blob/1.0.0/requirements.txt
+    # pyproject.toml is out of sync
+    aiohttp
+    yarl
+    mashumaro
+    orjson
+  ];
 
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
     python-dotenv
+    syrupy
   ];
 
   pythonImportsCheck = [ "bring_api" ];

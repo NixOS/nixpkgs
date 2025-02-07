@@ -1,45 +1,46 @@
 {
   lib,
+  backoff,
   buildPythonPackage,
   fetchFromGitHub,
-  # build inputs
-  requests,
-  six,
-  monotonic,
-  backoff,
-  python-dateutil,
-  # check inputs
-  pytestCheckHook,
-  mock,
   freezegun,
+  mock,
+  monotonic,
+  openai,
+  pytestCheckHook,
+  python-dateutil,
+  requests,
+  setuptools,
+  six,
 }:
-let
+
+buildPythonPackage rec {
   pname = "posthog";
-  version = "3.5.0";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  version = "3.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+nYMQxqI9RZ5vVL6KgiRLcx0JHWJTs/rZ6U6jIuaz+w=";
+    tag = "v${version}";
+    hash = "sha256-s4MVpJb5sRe4TIW9Bb068JTnUkObGOG3VlbWVuPPTM4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    backoff
+    monotonic
+    python-dateutil
     requests
     six
-    monotonic
-    backoff
-    python-dateutil
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    mock
     freezegun
+    mock
+    openai
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "posthog" ];
@@ -47,14 +48,18 @@ buildPythonPackage {
   disabledTests = [
     "test_load_feature_flags_wrong_key"
     # Tests require network access
+    "test_excepthook"
     "test_request"
+    "test_trying_to_use_django_integration"
     "test_upload"
+    # AssertionError: 2 != 3
+    "test_flush_interval"
   ];
 
   meta = with lib; {
-    description = "Official PostHog python library";
+    description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/releases/tag/v${version}";
+    changelog = "https://github.com/PostHog/posthog-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

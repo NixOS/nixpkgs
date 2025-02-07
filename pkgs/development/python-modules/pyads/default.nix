@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyads";
-  version = "3.4.0";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stlehmann";
     repo = "pyads";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HJ/dlRuwFSY5j/mAp6rLMlTV59GFwrTV27n73TWlCUo=";
+    tag = version;
+    hash = "sha256-OvDh92fwHW+UzEO5iqVOY7d5H0Es6CJK/f/HCyLO9J4=";
   };
 
   build-system = [ setuptools ];

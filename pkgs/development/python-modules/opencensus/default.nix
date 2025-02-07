@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  unittestCheckHook,
   google-api-core,
   opencensus-context,
 }:

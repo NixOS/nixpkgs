@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.13.1";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-STLIVYv2jy7pK5u8uCGGccYnBk1bCJOUN69td9wF5ZU=";
+    hash = "sha256-sAiStTs2QtC42+26I02/GSS2m+g6mnadWmJLAQlOMEs=";
   };
 
   build-system = [ setuptools ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/zzzeek/alembic";
     description = "Database migration tool for SQLAlchemy";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "alembic";
   };
 }

@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, reason, re, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  re,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -19,6 +26,6 @@ buildDunePackage {
     description = "Reason Native text layout library";
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/frame";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -20,10 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-DW0/6IAL5bS11AqOFL1JJmez5GzF2+N2d85e0l8HGdQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-NNvrDXBodrO3bxr4X1HEn5uHmHDJ1s9C70lPv7OkSCo=";
+    hash = "sha256-a8BXdA5rOjQRvacPRmobHxedHWNFZVyNN1xit+N8q3Y=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   propagatedBuildInputs = [
     numpy

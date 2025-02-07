@@ -3,16 +3,18 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pythonOlder,
   numpy,
   scikit-learn,
   scipy,
+  setuptools,
   tabulate,
   torch,
   tqdm,
   flaky,
+  llvmPackages,
   pandas,
+  pytest-cov-stub,
   pytestCheckHook,
   safetensors,
   pythonAtLeast,
@@ -20,48 +22,38 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JcplwaeYlGRAJXRNac1Ya/hgWoHE+NWjZhCU9eaSyRQ=";
+    hash = "sha256-AguMhI/MO4DNexe5azVEXOw7laTRBN0ecFW81qqh0rY=";
   };
 
-  # Remove at next skorch release:
-  patches = [
-    (fetchpatch {
-      name = "unbreak-tests-with-sklearn-1.4";
-      url = "https://github.com/skorch-dev/skorch/commit/1f7a779d0aa78589e17262c206f5775f2fcd75f8.diff";
-      hash = "sha256-X3SgjgDeq3PlBI13cC56LIL1dV1e+Z3tsBj9sz5pizo=";
-    })
-  ];
+  # AttributeError: 'NoneType' object has no attribute 'span' with Python 3.13
+  # https://github.com/skorch-dev/skorch/issues/1080
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
-  disabled = pythonOlder "3.8";
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scikit-learn
     scipy
     tabulate
-    torch
+    torch # implicit dependency
     tqdm
   ];
 
   nativeCheckInputs = [
     flaky
     pandas
+    pytest-cov-stub
     pytestCheckHook
     safetensors
   ];
 
-  # patch out pytest-cov dep/invocation
-  postPatch = ''
-    substituteInPlace setup.cfg  \
-      --replace "--cov=skorch" ""  \
-      --replace "--cov-report=term-missing" ""  \
-      --replace "--cov-config .coveragerc" ""
-  '';
+  checkInputs = lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   disabledTests =
     [
@@ -70,13 +62,8 @@ buildPythonPackage rec {
       # failing tests
       "test_pickle_load"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # there is a problem with the compiler selection
-      "test_fit_and_predict_with_compile"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # Python 3.11+ not yet supported for torch.compile
-      # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/_dynamo/eval_frame.py#L376-L377
       "test_fit_and_predict_with_compile"
     ];
 
@@ -93,11 +80,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skorch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Scikit-learn compatible neural net library using Pytorch";
     homepage = "https://skorch.readthedocs.io";
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

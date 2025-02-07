@@ -6,7 +6,6 @@
   fetchFromGitHub,
   poetry-core,
   pyjwt,
-  pytest-aiohttp,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "basilfx";
     repo = "aiobiketrax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6hSSPanagYKZxoyU8mp/1bWRcpJJkhNw3Rh82ogKGr4=";
+    tag = "v${version}";
+    hash = "sha256-N0v5SCTf3NkW/TCSTQL9VkrDj7/GXEejJGFCvJY4pIc=";
   };
 
   postPatch = ''
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "auth0-python" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     aiohttp

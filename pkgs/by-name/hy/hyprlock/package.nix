@@ -1,73 +1,89 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   libGL,
   libxkbcommon,
+  hyprgraphics,
   hyprlang,
+  hyprutils,
+  hyprwayland-scanner,
   pam,
+  sdbus-cpp_2,
+  systemdLibs,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   cairo,
   file,
   libjpeg,
   libwebp,
   pango,
   libdrm,
-  mesa,
-  unstableGitUpdater,
+  libgbm,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.3.0-unstable-2024-04-24";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
-    # FIXME: Change to a stable release once available
-    rev = "415262065fff0a04b229cd00165f346a86a0a73a";
-    hash = "sha256-jla5Wo0Qt3NEnD0OjNj85BGw0pR4Zlz5uy8AqHH7tuE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PotjNmR69yAEZP/Dn4lB0p7sHBjAPclNDbc5WkBZx4s=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    hyprwayland-scanner
+    wayland-scanner
   ];
 
   buildInputs = [
     cairo
     file
+    hyprgraphics
     hyprlang
+    hyprutils
     libdrm
     libGL
     libjpeg
     libwebp
     libxkbcommon
-    mesa
+    libgbm
     pam
     pango
+    sdbus-cpp_2
+    systemdLibs
     wayland
     wayland-protocols
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  # Install hyprlock config in location upstream looks
+  # https://github.com/hyprwm/hyprlock/blob/c976b6a1d135d3743556dc225c80e24918ef1fd5/src/config/ConfigManager.cpp#L185-L191
+  # https://github.com/hyprwm/hyprutils/blob/6a8bc9d2a4451df12f5179dc0b1d2d46518a90ab/src/path/Path.cpp#L71-L72
+  postInstall = ''
+    mkdir -p $out/etc/xdg/hypr
+    ln -s $out/share/hypr/hyprlock.conf $out/etc/xdg/hypr/hyprlock.conf
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers =
+      lib.teams.hyprland.members
+      ++ (with lib.maintainers; [
+        iynaix
+      ]);
     mainProgram = "hyprlock";
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.platforms.linux;
   };
 })

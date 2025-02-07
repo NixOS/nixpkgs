@@ -1,29 +1,29 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv }:
-rustPlatform.buildRustPackage {
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
+rustPlatform.buildRustPackage rec {
   pname = "loco-cli";
-  version = "0.2.6";
+  version = "0.2.9";
 
-  src = fetchFromGitHub {
-    owner = "loco-rs";
-    repo = "loco";
-    rev = "51e0362";
-    hash = "sha256-ZiAl+Ru2ggLy7RRqQySwKRbWtGesR7ZgREIpHKrJ00Q=";
-    sparseCheckout = [ "loco-cli" ];
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-AhL+k5XEf8m1pyOECTlPwALUG/ELJeACfV2kulxlzaA=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TwsnEkD6SVgyvtJHgG0Da+6K/bbDwnM8b4CMhba+ej8=";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  #Skip trycmd integration tests
+  checkFlags = [ "--skip=cli_tests" ];
 
-  sourceRoot = "source/loco-cli";
-
-  meta = with lib; {
-    mainProgram = "loco";
+  meta = {
     description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites";
     homepage = "https://loco.rs";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ sebrut ];
+    changelog = "https://github.com/loco-rs/loco/blob/master/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sebrut ];
+    mainProgram = "loco";
   };
 }

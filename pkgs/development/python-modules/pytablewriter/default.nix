@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pytablewriter";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b3YzDqNATaT/FFG4/x9EGlYlhXKPvgNB2xnm0bzvLJQ=";
+    tag = "v${version}";
+    hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     typepy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       dominate
       elasticsearch
@@ -84,7 +84,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pathvalidate" ];
 
@@ -106,7 +106,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
-    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
+    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ genericnerdyusername ];
   };

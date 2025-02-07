@@ -4,7 +4,6 @@
   callPackage,
   pythonOlder,
   fetchPypi,
-  fetchpatch2,
   writeText,
 
   # build-system
@@ -23,7 +22,6 @@
   argcomplete,
   hypothesis,
   mock,
-  nose,
   pygments,
   requests,
   xmlschema,
@@ -31,19 +29,13 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.2.2";
+  version = "8.3.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3ku4EE4gGTnM3GiLJ6iae+IHmyLivSsH+Aa2unEReXc=";
+    hash = "sha256-llNw0GK84R5zho4DNausMbTT3g6C9AB0CNJCtPhhB2E=";
   };
-
-  patches = [
-    # https://github.com/pytest-dev/pytest/issues/12424
-    # https://github.com/pytest-dev/pytest/pull/12436
-    ./8.2.2-unittest-testcase-regression.patch
-  ];
 
   outputs = [
     "out"
@@ -66,13 +58,12 @@ buildPythonPackage rec {
       tomli
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       argcomplete
       attrs
       hypothesis
       mock
-      nose
       pygments
       requests
       setuptools
@@ -93,7 +84,7 @@ buildPythonPackage rec {
     pytestcachePhase() {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
-    preDistPhases+=" pytestcachePhase"
+    appendToVar preDistPhases pytestcachePhase
 
     # pytest generates it's own bytecode files to improve assertion messages.
     # These files similar to cpython's bytecode files but are never laoded
@@ -106,7 +97,7 @@ buildPythonPackage rec {
         #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
-    preDistPhases+=" pytestRemoveBytecodePhase"
+    appendToVar preDistPhases pytestRemoveBytecodePhase
   '';
 
   pythonImportsCheck = [ "pytest" ];
@@ -115,12 +106,7 @@ buildPythonPackage rec {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [
-      domenkozar
-      lovek323
-      madjar
-      lsix
-    ];
+    maintainers = teams.python.members;
     license = licenses.mit;
   };
 }

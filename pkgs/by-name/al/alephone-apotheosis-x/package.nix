@@ -1,4 +1,8 @@
-{ lib, alephone, requireFile }:
+{
+  lib,
+  alephone,
+  requireFile,
+}:
 
 alephone.makeWrapper rec {
   pname = "apotheosis-x";
@@ -8,7 +12,7 @@ alephone.makeWrapper rec {
   zip = requireFile {
     name = "Apotheosis_X_1.1.zip";
     url = "https://www.moddb.com/mods/apotheosis-x/downloads";
-    sha256 = "sha256-4Y/RQQeN4VTpig8ZyxUpVHwzN8W8ciTBCkSzND8SMbs=";
+    hash = "sha256-4Y/RQQeN4VTpig8ZyxUpVHwzN8W8ciTBCkSzND8SMbs=";
   };
 
   sourceRoot = "Apotheosis X 1.1";

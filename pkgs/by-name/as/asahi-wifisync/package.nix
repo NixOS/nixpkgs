@@ -1,6 +1,7 @@
-{ lib
-, fetchCrate
-, rustPlatform
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wKd6rUUnegvl6cHODVQlllaOXuAGlmwx9gr73I/2l/c=";
   };
 
-  cargoHash = "sha256-UF1T0uAFO/ydTWigYXOP9Ju1qgV1oBmJuXSq4faSzJM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZxgRxQyDID3mBpr8dhHScctk14Pm9V51Gn24d24JyVk=";
   cargoDepsName = pname;
 
   meta = with lib; {

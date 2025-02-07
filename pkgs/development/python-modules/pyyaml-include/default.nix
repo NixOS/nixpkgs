@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tanbro";
     repo = "pyyaml-include";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xsNMIEBYqMVQp+H8R7XpFCwROXA8I6bFvAuHrRvC+DI=";
   };
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Extending PyYAML with a custom constructor for including YAML files within YAML files";
     homepage = "https://github.com/tanbro/pyyaml-include";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

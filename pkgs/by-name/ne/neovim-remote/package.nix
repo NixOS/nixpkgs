@@ -1,11 +1,13 @@
-{ lib
-, fetchFromGitHub
-, python3
-, neovim
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  neovim,
+  fetchpatch,
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "neovim-remote";
   version = "2.5.1";
 
@@ -13,7 +15,7 @@ with python3.pkgs; buildPythonApplication rec {
     owner = "mhinz";
     repo = "neovim-remote";
     rev = "v${version}";
-    sha256 = "0lbz4w8hgxsw4k1pxafrl3rhydrvi5jc6vnsmkvnhh6l6rxlmvmq";
+    hash = "sha256-uO5KezbUQGj3rNpuw2SJOzcP86DZqX7DJFz3BxEnf1E=";
   };
 
   patches = [
@@ -35,7 +37,7 @@ with python3.pkgs; buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME="$(mktemp -d)"

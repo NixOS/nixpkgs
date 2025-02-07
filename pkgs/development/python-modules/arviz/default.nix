@@ -1,49 +1,52 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  dm-tree,
   fetchFromGitHub,
-  emcee,
+
+  # build-system
+  packaging,
+  setuptools,
+
+  # dependencies
   h5netcdf,
   matplotlib,
-  netcdf4,
-  numba,
   numpy,
   pandas,
-  setuptools,
-  cloudpickle,
-  pytestCheckHook,
   scipy,
-  packaging,
-  pythonOlder,
   typing-extensions,
   xarray,
   xarray-einstats,
-  zarr,
+
+  # tests
+  bokeh,
+  cloudpickle,
+  emcee,
   ffmpeg,
   h5py,
-  jaxlib,
-  torchvision,
   jax,
-  # , pymc3 (circular dependency)
+  jaxlib,
+  numba,
+  numpyro,
+  #, pymc3 (circular dependency)
   pyro-ppl,
   #, pystan (not packaged)
-  numpyro,
-  bokeh,
+  pytestCheckHook,
+  torchvision,
+  writableTmpDirAsHomeHook,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.18.0";
+  version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SZRqSqChQBSA9/jBXN2ds9hh6TI3qZksHai1j2oVsq0=";
+    tag = "v${version}";
+    hash = "sha256-6toqOGwk8YbatfiDCTEG4r0z3zZAA8zcNVZJqqssYrY=";
   };
 
   build-system = [
@@ -52,10 +55,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    dm-tree
     h5netcdf
     matplotlib
-    netcdf4
     numpy
     pandas
     scipy
@@ -65,6 +66,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    bokeh
     cloudpickle
     emcee
     ffmpeg
@@ -78,15 +80,18 @@ buildPythonPackage rec {
     # pystan (not packaged)
     pytestCheckHook
     torchvision
+    writableTmpDirAsHomeHook
     zarr
-    bokeh
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  pytestFlagsArray = [
+    "arviz/tests/base_tests/"
 
-  pytestFlagsArray = [ "arviz/tests/base_tests/" ];
+    # AttributeError: module 'zarr.storage' has no attribute 'DirectoryStore'
+    # https://github.com/arviz-devs/arviz/issues/2357
+    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
+    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
+  ];
 
   disabledTests = [
     # Tests require network access
@@ -94,28 +99,23 @@ buildPythonPackage rec {
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
+
     # countourpy is not available at the moment
     "test_plot_kde"
     "test_plot_kde_2d"
     "test_plot_pair"
-    # Array mismatch
-    "test_plot_ts"
-    # The following two tests fail in a common venv-based setup.
-    # An issue has been opened upstream: https://github.com/arviz-devs/arviz/issues/2282
-    "test_plot_ppc_discrete"
-    "test_plot_ppc_discrete_save_animation"
-    # Assertion error
-    "test_data_zarr"
-    "test_plot_forest"
   ];
+
+  # Tests segfault on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "arviz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
     changelog = "https://github.com/arviz-devs/arviz/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ omnipotententity ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ omnipotententity ];
   };
 }

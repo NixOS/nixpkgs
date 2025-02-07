@@ -1,34 +1,31 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   testers,
   wakatime-cli,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "wakatime-cli";
-  version = "1.93.0";
+  version = "1.112.1";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
-    rev = "v${version}";
-    hash = "sha256-S4AvAGpaxp5lKi9RnLLaN8qLURYsLWIzhtXKRgQPuGc=";
+    tag = "v${version}";
+    hash = "sha256-J8hEQkTCaJhYYnuO8J2Tvgm/lWuPKHubKESb7WPzzkk=";
   };
 
-  vendorHash = "sha256-+9zdEIaKQlLcBwFaY5Fe5mpHWQDqfV+j1TPmDkdRjyk=";
+  vendorHash = "sha256-Zy54fGyTvLfrFEiPIcNtx25EqaIaYq46DYBpbZXfOFQ=";
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
   ];
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.22.4" "go 1.22.3"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags =
     let
@@ -39,6 +36,7 @@ buildGo122Module rec {
         "TestSendHeartbeats_ExtraHeartbeats"
         "TestSendHeartbeats_IsUnsavedEntity"
         "TestSendHeartbeats_NonExistingExtraHeartbeatsEntity"
+        "TestSendHeartbeats_ExtraHeartbeatsIsUnsavedEntity"
         "TestFileExperts_Err(Auth|Api|BadRequest)"
 
         # Flaky tests
@@ -52,11 +50,11 @@ buildGo122Module rec {
     command = "HOME=$(mktemp -d) wakatime-cli --version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wakatime.com/";
     description = "WakaTime command line interface";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "wakatime-cli";
   };
 }

@@ -35,7 +35,7 @@ bundlerApp {
           procps
           util-linux
         ]
-        ++ lib.optionals stdenv.isLinux [
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           iproute2
           virt-what
           zfs
@@ -60,7 +60,10 @@ bundlerApp {
     homepage = "https://github.com/puppetlabs/facter";
     license = lib.licenses.asl20;
     mainProgram = "facter";
-    maintainers = with lib.maintainers; [ womfoo anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      womfoo
+      anthonyroussel
+    ];
     platforms = lib.platforms.unix;
   };
 }

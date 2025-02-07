@@ -2,56 +2,64 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  numpy,
+  pybind11,
+  setuptools,
+
+  # dependencies
   clarabel,
   cvxopt,
-  ecos,
-  fetchPypi,
-  numpy,
   osqp,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
   scs,
-  setuptools,
-  wheel,
-  pybind11,
-  useOpenmp ? (!stdenv.isDarwin),
+
+  # checks
+  hypothesis,
+  pytestCheckHook,
+
+  useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.4.3";
-  format = "pyproject";
+  version = "1.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sbB4yMBZI60Sjn2BSwvhwzesBSYqeLdXqOb5V2SK2VM=";
+  src = fetchFromGitHub {
+    owner = "cvxpy";
+    repo = "cvxpy";
+    tag = "v${version}";
+    hash = "sha256-t2+j0ZrvGvTv6FoNVpD2MVFZKfGgqTaN32OKwBXM3Zw=";
   };
 
   # we need to patch out numpy version caps from upstream
   postPatch = ''
-    sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  build-system = [
+    numpy
     pybind11
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     clarabel
     cvxopt
-    ecos
     numpy
     osqp
     scipy
     scs
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   # Required flags from https://github.com/cvxpy/cvxpy/releases/tag/v1.1.11
   preBuild = lib.optionalString useOpenmp ''
@@ -61,28 +69,22 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "cvxpy" ];
 
-  disabledTests =
-    [
-      # Disable the slowest benchmarking tests, cuts test time in half
-      "test_tv_inpainting"
-      "test_diffcp_sdp_example"
-      "test_huber"
-      "test_partial_problem"
-      # https://github.com/cvxpy/cvxpy/issues/2174
-      "test_scipy_mi_time_limit_reached"
-    ]
-    ++ lib.optionals stdenv.isAarch64 [
-      "test_ecos_bb_mi_lp_2" # https://github.com/cvxpy/cvxpy/issues/1241#issuecomment-780912155
-    ];
+  disabledTests = [
+    # Disable the slowest benchmarking tests, cuts test time in half
+    "test_tv_inpainting"
+    "test_diffcp_sdp_example"
+    "test_huber"
+    "test_partial_problem"
+  ];
 
   pythonImportsCheck = [ "cvxpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

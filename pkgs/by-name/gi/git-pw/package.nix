@@ -1,14 +1,15 @@
-{ lib
-, git
-, python3
-, fetchFromGitHub
-, testers
-, git-pw
+{
+  lib,
+  git,
+  python3,
+  fetchFromGitHub,
+  testers,
+  git-pw,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-pw";
-  version = "2.6.0";
+  version = "2.7.0";
   format = "pyproject";
 
   PBR_VERSION = version;
@@ -16,14 +17,9 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "getpatchwork";
     repo = "git-pw";
-    rev = version;
-    hash = "sha256-3IiFU6qGI2MDTBOLQ2qyT5keUMNTNG3sxhtGR3bkIBc=";
+    tag = version;
+    hash = "sha256-y5qbvhuT+tjXvIFgCrM7RIPF6zhCkMu+/qByValrEXE=";
   };
-
-  postPatch = ''
-    # We don't want to run the coverage.
-    substituteInPlace tox.ini --replace "--cov=git_pw --cov-report" ""
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     pbr
@@ -39,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytest
     git
   ];

@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "polychromatic";
-  version = "0.9.1";
+  version = "0.9.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
-    rev = "v${version}";
-    hash = "sha256-3Pt1Z8G0xDWlFD7LxJILPUifMBTN4OvPNHZv80umO1s=";
+    tag = "v${version}";
+    hash = "sha256-fw4XLaivf8kRkNaemHvd9zcVKn87ZZhP+ZDJsCJHv/4=";
   };
 
   postPatch = ''

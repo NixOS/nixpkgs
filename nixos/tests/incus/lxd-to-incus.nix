@@ -3,7 +3,7 @@ import ../make-test-python.nix (
   {
     pkgs,
     lib,
-    incus ? pkgs.incus-lts,
+    lts ? true,
     ...
   }:
 
@@ -21,7 +21,7 @@ import ../make-test-python.nix (
     };
 
     nodes.machine =
-      { lib, ... }:
+      { ... }:
       {
         virtualisation = {
           diskSize = 6144;
@@ -72,7 +72,7 @@ import ../make-test-python.nix (
 
           incus = {
             enable = true;
-            package = incus;
+            package = if lts then pkgs.incus-lts else pkgs.incus;
           };
         };
         networking.nftables.enable = true;

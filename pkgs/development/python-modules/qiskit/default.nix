@@ -33,7 +33,7 @@ in
 buildPythonPackage rec {
   pname = "qiskit";
   # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "1.0.1";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Cjfn+9h8W08FcAlVC7b7O8Z+VGx5UeHosSgYJin/evE=";
+    tag = version;
+    hash = "sha256-Dqd8ywnACfvrfY7Fzw5zYwhlsDvHZErPGvxBPs2pS04=";
   };
 
   nativeBuildInputs = [ setuptools ];

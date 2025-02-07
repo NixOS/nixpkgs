@@ -1,15 +1,15 @@
-{ lib
-, boost
-, cmake
-, cxxopts
-, digestpp
-, fetchFromGitHub
-, fmt
-, jsoncons
-, pugixml
-, sqlite
-, sqlite_orm
-, stdenv
+{
+  lib,
+  boost,
+  cmake,
+  cxxopts,
+  digestpp,
+  fetchFromGitHub,
+  fmt,
+  jsoncons,
+  pugixml,
+  sqlite_orm,
+  stdenv,
 }:
 stdenv.mkDerivation {
   pname = "bt-migrate";
@@ -61,5 +61,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ ambroisie ];
     mainProgram = "BtMigrate";
     platforms = platforms.all;
+    broken = true; # https://github.com/mikedld/bt-migrate/issues/26
   };
 }

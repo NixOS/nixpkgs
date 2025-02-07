@@ -1,4 +1,13 @@
-{ stdenv, lib, qt6, fetchFromGitHub, cmake, pkg-config, jsoncpp, readline }:
+{
+  stdenv,
+  lib,
+  qt6,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  jsoncpp,
+  readline,
+}:
 
 stdenv.mkDerivation rec {
   pname = "med";
@@ -8,11 +17,21 @@ stdenv.mkDerivation rec {
     owner = "allencch";
     repo = "med";
     rev = version;
-    sha256 = "sha256-m2lVRSNaklB0Xfqgtyc0lNWXfTD8wTWsE06eGv4FOBE=";
+    hash = "sha256-m2lVRSNaklB0Xfqgtyc0lNWXfTD8wTWsE06eGv4FOBE=";
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook cmake pkg-config ];
-  buildInputs = [ qt6.qtbase qt6.qttools qt6.qtwayland jsoncpp readline ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwayland
+    jsoncpp
+    readline
+  ];
 
   postPatch = ''
     find . -type f -exec sed -i "s|/opt/med|$out/share/med|g" {} +

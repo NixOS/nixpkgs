@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "5.1.2";
+  version = "6.0.0";
 in
 buildPecl {
   inherit version;
@@ -19,10 +19,10 @@ buildPecl {
     owner = "swoole";
     repo = "swoole-src";
     rev = "v${version}";
-    hash = "sha256-WTsntvauiooj081mOoFcK6CVpnCCR/cEQtJbsOIJ/wo=";
+    hash = "sha256-h49TMwtEaaRfQO69Z9sAPsCqLYt/w/6Vx9ZVBajAU5U=";
   };
 
-  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
+  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
 
   # tests require internet access
   doCheck = false;

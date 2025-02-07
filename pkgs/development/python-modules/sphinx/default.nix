@@ -4,7 +4,6 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   isPyPy,
 
   # build-system
@@ -36,18 +35,23 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  typing-extensions,
+
+  # reverse dependencies to test
+  breathe,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.3.7";
-  format = "pyproject";
+  version = "8.1.3";
+  pyproject = true;
+
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     postFetch = ''
       # Change ä to æ in file names, since ä can be encoded multiple ways on different
       # filesystems, leading to different hashes on different platforms.
@@ -55,15 +59,12 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
+    hash = "sha256-AObNQz2gKoPHfvC5aoefynXfQMe3bnQpEx6KrLNQBoQ=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "python-3.13-compat.patch";
-      url = "https://github.com/sphinx-doc/sphinx/commit/3496de62b743942115acb486cf35dfcc102586c3.patch";
-      hash = "sha256-5VBPOQeGyj3a8VBq4hc9S/eKaeVZeGCTNislwgsauZo=";
-    })
+    # https://github.com/sphinx-doc/sphinx/commit/5ff3740063c1ac57f17ecd697bcd06cc1de4e75c
+    ./pygments-2.19-compat.patch
   ];
 
   build-system = [ flit-core ];
@@ -99,6 +100,7 @@ buildPythonPackage rec {
     html5lib
     pytestCheckHook
     pytest-xdist
+    typing-extensions
   ];
 
   preCheck = ''
@@ -121,10 +123,17 @@ buildPythonPackage rec {
       "test_class_alias_having_doccomment"
       "test_class_alias_for_imported_object_having_doccomment"
       "test_decorators"
+      # racy with too many threads
+      # https://github.com/NixOS/nixpkgs/issues/353176
+      "test_document_toc_only"
+      # Assertion error
+      "test_gettext_literalblock_additional"
       # requires cython_0, but fails miserably on 3.11
       "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
+      # https://github.com/sphinx-doc/sphinx/issues/13223
+      "test_html_multi_line_copyright"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/sphinx-doc/sphinx/issues/12430
@@ -143,6 +152,10 @@ buildPythonPackage rec {
       "test_methoddescriptor"
       "test_partialfunction"
     ];
+
+  passthru.tests = {
+    inherit breathe;
+  };
 
   meta = {
     description = "Python documentation generator";

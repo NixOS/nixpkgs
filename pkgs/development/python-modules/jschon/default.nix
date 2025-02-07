@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, rfc3986
-, pytestCheckHook
-, hypothesis
-, requests
-, pytest-httpserver
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  rfc3986,
+  pytestCheckHook,
+  hypothesis,
+  requests,
+  pytest-httpserver,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -56,6 +57,11 @@ buildPythonPackage rec {
     pytest-httpserver
     #pytest-benchmark # not needed for distribution
     pytest-xdist # not used upstream, but massive speedup
+  ];
+
+  disabledTests = [
+    # flaky, timing sensitive
+    "test_keyword_dependency_resolution"
   ];
 
   disabledTestPaths = [

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   bazel_6,
   jdk,
-  git,
+  nix-update-script,
 }:
 
 let
@@ -13,36 +13,41 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "1c729c2775715fd98f0f948a512eb173213250da";
-    hash = "sha256-1iaDDM8/v8KCOUjPgLUtZVta7rMzwlIK//cCoLUrb/s=";
+    rev = "40bc9ad53e5a59d596935839e7c072679e706266";
+    hash = "sha256-CL0YMQd1ck6/dlvJCLxt9jYyqDuk+iAWfdBOMj864u8=";
   };
-in buildBazelPackage rec {
+in
+buildBazelPackage rec {
   pname = "bant";
-  version = "0.1.5";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-3xGAznR/IHQHY1ISqmU8NxI90Pl57cdYeRDeLVh9L08=";
+    hash = "sha256-vqZGHMIs4t1TP+9r2hvtFXN5B5GXZerC18l8gQA9cmQ=";
   };
 
-  bazelFlags = ["--registry" "file://${registry}"];
+  bazelFlags = [
+    "--registry"
+    "file://${registry}"
+  ];
 
   postPatch = ''
     patchShebangs scripts/create-workspace-status.sh
   '';
 
   fetchAttrs = {
-    sha256 = {
-      aarch64-linux = "sha256-jtItWNfl+ebQqU8VWmvLsgNYNARGxN8+CTBz2nZcBEY=";
-      x86_64-linux = "sha256-ACJqybpHoMSg2ApGWkIyhdAQjIhb8gxUdo8SuWJvTNE=";
-    }.${system} or (throw "No hash for system: ${system}");
+    hash =
+      {
+        aarch64-linux = "sha256-M6LMaqPli71YvJS/4iwvowCyVaf+qe8WSICR3CgdU34=";
+        x86_64-linux = "sha256-iBxAzbSriYkkgDDkSjSSSVeWGBygxKAfruh8T5drUFw=";
+      }
+      .${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
     jdk
-    git
   ];
   bazel = bazel_6;
 
@@ -56,11 +61,16 @@ in buildBazelPackage rec {
     '';
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Bazel/Build Analysis and Navigation Tool";
     homepage = "http://bant.build/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hzeller lromor ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      hzeller
+      lromor
+    ];
+    platforms = lib.platforms.linux;
   };
 }

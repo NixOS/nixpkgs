@@ -1,23 +1,24 @@
 {
   lib,
   buildDotnetModule,
-  fetchFromGitHub,
   dotnetCorePackages,
+  fetchFromGitHub,
   nix-update-script,
 }:
+
 buildDotnetModule rec {
   pname = "garnet";
-  version = "1.0.13";
+  version = "1.0.54";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "garnet";
-    rev = "v${version}";
-    hash = "sha256-mAZBYVOAbVPKcOpt+vA4uEK+xEx4qXPnAthsPsxiXkw=";
+    tag = "v${version}";
+    hash = "sha256-tTJz4LilzrSDDmsTwRRK3Svif3ewUWuU3nbUN8GyyPY=";
   };
 
   projectFile = "main/GarnetServer/GarnetServer.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;

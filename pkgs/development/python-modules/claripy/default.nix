@@ -8,12 +8,13 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  typing-extensions,
   z3-solver,
 }:
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.109";
+  version = "9.2.140";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "claripy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-loDB5y5j8hVmQL2zZf/az6jsRJKRRNWlcRp2WjS90Hc=";
+    tag = "v${version}";
+    hash = "sha256-VnvAIQm4TiNUGmpg1agOj/qEQZiR011M1BQdSyrCY5Y=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     cachetools
     decorator
     pysmt
+    typing-extensions
     z3-solver
   ] ++ z3-solver.requiredPythonModules;
 

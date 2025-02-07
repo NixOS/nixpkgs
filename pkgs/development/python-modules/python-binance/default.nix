@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "python-binance";
-  version = "1.0.17";
+  version = "1.0.27";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sammchardy";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e88INUEkjOSVOD0KSs9LmstuQ7dQZdJk8K6VqFEusww=";
+    tag = "v${version}";
+    hash = "sha256-nsJuHxPXhMBRY4BUDDLj5sHK/GuJA0pBU3RGUDxVm50=";
   };
 
   patches = [

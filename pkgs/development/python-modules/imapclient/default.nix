@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WY3OLPUwixrL2NSLfNBSSNMXJEoYBL+O6KoglU3Cz9g=";
   };
 

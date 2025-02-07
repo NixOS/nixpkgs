@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 let
@@ -20,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   };
   sourceRoot = "${src.name}/${dirname}";
 
-  cargoHash = "sha256-vmCaQxPkzz1ZVmtX7L3VeQb3kWhVqyPoQ1NrTSiJN9Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9nA18f+Dwps45M/OIY0jtx7QgyJDTVUsPndFdNBKHCQ=";
 
   passthru.updateScript = nix-update-script { };
 

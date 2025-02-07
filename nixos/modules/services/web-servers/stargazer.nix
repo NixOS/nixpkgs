@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.stargazer;
@@ -19,18 +24,22 @@ let
 
   '';
   genINI = lib.generators.toINI { };
-  configFile = pkgs.writeText "config.ini" (lib.strings.concatStrings (
-    [ globalSection ] ++ (lib.lists.forEach cfg.routes (section:
-      let
-        name = section.route;
-        params = builtins.removeAttrs section [ "route" ];
-      in
-      genINI
-        {
+  configFile = pkgs.writeText "config.ini" (
+    lib.strings.concatStrings (
+      [ globalSection ]
+      ++ (lib.lists.forEach cfg.routes (
+        section:
+        let
+          name = section.route;
+          params = builtins.removeAttrs section [ "route" ];
+        in
+        genINI {
           "${name}" = params;
-        } + "\n"
-    ))
-  ));
+        }
+        + "\n"
+      ))
+    )
+  );
 in
 {
   options.services.stargazer = {
@@ -80,6 +89,21 @@ in
         Number of seconds to wait for the client to send a complete
         request and for stargazer to finish sending the response.
         Set to 0 to disable.
+      '';
+    };
+
+    allowCgiUser = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        When enabled, the stargazer process will be given `CAP_SETGID`
+        and `CAP_SETUID` so that it can run cgi processes as a different
+        user. This is required if the `cgi-user` option is used for a route.
+        Note that these capabilities could allow privilege escalation so be
+        careful. For that reason, this is disabled by default.
+
+        You will need to create the user mentioned `cgi-user` if it does not
+        already exist.
       '';
     };
 
@@ -136,22 +160,27 @@ in
     };
 
     routes = lib.mkOption {
-      type = lib.types.listOf
-        (lib.types.submodule {
-          freeformType = with lib.types; attrsOf (nullOr
-            (oneOf [
-              bool
-              int
-              float
-              str
-            ]) // {
-            description = "INI atom (null, bool, int, float or string)";
-          });
+      type = lib.types.listOf (
+        lib.types.submodule {
+          freeformType =
+            with lib.types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+              ])
+              // {
+                description = "INI atom (null, bool, int, float or string)";
+              }
+            );
           options.route = lib.mkOption {
             type = lib.types.str;
             description = "Route section name";
           };
-        });
+        }
+      );
       default = [ ];
       description = ''
         Routes that Stargazer should server.
@@ -206,6 +235,51 @@ in
         # User and group
         User = cfg.user;
         Group = cfg.group;
+        AmbientCapabilities = lib.mkIf cfg.allowCgiUser [
+          "CAP_SETGID"
+          "CAP_SETUID"
+        ];
+
+        # Hardening
+        UMask = "0077";
+        PrivateTmp = true;
+        ProtectHome = true;
+        ProtectSystem = "full";
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectControlGroups = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        PrivateDevices = true;
+        NoNewPrivileges = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        MemoryDenyWriteExecute = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RemoveIPC = true;
+        CapabilityBoundingSet =
+          [
+            "~CAP_SYS_PTRACE"
+            "~CAP_SYS_ADMIN"
+            "~CAP_SETPCAP"
+            "~CAP_SYS_TIME"
+            "~CAP_SYS_PACCT"
+            "~CAP_SYS_TTY_CONFIG "
+            "~CAP_SYS_CHROOT"
+            "~CAP_SYS_BOOT"
+            "~CAP_NET_ADMIN"
+          ]
+          ++ lib.lists.optional (!cfg.allowCgiUser) [
+            "~CAP_SETGID"
+            "~CAP_SETUID"
+          ];
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "~@cpu-emulation @debug @keyring @mount @obsolete"
+        ] ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
       };
     };
 

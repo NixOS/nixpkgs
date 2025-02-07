@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   vteInitSnippet = ''
@@ -15,14 +17,14 @@ in
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   options = {
 
-    programs.bash.vteIntegration = mkOption {
+    programs.bash.vteIntegration = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable Bash integration for VTE terminals.
         This allows it to preserve the current directory of the shell
@@ -30,9 +32,9 @@ in
       '';
     };
 
-    programs.zsh.vteIntegration = mkOption {
+    programs.zsh.vteIntegration = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable Zsh integration for VTE terminals.
         This allows it to preserve the current directory of the shell
@@ -42,12 +44,12 @@ in
 
   };
 
-  config = mkMerge [
-    (mkIf config.programs.bash.vteIntegration {
-      programs.bash.interactiveShellInit = mkBefore vteInitSnippet;
+  config = lib.mkMerge [
+    (lib.mkIf config.programs.bash.vteIntegration {
+      programs.bash.interactiveShellInit = lib.mkBefore vteInitSnippet;
     })
 
-    (mkIf config.programs.zsh.vteIntegration {
+    (lib.mkIf config.programs.zsh.vteIntegration {
       programs.zsh.interactiveShellInit = vteInitSnippet;
     })
   ];

@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -14,30 +13,25 @@
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.15.2";
+  version = "1.15.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FvKis02e4MK1eMlgoYCMl04oIs959um5xFWqzhCILUU=";
+    hash = "sha256-JrxjRCphgvt17+2LUXQd0tHbLxdr7Ixk4gpYYla48Uk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools>=39.2,<72"' '"setuptools"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/smarie/python-makefun/issues/102
-    "test_args_order_and_kind"
-  ];
 
   pythonImportsCheck = [ "makefun" ];
 

@@ -1,34 +1,37 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, makeWrapper
-, gh
-, fzf
-, coreutils
-, gawk
-, gnused
-, withBat ? false
-, bat
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  makeWrapper,
+  gh,
+  fzf,
+  coreutils,
+  gawk,
+  gnused,
+  withBat ? false,
+  bat,
 }:
 let
-  binPath = lib.makeBinPath ([
-    gh
-    fzf
-    coreutils
-    gawk
-    gnused
-  ]
-  ++ lib.optional withBat bat);
+  binPath = lib.makeBinPath (
+    [
+      gh
+      fzf
+      coreutils
+      gawk
+      gnused
+    ]
+    ++ lib.optional withBat bat
+  );
 in
 stdenvNoCC.mkDerivation rec {
   pname = "gh-f";
-  version = "1.1.5";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "gennaro-tedesco";
     repo = "gh-f";
     rev = "v${version}";
-    hash = "sha256-ITl8T8Oe21m047ygFlxWVjzUYPG4rlcTjfSpsropYJw=";
+    hash = "sha256-62FVFW2KLdH0uonIf3OVBFMGLcCteMjydaLAjWtxwUo=";
   };
 
   nativeBuildInputs = [

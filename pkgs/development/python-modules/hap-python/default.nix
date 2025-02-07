@@ -13,24 +13,27 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.9.1";
-  format = "setuptools";
+  version = "4.9.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nnh8PSEcuPN1qGuInJ7uYe83zdne8axbTrHd4g1xoJs=";
+    tag = version;
+    hash = "sha256-mBjVUfNHuGSeLRisqu9ALpTDwpxHir+6X0scq+HrzxA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     chacha20poly1305-reuseable
     cryptography
@@ -39,7 +42,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies.QRCode = [
+  optional-dependencies.QRCode = [
     base36
     pyqrcode
   ];
@@ -48,7 +51,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.QRCode;
+  ] ++ optional-dependencies.QRCode;
 
   disabledTestPaths = [
     # Disable tests requiring network access

@@ -1,13 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   poetry-core,
-  pythonOlder,
+
+  # dependencies
   fastavro,
   httpx,
   httpx-sse,
   pydantic,
+  pydantic-core,
   requests,
   tokenizers,
   types-requests,
@@ -16,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.5.8";
+  version = "5.13.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hM52Zv+PvfT0H7X2ykUqsmOaUUvIiWeihUqbG4INbqA=";
+  src = fetchFromGitHub {
+    owner = "cohere-ai";
+    repo = "cohere-python";
+    tag = version;
+    hash = "sha256-vDf5EoXCnYJhPnn9uj9L2cAnj7z1HVG1KxtxXByjwt8=";
   };
 
   build-system = [ poetry-core ];
@@ -33,6 +37,7 @@ buildPythonPackage rec {
     httpx
     httpx-sse
     pydantic
+    pydantic-core
     requests
     tokenizers
     types-requests
@@ -44,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cohere" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simplify interfacing with the Cohere API";
     homepage = "https://docs.cohere.com/docs";
     changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

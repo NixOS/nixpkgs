@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paypal";
     repo = "Checkout-Python-SDK";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-04ojNJeqVMdhnGpeCD+wzgKGLI22tVvrMW3gF/SH7KU=";
   };
 

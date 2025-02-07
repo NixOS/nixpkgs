@@ -11,25 +11,26 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
-  version = "2.32.1";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
     rev = version;
-    sha256 = "sha256-N92qv1CjOSeoknIbf+LA0oAzy75uRGjOpcpHCg7g5lY=";
+    sha256 = "sha256-e4e7Vj+WPRG2kH4Avanj6STYmwY7N39XI6SZV99CGE0=";
   };
   doCheck = false;
 
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security SystemConfiguration ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  cargoHash = "sha256-9L02ox2T+dBRx+mmFpy5Bktsyp3C/havfZoDaNevIMw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3TSLgOBvf9IVE7zyxYnDTEQbbL/QAtpyhPmCDbTLs1s=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sentry-cli \
         --bash <($out/bin/sentry-cli completions bash) \
         --fish <($out/bin/sentry-cli completions fish) \

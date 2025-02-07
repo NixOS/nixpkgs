@@ -5,7 +5,6 @@
   setuptools,
   click,
   cython,
-  pytestCheckHook,
   pythonOlder,
   tabulate,
 }:
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VKCOM";
     repo = "YouTokenToMe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IFZS4jSi4yMzI7VbOPHI3KFZu5tjPjfQDPY7e1qbKAM=";
   };
 

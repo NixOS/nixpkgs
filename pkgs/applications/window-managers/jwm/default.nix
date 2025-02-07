@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, expat
-, fontconfig
-, freetype
-, gettext
-, libX11
-, libXau
-, libXdmcp
-, libXext
-, libXft
-, libXinerama
-, libXmu
-, libXpm
-, libjpeg
-, libpng
-, librsvg
-, pango
-, pkg-config
-, which
-, xorg
-, xorgproto
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  expat,
+  fontconfig,
+  freetype,
+  gettext,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXext,
+  libXft,
+  libXinerama,
+  libXmu,
+  libXpm,
+  libjpeg,
+  libpng,
+  librsvg,
+  pango,
+  pkg-config,
+  which,
+  xorg,
+  xorgproto,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.3";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-HPcNXf+frYbT8lr5vU5xpUnyjGpQ5rc2G14EjDwpk3c=";
+    hash = "sha256-odGqHdm8xnjEcXmpKMy51HEhbjcROLL3hRSdlbmTr2g=";
   };
 
   nativeBuildInputs = [

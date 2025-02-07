@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
+
+  # build-system
   setuptools,
-  # propagated build inputs
+
+  # dependencies
   filelock,
   huggingface-hub,
   numpy,
@@ -16,7 +19,8 @@
   tokenizers,
   safetensors,
   tqdm,
-  # optional dependencies
+
+  # optional-dependencies
   diffusers,
   scikit-learn,
   tensorflow,
@@ -55,17 +59,24 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.42.3";
+  version = "4.48.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vcwOFprscE8R3AdIJudYme9vvSFJvF+iCzRzBhiggr8=";
+    tag = "v${version}";
+    hash = "sha256-jW/yhzmxQd/5BgbDImUaJSF0oMKIpIGhFoJuMZu0tv0=";
   };
+
+  patches = [
+    # Remove on the next major version bump
+    (fetchpatch {
+      url = "https://github.com/huggingface/transformers/commit/db864b5526d56fd99143619abff969bfcb5596d5.patch?full_index=1";
+      name = "dont-import-torch-distributed-if-not-available.patch";
+      hash = "sha256-XOraJmSt9Rp/oNiil6vDUBqZhd8MDbA0nz1Tx16Mk14=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -82,7 +93,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies =
+  optional-dependencies =
     let
       audio = [
         librosa
@@ -153,7 +164,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [
@@ -172,7 +183,6 @@ buildPythonPackage rec {
       # natten = [ natten ];
       # codecarbon = [ codecarbon ];
       video = [
-        # decord
         av
       ];
       sentencepiece = [
@@ -190,7 +200,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
-    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

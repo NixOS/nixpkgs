@@ -70,7 +70,7 @@ in
           LoadCredential = "bot-password-file:${cfg.botPasswordFile}";
           RestartSec = "10s";
           StateDirectory = "hebbot";
-          WorkingDirectory = "hebbot";
+          WorkingDirectory = "/var/lib/hebbot";
       };
     };
   };

@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/minrk/wurlitzer";
     changelog = "https://github.com/minrk/wurlitzer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

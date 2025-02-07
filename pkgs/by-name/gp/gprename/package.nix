@@ -5,10 +5,7 @@
   makeWrapper,
   moreutils,
   perlPackages,
-  gettext,
-  glib,
   gtk3,
-  gobject-introspection,
   pango,
   harfbuzz,
   gdk-pixbuf,
@@ -48,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/gprename \
       --set PERL5LIB ${
         perlPackages.makeFullPerlPath (
-          with perlPackages; [
+          with perlPackages;
+          [
             Pango
             Glib
             Gtk3

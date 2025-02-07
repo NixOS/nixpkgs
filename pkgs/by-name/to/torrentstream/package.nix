@@ -1,7 +1,8 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -20,7 +21,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   executables = [ "TorrentStream" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   projectFile = "TorrentStream.csproj";
   selfContainedBuild = true;
 
@@ -32,8 +33,6 @@ buildDotnetModule rec {
   patches = [
     ./0001-display-the-message-of-caught-exceptions.patch
   ];
-
-  postInstall = "rm $out/lib/torrentstream/NuGet.config"; # reduce closure size
 
   meta = {
     homepage = "https://github.com/trueromanus/TorrentStream";

@@ -1,6 +1,10 @@
-{ lib, buildDunePackage
-, mirage-crypto, mirage-crypto-rng
-, dune-configurator, async, logs
+{
+  buildDunePackage,
+  mirage-crypto,
+  mirage-crypto-rng,
+  dune-configurator,
+  async,
+  logs,
 }:
 
 buildDunePackage {

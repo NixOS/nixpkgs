@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, hwdata
-, gtk3
-, pkg-config
-, gettext
-, sqlite # compile GUI
-, withGUI ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  hwdata,
+  gtk3,
+  pkg-config,
+  gettext,
+  sqlite, # compile GUI
+  withGUI ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,10 +24,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-4etC7ymMgn1Q4f98DNASv8vn0AT55dYPdacZo6GRDw0=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+  ];
 
-  buildInputs = [ hwdata ]
-    ++ lib.optionals withGUI [ gtk3 sqlite ];
+  buildInputs =
+    [ hwdata ]
+    ++ lib.optionals withGUI [
+      gtk3
+      sqlite
+    ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -42,6 +50,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    changelog = "https://github.com/lyonel/lshw/blob/master/docs/Changelog";
     description = "Provide detailed information on the hardware configuration of the machine";
     homepage = "https://ezix.org/project/wiki/HardwareLiSter";
     license = licenses.gpl2;

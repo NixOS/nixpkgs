@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.81";
+  version = "0.82";
   pname = "putty";
 
   src = fetchurl {
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-y4sAqU9FNJTjRaPfKB16PtJrsN1+NiZPFFIG+IV2Of4=";
+    hash = "sha256-GVYhY4u2szeEtOls3ClvMymRtSRJaNxiNSHDcDCXtdk=";
   };
 
   nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk3 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   desktopItems = [

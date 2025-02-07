@@ -1,15 +1,25 @@
-{ lib
-, makeWrapper
-, nixosTests
-, symlinkJoin
+{
+  makeWrapper,
+  nixosTests,
+  symlinkJoin,
 
-, extraPythonPackages ? (ps: [ ])
+  extraPythonPackages ? (ps: [ ]),
 
-, libsForQt5
+  libsForQt5,
+
+  # unwrapped package parameters
+  withGrass ? false,
+  withServer ? false,
+  withWebKit ? false,
 }:
 let
-  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {  };
-in symlinkJoin rec {
+  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {
+    withGrass = withGrass;
+    withServer = withServer;
+    withWebKit = withWebKit;
+  };
+in
+symlinkJoin rec {
 
   inherit (qgis-unwrapped) version;
   name = "qgis-${version}";
@@ -25,13 +35,13 @@ in symlinkJoin rec {
   pythonInputs = qgis-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-unwrapped.py.pkgs);
 
   postBuild = ''
-    # unpackPhase
-
     buildPythonPath "$pythonInputs"
 
-    wrapProgram $out/bin/qgis \
-      --prefix PATH : $program_PATH \
-      --set PYTHONPATH $program_PYTHONPATH
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : $program_PATH \
+        --set PYTHONPATH $program_PYTHONPATH
+    done
   '';
 
   passthru = {

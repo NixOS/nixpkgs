@@ -24,7 +24,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = finalAttrs.pname;
+    repo = "cuda-samples";
     rev = "v${finalAttrs.version}";
     inherit hash;
   };
@@ -73,6 +73,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
     # CUDA itself is proprietary, but these sample apps are not.
     license = lib.licenses.bsd3;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
   };
 })

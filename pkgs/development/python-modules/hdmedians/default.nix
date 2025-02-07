@@ -5,7 +5,6 @@
   cython,
   numpy,
   oldest-supported-numpy,
-  pynose,
   pytestCheckHook,
   setuptools,
 }:
@@ -19,6 +18,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-tHrssWdx4boHNlVyVdgK4CQLCRVr/0NDId5VmzWawtY=";
   };
+
+  patches = [
+    # https://github.com/daleroberts/hdmedians/pull/10
+    ./replace-nose.patch
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -36,7 +40,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hdmedians" ];
 
   nativeCheckInputs = [
-    pynose
     pytestCheckHook
   ];
 

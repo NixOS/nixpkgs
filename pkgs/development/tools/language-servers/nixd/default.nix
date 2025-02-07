@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost182,
+  boost,
   gtest,
   llvmPackages,
   meson,
@@ -16,22 +16,24 @@
   nlohmann_json,
   pkg-config,
   testers,
+  python3,
 }:
 
 let
   common = rec {
-    version = "2.2.2";
+    version = "2.6.0";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       rev = version;
-      hash = "sha256-Yr/+03ealYQHjxtCLNCz/EYypwMPgiaTvCE55BEUk2c=";
+      hash = "sha256-gYC7nbZsTDOA1cJIw9JRjwjgkvSzrlQonGTT21EZeWM=";
     };
 
     nativeBuildInputs = [
       meson
       ninja
+      python3
       pkg-config
     ];
 
@@ -49,6 +51,7 @@ let
         inclyc
         Ruixi-rebirth
         aleksana
+        redyf
       ];
       platforms = lib.platforms.unix;
     };
@@ -69,7 +72,7 @@ in
 
       buildInputs = [
         gtest
-        boost182
+        boost
         nlohmann_json
       ];
 
@@ -100,7 +103,7 @@ in
       buildInputs = [
         nix
         gtest
-        boost182
+        boost
       ];
 
       env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
@@ -129,7 +132,7 @@ in
         nixt
         llvmPackages.llvm
         gtest
-        boost182
+        boost
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];

@@ -7,7 +7,7 @@
   pycrypto,
   ecdsa, # TODO
   mock,
-  can,
+  python-can,
   brotli,
   withOptionalDeps ? true,
   tcpdump,
@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.5.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secdev";
     repo = "scapy";
-    rev = "v${version}";
-    hash = "sha256-xJlovcxUQOQHfOU0Jgin/ayd2T5fOyeN4Jg0DbLHoeU=";
+    tag = "v${version}";
+    hash = "sha256-m2L30aEpPp9cfW652yd+0wFkNlMij6FF1RzWZbwJ79A=";
   };
 
   patches = [ ./find-library.patch ];
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   doCheck = false;
   nativeCheckInputs = [
     mock
-    can
+    python-can
     brotli
   ];
   checkPhase = ''

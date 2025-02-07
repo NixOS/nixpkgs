@@ -44,10 +44,9 @@ let
     };
   };
 
-  webroot = pkgs.runCommandLocal
-    "${cfg.package.name or "nextcloud"}-with-apps"
-    { }
-    ''
+  webroot = pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps" {
+    preferLocalBuild = true;
+  } ''
       mkdir $out
       ln -sfv "${cfg.package}"/* "$out"
       ${concatStrings
@@ -300,7 +299,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud28" "nextcloud29" ];
+      relatedPackages = [ "nextcloud29" "nextcloud30" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
@@ -375,14 +374,18 @@ in {
       type = with types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
-        "pm.max_children" = "32";
-        "pm.start_servers" = "2";
-        "pm.min_spare_servers" = "2";
-        "pm.max_spare_servers" = "4";
+        "pm.max_children" = "120";
+        "pm.start_servers" = "12";
+        "pm.min_spare_servers" = "6";
+        "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
       };
       description = ''
-        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
+        configuration directives. The above are recommended for a server with 4GiB of RAM.
+
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        and consider customizing the values.
       '';
     };
 
@@ -417,7 +420,6 @@ in {
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
-        default = "sqlite";
         description = "Database type.";
       };
       dbname = mkOption {
@@ -768,15 +770,17 @@ in {
       description = ''
         Extra options which should be appended to Nextcloud's config.php file.
       '';
-      example = literalExpression '' {
-        redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
-          dbindex = 0;
-          password = "secret";
-          timeout = 1.5;
-        };
-      } '';
+      example = literalExpression ''
+        {
+          redis = {
+            host = "/run/redis/redis.sock";
+            port = 0;
+            dbindex = 0;
+            password = "secret";
+            timeout = 1.5;
+          };
+        }
+      '';
     };
 
     secretFile = mkOption {
@@ -821,7 +825,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 29;
+        latest = 30;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -847,11 +851,11 @@ in {
           If you have an existing installation with a custom table prefix, make sure it is
           set correctly in `config.php` and remove the option from your NixOS config.
         '')
-        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
+        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
+        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -862,7 +866,8 @@ in {
               `pkgs.nextcloud`.
             ''
           else if versionOlder stateVersion "24.05" then nextcloud27
-          else nextcloud29
+          else if versionOlder stateVersion "24.11" then nextcloud29
+          else nextcloud30
         );
 
       services.nextcloud.phpPackage =
@@ -929,7 +934,10 @@ in {
         nextcloud-setup = let
           c = cfg.config;
           occInstallCmd = let
-            mkExport = { arg, value }: "export ${arg}=${value}";
+            mkExport = { arg, value }: ''
+              ${arg}=${value};
+              export ${arg};
+            '';
             dbpass = {
               arg = "DBPASS";
               value = if c.dbpassFile != null
@@ -1019,7 +1027,7 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
+          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
           # an automatic creation of the database user.
           environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
         };

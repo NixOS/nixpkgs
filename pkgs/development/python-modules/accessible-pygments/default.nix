@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Quansight-Labs/accessible-pygments";
     changelog = "https://github.com/Quansight-Labs/accessible-pygments/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

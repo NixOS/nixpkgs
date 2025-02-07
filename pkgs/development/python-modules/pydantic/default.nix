@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -21,15 +20,16 @@
   cloudpickle,
   email-validator,
   dirty-equals,
-  faker,
+  jsonschema,
   pytestCheckHook,
   pytest-mock,
   eval-type-backport,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.7.4";
+  version = "2.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-S4FZUnOsKC8J0xyTeXhMmCACCma+VfCSmrE6sYAnpok=";
+    tag = "v${version}";
+    hash = "sha256-SEgBuhof1rqnKFI7O1aajkgp17EgaPNcfJzbh/j4ebg=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     email = [ email-validator ];
   };
 
@@ -62,11 +62,12 @@ buildPythonPackage rec {
     [
       cloudpickle
       dirty-equals
-      faker
+      jsonschema
       pytest-mock
       pytestCheckHook
+      rich
     ]
-    ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+    ++ lib.flatten (lib.attrValues optional-dependencies)
     ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
@@ -101,7 +102,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
-    changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

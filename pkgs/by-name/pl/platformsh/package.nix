@@ -4,36 +4,37 @@
   fetchurl,
   testers,
   installShellFiles,
-  platformsh
+  platformsh,
 }:
 
+let
+  versions = lib.importJSON ./versions.json;
+  arch =
+    if stdenvNoCC.hostPlatform.isx86_64 then
+      "amd64"
+    else if stdenvNoCC.hostPlatform.isAarch64 then
+      "arm64"
+    else
+      throw "Unsupported architecture";
+  os =
+    if stdenvNoCC.hostPlatform.isLinux then
+      "linux"
+    else if stdenvNoCC.hostPlatform.isDarwin then
+      "darwin"
+    else
+      throw "Unsupported os";
+  versionInfo = versions."${os}-${arch}";
+  inherit (versionInfo) hash url;
+
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "platformsh";
-  version = "5.0.13";
+  inherit (versions) version;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  src =
-    {
-      x86_64-darwin = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
-      };
-      aarch64-darwin = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
-      };
-      x86_64-linux = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_amd64.tar.gz";
-        hash = "sha256-JP0RCqNQ8V4sFP3645MW+Pd9QfPFRAuTbVPIK6WD6PQ=";
-      };
-      aarch64-linux = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_arm64.tar.gz";
-        hash = "sha256-vpk093kpGAmMevd4SVr3KSIjUXUqt3yWDZFHOVxu9rw=";
-      };
-    }
-    .${stdenvNoCC.system}
-      or (throw "${finalAttrs.pname}-${finalAttrs.version}: ${stdenvNoCC.system} is unsupported.");
+  # run ./update
+  src = fetchurl { inherit hash url; };
 
   dontConfigure = true;
   dontBuild = true;
@@ -51,6 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       inherit (finalAttrs) version;
       package = platformsh;
@@ -62,8 +64,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/platformsh/cli";
     license = lib.licenses.mit;
     mainProgram = "platform";
-    maintainers = with lib.maintainers; [ shyim spk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with lib.maintainers; [
+      shyim
+      spk
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

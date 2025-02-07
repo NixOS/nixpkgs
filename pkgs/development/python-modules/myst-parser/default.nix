@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   flit-core,
   pythonOlder,
   defusedxml,
@@ -20,23 +21,29 @@
 }:
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "3.0.1";
+  version = "4.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TKo1lanZNM+XrOKZ0ZmtlhEPoAYQUspkyHXZm1wNTFE=";
+    tag = "v${version}";
+    hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
   };
 
-  nativeBuildInputs = [
-    flit-core
+  patches = [
+    (fetchpatch2 {
+      # Sphinx 8.1 compat
+      url = "https://github.com/executablebooks/MyST-Parser/commit/9fe724ebf1d02fd979632d82387f802c91e0d6f6.patch";
+      hash = "sha256-KkAV9tP+dFax9KuxqkhqNlGWx6wSO6M2dWpah+GYG0E=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     docutils
     jinja2
     mdit-py-plugins
@@ -54,6 +61,13 @@ buildPythonPackage rec {
     sphinx-pytest
     pytestCheckHook
   ] ++ markdown-it-py.optional-dependencies.linkify;
+
+  disabledTests = [
+    # sphinx 7.4 compat
+    "test_amsmath"
+    # pygments 2.19 compat
+    "test_includes"
+  ];
 
   pythonImportsCheck = [ "myst_parser" ];
 

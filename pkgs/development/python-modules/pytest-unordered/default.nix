@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "utapyngo";
     repo = "pytest-unordered";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-51UJjnGBO7qBvQlY8F0B29n8+EO2aa3DF3WOwcjZzSo=";
   };
 

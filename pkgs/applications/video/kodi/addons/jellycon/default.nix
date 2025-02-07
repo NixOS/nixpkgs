@@ -1,4 +1,16 @@
-{ lib, addonDir, buildKodiAddon, fetchFromGitHub, kodi, requests, dateutil, six, kodi-six, signals, websocket }:
+{
+  lib,
+  addonDir,
+  buildKodiAddon,
+  fetchFromGitHub,
+  kodi,
+  requests,
+  dateutil,
+  six,
+  kodi-six,
+  signals,
+  websocket,
+}:
 let
   python = kodi.pythonPackages.python.withPackages (p: with p; [ pyyaml ]);
 in
@@ -29,7 +41,7 @@ buildKodiAddon rec {
   '';
 
   postInstall = ''
-    mv /build/source/addon.xml $out${addonDir}/${namespace}/
+    cp -v addon.xml $out${addonDir}/$namespace/
   '';
 
   propagatedBuildInputs = [

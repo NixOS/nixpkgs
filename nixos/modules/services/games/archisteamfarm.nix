@@ -164,12 +164,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.archisteamfarm = {
-      # TODO: drop with 24.11
-      dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
-      settings.IPC = lib.mkIf (!cfg.web-ui.enable) false;
-    };
-
     users = {
       users.archisteamfarm = {
         home = cfg.dataDir;
@@ -227,14 +221,16 @@ in
             RestrictSUIDSGID = true;
             SecureBits = "noroot-locked";
             SystemCallArchitectures = "native";
-            SystemCallFilter = [ "@system-service" "~@privileged" ];
+            SystemCallFilter = [ "@system-service" "~@privileged" "mincore" ];
             UMask = "0077";
           }
         ];
 
         preStart =
           let
-            createBotsScript = pkgs.runCommandLocal "ASF-bots" { } ''
+            createBotsScript = pkgs.runCommand "ASF-bots" {
+              preferLocalBuild = true;
+            } ''
               mkdir -p $out
               # clean potential removed bots
               rm -rf $out/*.json

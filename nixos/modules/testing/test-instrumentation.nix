@@ -19,8 +19,19 @@ let
         export HOME=/root
         export DISPLAY=:0.0
 
+        # Determine if this script is ran with nounset
+        strict="false"
+        if set -o | grep --quiet --perl-regexp "nounset\s+on"; then
+            strict="true"
+        fi
+
         if [[ -e /etc/profile ]]; then
+            # TODO: Currently shell profiles are not checked at build time,
+            # so we need to unset stricter options to source them
+            set +o nounset
+            # shellcheck disable=SC1091
             source /etc/profile
+            [ "$strict" = "true" ] && set -o nounset
         fi
 
         # Don't use a pager when executing backdoor
@@ -45,7 +56,7 @@ let
         # we can also run non-NixOS guests during tests. This, however, is
         # mostly futureproofing as the test instrumentation is still very
         # tightly coupled to NixOS.
-        PS1= exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
+        PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
       '';
       serviceConfig.KillSignal = "SIGHUP";
   };
@@ -90,6 +101,7 @@ in
         contents."/etc/systemd/journald.conf".text = ''
           [Journal]
           ForwardToConsole=yes
+          TTYPath=/dev/${qemu-common.qemuSerialDevice}
           MaxLevelConsole=debug
         '';
 
@@ -162,6 +174,7 @@ in
 
     boot.kernelParams = [
       "console=${qemu-common.qemuSerialDevice}"
+      "console=tty0"
       # Panic if an error occurs in stage 1 (rather than waiting for
       # user intervention).
       "panic=1" "boot.panic_on_fail"
@@ -180,6 +193,7 @@ in
     services.journald.extraConfig =
       ''
         ForwardToConsole=yes
+        TTYPath=/dev/${qemu-common.qemuSerialDevice}
         MaxLevelConsole=debug
       '';
 

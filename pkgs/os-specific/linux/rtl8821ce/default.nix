@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   bc,
 }:
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
-  makeFlags = kernel.makeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -45,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       defelo
     ];
     broken =
-      stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+      stdenv.hostPlatform.isAarch64
+      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 })

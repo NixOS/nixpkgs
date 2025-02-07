@@ -7,22 +7,20 @@
   mmtf-python,
   numpy,
   pandas,
-  pynose,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "biopandas";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
+    tag = "v${version}";
+    hash = "sha256-dUeGjDDz9VA1NrFLGKy0ebaa+MU4c1tHi5YYkAspLRk=";
   };
-
 
   pythonRelaxDeps = [ "looseversion" ];
 
@@ -35,10 +33,7 @@ buildPythonPackage rec {
     looseversion
   ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require network access
@@ -54,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Working with molecular structures in pandas DataFrames";
     homepage = "https://github.com/BioPandas/biopandas";
-    changelog = "https://github.com/BioPandas/biopandas/releases/tag/${src.rev}";
+    changelog = "https://github.com/BioPandas/biopandas/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ natsukium ];
   };

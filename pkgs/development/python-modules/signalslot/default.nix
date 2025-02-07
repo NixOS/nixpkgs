@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
       --replace "--pep8 --cov" "" \
       --replace "--cov-report html" ""
   '';
-
 
   propagatedBuildInputs = [
     contexter

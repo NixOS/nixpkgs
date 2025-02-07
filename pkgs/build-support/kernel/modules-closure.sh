@@ -1,5 +1,3 @@
-source $stdenv/setup
-
 # When no modules are built, the $out/lib/modules directory will not
 # exist. Because the rest of the script assumes it does exist, we
 # handle this special case first.
@@ -88,6 +86,14 @@ for module in $(< ~-/closure); do
         done
     done || :
 done
+
+if test -e lib/firmware/edid ; then
+    echo "lib/firmware/edid found, copying."
+    mkdir -p "$out/lib/firmware"
+    cp -v --no-preserve=mode --recursive --dereference --no-target-directory lib/firmware/edid "$out/lib/firmware/edid"
+else
+    echo "lib/firmware/edid not found, skipping."
+fi
 
 # copy module ordering hints for depmod
 cp $kernel/lib/modules/"$version"/modules.order $out/lib/modules/"$version"/.

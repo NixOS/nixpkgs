@@ -6,6 +6,7 @@
   deprecated,
   etcd3,
   fetchFromGitHub,
+  flaky,
   hiro,
   importlib-resources,
   motor,
@@ -13,7 +14,9 @@
   pymemcache,
   pymongo,
   pytest-asyncio,
-  pytest-lazy-fixture,
+  pytest-benchmark,
+  pytest-cov-stub,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   redis,
@@ -23,27 +26,30 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.12.0";
+  version = "4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "limits";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-EH2/75tcKuS11XKuo4lCQrFe4/XJZpcWhuGlSuhIk18=";
+    hash = "sha256-JXXjRVn3RQMqNYRYXF4LuV2DHzVF8PTeGepFkt4jDFM=";
   };
+
+  patches = [
+    ./only-test-in-memory.patch
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace-fail "--cov=limits" "" \
       --replace-fail "-K" ""
 
     substituteInPlace setup.py \
@@ -53,16 +59,16 @@ buildPythonPackage rec {
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     importlib-resources
     packaging
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     redis = [ redis ];
     rediscluster = [ redis ];
     memcached = [ pymemcache ];
@@ -76,29 +82,31 @@ buildPythonPackage rec {
     async-etcd = [ aetcd ];
   };
 
-  doCheck = pythonOlder "3.12"; # SystemError in protobuf
+  env = {
+    # make protobuf compatible with old versions
+    # https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  };
 
   nativeCheckInputs = [
+    flaky
     hiro
     pytest-asyncio
-    pytest-lazy-fixture
+    pytest-benchmark
+    pytest-cov-stub
+    pytest-lazy-fixtures
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [ "test_moving_window_memcached" ];
 
   pythonImportsCheck = [ "limits" ];
-
-  pytestFlagsArray = [
-    # All other tests require a running Docker instance
-    "tests/test_limits.py"
-    "tests/test_ratelimit_parser.py"
-    "tests/test_limit_granularities.py"
-  ];
 
   meta = with lib; {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
-    changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
+    changelog = "https://github.com/alisaifee/limits/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

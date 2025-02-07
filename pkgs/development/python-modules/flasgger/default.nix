@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "flasgger";
-  version = "0.9.5";
+  version = "0.9.7.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "flasgger";
     repo = "flasgger";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-cYFMKZxpi69gVWqyZUltCL0ZwcfIABNsJKqAhN2TTSg=";
   };
 
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Easy OpenAPI specs and Swagger UI for your Flask API";
     homepage = "https://github.com/flasgger/flasgger/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,16 +1,17 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, qmake
-, wrapQtAppsHook
-, qtbase
-, pkg-config
-, lua
-, flam3
-, libxml2
-, libpng
-, libjpeg
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qmake,
+  wrapQtAppsHook,
+  qtbase,
+  pkg-config,
+  lua,
+  flam3,
+  libxml2,
+  libpng,
+  libjpeg,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,14 +43,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace qosmic.pro \
       --replace "/share" "/Applications/qosmic.app/Contents/Resources" \
       --replace "/qosmic/scripts" "/scripts" \
       --replace "install_icons install_desktop" ""
   '';
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+    pkg-config
+  ];
 
   buildInputs = [
     qtbase
@@ -65,7 +70,7 @@ stdenv.mkDerivation rec {
     "CONFIG+=link_pkgconfig"
   ];
 
-  preInstall = lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv qosmic.app $out/Applications
   '';

@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppxlib
-, rio
-, sedlex
-, spices
-, uutf
-, qcheck
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppxlib,
+  rio,
+  sedlex,
+  spices,
+  uutf,
+  qcheck,
 }:
 
 buildDunePackage rec {
@@ -39,7 +40,6 @@ buildDunePackage rec {
     description = "Efficient, immutable, pattern-matchable, UTF friendly byte strings";
     homepage = "https://github.com/riot-ml/riot";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
-

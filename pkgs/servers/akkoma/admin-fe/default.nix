@@ -1,12 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitea, fetchYarnDeps
-, fixup-yarn-lock, yarn, nodejs
-, git
-, python3, pkg-config, libsass
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  yarn,
+  nodejs,
+  git,
+  python3,
+  pkg-config,
+  libsass,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "admin-fe";
   version = "unstable-2024-04-27";
 
@@ -19,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-acF+YuWXlMZMipD5+XJS+K9vVFRz3wB2fZqc3Hd0Bjc=";
   };
 
@@ -38,7 +44,7 @@ stdenv.mkDerivation rec {
 
     export HOME="$(mktemp -d)"
 
-    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
+    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
     fixup-yarn-lock yarn.lock
     substituteInPlace yarn.lock \
       --replace-fail '"git://github.com/adobe-webplatform/eve.git#eef80ed"' '"https://github.com/adobe-webplatform/eve.git#eef80ed"'
@@ -73,10 +79,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Admin interface for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mvs ];
   };
-}
+})

@@ -12,11 +12,12 @@
   pyasn1-modules,
   pytestCheckHook,
   pythonOlder,
+  pyopenssl,
 }:
 
 buildPythonPackage rec {
   pname = "service-identity";
-  version = "24.1.0";
+  version = "24.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyca";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-ibi9hls/VnVePv4fF2CyxI22P1RX6QpCwyeENWVPkx4=";
+    tag = version;
+    hash = "sha256-onxCUWqGVeenLqB5lpUpj3jjxTM61ogXCQOGnDnClT4=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,8 @@ buildPythonPackage rec {
     pyasn1
     pyasn1-modules
   ];
+
+  checkInputs = [ pyopenssl ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

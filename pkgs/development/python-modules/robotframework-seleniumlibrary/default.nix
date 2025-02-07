@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  click,
   robotframework,
   robotframework-pythonlibcore,
   selenium,
@@ -14,20 +15,21 @@
 
 buildPythonPackage rec {
   pname = "robotframework-seleniumlibrary";
-  version = "6.4.0";
+  version = "6.7.0";
   pyproject = true;
 
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "SeleniumLibrary";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Rjbdn1WXdXLn//HLtHwVrlLD+3vw9mgre/0wvMb+xbc=";
+    tag = "v${version}";
+    sha256 = "sha256-fiuqJLisCvsVrQfxTDC0koTK7BqkG2x7lnPkvBTZY9E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    click
     robotframework
     robotframework-pythonlibcore
     selenium
@@ -44,11 +46,13 @@ buildPythonPackage rec {
     mkdir utest/output_dir
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.rev}/docs/SeleniumLibrary-${version}.rst";
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    changelog = "https://github.com/robotframework/SeleniumLibrary/blob/${src.tag}/docs/SeleniumLibrary-${src.tag}.rst";
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/SeleniumLibrary";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

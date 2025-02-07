@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = pname;
     owner = "druid-io";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9+xomjSwWDVHkret/mqAZKWOPFRMvVB3CWtFPzrT81k=";
   };
 
@@ -41,17 +41,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pycurl
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pydruid" ];
 
-  passthru = {
-    optional-dependencies = {
-      pandas = [ pandas ];
-      async = [ tornado ];
-      sqlalchemy = [ sqlalchemy ];
-      # druid has a `cli` extra, but it doesn't work with nixpkgs pygments
-    };
+  optional-dependencies = {
+    pandas = [ pandas ];
+    async = [ tornado ];
+    sqlalchemy = [ sqlalchemy ];
+    # druid has a `cli` extra, but it doesn't work with nixpkgs pygments
   };
 
   meta = with lib; {

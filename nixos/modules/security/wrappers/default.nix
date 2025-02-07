@@ -165,6 +165,10 @@ in
   ###### interface
 
   options = {
+    security.enableWrappers = lib.mkEnableOption "SUID/SGID wrappers" // {
+      default = true;
+    };
+
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
       default = {};
@@ -210,7 +214,7 @@ in
       example = "10G";
       type = lib.types.str;
       description = ''
-        Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /run/wrappers tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax. WARNING: don't set to less than 64MB.
       '';
     };
@@ -227,7 +231,7 @@ in
   };
 
   ###### implementation
-  config = {
+  config = lib.mkIf config.security.enableWrappers {
 
     assertions = lib.mapAttrsToList
       (name: opts:
@@ -249,16 +253,11 @@ in
           };
       in
       { # These are mount related wrappers that require the +s permission.
-        fusermount  = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${pkgs.fuse3}/bin/fusermount3";
+        fusermount  = mkSetuidRoot "${lib.getBin pkgs.fuse}/bin/fusermount";
+        fusermount3 = mkSetuidRoot "${lib.getBin pkgs.fuse3}/bin/fusermount3";
         mount  = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
-
-    boot.specialFileSystems.${parentWrapperDir} = {
-      fsType = "tmpfs";
-      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
-    };
 
     # Make sure our wrapperDir exports to the PATH env variable when
     # initializing the shell
@@ -274,6 +273,17 @@ in
       ]}"
       mrpx ${wrap.source},
     '') wrappers;
+
+    systemd.mounts = [{
+      where = parentWrapperDir;
+      what = "tmpfs";
+      type = "tmpfs";
+      options = lib.concatStringsSep "," ([
+        "nodev"
+        "mode=755"
+        "size=${config.security.wrapperDirSize}"
+      ]);
+    }];
 
     systemd.services.suid-sgid-wrappers = {
       description = "Create SUID/SGID Wrappers";
@@ -311,9 +321,9 @@ in
     };
 
     ###### wrappers consistency checks
-    system.checks = lib.singleton (pkgs.runCommandLocal
-      "ensure-all-wrappers-paths-exist" { }
-      ''
+    system.checks = lib.singleton (pkgs.runCommand "ensure-all-wrappers-paths-exist" {
+      preferLocalBuild = true;
+    } ''
         # make sure we produce output
         mkdir -p $out
 

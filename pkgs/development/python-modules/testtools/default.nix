@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-W+W7wfD6D4tgrKbO7AeEXUHQxHXPRFv6200sRew5fqM=";
+    hash = "sha256-W+W7wfD6D4tgrKbO7AeEXUHQxHXPRFv6200sRew5fqM=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Set of extensions to the Python standard library's unit testing framework";
-    homepage = "https://pypi.python.org/pypi/testtools";
+    homepage = "https://github.com/testing-cabal/testtools";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

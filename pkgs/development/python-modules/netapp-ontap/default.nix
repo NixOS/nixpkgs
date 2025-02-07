@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netapp-ontap";
-  version = "9.15.1.0";
+  version = "9.16.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
-    hash = "sha256-cw8wfMKBbzN4HWLg8Xxzpnv05atKWeTZlBaBIaNWTvo=";
+    hash = "sha256-r55lK9dSmo/pVsvhtM0T48TdjgjlQjmQ2zVnenxQGlE=";
   };
 
   build-system = [ setuptools ];

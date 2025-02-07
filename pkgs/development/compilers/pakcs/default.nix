@@ -1,33 +1,67 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, haskellPackages, haskell
-, which, swiProlog, rlwrap, tk
-, curl, git, unzip, gnutar, coreutils, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  makeWrapper,
+  haskellPackages,
+  haskell,
+  which,
+  swi-prolog,
+  rlwrap,
+  tk,
+  curl,
+  git,
+  unzip,
+  gnutar,
+  coreutils,
+  sqlite,
+}:
 
 let
   pname = "pakcs";
-  version = "3.6.0";
+  version = "3.7.2";
 
   # Don't switch to "Current release" without a reason, because its
   # source updates without version bump. Prefer last from "Older releases" instead.
   src = fetchurl {
     url = "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
-    hash = "sha256-1r6jEY3eEGESKcAepiziVbxpIvQLtCS6l0trBU3SGGo=";
+    hash = "sha256-ZfQUgFqmPPCeDx/T5G/JdvYDq/7XbvsgxPcEX4y9HZ4=";
   };
 
-  curry-frontend = (haskellPackages.override {
-    overrides = self: super: {
-      curry-frontend = haskell.lib.compose.overrideCabal (drv: {
-        inherit src;
-        postUnpack = "sourceRoot+=/frontend";
-      }) (super.callPackage ./curry-frontend.nix { });
-    };
-  }).curry-frontend;
+  curry-frontend =
+    (haskellPackages.override {
+      overrides = self: super: {
+        curry-frontend = lib.pipe (super.callPackage ./curry-frontend.nix { }) [
+          haskell.lib.doJailbreak
+          (haskell.lib.compose.overrideCabal (drv: {
+            inherit src;
+            postUnpack = "sourceRoot+=/frontend";
+          }))
+          (haskell.lib.compose.appendPatch
+            # mtl 2.3 compatibility has been fixed upstream but it's not in
+            # the release yet
+            (
+              fetchpatch2 {
+                name = "fix-mtl-2.3.patch";
+                url = "https://git.ps.informatik.uni-kiel.de/curry/curry-frontend/-/commit/3b26d2826141fee676da07939c2929a049279b70.diff";
+                hash = "sha256-R3XjoUzAwTvDoUEAIIjmrSh2r4RHMqe00RMIs+7jFPY=";
+              }
+            )
+          )
+        ];
+      };
+    }).curry-frontend;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
-  buildInputs = [ swiProlog ];
-  nativeBuildInputs = [ which makeWrapper ];
+  buildInputs = [ swi-prolog ];
+  nativeBuildInputs = [
+    which
+    makeWrapper
+  ];
 
   makeFlags = [
     "CURRYFRONTEND=${curry-frontend}/bin/curry-frontend"
@@ -45,7 +79,7 @@ in stdenv.mkDerivation {
                 scripts/compile-all-libs.sh; do
         substituteInPlace $file --replace "/bin/rm" "rm"
     done
-  '' ;
+  '';
 
   preBuild = ''
     mkdir -p $out/pakcs
@@ -67,7 +101,16 @@ in stdenv.mkDerivation {
 
     # List of dependencies from currytools/cpm/src/CPM/Main.curry
     wrapProgram $out/pakcs/bin/cypm \
-      --prefix PATH ":" "${lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          curl
+          git
+          unzip
+          gnutar
+          coreutils
+          sqlite
+        ]
+      }"
 
     runHook postInstall
   '';

@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "yapsy";
   version = "1.12.2-unstable-2023-03-29";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage {
     hash = "sha256-QKZlUAhYMCCsT/jbEHb39ESZ2+2FZYnhJnc1PgsozBA=";
   };
 
-  sourceRoot = "source/package";
+  sourceRoot = "${src.name}/package";
 
   build-system = [ setuptools ];
 

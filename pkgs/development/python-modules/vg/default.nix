@@ -6,7 +6,6 @@
   poetry-core,
   pythonOlder,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lace";
     repo = "vg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZNUAfkhjmsxD8cH0fR8Htjs+/F/3R9xfe1XgRyndids=";
   };
 

@@ -5,23 +5,29 @@
 , makeWrapper
 , wrapGAppsHook3
 
+, withOpenGL ? !stdenv.hostPlatform.isDarwin
+
 , bison
 , blas
 , cairo
 , ffmpeg
 , fftw
 , flex
+, freetype
 , gdal
 , geos
+, lapack
+, libGLU
 , libiconv
-, libmysqlclient
 , libpng
+, libsvm
 , libtiff
 , libxml2
+, llvmPackages
 , netcdf
 , pdal
 , pkg-config
-, postgresql
+, libpq
 , proj
 , python3Packages
 , readline
@@ -33,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
-  version = "8.3.2";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = finalAttrs.version;
-    hash = "sha256-loeg+7h676d2WdYOMcJFyzeEZcxjBynir6Hz0J/GBns=";
+    hash = "sha256-NKMshd6pr2O62ZjmQ/oPttmeVBYVD0Nqhh3SwQrhZf8=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     gdal # for `gdal-config`
     geos # for `geos-config`
-    libmysqlclient # for `mysql_config`
     netcdf # for `nc-config`
     pkg-config
   ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
@@ -60,59 +65,62 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     ffmpeg
     fftw
+    freetype
     gdal
     geos
-    libmysqlclient
+    lapack
     libpng
+    libsvm
     libtiff
     libxml2
     netcdf
     pdal
-    postgresql
+    libpq
     proj
     readline
     sqlite
     wxGTK32
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals withOpenGL [ libGLU ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
 
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix conversion of const char* to unsigned int.
-    ./clang-integer-conversion.patch
-  ];
-
-  # Correct mysql_config query
-  postPatch = ''
-      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
-  '';
-
   configureFlags = [
     "--with-blas"
+    "--with-cairo-ldflags=-lfontconfig"
+    "--with-cxx"
+    "--with-fftw"
+    "--with-freetype"
     "--with-geos"
-    # It complains about missing libmysqld but doesn't really seem to need it
-    "--with-mysql"
-    "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
-    "--with-mysql-libs=${libmysqlclient}/lib/mysql"
-    "--with-netcdf"
+    "--with-gdal"
+    "--with-lapack"
+    "--with-libsvm"
+    "--with-nls"
+    "--with-openmp"
+    "--with-pdal"
     "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-postgres-libs=${libpq}/lib/"
     "--with-proj-includes=${proj.dev}/include"
     "--with-proj-libs=${proj}/lib"
     "--with-proj-share=${proj}/share/proj"
-    "--with-pthread"
-    "--with-readline"
+    "--with-sqlite"
+    "--with-zstd"
+    "--without-bzlib"
+    "--without-mysql"
+    "--without-odbc"
+  ] ++ lib.optionals (! withOpenGL) [
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--without-cairo"
     "--without-freetype"
     "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */

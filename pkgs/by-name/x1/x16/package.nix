@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, callPackage
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  callPackage,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
-  version = "47";
+  version = "48";
 
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-emulator";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-v7INa0Xpq7WlrSqc6VNBwLQPUoloqsGbv5rd/VTQtUg=";
+    hash = "sha256-E4TosRoORCWLotOIXROP9oqwqo1IRSa6X13GnmuxE9A=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '/bin/echo' 'echo'
+      --replace-fail '/bin/echo' 'echo'
   '';
 
   dontConfigure = true;
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
     emulator = finalAttrs.finalPackage;
     rom = callPackage ./rom.nix { };
-    run = (callPackage ./run.nix { }){
+    run = (callPackage ./run.nix { }) {
       inherit (finalAttrs.finalPackage) emulator rom;
     };
   };
@@ -57,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isAarch64; # ofborg fails to compile it
+    broken = stdenv.hostPlatform.isAarch64; # ofborg fails to compile it
   };
 })

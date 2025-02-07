@@ -1,14 +1,21 @@
-{ lib, buildDunePackage, fetchFromGitHub, camlidl, fuse, dune-configurator }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  camlidl,
+  fuse,
+  dune-configurator,
+}:
 
 buildDunePackage rec {
   pname = "ocamlfuse";
-  version = "2.7.1_cvs9";
+  version = "2.7.1_cvs11";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "ocamlfuse";
     rev = "v${version}";
-    hash = "sha256-cOObHUAYiI2mN1qjsxcK6kHAmawuaGQOUNHqWioIvjM=";
+    hash = "sha256-D/Gn+02Kq4mqEpNZrYYw/NXSJce2joGhl3wUZDhVDYo=";
   };
 
   postPatch = ''
@@ -18,7 +25,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ camlidl ];
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ camlidl fuse ];
+  propagatedBuildInputs = [
+    camlidl
+    fuse
+  ];
 
   meta = {
     homepage = "https://sourceforge.net/projects/ocamlfuse";

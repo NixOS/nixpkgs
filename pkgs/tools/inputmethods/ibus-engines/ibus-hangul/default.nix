@@ -1,28 +1,33 @@
-{ lib, stdenv
-, fetchurl
-, substituteAll
-, appstream-glib
-, gettext
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, ibus
-, libhangul
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  appstream-glib,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  gobject-introspection,
+  autoreconfHook,
+  gtk3,
+  ibus,
+  libhangul,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-hangul";
   version = "1.5.5";
 
-  src = fetchurl {
-    url = "https://github.com/libhangul/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-parIgobNGJYCKYYOPhp3iXinrqpIStms+kgoS4f9w7s=";
+  src = fetchFromGitHub {
+    owner = "libhangul";
+    repo = "ibus-hangul";
+    rev = version;
+    hash = "sha256-x2oOW8eiEuwmdCGUo+r/KcsitfGccSyianwIEaOBS3M=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libhangul = "${libhangul}/lib/libhangul.so.1";
     })
   ];
@@ -32,16 +37,20 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook3
+    gobject-introspection.setupHook
+    autoreconfHook
   ];
 
   buildInputs = [
     gtk3
     ibus
     libhangul
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages (
+      pypkgs: with pypkgs; [
+        pygobject3
+        (toPythonModule ibus)
+      ]
+    ))
   ];
 
   meta = with lib; {

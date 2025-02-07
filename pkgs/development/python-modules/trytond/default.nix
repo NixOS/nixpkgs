@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
   defusedxml,
   lxml,
   relatorio,
@@ -12,7 +13,6 @@
   polib,
   python-sql,
   werkzeug,
-  wrapt,
   passlib,
   pydot,
   levenshtein,
@@ -27,17 +27,19 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.2.4";
-  format = "setuptools";
+  version = "7.4.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iYx9qpZmf2r8Ndynx+jyyrLnAmB56NgjleUoLtyz+20=";
+    hash = "sha256-rmwen1XmH7NkUJpgobVPkIGuDbwjzuWKNvOAj8Mwiq8=";
   };
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       defusedxml
       lxml
@@ -47,7 +49,6 @@ buildPythonPackage rec {
       polib
       python-sql
       werkzeug
-      wrapt
       passlib
 
       # extra dependencies
@@ -89,7 +90,7 @@ buildPythonPackage rec {
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [
       udono
       johbo

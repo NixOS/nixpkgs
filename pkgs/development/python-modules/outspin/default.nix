@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "outspin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j+J3n/p+DcfnhGfC4/NDBDl5bF39L5kIPeGJW0Zm7ls=";
   };
 
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/outspin/blob/${src.rev}/CHANGELOG.md";
     description = "Conveniently read single char inputs in the console";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

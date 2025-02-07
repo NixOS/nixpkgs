@@ -17,22 +17,17 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.13.12";
+  version = "1.16.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zcFcF0a3gyY3WmRiRlQntO8hjbkUm2Cxumn2aKHchvY=";
+    tag = "v${version}";
+    hash = "sha256-hlJvWWqeznk3KY85PatVRhSM0/OoXprFRy2l3jViG+o=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
-  '';
 
   build-system = [ poetry-core ];
 
@@ -40,11 +35,10 @@ buildPythonPackage rec {
     aiohttp
     attrs
     backoff
-    backports-strenum
     boto3
     pyhumps
     warrant-lite
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
   nativeCheckInputs = [
     pytest-asyncio

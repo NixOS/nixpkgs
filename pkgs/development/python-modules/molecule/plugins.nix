@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docker = [ docker ];
     vagrant = [ python-vagrant ];
   };

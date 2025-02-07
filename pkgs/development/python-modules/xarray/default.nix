@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flaky,
+  fetchFromGitHub,
+  fetchpatch,
   numpy,
   packaging,
   pandas,
@@ -14,42 +14,42 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2024.6.0";
+  version = "2025.01.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-C5HgvE3AKWlHlHZA/jHsboZ84ljS98vBC+30ptaDQMc=";
+  src = fetchFromGitHub {
+    owner = "pydata";
+    repo = "xarray";
+    tag = "v${version}";
+    hash = "sha256-BUpMNdYu72/R36r6XXHQqwIWL/ip+O+yE4WxcQQ3ZLY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     pandas
   ];
 
   nativeCheckInputs = [
-    flaky
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    # ModuleNotFoundError: No module named 'xarray.datatree_'
-    "--ignore xarray/tests/datatree"
   ];
 
   pythonImportsCheck = [ "xarray" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/pydata/xarray/blob/${src.tag}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
   };
 }

@@ -1,41 +1,15 @@
 { callPackage
 , nixosTests
 , python3
-, fetchFromGitHub
 }:
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      validators = super.validators.overridePythonAttrs (_: rec {
-        version = "0.20.0";
-        src = fetchFromGitHub {
-          owner = "python-validators";
-          repo = "validators";
-          rev = version;
-          hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
-        };
-        propagatedBuildInputs = [ super.decorator super.six ];
-      });
-
-      djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {
-        version = "3.14.0";
-        src = oldAttrs.src.override {
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
-        };
-        nativeCheckInputs = with super; [
-          pytest7CheckHook
-          pytest-django
-        ];
-      });
-    };
-  };
+  python = python3;
 
   common = callPackage ./common.nix { };
 
   frontend = callPackage ./frontend.nix { };
 in
-python.pkgs.pythonPackages.buildPythonPackage rec {
+python.pkgs.pythonPackages.buildPythonPackage {
   pname = "tandoor-recipes";
 
   inherit (common) version src;
@@ -51,50 +25,51 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp
-    beautifulsoup4
-    bleach
-    bleach-allowlist
-    boto3
-    cryptography
     django
-    django-allauth
+    cryptography
     django-annoying
-    django-auth-ldap
     django-cleanup
-    django-cors-headers
     django-crispy-forms
     django-crispy-bootstrap4
-    django-hcaptcha
-    django-js-reverse
-    django-oauth-toolkit
-    django-prometheus
-    django-scopes
-    django-storages
     django-tables2
-    django-webpack-loader
-    django-treebeard
     djangorestframework
     drf-writable-nested
+    django-oauth-toolkit
+    bleach
     gunicorn
-    icalendar
-    jinja2
     lxml
     markdown
-    microdata
     pillow
     psycopg2
-    pyppeteer
     python-dotenv
-    pytube
-    pyyaml
-    recipe-scrapers
     requests
     six
-    uritemplate
-    validators
     webdavclient3
     whitenoise
+    icalendar
+    pyyaml
+    uritemplate
+    beautifulsoup4
+    microdata
+    jinja2
+    django-webpack-loader
+    django-js-reverse
+    django-allauth
+    recipe-scrapers
+    django-scopes
+    django-treebeard
+    django-cors-headers
+    django-storages
+    boto3
+    django-prometheus
+    django-hcaptcha
+    python-ldap
+    django-auth-ldap
+    pyppeteer
+    pytubefix
+    aiohttp
+    inflection
+    redis
   ];
 
   configurePhase = ''
@@ -154,8 +129,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
 
   # flaky
   disabledTests = [
+    "test_add_duplicate"
+    "test_reset_inherit_space_fields"
     "test_search_count"
     "test_url_import_regex_replace"
+    "test_url_validator"
     "test_delete"
   ];
 

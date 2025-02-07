@@ -1,22 +1,24 @@
-{ lib
-, fetchFromGitHub
-, helix
-, installShellFiles
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  helix,
+  installShellFiles,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evil-helix";
-  version = "20240618";
+  version = "20250104";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
     rev = "release-${version}";
-    hash = "sha256-lzae2ypoTyHDpAkL3L7t8FhZ1XXSSkD5958dBEcsTOc=";
+    hash = "sha256-Otp68+SbW51/MqVejPrbYzeRu4wAiYsNkDQQTZScW1Q=";
   };
 
-  cargoHash = "sha256-803maQB+QYuLlZnvDGfE4jRjLnwkufPcfU7Lq9SX9uM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-epI/Xvw0mgc1IoDXpACws7Lsbkj1Xdk7conzJlUqRxY=";
 
   nativeBuildInputs = [ installShellFiles ];
 

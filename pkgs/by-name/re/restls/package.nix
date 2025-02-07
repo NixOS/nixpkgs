@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, rustPlatform
-, lib
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
 }:
 
-rustPlatform.buildRustPackage rec{
+rustPlatform.buildRustPackage rec {
   pname = "restls";
   version = "0.1.1";
 
@@ -14,10 +15,12 @@ rustPlatform.buildRustPackage rec{
     hash = "sha256-nlQdBwxHVbpOmb9Wq+ap2i4KI1zJYT3SEqvedDbVH8Q=";
   };
 
-  cargoHash = "sha256-KtNLLtStZ7SNndcPxWfNPA2duoXFVePrbNQFPUz2xFg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hub64iZNVw/BJjibtDnJ3boIU27DEbYSlMLhFFVJ9ps=";
 
   meta = with lib; {
     homepage = "https://github.com/3andne/restls";
+    changelog = "https://github.com/3andne/restls/releases/tag/${src.rev}";
     description = "Perfect Impersonation of TLS";
     license = licenses.bsd3;
     mainProgram = "restls";

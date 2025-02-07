@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   aocd-example-parser,
   beautifulsoup4,
   buildPythonPackage,
@@ -25,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YZvcR97uHceloqwoP+azaBmj3GLusYNbItLIaeJ3QD0=";
+    tag = "v${version}";
+    hash = "sha256-xR9CfyOUsKSSA/1zYi6kCK3oAaX6Kd625mKMWI+ZFMA=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -105,7 +104,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Get your Advent of Code data with a single import statement";
     homepage = "https://github.com/wimglenn/advent-of-code-data";
-    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/v${version}";
+    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ aadibajpai ];
     platforms = platforms.unix;

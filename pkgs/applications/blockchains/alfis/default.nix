@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  webkitgtk,
+  webkitgtk_4_0,
   zenity,
   Cocoa,
   Security,
@@ -15,32 +15,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.8.4-unstable-2024-03-08";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
-    rev = "28431ec0530405782038e7c02c2dedc3086bd7c9";
-    hash = "sha256-HL4RRGXE8PIcD+zTF1xZSyOpKMhKF75Mxm6KLGsR4Hc=";
+    rev = "v${version}";
+    hash = "sha256-ettStNktSDZnYNN/IWqTB1Ou1g1QEGFabS4EatnDLaE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ecies-ed25519-ng-0.5.2" = "sha256-E+jVbgKKK1DnJWAJN+xGZPCV2n7Gxp2t7XXkDNDnPN4=";
-      "ureq-2.9.1" = "sha256-ATT2wJ9kmY/Jjw6FEbxqM9pDytKFLmu/ZqH/pJpZTu8=";
-      "web-view-0.7.3" = "sha256-eVMcpMRZHwOdWhfV6Z1uGUNOmhB41YZPaiz1tRQvhrI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xe0YQCKnDV6M6IKWgljsuJ5ZevkdpxZDnNHAHKJyUec=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
   ];
   buildInputs =
-    lib.optional stdenv.isDarwin Security
-    ++ lib.optional (withGui && stdenv.isLinux) webkitgtk
-    ++ lib.optionals (withGui && stdenv.isDarwin) [
+    lib.optional stdenv.hostPlatform.isDarwin Security
+    ++ lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_0
+    ++ lib.optionals (withGui && stdenv.hostPlatform.isDarwin) [
       Cocoa
       WebKit
     ];
@@ -54,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=dns::client::tests::test_udp_client"
   ];
 
-  postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
+  postInstall = lib.optionalString (withGui && stdenv.hostPlatform.isLinux) ''
     wrapProgram $out/bin/alfis \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
@@ -62,10 +56,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Alternative Free Identity System";
     homepage = "https://alfis.name";
+    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
-    broken = withGui && stdenv.isDarwin;
+    broken = withGui && stdenv.hostPlatform.isDarwin;
   };
 }

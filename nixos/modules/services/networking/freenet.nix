@@ -1,9 +1,10 @@
 # NixOS module for Freenet daemon
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.freenet;
@@ -19,14 +20,14 @@ in
 
     services.freenet = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable the Freenet daemon";
       };
 
-      nice = mkOption {
-        type = types.int;
+      nice = lib.mkOption {
+        type = lib.types.int;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
       };
@@ -37,7 +38,7 @@ in
 
   ### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.freenet = {
       description = "Freenet daemon";

@@ -6,6 +6,7 @@
   fetchFromGitHub,
   ply,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
@@ -20,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jurismarches";
     repo = "luqum";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lcJCLl0crCl3Y5UlWBMZJR2UtVP96gaJNRxwY9Xn7TM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '--doctest-modules --doctest-glob="test_*.rst" --cov=luqum --cov-branch --cov-report html --no-cov-on-fail' ""
+      --replace '--doctest-modules --doctest-glob="test_*.rst"' ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     elastic-transport
     elasticsearch-dsl
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "luqum" ];

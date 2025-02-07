@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, ffmpeg
-, fzf
-, mpv
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  ffmpeg,
+  fzf,
+  mpv,
+  python3,
 }:
 
 let
   pname = "mov-cli";
-  version = "1.5.7";
+  version = "4.4.16";
 in
 python3.pkgs.buildPythonPackage {
   inherit pname version;
@@ -17,22 +18,30 @@ python3.pkgs.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "mov-cli";
     repo = "mov-cli";
-    rev = version;
-    hash = "sha256-OJhZtrSB5rjPY80GkTSU82hkcBgFYpW7Rc24BlBH7CE=";
+    tag = version;
+    hash = "sha256-hOnbBXzg9S0pqEcdXVrdG+P9tLqE8NC++ppOwqd+y+M=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     click
     colorama
+    deprecation
     httpx
+    inquirer
     krfzf-py
     lxml
     poetry-core
     pycrypto
+    python-decouple
     setuptools
     six
+    thefuzz
     tldextract
+    toml
+    typer
+    unidecode
+    (callPackage ./mov-cli-test.nix { })
   ];
 
   pythonRelaxDeps = [
@@ -40,15 +49,17 @@ python3.pkgs.buildPythonPackage {
     "tldextract"
   ];
 
-  makeWrapperArgs = let
-    binPath = lib.makeBinPath [
-      ffmpeg
-      fzf
-      mpv
+  makeWrapperArgs =
+    let
+      binPath = lib.makeBinPath [
+        ffmpeg
+        fzf
+        mpv
+      ];
+    in
+    [
+      "--prefix PATH : ${binPath}"
     ];
-  in [
-    "--prefix PATH : ${binPath}"
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/mov-cli/mov-cli";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-esedb";
-  version = "3.13";
+  version = "3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.esedb";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GdHMKLO44hR+H3fQ9h3t6sL8ACMwIVeg4nrg9brYmsU=";
+    tag = version;
+    hash = "sha256-IDLarSiI7GHjOOLibk2s/KqKwmozgIHdSfClPQXOsXI=";
   };
 
   nativeBuildInputs = [

@@ -11,12 +11,11 @@
   pytestCheckHook,
   pythonOlder,
   simplejson,
-  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "24.1.0";
+  version = "25.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,11 +23,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = "refs/tags/${version}";
-    hash = "sha256-0Yc28UEeozK2+IqILFTqHoTiM5L2SA4t6jld4qTBSzQ=";
+    tag = version;
+    hash = "sha256-zhIiDy+Wnt03WDc4BwQpSfiZorDf8BHiORCw8TotgJU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
@@ -40,7 +39,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     simplejson
-    twisted
   ];
 
   pythonImportsCheck = [ "structlog" ];
@@ -48,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Painless structural logging";
     homepage = "https://github.com/hynek/structlog";
-    changelog = "https://github.com/hynek/structlog/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/hynek/structlog/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

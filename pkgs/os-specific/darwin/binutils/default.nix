@@ -3,6 +3,7 @@
   stdenvNoCC,
   cctools,
   clang-unwrapped,
+  ld64,
   llvm,
   llvm-manpages,
   makeWrapper,
@@ -17,6 +18,7 @@ let
     "addr2line"
     "ar"
     "c++filt"
+    "dwarfdump"
     "dsymutil"
     "nm"
     "objcopy"
@@ -90,7 +92,7 @@ stdenvNoCC.mkDerivation {
       ${linkManPages (lib.getMan cctools) "$tool" "$tool"}
     done
     ${
-      # These unprefixed because some tools expect to invoke them without it when cross-compiling to Darwin:
+      # These are unprefixed because some tools expect to invoke them without it when cross-compiling to Darwin:
       # - clang needs `dsymutil` when building with debug information;
       # - meson needs `lipo` when cross-compiling to Darwin; and
       # - meson also needs `install_name_tool` and `otool` when performing rpath cleanup on installation.
@@ -104,10 +106,10 @@ stdenvNoCC.mkDerivation {
     makeWrapper "${lib.getBin clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
       --add-flags "-x assembler -integrated-as -c"
 
-    ln -s '${lib.getBin cctools}/bin/${targetPrefix}ld' "$out/bin/${targetPrefix}ld"
-    ${linkManPages (lib.getMan cctools) "ld" "ld"}
-    # ${linkManPages (lib.getMan cctools) "ld-classic" "ld-classic"}
-    ${linkManPages (lib.getMan cctools) "ld64" "ld64"}
+    ln -s '${lib.getBin ld64}/bin/${targetPrefix}ld' "$out/bin/${targetPrefix}ld"
+    ${linkManPages (lib.getMan ld64) "ld" "ld"}
+    ${linkManPages (lib.getMan ld64) "ld-classic" "ld-classic"}
+    ${linkManPages (lib.getMan ld64) "ld64" "ld64"}
   '';
 
   __structuredAttrs = true;

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, nose
-, numpy
-, scipy
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  numpy,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage {
@@ -20,16 +21,20 @@ buildPythonPackage {
     hash = "sha256-1If0gIsMU8673fKSSHVMvDgR1UnYgM/4HiyvZJ9T6VM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  patches = [ ./fix_test_invocation.patch ];
 
-  propagatedBuildInputs = [
-    nose # not actually required during runtime, but specified as required in `setup.py`
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "nose" ];
+
+  dependencies = [
     numpy
     scipy
     statsmodels
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "changefinder" ];
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aequitas";
     repo = "python-rflink";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-n6VLa0xX1qewMS7Kv+kiitezWRbRvDJRNuOmA7IV6u0=";
   };
 
@@ -38,6 +38,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version=version_from_git()" "version='${version}'"
+
+    substituteInPlace rflinkproxy/__main__.py --replace-fail \
+      "with async_timeout.timeout(CONNECTION_TIMEOUT):" \
+      "async with async_timeout.timeout(CONNECTION_TIMEOUT):"
   '';
 
   pythonImportsCheck = [ "rflink.protocol" ];

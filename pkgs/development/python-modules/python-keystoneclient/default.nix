@@ -9,6 +9,7 @@
   pbr,
   pythonOlder,
   requests-mock,
+  setuptools,
   stestr,
   testresources,
   testscenarios,
@@ -16,17 +17,19 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "5.4.0";
-  format = "setuptools";
+  version = "5.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srS9vp2vews1O4gHZy7u0B+H3QO0+LQtDQYbCbiTH0E=";
+    hash = "sha256-wvWTT5VXaTbJjkW/WZrUi8sKxFFZPl+DROv1LLD0EfU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     keystoneauth1
     oslo-config
     oslo-serialization
@@ -42,7 +45,9 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     stestr run
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "keystoneclient" ];

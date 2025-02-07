@@ -1,42 +1,49 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, installShellFiles
-, scdoc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  installShellFiles,
+  scdoc,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "soju";
-  version = "0.8.0";
+  version = "0.8.2";
 
-  src = fetchFromSourcehut {
-    owner = "~emersion";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "emersion";
     repo = "soju";
     rev = "v${version}";
-    hash = "sha256-K7Dgc1HQ6+GnjraQNcK9LOFxUIoKKWro1mWKDZFwLiE=";
+    hash = "sha256-zJj9y3llJOijmx7+C5NOzEpIG/SEeg+ZhWtLPQ/iabY=";
   };
 
-  vendorHash = "sha256-4Yl87Gk/HykjIyNpRfgthLf6b+v7kxmONIhYBWVXi0I=";
+  vendorHash = "sha256-E/9a8GCEb/0Xto6cgH9R4WWdaoo/nwb6kcFdoEeMUps=";
 
   nativeBuildInputs = [
     installShellFiles
     scdoc
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X codeberg.org/emersion/soju/config.DefaultPath=/etc/soju/config"
+    "-X codeberg.org/emersion/soju/config.DefaultUnixAdminPath=/run/soju/admin"
+  ];
 
   postBuild = ''
     make doc/soju.1 doc/sojuctl.1
   '';
 
+  checkFlags = [ "-skip TestPostgresMigrations" ];
+
   postInstall = ''
     installManPage doc/soju.1 doc/sojuctl.1
   '';
 
-  preCheck = ''
-    # Disable a test that requires an additional service.
-    rm database/postgres_test.go
-  '';
+  passthru.tests.soju = nixosTests.soju;
 
   meta = with lib; {
     description = "User-friendly IRC bouncer";
@@ -48,8 +55,13 @@ buildGoModule rec {
       deployments.
     '';
     homepage = "https://soju.im";
-    changelog = "https://git.sr.ht/~emersion/soju/refs/${src.rev}";
+    changelog = "https://codeberg.org/emersion/soju/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ azahi malte-v jtbx ];
+    maintainers = with maintainers; [
+      azahi
+      malte-v
+      jtbx
+    ];
+    mainProgram = "sojuctl";
   };
 }

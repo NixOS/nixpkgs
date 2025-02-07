@@ -1,38 +1,43 @@
 {
   lib,
-  addict,
   buildPythonPackage,
-  coverage,
   fetchFromGitHub,
-  lmdb,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  addict,
   matplotlib,
-  mlflow,
   numpy,
   opencv4,
-  parameterized,
-  pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rich,
-  setuptools,
-  stdenv,
   termcolor,
-  torch,
   yapf,
+
+  # checks
+  bitsandbytes,
+  coverage,
+  dvclive,
+  lion-pytorch,
+  lmdb,
+  mlflow,
+  parameterized,
+  pytestCheckHook,
+  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.4";
+  version = "0.10.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+YDtYHp3BwKvzhmHC6hAZ3Qtc9uRZMo/TpWqdpm2hn0=";
+    tag = "v${version}";
+    hash = "sha256-J9p+JCtNoBlBvvv4p57/DHUIifYs/jdo+pK+paD+iXI=";
   };
 
   build-system = [ setuptools ];
@@ -49,17 +54,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    bitsandbytes
     coverage
+    dvclive
+    lion-pytorch
     lmdb
     mlflow
     parameterized
     pytestCheckHook
-    torch
+    transformers
   ];
 
   preCheck =
     ''
-      export HOME=$TMPDIR
+      export HOME=$(mktemp -d)
     ''
     # Otherwise, the backprop hangs forever. More precisely, this exact line:
     # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
@@ -100,12 +108,11 @@ buildPythonPackage rec {
     "test_close"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ rxiao ];
-    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ rxiao ];
   };
 }

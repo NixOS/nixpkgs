@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-archive";
-  version = "1.1";
+  version = "1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.archive";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DUAJUbG3k6sbO7mqvNzQQns+4l8XHDUh0xZ/RA5LWEY=";
+    tag = version;
+    hash = "sha256-DhOpNllDL10Oh4CgmwHHgkU/lJbdV2vs4wCzAyLiDGU=";
   };
 
   build-system = [

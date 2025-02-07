@@ -5,6 +5,7 @@
   hatchling,
   httpx,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   respx,
@@ -12,22 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fShfnfYhUtthwHSFYIFj2cWE9dZXakTrfqiR3AL2nb8=";
+    tag = "v${version}";
+    hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report term-missing --cov=src/pywaze " ""
-  '';
 
   build-system = [ hatchling ];
 
@@ -35,6 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
   ];

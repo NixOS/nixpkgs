@@ -1,17 +1,24 @@
-{ lib, fetchFromGitHub, rustPlatform }:
-let version = "2.4.0";
-in rustPlatform.buildRustPackage {
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
+let
+  version = "2.5.1";
+in
+rustPlatform.buildRustPackage {
   pname = "catppuccin-whiskers";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "whiskers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rbPr5eSs99nS70J785SWO7tVBdiX/S7XUNHuo3aOQU4=";
+    tag = "v${version}";
+    hash = "sha256-OLEXy9MCrPQu1KWICsYhe/ayVqxkYIFwyJoJhgiNDz4=";
   };
 
-  cargoHash = "sha256-T7dreELSHfJizfbJEvvgkOmkMwlOETZVUdLwRFJOJEo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CVg7kcOTRa8KfDwiJHQhTPQfK6g3jOMa4h/BCUo3ehw=";
 
   meta = {
     homepage = "https://github.com/catppuccin/whiskers";

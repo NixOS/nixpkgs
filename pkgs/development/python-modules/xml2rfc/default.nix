@@ -1,70 +1,63 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
   configargparse,
   decorator,
   dict2xml,
   fetchFromGitHub,
   google-i18n-address,
-  html5lib,
   intervaltree,
   jinja2,
   lxml,
-  markupsafe,
   platformdirs,
   pycairo,
   pycountry,
-  pyflakes,
-  pypdf2,
+  pypdf,
   pytestCheckHook,
   python-fontconfig,
   pythonOlder,
   pyyaml,
   requests,
-  six,
+  setuptools,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.21.0";
-  format = "setuptools";
+  version = "3.25.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-7lYNEyoLYbxn1ld08eXaN8BumYhN9EftpHQKxdu64MY=";
+    tag = "v${version}";
+    hash = "sha256-hBQ90OtqRWVgr9EHf2EWm1KSy7di1PcrOJ7O+5bLK6I=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "SHELL := /bin/bash" "SHELL := bash" \
-      --replace "test flaketest" "test"
-    substituteInPlace setup.py \
-      --replace "'tox'," ""
+      --replace-fail "SHELL := /bin/bash" "SHELL := bash" \
+      --replace-fail "test flaketest" "test"
   '';
 
-  propagatedBuildInputs = [
-    appdirs
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "lxml" ];
+
+  dependencies = [
     configargparse
     dict2xml
     google-i18n-address
-    html5lib
     intervaltree
     jinja2
     lxml
-    markupsafe
     platformdirs
     pycountry
-    pyflakes
-    pypdf2
+    pypdf
     pyyaml
     requests
-    six
     wcwidth
   ];
 

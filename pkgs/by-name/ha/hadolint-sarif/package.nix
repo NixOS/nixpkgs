@@ -1,37 +1,34 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchCrate,
   rustPlatform,
-  hadolint-sarif,
-  testers,
+  nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hadolint-sarif";
-  version = "0.4.2";
+  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    owner = "psastras";
-    repo = "sarif-rs";
-    rev = "hadolint-sarif-v${version}";
-    hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-HPGVqAk1bXzeblTc4AnCLsHB60CKFV8ImO+MFqM10YI=";
   };
 
-  cargoHash = "sha256-AMRL1XANyze8bJe3fdgZvBnl/NyuWP13jixixqiPmiw=";
-  cargoBuildFlags = [
-    "--package"
-    "hadolint-sarif"
-  ];
-  cargoTestFlags = cargoBuildFlags;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1nl5Myr8o1gyvkpsdMVLjZqnLkULOmxUOT0NmVe+0Oo=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = hadolint-sarif; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "A CLI tool to convert hadolint diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
-    mainProgram = "hadolint-sarif";
-    maintainers = with lib.maintainers; [ getchoo ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "hadolint-sarif";
   };
 }

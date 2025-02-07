@@ -13,29 +13,32 @@
   pip,
   poetry-core,
   pyparsing,
+  pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  requests-mock,
+  ruff,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.24.0";
+  version = "8.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "youtype";
     repo = "mypy_boto3_builder";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RVpyCXIM7ze2iWJsi3i5N5JF2EyASAJ52DpYeebNk5A=";
+    tag = version;
+    hash = "sha256-aDQ+zznHS0EyanmasT1wOtw0jgo6SYGlR6132XXmqTc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
     boto3
     cryptography
@@ -46,11 +49,16 @@ buildPythonPackage rec {
     newversion
     pip
     pyparsing
+    ruff
     setuptools
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-mock
+    requests-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "mypy_boto3_builder" ];
 
@@ -61,10 +69,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Type annotations builder for boto3";
-    mainProgram = "mypy_boto3_builder";
     homepage = "https://github.com/youtype/mypy_boto3_builder";
-    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${src.tag}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mypy_boto3_builder";
   };
 }

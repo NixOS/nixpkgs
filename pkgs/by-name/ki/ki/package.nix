@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "langfield";
     repo = pname;
     rev = "eb32fbd3229dc1a60bcc76a937ad63f3eb869f65";
-    sha256 = "sha256-5mQhJhvJQC9835goL3t3DRbD+c4P3KxnOflxvqmxL58=";
+    hash = "sha256-5mQhJhvJQC9835goL3t3DRbD+c4P3KxnOflxvqmxL58=";
   };
 
   patches = [

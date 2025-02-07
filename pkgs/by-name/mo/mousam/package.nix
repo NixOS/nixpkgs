@@ -1,26 +1,27 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mousam";
-  version = "1.3.1";
+  version = "1.4.0";
   # built with meson, not a python format
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "amit9838";
     repo = "mousam";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QFEn7o3DRJyRLbEfb86AsS/ifYqzs3b5n2fZa/9Mm1A=";
+    tag = "v${version}";
+    hash = "sha256-wJcexOyQqLQJLCathpt6D0SEJP1AvfLPfhAfNzhknUQ=";
   };
 
   nativeBuildInputs = [

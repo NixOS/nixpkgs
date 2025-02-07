@@ -6,15 +6,18 @@
   protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-health-checking";
-  version = "1.64.1";
+  version = "1.70.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "grpcio_health_checking";
     inherit version;
-    hash = "sha256-VSOJ8/Jj32p/U8sk8opjGlhKMHIfn0Mp0nFZU+GX49s=";
+    hash = "sha256-yl/IanxgmEjDh30RtdLS7SfikjFR4r9h5HBRx9PBDRs=";
   };
 
   propagatedBuildInputs = [

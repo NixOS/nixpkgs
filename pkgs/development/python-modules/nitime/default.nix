@@ -27,13 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-4Ie8fuk9CKdn/64TsCfN2No2dU16ICpBRWYerqqF0/0=";
   };
 
-  # Upstream wants to build against the oldest version of numpy possible, but
-  # we only want to build against the most recent version.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "numpy==" "numpy>="
-  '';
-
   nativeBuildInputs = [
     cython
     setuptools
@@ -51,7 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.isDarwin; # tests hang indefinitely
+  doCheck = !stdenv.hostPlatform.isDarwin; # tests hang indefinitely
 
   pythonImportsCheck = [ "nitime" ];
 

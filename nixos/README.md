@@ -40,7 +40,7 @@ Module updates are submissions changing modules in some ways. These often contai
 Reviewing process:
 
 - Ensure that the module maintainers are notified.
-  - [CODEOWNERS](https://help.github.com/articles/about-codeowners/) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+  - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the module tests, if any, are succeeding.
   - You may invoke OfBorg with `@ofborg test <module>` to build `nixosTests.<module>`
 - Ensure that the introduced options are correct.
@@ -80,9 +80,13 @@ Reviewing process:
 
 - Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
 - Ensure that the module tests, if any, are succeeding.
+- Ensure that new module tests are added to the package `passthru.tests`.
 - Ensure that the introduced options are correct.
   - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
+    - Defaults may only be omitted if both:
+      1. The user is required to set the default in order to properly use the service.
+      2. The lack of a default does not break evaluation when the module is not enabled.
 - Ensure that module `meta` field is present
   - Maintainers should be declared in `meta.maintainers`.
   - Module documentation should be declared with `meta.doc`.
@@ -95,7 +99,8 @@ Sample template for a new module review is provided below.
 ##### Reviewed points
 
 - [ ] module path fits the guidelines
-- [ ] module tests succeed on ARCHITECTURE
+- [ ] module tests, if any, succeed on ARCHITECTURE
+- [ ] module tests, if any, are added to package `passthru.tests`
 - [ ] options have appropriate types
 - [ ] options have default
 - [ ] options have example

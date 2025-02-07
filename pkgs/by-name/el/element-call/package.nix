@@ -1,52 +1,53 @@
 { lib
 , stdenv
-, mkYarnPackage
 , fetchFromGitHub
 , fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
   offlineCacheHash = {
-    x86_64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    aarch64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    x86_64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
-    aarch64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
+    x86_64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
+    aarch64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
+    x86_64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
+    aarch64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
   }.${system} or throwSystem;
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.5.16";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
-    rev = "v${version}";
-    hash = "sha256-GTHM27i716RZk+kDELMg/lYy355/SZoQLXGPQ90M4xg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HmkFr2DroN1uNNH2pnRwE7vsJsEPLYU6yhroiuR/E6Q=";
   };
 
-  packageJSON = ./package.json;
-
-  patches = [ ./name.patch ];
-
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = offlineCacheHash;
   };
 
-  buildPhase = ''
-    runHook preBuild
-    yarn --offline run build
-    runHook postBuild
-  '';
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    nodejs
+  ];
 
-  preInstall = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir $out
-    cp -R ./deps/element-call/dist $out
-  '';
+    cp -r dist/* $out
 
-  doDist = false;
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/element-hq/element-call";
@@ -55,4 +56,4 @@ mkYarnPackage rec {
     maintainers = with maintainers; [ kilimnik ];
     mainProgram = "element-call";
   };
-}
+})

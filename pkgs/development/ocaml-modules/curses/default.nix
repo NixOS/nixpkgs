@@ -1,39 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ncurses }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  ncurses,
+  dune-configurator,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml-curses";
-  version = "1.0.8";
+buildDunePackage rec {
+  pname = "curses";
+  version = "1.0.11";
+
+  minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "mbacarella";
     repo = "curses";
     rev = version;
-    sha256 = "0yy3wf8i7jgvzdc40bni7mvpkvclq97cgb5fw265mrjj0iqpkqpd";
+    hash = "sha256-tjBOv7RARDzBShToNLL9LEaU/Syo95MfwZunFsyN4/Q=";
   };
 
-  strictDeps = true;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ ocaml findlib ];
-
-  # Fix build for recent ncurses versions
-  env.NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
-
-  createFindlibDestdir = true;
-
-  postPatch = ''
-    substituteInPlace curses.ml --replace "pp gcc" "pp $CC"
-  '';
-
-  buildPhase = "make all opt";
-
-  meta = with lib; {
+  meta = {
     description = "OCaml Bindings to curses/ncurses";
     homepage = "https://github.com/mbacarella/curses";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
-    maintainers = [ ];
-    inherit (ocaml.meta) platforms;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

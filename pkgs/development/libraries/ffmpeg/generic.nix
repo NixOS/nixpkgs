@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
+{ lib, config, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -33,27 +33,27 @@
 , fetchpatch2
 
   # Feature flags
-, withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
-, withAom ? withFullDeps # AV1 reference encoder
-, withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
+, withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux # Alsa in/output supporT
+, withAmf ? withHeadlessDeps && lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
+, withAom ? withHeadlessDeps # AV1 reference encoder
+, withAribb24 ? withFullDeps # ARIB text and caption decoding
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
-, withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
-, withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
-, withBluray ? withFullDeps # BluRay reading
+, withBluray ? withHeadlessDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
-, withCelt ? withFullDeps # CELT decoder
+, withCdio ? withFullDeps && withGPL # Audio CD grabbing
+, withCelt ? withHeadlessDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
-, withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && withNvcodec
-, withCudaLLVM ? withFullDeps
+, withCudaLLVM ? withHeadlessDeps
+, withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
 , withCuvid ? withHeadlessDeps && withNvcodec
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
-, withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
+, withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
 , withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
 , withDvdread ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
@@ -63,64 +63,73 @@
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps && withGPL # frei0r video filtering
-, withFribidi ? withFullDeps # Needed for drawtext filter
+, withFribidi ? withHeadlessDeps # Needed for drawtext filter
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
-, withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
+, withIlbc ? withFullDeps # iLBC de/encoding
+, withJack ? withFullDeps && !stdenv.hostPlatform.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
+, withKvazaar ? withFullDeps # HEVC encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLc3 ? withFullDeps && lib.versionAtLeast version "7.1" # LC3 de/encoding
+, withLcevcdec ? false && lib.versionAtLeast version "7.1" # LCEVC decoding # FIXME currently makes ffmpeg crash in any operation on non-AVX CPUs
+, withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
-, withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
+, withModplug ? withFullDeps && !stdenv.hostPlatform.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
+, withNpp ? withFullDeps && withUnfree && config.cudaSupport # Nvidia Performance Primitives-based code
 , withNvdec ? withHeadlessDeps && withNvcodec
 , withNvenc ? withHeadlessDeps && withNvcodec
-, withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
-, withOpencl ? withFullDeps
+, withOpencl ? withHeadlessDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
-, withOpengl ? withFullDeps && !stdenv.isDarwin # OpenGL rendering
+, withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
-, withOpenjpeg ? withFullDeps # JPEG 2000 de/encoder
-, withOpenmpt ? withFullDeps # Tracked music files decoder
+, withOpenjpeg ? withHeadlessDeps # JPEG 2000 de/encoder
+, withOpenmpt ? withHeadlessDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
-, withPlacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
-, withPulse ? withSmallDeps && stdenv.isLinux # Pulseaudio input support
+, withPlacebo ? withFullDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
+, withPulse ? withSmallDeps && stdenv.hostPlatform.isLinux # Pulseaudio input support
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
+, withRist ? withHeadlessDeps # Reliable Internet Stream Transport (RIST) protocol
 , withRtmp ? withFullDeps # RTMP[E] support
-, withSamba ? withFullDeps && !stdenv.isDarwin && withGPLv3 # Samba protocol
+, withRubberband ? withFullDeps && withGPL # Rubberband filter
+, withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3 # Samba protocol
 , withSdl2 ? withSmallDeps
-, withShaderc ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
+, withShaderc ? withFullDeps && !stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "5.0"
+, withShine ? withFullDeps # Fixed-point MP3 encoding
+, withSnappy ? withFullDeps # Snappy compression, needed for hap encoding
 , withSoxr ? withHeadlessDeps # Resampling via soxr
 , withSpeex ? withHeadlessDeps # Speex de/encoder
 , withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
-, withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
+, withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
 , withTwolame ? withFullDeps # MP2 encoding
-, withV4l2 ? withHeadlessDeps && stdenv.isLinux  # Video 4 Linux support
+, withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux  # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
-, withVideoToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple VideoToolbox
-, withVidStab ? withFullDeps && withGPL # Video stabilization
-, withVmaf ? withFullDeps && !stdenv.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
+, withVidStab ? withHeadlessDeps && withGPL # Video stabilization
+, withVmaf ? withFullDeps && !stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
 , withVpl ? false # Hardware acceleration via intel libvpl
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
-, withVulkan ? withSmallDeps && !stdenv.isDarwin
-, withWebp ? withFullDeps # WebP encoder
+, withVulkan ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin
+, withVvenc ? withFullDeps && lib.versionAtLeast version "7.1" # H.266/VVC encoding
+, withWebp ? withHeadlessDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
 , withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
 , withXavs ? withFullDeps && withGPL # AVS encoder
@@ -128,14 +137,15 @@
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
 , withXcbxfixes ? withFullDeps # X11 grabbing mouse rendering
-, withXevd ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC decoding
-, withXeve ? withFullDeps && lib.versionAtLeast version "7" && stdenv.hostPlatform.isx86 # MPEG-5 EVC encoding
+, withXevd ? withFullDeps && lib.versionAtLeast version "7.1" && !xevd.meta.broken # MPEG-5 EVC decoding
+, withXeve ? withFullDeps && lib.versionAtLeast version "7.1" && !xeve.meta.broken # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
-, withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
+, withXml2 ? withHeadlessDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
+, withZvbi ? withHeadlessDeps # Teletext support
 
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -216,6 +226,9 @@
  *  External libraries options
  */
 , alsa-lib
+, amf
+, amf-headers
+, aribb24
 , avisynthplus
 , bzip2
 , celt
@@ -234,14 +247,19 @@
 , gsm
 , harfbuzz
 , intel-media-sdk
+, kvazaar
 , ladspaH
 , lame
+, lcevcdec
+, lcms2
 , libaom
 , libaribcaption
 , libass
 , libbluray
 , libbs2b
 , libcaca
+, libcdio
+, libcdio-paranoia
 , libdc1394
 , libdrm
 , libdvdnav
@@ -249,17 +267,19 @@
 , libGL
 , libGLU
 , libiconv
+, libilbc
 , libjack2
 , libjxl
+, liblc3
 , libmodplug
 , libmysofa
-, libogg
 , libopenmpt
 , libopus
 , libplacebo
 , libplacebo_5
 , libpulseaudio
 , libraw1394
+, librist
 , librsvg
 , libssh
 , libtensorflow
@@ -290,10 +310,13 @@
 , quirc
 , rav1e
 , rtmpdump
+, rubberband
 , twolame
 , samba
 , SDL2
 , shaderc
+, shine
+, snappy
 , soxr
 , speex
 , srt
@@ -302,6 +325,7 @@
 , vo-amrwbenc
 , vulkan-headers
 , vulkan-loader
+, vvenc
 , x264
 , x265
 , xavs
@@ -309,18 +333,21 @@
 , xeve
 , xvidcore
 , xz
-, zeromq4
+, zeromq
 , zimg
 , zlib
+, zvbi
 /*
- *  Darwin frameworks
+ *  Darwin
  */
-, AppKit
-, AudioToolbox
-, AVFoundation
-, CoreImage
-, VideoToolbox
+, apple-sdk_15
 , xcode # unfree contains metalcc and metallib
+/*
+ *  Cuda Packages
+ */
+, cuda_cudart
+, cuda_nvcc
+, libnpp
 /*
  *  Testing
  */
@@ -400,79 +427,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = []
-    ++ optionals (versionOlder version "5") [
-      (fetchpatch2 {
-        name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
-        hash = "sha256-agJgzIzrBTQBAypuCmGXXFo7vw6Iodw5Ny5O5QCKCn8=";
-      })
-      (fetchpatch2 {
-        # Backport fix for binutils-2.41.
-        name = "binutils-2.41.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
-        hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
-      })
-      # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
-      # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
-      (fetchpatch2 {
-        name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
-        hash = "sha256-vqqVACjbCcGL9Qvmg1QArSKqVmOqr8BEr+OxTBDt6mA=";
-        postFetch = ''
-          substituteInPlace "$out" \
-            --replace libavformat/seek.c libavformat/utils.c \
-            --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
-        '';
-      })
-    ]
-    ++ optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
-      (fetchpatch2 {
-        name = "fix_build_failure_due_to_libjxl_version_to_new";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
-        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
-      })
-      (fetchpatch2 {
-        name = "5.x-CVE-2024-31585.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8711cea3841fc385cccb1e7255176479e865cd4d";
-        hash = "sha256-WT+ly/l04yM/tRVbhkESA3sDDjwvtd/Cg2y8tQo4ApI=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2024-31582.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
-        hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2024-31578.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
-        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-      })
-      ./5.1.4-CVE-2023-49502.patch
-      (fetchpatch2 {
-        name = "CVE-2023-50008.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
-        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51793.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8b8b4bdef311f88c0075a06a25320187aff00bf2";
-        hash = "sha256-e7oGyOfUXuA8XK3vfygNtFlHpHl92O2KSLAo50sNJ5o=";
-      })
-      (fetchpatch2 {
-        name = "CVE-2023-51796.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e01a55c5283b82667dad347331816a5e20869ce9";
-        hash = "sha256-m4rq+UFG3nXdgOJ3S6XcruMZ+CPw+twmy2HFv3cnvJc=";
-      })
-    ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       (fetchpatch2 { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
         hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
-      })
-      (fetchpatch2 {
-        name = "fix_vulkan_av1";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
-        hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
       })
       (fetchpatch2 {
         name = "CVE-2024-31582.patch";
@@ -505,12 +464,13 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
       })
     ]
-    ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.0.1") [
+    ++ optionals (lib.versionAtLeast version "7.1") [
+      ./fix-fate-ffmpeg-spec-disposition-7.1.patch
+
+      # Expose a private API for Chromium / Qt WebEngine.
       (fetchpatch2 {
-        # Will likely be obsolete in >7.0
-        name = "fate_avoid_dependency_on_samples";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
-        hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
+        hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
       })
     ];
 
@@ -597,25 +557,25 @@ stdenv.mkDerivation (finalAttrs: {
      *  External libraries
      */
     (enableFeature withAlsa "alsa")
+    (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
-    (enableFeature withAppKit "appkit")
+    (enableFeature withAribb24 "libaribb24")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
-    (enableFeature withAudioToolbox "audiotoolbox")
-    (enableFeature withAvFoundation "avfoundation")
     (enableFeature withAvisynth "avisynth")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCaca "libcaca")
+    (enableFeature withCdio "libcdio")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCodec2 "libcodec2")
-    (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
+    (enableFeature withCudaNVCC "cuda-nvcc")
     (enableFeature withCuvid "cuvid")
     (enableFeature withDav1d "libdav1d")
     (enableFeature withDc1394 "libdc1394")
@@ -639,11 +599,19 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withHarfbuzz "libharfbuzz")
   ] ++ [
     (enableFeature withIconv "iconv")
+    (enableFeature withIlbc "libilbc")
     (enableFeature withJack "libjack")
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
     (enableFeature withJxl "libjxl")
   ] ++ [
+    (enableFeature withKvazaar "libkvazaar")
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast version "7.1") [
+    (enableFeature withLc3 "liblc3")
+    (enableFeature withLcevcdec "liblcevc-dec")
+  ] ++ optionals (versionAtLeast version "5.1") [
+    (enableFeature withLcms2 "lcms2")
+  ] ++ [
     (enableFeature withLzma "lzma")
   ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withMetal "metal")
@@ -652,6 +620,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMp3lame "libmp3lame")
     (enableFeature withMysofa "libmysofa")
+    (enableFeature withNpp "libnpp")
     (enableFeature withNvdec "nvdec")
     (enableFeature withNvenc "nvenc")
     (enableFeature withOpenal "openal")
@@ -672,12 +641,16 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withQuirc "libquirc")
   ] ++ [
     (enableFeature withRav1e "librav1e")
+    (enableFeature withRist "librist")
     (enableFeature withRtmp "librtmp")
+    (enableFeature withRubberband "librubberband")
     (enableFeature withSamba "libsmbclient")
     (enableFeature withSdl2 "sdl2")
   ] ++ optionals (versionAtLeast version "5.0") [
     (enableFeature withShaderc "libshaderc")
   ] ++ [
+    (enableFeature withShine "libshine")
+    (enableFeature withSnappy "libsnappy")
     (enableFeature withSoxr "libsoxr")
     (enableFeature withSpeex "libspeex")
     (enableFeature withSrt "libsrt")
@@ -694,13 +667,15 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast version "6.0")  [
     (enableFeature withVpl "libvpl")
   ] ++ [
-    (enableFeature withVideoToolbox "videotoolbox")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
     (enableFeature withVoAmrwbenc "libvo-amrwbenc")
     (enableFeature withVorbis "libvorbis")
     (enableFeature withVpx "libvpx")
     (enableFeature withVulkan "vulkan")
+  ] ++ optionals (versionAtLeast version "7.1")  [
+    (enableFeature withVvenc "libvvenc")
+  ] ++ [
     (enableFeature withWebp "libwebp")
     (enableFeature withX264 "libx264")
     (enableFeature withX265 "libx265")
@@ -719,6 +694,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
     (enableFeature withZmq "libzmq")
+    (enableFeature withZvbi "libzvbi")
     /*
      * Developer flags
      */
@@ -731,8 +707,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-cross-compile"
     "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ optionals stdenv.cc.isClang [
-    "--cc=clang"
-    "--cxx=clang++"
+    "--cc=${stdenv.cc.targetPrefix}clang"
+    "--cxx=${stdenv.cc.targetPrefix}clang++"
   ] ++ optionals withMetal [
     "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
     "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -751,26 +727,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
-  ++ optionals withCudaLLVM [ clang ];
+  nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config yasm ]
+  # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
+  ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
+  ++ optionals withCudaLLVM [ clang ]
+  ++ optionals withCudaNVCC [ cuda_nvcc ];
 
   buildInputs = []
+  ++ optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ]
   ++ optionals withAlsa [ alsa-lib ]
+  ++ optionals withAmf [ amf-headers ]
   ++ optionals withAom [ libaom ]
-  ++ optionals withAppKit [ AppKit ]
+  ++ optionals withAribb24 [ aribb24 ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
-  ++ optionals withAudioToolbox [ AudioToolbox ]
-  ++ optionals withAvFoundation [ AVFoundation ]
   ++ optionals withAvisynth [ avisynthplus ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
+  ++ optionals withCdio [ libcdio libcdio-paranoia ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
   ++ optionals withCodec2 [ codec2 ]
-  ++ optionals withCoreImage [ CoreImage ]
+  ++ optionals withCudaNVCC [ cuda_cudart cuda_nvcc ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
@@ -788,15 +768,20 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withGsm [ gsm ]
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
+  ++ optionals withIlbc [ libilbc ]
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
+  ++ optionals withKvazaar [ kvazaar ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLc3 [ liblc3 ]
+  ++ optionals withLcevcdec [ lcevcdec ]
+  ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
-  ++ optionals withOgg [ libogg ]
+  ++ optionals withNpp [ libnpp cuda_cudart cuda_nvcc ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
   ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
@@ -810,10 +795,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withQrencode [ qrencode ]
   ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
+  ++ optionals withRist [ librist ]
   ++ optionals withRtmp [ rtmpdump ]
+  ++ optionals withRubberband [ rubberband ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
   ++ optionals withShaderc [ shaderc ]
+  ++ optionals withShine [ shine ]
+  ++ optionals withSnappy [ snappy ]
   ++ optionals withSoxr [ soxr ]
   ++ optionals withSpeex [ speex ]
   ++ optionals withSrt [ srt ]
@@ -826,7 +815,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
-  ++ optionals withVideoToolbox [ VideoToolbox ]
   ++ optionals withVidStab [ vid-stab ]
   ++ optionals withVmaf [ libvmaf ]
   ++ optionals withVoAmrwbenc [ vo-amrwbenc ]
@@ -834,6 +822,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withVpl [ libvpl ]
   ++ optionals withVpx [ libvpx ]
   ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
+  ++ optionals withVvenc [ vvenc ]
   ++ optionals withWebp [ libwebp ]
   ++ optionals withX264 [ x264 ]
   ++ optionals withX265 [ x265 ]
@@ -846,17 +835,25 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withXvid [ xvidcore ]
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
-  ++ optionals withZmq [ zeromq4 ]
+  ++ optionals withZmq [ zeromq ]
+  ++ optionals withZvbi [ zvbi ]
   ;
 
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # Fails with SIGABRT otherwise FIXME: Why?
   checkPhase = let
-    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    ldLibraryPathEnv = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     libsToLink = [ ]
       ++ optional buildAvcodec "libavcodec"
       ++ optional buildAvdevice "libavdevice"
@@ -884,10 +881,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
-  # See the explanation in addOpenGLRunpath.
-  postFixup = optionalString (stdenv.isLinux && withLib) ''
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavcodec.so
-    addOpenGLRunpath ${placeholder "lib"}/lib/libavutil.so
+  # See the explanation in addDriverRunpath.
+  postFixup = optionalString (stdenv.hostPlatform.isLinux && withLib) ''
+    addDriverRunpath ${placeholder "lib"}/lib/libavcodec.so
+    addDriverRunpath ${placeholder "lib"}/lib/libavutil.so
   ''
   # https://trac.ffmpeg.org/ticket/10809
   + optionalString (versionAtLeast version "5.0" && withVulkan && !stdenv.hostPlatform.isMinGW) ''
@@ -928,7 +925,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # See https://github.com/NixOS/nixpkgs/pull/295344#issuecomment-1992263658
     broken = stdenv.hostPlatform.isMinGW && stdenv.hostPlatform.is64bit;
-    maintainers = with maintainers; [ atemu arthsmn jopejoe1 ];
+    maintainers = with maintainers; [ atemu jopejoe1 emily ];
     mainProgram = "ffmpeg";
   };
 } // lib.optionalAttrs withCudaLLVM {

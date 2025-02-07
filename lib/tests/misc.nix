@@ -39,13 +39,16 @@ let
     composeManyExtensions
     concatLines
     concatMapAttrs
+    concatMapAttrsStringSep
     concatMapStrings
     concatStrings
     concatStringsSep
     const
     escapeXML
     evalModules
+    extends
     filter
+    filterAttrs
     fix
     fold
     foldAttrs
@@ -58,6 +61,7 @@ let
     genList
     getExe
     getExe'
+    getLicenseFromSpdxIdOr
     groupBy
     groupBy'
     hasAttrByPath
@@ -101,7 +105,9 @@ let
     take
     testAllTrue
     toBaseDigits
+    toExtension
     toHexString
+    fromHexString
     toInt
     toIntBase10
     toShellVars
@@ -231,11 +237,6 @@ runTests {
     ];
   };
 
-  testFix = {
-    expr = fix (x: {a = if x ? a then "a" else "b";});
-    expected = {a = "a";};
-  };
-
   testComposeExtensions = {
     expr = let obj = makeExtensible (self: { foo = self.bar; });
                f = self: super: { bar = false; baz = true; };
@@ -286,6 +287,21 @@ runTests {
     expected = "FA";
   };
 
+  testFromHexStringFirstExample = {
+    expr = fromHexString "FF";
+    expected = 255;
+  };
+
+  testFromHexStringSecondExample = {
+    expr = fromHexString (builtins.hashString "sha256" "test");
+    expected = 9223372036854775807;
+  };
+
+  testFromHexStringWithPrefix = {
+    expr = fromHexString "0Xf";
+    expected = 15;
+  };
+
   testToBaseDigits = {
     expr = toBaseDigits 2 6;
     expected = [ 1 1 0 ];
@@ -311,6 +327,11 @@ runTests {
   testConcatStringsSep = {
     expr = concatStringsSep "," ["a" "b" "c"];
     expected = "a,b,c";
+  };
+
+  testConcatMapAttrsStringSepExamples = {
+    expr = concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; };
+    expected = "a: foo-0.1.0\nb: foo-0.2.0";
   };
 
   testConcatLines = {
@@ -352,6 +373,72 @@ runTests {
     expected = "hellohellohellohellohello";
   };
 
+  # Test various strings are trimmed correctly
+  testTrimString = {
+    expr =
+    let
+      testValues = f: mapAttrs (_: f) {
+        empty = "";
+        cr = "\r";
+        lf = "\n";
+        tab = "\t";
+        spaces = "   ";
+        leading = "  Hello, world";
+        trailing = "Hello, world   ";
+        mixed = " Hello, world ";
+        mixed-tabs = " \t\tHello, world \t \t ";
+        multiline = "  Hello,\n  world!  ";
+        multiline-crlf = "  Hello,\r\n  world!  ";
+      };
+    in
+      {
+        leading = testValues (strings.trimWith { start = true; });
+        trailing = testValues (strings.trimWith { end = true; });
+        both = testValues strings.trim;
+      };
+    expected = {
+      leading = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "Hello, world";
+        trailing = "Hello, world   ";
+        mixed = "Hello, world ";
+        mixed-tabs = "Hello, world \t \t ";
+        multiline = "Hello,\n  world!  ";
+        multiline-crlf = "Hello,\r\n  world!  ";
+      };
+      trailing = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "  Hello, world";
+        trailing = "Hello, world";
+        mixed = " Hello, world";
+        mixed-tabs = " \t\tHello, world";
+        multiline = "  Hello,\n  world!";
+        multiline-crlf = "  Hello,\r\n  world!";
+      };
+      both = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "Hello, world";
+        trailing = "Hello, world";
+        mixed = "Hello, world";
+        mixed-tabs = "Hello, world";
+        multiline = "Hello,\n  world!";
+        multiline-crlf = "Hello,\r\n  world!";
+      };
+    };
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -385,6 +472,26 @@ runTests {
   testSplitStringsRegex = {
     expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
     expected = [ "A" "B" ];
+  };
+
+  testEscapeShellArg = {
+    expr = strings.escapeShellArg "esc'ape\nme";
+    expected = "'esc'\\''ape\nme'";
+  };
+
+  testEscapeShellArgEmpty = {
+    expr = strings.escapeShellArg "";
+    expected = "''";
+  };
+
+  testEscapeShellArgs = {
+    expr = strings.escapeShellArgs ["one" "two three" "four'five"];
+    expected = "one 'two three' 'four'\\''five'";
+  };
+
+  testEscapeShellArgsUnicode = {
+    expr = strings.escapeShellArg "á";
+    expected = "'á'";
   };
 
   testSplitStringsDerivation = {
@@ -486,12 +593,12 @@ runTests {
     '';
     expected = ''
       STRing01='just a '\'''string'\''''
-      declare -a _array_=('with' 'more strings')
+      declare -a _array_=(with 'more strings')
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
-      drv='/drv'
-      path='/path'
+      drv=/drv
+      path=/path
       stringable='hello toString'
     '';
   };
@@ -745,6 +852,30 @@ runTests {
     ([ 1 2 ] == (take 2 [  1 2 3 ]))
     ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
+  ];
+
+  testDrop = let inherit (lib) drop; in testAllTrue [
+    # list index -1 is out of bounds
+    # ([ 1 2 3 ] == (drop (-1) [  1 2 3 ]))
+    (drop 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (drop 1 [ 1 2 3 ] == [ 2 3 ])
+    (drop 2 [ 1 2 3 ] == [ 3 ])
+    (drop 3 [ 1 2 3 ] == [ ])
+    (drop 4 [ 1 2 3 ] == [ ])
+    (drop 0 [ ] == [ ])
+    (drop 1 [ ] == [ ])
+  ];
+
+  testDropEnd = let inherit (lib) dropEnd; in testAllTrue [
+    (dropEnd 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd 1 [ 1 2 3 ] == [ 1 2 ])
+    (dropEnd 2 [ 1 2 3 ] == [ 1 ])
+    (dropEnd 3 [ 1 2 3 ] == [ ])
+    (dropEnd 4 [ 1 2 3 ] == [ ])
+    (dropEnd 0 [ ] == [ ])
+    (dropEnd 1 [ ] == [ ])
+    (dropEnd (-1) [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd (-1) [ ] == [ ])
   ];
 
   testListHasPrefixExample1 = {
@@ -1002,6 +1133,25 @@ runTests {
     };
   };
 
+  testFilterAttrs = {
+    expr = filterAttrs (n: v: n != "a" && (v.hello or false) == true) {
+      a.hello = true;
+      b.hello = true;
+      c = {
+        hello = true;
+        world = false;
+      };
+      d.hello = false;
+    };
+    expected = {
+      b.hello = true;
+      c = {
+        hello = true;
+        world = false;
+      };
+    };
+  };
+
   # code from example
   testFoldlAttrs = {
     expr = {
@@ -1133,6 +1283,28 @@ runTests {
   testAttrsToListsCanDealWithFunctions = testingEval (
     attrsToList { someFunc= a: a + 1;}
   );
+
+# FIXED-POINTS
+
+  testFix = {
+    expr = fix (x: {a = if x ? a then "a" else "b";});
+    expected = {a = "a";};
+  };
+
+  testToExtension = {
+    expr = [
+      (fix (final: { a = 0; c = final.a; }))
+      (fix (extends (toExtension { a = 1; b = 2; }) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (prev: { a = 1; b = prev.a; })) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (final: prev: { a = 1; b = prev.a; c = final.a + 1; })) (final: { a = 0; c = final.a; })))
+    ];
+    expected = [
+      { a = 0; c = 0; }
+      { a = 1; b = 2; c = 1; }
+      { a = 1; b = 0; c = 1; }
+      { a = 1; b = 0; c = 2; }
+    ];
+  };
 
 # GENERATORS
 # these tests assume attributes are converted to lists
@@ -1493,7 +1665,7 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist = {
+  testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
         nested.values = {
@@ -1509,10 +1681,34 @@ runTests {
           emptylist = [];
           attrs = { foo = null; "foo b/ar" = "baz"; };
           emptyattrs = {};
+          "keys are not <escaped>" = "and < neither are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+    expected = { value = builtins.readFile ./test-to-plist-unescaped-expected.plist; };
+  };
+
+  testToPlistEscaped = {
+    expr = mapAttrs (const (generators.toPlist { escape = true; })) {
+      value = {
+        nested.values = {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+          "keys are <escaped>" = "and < so are string values";
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-escaped-expected.plist; };
   };
 
   testToLuaEmptyAttrSet = {
@@ -1671,7 +1867,7 @@ runTests {
       verbose = true;
     };
 
-    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+    expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
@@ -1727,6 +1923,44 @@ runTests {
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
     expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+  };
+
+  testAttrsWithName = {
+    expr = let
+      eval =  evalModules {
+        modules = [
+          {
+            options = {
+              foo = lib.mkOption {
+                type = lib.types.attrsWith {
+                  placeholder = "MyCustomPlaceholder";
+                  elemType = lib.types.submodule {
+                    options.bar = lib.mkOption {
+                      type = lib.types.int;
+                      default = 42;
+                    };
+                  };
+                };
+              };
+            };
+          }
+        ];
+      };
+      opt = eval.options.foo;
+    in
+      (opt.type.getSubOptions opt.loc).bar.loc;
+    expected = [
+      "foo"
+      "<MyCustomPlaceholder>"
+      "bar"
+    ];
+  };
+
+  testShowOptionWithPlaceholder = {
+    # <name>, *, should not be escaped. It is used as a placeholder by convention.
+    # Other symbols should be escaped. `{}`
+    expr = lib.showOption ["<name>" "<myName>" "*" "{foo}"];
+    expected = "<name>.<myName>.*.\"{foo}\"";
   };
 
   testCartesianProductOfEmptySet = {
@@ -2305,6 +2539,25 @@ runTests {
 
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
+  );
+
+  testGetLicenseFromSpdxIdOrExamples = {
+    expr = [
+      (getLicenseFromSpdxIdOr "MIT" null)
+      (getLicenseFromSpdxIdOr "mIt" null)
+      (getLicenseFromSpdxIdOr "MY LICENSE" lib.licenses.free)
+      (getLicenseFromSpdxIdOr "MY LICENSE" null)
+    ];
+    expected = [
+      lib.licenses.mit
+      lib.licenses.mit
+      lib.licenses.free
+      null
+    ];
+  };
+
+  testGetLicenseFromSpdxIdOrThrow = testingThrow (
+    getLicenseFromSpdxIdOr "MY LICENSE" (throw "No SPDX ID matches MY LICENSE")
   );
 
   testPlatformMatch = {

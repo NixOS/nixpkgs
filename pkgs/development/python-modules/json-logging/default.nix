@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bobbui";
     repo = "json-logging-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
   };
 
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bobbui/json-logging-python";
     changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

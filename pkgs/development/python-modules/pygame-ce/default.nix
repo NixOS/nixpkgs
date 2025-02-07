@@ -9,6 +9,8 @@
   pkg-config,
   setuptools,
   cython,
+  ninja,
+  meson-python,
 
   AppKit,
   fontconfig,
@@ -21,20 +23,23 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
+  numpy,
+
+  pygame-gui,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.4.1";
+  version = "2.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pygame-community";
     repo = "pygame-ce";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4Ky+QEUsQ0odcwEETk0yGECs7CcJQthhavboOnMDvF8=";
+    tag = version;
+    hash = "sha256-9e02ZfBfk18jsVDKKhMwEJiTGMG7VdBEgVh4unMJguY=";
     # Unicode file cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -62,21 +67,31 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
+      substituteInPlace pyproject.toml \
+        --replace-fail '"meson<=1.5.1",' '"meson",' \
+        --replace-fail '"ninja<=1.11.1.1",' "" \
+        --replace-fail '"cython<=3.0.11",' '"cython",' \
+        --replace-fail '"sphinx<=7.2.6",' ""
       substituteInPlace buildconfig/config_{unix,darwin}.py \
         --replace-fail 'from distutils' 'from setuptools._distutils'
       substituteInPlace src_py/sysfont.py \
         --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
         --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # flaky
       rm test/system_test.py
+      substituteInPlace test/meson.build \
+        --replace-fail "'system_test.py'," ""
     '';
 
   nativeBuildInputs = [
     pkg-config
     cython
     setuptools
+    ninja
+    meson-python
   ];
 
   buildInputs = [
@@ -89,10 +104,14 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+
+  nativeCheckInputs = [
+    numpy
+  ];
 
   preConfigure = ''
-    ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
+    ${python.pythonOnBuildForHost.interpreter} -m buildconfig.config
   '';
 
   env =
@@ -116,13 +135,33 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "pygame" ];
+  pythonImportsCheck = [
+    "pygame"
+    "pygame.camera"
+    "pygame.colordict"
+    "pygame.cursors"
+    "pygame.freetype"
+    "pygame.ftfont"
+    "pygame.locals"
+    "pygame.midi"
+    "pygame.pkgdata"
+    "pygame.sndarray" # requires numpy
+    "pygame.sprite"
+    "pygame.surfarray"
+    "pygame.sysfont"
+    "pygame.version"
+  ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit pygame-gui;
+  };
+
+  meta = {
     description = "Pygame Community Edition (CE) - library for multimedia application built on SDL";
     homepage = "https://pyga.me/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ pbsds ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/pygame-community/pygame-ce/releases/tag/${version}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.pbsds ];
+    platforms = lib.platforms.unix;
   };
 }

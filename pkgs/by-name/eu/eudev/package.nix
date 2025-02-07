@@ -1,11 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gperf
-, kmod
-, pkg-config
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gperf,
+  kmod,
+  pkg-config,
+  util-linux,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     "udevrulesdir=$(out)/var/lib/udev/rules.d"
   ];
 
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     homepage = "https://github.com/eudev-project/eudev";
     description = "Fork of udev with the aim of isolating it from init";
@@ -79,7 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/eudev-project/eudev/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      raskin
+      AndersonTorres
+    ];
+    pkgConfigModules = [
+      "libudev"
+      "udev"
+    ];
     inherit (kmod.meta) platforms;
   };
 })

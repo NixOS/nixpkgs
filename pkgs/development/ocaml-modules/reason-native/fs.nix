@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fp, reason, src }:
+{
+  lib,
+  buildDunePackage,
+  fp,
+  reason,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -18,7 +24,6 @@ buildDunePackage {
     description = "Reason Native file system API";
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/fs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
-

@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
     repo = "polybar-themes";
     rev = "adb6a4546a8351a469fa779df173e46b69aa1ac3";
     sparseCheckout = [ "fonts/panels/icomoon_feather.ttf" ];
-    sha256 = "sha256-QL7/pfIqOd2JOm6rkH+P4rMg0AhGllfkReQ03YeGW+8=";
+    hash = "sha256-QL7/pfIqOd2JOm6rkH+P4rMg0AhGllfkReQ03YeGW+8=";
   };
 
   installPhase = ''

@@ -20,20 +20,19 @@
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.13.1";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y+Ne7ZUgCieWcC4zqfrqPzmr/kGUdFroGfIPKWACaPY=";
+    hash = "sha256-U8jqJ5uLVX8zoeQwr14FPNdHACRA4HK65q2TAtRr5Xk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "cython==" "cython>=" \
-      --replace "numpy>=2.0.0rc1" "numpy"
+      --replace "cython==" "cython>="
   '';
 
   nativeBuildInputs = [

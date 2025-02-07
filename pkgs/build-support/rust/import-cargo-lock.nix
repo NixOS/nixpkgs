@@ -12,6 +12,8 @@
 
   # Additional registries to pull sources from
   #   { "https://<registry index URL>" = "https://<registry download URL>"; }
+  #   or if the registry is using the new sparse protocol
+  #   { "sparse+https://<registry download URL>" = "https://<registry download URL>"; }
   # where:
   # - "index URL" is the "index" value of the configuration entry for that registry
   #   https://doc.rust-lang.org/cargo/reference/registries.html#using-an-alternate-registry
@@ -46,6 +48,10 @@ let
     else args.lockFileContents;
 
   parsedLockFile = builtins.fromTOML lockFileContents;
+
+  # lockfile v1 and v2 don't have the `version` key, so assume v2
+  # we can implement more fine-grained detection later, if needed
+  lockFileVersion = parsedLockFile.version or 2;
 
   packages = parsedLockFile.package;
 
@@ -117,7 +123,8 @@ let
       gitParts = parseGit pkg.source;
       registryIndexUrl = lib.removePrefix "registry+" pkg.source;
     in
-      if lib.hasPrefix "registry+" pkg.source && builtins.hasAttr registryIndexUrl registries then
+      if (lib.hasPrefix "registry+" pkg.source || lib.hasPrefix "sparse+" pkg.source)
+        && builtins.hasAttr registryIndexUrl registries then
       let
         crateTarball = fetchCrate pkg registries.${registryIndexUrl};
       in runCommand "${pkg.name}-${pkg.version}" {} ''
@@ -199,11 +206,20 @@ let
         # Cargo is happy with empty metadata.
         printf '{"files":{},"package":null}' > "$out/.cargo-checksum.json"
 
+        ${lib.optionalString (gitParts ? type) ''
+          gitPartsValue=${lib.escapeShellArg gitParts.value}
+          # starting with lockfile version v4 the git source url contains encoded query parameters
+          # our regex parser does not know how to unescape them to get the actual value, so we do it here
+          ${lib.optionalString (lockFileVersion >= 4) ''
+            gitPartsValue=$(${lib.getExe python3Packages.python} -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.argv[1]))" "$gitPartsValue")
+          ''}
+        ''}
+
         # Set up configuration for the vendor directory.
         cat > $out/.cargo-config <<EOF
-        [source."${gitParts.url}${lib.optionalString (gitParts ? type) "?${gitParts.type}=${gitParts.value}"}"]
+        [source."${pkg.source}"]
         git = "${gitParts.url}"
-        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"${gitParts.value}\""}
+        ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"$gitPartsValue\""}
         replace-with = "vendored-sources"
         EOF
       ''
@@ -226,7 +242,7 @@ let
       else "cp $lockFileContentsPath $out/Cargo.lock"
     }
 
-    cat > $out/.cargo/config <<EOF
+    cat > $out/.cargo/config.toml <<EOF
 [source.crates-io]
 replace-with = "vendored-sources"
 
@@ -237,7 +253,7 @@ EOF
     declare -A keysSeen
 
     for registry in ${toString (builtins.attrNames extraRegistries)}; do
-      cat >> $out/.cargo/config <<EOF
+      cat >> $out/.cargo/config.toml <<EOF
 
 [source."$registry"]
 registry = "$registry"
@@ -253,7 +269,7 @@ EOF
         key=$(sed 's/\[source\."\(.*\)"\]/\1/; t; d' < "$crate/.cargo-config")
         if [[ -z ''${keysSeen[$key]} ]]; then
           keysSeen[$key]=1
-          cat "$crate/.cargo-config" >> $out/.cargo/config
+          cat "$crate/.cargo-config" >> $out/.cargo/config.toml
         fi
       fi
     done

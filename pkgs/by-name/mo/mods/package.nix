@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "mods";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
     rev = "v${version}";
-    hash = "sha256-s2yzrOfZievm7t9NzHojVDNpHkQdZsqdq7zJNO7/SM8=";
+    hash = "sha256-1Qx3P1q7zmrzNqmiivri0BxdEsRYgS1cOp17S44jRPI=";
   };
 
-  vendorHash = "sha256-Q+lpf35tAIZSHV8FBmYrgKbg5RTJzS33Zv8AH9bVxLY=";
+  vendorHash = "sha256-LarOXYkyhSCMXkD2G3/XYHnj5bDcL6nwWxlMAYy+9d8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -61,7 +61,10 @@ buildGoModule rec {
     description = "AI on the command line";
     homepage = "https://github.com/charmbracelet/mods";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya caarlos0 ];
+    maintainers = with maintainers; [
+      dit7ya
+      caarlos0
+    ];
     mainProgram = "mods";
   };
 }

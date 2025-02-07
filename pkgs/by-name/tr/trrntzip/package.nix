@@ -7,22 +7,23 @@
 # Besides the new one is on github instead of sourceforge
 # which makes life for us easier
 
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trrntzip";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "0-wiz-0";
     repo = "trrntzip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7BrTJCQH9x9cNqm7tGOLxQlbTmlxs5S2hAD4ZWIady8=";
+    hash = "sha256-whxPqXT6w91jWv9aoTE4ITbjqohgwytzA0HN7WXKcTA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -48,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ TheBrainScrambler ];
+    maintainers = with maintainers; [ ];
   };
 })

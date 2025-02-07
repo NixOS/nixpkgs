@@ -10,6 +10,7 @@
   fetchPypi,
   gn,
   pytestCheckHook,
+  cctools,
   xcodebuild,
   ApplicationServices,
   OpenGL,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.8.0.post1";
-  format = "setuptools";
+  version = "0.8.0.post2";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "skia-pathops";
+    pname = "skia_pathops";
     inherit version;
     extension = "zip";
-    hash = "sha256-oFYkneL2H6VRFrnuVVE8aja4eK7gDJFFDkBNFgZIXLs=";
+    hash = "sha256-niUs3rbE0WLoKYbTHb2JxnXRZ3y4AZwuE+YpXUpVcmk=";
   };
 
   postPatch =
@@ -33,7 +34,7 @@ buildPythonPackage rec {
         --replace "build_cmd = [sys.executable, build_skia_py, build_dir]" \
           'build_cmd = [sys.executable, build_skia_py, "--no-fetch-gn", "--no-virtualenv", "--gn-path", "${gn}/bin/gn", build_dir]'
     ''
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace src/cpp/skia-builder/skia/gn/skia/BUILD.gn \
         --replace "-march=armv7-a" "-march=armv8-a" \
         --replace "-mfpu=neon" "" \
@@ -42,7 +43,7 @@ buildPythonPackage rec {
         --replace "defined(SK_CPU_ARM64)" "0"
     ''
     +
-      lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) # old compiler?
+      lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) # old compiler?
         ''
           patch -p1 <<EOF
           --- a/src/cpp/skia-builder/skia/include/private/base/SkTArray.h
@@ -53,18 +54,25 @@ buildPythonPackage rec {
           EOF
         '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    ninja
+    setuptools
     setuptools-scm
-  ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs =
+    [
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools.libtool
+      xcodebuild
+    ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     OpenGL
   ];
-
-  propagatedBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

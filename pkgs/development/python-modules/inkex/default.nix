@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   inkscape,
   poetry-core,
@@ -12,27 +13,44 @@
   pyparsing,
   pyserial,
   scour,
+  tinycss2,
   gobject-introspection,
   pytestCheckHook,
   gtk3,
+  fetchpatch2,
 }:
 
 buildPythonPackage {
   pname = "inkex";
   inherit (inkscape) version;
-
-  format = "pyproject";
+  pyproject = true;
 
   inherit (inkscape) src;
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    (fetchpatch2 {
+      name = "add-numpy-2-support.patch";
+      url = "https://gitlab.com/inkscape/extensions/-/commit/13ebc1e957573fea2c3360f676b0f1680fad395d.patch";
+      hash = "sha256-0n8L8dUaYYPBsmHlAxd60c5zqfK6NmXJfWZVBXPbiek=";
+      stripLen = 1;
+      extraPrefix = "share/extensions/";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "numpy" ];
+
+  dependencies = [
     cssselect
     lxml
     numpy
+    pillow
     pygobject3
+    pyparsing
     pyserial
+    scour
+    tinycss2
   ];
 
   pythonImportsCheck = [ "inkex" ];
@@ -44,16 +62,18 @@ buildPythonPackage {
 
   checkInputs = [
     gtk3
-    packaging
-    pillow
-    pyparsing
-    scour
   ];
 
-  disabledTests = [
-    "test_extract_multiple"
-    "test_lookup_and"
-  ];
+  disabledTests =
+    [
+      "test_extract_multiple"
+      "test_lookup_and"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      "test_image_extract"
+      "test_path_number_nodes"
+      "test_plotter" # Hangs
+    ];
 
   disabledTestPaths = [
     # Fatal Python error: Segmentation fault
@@ -68,8 +88,7 @@ buildPythonPackage {
     cd share/extensions
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
-      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
   '';
 
   meta = {

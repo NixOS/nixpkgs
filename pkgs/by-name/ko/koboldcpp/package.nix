@@ -3,79 +3,65 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  gitUpdater,
-  python311Packages,
+  python3Packages,
   tk,
+  addDriverRunpath,
 
-  darwin,
+  apple-sdk_12,
 
   koboldLiteSupport ? true,
 
   config,
   cudaPackages ? { },
 
-  openblasSupport ? !stdenv.isDarwin,
-  openblas,
-
   cublasSupport ? config.cudaSupport,
+  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+  # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
+  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
 
-  clblastSupport ? stdenv.isLinux,
+  clblastSupport ? stdenv.hostPlatform.isLinux,
   clblast,
   ocl-icd,
 
-  vulkanSupport ? true,
+  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
   vulkan-loader,
-
-  metalSupport ? stdenv.isDarwin && stdenv.isAarch64,
-
-  # You can find list of x86_64 options here: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
-  # For ARM here: https://gcc.gnu.org/onlinedocs/gcc/ARM-Options.html
-  # If you set "march" to "native", specify "mtune" as well; otherwise, it will be set to "generic". (credit to: https://lemire.me/blog/2018/07/25/it-is-more-complicated-than-i-thought-mtune-march-in-gcc/)
-  # For example, if you have an AMD Ryzen CPU, you will set "march" to "x86-64" and "mtune" to "znver2"
-  march ? "",
-  mtune ? "",
+  metalSupport ? stdenv.hostPlatform.isDarwin,
+  nix-update-script,
 }:
 
 let
   makeBool = option: bool: (if bool then "${option}=1" else "");
 
+  libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
+    --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
+  '';
+
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.68";
+  version = "1.82.4";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
-    rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-zqRlQ8HgT4fmGHD6uxxa2duZrx9Vhxd+gm1XQ7w9ay0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ObQJS6ZRdtSCTAQCq8w3gLDa1Z8z++JgDmyedTXB1F8=";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     makeWrapper
-    python311Packages.wrapPython
+    python3Packages.wrapPython
   ];
 
-  pythonInputs = builtins.attrValues { inherit (python311Packages) tkinter customtkinter packaging; };
+  pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals effectiveStdenv.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Accelerate
-      darwin.apple_sdk_11_0.frameworks.CoreVideo
-      darwin.apple_sdk_11_0.frameworks.CoreGraphics
-      darwin.apple_sdk_11_0.frameworks.CoreServices
-    ]
-    ++ lib.optionals metalSupport [
-      darwin.apple_sdk_11_0.frameworks.MetalKit
-      darwin.apple_sdk_11_0.frameworks.Foundation
-      darwin.apple_sdk_11_0.frameworks.MetalPerformanceShaders
-    ]
-    ++ lib.optionals openblasSupport [ openblas ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
       cudaPackages.cuda_nvcc
@@ -90,30 +76,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   pythonPath = finalAttrs.pythonInputs;
 
-  darwinLdFlags = lib.optionals stdenv.isDarwin [
-    "-F${darwin.apple_sdk_11_0.frameworks.CoreServices}/Library/Frameworks"
-    "-F${darwin.apple_sdk_11_0.frameworks.Accelerate}/Library/Frameworks"
-    "-framework CoreServices"
-    "-framework Accelerate"
-  ];
-  metalLdFlags = lib.optionals metalSupport [
-    "-F${darwin.apple_sdk_11_0.frameworks.Foundation}/Library/Frameworks"
-    "-F${darwin.apple_sdk_11_0.frameworks.Metal}/Library/Frameworks"
-    "-framework Foundation"
-    "-framework Metal"
-  ];
-
-  env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
-
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") "-march=${march}" + lib.optionalString (mtune != "") "-mtune=${mtune}";
-
   makeFlags = [
-    (makeBool "LLAMA_OPENBLAS" openblasSupport)
     (makeBool "LLAMA_CUBLAS" cublasSupport)
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
+    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
 
   installPhase = ''
@@ -124,6 +92,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
     cp *.embd "$out/bin"
+
+    ${lib.optionalString metalSupport ''
+      cp *.metal "$out/bin"
+    ''}
 
     ${lib.optionalString (!koboldLiteSupport) ''
       rm "$out/bin/kcpp_docs.embd"
@@ -136,19 +108,21 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
-    --prefix PATH ${lib.makeBinPath [ tk ]}
+      --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
     description = "Way to run various GGML and GGUF models";
+    homepage = "https://github.com/LostRuins/koboldcpp";
     license = lib.licenses.agpl3Only;
+    mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
       donteatoreo
     ];
-    mainProgram = "koboldcpp";
     platforms = lib.platforms.unix;
   };
 })

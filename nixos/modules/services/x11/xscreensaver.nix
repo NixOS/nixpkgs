@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.xscreensaver;
@@ -36,5 +41,7 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ vancluever AndersonTorres ];
+  meta.maintainers = with lib.maintainers; [
+    vancluever
+  ];
 }

@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  hostPlatform,
+  stdenv,
   fetchFromGitHub,
   # build dependencies
   hatchling,
@@ -11,6 +11,7 @@
   conda-libmamba-solver,
   conda-package-handling,
   distro,
+  frozendict,
   jsonpatch,
   packaging,
   platformdirs,
@@ -25,18 +26,18 @@
   defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
 }:
 buildPythonPackage rec {
+  __structuredAttrs = true;
   pname = "conda";
-  version = "24.5.0";
+  version = "25.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
     owner = "conda";
     repo = "conda";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DbgdTaCMWf0d3MLEMGoWxN3x37tAtoW8T7mm5279yqk=";
+    tag = version;
+    hash = "sha256-dFj9ob9RRmeaaVDJeDOVLe06fBkCGEWhavLFKytJ8Mo=";
   };
-
 
   build-system = [
     hatchling
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     conda-libmamba-solver
     conda-package-handling
     distro
+    frozendict
     jsonpatch
     packaging
     platformdirs
@@ -62,15 +64,23 @@ buildPythonPackage rec {
   patches = [ ./0001-conda_exe.patch ];
 
   makeWrapperArgs = [
-    "--set CONDA_EXE ${placeholder "out"}/bin/conda"
-    ''--set-default CONDA_ENVS_PATH "${defaultEnvPath}"''
-    ''--set-default CONDA_PKGS_DIRS "${defaultPkgPath}"''
+    "--set"
+    "CONDA_EXE"
+    "${placeholder "out"}/bin/conda"
+
+    "--set-default"
+    "CONDA_ENVS_PATH"
+    defaultEnvPath
+
+    "--set-default"
+    "CONDA_PKGS_DIRS"
+    defaultPkgPath
   ];
 
   pythonImportsCheck = [ "conda" ];
 
   # menuinst is currently not packaged
-  pythonRemoveDeps = lib.optionals (!hostPlatform.isWindows) [ "menuinst" ];
+  pythonRemoveDeps = lib.optionals (!stdenv.hostPlatform.isWindows) [ "menuinst" ];
 
   meta = {
     description = "OS-agnostic, system-level binary package manager";

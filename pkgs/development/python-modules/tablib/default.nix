@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.6.1";
+  version = "3.7.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BAaF/eEekjdnX0Pphe25S2MlCl6SNvidVhzm+xRluDk=";
+    hash = "sha256-+duE7TmN9RCb1pwR1GYT0WzFcvua0yE/ENleK18SwY4=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       markuppy
       odfpy
@@ -76,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://tablib.readthedocs.io/";
     changelog = "https://github.com/jazzband/tablib/raw/v${version}/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

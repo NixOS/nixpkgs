@@ -2,8 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   asn1crypto,
-  astunparse,
   bincopy,
   bitstring,
   click,
@@ -14,56 +19,69 @@
   cryptography,
   deepmerge,
   fastjsonschema,
+  filelock,
   hexdump,
   libusbsio,
+  libuuu,
   oscrypto,
+  packaging,
   platformdirs,
   prettytable,
-  pylink-square,
   pyocd,
-  pyocd-pemicro,
-  pypemicro,
   pyserial,
   requests,
   ruamel-yaml,
-  setuptools,
   sly,
-  spsdk,
-  testers,
   typing-extensions,
+
+  # tests
   ipykernel,
   pytest-notebook,
   pytestCheckHook,
   voluptuous,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.1.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cWz2zML/gb9l2C5VEBti+nX3ZLyGbLFyLZGjk5GfTJw=";
+    tag = "v${version}";
+    hash = "sha256-Ua32c6hNjwfjsQIugiqtRL50AvOrPgqyKoG1Lb0NVqE=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.1,<74" "setuptools"
+
+    substituteInPlace setup.py \
+      --replace-fail "setuptools>=72.1,<74" "setuptools"
+  '';
+
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
   pythonRelaxDeps = [
-    "click"
     "cryptography"
-    "platformdirs"
     "requests"
+    "packaging"
     "typing-extensions"
   ];
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    # Remove unneeded unfree package. pyocd-pemicro is only used when
+    # generating a pyinstaller package, which we don't do.
+    "pyocd-pemicro"
+  ];
+
+  dependencies = [
     asn1crypto
-    astunparse
     bincopy
     bitstring
     click
@@ -74,15 +92,15 @@ buildPythonPackage rec {
     cryptography
     deepmerge
     fastjsonschema
+    filelock
     hexdump
     libusbsio
+    libuuu
     oscrypto
+    packaging
     platformdirs
     prettytable
-    pylink-square
     pyocd
-    pyocd-pemicro
-    pypemicro
     pyserial
     requests
     ruamel-yaml
@@ -90,28 +108,32 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonImportsCheck = [ "spsdk" ];
+
+  preInstallCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
   nativeCheckInputs = [
     ipykernel
     pytest-notebook
     pytestCheckHook
     voluptuous
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   disabledTests = [
-    "test_nxpcrypto_create_signature_algorithm"
-    "test_nxpimage_sb31_kaypair_not_matching"
+    # Missing rotk private key
+    "test_general_notebooks"
   ];
 
-  pythonImportsCheck = [ "spsdk" ];
-
-  passthru.tests.version = testers.testVersion { package = spsdk; };
-
-  meta = with lib; {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
+  meta = {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

@@ -11,14 +11,14 @@
 let
   zipp = buildPythonPackage rec {
     pname = "zipp";
-    version = "3.19.2";
+    version = "3.21.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-vx3PZFD4c6E+lSopUEiHyJ5t51BiCeWxvMNGATXU3hk=";
+      hash = "sha256-LJlY9kMKIEA0GlLrYI7W3ZPvQ5LgL/4hlBfBsotd0fQ=";
     };
 
     nativeBuildInputs = [ setuptools-scm ];
@@ -43,7 +43,7 @@ let
       description = "Pathlib-compatible object wrapper for zip files";
       homepage = "https://github.com/jaraco/zipp";
       license = licenses.mit;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

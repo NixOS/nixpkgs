@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, cython
-, tree-sitter0_21
-, pytestCheckHook
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  tree-sitter,
+  pytestCheckHook,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -34,20 +34,14 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
     cython
   ];
-  dependencies = [
-    # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
-    tree-sitter0_21
-  ];
+  dependencies = [ tree-sitter ];
   # Generate languages.so file (build won't fail without this, but tests will).
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} build.py
   '';
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # Without cd $out, tests fail to import the compiled cython extensions.
   # Without copying the ./tests/ directory to $out, pytest won't detect the
   # tests and run them. See also:
@@ -64,5 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/grantjenks/py-tree-sitter-languages";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
+    # https://github.com/grantjenks/py-tree-sitter-languages/issues/67
+    broken = versionAtLeast tree-sitter.version "0.22";
   };
 }

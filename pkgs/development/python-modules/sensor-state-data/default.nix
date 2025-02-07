@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  home-assistant-bluetooth,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  sensor-state-data,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9GdBKUhueis8pnQP5ZNxvEyRXVGINTueVzLOR4xx5mU=";
   };
 

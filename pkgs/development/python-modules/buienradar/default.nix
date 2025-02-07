@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "buienradar";
-  version = "1.0.6";
+  version = "1.0.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjj4791";
     repo = "python-buienradar";
     # https://github.com/mjj4791/python-buienradar/issues/14
-    rev = "6081a860e190eb59c2ea3ebdcb8a50f6133a0b53";
-    hash = "sha256-5bFGPR8StyQTMRcvECdHGC33oAR/9noeCbpwx3DSquQ=";
+    tag = version;
+    hash = "sha256-DwOysdA6B9DMH1j/1Oetx2rCgqwk/UggCdH0lBVS6Hw=";
   };
 
   propagatedBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/mjj4791/python-buienradar/blob/${src.tag}/CHANGLOG.rst";
     description = "Library and CLI tools for interacting with buienradar";
     mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";

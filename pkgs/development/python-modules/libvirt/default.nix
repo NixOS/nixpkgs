@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitLab,
@@ -11,15 +12,20 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "10.4.0";
+  version = "10.10.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
     rev = "v${version}";
-    hash = "sha256-Qwn07C8N2ZZzE5+qCo2HtBSm5/zGBqbiLnJePxuEJjs=";
+    hash = "sha256-zOjTGXwxjd6QT01AaIln0FdP/8UZS0W3yPltUhlocpk=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'pkg-config' "${stdenv.cc.targetPrefix}pkg-config"
+  '';
 
   build-system = [ setuptools ];
 

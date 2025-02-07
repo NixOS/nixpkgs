@@ -8,13 +8,11 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
   "@uppy/companion" = "companion";
-  "@vue/cli" = "vue";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
@@ -34,11 +32,8 @@
   graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  kaput-cli = "kaput";
-  less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  neovim = "neovim-node-host";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
@@ -49,8 +44,6 @@
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
-  remod-cli = "remod";
-  teck-programmer = "teck-firmware-upgrade";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

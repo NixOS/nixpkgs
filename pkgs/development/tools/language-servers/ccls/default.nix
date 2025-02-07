@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, llvmPackages, rapidjson, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  rapidjson,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ccls";
-  version = "0.20240202";
+  version = "0.20241108";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "sha256-xVx3+cnmIdoA7R1S31EaiPj+DOTqkINoQeMgauW61Ys=";
+    sha256 = "sha256-0hZ4VnscnKYBrXy58IjeoeDxja1oNq0mNaQGPmej5BA=";
   };
 
-  nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];
-  buildInputs = with llvmPackages; [ libclang llvm rapidjson ];
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.llvm.dev
+  ];
+  buildInputs = with llvmPackages; [
+    libclang
+    llvm
+    rapidjson
+  ];
 
   cmakeFlags = [ "-DCCLS_VERSION=${version}" ];
 
@@ -34,9 +48,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C/c++ language server powered by clang";
     mainProgram = "ccls";
-    homepage    = "https://github.com/MaskRay/ccls";
-    license     = licenses.asl20;
-    platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ mic92 tobim ];
+    homepage = "https://github.com/MaskRay/ccls";
+    license = licenses.asl20;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [
+      mic92
+      tobim
+    ];
   };
 }

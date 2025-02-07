@@ -1,88 +1,95 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, callPackage
-, cmake
-, cubeb
-, curl
-, extra-cmake-modules
-, libXrandr
-, libbacktrace
-, libwebp
-, makeWrapper
-, ninja
-, pkg-config
-, qt6
-, substituteAll
-, vulkan-loader
-, wayland
+{
+  lib,
+  stdenv,
+  llvmPackages,
+  SDL2,
+  callPackage,
+  cmake,
+  cpuinfo,
+  cubeb,
+  curl,
+  discord-rpc,
+  extra-cmake-modules,
+  libXrandr,
+  libbacktrace,
+  libwebp,
+  makeWrapper,
+  ninja,
+  pkg-config,
+  qt6,
+  vulkan-loader,
+  wayland,
+  wayland-scanner,
 }:
 
 let
-  shaderc-patched = callPackage ./shaderc-patched.nix { };
+  sources = callPackage ./sources.nix { };
   inherit (qt6)
     qtbase
     qtsvg
     qttools
     qtwayland
     wrapQtAppsHook
-  ;
+    ;
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "duckstation";
-  version = "0.1-6658";
-
-  src = fetchFromGitHub {
-    owner = "stenzek";
-    repo = "duckstation";
-    rev = "4e0c417add264226b3db065c1466791f0591a1b5";
-    hash = "sha256-fN0bcjqjMmK3qVLlrYmR2VgjK0BjdK4nUj8vNYdFC3I=";
-  };
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
+  inherit (sources.duckstation) pname version src;
 
   patches = [
     # Tests are not built by default
     ./001-fix-test-inclusion.diff
-    # Patching yet another script that fills data based on git commands...
-    (substituteAll {
-      src = ./002-hardcode-vars.diff;
-      gitHash = finalAttrs.src.rev;
-      gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g4e0c417a";
-      gitDate = "2024-04-16T12:49:54+10:00";
-    })
+    # Patching yet another script that fills data based on git commands . . .
+    ./002-hardcode-vars.diff
+    # Fix NEON intrinsics usage
+    ./003-fix-NEON-intrinsics.patch
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     ninja
     pkg-config
     qttools
+    wayland-scanner
     wrapQtAppsHook
   ];
 
   buildInputs = [
     SDL2
+    cpuinfo
     curl
+    extra-cmake-modules
     libXrandr
     libbacktrace
     libwebp
     qtbase
     qtsvg
     qtwayland
-    shaderc-patched
+    sources.discord-rpc-patched
+    sources.lunasvg
+    sources.shaderc-patched
+    sources.soundtouch-patched
+    sources.spirv-cross-patched
     wayland
-  ]
-  ++ cubeb.passthru.backendLibs;
-
-  strictDeps = true;
+  ] ++ cubeb.passthru.backendLibs;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
 
+  strictDeps = true;
+
   doInstallCheck = true;
+
+  postPatch = ''
+    gitHash=$(cat .nixpkgs-auxfiles/git_hash) \
+    gitBranch=$(cat .nixpkgs-auxfiles/git_branch) \
+    gitTag=$(cat .nixpkgs-auxfiles/git_tag) \
+    gitDate=$(cat .nixpkgs-auxfiles/git_date) \
+      substituteAllInPlace src/scmversion/gen_scmversion.sh
+  '';
+
+  # error: cannot convert 'int16x8_t' to '__Int32x4_t'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-flax-vector-conversions";
 
   installCheckPhase = ''
     runHook preCheck
@@ -108,10 +115,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libPath = lib.makeLibraryPath ([
-        vulkan-loader
-      ] ++ cubeb.passthru.backendLibs);
-    in [
+      libPath = lib.makeLibraryPath (
+        [
+          sources.shaderc-patched
+          sources.spirv-cross-patched
+          vulkan-loader
+        ]
+        ++ cubeb.passthru.backendLibs
+      );
+    in
+    [
       "--prefix LD_LIBRARY_PATH : ${libPath}"
     ];
 
@@ -128,7 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = lib.licenses.gpl3Only;
     mainProgram = "duckstation-qt";
-    maintainers = with lib.maintainers; [ guibou AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      guibou
+      AndersonTorres
+    ];
     platforms = lib.platforms.linux;
   };
 })

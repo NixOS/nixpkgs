@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "scim2-filter-parser";
-  version = "0.5.0";
-  format = "pyproject";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15five";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-QEPTYpWlRPWO6Evyt4zoqUST4ousF67GmiOpD7WUqcI=";
+    tag = version;
+    hash = "sha256-KmtOtI/5HT0lVwvXQFTlEwMeptoa4cA5hTSgSULxhIc=";
   };
 
   patches = [
@@ -31,16 +31,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  propagatedBuildInputs = [ sly ];
+  dependencies = [ sly ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     django-query = [ django ];
   };
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.django-query;
+  ] ++ optional-dependencies.django-query;
 
   meta = with lib; {
     description = "Customizable parser/transpiler for SCIM2.0 filters";

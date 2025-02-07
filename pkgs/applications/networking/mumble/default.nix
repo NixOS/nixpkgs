@@ -7,15 +7,16 @@
 , flac
 , libogg
 , libvorbis
+, stdenv_32bit
 , iceSupport ? true, zeroc-ice
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
 , pulseSupport ? true, libpulseaudio
-, speechdSupport ? false, speechd
+, speechdSupport ? false, speechd-minimal
 }:
 
 let
-  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
+  generic = overrides: source: (overrides.stdenv or stdenv).mkDerivation (source // overrides // {
     pname = overrides.type;
     version = source.version;
 
@@ -38,7 +39,6 @@ let
 
     meta = with lib; {
       description = "Low-latency, high quality voice chat software";
-      mainProgram = "mumble-server";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
       maintainers = with maintainers; [ felixsinger lilacious ];
@@ -53,7 +53,7 @@ let
     buildInputs = [ flac libogg libopus libsndfile libvorbis qt5.qtsvg rnnoise speex ]
       ++ lib.optional (!jackSupport) alsa-lib
       ++ lib.optional jackSupport libjack2
-      ++ lib.optional speechdSupport speechd
+      ++ lib.optional speechdSupport speechd-minimal
       ++ lib.optional pulseSupport libpulseaudio
       ++ lib.optional pipewireSupport pipewire;
 
@@ -72,7 +72,7 @@ let
       ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
       ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
 
-    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd}/include/speech-dispatcher";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
     postFixup = ''
       wrapProgram $out/bin/mumble \
@@ -96,19 +96,31 @@ let
       ++ lib.optional iceSupport zeroc-ice;
   } source;
 
+  overlay = source: generic {
+    stdenv = stdenv_32bit;
+    type = "mumble-overlay";
+
+    configureFlags = [
+      "-D server=OFF"
+      "-D client=OFF"
+      "-D overlay=ON"
+    ];
+  } source;
+
   source = rec {
-    version = "1.5.634";
+    version = "1.5.735";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       rev = "v${version}";
-      sha256 = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
+      hash = "sha256-JRnGgxkf5ct6P71bYgLbCEUmotDLS2Evy6t8R7ac7D4=";
       fetchSubmodules = true;
     };
   };
 in {
-  mumble  = client source;
-  murmur  = server source;
+  mumble  = lib.recursiveUpdate (client source) {meta.mainProgram = "mumble";};
+  murmur  = lib.recursiveUpdate (server source) {meta.mainProgram = "mumble-server";};
+  overlay = overlay source;
 }

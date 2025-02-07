@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.25";
+  version = "1.28";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "puremagic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-l97ZK9VT+kU9Hos91C7Q9Zhv3Dge3kyF7N//j4sZ5Kc=";
+    tag = version;
+    hash = "sha256-a7jRQUSbH3E6eJiXNKr4ikdSXRZ6+/csl/EMiKXMzmk=";
   };
 
   build-system = [ setuptools ];

@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  colorama,
+  fetchFromGitHub,
+  setuptools,
   tqdm,
   pytestCheckHook,
   pythonOlder,
@@ -12,18 +12,21 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.7.8";
+  version = "0.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-muauX4Mq58ew9lGPE0H+bu4bqPydNADLocujjy6qRh4=";
+  src = fetchFromGitHub {
+    owner = "slhck";
+    repo = "ffmpeg-progress-yield";
+    tag = "v${version}";
+    hash = "sha256-o5PlL6Ggo0Mrs/ujdnTV5GMAVeG2wpBoBDfxTVic3mA=";
   };
 
-  propagatedBuildInputs = [
-    colorama
+  build-system = [ setuptools ];
+
+  dependencies = [
     tqdm
   ];
 

@@ -6,28 +6,28 @@
   jsonpath-ng,
   lupa,
   poetry-core,
-  pybloom-live,
   pyprobables,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
   redis,
+  redis-server,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.23.2";
+  version = "2.26.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/nuBj9h5MMz1YvJozhl4Fq/OkLckesnQHHTUWfz06sA=";
+    tag = "v${version}";
+    hash = "sha256-jD0e04ltH1MjExfrPsR6LUn4X0/qoJZWzX9i2A58HHI=";
   };
 
   build-system = [ poetry-core ];
@@ -37,14 +37,7 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  nativeCheckInputs = [
-    hypothesis
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lua = [ lupa ];
     json = [ jsonpath-ng ];
     bf = [ pyprobables ];
@@ -52,12 +45,25 @@ buildPythonPackage rec {
     probabilistic = [ pyprobables ];
   };
 
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "fakeredis" ];
 
-  disabledTests = [
-    # AssertionError
-    "test_command"
-  ];
+  pytestFlagsArray = [ "-m 'not slow'" ];
+
+  preCheck = ''
+    ${lib.getExe' redis-server "redis-server"} --port 6390 &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

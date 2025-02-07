@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, dune_3, ordering }:
+{
+  buildDunePackage,
+  dune_3,
+  ordering,
+}:
 
 buildDunePackage {
   pname = "dyn";
@@ -13,4 +17,3 @@ buildDunePackage {
     description = "Dynamic type";
   };
 }
-

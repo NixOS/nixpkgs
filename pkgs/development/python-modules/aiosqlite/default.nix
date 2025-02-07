@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JQ9iNxK7FvBhPyr825d+8P5ZYFztDIX3gOwp4FPfyU4=";
   };
 
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jreese/aiosqlite";
     changelog = "https://github.com/omnilib/aiosqlite/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

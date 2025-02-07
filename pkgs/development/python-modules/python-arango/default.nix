@@ -33,16 +33,16 @@ in
 
 buildPythonPackage rec {
   pname = "python-arango";
-  version = "7.9.1";
+  version = "8.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "ArangoDB-Community";
+    owner = "arangodb";
     repo = "python-arango";
-    rev = "refs/tags/${version}";
-    hash = "sha256-N10ysJKk0jxFyjgR/MXKHVS2MxCQtfFFGEh1IZ2eJk0=";
+    tag = version;
+    hash = "sha256-NAFleaZaZFWwhAPsuJG9S81w/FlkHgefqVWg5F+lhUo=";
   };
 
   nativeBuildInputs = [

@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-vmfs";
-  version = "3.8";
+  version = "3.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.vmfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-AcVWKUgykgTgP0haBOtWR+wNWzc/PN9qIwVJMqNg8hg=";
+    tag = version;
+    hash = "sha256-/D5EaTNLxdzTMF/9S9esFXAxIwesEp0tdAMUAyeNtSI=";
   };
 
   nativeBuildInputs = [

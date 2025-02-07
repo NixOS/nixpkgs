@@ -3,11 +3,10 @@
   stdenv,
   buildPythonPackage,
   click,
-  colorama,
   coverage,
   fetchPypi,
   pdm-backend,
-  pytest-sugar,
+  procps,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -18,49 +17,57 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.12.3";
-  format = "pyproject";
+  version = "0.15.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SecxMUgdgEKI72JZjZehzu8wWJBapTahE0+QiRujVII=";
+    hash = "sha256-oFiMCn+mihl4oGmBhld3j4ar5v9epqv0cvlAoIv+Two=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     typing-extensions
-  ];
+    # Build includes the standard optional by default
+    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
+  ] ++ optional-dependencies.standard;
 
-  passthru.optional-dependencies = {
-    all = [
-      colorama
+  optional-dependencies = {
+    standard = [
       shellingham
       rich
     ];
   };
 
-  nativeCheckInputs = [
-    coverage # execs coverage in tests
-    pytest-sugar
-    pytest-xdist
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs =
+    [
+      coverage # execs coverage in tests
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      procps
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  disabledTests = [
-    "test_scripts"
-    # Likely related to https://github.com/sarugaku/shellingham/issues/35
-    # fails also on Linux
-    "test_show_completion"
-    "test_install_completion"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "test_install_completion" ];
+  disabledTests =
+    [
+      "test_scripts"
+      # Likely related to https://github.com/sarugaku/shellingham/issues/35
+      # fails also on Linux
+      "test_show_completion"
+      "test_install_completion"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      "test_install_completion"
+    ];
 
   pythonImportsCheck = [ "typer" ];
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ryanhaining";
     repo = "cppitertools";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mii4xjxF1YC3H/TuO/o4cEz8bx2ko6U0eufqNVw5LNA=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace CMakeLists.txt \
         --replace-fail "  DIRECTORY ." "  DIRECTORY . EXCLUDE_FROM_ALL"
     ''
-    + lib.optionalString finalAttrs.doCheck ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # Required for tests.
       cp ${lib.getDev catch2}/include/catch2/catch.hpp test/
     '';

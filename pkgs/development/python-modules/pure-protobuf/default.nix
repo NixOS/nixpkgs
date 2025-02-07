@@ -8,13 +8,13 @@
   typing-extensions,
   pytestCheckHook,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "3.1.0";
+  version = "3.1.3";
 
   format = "pyproject";
   # < 3.10 requires get-annotations which isn't packaged yet
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JXC68iEX5VepIe4qpugvY0Qb3JlM5mPGHnUVWvb1TDA=";
+    tag = version;
+    hash = "sha256-AsiJDi3SF3nlWKFvZujUsoHY8AJ21JKzEuTdR9FtFQI=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];

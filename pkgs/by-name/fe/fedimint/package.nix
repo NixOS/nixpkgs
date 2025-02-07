@@ -1,48 +1,45 @@
-{ lib
-, fetchFromGitHub
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, buildPackages
-, git
-, stdenv
-, libiconv
-, clang
-, libclang
-, Security
-, SystemConfiguration
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  version = "0.3.2-rc.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-eOGmx/freDQLxZ48nP9Y2kA84F6sdig6qfZwnJfOB3g=";
+    hash = "sha256-0MM5xpxBam95vSepDvVtpt/997XyC8aOqDiyPykHRRc=";
   };
 
-  cargoHash = "sha256-2ctrZLvovgMpxZPFtmblZ/NGyxievE6FmzC4BBGuw6g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mSj8B9Ma9Zoz5SYmVj2yW0ZK6dqaMgq+nNPPFG0aIrY=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
-    clang
-    libclang.lib
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
   ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin
@@ -53,13 +50,9 @@ rustPlatform.buildRustPackage rec {
     keepPattern=''${keepPattern:1}
     find "$out/bin" -maxdepth 1 -type f | grep -Ev "(''${keepPattern})" | xargs rm -f
 
-    # fix the upstream name
-    mv $out/bin/recoverytool $out/bin/fedimint-recoverytool
-
-
     cp -a $releaseDir/fedimint-cli  $fedimintCli/bin/
     cp -a $releaseDir/fedimint-dbtool  $fedimintCli/bin/
-    cp -a $releaseDir/recoverytool  $fedimintCli/bin/fedimint-recoverytool
+    cp -a $releaseDir/fedimint-recoverytool  $fedimintCli/bin/
 
     cp -a $releaseDir/fedimintd  $fedimint/bin/
 
@@ -74,7 +67,6 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 

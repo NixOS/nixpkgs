@@ -1,59 +1,54 @@
-{ lib
-, cacert
-, curl
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, openssl
-, stdenv
-, CoreServices
-, Security
-, zig
-, nix-update-script
+{
+  lib,
+  cacert,
+  curl,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
+  zig,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.2.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E9jUlEiHyf5UR/UZxJj9LTfyAxGR/WsvRQdFdIVvLG8=";
+    hash = "sha256-GiV5yjlzU4iU4BJ8Fq8I9uOchVCF2UGb+WLMMr7n8pc=";
   };
 
-  cargoHash = "sha256-IXMkgpyYwll8NwTXRffbsSP5uFHGJe1n2RQ1Mbu+E70=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JMYGcIli72pH5O8DXQb7++bvnIgBpyYykqRbddObaAI=";
 
-  nativeCheckInputs = [cacert];
+  nativeCheckInputs = [ cacert ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl CoreServices Security ];
-
-  checkFlags = [
-    # Disabled because they access the network.
-    "--skip=test_build_basic_extension"
-    "--skip=test_build_basic_function"
-    "--skip=test_build_basic_zip_extension"
-    "--skip=test_build_basic_zip_function"
-    "--skip=test_build_event_type_function"
-    "--skip=test_build_http_feature_function"
-    "--skip=test_build_http_function"
-    "--skip=test_build_internal_zip_extension"
-    "--skip=test_build_logs_extension"
-    "--skip=test_build_telemetry_extension"
-    "--skip=test_download_example"
-    "--skip=test_init_subcommand"
-    "--skip=test_init_subcommand_without_override"
-    "--skip=test_build_example"
-    "--skip=test_deploy_workspace"
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
   ];
 
-  # remove date from version output to make reproducible
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+      CoreServices
+      Security
+    ];
+
+  # Remove files that don't make builds reproducible:
+  # - Remove build.rs file that adds the build date to the version.
+  # - Remove cargo_lambda.rs that contains tests that reach the network.
   postPatch = ''
     rm crates/cargo-lambda-cli/build.rs
+    rm crates/cargo-lambda-cli/tests/cargo_lambda.rs
   '';
 
   postInstall = ''
@@ -69,6 +64,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
     license = licenses.mit;
-    maintainers = with maintainers; [ taylor1791 calavera ];
+    maintainers = with maintainers; [
+      taylor1791
+      calavera
+      matthiasbeyer
+    ];
   };
 }

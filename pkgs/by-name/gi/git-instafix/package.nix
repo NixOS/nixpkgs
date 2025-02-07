@@ -1,14 +1,13 @@
-{ git
-, lib
-, libgit2
-, makeWrapper
-, rustPlatform
-, stdenv
-, fetchFromGitHub
+{
+  git,
+  lib,
+  libgit2,
+  rustPlatform,
+  stdenv,
+  fetchFromGitHub,
 }:
 let
-  inherit
-    (lib)
+  inherit (lib)
     licenses
     maintainers
     ;
@@ -26,7 +25,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-Uz+KQ8cQT3v97EtmbAv2II30dUrFD0hMo/GhnqcdBOs=";
   };
 
-  cargoHash = "sha256-12UkZyyu4KH3dcCadr8UhK8DTtVjcsjYzt7kiNLpUqU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-B0XTk0KxA60AuaS6eO3zF/eA/cTcLwA31ipG4VjvO8Q=";
 
   buildInputs = [ libgit2 ];
   nativeCheckInputs = [ git ];
@@ -35,9 +35,15 @@ rustPlatform.buildRustPackage {
     description = "Quickly fix up an old commit using your currently-staged changes";
     mainProgram = "git-instafix";
     homepage = "https://github.com/quodlibetor/git-instafix";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ mightyiam ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      mightyiam
+      quodlibetor
+    ];
     changelog = "https://github.com/quodlibetor/git-instafix/releases/tag/v${version}";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

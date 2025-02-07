@@ -1,48 +1,52 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}:
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
 
-{
-  name = "gnupg";
-  meta = with lib.maintainers; {
-    maintainers = [ rnhmjoj ];
-  };
+  {
+    name = "gnupg";
+    meta = with lib.maintainers; {
+      maintainers = [ rnhmjoj ];
+    };
 
-  # server for testing SSH
-  nodes.server = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
+    # server for testing SSH
+    nodes.server =
+      { ... }:
+      {
+        imports = [ ../modules/profiles/minimal.nix ];
 
-    users.users.alice.isNormalUser = true;
-    services.openssh.enable = true;
-  };
+        users.users.alice.isNormalUser = true;
+        services.openssh.enable = true;
+      };
 
-  # machine for testing GnuPG
-  nodes.machine = { pkgs, ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
+    # machine for testing GnuPG
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [ ../modules/profiles/minimal.nix ];
 
-    users.users.alice.isNormalUser = true;
-    services.getty.autologinUser = "alice";
+        users.users.alice.isNormalUser = true;
+        services.getty.autologinUser = "alice";
 
-    environment.shellInit = ''
-      # preset a key passphrase in gpg-agent
-      preset_key() {
-        # find all keys
-        case "$1" in
-          ssh) grips=$(awk '/^[0-9A-F]/{print $1}' "''${GNUPGHOME:-$HOME/.gnupg}/sshcontrol") ;;
-          pgp) grips=$(gpg --with-keygrip --list-secret-keys | awk '/Keygrip/{print $3}') ;;
-        esac
+        environment.shellInit = ''
+          # preset a key passphrase in gpg-agent
+          preset_key() {
+            # find all keys
+            case "$1" in
+              ssh) grips=$(awk '/^[0-9A-F]/{print $1}' "''${GNUPGHOME:-$HOME/.gnupg}/sshcontrol") ;;
+              pgp) grips=$(gpg --with-keygrip --list-secret-keys | awk '/Keygrip/{print $3}') ;;
+            esac
 
-        # try to preset the passphrase for each key found
-        for grip in $grips; do
-          "$(gpgconf --list-dirs libexecdir)/gpg-preset-passphrase" -c -P "$2" "$grip"
-        done
-      }
-    '';
+            # try to preset the passphrase for each key found
+            for grip in $grips; do
+              "$(gpgconf --list-dirs libexecdir)/gpg-preset-passphrase" -c -P "$2" "$grip"
+            done
+          }
+        '';
 
-    programs.gnupg.agent.enable = true;
-    programs.gnupg.agent.enableSSHSupport = true;
-  };
+        programs.gnupg.agent.enable = true;
+        programs.gnupg.agent.enableSSHSupport = true;
+      };
 
-  testScript =
-    ''
+    testScript = ''
       import shlex
 
 
@@ -69,9 +73,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           machine.wait_until_tty_matches("1", "Change")
           machine.send_chars("O\n")
           machine.wait_until_tty_matches("1", "Please enter")
-          machine.send_chars("pgp_p4ssphrase\n")
-          machine.wait_until_tty_matches("1", "Please re-enter")
-          machine.send_chars("pgp_p4ssphrase\n")
+          machine.send_chars("pgp_p4ssphrase")
+          machine.send_key("tab")
+          machine.send_chars("pgp_p4ssphrase")
+          machine.wait_until_tty_matches("1", "Passphrases match")
+          machine.send_chars("\n")
           machine.wait_until_tty_matches("1", "public and secret key created")
 
       with subtest("Confirm the key is in the keyring"):
@@ -90,9 +96,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           machine.wait_until_tty_matches("1", "Enter passphrase")
           machine.send_chars("ssh_p4ssphrase\n")
           machine.wait_until_tty_matches("1", "Please enter")
-          machine.send_chars("ssh_agent_p4ssphrase\n")
-          machine.wait_until_tty_matches("1", "Please re-enter")
-          machine.send_chars("ssh_agent_p4ssphrase\n")
+          machine.send_chars("ssh_agent_p4ssphrase")
+          machine.send_key("tab")
+          machine.send_chars("ssh_agent_p4ssphrase")
+          machine.wait_until_tty_matches("1", "Passphrases match")
+          machine.send_chars("\n")
 
       with subtest("Confirm the SSH key has been registered"):
           machine.wait_until_succeeds(as_alice("ssh-add -l | grep -q alice@machine"))
@@ -115,4 +123,5 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           server.wait_for_open_port(22)
           machine.succeed(as_alice("ssh -i alice -o StrictHostKeyChecking=no server exit"))
     '';
-})
+  }
+)

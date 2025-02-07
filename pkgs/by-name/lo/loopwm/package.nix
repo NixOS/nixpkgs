@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "loopwm";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://github.com/MrKai77/Loop/releases/download/${finalAttrs.version}/Loop.zip";
-    hash = "sha256-1DQ6O6QkD04/meS0XaS0+vpr+vd5cfwGSehV8QVgYtI=";
+    hash = "sha256-eF8B4rmkyTtT0vWTcjdaNaWCHWSlPfS4uVV29L+wXiM=";
   };
 
   sourceRoot = ".";
@@ -28,6 +28,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r Loop.app $out/Applications
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "macOS Window management made elegant";

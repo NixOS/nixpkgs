@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cobalt";
-  version = "0.19.3";
+  version = "0.19.6";
 
   src = fetchFromGitHub {
     owner = "cobalt-org";
     repo = "cobalt.rs";
     rev = "v${version}";
-    sha256 = "sha256-aAhceExz5SENL+FhPHyx8HmaNOWjNsynv81Rj2cS5M8=";
+    sha256 = "sha256-6fsKEIgcBu0SE/f0TNfvTdpZX3zc5Bd0F1T82COOqVQ=";
   };
 
-  cargoHash = "sha256-vw7fGsTSEVO8s1LzilKJN5lGzOfQcms1h7rnTOyE4Kw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NLSdYGZy+FWjA5N1zGf3Lajg2qo4TJ86AzlKVrHxwaU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "Static site generator written in Rust";

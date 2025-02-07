@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tuxu";
     repo = "python-samplerate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/9NFJcn8R0DFjVhFAIYOtzZM90hjVIfsVXFlS0nHNhA=";
   };
 

@@ -1,8 +1,10 @@
 {
   lib,
   fetchFromGitHub,
+  backports-shutil-which,
   bech32,
   buildPythonPackage,
+  setuptools,
   cryptography,
   ed25519,
   ecdsa,
@@ -11,8 +13,7 @@
   mnemonic,
   unidecode,
   mock,
-  pytest,
-  backports-shutil-which,
+  pytestCheckHook,
   configargparse,
   python-daemon,
   pymsgbox,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.14.8";
-  format = "setuptools";
+  version = "0.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    rev = "v${version}";
-    hash = "sha256-tcVott/GlHsICQf640Gm5jx89fZWsCdcYnBxi/Kh2oc=";
+    tag = "v${version}";
+    hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
   };
 
   # hardcode the path to gpgconf in the libagent library
@@ -40,9 +41,14 @@ buildPythonPackage rec {
       --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
   '';
 
-  propagatedBuildInputs = [
-    unidecode
+  build-system = [ setuptools ];
+
+  # https://github.com/romanz/trezor-agent/pull/481
+  pythonRemoveDeps = [ "backports.shutil-which" ];
+
+  dependencies = [
     backports-shutil-which
+    unidecode
     configargparse
     python-daemon
     pymsgbox
@@ -55,14 +61,17 @@ buildPythonPackage rec {
     cryptography
   ];
 
+  pythonImportsCheck = [ "libagent" ];
+
   nativeCheckInputs = [
     mock
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    py.test libagent/tests
-  '';
+  disabledTests = [
+    # test fails in sandbox
+    "test_get_agent_sock_path"
+  ];
 
   meta = with lib; {
     description = "Using hardware wallets as SSH/GPG agent";

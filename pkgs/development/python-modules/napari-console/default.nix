@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  imageio,
   ipykernel,
   ipython,
-  napari-plugin-engine,
   pythonOlder,
   qtconsole,
   qtpy,
@@ -22,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-console";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3gOfiPx06G5c4eaLQ5kP45hUr6yw91esznJFacpO66Q=";
   };
 

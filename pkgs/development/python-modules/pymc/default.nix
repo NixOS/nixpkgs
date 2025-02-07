@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
+  versioneer,
 
   # dependencies
   arviz,
@@ -22,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.16.1";
+  version = "5.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-C3D07uouV8QZLplIonmViZoCXb4AAEN+uGvNly2hcMc=";
+    tag = "v${version}";
+    hash = "sha256-5iHm+q4ykXhCntUpZmEfZc1805+GoCQR3yrkQGJ2qQg=";
   };
 
   postPatch = ''
@@ -39,7 +37,10 @@ buildPythonPackage rec {
       --replace-fail ', "pytest-cov"' ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   dependencies = [
     arviz
@@ -63,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
-    changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
+    changelog = "https://github.com/pymc-devs/pymc/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nidabdella

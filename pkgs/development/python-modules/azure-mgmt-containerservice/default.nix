@@ -2,7 +2,6 @@
   lib,
   azure-common,
   azure-mgmt-core,
-  azure-mgmt-nspkg,
   buildPythonPackage,
   fetchPypi,
   isodate,
@@ -12,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "30.0.0";
+  version = "34.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bGLmrFkONP7dc5/iSzGzdQcToBRhZpbqjUTHvMgcBrc=";
+    pname = "azure_mgmt_containerservice";
+    inherit version;
+    hash = "sha256-gi0Hgot0al6lQIqLN3D0HcQk1sTCjeU8KWEbYr74rqM=";
   };
 
   build-system = [ setuptools ];

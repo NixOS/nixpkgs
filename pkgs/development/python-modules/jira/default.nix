@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.8.0";
+  version = "3.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-zE0fceCnyv0qKak8sRCXPCauC0KeOmczY/ZkVoHNcS8=";
+    tag = version;
+    hash = "sha256-P3dbrBKpHvLNIA+JBeSXEQl4QVZ0FdKkNIU8oPHWw6k=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       ipython
       keyring
@@ -83,9 +83,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
-    changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
+    changelog = "https://github.com/pycontribs/jira/releases/tag/${src.tag}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "jirashell";
   };
 }

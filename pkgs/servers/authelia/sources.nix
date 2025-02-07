@@ -1,14 +1,14 @@
 { fetchFromGitHub }:
 rec {
   pname = "authelia";
-  version = "4.37.5";
+  version = "4.38.18";
 
   src = fetchFromGitHub {
     owner = "authelia";
     repo = "authelia";
     rev = "v${version}";
-    hash = "sha256-xsdBnyPHFIimhp2rcudWqvVR36WN4vBXbxRmvgqMcDw=";
+    hash = "sha256-gJEKjplESS6wNN2cM/JYRAHm7200tMlBKs1lZi0ShiE=";
   };
-  vendorHash = "sha256-mzGE/T/2TT4+7uc2axTqG3aeLMnt1r9Ya7Zj2jIkw/w=";
-  npmDepsHash = "sha256-MGs6UAxT5QZd8S3AO75mxuCb6U0UdRkGEjenOVj+Oqs=";
+  vendorHash = "sha256-K5PunLkbcEuWL4IWbXYqgP3H5S/d5IHrWqCin//qJxw=";
+  pnpmDepsHash = "sha256-jkghQGWLvmL1Vxwl7v4T/H1UUN8DeaCgbc8lnUcS4nA=";
 }

@@ -2,7 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pynose,
+  pytestCheckHook,
   setuptools,
   sphinx,
   sphinx-rtd-theme,
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MrDogeBro";
     repo = "sphinx_rtd_dark_mode";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N5KG2Wqn9wfGNY3VH4FnBce1aZUbnvVmwD10Loe0Qn4=";
   };
 
@@ -25,17 +25,11 @@ buildPythonPackage rec {
   dependencies = [ sphinx-rtd-theme ];
 
   nativeCheckInputs = [
-    pynose
+    pytestCheckHook
     sphinx
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests tests
-
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "tests/build.py" ];
 
   pythonImportsCheck = [ "sphinx_rtd_dark_mode" ];
 

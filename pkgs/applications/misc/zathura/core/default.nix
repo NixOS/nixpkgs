@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -14,6 +14,9 @@
   gtk,
   girara,
   gettext,
+  gnome,
+  libheif,
+  libjxl,
   libxml2,
   check,
   sqlite,
@@ -24,17 +27,16 @@
   file,
   librsvg,
   gtk-mac-integration,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.6";
+  version = "0.5.11";
 
-  src = fetchFromGitHub {
-    owner = "pwmt";
-    repo = "zathura";
-    rev = finalAttrs.version;
-    hash = "sha256-lTEBIZ3lkzjJ+L1qecrcL8iseo8AvSIo3Wh65/ikwac=";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
   };
 
   outputs = [
@@ -51,9 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     "-Dtests=disabled"
+    # by default, zathura searches for zathurarc under $out/etc
+    "-Dsysconfdir=/etc"
     # Make sure tests are enabled for doCheck
     # (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "landlock" stdenv.hostPlatform.isLinux)
   ];
 
   nativeBuildInputs = [
@@ -68,28 +73,41 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs = [
-    gtk
-    girara
-    libintl
-    sqlite
-    glib
-    file
-    librsvg
-    check
-    json-glib
-    texlive.bin.core
-  ] ++ lib.optional stdenv.isLinux libseccomp ++ lib.optional stdenv.isDarwin gtk-mac-integration;
+  buildInputs =
+    [
+      gtk
+      girara
+      libintl
+      sqlite
+      glib
+      file
+      librsvg
+      check
+      json-glib
+      texlive.bin.core
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
-  doCheck = !stdenv.isDarwin;
+  # add support for more image formats
+  env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+    extraLoaders = [
+      libheif.out
+      libjxl
+      librsvg
+      webp-pixbuf-loader
+    ];
+  };
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pwmt.org/projects/zathura";
     description = "Core component for zathura PDF viewer";
-    license = licenses.zlib;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ globin ];
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ globin ];
   };
 })

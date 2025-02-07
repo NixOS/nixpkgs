@@ -7,7 +7,7 @@
 , util-linux
 
   # patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin
+, interactive ? stdenv.hostPlatform.isCygwin
 , readline
 , withDocs ? false
 , texinfo
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+    -DDEFAULT_LOADABLE_BUILTINS_PATH="${placeholder "out"}/lib/bash:."
   '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
@@ -57,15 +58,12 @@ stdenv.mkDerivation rec {
 
   patches = upstreamPatches ++ [
     ./pgrp-pipe-5.patch
-    (fetchurl {
-      name = "fix-static.patch";
-      url = "https://cgit.freebsd.org/ports/plain/shells/bash/files/patch-configure?id=3e147a1f594751a68fea00a28090d0792bee0b51";
-      sha256 = "XHFMQ6eXTReNoywdETyrfQEv1rKF8+XFbQZP4YoVKFk=";
-    })
     # Apply parallel build fix pending upstream inclusion:
     #   https://savannah.gnu.org/patch/index.php?10373
     # Had to fetch manually to workaround -p0 default.
     ./parallel.patch
+    # Fix `pop_var_context: head of shell_variables not a function context`.
+    ./fix-pop-var-context-error.patch
   ];
 
   configureFlags = [
@@ -82,8 +80,8 @@ stdenv.mkDerivation rec {
     "bash_cv_getcwd_malloc=yes"
     # This check cannot be performed when cross compiling. The "yes"
     # default is fine for static linking on Linux (weak symbols?) but
-    # not with OpenBSD, when it does clash with the regular `getenv`.
-    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && isOpenBSD) then "yes" else "no"}"
+    # not with BSDs, when it does clash with the regular `getenv`.
+    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"}"
   ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix"
     "--without-libiconv-prefix"
@@ -154,7 +152,9 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    # https://github.com/NixOS/nixpkgs/issues/333338
+    badPlatforms = [ lib.systems.inspect.patterns.isMinGW ];
+    maintainers = [ ];
     mainProgram = "bash";
   };
 }

@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchzip
-, fetchpatch
-, bzip2
-, lzo
-, openssl_1_1
-, opensslSupport ? false
-, zlib
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  bzip2,
+  lzo,
+  openssl_1_1,
+  opensslSupport ? false,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,8 +29,11 @@ stdenv.mkDerivation rec {
     })
   ] ++ lib.optional (!opensslSupport) ./0002-disable-openssl.patch;
 
-  buildInputs = [ bzip2 lzo zlib ]
-    ++ lib.optional (opensslSupport) openssl_1_1;
+  buildInputs = [
+    bzip2
+    lzo
+    zlib
+  ] ++ lib.optional (opensslSupport) openssl_1_1;
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -37,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Universal script based file extractor and reimporter";
     homepage = "https://aluigi.altervista.org/quickbms.htm";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "quickbms";
   };

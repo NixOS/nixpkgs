@@ -1,21 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, stdenv
-, nix-update
-, writeScript
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  stdenv,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  nix-update,
+  writeScript,
+  git,
+  python312,
+  swim,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.8.0";
+  version = "0.12.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-J3AdXuN1WLKFED9YeBly68umPlx05Wl+mhT2YbBsJVk=";
+    hash = "sha256-AarFH0D0ApZ+i6qtKy7zM2iwg/QeYoLwOHbg+d6Q78k=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
@@ -24,30 +29,46 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-      "tracing-tree-0.2.0" = "sha256-/JNeAKjAXmKPh0et8958yS7joORDbid9dhFB0VUAhZc=";
     };
   };
 
-  # rust + gitlab is a rare combo
-  passthru.updateScript = [
+  # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    # rust + gitlab + fetchgit is a rare combo
     (writeScript "update-spade" ''
       VERSION="$(
         ${lib.getExe git} ls-remote --tags --sort -version:refname ${lib.escapeShellArg src.gitRepoUrl} \
           | cut -f2 | grep ^refs/tags/v | cut -d/ -f3- | cut -c2- \
           | sort --version-sort --reverse | head -n1
       )"
-      exec ${lib.getExe nix-update} --version "$VERSION" "$@"
+      exec ${lib.getExe nix-update} spade --version "$VERSION" "$@" --commit
     '')
+    (nix-update-script {
+      extraArgs = [
+        "swim"
+        "--commit"
+      ];
+    })
   ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+
+  passthru.tests = {
+    inherit swim;
+  };
 
   meta = with lib; {
     description = "Better hardware description language";
     homepage = "https://gitlab.com/spade-lang/spade";
     changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
-    license = with licenses; [ eupl12 asl20 mit ];
+    license = with licenses; [
+      eupl12
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "spade";
-    broken = stdenv.isDarwin; # ld: symbol(s) not found for architecture ${system}
   };
 }

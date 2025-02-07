@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   hatch-vcs,
@@ -23,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.35.2";
+  version = "0.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
-    rev = "v${version}";
-    hash = "sha256-jMbCxqIn9f9+16rFwpQdkBHj6NwTNkQxnSVV4qQ1fjM=";
+    tag = version;
+    hash = "sha256-oQCHnW+t4VczEFvV7neLUQTCCwRigJsUGpTRkivdyjU=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +47,7 @@ buildPythonPackage rec {
 
   # libredirect is not available on darwin
   # tests hang on pypy indefinitely
-  doCheck = !stdenv.isDarwin && !isPyPy;
+  doCheck = !stdenv.hostPlatform.isDarwin && !isPyPy;
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf
@@ -64,6 +63,8 @@ buildPythonPackage rec {
     # Tests requires network access
     "test_getaddrinfo"
     "test_hosts_no_network"
+    # flaky test, depends on builder performance
+    "test_server_connection_timeout_exception"
   ];
 
   pythonImportsCheck = [ "eventlet" ];

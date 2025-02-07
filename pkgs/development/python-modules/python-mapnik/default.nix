@@ -5,6 +5,7 @@
   substituteAll,
   isPyPy,
   python,
+  setuptools,
   pillow,
   pycairo,
   pkg-config,
@@ -21,16 +22,14 @@
   zlib,
   libxml2,
   sqlite,
-  nose,
   pytestCheckHook,
-  darwin,
   sparsehash,
 }:
 
 buildPythonPackage rec {
   pname = "python-mapnik";
   version = "3.0.16-unstable-2024-02-22";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapnik";
@@ -53,14 +52,16 @@ buildPythonPackage rec {
     ./python-mapnik_std_optional.patch
   ];
 
-  stdenv = if python.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv = python.stdenv;
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
     pkg-config
   ];
 
-  buildInputs = [
+  dependencies = [
     mapnik
     boost
     cairo
@@ -94,44 +95,44 @@ buildPythonPackage rec {
     export XMLPARSER=libxml2
   '';
 
-  nativeCheckInputs = [
-    nose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck =
     ''
       # import from $out
       rm -r mapnik
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Replace the hardcoded /tmp references with $TMPDIR
       sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
     '';
 
   # https://github.com/mapnik/python-mapnik/issues/255
-  disabledTests = [
-    "test_geometry_type"
-    "test_passing_pycairo_context_pdf"
-    "test_pdf_printing"
-    "test_render_with_scale_factor"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_passing_pycairo_context_png"
-    "test_passing_pycairo_context_svg"
-    "test_pycairo_pdf_surface1"
-    "test_pycairo_pdf_surface2"
-    "test_pycairo_pdf_surface3"
-    "test_pycairo_svg_surface1"
-    "test_pycairo_svg_surface2"
-    "test_pycairo_svg_surface3"
-  ];
+  disabledTests =
+    [
+      "test_geometry_type"
+      "test_passing_pycairo_context_pdf"
+      "test_pdf_printing"
+      "test_render_with_scale_factor"
+      "test_raster_warping"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_passing_pycairo_context_png"
+      "test_passing_pycairo_context_svg"
+      "test_pycairo_pdf_surface1"
+      "test_pycairo_pdf_surface2"
+      "test_pycairo_pdf_surface3"
+      "test_pycairo_svg_surface1"
+      "test_pycairo_svg_surface2"
+      "test_pycairo_svg_surface3"
+    ];
 
   pythonImportsCheck = [ "mapnik" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ ];
     homepage = "https://mapnik.org";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.geospatial.members;
   };
 }

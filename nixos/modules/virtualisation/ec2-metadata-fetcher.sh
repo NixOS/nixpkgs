@@ -1,5 +1,6 @@
 metaDir=/etc/ec2-metadata
-mkdir -m 0755 -p "$metaDir"
+mkdir -p "$metaDir"
+chmod 0755 "$metaDir"
 rm -f "$metaDir/*"
 
 get_imds_token() {
@@ -40,7 +41,7 @@ while [ $try -le 3 ]; do
   sleep 1
 done
 
-if [ "x$IMDS_TOKEN" == "x" ]; then
+if [ "$IMDS_TOKEN" == "" ]; then
   echo "failed to fetch an IMDS2v token."
 fi
 

@@ -1,31 +1,66 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  hypothesis,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
+  fetchFromGitHub,
   cloudpickle,
   cython,
+  hypothesis,
   jinja2,
   numpy,
+  nvidia-ml-py,
   psutil,
-  pynvml,
+  pydantic,
   pytestCheckHook,
   pythonOlder,
   rich,
+  setuptools-scm,
+  setuptools,
 }:
+
+let
+  heap-layers-src = fetchFromGitHub {
+    owner = "emeryberger";
+    repo = "heap-layers";
+    name = "Heap-Layers";
+    rev = "a2048eae91b531dc5d72be7a194e0b333c06bd4c";
+    sha256 = "sha256-vl3z30CBX7hav/DM/UE0EQ9lLxZF48tMJrYMXuSulyA=";
+  };
+
+  printf-src = fetchFromGitHub {
+    owner = "mpaland";
+    repo = "printf";
+    name = "printf";
+    tag = "v4.0.0";
+    sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
+  };
+in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.42.2";
+  version = "1.5.51";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0ZGk0xFBFSeeg4vjNXu/ppGdEKGhUc2ql4R6oWG23aQ=";
+  src = fetchFromGitHub {
+    owner = "plasma-umass";
+    repo = "scalene";
+    tag = "v${version}";
+    hash = "sha256-507auU1uy3StmDWruwd/sgJDpV1WhbneSj/bTxUuAN0=";
   };
+
+  patches = [
+    ./01-manifest-no-git.patch
+  ];
+
+  prePatch = ''
+    cp -r ${heap-layers-src} vendor/Heap-Layers
+    mkdir vendor/printf
+    cp ${printf-src}/printf.c vendor/printf/printf.cpp
+    cp -r ${printf-src}/* vendor/printf
+    sed -i 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+  '';
 
   nativeBuildInputs = [
     cython
@@ -36,10 +71,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cloudpickle
     jinja2
+    numpy
     psutil
-    pynvml
+    pydantic
     rich
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+
+  pythonRemoveDeps = [
+    "nvidia-ml-py3"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -48,6 +88,11 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     numpy
+  ];
+
+  disabledTests = [
+    # Flaky -- socket collision
+    "test_show_browser"
   ];
 
   # remove scalene directory to prevent pytest import confusion
@@ -64,5 +109,15 @@ buildPythonPackage rec {
     mainProgram = "scalene";
     license = licenses.asl20;
     maintainers = with maintainers; [ sarahec ];
+    badPlatforms = [
+      # The scalene doesn't seem to account for arm64 linux
+      "aarch64-linux"
+
+      # On darwin, builds 1) assume aarch64 and 2) mistakenly compile one part as
+      # x86 and the other as arm64 then tries to link them into a single binary
+      # which fails.
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

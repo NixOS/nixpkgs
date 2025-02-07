@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hypothesis,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cole";
     repo = "aiosmtplib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-67Z+k+PBIGP2oGb/52dMtsapUsHufvFcX+wWiMj5Jsg=";
+    tag = "v${version}";
+    hash = "sha256-Bj5wkNaNm9ojjffsS4nNKUucwbitvApIK1Ux88MSOoE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     aiosmtpd
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
     changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

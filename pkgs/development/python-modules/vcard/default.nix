@@ -6,7 +6,6 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   version = "0.16.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitLab {
     owner = "engmark";
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "python-dateutil" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ python-dateutil ];
 

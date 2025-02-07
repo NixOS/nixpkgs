@@ -6,23 +6,23 @@
 
 buildGoModule rec {
   pname = "gtrash";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "umlx5h";
     repo = "gtrash";
     rev = "v${version}";
-    hash = "sha256-5+wcrU2mx/ZawMCSCU4xddMlMVpoIW/Duv7XqUVIDoo=";
+    hash = "sha256-odvj0YY18aishVWz5jWcLDvkYJLQ97ZSGpumxvxui4Y=";
   };
 
-  vendorHash = "sha256-iWNuPxetYH9xJpf3WMoA5c50kII9DUpWvhTVSE1kSk0=";
+  vendorHash = "sha256-JJA9kxNCtvfs51TzO7hEaS4UngBOEJuIIRIfHKSUMls=";
 
   subPackages = [ "." ];
 
   # disabled because it is required to run on docker.
   doCheck = false;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"

@@ -3,46 +3,41 @@
   buildPythonPackage,
   environs,
   fetchFromGitHub,
-  poetry-core,
+  httpx,
+  setuptools,
+  pytest-cov-stub,
   pytest-mock,
   pytest-vcr,
   pytestCheckHook,
   pythonOlder,
-  requests,
   tornado,
 }:
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "6.2.0";
+  version = "7.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Y1y8FBxpGpNIWCZbel9fdGLGC9VM9h1BvHtUxCZxp/A=";
+    tag = "v${version}";
+    hash = "sha256-3TYgOa8NWGhkVIT5HkDdpHGyj7FzP8n02a36KHW6IC4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=deezer" ""
-  '';
+  build-system = [ setuptools ];
 
-  build-system = [ poetry-core ];
-
-  dependencies = [
-    requests
-    tornado
-  ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     environs
+    pytest-cov-stub
     pytest-mock
     pytest-vcr
     pytestCheckHook
+    tornado
   ];
 
   pythonImportsCheck = [ "deezer" ];

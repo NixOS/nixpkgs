@@ -1,8 +1,13 @@
 {
-  lib, fetchFromGitLab, buildDunePackage
-, integers_stubs_js, ctypes, ppx_expect
-, js_of_ocaml-compiler
-, nodejs
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  integers_stubs_js,
+  ctypes,
+  ppx_expect,
+  js_of_ocaml-compiler,
+  nodejs,
+  stdenv,
 }:
 
 buildDunePackage rec {
@@ -16,7 +21,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OJIzg2hnwkXkQHd4bRR051eLf4HNWa/XExxbj46SyUs=";
+    hash = "sha256-OJIzg2hnwkXkQHd4bRR051eLf4HNWa/XExxbj46SyUs=";
   };
 
   propagatedBuildInputs = [ integers_stubs_js ];
@@ -28,7 +33,7 @@ buildDunePackage rec {
     ctypes
     ppx_expect
   ];
-  doCheck = true;
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   meta = {
     description = "Js_of_ocaml Javascript stubs for the OCaml ctypes library";

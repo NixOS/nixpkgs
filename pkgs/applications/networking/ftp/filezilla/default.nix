@@ -50,11 +50,7 @@ stdenv.mkDerivation rec {
     wxGTK32
     gtk3
     xdg-utils
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
-
-  preBuild = lib.optionalString (stdenv.isDarwin) ''
-    export MACOSX_DEPLOYMENT_TARGET=11.0
-  '';
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
   enableParallelBuilding = true;
 

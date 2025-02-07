@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jinja2,
   mako,
-  nose,
   pyramid,
   pyramid-mako,
   pytestCheckHook,
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kakulukia";
     repo = "pypugjs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W+EVNxT2OimNENHe4lJDn6Wm1EbBysGuCD3/Wkdew/U=";
   };
 
@@ -35,7 +34,6 @@ buildPythonPackage rec {
     django
     jinja2
     mako
-    nose
     tornado
     pyramid
     pyramid-mako

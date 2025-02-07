@@ -1,66 +1,105 @@
 {
-  rustPlatform,
-  rustc,
-  cargo,
-  corrosion,
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
-  libuuid,
-  gnutls,
-  python3,
-  xdg-utils,
+  rustPlatform,
+  rustc,
+  cargo,
   installShellFiles,
-  darwin,
+
+  # buildInputs
+  libuuid,
+  xdg-utils,
+
+  # passthru.tests
+  nixosTests,
+
+  # nativeCheckInputs
+  python3,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.0.2";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v3.0.2";
-    hash = "sha256-vN3X6vLuD4Fw9wpEUYLf8sboA5GIcdP5EFb41KS6d5s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aKDwRCJ1yopRdsPxnHhgOpSho1i8/dcAurI+XhpSbn4=";
     fetchSubmodules = true;
+  };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
+    inherit (finalAttrs) src;
+    hash = "sha256-UbJodQBCrmXbw5+ahusBnEcoCYGFHRA6bg5hf9/prmA=";
   };
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
-      --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
+      --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
+  # The CMakeLists files used by upstream issue a `cargo install` command to
+  # install a rust tool (cxxbridge-cmd) that is supposed to be included in the Cargo.toml's and
+  # `Cargo.lock` files of upstream. Setting CARGO_HOME like that helps `cargo
+  # install` find the dependencies we prefetched. See also:
+  # https://github.com/GothenburgBitFactory/taskwarrior/issues/3705
+  postUnpack = ''
+    export CARGO_HOME=$PWD/.cargo
+  '';
+  failingTests = [
+    # It would be very hard to make this test succeed, as the bash completion
+    # needs to be installed and the builder's `bash` should be aware of it.
+    # Doesn't worth the effort. See also:
+    # https://github.com/GothenburgBitFactory/taskwarrior/issues/3727
+    "bash_completion.test.py"
+  ];
+  # Contains Bash and Python scripts used while testing.
+  preConfigure =
+    ''
+      patchShebangs test
+    ''
+    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+      substituteInPlace test/CMakeLists.txt \
+        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+    '';
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
-    libuuid
-    python3
-    installShellFiles
-    corrosion
-    cargo
-    rustc
     rustPlatform.cargoSetupHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin dependencies
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    # To install cxxbridge-cmd before configurePhase, see above linked upstream
+    # issue.
+    rustc
+    cargo
+    installShellFiles
+  ];
+
+  buildInputs = [
+    libuuid
   ];
 
   doCheck = true;
+  # See:
+  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
   preCheck = ''
-    patchShebangs --build test
+    make test_runner
   '';
-  checkTarget = "test";
+  nativeCheckInputs = [
+    python3
+  ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}-cargo-deps";
-    inherit src;
-    sourceRoot = src.name;
-    hash = "sha256-4hdM9LgDa47ZYcX30HXvixIRy0xaahG4XBqPiUM+IUM=";
-  };
-  cargoRoot = "./";
-  preConfigure = ''
-    export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
-  '';
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
@@ -77,12 +116,20 @@ stdenv.mkDerivation rec {
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  passthru.tests.nixos = nixosTests.taskchampion-sync-server;
+
+  meta = {
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/releases/tag/v${finalAttrs.src.rev}";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [marcweber oxalica mlaradji];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      marcweber
+      oxalica
+      mlaradji
+      doronbehar
+    ];
     mainProgram = "task";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

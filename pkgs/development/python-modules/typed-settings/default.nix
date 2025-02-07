@@ -6,7 +6,9 @@
   click,
   click-option-group,
   fetchPypi,
+  hatch-vcs,
   hatchling,
+  hypothesis,
   jinja2,
   pydantic,
   pytestCheckHook,
@@ -14,10 +16,9 @@
   tomli,
   typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "24.3.0";
+  version = "24.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,14 +26,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-x1ojSSZNrKkBHKE9dWw7NzX/G6ggRYRIQ5MMahwL1Ps=";
+    hash = "sha256-mlWV3jP4BFKiA44Bi8RVCP/8I4qHUvCPXAPcjnvA0eI=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       attrs
       cattrs
@@ -52,10 +53,13 @@ buildPythonPackage rec {
     pydantic = [ pydantic ];
   };
 
+  nativeBuildInputs = [ hatch-vcs ];
+
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     typing-extensions
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests" ];
 
@@ -79,6 +83,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

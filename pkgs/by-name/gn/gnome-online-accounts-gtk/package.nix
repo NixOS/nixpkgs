@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, glib
-, glib-networking
-, gnome-online-accounts
-, gtk4
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  glib-networking,
+  gnome-online-accounts,
+  gtk4,
+  libadwaita,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts-gtk";
-  version = "3.50.3";
+  version = "3.50.6";
 
   src = fetchFromGitHub {
     owner = "xapp-project";
     repo = "gnome-online-accounts-gtk";
     rev = finalAttrs.version;
-    hash = "sha256-peElSkGl2dYeJmMUeB+xDoOY3MhHs7IsIQYr0iJZP58=";
+    hash = "sha256-/d6ezujW/yeZV95zv/12ttUEUliZARtEGFoCXe6Dp/I=";
   };
 
   nativeBuildInputs = [

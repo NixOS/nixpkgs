@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fritz-exporter";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdreker";
     repo = "fritz_exporter";
-    rev = "fritzexporter-v${version}";
-    hash = "sha256-x5WCVDIKdreQCmVpiWbmVBNo42P5kSxX9dLMBKfZTWc=";
+    tag = "fritzexporter-v${version}";
+    hash = "sha256-qqvvoOQRFNl9IUjaBc/qzg9AevT5c2JDsfDVAZW6d6E=";
   };
 
   postPatch = ''
@@ -22,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "defusedxml"
+    "attrs"
   ];
 
   nativeBuildInputs = with python3.pkgs; [

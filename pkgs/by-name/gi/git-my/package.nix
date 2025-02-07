@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "davidosomething";
     repo = "git-my";
     rev = finalAttrs.version;
-    sha256 = "0jji5zw25jygj7g4f6f3k0p0s9g37r8iad8pa0s67cxbq2v4sc0v";
+    hash = "sha256-GzBNtsCrs2M0UBc1FVE+4yUNLpjDGUfekc/LIvgvUUo=";
   };
 
   buildInputs = [ bash ];

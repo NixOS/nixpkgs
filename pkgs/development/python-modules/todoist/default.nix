@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Official Todoist Python API library";
     homepage = "https://todoist-python.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

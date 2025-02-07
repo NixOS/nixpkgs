@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bonsai";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromSourcehut {
     owner = "~stacyharper";
     repo = "bonsai";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Wsr76OQOIqRPCx/8GK9NovxxPZ3dEP8pSo8wgMK1Hfo=";
+    hash = "sha256-WAne0628lELQanUv2lg8Y9QEikZVAT7Xtkndhs8Ozjw=";
   };
 
   nativeBuildInputs = [

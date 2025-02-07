@@ -1,6 +1,22 @@
-{ stdenv, lib, qtbase, wrapQtAppsHook, fetchFromGitHub,
-  addOpenGLRunpath, poppler_utils, qtxmlpatterns, qtsvg, mesa, gcc, xvfb-run,
-  fontconfig, freetype, xorg, ccache, qmake, python3, qttools, git
+{
+  stdenv,
+  lib,
+  qtbase,
+  wrapQtAppsHook,
+  fetchFromGitHub,
+  addDriverRunpath,
+  poppler_utils,
+  qtxmlpatterns,
+  qtsvg,
+  libgbm,
+  xvfb-run,
+  fontconfig,
+  freetype,
+  xorg,
+  qmake,
+  python3,
+  qttools,
+  git,
 }:
 let
   qtPython = python3.withPackages (pkgs: with pkgs; [ pyqt5 ]);
@@ -23,7 +39,7 @@ stdenv.mkDerivation rec {
     poppler_utils
     qtxmlpatterns
     qtsvg
-    mesa
+    libgbm
     freetype
     xorg.libXi
     xorg.libXrender
@@ -31,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     xvfb-run
     fontconfig
     wrapQtAppsHook

@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kwidgetsaddons";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, texinfo
-, perl
-, python3
-, makeWrapper
-, autoreconfHook
-, rlwrap ? null
-, tk ? null
-, gnuplot ? null
-, lisp-compiler
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  texinfo,
+  perl,
+  python3,
+  makeWrapper,
+  autoreconfHook,
+  rlwrap ? null,
+  tk ? null,
+  gnuplot ? null,
+  lisp-compiler,
 }:
 
 let
   # Allow to remove some executables from the $PATH of the wrapped binary
-  searchPath = lib.makeBinPath
-    (lib.filter (x: x != null) [ lisp-compiler rlwrap tk gnuplot ]);
+  searchPath = lib.makeBinPath (
+    lib.filter (x: x != null) [
+      lisp-compiler
+      rlwrap
+      tk
+      gnuplot
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "maxima";
-  version = "5.46.0";
+  version = "5.47.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${finalAttrs.pname}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-c5Dwa0jaZckDPosvYpuXi5AFZFSlQCLbfecOIiWqiwc=";
+    url = "mirror://sourceforge/maxima/maxima-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-kQQCGyT9U+jAOpg1CctC6TepJejAyFwzXXcJoU/UD3o=";
   };
 
   nativeBuildInputs = [
@@ -45,20 +52,20 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace doc/info/Makefile.am --replace "/usr/bin/env perl" "${perl}/bin/perl"
   '';
 
-  postInstall = ''
-    # Make sure that maxima can find its runtime dependencies.
-    for prog in "$out/bin/"*; do
-      wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
-    done
-    # Move emacs modules and documentation into the right place.
-    mkdir -p $out/share/emacs $out/share/doc
-    ln -s ../maxima/${finalAttrs.version}/emacs $out/share/emacs/site-lisp
-    ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
-  ''
-   + (lib.optionalString (lisp-compiler.pname == "ecl") ''
-     cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
-   '')
-  ;
+  postInstall =
+    ''
+      # Make sure that maxima can find its runtime dependencies.
+      for prog in "$out/bin/"*; do
+        wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
+      done
+      # Move emacs modules and documentation into the right place.
+      mkdir -p $out/share/emacs $out/share/doc
+      ln -s ../maxima/${finalAttrs.version}/emacs $out/share/emacs/site-lisp
+      ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
+    ''
+    + (lib.optionalString (lisp-compiler.pname == "ecl") ''
+      cp src/binary-ecl/maxima.fas* "$out/lib/maxima/${finalAttrs.version}/binary-ecl/"
+    '');
 
   patches = [
     # fix path to info dir (see https://trac.sagemath.org/ticket/11348)
@@ -79,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/sagemath/sage/07d6c37d18811e2b377a9689790a7c5e24da16ba/build/pkgs/maxima/patches/undoing_true_false_printing_patch.patch";
       sha256 = "0fvi3rcjv6743sqsbgdzazy9jb6r1p1yq63zyj9fx42wd1hgf7yx";
     })
+
+    ./5.47.0-CVE-2024-34490.patch
   ];
 
   # The test suite is disabled since 5.42.2 because of the following issues:
@@ -93,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # These failures don't look serious. It would be nice to fix them, but I
   # don't know how and probably won't have the time to find out.
-  doCheck = false;    # try to re-enable after next version update
+  doCheck = false; # try to re-enable after next version update
 
   enableParallelBuilding = true;
 

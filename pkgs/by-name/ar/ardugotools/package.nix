@@ -5,7 +5,7 @@
   ...
 }:
 let
-  version = "0.5.2";
+  version = "0.6.1";
 in
 buildGoModule {
   pname = "ardugotools";
@@ -14,11 +14,22 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "randomouscrap98";
     repo = "ardugotools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ugYkcYrVHoGC58u6zQNEjlWspAFONmEQVnVDWdWeVnw=";
+    rev = "v${version}";
+    hash = "sha256-SqeUcYa8XscwaJaCSIoZ9lEtRJ0hN01XJDyCJFX2dTc=";
   };
 
   vendorHash = "sha256-Z9ObsS+GwVsz6ZlXCgN0WlShHzbmx4WLa/1/XLSSAAs=";
+
+  checkFlags =
+    let
+      # Skip tests referencing a non-existing file
+      skippedTests = [
+        "TestRunLuaFlashcartGenerator_CategoriesOnly"
+        "TestRunLuaFlashcartGenerator_FullCart"
+        "TestRunLuaFlashcartGenerator_MakeCart"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = {
     description = "CLI toolset for Arduboy";

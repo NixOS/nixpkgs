@@ -91,6 +91,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${steam-run}/bin/steam-run $out/bin/itch \
       --add-flags ${electron}/bin/electron \
       --add-flags $out/share/itch/resources/app \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}:${itch-setup}
   '';
@@ -98,6 +99,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
+    changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];

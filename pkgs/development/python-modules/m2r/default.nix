@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qvtn/EnPsdieRqNEOsdH4V9LtC3yDtBPBnrZ777iVqs=";
+    hash = "sha256-qvtn/EnPsdieRqNEOsdH4V9LtC3yDtBPBnrZ777iVqs=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/miyakogi/m2r";
     description = "Markdown to reStructuredText converter";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     # https://github.com/miyakogi/m2r/issues/66
     broken = versionAtLeast mistune.version "2";
   };

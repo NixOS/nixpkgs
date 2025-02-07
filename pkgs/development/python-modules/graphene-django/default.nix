@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-12ue7Pq7TFMSBAfaj8Si6KrpuKYp5T2EEesJpc8wRho=";
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
       "test_should_multiplechoicefield_convert_to_list_of_enum"
       "test_perform_mutate_success_with_enum_choice_field"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # this test touches files in the "/" directory and fails in darwin sandbox
       "test_should_filepath_convert_string"
     ];

@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jnross/Bluetility";
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.darwin;
   };
 })

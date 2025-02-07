@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libusb1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "WestberryTech";
-    repo = finalAttrs.pname;
+    repo = "wb32-dfu-updater";
     rev = finalAttrs.version;
     hash = "sha256-DKsDVO00JFhR9hIZksFVJLRwC6PF9LCRpf++QywFO2w=";
   };

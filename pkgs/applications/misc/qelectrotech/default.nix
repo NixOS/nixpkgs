@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchzip
-, installShellFiles
-, pkg-config
-, qmake
-, qtbase
-, kcoreaddons
-, kwidgetsaddons
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchzip,
+  installShellFiles,
+  pkg-config,
+  qmake,
+  qtbase,
+  kcoreaddons,
+  kwidgetsaddons,
 }:
 
 mkDerivation rec {
@@ -74,6 +75,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

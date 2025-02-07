@@ -1,29 +1,32 @@
-{ lib
-, stdenv
-, fetchzip
-, jdk
-, ant
-, gettext
-, which
-, dbip-country-lite
-, java-service-wrapper
-, makeWrapper
-, gmp
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jdk,
+  ant,
+  gettext,
+  which,
+  dbip-country-lite,
+  java-service-wrapper,
+  makeWrapper,
+  gmp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.5.2";
+  version = "2.8.0";
 
   src = fetchzip {
-    urls = [
-      "https://github.com/i2p/i2p.i2p/archive/i2p-${finalAttrs.version}.tar.gz"
-    ] ++ (map (mirror: "${mirror}${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
-      "https://download.i2p2.de/releases/"
-      "https://files.i2p-projekt.de/"
-      "https://download.i2p2.no/releases/"
-    ]);
-    hash = "sha256-0ftTLdU/tf1xTUSuqHvveSS33h1XLGPkrXcGpIe8f0U=";
+    urls =
+      [
+        "https://github.com/i2p/i2p.i2p/archive/i2p-${finalAttrs.version}.tar.gz"
+      ]
+      ++ (map (mirror: "${mirror}${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
+        "https://download.i2p2.de/releases/"
+        "https://files.i2p-projekt.de/"
+        "https://download.i2p2.no/releases/"
+      ]);
+    hash = "sha256-Gw60l6aB9EcDxWowSHUF8LIoxs5bYamJYTVGKQI2V80=";
   };
 
   strictDeps = true;
@@ -97,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
+    changelog = "https://github.com/i2p/i2p.i2p/releases/tag/i2p-${finalAttrs.version}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
@@ -116,7 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       publicDomain
     ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [ linsui ];
     mainProgram = "i2prouter-plain";
   };

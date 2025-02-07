@@ -21,11 +21,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-S3OW6KihRd6ReTWUXRb1OWC7+YoxehjFRBxcnJVgImU=";
   };
 
-  cargoHash = "sha256-OwbFIbKB/arj+3gq2tfEq8yTKSUPBQNYJNzrWvDv4A4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WYqbG0iSVvnRLCy5Qs4wr72LjQ6uPgskVWP62Af0RQ8=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl sqlite ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ libgit2 openssl sqlite ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
   OPENSSL_NO_VENDOR = 1;
   LIBGIT2_NO_VENDOR = 1;

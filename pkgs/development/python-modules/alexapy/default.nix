@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "alexapy";
-  version = "1.27.10";
+  version = "1.29.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,17 +27,17 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "keatontaylor";
     repo = "alexapy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eoL7q+p0m3YZd7Ub7U8nE3tQGNA2oQXelvN+H01b0BM=";
+    tag = "v${version}";
+    hash = "sha256-46dRjVm3d1/bMlJCO6Dy/+cOYsPNruUADshrdrObw5Q=";
   };
 
   pythonRelaxDeps = [ "aiofiles" ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     authcaptureproxy
@@ -56,11 +56,11 @@ buildPythonPackage rec {
   # Module has no tests (only a websocket test which seems unrelated to the module)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python Package for controlling Alexa devices (echo dot, etc) programmatically";
     homepage = "https://gitlab.com/keatontaylor/alexapy";
     changelog = "https://gitlab.com/keatontaylor/alexapy/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

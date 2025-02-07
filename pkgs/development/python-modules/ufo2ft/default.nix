@@ -7,46 +7,54 @@
   cu2qu,
   defcon,
   fetchPypi,
+  fetchpatch2,
   fontmath,
   fonttools,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
   skia-pathops,
+  syrupy,
   ufolib2,
 }:
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "3.2.5";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PUPk92wugtIZWXP8vq8bJNxqTDhDENKdNhW1kNEcL3E=";
+    hash = "sha256-DPfbxyPI8dVwPxOBIy55C3XNvWZqQ1Zd6/L8liCdbyg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
   pythonRelaxDeps = [ "cffsubr" ];
 
-  propagatedBuildInputs = [
-    cu2qu
-    fontmath
-    fonttools
-    defcon
-    compreffor
-    booleanoperations
-    cffsubr
-    ufolib2
-    skia-pathops
-  ] ++ fonttools.optional-dependencies.lxml ++ fonttools.optional-dependencies.ufo;
+  dependencies =
+    [
+      cu2qu
+      fontmath
+      fonttools
+      defcon
+      compreffor
+      booleanoperations
+      cffsubr
+      ufolib2
+      skia-pathops
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
 
   disabledTests = [
     # Do not depend on skia.
@@ -68,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googlefonts/ufo2ft";
     changelog = "https://github.com/googlefonts/ufo2ft/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

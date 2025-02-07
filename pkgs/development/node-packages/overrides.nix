@@ -23,25 +23,18 @@ final: prev: {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
     '';
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash zsh; do
+      installShellCompletion --cmd ng \
+        --$shell <($out/bin/ng completion script)
+    done
+    '';
   };
 
   "@electron-forge/cli" = prev."@electron-forge/cli".override {
     buildInputs = [ final.node-gyp-build ];
   };
-
-  bower2nix = prev.bower2nix.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ pkgs.git pkgs.nix ]}
-      done
-    '';
-  };
-
-  expo-cli = prev."expo-cli".override (oldAttrs: {
-    # The traveling-fastlane-darwin optional dependency aborts build on Linux.
-    dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
-  });
 
   fast-cli = prev.fast-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -61,14 +54,6 @@ final: prev: {
     '';
   };
 
-  grammarly-languageserver = prev.grammarly-languageserver.override (old: {
-    meta = old.meta // {
-      # requires EOL Node.js 16
-      # https://github.com/znck/grammarly/issues/334
-      broken = true;
-    };
-  });
-
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -85,18 +70,11 @@ final: prev: {
     buildInputs = oldAttrs.buildInputs ++ [ final.node-gyp-build pkgs.zeromq ];
   });
 
-  insect = prev.insect.override (oldAttrs: {
-    nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package final.pulp ];
-  });
-
-  intelephense = prev.intelephense.override (oldAttrs: {
-    meta = oldAttrs.meta // { license = lib.licenses.unfree; };
-  });
-
   joplin = prev.joplin.override (oldAttrs:{
     nativeBuildInputs = [
       pkgs.pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
+      (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pkgs.xcbuild
     ];
     buildInputs = with pkgs; [
@@ -106,12 +84,12 @@ final: prev: {
 
       libsecret
       final.node-gyp-build
-      final.node-pre-gyp
+      node-pre-gyp
 
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
     ];
@@ -129,6 +107,11 @@ final: prev: {
         };
       }
     ] ++ oldAttrs.dependencies;
+
+    meta = oldAttrs.meta // {
+      # ModuleNotFoundError: No module named 'distutils'
+      broken = stdenv.hostPlatform.isDarwin; # still broken on darwin
+    };
   });
 
   jsonplaceholder = prev.jsonplaceholder.override {
@@ -150,7 +133,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -159,22 +142,8 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
+      ${lib.optionalString stdenv.hostPlatform.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
-  };
-
-  node-gyp = prev.node-gyp.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
-    # This is important when build nodejs packages in sandbox.
-    postInstall = ''
-      wrapProgram "$out/bin/node-gyp" \
-        --set npm_config_nodedir ${nodejs}
-    '';
-  };
-
-  node-red = prev.node-red.override {
-    buildInputs = [ final.node-pre-gyp ];
   };
 
   node2nix = prev.node2nix.override {
@@ -199,6 +168,11 @@ final: prev: {
           url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
           hash = "sha256-pe8Xm4mjPh9oKXugoMY6pRl8YYgtdw0sRXN+TienalU=";
         })
+        # Use top-level cctools in generated files - PR svanderburg/node2nix#334
+        (fetchpatch {
+          url = "https://github.com/svanderburg/node2nix/commit/31c308bba5f39ea0105f66b9f40dbe57fed7a292.patch";
+          hash = "sha256-DdNRteonMvyffPh0uo0lUbsohKYnyqv0QcD9vjN6aXE=";
+        })
       ];
     in ''
       ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
@@ -214,7 +188,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-1rYdTpyv03iycF1+BhzrzQJCdOuAOtaqHTWJZCWvijKD2N5Xu0TtVC8/+1faWqcP9iBCWOmjmhoH94dH82BxPQ==";
+        sha512 = "sha512-EV6+ovTsEXCPAp58g2dD68LxoP/wK5pRvgy0J/HxPGB009omFPv3Yet0HiaqvrIrgPTBuC6wCH1LTOY91EO5hQ==";
       };
     };
     esbuild-linux-arm64 = {
@@ -223,7 +197,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-9pb6rBjGvTFNira2FLIWqDk/uaf42sSyLE8j1rnUpuzsODBq7FvpwHYZxQ/It/8b+QOS1RYfqgGFNLRI+qlq2A==";
+        sha512 = "sha512-/93bf2yxencYDnItMYV/v116zff6UyTjo4EtEQjUBeGiVpMmffDNUyD9UN2zV+V3LRV3/on4xdZ26NKzn6754g==";
       };
     };
     esbuild-darwin-x64 = {
@@ -232,7 +206,7 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-${esbuild-version}.tgz";
-        sha512 = "sha512-tBcXp9KNphnNH0dfhv8KYkZhjc+H3XBkF5DKtswJblV7KlT9EI2+jeA8DgBjp908WEuYll6pF+UStUCfEpdysA==";
+        sha512 = "sha512-aClqdgTDVPSEGgoCS8QDG37Gu8yc9lTHNAQlsztQ6ENetKEO//b8y31MMu2ZaPbn4kVsIABzVLXYLhCGekGDqw==";
       };
     };
     esbuild-darwin-arm64 = {
@@ -241,16 +215,16 @@ final: prev: {
       version = esbuild-version;
       src = fetchurl {
         url = "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-${esbuild-version}.tgz";
-        sha512 = "sha512-4J6IRT+10J3aJH3l1yzEg9y3wkTDgDk7TSDFX+wKFiWjqWp/iCfLIYzGyasx9l0SAFPT1HwSCR+0w/h1ES/MjA==";
+        sha512 = "sha512-YsS2e3Wtgnw7Wq53XXBLcV6JhRsEq8hkfg91ESVadIrzr9wO6jJDMZnCQbHm1Guc5t/CdDiFSSfWP58FNuvT3Q==";
       };
     };
   in{
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     dependencies = oldAttrs.dependencies
-      ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) esbuild-linux-x64
-      ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) esbuild-linux-arm64
-      ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) esbuild-darwin-x64
-      ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) esbuild-darwin-arm64;
+      ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) esbuild-linux-x64
+      ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) esbuild-linux-arm64
+      ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) esbuild-darwin-x64
+      ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) esbuild-darwin-arm64;
     postInstall = ''
       wrapProgram "$out/bin/postcss" \
         --prefix NODE_PATH : ${final.postcss}/lib/node_modules \
@@ -268,33 +242,6 @@ final: prev: {
     };
   });
 
-  # To update prisma, please first update prisma-engines to the latest
-  # version. Then change the correct hash to this package. The PR should hold
-  # two commits: one for the engines and the other one for the node package.
-  prisma = prev.prisma.override rec {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-
-    inherit (pkgs.prisma-engines) version;
-
-    src = fetchurl {
-      url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-136nEfCJjLLUMO3TZhVrltfqv8nU2fA14+L0JLe6Zfk=";
-    };
-    postInstall = with pkgs; ''
-      wrapProgram "$out/bin/prisma" \
-        --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-        --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
-        --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
-        --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
-    '';
-
-    passthru.tests = {
-      simple-execution = pkgs.callPackage ./package-tests/prisma.nix {
-        inherit (final) prisma;
-      };
-    };
-  };
-
   pulp = prev.pulp.override {
     # tries to install purescript
     npmFlags = builtins.toString [ "--ignore-scripts" ];
@@ -311,43 +258,16 @@ final: prev: {
     name = "rush";
   };
 
-  tailwindcss = prev.tailwindcss.override {
-    plugins = [ ];
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      nodePath=""
-      for p in "$out" "${final.postcss}" $plugins; do
-        nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
-      done
-      wrapProgram "$out/bin/tailwind" \
-        --prefix NODE_PATH : "$nodePath"
-      wrapProgram "$out/bin/tailwindcss" \
-        --prefix NODE_PATH : "$nodePath"
-      unset nodePath
-    '';
-    passthru.tests = {
-      simple-execution = callPackage ./package-tests/tailwindcss.nix {
-        inherit (final) tailwindcss;
-      };
-    };
-  };
-
-  teck-programmer = prev.teck-programmer.override ({ meta, ... }: {
-    nativeBuildInputs = [ final.node-gyp-build ];
-    buildInputs = [ pkgs.libusb1 ];
-    meta = meta // { license = lib.licenses.gpl3Plus; };
-  });
-
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
@@ -355,7 +275,7 @@ final: prev: {
   };
 
   thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
-    nativeBuildInputs = [ final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
@@ -385,12 +305,12 @@ final: prev: {
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
-      final.node-pre-gyp
+      node-pre-gyp
       pixman
       cairo
       pango
       libjpeg
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -412,7 +332,7 @@ final: prev: {
   };
 
   wavedrom-cli = prev.wavedrom-cli.override {
-    nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.pkg-config pkgs.node-pre-gyp ];
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
     buildInputs = with pkgs; [
@@ -420,7 +340,7 @@ final: prev: {
       pixman
       cairo
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreText
     ];
   };
@@ -428,63 +348,4 @@ final: prev: {
   webtorrent-cli = prev.webtorrent-cli.override {
     buildInputs = [ final.node-gyp-build ];
   };
-
-  wrangler = prev.wrangler.override (oldAttrs:
-    let
-      workerdVersion = (lib.findFirst (dep: dep.name == "workerd") null oldAttrs.dependencies).version;
-      linuxWorkerd = {
-        name = "_at_cloudflare_slash_workerd-linux-64";
-        packageName = "@cloudflare/workerd-linux-64";
-        # Should be same version as workerd
-        version = workerdVersion;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-${workerdVersion}.tgz";
-          sha512 = "sha512-E8mj+HPBryKwaJAiNsYzXtVjKCL0KvUBZbtxJxlWM4mLSQhT+uwGT3nydb/hFY59rZnQgZslw0oqEWht5TEYiQ==";
-        };
-      };
-      linuxWorkerdArm = {
-        name = "_at_cloudflare_slash_workerd-linux-arm64";
-        packageName = "@cloudflare/workerd-linux-arm64";
-        # Should be same version as workerd
-        version = workerdVersion;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-${workerdVersion}.tgz";
-          sha512 = "sha512-/Fr1W671t2triNCDCBWdStxngnbUfZunZ/2e4kaMLzJDJLYDtYdmvOUCBDzUD4ssqmIMbn9RCQQ0U+CLEoqBqw==";
-        };
-      };
-      darwinWorkerd = {
-        name = "_at_cloudflare_slash_workerd-darwin-64";
-        packageName = "@cloudflare/workerd-darwin-64";
-        # Should be same version as workerd
-        version = workerdVersion;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-${workerdVersion}.tgz";
-          sha512 = "sha512-ATaXjefbTsrv4mpn4Fdua114RRDXcX5Ky+Mv+f4JTUllgalmqC4CYMN4jxRz9IpJU/fNMN8IEfvUyuJBAcl9Iw==";
-        };
-      };
-      darwinWorkerdArm = {
-        name = "_at_cloudflare_slash_workerd-darwin-arm64";
-        packageName = "@cloudflare/workerd-darwin-arm64";
-        # Should be same version as workerd
-        version = workerdVersion;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-${workerdVersion}.tgz";
-          sha512 = "sha512-wnbsZI4CS0QPCd+wnBHQ40C28A/2Qo4ESi1YhE2735G3UNcc876MWksZhsubd+XH0XPIra6eNFqyw6wRMpQOXA==";
-        };
-      };
-
-    in
-    {
-      meta = oldAttrs.meta // { broken = before "16.13"; };
-      buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
-      preFixup = ''
-        # patch elf is trying to patch binary for sunos
-        rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
-      '';
-      dependencies = oldAttrs.dependencies
-        ++ lib.optional (stdenv.isLinux && stdenv.isx86_64) linuxWorkerd
-        ++ lib.optional (stdenv.isLinux && stdenv.isAarch64) linuxWorkerdArm
-        ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) darwinWorkerd
-        ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwinWorkerdArm;
-    });
 }

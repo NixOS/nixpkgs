@@ -1,39 +1,44 @@
-{ lib
-, cmake
-, darwin
-, fetchFromGitHub
-, libopus
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  libopus,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "xiu";
-  version = "0.12.7";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "harlanc";
     repo = "xiu";
     rev = "v${version}";
-    hash = "sha256-tFArcI7NcIopM5uPshaOU3ExJW5URc5Mf2V0ZwwgwKo=";
+    hash = "sha256-EjyvCwqcPkOe69YnDiAExtBNPhsqqGa95ao+bn6wcyA=";
   };
 
-  cargoHash = "sha256-OBL1uDVogcU6saEz2d2sWJTwXM2KE/YfhsNZtH0Cnk8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IEIZM27zQZrq63ZsCVAeOl2exuFR5tUG3Gwipjg4+oo=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-    libopus
-  ] ++ lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      libopus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 

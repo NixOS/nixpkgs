@@ -11,10 +11,11 @@
   freebsd-lib,
   expat,
   zlib,
+  extraSrc ? [ ],
 }:
 
 let
-  inherit (freebsd-lib) mkBsdArch;
+  inherit (freebsd-lib) mkBsdMachine;
 in
 
 mkDerivation {
@@ -41,9 +42,12 @@ mkDerivation {
 
       "sys/rpc/types.h"
     ]
-    ++ lib.optionals (versionData.major == 14) [ "sys/sys/bitcount.h" ]
+    ++ lib.optionals (versionData.major >= 14) [
+      "sys/sys/bitcount.h"
+      "sys/sys/linker_set.h"
+      "sys/sys/module.h"
+    ]
     ++ [
-
       # Listed in Makekfile as INC
       "include/mpool.h"
       "include/ndbm.h"
@@ -57,14 +61,14 @@ mkDerivation {
       "include/elf.h"
       "sys/sys/ctf.h"
     ]
-    ++ lib.optionals (versionData.major == 14) [
+    ++ lib.optionals (versionData.major >= 14) [
       "include/bitstring.h"
       "sys/sys/bitstring.h"
       "sys/sys/nv_namespace.h"
     ]
     ++ [
 
-      # Listed in Makekfile as SYSINC
+      # Listed in Makefile as SYSINCS
 
       "sys/sys/capsicum.h"
       "sys/sys/caprights.h"
@@ -78,7 +82,7 @@ mkDerivation {
       "sys/sys/elf64.h"
       "sys/sys/elf_common.h"
       "sys/sys/elf_generic.h"
-      "sys/${mkBsdArch stdenv}/include"
+      "sys/${mkBsdMachine stdenv}/include"
     ]
     ++ lib.optionals stdenv.hostPlatform.isx86 [ "sys/x86/include" ]
     ++ [
@@ -112,14 +116,15 @@ mkDerivation {
 
       # idk bro
       "sys/sys/kbio.h"
-    ];
+    ]
+    ++ extraSrc;
 
   preBuild =
     ''
       NIX_CFLAGS_COMPILE+=' -I../../include -I../../sys'
 
-      cp ../../sys/${mkBsdArch stdenv}/include/elf.h ../../sys/sys
-      cp ../../sys/${mkBsdArch stdenv}/include/elf.h ../../sys/sys/${mkBsdArch stdenv}
+      cp ../../sys/${mkBsdMachine stdenv}/include/elf.h ../../sys/sys
+      cp ../../sys/${mkBsdMachine stdenv}/include/elf.h ../../sys/sys/${mkBsdMachine stdenv}
     ''
     + lib.optionalString stdenv.hostPlatform.isx86 ''
       cp ../../sys/x86/include/elf.h ../../sys/x86
@@ -171,4 +176,6 @@ mkDerivation {
   # build build-time dependencies for building FreeBSD packages). It is
   # not needed when building for FreeBSD.
   meta.broken = stdenv.hostPlatform.isFreeBSD;
+
+  alwaysKeepStatic = true;
 }

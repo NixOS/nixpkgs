@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-opensensemap-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iUSdjU41JOT7k044EI2XEvJiSo6V4mO6S51EcIughEM=";
   };
 

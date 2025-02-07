@@ -1,4 +1,8 @@
-{ lib, stdenv, pkgs }:
+{
+  lib,
+  stdenv,
+  pkgs,
+}:
 
 stdenv.mkDerivation {
   pname = "fetchmail";
@@ -8,11 +12,19 @@ stdenv.mkDerivation {
     owner = "fetchmail";
     repo = "fetchmail";
     rev = "30b368fb8660d8fec08be1cdf2606c160b4bcb80";
-    sha256 = "sha256-83D2YlFCODK2YD+oLICdim2NtNkkJU67S3YLi8Q6ga8=";
+    hash = "sha256-83D2YlFCODK2YD+oLICdim2NtNkkJU67S3YLi8Q6ga8=";
   };
 
-  buildInputs = with pkgs; [ openssl python3 ];
-  nativeBuildInputs = with pkgs; [ autoreconfHook pkg-config bison flex ];
+  buildInputs = with pkgs; [
+    openssl
+    python3
+  ];
+  nativeBuildInputs = with pkgs; [
+    autoreconfHook
+    pkg-config
+    bison
+    flex
+  ];
 
   configureFlags = [ "--with-ssl=${pkgs.openssl.dev}" ];
 

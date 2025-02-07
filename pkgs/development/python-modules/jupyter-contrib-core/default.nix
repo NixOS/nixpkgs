@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter-contrib";
     repo = "jupyter_contrib_core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UTtK+aKxBFkqKuHrt1ox8vdHyFz/9HiKFl7U4UQcG88=";
   };
 

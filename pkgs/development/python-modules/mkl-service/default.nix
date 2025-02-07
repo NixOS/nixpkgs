@@ -3,30 +3,44 @@
   buildPythonPackage,
   fetchFromGitHub,
   cython,
+  setuptools,
   mkl,
-  nose,
-  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkl-service";
-  version = "2.4.1";
-  format = "setuptools";
+  version = "2.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IntelPython";
     repo = "mkl-service";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-4UPiQt1hVVlPFZnuKlMK3FLv2cIEXToHKxnyYLXR/sY=";
+    tag = "v${version}";
+    hash = "sha256-o5mjZhqQc7tu44EjrScuGzv6pZNlnZnndMIAhl8pY5o=";
   };
 
-  MKLROOT = mkl;
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  nativeCheckInputs = [ nose ];
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [
-    mkl
-    six
+  env.MKLROOT = mkl;
+
+  dependencies = [ mkl ];
+
+  pythonImportsCheck = [ "mkl" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    cd $out
+  '';
+
+  disabledTests = [
+    # require SIMD compilation
+    "test_cbwr_all"
+    "test_cbwr_branch"
   ];
 
   meta = with lib; {

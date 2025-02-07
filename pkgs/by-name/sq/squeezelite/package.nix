@@ -9,8 +9,8 @@
   libpulseaudio,
   libvorbis,
   mpg123,
-  audioBackend ? if stdenv.isLinux then "alsa" else "portaudio",
-  alsaSupport ? stdenv.isLinux,
+  audioBackend ? if stdenv.hostPlatform.isLinux then "alsa" else "portaudio",
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   dsdSupport ? true,
   faad2Support ? true,
@@ -23,7 +23,7 @@
   soxr,
   sslSupport ? true,
   openssl,
-  portaudioSupport ? stdenv.isDarwin,
+  portaudioSupport ? stdenv.hostPlatform.isDarwin,
   portaudio,
   slimserver,
 }:
@@ -40,13 +40,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1488";
+  version = "2.0.0.1518";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "0e85ddfd79337cdc30b7d29922b1d790600bb6b4";
-    hash = "sha256-FGqo/c74JN000w/iRnvYUejqnYGDzHNZu9pEmR7yR3s=";
+    rev = "ed3c82052db4846e8e0da01c5bf8db130db00dee";
+    hash = "sha256-nxEsraKV5OPaeRuN2NRvxGtUb189ArP3blxSOMPD2II=";
   };
 
   buildInputs =
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     ++ optional pulseSupport libpulseaudio
     ++ optional alsaSupport alsa-lib
     ++ optional portaudioSupport portaudio
-    ++ optionals stdenv.isDarwin (
+    ++ optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         CoreVideo
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
     ++ optional sslSupport openssl
-    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) libgpiod;
+    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -99,9 +99,9 @@ stdenv.mkDerivation {
     ++ optional pulseSupport "-DPULSEAUDIO"
     ++ optional resampleSupport "-DRESAMPLE"
     ++ optional sslSupport "-DUSE_SSL"
-    ++ optional (stdenv.isAarch32 or stdenv.isAarch64) "-DRPI";
+    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
 
-  env = lib.optionalAttrs stdenv.isDarwin { LDADD = "-lportaudio -lpthread"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
 
   installPhase = ''
     runHook preInstall

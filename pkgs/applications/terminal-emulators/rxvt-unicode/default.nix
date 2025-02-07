@@ -1,13 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeDesktopItem
-, libX11, libXt, libXft, libXrender, libXext
-, ncurses, fontconfig, freetype
-, pkg-config, gdk-pixbuf, perl
-, libptytty
-, perlSupport      ? true
-, gdkPixbufSupport ? true
-, unicode3Support  ? true
-, emojiSupport     ? false
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  makeDesktopItem,
+  libX11,
+  libXt,
+  libXft,
+  libXrender,
+  libXext,
+  ncurses,
+  fontconfig,
+  freetype,
+  pkg-config,
+  gdk-pixbuf,
+  perl,
+  libptytty,
+  perlSupport ? true,
+  gdkPixbufSupport ? true,
+  unicode3Support ? true,
+  emojiSupport ? false,
+  nixosTests,
 }:
 
 let
@@ -22,18 +35,25 @@ let
     comment = description;
     desktopName = "URxvt";
     genericName = pname;
-    categories = [ "System" "TerminalEmulator" ];
+    categories = [
+      "System"
+      "TerminalEmulator"
+    ];
   };
 
-  fetchPatchFromAUR = { package, name, rev, sha256 }:
+  fetchPatchFromAUR =
+    {
+      package,
+      name,
+      rev,
+      sha256,
+    }:
     fetchpatch rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=${package}&id=${rev}";
       extraPrefix = "";
       inherit name sha256;
     };
 in
-
-with lib;
 
 stdenv.mkDerivation {
   name = "${pname}-unwrapped-${version}";
@@ -46,48 +66,74 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
-    [ libX11 libXt libXft ncurses  # required to build the terminfo file
-      fontconfig freetype libXrender
+    [
+      libX11
+      libXt
+      libXft
+      ncurses # required to build the terminfo file
+      fontconfig
+      freetype
+      libXrender
       libptytty
-    ] ++ optionals perlSupport [ perl libXext ]
-      ++ optional gdkPixbufSupport gdk-pixbuf;
+    ]
+    ++ lib.optionals perlSupport [
+      perl
+      libXext
+    ]
+    ++ lib.optional gdkPixbufSupport gdk-pixbuf;
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [
+    "out"
+    "terminfo"
+  ];
 
-  patches = (if emojiSupport then [
-    # the required patches to libXft are in nixpkgs by default, see
-    # ../../../servers/x11/xorg/overrides.nix
-    (fetchPatchFromAUR {
-      name = "enable-wide-glyphs.patch";
-      package = "rxvt-unicode-truecolor-wide-glyphs";
-      rev = "69701a09c2c206233952b84bc966407f6774f1dc";
-      sha256 = "0jfcj0ahky4dxdfrhqvh1v83mblhf5nak56dk1vq3bhyifdg7ffq";
+  patches =
+    (
+      if emojiSupport then
+        [
+          # the required patches to libXft are in nixpkgs by default, see
+          # ../../../servers/x11/xorg/overrides.nix
+          (fetchPatchFromAUR {
+            name = "enable-wide-glyphs.patch";
+            package = "rxvt-unicode-truecolor-wide-glyphs";
+            rev = "69701a09c2c206233952b84bc966407f6774f1dc";
+            sha256 = "0jfcj0ahky4dxdfrhqvh1v83mblhf5nak56dk1vq3bhyifdg7ffq";
+          })
+          (fetchPatchFromAUR {
+            name = "improve-font-rendering.patch";
+            package = "rxvt-unicode-truecolor-wide-glyphs";
+            rev = "69701a09c2c206233952b84bc966407f6774f1dc";
+            sha256 = "1jj5ai2182nq912279adihi4zph1w4dvbdqa1pwacy4na6y0fz9y";
+          })
+        ]
+      else
+        [
+          ./patches/9.06-font-width.patch
+        ]
+    )
+    ++ [
+      ./patches/256-color-resources.patch
+    ]
+    ++ lib.optional (perlSupport && lib.versionAtLeast perl.version "5.38") (fetchpatch {
+      name = "perl538-locale-c.patch";
+      url = "https://github.com/exg/rxvt-unicode/commit/16634bc8dd5fc4af62faf899687dfa8f27768d15.patch";
+      excludes = [ "Changes" ];
+      sha256 = "sha256-JVqzYi3tcWIN2j5JByZSztImKqbbbB3lnfAwUXrumHM=";
     })
-    (fetchPatchFromAUR {
-      name = "improve-font-rendering.patch";
-      package = "rxvt-unicode-truecolor-wide-glyphs";
-      rev = "69701a09c2c206233952b84bc966407f6774f1dc";
-      sha256 = "1jj5ai2182nq912279adihi4zph1w4dvbdqa1pwacy4na6y0fz9y";
-    })
-  ] else [
-    ./patches/9.06-font-width.patch
-  ]) ++ [
-    ./patches/256-color-resources.patch
-  ] ++ optional (perlSupport && versionAtLeast perl.version "5.38") (fetchpatch {
-    name = "perl538-locale-c.patch";
-    url = "https://github.com/exg/rxvt-unicode/commit/16634bc8dd5fc4af62faf899687dfa8f27768d15.patch";
-    excludes = [ "Changes" ];
-    sha256 = "sha256-JVqzYi3tcWIN2j5JByZSztImKqbbbB3lnfAwUXrumHM=";
-  }) ++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
+    ++ lib.optional stdenv.hostPlatform.isDarwin ./patches/makefile-phony.patch;
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"
     "--enable-256-color"
-    (enableFeature perlSupport "perl")
-    (enableFeature unicode3Support "unicode3")
-  ] ++ optional emojiSupport "--enable-wide-glyphs";
+    (lib.enableFeature perlSupport "perl")
+    (lib.enableFeature unicode3Support "unicode3")
+  ] ++ lib.optional emojiSupport "--enable-wide-glyphs";
 
-  LDFLAGS = [ "-lfontconfig" "-lXrender" "-lpthread" ];
+  LDFLAGS = [
+    "-lfontconfig"
+    "-lXrender"
+    "-lpthread"
+  ];
   CFLAGS = [ "-I${freetype.dev}/include/freetype2" ];
 
   preConfigure =
@@ -111,7 +157,7 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
-  meta = {
+  meta = with lib; {
     inherit description;
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
     downloadPage = "http://dist.schmorp.de/rxvt-unicode/Attic/";

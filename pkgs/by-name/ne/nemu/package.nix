@@ -1,27 +1,28 @@
-{ busybox
-, cmake
-, coreutils
-, dbus
-, fetchFromGitHub
-, gettext
-, graphviz
-, json_c
-, lib
-, libarchive
-, libusb1
-, libxml2
-, makeWrapper
-, ncurses
-, ninja
-, openssl
-, picocom
-, pkg-config
-, qemu
-, socat
-, sqlite
-, stdenv
-, systemd
-, tigervnc
+{
+  busybox,
+  cmake,
+  coreutils,
+  dbus,
+  fetchFromGitHub,
+  gettext,
+  graphviz,
+  json_c,
+  lib,
+  libarchive,
+  libusb1,
+  libxml2,
+  makeWrapper,
+  ncurses,
+  ninja,
+  openssl,
+  picocom,
+  pkg-config,
+  qemu,
+  socat,
+  sqlite,
+  stdenv,
+  systemd,
+  tigervnc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    busybox # for start-stop-daemon
     coreutils
     dbus
     gettext

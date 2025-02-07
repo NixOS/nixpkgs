@@ -1,9 +1,10 @@
-{ lib, nodes, pkgs, ... }:
+{ nodes, ... }:
 let
   caCert = nodes.acme.test-support.acme.caCert;
   caDomain = nodes.acme.test-support.acme.caDomain;
 
-in {
+in
+{
   security.acme = {
     acceptTerms = true;
     defaults = {

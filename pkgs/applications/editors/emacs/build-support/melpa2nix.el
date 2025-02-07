@@ -1,6 +1,3 @@
-(require 'package)
-(package-initialize)
-
 (require 'package-recipe)
 (require 'package-build)
 

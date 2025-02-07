@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vanbalken";
     repo = "arris-tg2492lg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MQq9jMUoJgqaY0f9YIbhME2kO+ektPqBnT9REg3qDpg=";
   };
 

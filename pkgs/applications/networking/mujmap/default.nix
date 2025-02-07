@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, notmuch
-, stdenv
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  notmuch,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,11 +18,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Qb9fEPQrdn+Ek9bdOMfaPIxlGGpQ9RfQZOeeqoOf17E=";
   };
 
-  cargoSha256 = "sha256-nnAYjutjxtEpDNoWTnlESDO4Haz14wZxY4gdyzdLgBU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LyiJYKhoSXVf1P+nu56Wgp+z8biPpt0tWgPZQrB2NNQ=";
 
   buildInputs = [
     notmuch
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "JMAP integration for notmuch mail";
