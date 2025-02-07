@@ -63,5 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dask/dask-glm/";
     license = licenses.bsd3;
     maintainers = [ ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }
