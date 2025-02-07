@@ -53,22 +53,15 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.11.1";
+  version = "8.12.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-x8p9tIsJCXQ+rvNCUNoCwZvGHU8dzt1mA/EJQJU2q1Y=";
+    hash = "sha256-mkYox2S+axqZCVZ8E+jncQQWCd9DshWPysTgXqcJfl0=";
   };
-
-  patches = [
-    # https://github.com/curl/curl/issues/15725
-    ./fix-eventfd-free.patch
-    # https://github.com/curl/curl/issues/15767
-    ./fix-password-only-netrc.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
