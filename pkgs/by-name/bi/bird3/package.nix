@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bird";
-  version = "2.16.1";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
-    hash = "sha256-9uWcvMrKYmaK6gIGhyS9QnuexEnH4PD8VoFQOYjHNbQ=";
+    url = "https://bird.network.cz/download/bird-${version}.tar.gz";
+    hash = "sha256-iGhAPKqE4lVLtuYK2+fGV+e7fErEGRDjmPNeI2upD6E=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
     description = "BIRD Internet Routing Daemon";
-    homepage = "http://bird.network.cz";
+    homepage = "https://bird.network.cz";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ herbetom ];
     platforms = platforms.linux;
