@@ -12,10 +12,11 @@
   aiodns,
   audioop-lts,
   brotli,
-  faust-cchardet,
   orjson,
+  poetry-core,
+  poetry-dynamic-versioning,
   pynacl,
-  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   version = "3.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "nextcord";
@@ -40,8 +41,16 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    # disable dynamic versioning
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail 'enable = true' 'enable = false'
+  '';
+
   build-system = [
-    setuptools
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
   dependencies =
@@ -49,10 +58,9 @@ buildPythonPackage rec {
       aiodns
       aiohttp
       brotli
-      faust-cchardet
       orjson
       pynacl
-      setuptools # for pkg_resources, remove with next release
+      typing-extensions
     ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       audioop-lts

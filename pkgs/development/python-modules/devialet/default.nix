@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  async-upnp-client,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -21,9 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-HmTiHa7DEmjARaYn7/OoGotnTirE7S7zXLK/TfHdEAg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    async-upnp-client
+  ];
 
   # Module has no tests
   doCheck = false;
