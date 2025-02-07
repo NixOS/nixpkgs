@@ -73,6 +73,6 @@ buildPythonPackage rec {
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
