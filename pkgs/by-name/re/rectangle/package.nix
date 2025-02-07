@@ -33,15 +33,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Move and resize windows in macOS using keyboard shortcuts or snap areas";
     homepage = "https://rectangleapp.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Intuinewin
       wegank
     ];
-    license = licenses.mit;
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
