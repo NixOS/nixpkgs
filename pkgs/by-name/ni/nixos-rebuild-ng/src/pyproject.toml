@@ -39,6 +39,8 @@ ignore_missing_imports = true
 
 [tool.ruff.lint]
 extend-select = [
+    # don't shadow built-in names
+    "A",
     # ensure imports are sorted
     "I",
     # Automatically upgrade syntax for newer versions
