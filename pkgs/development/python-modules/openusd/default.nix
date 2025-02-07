@@ -105,7 +105,9 @@ buildPythonPackage rec {
     (lib.cmakeBool "PXR_BUILD_PYTHON_DOCUMENTATION" withDocs)
     (lib.cmakeBool "PXR_BUILD_USDVIEW" withUsdView)
     (lib.cmakeBool "PXR_BUILD_USD_TOOLS" withTools)
-    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" true)
+    (lib.cmakeBool "PXR_BUILD_IMAGING" true)
+    (lib.cmakeBool "PXR_BUILD_OPENIMAGEIO_PLUGIN" true)
+    (lib.cmakeBool "PXR_ENABLE_MATERIALX_SUPPORT" (!stdenv.hostPlatform.isDarwin))
     (lib.cmakeBool "PXR_ENABLE_OSL_SUPPORT" (!stdenv.hostPlatform.isDarwin && withOsl))
   ];
 
@@ -168,6 +170,10 @@ buildPythonPackage rec {
     "pxr"
     "pxr.Usd"
   ];
+
+  postPatch = ''
+    rm cmake/modules/FindOpenImageIO.cmake
+  '';
 
   postInstall =
     ''
