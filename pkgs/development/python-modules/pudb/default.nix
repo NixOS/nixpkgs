@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
+  hatchling,
   fetchPypi,
-  setuptools,
   jedi,
   packaging,
   pygments,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-Jk8jngU45S6D09AgFDEAsxccrhcidnS7G5+LB180hJw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     jedi

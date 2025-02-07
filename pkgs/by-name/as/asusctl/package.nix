@@ -13,54 +13,55 @@
   libgbm,
   seatd,
   wayland,
+  glibc,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.0.12";
+  version = "6.1.0";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-fod3ZkJktmJGHF8nSSp9lVMg/qYKQd4EiauFGTSvbsg=";
+    hash = "sha256-EedOSStqZ2Q8PUJ+0mgIC2+MbiO19VUVDoVvWkkQscc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "const-field-offset-0.1.5" = "sha256-QtlvLwe27tLLdWhqiKzXoUvBsBcZbfwY84jXUduzCKw=";
-      "supergfxctl-5.2.4" = "sha256-MQJJaTajPQ45BU6zyMx0Wwf7tAPcT4EURWWbZxrbGzE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o+u4k6yGVThBO9Chv4EwVpkDZzZj64RN9iNZyAy0LHs=";
 
   postPatch = ''
     files="
       asusd-user/src/config.rs
       asusd-user/src/daemon.rs
-      asusd/src/ctrl_anime/config.rs
+      asusd/src/aura_anime/config.rs
       rog-aura/src/aura_detection.rs
       rog-control-center/src/lib.rs
       rog-control-center/src/main.rs
       rog-control-center/src/tray.rs
     "
     for file in $files; do
-      substituteInPlace $file --replace /usr/share $out/share
+      substituteInPlace $file --replace-fail /usr/share $out/share
     done
 
-    substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
+    substituteInPlace data/asusd.rules --replace-fail systemctl ${lib.getExe' systemd "systemctl"}
     substituteInPlace data/asusd.service \
-      --replace /usr/bin/asusd $out/bin/asusd \
-      --replace /bin/sleep ${coreutils}/bin/sleep
+      --replace-fail /usr/bin/asusd $out/bin/asusd \
+      --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
     substituteInPlace data/asusd-user.service \
-      --replace /usr/bin/asusd-user $out/bin/asusd-user \
-      --replace /usr/bin/sleep ${coreutils}/bin/sleep
+      --replace-fail /usr/bin/asusd-user $out/bin/asusd-user \
+      --replace-fail /usr/bin/sleep ${lib.getExe' coreutils "sleep"}
 
     substituteInPlace Makefile \
-      --replace /usr/bin/grep ${lib.getExe gnugrep}
+      --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
+
+    substituteInPlace /build/asusctl-${version}-vendor/sg-0.4.0/build.rs \
+      --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = [
     fontconfig
