@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pillow"
+    "typer"
   ];
 
   pythonImportsCheck = [
