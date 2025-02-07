@@ -199,6 +199,7 @@ buildDotnetModule {
       fadenb
       purcell
       tie
+      niklaskorz
     ];
     mainProgram = "Sonarr";
     # platforms inherited from dotnet-sdk.
