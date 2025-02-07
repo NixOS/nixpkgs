@@ -534,6 +534,10 @@ let
               "-uefi"
             ];
           };
+        }
+        // {
+          equals = equals final;
+          notEquals = platform: !final.equals platform;
         };
     in
     assert final.useAndroidPrebuilt -> final.isAndroid;
