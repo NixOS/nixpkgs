@@ -305,6 +305,15 @@ in {
       example = "php82";
     };
 
+    finalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      description = ''
+        Package to the finalized Nextcloud package, including all installed apps.
+        This is automatically set by the module.
+      '';
+    };
+
     maxUploadSize = mkOption {
       default = "512M";
       type = types.str;
@@ -924,6 +933,8 @@ in {
       ] ++ [
         "L+ ${datadir}/config/override.config.php - - - - ${overrideConfig}"
       ];
+
+      services.nextcloud.finalPackage = webroot;
 
       systemd.services = {
         # When upgrading the Nextcloud package, Nextcloud can report errors such as
