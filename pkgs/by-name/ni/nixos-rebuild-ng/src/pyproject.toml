@@ -43,6 +43,8 @@ extend-select = [
     "A",
     # Better list/set/dict comprehensions
     "C4",
+    # Check for debugger statements
+    "T10",
     # ensure imports are sorted
     "I",
     # Automatically upgrade syntax for newer versions
