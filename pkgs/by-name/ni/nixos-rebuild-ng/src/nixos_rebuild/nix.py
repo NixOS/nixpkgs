@@ -583,7 +583,7 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
@@ -591,7 +591,7 @@ def upgrade_channels(all: bool = False) -> None:
     """
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
-            all
+            all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):

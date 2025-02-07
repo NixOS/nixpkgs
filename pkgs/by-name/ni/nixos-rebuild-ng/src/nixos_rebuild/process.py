@@ -92,7 +92,7 @@ def run_wrapper(
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
     env = None
-    input = None
+    process_input = None
     if remote:
         if extra_env:
             extra_env_args = [f"{env}={value}" for env, value in extra_env.items()]
@@ -100,7 +100,7 @@ def run_wrapper(
         if sudo:
             if remote.sudo_password:
                 args = ["sudo", "--prompt=", "--stdin", *args]
-                input = remote.sudo_password + "\n"
+                process_input = remote.sudo_password + "\n"
             else:
                 args = ["sudo", *args]
         args = [
@@ -133,7 +133,7 @@ def run_wrapper(
             args,
             check=check,
             env=env,
-            input=input,
+            input=process_input,
             # Hope nobody is using NixOS with non-UTF8 encodings, but "surrogateescape"
             # should still work in those systems.
             text=True,
