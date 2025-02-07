@@ -156,13 +156,13 @@ GEM
     fspath (3.1.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (4.27.2)
+    google-protobuf (4.27.3)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.27.2-arm64-darwin)
+    google-protobuf (4.27.3-arm64-darwin)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.27.2-x86_64-darwin)
+    google-protobuf (4.27.3-x86_64-darwin)
       bigdecimal
       rake (>= 13)
     guess_html_encoding (0.0.11)
