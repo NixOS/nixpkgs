@@ -20,12 +20,11 @@ buildNpmPackage rec {
     inherit src;
     hash = "sha256-VYoJAi1RzVf5ObjuGmnuiA/1WYBWC+qYPdfWF98+oGw=";
   };
-  npmWorkspace = "packages/neovim";
 
-  postInstall = ''
-    mkdir -p $out/bin
-    # Overwrite the unwanted wrapper created by buildNpmPackage
-    ln -sf $out/lib/node_modules/neovim/bin/cli.js $out/bin/neovim-node-host
+  buildPhase = ''
+    runHook preBuild
+    npm run build
+    runHook postBuild
   '';
 
   meta = {

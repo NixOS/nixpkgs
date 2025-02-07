@@ -91,6 +91,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pillow"
+    "typer"
   ];
 
   optional-dependencies = {
