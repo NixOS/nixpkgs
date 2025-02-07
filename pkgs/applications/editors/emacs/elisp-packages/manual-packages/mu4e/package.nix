@@ -14,6 +14,13 @@ elpaBuild {
 
   dontUnpack = false;
 
+  postPatch = ''
+    substituteInPlace share/emacs/site-lisp/mu4e/mu4e-server.el \
+      --replace-fail \
+     'mu4e-mu-binary (executable-find "mu")' \
+     'mu4e-mu-binary "${lib.getExe mu}"'
+  '';
+
   # prepare a multi-file package tar archive according to info
   # "(elisp) Multi-file Packages" for elpaBuild to install
   postBuild = ''
