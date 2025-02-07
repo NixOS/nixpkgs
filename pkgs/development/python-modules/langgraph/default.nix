@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "2.0.13";
+  version = "0.2.56";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpointpostgres==${version}";
-    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
+    tag = version;
+    hash = "sha256-X/IMNEmggu9bSJFUaTohbFYxGZBguf+eFb3ObmQGplk=";
   };
 
   postgresqlTestSetupPost = ''
@@ -116,10 +116,13 @@ buildPythonPackage rec {
 
   passthru.updateScript = langgraph-sdk.updateScript;
 
+  # multiple tags confuse the bulk updater
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Build resilient language agents as graphs";
     homepage = "https://github.com/langchain-ai/langgraph";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
