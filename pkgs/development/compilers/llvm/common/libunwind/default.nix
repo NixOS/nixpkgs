@@ -44,9 +44,11 @@ let
     cd ../runtimes
   '';
 
-  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
+  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) ''
     # libcxxabi wants to link to libunwind_shared.so (?).
     ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
+  '' + lib.optionalString (enableShared && stdenv.hostPlatform.isWindows) ''
+    ln -s $out/lib/libunwind.dll.a $out/lib/libunwind_shared.dll.a
   '';
 in
 stdenv.mkDerivation (rec {
