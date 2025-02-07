@@ -1,0 +1,68 @@
+From 5eaae2daff7722ee01eee239e131ee1f62643abe Mon Sep 17 00:00:00 2001
+From: Peter Waller <peter.waller@arm.com>
+Date: Wed, 5 Feb 2025 19:46:15 +0000
+Subject: [PATCH] [compiler-rt][AArch64] Enable libc-free builtins Linux build
+
+Without this change, libc++abi.so.1.0 fails to link with:
+
+```
+error: undefined sybol: __aarch64_sme_accessible
+```
+
+This symbol is provided by baremetal libc's such as newlib.
+
+In order to compile a libc with compiler-rt, it is necessary first to
+build a compiler-rt with no dependency on libc to acquire the builtins.
+The intended linux test requires getauxval which is provided by libc.
+
+To that end, there are examples in the wild of building a compiler-rt
+without libc by specifying -DCOMPILER_RT_BAREMETAL_BUILD=ON.
+On Linux, this gives a builtins build with (almost) no libc dependencies.
+
+See for example:
+
+https://github.com/NixOS/nixpkgs/blob/d7fe3bcaca37e79d8b3cbde4dd69edeafbd35313/pkgs/development/compilers/llvm/common/compiler-rt/default.nix#L116-L118
+
+```
+  ] ++ lib.optionals (!haveLibc || bareMetal) [
+    "-DCMAKE_C_COMPILER_WORKS=ON"
+    "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+```
+
+The above specifies that a !haveLibc build sets
+`-DCOMPILER_RT_BAREMETAL_BUILD`, which is done for example in a `pkgsLLVM` build.
+
+AIUI, acquiring such a builtins build of compiler-rt is necessary to build a
+pure LLVM toolchain, since builtins are required to build libc (and
+libcxx is required to build a full compiler-rt).
+
+The effect of falling back to unimplemented is that this early-stage
+builtins build is incapable of doing function multiversioning tests and
+falls back to behaving as-if the feature is unavailable.
+
+This behaviour changed in
+https://github.com/llvm/llvm-project/pull/119414, which introduced a
+subtle change in semantics in the removal of
+compiler-rt/lib/builtins/aarch64/sme-abi-init.c (definition of getauxval
+macro, which was bracketed by `#if defined(__linux__)`) vs the new
+definition which does not test for linux.
+
+The proposed change is reinstating things as they were before #119414.
+---
+ compiler-rt/lib/builtins/cpu_model/aarch64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/builtins/cpu_model/aarch64.c b/lib/builtins/cpu_model/aarch64.c
+index 4082fd62ea11a25..50438bcc7ddd885 100644
+--- a/lib/builtins/cpu_model/aarch64.c
++++ b/lib/builtins/cpu_model/aarch64.c
+@@ -80,7 +80,7 @@ struct {
+ #include "aarch64/fmv/getauxval.inc"
+ #elif defined(_WIN32)
+ #include "aarch64/fmv/windows.inc"
+-#elif defined(ENABLE_BAREMETAL_AARCH64_FMV)
++#elif defined(ENABLE_BAREMETAL_AARCH64_FMV) && !defined(__linux__)
+ #include "aarch64/fmv/baremetal.inc"
+ #else
+ #include "aarch64/fmv/unimplemented.inc"
+
