@@ -39,6 +39,8 @@ ignore_missing_imports = true
 
 [tool.ruff.lint]
 extend-select = [
+    # Enforce type annotations
+    "ANN",
     # don't shadow built-in names
     "A",
     # Better list/set/dict comprehensions
@@ -57,6 +59,10 @@ extend-select = [
     "PLW1510",
     # check for needless exception names in raise statements
     "TRY201",
+]
+ignore = [
+    # allow Any type
+   "ANN401"
 ]
 
 [tool.ruff.lint.per-file-ignores]
