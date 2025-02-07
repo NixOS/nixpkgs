@@ -1420,18 +1420,7 @@ final: prev:
       sha256 = "17c41flnjp25c5gry4lq8ik8mk3pbh1qwj86rby57jr4f4wvfykk";
     };
     meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-dictionary/";
-  };
-
-  blink-cmp-spell = buildVimPlugin {
-    pname = "blink-cmp-spell";
-    version = "2025-02-01";
-    src = fetchFromGitHub {
-      owner = "ribru17";
-      repo = "blink-cmp-spell";
-      rev = "38d6797dea6f72baa6e8b3bfca6da96d8fcac64d";
-      sha256 = "19pnasa446iiapgsr3z2fpk0nnrzh8g5wrzrq8n0y4q0z6spc9f6";
-    };
-    meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
+    meta.hydraPlatforms = [ ];
   };
 
   blink-cmp-git = buildVimPlugin {
@@ -1444,6 +1433,20 @@ final: prev:
       sha256 = "08hfwnjgsl88bkphpdxkdswdnc10mlxpsrk084kgzk4j19w55gyq";
     };
     meta.homepage = "https://github.com/Kaiser-Yang/blink-cmp-git/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  blink-cmp-spell = buildVimPlugin {
+    pname = "blink-cmp-spell";
+    version = "2025-02-01";
+    src = fetchFromGitHub {
+      owner = "ribru17";
+      repo = "blink-cmp-spell";
+      rev = "38d6797dea6f72baa6e8b3bfca6da96d8fcac64d";
+      sha256 = "19pnasa446iiapgsr3z2fpk0nnrzh8g5wrzrq8n0y4q0z6spc9f6";
+    };
+    meta.homepage = "https://github.com/ribru17/blink-cmp-spell/";
+    meta.hydraPlatforms = [ ];
   };
 
   blink-compat = buildVimPlugin {
@@ -1664,6 +1667,7 @@ final: prev:
       sha256 = "1s0zmpwg7z76l3ca1p426mkh33cw94m18q7rfsvnz4h4xwlsafpa";
     };
     meta.homepage = "https://github.com/kwkarlwang/bufresize.nvim/";
+    meta.hydraPlatforms = [ ];
   };
 
   bullets-vim = buildVimPlugin {
@@ -3315,6 +3319,7 @@ final: prev:
       sha256 = "06h388vkp8nv15wbh96pza85994xf979s7kjqrli4s6y5ygw6m02";
     };
     meta.homepage = "https://github.com/netmute/ctags-lsp.nvim/";
+    meta.hydraPlatforms = [ ];
   };
 
   ctrlp-cmatcher = buildVimPlugin {
@@ -8072,6 +8077,7 @@ final: prev:
       sha256 = "06d7s9949aylda4vq36h4s9hnnp3lycwm2nrjid5vxb98gy3d3xn";
     };
     meta.homepage = "https://github.com/milanglacier/minuet-ai.nvim/";
+    meta.hydraPlatforms = [ ];
   };
 
   mkdir-nvim = buildVimPlugin {
@@ -9816,6 +9822,19 @@ final: prev:
       sha256 = "0f5pdwcjhzrhgz3iz4bsq452prdq4lq6z9yjwzx3m2xgzp7kmcz1";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-dap/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-dap-cortex-debug = buildVimPlugin {
+    pname = "nvim-dap-cortex-debug";
+    version = "2024-12-01";
+    src = fetchFromGitHub {
+      owner = "jedrzejboczar";
+      repo = "nvim-dap-cortex-debug";
+      rev = "e09ad083da385fdb74f81fe808f3d2a1593d910d";
+      sha256 = "02yv6byx207wgfgsck9g25mrbqhc607cyqfvc13j0dfjc6f7lfka";
+    };
+    meta.homepage = "https://github.com/jedrzejboczar/nvim-dap-cortex-debug/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -13662,6 +13681,7 @@ final: prev:
       sha256 = "18m46gj68xv6basaqzbschr60sc9xzi4dx21cvnx401bk97cqpgi";
     };
     meta.homepage = "https://github.com/xiyaowong/telescope-emoji.nvim/";
+    meta.hydraPlatforms = [ ];
   };
 
   telescope-file-browser-nvim = buildVimPlugin {
@@ -13766,6 +13786,7 @@ final: prev:
       sha256 = "0n1mdiwkkciqpxjad1nngrc7px5yziyan0daxgs9jsgdqmy1lzp8";
     };
     meta.homepage = "https://github.com/ghassan0/telescope-glyph.nvim/";
+    meta.hydraPlatforms = [ ];
   };
 
   telescope-live-grep-args-nvim = buildVimPlugin {
@@ -14052,6 +14073,7 @@ final: prev:
       sha256 = "0bp6m6b7bsw9d4iyn1b8bw3avnvjlk7pi8h941m68fw54n3mf06f";
     };
     meta.homepage = "https://github.com/rebelot/terminal.nvim/";
+    meta.hydraPlatforms = [ ];
   };
 
   terminus = buildVimPlugin {
