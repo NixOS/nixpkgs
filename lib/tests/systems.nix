@@ -280,10 +280,13 @@ lib.runTests (
                 isCompatible = null;
               } ? ${platformAttrName};
           };
-
       })
+      # x86_64-linux is an arbitrary choice, just to get all the elaborated attrNames
       (
-        lib.systems.elaborate "x86_64-linux" # arbitrary choice, just to get all the elaborated attrNames
+        builtins.removeAttrs (lib.systems.elaborate "x86_64-linux") [
+          # Avoid the warning
+          "warnAboutPlatformEquals"
+        ]
       )
 
 )
