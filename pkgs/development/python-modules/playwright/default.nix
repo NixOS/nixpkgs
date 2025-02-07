@@ -3,7 +3,7 @@
   stdenv,
   auditwheel,
   buildPythonPackage,
-  git,
+  gitMinimal,
   greenlet,
   fetchFromGitHub,
   pyee,
@@ -22,7 +22,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.48.0";
+  version = "1.49.1";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${version}";
-    hash = "sha256-ZWVySGehR5r6s0y6qCZuFI8SobYbjWP+A6Rgfug2JEE=";
+    hash = "sha256-RwUjFofC/scwVClKncYWp3RbIUeKsWokVjcGibdrrtc=";
   };
 
   patches = [
@@ -51,12 +51,8 @@ buildPythonPackage rec {
     git config --global user.name "nixpkgs"
     git commit -m "workaround setuptools-scm"
 
-    substituteInPlace setup.py \
-      --replace "setuptools-scm==8.1.0" "setuptools-scm" \
-      --replace-fail "wheel==0.42.0" "wheel"
-
     substituteInPlace pyproject.toml \
-      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.1.0", "wheel==0.42.0", "auditwheel==5.4.0"]' \
+      --replace 'requires = ["setuptools==75.5.0", "setuptools-scm==8.1.0", "wheel==0.45.0", "auditwheel==6.1.0"]' \
                 'requires = ["setuptools", "setuptools-scm", "wheel"]'
 
     # Skip trying to download and extract the driver.
@@ -71,7 +67,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     setuptools-scm
     setuptools
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];

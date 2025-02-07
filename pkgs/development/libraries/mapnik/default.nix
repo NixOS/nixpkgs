@@ -22,7 +22,7 @@
   sqlite,
   zlib,
   catch2,
-  postgresql,
+  libpq,
   protozero,
   sparsehash,
 }:
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
     libxml2
-    postgresql
+    libpq
     protozero
     sparsehash
   ];

@@ -12,7 +12,7 @@
   openssl,
   systemd,
   mariadb-connector-c,
-  postgresql,
+  libpq,
   lua,
   openldap,
   geoip,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     mariadb-connector-c
-    postgresql
+    libpq
     lua
     openldap
     sqlite

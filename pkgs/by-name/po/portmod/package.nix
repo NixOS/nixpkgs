@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "2.6.2";
+  version = "2.8.1";
 
   src = fetchFromGitLab {
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    hash = "sha256-ufr2guaPdCvI5JOicL/lTrT3t6UlaY1hEB2xbwzhw6A=";
+    hash = "sha256-d5XNfjDgtBkNkUMhShYTjKtMbwVa2tLXdvYi6sXQmIA=";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
@@ -26,7 +26,7 @@ let
     pname = "portmod-rust";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-a6brse/qXzO7H46zUrOJzyOicKPiKGISp2VhdxAVUUI=";
+    cargoHash = "sha256-hLci2O+eliCgscvvC4ejn6ZDtFQnM5K6f0luu2cYIHM=";
 
     nativeBuildInputs = [
       python3Packages.python

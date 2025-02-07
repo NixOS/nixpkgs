@@ -1044,10 +1044,10 @@ let
     });
 
     gifski = old.gifski.overrideAttrs (attrs: {
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-tVbuYzGdBzWVeQ26Imq6y5gA0R/CjuNCZtQgfd3/qwA=";
+        hash = "sha256-yz6M3qDQPfT0HJHyK2wgzgl5sBh7EmdJ5zW8SJkk+wY=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -1061,10 +1061,10 @@ let
 
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
-        hash = "sha256-AccuRY3lfTXzaMnaYieKCEJErKo5132oSXgILbFhePI=";
+        hash = "sha256-5TV7iCzaaFwROfJNO6pvSUbJBzV+wZlU5+ZK4AMT6X0=";
       };
 
       cargoRoot = "src/rust";

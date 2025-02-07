@@ -6,6 +6,7 @@
   freezegun,
   mock,
   monotonic,
+  openai,
   pytestCheckHook,
   python-dateutil,
   requests,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "posthog";
-  version = "3.7.5";
+  version = "3.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
     tag = "v${version}";
-    hash = "sha256-zdZUlHQbSOSJhAxOY404/w7RsX8h+602A+8qmH9fQIc=";
+    hash = "sha256-s4MVpJb5sRe4TIW9Bb068JTnUkObGOG3VlbWVuPPTM4=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     mock
+    openai
     pytestCheckHook
   ];
 
@@ -57,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/releases/tag/v${version}";
+    changelog = "https://github.com/PostHog/posthog-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

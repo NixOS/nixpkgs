@@ -50,7 +50,8 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
-  cargoHash = "sha256-CgEs0cejquFRY3VN6CgbE23Gipg+LEuWp/jSIkITrjw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SigRm2ZC7jH1iCEGRpka1G/e9kBEieFVU0YDBl2LfTM=";
 
   checkFlags = [
     "--skip test_github" # requires internet

@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "great-expectations";
-  version = "1.2.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "great-expectations";
     repo = "great_expectations";
     tag = version;
-    hash = "sha256-TV07vmc0XdP6ICv7Kws79zACCsahZ6FlhplJHbpDFNk=";
+    hash = "sha256-MV6T8PyOyAQ2SfT8B38YdCtqj6oeZCW+z08koBR739A=";
   };
 
   postPatch = ''
@@ -131,7 +131,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for writing unit tests for data validation";
     homepage = "https://docs.greatexpectations.io";
-    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${version}";
+    changelog = "https://github.com/great-expectations/great_expectations/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

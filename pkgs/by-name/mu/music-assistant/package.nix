@@ -4,7 +4,7 @@
   fetchFromGitHub,
   ffmpeg-headless,
   nixosTests,
-  substituteAll,
+  replaceVars,
   providers ? [ ],
 }:
 
@@ -12,7 +12,34 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
+      aiojellyfin = super.aiojellyfin.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.1";
+
+        src = fetchFromGitHub {
+          owner = "Jc2k";
+          repo = "aiojellyfin";
+          tag = "v${version}";
+          hash = "sha256-A+uvM1/7HntRMIdknfHr0TMGIjHk7BCwsZopXdVoEO8=";
+        };
+      });
+
       music-assistant-frontend = self.callPackage ./frontend.nix { };
+
+      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.4";
+
+        src = fetchFromGitHub {
+          owner = "music-assistant";
+          repo = "models";
+          tag = version;
+          hash = "sha256-keig18o32X53q/QcoaPO0o9AT4XTEZ+dQ3L6u6BVkLU=";
+        };
+
+        postPatch = ''
+          substituteInPlace pyproject.toml \
+            --replace-fail "0.0.0" "${version}"
+        '';
+      });
     };
   };
 
@@ -27,19 +54,18 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.3.4";
+  version = "2.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-HV2R5zMTao8akUNZMGRKbU8BIxWmdjKFLsGMqA5cfBs=";
+    hash = "sha256-CSGpG1E4ou1TGz/S1mXFHyk49p7dStEwxUTB+xxfNEc=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg.patch;
+    (replaceVars ./ffmpeg.patch {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
@@ -59,6 +85,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "certifi"
     "colorlog"
     "cryptography"
     "mashumaro"
@@ -112,6 +139,7 @@ python.pkgs.buildPythonApplication rec {
       aiojellyfin
       pytest-aiohttp
       pytest-cov-stub
+      pytest-timeout
       pytestCheckHook
       syrupy
       pytest-timeout
@@ -119,8 +147,10 @@ python.pkgs.buildPythonApplication rec {
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    # blocks in setup
-    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+    # blocks in poll()
+    "--deselect=tests/providers/jellyfin/test_init.py::test_initial_sync"
+    "--deselect=tests/core/test_server_base.py::test_start_and_stop_server"
+    "--deselect=tests/core/test_server_base.py::test_events"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

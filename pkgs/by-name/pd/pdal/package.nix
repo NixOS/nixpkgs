@@ -18,7 +18,7 @@
 , libxml2
 , openscenegraph
 , pkg-config
-, postgresql
+, libpq
 , proj
 , sqlite
 , tiledb
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libxml2
     openscenegraph
-    postgresql
+    libpq
     proj
     sqlite
     tiledb

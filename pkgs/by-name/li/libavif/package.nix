@@ -8,6 +8,7 @@
   zlib,
   libpng,
   libjpeg,
+  libwebp,
   dav1d,
   libyuv,
   gdk-pixbuf,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
     "-DAVIF_BUILD_GDK_PIXBUF=ON"
+    "-DAVIF_LIBSHARPYUV=SYSTEM"
   ];
 
   nativeBuildInputs = [
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
     zlib
     libpng
     libjpeg
+    libwebp
   ];
 
   propagatedBuildInputs = [

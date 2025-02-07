@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   # pytest can already use xdist at this point
   preCheck = ''
-    appendToVar pytestFlagsArray "--numprocesses=$NIX_BUILD_CORES"
+    appendToVar pytestFlags "--numprocesses=$NIX_BUILD_CORES"
   '';
 
   # access file system

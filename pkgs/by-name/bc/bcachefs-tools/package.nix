@@ -70,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-rO4AjCnxmHQPk0hxgXK4yxUK5eag/+Q+fRG/BsRi0i0=";
+    hash = "sha256-xP3V3Cqb+F33I1fVhp7ru/qBl22ww4oZDUCb1OHBiag=";
   };
 
   makeFlags = [

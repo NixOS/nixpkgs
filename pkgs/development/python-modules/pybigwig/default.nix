@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pybigwig";
-  version = "0.3.23";
+  version = "0.3.24";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "deeptools";
     repo = "pyBigWig";
     tag = version;
-    hash = "sha256-ch9nZrQAnzFQQ62/NF4J51pV4DQAbVq4/f/6LaXf5hM=";
+    hash = "sha256-gK3cOwbvQtf+g1H/4x69swqCFdkBwpV7ZOrbE0eANh0=";
   };
 
   buildInputs = [ zlib ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
       libBigWig for local and remote file access.
     '';
     homepage = "https://github.com/deeptools/pyBigWig";
-    changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${version}";
+    changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ scalavision ];
   };

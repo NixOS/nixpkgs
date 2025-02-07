@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-npkQEr1tzY+CW9dDRe+JipXnWa5y38wv7J+kUMlcH54=";
   };
 
-  cargoHash = "sha256-AQNbiK7cn0R/DsW1RjKFX3hV3MBX9izPsljJU7yNDV0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-k4EakfuONQxj9jz39pnyp3Ofu+V/oyIFLHpfQqg0q+8=";
 
   meta = {
     description = "Backend and Storages for zenoh using InfluxDB";

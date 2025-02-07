@@ -10,6 +10,7 @@
 
   # buildInputs
   libiconv,
+  openssl,
   protobuf,
   darwin,
 
@@ -35,23 +36,27 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.18.2";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-CIIZbeRrraTqWronkspDpBVP/Z4JVoaiS5iBIXfsZGg=";
+    hash = "sha256-UOrkVHgTX1JK6chYJ6I+VJUquwsKLnOI5solS9W21HY=";
   };
 
-  buildAndTestSubdir = "python";
+  sourceRoot = "${src.name}/python";
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-D9+rKV4rF5AVMxFfEohHufHC2mO75M80TuZaHDI0XMU=";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -59,11 +64,15 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  build-system = [ rustPlatform.maturinBuildHook ];
+  build-system = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
 
   buildInputs =
     [
       libiconv
+      openssl
       protobuf
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
@@ -98,7 +107,7 @@ buildPythonPackage rec {
   ] ++ optional-dependencies.torch;
 
   preCheck = ''
-    cd python/python/tests
+    cd python/tests
   '';
 
   disabledTests =
@@ -115,15 +124,12 @@ buildPythonPackage rec {
     ++ [
       # incompatible with duckdb 1.1.1
       "test_duckdb_pushdown_extension_types"
+      # Writes to read-only build directory
+      "test_add_data_storage_version"
+      "test_fix_data_storage_version"
     ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--generate-lockfile"
-      "--lockfile-metadata-path"
-      "python"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python wrapper for Lance columnar format";

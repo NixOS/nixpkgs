@@ -20,6 +20,9 @@
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -2348,6 +2351,12 @@
   ],
   "using-predefined-android-package-compositions": [
     "index.html#using-predefined-android-package-compositions"
+  ],
+  "astal": [
+    "index.html#astal"
+  ],
+  "astal-bundling": [
+    "index.html#astal-bundling"
   ],
   "spawning-emulator-instances": [
     "index.html#spawning-emulator-instances"

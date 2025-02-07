@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fNsiM9B3E34x8m+RuVlZXIhsoB0JaxloAUfa0RmXobQ=";
   };
 
-  cargoHash = "sha256-SVinnMapZ2mFvihYYuBpvyzXQsnwBrpazk/yhSa++8g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uF2FoDgQQjLAiI2bjtLKmGxRINdF6RHSXR8j0TWDXkU=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 

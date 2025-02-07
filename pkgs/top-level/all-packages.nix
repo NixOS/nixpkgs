@@ -1044,9 +1044,7 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
-  nominatim = callPackage ../servers/nominatim {
-    postgresql = postgresql_14;
-  };
+  nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
@@ -1669,9 +1667,9 @@ with pkgs;
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
   freshBootstrapTools = if stdenv.hostPlatform.isDarwin then
     callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
-      localSystem = { config = lib.systems.parse.tripleFromSystem stdenv.buildPlatform; };
+      localSystem = stdenv.buildPlatform;
       crossSystem =
-        if stdenv.buildPlatform == stdenv.hostPlatform then null else { config = lib.systems.parse.tripleFromSystem stdenv.hostPlatform; };
+        if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
     }
   else if stdenv.hostPlatform.isLinux then
     callPackage ../stdenv/linux/make-bootstrap-tools.nix {}
@@ -5760,6 +5758,7 @@ with pkgs;
     crystal_1_11
     crystal_1_12
     crystal_1_14
+    crystal_1_15
     crystal;
 
   crystalline = callPackage ../development/tools/language-servers/crystalline {
@@ -6573,11 +6572,11 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_83 = callPackage ../development/compilers/rust/1_83.nix {
+  rust_1_84 = callPackage ../development/compilers/rust/1_84.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_19 = llvmPackages_19.libllvm;
   };
-  rust = rust_1_83;
+  rust = rust_1_84;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -6585,8 +6584,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_83 = rust_1_83.packages.stable;
-  rustPackages = rustPackages_1_83;
+  rustPackages_1_84 = rust_1_84.packages.stable;
+  rustPackages = rustPackages_1_84;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -8876,10 +8875,6 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gd = callPackage ../development/libraries/gd {
-    automake = automake115x;
-  };
-
   gdal = callPackage ../development/libraries/gdal { };
 
   gdalMinimal = callPackage ../development/libraries/gdal {
@@ -10843,26 +10838,17 @@ with pkgs;
         stdenv;
   };
 
-  # requires a newer Apple SDK
-  zig_0_9 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.9 {
-    llvmPackages = llvmPackages_13;
-  };
-  # requires a newer Apple SDK
-  zig_0_10 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.10 {
-    llvmPackages = llvmPackages_15;
-  };
-  # requires a newer Apple SDK
-  zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11 {
-    llvmPackages = llvmPackages_16;
-  };
-  # requires a newer Apple SDK
-  zig_0_12 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.12 {
-    llvmPackages = llvmPackages_17;
-  };
-  # requires a newer Apple SDK
-  zig_0_13 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.13 {
-    llvmPackages = llvmPackages_18;
-  };
+  inherit (rec {
+    zigPackages = recurseIntoAttrs (callPackage ../development/compilers/zig {});
+
+    zig_0_11 = zigPackages."0.11";
+    zig_0_12 = zigPackages."0.12";
+    zig_0_13 = zigPackages."0.13";
+  }) zigPackages
+     zig_0_11
+     zig_0_12
+     zig_0_13;
+
   zig = zig_0_13;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
@@ -11075,7 +11061,12 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_11;
+  sbcl_2_5_0 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.0"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_5_0;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -11647,6 +11638,8 @@ with pkgs;
 
   postgresqlVersions = import ../servers/sql/postgresql pkgs;
   inherit (postgresqlVersions)
+    libpq
+
     postgresql_13
     postgresql_14
     postgresql_15
@@ -17717,7 +17710,7 @@ with pkgs;
                 [(
                   { lib, ... }: {
                     config.nixpkgs.pkgs = lib.mkDefault pkgs;
-                    config.nixpkgs.localSystem = lib.mkDefault ({ config = lib.systems.parse.tripleFromSystem stdenv.hostPlatform; });
+                    config.nixpkgs.localSystem = lib.mkDefault stdenv.hostPlatform;
                   }
                 )] ++ (
                   if builtins.isList configuration

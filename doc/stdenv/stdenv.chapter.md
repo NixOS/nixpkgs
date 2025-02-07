@@ -330,7 +330,7 @@ let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 dep(h0, t0, A, B)
 propagated-dep(h1, t1, B, C)
 h0 + h1 in {-1, 0, 1}
-h0 + t1 in {-1, 0, -1}
+h0 + t1 in {-1, 0, 1}
 ----------------------------- Take immediate dependencies' propagated dependencies
 propagated-dep(mapOffset(h0, t0, h1),
                mapOffset(h0, t0, t1),
@@ -343,7 +343,7 @@ propagated-dep(h, t, A, B)
 dep(h, t, A, B)
 ```
 
-Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the target offset: `t = h + 1`. That means that:
+Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the host offset: `t = h + 1`. That means that:
 
 ```
 let f(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -1370,6 +1370,20 @@ This setup hook moves any libraries installed in the `lib64/` subdirectory into 
 This setup hook moves any systemd user units installed in the `lib/` subdirectory into `share/`. In addition, a link is provided from `share/` to `lib/` for compatibility. This is needed for systemd to find user services when installed into the user profile.
 
 This hook only runs when compiling for Linux.
+
+### `no-broken-symlinks.sh` {#no-broken-symlinks.sh}
+
+This setup hook checks for, reports, and (by default) fails builds when "broken" symlinks are found. A symlink is considered "broken" if it's dangling (the target doesn't exist) or reflexive (it refers to itself).
+
+This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
+
+::: {.note}
+The hook only considers symlinks with targets inside the Nix store.
+:::
+
+::: {.note}
+The check for reflexivity is direct and does not account for transitivity, so this hook will not prevent cycles in symlinks.
+:::
 
 ### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 

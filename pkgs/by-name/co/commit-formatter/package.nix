@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "EYzhb9jJ4MzHxIbaTb1MxeXUgoxTwcnq5JdxAv2uNcA=";
   };
 
-  cargoHash = "sha256-AeHQCoP1HOftlOt/Yala3AXocMlwwIXIO2i1AsFSvGQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uW+mmArQZ5Pl2TlKIRd00dB6615Nn/Q8KtRE/ahl5V4=";
 
   meta = with lib; {
     description = "CLI tool to help you write git commit";

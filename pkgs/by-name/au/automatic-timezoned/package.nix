@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xXTm7/NS9XJRX/MQld7+GVOum9iW0wYfvaEve7K5cIk=";
   };
 
-  cargoHash = "sha256-WH2voVKUip5T9a4vVhe0N8YhuAiXD1JMyaIJ3lHWcrY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Zd4LUXPrRhz4r8C/BqnWnJOHYCnbO7uz9sqVi8hVKFI=";
 
   meta = with lib; {
     description = "Automatically update system timezone based on location";

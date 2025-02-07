@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.0.2";
+  version = "11.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-qcsPOISQjHVHh4TrQ/UihZaxB/jWBfq7AVI4U1gQPVs=";
+    hash = "sha256-8PqyxTwDk8pJjBh+NUB5BkuTeeA51gxmzqT450Y1d4Q=";
   };
 
   pythonRelaxDeps = [
@@ -151,7 +151,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

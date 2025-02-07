@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage rec {
       frameworks.AppKit
     ]
   );
-  cargoHash = "sha256-rS4P4CJ1V1Bq4lsprYEWhff9b1EqQ/6ytyjJs9DCrY0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bRznReljcnRRn2PsOukFHV634CkBByJZxJVyGL4f/10=";
 
   meta = {
     homepage = "https://github.com/sarub0b0/kubetui";

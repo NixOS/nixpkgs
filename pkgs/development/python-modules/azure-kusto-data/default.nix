@@ -69,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Kusto Data Client";
     homepage = "https://pypi.org/project/azure-kusto-data/";
-    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/v${version}";
+    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "src/icalendar" ];
 
   meta = with lib; {
-    changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";

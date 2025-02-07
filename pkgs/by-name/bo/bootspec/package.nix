@@ -26,7 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   ];
 
-  cargoHash = "sha256-eGSKVHjPnHK7WyGkO5LIjocNGHawahYQR3H5Lgk1C9s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-65jk8UlXZgQoxuwRcGlMnI4e+LpCJuP2TaqK+Kn4GnQ=";
 
   meta = with lib; {
     description = "Implementation of RFC-0125's datatype and synthesis tooling";

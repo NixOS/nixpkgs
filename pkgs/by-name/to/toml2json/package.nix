@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9q2HtNzsRO0/5gcmxUfWuQlWsfvw/A21WEXZlifCUjY=";
   };
 
-  cargoHash = "sha256-laOM7LpmsCpLcm4kPRsJiXHoKR58RCuQxVO5Z78beWI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IglwVFTKOQFln/LE76+QM4P0J9dDM83jSAF6jGGNLEg=";
 
   meta = with lib; {
     description = "Very small CLI for converting TOML to JSON";

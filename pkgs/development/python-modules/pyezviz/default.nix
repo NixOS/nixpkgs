@@ -40,6 +40,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyezviz" ];
 
+  # renamed to pyezvizapi
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";
     homepage = "https://github.com/baqs/pyEzviz/";

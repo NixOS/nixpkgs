@@ -61,11 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SfKaCpL0wtGaLLQelqsvzn61veQYUMipFPz2VeMRCUQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-pTd3H4ZYwsCb4C6gijE0gRWZ4Mq6gGGmwXE3nKGILhw=";
-    # TODO: move this to fetchCargoTarball
+    hash = "sha256-cO79X3M0B6WN4w0JeBh00EyaIdHcthOkeKhaYdTn2BQ=";
     dontConfigure = true;
   };
 

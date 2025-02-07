@@ -187,7 +187,8 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    cargoHash = "sha256-2KnfLNVw48VVQ1Ec8MS2MaiA3BpGeFd/uIrJRHhaJR8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-E89E/LWBPHtb6vX94swodmE+UrWMrzQnm8AO5GeyuoA=";
 
     patches = [
       # Override version string with hardcoded value as it may be outdated upstream.
