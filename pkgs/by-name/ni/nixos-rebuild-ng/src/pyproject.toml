@@ -45,6 +45,8 @@ extend-select = [
     "UP",
     # detect common sources of bugs
     "B",
+    # Ruff specific rules
+    "RUF",
     # require `check` argument for `subprocess.run`
     "PLW1510",
     # check for needless exception names in raise statements
