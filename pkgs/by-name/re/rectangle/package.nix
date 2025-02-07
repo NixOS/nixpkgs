@@ -22,8 +22,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications
-    mv Rectangle.app $out/Applications
+    mkdir -p "$out/Applications"
+    mv Rectangle.app "$out/Applications"
 
     runHook postInstall
   '';
