@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "2.0.13";
+  version = "0.1.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpointpostgres==${version}";
-    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
+    tag = "sdk==${version}";
+    hash = "sha256-mG04V36Aa5Df5pUgr+xWej8i2XYx+O/N61sSzxwN9Go=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -54,12 +54,15 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
       nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
+
+    # multiple tags confuse the bulk updater
+    skipBulkUpdate = true;
   };
 
   meta = {
     description = "SDK for interacting with the LangGraph Cloud REST API";
     homepage = "https://github.com/langchain-ai/langgraphtree/main/libs/sdk-py";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
