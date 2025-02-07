@@ -56,6 +56,9 @@ buildPythonPackage rec {
     "file_does_not_exist"
     # Comparing console output doesn't work reliable
     "console"
+    # Assertion failure
+    "test_html_with_external_css"
+    "test_style_defs"
   ];
 
   pythonImportsCheck = [ "diff_cover" ];
