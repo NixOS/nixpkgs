@@ -54,6 +54,9 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
       nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
+
+    # multiple tags confuse the bulk updater
+    skipBulkUpdate = true;
   };
 
   meta = {
