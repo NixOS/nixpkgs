@@ -22,7 +22,6 @@
 stdenv.mkDerivation {
   pname = "ilia";
   version = "3.1";
-  
   src = fetchFromGitHub {
     owner = "regolith-linux";
     repo = "ilia";
