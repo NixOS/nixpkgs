@@ -12,7 +12,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = finalAttrs.pname;
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-6T7AksvBxUpv8TkPicnlCE5KZS/ydPB5Bq1MJcWoZds=";
   };
 
