@@ -10,6 +10,12 @@
   setuptools,
 }:
 
+let
+  zbar' = zbar.override {
+    enableVideo = false;
+    withXorg = false;
+  };
+in
 buildPythonPackage rec {
   pname = "pyzbar";
   version = "0.1.9";
@@ -24,7 +30,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs = [ zbar ];
+  buildInputs = [ zbar' ];
 
   dependencies = [
     pillow
@@ -39,7 +45,7 @@ buildPythonPackage rec {
     substituteInPlace pyzbar/zbar_library.py \
       --replace-fail \
         "find_library('zbar')" \
-        '"${lib.getLib zbar}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}"'
+        '"${lib.getLib zbar'}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   disabledTests = [
