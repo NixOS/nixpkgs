@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   llvmPackages,
+  xcbuild,
   targetPackages,
   libxml2,
   zlib,
@@ -30,10 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = args.patches or [ ];
 
-  nativeBuildInputs = [
-    cmake
-    (lib.getDev llvmPackages.llvm.dev)
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      (lib.getDev llvmPackages.llvm.dev)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # provides xcode-select, which is required for SDK detection
+      xcbuild
+    ];
 
   buildInputs =
     [
@@ -81,16 +87,28 @@ stdenv.mkDerivation (finalAttrs: {
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
   # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch =
-    if lib.versionAtLeast finalAttrs.version "0.12" then
-      ''
-        substituteInPlace lib/std/zig/system.zig \
-          --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
-      ''
-    else
-      ''
-        substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
-          --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
-      '';
+    let
+      zigSystemPath =
+        if lib.versionAtLeast finalAttrs.version "0.12" then
+          "lib/std/zig/system.zig"
+        else
+          "lib/std/zig/system/NativeTargetInfo.zig";
+    in
+    ''
+      substituteInPlace ${zigSystemPath} \
+        --replace-fail "/usr/bin/env" "${lib.getExe' coreutils "env"}"
+    ''
+    # Zig tries to access xcrun and xcode-select at the absolute system path to query the macOS SDK
+    # location, which does not work in the darwin sandbox.
+    # Upstream issue: https://github.com/ziglang/zig/issues/22600
+    # Note that while this fix is already merged upstream and will be included in 0.14+,
+    # we can't fetchpatch the upstream commit as it won't cleanly apply on older versions,
+    # so we substitute the paths instead.
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder finalAttrs.version "0.14") ''
+      substituteInPlace lib/std/zig/system/darwin.zig \
+        --replace-fail /usr/bin/xcrun xcrun \
+        --replace-fail /usr/bin/xcode-select xcode-select
+    '';
 
   postBuild =
     if lib.versionAtLeast finalAttrs.version "0.13" then
