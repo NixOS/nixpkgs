@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   pnpm_8,
+  nixosTests,
 }:
 stdenv.mkDerivation rec {
   pname = "it-tools";
@@ -43,6 +44,11 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    it-tools-nginx = nixosTests.it-tools.nginx;
+    it-tools-caddy = nixosTests.it-tools.caddy;
+  };
 
   meta = {
     description = "Self-hostable website containing handy tools for developers, with great UX";
