@@ -41,6 +41,8 @@ ignore_missing_imports = true
 extend-select = [
     # ensure imports are sorted
     "I",
+    # Automatically upgrade syntax for newer versions
+    "UP",
     # require `check` argument for `subprocess.run`
     "PLW1510",
     # check for needless exception names in raise statements

@@ -3,9 +3,10 @@ import logging
 import os
 import shlex
 import subprocess
+from collections.abc import Sequence
 from dataclasses import dataclass
 from getpass import getpass
-from typing import Final, Self, Sequence, TypedDict, Unpack
+from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
 
