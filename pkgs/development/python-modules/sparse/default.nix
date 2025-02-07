@@ -59,5 +59,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = [ ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }
