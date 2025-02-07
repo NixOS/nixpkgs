@@ -59,6 +59,8 @@ extend-select = [
     "PLW1510",
     # check for needless exception names in raise statements
     "TRY201",
+    # Pythonic naming conventions
+    "N",
 ]
 ignore = [
     # allow Any type
