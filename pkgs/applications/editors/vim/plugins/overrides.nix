@@ -3146,6 +3146,10 @@ in
     ];
   };
 
+  telescope-emoji-nvim = super.telescope-emoji-nvim.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
+  };
+
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs {
     dependencies = with self; [
       sqlite-lua
@@ -3205,6 +3209,10 @@ in
       plenary-nvim
       telescope-nvim
     ];
+  };
+
+  telescope-glyph-nvim = super.telescope-github-nvim.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
   };
 
   telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs {

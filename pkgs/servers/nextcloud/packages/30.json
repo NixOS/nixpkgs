@@ -1,4 +1,14 @@
 {
+  "app_api": {
+    "hash": "sha256-Ke0uGO+57JG39OoQdi+xa/w+l9ldhp2ZRy6bzJXv65g=",
+    "url": "https://github.com/cloud-py-api/app_api/releases/download/v3.2.0/app_api-v3.2.0.tar.gz",
+    "version": "3.2.0",
+    "description": "### Boost your Nextcloud with AppAPI and its specially designed applications.\n\n\nThe AppAPI is a project within the Nextcloud ecosystem designed to streamline and enhance the process of\napplication development, deployment, and management.\n\nIt introduces a new methodology that allows developers to create\napplications using a variety of programming languages, not limited to PHP, which was traditionally used in Nextcloud development.\n\n### Bundled App\n\n**Starting with Nextcloud 30.0.1, this application is included in the default Nextcloud package.**\n\n### Support\n\nWe appreciate any support for this project:\n\n- ⭐ Star our work on GitHub\n- ❗ Create an Issue or feature request\n- 💁 Resolve an Issue and create a Pull Request\n- 🧑‍💻 Develop your own application using AppAPI\n\nWe are genuinely excited about the future of the AppAPI project and its potential to transform\nthe way applications are developed and experienced within Nextcloud.\n\nAs we embark on this journey, we warmly invite you - developers, thinkers, creators, and visionaries -\nto join us in shaping a more versatile, stable, and secure app landscape.\n\n*Your insights, suggestions, and contributions are invaluable to us.*",
+    "homepage": "https://github.com/nextcloud/app_api",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "bookmarks": {
     "hash": "sha256-KsRj0AjSQ1Z7ej+BPWLqP2LMGg7NnL7o8/mI4mTNJRs=",
     "url": "https://github.com/nextcloud/bookmarks/releases/download/v15.0.5/bookmarks-15.0.5.tar.gz",
@@ -79,12 +89,32 @@
       "agpl"
     ]
   },
+  "files_automatedtagging": {
+    "hash": "sha256-eXLTCtdIW/D0nigyYKnHj9iFQNAxWs8F46vivCUgVYs=",
+    "url": "https://github.com/nextcloud-releases/files_automatedtagging/releases/download/v1.20.0/files_automatedtagging-v1.20.0.tar.gz",
+    "version": "1.20.0",
+    "description": "An app for Nextcloud that automatically assigns tags to newly uploaded files based on some conditions.\n\nThe tags can later be used to control retention, file access, automatic script execution and more.\n\n## How it works\nTo define tags, administrators can create and manage a set of rule groups. Each rule group consists of one or more rules combined through operators. Rules can include criteria like file type, size, time and more. A request matches a group if all rules evaluate to true. On uploading a file all defined groups are evaluated and when matching, the given tags are assigned to the file.",
+    "homepage": "https://github.com/nextcloud/files_automatedtagging",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "files_mindmap": {
     "hash": "sha256-SRHkK3oaSEBsrQPhjgWy9WSliubYkrOc89lix5O/fZM=",
     "url": "https://github.com/ACTom/files_mindmap/releases/download/v0.0.33/files_mindmap-0.0.33.tar.gz",
     "version": "0.0.33",
     "description": "This application enables Nextcloud users to open, save and edit mind map files in the web browser. If enabled, an entry in the New button at the top of the web browser the Mindmap file entry appears. When clicked, a new mindmap file opens in the browser and the file can be saved into the current Nextcloud directory.",
     "homepage": "https://github.com/ACTom/files_mindmap",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "files_retention": {
+    "hash": "sha256-krJOb925AjmnwmkFYg00eC4KmICr4Tf3jUANYWTRJdA=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v1.19.0/files_retention-v1.19.0.tar.gz",
+    "version": "1.19.0",
+    "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
+    "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
       "agpl"
     ]
@@ -125,6 +155,16 @@
     "version": "1.17.1",
     "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
     "homepage": "https://github.com/nextcloud/impersonate",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "integration_deepl": {
+    "hash": "sha256-FKlu1tlA/GxAHKFu4kfq8CsDvBrnMnLKDizisgb0IOQ=",
+    "url": "https://github.com/nextcloud-releases/integration_deepl/releases/download/v1.3.1/integration_deepl-v1.3.1.tar.gz",
+    "version": "1.3.1",
+    "description": "Deepl integration providing an translations through deepl.com with Nextcloud\n\nThis app integrates with [Nextcloud Assistant](https://apps.nextcloud.com/apps/assistant) to offer translation services We recommend to install Assistant additionally and activate Deepl as translation provider in the Artifical Intelligence admin settings.\n\nThis app also integrates with the translation API of Nextcloud server to offer translation services without Assistant. Currently this is available in Text and Talk.\n\nTo run translations and any other Task Processing tasks synchronously, run the following command in a background process (10 is the interval in seconds when the process should relaunch to use the latest php changes):\n\n```sh\nset -e; while true; do occ background-job:worker -v -t 10 \"OC\\TaskProcessing\\SynchronousBackgroundJob\"; done\n```\n\n## Ethical AI Rating\n### Rating: 🔴\n\nNegative:\n* the software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be ran on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
+    "homepage": "https://github.com/nextcloud/integration_deepl",
     "licenses": [
       "agpl"
     ]
@@ -250,19 +290,29 @@
     ]
   },
   "qownnotesapi": {
-    "hash": "sha256-ydz8e8ZOLOT60yt55DI0gGpSaLz9sCz5Zyt1jhMYIv0=",
-    "url": "https://github.com/pbek/qownnotesapi/releases/download/v24.11.0/qownnotesapi-nc.tar.gz",
-    "version": "24.11.0",
+    "hash": "sha256-P0wtnv2J0Q80ws/ih6xg7x16J87Oq5/oRVNQKg4wicU=",
+    "url": "https://github.com/pbek/qownnotesapi/releases/download/v25.2.0/qownnotesapi-nc.tar.gz",
+    "version": "25.2.0",
     "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
     "homepage": "https://github.com/pbek/qownnotesapi",
     "licenses": [
       "agpl"
     ]
   },
+  "quota_warning": {
+    "hash": "sha256-hQpbARBAKYakjwp/LGYMIFhjVRxqfQj36x6QF8HIfEA=",
+    "url": "https://github.com/nextcloud-releases/quota_warning/releases/download/v1.20.0/quota_warning-v1.20.0.tar.gz",
+    "version": "1.20.0",
+    "description": "This app sends notifications to users when they reached 85, 90 and 95% of their quota (checked once a day).\nIn addition an email can be sent to the users. The three percentages can be changed in the admin settings.\nIt is also possible to have a link in the email and the notification for upsell options.",
+    "homepage": "https://github.com/nextcloud/quota_warning",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "registration": {
-    "hash": "sha256-LHrs6kCawIj7Te/OftUOEw8khgGnAP0nm9y/JaP8KkE=",
-    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.5.0/registration-v2.5.0.tar.gz",
-    "version": "2.5.0",
+    "hash": "sha256-1Y1mZWqaJu8Xtwbo8ziqzzdszNNoiWJLO3Sy5Ko7rys=",
+    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.6.0/registration-v2.6.0.tar.gz",
+    "version": "2.6.0",
     "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
     "homepage": "https://github.com/nextcloud/registration",
     "licenses": [
@@ -275,6 +325,16 @@
     "version": "8.5.3",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "sociallogin": {
+    "hash": "sha256-P9OBXDW3+iOtC9/dQ/M89YxY3OQ0u5I8Z1XQLvYznEo=",
+    "url": "https://github.com/zorn-v/nextcloud-social-login/releases/download/v5.8.4/release.tar.gz",
+    "version": "5.8.4",
+    "description": "# Social login\n\nMake possible create users and login via Telegram, OAuth or OpenID\n\nFor OAuth you must create app for certain providers. Login button appear at login page if app id specified. Settings are in \"Social login\" section of settings page.\n\n## Installation\n\nLogin to your NextCloud installation as an administrator and under \"Apps\" click \"Download and enable\" next to the \"Social Login\" app.\n\nSee below for setup and configuration instructions.\n\n\n\n## Custom OAuth2/OIDC groups\n\nYou can use groups from your custom provider. For that you should specify \"Groups claim\" in custom OAuth2/OIDC provider settings. That claim should be returned from provider in `id_token` or at user info endpoint. Format should be `array` or comma separated string. Eg (with claim named `roles`)\n\n```json\n{\"roles\": [\"admin\", \"user\"]}\n```\nor\n```json\n{\"roles\": \"admin,user\"}\n```\n\nAlso nested claims is supported. For example `resource_access.client-id.roles` for\n\n```json\n\"resource_access\": {\n   \"client-id\": {\n     \"roles\": [\n       \"client-role-1\",\n       \"client-role-2\"\n     ]\n   }\n}\n```\n\nThere is also support for setting the displayName:\n```\n{\"roles\": [{gid: 1, displayName: \"admin\"}, {gid: 2, displayName: \"user\"}]}\n```\n\n\nYou can use provider groups in two ways:\n\n1. Map provider groups to existing nextcloud groups\n2. Create provider groups in nextcloud and associate it to user (if appropriate option specified)\n\nIf you want sync groups on every login do not forget to check \"Update user profile every login\" setting\n\n## Examples for groups\n\n* You can find example how to configure WSO2IS for return roles claim with OIDC [here](https://medium.com/@dewni.matheesha/claim-mapping-and-retrieving-end-user-information-in-wso2is-cffd5f3937ff)\n* [GitLab OIDC allowing specific GitLab groups](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/gitlab.md)\n\n## Built-in OAuth providers\n\nYou can copy link of certain login button to get proper \"redirect url\" for OAuth app setting.\n\n* [Google](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/google.md)\n* [Amazon](https://developer.amazon.com/loginwithamazon/console/site/lwa/overview.html)\n* [Facebook](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/facebook.md)\n* [Twitter](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/twitter.md)\n* [GitHub](https://github.com/settings/developers)\n* [Discord](#configure-discord)\n* [Telegram](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/telegram.md)\n* PlexTv - you can use any title as app id\n* [Codeberg](https://github.com/zorn-v/nextcloud-social-login/blob/master/docs/sso/codeberg.md)\n\nDetails about \"Allow login only from specified domain\" google setting you can find here [#44](https://github.com/zorn-v/nextcloud-social-login/issues/44)\nYou can use comma separated list for multiple domains\n\n## Config\n\nYou can use `'social_login_auto_redirect' => true` setting in `config.php` for auto redirect unauthorized users to social login if only one provider is configured.\nIf you want to temporary disable this function (e.g. for login as local admin), you can add `noredir=1` query parameter in url for login page. Something like `https://cloud.domain.com/login?noredir=1`\n\nTo set options for http client, you can use\n```php\n  'social_login_http_client' => [\n    'timeout' => 45,\n    'proxy' => 'socks4://127.0.0.1:9050', // Check https://curl.se/libcurl/c/CURLOPT_PROXY.html for allowed variants\n  ],\n```\nin `config.php`\n\n### Configurate a provider via CLI\n\nYou can configure everything from commandline by using the occ utility. To setup a oidc-provider replace the variables and URLs with values that match your deployment.\n```bash\nphp occ config:app:set sociallogin custom_providers --value='{\"custom_oidc\": [{\"name\": \"gitlab_oidc\", \"title\": \"Gitlab\", \"authorizeUrl\": \"https://gitlab.my-domain.org/oauth/authorize\", \"tokenUrl\": \"https://gitlab.my-domain.org/oauth/token\", \"userInfoUrl\": \"https://gitlab.my-domain.org/oauth/userinfo\", \"logoutUrl\": \"\", \"clientId\": \"$my_application_id\", \"clientSecret\": \"$my_super_secret_secret\", \"scope\": \"openid\", \"groupsClaim\": \"groups\", \"style\": \"gitlab\", \"defaultGroup\": \"\"}]}'\n```\nto do this with docker you just need to add `docker exec -t -uwww-data CONTAINER_NAME` in front of the command, or run it interactively from `docker exec -it -uwww-data CONTAINER_NAME sh`\n\nTo find out how to configure other providers, just configure them in the GUI and take a look at the database afterwards:\n```\nmysql -u nextcloud -p nextcloud\nPassword: <yourpassword>\n\n> SELECT * FROM oc_appconfig WHERE appid='sociallogin';\n```\n\nOr just run\n\n`docker exec -t -uwww-data CONTAINER_NAME php occ config:app:get sociallogin custom_providers`\n\n### Configure Discord\n\nTo properly configure discord you have to:\n\n1. Create new discord application on [DiscordApp developers](https://discordapp.com/developers/applications/me#top)\n2. Open tab `Settings -> OAuth2 -> General`. In `Redirects` add new redirection link looking like this: `https://nextcloud.mydomain.com/apps/sociallogin/oauth/discord`.\n3. Copy `CLIENT ID` and generate and copy `CLIENT SECRET`\n4. Open in Nextcloud `Settings -> Social Login` and paste `CLIENT ID` into field `App id` and `CLIENT SECRET` into `Secret`.\n5. Select default group for users created this way.\n6. For group mapping check [#395](https://github.com/zorn-v/nextcloud-social-login/pull/395)\n\n## Hint\n\n### About Callback(Reply) Url\nYou can copy link from specific login button on login page and paste it on provider's website as callback url. To make proper button visible, just fill certain provider settings with random data and change it later.\n\nSome users may get strange reply(Callback) url error from provider even if you pasted the right url, that's because your nextcloud server may generate http urls when you are actually using https.\nPlease set 'overwriteprotocol' => 'https', in your config.php file.",
+    "homepage": "https://github.com/zorn-v/nextcloud-social-login",
     "licenses": [
       "agpl"
     ]
