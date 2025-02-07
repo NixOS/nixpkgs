@@ -15,7 +15,7 @@ php.buildComposerProject2 (finalAttrs: {
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aX3DMy9Jv8rNp1/VIvUtNXYXGBrCgBMs5GsDf4XXSj0=";
   };
 
