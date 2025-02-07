@@ -17,10 +17,11 @@ let
         installPhase =
           attrs.installPhase
           + ''
-            rm -R $out/storage $out/public/uploads
+            rm -R $out/storage $out/public/uploads $out/themes
             ln -s ${dataDir}/.env $out/.env
             ln -s ${dataDir}/storage $out/storage
             ln -s ${dataDir}/public/uploads $out/public/uploads
+            ln -s ${dataDir}/themes $out/themes
           '';
       });
 
