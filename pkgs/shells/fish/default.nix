@@ -256,7 +256,7 @@ let
       ''
         patchShebangs ./build_tools/git_version_gen.sh
       ''
-      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      + lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
         export CMAKE_PREFIX_PATH=
       '';
 

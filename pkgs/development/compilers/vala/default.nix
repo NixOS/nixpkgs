@@ -66,7 +66,7 @@ let
       # when cross-compiling ./compiler/valac is valac for host
       # so add the build vala in nativeBuildInputs
       preBuild = lib.optionalString (
-        disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)
+        disableGraphviz && (stdenv.buildPlatform.equals stdenv.hostPlatform)
       ) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
       outputs = [
@@ -84,7 +84,7 @@ let
         ]
         ++ lib.optional (stdenv.hostPlatform.isDarwin) expat
         ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
-        ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
+        ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [ vala ]
         ++ extraNativeBuildInputs;
 
       buildInputs =

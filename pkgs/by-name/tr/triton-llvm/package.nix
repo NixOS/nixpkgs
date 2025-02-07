@@ -61,7 +61,7 @@ let
     else
       python3Packages.python;
 
-  isNative = stdenv.hostPlatform == stdenv.buildPlatform;
+  isNative = stdenv.hostPlatform.equals stdenv.buildPlatform;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";

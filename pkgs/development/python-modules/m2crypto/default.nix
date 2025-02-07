@@ -42,7 +42,7 @@ buildPythonPackage rec {
         "-Wno-error=incompatible-pointer-types"
       ]);
     }
-    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    // lib.optionalAttrs (stdenv.hostPlatform.notEquals stdenv.buildPlatform) {
       CPP = "${stdenv.cc.targetPrefix}cpp";
     };
 

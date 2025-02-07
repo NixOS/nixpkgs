@@ -91,17 +91,19 @@ stdenv.mkDerivation {
       "--disable-site-fndir"
       # --enable-function-subdirs is not enabled due to it being slow at runtime in some cases
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
-      # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
-      "zsh_cv_shared_environ=yes"
-      "zsh_cv_shared_tgetent=yes"
-      "zsh_cv_shared_tigetstr=yes"
-      "zsh_cv_sys_dynamic_clash_ok=yes"
-      "zsh_cv_sys_dynamic_rtld_global=yes"
-      "zsh_cv_sys_dynamic_execsyms=yes"
-      "zsh_cv_sys_dynamic_strip_exe=yes"
-      "zsh_cv_sys_dynamic_strip_lib=yes"
-    ];
+    ++ lib.optionals
+      (stdenv.hostPlatform.notEquals stdenv.buildPlatform && !stdenv.hostPlatform.isStatic)
+      [
+        # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
+        "zsh_cv_shared_environ=yes"
+        "zsh_cv_shared_tgetent=yes"
+        "zsh_cv_shared_tigetstr=yes"
+        "zsh_cv_sys_dynamic_clash_ok=yes"
+        "zsh_cv_sys_dynamic_rtld_global=yes"
+        "zsh_cv_sys_dynamic_execsyms=yes"
+        "zsh_cv_sys_dynamic_strip_exe=yes"
+        "zsh_cv_sys_dynamic_strip_lib=yes"
+      ];
 
   postPatch = ''
     substituteInPlace Src/Modules/pcre.mdd \
@@ -146,7 +148,7 @@ stdenv.mkDerivation {
     fi
     EOF
         ${
-          if stdenv.hostPlatform == stdenv.buildPlatform then
+          if stdenv.hostPlatform.equals stdenv.buildPlatform then
             ''
               $out/bin/zsh -c "zcompile $out/etc/zshenv"
             ''

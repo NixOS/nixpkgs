@@ -74,7 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/wodim $out/bin/cdrecord
   '';
 
-  cmakeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "-DBITFIELDS_HTOL=0" ];
+  cmakeFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
+    "-DBITFIELDS_HTOL=0"
+  ];
 
   makeFlags = [ "PREFIX=\$(out)" ];
 

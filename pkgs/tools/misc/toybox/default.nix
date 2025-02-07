@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-D+tf2bJQlf2pLMNZdMUOoUdE3ea/KgkqoXGsnl1MVOE=";
   };
 
-  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  depsBuildBuild = optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     buildPackages.stdenv.cc
   ];
   buildInputs =

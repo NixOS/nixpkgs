@@ -23,7 +23,7 @@
   guile ? null,
   enablePython ? false,
   python ? null,
-  enablePerl ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform),
+  enablePerl ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform.equals stdenv.buildPlatform),
   perl ? null,
 # re-add javascript support when upstream supports modern spidermonkey
 }:

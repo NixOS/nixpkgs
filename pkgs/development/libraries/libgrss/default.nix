@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     [
       "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
     ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.equals stdenv.hostPlatform) [
       "--enable-gtk-doc"
     ];
 

@@ -11,7 +11,7 @@
   buildPackages,
   odbcSupport ? true,
   unixODBC,
-  snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
+  snmpSupport ? stdenv.buildPlatform.equals stdenv.hostPlatform,
   net-snmp,
   sshSupport ? true,
   libssh2,

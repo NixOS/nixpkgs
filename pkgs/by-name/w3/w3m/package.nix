@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     ln -s ${mktable}/bin/mktable mktable
     # stop make from recompiling mktable
     sed -i -e 's!mktable.*:.*!mktable:!' Makefile.in
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
       "--with-ssl=${openssl.dev}"
       "--with-gc=${boehmgc.dev}"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
     ]
     ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"

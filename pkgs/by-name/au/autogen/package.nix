@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       perl
       autoreconfHook # patches applied
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # autogen needs a build autogen when cross-compiling
       buildPackages.buildPackages.autogen
       buildPackages.texinfo
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
       "--enable-timeout=78"
       "CFLAGS=-D_FILE_OFFSET_BITS=64"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       # the configure check for regcomp wants to run a host program
       "libopts_cv_with_libregex=yes"
       #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"

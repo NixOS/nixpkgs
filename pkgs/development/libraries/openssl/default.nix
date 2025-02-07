@@ -124,7 +124,7 @@ let
           riscv64-linux = "./Configure linux64-riscv64";
         }
         .${stdenv.hostPlatform.system} or (
-          if stdenv.hostPlatform == stdenv.buildPlatform then
+          if stdenv.hostPlatform.equals stdenv.buildPlatform then
             "./config"
           else if stdenv.hostPlatform.isBSD then
             if stdenv.hostPlatform.isx86_64 then

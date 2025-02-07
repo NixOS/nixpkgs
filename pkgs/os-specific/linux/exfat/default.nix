@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
       "ARCH=${stdenv.hostPlatform.linuxArch}"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ];
 

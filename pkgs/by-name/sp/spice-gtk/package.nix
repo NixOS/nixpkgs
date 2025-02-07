@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       vala
       wrapGAppsHook3
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       mesonEmulatorHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

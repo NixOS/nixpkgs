@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "bin"
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ] ++ lib.optionals (stdenv.buildPlatform.equals stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
@@ -69,8 +69,10 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dgtk_doc=${if (stdenv.buildPlatform.equals stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dintrospection=${
+      if (stdenv.buildPlatform.equals stdenv.hostPlatform) then "enabled" else "disabled"
+    }"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
