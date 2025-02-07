@@ -38,6 +38,7 @@
   plugins ? { },
   flavors ? { },
   initLua ? null,
+  mainLua ? null,
 }:
 
 let
@@ -69,6 +70,7 @@ let
           ${lib.concatStringsSep "\n" (
             lib.mapAttrsToList (name: value: "ln -s ${value} $out/plugins/${name}") plugins
           )}
+          ${lib.optionalString (mainLua != null) "ln -s ${mainLua} $out/plugins/main.lua"}
         ''}
 
         mkdir $out/flavors
