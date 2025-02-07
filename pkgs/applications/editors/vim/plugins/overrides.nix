@@ -2866,9 +2866,6 @@ in
     luaAttr = luaPackages.rocks-config-nvim;
   };
 
-  roslyn-nvim = super.roslyn-nvim.overrideAttrs {
-  };
-
   rtp-nvim = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.rtp-nvim;
   };
