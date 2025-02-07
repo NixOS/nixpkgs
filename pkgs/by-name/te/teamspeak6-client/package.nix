@@ -32,7 +32,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "6.0.0-beta2";
 
   src = fetchurl {
-    # check https://teamspeak.com/en/downloads/#ts6 for version and checksum
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
     hash = "sha256-3jNPv3uQ2RztR1p4XQNLUg5IVrvW/dcdtqXdiGJKVSs=";
   };
@@ -107,6 +106,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  updateScript = ./update.sh;
 
   meta = {
     description = "TeamSpeak voice communication tool (beta version)";
