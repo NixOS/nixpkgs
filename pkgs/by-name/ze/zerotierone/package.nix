@@ -77,11 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       ''
         makeFlagsArray+=("ARCH_FLAGS=") # disable multi-arch build
-        if ! grep -q MACOS_VERSION_MIN=10.13 make-mac.mk; then
-          echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"
-          exit 1
-        fi
-        (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release)
+        (cd rustybits && cargo build -p zeroidc --release)
 
         cp \
           ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
