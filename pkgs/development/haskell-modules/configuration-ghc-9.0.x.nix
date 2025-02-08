@@ -70,6 +70,11 @@ self: super: {
 
   # Jailbreaks & Version Updates
 
+  # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
+  tar = doDistribute (doJailbreak self.tar_0_6_0_0);
+  # text-metrics >= 0.3.3 requires GHC2021
+  text-metrics = doDistribute self.text-metrics_0_3_2;
+
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   # For GHC < 9.2, os-string is not required.

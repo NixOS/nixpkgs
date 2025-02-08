@@ -117,6 +117,8 @@ extra-packages:
   - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ghc-source-gen < 0.4.6.0            # 2024-12-31: support GHC < 9.0
+  - tar == 0.6.0.0                      # 2025-02-08: last version to not require os-string (which can't be buil with GHC < 9.2)
+  - text-metrics < 0.3.3                # 2025-02-08: >= 0.3.3 uses GHC2021
 
 package-maintainers:
   abbradar:

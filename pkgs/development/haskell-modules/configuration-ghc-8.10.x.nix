@@ -141,8 +141,16 @@ self: super: {
   # bundled with GHC < 9.0.
   wai-extra = dontHaddock super.wai-extra;
 
-  # Overly-strict bounds introducted by a revision in version 0.3.2.
-  text-metrics = doJailbreak super.text-metrics;
+  # tar > 0.6 requires os-string which can't be built with bytestring < 0.11
+  tar = overrideCabal (drv: {
+    jailbreak = true;
+    buildDepends = drv.buildDepends or [ ] ++ [
+      self.bytestring-handle
+    ];
+  }) self.tar_0_6_0_0;
+  # text-metrics >= 0.3.3 requires GHC2021
+  text-metrics = doDistribute (doJailbreak self.text-metrics_0_3_2);
+  bytestring-handle = unmarkBroken (doDistribute super.bytestring-handle);
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
