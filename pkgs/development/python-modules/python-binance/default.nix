@@ -13,24 +13,27 @@
   requests,
   six,
   ujson,
+  setuptools,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "python-binance";
   version = "1.0.27";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sammchardy";
-    repo = pname;
+    repo = "python-binance";
     tag = "v${version}";
     hash = "sha256-nsJuHxPXhMBRY4BUDDLj5sHK/GuJA0pBU3RGUDxVm50=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     dateparser
     requests
