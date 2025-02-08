@@ -1427,6 +1427,8 @@ mapAliases {
   typst-fmt = typstfmt; # Added 2023-07-15
   typst-lsp = throw "'typst-lsp' has been removed due to lack of upstream maintenance, consider using 'tinymist' instead"; # Added 2025-01-25
   typst-preview = throw "The features of 'typst-preview' have been consolidated to 'tinymist', an all-in-one language server for typst"; # Added 2024-07-07
+  tuic = throw "`tuic` has been removed due to lack of upstream maintenance, consider using other tuic implementations"; # Added 2025-02-08
+
 
   ### U ###
 
