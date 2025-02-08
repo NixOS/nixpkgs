@@ -2136,8 +2136,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.24.2024121201"; # compatible with vscode ^1.96
-          hash = "sha256-v3wdodDzYalz927KqqpL4IqEqLRmx1CLWdGBvZgNmpE=";
+          version = "0.24.2025020602"; # latest compatible with vscode ^1.97
+          hash = "sha256-smeBJ+yEIdbBs1eiKlPFCpYrb/nAkpnGlT9pTNnCnBI=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
