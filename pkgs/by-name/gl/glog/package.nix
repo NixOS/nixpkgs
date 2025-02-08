@@ -73,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: rec {
         lib.optionals stdenv.hostPlatform.isDarwin [
           "mock-log"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-          "logging" # works around segfaults on aarch64-darwin for now
+        ++ [
+          "logging" # works around segfaults for now
         ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]
