@@ -19,7 +19,7 @@
 }:
 let
   pname = "sacrebleu";
-  version = "2.5.0";
+  version = "2.5.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -29,7 +29,7 @@ buildPythonPackage {
     owner = "mjpost";
     repo = "sacrebleu";
     tag = "v${version}";
-    hash = "sha256-ErssNc8X376E26maGJo/P19CA7FDxZ4/h6mgRB+YNZc=";
+    hash = "sha256-nLZotWQLrN9hB1fBuDJkvGr4SMvQz8Ucl8ybpNhf9Ic=";
   };
 
   build-system = [ setuptools-scm ];
