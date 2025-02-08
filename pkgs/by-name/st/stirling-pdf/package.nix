@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle_7,
+  gradle_8,
   makeWrapper,
   jre,
 }:
 
 let
-  gradle = gradle_7;
+  gradle = gradle_8;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.33.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Cl2IbFfw6TH904Y63YQnXS/mDEuUB6AdCoRT4G+W0hU=";
+    hash = "sha256-iGXq6bqJS+w2bi3HGUXyneay23ekOpIxoAeqH4dI6vw=";
   };
 
   patches = [
