@@ -1,8 +1,11 @@
 {
   lib,
+  attrs,
   buildPythonPackage,
   fetchPypi,
+  pydantic,
   pythonOlder,
+  scrapy,
   setuptools,
 }:
 
@@ -19,6 +22,12 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  optional-dependencies = {
+    attrs = [ attrs ];
+    pydantic = [ pydantic ];
+    scrapy = [ scrapy ];
+  };
 
   # Infinite recursion with Scrapy
   doCheck = false;
