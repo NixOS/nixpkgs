@@ -262,6 +262,9 @@ self: super: {
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # Needed until upstream fixes are pulled in
+  aws-spend-summary = doJailbreak super.aws-spend-summary;
+
   # currently, cabal-plan seems to get not much maintenance
   cabal-plan = doJailbreak super.cabal-plan;
 
