@@ -214,40 +214,66 @@ originalAttrs:
     '';
 
     preInstall =
+      # What follows is a horribly cursed hack.
+      #
+      # GCC will install its libraries to $out/lib, $out/lib32, $out/lib64,
+      # $out/$targetConfig/lib, $out/$targetConfig/lib32 or $out/$targetConfig/lib64,
+      # depending on whether it's built as native or cross, and the exact target spec.
+      #
+      # We can't predict what it's actually going to do, and we also can't just tell it
+      # to always install to lib, but we want everything to end up in lib
+      # for consistency (multilib weirdness aside).
+      #
+      # So, we create a bunch of symlinks before we run GCC's install phase,
+      # redirecting every possible directory it may want to write to to the place
+      # we actually want things to be installed.
+      # We will then nuke the symlinks in postInstall.
+      #
+      # FIXME: there must be a better way to do this.
       ''
-        mkdir -p "$out/''${targetConfig}/lib"
-        mkdir -p "''${!outputLib}/''${targetConfig}/lib"
+        declare -ga compatibilitySymlinks=()
+
+        makeCompatibilitySymlink() {
+          declare -a outputsToLink=("$out")
+
+          if [ -n "$lib" ]; then
+            outputsToLink+=("$lib")
+          fi
+
+          for output in "''${outputsToLink[@]}"; do
+            local linkTarget="$1"
+            local linkName="$output/$2"
+
+            echo "Creating compatibility symlink: $linkTarget -> $linkName"
+
+            mkdir -p "$(dirname "$linkName")"
+            ln -s "$linkTarget" "$linkName"
+            compatibilitySymlinks+=("$linkName")
+          done
+        }
       ''
       +
-        # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
-        # since native-compiles have $lib/lib as a directory (not a
-        # symlink), this ensures that in every case we can assume that
-        # $lib/lib contains the .so files
-        lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
-          ln -Ts "''${!outputLib}/''${targetConfig}/lib" $lib/lib
+        # This will redirect $output/lib{32,64} to $output/lib.
+        # Multilib is special, because it creates $out/lib (for 32-bit)
+        # and $out/lib64 (for 64-bit). No other targets can have both.
+        lib.optionalString (!enableMultilib) ''
+          makeCompatibilitySymlink lib lib32
+          makeCompatibilitySymlink lib lib64
         ''
       +
-        # Make `lib64` symlinks to `lib`.
-        lib.optionalString
-          (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32)
-          ''
-            ln -s lib "$out/''${targetConfig}/lib64"
-            ln -s lib "''${!outputLib}/''${targetConfig}/lib64"
-          ''
-      +
-        # On mips platforms, gcc follows the IRIX naming convention:
-        #
-        #  $PREFIX/lib   = mips32
-        #  $PREFIX/lib32 = mips64n32
-        #  $PREFIX/lib64 = mips64
-        #
-        # Make `lib32` symlinks to `lib`.
-        lib.optionalString (!enableMultilib && stdenv.targetPlatform.isMips64n32) ''
-          ln -s lib "$out/''${targetConfig}/lib32"
-          ln -s lib "''${!outputLib}/''${targetConfig}/lib32"
+        # This will redirect $output/$targetConfig/lib{,32,64} to $output/$targetConfig/lib.
+        lib.optionalString isCross ''
+          makeCompatibilitySymlink lib $targetConfig/lib32
+          makeCompatibilitySymlink lib $targetConfig/lib64
         '';
 
     postInstall = ''
+      # Clean up our compatibility symlinks (see above)
+      for link in "''${compatibilitySymlinks[@]}"; do
+        echo "Removing compatibility symlink: $link"
+        rm -f "$link"
+      done
+
       # Move target runtime libraries to lib output.
       # For non-cross, they're in $out/lib; for cross, they're in $out/$targetConfig/lib.
       targetLibDir="''${targetConfig+$targetConfig/}lib"
@@ -321,6 +347,15 @@ originalAttrs:
               ln -sf "$man_prefix"gcc.1 "$i"
           fi
       done
+    ''
+    # if cross-compiling, link from $lib/lib to $lib/${targetConfig}.
+    # since native-compiles have $lib/lib as a directory (not a
+    # symlink), this ensures that in every case we can assume that
+    # $lib/lib contains the .so files
+    + lib.optionalString isCross ''
+      if [ -e "$lib/$targetConfig/lib" ]; then
+        ln -s "$lib/$targetConfig/lib" "$lib/lib"
+      fi
     '';
   }
   // lib.optionalAttrs ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc) {
