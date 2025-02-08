@@ -1,0 +1,16 @@
+diff --git a/make-mac.mk b/make-mac.mk
+index e10f9622..5ae4d578 100644
+--- a/make-mac.mk
++++ b/make-mac.mk
+@@ -126,11 +126,6 @@ zerotier-one: one
+ 
+ zeroidc: rustybits/target/libzeroidc.a
+ 
+-rustybits/target/libzeroidc.a:	FORCE
+-	cd rustybits && MACOSX_DEPLOYMENT_TARGET=$(MACOS_VERSION_MIN) cargo build -p zeroidc --target=x86_64-apple-darwin $(EXTRA_CARGO_FLAGS)
+-	cd rustybits && MACOSX_DEPLOYMENT_TARGET=$(MACOS_VERSION_MIN) cargo build -p zeroidc --target=aarch64-apple-darwin $(EXTRA_CARGO_FLAGS)
+-	cd rustybits && lipo -create target/x86_64-apple-darwin/$(RUST_VARIANT)/libzeroidc.a target/aarch64-apple-darwin/$(RUST_VARIANT)/libzeroidc.a -output target/libzeroidc.a
+-
+ central-controller:
+ 	make ARCH_FLAGS="-arch x86_64" ZT_CONTROLLER=1 one
+ 
