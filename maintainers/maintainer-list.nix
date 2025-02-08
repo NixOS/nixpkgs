@@ -18752,6 +18752,12 @@
     githubId = 4633847;
     name = "Ben Hamlin";
   };
+  proux01 = {
+    email = "pierre.roux@onera.fr";
+    github = "proux01";
+    githubId = 15833376;
+    name = "Pierre ROux";
+  };
   prrlvr = {
     email = "po@prrlvr.fr";
     github = "prrlvr";
