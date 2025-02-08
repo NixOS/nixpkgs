@@ -9,7 +9,7 @@ let
     python3.pkgs.appthreat-vulnerability-db.overrideAttrs (oldAttrs: rec {
       version = "5.7.8";
       src = oldAttrs.src.override {
-        rev = "refs/tags/v${version}";
+        tag = "v${version}";
         hash = "sha256-R00/a9+1NctVPi+EL7K65w/e88c9oSW5xXGgno+MCXo=";
       };
     })
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QTvxKoqBxTb/xFaIHsYe3N+7ABJ6sDd2vVcjkMbm3xI=";
   };
 
