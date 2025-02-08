@@ -1880,8 +1880,6 @@ self: super: with self; {
 
   bpemb = callPackage ../development/python-modules/bpemb { };
 
-  bpycv = callPackage ../development/python-modules/bpycv {};
-
   bpylist2 = callPackage ../development/python-modules/bpylist2 { };
 
   bpython = callPackage ../development/python-modules/bpython { };
