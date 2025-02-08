@@ -32,7 +32,7 @@ phpPackage.buildComposerProject2 rec {
   src = fetchFromGitHub {
     owner = "librenms";
     repo = pname;
-    rev = "${version}";
+    tag = version;
     sha256 = "sha256-Uo+JOgb1KSZkludoupIIGnuK88ER3LthGnGmShpkrNU=";
   };
 
