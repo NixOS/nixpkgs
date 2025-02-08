@@ -17235,6 +17235,12 @@
     githubId = 72201;
     name = "Ole Jørgen Brønner";
   };
+  olemussmann = {
+    email = "nixpkgs-account@ole.mn";
+    github = "OleMussmann";
+    githubId = 14004859;
+    name = "Ole Mussmann";
+  };
   olifloof = {
     email = "benmoreosm@gmail.com";
     github = "olifloof";
