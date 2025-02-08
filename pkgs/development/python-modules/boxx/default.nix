@@ -10,7 +10,6 @@
   pandas,
   imageio,
   snakeviz,
-  fn,
   pyopengl,
   seaborn,
   torch,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     pandas
     imageio
     snakeviz
-    fn
     pyopengl
     seaborn
   ];
