@@ -10950,6 +10950,11 @@
     githubId = 691552;
     name = "Jamie McClymont";
   };
+  jjtt = {
+    github = "jjtt";
+    githubId = 3908945;
+    name = "Juho Törmä";
+  };
   jk = {
     email = "hello+nixpkgs@j-k.io";
     matrix = "@j-k:matrix.org";
