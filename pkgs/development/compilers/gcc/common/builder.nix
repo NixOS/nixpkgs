@@ -336,9 +336,13 @@ originalAttrs:
         done
       ''
       +
-        # Recreate the target symlink so GCC can find libgcc_s on non-split builds.
+        # Recreate the target symlink so GCC can find libgcc_s on non-split builds,
+        # but be careful to not create a dangling symlink when it doesn't exist
+        # (MinGW, maybe more?).
         lib.optionalString (with stdenv; targetPlatform.config != hostPlatform.config) ''
-          ln -s $lib/lib $lib/$targetConfig/lib
+          if [ -e $lib/lib ]; then
+            ln -s $lib/lib $lib/$targetConfig/lib
+          fi
         '';
   }
 ))
