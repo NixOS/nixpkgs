@@ -27,6 +27,11 @@ buildNpmPackage rec {
     runHook postBuild
   '';
 
+  postInstall = ''
+    mkdir $out/bin
+    ln -s $out/lib/node_modules/neovim/node_modules/.bin/neovim-node-host $out/bin/neovim-node-host
+  '';
+
   meta = {
     mainProgram = "neovim-node-host";
     description = "Nvim msgpack API client and remote plugin provider";
