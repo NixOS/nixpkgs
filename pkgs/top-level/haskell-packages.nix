@@ -132,7 +132,8 @@ let
         lib.mergeAttrsList
       ];
 
-  makeGhc =
+  # callPackage a GHC expression and apply the rule given as the second argument.
+  callGhc =
     filename:
     {
       bootPkgsAttr,
@@ -182,7 +183,7 @@ let
       (lib.mapAttrs' (
         filename: versionParts: {
           name = "ghc${lib.concatStrings versionParts}";
-          value = makeGhc (exprDir + "/${filename}") (matchGhcRules versionParts);
+          value = callGhc (exprDir + "/${filename}") (matchGhcRules versionParts);
         }
       ))
     ];
@@ -383,7 +384,7 @@ in
           # TODO(@sternensemann): can we avoid tracking the version in two places?
           majorMinor = "9.13";
           ghc =
-            makeGhc ../development/compilers/ghc/head.nix
+            callGhc ../development/compilers/ghc/head.nix
               # GHC's master branch always has an odd version minor number.
               # Our rules/configurations use the even version number of the following release.
               ghcRules.${toGhcReleaseSeriesVersion majorMinor};
