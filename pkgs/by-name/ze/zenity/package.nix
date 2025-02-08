@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "zenity";
+      versionPolicy = "odd-unstable";
     };
   };
 
