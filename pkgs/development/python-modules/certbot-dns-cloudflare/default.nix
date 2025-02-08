@@ -5,18 +5,21 @@
   cloudflare,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-cloudflare";
-  format = "setuptools";
+  pyproject = true;
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   sourceRoot = "${src.name}/certbot-dns-cloudflare";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     certbot
     cloudflare
