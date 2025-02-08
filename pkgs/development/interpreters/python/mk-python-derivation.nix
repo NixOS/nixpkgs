@@ -100,8 +100,6 @@ let
     "nativeCheckInputs"
     "doCheck"
     "doInstallCheck"
-    "dontWrapPythonPrograms"
-    "catchConflicts"
     "pyproject"
     "format"
     "disabledTestPaths"
@@ -282,6 +280,8 @@ let
 
       name = namePrefix + name;
 
+      inherit catchConflicts;
+
       nativeBuildInputs =
         [
           python
@@ -289,7 +289,7 @@ let
           ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, flit, ...)?
           pythonRemoveTestsDirHook
         ]
-        ++ optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
+        ++ optionals (finalAttrs.catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
           #
           # 1. When building a package that is also part of the bootstrap chain, we
           #    must ignore conflicts after installation, because there will be one with
@@ -386,8 +386,10 @@ let
       nativeInstallCheckInputs = nativeCheckInputs;
       installCheckInputs = checkInputs;
 
+      inherit dontWrapPythonPrograms;
+
       postFixup =
-        optionalString (!dontWrapPythonPrograms) ''
+        optionalString (!finalAttrs.dontWrapPythonPrograms) ''
           wrapPythonPrograms
         ''
         + attrs.postFixup or "";
