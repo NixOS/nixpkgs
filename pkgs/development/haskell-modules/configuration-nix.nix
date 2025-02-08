@@ -1479,11 +1479,11 @@ self: super: builtins.intersectAttrs super {
 
   postgresql-libpq-configure = overrideCabal
     (drv: {
-      librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.postgresql ];
+      librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.libpq ];
     })
     super.postgresql-libpq-configure;
 
-  postgresql-libpq-pkgconfig = addPkgconfigDepend pkgs.postgresql super.postgresql-libpq-pkgconfig;
+  postgresql-libpq-pkgconfig = addPkgconfigDepend pkgs.libpq super.postgresql-libpq-pkgconfig;
 
   # Test failure is related to a GHC implementation detail of primitives and doesn't
   # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
