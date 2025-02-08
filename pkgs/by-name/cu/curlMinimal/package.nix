@@ -123,11 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
-  '' + lib.optionalString (pslSupport && stdenv.hostPlatform.isStatic) ''
-    # curl doesn't understand that libpsl2 has deps because it doesn't use
-    # pkg-config.
-    # https://github.com/curl/curl/pull/12919
-    configureFlagsArray+=("LIBS=-lidn2 -lunistring")
   '';
 
   configureFlags = [
