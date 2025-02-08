@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "materialx";
-  version = "1.39.1";
+  version = "1.38.10";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
-    tag = "v${version}";
-    hash = "sha256-WzzsY1hOWwJEqT/ZRLIoZDfKNvx1Yf6aFhA3ZcSPx+s=";
+    rev = "v${version}";
+    hash = "sha256-/kMHmW2dptZNtjuhE5s+jvPRIdtY+FRiVtMU+tiBgQo=";
   };
 
   format = "other";
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/AcademySoftwareFoundation/MaterialX/blob/${src.rev}/CHANGELOG.md";
     description = "Open standard for representing rich material and look-development content in computer graphics";
     homepage = "https://materialx.org";
     maintainers = [ lib.maintainers.gador ];
