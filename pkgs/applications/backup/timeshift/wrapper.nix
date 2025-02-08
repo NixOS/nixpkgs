@@ -45,6 +45,11 @@ stdenvNoCC.mkDerivation {
     )
     wrapProgram "$out/bin/timeshift" "''${makeWrapperArgs[@]}"
     wrapProgram "$out/bin/timeshift-gtk" "''${gappsWrapperArgs[@]}"
+    # Substitute app_command to look for the `timeshift-gtk` in $out.
+    unlink "$out/bin/timeshift-launcher"
+    substitute ${lib.getExe' timeshift-unwrapped "timeshift-launcher"} "$out/bin/timeshift-launcher" \
+      --replace-fail "app_command=${lib.getExe' timeshift-unwrapped "timeshift-gtk"}" "app_command=$out/bin/timeshift-gtk"
+    chmod +x "$out/bin/timeshift-launcher"
   '';
 
   inherit (timeshift-unwrapped) meta;
