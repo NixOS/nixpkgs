@@ -5,6 +5,7 @@
   cmake,
   ninja,
   secureBuild ? false,
+  localDynamicTLS ? false,
 }:
 
 let
@@ -34,12 +35,27 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
   ];
-  cmakeFlags = [
-    "-DMI_INSTALL_TOPLEVEL=ON"
-  ]
-  ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
-  ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
-  ++ lib.optionals (!finalAttrs.doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
+
+  cmakeFlags = lib.mapAttrsToList lib.cmakeBool {
+    MI_INSTALL_TOPLEVEL = true;
+    MI_SECURE = secureBuild;
+    MI_BUILD_SHARED = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries;
+    MI_LIBC_MUSL = stdenv.hostPlatform.libc == "musl";
+    MI_LOCAL_DYNAMIC_TLS = localDynamicTLS;
+    MI_BUILD_TESTS = finalAttrs.doCheck;
+
+    # MI_OPT_ARCH is inaccurate (e.g. it assumes aarch64 == armv8.1-a).
+    # Nixpkgs's native platform configuration does a better job.
+    MI_NO_OPT_ARCH = true;
+  };
+
+  postPatch = ''
+    substituteInPlace cmake/mimalloc-config.cmake \
+      --replace-fail 'string(REPLACE "/lib/cmake" "/lib" MIMALLOC_LIBRARY_DIR "''${MIMALLOC_CMAKE_DIR}")' \
+                     "set(MIMALLOC_LIBRARY_DIR \"$out/lib\")" \
+      --replace-fail 'string(REPLACE "/lib/cmake/" "/lib/" MIMALLOC_OBJECT_DIR "''${CMAKE_CURRENT_LIST_DIR}")' \
+                     "set(MIMALLOC_OBJECT_DIR \"$out/lib\")"
+  '';
 
   postInstall =
     let
