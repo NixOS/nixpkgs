@@ -51,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
     homepage = "https://h2o.examp1e.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [
+      toastal
+      thoughtpolice
+    ];
     platforms = platforms.linux;
   };
 })
