@@ -897,6 +897,7 @@
   ./services/monitoring/gatus.nix
   ./services/monitoring/gitwatch.nix
   ./services/monitoring/glances.nix
+  ./services/monitoring/glpi-agent.nix
   ./services/monitoring/goss.nix
   ./services/monitoring/grafana-agent.nix
   ./services/monitoring/grafana-image-renderer.nix
