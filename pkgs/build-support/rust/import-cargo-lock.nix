@@ -72,10 +72,26 @@ let
     builtins.map nameGitSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
   );
 
-  nameGitSha = pkg: let gitParts = parseGit pkg.source; in {
-    name = "${pkg.name}-${pkg.version}";
-    value = gitParts.sha;
-  };
+  namesGitShasWithSha = builtins.listToAttrs (
+    builtins.map nameGitShaWithSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
+  );
+
+  nameGitSha = pkg:
+    let
+      gitParts = parseGit pkg.source;
+    in {
+      name = "${pkg.name}-${pkg.version}";
+      value = gitParts.sha;
+    };
+
+  nameGitShaWithSha = pkg:
+    let
+      gitParts = parseGit pkg.source;
+      suffix = if builtins.isNull gitParts then "" else "-" + gitParts.sha;
+    in {
+      name = "${pkg.name}-${pkg.version}${suffix}";
+      value = gitParts.sha;
+    };
 
   # Convert the attrset provided through the `outputHashes` argument to a
   # a mapping from git commit SHA -> output hash.
@@ -88,7 +104,7 @@ let
   gitShaOutputHash = lib.mapAttrs' (nameVer: hash:
     let
       unusedHash = throw "A hash was specified for ${nameVer}, but there is no corresponding git dependency.";
-      rev = namesGitShas.${nameVer} or unusedHash; in {
+      rev = namesGitShasWithSha.${nameVer} or namesGitShas.${nameVer} or unusedHash; in {
       name = rev;
       value = hash;
     }) outputHashes;
@@ -122,12 +138,13 @@ let
     let
       gitParts = parseGit pkg.source;
       registryIndexUrl = lib.removePrefix "registry+" pkg.source;
+      suffix = if builtins.isNull gitParts then "" else "-" + gitParts.sha;
     in
       if (lib.hasPrefix "registry+" pkg.source || lib.hasPrefix "sparse+" pkg.source)
         && builtins.hasAttr registryIndexUrl registries then
       let
         crateTarball = fetchCrate pkg registries.${registryIndexUrl};
-      in runCommand "${pkg.name}-${pkg.version}" {} ''
+      in runCommand "${pkg.name}-${pkg.version}${suffix}" {} ''
         mkdir $out
         tar xf "${crateTarball}" -C $out --strip-components=1
 
@@ -137,11 +154,17 @@ let
       else if gitParts != null then
       let
         missingHash = throw ''
-          No hash was found while vendoring the git dependency ${pkg.name}-${pkg.version}. You can add
+          No hash was found while vendoring the git dependency ${pkg.name}-${pkg.version} or ${pkg.name}-${pkg.version}${suffix}. You can add
           a hash through the `outputHashes` argument of `importCargoLock`:
 
           outputHashes = {
             "${pkg.name}-${pkg.version}" = "<hash>";
+          };
+
+          or
+
+          outputHashes = {
+            "${pkg.name}-${pkg.version}${suffix}" = "<hash>";
           };
 
           If you use `buildRustPackage`, you can add this attribute to the `cargoLock`
@@ -163,7 +186,7 @@ let
             }
           else
             missingHash;
-      in runCommand "${pkg.name}-${pkg.version}" {} ''
+      in runCommand "${pkg.name}-${pkg.version}${suffix}" {} ''
         tree=${tree}
 
         # If the target package is in a workspace, or if it's the top-level
@@ -187,7 +210,7 @@ let
           done
 
           if [[ -z $crateCargoTOML ]]; then
-            >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}' in the tree in: $tree"
+            >&2 echo "Cannot find path for crate '${pkg.name}-${pkg.version}${suffix}' in the tree in: $tree"
             exit 1
           fi
         fi
@@ -215,12 +238,16 @@ let
           ''}
         ''}
 
-        # Set up configuration for the vendor directory.
+        # Set up configuration for the vendor directory with package name and version.
         cat > $out/.cargo-config <<EOF
-        [source."${pkg.source}"]
+        #pkg: ${pkg.name}
+        #version: ${pkg.version}
+        [source."${gitParts.url}${lib.optionalString (gitParts ? type) "?${gitParts.type}=$gitPartsValue"}"]
         git = "${gitParts.url}"
         ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"$gitPartsValue\""}
-        replace-with = "vendored-sources"
+        replace-with = "vendored-sources-git-${gitParts.sha}"
+        [source.vendored-sources-git-${gitParts.sha}]
+        directory = "cargo-vendor-dir/git-${gitParts.sha}"
         EOF
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
@@ -247,7 +274,7 @@ let
 replace-with = "vendored-sources"
 
 [source.vendored-sources]
-directory = "cargo-vendor-dir"
+directory = "cargo-vendor-dir/registry"
 EOF
 
     declare -A keysSeen
@@ -260,17 +287,31 @@ registry = "$registry"
 replace-with = "vendored-sources"
 EOF
     done
+    mkdir $out/registry
 
     for crate in ${toString depCrates}; do
       # Link the crate directory, removing the output path hash from the destination.
-      ln -s "$crate" $out/$(basename "$crate" | cut -c 34-)
-
+      # When the crate directory has a directory directive, putting it to git-* directory.
       if [ -e "$crate/.cargo-config" ]; then
         key=$(sed 's/\[source\."\(.*\)"\]/\1/; t; d' < "$crate/.cargo-config")
+        directory=$(sed 's/directory = "\(.*\)"/\1/; t; d' < "$crate/.cargo-config")
+        package_name=$(sed 's/#pkg: \(.*\)/\1/; t; d' < "$crate/.cargo-config")
+        if [[ ! -z "$directory" ]]; then
+          gitdir=$(basename "$directory")
+          if [ ! -d $out/$gitdir ] ; then
+            mkdir $out/$gitdir
+          fi
+          ln -s "$crate" $out/$gitdir/$(basename "$crate" | cut -c 34-)
+        else
+          >&2 echo "The key of 'directory' is empty in $crate/.cargo-config."
+          exit 1
+        fi
         if [[ -z ''${keysSeen[$key]} ]]; then
           keysSeen[$key]=1
           cat "$crate/.cargo-config" >> $out/.cargo/config.toml
         fi
+      else
+        ln -s "$crate" $out/registry/$(basename "$crate" | cut -c 34-)
       fi
     done
   '';

@@ -228,6 +228,7 @@ def extract_crate_tarball_contents(tarball_path: Path, crate_out_dir: Path) -> N
 def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
     lockfile_path = vendor_staging_dir / "Cargo.lock"
     out_dir.mkdir(exist_ok=True)
+    (out_dir / "registry").mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
     cargo_lock_toml = load_toml(lockfile_path)
@@ -235,7 +236,7 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
     config_lines = [
         '[source.vendored-sources]',
-        'directory = "@vendor@"',
+        'directory = "@vendor@/registry"',
         '[source.crates-io]',
         'replace-with = "vendored-sources"',
     ]
@@ -250,7 +251,6 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
         source: str = pkg["source"]
 
         dir_name = f"{pkg["name"]}-{pkg["version"]}"
-        crate_out_dir = out_dir / dir_name
 
         if source.startswith("git+"):
 
@@ -258,6 +258,8 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
 
             git_sha_rev = source_info["git_sha_rev"]
             git_tree = vendor_staging_dir / "git" / git_sha_rev
+            (out_dir / f"git-{git_sha_rev}").mkdir(exist_ok=True)
+            crate_out_dir = out_dir / f"git-{git_sha_rev}" / dir_name
 
             copy_and_patch_git_crate_subtree(git_tree, pkg["name"], crate_out_dir)
 
@@ -276,10 +278,13 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
             config_lines.append(f'git = "{source_info["url"]}"')
             if source_info["type"] is not None:
                 config_lines.append(f'{source_info["type"]} = "{source_info["value"]}"')
-            config_lines.append('replace-with = "vendored-sources"')
+            config_lines.append(f'replace-with = "vendored-sources-git-{git_sha_rev}"')
+            config_lines.append(f'[source.vendored-sources-git-{git_sha_rev}]')
+            config_lines.append(f'directory = "@vendor@/git-{git_sha_rev}"')
 
         elif source.startswith("registry+"):
 
+            crate_out_dir = out_dir / "registry" / dir_name
             filename = f"{pkg["name"]}-{pkg["version"]}.tar.gz"
             tarball_path = vendor_staging_dir / "tarballs" / filename
 
