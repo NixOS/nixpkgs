@@ -204,7 +204,7 @@ stdenv.mkDerivation {
     # and has many dependencies that are hard to satisfy
     # e.g. openldap version 2.4
     # so replace it with our own libcurl.so
-    ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
+    ln -sf ${curl.out}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
 
   passthru = {
