@@ -2117,8 +2117,9 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.251.0"; # compatible with vscode ^1.96
-          hash = "sha256-nv6lTPTPcggwMgO8a4KAF0W7gpou1399f/axnH0sS4s=";
+          # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
+          version = "1.266.1363"; # compatible with vscode ^1.96
+          hash = "sha256-paT/fZMIjSh7Bp4bBg4ZT/c1wVc0ecQLJxulSQZjRdg=";
         };
 
         meta = {
