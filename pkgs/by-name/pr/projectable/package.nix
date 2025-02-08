@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "projectable";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "dzfrias";
     repo = "projectable";
     rev = version;
-    hash = "sha256-yN4OA3glRCzjk87tTadwlhytMoh6FM/ke37BsX4rStQ=";
+    hash = "sha256-GM/dPmLnv1/Qj6QhBxPu5kO/SDnbY7Ntupf1FGkmrUY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3ZRdh2EeUBy5FqzBWYEsGO1oaw279b5oOmEqO9HZ+VE=";
+  cargoHash = "sha256-b/jB34Y1QXJsOLBliNeOxm1l4TIoEex5y6pDVPC4UVw=";
 
   nativeBuildInputs = [
     pkg-config

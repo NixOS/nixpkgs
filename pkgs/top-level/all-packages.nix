@@ -6428,6 +6428,13 @@ with pkgs;
     lldb_19 = llvmPackages_19.lldb;
     llvm_19 = llvmPackages_19.llvm;
     bolt_19 = llvmPackages_19.bolt;
+
+    llvmPackages_20 = llvmPackagesSet."20";
+    clang_20 = llvmPackages_20.clang;
+    lld_20 = llvmPackages_20.lld;
+    lldb_20 = llvmPackages_20.lldb;
+    llvm_20 = llvmPackages_20.llvm;
+    bolt_20 = llvmPackages_20.bolt;
   }) llvmPackages_12
     llvmPackages_13
     llvmPackages_14
@@ -6444,7 +6451,13 @@ with pkgs;
     lld_19
     lldb_19
     llvm_19
-    bolt_19;
+    bolt_19
+    llvmPackages_20
+    clang_20
+    lld_20
+    lldb_20
+    llvm_20
+    bolt_20;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -6661,9 +6674,6 @@ with pkgs;
   };
   cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
     inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
-  cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-ndk = callPackage ../development/tools/rust/cargo-ndk {
     inherit (darwin.apple_sdk.frameworks) CoreGraphics Foundation;
@@ -8973,8 +8983,7 @@ with pkgs;
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
     else if name == "llvm" then
-      # Use llvmPackages_git until LLVM 20 is the default.
-      targetPackages.llvmPackages_git.libc or llvmPackages_git.libc
+      targetPackages.llvmPackages_20.libc or llvmPackages_20.libc
     else throw "Unknown libc ${name}";
 
   libcCross =
@@ -15249,9 +15258,6 @@ with pkgs;
 
   tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
 
-  teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
-  teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
-
   telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
       then llvmPackages_19.stdenv
@@ -17096,8 +17102,17 @@ with pkgs;
     coqPackages_8_18 coq_8_18
     coqPackages_8_19 coq_8_19
     coqPackages_8_20 coq_8_20
-    coqPackages_9_0 coq_9_0
+    coqPackages_9_0  coq_9_0
     coqPackages      coq
+  ;
+
+  inherit (callPackage ./rocq-packages.nix {
+    inherit (ocaml-ng)
+      ocamlPackages_4_14
+    ;
+  }) mkRocqPackages
+    rocqPackages_9_0 rocq-core_9_0
+    rocqPackages     rocq-core
   ;
 
   coq-kernel = callPackage ../applications/editors/jupyter-kernels/coq { };

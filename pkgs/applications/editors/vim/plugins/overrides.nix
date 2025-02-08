@@ -2267,6 +2267,10 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  nvim-dap-cortex-debug = super.nvim-dap-cortex-debug.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
+  };
+
   nvim-coverage = super.nvim-coverage.overrideAttrs {
     dependencies = with self; [
       neotest
@@ -2866,9 +2870,6 @@ in
     luaAttr = luaPackages.rocks-config-nvim;
   };
 
-  roslyn-nvim = super.roslyn-nvim.overrideAttrs {
-  };
-
   rtp-nvim = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.rtp-nvim;
   };
@@ -3149,6 +3150,10 @@ in
     ];
   };
 
+  telescope-emoji-nvim = super.telescope-emoji-nvim.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
+  };
+
   telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs {
     dependencies = with self; [
       sqlite-lua
@@ -3208,6 +3213,10 @@ in
       plenary-nvim
       telescope-nvim
     ];
+  };
+
+  telescope-glyph-nvim = super.telescope-github-nvim.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
   };
 
   telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs {

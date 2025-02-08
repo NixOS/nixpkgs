@@ -152,7 +152,7 @@ mapAliases {
   bibata-extra-cursors = throw "bibata-cursors has been removed as it was broken"; # Added 2024-07-15
   bitcoin-unlimited = throw "bitcoin-unlimited has been removed as it was broken and unmaintained"; # Added 2024-07-15
   bitcoind-unlimited = throw "bitcoind-unlimited has been removed as it was broken and unmaintained"; # Added 2024-07-15
-  bird2 = bird; # Added 2022-02-21
+  bird = bird2; # Added 2025-01-11
   bisq-desktop = throw "bisq-desktop has been removed because OpenJFX 11 was removed"; # Added 2024-11-17
   bitwarden = bitwarden-desktop; # Added 2024-02-25
   blender-with-packages = args:
@@ -1373,6 +1373,7 @@ mapAliases {
   tdesktop = telegram-desktop; # Added 2023-04-07
   tdom = tclPackages.tdom; # Added 2024-10-02
   teamspeak_client = teamspeak3; # Added 2024-11-07
+  teamspeak5_client = teamspeak6-client; # Added 2025-01-29
   teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   teleport_13 = throw "teleport 13 has been removed as it is EOL. Please upgrade to Teleport 14 or later"; # Added 2024-05-26
   teleport_14 = throw "teleport 14 has been removed as it is EOL. Please upgrade to Teleport 15 or later"; # Added 2024-10-18

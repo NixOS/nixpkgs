@@ -12,29 +12,29 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.60";
+  version = "0.0.61";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     tag = "v${version}";
-    hash = "sha256-Qo2pzDjdlhIpKfldPbL9VsO1AaSc1bW5t1i1Nqu7alA=";
+    hash = "sha256-gyrmustYJAwjO7YbBl76f/IvcEy2ffb9Se7idcyxsYg=";
   };
 
   build-system = with python3Packages; [ hatchling ];
 
   dependencies = with python3Packages; [
+    lsprotocol
     packaging
     pygls
-    lsprotocol
     ruff
     typing-extensions
   ];
 
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
     python-lsp-jsonrpc
     ruff
     versionCheckHook

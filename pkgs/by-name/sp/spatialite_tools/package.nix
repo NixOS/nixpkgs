@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
+  env = {
+    NIX_LDFLAGS = toString [
+      "-lxml2"
+      (lib.optionalString stdenv.hostPlatform.isDarwin "-liconv")
+    ];
+  };
+
   enableParallelBuilding = true;
 
   passthru.tests.version = testers.testVersion {
