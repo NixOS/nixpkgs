@@ -527,6 +527,8 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ (if variant == "fresh" then [
     "--with-system-rhino"
     "--with-rhino-jar=${rhino}/share/java/js.jar"
+
+    "--without-system-java-websocket"
   ] else [
     # our Rhino is too new for older versions
     "--without-system-rhino"
