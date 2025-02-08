@@ -41,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.12.1";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-server";
     tag = "v${version}";
-    hash = "sha256-1jWui48QmnTw18Dvl24lgxsUkm0/mxyjIZP6+ScjGY4=";
+    hash = "sha256-tdhYLAXs1Yf3DqCzf/pLOlJvr/zYRkSlAF6hsavSu+A=";
   };
 
   pythonRelaxDeps = [
