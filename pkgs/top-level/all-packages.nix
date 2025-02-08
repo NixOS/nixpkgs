@@ -15592,6 +15592,10 @@ with pkgs;
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
+  windsurf = callPackage ../by-name/wi/windsurf/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
+
   openvscode-server = callPackage ../servers/openvscode-server {
     nodejs = nodejs_18;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
