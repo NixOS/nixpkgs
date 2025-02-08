@@ -53,7 +53,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.0";
+  version = "3.2.2";
 
   outputs = [
     "lib"
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-gVLZPuXtMdFhylxh3+LC/SJCaQiOwZpbVcBGctyGGYY=";
+    hash = "sha256-AbEwpIxgYl3g4calnWca8Vz/Tw1DnYfZrD1Vl5cSMpk=";
   };
 
   postPatch =
