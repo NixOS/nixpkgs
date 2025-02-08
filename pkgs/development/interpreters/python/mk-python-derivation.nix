@@ -118,8 +118,6 @@ let
 in
 
 {
-  name ? "${attrs.pname}-${attrs.version}",
-
   # Build-time dependencies for the package
   nativeBuildInputs ? [ ],
 
@@ -226,7 +224,7 @@ let
           throwMismatch =
             attrName: drv:
             let
-              myName = "'${namePrefix}${name}'";
+              myName = "'${finalAttrs.name}'";
               theirName = "'${drv.name}'";
               optionalLocation =
                 let
@@ -278,7 +276,7 @@ let
     (cleanAttrs attrs)
     // {
 
-      name = namePrefix + name;
+      name = namePrefix + attrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
 
       inherit catchConflicts;
 
