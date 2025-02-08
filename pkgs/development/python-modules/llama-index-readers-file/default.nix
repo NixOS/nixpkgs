@@ -27,6 +27,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "pymupdf"
     "pypdf"
+    "striprtf"
   ];
 
   build-system = [ poetry-core ];

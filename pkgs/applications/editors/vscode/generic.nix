@@ -33,6 +33,7 @@
 
   # Attributes inherit from specific versions
   version,
+  vscodeVersion ? version,
   src,
   meta,
   sourceRoot,
@@ -303,7 +304,7 @@ stdenv.mkDerivation (
         let
           vscodeRipgrep =
             if stdenv.hostPlatform.isDarwin then
-              if lib.versionAtLeast version "1.94.0" then
+              if lib.versionAtLeast vscodeVersion "1.94.0" then
                 "Contents/Resources/app/node_modules/@vscode/ripgrep/bin/rg"
               else
                 "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"

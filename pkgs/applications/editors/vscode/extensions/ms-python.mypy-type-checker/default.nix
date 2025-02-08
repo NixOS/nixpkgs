@@ -1,9 +1,6 @@
 {
   lib,
   vscode-utils,
-  mypy,
-  jq,
-  moreutils,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -13,17 +10,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     version = "2025.1.10381011";
     hash = "sha256-boKUxLOAgQJP13zX/NMhg1MtcrPVQJt5gLbxI7gVSu4=";
   };
-
-  buildInputs = [ mypy ];
-
-  nativeBuildInputs = [
-    jq
-    moreutils
-  ];
-
-  postInstall = ''
-    jq '.contributes.configuration.properties."mypy-type-checker.path".default = "${lib.getExe mypy}"' $out/$installPrefix/package.json | sponge $out/$installPrefix/package.json
-  '';
 
   meta = {
     changelog = "https://github.com/microsoft/vscode-mypy/releases";
