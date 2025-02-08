@@ -12402,8 +12402,8 @@ with pkgs;
   };
 
   udev =
-    if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
-    else systemdLibs;
+    if lib.meta.availableOn stdenv.hostPlatform systemdLibs then systemdLibs
+    else libudev-zero;
 
   sysvtools = sysvinit.override {
     withoutInitTools = true;
