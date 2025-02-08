@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hoarder";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "hoarder-app";
     repo = "hoarder";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3xgpiqq+BV0a/OlcQiGDt59fYNF+zP0+HPeBCRiZj48=";
+    hash = "sha256-SYcJfobuDl2iPXy5qGGG8ukBX/CSboSo/hF2e/8ixVw=";
   };
 
   patches = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       installPhase = "cp -pr --reflink=auto -- . $out";
     };
 
-    hash = "sha256-U2wrjBhklP7c8S3QQoUtOPTYyJr7MBOwm0R/76FjhqE=";
+    hash = "sha256-4MSNh2lyl0PFUoG29Tmk3WOZSRnW8NBE3xoppJr8ZNY=";
   };
   buildPhase = ''
     runHook preBuild
