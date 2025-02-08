@@ -10,14 +10,14 @@
 let
   soext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mimalloc";
   version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
   };
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
-  ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
+  ++ lib.optionals (!finalAttrs.doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
 
   postInstall =
     let
-      rel = lib.versions.majorMinor version;
+      rel = lib.versions.majorMinor finalAttrs.version;
       suffix = if stdenv.hostPlatform.isLinux then "${soext}.${rel}" else ".${rel}${soext}";
     in
     ''
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})
