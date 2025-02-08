@@ -21,6 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-lHVLrkFdNM8Y4t6TcXYnX8sQ4COrW3vV2sTDWeI4xZU=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace-fail "pulsectl >=23.5.0,<=24.11.0" "pulsectl >=23.5.0"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ pulsectl ];
