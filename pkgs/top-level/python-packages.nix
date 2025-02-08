@@ -18687,8 +18687,6 @@ self: super: with self; {
 
   zconfig = callPackage ../development/python-modules/zconfig { };
 
-  zcs = callPackage ../development/python-modules/zcs { };
-
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
   zeek = (toPythonModule (pkgs.zeek.broker.override {
