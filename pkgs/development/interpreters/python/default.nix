@@ -117,6 +117,7 @@ in {
     gdbm = null;
     sqlite = null;
     tzdata = null;
+    libuuid = null;
     libffi = libffiBoot; # without test suite
     stripConfig = true;
     stripIdlelib = true;
