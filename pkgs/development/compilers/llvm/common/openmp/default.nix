@@ -64,6 +64,7 @@ stdenv.mkDerivation (rec {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (!stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries))
     (lib.cmakeBool "LIBOMP_OMPD_SUPPORT" ompdSupport)
     (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
   ] ++ lib.optionals (lib.versions.major release_version == "13") [
