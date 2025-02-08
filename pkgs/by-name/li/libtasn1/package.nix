@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
+    changelog = "https://gitlab.com/gnutls/libtasn1/-/blob/v${version}/NEWS";
   };
 }
