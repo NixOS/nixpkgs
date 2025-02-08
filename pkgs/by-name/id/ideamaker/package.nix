@@ -9,6 +9,7 @@
   fetchurl,
   ilmbase,
   jemalloc,
+  jq,
   lib,
   libcork,
   libGLU,
@@ -170,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     runtimeInputs = [
       curl
       common-updater-scripts
+      jq
     ];
     text = ''
       update-source-version ideamaker "$(
