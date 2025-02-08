@@ -12497,6 +12497,8 @@ with pkgs;
   util-linuxMinimal = util-linux.override {
     nlsSupport = false;
     ncursesSupport = false;
+    pamSupport = false;
+    shadowSupport = false;
     systemdSupport = false;
     translateManpages = false;
   };
