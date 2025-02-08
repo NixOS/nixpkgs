@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
@@ -173,7 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # gallery app delegates to thumbnailer, tests various formats
+      vm = nixosTests.lomiri-gallery-app;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 
