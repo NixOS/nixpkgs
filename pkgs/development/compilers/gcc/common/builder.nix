@@ -8,7 +8,11 @@
 
 let
   forceLibgccToBuildCrtStuff = import ./libgcc-buildstuff.nix { inherit lib stdenv; };
+  isCross = with stdenv; targetPlatform.config != hostPlatform.config;
 in
+
+# We don't support multilib and cross at the same time
+assert !(enableMultilib && isCross);
 
 originalAttrs:
 (stdenv.mkDerivation (
@@ -244,30 +248,34 @@ originalAttrs:
         '';
 
     postInstall = ''
-      # Move runtime libraries to lib output.
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.so*" "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
-      moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll" "''${!outputLib}"
+      # Move target runtime libraries to lib output.
+      # For non-cross, they're in $out/lib; for cross, they're in $out/$targetConfig/lib.
+      targetLibDir="''${targetConfig+$targetConfig/}lib"
+
+      moveToOutput "$targetLibDir/lib*.so*" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.la"  "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.dylib" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.dll.a" "''${!outputLib}"
+      moveToOutput "$targetLibDir/lib*.dll" "''${!outputLib}"
       moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
       if [ -z "$enableShared" ]; then
-          moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.a" "''${!outputLib}"
+          moveToOutput "$targetLibDir/lib*.a" "''${!outputLib}"
       fi
 
-      for i in "''${!outputLib}/''${targetConfig}"/lib/*.{la,py}; do
+      for i in "''${!outputLib}"/$targetLibDir/*.{la,py}; do
           substituteInPlace "$i" --replace "$out" "''${!outputLib}"
       done
 
+      # Multilib and cross can't exist at the same time, so just use lib64 here
       if [ -n "$enableMultilib" ]; then
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.la"  "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dylib" "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll.a" "''${!outputLib}"
-          moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dll" "''${!outputLib}"
+          moveToOutput "lib64/lib*.so*" "''${!outputLib}"
+          moveToOutput "lib64/lib*.la"  "''${!outputLib}"
+          moveToOutput "lib64/lib*.dylib" "''${!outputLib}"
+          moveToOutput "lib64/lib*.dll.a" "''${!outputLib}"
+          moveToOutput "lib64/lib*.dll" "''${!outputLib}"
 
-          for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
+          for i in "''${!outputLib}"/lib64/*.{la,py}; do
               substituteInPlace "$i" --replace "$out" "''${!outputLib}"
           done
       fi
