@@ -101,6 +101,9 @@ buildNpmPackage rec {
     homepage = "https://github.com/detachhead/basedpyright";
     license = lib.licenses.mit;
     mainProgram = "basedpyright";
-    maintainers = with lib.maintainers; [ kiike ];
+    maintainers = with lib.maintainers; [
+      kiike
+      misilelab
+    ];
   };
 }
