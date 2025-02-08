@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
-  xvfb-run,
   matplotlib,
   scikit-image,
   numpy,
@@ -41,15 +39,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    xvfb-run
     torch
     torchvision
   ];
 
   pythonImportsCheck = [ "boxx" ];
 
+  # The tests are just a bunch of files with code in them (yikes)
+  # intead of normal classes/functions representing test cases.
+  # Standard test discovery mechanisms in unittest/pytest complain
+  # that no tests were discovered, so we run the files manually.
   checkPhase = ''
-    xvfb-run ${python.interpreter} -m unittest
+    export MPLCONFIGDIR=$(mktemp -d)
+    TESTS=$(find test -type f -name '*.py' | sed 's|test/\([^.]*\).py|\1|g')
+    touch test/__init__.py
+    for test in $TESTS; do
+      echo "Running test "$test"..."
+      python -m test.$test
+    done
   '';
 
   meta = with lib; {
