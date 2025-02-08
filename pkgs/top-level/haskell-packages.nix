@@ -81,6 +81,10 @@ let
       ) (lib.length parts)
     );
 
+  # Convert a GHC version to the attribute under haskell.compiler/packages to use
+  # e.g. ghcVersionToAttr "9.8.4" == "ghc984"
+  ghcVersionToAttr = v: "ghc${lib.replaceStrings [ "." ] [ "" ] v}";
+
   # Takes a fix point as its input (pkgs.haskell.packages or pkgs.haskell.compiler)
   # and returns an attribute set of aliases that should be merged into them, e.g.
   # { ghc810 = …; ghc90 = …; … }. Which version to use is determined by ghcRules:
@@ -90,15 +94,14 @@ let
     set:
     let
       isReleaseSeries = v: lib.match "[0-9]+\\.[0-9]+" v != null;
-      versionToAttr = v: "ghc${lib.replaceStrings [ "." ] [ "" ] v}";
     in
     lib.mapAttrs'
       (
         series:
         { defaultVersion, ... }:
         {
-          name = versionToAttr series;
-          value = set.${versionToAttr defaultVersion};
+          name = ghcVersionToAttr series;
+          value = set.${ghcVersionToAttr defaultVersion};
         }
       )
       (
@@ -117,10 +120,7 @@ let
   # if the rule's attribute name is a prefix of the given GHC version.
   # Longer matching prefixes takes precedence.
   matchGhcRules =
-    versionParts:
-    let
-      version = lib.concatStringsSep "." versionParts;
-    in
+    version:
     lib.pipe ghcRules # see below
       [
         (lib.filterAttrs (
@@ -171,9 +171,9 @@ let
 
   # Find all GHC Nix expressions in the tree and automatically callGhc them.
   # Think ghcs by version like pkgs by name, though there is e.g. no sharding.
-  parseGhcFilename = builtins.match "([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.nix";
   ghcsByVersion =
     let
+      parseGhcFilename = builtins.match "([0-9]+\\.[0-9]+\\.[0-9]+)\\.nix";
       exprDir = ../development/compilers/ghc;
     in
     lib.pipe exprDir [
@@ -181,9 +181,13 @@ let
       (builtins.mapAttrs (f: _: parseGhcFilename f))
       (lib.filterAttrs (_: parsed: parsed != null))
       (lib.mapAttrs' (
-        filename: versionParts: {
-          name = "ghc${lib.concatStrings versionParts}";
-          value = callGhc (exprDir + "/${filename}") (matchGhcRules versionParts);
+        filename: version':
+        let
+          version = builtins.head version';
+        in
+        {
+          name = ghcVersionToAttr version;
+          value = callGhc (exprDir + "/${filename}") (matchGhcRules version);
         }
       ))
     ];
