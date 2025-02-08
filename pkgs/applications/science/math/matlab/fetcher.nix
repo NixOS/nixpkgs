@@ -29,6 +29,10 @@ stdenvNoCC.mkDerivation {
     # As mpm is bubblewrapped, it cannot write to $out directly
     # https://github.com/NixOS/nixpkgs/issues/239017
     ${lib.getExe matlab-package-manager} download --release "$version" --platforms glnxa64 --destination matlab --products "''${products[@]}"
+
+    # mpm 2024.4 now bundles mpm with the downloaded files. Remove this so the hashes are the same as prior mpm versions.
+    rm -rf matlab/mpm
+
     mv matlab $out
   '';
 
