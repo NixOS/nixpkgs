@@ -267,18 +267,7 @@ lib.runTests (
           in
           {
             expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") modified;
-            expected =
-              {
-                # Changes in these attrs are not detectable because they're function.
-                # The functions should be derived from the data, so this is not a problem.
-                canExecute = null;
-                emulator = null;
-                emulatorAvailable = null;
-                equals = null;
-                notEquals = null;
-                staticEmulatorAvailable = null;
-                isCompatible = null;
-              } ? ${platformAttrName};
+            expected = false;
           };
       })
       # x86_64-linux is an arbitrary choice, just to get all the elaborated attrNames
@@ -286,6 +275,15 @@ lib.runTests (
         builtins.removeAttrs (lib.systems.elaborate "x86_64-linux") [
           # Avoid the warning
           "warnAboutPlatformEquals"
+          # Changes in these attrs are not detectable because they're function.
+          # The functions should be derived from the data, so this is not a problem.
+          "canExecute"
+          "emulator"
+          "emulatorAvailable"
+          "equals"
+          "isCompatible"
+          "notEquals"
+          "staticEmulatorAvailable"
         ]
       )
 
