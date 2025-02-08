@@ -119,28 +119,28 @@ lib.extendMkDerivation {
 
       preUnpack =
         ''
-              mkdir -p "$NIX_BUILD_TOP/recipes"
-              recipeFile="$NIX_BUILD_TOP/recipes/$ename"
-              if [ -r "$recipe" ]; then
-                ln -s "$recipe" "$recipeFile"
-                nixInfoLog "link recipe"
-              elif [ -n "$recipe" ]; then
-                printf "%s" "$recipe" > "$recipeFile"
-                nixInfoLog "write recipe"
-              else
-                cat > "$recipeFile" <<'EOF'
+          mkdir -p "$NIX_BUILD_TOP/recipes"
+          recipeFile="$NIX_BUILD_TOP/recipes/$ename"
+          if [ -r "$recipe" ]; then
+            ln -s "$recipe" "$recipeFile"
+            nixInfoLog "link recipe"
+          elif [ -n "$recipe" ]; then
+            printf "%s" "$recipe" > "$recipeFile"
+            nixInfoLog "write recipe"
+          else
+            cat > "$recipeFile" <<'EOF'
           (${finalAttrs.ename} :fetcher git :url "" ${
             lib.optionalString (finalAttrs.files != null) ":files ${finalAttrs.files}"
           })
           EOF
-                nixInfoLog "use default recipe"
-              fi
-              nixInfoLog "recipe content:" "$(< $recipeFile)"
-              unset -v recipeFile
+            nixInfoLog "use default recipe"
+          fi
+          nixInfoLog "recipe content:" "$(< $recipeFile)"
+          unset -v recipeFile
 
-              ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
+          ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
-              mkdir -p "$NIX_BUILD_TOP/packages"
+          mkdir -p "$NIX_BUILD_TOP/packages"
         ''
         + preUnpack;
 
