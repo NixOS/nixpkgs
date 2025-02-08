@@ -105,15 +105,14 @@ lib.pipe drv
                     + lib.optionalString enableLibGccOutput (
                       ''
                         # move libgcc from lib to its own output (libgcc)
-                        mkdir -p $libgcc/lib
-                        mv    $lib/lib/libgcc_s.so $libgcc/lib/
-                        mv    $lib/lib/libgcc_s.so.${libgcc_s-version-major} $libgcc/lib/
-                        ln -s $libgcc/lib/libgcc_s.so $lib/lib/
-                        ln -s $libgcc/lib/libgcc_s.so.${libgcc_s-version-major} $lib/lib/
+                        mkdir -p $libgcc/${targetPlatformSlash}lib
+                        mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/${targetPlatformSlash}lib/
+                        mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/${targetPlatformSlash}lib/
+                        ln -s $libgcc/${targetPlatformSlash}lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
+                        ln -s $libgcc/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
                       ''
                       + lib.optionalString (targetPlatformSlash != "") ''
-                        mkdir -p $libgcc/${targetPlatformSlash}
-                        ln -s $libgcc/lib $libgcc/${targetPlatformSlash}lib
+                        ln -s ${targetPlatformSlash}lib $libgcc/lib
                       ''
                       #
                       # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:
