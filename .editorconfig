@@ -104,6 +104,9 @@ insert_final_newline = unset
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset
 
+[pkgs/tools/package-management/nix/**/.version]
+insert_final_newline = true
+
 [pkgs/tools/misc/timidity/timidity.cfg]
 trim_trailing_whitespace = unset
 
