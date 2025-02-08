@@ -41,6 +41,10 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
+  postPatch = ''
+    sed -i /intersphinx/d doc/source/conf.py
+  '';
+
   build-system = with python.pkgs; [
     setuptools
     setuptools-scm
