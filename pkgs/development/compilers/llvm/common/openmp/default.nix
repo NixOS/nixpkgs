@@ -17,7 +17,12 @@
 , python3
 , version
 , devExtraCmakeFlags ? []
+, ompdSupport ? true
+, ompdGdbSupport ? ompdSupport
 }:
+
+assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
+
 let
   pname = "openmp";
   src' =
@@ -55,10 +60,14 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+  ] ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3
   ];
 
-  cmakeFlags = lib.optionals (lib.versions.major release_version == "13") [
+  cmakeFlags = [
+    (lib.cmakeBool "LIBOMP_OMPD_SUPPORT" ompdSupport)
+    (lib.cmakeBool "LIBOMP_OMPD_GDB_SUPPORT" ompdGdbSupport)
+  ] ++ lib.optionals (lib.versions.major release_version == "13") [
     "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL fails
   ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
     "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
