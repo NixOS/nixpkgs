@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     export NODE_OPTIONS=--openssl-legacy-provider
   '';
+  # Needed ever since noBrokenSymlinks was introduced
+  postInstall = ''
+    rm $out/lib/node_modules/vim-language-server/node_modules/.bin/node-which
+  '';
 
   meta = {
     description = "VImScript language server, LSP for vim script";
