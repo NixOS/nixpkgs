@@ -103,6 +103,8 @@ class VimEditor(pluginupdate.Editor):
     def plugin2nix(
         self, pdesc: PluginDesc, plugin: pluginupdate.Plugin, isNeovim: bool
     ) -> str:
+        if isNeovim:
+            raise RuntimeError(f"Plugin {plugin.name} is already packaged in `luaPackages`, please use that")
         repo = pdesc.repo
 
         content = f"  {plugin.normalized_name} = "
