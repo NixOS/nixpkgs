@@ -30,7 +30,7 @@ callPackage (pkgs.path + "/pkgs/applications/editors/vscode/generic.nix") {
       "x86_64-linux"
     ];
     mainProgram = "windsurf";
-    maintainers = [ "joyanhui@qq.com" ];
+    maintainers = [ "joyanhui" ];
   };
   updateScript = "";
   longName = "Windsurf - Agentic IDE";
