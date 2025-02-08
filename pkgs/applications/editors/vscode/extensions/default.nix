@@ -3507,6 +3507,8 @@ let
         };
       };
 
+      ms-python.mypy-type-checker = callPackage ./ms-python.mypy-type-checker { };
+
       ms-python.python = callPackage ./ms-python.python { };
 
       ms-python.debugpy = buildVscodeMarketplaceExtension {
