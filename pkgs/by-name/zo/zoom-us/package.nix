@@ -40,6 +40,7 @@
   pulseaudioSupport ? true,
   libpulseaudio,
   pulseaudio,
+  callPackage,
 }:
 
 let
@@ -220,6 +221,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.startwindow = callPackage ./test.nix { };
 
   meta = with lib; {
     homepage = "https://zoom.us/";
