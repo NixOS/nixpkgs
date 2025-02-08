@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , pkg-config
-, flutter324
+, flutter327
 , gst_all_1
 , libunwind
 , makeWrapper
@@ -17,7 +17,7 @@
 , fletTarget ? "linux"
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "flet-client-flutter";
   version = "0.26.0";
 
