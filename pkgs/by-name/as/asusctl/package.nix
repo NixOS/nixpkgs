@@ -88,6 +88,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     make prefix=$out install-data
+
+    patchelf $out/bin/rog-control-center \
+      --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
 
   meta = with lib; {
