@@ -5,19 +5,20 @@
   cmake,
   ninja,
   secureBuild ? false,
+  localDynamicTLS ? false,
 }:
 
 let
   soext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mimalloc";
   version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mimalloc";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-C0cqYiXxx8tW3plUZrfAJYKeY36opGKymkZ/CWrVuEI=";
   };
 
@@ -34,15 +35,32 @@ stdenv.mkDerivation rec {
     cmake
     ninja
   ];
-  cmakeFlags =
-    [ "-DMI_INSTALL_TOPLEVEL=ON" ]
-    ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
-    ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    (lib.cmakeBool "MI_INSTALL_TOPLEVEL" true)
+    (lib.cmakeBool "DMI_SECURE" secureBuild)
+    (lib.cmakeBool "MI_BUILD_SHARED" (
+      !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.hasSharedLibraries
+    ))
+    (lib.cmakeBool "MI_LIBC_MUSL" (stdenv.hostPlatform.libc == "musl"))
+    (lib.cmakeBool "MI_LOCAL_DYNAMIC_TLS" localDynamicTLS)
+    (lib.cmakeBool "MI_BUILD_TESTS" finalAttrs.doCheck)
+
+    # MI_OPT_ARCH is inaccurate (e.g. it assumes aarch64 == armv8.1-a).
+    # Nixpkgs's native platform configuration does a better job.
+    (lib.cmakeBool "MI_OPT_ARCH" false)
+  ];
+
+  postPatch = ''
+    substituteInPlace cmake/mimalloc-config.cmake \
+      --replace-fail 'string(REPLACE "/lib/cmake" "/lib" MIMALLOC_LIBRARY_DIR "''${MIMALLOC_CMAKE_DIR}")' \
+                     "set(MIMALLOC_LIBRARY_DIR \"$out/lib\")" \
+      --replace-fail 'string(REPLACE "/lib/cmake/" "/lib/" MIMALLOC_OBJECT_DIR "''${CMAKE_CURRENT_LIST_DIR}")' \
+                     "set(MIMALLOC_OBJECT_DIR \"$out/lib\")"
+  '';
 
   postInstall =
     let
-      rel = lib.versions.majorMinor version;
+      rel = lib.versions.majorMinor finalAttrs.version;
       suffix = if stdenv.hostPlatform.isLinux then "${soext}.${rel}" else ".${rel}${soext}";
     in
     ''
@@ -75,4 +93,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})
