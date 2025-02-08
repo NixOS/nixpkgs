@@ -31,7 +31,7 @@ let
       stdenv.override {
         cc = stdenv.cc.override {
           nixSupport = stdenv.cc.nixSupport // {
-            cc-cflags = lib.remove "-lunwind" stdenv.cc.nixSupport.cc-cflags;
+            cc-cflags = lib.remove "-lunwind" (stdenv.cc.nixSupport.cc-cflags or [ ]);
           };
         };
       }
@@ -58,8 +58,8 @@ stdenv'.mkDerivation (finalAttrs: {
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
   postUnpack = lib.optionalString isFullBuild ''
-    patchShebangs $sourceRoot/../$pname/hdrgen/yaml_to_classes.py
-    chmod +x $sourceRoot/../$pname/hdrgen/yaml_to_classes.py
+    patchShebangs $sourceRoot/../$pname/utils/hdrgen/main.py
+    chmod +x $sourceRoot/../$pname/utils/hdrgen/main.py
   '';
 
   prePatch = ''
