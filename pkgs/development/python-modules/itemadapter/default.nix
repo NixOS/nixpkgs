@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JlXIxQ8ahAXJ+nS4zcTaf+xUHKIXvIIbkKzIRRyYqdI=";
+    hash = "sha256-Ow8n9MXi6K5BXYPj1g0zrbe6CbmMMGOLxgb7Hf8uzdI=";
   };
 
   build-system = [ setuptools ];
