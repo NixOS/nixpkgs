@@ -181,7 +181,7 @@ stdenv.mkDerivation {
       substituteInPlace $out/share/applications/Zoom.desktop \
           --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-      for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
+      for i in aomhost zopen ZoomLauncher ZoomWebviewHost; do
         if [ -f $out/opt/zoom/$i ]; then
           patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
         fi
@@ -189,8 +189,14 @@ stdenv.mkDerivation {
 
       # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
       # IPC breaks if the executable name does not end in 'zoom'
+      # zoom binary does not like being touched by patchelf
+      #   => we call it indirectly via the dynamic linker
+      # zoom binary inspects /proc/self/exe to find its data files
+      #   => we must place a copy (not symlink) of the linker in zoom's data dir
       mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
-      makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
+      cp "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/ld.so
+      makeWrapper $out/opt/zoom/ld.so $out/opt/zoom/zoom \
+        --add-flags $out/opt/zoom/.zoom \
         --prefix LD_LIBRARY_PATH ":" ${libs}
 
       rm $out/bin/zoom
