@@ -17293,17 +17293,14 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
 
+  fetchFromMPM = callPackage ../by-name/ma/matlab-package-manager/fetcher.nix { };
+
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
-
-  inherit (callPackage ../applications/science/math/matlab { })
-    fetchFromMPM
-    matlab
-    matlab-package-manager;
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
