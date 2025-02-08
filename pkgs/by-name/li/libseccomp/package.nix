@@ -7,6 +7,7 @@
   which,
   gperf,
   nix-update-script,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (python3Packages) seccomp;
+    };
   };
 
   meta = with lib; {
