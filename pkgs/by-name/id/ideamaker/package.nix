@@ -3,6 +3,7 @@
   boost,
   c-blosc,
   common-updater-scripts,
+  copyDesktopItems,
   curl,
   dpkg,
   fetchFromGitHub,
@@ -17,7 +18,6 @@
   makeDesktopItem,
   nlopt,
   opencascade-occt_7_6,
-  openexr,
   openssl_1_1,
   openvdb,
   poly2tri-c,
@@ -26,37 +26,63 @@
   tbb,
   unzip,
   writeShellApplication,
+  automake,
+  libtool,
+  pkgconf,
+  autoconf,
+  zlib,
 }:
-stdenv.mkDerivation (finalAttrs: {
+let
   pname = "ideamaker";
   version = "5.1.4.8480";
-  src =
-    let
-      semver = lib.strings.concatStringsSep "." (
-        lib.lists.init (builtins.splitVersion finalAttrs.version)
-      );
-    in
-    fetchurl {
-      url = "https://downcdn.raise3d.com/ideamaker/release/${semver}/ideaMaker_${finalAttrs.version}-ubuntu_amd64.deb";
-      hash = "sha256-vOiHqdegFHqA1PYYvtXBQSIl+OVq2oyAT80ZFtaIxl8=";
+  semver = lib.strings.concatStringsSep "." (lib.lists.init (builtins.splitVersion version));
+  description = "Raise3D's 3D slicer software";
+  openexr_2_2_1 = stdenv.mkDerivation rec {
+    name = "openexr-2.2.1";
+
+    src = fetchurl {
+      url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";
+      sha256 = "1kdf2gqznsdinbd5vcmqnif442nyhdf9l7ckc51410qm2gv5m6lg";
     };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    shared-mime-info
-    libsForQt5.wrapQtAppsHook
-  ];
+    patches = [
+      ./bootstrap.patch
+    ];
 
-  buildInputs = [
-    curl
-    libcork
-    libGLU
-    libsForQt5.quazip
-    nlopt
-    opencascade-occt_7_6
-    openssl_1_1
-    (openvdb.overrideAttrs {
+    outputs = [
+      "bin"
+      "dev"
+      "out"
+      "doc"
+    ];
+
+    preConfigure = ''
+      ./bootstrap
+    '';
+
+    nativeBuildInputs = [ pkgconf ];
+    buildInputs = [
+      autoconf
+      automake
+      libtool
+    ];
+    propagatedBuildInputs = [
+      ilmbase
+      zlib
+    ];
+
+    enableParallelBuilding = true;
+
+    meta = {
+      homepage = "http://www.openexr.com/";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ wkennington ];
+    };
+  };
+
+  openvdb_5_0_0 = (
+    openvdb.overrideAttrs {
       # attempting to build https://github.com/NixOS/nixpkgs/commit/7053b097de9334b07f6b74476b6b206542695731
       version = "5.0.0";
       outputs = [ "out" ];
@@ -71,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       buildInputs = [
         unzip
-        openexr
+        openexr_2_2_1
         boost
         tbb
         jemalloc
@@ -104,9 +130,35 @@ stdenv.mkDerivation (finalAttrs: {
 
       installFlags = ''DESTDIR=$(out)'';
 
-      NIX_CFLAGS_COMPILE = "-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
+      NIX_CFLAGS_COMPILE = "-I${openexr_2_2_1.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
       NIX_LDFLAGS = "-lboost_iostreams";
-    })
+    }
+  );
+in
+stdenv.mkDerivation {
+  inherit pname version;
+  src = fetchurl {
+    url = "https://downcdn.raise3d.com/ideamaker/release/${semver}/ideaMaker_${version}-ubuntu_amd64.deb";
+    hash = "sha256-vOiHqdegFHqA1PYYvtXBQSIl+OVq2oyAT80ZFtaIxl8=";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+    dpkg
+    shared-mime-info
+    libsForQt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    curl
+    libcork
+    libGLU
+    libsForQt5.quazip
+    nlopt
+    opencascade-occt_7_6
+    openssl_1_1
+    openvdb_5_0_0
     poly2tri-c
     tbb
   ];
@@ -134,37 +186,37 @@ stdenv.mkDerivation (finalAttrs: {
     install -D usr/share/ideamaker/icons/ideamaker-icon.png \
       $out/share/pixmaps/ideamaker.png
 
-    ln -s ${finalAttrs.desktopItem}/share/applications $out/share/
-
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "ideamaker";
-    exec = "ideamaker";
-    icon = "ideamaker";
-    desktopName = "Ideamaker";
-    comment = "ideaMaker - www.raise3d.com";
-    categories = [
-      "Qt"
-      "Utility"
-      "3DGraphics"
-      "Viewer"
-      "Engineering"
-    ];
-    genericName = finalAttrs.meta.description;
-    mimeTypes = [
-      "application/x-ideamaker"
-      "model/3mf"
-      "model/obj"
-      "model/stl"
-      "text/x.gcode"
-    ];
-    noDisplay = false;
-    startupNotify = true;
-    terminal = false;
-    type = "Application";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ideamaker";
+      exec = "ideamaker";
+      icon = "ideamaker";
+      desktopName = "Ideamaker";
+      comment = "ideaMaker - www.raise3d.com";
+      categories = [
+        "Qt"
+        "Utility"
+        "3DGraphics"
+        "Viewer"
+        "Engineering"
+      ];
+      genericName = description;
+      mimeTypes = [
+        "application/x-ideamaker"
+        "model/3mf"
+        "model/obj"
+        "model/stl"
+        "text/x.gcode"
+      ];
+      noDisplay = false;
+      startupNotify = true;
+      terminal = false;
+      type = "Application";
+    })
+  ];
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "ideamaker-update-script";
@@ -183,12 +235,12 @@ stdenv.mkDerivation (finalAttrs: {
   });
 
   meta = {
+    inherit description;
     homepage = "https://www.raise3d.com/ideamaker/";
     changelog = "https://www.raise3d.com/download/ideamaker-release-notes/";
-    description = "Raise3D's 3D slicer software";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ cjshearer ];
   };
-})
+}
