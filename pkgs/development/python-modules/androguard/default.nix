@@ -2,19 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  future,
+  poetry-core,
+  apkinspector,
   networkx,
   pygments,
   lxml,
   colorama,
+  cryptography,
+  dataset,
+  frida-python,
+  loguru,
   matplotlib,
   asn1crypto,
   click,
+  mutf8,
+  pyyaml,
   pydot,
   ipython,
+  oscrypto,
   pyqt5,
-  pyperclip,
   pytestCheckHook,
   python-magic,
   qt5,
@@ -39,38 +45,40 @@ buildPythonPackage rec {
     sha256 = "sha256-rBoYqhkjDcLhv1VVlIt5Uj05MyBk+QbLD1aCjQkrmqw=";
   };
 
-  patches = [
-    ./drop-removed-networkx-formats.patch
-    ./fix-tests.patch
+  build-system = [
+    poetry-core
   ];
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
 
   dependencies =
     [
+      apkinspector
       asn1crypto
       click
       colorama
-      future
+      cryptography
+      dataset
+      frida-python
       ipython
+      loguru
       lxml
       matplotlib
+      mutf8
       networkx
+      oscrypto
       pydot
       pygments
+      pyyaml
     ]
     ++ networkx.optional-dependencies.default
     ++ networkx.optional-dependencies.extra
     ++ lib.optionals withGui [
       pyqt5
-      pyperclip
     ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pyperclip
     pyqt5
     python-magic
   ];
