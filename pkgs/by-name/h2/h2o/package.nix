@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "Optimized HTTP/1 and HTTP/2 server";
+    description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";
     homepage = "https://h2o.examp1e.net";
     license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];
