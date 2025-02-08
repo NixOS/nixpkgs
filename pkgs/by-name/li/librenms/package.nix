@@ -25,7 +25,7 @@
 let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
-phpPackage.buildComposerProject rec {
+phpPackage.buildComposerProject2 rec {
   pname = "librenms";
   version = "25.1.0";
 
@@ -36,7 +36,7 @@ phpPackage.buildComposerProject rec {
     sha256 = "sha256-Uo+JOgb1KSZkludoupIIGnuK88ER3LthGnGmShpkrNU=";
   };
 
-  vendorHash = "sha256-QBZnsURxLf3vmeh9qxEOJtSVAi1Ipr0jEbC/EmhL4q8=";
+  vendorHash = "sha256-9cywwX0vWrvbi3HGARxrjsObckGiGbJPRILe0ASgrGU=";
 
   php = phpPackage;
 
@@ -68,9 +68,8 @@ phpPackage.buildComposerProject rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/librenms/* $out
     rm -r $out/share
 
@@ -117,8 +116,6 @@ phpPackage.buildComposerProject rec {
     ln -s ${dataDir}/rrd $out/rrd
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache
-
-    runHook postInstall
   '';
 
   passthru = {
