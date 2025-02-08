@@ -13,7 +13,7 @@
   pyarrow,
 
   # checks
-  distributed,
+  jinja2,
   pytestCheckHook,
   xarray,
 }:
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dask_expr" ];
 
   nativeCheckInputs = [
-    distributed
+    jinja2
     pytestCheckHook
     xarray
   ];
