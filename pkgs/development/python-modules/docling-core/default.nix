@@ -11,6 +11,7 @@
   pydantic,
   tabulate,
   pyyaml,
+  semchunk,
   typing-extensions,
   transformers,
   typer,
@@ -46,25 +47,29 @@ buildPythonPackage rec {
     pyyaml
     typing-extensions
     transformers
-    # semchunk
+    semchunk
     typer
     latex2mathml
   ];
 
   pythonRelaxDeps = [
     "pillow"
+    "typer"
   ];
 
   pythonImportsCheck = [
     "docling_core"
   ];
 
-  doCheck = false;
-
   nativeCheckInputs = [
     jsondiff
     pytestCheckHook
     requests
+  ];
+
+  disabledTestPaths = [
+    # attempts to download models
+    "test/test_hybrid_chunker.py"
   ];
 
   meta = {

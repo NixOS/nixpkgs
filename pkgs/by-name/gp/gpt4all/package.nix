@@ -4,10 +4,15 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   cmake,
-  qt6,
+  boost,
   fmt,
+  duckx,
+  expected-lite,
+  optional-lite,
+  string-view-lite,
+  variant-lite,
+  qt6,
   shaderc,
   vulkan-headers,
   wayland,
@@ -18,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "3.4.2";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-QzU22y6tt3UhazVSPcFuKejH4AV+mw7JExH61NtAKoM=";
+    hash = "sha256-DbMoDdP7tEku3zZiCOmPz3iHQF5acg97gd+tLKoFu/o=";
     owner = "nomic-ai";
     repo = "gpt4all";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
   };
 
   embed_model = fetchurl {
@@ -35,13 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./embedding-local.patch
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-fix-build-with-qt-6.8.0.diff?h=gpt4all-chat&id=d14b12cb63fae95e578aa839a570189a23833051";
-      sha256 = "3Zur9KFn45f4dgAzOF7p1q42IdLqXwioN4zMiBbWbVU=";
-      # remove the `gpt4all-chat` part of the paths as sourceRoot is gpt4all-chat
-      stripLen = 1;
-    })
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "duckx::duckx QXlsx" "duckx QXlsx"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/gpt4all-chat";
 
@@ -57,7 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      expected-lite
+      optional-lite
+      string-view-lite
+      variant-lite
+      boost
       fmt
+      duckx
       qt6.qtwayland
       qt6.qtquicktimeline
       qt6.qtsvg
@@ -80,14 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
-      "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
-      "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
-      "-DGGML_VULKAN=ON"
-      "-DGGML_KOMPUTE=ON"
+      (lib.cmakeBool "KOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER" false)
+      (lib.cmakeBool "KOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK" true)
+      (lib.cmakeBool "KOMPUTE_OPT_USE_BUILT_IN_FMT" false)
+
+      # https://github.com/NixOS/nixpkgs/issues/298997
+      # https://github.com/nomic-ai/gpt4all/issues/3468
+      (lib.cmakeBool "LLMODEL_KOMPUTE" false)
     ]
     ++ lib.optionals (!cudaSupport) [
-      "-DLLMODEL_CUDA=OFF"
+      (lib.cmakeBool "LLMODEL_CUDA" false)
     ];
 
   postInstall = ''

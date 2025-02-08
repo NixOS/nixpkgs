@@ -369,7 +369,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.0";
+  hassVersion = "2025.2.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -390,13 +390,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-TGlfqvmYUPA5wdvZWD89z6lfvDr+K/1kgu6NjkRpNxs=";
+    hash = "sha256-iWOrBIKsN+fi5pzMzekmTBIk2FoM2HOsWujkuZ45lHE=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-+dkS6AuqyzvC2NiGCGkDAGxF/kS/LuKkMFXWXjC3I8Y=";
+    hash = "sha256-GToOHfDOWrjiQEcxgX9h2tCYqGUv3mXxVh1/GchiNRU=";
   };
 
   build-system = with python.pkgs; [
@@ -450,9 +450,6 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
-
-    substituteInPlace tests/components/hassio/test_backup.py \
-      --replace-fail setup_integration setup_backup_integration
   '';
 
   dependencies = with python.pkgs; [

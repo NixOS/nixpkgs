@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   autoPatchelfHook,
   copyDesktopItems,
@@ -23,17 +23,17 @@
   libgbm,
   nss,
   udev,
+  libGL,
   xorg,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "teamspeak5-client";
-  version = "5.0.0-beta77";
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "teamspeak6-client";
+  version = "6.0.0-beta2";
 
   src = fetchurl {
-    # check https://teamspeak.com/en/downloads/#ts5 for version and checksum
-    url = "https://files.teamspeak-services.com/pre_releases/client/${version}/teamspeak-client.tar.gz";
-    sha256 = "6f3bf97b120d3c799cefc90c448e45836708a826d7caa07ad32b5c868eb9181b";
+    url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
+    hash = "sha256-3jNPv3uQ2RztR1p4XQNLUg5IVrvW/dcdtqXdiGJKVSs=";
   };
 
   sourceRoot = ".";
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     xorg.libXdamage
     xorg.libXfixes
     xorg.libxshmfence
+    xorg.libXtst
   ];
 
   nativeBuildInputs = [
@@ -72,8 +73,8 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "TeamSpeak";
       exec = "TeamSpeak";
-      icon = pname;
-      desktopName = pname;
+      icon = "teamspeak6-client";
+      desktopName = "teamspeak6-client";
       comment = "TeamSpeak Voice Communication Client";
       categories = [
         "Audio"
@@ -90,26 +91,33 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname} $out/share/icons/hicolor/64x64/apps/
+    mkdir -p $out/bin $out/share/teamspeak6-client $out/share/icons/hicolor/64x64/apps/
 
-    cp -a * $out/share/${pname}
-    cp logo-256.png $out/share/icons/hicolor/64x64/apps/${pname}.png
+    cp -a * $out/share/teamspeak6-client
+    cp logo-256.png $out/share/icons/hicolor/64x64/apps/teamspeak6-client.png
 
-    makeWrapper $out/share/${pname}/TeamSpeak $out/bin/TeamSpeak \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ udev ]}"
+    makeWrapper $out/share/teamspeak6-client/TeamSpeak $out/bin/TeamSpeak \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          udev
+          libGL
+        ]
+      }"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  updateScript = ./update.sh;
+
+  meta = {
     description = "TeamSpeak voice communication tool (beta version)";
     homepage = "https://teamspeak.com/";
-    license = {
-      fullName = "Teamspeak client license";
-      url = "https://www.teamspeak.com/en/privacy-and-terms/";
-      free = false;
-    };
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.teamspeak;
+    mainProgram = "TeamSpeak";
+    maintainers = with lib.maintainers; [
+      gepbird
+      jojosch
+    ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

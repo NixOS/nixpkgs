@@ -8,18 +8,18 @@
   nixosTests,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-aX3DMy9Jv8rNp1/VIvUtNXYXGBrCgBMs5GsDf4XXSj0=";
   };
 
-  vendorHash = "sha256-KaYvA0Rd4pd1s/L8QbVUgkE+SjH+jv4+6RvIaGOpews=";
+  vendorHash = "sha256-W4pRJJYGaKYYO6BqhYZyP0VH7lcPXbByR0bBn+dfdIo=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -52,13 +52,10 @@ php.buildComposerProject (finalAttrs: {
     runHook postConfigure
   '';
 
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/grocy/* $out
     rm -r $out/share
-
-    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) grocy; };
