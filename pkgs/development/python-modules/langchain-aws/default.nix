@@ -78,6 +78,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       drupol
       natsukium
+      sarahec
     ];
   };
 }
