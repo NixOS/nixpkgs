@@ -119,6 +119,11 @@ let
       rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
       ln -s ${alsa-lib}/lib/libasound.so.2.0.0 $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
 
+      ln -snf ${glib.dev}/bin/gio-querymodules $out/usr/bin/gio-querymodules
+      ln -snf ${glib.dev}/bin/glib-compile-schemas $out/usr/bin/glib-compile-schemas
+      rm $out/usr/share/doc/libglib2.0-bin/changelog.Debian.gz
+      rm $out/usr/share/doc/libxml2/NEWS.gz
+
       runHook postInstall
     '';
   };
