@@ -28,13 +28,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-t0JItqEbf2YqZnu5mVsCO9YGzB7WlCfsIwi76nHJ/WI=";
+    hash = "sha256-nvaq+9evQSj/ahK68nj8FckG4nA1gs2DqcZxFEFH1iU=";
   };
 
   patches = [
