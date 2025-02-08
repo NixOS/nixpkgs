@@ -14114,7 +14114,9 @@ with pkgs;
     portaudio = null;
   };
 
-  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr {
+    openexr = openexr_2;
+  };
 
   luddite = with python3Packages; toPythonApplication luddite;
 
