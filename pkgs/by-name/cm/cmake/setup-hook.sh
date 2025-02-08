@@ -93,7 +93,6 @@ cmakeConfigurePhase() {
     prependToVar cmakeFlags "-DCMAKE_INSTALL_BINDIR=${!outputBin}/bin"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_SBINDIR=${!outputBin}/sbin"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
-    prependToVar cmakeFlags "-DCMAKE_INSTALL_OLDINCLUDEDIR=${!outputInclude}/include"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_MANDIR=${!outputMan}/share/man"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_INFODIR=${!outputInfo}/share/info"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_DOCDIR=${!outputDoc}/share/doc/${shareDocName}"
