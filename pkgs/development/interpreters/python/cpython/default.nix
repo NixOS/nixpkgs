@@ -25,7 +25,7 @@
 , zlib
 
 # platform-specific dependencies
-, bash
+, bashNonInteractive
 , darwin
 , windows
 
@@ -237,7 +237,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   inherit nativeBuildInputs;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [
-    bash # only required for patchShebangs
+    bashNonInteractive # only required for patchShebangs
   ] ++ buildInputs;
 
   prePatch = optionalString stdenv.hostPlatform.isDarwin ''
@@ -334,7 +334,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
-      --replace-fail "'/bin/sh'" "'${bash}/bin/sh'"
+      --replace-fail "'/bin/sh'" "'${bashNonInteractive}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
@@ -616,7 +616,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
-    pythonOnBuildForHost buildPackages.bash
+    pythonOnBuildForHost buildPackages.bashNonInteractive
   ];
 
   separateDebugInfo = true;
