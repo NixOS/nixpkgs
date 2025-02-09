@@ -75,7 +75,12 @@ in
           # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L42
           which
           unpaper
-          libreoffice
+          # Before any invocation to LibreOffice ended up in trying to mkdir
+          # /run/user/<uid>/libreoffice-dbus. Since the user is not a logged one and
+          # the user not a lingering one, it always failed with a permission denied
+          # error.
+          # Thus, we use a libreoffice version not verifying Dbus.
+          (libreoffice.override { dbusVerify = false; })
           qpdf
           ocrmypdf
           poppler-utils
@@ -112,7 +117,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateUsers = true;
-        ProcSubset = "pid";
+        ProcSubset = "all"; # for libreoffice to work
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
