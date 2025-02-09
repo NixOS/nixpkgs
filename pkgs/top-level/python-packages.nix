@@ -11369,8 +11369,6 @@ self: super: with self; {
 
   pwlf = callPackage ../development/python-modules/pwlf { };
 
-  pwndbg = callPackage ../development/python-modules/pwndbg { };
-
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
   };
