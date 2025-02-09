@@ -15,16 +15,16 @@ in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.10.2";
+  version = "5.11.0-mas.1";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-LHjVmrsOdk8vfsqvNEWkzpusm6jbz3SOb3bEaIb7rb4=";
+    hash = "sha256-0mFbI+cqJ2AsuCq/nYveatRTyS3ex4YE0OMjWkZcGQc=";
   };
 
-  npmDepsHash = "sha256-LAbqsMdMmmHGgvg2ilz6neQxMOK3jtCKt8K0M8BWifs=";
+  npmDepsHash = "sha256-HggJtYq7MD11LE3bgOI+MZ4pk+eS85UuLuYmr/KbIoM=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
