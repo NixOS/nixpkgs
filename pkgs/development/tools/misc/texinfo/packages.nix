@@ -6,7 +6,7 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -57,7 +57,7 @@ let
       xz
       libintl
       libiconv
-      bash
+      bashNonInteractive
       gnulib
       gawk
       freebsd
