@@ -24,6 +24,10 @@ with haskellLib;
   ghcjs-dom-javascript = addBuildDepend self.ghcjs-base super.ghcjs-dom-javascript;
   jsaddle = addBuildDepend self.ghcjs-base super.jsaddle;
   jsaddle-dom = addBuildDepend self.ghcjs-base super.jsaddle-dom;
+  jsaddle-warp = overrideCabal (drv: {
+    libraryHaskellDepends = [ ];
+    testHaskellDepends = [ ];
+  }) super.jsaddle-warp;
 
   entropy = addBuildDepend self.ghcjs-dom super.entropy;
 
