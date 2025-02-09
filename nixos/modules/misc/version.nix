@@ -16,6 +16,7 @@ let
     toLower
     optionalString
     literalExpression
+    match
     mkRenamedOptionModule
     mkDefault
     mkOption
@@ -262,6 +263,27 @@ in
   };
 
   config = {
+
+    assertions = [
+      {
+        assertion = match "[0-9]{2}\\.[0-9]{2}" config.system.stateVersion != null;
+        message = ''
+          ${config.system.stateVersion} is an invalid value for 'system.stateVersion'; it must be in the format "YY.MM",
+          which corresponds to a prior release of NixOS.
+
+          If you want to switch releases or switch to unstable, you should change your channel and/or flake input URLs only.
+          *DO NOT* touch the 'system.stateVersion' option, as it will not help you upgrade.
+          Leave it exactly on the previous value, which is likely the value you had for it when you installed your system.
+
+          If you're unsure which value to set it to, use "${
+            if match "[0-9]{2}\\.[0-9]{2}" options.system.stateVersion.default != null then
+              options.system.stateVersion.default
+            else
+              options.system.nixos.release.default
+          }" as a default.
+        '';
+      }
+    ];
 
     system.nixos = {
       # These defaults are set here rather than up there so that
