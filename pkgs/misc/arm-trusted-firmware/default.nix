@@ -26,13 +26,13 @@ let
            stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    version = "2.10.0";
+    version = "2.12.0";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
-      rev = "v${version}";
-      hash = "sha256-CAuftVST9Fje/DWaaoX0K2SfWwlGMaUFG4huuwsTOSU=";
+      tag = "v${version}";
+      hash = "sha256-PCUKLfmvIBiJqVmKSUKkNig1h44+4RypZ04BvJ+HP6M=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -52,6 +52,7 @@ let
     buildInputs = [ openssl ];
 
     makeFlags = [
+      "CC=$(CC_FOR_BUILD)"
       "HOSTCC=$(CC_FOR_BUILD)"
       "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -59,6 +60,13 @@ let
       # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
       # See also: https://developer.trustedfirmware.org/T996
       "LDFLAGS=-no-warn-rwx-segments"
+      # GNU's assembler doesn't recognize the `-x` option, so instead,
+      # use the GNU C compiler, which does recognize it.
+      "AS=$(CC_FOR_BUILD)"
+      "HOSTAS=$(CC_FOR_BUILD)"
+      # LTO is enabled by default and causes an error while building `armTrustedFirmwareAllwinner`
+      # `/nix/store/sqqa2hz569dcdv34y2c96gxzldpalp5q-binutils-2.43.1/bin/ld: /build/source/build/sun50i_a64/release/bl31/simd_ctx.o: plugin needed to handle lto object`
+      ''CFLAGS="-fno-lto"''
     ] ++ (lib.optional (platform != null) "PLAT=${platform}")
       ++ extraMakeFlags;
 
