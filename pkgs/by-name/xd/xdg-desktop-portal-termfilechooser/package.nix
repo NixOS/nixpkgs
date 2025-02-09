@@ -9,20 +9,15 @@
   inih,
   systemd,
   scdoc,
-  pipewire,
-  wayland,
-  wayland-protocols,
-  libgbm,
-  wayland-scanner,
 }:
 stdenv.mkDerivation {
   pname = "xdg-desktop-portal-termfilechooser";
   version = "0.4.0";
 
   src = fetchgit {
-    url = "https://github.com/boydaihungst/xdg-desktop-portal-termfilechooser.git";
-    rev = "a0b20c06e3d45cf57218c03fce1111671a617312";
-    hash = "sha256-MOS2dS2PeH5O0FKxZfcJUAmCViOngXHZCyjRmwAqzqE=";
+    url = "https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser";
+    rev = "c35af27e323a492cbb3b19bdd135657ae523caef";
+    hash = "sha256-9bxhKkk5YFBhR2ylcDzlvt4ltYuF174w00EJK5r3aY0=";
   };
 
   nativeBuildInputs = [
@@ -30,24 +25,19 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     scdoc
-    wayland-scanner
   ];
 
   buildInputs = [
     xdg-desktop-portal
     inih
     systemd
-    pipewire
-    wayland
-    wayland-protocols
-    libgbm
   ];
 
   mesonFlags = [ "-Dsd-bus-provider=libsystemd" ];
 
   meta = with lib; {
     description = "xdg-desktop-portal backend for choosing files with your favorite file chooser";
-    homepage = "https://github.com/boydaihungst/xdg-desktop-portal-termfilechooser";
+    homepage = "https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ body20002 ];
