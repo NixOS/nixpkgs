@@ -1208,4 +1208,19 @@ in {
       assert (base >= 2);
       assert (i >= 0);
       lib.reverseList (go i);
+
+  /**
+    Returns the first argument if it is truthy, otherwise the second argument.
+
+    Truthiness is determined by the following rules:
+    - Booleans: `true` is truthy, `false` is falsy.
+    - Lists: Any non-empty list is truthy, the empty list is falsy.
+    - Sets: Any non-empty set is truthy, the empty set is falsy.
+    - Strings: Any non-empty string is truthy, the empty string is falsy.
+    - null: is falsy.
+  */
+  fallback = a: b:
+    if a == [] || a == null || a == {} || a == "" || a == false
+    then b
+    else a;
 }
