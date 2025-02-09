@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   docbook-xsl-nons,
   libxslt,
@@ -62,20 +61,19 @@
   # tries to compile and run generate_argument_docbook.c
   withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
-  buildPackages,
   gnome,
   remmina,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.9.0";
+  version = "3.10.3";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-oThlqUpEmhcLpMMYExMA3GbtB2+lq6oc5TRZt0eKRLA=";
+    hash = "sha256-qFjR1Z2GZsNpgjlbHw+o+dLCBLZQ9D9c93FFqFGM8T4=";
   };
 
   postPatch =
@@ -84,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # skip NIB file generation on darwin
       substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
-        --replace-fail "if (NOT IS_XCODE)" "if (FALSE)"
+        --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
 
       substituteInPlace "libfreerdp/freerdp.pc.in" \
         --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"

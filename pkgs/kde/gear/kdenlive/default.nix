@@ -1,6 +1,6 @@
 {
   mkKdeDerivation,
-  substituteAll,
+  replaceVars,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
@@ -17,8 +17,7 @@ mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       inherit mediainfo mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })

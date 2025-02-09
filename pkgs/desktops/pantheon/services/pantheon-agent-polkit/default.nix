@@ -10,19 +10,20 @@
 , libadwaita
 , libgee
 , granite7
+, pantheon-wayland
 , polkit
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-Hm4vEubj2VjObD2t7wBHGrjnp6Nza6Ze7AOcJ0n5Dmc=";
+    hash = "sha256-qqeB8SLuES/KoK7ycQ2J1YBA07HITovdnO8kSsrVcfs=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libgee
+    pantheon-wayland
     polkit
   ];
 

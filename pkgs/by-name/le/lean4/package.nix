@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.12.0";
+  version = "4.16.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-O2Egyh2D0TfQWzQKfHUeAh7qAjMfeLVwXwGUw5QqcvE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RdFTxLk0Yahwhu/oQeTappvWnUtnim63dxN7gmU8Jt8=";
   };
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.rev}")'
+      --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
 
     # Remove tests that fails in sandbox.
     # It expects `sourceRoot` to be a git repository.
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    cadical
   ];
 
   buildInputs = [
     gmp
     libuv
+    cadical
   ];
 
   nativeCheckInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
-    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.rev}/RELEASES.md";
+    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [

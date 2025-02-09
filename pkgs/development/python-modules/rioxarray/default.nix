@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "rioxarray";
-  version = "0.18.1";
+  version = "0.18.2";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "corteva";
     repo = "rioxarray";
     tag = version;
-    hash = "sha256-0YsGu8JuYrb6lWuC3RQ4jCkulxxFpnd0eaRajCwtFHo=";
+    hash = "sha256-HNtMLY83e6MQakIlmsJohmhjDWiM5/hqq25qSY1dPBw=";
   };
 
   patches = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     description = "geospatial xarray extension powered by rasterio";
     homepage = "https://corteva.github.io/rioxarray/";
-    changelog = "https://github.com/corteva/rioxarray/releases/tag/${version}";
+    changelog = "https://github.com/corteva/rioxarray/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = lib.teams.geospatial.members;
   };

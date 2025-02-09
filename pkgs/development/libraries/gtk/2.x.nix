@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = finalAttrs.setupHooks ++ [
+    gdk-pixbuf
     gettext
     gobject-introspection
     perl

@@ -7,7 +7,7 @@
 
 let
   bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
-  version = "0.94.0";
+  version = "0.94.1";
 in
 stdenv.mkDerivation {
   pname = "nwjs-ffmpeg-prebuilt";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   src =
     let
       hashes = {
-        "x64" = "sha256-lepsr2/sCEUrq+an/z2g4Auj7MZcDT5I9PAKlFIbkpQ=";
-        "ia32" = "sha256-lepsr2/sCEUrq+an/z2g4Auj7MZcDT5I9PAKlFIbkpQ=";
+        "x64" = "sha256-FlhYfEUmmB4kgy2QT3e3cniNY/8eBYD4p2c23oTnEJU=";
+        "ia32" = "sha256-FlhYfEUmmB4kgy2QT3e3cniNY/8eBYD4p2c23oTnEJU=";
       };
     in
     fetchurl {

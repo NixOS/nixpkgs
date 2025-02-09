@@ -109,5 +109,5 @@ assert (lib.versionAtLeast version "4.9");
   IOMMU_DEFAULT_DMA_LAZY = option no;
 
   # not needed for less than a decade old glibc versions
-  LEGACY_VSYSCALL_NONE = yes;
+  LEGACY_VSYSCALL_NONE = lib.mkIf stdenv.hostPlatform.isx86 yes;
 }

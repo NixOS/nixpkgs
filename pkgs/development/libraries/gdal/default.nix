@@ -53,6 +53,7 @@
   libjpeg,
   libjxl,
   libmysqlclient,
+  libpq,
   libpng,
   libspatialite,
   libtiff,
@@ -66,7 +67,6 @@
   pcre2,
   pkg-config,
   poppler,
-  postgresql,
   proj,
   python3,
   qhull,
@@ -83,13 +83,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.10.0";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pb2xKTmJB7U1jIG80ENmZrR7vFw6YDoees43u/JhU3Y=";
+    hash = "sha256-4XUDHN1RJPgURwTFPFu/9QRqW6XhLMydti9CRO6p7SI=";
   };
 
   nativeBuildInputs =
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
         libhwy
       ];
       mysqlDeps = lib.optionals useMysql [ libmysqlclient ];
-      postgresDeps = lib.optionals usePostgres [ postgresql ];
+      postgresDeps = lib.optionals usePostgres [ libpq ];
       popplerDeps = lib.optionals usePoppler [ poppler ];
       arrowDeps = lib.optionals useArrow [ arrow-cpp ];
       hdfDeps = lib.optionals useHDF [

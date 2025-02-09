@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     cups
   ];
   buildInputs = [
+    cups
     ghostscript
     libcupsfilters
     mupdf

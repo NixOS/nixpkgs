@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.17";
+  version = "0.3.18";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_netapp";
     inherit version;
-    hash = "sha256-VVgUqFHUbAJ0vFzPFM2Z2pPlKuIDnl8zSIcw7JFnDwo=";
+    hash = "sha256-fj4o5EzA7G9MtNbSphZPBi7Zq2T/QrFOWXxZ+9ep/Dw=";
   };
 
   build-system = [ setuptools ];

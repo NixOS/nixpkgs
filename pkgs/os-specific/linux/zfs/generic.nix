@@ -34,6 +34,7 @@ let
 
       # Kernel dependencies
       kernel ? null,
+      kernelModuleMakeFlags ? [ ],
       enablePython ? true,
       ...
     }@outerArgs:
@@ -58,7 +59,6 @@ let
         optionals
         optional
         makeBinPath
-        versionAtLeast
         ;
 
       smartmon = smartmontools.override { inherit enableMail; };
@@ -71,7 +71,6 @@ let
         "user"
         "all"
       ];
-      isAtLeast22Series = versionAtLeast version "2.2.0";
 
       # XXX: You always want to build kernel modules with the same stdenv as the
       # kernel was built with. However, since zfs can also be built for userspace we
@@ -121,8 +120,7 @@ let
                                                         --replace-fail "/etc/default"            "$out/etc/default"
           substituteInPlace ./contrib/initramfs/Makefile.am \
             --replace-fail "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
-        ''
-        + optionalString isAtLeast22Series ''
+
           substituteInPlace ./udev/vdev_id \
             --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
              "PATH=${
@@ -140,24 +138,6 @@ let
               "bashcompletiondir=$out/share/bash-completion/completions"
 
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
-        ''
-        + optionalString (!isAtLeast22Series) ''
-          substituteInPlace ./etc/zfs/Makefile.am --replace-fail "\$(sysconfdir)/zfs" "$out/etc/zfs"
-
-          find ./contrib/initramfs -name Makefile.am -exec sed -i -e 's|/usr/share/initramfs-tools|'$out'/share/initramfs-tools|g' {} \;
-
-          substituteInPlace ./cmd/arc_summary/arc_summary3 --replace-fail "/sbin/modinfo" "modinfo"
-          substituteInPlace ./cmd/vdev_id/vdev_id \
-            --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-            "PATH=${
-              makeBinPath [
-                coreutils
-                gawk
-                gnused
-                gnugrep
-                systemd
-              ]
-            }"
         '';
 
       nativeBuildInputs =
@@ -212,10 +192,10 @@ let
             "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
             "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           ]
-          ++ kernel.makeFlags
+          ++ kernelModuleMakeFlags
         );
 
-      makeFlags = optionals buildKernel kernel.makeFlags;
+      makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
       enableParallelBuilding = true;
 
@@ -260,12 +240,6 @@ let
 
           # Remove tests because they add a runtime dependency on gcc
           rm -rf $out/share/zfs/zfs-tests
-
-          ${optionalString (lib.versionOlder version "2.2") ''
-            # Add Bash completions.
-            install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
-            (cd $out/share/bash-completion/completions; ln -s zfs zpool)
-          ''}
         '';
 
       postFixup =
@@ -291,6 +265,7 @@ let
       outputs = [ "out" ] ++ optionals buildUser [ "dev" ];
 
       passthru = {
+        inherit kernel;
         inherit enableMail kernelModuleAttribute;
         latestCompatibleLinuxPackages = lib.warn "zfs.latestCompatibleLinuxPackages is deprecated and is now pointing at the default kernel. If using the stable LTS kernel (default `linuxPackages` is not possible then you must explicitly pin a specific kernel release. For example, `boot.kernelPackages = pkgs.linuxPackages_6_6`. Please be aware that non-LTS kernels are likely to go EOL before ZFS supports the latest supported non-LTS release, requiring manual intervention." linuxPackages;
 

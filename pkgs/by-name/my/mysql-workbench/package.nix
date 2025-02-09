@@ -46,31 +46,22 @@ let
     };
   });
 
-  getCoreExe = lib.getExe' coreutils;
-
   inherit (python3Packages) paramiko pycairo pyodbc;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
-  version = "8.0.40";
+  version = "8.0.41";
 
   src = fetchurl {
     url = "https://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-/CrjHgZ3IFFvUB1IxeURme8Z6BoZx0b03MWk8QCe0Sg=";
+    hash = "sha256-H/u1nwizZ9pCEu9JPXRcKshxjvc/efcZ//6ankHcGGk=";
   };
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
       bash = lib.getExe bash;
       catchsegv = lib.getExe' glibc "catchsegv";
-      cp = getCoreExe "cp";
-      dd = getCoreExe "dd";
-      ls = getCoreExe "ls";
-      mkdir = getCoreExe "mkdir";
-      nohup = getCoreExe "nohup";
-      rm = getCoreExe "rm";
-      rmdir = getCoreExe "rmdir";
-      stat = getCoreExe "stat";
+      coreutils = lib.getBin coreutils;
       sudo = lib.getExe sudo;
     })
 

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "parlay";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "parlay";
     rev = "v${version}";
-    hash = "sha256-g0gTsfdt1/BwWFBPyNuBf58gypdeZib6GUDPnPaFepA=";
+    hash = "sha256-rpzCwbF2M6zfNVHLaSPgX30ti+XtJ645HqoDJvx8lg8=";
   };
 
   vendorHash = "sha256-kxN2uBXjCnyVbypDOrOAXoSa6Pb7Fmk487ael4aI9Uw=";

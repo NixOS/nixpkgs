@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     libdwarf
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   meta = with lib; {
     description = "Foreign function interface for bash";
     mainProgram = "ctypes.sh";

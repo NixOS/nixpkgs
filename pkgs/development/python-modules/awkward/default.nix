@@ -24,8 +24,6 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
-
-  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -73,14 +71,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Need to be run on a GPU platform.
     "tests-cuda"
-    # JAX is broken
-    "tests/test_2603_custom_behaviors_with_jax.py"
-  ];
-
-  disabledTests = [
-    # AssertionError: Regex pattern did not match.
-    "test_serialise_with_nonserialisable_attrs"
-    "test_serialise_with_nonserialisable_attrs"
   ];
 
   meta = {

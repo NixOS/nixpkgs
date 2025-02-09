@@ -10,17 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
-  version = "25.01";
+  version = "25.01.1";
 
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
   src = fetchzip {
     url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
-    hash = "sha256-HyDsHimDug+8vX0wfon4pK0DEYH5402CDinp3EZpaWs=";
+    hash = "sha256-rN2eK+AoyDH+tL3yxTRQQQYHf0PoYK84FgrRwm/Wfjk=";
     stripRoot = false;
   };
 
-  cargoHash = "sha256-G3gJRI12JFk+A4DP65TOcD9jBJvNrb4aPr9V9uv4JP0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JZwURUMUnwc3tzAsN7NJCE8106c/4VgZtHHA3e/BsXs=";
 
   nativeBuildInputs = [
     git
@@ -44,10 +45,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  # `hx --version` outputs 25.1 instead of 25.01
-  preVersionCheck = ''
-    export version=${lib.replaceStrings [ ".0" ] [ "." ] version}
-  '';
   versionCheckProgram = "${placeholder "out"}/bin/hx";
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;

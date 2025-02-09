@@ -2,7 +2,7 @@
   lib,
   stdenv,
   runCommand,
-  substituteAll,
+  replaceVarsWith,
   coreutils,
 }:
 
@@ -12,11 +12,13 @@ let
 in
 runCommand name
   {
-    script = substituteAll {
+    script = replaceVarsWith {
       src = ./service-wrapper.sh;
       isExecutable = true;
-      inherit (stdenv) shell;
-      inherit coreutils;
+      replacements = {
+        inherit (stdenv) shell;
+        inherit coreutils;
+      };
     };
 
     meta = with lib; {

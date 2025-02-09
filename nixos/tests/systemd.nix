@@ -128,7 +128,7 @@ import ./make-test-python.nix (
             # it's not possible because we're not in a tty when grepping
             # (i.e. hacky way to ensure that the error from above doesn't appear here).
             _, out = machine.execute("systemctl --user edit testservice2.service 2>&1")
-            assert out.rstrip("\n") == "Cannot edit units if not on a tty."
+            assert out.rstrip("\n") == "Cannot edit units interactively if not on a tty."
 
         # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
         with subtest("systemd reads timezone database in /etc/zoneinfo"):

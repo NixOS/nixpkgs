@@ -148,10 +148,6 @@ let
       # Note: do not set TERM=dumb environment variable globally, it is used in
       # test-ci-js test suite to skip tests that otherwise run fine.
       NINJA = "TERM=dumb ninja";
-    } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
-      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
-      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300 -Wno-macro-redefined";
     };
 
     # NB: technically, we do not need bash in build inputs since all scripts are

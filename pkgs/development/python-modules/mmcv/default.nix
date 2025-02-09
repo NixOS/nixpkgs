@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -120,16 +121,23 @@ buildPythonPackage rec {
   # test_cnn test_ops really requires gpus to be useful.
   # some of the tests take exceedingly long time.
   # the rest of the tests are disabled due to sandbox env.
-  disabledTests = [
-    "test_cnn"
-    "test_ops"
-    "test_fileclient"
-    "test_load_model_zoo"
-    "test_processing"
-    "test_checkpoint"
-    "test_hub"
-    "test_reader"
-  ];
+  disabledTests =
+    [
+      "test_cnn"
+      "test_ops"
+      "test_fileclient"
+      "test_load_model_zoo"
+      "test_processing"
+      "test_checkpoint"
+      "test_hub"
+      "test_reader"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # flaky numerical tests (AssertionError)
+      "test_ycbcr2rgb"
+      "test_ycbcr2bgr"
+      "test_tensor2imgs"
+    ];
 
   meta = {
     description = "Foundational Library for Computer Vision Research";

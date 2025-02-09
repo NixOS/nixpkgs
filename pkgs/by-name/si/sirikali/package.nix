@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sirikali";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "mhogomchungu";
     repo = "sirikali";
     rev = version;
-    hash = "sha256-zEiX0eAsmfWDXehxetkqXbdXhB53DE5LDyglMBijckI=";
+    hash = "sha256-YGMmDatTKjhORTisX9kTVrpIWo6j0YkxZsDLJXga6ho=";
   };
 
   buildInputs =

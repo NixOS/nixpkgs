@@ -1,6 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, cmake
+, ninja
 , libGL
 , libGLU
 , libpng
@@ -12,7 +14,6 @@
 , pcre
 , SDL2
 , sqlite
-, getconf
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rXw56zoFpLMzz8U3RHWGBF0dUFCUTjXShUEhzp2Qc5g=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  # incompatible pointer type error: const char ** -> const void **
+  postPatch = ''
+    substituteInPlace libs/sqlite/sqlite.c \
+     --replace-warn \
+       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, &tl)" \
+       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, (const void**)&tl)"
+  '';
 
   buildInputs = [
     libGL
@@ -42,7 +49,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  nativeBuildInputs = [ getconf ];
+  nativeBuildInputs = [ cmake ninja ];
 
   # append default installPhase with library install for haxe
   postInstall = let
@@ -50,11 +57,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p "${haxelibPath}"
     echo -n "${version}" > "${haxelibPath}/../.current"
-    cp -r other/haxelib/* "${haxelibPath}"
-  '';
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change libhl.dylib $out/lib/libhl.dylib $out/bin/hl
+    cp -r ../other/haxelib/* "${haxelibPath}"
   '';
 
   meta = with lib; {

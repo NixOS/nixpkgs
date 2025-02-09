@@ -1,21 +1,22 @@
 {
   lib,
+  arrow,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  arrow,
-  requests-oauthlib,
-  typing-extensions,
   pydantic,
-  responses,
+  pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
+  requests-oauthlib,
+  responses,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "withings-api";
   version = "2.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -28,13 +29,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'requests-oauth = ">=0.4.1"' ''' \
-      --replace 'addopts = "--capture no --cov ./withings_api --cov-report html:build/coverage_report --cov-report term --cov-report xml:build/coverage.xml"' '''
+      --replace-fail 'requests-oauth = ">=0.4.1"' '''
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     arrow
     requests-oauthlib
     typing-extensions
@@ -42,13 +42,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];
 
+  pythonImportsCheck = [ "withings_api" ];
+
   meta = with lib; {
     description = "Library for the Withings Health API";
     homepage = "https://github.com/vangorra/python_withings_api";
+    changelog = "https://github.com/vangorra/python_withings_api/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kittywitch ];
     broken = versionAtLeast pydantic.version "2";

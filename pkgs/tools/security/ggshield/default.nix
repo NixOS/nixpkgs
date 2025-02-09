@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.34.0";
+  version = "1.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     tag = "v${version}";
-    hash = "sha256-RNQD862m1p8ooFbV8k7yDW9GzP5vPQ8hgerMpvDdXAs=";
+    hash = "sha256-qHGReoIRgqpolQvtzysXtcFJGzavdG6osh4u1ctvHuo=";
   };
 
   pythonRelaxDeps = true;
@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ (with python3.pkgs; [
       jsonschema
       pyfakefs
+      pytest-factoryboy
       pytest-mock
       pytest-voluptuous
       pytestCheckHook
@@ -56,9 +57,8 @@ python3.pkgs.buildPythonApplication rec {
     # Don't run functional tests
     "tests/functional/"
     "tests/unit/cmd/honeytoken"
-    "tests/unit/cmd/iac"
-    "tests/unit/cmd/sca/"
     "tests/unit/cmd/scan/"
+    "tests/test_factories.py"
   ];
 
   disabledTests = [
@@ -74,6 +74,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_file_is_longer_than_does_not_read_utf8_file"
     "test_file_is_longer_using_8bit_codec"
     "test_generate_files_from_paths"
+    # Nixpkgs issue
+    "test_get_file_sha_in_ref"
   ];
 
   meta = with lib; {

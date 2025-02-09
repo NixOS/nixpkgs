@@ -38,17 +38,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.29";
+  version = "7.33";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-b1Gb5guaFyWrt9KEwptuXGvfrJAvgnFEl8QuwSufktE="
+        "sha256-EBPMuW2cuuw9B6nbUDQiRyugQOItWHldGPvlijW7s9Y="
       else
         {
-          x86_64-linux = "sha256-uFK8Y36pYTDK3foCKH9kiq3u1MTir2nNM5KrDwIHEm0=";
-          aarch64-linux = "sha256-KZTUeEtyAVwIFTmclYv4GcGJ2WXukEF0/mfYmmBPfz0=";
+          x86_64-linux = "sha256-C+iJO6hQib2Z5FKB2dBRD963x9ezSt8G3E3ocaY56TI=";
+          aarch64-linux = "sha256-Lbf8yY6UqtfqHWYkLRzUkasdjxyPxFoxdehJG0+0u44=";
         }
         .${stdenv.hostPlatform.system};
   };
@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
+  dontStrip = true;
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

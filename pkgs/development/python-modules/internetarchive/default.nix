@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "5.0.4";
+  version = "5.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     tag = "v${version}";
-    hash = "sha256-x4EzVm22iZhGysg2iMtuil2tNJn4/8cWYyULLowODGc=";
+    hash = "sha256-xi3cR/j25gRe+muWjk8towzELgDciqLxGvBIpRqJHd0=";
   };
 
   build-system = [ setuptools ];
@@ -61,12 +61,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "internetarchive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
     changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
-    license = licenses.agpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "ia";
   };
 }

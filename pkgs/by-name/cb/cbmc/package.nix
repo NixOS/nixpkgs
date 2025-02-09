@@ -2,29 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
   bison,
   cadical,
-  cbmc,
   cmake,
   flex,
   makeWrapper,
   perl,
   substituteAll,
   cudd,
-  fetchurl,
   nix-update-script,
+  fetchpatch,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.4.0";
+  version = "6.4.1";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-PZZnseOE3nodE0zwyG+82gm55BO4rsCcP4T+fZq7L6I=";
+    hash = "sha256-O8aZTW+Eylshl9bmm9GzbljWB0+cj2liZHs2uScERkM=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -47,16 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [ cadical ];
-
-  # do not download sources
-  # link existing cadical instead
   patches = [
     (substituteAll {
       src = ./0001-Do-not-download-sources-in-cmake.patch;
       inherit cudd;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
+    # Fixes build with libc++ >= 19 due to the removal of std::char_traits<unsigned>.
+    # Remove for versions > 6.4.1.
+    (fetchpatch {
+      url = "https://github.com/diffblue/cbmc/commit/684bf4221c8737952e6469304f5a360dc3d5439d.patch";
+      hash = "sha256-3hHu6FcyHjfeFjNxhyhxxk7I/SK98BXT+xy7NgtEt50=";
+    })
   ];
 
   postPatch =
@@ -91,13 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isGNU [
-      # Needed with GCC 12 but breaks on darwin (with clang)
-      "-Wno-error=maybe-uninitialized"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
+    lib.optionals stdenv.cc.isClang [
       # fix "argument unused during compilation"
       "-Wno-unused-command-line-argument"
+      # fix "variable 'plus_overflow' set but not used"
+      "-Wno-error=unused-but-set-variable"
+      # fix "passing no argument for the '...' parameter of a variadic macro is a C++20 extension"
+      "-Wno-error=c++20-extensions"
     ]
   );
 
@@ -105,15 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DWITH_JBMC=OFF"
     "-Dsat_impl=cadical"
-    "-Dcadical_INCLUDE_DIR=${cadical.dev}/include"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = cbmc;
-    command = "cbmc --version";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/cbmc";
+  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "cbmc-(.*)"
+    ];
+  };
 
   meta = {
     description = "CBMC is a Bounded Model Checker for C and C++ programs";

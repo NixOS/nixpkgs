@@ -19,6 +19,10 @@
   python3,
   linuxHeaders,
   nixosTests,
+  runCommandLocal,
+  gnutar,
+  gnugrep,
+  envoy,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wamr",
@@ -30,16 +34,16 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.32.3";
-    rev = "58bd599ebd5918d4d005de60954fcd2cb00abd95";
-    hash = "sha256-5HpxcsAPoyVOJ3Aem+ZjSLa8Zu6s76iCMiWJbp8RjHc=";
+    version = "1.33.0";
+    rev = "b0f43d67aa25c1b03c97186a200cc187f4c22db3";
+    hash = "sha256-zqekRpOlaA2IrwwFUEwASa1uokET98h5sr7EwzWgcbU=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash =
     {
-      x86_64-linux = "sha256-YFXNatolLM9DdwkMnc9SWsa6Z6/aGzqLmo/zKE7OFy0=";
-      aarch64-linux = "sha256-AjG1OBjPjiSwWCmIJgHevSQHx8+rzRgmLsw3JwwD0hk=";
+      x86_64-linux = "sha256-4CQkHlXbDpRiqzeyserVf9PpLx3ME7TtZ2H88ggog6U=";
+      aarch64-linux = "sha256-FxkfBWiG0NIInl28w+l4YvaV2VFuCtjn5VBAKvJoxM8=";
     }
     .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -64,27 +68,6 @@ buildBazelPackage rec {
 
       # use system C/C++ tools
       ./0003-nixpkgs-use-system-C-C-toolchains.patch
-
-      # patch boringssl to work with GCC 14
-      # vendored patch from https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d
-      ./0004-nixpkgs-patch-boringssl-for-gcc14.patch
-
-      # update rust rules to work with rustc v1.83
-      # cherry-pick of https://github.com/envoyproxy/envoy/commit/019f589da2cc8da7673edd077478a100b4d99436
-      # drop with v1.33.x
-      ./0005-deps-Bump-rules_rust-0.54.1-37056.patch
-
-      # patch gcc flags to work with GCC 14
-      # (silences erroneus -Werror=maybe-uninitialized and others)
-      # cherry-pick of https://github.com/envoyproxy/envoy/commit/448e4e14f4f188687580362a861ae4a0dbb5b1fb
-      # drop with v1.33.x
-      ./0006-gcc-warnings.patch
-
-      # Remove "-Werror" from protobuf build
-      # This is fixed in protobuf v28 and later:
-      # https://github.com/protocolbuffers/protobuf/commit/f5a1b178ad52c3e64da40caceaa4ca9e51045cb4
-      # drop with v1.33.x
-      ./0007-protobuf-remove-Werror.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -152,7 +135,9 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/*_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel \
+        $bazelOut/external/rules_rust/util/process_wrapper/private/process_wrapper.sh \
+        $bazelOut/external/rules_rust/crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
@@ -263,6 +248,38 @@ buildBazelPackage rec {
     envoy = nixosTests.envoy;
     # tested as a core component of Pomerium
     pomerium = nixosTests.pomerium;
+
+    deps-store-free =
+      runCommandLocal "${envoy.name}-deps-store-free-test"
+        {
+          nativeBuildInputs = [
+            gnutar
+            gnugrep
+          ];
+        }
+        ''
+          touch $out
+          tar -xf ${envoy.deps}
+          grep -r /nix/store external && status=$? || status=$?
+          case $status in
+            1)
+              echo "No match found."
+              ;;
+            0)
+              echo
+              echo "Error: Found references to /nix/store in envoy.deps derivation"
+              echo "This is a reproducibility issue, as the hash of the fixed-output derivation"
+              echo "will change in case the store path of the input changes."
+              echo
+              echo "Replace the store path in fetcherAttrs.preInstall."
+              exit 1
+              ;;
+            *)
+              echo "An unexpected error occurred."
+              exit $status
+              ;;
+          esac
+        '';
   };
 
   meta = with lib; {

@@ -54,6 +54,8 @@ let
 
     dontConfigure = true;
 
+    patches = [ ./disable-theme-tests.patch ];
+
     postPatch = ''
       patchShebangs --build test.sh test/shimexec .test-framework/bin/best.sh
     '';

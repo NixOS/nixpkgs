@@ -2,14 +2,13 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
   testers,
   snyk,
   nodejs_20,
 }:
 
 let
-  version = "1.1294.0";
+  version = "1.1295.2";
 in
 buildNpmPackage {
   pname = "snyk";
@@ -19,10 +18,10 @@ buildNpmPackage {
     owner = "snyk";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-AO36b3VWdklfMjSEE3JMZUVS1KmBSra2xX6hqlf3OUM=";
+    hash = "sha256-cHOIToO9xr+CNS0llwffaTUdhUqFbFcZcrPnBeD+JxE=";
   };
 
-  npmDepsHash = "sha256-xGRmZyDXZVuFdpT1LcSLBh9bY86rOjGvVjyCt9PSigg=";
+  npmDepsHash = "sha256-RuIavwtTbgo5Ni7oGH2i5VAcVxfS4wKKSX6qHD8CHIw=";
 
   postPatch = ''
     substituteInPlace package.json \

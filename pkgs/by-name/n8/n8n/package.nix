@@ -4,44 +4,50 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  pnpm_9,
   python3,
   node-gyp,
+  cctools,
   xcbuild,
   libkrb5,
   libmongocrypt,
-  postgresql,
+  libpq,
   makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.72.1";
+  version = "1.75.2";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-GIA2y81nuKWe1zuZQ99oczQtQWStyT1Qh3bZ1oe8me4=";
+    hash = "sha256-fIdwciI4QUNr2wNWiq7qT4c6aZeUnkaVhSkIgFO4Svw=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-riuN7o+uUXS5G7fMgE7cZhGWHZtGwSHm4CP7G46R5Cw=";
+    hash = "sha256-rtXTAHZUeitQFTa1Tw6l4el+xWD2hLT+2wu2LXW80cE=";
   };
 
-  nativeBuildInputs = [
-    pnpm.configHook
-    python3 # required to build sqlite3 bindings
-    node-gyp # required to build sqlite3 bindings
-    makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs =
+    [
+      pnpm_9.configHook
+      python3 # required to build sqlite3 bindings
+      node-gyp # required to build sqlite3 bindings
+      makeWrapper
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      cctools
+      xcbuild
+    ];
 
   buildInputs = [
     nodejs
     libkrb5
     libmongocrypt
-    postgresql
+    libpq
   ];
 
   buildPhase = ''

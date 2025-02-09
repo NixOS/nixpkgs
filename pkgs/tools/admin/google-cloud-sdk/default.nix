@@ -63,8 +63,6 @@ stdenv.mkDerivation rec {
     ./gcloud-path.patch
     # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
-    # Revert patch including extended Python version constraint
-    ./gsutil-revert-version-constraint.patch
   ];
 
   installPhase = ''

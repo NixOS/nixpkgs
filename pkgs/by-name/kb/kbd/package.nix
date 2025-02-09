@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.6.4";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-UZ+NCHrsyn4KM80IS++SwGbrGXMWZmU9zHDJ1xqkCSY=";
+    sha256 = "sha256-8WfYmdkrVszxL29JNVFz+ThwqV8V2K7r9f3NKKYhrKg=";
   };
 
   # vlock is moved into its own output, since it depends on pam. This
@@ -33,11 +33,16 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  configureFlags = [
-    "--enable-optional-progs"
-    "--enable-libkeymap"
-    "--disable-nls"
-  ];
+  configureFlags =
+    [
+      "--enable-optional-progs"
+      "--enable-libkeymap"
+      "--disable-nls"
+    ]
+    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ];
 
   patches = [
     ./search-paths.patch
@@ -58,10 +63,10 @@ stdenv.mkDerivation rec {
 
     # Fix paths to decompressors. Trailing space to avoid replacing `xz` in `".xz"`.
     substituteInPlace src/libkbdfile/kbdfile.c \
-      --replace 'gzip '  '${gzip}/bin/gzip ' \
-      --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
-      --replace 'xz '    '${xz.bin}/bin/xz ' \
-      --replace 'zstd '  '${zstd.bin}/bin/zstd '
+      --replace-fail 'gzip '  '${gzip}/bin/gzip ' \
+      --replace-fail 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
+      --replace-fail 'xz '    '${xz.bin}/bin/xz ' \
+      --replace-fail 'zstd '  '${zstd.bin}/bin/zstd '
 
     sed -i '
       1i prefix:=$(vlock)

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) taskserver; };
 
   meta = {
-    description = "Server for synchronising Taskwarrior clients";
+    description = "Server for synchronising Taskwarrior 2 clients";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

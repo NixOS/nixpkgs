@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pydot";
-  version = "3.0.2";
+  version = "3.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kYDaVAtRs6oJ+/gRQLPt++IxXXeOhYmn0KSmnEEzK64=";
+    hash = "sha256-POiLJVjzgIsDdvIr+mwmOQnhw5geKntim2W0Ue7kol0=";
   };
 
   build-system = [

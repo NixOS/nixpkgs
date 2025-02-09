@@ -21,9 +21,8 @@
   libxkbcommon,
   darwin,
 }:
-
 let
-  version = "nightly-2024-11-07";
+  version = "nightly-2025-01-04";
 in
 rustPlatform.buildRustPackage {
   pname = "ruffle";
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage {
     owner = "ruffle-rs";
     repo = "ruffle";
     rev = version;
-    hash = "sha256-eufp3myszqguoHGYGqIpv5gMkVx1d4L/GflRgvnxPTQ=";
+    hash = "sha256-MxYl5fTTNerCwG3w34cltb6aasP6TvGRkvwf77lKIgs=";
   };
 
   nativeBuildInputs =
@@ -67,6 +66,16 @@ rustPlatform.buildRustPackage {
 
   dontWrapGApps = true;
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 -t $out/share/icons/hicolor/scalable/apps/ desktop/packages/linux/rs.ruffle.Ruffle.svg
+
+    install -Dm644 -t $out/share/applications/ desktop/packages/linux/rs.ruffle.Ruffle.desktop
+    substituteInPlace $out/share/applications/rs.ruffle.Ruffle.desktop \
+    --replace-fail "Exec=ruffle %u" "Exec=ruffle_desktop %u"
+
+    install -Dm644 -t $out/share/metainfo/ desktop/packages/linux/rs.ruffle.Ruffle.metainfo.xml
+  '';
+
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/ruffle_desktop \
       --add-needed libxkbcommon-x11.so \
@@ -94,29 +103,22 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--workspace" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "flash-lso-0.6.0" = "sha256-dhOAnVfxZw9JaOrY17xAeN7/y/aWZP+KUoDQuCf6D3Q=";
-      "h263-rs-0.1.0" = "sha256-dyQHnCe7LwwZYlF57sbRzir9vUavN3K8wLhwPIWlmik=";
-      "jpegxr-0.3.1" = "sha256-aV4Qh9ea0CirWU3lScjSKi4mii0cDTnx+miTcqWzxGg=";
-      "nellymoser-rs-0.1.2" = "sha256-66yt+CKaw/QFIPeNkZA2mb9ke64rKcAw/6k/pjNYY04=";
-      "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q+9yhUjYolPlBt6W1xJPoyE7DgqDffEhkQqJmSX4y3Y=";
 
-  meta = with lib; {
-    description = "Adobe Flash Player emulator written in the Rust programming language";
+  meta = {
+    description = "Cross platform Adobe Flash Player emulator";
     homepage = "https://ruffle.rs/";
-    license = with licenses; [
-      mit
-      asl20
+    license = [
+      lib.licenses.mit
+      lib.licenses.asl20
     ];
-    maintainers = with maintainers; [
-      govanify
-      jchw
+    maintainers = [
+      lib.maintainers.govanify
+      lib.maintainers.jchw
+      lib.maintainers.normalcea
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "ruffle_desktop";
   };
 }

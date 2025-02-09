@@ -25,14 +25,14 @@ let
 in
 buildPythonApplication rec {
   pname = "devede";
-  version = "4.17.0";
+  version = "4.19.0";
   namePrefix = "";
 
   src = fetchFromGitLab {
     owner = "rastersoft";
     repo = "devedeng";
     rev = version;
-    hash = "sha256-CdntdD5DRA/eXTBRBRszkbYFeFxj+0odb8XHkAFdobU=";
+    hash = "sha256-hjt2bXQov4lC6O4VY/eu/PZ2taSKng9gRhFDFhQR9SY=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "DVD Creator for Linux";
-    homepage = "http://www.rastersoft.com/programas/devede.html";
+    homepage = "https://www.rastersoft.com/programas/devede.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.bdimcheff ];
   };

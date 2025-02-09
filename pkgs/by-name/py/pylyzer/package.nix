@@ -3,61 +3,44 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   python3,
   makeWrapper,
   writeScriptBin,
-  which,
-  nix-update-script,
   versionCheckHook,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.76";
+  version = "0.0.78";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     tag = "v${version}";
-    hash = "sha256-1WBZ8i/JIIRRH11MNQma/o9VdMvN0eYopXt7Iwj1hZ8=";
+    hash = "sha256-g8/zhl0dCQOq4aTlivAh3ufgfEMzeMvTtJQxFuHHWB0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-dzp7HeEfM6UP3VgH56CQvnezZjg13YUszA+EsO2N4Os=";
+  cargoHash = "sha256-mi4pCYA0dQnv3MIpZxVVY0qLdIts/qvxS4og0Tyxk3w=";
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     python3
     makeWrapper
+    writableTmpDirAsHomeHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
   buildInputs = [
     python3
   ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
-
   postInstall = ''
     mkdir -p $out/lib
     cp -r $HOME/.erg/ $out/lib/erg
   '';
-
-  nativeCheckInputs = [ which ];
-
-  checkFlags =
-    [
-      # this test causes stack overflow
-      # > thread 'exec_import' has overflowed its stack
-      "--skip=exec_import"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # Dict({Str..Obj: Int}) does not implement Iterable(Str..Obj..Obj) and Indexable({"a"}..Obj, Int)
-      # https://github.com/mtshiba/pylyzer/issues/114
-      "--skip=exec_casting"
-    ];
 
   postFixup = ''
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg

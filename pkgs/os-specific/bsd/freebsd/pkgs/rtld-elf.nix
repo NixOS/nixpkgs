@@ -5,6 +5,7 @@
   flex,
   byacc,
   csu,
+  extraSrc ? [ ],
 }:
 
 mkDerivation {
@@ -26,7 +27,7 @@ mkDerivation {
     "sys/kern"
     "sys/libkern"
     "sys/crypto"
-  ];
+  ] ++ extraSrc;
 
   outputs = [
     "out"

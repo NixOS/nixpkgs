@@ -17,10 +17,9 @@
   gd,
   autoreconfHook,
   gawk,
-  rebar3WithPlugins,
   fetchFromGitHub,
   fetchgit,
-  fetchHex,
+  fetchpatch2,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -40,6 +39,8 @@
 }:
 
 let
+  inherit (beamPackages) buildRebar3 fetchHex rebar3WithPlugins;
+
   ctlpath = lib.makeBinPath [
     bash
     gnused
@@ -50,7 +51,7 @@ let
     procps
   ];
 
-  provider_asn1 = beamPackages.buildRebar3 {
+  provider_asn1 = buildRebar3 {
     name = "provider_asn1";
     version = "0.3.0";
     src = fetchHex {
@@ -60,7 +61,7 @@ let
     };
     beamDeps = [ ];
   };
-  rebar3_hex = beamPackages.buildRebar3 {
+  rebar3_hex = buildRebar3 {
     name = "rebar3_hex";
     version = "7.0.7";
     src = fetchHex {
@@ -73,7 +74,7 @@ let
 
   allBeamDeps = import ./rebar-deps.nix {
     inherit fetchHex fetchgit fetchFromGitHub;
-    builder = lib.makeOverridable beamPackages.buildRebar3;
+    builder = lib.makeOverridable buildRebar3;
 
     overrides = final: prev: {
       jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
@@ -171,6 +172,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-9TyIgsinUpUbirwqg61EYnPB/OyE5vhl3MBMRihqAtE=";
   };
+
+  patches = [
+    # Fix json_encode_with_kv_list used in mod_matrix_gw
+    (fetchpatch2 {
+      url = "https://github.com/processone/ejabberd/commit/056635119c8b9f169f1c59cccbf81faab88a6712.patch?full_index=1";
+      hash = "sha256-53NMT/SwPtaeo8zaJ1JHW6HUZrxkITi731UOdsFAlJ4=";
+    })
+  ];
 
   passthru.tests = {
     inherit (nixosTests) ejabberd;

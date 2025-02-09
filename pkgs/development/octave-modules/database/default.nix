@@ -3,7 +3,7 @@
   lib,
   fetchurl,
   struct,
-  postgresql,
+  libpq,
 }:
 
 buildOctavePackage rec {
@@ -20,7 +20,7 @@ buildOctavePackage rec {
   ];
 
   propagatedBuildInputs = [
-    postgresql
+    libpq
   ];
 
   requiredOctavePackages = [

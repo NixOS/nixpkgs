@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20240501";
+  version = "20250201";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    hash = "sha256-ZTijLslItfXRBUVKrz9KcOc78Efr5rRV+HfQckKcZSI=";
+    hash = "sha256-E2SpGAMsFfB64axDzUgVOZZwHDyPVbZjEvY4fJzRyUQ=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,6 @@
   libredirect,
   lxml,
   mock,
-  netifaces,
   pastedeploy,
   pbr,
   pyeclib,
@@ -33,11 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-ZvdWWvPUdZIEadxV0nhqgTXhgJJu+hD1LnYCAP+9gpM=";
   };
 
-  postPatch = ''
-    # files requires boto which is incompatible with python 3.9
-    rm test/functional/s3api/{__init__.py,s3_test_client.py}
-  '';
-
   nativeBuildInputs = [ installShellFiles ];
 
   build-system = [
@@ -45,21 +39,19 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     eventlet
     greenlet
     lxml
-    netifaces
     pastedeploy
     pyeclib
     requests
-    setuptools
     six
     xattr
   ];
 
-  dependencies = [
+  nativeCheckInputs = [
     boto3
     mock
     stestr

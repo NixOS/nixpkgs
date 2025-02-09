@@ -17,7 +17,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.3.0";
+  version = "24.3.3";
 
   src =
     let
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-7tmz6ThT6oH2eMRl5XTf1+nr/ufDlp4BvGyKFICiTRw=";
-        aarch64-linux = "sha256-idnTeh37Ew6fg1gdJaoFF+wpgoShcJZokmWsid6g3ow=";
-        x86_64-darwin = "sha256-P1XseM1Al7y1JFVe/8VCIE84nMT4l9KF+Ik+rHjrv20=";
-        aarch64-darwin = "sha256-Xl4D8qTwB0tccuXqon4DApOOM95swxbfwSTD8gqc7jo=";
+        x86_64-linux = "sha256-vj9C12bGJbWjmcjp2jVyvLmLHYdLjbEU0SVvevhkd4A=";
+        aarch64-linux = "sha256-vQArRJZvf38JEfDBNE4GfemddM4M1ar7RojXNTb6YaU=";
+        x86_64-darwin = "sha256-r+CLBy4zetjPXDzm6abQqY8IvE0UfROg5Ga0nIrb9oc=";
+        aarch64-darwin = "sha256-W8NAs5Z8Ogl1uv2zngi4A4viBL51izsv7ksS7gygh9I=";
       };
     in
     fetchurl {
@@ -107,10 +107,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         runHook postInstall
       '';
 
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.so.8"
+  ];
+
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dbeaver.io/";
+    changelog = "https://github.com/dbeaver/dbeaver/releases/tag/${finalAttrs.version}";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database
@@ -118,10 +123,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access,
       Teradata, Firebird, Derby, etc.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       gepbird
       mkg20001
       yzx9

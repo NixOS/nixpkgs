@@ -155,9 +155,6 @@ self: super: builtins.intersectAttrs super {
   # fix errors caused by hardening flags
   epanet-haskell = disableHardening ["format"] super.epanet-haskell;
 
-  # Link the proper version.
-  zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
-
   # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
   streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
 
@@ -464,6 +461,9 @@ self: super: builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  # Test suite requires running a docker container via testcontainers
+  amqp-streamly = dontCheck super.amqp-streamly;
+
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
@@ -471,6 +471,7 @@ self: super: builtins.intersectAttrs super {
 
   shellify = enableSeparateBinOutput super.shellify;
   specup = enableSeparateBinOutput super.specup;
+  aws-spend-summary = self.generateOptparseApplicativeCompletions [ "aws-spend-summary" ] (enableSeparateBinOutput super.aws-spend-summary);
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
@@ -705,6 +706,7 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
+  splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
@@ -822,6 +824,8 @@ self: super: builtins.intersectAttrs super {
       # Setup PATH for the actual tests
       ln -sf dist/build/git-annex/git-annex git-annex
       ln -sf git-annex git-annex-shell
+      ln -sf git-annex git-remote-annex
+      ln -sf git-annex git-remote-tor-annex
       PATH+=":$PWD"
 
       echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
@@ -979,6 +983,7 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
+  primitive_0_9_0_0 = dontCheck super.primitive_0_9_0_0;
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
@@ -1008,6 +1013,18 @@ self: super: builtins.intersectAttrs super {
   hasql-queue = dontCheck super.hasql-queue;
   postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
   postgresql-pure = dontCheck super.postgresql-pure;
+
+  # Needs PostgreSQL db during tests
+  relocant = overrideCabal (drv: {
+    preCheck = ''
+      export postgresqlTestUserOptions="LOGIN SUPERUSER"
+      export PGDATABASE=relocant
+    '';
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+  }) super.relocant;
 
   retrie = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_0_0;
@@ -1326,6 +1343,14 @@ self: super: builtins.intersectAttrs super {
     ] ++ drv.testFlags or [];
   }) super.http-api-data-qq;
 
+  # Test have become more fussy in >= 2.0. We need to have which available for
+  # tests to succeed and the makefile no longer finds happy by itself.
+  happy_2_1_3 = overrideCabal (drv: {
+    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/happy:$PATH"
+    '';
+  }) super.happy_2_1_3;
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
@@ -1389,22 +1414,12 @@ self: super: builtins.intersectAttrs super {
     '';
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
-    patches = old.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        # related: https://github.com/haskell/cabal/issues/10504
-        name = "suppress-error-about-missing-local-index.patch";
-        url = "https://github.com/haskell/cabal/commit/d58a75ef4adab36688878420cc9e2c25bca41ec4.patch";
-        hash = "sha256-IZ+agNNN9AcIJBBsT30LAkAXCAoYKF+kIhccGPFdm+8=";
-        stripLen = 1;
-        includes = [ "src/Distribution/Client/IndexUtils.hs" ];
-      })
-    ];
   }) super.cabal-install;
 
   tailwind = addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.nodePackages.tailwindcss.overrideAttrs (oa: {
+      (pkgs.tailwindcss.overrideAttrs (oa: {
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
@@ -1419,6 +1434,12 @@ self: super: builtins.intersectAttrs super {
 
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
+
+  # Make sure we build xz against nixpkgs' xz package instead of
+  # Hackage repackaging of the upstream sources.
+  xz = enableCabalFlag "system-xz" super.xz;
+  xz-clib = dontDistribute super.xz-clib;
+  lzma-static = dontDistribute super.lzma-static; # deprecated
 
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
@@ -1435,7 +1456,7 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       gi-webkit2webextension
-      gi-gtk_4_0_9
+      gi-gtk_4_0_11
       gi-gdk_4_0_9
       gi-gsk
       gi-adwaita

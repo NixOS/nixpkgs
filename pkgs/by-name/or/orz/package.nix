@@ -7,16 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "orz";
-  version = "1.6.2";
+  version = "1.6.2-unstable-2024-11-08";
 
   src = fetchFromGitHub {
     owner = "richox";
     repo = "orz";
-    rev = "v${version}";
-    hash = "sha256-Yro+iXlg18Pj/AkU4IjvgA88xctK65yStfTilz+IRs0=";
+    rev = "c828a50f18a309d4715741056db74941e6a98867";
+    hash = "sha256-PVso4ufBwxhF1yhzIkIwSbRJdnH9h8gn3nreWQJDMn4=";
   };
 
-  cargoHash = "sha256-aUsRbIajBP6esjW7Wj7mqIkbYUCbZ2GgxjRXMPTnHYg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vbhK4jHNhCI1nFv2pVOtjlxQe+b7NMP14z2Tk+no8Vs=";
 
   outputs = [
     "out"

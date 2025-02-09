@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-hl7";
+  pname = "hl7";
   version = "0.4.5";
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-9uFdyL4+9KSWXflyOMOeUudZTv4NwYPa0ADNTmuVbqo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gettext # msgfmt
   ];
 
   buildInputs = [
     qtbase
     fcitx5
     fcitx5-qt
-    gettext
   ];
 
   cmakeFlags = [

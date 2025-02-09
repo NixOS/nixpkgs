@@ -2,26 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-
-  cairo,
-  ffmpeg,
   texliveInfraOnly,
 
+  # build-system
+  poetry-core,
+  setuptools,
+
+  # buildInputs
+  cairo,
+
+  # dependencies
+  av,
+  beautifulsoup4,
   click,
   cloup,
   decorator,
   isosurfaces,
-  jupyterlab,
   manimpango,
   mapbox-earcut,
   moderngl,
   moderngl-window,
   networkx,
-  notebook,
   numpy,
   pillow,
   pycairo,
@@ -36,6 +37,17 @@
   tqdm,
   typing-extensions,
   watchdog,
+
+  # optional-dependencies
+  jupyterlab,
+  notebook,
+
+  # tests
+  ffmpeg,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 let
@@ -175,41 +187,27 @@ in
 buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
-  version = "0.18.1";
-  disabled = pythonOlder "3.9";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${version}";
-    hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
+    hash = "sha256-eQgp/GwKsfQA1ZgqfB3HF2ThEgH3Fbn9uAtcko9pkjs=";
   };
 
   build-system = [
     poetry-core
-  ];
-
-  pythonRelaxDeps = [
-    "cloup"
-    "isosurfaces"
-    "pillow"
-    "skia-pathops"
-    "watchdog"
+    setuptools
   ];
 
   patches = [ ./pytest-report-header.patch ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
-
-    substituteInPlace manim/_config/default.cfg \
-      --replace "ffmpeg_executable = ffmpeg" "ffmpeg_executable = ${lib.getExe ffmpeg}"
-  '';
-
   buildInputs = [ cairo ];
 
   dependencies = [
+    av
+    beautifulsoup4
     click
     cloup
     decorator
@@ -257,16 +255,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ffmpeg
     manim-tinytex
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
   pythonImportsCheck = [ "manim" ];
 
-  meta = with lib; {
+  meta = {
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -274,8 +275,9 @@ buildPythonPackage rec {
       3Blue1Brown on YouTube. This is the community maintained version of
       manim.
     '';
+    changelog = "https://docs.manim.community/en/latest/changelog/${version}-changelog.html";
     homepage = "https://github.com/ManimCommunity/manim";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

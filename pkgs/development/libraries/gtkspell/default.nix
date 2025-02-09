@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
+    gtk2 # GLIB_GNU_GETTEXT
     gtk-doc
     intltool
     pkg-config

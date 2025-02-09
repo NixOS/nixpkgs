@@ -2,8 +2,7 @@
 
 shopt -s nullglob
 
-export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+export PATH=/empty:@path@
 
 usage() {
     echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>] [-r]" >&2

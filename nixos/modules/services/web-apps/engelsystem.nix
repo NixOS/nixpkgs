@@ -43,7 +43,7 @@ in
       default = true;
       description = ''
         Whether to create a local database automatically.
-        This will override every database setting in {option}`services.engelsystem.config`.
+        This will override every database setting in {option}`services.engelsystem.settings`.
       '';
     };
 

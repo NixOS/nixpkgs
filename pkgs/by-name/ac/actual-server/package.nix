@@ -12,12 +12,12 @@
   nix-update-script,
 }:
 let
-  version = "24.12.0";
+  version = "25.1.0";
   src = fetchFromGitHub {
     owner = "actualbudget";
     repo = "actual-server";
     tag = "v${version}";
-    hash = "sha256-qCATfpYjDlR2LaalkF0/b5tD4HDE4aNDrLvTC4g0ctY=";
+    hash = "sha256-zpZNITXd9QOJNRz8RbAuHH1hrrWPEGsrROGWJuYXqrc=";
   };
 
   yarn_20 = yarn.override { nodejs = nodejs_20; };
@@ -77,10 +77,10 @@ let
     outputHashMode = "recursive";
     outputHash =
       {
-        x86_64-linux = "sha256-Rz+iKw4JDWtZOrCjs9sbHVw/bErAEY4TfoG+QfGKY94=";
-        aarch64-linux = "sha256-JGpRoIQrEI6crczHD62ZQO08GshBbzJC0dONYD69K/I=";
-        aarch64-darwin = "sha256-v2qzKmtqBdU6igyHat+NyL/XTzWgq/CKlNpai/iFHyQ=";
-        x86_64-darwin = "sha256-0ksWLlF/a58KY/8NgOQ5aPOLoXzqDqO3lhkmFvT17Bk=";
+        x86_64-linux = "sha256-N31aAAkznncKlygyeH5A3TrnOinXVz7CTQ8/G4QX6hY=";
+        aarch64-linux = "sha256-j7BFAKXi+TKIlmHBjbx6rwaKuAo6gnOlv6FV8rnlld0=";
+        aarch64-darwin = "sha256-YpUQYOLJHYxWuE6ToLFkXWEloAau9bLBvdbpNh8jRZQ=";
+        x86_64-darwin = "sha256-AioO82Y6mK0blSQRhhZZtWmduUcYwyVAewcXEVClJUg=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };

@@ -4,22 +4,23 @@
   buildGoModule,
   darwin,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   vfkit,
 }:
 
 buildGoModule rec {
   pname = "vfkit";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "vfkit";
     rev = "v${version}";
-    hash = "sha256-9iPr9VhN60B6kBikdEIFAs5mMH+VcmnjGhLuIa3A2JU=";
+    hash = "sha256-uBFL3iZLpGcVUSgZSoq8FI87CDAr3NI8uu+u5UsrZCc=";
   };
 
-  vendorHash = "sha256-6O1T9aOCymYXGAIR/DQBWfjc2sCyU/nZu9b1bIuXEps=";
+  vendorHash = "sha256-+5QZcoI+/98hyd87NV6uX/VZqd5z38fk7K7RibX/9vw=";
 
   subPackages = [ "cmd/vfkit" ];
 
@@ -45,11 +46,17 @@ buildGoModule rec {
     version = testers.testVersion { package = vfkit; };
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Simple command line tool to start VMs through the macOS Virtualization framework";
     homepage = "https://github.com/crc-org/vfkit";
+    changelog = "https://github.com/crc-org/vfkit/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sarcasticadmin ];
+    maintainers = with lib.maintainers; [
+      sarcasticadmin
+      phaer
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "vfkit";

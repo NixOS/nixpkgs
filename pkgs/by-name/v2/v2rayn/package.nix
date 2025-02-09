@@ -11,21 +11,21 @@
   openssl,
   lttng-ust_2_12,
   krb5,
-  imagemagick,
   makeDesktopItem,
   copyDesktopItems,
   bash,
   xorg,
+  xdg-utils,
 }:
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.4.1";
+  version = "7.7.1";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-mtmuEwZy72LPYFf7hzE8TYiSh2kK6xe2CRdkOSbg2h4=";
+    hash = "sha256-u73LzCaGc3vdRs9sG9fdv1jrDubgZGkkxCnP55Bqdx8=";
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
@@ -35,9 +35,13 @@ buildDotnetModule rec {
   postPatch = ''
     substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
+      --replace-fail "Utils.GetExePath())" '"${placeholder "out"}/bin/v2rayN")'
+    substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
+      --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
   '';
 
-  dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
+  dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
@@ -46,7 +50,6 @@ buildDotnetModule rec {
   executables = [ "v2rayN" ];
 
   nativeBuildInputs = [
-    imagemagick
     copyDesktopItems
     autoPatchelfHook
   ];
@@ -71,24 +74,6 @@ buildDotnetModule rec {
     xorg.libXext
   ];
 
-  postBuild =
-    let
-      selectSystem =
-        attrs:
-        attrs.${stdenv.hostPlatform.system}
-          or (throw "v2rayn: ${stdenv.hostPlatform.system} is not supported");
-      arch = selectSystem {
-        x86_64-linux = "x64";
-        aarch64-linux = "arm64";
-      };
-    in
-    ''
-      mv ./v2rayN/v2rayN.Desktop/bin/Release/net8.0/linux-${arch} ./v2rayN/v2rayN.Desktop/bin/Release/v2rayn
-      rm -r ./v2rayN/v2rayN.Desktop/bin/Release/net8.0
-      mv ./v2rayN/v2rayN.Desktop/bin/Release/v2rayn ./v2rayN/v2rayN.Desktop/bin/Release/net8.0
-      ln -s . ./v2rayN/v2rayN.Desktop/bin/Release/net8.0/linux-${arch}
-    '';
-
   desktopItems = [
     (makeDesktopItem {
       name = "v2rayn";
@@ -96,20 +81,27 @@ buildDotnetModule rec {
       icon = "v2rayn";
       genericName = "v2rayN";
       desktopName = "v2rayN";
+      categories = [
+        "Network"
+        "Application"
+      ];
+      terminal = false;
+      comment = "A GUI client for Windows and Linux, support Xray core and sing-box-core and others";
     })
   ];
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps
-    magick "v2rayN/v2rayN.Desktop/Assets/v2rayN.ico[11]" $out/share/pixmaps/v2rayn.png
+    install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

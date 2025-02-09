@@ -13,6 +13,7 @@ Here are some common neovim flags used in the tests:
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal
+, testers
 , pkgs
 }:
 let
@@ -107,8 +108,7 @@ in
 
   inherit nmt;
 
-  # Disabled because of https://github.com/NixOS/nixpkgs/pull/352727
-  # failed_check = pkgs.testers.testBuildFailure nvim-run-failing-check;
+  failed_check = testers.testBuildFailure nvim-run-failing-check;
 
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
@@ -364,8 +364,8 @@ in
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
-    cat ${nvim-with-luasnip}/nvim
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
+  inherit (vimPlugins) corePlugins;
 })

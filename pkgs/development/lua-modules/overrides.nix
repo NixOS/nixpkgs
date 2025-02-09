@@ -30,6 +30,7 @@
 , libmpack
 , libmysqlclient
 , libpsl
+, libpq
 , libuuid
 , libuv
 , libxcrypt
@@ -44,7 +45,6 @@
 , openssl
 , pcre
 , pkg-config
-, postgresql
 , readline
 , rustPlatform
 , sol2
@@ -361,7 +361,7 @@ in
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
-      (lib.getDev postgresql)
+      (lib.getDev libpq)
     ];
   });
 
@@ -505,9 +505,9 @@ in
 
   lua-rtoml = prev.lua-rtoml.overrideAttrs (oa: {
 
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = oa.src;
-      hash = "sha256-EcP4eYsuOVeEol+kMqzsVHd8F2KoBdLzf6K0KsYToUY=";
+      hash = "sha256-7mFn4dLgaxfAxtPFCc3VzcBx2HuywcZTYqCGTbaGS0k=";
     };
 
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
@@ -765,7 +765,7 @@ in
     ];
 
     meta = {
-      homepage = "http://pjb.com.au/comp/lua/readline.html";
+      homepage = "https://pjb.com.au/comp/lua/readline.html";
       description = "Interface to the readline library";
       license.fullName = "MIT/X11";
       broken = (luaOlder "5.1") || (luaAtLeast "5.5");
@@ -831,18 +831,24 @@ in
   });
 
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = oa.src;
-      hash = "sha256-pKqG8aiV8BvvDO6RE6J3HEA/S4E4QunbO4WBpV5jUYk=";
+      hash = "sha256-sO2q4cmkJc6T4iyJUWpBfr2ISycS1cXAIO0ibMfzyIE=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
 
+  tl = prev.tl.overrideAttrs ({
+    preConfigure = ''
+      rm luarocks.lock
+    '';
+  });
+
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
 
-    cargoDeps = rustPlatform.fetchCargoTarball {
+    cargoDeps = rustPlatform.fetchCargoVendor {
       src = oa.src;
-      hash = "sha256-lguGj8fDqztrvqvEYVcJLmiuxPDaCpXU8aztInKjF+E=";
+      hash = "sha256-ow0zefFFrU91Q2PJww2jtd6nqUjwXUtfQzjkzl/AXuo=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
@@ -856,6 +862,24 @@ in
 
   });
 
+  tree-sitter-http = prev.tree-sitter-http.overrideAttrs (oa: {
+    propagatedBuildInputs =
+      let
+        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+        # but that doesn't seem to work
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+      ++ [
+        lua.pkgs.luarocks-build-treesitter-parser
+        tree-sitter
+      ];
+
+    preInstall = ''
+      export HOME="$TMPDIR";
+    '';
+  });
+
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
     propagatedBuildInputs = let
       # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
@@ -866,9 +890,21 @@ in
     ];
   });
 
-  tl = prev.tl.overrideAttrs ({
-    preConfigure = ''
-      rm luarocks.lock
+  tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (oa: {
+    propagatedBuildInputs =
+      let
+        # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+        # but that doesn't seem to work
+        lua = lib.head oa.propagatedBuildInputs;
+      in
+      oa.propagatedBuildInputs
+      ++ [
+        lua.pkgs.luarocks-build-treesitter-parser
+        tree-sitter
+      ];
+
+    preInstall = ''
+      export HOME="$TMPDIR";
     '';
   });
 
@@ -877,12 +913,6 @@ in
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
-    postConfigure = ''
-      cat ''${rockspecFilename}
-      substituteInPlace ''${rockspecFilename} \
-        --replace-fail '"luasystem = 0.2.1",' "'luasystem >= 0.2',"
-    '';
-
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim

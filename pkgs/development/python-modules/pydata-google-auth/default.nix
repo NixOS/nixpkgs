@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pydata-google-auth";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = "pydata-google-auth";
     owner = "pydata";
     tag = version;
-    hash = "sha256-Vel8xSDX0djNwlICXE/ON3G4m0dWmynl8fHfDhaZhbI=";
+    hash = "sha256-NxEpwCkjNWao2bnKOsDgw93N+cVqwM12VfoEu8CyWUU=";
   };
 
   postPatch = ''

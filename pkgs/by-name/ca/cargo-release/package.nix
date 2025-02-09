@@ -13,21 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.25.10";
+  version = "0.25.16";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     tag = "v${version}";
-    hash = "sha256-eMPwbcMIjYxM5gJm3HSdwzxN7WYOOtzj/Wf7rwuJfWs=";
+    hash = "sha256-5crd28XBm6M/hOKzkQG2jaw017dQI5AReg5XnUYdXXc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cargo-test-macro-0.1.0" = "sha256-5EHfvuwbI14DBkbLWyXepmn9m4Qn2ah2+9J9FHrSOgU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pFSsOSTTpjEl3Od9c05qY26SsXEtfi9HS3E87wVr5y8=";
 
   nativeBuildInputs = [
     pkg-config

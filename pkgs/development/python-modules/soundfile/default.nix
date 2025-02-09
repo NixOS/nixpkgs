@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
   numpy,
   libsndfile,
@@ -12,29 +13,33 @@
 
 buildPythonPackage rec {
   pname = "soundfile";
-  version = "0.12.1";
-  format = "setuptools";
+  version = "0.13.0";
+  pyproject = true;
   # https://github.com/bastibe/python-soundfile/issues/157
   disabled = isPyPy || stdenv.hostPlatform.isi686;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6OEBeyzx3adnrvGdL9nuXr4H4FDUMPd6Cnxmugi4za4=";
+    hash = "sha256-6DOZ2L3n1zsRfDPWoeyFcTGDOPic5y9MPUV+l2h5g1U=";
   };
-
-  patches = [ ./0001-Fix-build-on-linux-arm64.patch ];
 
   postPatch = ''
     substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [
-    numpy
-    libsndfile
+  build-system = [
+    setuptools
     cffi
   ];
-  propagatedNativeBuildInputs = [ cffi ];
+
+  dependencies = [
+    numpy
+    cffi
+  ];
+
+  pythonImportsCheck = [ "soundfile" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Audio library based on libsndfile, CFFI and NumPy";

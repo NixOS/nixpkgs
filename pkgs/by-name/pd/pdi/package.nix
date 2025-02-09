@@ -30,15 +30,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdi";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
-    tag = version;
-    hash = "sha256-l4vKWIitP0BqSRPxpv0UgjAOgHJ3Aecm1hT+f9BeqRA=";
+    tag = finalAttrs.version;
+    hash = "sha256-EUqgscpCubub2Zl/7fcgbdVx216Y2Ke7h8Zui2SieP8=";
   };
 
   # Current hdf5 version in nixpkgs is 1.14.4.3 which is 4 numbers long and doesn't match the 3 number regex. :')
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "PDI supports loose coupling of simulation codes with data handling libraries";
     homepage = "https://pdi.dev/master/";
-    changelog = "https://github.com/pdidev/pdi/releases/tag/${src.tag}";
+    changelog = "https://github.com/pdidev/pdi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "pdirun";
     maintainers = with lib.maintainers; [ GaetanLepage ];
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

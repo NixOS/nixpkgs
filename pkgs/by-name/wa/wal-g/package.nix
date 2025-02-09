@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "3.0.3";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "sha256-r46svvUAMjZx+Oc/vTWet9iZLEiXkRFevUz4x0OixVI=";
+    sha256 = "sha256-wVr0L2ZXMuEo6tc2ajNzPinVQ8ZVzNOSoaHZ4oFsA+U=";
   };
 
-  vendorHash = "sha256-CfXLeFQA7ix1DP+DB5qWQryS2tLFNlfZrA3OBYxIpjU=";
+  vendorHash = "sha256-YDLAmRfDl9TgbabXj/1rxVQ052NZDg3IagXVTe5i9dw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

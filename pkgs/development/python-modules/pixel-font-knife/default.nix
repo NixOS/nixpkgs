@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-knife";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pixel_font_knife";
     inherit version;
-    hash = "sha256-kgr9j/i8Z7U4KvjQMoZp5JaWMlSYwuhaFMmvEktNw8w=";
+    hash = "sha256-tm5cAaeUBL9vbdvq73N2HCytlwYe0Q2Tovo+6XU59GQ=";
   };
 
   build-system = [ hatchling ];

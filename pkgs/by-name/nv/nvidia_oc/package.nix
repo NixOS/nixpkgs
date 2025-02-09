@@ -1,7 +1,8 @@
 {
   lib,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
+  autoAddDriverRunpath,
   versionCheckHook,
 }:
 
@@ -18,6 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-DuuHqBhL25ghgcYxcOtWRArUqL9+c3d5mBrAcWTAFW8=";
+
+  nativeBuildInputs = [
+    autoAddDriverRunpath
+  ];
 
   doInstallCheck = true;
 

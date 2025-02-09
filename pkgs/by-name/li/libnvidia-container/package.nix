@@ -52,7 +52,9 @@ stdenv.mkDerivation rec {
     # for binary lookups.
     # TODO: Remove the legacy compatibility once nvidia-docker is removed
     # from NixOS.
-    ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch
+    (replaceVars ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
 
     # fix bogus struct declaration
     ./0003-nvc-fix-struct-declaration.patch
@@ -84,12 +86,28 @@ stdenv.mkDerivation rec {
     #    libtirpc (for now)
     # 4. prevent installation of static libraries because of step 3
     # 5. prevent installation of libnvidia-container-go.so twice
+    # 6. Replace pkg-config and objcopy with target platform's one
+    # 7. Stub ldconfig
+    #
     sed -i Makefile \
       -e 's#DESTDIR=\$(DEPS_DIR)#DESTDIR=""#g' \
       -e 's#\$(DEPS_DIR)\$#\$#g' \
       -e 's#all: shared static tools#all: shared tools#g' \
       -e '/$(INSTALL) -m 644 $(LIB_STATIC) $(DESTDIR)$(libdir)/d' \
-      -e '/$(INSTALL) -m 755 $(libdir)\/$(LIBGO_SHARED) $(DESTDIR)$(libdir)/d'
+      -e '/$(INSTALL) -m 755 $(libdir)\/$(LIBGO_SHARED) $(DESTDIR)$(libdir)/d' \
+      -e "s,pkg-config,$PKG_CONFIG,g"
+    substituteInPlace mk/common.mk \
+      --replace-fail objcopy '$(OBJCOPY)' \
+      --replace-fail ldconfig true
+  '';
+
+  # Recreate library symlinks which ldconfig would have created
+  postFixup = ''
+    for lib in libnvidia-container libnvidia-container-go; do
+      rm -f "$out/lib/$lib.so"
+      ln -s "$out/lib/$lib.so.${version}" "$out/lib/$lib.so.1"
+      ln -s "$out/lib/$lib.so.1" "$out/lib/$lib.so"
+    done
   '';
 
   enableParallelBuilding = true;
@@ -98,7 +116,12 @@ stdenv.mkDerivation rec {
     HOME="$(mktemp -d)"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+    CGO_ENABLED = "1"; # Needed for cross-compilation
+    GOFLAGS = "-trimpath"; # Don't include paths to Go stdlib to resulting binary
+    inherit (go) GOARCH GOOS;
+  };
   NIX_LDFLAGS = [
     "-L${lib.getLib libtirpc}/lib"
     "-ltirpc"

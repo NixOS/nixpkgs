@@ -40,7 +40,7 @@
   zstandard,
   zulip,
   # other
-  git,
+  gitMinimal,
   withPcap ? true,
   dpkt,
   dnslib,
@@ -121,7 +121,7 @@ buildPythonApplication rec {
     ++ lib.optional withXclip xclip;
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # check phase uses the output bin, which is not possible when cross-compiling

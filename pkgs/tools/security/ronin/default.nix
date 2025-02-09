@@ -8,6 +8,7 @@
 
 bundlerEnv {
   name = "ronin";
+  version = "2.1.0";
   gemdir = ./.;
 
   gemConfig = defaultGemConfig // {

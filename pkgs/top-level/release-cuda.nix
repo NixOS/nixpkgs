@@ -89,7 +89,6 @@ let
       cholmod-extra = linux;
       colmap = linux;
       ctranslate2 = linux;
-      deepin.image-editor = linux;
       ffmpeg-full = linux;
       gimp = linux;
       gpu-screen-recorder = linux;
@@ -121,7 +120,6 @@ let
         boxx = linux;
         bpycv = linux;
         catboost = linux;
-        chainer = linux;
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
@@ -160,6 +158,7 @@ let
         transformers = linux;
         ttstokenizer = linux;
         vidstab = linux;
+        vllm = linux;
       };
     }
     // (lib.genAttrs packageSets evalPackageSet);

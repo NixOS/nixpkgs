@@ -3,28 +3,58 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
   versionCheckHook,
+  bacon,
   nix-update-script,
+
+  withSound ? false,
 }:
+
+let
+  soundDependencies =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # bindgenHook is only included on darwin as it is needed to build `coreaudio-sys`, a darwin-specific crate
+      rustPlatform.bindgenHook
+    ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.7.0";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     tag = "v${version}";
-    hash = "sha256-pw+EfmpDvMCKSHOeHiv06x13/tRuf053Zcj8z0eWnPs=";
+    hash = "sha256-TniEPcY3mK5LO9CBXi5kgnUQkOeDwF9n1K0kSn4ucKk=";
   };
 
-  cargoHash = "sha256-W1bDZSUBjPmb/7bOnE+E5byA0clJZ+qGJ4XYASAjfeU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6vR8Bxv/A6do4+oGAI0kx1yUyht7YOi1pP/mnIiBPmc=";
+
+  buildFeatures = lib.optionals withSound [
+    "sound"
+  ];
+
+  nativeBuildInputs = lib.optionals withSound [
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals withSound soundDependencies;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {
+    tests = {
+      withSound = bacon.override { withSound = true; };
+    };
     updateScript = nix-update-script { };
   };
 

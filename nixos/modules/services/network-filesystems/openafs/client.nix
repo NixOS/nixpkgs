@@ -73,7 +73,7 @@ in
           });
         description = ''
           This cell's database server records, added to the global
-          CellServDB. See CellServDB(5) man page for syntax. Ignored when
+          CellServDB. See {manpage}`CellServDB(5)` man page for syntax. Ignored when
           `afsdb` is set to `true`.
         '';
         example = [

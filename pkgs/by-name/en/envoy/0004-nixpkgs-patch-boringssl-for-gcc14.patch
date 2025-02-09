@@ -42,10 +42,10 @@ index 0000000000000000000000000000000000000000..8dcad4cc11f691eec93efa29075c1d35
 + // FIPS functions.
 + 
 diff --git a/bazel/repositories.bzl b/bazel/repositories.bzl
-index 5cb573770f0aeac7b42d803673c8c520b5e35131..e864ef24db4bf837ef50d90c8eca316eba939d74 100644
+index cd15ec36f45f5958f4e65d314af78a0ef7c5dc78..935bf8a1ced67c094e4e900ba84bf39033bd3bbb 100644
 --- a/bazel/repositories.bzl
 +++ b/bazel/repositories.bzl
-@@ -264,6 +264,7 @@ def _boringssl():
+@@ -263,6 +263,7 @@ def _boringssl():
          patch_args = ["-p1"],
          patches = [
              "@envoy//bazel:boringssl_static.patch",

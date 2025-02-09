@@ -13,6 +13,7 @@
   cairo,
   epoll-shim,
   git,
+  glaze,
   hyprcursor,
   hyprgraphics,
   hyprland-qtutils,
@@ -85,14 +86,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.46.2";
+  version = "0.47.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dj9dpVwpyTmUyVu4jtaIU39bHgVkoZjv6cgYfWyHc9E=";
+    hash = "sha256-dSKR1VpjpdJVZ5dmLgIvAu3K+DYrSbohZkqxSQhjw8U=";
   };
 
   postPatch = ''
@@ -143,6 +144,7 @@ customStdenv.mkDerivation (finalAttrs: {
     [
       aquamarine
       cairo
+      glaze
       git
       hyprcursor.dev
       hyprgraphics
@@ -215,12 +217,7 @@ customStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-      khaneliman
-      wozeparrot
-    ];
+    maintainers = lib.teams.hyprland.members;
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };

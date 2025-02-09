@@ -6,7 +6,7 @@
   ocaml-ng,
   perl,
   which,
-  gnumake42,
+  fetchpatch,
 }:
 
 let
@@ -27,9 +27,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/WeiDUorg/weidu/commit/bb90190d8bf7d102952c07d8288a7dc6c7a3322e.patch";
+      hash = "sha256-Z4hHdMR1dYjJeERJSqlYynyPu2CvE6+XJuCr9ogDmvk=";
+    })
+  ];
+
   postPatch = ''
     substitute sample.Configuration Configuration \
       --replace /usr/bin ${lib.makeBinPath [ ocaml' ]} \
+      --replace /usr/local/bin ${lib.makeBinPath [ ocaml' ]} \
       --replace elkhound ${elkhound}/bin/elkhound
 
     mkdir -p obj/{.depend,x86_LINUX}
@@ -43,7 +51,6 @@ stdenv.mkDerivation rec {
     ocaml'
     perl
     which
-    gnumake42
   ];
 
   buildFlags = [
@@ -69,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://weidu.org";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
-    # should work fine on both Darwin and Windows
-    platforms = platforms.linux;
+    # should work fine on Windows
+    platforms = platforms.unix;
   };
 }

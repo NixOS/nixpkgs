@@ -16,6 +16,7 @@
   hyprland,
   iniparser,
   jsoncpp,
+  libcava,
   libdbusmenu-gtk3,
   libevdev,
   libinotify-kqueue,
@@ -74,15 +75,6 @@
   waybar,
 }:
 
-let
-  # Derived from subprojects/cava.wrap
-  libcava.src = fetchFromGitHub {
-    owner = "LukashonakV";
-    repo = "cava";
-    rev = "0.10.3";
-    hash = "sha256-ZDFbI69ECsUTjbhlw2kHRufZbQMu+FQSMmncCJ5pagg=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
   version = "0.11.0";

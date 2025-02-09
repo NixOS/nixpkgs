@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    sha256 = "sha256-xZHYiaQ8ASUwu0ieHIXcjRaH06SQoB6OR1y7Ok+FjAs=";
+    sha256 = "sha256-dZnUu0g86WJIIvwMgdmwb6oYqItxoYrGQTFNX7I61Bs=";
   };
 
   patches = [
@@ -49,7 +49,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-Zn+xU6NJOY+jDYrSGsbYGAVqprQ6teEdNvlTNDXuzKs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OMa89riyopKMQf9E9Fr7Qs4hFfEfjnDFzaSWFtkYUXE=";
 
   nativeBuildInputs = [ pkg-config ];
 

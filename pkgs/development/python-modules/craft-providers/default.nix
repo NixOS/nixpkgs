@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.0.4";
+  version = "2.1.0";
 
   pyproject = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-f+0AEoVUFL/+v4sRYirc6OD5dYH4dlLk8h7im+CLuhM=";
+    hash = "sha256-+j3uwvecffl8cK+yNidWbL243VnPkX72DMYv8RXMaXE=";
   };
 
   patches = [
@@ -102,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

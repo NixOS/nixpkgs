@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/2U1+kCRpM36r2fHB6Hditnm2dSVHh08M0RIi3AIe44=";
   };
 
-  cargoHash = "sha256-pCQOFBs+lNdjcyOqZ/GjJyOthepnaWAM1feEpegdrDo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q9cHxGBL/GryUD2Uq0AuKNPmdQ0q7g6oXobpgWj4e0o=";
 
   meta = with lib; {
     description = "Sass reimplemented in rust with nom";

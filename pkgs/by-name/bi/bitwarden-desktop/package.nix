@@ -3,13 +3,10 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
-  electron_32,
+  electron_33,
   fetchFromGitHub,
-  glib,
   gnome-keyring,
-  gtk3,
   jq,
-  libsecret,
   makeDesktopItem,
   makeWrapper,
   napi-rs-cli,
@@ -26,7 +23,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_32;
+  electron = electron_33;
 
   bitwardenDesktopNativeArch =
     {
@@ -39,13 +36,13 @@ let
 in
 buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.12.0";
+  version = "2025.1.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-1XzIrZOTcFEuY/WqPGcFESBAZOiFcHA4ZvGXhDM7a54=";
+    hash = "sha256-0NXrTBkCyo9Hw+fyFTfXfa1efBlaM6xWd9Uvsbathpw=";
   };
 
   patches = [
@@ -70,7 +67,7 @@ buildNpmPackage rec {
     "--legacy-peer-deps"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-EtIcqbubAYN9I9wbw17oHiVshd3GtQayFtdgqWP7Pgg=";
+  npmDepsHash = "sha256-DDsPkvLGOhjmdYEOmhZfe4XHGFyowvWO24YcCA5griM=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
@@ -82,7 +79,7 @@ buildNpmPackage rec {
     ) patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-Fh6pbmFof/qIhVETtBA1fGlC45fuu1n7g9hosvmfHZc=";
+    hash = "sha256-IL8+n+rhRbvRO1jxJSy9PjUMb/tI4S/gzpUNOojBPWk=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -98,12 +95,6 @@ buildNpmPackage rec {
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
-  ];
-
-  buildInputs = [
-    glib
-    gtk3
-    libsecret
   ];
 
   preBuild = ''

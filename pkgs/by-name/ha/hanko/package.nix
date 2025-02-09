@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +16,12 @@ rustPlatform.buildRustPackage rec {
     tag = "v${version}";
     hash = "sha256-gytnUta/sNa8vJMvVS/DMwRc4R/8rmOnEfBKEjRpfGs=";
   };
-  cargoHash = "sha256-rlKFS1ppUoyZ1X2PeG8tEB44Ysqi7kCLqR+ECVIdPjs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UHA7NI/LtyY8ucj+PavKdqym8o5HtGUD7+60UYnGohM=";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage {
     hash = srcHash;
   };
   buildAndTestSubdir = pname;
+  useFetchCargoVendor = true;
   inherit cargoHash;
 
   nativeBuildInputs = [

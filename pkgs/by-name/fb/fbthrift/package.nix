@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2024.11.18.00";
+  version = "2025.01.06.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -39,13 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dJf4vaIcat24WiKLFNEqeCnJYiO+c5YkuFu+hrS6cPE=";
+    hash = "sha256-VIWUh238MJDGxf6j/yanom9SNnNjBBzGbpg/SAquN5E=";
   };
 
   patches = [
     # Remove a line that breaks the build due to the CMake classic of
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
+
+    ./glog-0.7.patch
   ];
 
   nativeBuildInputs = [

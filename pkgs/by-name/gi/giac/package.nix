@@ -209,7 +209,9 @@ stdenv.mkDerivation rec {
 
       if [ -n "$doc" ]; then
         mkdir -p "$doc/share/giac"
+        # $out/share/giac/doc/aide_cas is a symlink to ../aide_cas
         mv "$out/share/giac/doc" "$doc/share/giac"
+        ln -sf "$out/share/giac/aide_cas" "$doc/share/giac/doc/aide_cas"
         mv "$out/share/giac/examples" "$doc/share/giac"
       fi
     ''

@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "monit";
-  version = "5.34.3";
+  version = "5.34.4";
 
   src = fetchurl {
     url = "https://mmonit.com/monit/dist/monit-${version}.tar.gz";
-    sha256 = "sha256-Zp2Lld3sEk0URLpSZPZ/3q6OkOU7KSlxn0dQ/F/zumA=";
+    sha256 = "sha256-72B8+qv9N2fUC5ueMgMvdIvuvE1oaDH2ER4OaPvRtGk=";
   };
 
   nativeBuildInputs =

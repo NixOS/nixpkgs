@@ -3,26 +3,32 @@
   fetchFromGitHub,
   flutter327,
   webkitgtk_4_1,
-  pkg-config,
   copyDesktopItems,
   makeDesktopItem,
+  runCommand,
+  venera,
+  yq,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
+
 flutter327.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.1.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-zjlu+rdS+ctp8R1laeT9OF+HCLvTyQsAJIBA1fEiNMg=";
+    hash = "sha256-uVy3M5H2zIbHPk5Uug0HBFauiYk5+wR9CJrheATTjbc=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
     desktop_webview_window = "sha256-15tw3gLN9e886QjBFuYP34KLD1lN8AmQYXVza5Bvs40=";
-    flutter_qjs = "sha256-SvOgcZquwZ1/HWVkPVnD8Eo+jD3jjfkKsVleJpNaiV0=";
+    flutter_qjs = "sha256-nbXKfiCvG6JT570RNVq3gec+JFw3H7XG4g/QSNkDw18=";
+    flutter_7zip = "sha256-KHDq4XG3l+dq1NPW84wOK5kKbXJ8qCK8voGeTnX/Krw=";
     lodepng_flutter = "sha256-bGc9uXD1EQ/19OIZmR7a/YL9w93fNWdQF5S19LSwxZw=";
     photo_view = "sha256-Z+9xgvk8YS+bgCbBW7BBY72tV6JUq2kCX5OwKFK4YPE=";
     scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
@@ -32,7 +38,6 @@ flutter327.buildFlutterApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    pkg-config
   ];
 
   buildInputs = [
@@ -57,22 +62,36 @@ flutter327.buildFlutterApplication rec {
     })
   ];
 
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/venera/lib
-  '';
-
   postInstall = ''
     install -Dm0644 ./debian/gui/venera.png $out/share/pixmaps/venera.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : $out/app/venera/lib
+  '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (venera) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "venera.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Comic reader that support reading local and network comics";
     homepage = "https://github.com/venera-app/venera";
     mainProgram = "venera";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

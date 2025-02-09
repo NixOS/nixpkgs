@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-table-other";
-  version = "5.1.3";
+  version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-hIUzVc3Bs1zGvM/+R72NigU997Wmm++ZDxnzP+YpX1w=";
+    hash = "sha256-Yt6lAievCj9FC4eO6EIqUxiSaBPMvjSEb1PNyXPa82Q=";
   };
 
   nativeBuildInputs = [
@@ -26,8 +26,11 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     gettext
     libime
-    boost
     fcitx5
+  ];
+
+  buildInputs = [
+    boost
   ];
 
   meta = with lib; {

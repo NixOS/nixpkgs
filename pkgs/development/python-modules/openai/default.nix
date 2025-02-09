@@ -32,12 +32,11 @@
   pytest-asyncio,
   pytest-mock,
   respx,
-
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.59.3";
+  version = "1.61.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-gMykGfNgpTlh8LiFXL2p5ECSpeYCfS0LTsgHIzT1c1I=";
+    hash = "sha256-7dDsfEHHYJv6hbDPryhzZwCtdIzYUOABLOSXXQ1vau8=";
   };
 
   build-system = [

@@ -2,21 +2,23 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
   testers,
   zenoh,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zenoh";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh";
     rev = version;
-    hash = "sha256-Ydmd3eCXn+svMak1I5LU4rJNhzEEc2MiG5MoSMNOJ00=";
+    hash = "sha256-X/jUANTwuOHIA+m8LB4UuJDJ0PwZuMQHtSdgSPiPYNI=";
   };
 
-  cargoHash = "sha256-AjMgnZ+GJPGMQsyeOQGyXpVrdw2zb7B9/KXWKlvKT1Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hCon4ydLLwvdglVfNn+eWMbDaTpcPZxzLWINPULYZwI=";
 
   cargoBuildFlags = [
     "--workspace"
@@ -33,9 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = zenoh;
-    version = "v" + version;
+  passthru.tests = {
+    version = testers.testVersion {
+      package = zenoh;
+      version = "v" + version;
+    };
+    zenohd = nixosTests.zenohd;
   };
 
   meta = {

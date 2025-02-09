@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "openbao";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     rev = "v${version}";
-    hash = "sha256-QzUNb4T9uau9bWZX6ulUDyfdInGd86iClBAG72C+7mo=";
+    hash = "sha256-viN1Yuqnyg/nrRzV2HkjVGZSWD9QIXLN6nG5N0QtwbU=";
   };
 
-  vendorHash = "sha256-Lg58NbwO7vLNRCBwJujcoVcrV018FevvdrUassnAg3k=";
+  vendorHash = "sha256-dSEFoD2UbY6OejSxPBDxCNKHBoHI8YNnixayIS7z3e8=";
 
   proxyVendor = true;
 

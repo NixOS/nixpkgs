@@ -27,6 +27,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # fails if builder load is highly variable
+    "test_performance"
+  ];
+
   meta = with lib; {
     description = "Fork of frozendict, an immutable wrapper around dictionaries";
     homepage = "https://github.com/corenting/immutabledict";

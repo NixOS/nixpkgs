@@ -76,15 +76,34 @@ buildFHSEnv {
       pkgs.wivrn.buildInputs
       ++ pkgs.wivrn.nativeBuildInputs
       ++ (with pkgs; [
+        avahi
+        ffmpeg
         glib
         libmd
         ninja
         glslang
         gst_all_1.gstreamer
+        gdk-pixbuf
+        lerc
+        libsysprof-capture
+        libbsd
+        libdeflate
         libdrm
+        libGL
+        libnotify
+        libpng
+        libselinux
+        libsepol
+        libtiff
+        libuuid
+        libwebp
         openssl
         openxr-loader
+        pipewire
+        pulseaudio
+        systemd
         vulkan-loader
+        x264
       ])
       ++ (with pkgs; [
         android-tools # For adb installing WiVRn APKs

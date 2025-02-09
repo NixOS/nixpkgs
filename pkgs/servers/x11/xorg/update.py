@@ -48,23 +48,6 @@ for component in [
         entry[0].append(version.parse(ver))
         entry[1][ver] = f"{mirror}{component}/{href}"
 
-# luit
-lurl = "https://invisible-mirror.net/archives/luit/"
-r = requests.get(lurl)
-soup = BeautifulSoup(r.text, "html.parser")
-for a in soup.find_all("a"):
-    href = a["href"]
-
-    if not href.endswith(".tgz"):
-        continue
-
-    pname, rem = href.rsplit("-", 1)
-    ver, _ = rem.rsplit(".", 1)
-
-    entry = allversions.setdefault(f"{lurl}{pname}", ([], {}))
-    entry[0].append(version.parse(ver))
-    entry[1][ver] = f"{lurl}{href}"
-
 print("Finding updated versions...")
 
 with open("./tarballs.list") as f:
@@ -76,7 +59,7 @@ changes_text = []
 for line in lines_tarballs:
     line = line.rstrip("\n")
 
-    if any(line.startswith(frag) for frag in [mirror, lurl]):
+    if line.startswith(mirror):
         pname, rem = line.rsplit("-", 1)
         if line.startswith(mirror):
             ver, _, _ = rem.rsplit(".", 2)

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.9.2";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     tag = version;
-    hash = "sha256-JkO5DNGVTnqbMfkadQGdyJEsfDfMDZ+nfjEjRpoMOfk=";
+    hash = "sha256-AfreBLyJDogXnxB5cIoT766VFiHIIoVKAoBIra6Q+xs=";
   };
 
   postPatch = ''
@@ -96,7 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
-    changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
     maintainers = [ ];
   };

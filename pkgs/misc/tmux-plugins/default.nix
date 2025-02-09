@@ -89,13 +89,13 @@ in rec {
     };
   };
 
-  catppuccin = mkTmuxPlugin {
+  catppuccin = mkTmuxPlugin rec {
     pluginName = "catppuccin";
-    version = "unstable-2024-05-15";
+    version = "2.1.2";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      rev = "697087f593dae0163e01becf483b192894e69e33";
+      rev = "v${version}";
       hash = "sha256-EHinWa6Zbpumu+ciwcMo6JIIvYFfWWEKH1lwfyZUNTo=";
     };
     postInstall = ''
@@ -537,7 +537,8 @@ in rec {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
       rev = "ca6468e2deef11efadfe3a62832ae67742505432";
-      hash = "sha256-dkiIbTPIn3ampK7LItndOL69cMVfuJyOIQZL4lt58jQ=";
+      hash = "sha256-wl9/5XvFq+AjV8CwYgIZjPOE0/kIuEYBNQqNDidjNFo=";
+      fetchSubmodules = true;
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";
@@ -880,6 +881,10 @@ in rec {
       platforms = platforms.unix;
       maintainers = with maintainers; [ jfvillablanca ];
     };
+  };
+
+  tmux-which-key = pkgs.callPackage ./tmux-which-key {
+    inherit mkTmuxPlugin;
   };
 
   yank = mkTmuxPlugin {

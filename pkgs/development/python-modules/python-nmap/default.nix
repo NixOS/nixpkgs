@@ -35,7 +35,7 @@ buildPythonPackage rec {
       for systems administrators who want to automatize scanning task and reports.
       It also supports nmap script outputs.
     '';
-    homepage = "http://xael.org/pages/python-nmap-en.html";
+    homepage = "https://xael.org/pages/python-nmap-en.html";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

@@ -16,17 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.47.0";
+  version = "3.47.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-g+shpvamSfUG34vTqrhaCPdVbO7V29jep0PqAD/DqVc=";
+    hash = "sha256-8bLuQSwo10cryVupljaNbwzc8ANir/2tsn7ShsF5VAs=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2024/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-3yXJb6+4Cck7jhwlxs/XSPRJ99SmV+jBJNOO/v5Ws04=";
+    hash = "sha256-bcyommdJAp+6gbwPQYjL1PeKy0jWo+rcbVSK+RF8P0E=";
   };
 
   outputs = [ "bin" "dev" "man" "doc" "out" ];
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS3_TOKENIZER"
     "-DSQLITE_ENABLE_FTS4"
     "-DSQLITE_ENABLE_FTS5"
+    "-DSQLITE_ENABLE_PREUPDATE_HOOK"
     "-DSQLITE_ENABLE_RTREE"
+    "-DSQLITE_ENABLE_SESSION"
     "-DSQLITE_ENABLE_STMT_SCANSTATUS"
     "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
     "-DSQLITE_SOUNDEX"

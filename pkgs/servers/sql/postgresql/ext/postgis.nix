@@ -26,6 +26,8 @@
   automake,
   libtool,
   which,
+  sfcgal,
+  withSfcgal ? false,
 }:
 
 let
@@ -33,7 +35,7 @@ let
 in
 buildPostgresqlExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.5.0";
+  version = "3.5.2";
 
   outputs = [
     "out"
@@ -44,24 +46,28 @@ buildPostgresqlExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     rev = "${finalAttrs.version}";
-    hash = "sha256-wh7Lav2vnKzGWuSvvMFvAaGV7ynD+KgPsFUgujdtzlA=";
+    hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
-  buildInputs = [
-    libxml2
-    geos
-    proj
-    gdal
-    json_c
-    protobufc
-    pcre2.dev
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  buildInputs =
+    [
+      geos
+      proj
+      gdal
+      json_c
+      protobufc
+      pcre2.dev
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+    ++ lib.optional withSfcgal sfcgal;
   nativeBuildInputs = [
     autoconf
     automake
     libtool
+    libxml2
     perl
     pkg-config
+    protobufc
     which
   ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
@@ -87,7 +93,7 @@ buildPostgresqlExtension (finalAttrs: {
     "--with-gdalconfig=${gdal}/bin/gdal-config"
     "--with-jsondir=${json_c.dev}"
     "--disable-extension-upgrades-install"
-  ];
+  ] ++ lib.optional withSfcgal "--with-sfcgal=${sfcgal}/bin/sfcgal-config";
 
   makeFlags = [
     "PERL=${perl}/bin/perl"
@@ -130,6 +136,25 @@ buildPostgresqlExtension (finalAttrs: {
         end$$;
         -- st_makepoint goes through c code
         select st_makepoint(1, 1);
+      ''
+      + lib.optionalString withSfcgal ''
+        CREATE EXTENSION postgis_sfcgal;
+        do $$
+        begin
+          if postgis_sfcgal_version() <> '${sfcgal.version}' then
+            raise '"%" does not match "${sfcgal.version}"', postgis_sfcgal_version();
+          end if;
+        end$$;
+        CREATE TABLE geometries (
+          name varchar,
+          geom geometry(PolygonZ) NOT NULL
+        );
+
+        INSERT INTO geometries(name, geom) VALUES
+          ('planar geom', 'PolygonZ((1 1 0, 1 2 0, 2 2 0, 2 1 0, 1 1 0))'),
+          ('nonplanar geom', 'PolygonZ((1 1 1, 1 2 -1, 2 2 2, 2 1 0, 1 1 1))');
+
+        SELECT name from geometries where cg_isplanar(geom);
       '';
   };
 

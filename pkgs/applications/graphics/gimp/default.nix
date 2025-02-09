@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   autoreconfHook,
   pkg-config,
   intltool,
@@ -45,7 +45,7 @@
   libheif,
   libxslt,
   libgudev,
-  openexr,
+  openexr_3,
   desktopToDarwinBundle,
   AppKit,
   Cocoa,
@@ -74,8 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # to remove compiler from the runtime closure, reference was retained via
     # gimp --version --verbose output
-    (substituteAll {
-      src = ./remove-cc-reference.patch;
+    (replaceVars ./remove-cc-reference.patch {
       cc_version = stdenv.cc.cc.name;
     })
 
@@ -127,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       poppler
       poppler_data
       libtiff
-      openexr
+      openexr_3
       libmng
       librsvg
       libwmf

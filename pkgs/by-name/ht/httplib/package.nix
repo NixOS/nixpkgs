@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httplib";
-  version = "0.18.3";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mErNqoGLRXQ9jkJO87o2LlKZaZm6nb4nNiv4ylLT0pM=";
+    hash = "sha256-d5b6WsqR9oTiWq9wED+7Ts0kjURutxAJVXbm1okNg8k=";
   };
 
   nativeBuildInputs = [ cmake ];

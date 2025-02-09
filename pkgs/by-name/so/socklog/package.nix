@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.1.0";
 
   src = fetchurl {
-    url = "http://smarden.org/socklog/socklog-${version}.tar.gz";
+    url = "https://smarden.org/socklog/socklog-${version}.tar.gz";
     sha256 = "0mdlmhiq2j2fip7c4l669ams85yc3c1s1d89am7dl170grw9m1ma";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "System and kernel logging services";
-    homepage = "http://smarden.org/socklog/";
+    homepage = "https://smarden.org/socklog/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = [ maintainers.joachifm ];

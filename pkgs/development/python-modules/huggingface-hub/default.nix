@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.26.5";
+  version = "0.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-0yg0UwC0vyp8Q+2RTyAJkFP9I4/RQ6zRj3CaKJwU8Gc=";
+    hash = "sha256-QrbwpJub4+pfbFERBk6GSZDSrjoCPniO+kB5hiddk28=";
   };
 
   build-system = [ setuptools ];

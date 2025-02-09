@@ -9,21 +9,22 @@
 
   # dependencies
   absl-py,
+  distutils,
   h5py,
   ml-dtypes,
   namex,
   numpy,
+  onnxruntime,
   optree,
   packaging,
-  rich,
-  tensorflow,
   pythonAtLeast,
-  distutils,
+  rich,
+  scikit-learn,
+  tensorflow,
 
   # tests
   dm-tree,
   jax,
-  jaxlib,
   pandas,
   pydot,
   pytestCheckHook,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     tag = "v${version}";
-    hash = "sha256-qidY1OmlOYPKVoxryx1bEukA7IS6rPV4jqlnuf3y39w=";
+    hash = "sha256-sbAGiI1Ai0MPiQ8AMpa5qX6hYt/plsIqhn9xYLBb120=";
   };
 
   build-system = [
@@ -53,9 +54,11 @@ buildPythonPackage rec {
     ml-dtypes
     namex
     numpy
+    onnxruntime
     optree
     packaging
     rich
+    scikit-learn
     tensorflow
   ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
@@ -66,7 +69,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-tree
-    jaxlib
     jax
     pandas
     pydot
@@ -81,6 +83,9 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # Requires onnx which is currently broken
+      "test_export_onnx"
+
       # Tries to install the package in the sandbox
       "test_keras_imports"
 
@@ -99,6 +104,9 @@ buildPythonPackage rec {
     ];
 
   disabledTestPaths = [
+    # Require onnx which is currently broken
+    "keras/src/export/onnx_test.py"
+
     # Datasets are downloaded from the internet
     "integration_tests/dataset_tests"
 
@@ -121,7 +129,6 @@ buildPythonPackage rec {
 
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "keras/src/backend/tensorflow/saved_model_test.py"
-    "keras/src/export/export_lib_test.py"
 
     # KeyError: 'Unable to synchronously open object (bad object header version number)'
     "keras/src/saving/file_editor_test.py"

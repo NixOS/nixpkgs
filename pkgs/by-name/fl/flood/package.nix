@@ -2,26 +2,26 @@
 , buildNpmPackage
 , fetchFromGitHub
 , nixosTests
-, pnpm
+, pnpm_9
 , nix-update-script
 }:
 
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.8.5";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lm+vPo7V99OSUAVEvdiTNMlD/+iHGPIyPLc1WzO1aTU=";
+    hash = "sha256-sIwXx9DA+vRW4pf6jyqcsla0khh8fdpvVTZ5pLrUhhc=";
   };
 
-  npmConfigHook = pnpm.configHook;
+  npmConfigHook = pnpm_9.configHook;
   npmDeps = pnpmDeps;
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-NuU9O3bEboxmuEuk1WSUeZRNgVK5cwFiUAN3+7vACGw=";
+    hash = "sha256-E2VxRcOMLvvCQb9gCAGcBTsly571zh/HWM6Q1Zd2eVw=";
   };
 
   passthru = {

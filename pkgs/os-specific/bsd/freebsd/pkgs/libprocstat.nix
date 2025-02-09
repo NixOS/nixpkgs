@@ -7,6 +7,7 @@
   libutil,
   libelf,
   csu,
+  extraSrc ? [ ],
 }:
 
 mkDerivation {
@@ -17,7 +18,7 @@ mkDerivation {
     "sys/contrib/pcg-c"
     "sys/opencrypto"
     "sys/crypto"
-  ];
+  ] ++ extraSrc;
 
   outputs = [
     "out"

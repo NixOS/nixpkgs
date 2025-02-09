@@ -333,7 +333,7 @@
 , xeve
 , xvidcore
 , xz
-, zeromq4
+, zeromq
 , zimg
 , zlib
 , zvbi
@@ -707,8 +707,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-cross-compile"
     "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ optionals stdenv.cc.isClang [
-    "--cc=clang"
-    "--cxx=clang++"
+    "--cc=${stdenv.cc.targetPrefix}clang"
+    "--cxx=${stdenv.cc.targetPrefix}clang++"
   ] ++ optionals withMetal [
     "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
     "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -835,7 +835,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withXvid [ xvidcore ]
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
-  ++ optionals withZmq [ zeromq4 ]
+  ++ optionals withZmq [ zeromq ]
   ++ optionals withZvbi [ zvbi ]
   ;
 

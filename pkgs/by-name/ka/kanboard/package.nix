@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "kanboard";
     repo = "kanboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/PFE5h4elHFNbbIssoGMDkhGkEIec2uEMz+vU+DN5D0=";
+    hash = "sha256-pKWn6CZZu/iHnHLIY/6fMBDvAGXmBmsiFNdIyjSI98w=";
   };
 
   dontBuild = true;

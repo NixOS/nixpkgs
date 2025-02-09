@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ie5JPHBvypUtPStwA/aO4GeQ/qbHTzUJF3T4QuW6JNc=";
   };
 
-  cargoHash = "sha256-qZC4axeRnKgUNGDFzmdvN/mwkcqsh8KwLlM6oGT19e8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ef4lxuN7s5X/9I7VSub5DZVjQG8DhdMr/7CRtd2x9rs=";
 
   postPatch = ''
     substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd

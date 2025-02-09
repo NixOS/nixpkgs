@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "info" ];
   setOutputFlags = false; # Doesn't support all the flags
 
-  patches = [ ./clang.patch ] # Fix implicit `int` on `main` error with newer versions of clang
+  patches = [
+    # Fix implicit `int` on `main` error with newer versions of clang
+    ./clang.patch
+    # Fix build against opaque aalib API
+    ./ncurses-6.5.patch
+  ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
 
   # The fuloong2f is not supported by aalib still

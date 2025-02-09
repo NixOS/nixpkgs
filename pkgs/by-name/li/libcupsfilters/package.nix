@@ -7,6 +7,7 @@
   fontconfig,
   ghostscript,
   lcms2,
+  lib,
   libexif,
   libjpeg,
   libpng,
@@ -33,9 +34,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    cups
   ];
   buildInputs = [
+    cups
     dbus
     fontconfig
     ghostscript
@@ -50,9 +51,10 @@ stdenv.mkDerivation rec {
     qpdf
   ];
   configureFlags = [
-    "--with-mutool-path=${mupdf}/bin/mutool"
-    "--with-gs-path=${ghostscript}/bin/gs"
-    "--with-ippfind-path=${cups}/bin/ippfind"
+    "--with-cups-config=${lib.getExe' (lib.getDev cups) "cups-config"}"
+    "--with-mutool-path=${lib.getExe' mupdf "mutool"}"
+    "--with-gs-path=${lib.getExe ghostscript}"
+    "--with-ippfind-path=${lib.getExe' cups "ippfind"}"
     "--enable-imagefilters"
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
   ];
@@ -61,4 +63,11 @@ stdenv.mkDerivation rec {
     "CUPS_DATADIR=$(out)/share/cups"
     "CUPS_SERVERROOT=$(out)/etc/cups"
   ];
+
+  meta = {
+    homepage = "https://github.com/OpenPrinting/libcupsfilters";
+    description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+  };
 }

@@ -4,7 +4,6 @@
   f,
   markdown-mode,
   melpaBuild,
-  nix-update-script,
   yasnippet,
 }:
 
@@ -26,9 +25,5 @@ melpaBuild {
 
   passthru = {
     inherit lspce-module;
-    updateScript = nix-update-script {
-      attrPath = "emacsPackages.lspce.lspce-module";
-      extraArgs = [ "--version=branch" ];
-    };
   };
 }

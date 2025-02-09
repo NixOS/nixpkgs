@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.13.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w55Fs1RZ4c55vTvb3jArPcmBLij1nuLi2MUHMMXPhng=";
+    hash = "sha256-WZmT8qYLQBp0lftm4T6BU92xffGmhniQNP7TI5pl4Y8=";
   };
 
   nativeBuildInputs = [
@@ -61,9 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-rO4AjCnxmHQPk0hxgXK4yxUK5eag/+Q+fRG/BsRi0i0=";
+    hash = "sha256-xP3V3Cqb+F33I1fVhp7ru/qBl22ww4oZDUCb1OHBiag=";
   };
 
   makeFlags = [

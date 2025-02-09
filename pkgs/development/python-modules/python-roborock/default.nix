@@ -2,12 +2,14 @@
   lib,
   stdenv,
   aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   click,
   construct,
   dacite,
   fetchFromGitHub,
+  freezegun,
   paho-mqtt,
   poetry-core,
   pycryptodome,
@@ -20,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.8.5";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +31,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-3wUf2J7TncxUdqN3SgAdHwMLbkNXj9Pwf7Zk3OmAThY=";
+    hash = "sha256-uFZ+d4MehZbK7xZdmWnZrsbK2f5UsA4J/vVRLZXyI8E=";
   };
 
   postPatch = ''
@@ -41,7 +43,7 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     click
@@ -53,6 +55,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
+    aioresponses
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];
@@ -62,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/humbertogontijo/python-roborock";
-    changelog = "https://github.com/humbertogontijo/python-roborock/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/humbertogontijo/python-roborock/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "roborock";

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pulumi-hcloud";
-  version = "1.20.4";
+  version = "1.21.1";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pulumi";
     repo = "pulumi-hcloud";
     tag = "v${version}";
-    hash = "sha256-m9MRXDTSC0K1raoH9gKPuxdwvUEnZ/ulp32xlY1Hsdo=";
+    hash = "sha256-waeA+qYLj4WFUgNK5/54gfRQivNiIvIp6FoxgpeRjlM=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pulumi python hetzner web services provider";
     homepage = "https://github.com/pulumi/pulumi-hcloud";
-    changelog = "https://github.com/pulumi/pulumi-hcloud/releases/tag/v${version}";
+    changelog = "https://github.com/pulumi/pulumi-hcloud/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ albertodvp ];
   };

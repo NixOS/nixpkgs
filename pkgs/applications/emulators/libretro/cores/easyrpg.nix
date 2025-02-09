@@ -67,6 +67,9 @@ mkLibretroCore {
   ];
   makefile = "Makefile";
 
+  # Do not update automatically since we want to pin a specific version
+  passthru.updateScript = null;
+
   meta = {
     description = "EasyRPG Player libretro port";
     homepage = "https://github.com/EasyRPG/Player";

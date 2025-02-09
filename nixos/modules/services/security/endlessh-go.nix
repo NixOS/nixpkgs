@@ -110,7 +110,13 @@ in
             );
           DynamicUser = true;
           RootDirectory = rootDirectory;
-          BindReadOnlyPaths = [ builtins.storeDir ];
+          BindReadOnlyPaths = [
+            builtins.storeDir
+            "-/etc/hosts"
+            "-/etc/localtime"
+            "-/etc/nsswitch.conf"
+            "-/etc/resolv.conf"
+          ];
           InaccessiblePaths = [ "-+${rootDirectory}" ];
           RuntimeDirectory = baseNameOf rootDirectory;
           RuntimeDirectoryMode = "700";

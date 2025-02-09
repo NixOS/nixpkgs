@@ -54,31 +54,31 @@
       "dependency": "direct main",
       "description": {
         "name": "audio_service",
-        "sha256": "9dd5ba7e77567b290c35908b1950d61485b4dfdd3a0ac398e98cfeec04651b75",
+        "sha256": "f6c8191bef6b843da34675dd0731ad11d06094c36b691ffcf3148a4feb2e585f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.18.15"
+      "version": "0.18.16"
     },
     "audio_service_mpris": {
       "dependency": "direct main",
       "description": {
         "name": "audio_service_mpris",
-        "sha256": "b16db3584a4b2464c0bfd575c1a21765723d257931222f8adfcb0511f940d352",
+        "sha256": "fdab1ae1f659c6db36d5cc396e46e4ee9663caefa6153f8453fcd01d57567c08",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.1.5"
+      "version": "0.2.0"
     },
     "audio_service_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "audio_service_platform_interface",
-        "sha256": "8431a455dac9916cc9ee6f7da5620a666436345c906ad2ebb7fa41d18b3c1bf4",
+        "sha256": "6283782851f6c8b501b60904a32fc7199dc631172da0629d7301e66f672ab777",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.1.1"
+      "version": "0.1.3"
     },
     "audio_service_web": {
       "dependency": "transitive",
@@ -94,11 +94,11 @@
       "dependency": "direct main",
       "description": {
         "name": "audio_session",
-        "sha256": "343e83bc7809fbda2591a49e525d6b63213ade10c76f15813be9aed6657b3261",
+        "sha256": "b2a26ba8b7efa1790d6460e82971fde3e398cfbe2295df9dea22f3499d2c12a7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.1.21"
+      "version": "0.1.23"
     },
     "audio_video_progress_bar": {
       "dependency": "direct main",
@@ -464,11 +464,11 @@
       "dependency": "direct main",
       "description": {
         "name": "equatable",
-        "sha256": "c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2",
+        "sha256": "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.5"
+      "version": "2.0.7"
     },
     "extended_image": {
       "dependency": "direct main",
@@ -882,21 +882,21 @@
       "dependency": "direct main",
       "description": {
         "name": "just_audio",
-        "sha256": "d8e8aaf417d33e345299c17f6457f72bd4ba0c549dc34607abb5183a354edc4d",
+        "sha256": "1a1eb86e7d81e69a1d36943f2b3efd62dece3dad2cafd9ec2e62e6db7c04d9b7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.9.40"
+      "version": "0.9.43"
     },
     "just_audio_media_kit": {
       "dependency": "direct main",
       "description": {
         "name": "just_audio_media_kit",
-        "sha256": "7f57d317fafa04cb3e70b924e8f632ffb7eca7a97a369e1e44738ed89fbd5da1",
+        "sha256": "9f3517213dfc7bbaf6980656feb66c35600f114c7efc0b5b3f4476cd5c18b45e",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.5"
+      "version": "2.0.6"
     },
     "just_audio_platform_interface": {
       "dependency": "transitive",
@@ -922,11 +922,11 @@
       "dependency": "direct main",
       "description": {
         "name": "just_audio_windows",
-        "sha256": "48ab2dec79cf6097550602fe07b1a644f341450e138dc8fdc23e42ce0ed2d928",
+        "sha256": "b1ba5305d841c0e3883644e20fc11aaa23f28cfdd43ec20236d1e119a402ef29",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.1"
+      "version": "0.2.2"
     },
     "leak_tracker": {
       "dependency": "transitive",
@@ -967,6 +967,16 @@
       },
       "source": "hosted",
       "version": "2.1.1"
+    },
+    "lists": {
+      "dependency": "transitive",
+      "description": {
+        "name": "lists",
+        "sha256": "4ca5c19ae4350de036a7e996cdd1ee39c93ac0a2b840f4915459b7d0a7d4ab27",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.0.1"
     },
     "logging": {
       "dependency": "direct main",
@@ -1012,11 +1022,11 @@
       "dependency": "transitive",
       "description": {
         "name": "media_kit",
-        "sha256": "3289062540e3b8b9746e5c50d95bd78a9289826b7227e253dff806d002b9e67a",
+        "sha256": "1f1deee148533d75129a6f38251ff8388e33ee05fc2d20a6a80e57d6051b7b62",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.10+1"
+      "version": "1.1.11"
     },
     "media_kit_libs_linux": {
       "dependency": "direct main",
@@ -1644,6 +1654,16 @@
       "source": "hosted",
       "version": "1.3.2"
     },
+    "unicode": {
+      "dependency": "transitive",
+      "description": {
+        "name": "unicode",
+        "sha256": "0f69e46593d65245774d4f17125c6084d2c20b4e473a983f6e21b7d7762218f1",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.3.1"
+    },
     "universal_platform": {
       "dependency": "transitive",
       "description": {
@@ -1898,11 +1918,11 @@
       "dependency": "direct main",
       "description": {
         "name": "youtube_explode_dart",
-        "sha256": "28dca07fefb4b6518beab95f0c1ef81031f921ed0fe87ebcd9c51378546edfee",
+        "sha256": "51ca5b2c03bf56060143d4f87df90ec3227592d7ae8a8003532533ae019d4291",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.3"
+      "version": "2.3.6"
     }
   },
   "sdks": {

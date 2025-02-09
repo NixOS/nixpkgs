@@ -2,10 +2,11 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   dart-sass,
   nix-update-script,
+  nixosTests,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
@@ -17,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-nOhovVqWlHPunwruJrgqFhhDxccKBp/iEyB3Y3C5Cz8=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit
       pname
       version
@@ -33,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     nodejs
     dart-sass
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''
@@ -54,7 +55,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests.homer) caddy nginx;
+    };
+  };
 
   meta = with lib; {
     description = "A very simple static homepage for your server.";

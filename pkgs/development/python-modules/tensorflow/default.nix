@@ -22,7 +22,6 @@
   packaging,
   setuptools,
   wheel,
-  keras-preprocessing,
   google-pasta,
   opt-einsum,
   astunparse,
@@ -197,7 +196,6 @@ let
     google-pasta
     grpcio
     h5py
-    keras-preprocessing
     numpy
     opt-einsum
     packaging
@@ -607,6 +605,7 @@ let
   };
 in
 buildPythonPackage {
+  __structuredAttrs = true;
   inherit version pname;
   disabled = pythonAtLeast "3.12";
 
@@ -636,7 +635,10 @@ buildPythonPackage {
     rm $out/bin/tensorboard
   '';
 
-  setupPyGlobalFlags = [ "--project_name ${pname}" ];
+  setupPyGlobalFlags = [
+    "--project_name"
+    pname
+  ];
 
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [
@@ -648,7 +650,6 @@ buildPythonPackage {
     google-pasta
     grpcio
     h5py
-    keras-preprocessing
     numpy
     opt-einsum
     packaging

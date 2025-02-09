@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage {
 
   cargoPatches = [ ./update-sqlx.patch ];
 
-  cargoHash = "sha256-3A3bf7iq1acsWttKmcJmxWM74B0qUIcROBAkjDZFKxE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K9oo0QrqcPNdV7WMlgSCVc+7AVfoyDkovvJLqKJPvTQ=";
 
   buildInputs =
     with darwin.apple_sdk.frameworks;

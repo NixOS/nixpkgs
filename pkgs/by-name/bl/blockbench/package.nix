@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.11.2";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     tag = "v${version}";
-    hash = "sha256-rUMzn+3j+RL8DY8euS6a4MmdoIAVLXxXu9wvKNmK/TU=";
+    hash = "sha256-/OdSV/wTrs6roiPiSQCqCLrlWtkB11gm3DM7r7B4HUU=";
   };
 
   nativeBuildInputs =
@@ -28,7 +28,7 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  npmDepsHash = "sha256-0hS+AjfYvkdxyM6CtXYgvjt49GmcCvyAdEFWfK8uaHc=";
+  npmDepsHash = "sha256-ZM3hFMHuKl5BW1+10czESDknc9jIZ024mUSUdNHF3EM=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 

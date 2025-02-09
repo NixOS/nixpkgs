@@ -39,8 +39,8 @@
     ''
       newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
 
-      with subtest("/run/etc-metadata/ is mounted"):
-        print(machine.succeed("mountpoint /run/etc-metadata"))
+      with subtest("/run/nixos-etc-metadata/ is mounted"):
+        print(machine.succeed("mountpoint /run/nixos-etc-metadata"))
 
       with subtest("No temporary files leaked into stage 2"):
         machine.succeed("[ ! -e /etc-metadata-image ]")
@@ -91,10 +91,14 @@
 
         machine.succeed(f"{newergen} switch")
 
-        tmpMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc\\..*' | wc -l").rstrip()
-        metaMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc-metadata\\..*' | wc -l").rstrip()
+        tmpMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc\\..*'").rstrip()
+        print(tmpMounts)
+        metaMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc-metadata.*'").rstrip()
+        print(metaMounts)
 
-        assert tmpMounts == "0", f"Found {tmpMounts} remaining tmpmounts"
-        assert metaMounts == "1", f"Found {metaMounts} remaining metamounts"
+        numOfTmpMounts = len(tmpMounts.splitlines())
+        numOfMetaMounts = len(metaMounts.splitlines())
+        assert numOfTmpMounts == 0, f"Found {numOfTmpMounts} remaining tmpmounts"
+        assert numOfMetaMounts == 1, f"Found {numOfMetaMounts} remaining metamounts"
     '';
 }

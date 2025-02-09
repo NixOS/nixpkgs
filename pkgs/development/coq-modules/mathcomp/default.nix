@@ -20,7 +20,7 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch coq.coq-version [
-      { case = range "8.19" "8.20"; out = "2.3.0"; }
+      { case = range "8.19" "9.0"; out = "2.3.0"; }
       { case = range "8.17" "8.20"; out = "2.2.0"; }
       { case = range "8.17" "8.18"; out = "2.1.0"; }
       { case = range "8.17" "8.18"; out = "2.0.0"; }
@@ -67,7 +67,7 @@ let
 
   mathcomp_ = package: let
       mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
-      pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
+      pkgpath = if package == "single" then "." else package;
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
         echo "all.v"  > Make
@@ -92,6 +92,8 @@ let
           then patchShebangs etc/buildlibgraph
           fi
         '' + ''
+          # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
+          test -d mathcomp && cd mathcomp
           cd ${pkgpath}
         '' + lib.optionalString (package == "all") pkgallMake;
 

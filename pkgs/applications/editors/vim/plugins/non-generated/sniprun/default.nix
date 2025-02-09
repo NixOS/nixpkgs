@@ -24,7 +24,8 @@ let
     pname = "sniprun-bin";
     inherit version src;
 
-    cargoHash = "sha256-eZcWS+DWec0V9G6hBnZRUNcb3uZeSiBhn4Ed9KodFV8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-j3i86I5Lmt0+fQONikHnxfeLEbiyFSairgjHXmjZfTk=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -56,8 +57,6 @@ vimUtils.buildVimPlugin {
   '';
 
   propagatedBuildInputs = [ sniprun-bin ];
-
-  nvimRequireCheck = "sniprun";
 
   passthru = {
     updateScript = nix-update-script {

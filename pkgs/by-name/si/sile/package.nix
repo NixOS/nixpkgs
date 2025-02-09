@@ -36,15 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+9pZUDszPYJmFgHbZH0aKtZ6qLcJjh73jG2CFoRKxWc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
+    dontConfigure = true;
     nativeBuildInputs = [ zstd ];
-    hash = "sha256-qw5XvXFhYLQJalk3fQwKakgBwfWMjhJzHKbqjchE2V0=";
+    hash = "sha256-FdUrivumG5R69CwZedpkBzds5PcZr4zSsA6QW/+rDBM=";
   };
 
   nativeBuildInputs = [
     zstd
     pkg-config
+    fontconfig # fc-match
     jq
     cargo
     rustc
@@ -101,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
       gentium
     ];
   };
+  strictDeps = true;
+  env.LUA = "${finalAttrs.finalPackage.passthru.luaEnv}/bin/lua";
 
   enableParallelBuilding = true;
 

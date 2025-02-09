@@ -19,33 +19,40 @@
   libdecor,
   ffmpeg,
   wayland-scanner,
-  makeWrapper,
+  makeBinaryWrapper,
   versionCheckHook,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
   x11Support ? stdenv.hostPlatform.isLinux,
   waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "q2pro";
-  version = "3510";
+  version = "0-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     owner = "skullernet";
     repo = "q2pro";
-    tag = "r${version}";
-    hash = "sha256-LNOrGJarXnf4QqFXDkUfUgLGrjSqbjncpIN2yttbMuk=";
+    rev = "5b2d9f29aa9fb07cfe2b4ba9ee628a0153e759c2";
+    hash = "sha256-vz7f6isv3pcMtr3hO96sV1G2F94/w431FxtB6DcpCVU=";
   };
+
+  # build date and rev number is displayed in the game's console
+  revCount = "3660"; # git rev-list --count ${src.rev}
+  SOURCE_DATE_EPOCH = "1735838714"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs =
     [
       meson
       pkg-config
       ninja
-      makeWrapper
+      makeBinaryWrapper
+      copyDesktopItems
     ]
-    ++ lib.optionals waylandSupport [
-      wayland-scanner
-    ];
+    ++ lib.optional waylandSupport wayland-scanner
+    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs =
     [
@@ -64,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       wayland-protocols
       libdecor
     ]
-    ++ lib.optionals x11Support [ libXi ];
+    ++ lib.optional x11Support libXi;
 
   mesonBuildType = "release";
 
@@ -79,8 +86,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.mesonEnable "windows-crash-dumps" false)
   ];
 
+  internalVersion = "r${revCount}~${builtins.substring 0 8 src.rev}";
   postPatch = ''
-    echo 'r${version}' > VERSION
+    echo '${internalVersion}' > VERSION
   '';
 
   postInstall =
@@ -92,11 +100,36 @@ stdenv.mkDerivation (finalAttrs: rec {
       mv -v $out/bin/q2pro $out/bin/q2pro-unwrapped
       makeWrapper $out/bin/q2pro-unwrapped $out/bin/q2pro \
         --prefix ${ldLibraryPathEnvName} : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+
+      install -D ${src}/src/unix/res/q2pro.xpm $out/share/icons/hicolor/32x32/apps/q2pro.xpm
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
+  preVersionCheck = ''
+    export version='${internalVersion}'
+  '';
   doInstallCheck = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "q2pro";
+      desktopName = "Q2PRO";
+      exec = if stdenv.hostPlatform.isDarwin then "q2pro" else "q2pro +connect %u";
+      icon = "q2pro";
+      terminal = false;
+      mimeTypes = [
+        "x-scheme-handler/quake2"
+      ];
+      type = "Application";
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
+    })
+  ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Enhanced Quake 2 client and server focused on multiplayer";

@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
     tag = version;
-    hash = "sha256-C1ca7tx9s88U7Xp/bd3KhlWeb32a612RyCVBQz0vJ1g=";
+    hash = "sha256-EfZcY5eZtRKjxWC4/sWF3F4N/uK2e3gFK2dBY/kTCM4=";
   };
 
   postPatch = ''

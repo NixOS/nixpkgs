@@ -20,14 +20,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts${suffix}";
-  version = "2024.12.01";
+  version = "2025.02.01";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "notofonts.github.io";
     rev = "noto-monthly-release-${version}";
-    hash = "sha256-CmYGnQOSABTMir120VWtROiLcEBVj117ZpgwPijoWnI=";
+    hash = "sha256-IXQmHBG7yvngifLTVLwkL+10lfqofgERtNmgZSvgrt8=";
   };
+
+  outputs = [
+    "out"
+    "megamerge" # Experimental fonts created by mergeing regular notofonts
+  ];
 
   _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
@@ -39,6 +44,8 @@ stdenvNoCC.mkDerivation rec {
       #
       # We have a mix of otf and ttf fonts
       local out_font=$out/share/fonts/noto
+
+      install -m444 -Dt $megamerge/share/fonts/truetype/ megamerge/*.ttf
     ''
     + (
       if _variants == [ ] then

@@ -14,11 +14,12 @@ let
 
     sourceRoot = "${src.name}/rust";
 
+    useFetchCargoVendor = true;
     cargoHash =
       {
-        _0_9_1 = "sha256-Gl3ArdSuw3/yi/JX6oloKJqerSJjTfK8HXRNei/LO+4=";
-        _0_9_6 = "sha256-a11UxG8nbIng+6uOWq/BZxdtRmRINl/7UOc6ap2mgrk=";
-        _0_9_8 = "sha256-/1qj0N83wgkPSQnGb3CHTS/ox6OpJCKF5mVpuKTqUBQ=";
+        _0_9_1 = "sha256-ZVl1nesepZnmOWeJPOgE6IDCokQm5FedbA5MBvr5S8c=";
+        _0_9_6 = "sha256-vvzb+jNN5lmRrKJ3zqvORvdduqEHRmbp85L/9Zegh/E=";
+        _0_9_8 = "sha256-cwb1wYVXOE5YABlMxUDt+OMlDpIlipqeNI7ZFAGHCqo=";
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'rhttp': '${version}'

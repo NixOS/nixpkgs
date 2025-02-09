@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  stdenv,
   pexpect,
   poetry,
   poetry-core,
@@ -9,6 +10,7 @@
   pytest-xdist,
   pytestCheckHook,
   shellingham,
+  darwin,
 }:
 
 buildPythonPackage rec {
@@ -34,11 +36,15 @@ buildPythonPackage rec {
     shellingham
   ];
 
-  nativeCheckInputs = [
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    [
+      pytest-mock
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.ps
+    ];
 
   meta = {
     changelog = "https://github.com/python-poetry/poetry-plugin-shell/blob/${src.tag}/CHANGELOG.md";

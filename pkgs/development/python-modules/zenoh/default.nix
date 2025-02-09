@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "zenoh";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-python";
     rev = version;
-    hash = "sha256-DO5AZDS7XvExxATtbkFOLG66zQOZu4gE6VWOG7C3qGA=";
+    hash = "sha256-N82KcLMYTOzkeFR6NLNR/g4MDjXk2aZRaAVMggXKwf0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname version;
-    hash = "sha256-GolnCEsqCGxjrKl2qXVRi9+d8hwXNsRVdfI7Cf60/jg=";
+    hash = "sha256-5JdqANf5roFY3J+iPxg+WhmAyTWARhgav+/jt7rttqg=";
   };
 
   build-system = [

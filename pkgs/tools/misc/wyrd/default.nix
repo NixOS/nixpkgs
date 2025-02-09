@@ -1,36 +1,46 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  makeWrapper,
   ocamlPackages,
-  ncurses,
   remind,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.6";
   pname = "wyrd";
+  version = "1.7.1";
 
-  src = fetchurl {
-    url = "http://pessimization.com/software/wyrd/wyrd-${version}.tar.gz";
-    sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
+  src = fetchFromGitLab {
+    owner = "wyrd-calendar";
+    repo = "wyrd";
+    tag = version;
+    hash = "sha256-RwGzXJLoCWRGgHf1rayBgkZuRwA1TcYNfN/h1rhJC+8=";
   };
 
-  preConfigure = ''
-    substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
-  '';
-
   strictDeps = true;
+
   nativeBuildInputs = [
+    makeWrapper
+    ocamlPackages.findlib
     ocamlPackages.ocaml
-    ocamlPackages.camlp4
+    ocamlPackages.odoc
   ];
+
   buildInputs = [
-    ncurses
+    ocamlPackages.curses
+    ocamlPackages.yojson
     remind
   ];
 
-  preferLocalBuild = true;
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/wyrd" \
+      --prefix PATH : "${lib.makeBinPath [ remind ]}"
+  '';
 
   meta = with lib; {
     description = "Text-based front-end to Remind";
@@ -41,8 +51,8 @@ stdenv.mkDerivation rec {
       flashy GUI dialogs. Rather, Wyrd is designed to make you more
       efficient at editing your reminder files directly.
     '';
-    homepage = "http://pessimization.com/software/wyrd/";
-    downloadPage = "http://pessimization.com/software/wyrd/";
+    homepage = "https://gitlab.com/wyrd-calendar/wyrd";
+    downloadPage = "https://gitlab.com/wyrd-calendar/wyrd";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.unix;

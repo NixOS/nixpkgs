@@ -8,7 +8,7 @@
   zstd,
   stdenv,
   darwin,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -25,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lQxv2gwZOGtxJrXjxvjBnbl225ppSs3cVNCfePFeqEE=";
   };
 
-  cargoHash = "sha256-jDyEZaP1R1c5K+d9BQSVqy/rCEAXIrVA/68vQweSIF4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-s1xA7UHArHeGaXrGQmqn9pKvtSW175ci4ipQEmKQQ5s=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''

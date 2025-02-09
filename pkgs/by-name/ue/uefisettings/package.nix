@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-Cik8uVdzhMmgXfx23axkUJBg8zd5afMgYvluN0BJsdo=";
   };
 
-  cargoHash = "sha256-FCQ/1E6SZyVOOAlpqyaDWEZx0y0Wk3Caosvr48VamAA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-adCC5o17j6tuffymiLUn2SEPlrjMzYn6a74/4a9HI/w=";
 
   checkFlags = [
     # Expects filesystem access to /proc and rootfs

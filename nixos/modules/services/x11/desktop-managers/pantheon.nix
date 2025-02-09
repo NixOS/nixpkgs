@@ -112,27 +112,23 @@ in
       # https://github.com/elementary/greeter/issues/368
       services.displayManager.defaultSession = mkDefault "pantheon";
 
-      services.xserver.displayManager.sessionCommands = ''
-        if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
-            true
-            ${concatMapStrings (p: ''
-              if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
-                export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
-              fi
+      environment.extraInit = ''
+        ${concatMapStrings (p: ''
+          if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+            export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+          fi
 
-              if [ -d "${p}/lib/girepository-1.0" ]; then
-                export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
-                export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
-              fi
-            '') cfg.sessionPath}
-        fi
+          if [ -d "${p}/lib/girepository-1.0" ]; then
+            export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+            export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+          fi
+        '') cfg.sessionPath}
       '';
 
       # Default services
       hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
-      services.bamf.enable = true;
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
       # TODO: Enable once #177946 is resolved
@@ -232,7 +228,8 @@ in
       ])) config.environment.pantheon.excludePackages;
 
       # Settings from elementary-default-settings
-      environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+      # GTK4 will try both $XDG_CONFIG_DIRS/gtk-4.0 and ${gtk4}/etc/gtk-4.0, but not /etc/gtk-4.0.
+      environment.etc."xdg/gtk-4.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-4.0/settings.ini";
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;

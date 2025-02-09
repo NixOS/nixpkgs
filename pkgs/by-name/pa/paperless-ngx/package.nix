@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   buildNpmPackage,
   nodejs_20,
   nixosTests,
@@ -26,15 +25,14 @@
   nltk-data,
   xorg,
 }:
-
 let
-  version = "2.13.5";
+  version = "2.14.7";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AVfm5tC2+hTdEv0ildEj0El1M/sF7ftkEn3pUkG1O7Q=";
+    tag = "v${version}";
+    hash = "sha256-p3eUEb/ZPK11NbqE4LU+3TE1Xny9sjfYvVVmABkoAEQ=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -44,23 +42,6 @@ let
     self = python;
     packageOverrides = final: prev: {
       django = prev.django_5;
-
-      # TODO: drop after https://github.com/NixOS/nixpkgs/pull/306556 or similar got merged
-      django-allauth = prev.django-allauth.overridePythonAttrs (
-        { src, nativeCheckInputs, ... }:
-        let
-          version = "65.0.2";
-        in
-        {
-          inherit version;
-          src = src.override {
-            tag = version;
-            hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
-          };
-
-          nativeCheckInputs = nativeCheckInputs ++ [ prev.fido2 ];
-        }
-      );
 
       django-extensions = prev.django-extensions.overridePythonAttrs (_: {
         # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
@@ -105,7 +86,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-pBCWcdCTQh0N4pRLBWLZXybuhpiat030xvPZ5z7CUJ0=";
+    npmDepsHash = "sha256-hK7Soop9gBZP4m2UzbEIAsLkPKpbQkLmVruY2So4CSs=";
 
     nativeBuildInputs =
       [
@@ -154,14 +135,6 @@ python.pkgs.buildPythonApplication rec {
   pyproject = false;
 
   inherit version src;
-
-  patches = [
-    (fetchpatch2 {
-      name = "ocrmypdf-16.6-compat.patch";
-      url = "https://github.com/paperless-ngx/paperless-ngx/commit/d1f255a22ea53712cb9101277ec57ea1976f9c02.patch?full_index=1";
-      hash = "sha256-V2nnNeNCcfSrjOttQ5rgDj7gnxpfpBPVeDDnMea0C3U=";
-    })
-  ];
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
@@ -232,6 +205,8 @@ python.pkgs.buildPythonApplication rec {
       whoosh
       zxing-cpp
     ]
+    ++ django-allauth.optional-dependencies.mfa
+    ++ django-allauth.optional-dependencies.socialaccount
     ++ redis.optional-dependencies.hiredis
     ++ uvicorn.optional-dependencies.standard;
 
@@ -308,6 +283,7 @@ python.pkgs.buildPythonApplication rec {
     # FileNotFoundError(2, 'No such file or directory'): /build/tmp...
     "test_script_with_output"
     "test_script_exit_non_zero"
+    "testDocumentPageCountMigrated"
     # AssertionError: 10 != 4 (timezone/time issue)
     # Due to getting local time from modification date in test_consumer.py
     "testNormalOperation"

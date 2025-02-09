@@ -8,18 +8,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.6.16";
+  version = "0.6.17";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";
     tag = version;
-    hash = "sha256-5ZCCrq/mc9FAjl7AMbuQyRak5sL1dG3qWnrdNzUu4Ss=";
+    hash = "sha256-wtXqJfI/I0prPip3AbfFk0OvPja6oytPsl6hFtZ6b50=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  cargoHash = "sha256-CzZgAjAIJryhFEJve3E62rg4QGRPSvBMuFZJzHGf09w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QQNGUlEamMPRS5sPi3VYbIU28KWxM4ibIEQnk/1sgNA=";
 
   postInstall =
     ''

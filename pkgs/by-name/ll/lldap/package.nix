@@ -5,7 +5,7 @@
 , nixosTests
 , rustPlatform
 , rustc
-, wasm-bindgen-cli
+, wasm-bindgen-cli_0_2_95
 , wasm-pack
 , which
 }:
@@ -38,7 +38,7 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-cli binaryen which rustc rustc.llvmPackages.lld
+      wasm-pack wasm-bindgen-cli_0_2_95 binaryen which rustc rustc.llvmPackages.lld
     ];
 
     buildPhase = ''

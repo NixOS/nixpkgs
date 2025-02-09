@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   glib,
   gnome-shell,
   gettext,
@@ -22,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-gi-path.patch;
+    (replaceVars ./fix-gi-path.patch {
       gnomeShell = gnome-shell;
     })
   ];

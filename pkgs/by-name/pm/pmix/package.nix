@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Pin the compiler to the current version in a cross compiler friendly way.
       # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
       substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \
-        --replace-fail compiler=gcc \
+        --replace-fail compiler=${stdenv.cc.targetPrefix}gcc \
           compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc
     '';
 

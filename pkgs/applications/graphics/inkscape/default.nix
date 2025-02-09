@@ -41,7 +41,7 @@
 , potrace
 , python3
 , runCommand
-, substituteAll
+, replaceVars
 , wrapGAppsHook3
 , libepoxy
 , zlib
@@ -92,15 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/inkscape/inkscape/-/commit/eb6dadcf1a5c660167ba43f3606c8e7cc6529787.patch";
       hash = "sha256-FvbJV/YrBwhHg0kFdbhyd/Y9g7YV2nPIrRqZt7yJ50Q=";
     })
-    (substituteAll {
-      src = ./fix-python-paths.patch;
+    (replaceVars ./fix-python-paths.patch {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = lib.getExe python3Env;
     })
-    (substituteAll {
+    (replaceVars ./fix-ps2pdf-path.patch {
       # Fix path to ps2pdf binary
-      src = ./fix-ps2pdf-path.patch;
       inherit ghostscript;
     })
   ];
@@ -113,6 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     # double-conversion is a dependency of 2geom
     substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
       --replace-fail 'find_package(DoubleConversion REQUIRED)' ""
+    # use native Python when cross-compiling
+    shopt -s globstar
+    for f in **/CMakeLists.txt; do
+      substituteInPlace $f \
+        --replace-quiet "COMMAND python3" "COMMAND ${lib.getExe python3Env.pythonOnBuildForHost}"
+    done
+    shopt -u globstar
   '';
 
   nativeBuildInputs = [

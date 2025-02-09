@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "puncia";
-  version = "0.26";
+  version = "0.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ARPSyndicate";
     repo = "puncia";
     tag = "v${version}";
-    hash = "sha256-ZvB3X94gjIunerLhtd6a2Eou6AxHxONRJGS2jCiMjbk=";
+    hash = "sha256-P3F3e53H37Wr2qCRiEaQQ6SQBrSNILk+wT3Q9DIh0FU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

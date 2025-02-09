@@ -12,7 +12,7 @@
   openssl,
   perl,
   pkg-config,
-  pnpm,
+  pnpm_9,
   protobuf,
   rustPlatform,
   stdenv,
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   pnpmRoot = "app/${app-type}";
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
 
     sourceRoot = "${src.name}/app/${app-type}";
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
     # Setup pnpm
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
 
     # Make sure we can find our libraries
     perl

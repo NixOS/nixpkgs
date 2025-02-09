@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # https://github.com/vectorgraphics/asymptote/issues/513
-  postConfigure = ''
+  postConfigure = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace Makefile \
       --replace-fail 'glew.o -lGLX' 'glew.o'
   '';
@@ -166,10 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # do not use bundled libgc.so
-  configureFlags =
-    [ "--enable-gc=system" ]
-    # TODO add open_memstream to enable XDR/V3D on Darwin (requires memstream or >=10.13 Apple SDK)
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-xdr=no";
+  configureFlags = [ "--enable-gc=system" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 

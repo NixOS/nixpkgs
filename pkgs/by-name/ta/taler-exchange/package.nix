@@ -10,7 +10,7 @@
   libsodium,
   libunistring,
   pkg-config,
-  postgresql,
+  libpq,
   autoreconfHook,
   python3,
   recutils,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmicrohttpd
     jansson
     libsodium
-    postgresql
+    libpq
     curl
     recutils
     gettext

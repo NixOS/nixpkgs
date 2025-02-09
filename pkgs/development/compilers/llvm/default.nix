@@ -29,11 +29,12 @@ let
     "16.0.6".officialRelease.sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs=";
     "17.0.6".officialRelease.sha256 = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
-    "19.1.5".officialRelease.sha256 = "sha256-QxQL4QwUH6e5HWpBvI8yIbZYBNwqqRsZqPH0w/JSiHQ=";
-    "20.0.0-git".gitRelease = {
-      rev = "eb5cda480d2ad81230b2aa3e134e2b603ff90a1c";
-      rev-version = "20.0.0-unstable-2024-11-26";
-      sha256 = "sha256-8VbQINEZZqAIF4egMaNPd3/W3E3QmOXMl7WToftrebg=";
+    "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
+    "20.1.0-rc1".officialRelease.sha256 = "sha256-yOczbperlR20+iLoao9g0CR+Ml2mjTCx1cqP/9WOhME=";
+    "21.0.0-git".gitRelease = {
+      rev = "312055d1da169f043e65b35fcd62d6d685700114";
+      rev-version = "21.0.0-unstable-2025-02-01";
+      sha256 = "sha256-V14ypUGn7GxzchmKjoSH2oiHDUQa07b4bQWjjRpQKCo=";
     };
   } // llvmVersions;
 

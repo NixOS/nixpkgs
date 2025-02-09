@@ -22,6 +22,7 @@
   wayland,
   xdg-utils,
 
+  nix-update-script,
 }:
 let
   rpathLibs =
@@ -43,16 +44,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "alacritty";
-    repo = pname;
+    repo = "alacritty";
     tag = "v${version}";
-    hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
+    hash = "sha256-CAxf0ltvYXYTdjQmLQnRwRRJUBgABbHSB8DxfAbgBdo=";
   };
 
-  cargoHash = "sha256-T+/G2z7H/egJ/IlP3KA31jydg1CmFdLW8bLYSf/yWck=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5AIl/z9OHSBs0DRk4UD03Yrvb6Ib5FGJk9XCRCKsjTs=";
 
   nativeBuildInputs = [
     cmake
@@ -121,7 +123,10 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
-  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
+  passthru = {
+    tests.test = nixosTests.terminal-emulators.alacritty;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Cross-platform, GPU-accelerated terminal emulator";
@@ -130,7 +135,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "alacritty";
     maintainers = with maintainers; [
       Br1ght0ne
-      mic92
+      rvdp
     ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";

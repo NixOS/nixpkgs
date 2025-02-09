@@ -34,6 +34,7 @@ python311Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python311Packages; [
     grpcio-tools
     notify2
+    packaging
     pyasn
     pyinotify
     pyqt5

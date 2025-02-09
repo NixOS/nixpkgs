@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b7320bb..d7169da 100644
+index 3dd3e19..4290041 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -143,25 +143,6 @@ check_function_exists (strtoull HAVE_STRTOULL)

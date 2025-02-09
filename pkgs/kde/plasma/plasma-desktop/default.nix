@@ -5,7 +5,7 @@
   makeWrapper,
   glib,
   gsettings-desktop-schemas,
-  substituteAll,
+  replaceVars,
   util-linux,
   pkg-config,
   qtsvg,
@@ -31,18 +31,15 @@ mkKdeDerivation {
   pname = "plasma-desktop";
 
   patches = [
-    (substituteAll {
-      src = ./hwclock-path.patch;
+    (replaceVars ./hwclock-path.patch {
       hwclock = "${lib.getBin util-linux}/bin/hwclock";
     })
-    (substituteAll {
-      src = ./kcm-access.patch;
+    (replaceVars ./kcm-access.patch {
       gsettings = "${gsettings-wrapper}/bin/gsettings";
     })
     ./tzdir.patch
     ./no-discover-shortcut.patch
-    (substituteAll {
-      src = ./wallpaper-paths.patch;
+    (replaceVars ./wallpaper-paths.patch {
       wallpapers = "${lib.getBin breeze}/share/wallpapers";
     })
   ];

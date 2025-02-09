@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -19,6 +18,7 @@
   qtdeclarative,
   qtquickcontrols2,
   qtsystems,
+  qttools,
   qtwebengine,
   wrapQtAppsHook,
   xvfb-run,
@@ -29,40 +29,35 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
-    rev = finalAttrs.version;
-    hash = "sha256-VxSADFTlaxQUDc81TzGkx54mjAUgY2L+suQC9zYGKo0=";
+    tag = finalAttrs.version;
+    hash = "sha256-CW+8HEGxeDDfqbBtNHDKTvsZkbu0tCmD6OEDW07KG2k=";
   };
 
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/576 merged & in release
-    (fetchpatch {
-      name = "0002-morph-browser-Call-i18n-bindtextdomain-with-buildtime-determined-locale-path.patch";
-      url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/0527a1e01fb27c62f5e0011274f73bad400e9691.patch";
-      hash = "sha256-zx/pP72uNqAi8TZR4bKeONuqcJyK/vGtPglTA+5R5no=";
-    })
+  outputs = [
+    "out"
+    "doc"
   ];
 
   postPatch =
     ''
       substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
-        --replace '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+        --replace-fail '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-      # We normally don't want to use absolute paths in desktop file, but this one is special
-      # There appears to be some issue in lomiri-app-launch's lookup of relative Icon entries (while lomiri is starting up?)
-      # that makes the session segfault.
-      # As a compromise, hardcode /run/current-system
       substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
-        --replace 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=/run/current-system/sw/share/icons/hicolor/scalable/apps/morph-browser.svg' \
-        --replace 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
+        --replace-fail 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=morph-browser' \
+        --replace-fail 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
+
+      substituteInPlace doc/CMakeLists.txt \
+        --replace-fail 'COMMAND ''${QDOC_EXECUTABLE} -qt5' 'COMMAND ''${QDOC_EXECUTABLE}'
     ''
     + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
       substituteInPlace CMakeLists.txt \
-        --replace 'add_subdirectory(tests)' ""
+        --replace-fail 'add_subdirectory(tests)' ""
     '';
 
   strictDeps = true;
@@ -71,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gettext
     pkg-config
+    qttools # qdoc
     wrapQtAppsHook
   ];
 
@@ -142,9 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Test of morph-browser itself
       standalone = nixosTests.morph-browser;
 
-      # Lomiri-specific issues with the desktop file may break the entire session, make sure it still works
-      lomiri-basics = nixosTests.lomiri.desktop-basics;
-      lomiri-appinteractions = nixosTests.lomiri.desktop-appinteractions;
+      # Interactions between the Lomiri ecosystem and this browser
+      inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;
     };
   };
 

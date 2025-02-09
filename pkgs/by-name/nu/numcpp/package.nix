@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
-  version = "2.12.1";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
     rev = "Version_${finalAttrs.version}";
-    hash = "sha256-1LGyDvT+PiGRXn7NorcYUjSPzNuRv/YXhQWIaOa7xdo=";
+    hash = "sha256-+2xd8GNMSKPz801lfMAcHIkmidKd+xM8YblkdFj3HZk=";
   };
 
   nativeCheckInputs = [

@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gettext
+    glib # glib-compile-resources
     itstool
     pkg-config
     libxml2

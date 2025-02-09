@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -9,7 +10,6 @@ let
   cfg = config.services.wyoming.piper;
 
   inherit (lib)
-    escapeShellArgs
     mkOption
     mkEnableOption
     mkPackageOption
@@ -20,18 +20,19 @@ let
     toString
     ;
 
+  inherit (utils)
+    escapeSystemdExecArgs
+    ;
 in
 
 {
-  meta.buildDocsInSandbox = false;
-
   options.services.wyoming.piper = with types; {
     package = mkPackageOption pkgs "wyoming-piper" { };
 
     servers = mkOption {
       default = { };
       description = ''
-        Attribute set of piper instances to spawn.
+        Attribute set of wyoming-piper instances to spawn.
       '';
       type = types.attrsOf (
         types.submodule (
@@ -69,7 +70,7 @@ in
               };
 
               noiseScale = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 0.667;
                 description = ''
                   Generator noise value.
@@ -78,7 +79,7 @@ in
               };
 
               noiseWidth = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 0.333;
                 description = ''
                   Phoneme width noise value.
@@ -87,7 +88,7 @@ in
               };
 
               lengthScale = mkOption {
-                type = float;
+                type = numbers.between 0.0 1.0;
                 default = 1.0;
                 description = ''
                   Phoneme length value.
@@ -101,7 +102,6 @@ in
                 description = ''
                   Extra arguments to pass to the server commandline.
                 '';
-                apply = escapeShellArgs;
               };
             };
           }
@@ -136,20 +136,30 @@ in
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-piper";
-            StateDirectory = "wyoming/piper";
+            StateDirectory = [ "wyoming/piper" ];
             # https://github.com/home-assistant/addons/blob/master/piper/rootfs/etc/s6-overlay/s6-rc.d/piper/run
-            ExecStart = ''
-              ${cfg.package}/bin/wyoming-piper \
-                --data-dir $STATE_DIRECTORY \
-                --download-dir $STATE_DIRECTORY \
-                --uri ${options.uri} \
-                --piper ${options.piper}/bin/piper \
-                --voice ${options.voice} \
-                --speaker ${options.speaker} \
-                --length-scale ${options.lengthScale} \
-                --noise-scale ${options.noiseScale} \
-                --noise-w ${options.noiseWidth} ${options.extraArgs}
-            '';
+            ExecStart = escapeSystemdExecArgs (
+              [
+                (lib.getExe cfg.package)
+                "--data-dir"
+                "/var/lib/wyoming/piper"
+                "--uri"
+                options.uri
+                "--piper"
+                (lib.getExe options.piper)
+                "--voice"
+                options.voice
+                "--speaker"
+                options.speaker
+                "--length-scale"
+                options.lengthScale
+                "--noise-scale"
+                options.noiseScale
+                "--noise-w"
+                options.noiseWidth
+              ]
+              ++ options.extraArgs
+            );
             CapabilityBoundingSet = "";
             DeviceAllow = "";
             DevicePolicy = "closed";

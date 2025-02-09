@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.23.1";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
-    hash = "sha256-w3QcvAHwEM1kdRY/780yr2kQQ2tCEvNeLHBm9bgAjMI=";
+    hash = "sha256-2lQ/uOojY/u43Yf/rqLdzTn4fs8/HHxztH5ua7fOXsk=";
   };
 
-  npmDepsHash = "sha256-cEpBeEjOdArnLekS5uUk9OrsACZrvY63i8pYYvDSnbI=";
+  npmDepsHash = "sha256-4EFl0hOI6DcpzcSedanQBOrNbHTxR0G7C8L4+7EnESE=";
   npmWorkspace = "packages/pyright";
 
   preBuild = ''
@@ -44,6 +44,8 @@ buildNpmPackage rec {
   postInstall = ''
     mv "$out/bin/pyright" "$out/bin/basedpyright"
     mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
+    # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
+    find -L $out -type l -print -delete
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -99,6 +101,9 @@ buildNpmPackage rec {
     homepage = "https://github.com/detachhead/basedpyright";
     license = lib.licenses.mit;
     mainProgram = "basedpyright";
-    maintainers = with lib.maintainers; [ kiike ];
+    maintainers = with lib.maintainers; [
+      kiike
+      misilelab
+    ];
   };
 }

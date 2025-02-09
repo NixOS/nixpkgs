@@ -142,6 +142,8 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       # For sysprof-agent
       --prefix PATH : "${sysprof}/bin"
+      # libpanel icons
+      --prefix XDG_DATA_DIRS : "${libpanel}/share"
     )
 
     # Ensure that all plugins get their interpreter paths fixed up.

@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoconf
+    dbus-glib # dbus-binding-tool
   ];
 
   buildInputs = [

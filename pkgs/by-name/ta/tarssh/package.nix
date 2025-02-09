@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-AoKc8VF6rqYIsijIfgvevwu+6+suOO7XQCXXgAPNgLk=";
   };
 
-  cargoHash = "sha256-w1MNsMSGONsAAjyvAHjio2K88j1sqyP1Aqmw3EMya+c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-r1WwAL24Ohmf4L7UXUwmecRiMmthjpzoWOVv33bMkDk=";
 
   meta = with lib; {
     description = "Simple SSH tarpit inspired by endlessh";

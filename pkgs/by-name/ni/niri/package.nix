@@ -24,13 +24,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.10.1";
+  version = "25.01";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     tag = "v${version}";
-    hash = "sha256-Qjf7alRbPPERfiZsM9EMKX+HwjESky1tieh5PJIkLwE=";
+    hash = "sha256-AJ1rlgNOPb3/+DbS5hkhm21t6Oz8IgqLllwmZt0lyzk=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-2hFavY3Y6aBPjo53o7GMjuvUKOcj+ZQiV0M1mpoH/Ck=";
+  cargoHash = "sha256-eGI3i7FnjZGEfcGvEpNLOog8cgExBJuGoXM/oHsui0M=";
 
   strictDeps = true;
 
@@ -101,6 +101,12 @@ rustPlatform.buildRustPackage rec {
       ]
     );
   };
+
+  preCheck = ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+    # See https://github.com/YaLTeR/niri/issues/953
+    export RAYON_NUM_THREADS=1
+  '';
 
   passthru = {
     providedSessions = [ "niri" ];

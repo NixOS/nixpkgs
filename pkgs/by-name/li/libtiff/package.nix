@@ -5,7 +5,7 @@
   fetchpatch,
   nix-update-script,
 
-  autoreconfHook,
+  cmake,
   pkg-config,
   sphinx,
 
@@ -40,11 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # FreeImage needs this patch
-    ./headers.patch
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    ./static.patch
   ];
 
   postPatch = ''
@@ -61,16 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postFixup = ''
-    moveToOutput include/tif_config.h $dev_private
-    moveToOutput include/tif_dir.h $dev_private
-    moveToOutput include/tif_hash_set.h $dev_private
-    moveToOutput include/tiffiop.h $dev_private
+    mkdir -p $dev_private/include
+    mv -t $dev_private/include \
+      libtiff/tif_config.h \
+      ../libtiff/tif_dir.h \
+      ../libtiff/tif_hash_set.h \
+      ../libtiff/tiffiop.h
   '';
 
-  # If you want to change to a different build system, please make
-  # sure cross-compilation works first!
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
     pkg-config
     sphinx
   ];
@@ -90,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     zlib
     zstd
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
   ];
 
   enableParallelBuilding = true;

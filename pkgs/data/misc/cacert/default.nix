@@ -74,12 +74,13 @@ stdenv.mkDerivation rec {
     "out"
     "unbundled"
     "p11kit"
+    "hashed"
   ];
 
   nativeBuildInputs = [ buildcatrust ];
 
   buildPhase = ''
-    mkdir unbundled
+    mkdir unbundled hashed
     buildcatrust \
       --certdata_input certdata.txt \
       --ca_bundle_input "${extraCertificatesBundle}" ${
@@ -89,6 +90,7 @@ stdenv.mkDerivation rec {
       --ca_bundle_output ca-bundle.crt \
       --ca_standard_bundle_output ca-no-trust-rules-bundle.crt \
       --ca_unpacked_output unbundled \
+      --ca_hashed_unpacked_output hashed \
       --p11kit_output ca-bundle.trust.p11-kit
   '';
 
@@ -103,6 +105,11 @@ stdenv.mkDerivation rec {
 
     # install individual certs in unbundled output
     install -D -t "$unbundled/etc/ssl/certs" unbundled/*.crt
+
+    # install hashed certs in hashed output
+    # use cp as install doesn't copy symlinks
+    mkdir -p $hashed/etc/ssl/certs/
+    cp -P hashed/* $hashed/etc/ssl/certs/
   '';
 
   setupHook = ./setup-hook.sh;

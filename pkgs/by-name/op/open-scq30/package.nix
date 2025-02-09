@@ -52,7 +52,8 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Foundation
     ];
 
-  cargoHash = "sha256-YBJd43xOCumQbrvzfV/+F63McYzHg1bGI3icgGzGZrQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3K+/CpTGWSjCRa2vOEcDvLIiZMdntugIqnzkXF4wkng=";
 
   INSTALL_PREFIX = placeholder "out";
 
