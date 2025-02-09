@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+    # https://github.com/util-linux/util-linux/pull/3013
     ./fix-darwin-build.patch
   ];
 
