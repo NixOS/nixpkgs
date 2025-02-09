@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "megatools";
-  version = "1.11.1";
+  version = "1.11.3";
 
   src = fetchgit {
-    url = "https://megous.com/git/megatools";
+    url = "https://xff.cz/git/megatools";
     rev = version;
-    sha256 = "sha256-AdvQqaRTsKTqdfNfFiWtA9mIPVGuui+Ru9TUARVG0+Q=";
+    sha256 = "sha256-z2BUSNXl0u+28TzhLmNjcgNVLBmr3m+FuRWr8o/EINw=";
   };
 
   nativeBuildInputs = [
