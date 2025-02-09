@@ -47,7 +47,10 @@ stdenv.mkDerivation rec {
     homepage = "https://xff.cz/megatools/";
     changelog = "https://xff.cz/megatools/builds/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [
+      viric
+      vji
+    ];
     platforms = platforms.unix;
   };
 }
