@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       emily
       techknowlogick
     ];
+    mainProgram = "watchman";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
