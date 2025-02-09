@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "heroiclabs";
     repo = "nakama";
     tag = "v${version}";
-    hash = "sha256-x5gT/mYVaYdeor+U37z1MjJ6zmb7yep/2tVJYgGXPYo=";
+    hash = "sha256-so8N2gk4TfeJy30XxiXH7utXs8InvnXm68ZoSvFykQk=";
   };
 
   vendorHash = null;
@@ -30,6 +30,7 @@ buildGoModule rec {
   meta = {
     description = "Distributed server for social and realtime games and apps";
     homepage = "https://heroiclabs.com/nakama/";
+    changelog = "https://github.com/heroiclabs/nakama/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.qxrein ];
