@@ -914,6 +914,7 @@
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
   ./services/monitoring/below.nix
+  ./services/monitoring/beszel-agent.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/certspotter.nix
