@@ -1,0 +1,22 @@
+--- a/src/libespeak-ng/mbrowrap.c
++++ b/src/libespeak-ng/mbrowrap.c
+@@ -205,7 +205,7 @@
+ 		signal(SIGTERM, SIG_IGN);
+ 
+ 		snprintf(charbuf, sizeof(charbuf), "%g", mbr_volume);
+-		execlp("mbrola", "mbrola", "-e", "-v", charbuf,
++		execlp("@mbrola@/bin/mbrola", "mbrola", "-e", "-v", charbuf,
+ 		       voice_path, "-", "-.wav", (char *)NULL);
+ 		/* if execution reaches this point then the exec() failed */
+ 		snprintf(mbr_errorbuf, sizeof(mbr_errorbuf),
+--- a/src/libespeak-ng/synth_mbrola.c
++++ b/src/libespeak-ng/synth_mbrola.c
+@@ -85,7 +85,7 @@
+ 	if (!load_MBR())
+ 		return ENS_MBROLA_NOT_FOUND;
+ 
+-	sprintf(path, "%s/mbrola/%s", path_home, mbrola_voice);
++	sprintf(path, "@mbrola@/share/mbrola/voices/%s/%s", mbrola_voice, mbrola_voice);
+ #ifdef PLATFORM_POSIX
+ 	// if not found, then also look in
+ 	//   usr/share/mbrola/xx, /usr/share/mbrola/xx/xx, /usr/share/mbrola/voices/xx

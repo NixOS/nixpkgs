@@ -1,0 +1,47 @@
+diff --git a/playwright/_impl/_driver.py b/playwright/_impl/_driver.py
+index f3b911f..d00e509 100644
+--- a/playwright/_impl/_driver.py
++++ b/playwright/_impl/_driver.py
+@@ -23,11 +23,7 @@ from playwright._repo_version import version
+ 
+ 
+ def compute_driver_executable() -> Path:
+-    package_path = Path(inspect.getfile(playwright)).parent
+-    platform = sys.platform
+-    if platform == "win32":
+-        return package_path / "driver" / "playwright.cmd"
+-    return package_path / "driver" / "playwright.sh"
++   return Path("@driver@")
+ 
+ 
+ if sys.version_info.major == 3 and sys.version_info.minor == 7:
+diff --git a/setup.py b/setup.py
+index 3487a6a..05112c2 100644
+--- a/setup.py
++++ b/setup.py
+@@ -141,25 +141,8 @@ class PlaywrightBDistWheelCommand(BDistWheelCommand):
+         base_wheel_location: str = glob.glob(os.path.join(self.dist_dir, "*.whl"))[0]
+         without_platform = base_wheel_location[:-7]
+         for wheel_bundle in wheels:
+-            download_driver(wheel_bundle["zip_name"])
+-            zip_file = (
+-                f"driver/playwright-{driver_version}-{wheel_bundle['zip_name']}.zip"
+-            )
+-            with zipfile.ZipFile(zip_file, "r") as zip:
+-                extractall(zip, f"driver/{wheel_bundle['zip_name']}")
+             wheel_location = without_platform + wheel_bundle["wheel"]
+             shutil.copy(base_wheel_location, wheel_location)
+-            with zipfile.ZipFile(wheel_location, "a") as zip:
+-                driver_root = os.path.abspath(f"driver/{wheel_bundle['zip_name']}")
+-                for dir_path, _, files in os.walk(driver_root):
+-                    for file in files:
+-                        from_path = os.path.join(dir_path, file)
+-                        to_path = os.path.relpath(from_path, driver_root)
+-                        zip.write(from_path, f"playwright/driver/{to_path}")
+-                zip.writestr(
+-                    "playwright/driver/README.md",
+-                    f"{wheel_bundle['wheel']} driver package",
+-                )
+         os.remove(base_wheel_location)
+         if InWheel:
+             for whlfile in glob.glob(os.path.join(self.dist_dir, "*.whl")):

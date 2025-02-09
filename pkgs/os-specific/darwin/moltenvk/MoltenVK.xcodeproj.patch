@@ -1,0 +1,88 @@
+diff --git a/MoltenVK/MoltenVK.xcodeproj/project.pbxproj b/MoltenVK/MoltenVK.xcodeproj/project.pbxproj
+index c23afce4..12ac12f4 100644
+--- a/MoltenVK/MoltenVK.xcodeproj/project.pbxproj
++++ b/MoltenVK/MoltenVK.xcodeproj/project.pbxproj
+@@ -365,13 +365,6 @@
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+-		2F21D82E24983488009BEA5F /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
+-			proxyType = 1;
+-			remoteGlobalIDString = 2FEA0CFF2490381A00EEF3AD;
+-			remoteInfo = "MoltenVKSPIRVToMSLConverter-tvOS";
+-		};
+ 		2FEA0D1B249040CA00EEF3AD /* PBXContainerItemProxy */ = {
+ 			isa = PBXContainerItemProxy;
+ 			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
+@@ -400,20 +393,6 @@
+ 			remoteGlobalIDString = A93903C71C57E9ED00FE90DC;
+ 			remoteInfo = "MVKSPIRVToMSLConverter-macOS";
+ 		};
+-		A981499A1FB6B9CF005F00B4 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
+-			proxyType = 1;
+-			remoteGlobalIDString = A93903B81C57E9D700FE90DC;
+-			remoteInfo = "MVKSPIRVToMSLConverter-iOS";
+-		};
+-		A9B1C7F4251AA5AF001D12CC /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = A9C86CB61C55B8350096CAF2 /* MoltenVKShaderConverter.xcodeproj */;
+-			proxyType = 1;
+-			remoteGlobalIDString = A9092A8C1A81717B00051823;
+-			remoteInfo = MoltenVKShaderConverter;
+-		};
+ /* End PBXContainerItemProxy section */
+ 
+ /* Begin PBXFileReference section */
+@@ -1019,7 +998,6 @@
+ 			buildRules = (
+ 			);
+ 			dependencies = (
+-				2F21D82F24983488009BEA5F /* PBXTargetDependency */,
+ 			);
+ 			name = "MoltenVK-tvOS";
+ 			productName = MoltenVK;
+@@ -1039,7 +1017,6 @@
+ 			buildRules = (
+ 			);
+ 			dependencies = (
+-				A981499B1FB6B9CF005F00B4 /* PBXTargetDependency */,
+ 			);
+ 			name = "MoltenVK-iOS";
+ 			productName = MoltenVK;
+@@ -1059,7 +1036,6 @@
+ 			buildRules = (
+ 			);
+ 			dependencies = (
+-				A9B1C7F5251AA5AF001D12CC /* PBXTargetDependency */,
+ 			);
+ 			name = "MoltenVK-macOS";
+ 			productName = MoltenVK;
+@@ -1476,24 +1452,6 @@
+ 		};
+ /* End PBXSourcesBuildPhase section */
+ 
+-/* Begin PBXTargetDependency section */
+-		2F21D82F24983488009BEA5F /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			name = "MoltenVKSPIRVToMSLConverter-tvOS";
+-			targetProxy = 2F21D82E24983488009BEA5F /* PBXContainerItemProxy */;
+-		};
+-		A981499B1FB6B9CF005F00B4 /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			name = "MVKSPIRVToMSLConverter-iOS";
+-			targetProxy = A981499A1FB6B9CF005F00B4 /* PBXContainerItemProxy */;
+-		};
+-		A9B1C7F5251AA5AF001D12CC /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			name = MoltenVKShaderConverter;
+-			targetProxy = A9B1C7F4251AA5AF001D12CC /* PBXContainerItemProxy */;
+-		};
+-/* End PBXTargetDependency section */
+-
+ /* Begin XCBuildConfiguration section */
+ 		2FEA0AB824902F9F00EEF3AD /* Debug */ = {
+ 			isa = XCBuildConfiguration;

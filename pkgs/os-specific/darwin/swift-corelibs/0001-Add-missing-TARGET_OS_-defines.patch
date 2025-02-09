@@ -1,0 +1,30 @@
+From 549160574ee44656d50997b27ef83736e0848201 Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Mon, 26 Apr 2021 20:51:05 +0200
+Subject: [PATCH] Add missing TARGET_OS_* defines
+
+---
+ .../Base.subproj/SwiftRuntime/TargetConditionals.h         | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/CoreFoundation/Base.subproj/SwiftRuntime/TargetConditionals.h b/CoreFoundation/Base.subproj/SwiftRuntime/TargetConditionals.h
+index 6d42b873..abf746c9 100644
+--- a/CoreFoundation/Base.subproj/SwiftRuntime/TargetConditionals.h
++++ b/CoreFoundation/Base.subproj/SwiftRuntime/TargetConditionals.h
+@@ -118,6 +118,13 @@
+ 
+ #define TARGET_OS_WIN32        TARGET_OS_WINDOWS
+ #define TARGET_OS_MAC          TARGET_OS_DARWIN
++#define TARGET_OS_OSX          TARGET_OS_DARWIN
++
++#define TARGET_OS_IPHONE       0
++#define TARGET_OS_WATCH        0
++#define TARGET_OS_TV           0
++#define TARGET_OS_EMBEDDED     0
++
+ 
+ #if __x86_64__
+ #define TARGET_CPU_PPC          0
+-- 
+2.17.2 (Apple Git-113)
+

@@ -1,0 +1,33 @@
+From f0c4d3860b75cb064d066045907622d536044096 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <me@pbb.lc>
+Date: Sun, 10 May 2020 12:47:28 +0200
+Subject: [PATCH 11/11] qtbase: derive plugin load path from PATH
+
+---
+ src/corelib/kernel/qcoreapplication.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
+index a80efbb5622..8cf9e85da43 100644
+--- a/src/corelib/kernel/qcoreapplication.cpp
++++ b/src/corelib/kernel/qcoreapplication.cpp
+@@ -2991,6 +2991,16 @@ QStringList QCoreApplication::libraryPathsLocked()
+         QStringList *app_libpaths = new QStringList;
+         coreappdata()->app_libpaths.reset(app_libpaths);
+ 
++        // Add library paths derived from PATH
++        const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(QStringLiteral(":"));
++        const QString plugindir = QStringLiteral("../" NIXPKGS_QT_PLUGIN_PREFIX);
++        for (const QString &path: paths) {
++            if (!path.isEmpty()) {
++                app_libpaths->append(QDir::cleanPath(path + QDir::separator() + plugindir));
++            }
++        }
++
++
+         auto setPathsFromEnv = [&](QString libPathEnv) {
+             if (!libPathEnv.isEmpty()) {
+                 QStringList paths = libPathEnv.split(QDir::listSeparator(), Qt::SkipEmptyParts);
+-- 
+2.42.0
+

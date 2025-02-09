@@ -1,0 +1,14 @@
+--- a/client/out/languageserver.js
++++ b/client/out/languageserver.js
+@@ -145,11 +145,9 @@
+                     break;
+                 case "linux":
+                     command = this.context.asAbsolutePath(path.join('server', binDir ? binDir : 'bin-Linux', 'lua-language-server'));
+-                    yield fs.promises.chmod(command, '777');
+                     break;
+                 case "darwin":
+                     command = this.context.asAbsolutePath(path.join('server', binDir ? binDir : 'bin-macOS', 'lua-language-server'));
+-                    yield fs.promises.chmod(command, '777');
+                     break;
+                 default:
+                     throw new Error(`Unsupported operating system "${platform}"!`);

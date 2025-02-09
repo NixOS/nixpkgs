@@ -1,0 +1,58 @@
+diff --git a/src/sage/libs/linbox/conversion.pxd b/src/sage/libs/linbox/conversion.pxd
+index 7794c9edc3..1753277b1f 100644
+--- a/src/sage/libs/linbox/conversion.pxd
++++ b/src/sage/libs/linbox/conversion.pxd
+@@ -177,9 +177,8 @@ cdef inline Vector_integer_dense new_sage_vector_integer_dense(P, DenseVector_in
+     - v -- linbox vector
+     """
+     cdef Vector_integer_dense res = P()
+-    cdef cppvector[Integer] * vec = &v.refRep()
+     cdef size_t i
+     for i in range(<size_t> res._degree):
+-        mpz_set(res._entries[i], vec[0][i].get_mpz_const())
++        mpz_set(res._entries[i], v.getEntry(i).get_mpz_const())
+ 
+     return res
+diff --git a/src/sage/libs/linbox/linbox.pxd b/src/sage/libs/linbox/linbox.pxd
+index 9112d151f8..dcc482960c 100644
+--- a/src/sage/libs/linbox/linbox.pxd
++++ b/src/sage/libs/linbox/linbox.pxd
+@@ -32,7 +32,7 @@ cdef extern from "linbox/matrix/dense-matrix.h":
+         ctypedef Modular_double Field
+         ctypedef double Element
+         DenseMatrix_Modular_double(Field F, size_t m, size_t n)
+-        DenseMatrix_Modular_double(Field F, Element*, size_t m, size_t n)
++        DenseMatrix_Modular_double(Field F, size_t m, size_t n, Element*)
+         void setEntry(size_t i, size_t j, Element& a)
+         Element &getEntry(size_t i, size_t j)
+ 
+@@ -42,7 +42,7 @@ cdef extern from "linbox/matrix/dense-matrix.h":
+         ctypedef Modular_float Field
+         ctypedef float Element
+         DenseMatrix_Modular_float(Field F, size_t m, size_t n)
+-        DenseMatrix_Modular_float(Field F, Element*, size_t m, size_t n)
++        DenseMatrix_Modular_float(Field F, size_t m, size_t n, Element*)
+         void setEntry(size_t i, size_t j, Element& a)
+         Element &getEntry(size_t i, size_t j)
+ 
+@@ -101,7 +101,6 @@ cdef extern from "linbox/vector/vector.h":
+         DenseVector_integer (Field &F)
+         DenseVector_integer (Field &F, long& m)
+         DenseVector_integer (Field &F, cppvector[Integer]&)
+-        cppvector[Element]& refRep()
+         size_t size()
+         void resize(size_t)
+         void resize(size_t n, const Element&)
+diff --git a/src/sage/matrix/matrix_modn_dense_template.pxi b/src/sage/matrix/matrix_modn_dense_template.pxi
+index 010365d76f..3d60726ff9 100644
+--- a/src/sage/matrix/matrix_modn_dense_template.pxi
++++ b/src/sage/matrix/matrix_modn_dense_template.pxi
+@@ -219,7 +219,7 @@ cdef inline linbox_echelonize_efd(celement modulus, celement* entries, Py_ssize_
+         return 0,[]
+ 
+     cdef ModField *F = new ModField(<long>modulus)
+-    cdef DenseMatrix *A = new DenseMatrix(F[0], <ModField.Element*>entries,<Py_ssize_t>nrows, <Py_ssize_t>ncols)
++    cdef DenseMatrix *A = new DenseMatrix(F[0], <Py_ssize_t>nrows, <Py_ssize_t>ncols, <ModField.Element*>entries)
+     cdef Py_ssize_t r = reducedRowEchelonize(A[0])
+     cdef Py_ssize_t i,j
+     for i in range(nrows):

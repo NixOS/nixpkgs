@@ -1,0 +1,372 @@
+commit cd5603a4767277a29d3e67a9c3f2a5d2129cd973
+Author: Sterling Augustine <saugustine@google.com>
+Date:   Tue Mar 19 20:01:59 2019 +0000
+
+    Add --unwindlib=[libgcc|compiler-rt] to parallel --rtlib= [take 2]
+    
+    "clang++ hello.cc --rtlib=compiler-rt"
+    
+    now can works without specifying additional unwind or exception
+    handling libraries.
+    
+    This reworked version of the feature no longer modifies today's default
+    unwind library for compiler-rt: which is nothing. Rather, a user
+    can specify -DCLANG_DEFAULT_UNWINDLIB=libunwind when configuring
+    the compiler.
+    
+    This should address the issues from the previous version.
+    
+    Update tests for new --unwindlib semantics.
+    
+    Differential Revision: https://reviews.llvm.org/D59109
+    
+    git-svn-id: https://llvm.org/svn/llvm-project/cfe/trunk@356508 91177308-0d34-0410-b5e6-96231b3b80d8
+    (cherry picked from commit 344aa82a52f2fae527f58284567ae305a314f7a8)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c2016a45ca..edeb2b66a1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -261,6 +261,24 @@ if (NOT(CLANG_DEFAULT_RTLIB STREQUAL "" OR
+     "Default runtime library to use (\"libgcc\" or \"compiler-rt\", empty for platform default)" FORCE)
+ endif()
+ 
++set(CLANG_DEFAULT_UNWINDLIB "" CACHE STRING
++  "Default unwind library to use (\"none\" \"libgcc\" or \"libunwind\", empty to match runtime library.)")
++if (CLANG_DEFAULT_UNWINDLIB STREQUAL "")
++  if (CLANG_DEFAULT_RTLIB STREQUAL "libgcc")
++    set (CLANG_DEFAULT_UNWINDLIB "libgcc" CACHE STRING "" FORCE)
++  elseif (CLANG_DEFAULT_RTLIBS STREQUAL "libunwind")
++    set (CLANG_DEFAULT_UNWINDLIB "none" CACHE STRING "" FORCE)
++  endif()
++endif()
++
++if (NOT(CLANG_DEFAULT_UNWINDLIB STREQUAL "none" OR
++        CLANG_DEFAULT_UNWINDLIB STREQUAL "libgcc" OR
++        CLANG_DEFAULT_UNWINDLIB STREQUAL "libunwind"))
++  message(WARNING "Resetting default unwindlib to use platform default")
++  set(CLANG_DEFAULT_UNWINDLIB "" CACHE STRING
++    "Default unwind library to use (\"none\" \"libgcc\" or \"libunwind\", empty for none)" FORCE)
++endif()
++
+ set(CLANG_DEFAULT_OBJCOPY "objcopy" CACHE STRING
+   "Default objcopy executable to use.")
+ 
+diff --git a/include/clang/Basic/DiagnosticDriverKinds.td b/include/clang/Basic/DiagnosticDriverKinds.td
+index 5475e28ed7..15971210e4 100644
+--- a/include/clang/Basic/DiagnosticDriverKinds.td
++++ b/include/clang/Basic/DiagnosticDriverKinds.td
+@@ -52,6 +52,10 @@ def err_drv_invalid_rtlib_name : Error<
+   "invalid runtime library name in argument '%0'">;
+ def err_drv_unsupported_rtlib_for_platform : Error<
+   "unsupported runtime library '%0' for platform '%1'">;
++def err_drv_invalid_unwindlib_name : Error<
++  "invalid unwind library name in argument '%0'">;
++def err_drv_incompatible_unwindlib : Error<
++  "--rtlib=libgcc requires --unwindlib=libgcc">;
+ def err_drv_invalid_stdlib_name : Error<
+   "invalid library name in argument '%0'">;
+ def err_drv_invalid_output_with_multiple_archs : Error<
+diff --git a/include/clang/Config/config.h.cmake b/include/clang/Config/config.h.cmake
+index 1d624450b9..2d4cb747e8 100644
+--- a/include/clang/Config/config.h.cmake
++++ b/include/clang/Config/config.h.cmake
+@@ -23,6 +23,9 @@
+ /* Default runtime library to use. */
+ #define CLANG_DEFAULT_RTLIB "${CLANG_DEFAULT_RTLIB}"
+ 
++/* Default unwind library to use. */
++#define CLANG_DEFAULT_UNWINDLIB "${CLANG_DEFAULT_UNWINDLIB}"
++
+ /* Default objcopy to use */
+ #define CLANG_DEFAULT_OBJCOPY "${CLANG_DEFAULT_OBJCOPY}"
+ 
+diff --git a/include/clang/Driver/Options.td b/include/clang/Driver/Options.td
+index 75a21e66c7..4da0e54965 100644
+--- a/include/clang/Driver/Options.td
++++ b/include/clang/Driver/Options.td
+@@ -2570,6 +2570,8 @@ def std_EQ : Joined<["-", "--"], "std=">, Flags<[CC1Option]>,
+   }]>;
+ def stdlib_EQ : Joined<["-", "--"], "stdlib=">, Flags<[CC1Option]>,
+   HelpText<"C++ standard library to use">, Values<"libc++,libstdc++,platform">;
++def unwindlib_EQ : Joined<["-", "--"], "unwindlib=">, Flags<[CC1Option]>,
++  HelpText<"Unwind library to use">, Values<"libgcc,unwindlib,platform">;
+ def sub__library : JoinedOrSeparate<["-"], "sub_library">;
+ def sub__umbrella : JoinedOrSeparate<["-"], "sub_umbrella">;
+ def system_header_prefix : Joined<["--"], "system-header-prefix=">,
+diff --git a/include/clang/Driver/ToolChain.h b/include/clang/Driver/ToolChain.h
+index d5f75b8271..4bedf760eb 100644
+--- a/include/clang/Driver/ToolChain.h
++++ b/include/clang/Driver/ToolChain.h
+@@ -100,6 +100,12 @@ public:
+     RLT_Libgcc
+   };
+ 
++  enum UnwindLibType {
++    UNW_None,
++    UNW_CompilerRT,
++    UNW_Libgcc
++  };
++
+   enum RTTIMode {
+     RM_Enabled,
+     RM_Disabled,
+@@ -368,6 +374,10 @@ public:
+     return ToolChain::CST_Libstdcxx;
+   }
+ 
++  virtual UnwindLibType GetDefaultUnwindLibType() const {
++    return ToolChain::UNW_None;
++  }
++
+   virtual std::string getCompilerRTPath() const;
+ 
+   virtual std::string getCompilerRT(const llvm::opt::ArgList &Args,
+@@ -512,6 +522,10 @@ public:
+   // given compilation arguments.
+   virtual CXXStdlibType GetCXXStdlibType(const llvm::opt::ArgList &Args) const;
+ 
++  // GetUnwindLibType - Determine the unwind library type to use with the
++  // given compilation arguments.
++  virtual UnwindLibType GetUnwindLibType(const llvm::opt::ArgList &Args) const;
++
+   /// AddClangCXXStdlibIncludeArgs - Add the clang -cc1 level arguments to set
+   /// the include paths to use for the given C++ standard library type.
+   virtual void
+diff --git a/lib/Driver/ToolChain.cpp b/lib/Driver/ToolChain.cpp
+index 88a627eab6..d82423f4a8 100644
+--- a/lib/Driver/ToolChain.cpp
++++ b/lib/Driver/ToolChain.cpp
+@@ -680,6 +680,33 @@ ToolChain::RuntimeLibType ToolChain::GetRuntimeLibType(
+   return GetDefaultRuntimeLibType();
+ }
+ 
++ToolChain::UnwindLibType ToolChain::GetUnwindLibType(
++    const ArgList &Args) const {
++  const Arg *A = Args.getLastArg(options::OPT_unwindlib_EQ);
++  StringRef LibName = A ? A->getValue() : CLANG_DEFAULT_UNWINDLIB;
++
++  if (LibName == "none")
++    return ToolChain::UNW_None;
++  else if (LibName == "platform" || LibName == "") {
++    ToolChain::RuntimeLibType RtLibType = GetRuntimeLibType(Args);
++    if (RtLibType == ToolChain::RLT_CompilerRT)
++      return ToolChain::UNW_None;
++    else if (RtLibType == ToolChain::RLT_Libgcc)
++      return ToolChain::UNW_Libgcc;
++  } else if (LibName == "libunwind") {
++    if (GetRuntimeLibType(Args) == RLT_Libgcc)
++      getDriver().Diag(diag::err_drv_incompatible_unwindlib);
++    return ToolChain::UNW_CompilerRT;
++  } else if (LibName == "libgcc")
++    return ToolChain::UNW_Libgcc;
++
++  if (A)
++    getDriver().Diag(diag::err_drv_invalid_unwindlib_name)
++        << A->getAsString(Args);
++
++  return GetDefaultUnwindLibType();
++}
++
+ ToolChain::CXXStdlibType ToolChain::GetCXXStdlibType(const ArgList &Args) const{
+   const Arg *A = Args.getLastArg(options::OPT_stdlib_EQ);
+   StringRef LibName = A ? A->getValue() : CLANG_DEFAULT_CXX_STDLIB;
+diff --git a/lib/Driver/ToolChains/CommonArgs.cpp b/lib/Driver/ToolChains/CommonArgs.cpp
+index 85ffc1618d..9fd29726a4 100644
+--- a/lib/Driver/ToolChains/CommonArgs.cpp
++++ b/lib/Driver/ToolChains/CommonArgs.cpp
+@@ -1132,47 +1132,80 @@ bool tools::isObjCAutoRefCount(const ArgList &Args) {
+   return Args.hasFlag(options::OPT_fobjc_arc, options::OPT_fno_objc_arc, false);
+ }
+ 
+-static void AddLibgcc(const llvm::Triple &Triple, const Driver &D,
+-                      ArgStringList &CmdArgs, const ArgList &Args) {
+-  bool isAndroid = Triple.isAndroid();
+-  bool isCygMing = Triple.isOSCygMing();
+-  bool IsIAMCU = Triple.isOSIAMCU();
+-  bool StaticLibgcc = Args.hasArg(options::OPT_static_libgcc) ||
+-                      Args.hasArg(options::OPT_static) ||
+-                      Args.hasArg(options::OPT_static_pie);
+-
+-  bool SharedLibgcc = Args.hasArg(options::OPT_shared_libgcc);
+-  bool UnspecifiedLibgcc = !StaticLibgcc && !SharedLibgcc;
+-
+-  // Gcc adds libgcc arguments in various ways:
+-  //
+-  // gcc <none>:     -lgcc --as-needed -lgcc_s --no-as-needed
+-  // g++ <none>:                       -lgcc_s               -lgcc
+-  // gcc shared:                       -lgcc_s               -lgcc
+-  // g++ shared:                       -lgcc_s               -lgcc
+-  // gcc static:     -lgcc             -lgcc_eh
+-  // g++ static:     -lgcc             -lgcc_eh
+-  // gcc static-pie: -lgcc             -lgcc_eh
+-  // g++ static-pie: -lgcc             -lgcc_eh
+-  //
+-  // Also, certain targets need additional adjustments.
++enum class LibGccType { UnspecifiedLibGcc, StaticLibGcc, SharedLibGcc };
++
++static LibGccType getLibGccType(const ArgList &Args) {
++  bool Static = Args.hasArg(options::OPT_static_libgcc) ||
++                Args.hasArg(options::OPT_static) ||
++                Args.hasArg(options::OPT_static_pie);
++
++  bool Shared = Args.hasArg(options::OPT_shared_libgcc);
++  if (Shared)
++    return LibGccType::SharedLibGcc;
++  if (Static)
++    return LibGccType::StaticLibGcc;
++  return LibGccType::UnspecifiedLibGcc;
++}
+ 
+-  bool LibGccFirst = (D.CCCIsCC() && UnspecifiedLibgcc) || StaticLibgcc;
+-  if (LibGccFirst)
+-    CmdArgs.push_back("-lgcc");
++// Gcc adds libgcc arguments in various ways:
++//
++// gcc <none>:     -lgcc --as-needed -lgcc_s --no-as-needed
++// g++ <none>:                       -lgcc_s               -lgcc
++// gcc shared:                       -lgcc_s               -lgcc
++// g++ shared:                       -lgcc_s               -lgcc
++// gcc static:     -lgcc             -lgcc_eh
++// g++ static:     -lgcc             -lgcc_eh
++// gcc static-pie: -lgcc             -lgcc_eh
++// g++ static-pie: -lgcc             -lgcc_eh
++//
++// Also, certain targets need additional adjustments.
++
++static void AddUnwindLibrary(const ToolChain &TC, const Driver &D,
++                             ArgStringList &CmdArgs, const ArgList &Args) {
++  ToolChain::UnwindLibType UNW = TC.GetUnwindLibType(Args);
++  // Targets that don't use unwind libraries.
++  if (TC.getTriple().isAndroid() || TC.getTriple().isOSIAMCU() ||
++      TC.getTriple().isOSBinFormatWasm() ||
++      UNW == ToolChain::UNW_None)
++    return;
+ 
+-  bool AsNeeded = D.CCCIsCC() && UnspecifiedLibgcc && !isAndroid && !isCygMing;
++  LibGccType LGT = getLibGccType(Args);
++  bool AsNeeded = D.CCCIsCC() && LGT == LibGccType::UnspecifiedLibGcc &&
++                  !TC.getTriple().isAndroid() && !TC.getTriple().isOSCygMing();
+   if (AsNeeded)
+     CmdArgs.push_back("--as-needed");
+ 
+-  if ((UnspecifiedLibgcc || SharedLibgcc) && !isAndroid)
+-    CmdArgs.push_back("-lgcc_s");
+-
+-  else if (StaticLibgcc && !isAndroid && !IsIAMCU)
+-    CmdArgs.push_back("-lgcc_eh");
++  switch (UNW) {
++  case ToolChain::UNW_None:
++    return;
++  case ToolChain::UNW_Libgcc: {
++    LibGccType LGT = getLibGccType(Args);
++    if (LGT == LibGccType::UnspecifiedLibGcc || LGT == LibGccType::SharedLibGcc)
++      CmdArgs.push_back("-lgcc_s");
++    else if (LGT == LibGccType::StaticLibGcc)
++      CmdArgs.push_back("-lgcc_eh");
++    break;
++  }
++  case ToolChain::UNW_CompilerRT:
++    CmdArgs.push_back("-lunwind");
++    break;
++  }
+ 
+   if (AsNeeded)
+     CmdArgs.push_back("--no-as-needed");
++}
++
++static void AddLibgcc(const ToolChain &TC, const Driver &D,
++                      ArgStringList &CmdArgs, const ArgList &Args) {
++  bool isAndroid = TC.getTriple().isAndroid();
++
++  LibGccType LGT = getLibGccType(Args);
++  bool LibGccFirst = (D.CCCIsCC() && LGT == LibGccType::UnspecifiedLibGcc) ||
++                     LGT == LibGccType::StaticLibGcc;
++  if (LibGccFirst)
++    CmdArgs.push_back("-lgcc");
++
++  AddUnwindLibrary(TC, D, CmdArgs, Args);
+ 
+   if (!LibGccFirst)
+     CmdArgs.push_back("-lgcc");
+@@ -1182,7 +1215,7 @@ static void AddLibgcc(const llvm::Triple &Triple, const Driver &D,
+   //
+   // NOTE: This fixes a link error on Android MIPS as well.  The non-static
+   // libgcc for MIPS relies on _Unwind_Find_FDE and dl_iterate_phdr from libdl.
+-  if (isAndroid && !StaticLibgcc)
++  if (isAndroid && getLibGccType(Args) != LibGccType::StaticLibGcc)
+     CmdArgs.push_back("-ldl");
+ }
+ 
+@@ -1194,6 +1227,7 @@ void tools::AddRunTimeLibs(const ToolChain &TC, const Driver &D,
+   switch (RLT) {
+   case ToolChain::RLT_CompilerRT:
+     CmdArgs.push_back(TC.getCompilerRTArgString(Args, "builtins"));
++    AddUnwindLibrary(TC, D, CmdArgs, Args);
+     break;
+   case ToolChain::RLT_Libgcc:
+     // Make sure libgcc is not used under MSVC environment by default
+@@ -1205,7 +1239,7 @@ void tools::AddRunTimeLibs(const ToolChain &TC, const Driver &D,
+             << Args.getLastArg(options::OPT_rtlib_EQ)->getValue() << "MSVC";
+       }
+     } else
+-      AddLibgcc(TC.getTriple(), D, CmdArgs, Args);
++      AddLibgcc(TC, D, CmdArgs, Args);
+     break;
+   }
+ }
+diff --git a/test/Driver/compiler-rt-unwind.c b/test/Driver/compiler-rt-unwind.c
+new file mode 100644
+index 0000000000..00024dfa7e
+--- /dev/null
++++ b/test/Driver/compiler-rt-unwind.c
+@@ -0,0 +1,49 @@
++// General tests that the driver handles combinations of --rtlib=XXX and
++// --unwindlib=XXX properly.
++//
++// RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
++// RUN:     --target=x86_64-unknown-linux \
++// RUN:     --gcc-toolchain="" \
++// RUN:   | FileCheck --check-prefix=RTLIB-EMPTY %s
++// RTLIB-EMPTY: "{{.*}}lgcc"
++// RTLIB-EMPTY: "{{.*}}-lgcc_s"
++//
++// RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
++// RUN:     --target=x86_64-unknown-linux -rtlib=libgcc \
++// RUN:     --gcc-toolchain="" \
++// RUN:   | FileCheck --check-prefix=RTLIB-GCC %s
++// RTLIB-GCC: "{{.*}}lgcc"
++// RTLIB-GCC: "{{.*}}lgcc_s"
++//
++// RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1 \
++// RUN:     --target=x86_64-unknown-linux -rtlib=libgcc --unwindlib=libunwind \
++// RUN:     --gcc-toolchain="" \
++// RUN:   | FileCheck --check-prefix=RTLIB-GCC-UNWINDLIB-COMPILER-RT %s
++// RTLIB-GCC-UNWINDLIB-COMPILER-RT: "{{.*}}lgcc"
++// RTLIB-GCC-UNWINDLIB-COMPILER-RT: "{{.*}}lunwind"
++//
++// RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1   \
++// RUN:     --target=x86_64-unknown-linux -rtlib=compiler-rt \
++// RUN:     --gcc-toolchain="" \
++// RUN:   | FileCheck --check-prefix=RTLIB-COMPILER-RT %s
++// RTLIB-COMPILER-RT: "{{.*}}libclang_rt.builtins-x86_64.a"
++//
++// RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1   \
++// RUN:     --target=x86_64-unknown-linux -rtlib=compiler-rt --unwindlib=libgcc \
++// RUN:     --gcc-toolchain="" \
++// RUN:   | FileCheck --check-prefix=RTLIB-COMPILER-RT-UNWINDLIB-GCC %s
++// RTLIB-COMPILER-RT-UNWINDLIB-GCC: "{{.*}}libclang_rt.builtins-x86_64.a"
++// RTLIB-COMPILER-RT-UNWINDLIB-GCC: "{{.*}}lgcc_s"
++//
++// RUN: %clang -no-canonical-prefixes %s -### -o %t.o 2>&1              \
++// RUN:     --target=x86_64-unknown-linux -rtlib=compiler-rt --unwindlib=libgcc \
++// RUN:     -static --gcc-toolchain="" \
++// RUN:   | FileCheck --check-prefix=RTLIB-COMPILER-RT-UNWINDLIB-GCC-STATIC %s
++// RTLIB-COMPILER-RT-UNWINDLIB-GCC-STATIC: "{{.*}}libclang_rt.builtins-x86_64.a"
++// RTLIB-COMPILER-RT-UNWINDLIB-GCC-STATIC: "{{.*}}lgcc_eh"
++//
++// RUN: not %clang -no-canonical-prefixes %s -o %t.o 2> %t.err              \
++// RUN:     --target=x86_64-unknown-linux -rtlib=libgcc --unwindlib=libunwind \
++// RUN:     --gcc-toolchain="" \
++// RUN: FileCheck --input-file=%t.err --check-prefix=RTLIB-GCC-UNWINDLIB-COMPILER_RT %s
++// RTLIB-GCC-UNWINDLIB-COMPILER_RT: "{{[.|\\\n]*}}--rtlib=libgcc requires --unwindlib=libgcc"

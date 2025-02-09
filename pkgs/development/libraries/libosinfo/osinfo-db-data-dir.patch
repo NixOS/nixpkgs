@@ -1,0 +1,11 @@
+--- a/osinfo/osinfo_loader.c
++++ b/osinfo/osinfo_loader.c
+@@ -2304,7 +2304,7 @@
+     } else {
+         path = g_getenv("OSINFO_SYSTEM_DIR");
+         if (!path)
+-            path = DATA_DIR "/osinfo";
++            path = "@osinfo_db_data_dir@/osinfo";
+ 
+         file = g_file_new_for_path(path);
+     }

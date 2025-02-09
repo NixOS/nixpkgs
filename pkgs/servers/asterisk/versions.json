@@ -1,0 +1,14 @@
+{
+  "asterisk_18": {
+    "sha256": "ad7d01f58e5c5266e5b23cc385e6a3d32a656b93c1d4b4fb0082f3300012bd02",
+    "version": "18.20.1"
+  },
+  "asterisk_20": {
+    "sha256": "7d128f2a164e36fae4875058120ff026e7cd73f7701429fee4fa293f4fba4336",
+    "version": "20.5.1"
+  },
+  "asterisk_21": {
+    "sha256": "8e7db886b70e808ade38ad060ccbbb49353031e4c2fa6dc4435bfbd79f082956",
+    "version": "21.0.1"
+  }
+}

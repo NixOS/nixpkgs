@@ -1,0 +1,28 @@
+commit 72489cd0a1c229258abe4f20e4fdfd414dfa88da
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Sun Oct 2 00:15:24 2022 +0200
+
+    Fix NEON detection
+
+diff --git a/cmake/FindNeon.cmake b/cmake/FindNeon.cmake
+index 0062449..9c436d9 100644
+--- a/cmake/FindNeon.cmake
++++ b/cmake/FindNeon.cmake
+@@ -1,10 +1,11 @@
+ include(FindPackageHandleStandardArgs)
+ 
+ # Check the version of neon supported by the ARM CPU
+-execute_process(COMMAND cat /proc/cpuinfo | grep Features | grep neon
+-                OUTPUT_VARIABLE neon_version
+-                ERROR_QUIET
+-                OUTPUT_STRIP_TRAILING_WHITESPACE)
+-if(neon_version)
+-    set(CPU_HAS_NEON 1)
++message(STATUS "Detecting NEON support")
++execute_process(COMMAND sed -n "/Features.* neon/q 1" /proc/cpuinfo
++                RESULT_VARIABLE CPU_HAS_NEON)
++if(CPU_HAS_NEON)
++    message(STATUS "Detecting NEON support - supported")
++else()
++    message(STATUS "Detecting NEON support - not supported" )
+ endif()

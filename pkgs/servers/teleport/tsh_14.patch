@@ -1,0 +1,17 @@
+diff --git a/tool/tsh/common/tsh.go b/tool/tsh/common/tsh.go
+index 5de21c69d0..3995c19e3c 100644
+--- a/tool/tsh/common/tsh.go
++++ b/tool/tsh/common/tsh.go
+@@ -1084,10 +1084,11 @@ func Run(ctx context.Context, args []string, opts ...CliOption) error {
+ 
+ 	var err error
+ 
+-	cf.executablePath, err = os.Executable()
++	tempBinaryPath, err := os.Executable()
+ 	if err != nil {
+ 		return trace.Wrap(err)
+ 	}
++	cf.executablePath = path.Dir(tempBinaryPath) + "/tsh"
+ 
+ 	// configs
+ 	setEnvFlags(&cf)

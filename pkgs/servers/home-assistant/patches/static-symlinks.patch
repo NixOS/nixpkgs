@@ -1,0 +1,37 @@
+diff --git a/homeassistant/components/frontend/__init__.py b/homeassistant/components/frontend/__init__.py
+index 2ec991750f..9a937006ce 100644
+--- a/homeassistant/components/frontend/__init__.py
++++ b/homeassistant/components/frontend/__init__.py
+@@ -383,7 +383,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+ 
+     local = hass.config.path("www")
+     if os.path.isdir(local):
+-        hass.http.register_static_path("/local", local, not is_dev)
++        hass.http.register_static_path("/local", local, not is_dev, follow_symlinks=True)
+ 
+     # Can be removed in 2023
+     hass.http.register_redirect("/config/server_control", "/developer-tools/yaml")
+diff --git a/homeassistant/components/http/__init__.py b/homeassistant/components/http/__init__.py
+index 122b7b79ce..3cf2b7e0db 100644
+--- a/homeassistant/components/http/__init__.py
++++ b/homeassistant/components/http/__init__.py
+@@ -411,16 +411,16 @@ class HomeAssistantHTTP:
+         )
+ 
+     def register_static_path(
+-        self, url_path: str, path: str, cache_headers: bool = True
++        self, url_path: str, path: str, cache_headers: bool = True, follow_symlinks: bool = False
+     ) -> None:
+         """Register a folder or file to serve as a static path."""
+         if os.path.isdir(path):
+             if cache_headers:
+                 resource: CachingStaticResource | web.StaticResource = (
+-                    CachingStaticResource(url_path, path)
++                    CachingStaticResource(url_path, path, follow_symlinks=follow_symlinks)
+                 )
+             else:
+-                resource = web.StaticResource(url_path, path)
++                resource = web.StaticResource(url_path, path, follow_symlinks=follow_symlinks)
+             self.app.router.register_resource(resource)
+             self.app["allow_configured_cors"](resource)
+             return

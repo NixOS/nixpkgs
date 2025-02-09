@@ -1,0 +1,13 @@
+diff --git a/desktop_version/CMakeLists.txt b/desktop_version/CMakeLists.txt
+index 7405c122..68ba40e3 100644
+--- a/desktop_version/CMakeLists.txt
++++ b/desktop_version/CMakeLists.txt
+@@ -296,7 +296,7 @@ if(BUNDLE_DEPENDENCIES)
+ else()
+ 	find_package(utf8cpp CONFIG)
+ 
+-	target_link_libraries(VVVVVV physfs tinyxml2 utf8cpp lodepng-static)
++	target_link_libraries(VVVVVV physfs tinyxml2 utf8cpp::utf8cpp lodepng-static)
+ endif()
+ 
+ # SDL2 Dependency (Detection pulled from FAudio)
