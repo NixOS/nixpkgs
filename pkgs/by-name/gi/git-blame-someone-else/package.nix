@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "git-blame-someone-else";
-  version = "0-unstable-6-13-2018";
+  version = "0-unstable-2018-06-13";
 
   src = fetchFromGitHub {
     owner = "jayphelps";
@@ -15,12 +15,10 @@ stdenv.mkDerivation {
     hash = "sha256-xraG1dR5Q8oDlUXARgh0ql8eRwH4bJWblJFjH1wJcys=";
   };
 
-  doCheck = true;
-
-  doInstallCheck = true;
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = {
-    description = "Blame someone else for your bad code.";
+    description = "Blame someone else for your bad code";
     longDescription = ''
       A simple script to spoof a git commit as someone else. Created as a joke, not recommended for production use.
     '';
