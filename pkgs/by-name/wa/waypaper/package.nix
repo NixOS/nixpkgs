@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "waypaper";
-  version = "2.3";
+  version = "2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
     tag = version;
-    hash = "sha256-ty3KiKkIyv6aqTua3YUB2smYJv7dXGPP5k3lXoxDzI0=";
+    hash = "sha256-bNh8WWSLgCV8PLFvDn/+AEcNOazxMEKEYv7n+L9ABTA=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,9 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.platformdirs
     python3.pkgs.importlib-metadata
     python3.pkgs.pillow
+    python3.pkgs.imageio
+    python3.pkgs.imageio-ffmpeg
+    python3.pkgs.screeninfo
   ];
 
   propagatedBuildInputs = [ killall ];
