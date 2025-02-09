@@ -29,8 +29,6 @@ buildPythonPackage rec {
   # Patch out gui cli because it is not supported in this packaging and
   # nixify path to the trafilatura binary in the test suite
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"trafilatura_gui=trafilatura.gui:main",' ""
     substituteInPlace tests/cli_tests.py \
       --replace-fail 'trafilatura_bin = "trafilatura"' \
                      'trafilatura_bin = "${placeholder "out"}/bin/trafilatura"'
@@ -63,6 +61,8 @@ buildPythonPackage rec {
     "test_queue"
     "test_redirection"
     "test_whole"
+    # Requires docs which Pypi source code does not provide
+    "test_input_type"
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
