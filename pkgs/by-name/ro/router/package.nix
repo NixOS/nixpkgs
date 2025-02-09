@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.56.0";
+  version = "1.60.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
+    hash = "sha256-28uYog5TCkN36j4Ch1cIRvPuMwz7KyzBMNdFSiJ/Swk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1AKYOv7kT60H8x1qmtPqR4Wxq1DxSCDzt+Uv7MRUeaw=";
+  cargoHash = "sha256-7jUTxu3bAerEADN2n1MZ9LBP6NCNJ8v4ihL4KGK8prM=";
 
   nativeBuildInputs = [
     cmake
