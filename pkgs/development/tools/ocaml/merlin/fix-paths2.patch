@@ -1,0 +1,17 @@
+diff --git a/src/kernel/mconfig_dot.ml b/src/kernel/mconfig_dot.ml
+index 0a42a1d3..91997190 100644
+--- a/src/kernel/mconfig_dot.ml
++++ b/src/kernel/mconfig_dot.ml
+@@ -146,10 +146,10 @@ end = struct
+       let prog, args =
+         match cfg with
+         | Dot_merlin ->
+-          let prog = "dot-merlin-reader" in
++          let prog = "@dot-merlin-reader@" in
+           (prog, [| prog |])
+         | Dune ->
+-          let prog = "dune" in
++          let prog = "@dune@" in
+           (prog, [| prog; "ocaml-merlin"; "--no-print-directory" |])
+       in
+       let cwd = Sys.getcwd () in

@@ -1,0 +1,36 @@
+--- a/src/arch.rs
++++ b/src/arch.rs
+@@ -142,7 +142,7 @@ cfg_match! {
+ 
+         #[naked]
+         unsafe extern "C" fn entry_trampoline() -> ! {
+-            core::arch::asm!(
++            core::arch::naked_asm!(
+                 "lea r10, [rip + {context}]",
+                 "mov r11, [r10 + {size} * 1]", // .env_entry
+                 "test r11, r11",
+@@ -153,7 +153,6 @@ cfg_match! {
+                 "jmp [rip + {context}]",
+                 context = sym TRAMPOLINE_CONTEXT,
+                 size = const core::mem::size_of::<*const u8>(),
+-                options(noreturn),
+             )
+         }
+     }
+@@ -162,7 +161,7 @@ cfg_match! {
+ 
+         #[naked]
+         unsafe extern "C" fn entry_trampoline() -> ! {
+-            core::arch::asm!(
++            core::arch::naked_asm!(
+                 "adrp x8, {context}",
+                 "ldr x9, [x8, {env_entry_off}]", // .env_entry
+                 "cbz x9, 2f",
+@@ -174,7 +173,6 @@ cfg_match! {
+                 context = sym TRAMPOLINE_CONTEXT,
+                 env_entry_off = const TrampolineContext::ENV_ENTRY_OFFSET,
+                 env_string_off = const TrampolineContext::ENV_STRING_OFFSET,
+-                options(noreturn),
+             )
+         }
+     }
