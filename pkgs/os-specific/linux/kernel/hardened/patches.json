@@ -52,12 +52,12 @@
     "6.12": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-v6.12.10-hardened1.patch",
-            "sha256": "1m48sf0ihzpcj4ca9420rmhrihhchd2qrv86vw8llq3jmv7xqij5",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.12.10-hardened1/linux-hardened-v6.12.10-hardened1.patch"
+            "name": "linux-hardened-v6.12.12-hardened1.patch",
+            "sha256": "0k413adalc62ykrfar8dgp6480jmc6sx9c60sbk869xq8ghs6hq3",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.12.12-hardened1/linux-hardened-v6.12.12-hardened1.patch"
         },
-        "sha256": "15xjjn8ff7g9q0ljr2g8k098ppxnpvxlgv22rdrplls8sxg6wlaa",
-        "version": "6.12.10"
+        "sha256": "1zwfw3lci3ihandx2cpq3h12x7l94jzr4xkd5lzkn1ppgv8l52g9",
+        "version": "6.12.12"
     },
     "6.6": {
         "patch": {
