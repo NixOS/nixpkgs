@@ -204,7 +204,7 @@ let
     ghcBinDists.${distSetName}.${stdenv.hostPlatform.system}
       or (throw "cannot bootstrap GHC on this platform ('${stdenv.hostPlatform.system}' with libc '${distSetName}')");
 
-  useLLVM = !stdenv.targetPlatform.isx86;
+  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
 
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.
