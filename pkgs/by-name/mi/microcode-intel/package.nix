@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libarchive,
   iucode-tool,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,16 +18,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-dvXt4SX/90oFM4GR9R7C2udhZ+plxnabOZpbtwN3V8Q=";
   };
 
-  nativeBuildInputs = [
-    iucode-tool
-    libarchive
-  ];
+  nativeBuildInputs = [ libarchive ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out kernel/x86/microcode
-    iucode_tool -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
+    ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe iucode-tool} -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
     touch -d @$SOURCE_DATE_EPOCH kernel/x86/microcode/GenuineIntel.bin
     echo kernel/x86/microcode/GenuineIntel.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/intel-ucode.img
 
