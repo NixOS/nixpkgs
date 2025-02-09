@@ -3,6 +3,9 @@
   stdenvNoCC,
   fetchzip,
   writeScript,
+  # Can be overriden to alter the display name in steam
+  # This could be useful if multiple versions should be installed together
+  steamDisplayName ? "GE-Proton",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
@@ -39,9 +42,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preFixup = ''
     substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
-      --replace-fail "${finalAttrs.version}" "GE-Proton"
+      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
     substituteInPlace "$steamcompattool/proton" \
-      --replace-fail "${finalAttrs.version}" "GE-Proton"
+      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
   '';
 
   /*
