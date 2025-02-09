@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Owl-Maintain/brlaser/releases/tag/v${version}";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ StijnDW ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
