@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
