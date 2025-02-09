@@ -40,9 +40,30 @@ in
         Secrets should be added in environmentFiles instead of environment.
       '';
     };
+
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/stirling-pdf";
+      description = "Where stirling-pdf stores persistent files";
+    };
   };
 
   config = lib.mkIf cfg.enable {
+
+    users = {
+      users.stirling-pdf = {
+        isSystemUser = true;
+        home = cfg.dataDir;
+        description = "User for running the stirling-pdf service";
+        group = "stirling-pdf";
+      };
+      groups.stirling-pdf = { };
+    };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - stirling-pdf stirling-pdf - -"
+    ];
+
     systemd.services.stirling-pdf = {
       environment = lib.mapAttrs (_: toString) cfg.environment;
 
@@ -76,18 +97,17 @@ in
       serviceConfig = {
         BindReadOnlyPaths = [ "${pkgs.tesseract}/share/tessdata:/usr/share/tessdata" ];
         CacheDirectory = "stirling-pdf";
-        Environment = [ "HOME=%S/stirling-pdf" ];
+        Environment = [ "HOME=${cfg.dataDir}" ];
         EnvironmentFile = cfg.environmentFiles;
         ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = "stirling-pdf";
         StateDirectory = "stirling-pdf";
         SuccessExitStatus = 143;
         User = "stirling-pdf";
-        WorkingDirectory = "/var/lib/stirling-pdf";
+        WorkingDirectory = cfg.dataDir;
 
         # Hardening
         CapabilityBoundingSet = "";
-        DynamicUser = true;
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
