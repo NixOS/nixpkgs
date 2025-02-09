@@ -1101,10 +1101,6 @@ in
     };
   };
 
-  feline-nvim = super.feline-nvim.overrideAttrs {
-    nvimSkipModule = "minimal_init";
-  };
-
   flash-nvim = super.flash-nvim.overrideAttrs {
     # Docs require lazyvim
     # dependencies = with self; [ lazy-nvim ];
