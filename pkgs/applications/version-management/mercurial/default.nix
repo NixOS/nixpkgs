@@ -55,6 +55,7 @@ let
         rustPlatform.fetchCargoVendor {
           inherit src;
           name = "mercurial-${version}";
+          allowGitDependencies = false;
           hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
           sourceRoot = "mercurial-${version}/rust";
         }

@@ -11,7 +11,6 @@
   gettext,
   makeWrapper,
   gnutls,
-  p11-kit,
   libproxy,
   gnome,
   gsettings-desktop-schemas,
@@ -60,7 +59,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gnutls
-    p11-kit
     libproxy
     gsettings-desktop-schemas
     bash # installed-tests shebangs
