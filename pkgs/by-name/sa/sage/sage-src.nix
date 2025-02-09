@@ -99,6 +99,9 @@ stdenv.mkDerivation rec {
     "-p1"
   ];
 
+  # harmless broken symlinks to (not) generated files used by sage-the-distro
+  dontCheckForBrokenSymlinks = true;
+
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment
     # variables. It won't be close to feature complete though.

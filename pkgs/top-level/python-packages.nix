@@ -10729,9 +10729,7 @@ self: super: with self; {
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
-  pylance = callPackage ../development/python-modules/pylance {
-    inherit (pkgs) protobuf;
-  };
+  pylance = callPackage ../development/python-modules/pylance { };
 
   pyldavis = callPackage ../development/python-modules/pyldavis { };
 
