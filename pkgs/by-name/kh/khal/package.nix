@@ -41,6 +41,8 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
+  patches = [ ./intersphinx.patch ];
+
   build-system = with python.pkgs; [
     setuptools
     setuptools-scm

@@ -1,0 +1,20 @@
+From bab4648d4b8b33e401c60e5783f7eddbc16a96f6 Mon Sep 17 00:00:00 2001
+From: Martin Stone <martin@d7415.co.uk>
+Date: Thu, 31 Oct 2024 14:43:22 +0000
+Subject: [PATCH] Replace intersphinx_mapping format removed in Sphinx 8.0.0
+
+Fixes #1356
+---
+ doc/source/conf.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/doc/source/conf.py b/doc/source/conf.py
+index 2809221fb..6563ea98e 100644
+--- a/doc/source/conf.py
++++ b/doc/source/conf.py
+@@ -309,4 +309,4 @@ def write_section(specsection, secname, key, comment, output):
+ 
+ 
+ # Example configuration for intersphinx: refer to the Python standard library.
+-intersphinx_mapping = {'http://docs.python.org/': None}
++intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
