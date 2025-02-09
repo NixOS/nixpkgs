@@ -10,7 +10,6 @@
   installShellFiles,
   scdoc,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "wleave";
   version = "0.5.1";
