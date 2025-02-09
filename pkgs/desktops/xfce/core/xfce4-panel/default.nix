@@ -1,9 +1,9 @@
-{ lib
+{ stdenv
+, lib
 , mkXfceDerivation
 , cairo
 , exo
 , garcon
-, gobject-introspection
 , gtk-layer-shell
 , gtk3
 , libdbusmenu-gtk3
@@ -12,9 +12,14 @@
 , libxfce4util
 , libxfce4windowing
 , tzdata
-, vala
 , wayland
 , xfconf
+, withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, vala
 }:
 
 mkXfceDerivation {
@@ -24,9 +29,9 @@ mkXfceDerivation {
 
   sha256 = "sha256-tLWjU0M7tuE+qqDwaE1CtnOjDiPWno8Mf7hhxYxbvjo=";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals withIntrospection [
     gobject-introspection
-    vala
+    vala # vala bindings require GObject introspection
   ];
 
   buildInputs = [
