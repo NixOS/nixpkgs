@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pythonOlder,
   pdm-backend,
-  appdirs,
   loguru,
+  platformdirs,
   requests,
   setuptools,
   toml,
@@ -37,8 +37,8 @@ buildPythonPackage rec {
   build-system = [ pdm-backend ];
 
   dependencies = [
-    appdirs
     loguru
+    platformdirs
     requests
     setuptools # for pkg_resources
     toml
