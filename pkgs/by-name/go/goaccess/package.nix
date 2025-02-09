@@ -7,6 +7,7 @@
   libmaxminddb,
   ncurses,
   openssl,
+  nixosTests,
   withGeolocation ? true,
 }:
 
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     "--enable-utf8"
     "--with-openssl"
   ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
+
+  passthru.tests.moduleTest = nixosTests.goaccess;
 
   meta = with lib; {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
