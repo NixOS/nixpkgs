@@ -149,6 +149,11 @@ stdenv.mkDerivation (rec {
     ln -s $out/bin/*${if lib.versionAtLeast release_version "18" then vscodeExt.name else "-vscode"} $out/share/vscode/extensions/llvm-org.${vscodeExt.name}-${vscodeExt.version}/bin
   '';
 
+  fixupPhase = ''
+    # fix noBrokenSymlinks ERROR
+    rm -v -f $out/lib/python3.12/site-packages/lldb/lldb-argdumper
+  '';
+
   passthru.vscodeExtName = vscodeExt.name;
   passthru.vscodeExtPublisher = "llvm";
   passthru.vscodeExtUniqueId = "llvm-org.${vscodeExt.name}-${vscodeExt.version}";
