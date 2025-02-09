@@ -1310,11 +1310,11 @@ self: super: builtins.intersectAttrs super {
       '';
     })) {
       inherit (super) happy;
-      happy_2_1_4 = super.happy_2_1_4.override {
-        happy-lib = self.happy-lib_2_1_4;
+      happy_2_1_5 = super.happy_2_1_5.override {
+        happy-lib = self.happy-lib_2_1_5;
       };
     })
-    happy_2_1_4
+    happy_2_1_5
     happy
     ;
 
