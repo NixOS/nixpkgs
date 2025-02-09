@@ -8,12 +8,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bevy_cli";
-  version = "v0.1.0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "TheBevyFlock";
     repo = "bevy_cli";
-    rev = "lint-${version}";
+    # the rust workspace includes multiple crates, including
+    #
+    # - bevy_cli, which is the main CLI that hosts all subcommand
+    # - bevy_lint, which is just the linter part of the main CLI
+    #
+    # currently, only the linter has been released, but the main CLI also
+    # already exposes it and will be the goto-tool in the future
+    rev = "lint-v${version}";
     hash = "sha256-WjsShx7zvJENo4xRKnb0dwjfzzcvKyjQamH98owdo3A=";
   };
 
