@@ -504,6 +504,16 @@ let
                   ;
               };
 
+              haskell.packages.ghc912 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  miso
+                  reflex-dom
+                  ;
+              };
+
               haskell.packages.ghcHEAD = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
                   ghc
