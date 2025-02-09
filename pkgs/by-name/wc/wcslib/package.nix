@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+  # DOCDIR is set to the path $out/share/doc/wcslib, and DOCLINK points
+  # to the same location.
+  # `$(LN_S) $(notdir $(DOCDIR)) $(DOCLINK)` effectively running:
+  # `ln -s wcslib $out/share/doc/wcslib`
+  # This produces a broken link because the target location already exists
+  postInstall = ''
+    rm $out/share/doc/wcslib/wcslib
+  '';
+
   meta = {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
     description = "World Coordinate System library for astronomy";
