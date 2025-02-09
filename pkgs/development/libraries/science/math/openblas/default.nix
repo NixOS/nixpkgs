@@ -158,7 +158,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.28";
+  version = "0.3.29";
 
   outputs = [
     "out"
@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    hash = "sha256-430zG47FoBNojcPFsVC7FA43FhVPxrulxAW3Fs6CHo8=";
+    hash = "sha256-n/3FGmZxnNiOEKYHSIuqX2LJS1BzYPCwLWT9DSwEoPI=";
   };
 
   postPatch = ''

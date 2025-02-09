@@ -5,7 +5,7 @@
 
    e.g.
 
-   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
+   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nix --arg supportedSystems '[builtins.currentSystem]'
 
    To build all of the bootstrapFiles bundles on every enabled platform, use:
 
@@ -70,7 +70,7 @@ let
     gmp = nativePlatforms;
     libcCross = nativePlatforms;
     nix = nativePlatforms;
-    nixUnstable = nativePlatforms;
+    nixVersions.git = nativePlatforms;
     mesa = nativePlatforms;
     rustc = nativePlatforms;
     cargo = nativePlatforms;

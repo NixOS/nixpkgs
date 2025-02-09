@@ -1,0 +1,38 @@
+From 440ccccb02ec438b4077b5885e5a1483e12c38b1 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sun, 9 Feb 2025 08:51:32 +0100
+Subject: [PATCH] build: use pkg-config to find tss2-esys
+
+Otherwise, tss2-esys's dependencies (other tss2 libraries, OpenSSL)
+won't be linked when tss2-esys is a static library.
+---
+Link: https://dev.gnupg.org/D606
+
+ configure.ac | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index dc444657f..a60c1820c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1574,8 +1574,8 @@ if test "$build_tpm2d" = "yes"; then
+     AC_SEARCH_LIBS([TSS_Create],[tss ibmtss],have_libtss=IBM,
+                    [AC_MSG_ERROR([IBM TPM Software Stack requested but not found])])
+   elif test "$with_tss" = intel; then
+-    AC_SEARCH_LIBS([Esys_Initialize],[tss2-esys],have_libtss=Intel,
+-                   [AC_MSG_ERROR([Intel TPM Software Stack requested but not found])])
++    PKG_CHECK_MODULES([LIBTSS], [tss2-esys tss2-mu tss2-rc tss2-tctildr],have_libtss=Intel,
++                      [AC_MSG_ERROR([Intel TPM Software Stack requested but not found])])
+   else
+     AC_MSG_ERROR([Invalid TPM Software Stack requested: $with_tss])
+   fi
+@@ -1605,7 +1605,6 @@ if test "$build_tpm2d" = "yes"; then
+ 	AC_MSG_WARN([Need Esys_TR_GetTpmHandle API (usually requires Intel TSS 2.4.0 or later, disabling TPM support)])
+ 	have_libtss=no
+     ])
+-    LIBTSS_LIBS="$LIBS -ltss2-mu -ltss2-rc -ltss2-tctildr"
+     AC_DEFINE(HAVE_INTEL_TSS, 1, [Defined if we have the Intel TSS])
+   fi
+   LIBS="$_save_libs"
+-- 
+2.47.0

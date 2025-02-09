@@ -57,16 +57,15 @@ melpaBuild {
   checkInputs = [
     # Emacs packages
     tempel
+  ];
 
+  nativeCheckInputs = [
     # Executables
     basedpyright
     git
     go
     gopls
     python
-  ];
-
-  nativeCheckInputs = [
     writableTmpDirAsHomeHook
   ];
 

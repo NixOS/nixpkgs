@@ -30,7 +30,7 @@
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf_21,
+  protobuf,
   python3,
   udev,
 }:
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals trezorSupport [
       hidapi
       libusb1
-      protobuf_21
+      protobuf
       python3
     ]
     ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [

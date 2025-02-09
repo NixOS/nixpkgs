@@ -21,3 +21,5 @@ addEmacsVars () {
     addToEmacsNativeLoadPath "$1/share/emacs/native-lisp"
   fi
 }
+
+addEnvHooks "$targetOffset" addEmacsVars

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   docbook_xsl,
   docbook_xml_dtd_43,
@@ -24,6 +25,16 @@ stdenv.mkDerivation rec {
     url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
+
+  patches = [
+    # Can be dropped on next release, or if we switch to Meson for
+    # this package.  Test pkgsStatic.curl still builds.
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://github.com/rockdaboot/libpsl/commit/490bd6f98a2addcade55028ea60c36cce07e21e4.patch";
+      hash = "sha256-7Uu9gaVuA9Aly2mmnhUVgv2BYQTSBODJ2rDl5xp0uVY=";
+    })
+  ];
 
   outputs =
     [

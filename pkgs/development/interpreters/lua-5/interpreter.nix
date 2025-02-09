@@ -7,7 +7,7 @@
   makeWrapper,
   self,
   packageOverrides ? (final: prev: { }),
-  substituteAll,
+  replaceVars,
   pkgsBuildBuild,
   pkgsBuildHost,
   pkgsBuildTarget,
@@ -149,8 +149,7 @@ stdenv.mkDerivation (
     postInstall = ''
       mkdir -p "$out/nix-support" "$out/share/doc/lua" "$out/lib/pkgconfig"
       cp ${
-        substituteAll {
-          src = ./utils.sh;
+        replaceVars ./utils.sh {
           luapathsearchpaths = lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
           luacpathsearchpaths = lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
         }
