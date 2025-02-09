@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Zephyruso/zashboard";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Buer-Nahida ];
   };
 }
