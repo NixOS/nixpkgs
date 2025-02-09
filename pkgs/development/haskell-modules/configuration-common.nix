@@ -166,7 +166,7 @@ self: super: {
 
   # jacinda needs latest version of alex and happy
   jacinda = super.jacinda.override {
-    happy = self.happy_2_1_4;
+    happy = self.happy_2_1_5;
   };
 
   # Test suite hangs on 32bit. Unclear if this is a bug or not, but if so, then
@@ -1717,7 +1717,7 @@ self: super: {
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_2_1 = doDistribute (dontCheck super.haskeline_0_8_2_1);
+  haskeline_0_8_3_0 = doDistribute (dontCheck super.haskeline_0_8_3_0);
 
   # Too strict upper bound on HTF
   # https://github.com/nikita-volkov/stm-containers/issues/29
@@ -1881,7 +1881,7 @@ self: super: {
   # 2022-03-19: strict upper bounds https://github.com/poscat0x04/hinit/issues/2
   hinit = doJailbreak
     (self.generateOptparseApplicativeCompletions [ "hi" ]
-      (super.hinit.override { haskeline = self.haskeline_0_8_2_1; }));
+      super.hinit);
 
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;

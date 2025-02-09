@@ -44,7 +44,7 @@ self: super: {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -78,9 +78,6 @@ self: super: {
   newtype-generics = doJailbreak super.newtype-generics; # base < 4.19
   hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
   svg-builder = doJailbreak super.svg-builder; # base <4.19, bytestring <0.12, text <2.1
-  # Too strict bound on base, believe it or not.
-  # https://github.com/judah/terminfo/pull/55#issuecomment-1876894232
-  terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
   saltine = doJailbreak super.saltine; # bytestring  && <0.12, deepseq <1.5, text > 1.2 && <1.3 || >=2.0 && <2.1
