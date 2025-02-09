@@ -1,0 +1,13 @@
+diff --git a/src/mailman/core/logging.py b/src/mailman/core/logging.py
+index f8f87279f..7ff13b003 100644
+--- a/src/mailman/core/logging.py
++++ b/src/mailman/core/logging.py
+@@ -142,6 +142,8 @@ def _init_logger(propagate, sub_name, log, logger_config):
+         address, facility = _get_syslog_params(logger_config)
+         handler = logging.handlers.SysLogHandler(
+             address=address, facility=facility)
++    elif logger_config.handler == 'stderr':
++        handler = logging.StreamHandler(sys.stderr)
+     else:
+         path_str = logger_config.path
+         path_abs = os.path.normpath(os.path.join(config.LOG_DIR, path_str))

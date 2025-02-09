@@ -1,0 +1,37 @@
+diff --git a/mkdocs_gitlab_plugin/plugin.py b/mkdocs_gitlab_plugin/plugin.py
+index e8d7ab7..8b883f5 100644
+--- a/mkdocs_gitlab_plugin/plugin.py
++++ b/mkdocs_gitlab_plugin/plugin.py
+@@ -3,7 +3,7 @@
+ import re
+ import mkdocs
+ 
+-from mkdocs.config import Config
++from mkdocs.config.config_options import Type
+ from mkdocs.plugins import BasePlugin
+ 
+ class GitlabLinksPlugin(BasePlugin):
+@@ -13,8 +13,8 @@ class GitlabLinksPlugin(BasePlugin):
+     '''
+ 
+     config_scheme = (
+-        ('gitlab_url', mkdocs.config.config_options.Type(str, default='http://gitlab.com/XXX')),
+-        ('verbose', mkdocs.config.config_options.Type(bool, default=False))
++        ('gitlab_url', Type(str, default='http://gitlab.com/XXX')),
++        ('verbose', Type(bool, default=False))
+     )
+ 
+     TOKEN_PATHS = {
+diff --git a/mkdocs_gitlab_plugin/test.py b/mkdocs_gitlab_plugin/test.py
+index 4a5c35f..d5a19c6 100644
+--- a/mkdocs_gitlab_plugin/test.py
++++ b/mkdocs_gitlab_plugin/test.py
+@@ -1,7 +1,7 @@
+ 
+ import sys
+ 
+-from plugin import GitlabLinksPlugin
++from .plugin import GitlabLinksPlugin
+ 
+ if __name__ == '__main__':
+     plugin = GitlabLinksPlugin()

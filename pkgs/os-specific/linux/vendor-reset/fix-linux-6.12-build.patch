@@ -1,0 +1,56 @@
+From ab1b34848097587aca1f248958358ddb1dc90917 Mon Sep 17 00:00:00 2001
+From: mfrischknecht <manuel.frischknecht@gmail.com>
+Date: Sat, 23 Nov 2024 23:43:53 +0100
+Subject: [PATCH 1/2] Import `unaligned.h` from `linux`
+
+`asm/unaligned.h` has been moved to `linux/unaligned.h` since Linux v. 6.12.
+C.f. e.g. https://github.com/torvalds/linux/commit/5f60d5f6bbc12e782fac78110b0ee62698f3b576
+---
+ src/amd/amdgpu/atom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/amd/amdgpu/atom.c b/src/amd/amdgpu/atom.c
+index 333961f..d14c849 100644
+--- a/src/amd/amdgpu/atom.c
++++ b/src/amd/amdgpu/atom.c
+@@ -29,7 +29,7 @@
+ #include <linux/slab.h>
+ #include <linux/delay.h>
+ #include <linux/version.h>
+-#include <asm/unaligned.h>
++#include <linux/unaligned.h>
+ 
+ //#include <drm/drm_util.h>
+ //#include <drm/drm_print.h>
+
+From 54ffd6a012e7567b0288bc5fcc3678b545bd5aec Mon Sep 17 00:00:00 2001
+From: mfrischknecht <manuel.frischknecht@gmail.com>
+Date: Wed, 27 Nov 2024 07:09:37 +0100
+Subject: [PATCH 2/2] Make new include path conditional
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+…so the module builds for both kernels below 6.12 and above. Thanks, @VoodaGod!
+
+Co-authored-by: Jason Rensburger <l33tjas.0n@gmail.com>
+---
+ src/amd/amdgpu/atom.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/amd/amdgpu/atom.c b/src/amd/amdgpu/atom.c
+index d14c849..36d45ff 100644
+--- a/src/amd/amdgpu/atom.c
++++ b/src/amd/amdgpu/atom.c
+@@ -29,7 +29,11 @@
+ #include <linux/slab.h>
+ #include <linux/delay.h>
+ #include <linux/version.h>
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
++#include <asm/unaligned.h>
++#else
+ #include <linux/unaligned.h>
++#endif
+ 
+ //#include <drm/drm_util.h>
+ //#include <drm/drm_print.h>

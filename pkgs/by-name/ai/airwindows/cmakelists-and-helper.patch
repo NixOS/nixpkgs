@@ -1,0 +1,31 @@
+diff --git a/plugins/LinuxVST/CMakeLists.txt b/plugins/LinuxVST/CMakeLists.txt
+index f43ea128..b87a5c03 100755
+--- a/plugins/LinuxVST/CMakeLists.txt
++++ b/plugins/LinuxVST/CMakeLists.txt
+@@ -2,11 +2,24 @@ cmake_minimum_required(VERSION 3.9)
+ project(airwindows_ports)
+ 
+ set(CMAKE_CXX_STANDARD 14)
+-add_compile_options(-O2 -D__cdecl=)
++add_compile_options(-D__cdecl=)
++
++set(VST2_SDK_PATH "${PROJECT_SOURCE_DIR}/include/vstsdk" CACHE STRING "VST2 SDK Path")
++
++set(VSTSDK_ROOT
++    "${VST2_SDK_PATH}"
++    "${VST2_SDK_PATH}/pluginterfaces/vst2.x/"
++    "${VST2_SDK_PATH}/public.sdk/source/vst2.x/"
++)
++
++set(VSTSDK_SOURCES
++    "${VST2_SDK_PATH}/public.sdk/source/vst2.x/audioeffectx.cpp"
++    "${VST2_SDK_PATH}/public.sdk/source/vst2.x/audioeffect.cpp"
++    "${VST2_SDK_PATH}/public.sdk/source/vst2.x/vstplugmain.cpp"
++)
+ 
+ include(Helpers.cmake)
+ 
+-add_subdirectory(include/vstsdk)
+ add_airwindows_plugin(Acceleration)
+ add_airwindows_plugin(Acceleration2)
+ add_airwindows_plugin(ADClip7)
