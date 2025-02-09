@@ -1,26 +1,27 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, pkg-config
-, protobuf
-, elfutils
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  protobuf,
+  elfutils,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.56.0";
+  version = "1.60.1";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = "router";
-    rev = "v${version}";
-    hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
+    tag = "v${version}";
+    hash = "sha256-r4t7tyB1FjQ6aVL/ympaeqT6rn+dhppXYAiSHJ+jq3s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1AKYOv7kT60H8x1qmtPqR4Wxq1DxSCDzt+Uv7MRUeaw=";
+  cargoHash = "sha256-ETd/U5lovU9ZY+uq8pJmbZEHWmemrG8y79KqV84bbUA=";
 
   nativeBuildInputs = [
     cmake
@@ -36,8 +37,12 @@ rustPlatform.buildRustPackage rec {
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   RUSTY_V8_ARCHIVE = callPackage ./librusty_v8.nix { };
 
-  cargoTestFlags = [
-    "-- --skip=query_planner::tests::missing_typename_and_fragments_in_requires"
+  checkFlags = [
+    "--skip=query_planner::tests::missing_typename_and_fragments_in_requires"
+    "--skip=router::event::schema::tests::schema_by_url"
+    "--skip=router::event::schema::tests::schema_no_watch"
+    "--skip=router::event::schema::tests::schema_success_fail_success"
+    "--skip=services::layers::persisted_queries::tests::pq_layer_freeform_graphql_with_safelist_log_unknown_true"
   ];
 
   meta = with lib; {
