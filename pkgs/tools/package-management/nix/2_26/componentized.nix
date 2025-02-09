@@ -6,7 +6,6 @@
   newScope,
   pkgs,
   stdenv,
-  libgit2-thin-packfile,
   ...
 }:
 let
@@ -44,7 +43,6 @@ let
           inherit pkgs;
           inherit stdenv;
           inherit src;
-          inherit libgit2-thin-packfile;
         };
       };
 in
