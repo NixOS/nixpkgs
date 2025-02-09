@@ -129,6 +129,16 @@
       "agpl"
     ]
   },
+  "integration_deepl": {
+    "hash": "sha256-FKlu1tlA/GxAHKFu4kfq8CsDvBrnMnLKDizisgb0IOQ=",
+    "url": "https://github.com/nextcloud-releases/integration_deepl/releases/download/v1.3.1/integration_deepl-v1.3.1.tar.gz",
+    "version": "1.3.1",
+    "description": "Deepl integration providing an translations through deepl.com with Nextcloud\n\nThis app integrates with [Nextcloud Assistant](https://apps.nextcloud.com/apps/assistant) to offer translation services We recommend to install Assistant additionally and activate Deepl as translation provider in the Artifical Intelligence admin settings.\n\nThis app also integrates with the translation API of Nextcloud server to offer translation services without Assistant. Currently this is available in Text and Talk.\n\nTo run translations and any other Task Processing tasks synchronously, run the following command in a background process (10 is the interval in seconds when the process should relaunch to use the latest php changes):\n\n```sh\nset -e; while true; do occ background-job:worker -v -t 10 \"OC\\TaskProcessing\\SynchronousBackgroundJob\"; done\n```\n\n## Ethical AI Rating\n### Rating: 🔴\n\nNegative:\n* the software for training and inferencing of this model is proprietary, limiting running it locally or training by yourself\n* the trained model is not freely available, so the model can not be ran on-premises\n* the training data is not freely available, limiting the ability of external parties to check and correct for bias or optimise the model’s performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
+    "homepage": "https://github.com/nextcloud/integration_deepl",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "integration_openai": {
     "hash": "sha256-Dc7E5c9/rX4xgk7+spbwNWed57TDaO5oVPW6WDTXz/k=",
     "url": "https://github.com/nextcloud-releases/integration_openai/releases/download/v3.3.0/integration_openai-v3.3.0.tar.gz",
@@ -265,6 +275,16 @@
     "version": "24.11.0",
     "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
     "homepage": "https://github.com/pbek/qownnotesapi",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "quota_warning": {
+    "hash": "sha256-hQpbARBAKYakjwp/LGYMIFhjVRxqfQj36x6QF8HIfEA=",
+    "url": "https://github.com/nextcloud-releases/quota_warning/releases/download/v1.20.0/quota_warning-v1.20.0.tar.gz",
+    "version": "1.20.0",
+    "description": "This app sends notifications to users when they reached 85, 90 and 95% of their quota (checked once a day).\nIn addition an email can be sent to the users. The three percentages can be changed in the admin settings.\nIt is also possible to have a link in the email and the notification for upsell options.",
+    "homepage": "https://github.com/nextcloud/quota_warning",
     "licenses": [
       "agpl"
     ]
