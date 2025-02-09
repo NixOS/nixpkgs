@@ -2,16 +2,21 @@
   lib,
   stdenv,
   buildPythonPackage,
-  rustPlatform,
   fetchFromGitHub,
-  darwin,
-  libiconv,
+  rustPlatform,
+
+  # buildInputs
   openssl,
+
+  # nativeBuildInputs
   pkg-config,
   protobuf,
+
+  # dependencies
   attrs,
   cachetools,
   deprecation,
+  nest-asyncio,
   overrides,
   packaging,
   pydantic,
@@ -19,6 +24,8 @@
   requests,
   retry,
   tqdm,
+
+  # tests
   aiohttp,
   pandas,
   polars,
@@ -30,23 +37,22 @@
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${version}";
-    hash = "sha256-URgJFSrCccp9DBdW2VQgft1GZHu48pb8RrLHmBBow5Q=";
+    hash = "sha256-AvISt9YpnHFrxRQYkkycXmsHSRs9QcBUe0DLXMYGrEI=";
   };
 
   buildAndTestSubdir = "python";
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-0mBCBQTv9nsHiQDUrZfm5+ZUGp3A2k8+DH/T85Vq2KA=";
+  };
 
   build-system = [ rustPlatform.maturinBuildHook ];
 
@@ -56,24 +62,15 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      libiconv
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
 
   dependencies = [
     attrs
     cachetools
     deprecation
+    nest-asyncio
     overrides
     packaging
     pydantic
@@ -100,37 +97,30 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not slow'" ];
 
-  disabledTests =
+  disabledTests = [
+    # require tantivy which is not packaged in nixpkgs
+    "test_basic"
+    "test_fts_native"
+
+    # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
+    # https://github.com/lancedb/lancedb/issues/1539
+    "test_polars"
+  ];
+
+  disabledTestPaths =
     [
-      # require tantivy which is not packaged in nixpkgs
-      "test_basic"
-
-      # polars.exceptions.ComputeError: TypeError: _scan_pyarrow_dataset_impl() got multiple values for argument 'batch_size'
-      # https://github.com/lancedb/lancedb/issues/1539
-      "test_polars"
-
-      # Requires tantivy which is not packaged in nixpkgs
-      "test_fts_native"
+      # touch the network
+      "test_s3.py"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fail with darwin sandbox
-      "test_async_remote_db"
-      "test_http_error"
-      "test_retry_error"
+      # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+      "test_remote_db.py"
     ];
-
-  disabledTestPaths = [
-    # touch the network
-    "test_s3.py"
-  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
       "python-v(.*)"
-      "--generate-lockfile"
-      "--lockfile-metadata-path"
-      "python"
     ];
   };
 
