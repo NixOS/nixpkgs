@@ -36,6 +36,10 @@ buildPythonPackage rec {
     textual
   ];
 
+  pythonRelaxDeps = [
+    "syrupy"
+  ];
+
   # Module has no tests
   doCheck = false;
 
