@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://xff.cz/git/megatools";
     rev = version;
-    sha256 = "sha256-z2BUSNXl0u+28TzhLmNjcgNVLBmr3m+FuRWr8o/EINw=";
+    hash = "sha256-z2BUSNXl0u+28TzhLmNjcgNVLBmr3m+FuRWr8o/EINw=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line client for Mega.co.nz";
-    homepage = "https://megatools.megous.com/";
+    homepage = "https://xff.cz/megatools/";
+    changelog = "https://xff.cz/megatools/builds/NEWS";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
