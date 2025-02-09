@@ -7,7 +7,6 @@
   pkgs,
 
   stdenv,
-  libgit2-thin-packfile,
 }:
 
 let
@@ -139,7 +138,6 @@ let
 in
 scope: {
   inherit stdenv;
-  inherit libgit2-thin-packfile;
 
   aws-sdk-cpp =
     (pkgs.aws-sdk-cpp.override {
@@ -158,8 +156,6 @@ scope: {
   boehmgc = pkgs.boehmgc.override {
     enableLargeConfig = true;
   };
-
-  libgit2 = libgit2-thin-packfile;
 
   inherit resolvePath filesetToSource;
 
