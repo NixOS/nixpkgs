@@ -347,7 +347,6 @@ let
         mkExtraBuildCommands0 cc
         + ''
           ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
-          ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/share" "$rsrc/share"
         '';
       mkExtraBuildCommands =
         cc:

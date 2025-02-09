@@ -163,6 +163,7 @@ stdenv.mkDerivation (
         cargoInstallHook
         cargoSetupHook
         rustc
+        cargo
       ];
 
     buildInputs =

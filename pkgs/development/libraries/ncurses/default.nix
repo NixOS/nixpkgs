@@ -16,15 +16,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.4.20221231";
+  version = "6.5";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    urls = [
-      "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
-      "https://ftp.gnu.org/gnu/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
-    ];
-    hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    hash = "sha256-E22RvCaamleF5fnpgLx2q1dCj2BM4+WlqQzrx2eXHMY=";
   };
 
   outputs = [ "out" "dev" "man" ];

@@ -131,6 +131,9 @@ cmakeConfigurePhase() {
         enableParallelBuilding=1
         echo "cmake: enabled parallel building"
     fi
+    if [[ "$enableParallelBuilding" -ne 0 ]]; then
+        export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
+    fi
 
     if ! [[ -v enableParallelInstalling ]]; then
         enableParallelInstalling=1

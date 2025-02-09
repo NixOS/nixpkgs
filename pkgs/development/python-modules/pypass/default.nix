@@ -13,7 +13,7 @@
   pythonAtLeast,
   pytestCheckHook,
   setuptools,
-  substituteAll,
+  replaceVars,
   tree,
   xclip,
 }:
@@ -32,8 +32,7 @@ buildPythonPackage rec {
 
   # Set absolute nix store paths to the executables that pypass uses
   patches = [
-    (substituteAll {
-      src = ./mark-executables.patch;
+    (replaceVars ./mark-executables.patch {
       git_exec = "${gitMinimal}/bin/git";
       grep_exec = "${gnugrep}/bin/grep";
       gpg_exec = "${gnupg}/bin/gpg2";

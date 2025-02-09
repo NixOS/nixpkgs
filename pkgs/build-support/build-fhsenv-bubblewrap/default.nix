@@ -94,7 +94,7 @@ let
       files = [
         # NixOS Compatibility
         "static"
-        "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+        "nix" # mainly for nixVersions.git users, but also for access to nix/netrc
         # Shells
         "shells"
         "bashrc"
