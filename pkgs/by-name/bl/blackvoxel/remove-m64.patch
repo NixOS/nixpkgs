@@ -1,0 +1,55 @@
+diff --git a/src/sc_Squirrel3/sq/Makefile b/src/sc_Squirrel3/sq/Makefile
+index 08fb2ef..89d2f9d 100644
+--- a/src/sc_Squirrel3/sq/Makefile
++++ b/src/sc_Squirrel3/sq/Makefile
+@@ -18,10 +18,10 @@ sqprof:
+ 	$(CXX) -O2 -pg -fno-exceptions -fno-rtti -pie -gstabs -g3 -o $(OUT) $(SRCS) $(INCZ) $(LIBZ) $(LIB)
+ 	
+ sq64:
+-	$(CXX) -O2 -s -m64 -fno-exceptions -fno-rtti -D_SQ64 -o $(OUT) $(SRCS) $(INCZ) $(LIBZ) $(LIB)
++	$(CXX) -O2 -s -fno-exceptions -fno-rtti -D_SQ64 -o $(OUT) $(SRCS) $(INCZ) $(LIBZ) $(LIB)
+ 	
+ sq64d:
+-	$(CXX) -O0 -g3 -m64 -fno-exceptions -fno-rtti -D_SQ64 -o $(OUT) $(SRCS) $(INCZ) $(LIBZ) $(LIB)
++	$(CXX) -O0 -g3 -fno-exceptions -fno-rtti -D_SQ64 -o $(OUT) $(SRCS) $(INCZ) $(LIBZ) $(LIB)
+ 	
+ .PHONY: clean mrproper
+ 
+diff --git a/src/sc_Squirrel3/sqstdlib/Makefile b/src/sc_Squirrel3/sqstdlib/Makefile
+index 41ee3f7..4322f46 100644
+--- a/src/sc_Squirrel3/sqstdlib/Makefile
++++ b/src/sc_Squirrel3/sqstdlib/Makefile
+@@ -36,12 +36,12 @@ sqprof:
+ 	rm *.o
+ 	
+ sq64:
+-	$(CC) -O2 -m64 -fno-exceptions -D_SQ64 -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
++	$(CC) -O2 -fno-exceptions -D_SQ64 -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
+ 	$(AR) rc $(OUT) *.o
+ 	rm *.o
+ 	
+ sq64d:
+-	$(CC) -O0 -g3 -m64 -fno-exceptions -D_SQ64 -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
++	$(CC) -O0 -g3 -fno-exceptions -D_SQ64 -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ)
+ 	$(AR) rc $(OUT) *.o
+ 
+ .PHONY: clean mrproper
+diff --git a/src/sc_Squirrel3/squirrel/Makefile b/src/sc_Squirrel3/squirrel/Makefile
+index be2c281..80c4681 100644
+--- a/src/sc_Squirrel3/squirrel/Makefile
++++ b/src/sc_Squirrel3/squirrel/Makefile
+@@ -47,12 +47,12 @@ sqprof:
+ 	rm *.o
+ 
+ sq64:
+-	$(CC) -O2 -m64 -D_SQ64 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) $(DEFS)
++	$(CC) -O2 -D_SQ64 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) $(DEFS)
+ 	$(AR) rc $(OUT) *.o
+ 	rm *.o
+ 
+ sq64d:
+-	$(CC) -O0 -g3 -m64 -D_SQ64 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) $(DEFS)
++	$(CC) -O0 -g3 -D_SQ64 -fno-exceptions -fno-rtti -Wall -fno-strict-aliasing -c $(SRCS) $(INCZ) $(DEFS)
+ 	$(AR) rc $(OUT) *.o
+ 
+ .PHONY: clean mrproper
