@@ -67,6 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/bwa-mem2/bwa-mem2/";
     changelog = "https://github.com/bwa-mem2/bwa-mem2/blob/${finalAttrs.src.rev}/NEWS.md";
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ alxsimon ];
+    maintainers = with maintainers; [ apraga ];
   };
 })
