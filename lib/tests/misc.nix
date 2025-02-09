@@ -22,6 +22,7 @@ let
   lib = import ../default.nix;
 
   inherit (lib)
+    fallback
     allUnique
     and
     attrNames
@@ -2611,5 +2612,45 @@ runTests {
       directory = ./packages-from-directory/c;
     };
     expected = "c";
+  };
+
+  # Tests for lib.fallback
+  # Truthy
+  testFallbackTruthyString = {
+    expr = fallback "default" null;
+    expected = "default";
+  };
+  testFallbackTruthyList = {
+    expr = fallback [ 1 2 3 ] null;
+    expected = [ 1 2 3 ];
+  };
+  testFallbackTruthyAttrs = {
+    expr = fallback { foo = "bar"; } null;
+    expected = { foo = "bar"; };
+  };
+  testFallbackTruthyBool= {
+    expr = fallback true null;
+    expected = true;
+  };
+  # Falsey
+  testFallbackFalseyNull = {
+    expr = fallback null "fallback";
+    expected = "fallback";
+  };
+  testFallbackFalseyList = {
+    expr = fallback [] [ 1 2 3 ];
+    expected = [ 1 2 3 ];
+  };
+  testFallbackFalseyAttrs = {
+    expr = fallback {} { foo = "bar"; };
+    expected = { foo = "bar"; };
+  };
+  testFallbackFalseyBool = {
+    expr = fallback false true;
+    expected = true;
+  };
+  testFallbackFalseyString = {
+    expr = fallback "" "fallback";
+    expected = "fallback";
   };
 }
