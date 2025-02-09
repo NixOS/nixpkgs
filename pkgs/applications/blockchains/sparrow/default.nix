@@ -16,19 +16,19 @@
   tor,
   zlib,
   openimajgrabber,
-  hwi,
   imagemagick,
   gzip,
   gnupg,
+  libusb1,
 }:
 
 let
   pname = "sparrow";
-  version = "2.0.0";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "sha256-Z4rA3KObPAOuJeI+TzyYaXDyptAxBAWzYJDTplUvw50=";
+    hash = "sha256-Fbq9+GmKL40QnxlKtbVYLiZRVbknY+YF/9rl3/cuLnA=";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
@@ -57,12 +57,12 @@ let
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
-    sha256 = "sha256-qjkKw3WmbRBf+yqcSIYVWmYz8M3u2JxnBriR0Ec/C7A=";
+    hash = "sha256-Y7A/q8VqTHoJbLkLMUYxiYCbvhCEfTQS+4Z5b9yCy+k=";
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
-    sha256 = "sha256-CRrEzWqFVFQGWsh2+rjSuGHuFmf+y6SetCi2G89jZ/0=";
+    hash = "sha256-iIYqGdcJgIbPok6ue62l6dGlg+KdzqBkulyMqFjk8gk=";
   };
 
   publicKey = ./publickey.asc;
@@ -145,6 +145,7 @@ let
       autoPatchelfHook
       (lib.getLib stdenv.cc.cc)
       zlib
+      libusb1
     ];
 
     buildPhase = ''
@@ -187,7 +188,9 @@ let
       rm -fR com.sparrowwallet.merged.module/linux-aarch64
       rm -fR com.sparrowwallet.merged.module/linux-arm
       rm -fR com.sparrowwallet.merged.module/linux-x86
-      rm com.sparrowwallet.sparrow/native/linux/x64/hwi
+      rm -fR com.fazecast.jSerialComm/OpenBSD
+      rm -fR com.fazecast.jSerialComm/Android
+      rm -fR com.fazecast.jSerialComm/Solaris
 
       ls | xargs -d " " -- echo > ../manifest.txt
       find . | grep "\.so$" | xargs -- chmod ugo+x
@@ -204,7 +207,6 @@ let
       cp manifest.txt $out/
       cp -r modules/ $out/
       ln -s ${openimajgrabber}/lib/OpenIMAJGrabber.so $out/modules/com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_x64/OpenIMAJGrabber.so
-      ln -s ${hwi}/bin/hwi $out/modules/com.sparrowwallet.sparrow/native/linux/x64/hwi
     '';
   };
 in
@@ -264,8 +266,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
 
-    mkdir -p $out/etc/udev/rules.d
-    cp ${hwi}/lib/python*/site-packages/hwilib/udev/*.rules $out/etc/udev/rules.d
+    mkdir -p $out/etc/udev/
+    ln -s ${sparrow-modules}/modules/com.sparrowwallet.lark/udev $out/etc/udev/rules.d
 
     runHook postInstall
   '';
