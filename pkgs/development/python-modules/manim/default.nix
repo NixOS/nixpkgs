@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  setuptools,
 
   # buildInputs
   cairo,
@@ -197,6 +198,7 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
+    setuptools
   ];
 
   patches = [ ./pytest-report-header.patch ];
