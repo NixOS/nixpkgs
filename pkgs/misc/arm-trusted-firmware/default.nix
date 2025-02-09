@@ -164,17 +164,6 @@ in {
     platform = "rk3588";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
-
-    # TODO: remove this once the following get merged:
-    # 1: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840
-    # 2: https://review.trustedfirmware.org/c/ci/tf-a-ci-scripts/+/21833
-    src = fetchFromGitLab {
-      domain = "gitlab.collabora.com";
-      owner = "hardware-enablement/rockchip-3588";
-      repo = "trusted-firmware-a";
-      rev = "002d8e85ce5f4f06ebc2c2c52b4923a514bfa701";
-      hash = "sha256-1XOG7ILIgWa3uXUmAh9WTfSGLD/76OsmWrUhIxm/zTg=";
-    };
   };
 
   armTrustedFirmwareS905 = buildArmTrustedFirmware rec {
