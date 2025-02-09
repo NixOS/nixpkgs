@@ -4496,19 +4496,6 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
-  feline-nvim = buildVimPlugin {
-    pname = "feline.nvim";
-    version = "2025-01-24";
-    src = fetchFromGitHub {
-      owner = "freddiehaddad";
-      repo = "feline.nvim";
-      rev = "8184e3765d2a604b73c059f7eeab73212575fb0e";
-      sha256 = "0fwsly72b9s7gjk1sval25mwp3s9v5ha8x1rks50ljcl5xvfzci6";
-    };
-    meta.homepage = "https://github.com/freddiehaddad/feline.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   fennel-vim = buildVimPlugin {
     pname = "fennel.vim";
     version = "2020-11-15";
