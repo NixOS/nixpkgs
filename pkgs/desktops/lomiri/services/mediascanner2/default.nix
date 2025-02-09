@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   testers,
   # dbus-cpp not compatible with Boost 1.87
   # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
@@ -101,7 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # music app needs mediascanner to work properly, so it can find files
+      music-app = nixosTests.lomiri-music-app;
+
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 
