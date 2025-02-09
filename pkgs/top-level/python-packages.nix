@@ -8254,6 +8254,8 @@ self: super: with self; {
 
   misoc = callPackage ../development/python-modules/misoc { };
 
+  miss-hit-core = callPackage ../development/python-modules/miss-hit-core { };
+
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
   mistune = callPackage ../development/python-modules/mistune { };
