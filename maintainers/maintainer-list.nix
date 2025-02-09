@@ -14347,6 +14347,11 @@
     githubId = 36074738;
     name = "MasterEvarior";
   };
+  Mastermines1 = {
+    github = "Mastermines1";
+    githubID = 85805049;
+    name = "Mastermines";
+  };
   matdibu = {
     email = "contact@mateidibu.dev";
     github = "matdibu";
