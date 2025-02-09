@@ -259,7 +259,7 @@ in
         description = ''
           Thinkfan settings. Use this option to configure thinkfan
           settings not exposed in a NixOS option or to bypass one.
-          Before changing this, read the `{manpage}`thinkfan.conf(5)``
+          Before changing this, read the {manpage}`thinkfan.conf(5)`
           manpage and take a look at the example config file at
           <https://github.com/vmatare/thinkfan/blob/master/examples/thinkfan.yaml>
         '';

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -35,12 +34,11 @@
   exempi,
   cargo,
   rustPlatform,
-  rustfmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "47.0";
+  version = "47.3";
 
   outputs = [
     "out"
@@ -50,17 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-z2nrCjcX/jVAEWFuL2Ajg4FP9Xt6nqzzBsZ25k2PZmY=";
+    hash = "sha256-PlhTk+gef6D5r55U38hvYSa1w9hS6pDf3DumsHlSxKo=";
   };
-
-  # FIXME: remove in next version
-  patches = [
-    (fetchpatch {
-      name = "fix-crash-when-drag-and-drop";
-      url = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/commit/455ad2aebe5e5d5a57a2f4defc6af054927eac73.patch";
-      hash = "sha256-PeWlFhvM8UzUFRaK9k/9Txwgta/EiFnMRjHwld3O+cU=";
-    })
-  ];
 
   cargoRoot = "shell-rs";
 
@@ -87,9 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     yelp-tools
     cargo
     rustPlatform.cargoSetupHook
-    # FIXME: remove rustfmt in next version
-    # https://gitlab.gnome.org/GNOME/Incubator/papers/-/commit/d0093c8c9cbacfbdafd70b6024982638b30a2591
-    rustfmt
   ];
 
   buildInputs =
@@ -129,10 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!supportNautilus) [
       "-Dnautilus=false"
     ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
-  ) "-Wno-error=incompatible-function-pointer-types";
 
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \

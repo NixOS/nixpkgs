@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "flexit-bacnet";
-  version = "2.2.2";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "piotrbulinski";
     repo = "flexit_bacnet";
     tag = version;
-    hash = "sha256-c5561ewnAybYcdqesWYEgfT7Y+TetOjxLZeMTJ1ToUk=";
+    hash = "sha256-MudBn+ki/jqeFK1iz/vAXaXkkddLThO+1T4BXFJ90lk=";
   };
 
   build-system = [ setuptools ];
