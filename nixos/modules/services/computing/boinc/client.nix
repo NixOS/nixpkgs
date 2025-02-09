@@ -54,6 +54,18 @@ in
       '';
     };
 
+    virtualbox = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = lib.literalExpression "true";
+        description = ''
+          This would add the boinc user to the virtualbox's group, as well as
+          enable the virtualbox service.
+        '';
+      };
+    };
+
     extraEnvPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
@@ -62,9 +74,9 @@ in
         Additional packages to make available in the environment in which
         BOINC will run. Common choices are:
 
-        - {var}`pkgs.virtualbox`:
-          The VirtualBox virtual machine framework. Required by some BOINC
-          projects, such as ATLAS@home.
+        Please note that putting `pkgs.virtualbox` here would result the
+        non-wrapped version being used, and it will not work.
+
         - {var}`pkgs.ocl-icd`:
           OpenCL infrastructure library. Required by BOINC projects that
           use OpenCL, in addition to a device-specific OpenCL driver.
@@ -88,8 +100,13 @@ in
       description = "BOINC Client";
       home = cfg.dataDir;
       isSystemUser = true;
+      extraGroups = lib.mkIf cfg.virtualbox.enable [ "vboxusers" ];
     };
     users.groups.boinc = { };
+
+    virtualisation.virtualbox.host = lib.mkIf cfg.virtualbox.enable {
+      enable = true;
+    };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - boinc boinc - -"
