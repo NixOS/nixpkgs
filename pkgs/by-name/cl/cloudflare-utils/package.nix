@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "cloudflare-utils";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "Cyb3r-Jak3";
     repo = "cloudflare-utils";
     rev = "v${version}";
-    hash = "sha256-XYOYun7PmZEQQRVCi46tBYoNZdXedmhpdUygtVlU0bE=";
+    hash = "sha256-LbqH48ysOp2s+e+52doHIyaxUbzzCdJqhdvLuIJ3CCc=";
   };
 
   vendorHash = "sha256-fg2BJkXdCWAO83kMoxkHlEyZuVezu9rs0hEda17KObE=";

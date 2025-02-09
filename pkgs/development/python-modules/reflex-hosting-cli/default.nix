@@ -9,6 +9,7 @@
   platformdirs,
   pydantic,
   python-dateutil,
+  pyyaml,
   rich,
   tabulate,
   typer,
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     platformdirs
     pydantic
     python-dateutil
+    pyyaml
     rich
     tabulate
     typer

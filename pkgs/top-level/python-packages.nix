@@ -5791,7 +5791,7 @@ self: super: with self; {
   h2 = callPackage ../development/python-modules/h2 { };
 
   h3 = callPackage ../development/python-modules/h3 {
-    inherit (pkgs) h3;
+    h3 = pkgs.h3_4;
   };
 
   h5io = callPackage ../development/python-modules/h5io { };
@@ -10729,9 +10729,7 @@ self: super: with self; {
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
-  pylance = callPackage ../development/python-modules/pylance {
-    inherit (pkgs) protobuf;
-  };
+  pylance = callPackage ../development/python-modules/pylance { };
 
   pyldavis = callPackage ../development/python-modules/pyldavis { };
 

@@ -12398,8 +12398,8 @@ with pkgs;
   };
 
   udev =
-    if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
-    else systemdLibs;
+    if lib.meta.availableOn stdenv.hostPlatform systemdLibs then systemdLibs
+    else libudev-zero;
 
   sysvtools = sysvinit.override {
     withoutInitTools = true;
@@ -15589,6 +15589,10 @@ with pkgs;
   vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
   vscodium-fhs = vscodium.fhs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
+
+  windsurf = callPackage ../by-name/wi/windsurf/package.nix {
+    vscode-generic = ../applications/editors/vscode/generic.nix;
+  };
 
   openvscode-server = callPackage ../servers/openvscode-server {
     nodejs = nodejs_18;

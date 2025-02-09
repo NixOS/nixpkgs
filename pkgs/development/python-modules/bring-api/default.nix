@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bring-api";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "miaucl";
     repo = "bring-api";
     tag = version;
-    hash = "sha256-1K8CijA2cSyofH/qanOsDRLqnQZyBTqsnrUtvZYBS2c=";
+    hash = "sha256-ohWemgZhnUUz5O40nIlrTN1jEUDQvGGLNvqXNbYYAaM=";
   };
 
   build-system = [ setuptools ];

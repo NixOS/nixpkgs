@@ -77,6 +77,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-x5qFCprn8q0xC88HudLV7W53X1Nkbz3F52RMp2PxIu8=";
   };
 
+  # There are broken symlinks in the node_modules
+  dontCheckForBrokenSymlinks = true;
+
   outputs = [
     "out"
     "cli"

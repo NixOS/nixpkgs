@@ -55,7 +55,7 @@ package_attrs = json.loads(subprocess.run(
         "--apply", """p: {
           dir = builtins.dirOf p.meta.position;
           version = p.version;
-          sourceHash = p.src.outputHash;
+          sourceHash = p.src.src.outputHash;
           yarnHash = p.yarnOfflineCache.outputHash;
         }""",
         "--",
@@ -97,22 +97,9 @@ source_nix_hash, source_store_path = subprocess.run(
 old_source_hash = package_attrs["sourceHash"]
 new_source_hash = nix_hash_to_sri(source_nix_hash)
 
-old_yarn_hash = package_attrs["yarnHash"]
-new_yarn_hash = nix_hash_to_sri(subprocess.run(
-    [
-        "prefetch-yarn-deps",
-        # does not support "--" separator :(
-        # Also --verbose writes to stdout, yikes.
-        os.path.join(source_store_path, "yarn.lock"),
-    ],
-    stdout=subprocess.PIPE,
-    text=True,
-    check=True,
-).stdout.rstrip())
-
 package_dir = package_attrs["dir"]
 package_file_name = "package.nix"
-deps_file_name = "deps.nix"
+deps_file_name = "deps.json"
 
 # To update deps.nix, we copy the package to a temporary directory and run
 # passthru.fetch-deps script there.
@@ -127,6 +114,39 @@ with tempfile.TemporaryDirectory() as work_dir:
         # Try to be more specific to avoid false positive matches.
         f"version = \"{old_version}\"": f"version = \"{new_version}\"",
         old_source_hash: new_source_hash,
+    })
+
+    # We need access to the patched and updated src to get the patched `yarn.lock`.
+    patched_src = os.path.join(work_dir, "patched-src")
+    subprocess.run(
+        [
+            "nix",
+            "--extra-experimental-features", "nix-command",
+            "build",
+            "--impure",
+            "--nix-path", "",
+            "--include", f"nixpkgs={nixpkgs_path}",
+            "--include", f"package={package_file}",
+            "--expr", "(import <nixpkgs> { }).callPackage <package> { }",
+            "--out-link", patched_src,
+            "src",
+        ],
+        check=True,
+    )
+    old_yarn_hash = package_attrs["yarnHash"]
+    new_yarn_hash = nix_hash_to_sri(subprocess.run(
+        [
+            "prefetch-yarn-deps",
+            # does not support "--" separator :(
+            # Also --verbose writes to stdout, yikes.
+            os.path.join(patched_src, "yarn.lock"),
+        ],
+        stdout=subprocess.PIPE,
+        text=True,
+        check=True,
+    ).stdout.rstrip())
+
+    replace_in_file(package_file, {
         old_yarn_hash: new_yarn_hash,
     })
 
