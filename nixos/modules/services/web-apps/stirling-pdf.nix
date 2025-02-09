@@ -75,7 +75,7 @@ in
           # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L42
           which
           unpaper
-          libreoffice
+          (libreoffice.override { dbusVerify = false; })
           qpdf
           ocrmypdf
           poppler_utils
@@ -112,7 +112,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateUsers = true;
-        ProcSubset = "pid";
+        ProcSubset = "all"; # for libreoffice to work
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
