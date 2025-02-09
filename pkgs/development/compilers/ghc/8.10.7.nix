@@ -1,3 +1,7 @@
+let
+  version = "8.10.7";
+in
+
 {
   lib,
   stdenv,
@@ -32,8 +36,7 @@
   libffi ? null,
   libffi_3_3 ? null,
 
-  useLLVM ?
-    !(stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isPower || stdenv.targetPlatform.isSparc),
+  useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; }),
   # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -271,7 +274,7 @@ in
 
 stdenv.mkDerivation (
   rec {
-    version = "8.10.7";
+    inherit version;
     pname = "${targetPrefix}ghc${variantSuffix}";
 
     src = fetchurl {
