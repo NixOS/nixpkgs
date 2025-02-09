@@ -41,4 +41,17 @@ with haskellLib;
       (drv: {
         jsaddle-webkit2gtk = null;
       });
+
+  miso-examples = pkgs.lib.pipe super.miso-examples [
+    (addBuildDepends (
+      with self;
+      [
+        aeson
+        ghcjs-base
+        jsaddle-warp
+        miso
+        servant
+      ]
+    ))
+  ];
 })
