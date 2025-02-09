@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cairocffi,
-  dbus-fast,
+  dbus-next,
   glib,
   iwlib,
   libcst,
@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   dependencies = extraPackages ++ [
     (cairocffi.override { withXcffib = true; })
-    dbus-fast
+    dbus-next
     iwlib
     libcst
     mpd2
