@@ -26,6 +26,7 @@ in
   options = {
     services.bird2 = {
       enable = mkEnableOption "BIRD Internet Routing Daemon";
+      package = lib.mkPackageOption pkgs "bird2" { };
       config = mkOption {
         type = types.lines;
         description = ''
@@ -74,15 +75,16 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.bird ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc."bird/bird2.conf".source = pkgs.writeTextFile {
       name = "bird2";
       text = cfg.config;
+      derivationArgs.nativeBuildInputs = lib.optional cfg.checkConfig cfg.package;
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird2.conf
         ${cfg.preCheckConfig}
-        ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
+        bird -d -p -c bird2.conf
       '';
     };
 
@@ -95,9 +97,9 @@ in
         Restart = "on-failure";
         User = "bird2";
         Group = "bird2";
-        ExecStart = "${pkgs.bird}/bin/bird -c /etc/bird/bird2.conf";
-        ExecReload = "${pkgs.bird}/bin/birdc configure";
-        ExecStop = "${pkgs.bird}/bin/birdc down";
+        ExecStart = "${lib.getExe' cfg.package "bird"} -c /etc/bird/bird2.conf";
+        ExecReload = "${lib.getExe' cfg.package "birdc"} configure";
+        ExecStop = "${lib.getExe' cfg.package "birdc"} down";
         RuntimeDirectory = "bird";
         CapabilityBoundingSet = caps;
         AmbientCapabilities = caps;

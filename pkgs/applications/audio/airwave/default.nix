@@ -12,6 +12,7 @@
   file,
   libX11,
   qt5,
+  vst2-sdk,
 }:
 
 let
@@ -22,18 +23,6 @@ let
     repo = "airwave";
     rev = version;
     sha256 = "1ban59skw422mak3cp57lj27hgq5d3a4f6y79ysjnamf8rpz9x4s";
-  };
-
-  vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk369_01_03_2018_build_132";
-    src = requireFile {
-      name = "${name}.zip";
-      url = "http://www.steinberg.net/en/company/developers.html";
-      sha256 = "0r29fv6yhm2m5yznn8m4my7fq01w1lpphax4sshagy6b1dgjlv3w";
-    };
-    nativeBuildInputs = [ unzip ];
-    installPhase = "cp -r . $out";
-    meta.license = lib.licenses.unfree;
   };
 
   wine-wow64 = wine.override {
@@ -84,7 +73,7 @@ multiStdenv.mkDerivation {
   # Cf. https://github.com/phantom-code/airwave/issues/57
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = [ "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK" ];
+  cmakeFlags = [ "-DVSTSDK_PATH=${vst2-sdk}" ];
 
   postInstall = ''
     mv $out/bin $out/libexec
