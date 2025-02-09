@@ -101,11 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ares";
     maintainers = with lib.maintainers; [
       Madouura
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })
-# TODO: select between Qt and GTK3
-# TODO: call Darwin hackers to deal with specific errors
