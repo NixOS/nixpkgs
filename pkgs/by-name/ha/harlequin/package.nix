@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication rec {
     "numpy"
     "pyarrow"
     "textual"
+    "syrupy"
   ];
 
   build-system = with python3Packages; [ poetry-core ];
