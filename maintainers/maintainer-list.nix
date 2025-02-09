@@ -3516,6 +3516,13 @@
     githubId = 2379774;
     name = "Sean Buckley";
   };
+  Buer-Nahida = {
+    email = "me@nahida.im";
+    github = "Buer-Nahida";
+    githubId = 139795416;
+    name = "纳西妲 · Nahida";
+    keys = [ { fingerprint = "58E6 9E46 96C3 046A DB4E  314C B7CF AB72 643B 5A6B"; } ];
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
