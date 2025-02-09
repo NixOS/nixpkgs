@@ -177,6 +177,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/data/test1592
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
 
