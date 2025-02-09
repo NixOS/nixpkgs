@@ -135,7 +135,7 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @clock @setuid @chown"
+          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
         ];
         UMask = "0077";
       };
