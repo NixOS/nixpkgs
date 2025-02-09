@@ -13,13 +13,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-L0GkzpSn4f6dLDOm2iDJr8D1DINTHNW9Kkn1xFTuqfo=";
   };
 
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+
   outputs = [
     "out"
     "steamcompattool"
   ];
 
-  buildCommand = ''
-    runHook preBuild
+  installPhase = ''
+    runHook preInstall
 
     # Make it impossible to add to an environment. You should use the appropriate NixOS option.
     # Also leave some breadcrumbs in the file.
@@ -30,10 +34,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rm $steamcompattool/{compatibilitytool.vdf,proton,version}
     cp $src/{compatibilitytool.vdf,proton,version} $steamcompattool
 
-    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/compatibilitytool.vdf
-    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/proton
+    runHook postInstall
+  '';
 
-    runHook postBuild
+  preFixup = ''
+    substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
+      --replace-fail "${finalAttrs.version}" "GE-Proton"
+    substituteInPlace "$steamcompattool/proton" \
+      --replace-fail "${finalAttrs.version}" "GE-Proton"
   '';
 
   /*
@@ -62,6 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       NotAShelf
+      Scrumplex
       shawn8901
     ];
     platforms = [ "x86_64-linux" ];
