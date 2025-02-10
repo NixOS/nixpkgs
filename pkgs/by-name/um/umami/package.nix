@@ -5,6 +5,7 @@
   fetchurl,
   fetchYarnDeps,
   makeWrapper,
+  nixosTests,
   nodejs,
   prisma,
   prisma-engines,
@@ -141,6 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) umami;
+    };
     inherit
       sources
       geocities
