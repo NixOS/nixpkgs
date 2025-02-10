@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "gitlab.vim";
-  version = "unstable-2025-01-23";
+  version = "0.1.1";
 
   src = fetchFromGitLab {
     owner = "gitlab-org/editor-extensions";
