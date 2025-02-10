@@ -108,10 +108,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
-      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
-                "Exec=$out/bin/electrum %u" \
-      --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
-                "Exec=$out/bin/electrum --testnet %u"
+      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u" \
+      --replace "Exec=electrum --testnet %u" "Exec=$out/bin/electrum --testnet %u"
   '';
 
   postFixup = lib.optionalString enableQt ''
