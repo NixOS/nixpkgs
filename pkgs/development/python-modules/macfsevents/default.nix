@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  CoreFoundation,
-  CoreServices,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +15,6 @@ buildPythonPackage rec {
   };
 
   patches = [ ./fix-packaging.patch ];
-
-  buildInputs = [
-    CoreFoundation
-    CoreServices
-  ];
 
   # Some tests fail under nix build directory
   doCheck = false;
