@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   lz4,
   lzo,
   which,
@@ -59,6 +60,10 @@ let
     postInstall = lib.optionalString bigEndian ''
       mv $out/bin/sasquatch{,-v4be}
     '';
+
+    passthru = {
+      updateScript = gitUpdater { rev-prefix = "sasquatch-v"; };
+    };
 
     meta = {
       homepage = "https://github.com/onekey-sec/sasquatch";
