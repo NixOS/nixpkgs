@@ -7441,6 +7441,13 @@
     githubId = 878822;
     name = "Tristan Helmich";
   };
+  famfo = {
+    name = "famfo";
+    email = "famfo+nixpkgs@famfo.xyz";
+    matrix = "@famfo:ccc.ac";
+    github = "famfo";
+    githubId = 44938471;
+  };
   fangpen = {
     email = "hello@fangpenlin.com";
     github = "fangpenlin";
