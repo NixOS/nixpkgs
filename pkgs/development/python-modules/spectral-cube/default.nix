@@ -30,7 +30,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "spectral_cube";
+    inherit version;
     hash = "sha256-bjBghr5WrfC4NH5cyiy9RUiCmJSUHBtyD61bd1i/4kM=";
   };
 
