@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lora";
   version = "3.005";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EHa8DUPFRvdYBdCY41gfjKGtTHwGIXCwD9Qc+Npmt1s=";
   };
 
@@ -37,4 +37,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ofalvai ];
   };
-}
+})
