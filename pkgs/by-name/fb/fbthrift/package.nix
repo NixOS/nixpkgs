@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2025.01.27.00";
+  version = "2025.02.03.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HiPIpmRwlHSduwHV8EJSmhg7PYFDumx0TNo8uzJ9+j8=";
+    hash = "sha256-130BHYUFDo11T9bI7cQ7Y+lTnFSr3WNgJ7IA+3BE9+g=";
   };
 
   patches = [
