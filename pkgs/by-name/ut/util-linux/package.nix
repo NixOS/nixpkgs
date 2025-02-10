@@ -168,6 +168,10 @@ stdenv.mkDerivation rec {
       rev-prefix = "v";
       ignoredVersions = "(-rc).*";
     };
+
+    # encode upstream assumption to be used in man-db
+    # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
+    hasCol = stdenv.hostPlatform.libc == "glibc";
   };
 
   meta = with lib; {
