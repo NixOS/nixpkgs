@@ -186,7 +186,6 @@ self: super: {
   orbits = dontCheck super.orbits;
 
   # Too strict bounds on hspec < 2.11
-  http-api-data = doJailbreak super.http-api-data;
   tasty-discover = doJailbreak super.tasty-discover;
 
   # Too strict lower bound on lens, drop with LTS 23
