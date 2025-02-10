@@ -13,6 +13,7 @@
   zlib,
   libiconv,
   darwin,
+  fetchpatch,
 }:
 
 let
@@ -45,6 +46,11 @@ stdenv.mkDerivation {
 
   patches = [
     ./0001-darwin-disable-link-time-optimization.patch
+    # https://github.com/zerotier/ZeroTierOne/pull/2435
+    (fetchpatch {
+      url = "https://github.com/zerotier/ZeroTierOne/commit/8f56d484b681ea30cd28e19cab34499acfa6e64d.patch";
+      hash = "sha256-UplkX2O4o8XKKTlR3ZsSG9E0y5gVhAagyepqwyGEYmA=";
+    })
   ];
 
   postPatch = ''
@@ -89,20 +95,12 @@ stdenv.mkDerivation {
   preBuild =
     if stdenv.hostPlatform.isDarwin then
       ''
-        makeFlagsArray+=("ARCH_FLAGS=") # disable multi-arch build
+        # building multiple architectures at the same time from nixpkgs is not supported
+        makeFlagsArray+=("ARCH=${stdenv.hostPlatform.darwinArch}")
         if ! grep -q MACOS_VERSION_MIN=10.13 make-mac.mk; then
           echo "You may need to update MACOSX_DEPLOYMENT_TARGET to match the value in make-mac.mk"
           exit 1
         fi
-        (cd rustybits && MACOSX_DEPLOYMENT_TARGET=10.13 cargo build -p zeroidc --release)
-
-        cp \
-          ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
-          ./rustybits/target
-
-        # zerotier uses the "FORCE" target as a phony target to force rebuilds.
-        # We don't want to rebuild libzeroidc.a as we build want to build this library ourself for a single architecture
-        touch FORCE
       ''
     else
       ''
