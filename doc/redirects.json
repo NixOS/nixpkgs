@@ -86,6 +86,9 @@
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
   ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"
   ],

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -26,11 +27,14 @@
   vala,
   writeShellScript,
   shared-mime-info,
+  # Requires building a cdylib.
+  withPixbufLoader ? !stdenv.hostPlatform.isStatic,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
+  mesonEmulatorHook,
   _experimental-update-script-combinators,
   common-updater-scripts,
   jq,
@@ -65,6 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7NKT+wzDOMFwFxu8e8++pnJdBByV8xOF3JNUCZM+RZc=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "cross-introspection.patch";
+      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/84f24b1f5767f807f8d0442bbf3f149a0defcf78.patch";
+      hash = "sha256-FRyAYCCP3eu7YDUS6g7sKCdbq2nU8yQdbdVaQwLrlhE=";
+    })
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
@@ -95,6 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
       gobject-introspection
       gi-docgen
       vala # vala bindings require GObject introspection
+    ]
+    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
     ];
 
   buildInputs =
@@ -119,13 +134,25 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dtriplet=${stdenv.hostPlatform.rust.rustcTarget}"
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "pixbuf-loader" withPixbufLoader)
     (lib.mesonEnable "vala" withIntrospection)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  # Probably broken MIME type detection.
-  doCheck = !stdenv.isDarwin;
+  doCheck =
+    # Probably broken MIME type detection.
+    !stdenv.isDarwin
+    &&
+      # Could be made to work, but requires the C API test to be linked
+      # with a C++ linker because
+      # librsvg -> gdk-pixbuf -> libtiff -> lerc (C++).
+      #
+      # Doesn't make sense to pursue this upstream until gdk-pixbuf
+      # itself is fixed:
+      # https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/181
+      !stdenv.hostPlatform.isStatic;
 
   env = {
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
@@ -156,17 +183,18 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_DATA_DIRS=${shared-mime-info}/share:$XDG_DATA_DIRS
   '';
 
-  # Not generated when cross compiling.
   postInstall =
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    # Not generated when cross compiling.
+    lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       # Merge gdkpixbuf and librsvg loaders
       GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
       cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
       mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
-
+    ''
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
       installShellCompletion --cmd rsvg-convert \
         --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
         --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \

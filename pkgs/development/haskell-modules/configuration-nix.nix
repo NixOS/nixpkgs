@@ -1426,6 +1426,16 @@ self: super: builtins.intersectAttrs super {
           pkgs.nodePackages."@tailwindcss/line-clamp"
           pkgs.nodePackages."@tailwindcss/typography"
         ];
+        # Added a shim for the `tailwindcss` CLI entry point
+        nativeBuildInputs = (oa.nativeBuildInputs or []) ++ [ pkgs.buildPackages.makeBinaryWrapper ];
+        postInstall = (oa.postInstall or "") + ''
+          nodePath=""
+          for p in "$out" "${pkgs.nodePackages.postcss}" $plugins; do
+            nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
+          done
+          makeWrapper "$out/bin/tailwindcss" "$out/bin/tailwind" --prefix NODE_PATH : "$nodePath"
+          unset nodePath
+        '';
       })) super.tailwind;
 
   emanote = addBuildDepend pkgs.stork super.emanote;
