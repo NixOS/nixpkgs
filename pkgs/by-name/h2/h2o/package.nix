@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       toastal
       thoughtpolice
     ];
+    mainProgram = "h2o";
     platforms = platforms.linux;
   };
 })
