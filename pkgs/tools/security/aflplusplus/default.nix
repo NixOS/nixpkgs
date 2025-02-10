@@ -209,6 +209,7 @@ let
       maintainers = with lib.maintainers; [
         ris
         mindavi
+        msanft
       ];
     };
   };
