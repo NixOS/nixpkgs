@@ -1262,6 +1262,7 @@ self: super: {
   # 2023-12-19: jailbreaks due to hnix-0.17 https://github.com/dhall-lang/dhall-haskell/pull/2559
   # until dhall-nix 1.1.26+, dhall-nixpkgs 1.0.10+
   dhall-nix = self.generateOptparseApplicativeCompletions [ "dhall-to-nix" ] (doJailbreak super.dhall-nix);
+  # 2025-02-10: jailbreak due to aeson < 2.2, hnix < 0.17, transformers < 0.6, turtle < 1.6
   dhall-nixpkgs = self.generateOptparseApplicativeCompletions [ "dhall-to-nixpkgs" ] (doJailbreak super.dhall-nixpkgs);
   dhall-yaml = self.generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
 
