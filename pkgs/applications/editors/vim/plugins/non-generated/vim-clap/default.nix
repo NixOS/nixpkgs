@@ -6,8 +6,6 @@
   pkg-config,
   libgit2,
   zlib,
-  stdenv,
-  darwin,
   vimUtils,
   nix-update-script,
 }:
@@ -51,16 +49,10 @@ let
       })
     ];
 
-    buildInputs =
-      [
-        libgit2
-        zlib
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.AppKit
-        darwin.apple_sdk.frameworks.CoreServices
-        darwin.apple_sdk.frameworks.SystemConfiguration
-      ];
+    buildInputs = [
+      libgit2
+      zlib
+    ];
   };
 in
 
