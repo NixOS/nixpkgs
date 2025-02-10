@@ -8,12 +8,21 @@
   perl,
   pkg-config,
   vpnc-scripts,
+  fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "gpclient";
 
-  inherit (gpauth) version src meta;
+  version = "2.4.1";
+  src = fetchFromGitHub {
+    owner = "yuezk";
+    repo = "GlobalProtect-openconnect";
+    rev = "v${version}";
+    hash = "sha256-MY4JvftrC6sR8M0dFvnGZOkvHIhPRcyct9AG/8527gw=";
+  };
+
+  inherit (gpauth) meta;
 
   buildAndTestSubdir = "apps/gpclient";
   useFetchCargoVendor = true;
