@@ -1320,6 +1320,9 @@ self: super: {
   # dontCheck: The test suite tries to mess with ALSA, which doesn't work in the build sandbox.
   xmobar = dontCheck super.xmobar;
 
+  # 2025-02-10: Too strict bounds on aeson < 1.5
+  json-alt = doJailbreak super.json-alt;
+
   # https://github.com/mgajda/json-autotype/issues/25
   json-autotype = dontCheck super.json-autotype;
 
