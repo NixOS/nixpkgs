@@ -8,7 +8,7 @@ from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
-from typing import Final
+from typing import Final, Literal
 from uuid import uuid4
 
 from . import tmpdir
@@ -554,7 +554,7 @@ def set_profile(
 
 def switch_to_configuration(
     path_to_config: Path,
-    action: Action,
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,
