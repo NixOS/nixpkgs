@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-d2";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
     rev = "v${version}";
-    hash = "sha256-5/vChjSYMlCcieA10jncoXZw9Gpeol+Am7mUo78Zqho=";
+    hash = "sha256-d3PKwvTpOpqp6J1i53T7FYSEGO+yuL+wtpAwNjrPZcQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-MxeSgSwBOQ5Eb/2mPtacNNX8MBSToon31egrbfxZjZg=";
+  cargoHash = "sha256-nV0VBbAivS6Qj62H1Uk/alDEPnryRmEfY3LZIIvDEKE=";
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
