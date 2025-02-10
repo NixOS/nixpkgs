@@ -1262,8 +1262,6 @@ self: super: {
 
   # dontCheck: https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
-  # Allow lens-aeson >= 1.2 https://github.com/haskell-servant/servant/issues/1703
-  servant-auth-server = doJailbreak super.servant-auth-server;
   # Allow hspec >= 2.10 https://github.com/haskell-servant/servant/issues/1704
   servant-foreign = doJailbreak super.servant-foreign;
 
