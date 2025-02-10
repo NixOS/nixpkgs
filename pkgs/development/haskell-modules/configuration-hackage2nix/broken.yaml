@@ -3879,7 +3879,6 @@ broken-packages:
   - monadacme # failure in job https://hydra.nixos.org/build/233218330 at 2023-09-02
   - monad-atom # failure in job https://hydra.nixos.org/build/233243367 at 2023-09-02
   - monad-atom-simple # failure in job https://hydra.nixos.org/build/233259038 at 2023-09-02
-  - monad-bayes # failure in job https://hydra.nixos.org/build/252725686 at 2024-03-16
   - monad-branch # failure in job https://hydra.nixos.org/build/233251253 at 2023-09-02
   - MonadCatchIO-mtl # failure in job https://hydra.nixos.org/build/233228214 at 2023-09-02
   - MonadCatchIO-transformers # failure in job https://hydra.nixos.org/build/252729237 at 2024-03-16
