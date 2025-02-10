@@ -294,10 +294,6 @@ self: super: {
   # successfully with recent versions of the compiler).
   bin-package-db = null;
 
-  # Unnecessarily requires alex >= 3.3
-  # https://github.com/glguy/config-value/commit/c5558c8258598fab686c259bff510cc1b19a0c50#commitcomment-119514821
-  config-value = doJailbreak super.config-value;
-
   # path-io bound is adjusted in 0.6.1 release
   # https://github.com/tek/hix/commit/019426f6a3db256e4c96558ffe6fa2114e2f19a0
   hix = doJailbreak super.hix;
