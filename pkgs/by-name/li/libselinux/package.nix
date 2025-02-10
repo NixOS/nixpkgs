@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   buildPackages,
   pcre2,
   pkg-config,
@@ -19,7 +18,7 @@ assert enablePython -> swig != null && python3 != null;
 stdenv.mkDerivation (
   rec {
     pname = "libselinux";
-    version = "3.7";
+    version = "3.8";
     inherit (libsepol) se_url;
 
     outputs = [
@@ -31,7 +30,7 @@ stdenv.mkDerivation (
 
     src = fetchurl {
       url = "${se_url}/${version}/libselinux-${version}.tar.gz";
-      hash = "sha256-6gP0LROk+VdXmX26jPCyYyH6xdLxZEGLTMhWqS0rF70=";
+      hash = "sha256-DDdWvKBHyScCgdfE3N7NAAty44oYPJMGYeupaQg5tUE=";
     };
 
     patches = [
@@ -45,8 +44,8 @@ stdenv.mkDerivation (
       # This is a static email, so we shouldn't have to worry about
       # normalizing the patch.
       (fetchurl {
-        url = "https://lore.kernel.org/selinux/20211113141616.361640-1-hi@alyssa.is/raw";
-        hash = "sha256-dqxiupaJK4o00YERGWGIEIhM7sPelxBFQomAFKXQQpk=";
+        url = "https://lore.kernel.org/selinux/20250211211651.1297357-3-hi@alyssa.is/raw";
+        hash = "sha256-a0wTSItj5vs8GhIkfD1OPSjGmAJlK1orptSE7T3Hx20=";
         postFetch = ''
           mv "$out" $TMPDIR/patch
           ${buildPackages.patchutils_0_3_3}/bin/filterdiff \
@@ -57,13 +56,6 @@ stdenv.mkDerivation (
       (fetchurl {
         url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
         hash = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
-      })
-
-      # libselinux: fix swig bindings for 4.3.0
-      (fetchpatch {
-        url = "https://github.com/SELinuxProject/selinux/commit/8e0e718bae53fff30831b92cd784151d475a20da.patch";
-        stripLen = 1;
-        hash = "sha256-8Nd6ketQ7/r5W0sRdheqyGWHJRZ1RfGC4ehTqnHau04=";
       })
     ];
 
