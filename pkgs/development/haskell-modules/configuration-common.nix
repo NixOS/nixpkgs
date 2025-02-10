@@ -913,10 +913,6 @@ self: super: {
   # 2025-02-10: Too strict bounds on hedgehog < 1.5
   tasty-sugar = doJailbreak super.tasty-sugar;
 
-  # Too strict lower bound on aeson
-  # https://github.com/input-output-hk/hedgehog-extras/issues/39
-  hedgehog-extras = doJailbreak super.hedgehog-extras;
-
   # Allow bytestring-0.12.1.0, https://github.com/lpeterse/haskell-socket/issues/71
   socket = doJailbreak super.socket;
 
