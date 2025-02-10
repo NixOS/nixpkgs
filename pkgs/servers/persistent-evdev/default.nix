@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "persistent-evdev";
-  version = "unstable-2022-05-07";
+  version = "0-unstable-2022-05-07";
   format = "other";
 
   src = fetchFromGitHub {

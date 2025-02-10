@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "git-fire";
-  version = "unstable-2017-08-27";
+  version = "0-unstable-2017-08-27";
 
   src = fetchFromGitHub {
     owner = "qw3rtman";

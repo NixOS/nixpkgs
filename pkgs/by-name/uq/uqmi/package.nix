@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "uqmi";
-  version = "unstable-2024-01-16";
+  version = "0-unstable-2024-01-16";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uqmi.git";

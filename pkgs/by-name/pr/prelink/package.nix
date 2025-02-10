@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "prelink";
-  version = "unstable-2019-06-24";
+  version = "0-unstable-2019-06-24";
 
   src = fetchgit {
     url = "https://git.yoctoproject.org/git/prelink-cross";

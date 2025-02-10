@@ -139,7 +139,7 @@ lib.makeScope pkgs.newScope (
 
     farbfeld = pluginDerivation {
       pname = "farbfeld";
-      version = "unstable-2019-08-12";
+      version = "0-unstable-2019-08-12";
 
       src = fetchFromGitHub {
         owner = "ids1024";
@@ -296,7 +296,7 @@ lib.makeScope pkgs.newScope (
     };
 
     gimplensfun = pluginDerivation {
-      version = "unstable-2018-10-21";
+      version = "0-unstable-2018-10-21";
       pname = "gimplensfun";
 
       src = fetchFromGitHub {

@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "freqtweak";
-  version = "unstable-2019-08-03";
+  version = "0-unstable-2019-08-03";
 
   src = fetchFromGitHub {
     owner = "essej";

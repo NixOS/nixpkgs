@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "ibus-cangjie";
-  version = "unstable-2023-07-25";
+  version = "0-unstable-2023-07-25";
 
   src = fetchFromGitHub {
     owner = "Cangjians";

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "libde265-test-corpus-decode";
-  version = "unstable-2020-02-19";
+  version = "0-unstable-2020-02-19";
 
   src = fetchFromGitHub {
     owner = "strukturag";

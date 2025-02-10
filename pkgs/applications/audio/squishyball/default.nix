@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "squishyball";
-  version = "unstable-2020-11-23";
+  version = "0-unstable-2020-11-23";
 
   src = fetchFromGitLab {
     domain = "gitlab.xiph.org";

@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation {
   pname = "gbar";
-  version = "unstable-2023-09-21";
+  version = "0-unstable-2023-09-21";
 
   src = fetchFromGitHub {
     owner = "scorpion-26";

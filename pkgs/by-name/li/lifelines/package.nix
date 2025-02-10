@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lifelines";
-  version = "unstable-2019-05-07";
+  version = "0-unstable-2019-05-07";
 
   src = fetchFromGitHub {
     owner = pname;

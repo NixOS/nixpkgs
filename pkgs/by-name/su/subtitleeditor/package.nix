@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleeditor";
-  version = "unstable-2019-11-30";
+  version = "0-unstable-2019-11-30";
 
   src = fetchFromGitHub {
     owner = "kitone";

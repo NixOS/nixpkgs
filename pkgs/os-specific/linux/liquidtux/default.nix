@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   name = "liquidtux-${version}-${kernel.version}";
-  version = "unstable-2021-12-16";
+  version = "0-unstable-2021-12-16";
 
   src = fetchFromGitHub {
     owner = "liquidctl";

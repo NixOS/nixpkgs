@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "workstyle";
-  version = "unstable-2023-08-23";
+  version = "0-unstable-2023-08-23";
 
   src = fetchFromGitHub {
     owner = "pierrechevalier83";

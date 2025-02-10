@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "fusee-nano";
-  version = "unstable-2023-05-17";
+  version = "0-unstable-2023-05-17";
 
   src = fetchFromGitHub {
     owner = "DavidBuchanan314";

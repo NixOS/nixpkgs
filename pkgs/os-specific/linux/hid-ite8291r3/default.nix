@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "hid-ite8291r3";
-  version = "unstable-2022-06-01";
+  version = "0-unstable-2022-06-01";
 
   src = fetchFromGitHub {
     owner = "pobrn";

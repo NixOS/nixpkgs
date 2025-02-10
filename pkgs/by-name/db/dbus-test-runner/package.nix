@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-test-runner";
-  version = "unstable-2019-10-02";
+  version = "0-unstable-2019-10-02";
 
   src = fetchbzr {
     url = "lp:dbus-test-runner";

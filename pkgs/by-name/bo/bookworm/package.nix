@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "unstable-2022-01-09";
+  version = "0-unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "babluboy";

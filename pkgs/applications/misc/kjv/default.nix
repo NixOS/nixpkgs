@@ -22,7 +22,7 @@ in
 
 stdenv.mkDerivation {
   pname = "kjv";
-  version = "unstable-2021-03-11";
+  version = "0-unstable-2021-03-11";
 
   src = fetchFromGitHub {
     owner = "bontibon";

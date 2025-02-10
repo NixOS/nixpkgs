@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "hayabusa";
-  version = "unstable-2023-11-29";
+  version = "0-unstable-2023-11-29";
 
   src = fetchFromGitHub {
     owner = "notarin";

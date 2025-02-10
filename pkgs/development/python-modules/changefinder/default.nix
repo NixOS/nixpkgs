@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "changefinder";
-  version = "unstable-2024-03-24";
+  version = "0-unstable-2024-03-24";
   pyproject = true;
 
   src = fetchFromGitHub {

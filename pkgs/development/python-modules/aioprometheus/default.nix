@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioprometheus";
-  version = "unstable-2023-03-14";
+  version = "0-unstable-2023-03-14";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";

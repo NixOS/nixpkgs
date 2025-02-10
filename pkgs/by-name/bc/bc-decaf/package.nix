@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bc-decaf";
-  version = "unstable-2022-07-20";
+  version = "0-unstable-2022-07-20";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [

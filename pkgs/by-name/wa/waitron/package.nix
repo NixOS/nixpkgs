@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "waitron";
-  version = "unstable-2020-08-04";
+  version = "0-unstable-2020-08-04";
   rev = "2315857d94e3d1a1e79ac48f8f6a68d59d0ce300";
 
   src = fetchFromGitHub {

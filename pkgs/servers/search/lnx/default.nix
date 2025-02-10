@@ -10,7 +10,7 @@
 # unstable was chosen because of an added Cargo.lock
 # revert to stable for the version after 0.9.0
 let
-  version = "unstable-2022-06-25";
+  version = "0-unstable-2022-06-25";
 in
 rustPlatform.buildRustPackage {
   pname = "lnx";

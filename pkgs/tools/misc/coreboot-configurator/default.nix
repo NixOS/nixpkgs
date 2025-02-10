@@ -20,7 +20,7 @@
 
 mkDerivation {
   pname = "coreboot-configurator";
-  version = "unstable-2023-01-17";
+  version = "0-unstable-2023-01-17";
 
   src = fetchFromGitHub {
     owner = "StarLabsLtd";

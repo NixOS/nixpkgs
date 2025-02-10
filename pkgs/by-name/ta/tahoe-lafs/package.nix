@@ -40,7 +40,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
-  version = "unstable-2021-07-09";
+  version = "0-unstable-2021-07-09";
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";

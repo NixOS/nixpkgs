@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "redprl";
-  version = "unstable-2019-11-04";
+  version = "0-unstable-2019-11-04";
 
   src = fetchFromGitHub {
     owner = "RedPRL";

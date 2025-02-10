@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "lalezar-fonts";
-  version = "unstable-2017-02-28";
+  version = "0-unstable-2017-02-28";
 
   src = fetchFromGitHub {
     owner = "BornaIz";

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-tilingnome";
-  version = "unstable-2019-09-19";
+  version = "0-unstable-2019-09-19";
 
   src = fetchFromGitHub {
     owner = "rliang";

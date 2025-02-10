@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cen64";
-  version = "unstable-2022-10-02";
+  version = "0-unstable-2022-10-02";
 
   src = fetchFromGitHub {
     owner = "n64dev";

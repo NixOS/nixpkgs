@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rmfuse";
-  version = "unstable-2021-06-06";
+  version = "0-unstable-2021-06-06";
 
   pyproject = true;
 

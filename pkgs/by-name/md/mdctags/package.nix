@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "mdctags";
-  version = "unstable-2020-06-11"; # v0.1.0 does not build with our rust version
+  version = "0-unstable-2020-06-11"; # v0.1.0 does not build with our rust version
 
   src = fetchFromGitHub {
     owner = "wsdjeg";

@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "ultrablue-server";
-  version = "unstable-fosdem2023";
+  version = "0-unstable-fosdem2023";
 
   src = fetchFromGitHub {
     owner = "ANSSI-FR";

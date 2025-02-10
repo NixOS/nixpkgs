@@ -12,7 +12,7 @@
 
 resholve.mkDerivation rec {
   pname = "pdfmm";
-  version = "unstable-2019-01-24";
+  version = "0-unstable-2019-01-24";
 
   src = fetchFromGitHub {
     owner = "jpfleury";

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "mdk4";
-  version = "unstable-2021-04-27";
+  version = "0-unstable-2021-04-27";
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";

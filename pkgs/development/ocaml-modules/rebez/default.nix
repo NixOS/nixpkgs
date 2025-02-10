@@ -7,7 +7,7 @@
 
 buildDunePackage rec {
   pname = "rebez";
-  version = "unstable-2019-06-20";
+  version = "0-unstable-2019-06-20";
 
   src = fetchFromGitHub {
     owner = "jchavarri";

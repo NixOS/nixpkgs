@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "opensfm";
-  version = "unstable-2023-12-09";
+  version = "0-unstable-2023-12-09";
 
   src = fetchFromGitHub {
     owner = "mapillary";

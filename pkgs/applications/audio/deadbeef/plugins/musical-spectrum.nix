@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "deadbeef-musical-spectrum-plugin";
-  version = "unstable-2020-07-01";
+  version = "0-unstable-2020-07-01";
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";

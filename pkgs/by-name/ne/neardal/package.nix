@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "neardal";
-  version = "unstable-0.7-post-git-2015-09-30";
+  version = "0-unstable-0.7-post-git-2015-09-30";
 
   src = fetchFromGitHub {
     owner = "connectivity";

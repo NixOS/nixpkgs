@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kepler";
-  version = "unstable-2023-07-19";
+  version = "0-unstable-2023-07-19";
 
   src = fetchFromGitHub {
     owner = "Exein-io";

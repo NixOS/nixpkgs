@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clight-gui";
-  version = "unstable-2023-02-21";
+  version = "0-unstable-2023-02-21";
 
   src = fetchFromGitHub {
     owner = "nullobsi";

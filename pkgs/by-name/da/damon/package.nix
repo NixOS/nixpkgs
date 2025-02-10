@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "damon";
-  version = "unstable-2021-10-06";
+  version = "0-unstable-2021-10-06";
 
   src = fetchFromGitHub {
     owner = "hashicorp";

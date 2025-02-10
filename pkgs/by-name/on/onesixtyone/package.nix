@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "onesixtyone";
-  version = "unstable-2019-12-26";
+  version = "0-unstable-2019-12-26";
 
   src = fetchFromGitHub {
     owner = "trailofbits";

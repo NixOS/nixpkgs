@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rose-pine-icon-theme";
-  version = "unstable-2022-09-01";
+  version = "0-unstable-2022-09-01";
 
   src = fetchFromGitHub {
     owner = "rose-pine";

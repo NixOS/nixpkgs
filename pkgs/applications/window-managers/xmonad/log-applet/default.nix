@@ -19,7 +19,7 @@
 assert desktopSupport == "gnomeflashback" || desktopSupport == "mate" || desktopSupport == "xfce4";
 
 stdenv.mkDerivation rec {
-  version = "unstable-2017-09-15";
+  version = "0-unstable-2017-09-15";
   pname = "xmonad-log-applet";
   name = "${pname}-${desktopSupport}-${version}";
 

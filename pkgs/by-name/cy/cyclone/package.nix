@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cyclone";
-  version = "unstable-2023-09-12";
+  version = "0-unstable-2023-09-12";
 
   src = fetchFromGitHub {
     owner = "porres";

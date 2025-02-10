@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "xf86-video-nested";
-  version = "unstable-2017-06-12";
+  version = "0-unstable-2017-06-12";
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/xorg/driver/xf86-video-nested";

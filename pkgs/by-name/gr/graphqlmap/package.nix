@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "graphqlmap";
-  version = "unstable-2022-01-17";
+  version = "0-unstable-2022-01-17";
   format = "setuptools";
 
   src = fetchFromGitHub {

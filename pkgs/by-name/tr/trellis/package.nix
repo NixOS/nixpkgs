@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "unstable-2022-09-14";
+  version = "0-unstable-2022-09-14";
 
   srcs = [
     main_src

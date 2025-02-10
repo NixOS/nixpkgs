@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation {
   pname = "tmate-ssh-server";
-  version = "unstable-2023-06-02";
+  version = "0-unstable-2023-06-02";
 
   src = fetchFromGitHub {
     owner = "tmate-io";

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "yaup";
-  version = "unstable-2019-10-16";
+  version = "0-unstable-2019-10-16";
 
   src = fetchFromGitHub {
     owner = "Holarse-Linuxgaming";

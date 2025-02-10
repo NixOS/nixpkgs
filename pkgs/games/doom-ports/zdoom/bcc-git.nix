@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "doom-bcc";
-  version = "unstable-2018-01-04";
+  version = "0-unstable-2018-01-04";
 
   src = fetchFromGitHub {
     owner = "wormt";

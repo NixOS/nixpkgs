@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "fritzbox-exporter";
-  version = "unstable-2021-04-13";
+  version = "0-unstable-2021-04-13";
 
   src = fetchFromGitHub {
     rev = "fd36539bd7db191b3734e17934b5f1e78e4e9829";

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "courier-prime";
-  version = "unstable-2019-12-05";
+  version = "0-unstable-2019-12-05";
 
   src = fetchzip {
     url = "https://github.com/quoteunquoteapps/CourierPrime/archive/7f6d46a766acd9391d899090de467c53fd9c9cb0/${pname}-${version}.zip";

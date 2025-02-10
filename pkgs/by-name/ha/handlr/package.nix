@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
-  version = "unstable-2021-08-29";
+  version = "0-unstable-2021-08-29";
 
   src = fetchFromGitHub {
     owner = "chmln";

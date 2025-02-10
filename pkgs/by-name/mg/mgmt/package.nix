@@ -12,7 +12,7 @@
 }:
 buildGoModule rec {
   pname = "mgmt";
-  version = "unstable-2022-10-24";
+  version = "0-unstable-2022-10-24";
 
   src = fetchFromGitHub {
     owner = "purpleidea";

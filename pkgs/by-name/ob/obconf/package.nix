@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obconf";
-  version = "unstable-2015-02-13";
+  version = "0-unstable-2015-02-13";
 
   src = fetchgit {
     url = "git://git.openbox.org/dana/obconf";

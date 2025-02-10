@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libnut";
-  version = "unstable-2020-11-06";
+  version = "0-unstable-2020-11-06";
 
   src = fetchgit {
     url = "https://git.ffmpeg.org/nut.git";

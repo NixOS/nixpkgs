@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "argos";
-  version = "unstable-2024-10-28";
+  version = "0-unstable-2024-10-28";
 
   src = fetchFromGitHub {
     owner = "p-e-w";

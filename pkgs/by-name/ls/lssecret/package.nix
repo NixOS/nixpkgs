@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lssecret";
-  version = "unstable-2022-12-02";
+  version = "0-unstable-2022-12-02";
 
   src = fetchFromGitLab {
     owner = "GrantMoyer";

@@ -6,7 +6,7 @@
 }:
 wsjtx.overrideAttrs (old: {
   pname = "jtdx";
-  version = "unstable-2022-03-01";
+  version = "0-unstable-2022-03-01";
   src = fetchgit {
     url = "https://github.com/jtdx-project/jtdx.git";
     rev = "2a0e2bea8c66c9ca94d2ea8034cf83a68cfa40eb";

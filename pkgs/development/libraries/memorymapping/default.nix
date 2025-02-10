@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "memorymapping";
-  version = "unstable-2014-02-20";
+  version = "0-unstable-2014-02-20";
 
   src = fetchFromGitHub {
     owner = "NimbusKit";

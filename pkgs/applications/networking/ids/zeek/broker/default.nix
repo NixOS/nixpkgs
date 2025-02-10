@@ -23,7 +23,7 @@ let
     hash = "sha256-AVaKcRjF5ZiSR8aPSLBzSTeWVwGWW/aSyQJcN0Yhza0=";
   };
   caf' = caf.overrideAttrs (old: {
-    version = "unstable-2024-01-07-zeek";
+    version = "0-unstable-2024-01-07-zeek";
     src = fetchFromGitHub {
       owner = "zeek";
       repo = "actor-framework";

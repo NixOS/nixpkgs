@@ -11,7 +11,7 @@
 stdenv.mkDerivation rec {
   pname = "libvdwxc";
   # Stable version has non-working MPI detection.
-  version = "unstable-24.02.2020";
+  version = "0-unstable-24.02.2020";
 
   src = fetchFromGitLab {
     owner = "libvdwxc";

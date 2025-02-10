@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lpcnetfreedv";
-  version = "unstable-2022-08-22";
+  version = "0-unstable-2022-08-22";
 
   src = fetchFromGitHub {
     owner = "drowe67";

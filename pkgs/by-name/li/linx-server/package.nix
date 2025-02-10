@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "linx-server";
-  version = "unstable-2021-12-24";
+  version = "0-unstable-2021-12-24";
 
   src = fetchFromGitHub {
     owner = "zizzydizzymc";

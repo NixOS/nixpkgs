@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swaycons";
-  version = "unstable-2023-11-29";
+  version = "0-unstable-2023-11-29";
 
   src = fetchFromGitHub {
     owner = "allie-wake-up";

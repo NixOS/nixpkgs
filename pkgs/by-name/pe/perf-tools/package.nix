@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "perf-tools";
-  version = "unstable-2017-12-19";
+  version = "0-unstable-2017-12-19";
 
   src = fetchFromGitHub {
     owner = "brendangregg";

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdjango";
-  version = "unstable-2018-03-07";
+  version = "0-unstable-2018-03-07";
 
   src = fetchFromGitHub {
     owner = "jlaine";

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "hdl-dump";
-  version = "unstable-2022-09-19";
+  version = "0-unstable-2022-09-19";
 
   src = fetchFromGitHub {
     owner = "ps2homebrew";

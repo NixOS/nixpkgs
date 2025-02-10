@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "pms";
-  version = "unstable-2022-11-12";
+  version = "0-unstable-2022-11-12";
 
   src = fetchFromGitHub {
     owner = "ambientsound";

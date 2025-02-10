@@ -15,7 +15,7 @@
 
 mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2024-01-14";
+  version = "0-unstable-2024-01-14";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";

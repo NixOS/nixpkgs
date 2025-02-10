@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "kazam";
-  version = "unstable-2021-06-22";
+  version = "0-unstable-2021-06-22";
 
   src = fetchFromGitHub {
     owner = "niknah";

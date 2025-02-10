@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dee";
-  version = "unstable-2017-06-16";
+  version = "0-unstable-2017-06-16";
 
   outputs = [
     "out"

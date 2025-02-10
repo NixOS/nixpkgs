@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tamgamp.lv2";
-  version = "unstable-2020-06-14";
+  version = "0-unstable-2020-06-14";
 
   src = fetchFromGitHub {
     owner = "sadko4u";

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "x2x";
-  version = "unstable-2023-04-30";
+  version = "0-unstable-2023-04-30";
 
   src = fetchFromGitHub {
     owner = "dottedmag";

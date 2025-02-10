@@ -9,7 +9,7 @@
   openssl,
 }:
 let
-  version = "unstable-2023-08-09";
+  version = "0-unstable-2023-08-09";
 in
 stdenv.mkDerivation {
   pname = "ossec-agent";

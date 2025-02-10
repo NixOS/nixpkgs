@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "tcping-go";
-  version = "unstable-2022-05-28";
+  version = "0-unstable-2022-05-28";
 
   src = fetchFromGitHub {
     owner = "cloverstd";

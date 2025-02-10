@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "g933-utils";
-  version = "unstable-2021-11-19";
+  version = "0-unstable-2021-11-19";
 
   src = fetchFromGitHub {
     owner = "ashkitten";

@@ -23,7 +23,7 @@
 let
   bantorra = buildDunePackage rec {
     pname = "bantorra";
-    version = "unstable-2022-05-08";
+    version = "0-unstable-2022-05-08";
     src = fetchFromGitHub {
       owner = "RedPRL";
       repo = "bantorra";
@@ -45,7 +45,7 @@ let
   };
   kado = buildDunePackage rec {
     pname = "kado";
-    version = "unstable-2023-10-03";
+    version = "0-unstable-2023-10-03";
     src = fetchFromGitHub {
       owner = "RedPRL";
       repo = "kado";
@@ -68,7 +68,7 @@ in
 
 buildDunePackage {
   pname = "cooltt";
-  version = "unstable-2023-10-03";
+  version = "0-unstable-2023-10-03";
 
   minimalOCamlVersion = "5.0";
 

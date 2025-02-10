@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "layan-kde";
-  version = "unstable-2023-09-30";
+  version = "0-unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";

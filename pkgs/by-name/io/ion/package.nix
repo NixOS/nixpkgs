@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "ion";
-  version = "unstable-2024-09-20";
+  version = "0-unstable-2024-09-20";
 
   src = fetchFromGitLab {
     domain = "gitlab.redox-os.org";

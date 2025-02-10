@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sc68";
-  version = "unstable-2022-11-24";
+  version = "0-unstable-2022-11-24";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/sc68/code/";

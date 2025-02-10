@@ -16,7 +16,7 @@
 
 buildPythonApplication {
   pname = "hushboard";
-  version = "unstable-2021-03-17";
+  version = "0-unstable-2021-03-17";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";

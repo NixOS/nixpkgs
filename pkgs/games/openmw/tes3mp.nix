@@ -16,7 +16,7 @@ let
   # raknet could also be split into dev and lib outputs
   raknet = stdenv.mkDerivation {
     pname = "raknet";
-    version = "unstable-2020-01-19";
+    version = "0-unstable-2020-01-19";
 
     src = fetchFromGitHub {
       owner = "TES3MP";

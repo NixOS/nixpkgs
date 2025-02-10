@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "qtwirediff";
-  version = "unstable-2023-03-07";
+  version = "0-unstable-2023-03-07";
 
   src = fetchFromGitHub {
     owner = "aaptel";

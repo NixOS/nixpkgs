@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "zfsbackup";
-  version = "unstable-2022-09-23";
+  version = "0-unstable-2022-09-23";
   rev = "a30f1a44bcae5f64cfb36a12926242a968a759c6";
 
   src = fetchFromGitHub {

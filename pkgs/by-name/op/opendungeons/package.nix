@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "opendungeons";
-  version = "unstable-2023-03-18";
+  version = "0-unstable-2023-03-18";
 
   src = fetchFromGitHub {
     owner = "paroj";

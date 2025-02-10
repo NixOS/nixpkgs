@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "mmc-utils";
-  version = "unstable-2024-03-07";
+  version = "0-unstable-2024-03-07";
 
   src = fetchzip rec {
     url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-${passthru.rev}.tar.gz";

@@ -15,7 +15,7 @@
 
 mkDerivation {
   pname = "gr-lora_sdr";
-  version = "unstable-2025-01-09";
+  version = "0-unstable-2025-01-09";
 
   src = fetchFromGitHub {
     owner = "tapparelj";

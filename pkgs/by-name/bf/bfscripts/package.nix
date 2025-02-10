@@ -36,7 +36,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bfscripts";
-  version = "unstable-2023-05-15";
+  version = "0-unstable-2023-05-15";
 
   src = fetchFromGitHub {
     owner = "Mellanox";

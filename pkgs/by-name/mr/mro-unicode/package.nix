@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mro-unicode";
-  version = "unstable-2013-05-25";
+  version = "0-unstable-2013-05-25";
 
   src = fetchurl {
     url = "https://github.com/phjamr/MroUnicode/raw/f297de070f7eba721a47c850e08efc119d3bfbe8/MroUnicode-Regular.ttf";

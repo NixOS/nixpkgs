@@ -13,7 +13,7 @@
 
 resholve.mkDerivation rec {
   pname = "mons";
-  version = "unstable-2020-03-20";
+  version = "0-unstable-2020-03-20";
 
   src = fetchFromGitHub {
     owner = "Ventto";

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "oh-my-fish";
-  version = "unstable-2022-03-27";
+  version = "0-unstable-2022-03-27";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";

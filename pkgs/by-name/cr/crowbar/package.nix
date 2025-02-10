@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "crowbar";
-  version = "unstable-2020-04-23";
+  version = "0-unstable-2020-04-23";
 
   src = fetchFromGitHub {
     owner = "galkan";

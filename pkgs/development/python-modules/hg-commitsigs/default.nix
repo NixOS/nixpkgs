@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
   pname = "hg-commitsigs";
   # Latest tag is 11 years old.
-  version = "unstable-2021-01-08";
+  version = "0-unstable-2021-01-08";
 
   src = fetchhg {
     url = "https://foss.heptapod.net/mercurial/commitsigs";

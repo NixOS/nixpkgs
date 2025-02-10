@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "libgumath";
-  version = "unstable-2019-08-01";
+  version = "0-unstable-2019-08-01";
 
   src = fetchFromGitHub {
     owner = "xnd-project";

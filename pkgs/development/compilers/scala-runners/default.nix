@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "scala-runners";
-  version = "unstable-2021-07-28";
+  version = "0-unstable-2021-07-28";
 
   src = fetchFromGitHub {
     repo = pname;

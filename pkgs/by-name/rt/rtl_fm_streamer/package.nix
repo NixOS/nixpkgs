@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtl_fm_streamer";
-  version = "unstable-2021-06-08";
+  version = "0-unstable-2021-06-08";
 
   src = fetchFromGitHub {
     owner = "AlbrechtL";

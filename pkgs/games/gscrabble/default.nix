@@ -12,7 +12,7 @@
 
 buildPythonApplication {
   pname = "gscrabble";
-  version = "unstable-2020-04-21";
+  version = "0-unstable-2020-04-21";
 
   src = fetchFromGitHub {
     owner = "RaaH";

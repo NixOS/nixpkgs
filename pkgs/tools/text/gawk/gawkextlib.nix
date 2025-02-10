@@ -43,7 +43,7 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "gawkextlib-${name}";
-      version = "unstable-2022-10-20";
+      version = "0-unstable-2022-10-20";
 
       src = fetchgit {
         url = "git://git.code.sf.net/p/gawkextlib/code";

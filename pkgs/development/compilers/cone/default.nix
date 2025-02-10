@@ -7,7 +7,7 @@
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "cone";
-  version = "unstable-2022-12-12";
+  version = "0-unstable-2022-12-12";
 
   src = fetchFromGitHub {
     owner = "jondgoodwin";

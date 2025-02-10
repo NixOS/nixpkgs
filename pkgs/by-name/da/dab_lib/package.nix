@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dab_lib";
-  version = "unstable-2023-03-02";
+  version = "0-unstable-2023-03-02";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";

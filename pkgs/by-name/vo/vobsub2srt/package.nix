@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vobsub2srt";
-  version = "unstable-2014-08-17";
+  version = "0-unstable-2014-08-17";
 
   src = fetchFromGitHub {
     owner = "ruediger";

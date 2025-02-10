@@ -11,7 +11,7 @@
 
   hexmap = stdenv.mkDerivation {
     pname = "hexmap";
-    version = "unstable-2023-01-26";
+    version = "0-unstable-2023-01-26";
 
     src = fetchFromGitHub {
       owner = "lifelike";

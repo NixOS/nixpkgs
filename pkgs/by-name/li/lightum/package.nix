@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "lightum";
-  version = "unstable-2014-06-07";
+  version = "0-unstable-2014-06-07";
 
   src = fetchFromGitHub {
     owner = "poliva";

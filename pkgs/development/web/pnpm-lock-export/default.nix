@@ -5,7 +5,7 @@
 }:
 buildNpmPackage rec {
   pname = "pnpm-lock-export";
-  version = "unstable-2023-07-31";
+  version = "0-unstable-2023-07-31";
 
   src = fetchFromGitHub {
     owner = "adamcstephens";

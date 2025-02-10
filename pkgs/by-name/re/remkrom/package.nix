@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "remkrom";
-  version = "unstable-2020-10-17";
+  version = "0-unstable-2020-10-17";
 
   src = fetchFromGitHub {
     owner = "siraben";

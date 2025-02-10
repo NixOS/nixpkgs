@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "kreative-square-fonts";
-  version = "unstable-2021-01-29";
+  version = "0-unstable-2021-01-29";
 
   src = fetchFromGitHub {
     owner = "kreativekorp";

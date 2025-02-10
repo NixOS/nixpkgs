@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "golint";
-  version = "unstable-2020-12-08";
+  version = "0-unstable-2020-12-08";
 
   # we must allow references to the original `go` package, as golint uses
   # compiler go/build package to load the packages it's linting.

@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "muso";
-  version = "unstable-2021-09-02";
+  version = "0-unstable-2021-09-02";
 
   src = fetchFromGitHub {
     owner = "quebin31";

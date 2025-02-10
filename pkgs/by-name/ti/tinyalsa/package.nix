@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyalsa";
-  version = "unstable-2022-06-05";
+  version = "0-unstable-2022-06-05";
 
   src = fetchFromGitHub {
     owner = "tinyalsa";

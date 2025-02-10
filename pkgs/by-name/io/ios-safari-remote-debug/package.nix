@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "ios-safari-remote-debug";
-  version = "unstable-2024-09-09";
+  version = "0-unstable-2024-09-09";
 
   src = fetchFromGitea {
     domain = "git.gay";

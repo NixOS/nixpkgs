@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "check";
-  version = "unstable-2018-12-24";
+  version = "0-unstable-2018-12-24";
   rev = "ccaba434e62accd51209476ad093810bd27ec150";
 
   src = fetchFromGitLab {

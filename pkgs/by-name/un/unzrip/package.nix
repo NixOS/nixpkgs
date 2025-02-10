@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unzrip";
-  version = "unstable-2023-04-16";
+  version = "0-unstable-2023-04-16";
 
   src = fetchFromGitHub {
     owner = "quininer";

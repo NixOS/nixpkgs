@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "spectre-cli";
-  version = "unstable-2022-02-05";
+  version = "0-unstable-2022-02-05";
 
   src = fetchFromGitLab {
     owner = "spectre.app";

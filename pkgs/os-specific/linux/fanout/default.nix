@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fanout";
-  version = "unstable-2022-10-17-${kernel.version}";
+  version = "0-unstable-2022-10-17-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "bob-linuxtoys";

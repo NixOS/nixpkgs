@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libyafaray";
-  version = "unstable-2022-09-17";
+  version = "0-unstable-2022-09-17";
 
   src = fetchFromGitHub {
     owner = "YafaRay";

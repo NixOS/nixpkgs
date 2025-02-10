@@ -9,7 +9,7 @@ let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;
 
   overrides = rec {
-    version = "unstable-${lib.fileContents ./date.txt}";
+    version = "0-unstable-${lib.fileContents ./date.txt}";
 
     passthru.updateScript = ./update.sh;
 

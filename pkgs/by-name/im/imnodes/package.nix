@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "imnodes";
-  version = "unstable-2024-03-12";
+  version = "0-unstable-2024-03-12";
   outputs = [
     "out"
     "dev"

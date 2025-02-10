@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "zabbixctl";
-  version = "unstable-2021-05-25";
+  version = "0-unstable-2021-05-25";
 
   src = fetchFromGitHub {
     owner = "kovetskiy";

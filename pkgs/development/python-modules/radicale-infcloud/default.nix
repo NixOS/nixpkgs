@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "radicale-infcloud";
-  version = "unstable-2022-04-18";
+  version = "0-unstable-2022-04-18";
   pyproject = true;
 
   src = fetchFromGitHub {

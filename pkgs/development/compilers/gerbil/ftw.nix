@@ -7,7 +7,7 @@
 
 {
   pname = "ftw";
-  version = "unstable-2023-11-15";
+  version = "0-unstable-2023-11-15";
   git-version = "e5e2f56";
   softwareName = "FTW: For The Web!";
   gerbil-package = "drewc/ftw";

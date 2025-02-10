@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "go-sct";
-  version = "unstable-2022-01-32";
+  version = "0-unstable-2022-01-32";
 
   src = fetchFromGitHub {
     owner = "d4l3k";

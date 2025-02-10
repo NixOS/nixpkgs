@@ -35,7 +35,7 @@ in
 
   backlog = zncDerivation rec {
     pname = "znc-backlog";
-    version = "unstable-2017-06-13";
+    version = "0-unstable-2017-06-13";
     module_name = "backlog";
 
     src = fetchFromGitHub {
@@ -55,7 +55,7 @@ in
 
   clientbuffer = zncDerivation rec {
     pname = "znc-clientbuffer";
-    version = "unstable-2021-05-30";
+    version = "0-unstable-2021-05-30";
     module_name = "clientbuffer";
 
     src = fetchFromGitHub {
@@ -79,7 +79,7 @@ in
 
   clientaway = zncDerivation rec {
     pname = "znc-clientaway";
-    version = "unstable-2017-04-28";
+    version = "0-unstable-2017-04-28";
     module_name = "clientaway";
 
     src = fetchFromGitHub {
@@ -99,7 +99,7 @@ in
 
   fish = zncDerivation rec {
     pname = "znc-fish";
-    version = "unstable-2017-06-26";
+    version = "0-unstable-2017-06-26";
     module_name = "fish";
 
     src = fetchFromGitHub {
@@ -119,7 +119,7 @@ in
 
   ignore = zncDerivation rec {
     pname = "znc-ignore";
-    version = "unstable-2017-04-28";
+    version = "0-unstable-2017-04-28";
     module_name = "ignore";
 
     src = fetchFromGitHub {
@@ -159,7 +159,7 @@ in
 
   playback = zncDerivation rec {
     pname = "znc-playback";
-    version = "unstable-2015-08-04";
+    version = "0-unstable-2015-08-04";
     module_name = "playback";
 
     src = fetchFromGitHub {
@@ -179,7 +179,7 @@ in
 
   privmsg = zncDerivation rec {
     pname = "znc-privmsg";
-    version = "unstable-2015-02-22";
+    version = "0-unstable-2015-02-22";
     module_name = "privmsg";
 
     src = fetchFromGitHub {
@@ -197,7 +197,7 @@ in
 
   push = zncDerivation rec {
     pname = "znc-push";
-    version = "unstable-2016-10-12";
+    version = "0-unstable-2016-10-12";
     module_name = "push";
 
     src = fetchFromGitHub {

@@ -31,7 +31,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "unstable-2023-10-30";
+  version = "0-unstable-2023-10-30";
   pname = "openclonk";
 
   src = fetchFromGitHub {

@@ -9,7 +9,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";
-  version = "unstable-2022-07-11";
+  version = "0-unstable-2022-07-11";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";

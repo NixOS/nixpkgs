@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "PotreeConverter";
-  version = "unstable-2023-02-27";
+  version = "0-unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "potree";

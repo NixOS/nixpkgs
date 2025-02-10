@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "hamtransfer";
-  version = "unstable-2024-04-05";
+  version = "0-unstable-2024-04-05";
 
   src = fetchFromGitHub {
     owner = "ThomasHabets";

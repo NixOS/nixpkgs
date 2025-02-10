@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "osc-diagram";
-  version = "unstable-2023-08-07";
+  version = "0-unstable-2023-08-07";
   pyproject = true;
 
   src = fetchFromGitHub {

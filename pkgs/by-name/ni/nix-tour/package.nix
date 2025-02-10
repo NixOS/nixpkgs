@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-tour";
-  version = "unstable-2022-01-03";
+  version = "0-unstable-2022-01-03";
 
   src = fetchFromGitHub {
     owner = "nixcloud";

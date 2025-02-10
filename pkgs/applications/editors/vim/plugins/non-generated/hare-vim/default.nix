@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "hare.vim";
-  version = "unstable-2025-01-23";
+  version = "0-unstable-2025-01-23";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";

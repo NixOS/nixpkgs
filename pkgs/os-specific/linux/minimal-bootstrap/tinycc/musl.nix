@@ -12,7 +12,7 @@
 let
   pname = "tinycc-musl";
   # next commit introduces use of realpath (unsupported in mes-libc)
-  version = "unstable-2023-07-10";
+  version = "0-unstable-2023-07-10";
   rev = "fd6d2180c5c801bb0b4c5dde27d61503059fc97d";
 
   src = fetchurl {

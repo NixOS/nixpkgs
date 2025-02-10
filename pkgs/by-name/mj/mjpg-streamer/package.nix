@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "mjpg-streamer";
-  version = "unstable-2019-05-24";
+  version = "0-unstable-2019-05-24";
 
   src = fetchFromGitHub {
     owner = "jacksonliam";

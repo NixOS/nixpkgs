@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "cubeb";
-  version = "unstable-2022-10-18";
+  version = "0-unstable-2022-10-18";
 
   src = fetchFromGitHub {
     owner = "mozilla";

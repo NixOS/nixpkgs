@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gmad";
-  version = "unstable-2020-02-24";
+  version = "0-unstable-2020-02-24";
 
   meta = {
     description = "Garry's Mod Addon Creator and Extractor";

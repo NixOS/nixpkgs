@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "xhtml1";
-  version = "unstable-2002-08-01";
+  version = "0-unstable-2002-08-01";
 
   src = fetchurl {
     url = "https://www.w3.org/TR/xhtml1/xhtml1.tgz";

@@ -37,7 +37,7 @@ in
 
   githubRelease = stdenvNoCC.mkDerivation {
     pname = "${pname}-github";
-    version = "unstable-2022-05-19";
+    version = "0-unstable-2022-05-19";
 
     src = fetchFromGitHub {
       owner = "coz-m";

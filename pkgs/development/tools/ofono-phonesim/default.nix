@@ -9,7 +9,7 @@
 
 mkDerivation {
   pname = "ofono-phonesim";
-  version = "unstable-2019-11-18";
+  version = "0-unstable-2019-11-18";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/network/ofono/phonesim.git/snapshot/phonesim-adf231a84cd3708b825dc82c56e841dd7e3b4541.tar.gz";

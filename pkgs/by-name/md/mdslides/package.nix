@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mdslides";
-  version = "unstable-2022-12-15";
+  version = "0-unstable-2022-12-15";
 
   src = fetchFromGitHub {
     owner = "dadoomer";

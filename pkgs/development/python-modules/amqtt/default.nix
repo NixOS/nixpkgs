@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "amqtt";
-  version = "unstable-2022-05-29";
+  version = "0-unstable-2022-05-29";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";

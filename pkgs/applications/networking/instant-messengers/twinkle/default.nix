@@ -22,7 +22,7 @@
 
 mkDerivation rec {
   pname = "twinkle";
-  version = "unstable-2024-20-11";
+  version = "0-unstable-2024-20-11";
 
   src = fetchFromGitHub {
     owner = "LubosD";

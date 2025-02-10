@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wwcd";
-  version = "unstable-2022-02-05";
+  version = "0-unstable-2022-02-05";
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";

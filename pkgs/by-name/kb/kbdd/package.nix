@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "kbdd";
-  version = "unstable-2021-04-26";
+  version = "0-unstable-2021-04-26";
 
   src = fetchFromGitHub {
     owner = "qnikst";

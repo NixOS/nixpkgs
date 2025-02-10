@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "artim-dark";
-  version = "unstable-2021-12-29";
+  version = "0-unstable-2021-12-29";
 
   src = fetchFromGitHub {
     owner = "Mrcuve0";

@@ -16,7 +16,7 @@
 
 mkDerivation {
   pname = "appcsxcad";
-  version = "unstable-2023-01-06";
+  version = "0-unstable-2023-01-06";
 
   src = fetchFromGitHub {
     owner = "thliebig";

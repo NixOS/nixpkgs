@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cups-pdf-to-pdf";
-  version = "unstable-2021-12-22";
+  version = "0-unstable-2021-12-22";
 
   src = fetchFromGitHub {
     owner = "alexivkin";

@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openwith";
-  version = "unstable-2022-10-28";
+  version = "0-unstable-2022-10-28";
 
   src = fetchFromGitHub {
     owner = "jdek";

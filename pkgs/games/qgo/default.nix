@@ -10,7 +10,7 @@
 
 mkDerivation {
   pname = "qgo";
-  version = "unstable-2017-12-18";
+  version = "0-unstable-2017-12-18";
 
   meta = with lib; {
     description = "Go client based on Qt5";

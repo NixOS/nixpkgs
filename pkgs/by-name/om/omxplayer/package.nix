@@ -75,7 +75,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "omxplayer";
-  version = "unstable-2013-03-28";
+  version = "0-unstable-2013-03-28";
 
   src = fetchFromGitHub {
     owner = "huceke";

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "serializable";
-  version = "unstable-2023-07-13";
+  version = "0-unstable-2023-07-13";
   format = "setuptools";
 
   src = fetchFromGitHub {

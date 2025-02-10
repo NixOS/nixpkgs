@@ -22,7 +22,7 @@
 
 buildPythonPackage {
   pname = "pysim";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2023-08-13";
   format = "pyproject";
 
   src = fetchFromGitHub {

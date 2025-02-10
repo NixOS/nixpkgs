@@ -7,7 +7,7 @@
 
 buildNpmPackage rec {
   pname = "haste-server";
-  version = "unstable-2023-03-06";
+  version = "0-unstable-2023-03-06";
 
   src = fetchFromGitHub {
     owner = "toptal";

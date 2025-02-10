@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "basiliskii";
-  version = "unstable-2022-09-30";
+  version = "0-unstable-2022-09-30";
 
   src = fetchFromGitHub {
     owner = "kanjitalk755";

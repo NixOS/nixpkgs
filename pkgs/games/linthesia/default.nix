@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "linthesia";
-  version = "unstable-2023-05-23";
+  version = "0-unstable-2023-05-23";
 
   src = fetchFromGitHub {
     owner = "linthesia";

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-fortran";
-  version = "unstable-2022-03-02";
+  version = "0-unstable-2022-03-02";
   format = "setuptools";
 
   src = fetchFromGitHub {

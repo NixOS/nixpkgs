@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "udis86";
-  version = "unstable-2014-12-25";
+  version = "0-unstable-2014-12-25";
 
   src = fetchFromGitHub {
     owner = "vmt";

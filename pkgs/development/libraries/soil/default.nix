@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "soil";
-  version = "unstable-2020-01-04";
+  version = "0-unstable-2020-01-04";
 
   src = fetchzip {
     url = "https://web.archive.org/web/20200104042737id_/http://www.lonesock.net/files/soil.zip";

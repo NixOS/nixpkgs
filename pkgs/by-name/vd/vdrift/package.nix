@@ -22,7 +22,7 @@
   },
 }:
 let
-  version = "unstable-2021-09-05";
+  version = "0-unstable-2021-09-05";
   bin = stdenv.mkDerivation {
     pname = "vdrift";
     inherit version;

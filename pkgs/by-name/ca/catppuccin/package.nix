@@ -195,7 +195,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2024-03-12";
+    version = "0-unstable-2024-03-12";
 
     srcs = selectedSources;
 

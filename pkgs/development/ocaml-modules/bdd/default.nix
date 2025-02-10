@@ -7,7 +7,7 @@
 
 buildDunePackage {
   pname = "bdd";
-  version = "unstable-2022-07-14";
+  version = "0-unstable-2022-07-14";
 
   duneVersion = "3";
 

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "oyaml";
-  version = "unstable-2021-12-03";
+  version = "0-unstable-2021-12-03";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";

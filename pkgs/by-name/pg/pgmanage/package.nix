@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   # The last release 11.0.1 from 2018 fails the NixOS test
   # probably because of PostgreSQL-12 incompatibility.
   # Fortunately the latest master does succeed the test.
-  version = "unstable-2022-05-11";
+  version = "0-unstable-2022-05-11";
 
   src = fetchFromGitHub {
     owner = "pgManage";

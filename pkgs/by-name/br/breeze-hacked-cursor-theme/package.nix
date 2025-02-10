@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "breeze-hacked-cursor-theme";
-  version = "unstable-2024-1-28";
+  version = "0-unstable-2024-1-28";
 
   src = fetchFromGitHub {
     owner = "clayrisser";

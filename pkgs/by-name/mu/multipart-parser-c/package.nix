@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "multipart-parser-c";
-  version = "unstable-2015-12-14";
+  version = "0-unstable-2015-12-14";
 
   src = fetchFromGitHub {
     owner = "iafonov";

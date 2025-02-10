@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "grpc-health-check";
-  version = "unstable-2022-08-19";
+  version = "0-unstable-2022-08-19";
 
   src = fetchFromGitHub {
     owner = "paypizza";

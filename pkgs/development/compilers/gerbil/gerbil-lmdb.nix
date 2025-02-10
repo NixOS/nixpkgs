@@ -8,7 +8,7 @@
 
 {
   pname = "gerbil-lmdb";
-  version = "unstable-2023-09-23";
+  version = "0-unstable-2023-09-23";
   git-version = "6d64813";
   gerbil-package = "clan";
   gerbilInputs = [ ];

@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sockdump";
-  version = "unstable-2023-12-11";
+  version = "0-unstable-2023-12-11";
 
   src = fetchFromGitHub {
     owner = "mechpen";

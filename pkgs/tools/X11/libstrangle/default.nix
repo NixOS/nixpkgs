@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
-  version = "unstable-202202022";
+  version = "0-unstable-202202022";
 
   buildInputs = [
     libGL

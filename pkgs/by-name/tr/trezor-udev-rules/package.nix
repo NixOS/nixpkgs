@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "trezor-udev-rules";
-  version = "unstable-2019-07-17";
+  version = "0-unstable-2019-07-17";
 
   udevRules = fetchurl {
     # let's pin the latest commit in the repo which touched the udev rules file

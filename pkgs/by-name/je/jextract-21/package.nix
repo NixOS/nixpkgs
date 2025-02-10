@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "jextract";
-  version = "unstable-2023-11-27";
+  version = "0-unstable-2023-11-27";
 
   src = fetchFromGitHub {
     owner = "openjdk";

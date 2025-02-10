@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "paranoid-crypto";
-  version = "unstable-20220819";
+  version = "0-unstable-20220819";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";

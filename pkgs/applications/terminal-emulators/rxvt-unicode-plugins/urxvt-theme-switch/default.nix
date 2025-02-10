@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "urxvt-theme-switch";
-  version = "unstable-2014-12-21";
+  version = "0-unstable-2014-12-21";
 
   dontPatchShebangs = true;
 

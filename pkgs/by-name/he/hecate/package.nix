@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "hecate";
-  version = "unstable-2022-05-03";
+  version = "0-unstable-2022-05-03";
 
   src = fetchFromGitHub {
     owner = "evanmiller";

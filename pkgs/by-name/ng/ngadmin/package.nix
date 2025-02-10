@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "ngadmin";
-  version = "unstable-2020-10-05";
+  version = "0-unstable-2020-10-05";
 
   src = fetchFromGitHub {
     owner = "Alkorin";

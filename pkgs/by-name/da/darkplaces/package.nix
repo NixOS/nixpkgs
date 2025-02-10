@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "darkplaces";
-  version = "unstable-2022-05-10";
+  version = "0-unstable-2022-05-10";
 
   src = fetchFromGitHub {
     owner = "DarkPlacesEngine";

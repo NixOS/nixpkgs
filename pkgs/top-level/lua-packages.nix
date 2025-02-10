@@ -82,7 +82,7 @@ rec {
     }:
     buildLuaPackage rec {
       pname = "lua-pam";
-      version = "unstable-2015-07-03";
+      version = "0-unstable-2015-07-03";
       # Needed for `disabled`, overridden in buildLuaPackage
       name = "${pname}-${version}";
 

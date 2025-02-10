@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prettypst";
-  version = "unstable-2024-10-20";
+  version = "0-unstable-2024-10-20";
 
   src = fetchFromGitHub {
     owner = "antonWetzel";

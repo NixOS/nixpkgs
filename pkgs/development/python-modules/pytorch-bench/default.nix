@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "pytorch-bench";
-  version = "unstable-2024-07-18";
+  version = "0-unstable-2024-07-18";
   pyproject = true;
 
   src = fetchFromGitHub {

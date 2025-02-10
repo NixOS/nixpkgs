@@ -12,7 +12,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "neofetch";
-  version = "unstable-2021-12-10";
+  version = "0-unstable-2021-12-10";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";

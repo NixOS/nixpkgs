@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "ivsc-driver";
-  version = "unstable-2024-09-18";
+  version = "0-unstable-2024-09-18";
 
   src = fetchFromGitHub {
     owner = "intel";

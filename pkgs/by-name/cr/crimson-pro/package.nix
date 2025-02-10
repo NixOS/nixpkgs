@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "crimson-pro";
-  version = "unstable-2022-08-30";
+  version = "0-unstable-2022-08-30";
 
   outputs = [
     "out"

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wireworld";
-  version = "unstable-2023-05-09";
+  version = "0-unstable-2023-05-09";
 
   src = fetchFromGitLab {
     owner = "blinry";

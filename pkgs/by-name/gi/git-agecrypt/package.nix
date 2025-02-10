@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "git-agecrypt";
-  version = "unstable-2024-03-11";
+  version = "0-unstable-2024-03-11";
 
   src = fetchFromGitHub {
     owner = "vlaci";

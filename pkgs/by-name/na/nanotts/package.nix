@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "nano-tts";
-  version = "unstable-2021-02-22";
+  version = "0-unstable-2021-02-22";
 
   src = fetchFromGitHub {
     repo = "nanotts";

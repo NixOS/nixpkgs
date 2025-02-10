@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "tpm-luks";
-  version = "unstable-2015-07-11";
+  version = "0-unstable-2015-07-11";
 
   src = fetchFromGitHub {
     owner = "momiji";

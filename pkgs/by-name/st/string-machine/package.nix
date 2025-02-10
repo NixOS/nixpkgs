@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "string-machine";
-  version = "unstable-2020-01-20";
+  version = "0-unstable-2020-01-20";
 
   src = fetchFromGitHub {
     owner = "jpcima";

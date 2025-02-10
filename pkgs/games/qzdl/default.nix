@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "qzdl";
-  version = "unstable-2023-04-04";
+  version = "0-unstable-2023-04-04";
 
   src = fetchFromGitHub {
     owner = "qbasicer";

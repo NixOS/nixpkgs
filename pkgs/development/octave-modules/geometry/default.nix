@@ -7,7 +7,7 @@
 
 buildOctavePackage rec {
   pname = "geometry";
-  version = "unstable-2021-07-07";
+  version = "0-unstable-2021-07-07";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/octave/${pname}";

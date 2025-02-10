@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2024-07-22";
+    version = "0-unstable-2024-07-22";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "oscscreen";
-  version = "unstable-2023-03-23";
+  version = "0-unstable-2023-03-23";
   pyproject = true;
 
   src = fetchFromGitHub {

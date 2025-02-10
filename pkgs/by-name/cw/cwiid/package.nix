@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cwiid";
-  version = "unstable-2010-02-21";
+  version = "0-unstable-2010-02-21";
 
   src = fetchFromGitHub {
     owner = "abstrakraft";
