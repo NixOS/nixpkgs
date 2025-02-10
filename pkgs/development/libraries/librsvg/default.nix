@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -31,6 +32,7 @@
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   buildPackages,
   gobject-introspection,
+  mesonEmulatorHook,
   _experimental-update-script-combinators,
   common-updater-scripts,
   jq,
@@ -65,6 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7NKT+wzDOMFwFxu8e8++pnJdBByV8xOF3JNUCZM+RZc=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "cross-introspection.patch";
+      url = "https://gitlab.gnome.org/GNOME/librsvg/-/commit/84f24b1f5767f807f8d0442bbf3f149a0defcf78.patch";
+      hash = "sha256-FRyAYCCP3eu7YDUS6g7sKCdbq2nU8yQdbdVaQwLrlhE=";
+    })
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
@@ -95,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
       gobject-introspection
       gi-docgen
       vala # vala bindings require GObject introspection
+    ]
+    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
     ];
 
   buildInputs =
@@ -119,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dtriplet=${stdenv.hostPlatform.rust.rustcTarget}"
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "vala" withIntrospection)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
@@ -156,17 +170,18 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_DATA_DIRS=${shared-mime-info}/share:$XDG_DATA_DIRS
   '';
 
-  # Not generated when cross compiling.
   postInstall =
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
-    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    # Not generated when cross compiling.
+    lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       # Merge gdkpixbuf and librsvg loaders
       GDK_PIXBUF=$out/${gdk-pixbuf.binaryDir}
       cat ${lib.getLib gdk-pixbuf}/${gdk-pixbuf.binaryDir}/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
       mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
-
+    ''
+    + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
       installShellCompletion --cmd rsvg-convert \
         --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
         --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \
