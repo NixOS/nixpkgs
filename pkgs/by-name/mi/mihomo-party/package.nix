@@ -54,30 +54,27 @@ stdenv.mkDerivation {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDependencies = map lib.getLib [
-    udev
-    libayatana-appindicator
-  ];
-
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
+    mkdir -p $out/bin
     cp -r opt/mihomo-party usr/share $out
     substituteInPlace $out/share/applications/mihomo-party.desktop \
       --replace-fail "/opt/mihomo-party/mihomo-party" "mihomo-party"
+    ln -s $out/mihomo-party/mihomo-party $out/bin/mihomo-party
 
     runHook postInstall
   '';
 
   preFixup = ''
-    mkdir $out/bin
-    makeWrapper $out/mihomo-party/mihomo-party $out/bin/mihomo-party \
-      --prefix LD_LIBRARY_PATH : "${
+    patchelf --add-needed libGL.so.1 \
+      --add-rpath ${
         lib.makeLibraryPath [
           libGL
+          udev
+          libayatana-appindicator
         ]
-      }"
+      } $out/mihomo-party/mihomo-party
   '';
 
   meta = {
