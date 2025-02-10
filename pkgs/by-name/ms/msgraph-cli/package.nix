@@ -7,12 +7,12 @@
 }:
 buildDotnetModule rec {
   pname = "msgraph-cli";
-  version = "v1.9.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-cli";
-    rev = version;
+    tag = "v${version}";
     hash = "sha256-bpdxzVlQWQLNYTZHN25S6qa3NKHhDc+xV6NvzSNMVnQ=";
   };
 
