@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "netlify-cli";
-  version = "18.0.2";
+  version = "18.0.4";
 
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-GykzaVJyiAH7L9afK+PdwkqImo80ldcx420pM8V4WBg=";
+    hash = "sha256-UMGSb2CA7BaHRWgRoH4XR9XboDzkl5/JYYjKK5+ChjY=";
   };
 
-  npmDepsHash = "sha256-n6JUInqI4ioMTebYcJXJ1ff8MjUW/+Y3b2lS7zhuSdI=";
+  npmDepsHash = "sha256-cI5FBnjAWyj1VAm+GOQx6kj2bpmEQpsdMomZ4JpPohQ=";
 
   inherit nodejs;
 

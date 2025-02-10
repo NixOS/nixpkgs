@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
@@ -53,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./1003-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_m.patch
     ./1004-Re-enable-coverge-reporting.patch
     ./1005-Make-GTest-available-to-example-test.patch
+
+    # In aarch64 lomiri-gallery-app VM tests, default 10s timeout for thumbnail extractor is often too tight
+    # Raise to 20s to work around this (too much more will run into D-Bus' call timeout)
+    ./2001-Raise-default-extraction-timeout.patch
   ];
 
   postPatch = ''
@@ -169,7 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # gallery app delegates to thumbnailer, tests various formats
+      vm = nixosTests.lomiri-gallery-app;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
     updateScript = gitUpdater { };
   };
 

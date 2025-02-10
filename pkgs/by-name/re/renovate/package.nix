@@ -53,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       yq '.engines.node = "${nodejs.version}"' -i package.json
 
       pnpm build
-      pnpm prune --prod --ignore-scripts
+      find -name 'node_modules' -type d -exec rm -rf {} \; || true
+      pnpm install --offline --prod --ignore-scripts
     ''
     # The optional dependency re2 is not built by pnpm and needs to be built manually.
     # If re2 is not built, you will get an annoying warning when you run renovate.

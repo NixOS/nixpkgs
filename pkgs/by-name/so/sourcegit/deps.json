@@ -106,11 +106,6 @@
   },
   {
     "pname": "HarfBuzzSharp",
-    "version": "7.3.0.2",
-    "hash": "sha256-ibgoqzT1NV7Qo5e7X2W6Vt7989TKrkd2M2pu+lhSDg8="
-  },
-  {
-    "pname": "HarfBuzzSharp",
     "version": "7.3.0.3",
     "hash": "sha256-1vDIcG1aVwVABOfzV09eAAbZLFJqibip9LaIx5k+JxM="
   },
@@ -136,18 +131,18 @@
   },
   {
     "pname": "LiveChartsCore",
-    "version": "2.0.0-rc4.5",
-    "hash": "sha256-2Fgn9Bo1aM6dZHCU+OVykOhggTzpcEfFNfYtWc4yvHc="
+    "version": "2.0.0-rc5",
+    "hash": "sha256-NHgYbeIdAoZlrC6QgVb1oLo3dlo17R8yTbPgiHMmJZc="
   },
   {
     "pname": "LiveChartsCore.SkiaSharpView",
-    "version": "2.0.0-rc4.5",
-    "hash": "sha256-03RR14tA0DtYHiLdgmAI4Gp5/e2H6QPkNFOBeqiFaJU="
+    "version": "2.0.0-rc5",
+    "hash": "sha256-zppOFKHGn2HJMP8AAuk6mxJXqvgjfN7o8f0sInUWZGc="
   },
   {
     "pname": "LiveChartsCore.SkiaSharpView.Avalonia",
-    "version": "2.0.0-rc4.5",
-    "hash": "sha256-lzG/5e6WDpUiHZ8GvovOMvwXyYoVBeB1Ktuuw2Fx5No="
+    "version": "2.0.0-rc5",
+    "hash": "sha256-xyFEZWWkRlBi8GNCDpyOUzt6aEe+9sR1+VN2yY59mhg="
   },
   {
     "pname": "MicroCom.Runtime",
@@ -161,18 +156,13 @@
   },
   {
     "pname": "SkiaSharp",
-    "version": "2.88.8",
-    "hash": "sha256-rD5gc4SnlRTXwz367uHm8XG5eAIQpZloGqLRGnvNu0A="
-  },
-  {
-    "pname": "SkiaSharp",
     "version": "2.88.9",
     "hash": "sha256-jZ/4nVXYJtrz9SBf6sYc/s0FxS7ReIYM4kMkrhZS+24="
   },
   {
     "pname": "SkiaSharp.HarfBuzz",
-    "version": "2.88.8",
-    "hash": "sha256-W9jNuEo/8q+k2aHNC19FfKcBUIEWx2zDcGwM+jDZ1o8="
+    "version": "2.88.9",
+    "hash": "sha256-JH8Jr25eftPfq0BztamvxfDcAZtnx/jLRj5DGCS5/G8="
   },
   {
     "pname": "SkiaSharp.NativeAssets.Linux",
