@@ -18,7 +18,6 @@ let
 
   cfg = config.services.rss-bridge;
 
-
   cfgEnv = lib.pipe cfg.config [
     (lib.mapAttrsRecursive (
       path: value:
@@ -61,17 +60,19 @@ in
 
       user = mkOption {
         type = types.str;
-        default = "nginx";
+        default = if cfg.webserver == null then "rss-bridge" else cfg.webserver;
+        defaultText = "{option}`config.services.rss-bridge.webserver` or \"rss-bridge\"";
         description = ''
-          User account under which both the service and the web-application run.
+          The user account under which both the service and the web application run.
         '';
       };
 
       group = mkOption {
         type = types.str;
-        default = "nginx";
+        default = if cfg.webserver == null then "rss-bridge" else cfg.webserver;
+        defaultText = "{option}`config.services.rss-bridge.webserver` or \"rss-bridge\"";
         description = ''
-          Group under which the web-application run.
+          The group under which the web application runs.
         '';
       };
 
@@ -99,7 +100,20 @@ in
         type = types.nullOr types.str;
         default = "rss-bridge";
         description = ''
-          Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+          Name of the nginx or caddy virtualhost to use and setup. If null, do not setup any virtualhost.
+        '';
+      };
+
+      webserver = mkOption {
+        type = types.nullOr (
+          types.enum [
+            "nginx"
+            "caddy"
+          ]
+        );
+        default = "nginx";
+        description = ''
+          Type of virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
 
@@ -172,7 +186,7 @@ in
       };
     };
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
+    services.nginx = mkIf (cfg.virtualHost != null && cfg.webserver == "nginx") {
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {
@@ -192,6 +206,19 @@ in
             '';
           };
         };
+      };
+    };
+
+    services.caddy = mkIf (cfg.virtualHost != null && cfg.webserver == "caddy") {
+      enable = true;
+      virtualHosts.${cfg.virtualHost} = {
+        extraConfig = ''
+          root * ${cfg.package}
+          file_server
+          php_fastcgi unix/${config.services.phpfpm.pools.${cfg.pool}.socket} {
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "  env ${n} \"${v}\"") cfgEnv)}
+          }
+        '';
       };
     };
   };
