@@ -1814,9 +1814,6 @@ self: super: {
   };
   hspec-core_2_7_10 = doJailbreak (dontCheck super.hspec-core_2_7_10);
 
-  # waiting for aeson bump
-  servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
-
   hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] super.hercules-ci-agent;
 
   hercules-ci-cli = lib.pipe super.hercules-ci-cli [
