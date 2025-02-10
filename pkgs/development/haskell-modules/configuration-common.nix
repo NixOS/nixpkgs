@@ -1067,8 +1067,6 @@ self: super: {
     };
   } super.djinn;
 
-  mueval = doJailbreak super.mueval;
-
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
 
