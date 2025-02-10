@@ -118,10 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional disableDocs "--disable-docs"
     ++ lib.optionals (!isStatic) [
-      # instead of `--disable-static` that `stdenv` assumes
-      "--disable-libs"
       # "not currently supported" in `configure --help-cs` but still emphasized in README
       "--enable-shared"
+      # Racket builds on unix-like systems do not produce shared libraries, so
+      # do not use '--disable-libs' to disable the production of static libs.
     ]
     ++ lib.optionals isDarwin [
       "--disable-strip"
