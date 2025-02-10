@@ -9920,6 +9920,11 @@
     github = "ilyakooo0";
     githubId = 6209627;
   };
+  ilys = {
+    name = "ilys";
+    github = "ilyist";
+    githubId = 185637611;
+  };
   imadnyc = {
     email = "me@imad.nyc";
     github = "imadnyc";
@@ -21193,6 +21198,12 @@
     github = "SharzyL";
     githubId = 46294732;
     name = "Sharzy";
+  };
+  shavyn = {
+    name = "Marco Desiderati";
+    email = "desideratimarco@gmail.com";
+    github = "Shavyn";
+    githubId = 7593302;
   };
   shawn8901 = {
     email = "shawn8901@googlemail.com";
