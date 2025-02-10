@@ -1255,8 +1255,7 @@ self: super: {
 
   # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
-  # dontCheck can be removed on the next package set bump
-  vulkan-utils = dontCheck (addExtraLibrary pkgs.vulkan-headers super.vulkan-utils);
+  vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
 
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
