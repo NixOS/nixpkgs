@@ -2771,6 +2771,9 @@ self: super: {
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
+  # unbreak with tasty-quickcheck 0.11
+  text-builder = super.text-builder_0_6_7_3;
+
   postgrest = lib.pipe super.postgrest [
     # 2023-12-20: New version needs extra dependencies
     (addBuildDepends [ self.extra self.fuzzyset_0_2_4 self.cache self.timeit ])
