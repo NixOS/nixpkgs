@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./installed-tests-path.patch
 
     ./static-deps.patch
-    ./static-lerc.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
