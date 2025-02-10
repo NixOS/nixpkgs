@@ -26058,6 +26058,12 @@
     githubId = 8100652;
     name = "David Mell";
   };
+  zsenai = {
+    email = "zarred.f@gmail.com";
+    github = "ZarredFelicite";
+    githubId = 54928291;
+    name = "Zarred Felicite";
+  };
   zshipko = {
     email = "zachshipko@gmail.com";
     github = "zshipko";
