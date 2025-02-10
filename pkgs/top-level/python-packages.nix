@@ -12383,6 +12383,10 @@ self: super: with self; {
 
   pyobihai = callPackage ../development/python-modules/pyobihai { };
 
+  pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
+
+  pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
+
   pyocd = callPackage ../development/python-modules/pyocd { };
 
   pyocd-pemicro = callPackage ../development/python-modules/pyocd-pemicro { };
@@ -14506,6 +14510,8 @@ self: super: with self; {
   ruffus = callPackage ../development/python-modules/ruffus { };
 
   rules = callPackage ../development/python-modules/rules { };
+
+  rumps = callPackage ../development/python-modules/rumps { };
 
   runs = callPackage ../development/python-modules/runs { };
 
