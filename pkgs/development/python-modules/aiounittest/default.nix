@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "aiounittest";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kwarunek";
     repo = pname;
     tag = version;
-    hash = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
+    hash = "sha256-hcfcB2SMduTopqdRdMi63UTTD7BWc5g2opAfahWXjlw=";
   };
 
   nativeBuildInputs = [ setuptools ];
