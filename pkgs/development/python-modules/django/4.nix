@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   pythonOlder,
   substituteAll,
@@ -65,6 +66,13 @@ buildPythonPackage rec {
       # make sure the tests don't remove packages from our pythonpath
       # and disable failing tests
       ./django_4_tests.patch
+
+      # fix filename length limit tests on bcachefs
+      # FIXME: remove if ever backported
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+      })
     ]
     ++ lib.optionals withGdal [
       (substituteAll {
