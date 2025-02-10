@@ -26,6 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-C+/M25oCLTNGGEUj2EyXn3UjcvPvDYFmmUW8IOoF1uU=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/conftest.py \
+      --replace-fail 'aiohttp_app(loop,' 'aiohttp_app(event_loop,' \
+      --replace-fail 'return loop.run_until_complete' 'return event_loop.run_until_complete'
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     apispec
