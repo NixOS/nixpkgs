@@ -32,6 +32,12 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace test_webtest_aiohttp.py \
+      --replace-fail '(app, loop)' '(app, event_loop)' \
+      --replace-fail 'WebTestApp(app, loop=loop)' 'WebTestApp(app, loop=event_loop)'
+  '';
+
   propagatedBuildInputs = [ webtest ];
 
   nativeCheckInputs = [
