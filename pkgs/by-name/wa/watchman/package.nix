@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.02.03.00";
+  version = "2025.02.10.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fR5SOCRc77vtKUIRJvl7pgRjUPwakQCzGTvIF4Ye2/I=";
+    hash = "sha256-X9cUiMrUeuuJT+0gJa9cL2mpeSEWS/DkTx7eQu8u7oY=";
   };
 
   patches = [
