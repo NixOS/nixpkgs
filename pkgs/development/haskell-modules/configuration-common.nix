@@ -2677,12 +2677,6 @@ self: super: {
       }))
     ];
 
-  # Support tasty-quickcheck 0.11: https://github.com/nikita-volkov/deferred-folds/pull/8
-  deferred-folds = appendPatch (fetchpatch {
-    url = "https://github.com/nikita-volkov/deferred-folds/commit/27bd67d49f52d6826ea69c3a85e5297408266ad0.patch";
-    sha256 = "sha256-4LUoAIX0e4VZrka6nIrlccBHDMTbd1hGQCtRoJDAl74=";
-  }) super.deferred-folds;
-
   # Support tasty-quickcheck 0.11: https://github.com/Bodigrim/mod/pull/26
   mod = appendPatch (fetchpatch {
     url = "https://github.com/Bodigrim/mod/commit/30596fb9d85b69ec23ecb05ef9a7c91d67901cfd.patch";
