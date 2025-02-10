@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2025.02.03.00";
+  version = "2025.02.10.00";
 
   outputs = [
     "out"
