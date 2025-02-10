@@ -1484,8 +1484,6 @@ with pkgs;
 
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
-  ctpv = callPackage ../applications/file-managers/lf/ctpv.nix { };
-
   mc = callPackage ../applications/file-managers/mc {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
