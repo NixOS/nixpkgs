@@ -1551,9 +1551,6 @@ self: super: {
     })
   ] super.jsaddle-hello;
 
-  # Too strict upper bounds on text
-  lsql-csv = doJailbreak super.lsql-csv;
-
   # Tests disabled and broken override needed because of missing lib chrome-test-utils: https://github.com/reflex-frp/reflex-dom/issues/392
   reflex-dom-core = lib.pipe super.reflex-dom-core [
     doDistribute
