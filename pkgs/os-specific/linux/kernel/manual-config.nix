@@ -1,7 +1,7 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , cpio, elfutils, hexdump, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
 , fetchpatch
-, rustc, rust-bindgen, rustPlatform
+, rustc, rust-bindgen, rustPlatform, rustfmt,
 }:
 
 let
@@ -125,7 +125,7 @@ let
         (buildPackages.deterministic-uname.override { inherit modDirVersion; })
       ]
       ++ optional (lib.versionAtLeast version "5.13") zstd
-      ++ optionals withRust [ rustc rust-bindgen ]
+      ++ optionals withRust [ rustc rust-bindgen rustfmt ]
       ;
 
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
@@ -160,7 +160,7 @@ let
         hexdump
       ] ++ optional  needsUbootTools ubootTools
         ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-        ++ optionals withRust [ rustc rust-bindgen ];
+        ++ optionals withRust [ rustc rust-bindgen rustfmt ];
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
