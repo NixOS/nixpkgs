@@ -13,8 +13,8 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpclient";
-
   version = "2.4.1";
+
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
