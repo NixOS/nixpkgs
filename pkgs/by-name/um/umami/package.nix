@@ -7,7 +7,6 @@
   makeWrapper,
   nixosTests,
   nodejs,
-  prisma,
   prisma-engines,
   openssl,
   rustPlatform,
@@ -57,7 +56,6 @@ let
       hash = cargoHash;
     };
   });
-  prisma' = prisma.override { prisma-engines = prisma-engines'; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "umami";
@@ -67,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     yarnConfigHook
     yarnBuildHook
     nodejs
-    prisma'
     makeWrapper
   ];
 
@@ -77,6 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     inherit (sources) hash;
   };
+
+  patches = [
+    # Include prisma cli in next standalone build.
+    # This is preferred to using the prisma in nixpkgs because it guarantees
+    # the version matches.
+    # See https://nextjs-forum.com/post/1280550687998083198
+    # and https://nextjs.org/docs/pages/api-reference/config/next-config-js/output#caveats
+    ./0001-include-prisma-cli-in-build.diff
+  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
@@ -93,11 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
   env.COLLECT_API_ENDPOINT = collectApiEndpoint;
   env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
 
+  # Allow prisma-cli to find prisma-engines without having to download them
+  env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
+  env.PRISMA_SCHEMA_ENGINE_BINARY = "${prisma-engines'}/bin/schema-engine";
+
   buildPhase = ''
     runHook preBuild
 
     yarn --offline copy-db-files
-    prisma generate # yarn --offline build-db-client, but using prisma from nixpkgs
+    yarn --offline build-db-client # prisma generate
 
     yarn --offline build-tracker
     yarn --offline build-app
@@ -134,9 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set NODE_ENV production \
       --set NEXT_TELEMETRY_DISABLED 1 \
       --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines'}/lib/libquery_engine.node" \
+      --set PRISMA_SCHEMA_ENGINE_BINARY "${prisma-engines'}/bin/schema-engine" \
       --prefix PATH : ${lib.makeBinPath [ openssl ]} \
       --chdir $out \
-      --run "${prisma'}/bin/prisma migrate deploy" \
+      --run "$out/node_modules/.bin/prisma migrate deploy" \
       --add-flags "$out/server.js"
 
     runHook postInstall
@@ -150,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       sources
       geocities
       ;
+    prisma-engines = prisma-engines';
     updateScript = ./update.sh;
   };
 
