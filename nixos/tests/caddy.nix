@@ -28,6 +28,7 @@ import ./make-test-python.nix (
             }
           '';
           services.caddy.enableReload = true;
+          services.caddy.enforceConfigValidation = pkgs.lib.mkDefault false;
 
           specialisation.config-reload.configuration = {
             services.caddy.extraConfig = ''
@@ -89,6 +90,16 @@ import ./make-test-python.nix (
               '';
             };
           };
+          specialisation.invalid-config-fail.configuration = {
+            services.caddy = {
+              enforceConfigValidation = true;
+              extraConfig = ''
+                not-a-real-directive {
+                  this-should-fail
+                }
+              '';
+            };
+          };
         };
     };
 
@@ -101,6 +112,8 @@ import ./make-test-python.nix (
         multipleHostnames = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-hostnames";
         rfc42Config = "${nodes.webserver.system.build.toplevel}/specialisation/rfc42";
         withPluginsConfig = "${nodes.webserver.system.build.toplevel}/specialisation/with-plugins";
+        invalidConfigWarning = "${nodes.webserver.system.build.toplevel}/specialisation/invalid-config-warning";
+        invalidConfigFail = "${nodes.webserver.system.build.toplevel}/specialisation/invalid-config-fail";
       in
       ''
         url = "http://localhost/example.html"
@@ -150,6 +163,17 @@ import ./make-test-python.nix (
             )
             webserver.wait_for_open_port(80)
             webserver.succeed("curl http://localhost | grep caddy")
+
+        with subtest("invalid config shows warning when validation is not enforced"):
+            webserver.succeed(
+                "${invalidConfigWarning}/bin/switch-to-configuration test >&2"
+            )
+            webserver.wait_for_unit("caddy")
+
+        with subtest("invalid config fails build when validation is enforced"):
+            webserver.fail(
+                "${invalidConfigFail}/bin/switch-to-configuration test >&2"
+            )
       '';
   }
 )
