@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, zlib
-, stdenv
-, darwin
-, vimUtils
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  zlib,
+  stdenv,
+  darwin,
+  vimUtils,
+  nix-update-script,
 }:
 
 let
@@ -33,27 +34,23 @@ let
     pname = "maple";
     inherit version src meta;
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "subprocess-0.2.10" = "sha256-WcGrJ103ofGlQwi32kRGM3Z+uvKSCFBmFZbZXAtuWwM=";
-        "tree-sitter-dockerfile-0.1.0" = "sha256-K+duK3HcxlVgbLXBos3MUxyfnTywcHX6JM4Do0qAJO0=";
-        "tree-sitter-vim-0.3.1-dev.0" = "sha256-CWxZ28LdptiMNO2VIk+Ny/DhQXdN604EuqRIb9oaCmI=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-FEeSwa8KmIyfhWAU9Dpric6uB2e0yK+Tig/k2zwq2Rg=";
 
     nativeBuildInputs = [
       pkg-config
     ];
 
-    buildInputs = [
-      libgit2
-      zlib
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+    buildInputs =
+      [
+        libgit2
+        zlib
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        darwin.apple_sdk.frameworks.AppKit
+        darwin.apple_sdk.frameworks.CoreServices
+        darwin.apple_sdk.frameworks.SystemConfiguration
+      ];
   };
 in
 
