@@ -5,37 +5,47 @@
   pkg-config,
   sqlite,
   scdoc,
+  installShellFiles,
   makeWrapper,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pimsync";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
     rev = "v${version}";
-    hash = "sha256-upOCrpbveSSFrhdHDkTOmja4MLmsgtuoDHMsgXyulWI=";
+    hash = "sha256-mNOKAnBpCo4LFn7l16UG7V3cCJkUhRxhB/0jwoPLttM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-i9t/6z1UJFppv3y7anB+df+UldGP2TynYKKIUAZff5Y=";
+  cargoHash = "sha256-2Uj+dDtuykQx1tBSGN3AE3Bz904bHfkbhKN3VIeG40M=";
+
+  PIMSYNC_VERSION = version;
 
   nativeBuildInputs = [
     pkg-config
     scdoc
     makeWrapper
+    installShellFiles
   ];
 
   buildInputs = [
     sqlite
   ];
 
-  makeFlags = [
-    "build"
-    "PREFIX=${placeholder "out"}"
-  ];
+  postBuild = ''
+    make man
+  '';
+
+  postInstall = ''
+    installManPage target/pimsync.1 target/pimsync.conf.5 target/pimsync-migration.7
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Synchronise calendars and contacts";
