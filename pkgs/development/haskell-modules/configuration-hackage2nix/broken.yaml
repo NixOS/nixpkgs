@@ -3256,7 +3256,6 @@ broken-packages:
   - jpeg # failure in job https://hydra.nixos.org/build/233204056 at 2023-09-02
   - js-good-parts # failure in job https://hydra.nixos.org/build/233198958 at 2023-09-02
   - json2 # failure in job https://hydra.nixos.org/build/233242447 at 2023-09-02
-  - json-alt # failure in job https://hydra.nixos.org/build/233242230 at 2023-09-02
   - json-api # failure in job https://hydra.nixos.org/build/233198171 at 2023-09-02
   - json-api-lib # failure in job https://hydra.nixos.org/build/233210901 at 2023-09-02
   - json-assertions # failure in job https://hydra.nixos.org/build/233196774 at 2023-09-02
