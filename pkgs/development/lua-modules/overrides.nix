@@ -571,9 +571,6 @@ in
       final.nlua final.busted neovim-unwrapped
     ];
 
-    # stick to neovim's lua version else loading shared libraries fail
-    meta = oa.meta // { broken = !isLua51; };
-
     checkPhase = ''
       runHook preCheck
       export HOME=$(mktemp -d)

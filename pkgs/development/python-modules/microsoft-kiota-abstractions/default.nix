@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -14,19 +14,21 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.3.3";
+  version = "1.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-abstractions-python";
-    tag = "v${version}";
-    hash = "sha256-TgHj5Ga6Aw/sN2Hobn0OocFB/iGRHTKEeOa2j2aqnRY=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-abstractions-v${version}";
+    hash = "sha256-ESRnI8prXG1h5H5RVD4eOQ1sQYSEMMLVHSk8yhzFGVw=";
   };
 
-  build-system = [ flit-core ];
+  sourceRoot = "source/packages/abstractions/";
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     opentelemetry-api
@@ -52,8 +54,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Abstractions library for Kiota generated Python clients";
-    homepage = "https://github.com/microsoft/kiota-abstractions-python";
-    changelog = "https://github.com/microsoft/kiota-abstractions-python/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/abstractions/";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-abstractions-v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

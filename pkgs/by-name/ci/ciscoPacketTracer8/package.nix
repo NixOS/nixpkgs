@@ -136,7 +136,6 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/bin
     ln -s ${fhs-env}/bin/${fhs-env.name} $out/bin/packettracer8
-    ln -s ${fhs-env}/usr $out/usr
 
     runHook postInstall
   '';
