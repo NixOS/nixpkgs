@@ -1510,10 +1510,6 @@ self: super: {
       # https://github.com/NixOS/nixpkgs/issues/198495
       (dontCheckIf (!pkgs.postgresql.doCheck) super.persistent-postgresql);
 
-  # Test suite requires a later version of persistent-test which depends on persistent 2.14
-  # https://github.com/commercialhaskell/stackage/issues/6884
-  persistent-sqlite = dontCheck super.persistent-sqlite;
-
   # Needs matching lsp-types
   lsp_2_4_0_0 = super.lsp_2_4_0_0.override {
     lsp-types = self.lsp-types_2_1_1_0;
