@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   dpkg,
-  wrapGAppsHook3,
   autoPatchelfHook,
   nss,
   nspr,
@@ -43,7 +42,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    wrapGAppsHook3
     autoPatchelfHook
   ];
 
