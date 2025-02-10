@@ -1461,8 +1461,6 @@ self: super: {
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
-    # https://github.com/timbod7/haskell-chart/issues/233
-    jailbreak = true;
     preCheck = old.preCheck or "" + ''
       tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
     '';
