@@ -907,6 +907,9 @@ self: super: {
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
 
+  # 2025-02-10: Too strict bounds on doctest < 0.22
+  tasty-checklist = doJailbreak super.tasty-checklist;
+
   # Too strict lower bound on tasty-hedgehog
   # https://github.com/qfpl/tasty-hedgehog/issues/70
   tasty-sugar = doJailbreak super.tasty-sugar;
