@@ -309,7 +309,6 @@ self: super: {
 
   # 2025-02-10: Too strict bounds on bytestring < 0.12
   ghc-debug-common = doJailbreak super.ghc-debug-common;
-  ghc-debug-client = doJailbreak super.ghc-debug-client;
 
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
