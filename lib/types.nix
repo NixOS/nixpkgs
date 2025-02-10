@@ -1125,6 +1125,53 @@ rec {
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
   };
+
+  /**
+    Merges two option types together.
+
+    :::{.note}
+    Uses the type merge function of the first type, to merge it with the second type.
+
+    Usually types can only be merged if they are of the same type
+    :::
+
+    # Inputs
+
+    : `a` (option type): The first option type.
+    : `b` (option type): The second option type.
+
+    # Returns
+
+    - The merged option type.
+    - `{ _type = "merge-error"; error = "Cannot merge types"; }` if the types can't be merged.
+
+    # Examples
+    :::{.example}
+    ## `lib.types.mergeTypes` usage example
+    ```nix
+    let
+      enumAB = lib.types.enum ["A" "B"];
+      enumXY = lib.types.enum ["X" "Y"];
+      # This operation could be notated as: [ A ] | [ B ] -> [ A B ]
+      merged = lib.types.mergeTypes enumAB enumXY; # -> enum [ "A" "B" "X" "Y" ]
+    in
+      assert merged.check "A"; # true
+      assert merged.check "B"; # true
+      assert merged.check "X"; # true
+      assert merged.check "Y"; # true
+      merged.check "C" # false
+    ```
+    :::
+  */
+  mergeTypes = a: b:
+    assert isOptionType a && isOptionType b;
+    let
+      merged = a.typeMerge b.functor;
+    in
+    if merged == null then
+      setType "merge-error" { error = "Cannot merge types"; }
+    else
+      merged;
 };
 
 in outer_types // outer_types.types
