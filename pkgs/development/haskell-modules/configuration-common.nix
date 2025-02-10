@@ -1112,9 +1112,6 @@ self: super: {
   # fails with sandbox
   yi-keymap-vim = dontCheck super.yi-keymap-vim;
 
-  # https://github.com/bmillwood/applicative-quoters/issues/6
-  applicative-quoters = doJailbreak super.applicative-quoters;
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
