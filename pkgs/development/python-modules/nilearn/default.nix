@@ -28,6 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-oB3wj8bI3tPNb7eiEWNGA61Gpt94BQS20FIiwuepcv4=";
   };
 
+  postPatch = ''
+    sed -i "/addopts =/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [ hatch-vcs ];
 
   nativeCheckInputs = [ pytestCheckHook ];
