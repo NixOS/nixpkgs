@@ -658,15 +658,15 @@ in stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://wiki.documentfoundation.org/ReleaseNotes/${lib.versions.majorMinor version}";
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
     # at least one jar in dependencies
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = with lib.licenses; [ mpl20 lgpl3Plus asl20 ];
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     mainProgram = "libreoffice";
   };
 })
