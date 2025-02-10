@@ -2396,40 +2396,6 @@ in
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
-  nvim-dbee = super.nvim-dbee.overrideAttrs (
-    oa:
-    let
-      dbee-go = buildGoModule {
-        name = "nvim-dbee";
-        src = "${oa.src}/dbee";
-        vendorHash = "sha256-U/3WZJ/+Bm0ghjeNUILsnlZnjIwk3ySaX3Rd4L9Z62A=";
-        buildInputs = [
-          arrow-cpp
-          duckdb
-        ];
-      };
-    in
-    {
-      dependencies = [ self.nui-nvim ];
-
-      # nvim-dbee looks for the go binary in paths returned bu M.dir() and M.bin() defined in lua/dbee/install/init.lua
-      postPatch = ''
-        substituteInPlace lua/dbee/install/init.lua \
-          --replace-fail 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
-      '';
-
-      preFixup = ''
-        mkdir $target/bin
-        ln -s ${dbee-go}/bin/dbee $target/bin/dbee
-      '';
-
-      meta.platforms = lib.platforms.linux;
-    }
-  );
-
-  nvim-impairative = super.nvim-impairative.overrideAttrs {
-  };
-
   nvim-navic = super.nvim-navic.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -4040,6 +4006,7 @@ in
       "neotest"
       "nui-nvim"
       "nvim-cmp"
+      "nvim-dbee"
       "nvim-nio"
       "orgmode"
       "papis-nvim"
