@@ -57,6 +57,7 @@ let
       hash = cargoHash;
     };
   });
+  prisma' = prisma.override { prisma-engines = prisma-engines'; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "umami";
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarnConfigHook
     yarnBuildHook
     nodejs
-    prisma
+    prisma'
     makeWrapper
   ];
 
@@ -135,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines'}/lib/libquery_engine.node" \
       --prefix PATH : ${lib.makeBinPath [ openssl ]} \
       --chdir $out \
-      --run "${prisma}/bin/prisma migrate deploy" \
+      --run "${prisma'}/bin/prisma migrate deploy" \
       --add-flags "$out/server.js"
 
     runHook postInstall
