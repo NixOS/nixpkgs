@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , openssl
 , nettle
 , expat
@@ -61,6 +62,20 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "release-${finalAttrs.version}";
     hash = "sha256-CFsd8tdFL+JbxmDZoWdStvWcs9azSaLtMG8Ih5oXE/A=";
   };
+
+  patches = [
+    # https://github.com/NLnetLabs/unbound/pull/1238
+    (fetchpatch2 {
+      name = "unbound-add-ax_build_date_epoch.patch";
+      url = "https://github.com/NLnetLabs/unbound/commit/07f2eaaac200e4b4e784a2f03b7e750b92a9abe9.diff";
+      hash = "sha256-UCTGnDG1z9TuiLm6Yr/NL5AKnyCCkL1V38HcoixyTuQ=";
+    })
+    (fetchpatch2 {
+      name = "unbound-prefer-SOURCE_DATE_EPOCH.patch";
+      url = "https://github.com/NLnetLabs/unbound/commit/1528a96f74e233d1e64be39097b0491e481f7d1d.diff";
+      hash = "sha256-JVjphkOefZouqUwx/pJP9XNrb5gNJVmP2fWAdkYdvuU=";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
