@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.02.03.00";
+  version = "2025.02.10.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
