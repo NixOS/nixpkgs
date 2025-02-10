@@ -2503,7 +2503,6 @@ broken-packages:
   - heckle # failure in job https://hydra.nixos.org/build/233228954 at 2023-09-02
   - heddit # failure in job https://hydra.nixos.org/build/233229058 at 2023-09-02
   - hedgehog-checkers # failure in job https://hydra.nixos.org/build/233229405 at 2023-09-02
-  - hedgehog-extras # failure in job https://hydra.nixos.org/build/269679462 at 2024-08-19
   - hedgehog-fakedata # failure in job https://hydra.nixos.org/build/252721345 at 2024-03-16
   - hedgehog-generic # failure in job https://hydra.nixos.org/build/233204695 at 2023-09-02
   - hedgehog-gen # failure in updateAutotoolsGnuConfigScriptsPhase in job https://hydra.nixos.org/build/237243271 at 2023-10-21
