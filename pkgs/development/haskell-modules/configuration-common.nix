@@ -1239,9 +1239,6 @@ self: super: {
   # https://github.com/alphaHeavy/protobuf/issues/34
   protobuf = dontCheck super.protobuf;
 
-  # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
-  snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
-
   # The test suite does not know how to find the 'alex' binary.
   alex = overrideCabal (drv: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
