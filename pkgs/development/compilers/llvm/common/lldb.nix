@@ -3,6 +3,7 @@
 , llvm_meta
 , release_version
 , cmake
+, debugserver
 , zlib
 , ncurses
 , swig
@@ -140,7 +141,8 @@ stdenv.mkDerivation (rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/ \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "--set-default LLDB_DEBUGSERVER_PATH '${lib.getExe debugserver}'"}
 
     # Editor support
     # vscode:
