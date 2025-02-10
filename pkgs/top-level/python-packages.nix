@@ -7860,9 +7860,7 @@ self: super: with self; {
 
   macaddress = callPackage ../development/python-modules/macaddress{ };
 
-  macfsevents = callPackage ../development/python-modules/macfsevents {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
-  };
+  macfsevents = callPackage ../development/python-modules/macfsevents { };
 
   macholib = callPackage ../development/python-modules/macholib { };
 
