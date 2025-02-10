@@ -91,7 +91,7 @@ let
       cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
-    # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
+    # "75" -> "750"  Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L200-L201
     "${minArch'}0";
 
 in
@@ -116,13 +116,16 @@ stdenv.mkDerivation {
   ];
 
   # Fixup for the python test runners
-  postPatch = ''
-    patchShebangs ./testing/run_{tests,summarize}.py
-    substituteInPlace ./testing/run_tests.py \
-      --replace-fail \
-        "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
-        "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
-  '';
+  postPatch =
+    ''
+      patchShebangs ./testing/run_{tests,summarize}.py
+    ''
+    + lib.optionalString (strings.versionOlder version "2.9.0") ''
+      substituteInPlace ./testing/run_tests.py \
+        --replace-fail \
+          "print >>sys.stderr, cmdp, \"doesn't exist (original name: \" + cmd + \", precision: \" + precision + \")\"" \
+          "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
+    '';
 
   nativeBuildInputs =
     [
@@ -230,7 +233,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
+    homepage = "https://icl.utk.edu/magma/";
+    changelog = "https://github.com/icl-utk-edu/magma/blob/v${version}/ReleaseNotes";
     platforms = platforms.linux;
     maintainers = with maintainers; [ connorbaker ];
 
@@ -240,7 +244,6 @@ stdenv.mkDerivation {
       (cudaSupport && !static)
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && cudaOlder "9.0")
       || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null);
   };
 }
