@@ -27,6 +27,8 @@
   vala,
   writeShellScript,
   shared-mime-info,
+  # Requires building a cdylib.
+  withPixbufLoader ? !stdenv.hostPlatform.isStatic,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -134,12 +136,23 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dtriplet=${stdenv.hostPlatform.rust.rustcTarget}"
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "pixbuf-loader" withPixbufLoader)
     (lib.mesonEnable "vala" withIntrospection)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  # Probably broken MIME type detection.
-  doCheck = !stdenv.isDarwin;
+  doCheck =
+    # Probably broken MIME type detection.
+    !stdenv.isDarwin
+    &&
+      # Could be made to work, but requires the C API test to be linked
+      # with a C++ linker because
+      # librsvg -> gdk-pixbuf -> libtiff -> lerc (C++).
+      #
+      # Doesn't make sense to pursue this upstream until gdk-pixbuf
+      # itself is fixed:
+      # https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/181
+      !stdenv.hostPlatform.isStatic;
 
   env = {
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
