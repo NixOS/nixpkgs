@@ -4,14 +4,14 @@
   fetchFromGitHub,
   fetchurl,
   fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  makeWrapper,
   nodejs,
-  postgresql,
   prisma,
   prisma-engines,
-  makeWrapper,
   openssl,
+  rustPlatform,
+  yarnConfigHook,
+  yarnBuildHook,
   # build variables
   databaseType ? "postgresql",
   collectApiEndpoint ? "",
@@ -37,6 +37,25 @@ let
 
     meta.license = lib.licenses.cc-by-40;
   };
+
+  # Pin the specific version of prisma to the one used by upstream
+  # to guarantee compatibility.
+  prisma-engines' = prisma-engines.overrideAttrs (old: rec {
+    version = "5.22.0";
+    src = fetchFromGitHub {
+      owner = "prisma";
+      repo = "prisma-engines";
+      tag = version;
+      hash = "sha256-aCzm7pEsgbZ4ZNir3DLNnUlmiydOpLNcW2FpIQ44B6E=";
+    };
+    cargoHash = "sha256-9rU25cyYDGXGjQFrsHwifsRc4LHYz3JGrYUoQXVKYn0=";
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (old) pname;
+      inherit src version;
+      hash = cargoHash;
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "umami";
@@ -46,9 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarnConfigHook
     yarnBuildHook
     nodejs
-    postgresql
     prisma
-    openssl
     makeWrapper
   ];
 
@@ -114,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/umami-server  \
       --set NODE_ENV production \
       --set NEXT_TELEMETRY_DISABLED 1 \
-      --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines}/lib/libquery_engine.node" \
+      --set PRISMA_QUERY_ENGINE_LIBRARY "${prisma-engines'}/lib/libquery_engine.node" \
       --prefix PATH : ${lib.makeBinPath [ openssl ]} \
       --chdir $out \
       --run "${prisma}/bin/prisma migrate deploy" \
