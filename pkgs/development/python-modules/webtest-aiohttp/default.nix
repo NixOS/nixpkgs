@@ -6,21 +6,19 @@
   fetchpatch,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   webtest,
 }:
 
 buildPythonPackage rec {
   pname = "webtest-aiohttp";
   version = "2.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
-    repo = pname;
-    rev = version;
+    repo = "webtest-aiohttp";
+    tag = version;
     hash = "sha256-UuAz/k/Tnumupv3ybFR7PkYHwG3kH7M5oobZykEP+ao=";
   };
 
@@ -38,7 +36,9 @@ buildPythonPackage rec {
       --replace-fail 'WebTestApp(app, loop=loop)' 'WebTestApp(app, loop=event_loop)'
   '';
 
-  propagatedBuildInputs = [ webtest ];
+  build-system = [ setuptools ];
+
+  dependencies = [ webtest ];
 
   nativeCheckInputs = [
     aiohttp
