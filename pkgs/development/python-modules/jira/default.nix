@@ -10,6 +10,7 @@
   pillow,
   pyjwt,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   requests,
   requests-futures,
@@ -67,13 +68,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flaky
     pytestCheckHook
+    pytest-cov-stub
     requests-mock
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report=xml --cov jira" ""
-  '';
 
   pythonImportsCheck = [ "jira" ];
 
