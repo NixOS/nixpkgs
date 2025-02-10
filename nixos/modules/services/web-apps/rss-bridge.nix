@@ -11,6 +11,7 @@ let
     mkEnableOption
     mkIf
     mkOption
+    mkPackageOption
     mkRenamedOptionModule
     types
     ;
@@ -73,6 +74,8 @@ in
           Group under which the web-application run.
         '';
       };
+
+      package = mkPackageOption pkgs "rss-bridge" { };
 
       pool = mkOption {
         type = types.nullOr types.str;
@@ -173,7 +176,7 @@ in
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {
-          root = "${pkgs.rss-bridge}";
+          root = "${cfg.package}";
 
           locations."/" = {
             tryFiles = "$uri /index.php$is_args$args";
