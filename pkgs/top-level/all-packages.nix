@@ -11099,6 +11099,10 @@ with pkgs;
     postgresqlSupport = true;
   }).overrideAttrs { pname = "sqitch-pg"; };
 
+  sqitchSqlite = (callPackage ../development/tools/misc/sqitch {
+    sqliteSupport = true;
+  }).overrideAttrs { pname = "sqitch-sqlite"; };
+
   ### DEVELOPMENT / R MODULES
 
   R = darwin.apple_sdk_11_0.callPackage ../applications/science/math/R {
@@ -15645,7 +15649,7 @@ with pkgs;
     plugins = with wayfirePlugins; [ wcm wf-shell ];
   };
 
-  webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
+  webcamoid = qt6Packages.callPackage ../applications/video/webcamoid { };
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_33; };
 
