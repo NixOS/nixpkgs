@@ -146,8 +146,6 @@ self: super: {
   }) (doJailbreak super.language-haskell-extract);
 
   vector = overrideCabal (old: {
-    # Too strict bounds on doctest which isn't used, but is part of the configuration
-    jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
     testTarget = lib.concatStringsSep " " [
       "vector-tests-O0"
