@@ -44,13 +44,13 @@ lib.checkListOfEnum "${pname}: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-10-18";
+    version = "2025-02-09";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      hash = "sha256-xpRgOt/FqZSbtOlZKlZS1ILQn6OAwqKAXX3hj41Wo+0=";
+      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 
     nativeBuildInputs = [
