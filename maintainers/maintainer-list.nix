@@ -14892,6 +14892,12 @@
     name = "melvyn";
     keys = [ { fingerprint = "232B 9F00 2153 CA86 849C  9224 25A2 B728 0CE3 AFF6"; } ];
   };
+  meowking = {
+    name = "Meow King";
+    email = "mr.meowking@posteo.com";
+    github = "Ziqi-Yang";
+    githubId = 87977742;
+  };
   mephistophiles = {
     email = "mussitantesmortem@gmail.com";
     name = "Maxim Zhukov";
