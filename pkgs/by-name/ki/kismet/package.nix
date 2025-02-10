@@ -14,7 +14,7 @@
   libwebsockets,
   lm_sensors,
   networkmanager,
-  pcre,
+  pcre2,
   pkg-config,
   openssl,
   protobuf,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
       openssl
       libusb1
       libwebsockets
-      pcre
+      pcre2
       protobuf
       protobufc
       sqlite
