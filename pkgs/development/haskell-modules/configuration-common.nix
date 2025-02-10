@@ -185,7 +185,7 @@ self: super: {
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
-  # Too strict bounds on hspec < 2.11
+  # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
 
   # Too strict lower bound on lens, drop with LTS 23
