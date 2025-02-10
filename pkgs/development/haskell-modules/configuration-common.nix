@@ -1637,10 +1637,6 @@ self: super: {
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
   haskeline_0_8_3_0 = doDistribute (dontCheck super.haskeline_0_8_3_0);
 
-  # Too strict upper bound on HTF
-  # https://github.com/nikita-volkov/stm-containers/issues/29
-  stm-containers = doJailbreak super.stm-containers;
-
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
 
