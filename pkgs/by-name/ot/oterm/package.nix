@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.7.3";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
-    hash = "sha256-COIvnn6qDG9srv4ByWTBoRHfIva3a2dLS+yIZDguo+M=";
+    hash = "sha256-YKzC7GzRMFQ3zuVrbsiKCW9o8iCAR3PzSYP1ufRspDQ=";
   };
 
   pythonRelaxDeps = [
@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
     aiosql
     aiosqlite
     httpx
+    mcp
     ollama
     packaging
     pillow
