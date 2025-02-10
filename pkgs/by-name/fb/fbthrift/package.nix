@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2025.02.03.00";
+  version = "2025.02.10.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
