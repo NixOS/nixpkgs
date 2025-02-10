@@ -24,6 +24,7 @@ in
           "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
         };
       '';
+      default = {};
       description = ''
         Locally defined maps of hostnames to IP addresses.
       '';
@@ -154,16 +155,6 @@ in
         `networking.extraHosts` if you really want to add such a mapping.
       '';
     }];
-
-    # These entries are required for "hostname -f" and to resolve both the
-    # hostname and FQDN correctly:
-    networking.hosts = let
-      hostnames = # Note: The FQDN (canonical hostname) has to come first:
-        lib.optional (cfg.hostName != "" && cfg.domain != null) "${cfg.hostName}.${cfg.domain}"
-        ++ lib.optional (cfg.hostName != "") cfg.hostName; # Then the hostname (without the domain)
-    in {
-      "127.0.0.2" = hostnames;
-    };
 
     networking.hostFiles = let
       # Note: localhostHosts has to appear first in /etc/hosts so that 127.0.0.1
