@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
   python313,
-  substituteAll,
+  replaceVars,
   ffmpeg-headless,
   inetutils,
   nixosTests,
@@ -440,8 +440,7 @@ python.pkgs.buildPythonApplication rec {
     ./patches/static-follow-symlinks.patch
 
     # Patch path to ffmpeg binary
-    (substituteAll {
-      src = ./patches/ffmpeg-path.patch;
+    (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
   ];

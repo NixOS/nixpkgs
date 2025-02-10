@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  substituteAll,
+  replaceVars,
   isPy310,
   isPyPy,
 
@@ -57,8 +57,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./unvendor-llhttp.patch;
+    (replaceVars ./unvendor-llhttp.patch {
       llhttpDev = lib.getDev llhttp;
       llhttpLib = lib.getLib llhttp;
     })
