@@ -2667,16 +2667,6 @@ self: super: {
   ghc-source-gen = doJailbreak super.ghc-source-gen;
   ghc-source-gen_0_4_5_0 = doJailbreak super.ghc-source-gen_0_4_5_0;
 
-  psqueues = lib.pipe super.psqueues [
-    (overrideCabal { editedCabalFile = null; revision = null; } )
-    (appendPatch
-      # https://github.com/jaspervdj/psqueues/pull/59
-      (pkgs.fetchpatch {
-        url = "https://github.com/jaspervdj/psqueues/commit/281e458a3aa69b1cfc97f32e39eee0bee3035b3f.patch";
-        hash = "sha256-dcL2QShMMaiENhdGsLiVYTuorNb20NSBTHsGBM04ULw=";
-      }))
-    ];
-
   # Support tasty-quickcheck 0.11: https://github.com/Bodigrim/mod/pull/26
   mod = appendPatch (fetchpatch {
     url = "https://github.com/Bodigrim/mod/commit/30596fb9d85b69ec23ecb05ef9a7c91d67901cfd.patch";
