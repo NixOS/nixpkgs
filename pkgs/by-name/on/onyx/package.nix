@@ -24,6 +24,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "Convert songs between Clone Hero, Rock Band, and Guitar Hero";
     homepage = "https://github.com/mtolly/onyx";
+    changelog = "https://github.com/mtolly/onyx/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ appsforartists ];
     platforms = [ "x86_64-linux" ];
