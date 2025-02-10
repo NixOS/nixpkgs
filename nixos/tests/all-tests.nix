@@ -522,6 +522,7 @@ in {
   keyd = handleTest ./keyd.nix {};
   keymap = handleTest ./keymap.nix {};
   kimai = handleTest ./kimai.nix {};
+  kismet = handleTest ./kismet.nix {};
   kmonad = runTest ./kmonad.nix;
   knot = handleTest ./knot.nix {};
   komga = handleTest ./komga.nix {};
