@@ -1254,8 +1254,6 @@ self: super: {
 
   # dontCheck: https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
-  # Allow hspec >= 2.10 https://github.com/haskell-servant/servant/issues/1704
-  servant-foreign = doJailbreak super.servant-foreign;
 
   # Generate cli completions for dhall.
   dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
