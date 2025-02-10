@@ -1761,6 +1761,13 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  mini-nvim = super.mini-nvim.overrideAttrs {
+    # reduce closure size
+    postInstall = ''
+      rm -rf $out/{Makefile,benchmarks,readmes,tests,scripts}
+    '';
+  };
+
   git-conflict-nvim = super.git-conflict-nvim.overrideAttrs {
     # TODO: Remove after next fixed version
     # https://github.com/akinsho/git-conflict.nvim/issues/103
