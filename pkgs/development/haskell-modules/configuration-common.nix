@@ -1112,9 +1112,6 @@ self: super: {
     (self.generateOptparseApplicativeCompletions [ "idris" ])
   ];
 
-  # https://github.com/pontarius/pontarius-xmpp/issues/105
-  pontarius-xmpp = dontCheck super.pontarius-xmpp;
-
   # fails with sandbox
   yi-keymap-vim = dontCheck super.yi-keymap-vim;
 
