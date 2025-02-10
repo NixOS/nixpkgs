@@ -101,6 +101,10 @@ stdenv.mkDerivation rec {
       "--disable-nls"
       "--disable-ipcrm"
       "--disable-ipcs"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Doesn't build on Darwin, also doesn't really make sense on Darwin
+      "--disable-liblastlog2"
     ];
 
   makeFlags = [
