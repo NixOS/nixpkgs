@@ -8,8 +8,6 @@
   pkg-config,
   openssl,
   stdenv,
-  CoreServices,
-  Security,
   zig,
   nix-update-script,
 }:
@@ -19,9 +17,9 @@ rustPlatform.buildRustPackage rec {
   version = "1.5.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "cargo-lambda";
+    repo = "cargo-lambda";
+    tag = "v${version}";
     hash = "sha256-58kVtwBZEAlv9eVesqmWMZ+KxAwEiGMm8mCf9X5tPMI=";
   };
 
@@ -38,8 +36,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      CoreServices
-      Security
     ];
 
   checkFlags = [
@@ -63,12 +59,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to help you work with AWS Lambda";
     mainProgram = "cargo-lambda";
     homepage = "https://cargo-lambda.info";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       taylor1791
       calavera
     ];
