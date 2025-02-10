@@ -7,20 +7,20 @@
   glib,
   makeBinaryWrapper,
   pkg-config,
+  cairo,
+  gdk-pixbuf,
+  graphene,
   gtk4,
   libadwaita,
   libGL,
   libxkbcommon,
+  pango,
   vulkan-headers,
   vulkan-loader,
   wayland,
   winetricks,
   xorg,
   symlinkJoin,
-  cairo,
-  gdk-pixbuf,
-  graphene,
-  pango,
   nix-update-script,
 }:
 let
@@ -33,7 +33,7 @@ let
       waylandSupport = true;
     }).overrideAttrs
       (oldAttrs: {
-        # https://github.com/flathub/org.vinegarhq.Vinegar/blob/1a42384ff0c5670504415190301c20e89601bbad/wine.yml#L31
+        # https://github.com/flathub/org.vinegarhq.Vinegar/blob/a3c2f1249dec9548bd870027f55edcc58343b685/wine.yml#L31-L38
         # --with-wayland is added by waylandSupport = true;
         configureFlags = oldAttrs.configureFlags or [ ] ++ [
           "--disable-tests"
@@ -55,16 +55,16 @@ let
 in
 buildGoModule rec {
   pname = "vinegar";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     tag = "v${version}";
-    hash = "sha256-eAQ5qlBY1PmpijEu7mPmCBFbAIA30ABcbirdBljAmTQ=";
+    hash = "sha256-7rc6LKZx0OOZDedtTpHIQT4grx1FejRiVnJnVDUddy4=";
   };
 
-  vendorHash = "sha256-NLNAUf99psBq8PayorBH1DT6o9wZyKwx9ab+TtpKU50=";
+  vendorHash = "sha256-TZhdwHom4DTgLs4z/eADeoKakMtyFrvVljDg4JJp7dc=";
 
   nativeBuildInputs = [
     glib
@@ -73,10 +73,15 @@ buildGoModule rec {
   ];
 
   buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib.out
+    graphene
     gtk4
     libadwaita
     libGL
     libxkbcommon
+    pango.out
     vulkan-headers
     vulkan-loader
     wayland
@@ -86,6 +91,10 @@ buildGoModule rec {
     xorg.libXcursor
     xorg.libXfixes
   ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail 'gtk-update-icon-cache' '${lib.getExe' gtk4 "gtk4-update-icon-cache"}'
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -106,10 +115,6 @@ buildGoModule rec {
         find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
       fi
     }
-  '';
-
-  preInstall = ''
-    substituteInPlace Makefile --replace-fail 'gtk-update-icon-cache' '${lib.getExe' gtk4 "gtk4-update-icon-cache"}'
   '';
 
   installPhase = ''
@@ -136,9 +141,9 @@ buildGoModule rec {
       name = "vinegar-puregotk-lib-folder";
       paths = [
         cairo
+        gdk-pixbuf
         glib.out
         graphene
-        gdk-pixbuf
         gtk4
         libadwaita
         pango.out
