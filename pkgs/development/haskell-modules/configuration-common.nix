@@ -907,8 +907,7 @@ self: super: {
   # 2025-02-10: Too strict bounds on doctest < 0.22
   tasty-checklist = doJailbreak super.tasty-checklist;
 
-  # Too strict lower bound on tasty-hedgehog
-  # https://github.com/qfpl/tasty-hedgehog/issues/70
+  # 2025-02-10: Too strict bounds on hedgehog < 1.5
   tasty-sugar = doJailbreak super.tasty-sugar;
 
   # Too strict lower bound on aeson
