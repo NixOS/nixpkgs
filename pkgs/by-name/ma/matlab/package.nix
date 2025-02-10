@@ -39,13 +39,22 @@ stdenvNoCC.mkDerivation (self: {
     let
       unpack =
         if self.src ? "matlab-download" then
-          # Downloaded using fetchFromMPM: already unpacked
-          { dontUnpack = true; }
+          # Downloaded using fetchFromMPM: already unpacked. The downloaded files are large so
+          # avoid the default unpack phase which copies everything to the current directory.
+          # Instead symlink them to source.
+          {
+            unpackPhase = ''
+              runHook preUnpack
+              ln -s $src source
+              runHook postUnpack
+            '';
+            sourceRoot = ".";
+          }
         else
-          # Assume this is an ISO image from requireFile: need to unpack
+          # Assume this is an ISO image from requireFile: unpack ISO contents to source.
           {
             nativeBuildInputs = [ libarchive ];
-            unpackCmd = "bsdtar -vxf $curSrc";
+            unpackCmd = "bsdtar -vxf $curSrc -C source";
             sourceRoot = ".";
           };
     in
@@ -63,7 +72,7 @@ stdenvNoCC.mkDerivation (self: {
         installPhase = ''
           # As mpm is bubblewrapped, it cannot write to $out directly
           # https://github.com/NixOS/nixpkgs/issues/239017
-          ${lib.getExe matlab-package-manager} install --source "$src" --destination matlab --products "''${products[@]}"
+          ${lib.getExe matlab-package-manager} install --source source --destination matlab --products "''${products[@]}"
           mv matlab $out
           ln -s /etc/matlab $out/licenses
         '';
