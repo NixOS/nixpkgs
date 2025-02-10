@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lora";
-  version = "v3.005";
+  version = "3.005";
 
   src = fetchFromGitHub {
     owner = "cyrealtype";
     repo = "lora";
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-EHa8DUPFRvdYBdCY41gfjKGtTHwGIXCwD9Qc+Npmt1s=";
   };
 
