@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
   grpcio,
   hatchling,
   hatch-vcs,
