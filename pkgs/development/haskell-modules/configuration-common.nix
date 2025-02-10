@@ -188,6 +188,9 @@ self: super: {
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
 
+  # 2025-02-10: Too strict bounds on tasty < 1.5
+  tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
+
   # Out of date test data: https://github.com/ocharles/weeder/issues/176
   weeder = appendPatch (pkgs.fetchpatch {
     name = "weeder-2.9.0-test-fix-expected.patch";
