@@ -195,6 +195,11 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
 
+      # ModuleNotFoundError: No module named 'azure.mgmt.redhatopenshift.v2023_11_22'
+      azure-mgmt-redhatopenshift =
+        overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.5.0" "tar.gz"
+          "sha256-Uft0KcOciKzJ+ic9n4nxkwNSBmKZam19jhEiqY9fJSc=";
+
       # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
       azure-mgmt-signalr =
         overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b2" "tar.gz"
