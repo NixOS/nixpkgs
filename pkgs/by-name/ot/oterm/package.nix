@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
     python-dotenv
     rich-pixels
     textual
+    textualeffects
     typer
   ];
 
