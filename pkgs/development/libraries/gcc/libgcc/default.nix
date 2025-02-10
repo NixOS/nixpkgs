@@ -105,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
       arm-isa.h \
       arm-cpu.h \
     ''
+    + lib.optionalString stdenv.targetPlatform.isLoongArch64 ''
+      loongarch-multilib.h \
+    ''
     + ''
           insn-modes.h
       )
