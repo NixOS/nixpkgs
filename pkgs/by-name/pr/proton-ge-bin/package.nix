@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton9-24";
+  version = "GE-Proton9-25";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-L0GkzpSn4f6dLDOm2iDJr8D1DINTHNW9Kkn1xFTuqfo=";
+    hash = "sha256-cMN/U09NAsghx0A8dy+mjuvSFZxgvETmkigeOLskiQs=";
   };
 
   dontUnpack = true;
@@ -34,16 +34,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir $steamcompattool
     ln -s $src/* $steamcompattool
-    rm $steamcompattool/{compatibilitytool.vdf,proton,version}
-    cp $src/{compatibilitytool.vdf,proton,version} $steamcompattool
+    rm $steamcompattool/compatibilitytool.vdf
+    cp $src/compatibilitytool.vdf $steamcompattool
 
     runHook postInstall
   '';
 
   preFixup = ''
     substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
-      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
-    substituteInPlace "$steamcompattool/proton" \
       --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
   '';
 
