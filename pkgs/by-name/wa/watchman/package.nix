@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Watches files and takes action when they change";
