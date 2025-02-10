@@ -53,6 +53,9 @@ lib.checkListOfEnum "${pname}: color variants"
     dontPatchELF = true;
     dontRewriteSymlinks = true;
 
+    # FIXME: https://github.com/vinceliuice/Vimix-icon-theme/issues/47
+    dontCheckForBrokenSymlinks = true;
+
     postPatch = ''
       patchShebangs install.sh
     '';
