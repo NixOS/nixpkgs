@@ -1,18 +1,21 @@
 {
   lib,
   vimUtils,
-  fetchFromGitLab,
+  fetchFromGitHub,
   nix-update-script,
 }:
+let
+  version = "0.8.0";
+in
 vimUtils.buildVimPlugin {
   pname = "rainbow-delimiters.nvim";
-  version = "unstable-2025-01-12";
+  inherit version;
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "HiPhish";
     repo = "rainbow-delimiters.nvim";
-    rev = "85b80abaa09cbbc039e3095b2f515b3cf8cadd11";
-    hash = "sha256-zWHXYs3XdnoszqOFY3hA2L5mNn1a44OAeKv3lL3EMEw=";
+    tag = "v${version}";
+    hash = "sha256-40NE1+BFG6OPcHKGejfltuTANB/GTIPn1BfvAB55t9Q=";
   };
 
   nvimSkipModule = [
