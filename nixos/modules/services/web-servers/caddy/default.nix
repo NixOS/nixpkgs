@@ -70,6 +70,28 @@ let
   configPath = "/etc/${etcConfigFile}";
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
+
+  validateCaddyConfig =
+    adapter: configFile:
+    builtins.fromJSON (
+      builtins.readFile (
+        pkgs.runCommand "caddy-validate"
+          {
+            nativeBuildInputs = [ cfg.package ];
+          }
+          ''
+            if caddy validate --adapter ${toString adapter} --config ${configFile}; then
+              echo "true" > $out
+            else
+              echo "false" > $out
+            fi
+          ''
+      )
+    );
+
+  configValidationResult = validateCaddyConfig (
+    if cfg.adapter != null then cfg.adapter else "caddyfile"
+  ) cfg.configFile;
 in
 {
   imports = [
@@ -378,6 +400,16 @@ in
         [here](https://caddyserver.com/docs/caddyfile/concepts#environment-variables)
       '';
     };
+
+    enforceConfigValidation = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enforce Caddy configuration validation during build.
+        If true, invalid configuration will cause the build to fail.
+        If false, invalid configuration will only show a warning.
+      '';
+    };
   };
 
   # implementation
@@ -390,6 +422,10 @@ in
           message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
         }
       ]
+      ++ optional cfg.enforceConfigValidation {
+        assertion = configValidationResult;
+        message = "Caddy configuration validation failed. Check your configuration.";
+      }
       ++ map (
         name:
         mkCertOwnershipAssertion {
@@ -398,6 +434,10 @@ in
           services = [ config.systemd.services.caddy ];
         }
       ) vhostCertNames;
+
+    warnings = lib.optional (
+      !cfg.enforceConfigValidation && !configValidationResult
+    ) "Caddy configuration validation failed. The service might not start correctly.";
 
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
