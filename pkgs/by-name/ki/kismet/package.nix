@@ -15,6 +15,7 @@
   lm_sensors,
   networkmanager,
   nix-update-script,
+  nixosTests,
   pcre2,
   pkg-config,
   openssl,
@@ -115,6 +116,7 @@ stdenv.mkDerivation (finalPackage: {
   enableParallelBuilding = true;
 
   passthru = {
+    tests.kismet = nixosTests.kismet;
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
