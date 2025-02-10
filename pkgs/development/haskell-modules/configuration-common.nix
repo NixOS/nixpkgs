@@ -1280,10 +1280,6 @@ self: super: {
   # https://github.com/hslua/hslua/issues/106
   hslua-core = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua-core else super.hslua-core;
 
-  # Missing files required by the test suite.
-  # https://github.com/deemp/flakes/issues/4
-  lima = dontCheck super.lima;
-
   # The test suite runs for 20+ minutes on a very fast machine, which feels kinda disproportionate.
   prettyprinter = dontCheck super.prettyprinter;
 
