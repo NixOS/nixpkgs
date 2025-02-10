@@ -12,7 +12,7 @@
   ninja,
   pkg-config,
   python3,
-  substituteAll,
+  replaceVars,
   zlib,
 }:
 
@@ -46,8 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     # are not as predictable, therefore we need to keep them in the RPATH.
     # At the moment we are keeping the paths starting with /nix/store.
     # https://github.com/NixOS/nixpkgs/issues/31222#issuecomment-365811634
-    (substituteAll {
-      src = ./001-fix-rpath.patch;
+    (replaceVars ./001-fix-rpath.patch {
       inherit (builtins) storeDir;
     })
 

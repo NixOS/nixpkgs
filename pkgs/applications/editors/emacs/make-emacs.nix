@@ -185,7 +185,6 @@ mkDerivation (finalAttrs: {
             ./native-comp-driver-options-30.patch
         )
         {
-
           backendPath = (
             lib.concatStringsSep " " (
               builtins.map (x: ''"-B${x}"'') (
