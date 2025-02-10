@@ -26,7 +26,7 @@
   gmp,
   libspatialindex,
   leveldb,
-  postgresql,
+  libpq,
   hiredis,
   libiconv,
   ninja,
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals buildServer [
       leveldb
-      postgresql
+      libpq
       hiredis
       prometheus-cpp
     ];

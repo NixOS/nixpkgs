@@ -325,6 +325,10 @@ let
           else "install"))
       ];
 
+      # We remove a bunch of stuff that is symlinked from other places to save space,
+      # which trips the broken symlink check. So, just skip it. We'll know if it explodes.
+      dontCheckForBrokenSymlinks = true;
+
       postInstall = optionalString isModular ''
         mkdir -p $dev
         cp vmlinux $dev/
@@ -434,28 +438,26 @@ let
     "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
   ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
     ++ extraMakeFlags;
+in
 
-  finalKernel = stdenv.mkDerivation (
-    builtins.foldl' lib.recursiveUpdate {} [
-      (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
-      {
-        inherit pname version;
+stdenv.mkDerivation (
+  builtins.foldl' lib.recursiveUpdate {} [
+    (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
+    {
+      inherit pname version;
 
-        enableParallelBuilding = true;
+      enableParallelBuilding = true;
 
-        hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+      hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
-        makeFlags = [
-          "O=$(buildRoot)"
-        ] ++ commonMakeFlags;
+      makeFlags = [
+        "O=$(buildRoot)"
+      ] ++ commonMakeFlags;
 
-        passthru.moduleMakeFlags = [
-          "KBUILD_OUTPUT=${finalKernel.dev}/lib/modules/${finalKernel.modDirVersion}/build"
-        ] ++ commonMakeFlags;
+      passthru = { inherit commonMakeFlags; };
 
-        karch = stdenv.hostPlatform.linuxArch;
-      }
-      (optionalAttrs (pos != null) { inherit pos; })
-    ]
-  );
-in finalKernel)
+      karch = stdenv.hostPlatform.linuxArch;
+    }
+    (optionalAttrs (pos != null) { inherit pos; })
+  ]
+))

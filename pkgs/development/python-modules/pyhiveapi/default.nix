@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Hive API";
     homepage = "https://github.com/Pyhass/Pyhiveapi";
-    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/v${version}";
+    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

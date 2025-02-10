@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     pycryptodome
     javaobj-py3
+    vobject
   ];
 
   meta = with lib; {
@@ -34,6 +35,9 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.mit;
     mainProgram = "wtsexporter";
-    maintainers = with maintainers; [ bbenno ];
+    maintainers = with maintainers; [
+      bbenno
+      EstebanMacanek
+    ];
   };
 }

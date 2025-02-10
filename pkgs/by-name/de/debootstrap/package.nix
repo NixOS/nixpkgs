@@ -37,6 +37,7 @@ let
     gnutar
     gzip
     perl
+    util-linux
     wget
     xz
   ];

@@ -3,11 +3,9 @@
   atomicwrites,
   buildPythonPackage,
   fetchFromGitHub,
-  #, hatchling
   ruamel-yaml,
   poetry-core,
   pytest,
-  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   testfixtures,
@@ -16,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pytest-golden";
   version = "0.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,29 +27,26 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry>=0.12" poetry-core \
-      --replace poetry.masonry.api poetry.core.masonry.api
+      --replace-fail "poetry>=0.12" poetry-core \
+      --replace-fail poetry.masonry.api poetry.core.masonry.api
   '';
 
   pythonRelaxDeps = [ "testfixtures" ];
 
-  nativeBuildInputs = [
+  build-system = [
     # hatchling used for > 0.2.2
     poetry-core
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     ruamel-yaml
     testfixtures
   ];
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_golden" ];
 

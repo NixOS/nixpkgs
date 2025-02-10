@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cairo,
   cinnamon-desktop,
   dbus,
@@ -58,8 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];

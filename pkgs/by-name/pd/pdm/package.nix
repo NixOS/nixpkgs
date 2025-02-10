@@ -24,7 +24,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.22.2";
+  version = "2.22.3";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-se0Xvziyg4CU6wENO0oYVAI4f2uBv3Ubadiptf/uPgQ=";
+    hash = "sha256-+qUvVQJO/xfBZJuMBezu/LdKhKag1BCQ3To2qFXiOzY=";
   };
 
   pythonRelaxDeps = [ "hishel" ];

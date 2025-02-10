@@ -135,7 +135,7 @@ in
                   this patternBlock's {option}`filters` are applied.
                   If `value` starts and ends with a slash, it is interpreted as
                   an extended python regular expression, if not, it's an exact match.
-                  The journal fields are explained in systemd.journal-fields(7).
+                  The journal fields are explained in {manpage}`systemd.journal-fields(7)`.
                 '';
               };
 
@@ -210,7 +210,7 @@ in
         description = ''
           How often to run journalwatch.
 
-          The format is described in systemd.time(7).
+          The format is described in {manpage}`systemd.time(7)`.
         '';
       };
       accuracy = lib.mkOption {
@@ -219,7 +219,7 @@ in
         description = ''
           The time window around the interval in which the journalwatch run will be scheduled.
 
-          The format is described in systemd.time(7).
+          The format is described in {manpage}`systemd.time(7)`.
         '';
       };
     };

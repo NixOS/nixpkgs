@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XLlFDczoBUosr4nYvp5VBX3fohmpVOeBAyJB6ykoBEU=";
+    hash = "sha256-6NIRsSqBqedjca5O3cqXVh6h/bUEefB3QAz0Ry0q2Jw=";
   };
 
   postPatch = ''

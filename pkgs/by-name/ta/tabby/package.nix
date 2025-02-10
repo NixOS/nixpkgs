@@ -31,7 +31,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.23.0";
+  version = "0.23.1";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -120,7 +120,7 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${version}";
-    hash = "sha256-wIrYQqnt6Uuoxqs7QpCU+WQufk5dQuwKR3+fjF+97nM=";
+    hash = "sha256-8eQFsLiAHF/9gD1SdtsbDwHm0WjQ3Db6QIyxMF2dIM0=";
     fetchSubmodules = true;
   };
 

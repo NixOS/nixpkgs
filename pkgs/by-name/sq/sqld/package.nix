@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage rec {
     "sqld"
   ];
 
-  cargoHash = "";
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0a3h1b9fb87c82d5fbql5lc4gp338pa5s9i66dhw7zk8jdygx474";
   };
 
-  patches = [
-    ./getopt_on_darwin.patch
-  ];
+  patches = [ ./getopt_on_darwin.patch ];
+
+  # GCC 14 made implicit function declarations an error. With this switch we turn them
+  # back into a warning.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
   configurePhase = ''
     sed -i -r Makefile \

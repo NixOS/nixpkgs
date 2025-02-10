@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0vbQDHuLrgrsWiOb2hb6lYylJm5o/wOzoDIw85H8Eh0=";
   };
 
-  cargoHash = "sha256-EtRJsm6jo0fSEN9s0cS4IBWV/NnuUeDTa/x1utbh85k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KdHYyuH1RMLRueqYbfADUktBx9aL8yTagB0KxEGQsCs=";
 
   passthru = {
     tests.basic-functionality = nixosTests.stargazer;

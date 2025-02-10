@@ -114,7 +114,7 @@ in
         the disk usage, since Privoxy itself never deletes the certificates.
 
         ::: {.note}
-        The format is that of the `tmpfiles.d(5)`
+        The format is that of the {manpage}`tmpfiles.d(5)`
         Age parameter.
         :::
       '';

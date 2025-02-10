@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   kernel,
+  kernelModuleMakeFlags,
   elfutils,
   python3,
   perl,
@@ -101,7 +102,7 @@ stdenv.mkDerivation {
       "WERROR=0"
       "ASCIIDOC8=1"
     ]
-    ++ kernel.moduleMakeFlags
+    ++ kernelModuleMakeFlags
     ++ lib.optional (!withGtk) "NO_GTK2=1"
     ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
     ++ lib.optional (!withLibcap) "NO_LIBCAP=1";

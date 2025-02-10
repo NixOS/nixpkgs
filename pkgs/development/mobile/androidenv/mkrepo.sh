@@ -12,6 +12,7 @@ cat ./repo.json | ruby mkrepo.rb \
     --images ./xml/android-tv-sys-img2-1.xml \
     --images ./xml/android-wear-cn-sys-img2-1.xml \
     --images ./xml/android-wear-sys-img2-1.xml \
+    --images ./xml/android-automotive-sys-img2-1.xml \
     --images ./xml/google_apis-sys-img2-1.xml \
     --images ./xml/google_apis_playstore-sys-img2-1.xml \
     --addons ./xml/addon2-1.xml \

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
+, replaceVars
 , buildPackages
 , bzip2
 , curlMinimal
@@ -61,22 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./000-nixpkgs-cmake-prefix-path.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # TODO: Remove these in `staging`.
-
-    # Don't depend on frameworks.
-    ./002-application-services.diff
-    # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
-    ./003-libuv-application-services.diff
   ]
   ++ lib.optional stdenv.hostPlatform.isCygwin ./004-cygwin.diff
-  # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
   ++ lib.optional stdenv.hostPlatform.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
   # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
   ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) (
-    substituteAll {
-      src = ./007-darwin-bsd-ps-abspath.diff;
+    replaceVars ./007-darwin-bsd-ps-abspath.diff {
       ps = lib.getExe ps;
     })
   ++ [

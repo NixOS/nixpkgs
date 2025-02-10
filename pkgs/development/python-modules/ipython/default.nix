@@ -43,13 +43,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.30.0";
+  version = "8.31.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ywpAWjBtKZWly7mQGJTSQHhKnzQTlMa6P0/oxuuJ/24=";
+    hash = "sha256-tqInRga+xhZkBf8F5Uky7W5c/srKH8BfLKzee7B01ws=";
   };
 
   build-system = [ setuptools ];

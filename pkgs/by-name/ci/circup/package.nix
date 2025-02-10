@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "circup";
     tag = version;
-    hash = "sha256-4jmqS/XMB8t7aMfHriipi+VnCbZqrqjt21K5ktes2ec=";
+    hash = "sha256-G2c2Psd5cyjKkpqYQOLVWSeLIWdoxYm45KLT0q7cTzQ=";
   };
 
   pythonRelaxDeps = [ "semver" ];

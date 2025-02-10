@@ -30,9 +30,8 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = if stdenv.buildPlatform.isDarwin
-    then "sha256-HTqsghjfSjwOaN/ApPFvWVEoquZzE3MYzULkhUOXIWI"
-    else "sha256-Z3AbYtdNAyKT5EuGtCktEg0fxs/gpKdsrttRkxZhLAU";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Security

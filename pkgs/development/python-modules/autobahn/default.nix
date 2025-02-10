@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   attrs,
   argon2-cffi,
   cbor2,
@@ -27,7 +28,7 @@
   txaio,
   ujson,
   zope-interface,
-}@args:
+}:
 
 buildPythonPackage rec {
   pname = "autobahn";
@@ -42,6 +43,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-aeTE4a37zr83KZ+v947XikzFrHAhkZ4mj4tXdkQnB84=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # removal of broken pytest-asyncio markers
+      url = "https://github.com/crossbario/autobahn-python/commit/7bc85b34e200640ab98a41cfddb38267f39bc92e.patch";
+      hash = "sha256-JbuYWQhvjlXuHde8Z3ZSJAyrMOdIcE1GOq+Eh2HTz8c=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -73,8 +82,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autobahn" ];
 
-  optional-dependencies = rec {
-    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui;
+  optional-dependencies = lib.fix (self: {
+    all =
+      self.accelerate
+      ++ self.compress
+      ++ self.encryption
+      ++ self.nvx
+      ++ self.serialization
+      ++ self.scram
+      ++ self.twisted
+      ++ self.ui;
     accelerate = [
       # wsaccel
     ];
@@ -100,11 +117,11 @@ buildPythonPackage rec {
     ];
     twisted = [
       attrs
-      args.twisted
+      twisted
       zope-interface
     ];
     ui = [ pygobject3 ];
-  };
+  });
 
   meta = with lib; {
     changelog = "https://github.com/crossbario/autobahn-python/blob/${src.rev}/docs/changelog.rst";

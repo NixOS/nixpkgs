@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  postgresql,
+  libpq,
   python3,
 }:
 
@@ -23,12 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    postgresql.dev
     python3
   ];
 
   buildInputs = [
-    postgresql.lib
+    libpq
   ];
 
   postPatch = ''

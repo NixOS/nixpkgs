@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gitUpdater,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
   rev-prefix = "ena_linux_";
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.moduleMakeFlags;
+  makeFlags = kernelModuleMakeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "powerfox";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-powerfox";
     tag = "v${version}";
-    hash = "sha256-VSkOCJu3HXBHkvYtSe/kYFOhJ9kMrcf/ijMqvUB9aRU=";
+    hash = "sha256-eBadw++8mB/RUejIbMAnfBRmM+YC7oeeBWRaHCCyizo=";
   };
 
   patches = [

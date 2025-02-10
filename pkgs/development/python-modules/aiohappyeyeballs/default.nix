@@ -10,7 +10,7 @@
   # optional-dependencies
   furo,
   myst-parser,
-  sphinx-autobuild,
+  sphinx,
   sphinxHook,
 
   # tests
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     docs = [
       furo
       myst-parser
-      sphinx-autobuild
+      sphinx
       sphinxHook
     ];
   };

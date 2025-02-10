@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.7.0";
+  version = "4.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-ywGXzcnWYynmDXjDbSpzn8SroQ7z5fajhlE3JqI3PNk=";
+    hash = "sha256-rKeEi9z5eQfjn0Q4FR6CVIz9YDS7Ejg4cqcor5wtz0s=";
   };
 
   postPatch = ''
@@ -120,7 +120,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
-    changelog = "https://github.com/canonical/craft-application/blob/${src.rev}/docs/reference/changelog.rst";
+    changelog = "https://github.com/canonical/craft-application/blob/${src.tag}/docs/reference/changelog.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

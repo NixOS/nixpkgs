@@ -237,10 +237,9 @@ rec {
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     ${coreutils}/bin/mkdir xchg
     export > xchg/saved-env
-    PATH=${coreutils}/bin
 
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
-      cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
+      ${coreutils}/bin/cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
       source "$NIX_ATTRS_SH_FILE"
     fi
     source $stdenv/setup
@@ -258,7 +257,7 @@ rec {
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
     # the -K option to preserve the temporary build directory).
-    cat > ./run-vm <<EOF
+    ${coreutils}/bin/cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
     # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
@@ -268,7 +267,7 @@ rec {
     ${qemuCommand}
     EOF
 
-    chmod +x ./run-vm
+    ${coreutils}/bin/chmod +x ./run-vm
     source ./run-vm
 
     if ! test -e xchg/in-vm-exit; then
@@ -276,7 +275,7 @@ rec {
       exit 1
     fi
 
-    exitCode="$(cat xchg/in-vm-exit)"
+    exitCode="$(${coreutils}/bin/cat xchg/in-vm-exit)"
     if [ "$exitCode" != "0" ]; then
       exit "$exitCode"
     fi

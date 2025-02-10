@@ -418,7 +418,7 @@ let
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     dune-release = callPackage ../development/tools/ocaml/dune-release {
-      inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
+      inherit (pkgs) opam gitMinimal mercurial coreutils gnutar bzip2;
     };
 
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
@@ -793,7 +793,7 @@ let
       then import ../development/ocaml-modules/janestreet/0.17.nix
          {
            inherit self;
-           inherit (pkgs) bash fzf lib openssl zstd;
+           inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
          }
       else if lib.versionOlder "4.13.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.16.nix {
@@ -1086,6 +1086,8 @@ let
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
+
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -1542,7 +1544,7 @@ let
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
-      inherit (pkgs) postgresql;
+      inherit (pkgs) libpq;
     };
 
     pp = callPackage ../development/ocaml-modules/pp { };
@@ -1675,6 +1677,8 @@ let
     readline = callPackage ../development/ocaml-modules/readline {
       readline = pkgs.readline;
     };
+
+    reanalyze = callPackage ../development/tools/ocaml/reanalyze { };
 
     reason = callPackage ../development/compilers/reason { };
 

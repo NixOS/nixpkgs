@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   kernel,
+  kernelModuleMakeFlags,
   nixosTests,
   flex,
   coccinelle,
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "KVER=${kernel.version}"
     "INSTALL_MOD_PATH=${placeholder "out"}"

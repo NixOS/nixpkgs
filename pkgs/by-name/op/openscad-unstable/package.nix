@@ -44,12 +44,12 @@
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2025-01-05";
+  version = "2025-02-07";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "92a13b4f06221ef26c901130c0c52658976cdfb2";
-    hash = "sha256-803pDT/yq7eBk4J3E1JwKdhurnupPdB4A9xroLRg3+0=";
+    rev = "1308a7d476facb466bf9fae1e77666c35c8e3c8f";
+    hash = "sha256-+0cQ5mgRzOPfP6nl/rfC/hnw3V7yvGJCyLU8hOmlGOc=";
     # Unfortunately, we can't selectively fetch submodules. It would be good
     # to see that we don't accidentally depend on it.
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD

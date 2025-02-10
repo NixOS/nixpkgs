@@ -1,6 +1,5 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   furl,
@@ -8,15 +7,15 @@
   jsonschema,
   pytest-asyncio,
   pytest-httpbin,
-  pytest7CheckHook,
+  pytest-pook,
+  pytestCheckHook,
   pythonOlder,
-  requests,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.4.3";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,26 +24,30 @@ buildPythonPackage rec {
     owner = "h2non";
     repo = "pook";
     tag = "v${version}";
-    hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
+    hash = "sha256-DDHaKsye28gxyorILulrLRBy/B9zV673jeVZ85uPZAo=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
-    aiohttp
     furl
     jsonschema
-    requests
     xmltodict
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpbin
-    pytest7CheckHook
+    pytest-pook
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "pook" ];
+
+  disabledTests = [
+    # furl compat issue
+    "test_headers_not_matching"
+  ];
 
   disabledTestPaths = [
     # Don't test integrations

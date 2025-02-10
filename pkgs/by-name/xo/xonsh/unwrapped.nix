@@ -2,10 +2,12 @@
   lib,
   coreutils,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   glibcLocales,
   nix-update-script,
   pythonPackages,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -19,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "xonsh";
       repo = "xonsh";
-      rev = "refs/tags/${argset.version}";
+      tag = argset.version;
       hash = "sha256-20egNKlJjJO1wdy1anApz0ADBnaHPUSqhfrsPe3QQIs=";
     };
 
@@ -39,8 +41,10 @@ let
 
     nativeCheckInputs =
       [
-        git
+        addBinToPathHook
+        gitMinimal
         glibcLocales
+        writableTmpDirAsHomeHook
       ]
       ++ (with pythonPackages; [
         pip
@@ -77,6 +81,9 @@ let
 
       # https://github.com/xonsh/xonsh/issues/5569
       "test_spec_decorator_alias_output_format"
+
+      # Broken test
+      "test_repath_backslash"
     ];
 
     disabledTestPaths = [
@@ -101,11 +108,6 @@ let
         sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
       done
       patchShebangs .
-    '';
-
-    preCheck = ''
-      export HOME=$TMPDIR
-      export PATH=$out/bin:$PATH
     '';
 
     passthru = {

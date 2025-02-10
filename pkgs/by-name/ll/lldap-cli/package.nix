@@ -7,18 +7,21 @@
   gnugrep,
   gnused,
   jq,
+  lldap,
+  unixtools,
   curl,
   makeWrapper,
+  unstableGitUpdater,
 }:
 stdenv.mkDerivation {
   pname = "lldap-cli";
-  version = "0-unstable-2024-02-24";
+  version = "0-unstable-2024-11-11";
 
   src = fetchFromGitHub {
     owner = "Zepmann";
     repo = "lldap-cli";
-    rev = "d1fe50006c4a3a1796d4fb2d73d8c8dcfc875fd5";
-    hash = "sha256-ZKRTYdgtOfV7TgpaVKLhYrCttYvB/bUexMshmmF8NyY=";
+    rev = "2a80dc47c334c88faf3000b45c631bc2cea09906";
+    hash = "sha256-uk7SOiQmUYtoJnihSnPsu/7Er4wXX4xvPboJaNSMjkM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,14 +45,18 @@ stdenv.mkDerivation {
       --prefix PATH : ${
         lib.makeBinPath [
           bash
+          unixtools.column
           coreutils
           gnugrep
           gnused
           jq
+          lldap # Needed for lldap_set_password
           curl
         ]
       }
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Command line tool for managing LLDAP";

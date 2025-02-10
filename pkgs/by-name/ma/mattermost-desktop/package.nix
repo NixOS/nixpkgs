@@ -2,12 +2,16 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron,
+  electron_33,
   makeWrapper,
   testers,
   mattermost-desktop,
   nix-update-script,
 }:
+
+let
+  electron = electron_33;
+in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";

@@ -17,6 +17,7 @@
   getent,
   glibcLocales,
   autoPatchelfHook,
+  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -280,6 +281,14 @@ stdenv.mkDerivation (finalAttrs: {
         "0024-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
         "0025-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
         "0026-build-path.c-avoid-boot-time-segfault-for-musl.patch"
+      ]
+      ++ [
+        # add a missing include
+        (fetchpatch {
+          url = "https://github.com/systemd/systemd/commit/34fcd3638817060c79e1186b370e46d9b3a7409f.patch";
+          hash = "sha256-Uaewo3jPrZGJttlLcqO6cCj1w3IGZmvbur4+TBdIPxc=";
+          excludes = [ "src/udev/udevd.c" ];
+        })
       ]
     );
 

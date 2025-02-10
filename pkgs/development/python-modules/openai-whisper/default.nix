@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20240930";
+  version = "20240930-unstable-2025-01-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-6wfHJM2pg+y1qUfVF1VRG86G3CtQ+UNIwMXR8pPi2k4=";
+    repo = "whisper";
+    rev = "517a43ecd132a2089d85f4ebc044728a71d49f6e";
+    hash = "sha256-RYcQC70E27gtW4gzoPJU132Dm7CnSg8d2/GEfyUyXU4=";
   };
 
   patches = [
@@ -44,9 +44,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     more-itertools
     numba
     numpy

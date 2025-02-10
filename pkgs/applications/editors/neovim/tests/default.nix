@@ -364,8 +364,8 @@ in
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
-    cat ${nvim-with-luasnip}/nvim
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
+  inherit (vimPlugins) corePlugins;
 })

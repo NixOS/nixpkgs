@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   fetchYarnDeps,
+  fetchpatch,
   makeWrapper,
   CoreFoundation,
   AppKit,
@@ -115,6 +116,14 @@ let
             fixup-yarn-lock
           ]
       );
+
+    patches = lib.optional (lib.versionAtLeast version "16") [
+      (fetchpatch {
+        name = "disable-wasm-opt-for-ironrdp.patch";
+        url = "https://github.com/gravitational/teleport/commit/994890fb05360b166afd981312345a4cf01bc422.patch?full_index=1";
+        hash = "sha256-Y5SVIUQsfi5qI28x5ccoRkBjpdpeYn0mQk8sLO644xo=";
+      })
+    ];
 
     configurePhase = ''
       runHook preConfigure
@@ -244,6 +253,7 @@ buildGoModule rec {
       tomberek
       freezeboy
       techknowlogick
+      juliusfreudenberger
     ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array

@@ -63,10 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-x8p9tIsJCXQ+rvNCUNoCwZvGHU8dzt1mA/EJQJU2q1Y=";
   };
 
-  # FIXME: avoid rebuilding darwin stdenv for now
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = [
     # https://github.com/curl/curl/issues/15725
     ./fix-eventfd-free.patch
+    # https://github.com/curl/curl/issues/15767
+    ./fix-password-only-netrc.patch
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion

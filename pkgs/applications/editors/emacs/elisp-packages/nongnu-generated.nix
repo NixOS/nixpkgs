@@ -4073,10 +4073,10 @@
     elpaBuild {
       pname = "racket-mode";
       ename = "racket-mode";
-      version = "1.0.20250103.151851";
+      version = "1.0.20250125.153651";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/racket-mode-1.0.20250103.151851.tar";
-        sha256 = "11m25729hm7m5srjiys1ws070yi2aa7ni5rn240w9290nj1brjnb";
+        url = "https://elpa.nongnu.org/nongnu/racket-mode-1.0.20250125.153651.tar";
+        sha256 = "0sr2m99mnkjh2byxmy3pgn3gbzyrj64xjkcgwrjd5g4hyci7pdvq";
       };
       packageRequires = [ ];
       meta = {
@@ -4285,10 +4285,10 @@
     elpaBuild {
       pname = "scad-mode";
       ename = "scad-mode";
-      version = "95.0";
+      version = "96.0";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/scad-mode-95.0.tar";
-        sha256 = "1wkpgrkx3cjmh72qg9yiq2x9sqswx6x6pbr8zzhldyjs6kmjl7km";
+        url = "https://elpa.nongnu.org/nongnu/scad-mode-96.0.tar";
+        sha256 = "0l5r88srzzxy143kjghyfcm0n7vbm79qxy0mgxfd66i8gmvw85m4";
       };
       packageRequires = [ compat ];
       meta = {
@@ -4601,10 +4601,10 @@
     elpaBuild {
       pname = "subed";
       ename = "subed";
-      version = "1.2.23";
+      version = "1.2.25";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/subed-1.2.23.tar";
-        sha256 = "0bvsv688mqhga8dffy3841wxs5pkw0vish15dgligll47cj98mzp";
+        url = "https://elpa.nongnu.org/nongnu/subed-1.2.25.tar";
+        sha256 = "1w4r1xh8i7fvaifq50x3s21d31bp53hrvfsw1xp5lnh68xbx9and";
       };
       packageRequires = [ ];
       meta = {
@@ -5319,10 +5319,10 @@
     elpaBuild {
       pname = "xah-fly-keys";
       ename = "xah-fly-keys";
-      version = "26.9.20241225173150";
+      version = "26.9.20250124153828";
       src = fetchurl {
-        url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-26.9.20241225173150.tar";
-        sha256 = "0b2pjrfa130n4bam80p676k3xz417d6dfn8921xh6msf8b14cwpv";
+        url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-26.9.20250124153828.tar";
+        sha256 = "1c10mlrwnchaf1rpchjglxbd6llh10v1cqg2980kwd7jx56zajm3";
       };
       packageRequires = [ ];
       meta = {

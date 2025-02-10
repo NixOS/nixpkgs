@@ -7,41 +7,47 @@
   pnpm_9,
   python3,
   node-gyp,
+  cctools,
   xcbuild,
   libkrb5,
   libmongocrypt,
-  postgresql,
+  libpq,
   makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.73.1";
+  version = "1.75.2";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-gPdJKVOZlizdS0o+2nBgCImnIhtHzRjE2xk0zJA52go=";
+    hash = "sha256-fIdwciI4QUNr2wNWiq7qT4c6aZeUnkaVhSkIgFO4Svw=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Am9R2rfQiw1IPd22/UraqzEqvVeB5XuSrrLSYXWsWfU=";
+    hash = "sha256-rtXTAHZUeitQFTa1Tw6l4el+xWD2hLT+2wu2LXW80cE=";
   };
 
-  nativeBuildInputs = [
-    pnpm_9.configHook
-    python3 # required to build sqlite3 bindings
-    node-gyp # required to build sqlite3 bindings
-    makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs =
+    [
+      pnpm_9.configHook
+      python3 # required to build sqlite3 bindings
+      node-gyp # required to build sqlite3 bindings
+      makeWrapper
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      cctools
+      xcbuild
+    ];
 
   buildInputs = [
     nodejs
     libkrb5
     libmongocrypt
-    postgresql
+    libpq
   ];
 
   buildPhase = ''
@@ -67,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
+    shopt -s globstar
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules packages/**/node_modules -xtype l -delete
 
     echo "Removed non-deterministic and unnecessary files"
   '';

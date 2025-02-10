@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4POxv6fIrp+wKb9V+6Y2YPx3FXp3hpnkq+62H9TwGII=";
   };
 
-  cargoHash = "sha256-wMy3c4iqHOWmbJNCdy4/2XVgyF6lcAxSs3pAaD53JAg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-J9sGXJbGbO9UgZfgqxqzbiJz9j6WMpq3qC2ys7OJnII=";
 
   checkFlags = [
     # remote access

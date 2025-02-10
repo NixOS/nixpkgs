@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "polarity";
-  version = "latest-unstable-2025-01-23";
+  version = "latest-unstable-2025-02-03";
 
   src = fetchFromGitHub {
     owner = "polarity-lang";
     repo = "polarity";
-    rev = "b5449d485a86fec9d88621cc38fcdfd9b4c3c2d1";
-    hash = "sha256-MFem+/7LegSXJXlIQkaVLbTfxvuG46V10TI06NohQ9A=";
+    rev = "701d7d9c2c1f72477ce661a7656ec26c823d8a0b";
+    hash = "sha256-0fuM4p5fDthFP56pExviiZtU78mLV0oWzcVyS6+Euy0=";
   };
 
   cargoLock = {

@@ -38,7 +38,7 @@
     !(
       stdenv.targetPlatform.isx86
       || stdenv.targetPlatform.isPower
-      || stdenv.targetPlatform.isSparc
+      || (lib.versionOlder version "9.4" && stdenv.targetPlatform.isSparc)
       || (lib.versionAtLeast version "9.2" && stdenv.targetPlatform.isAarch64)
     ),
   # LLVM is conceptually a run-time-only dependency, but for

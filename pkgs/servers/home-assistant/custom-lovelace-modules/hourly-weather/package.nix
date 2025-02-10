@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "hourly-weather";
-  version = "6.6.0";
+  version = "6.6.1";
 
   src = fetchFromGitHub {
     owner = "decompil3d";
     repo = "lovelace-hourly-weather";
     rev = version;
-    hash = "sha256-UlKObFzzjsjxqp2uKvI8BYHTFBWFLFg4RTnJkFplZCA=";
+    hash = "sha256-D2kCUcUgLyMVeba3xc02q/5PrEzXrBVCX+75F58j8y0=";
   };
 
-  npmDepsHash = "sha256-cDRS87+uNbf4OOQ5w6gFFgeI52YblfAB0bS07wJg5r0=";
+  npmDepsHash = "sha256-gpyqQd4pRF4xKgfT9gRAVnXLSFThjfJV2yu4zOCvVpg=";
 
   env.CYPRESS_INSTALL_BINARY = "0";
 
