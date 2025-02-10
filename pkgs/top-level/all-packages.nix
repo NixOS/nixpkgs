@@ -13979,7 +13979,7 @@ with pkgs;
 
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
-  iwe = callPackage ../by-name/iw/iwe/package.nix {};
+  iwe = callPackage ./../by-name/iw/iwe/package.nix { /* ... */ };
 
   jabcode = callPackage ../development/libraries/jabcode { };
 
