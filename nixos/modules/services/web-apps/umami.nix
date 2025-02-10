@@ -247,7 +247,7 @@ in
       environment = mapAttrs (_: toString) nonFileSettings;
 
       description = "Umami: a simple, fast, privacy-focused alternative to Google Analytics";
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ (optional (cfg.createPostgresqlDatabase) "postgresql.service");
       wantedBy = [ "multi-user.target" ];
 
       script =
