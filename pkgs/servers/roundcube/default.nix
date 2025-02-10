@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  # FIXME: this should be removed after upstream releases the update forcing the use of public_html.
+  dontCheckForBrokenSymlinks = true;
+
   installPhase = ''
     mkdir $out
     cp -r * $out/
