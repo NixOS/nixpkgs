@@ -1490,11 +1490,6 @@ self: super: {
           sed -i test/PgInit.hs \
             -e s^'host=" <> host <> "'^^
         '';
-        # https://github.com/commercialhaskell/stackage/issues/6884
-        # persistent-postgresql-2.13.5.1 needs persistent-test >= 2.13.1.3 which
-        # is incompatible with the stackage version of persistent, so the tests
-        # are disabled temporarily.
-        doCheck = false;
         preCheck = drv.preCheck or "" + ''
           PGDATABASE=test
           PGUSER=test
