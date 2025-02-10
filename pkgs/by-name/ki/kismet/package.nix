@@ -4,7 +4,7 @@
   autoreconfHook,
   binutils,
   elfutils,
-  fetchurl,
+  fetchFromGitHub,
   glib,
   libcap,
   libmicrohttpd,
@@ -14,6 +14,7 @@
   libwebsockets,
   lm_sensors,
   networkmanager,
+  nix-update-script,
   pcre2,
   pkg-config,
   openssl,
@@ -27,13 +28,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackage: {
   pname = "kismet";
   version = "2023-07-R1";
 
-  src = fetchurl {
-    url = "https://www.kismetwireless.net/code/${pname}-${version}.tar.xz";
-    hash = "sha256-8IVI4mymX6HlZ7Heu+ocpNDnIGvduWpPY5yQFxhz6Pc=";
+  src = fetchFromGitHub {
+    owner = "kismetwireless";
+    repo = "kismet";
+    tag = "kismet-${finalPackage.version}";
+    hash = "sha256-BVsXzAH3Ru940CWvrI5ClNF/UkFT+yReMeklVuhTfxM=";
   };
 
   postPatch = ''
@@ -111,6 +114,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^kismet-(\\d+-\\d+-.+)$"
+      ];
+    };
+  };
+
   meta = {
     description = "Wireless network sniffer";
     homepage = "https://www.kismetwireless.net/";
@@ -118,4 +130,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ numinit ];
   };
-}
+})
