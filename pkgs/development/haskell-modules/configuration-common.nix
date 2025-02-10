@@ -1245,9 +1245,6 @@ self: super: {
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   }) super.alex;
 
-  # 2023-07-14: Restrictive upper bounds: https://github.com/luke-clifton/shh/issues/76
-  shh = doJailbreak super.shh;
-
   # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
   # dontCheck can be removed on the next package set bump
