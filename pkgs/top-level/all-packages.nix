@@ -15443,6 +15443,10 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
   };
 
+  vesktop = callPackage ../by-name/ve/vesktop/package.nix {
+    electron = electron_33;
+  };
+
   veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
 
   vim = vimUtils.makeCustomizable (callPackage ../applications/editors/vim {
