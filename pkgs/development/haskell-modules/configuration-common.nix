@@ -306,10 +306,6 @@ self: super: {
 
   ghc-debug-client = doJailbreak super.ghc-debug-client;
 
-  # Test failure.  Tests also disabled in Stackage:
-  # https://github.com/jtdaugherty/brick/issues/499
-  brick = dontCheck super.brick;
-
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
