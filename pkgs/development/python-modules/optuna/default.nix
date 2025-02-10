@@ -6,43 +6,34 @@
   pythonOlder,
   alembic,
   boto3,
-  botorch,
-  catboost,
-  cma,
   cmaes,
   colorlog,
-  distributed,
   fakeredis,
+  fvcore,
   google-cloud-storage,
-  lightgbm,
+  grpcio,
+  kaleido,
   matplotlib,
-  mlflow,
   moto,
   numpy,
   packaging,
   pandas,
   plotly,
+  protobuf,
   pytest-xdist,
-  pytorch-lightning,
   pyyaml,
   redis,
   scikit-learn,
   scipy,
   setuptools,
-  shap,
   sqlalchemy,
-  tensorflow,
   torch,
-  torchaudio,
-  torchvision,
   tqdm,
-  wandb,
-  xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,7 +42,7 @@ buildPythonPackage rec {
     owner = "optuna";
     repo = "optuna";
     tag = "v${version}";
-    hash = "sha256-wIgYExxJEWFxEadBuCsxEIcW2/J6EVybW1jp83gIMjY=";
+    hash = "sha256-NNlwrVrGg2WvkC42nmW7K/mRktE3B97GaL8GaSOKF1Y=";
   };
 
   build-system = [
@@ -69,60 +60,46 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    integration = [
-      botorch
-      catboost
-      cma
-      distributed
-      lightgbm
-      mlflow
-      pandas
-      # pytorch-ignite
-      pytorch-lightning
-      scikit-learn
-      shap
-      tensorflow
-      torch
-      torchaudio
-      torchvision
-      wandb
-      xgboost
-    ];
     optional = [
       boto3
-      botorch
       cmaes
+      fvcore
       google-cloud-storage
+      grpcio
       matplotlib
       pandas
       plotly
+      protobuf
       redis
       scikit-learn
+      scipy
     ];
   };
 
   preCheck = ''
     export PATH=$out/bin:$PATH
+
+    # grpc tests are racy
+    sed -i '/"grpc",/d' optuna/testing/storages.py
   '';
 
   nativeCheckInputs =
     [
       fakeredis
+      kaleido
       moto
       pytest-xdist
       pytestCheckHook
-      scipy
+      torch
     ]
     ++ fakeredis.optional-dependencies.lua
     ++ optional-dependencies.optional;
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
-
-  disabledTestPaths = [
-    # require unpackaged kaleido and building it is a bit difficult
-    "tests/visualization_tests"
-    # ImportError: cannot import name 'mock_s3' from 'moto'
-    "tests/artifacts_tests/test_boto3.py"
+  disabledTests = [
+    # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
+    "test_get_pareto_front_plot"
+    # too narrow time limit
+    "test_get_timeline_plot_with_killed_running_trials"
   ];
 
   pythonImportsCheck = [ "optuna" ];
