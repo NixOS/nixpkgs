@@ -2775,7 +2775,7 @@ self: super: {
       # Matching dependencies for hasql < 1.6.x
       hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements_0_3_1_5;
       hasql-implicits = dontCheck super.hasql-implicits_0_1_1_3;
-      hasql-notifications = dontCheck super.hasql-notifications_0_2_2_0;
+      hasql-notifications = dontCheck super.hasql-notifications_0_2_2_2;
       hasql-pool = dontCheck super.hasql-pool_1_0_1;
       hasql-transaction = dontCheck super.hasql-transaction_1_1_0_1;
     })) [
