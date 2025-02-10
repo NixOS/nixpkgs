@@ -11680,6 +11680,12 @@
     githubId = 2396926;
     name = "Justin Woo";
   };
+  justryanw = {
+    email = "nixpkgs@ryanjw.net";
+    github = "justryanw";
+    githubId = 34030157;
+    name = "Ryan Walker";
+  };
   jvanbruegge = {
     email = "supermanitu@gmail.com";
     github = "jvanbruegge";
