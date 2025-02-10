@@ -141,18 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  doCheck =
-    # Probably broken MIME type detection.
-    !stdenv.isDarwin
-    &&
-      # Could be made to work, but requires the C API test to be linked
-      # with a C++ linker because
-      # librsvg -> gdk-pixbuf -> libtiff -> lerc (C++).
-      #
-      # Doesn't make sense to pursue this upstream until gdk-pixbuf
-      # itself is fixed:
-      # https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/181
-      !stdenv.hostPlatform.isStatic;
+  # Probably broken MIME type detection.
+  doCheck = !stdenv.isDarwin;
 
   env = {
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_QUERY_LOADERS = writeShellScript "gdk-pixbuf-loader-loaders-wrapped" ''
