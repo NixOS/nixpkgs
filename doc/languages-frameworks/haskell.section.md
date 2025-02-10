@@ -297,8 +297,8 @@ Defaults to `false`.
 : Whether to build (HTML) documentation using [haddock][haddock].
 Defaults to `true` if supported.
 
-`testTarget`
-: Name of the test suite to build and run. If unset, all test suites will be executed.
+`testTargets`
+: Names of the test suites to build and run. If unset, all test suites will be executed.
 
 `preCompileBuildDriver`
 : Shell code to run before compiling `Setup.hs`.
