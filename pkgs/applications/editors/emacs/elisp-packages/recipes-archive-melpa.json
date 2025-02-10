@@ -76110,28 +76110,30 @@
   "repo": "emacsorphanage/magit-svn",
   "unstable": {
    "version": [
-    20220314,
-    1451
+    20250210,
+    1141
    ],
    "deps": [
+    "dash",
     "magit",
     "transient"
    ],
-   "commit": "b8277081db90977247ae3900ea6afeb0ca644d36",
-   "sha256": "1ywwylxasgyk6gldypvbn6hlbmkp24rx6kcd0qvxsp39bbd0in50"
+   "commit": "ca637c648835eddbeb277cc8089d3ffd6f75ae13",
+   "sha256": "sha256-p+uDl+TUStmtbiPk64oRAbvni0LADklStClHgD5OgXQ="
   },
   "stable": {
    "version": [
     2,
     2,
-    3
+    4
    ],
    "deps": [
+    "dash",
     "magit",
     "transient"
    ],
-   "commit": "350493217afdb7637564e089f475909adecd9208",
-   "sha256": "1v1y4fir1plz4kj0cvkcd29wibli4dw7vp4fmbxq4df76d8iy8yd"
+   "commit": "ca637c648835eddbeb277cc8089d3ffd6f75ae13",
+   "sha256": "0x419qz80ir9ni94j3n08a5ygfq1265fpr13dsnxjjnlwjbq7sx7"
   }
  },
  {
