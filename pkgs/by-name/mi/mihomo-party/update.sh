@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash nixVersions.latest curl coreutils jq common-updater-scripts
+#!nix-shell -i bash -p bash nix curl coreutils jq common-updater-scripts
 
 latestTag=$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -sL https://api.github.com/repos/mihomo-party-org/mihomo-party/releases/latest | jq -r ".tag_name")
 latestVersion="$(expr "$latestTag" : 'v\(.*\)')"
