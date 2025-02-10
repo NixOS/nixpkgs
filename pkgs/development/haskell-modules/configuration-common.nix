@@ -188,8 +188,6 @@ self: super: {
   # 2025-02-10: Too strict bounds on tasty-quickcheck < 0.11
   tasty-discover = doJailbreak super.tasty-discover;
 
-  # Too strict lower bound on lens, drop with LTS 23
-  provide = doJailbreak super.provide;
   # Too strict bounds on quickcheck-instances/tasty-qickcheck, drop with LTS 23
   lawful-conversions = doJailbreak super.lawful-conversions;
 
