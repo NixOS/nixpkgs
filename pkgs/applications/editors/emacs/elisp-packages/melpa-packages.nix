@@ -447,7 +447,8 @@ let
 
         magit-circleci = buildWithGit super.magit-circleci;
 
-        magit-delta = buildWithGit super.magit-delta;
+        # https://github.com/dandavison/magit-delta/issues/30
+        magit-delta = addPackageRequires (buildWithGit super.magit-delta) [ self.dash ];
 
         orgit = buildWithGit super.orgit;
 
