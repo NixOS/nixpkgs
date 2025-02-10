@@ -48,11 +48,6 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
-  checkFlags = [
-    # https://gitlab.com/sequoia-pgp/sequoia-sq/-/issues/297
-    "--skip=sq_autocrypt_import"
-  ];
-
   # Needed for tests to be able to create a ~/.local/share/sequoia directory
   preCheck = ''
     export HOME=$(mktemp -d)
