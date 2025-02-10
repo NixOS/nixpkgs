@@ -2884,6 +2884,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+nvim-dbee = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nui-nvim }:
+buildLuarocksPackage {
+  pname = "nvim-dbee";
+  version = "0.1.9-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nvim-dbee-0.1.9-1.rockspec";
+    sha256 = "1lmzy6ivnwvhzclkfbcswj2mznrpc4i8s3ivdrc78rr86i49mvpg";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/kndndrj/nvim-dbee/archive/v0.1.9.zip";
+    sha256 = "10xplksglyd8af8q1cl2lxcpn52b766g87gva9fd3l66idxsds00";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nui-nvim ];
+
+  meta = {
+    homepage = "https://github.com/kndndrj/nvim-dbee";
+    description = "Interactive database client for neovim";
+    license.fullName = "GPL-3.0";
+  };
+}) {};
+
 nvim-nio = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "nvim-nio";
