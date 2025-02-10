@@ -381,6 +381,7 @@ self: super: {
   ] super.gitit;
 
   # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
+  # TODO: Confirm whether this can be removed once gtk is fixed on staging.
   threadscope = overrideCabal (drv: {
     prePatch = drv.prePatch or "" + ''
       ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
