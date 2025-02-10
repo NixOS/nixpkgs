@@ -35,7 +35,6 @@ buildPerlPackage rec {
   # Disable tests as it requires Bio::Tools::Align which is in a different directory
   buildPhase = ''
     make
-
   '';
 
   checkPhase = ''
