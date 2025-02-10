@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
@@ -49,6 +50,11 @@ buildPythonPackage rec {
     starlette
     werkzeug
   ];
+
+  preCheck = ''
+    # httpx 0.28.0+ requires SSL_CERT_FILE or SSL_CERT_DIR
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
 
   pythonImportsCheck = [ "authlib" ];
 

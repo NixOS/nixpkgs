@@ -45,6 +45,17 @@ let
         ];
       });
 
+      aiomqtt = super.aiomqtt.overridePythonAttrs (rec {
+        version = "2.0.1";
+        src = fetchFromGitHub {
+          owner = "sbtinstruments";
+          repo = "aiomqtt";
+          tag = "v${version}";
+          hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
+        };
+        meta.broken = false;
+      });
+
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
         src = fetchFromGitHub {
@@ -87,6 +98,37 @@ let
         ];
       });
 
+      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
+        version = "4.0.3";
+        src = fetchFromGitHub {
+          owner = "aio-libs";
+          repo = "async-timeout";
+          tag = "v${version}";
+          hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
+        };
+      });
+
+      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.1";
+        src = fetchFromGitHub {
+          owner = "EuleMitKeule";
+          repo = "eq3btsmart";
+          tag = version;
+          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
+        };
+        build-system = with self; [ poetry-core ];
+      });
+
+      govee-local-api = super.govee-local-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.3";
+        src = fetchFromGitHub {
+          owner = "Galorhallen";
+          repo = "govee-local-api";
+          tag = "v${version}";
+          hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
+        };
+      });
+
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
         version = "5.12.4";
         src = fetchFromGitHub {
@@ -100,6 +142,16 @@ let
         ];
       });
 
+      letpot = super.letpot.overridePythonAttrs (rec {
+        version = "0.3.0";
+        src = fetchFromGitHub {
+          owner = "jpelgrom";
+          repo = "python-letpot";
+          tag = "v${version}";
+          hash = "sha256-OFLQ0DV7roqUlm6zJWAzMRpcmAi/oco8lEHbmfqNaVs=";
+        };
+      });
+
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -108,6 +160,8 @@ let
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
+
+      paho-mqtt = super.paho-mqtt_1;
 
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
         version = "2.5.9";
@@ -204,6 +258,46 @@ let
         };
       });
 
+      pyrail = super.pyrail.overridePythonAttrs (rec {
+        version = "0.0.3";
+        src = fetchPypi {
+          pname = "pyrail";
+          inherit version;
+          hash = "sha256-XxcVcRXMjYAKevANAqNJkGDUWfxDaLqgCL6XL9Lhsf4=";
+        };
+        env.CI_JOB_ID = version;
+        build-system = [ self.setuptools ];
+        dependencies = [ self.requests ];
+      });
+
+      # snmp component does not support pysnmp 7.0+
+      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
+        version = "6.2.6";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmp";
+          tag = "v${version}";
+          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
+        };
+      });
+
+      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.4";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmpcrypto";
+          tag = "v${version}";
+          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
+        };
+        build-system = with self; [ setuptools ];
+        postPatch = ''
+          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
+          substituteInPlace setup.py --replace \
+            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
+            "observed_version = [36, 2, 0]"
+        '';
+      });
+
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -224,22 +318,6 @@ let
         };
         patches = [ ];
         doCheck = false;
-      });
-
-      slack-sdk = super.slack-sdk.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = fetchFromGitHub {
-          owner = "slackapi";
-          repo = "python-slackclient";
-          rev = "refs/tags/${version}";
-          hash = "sha256-U//HUe6e41wOOzoaDl4yXPnEASCzpGBIScHStWMN8tk=";
-        };
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace-fail "pytest-runner" ""
-        '';
-        pythonImportsCheck = [ "slack" ];
-        doCheck = false; # Tests changed a lot for > 3
       });
 
       vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
@@ -291,7 +369,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.1.4";
+  hassVersion = "2025.2.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -312,13 +390,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-QqWF/uvFQbf0tdJMzFV3hAt9Je5sFR5z+aAPtCxycbM=";
+    hash = "sha256-iWOrBIKsN+fi5pzMzekmTBIk2FoM2HOsWujkuZ45lHE=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-yzX4Wgo468On/WuK32Xdl0O3en/WFRdykvfvHNEU1S0=";
+    hash = "sha256-GToOHfDOWrjiQEcxgX9h2tCYqGUv3mXxVh1/GchiNRU=";
   };
 
   build-system = with python.pkgs; [
@@ -331,19 +409,23 @@ python.pkgs.buildPythonApplication rec {
     "bcrypt"
     "ciso8601"
     "cryptography"
-    "jinja2"
+    "fnv-hash-fast"
     "hass-nabucasa"
     "httpx"
+    "jinja2"
     "orjson"
     "pillow"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
     "requests"
+    "securetar"
     "sqlalchemy"
     "typing-extensions"
+    "ulid-transform"
     "urllib3"
     "uv"
+    "voluptuous-openapi"
     "yarl"
   ];
 
@@ -375,6 +457,7 @@ python.pkgs.buildPythonApplication rec {
     aiodns
     aiohasupervisor
     aiohttp
+    aiohttp-asyncmdnsresolver
     aiohttp-cors
     aiohttp-fast-zlib
     aiozoneinfo

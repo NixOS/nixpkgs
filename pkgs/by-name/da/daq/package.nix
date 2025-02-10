@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     "--with-dnet-libraries=${libdnet}/lib"
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+
   meta = {
     description = "Data AcQuisition library (DAQ), for packet I/O";
     mainProgram = "daq-modules-config";

@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-B421xXt7TrBJVwi04vygnw9t5o7/KLVpuItQtwV4E24=";
   };
 
-  cargoHash = "sha256-geg6gdPKUBJBJI/TpW5m+/q/7M7kmIlrU2UAauctFOM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GGEKQgnSB2HW3VIj4CfxzUZaWYE2/nHJPN9ZMmHY5Ns=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-o8b30xCkHWdfGhI+8KXVj1U8xJtt7YsRcKBL6FxUVW8=";
   };
 
-  cargoHash = "sha256-oppQG3YqiTe0feuvIrKkSCYLBRgNIGOOQ31/pCSJaPY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eTXSVeFzlQHBPWPRgt//uvtsPal4KeD2Rk7Sevkx/LE=";
 
   meta = {
     description = "Template generation tool to create no_std applications targeting Espressif's chips";

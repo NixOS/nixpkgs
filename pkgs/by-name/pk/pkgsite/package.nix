@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "pkgsite";
-  version = "0-unstable-2025-01-21";
+  version = "0-unstable-2025-01-31";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "pkgsite";
-    rev = "ce52a304a0f4dccd8ae7abfdd3712c9dae7b4f34";
-    hash = "sha256-6fZr9mi6SGIe7AUNv6cS6R+kBNjFbPfdamnpGclimWQ=";
+    rev = "50d4697cc82f2eedc49fc659871d1e81ca4c6164";
+    hash = "sha256-zDUsMkhQH/KJDjUE6mw/zRF23Ad3VIfqjEIY374Y9GE=";
   };
 
   vendorHash = "sha256-Z+Ji3RO2zn5vn9DXOAxyeI4OZXGOfyVdfdIsNyJHZpE=";

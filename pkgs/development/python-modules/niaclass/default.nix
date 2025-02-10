@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niaclass";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaClass";
     tag = version;
-    hash = "sha256-2VNLXVciWInkZwk9O+U+6oU+FOVQx3InV4UVgny/B6I=";
+    hash = "sha256-cowB+nBb5vH2ntLrcctqICYcf3I4m8rw3g4vO3/rokw=";
   };
 
   pythonRelaxDeps = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Framework for solving classification tasks using Nature-inspired algorithms";
     homepage = "https://github.com/firefly-cpp/NiaClass";
-    changelog = "https://github.com/firefly-cpp/NiaClass/releases/tag/${version}";
+    changelog = "https://github.com/firefly-cpp/NiaClass/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

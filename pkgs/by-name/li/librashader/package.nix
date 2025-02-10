@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage {
     ./patches/fix-optional-dep-syntax.patch
   ];
 
-  cargoHash = "sha256-eUZOFdbOPs81LAMEV4i6eYRN8NYVcnmble/L+ptx2EA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9rwrbCt/obrKlRDWzzc1hm6ywHubz5x6Ujm2JMso0vg=";
 
   RUSTC_BOOTSTRAP = 1;
 

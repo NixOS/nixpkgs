@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.16.1";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = version;
-    hash = "sha256-6i7LPdmMakGeLujhA9d7Ep9oiVcND3ni/jzUkqgEqxw=";
+    hash = "sha256-S5A5wBb2ZMxpLvP/EYahdg2BqgzKGvnzvZOII76O/+w=";
   };
 
   build-system = [ setuptools ];
@@ -76,62 +76,23 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # jax.errors.UnexpectedTracerError: Encountered an unexpected tracer
-    "test_haiku_state_dropout_smoke"
-    "test_flax_state_dropout_smoke"
-
     # AssertionError due to tolerance issues
-    "test_beta_binomial_log_prob"
-    "test_collapse_beta"
-    "test_cpu"
-    "test_gamma_poisson"
-    "test_gof"
-    "test_hpdi"
-    "test_kl_dirichlet_dirichlet"
-    "test_kl_univariate"
-    "test_mean_var"
-    # since jax update to 0.5.0
-    "test_analytic_kl_2"
-    "test_analytic_kl_3"
-    "test_apply_kernel"
-    "test_beta_bernoulli"
-    "test_biject_to"
     "test_bijective_transforms"
-    "test_change_point_x64"
-    "test_cholesky_update"
-    "test_dais_vae"
-    "test_discrete_gibbs_multiple_sites_chain"
+    "test_cpu"
     "test_entropy_categorical"
     "test_gaussian_model"
-    "test_get_proposal_loc_and_scale"
-    "test_guide_plate_contraction"
-    "test_kernel_forward"
+
+    # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
+    # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+    # E        Emitted warnings: [].
     "test_laplace_approximation_warning"
-    "test_log_prob_gradient"
-    "test_logistic_regression"
-    "test_logistic_regression_x64"
-    "test_scale"
-    "test_scan_svi"
-    "test_stein_particle_loss"
-    "test_weight_convergence"
 
     # Tests want to download data
     "data_load"
     "test_jsb_chorales"
 
-    # RuntimeWarning: overflow encountered in cast
-    "test_zero_inflated_logits_probs_agree"
-
-    # NameError: unbound axis name: _provenance
-    "test_model_transformation"
-
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
-  ];
-
-  disabledTestPaths = [
-    # require jaxns (unpackaged)
-    "test/contrib/test_nested_sampling.py"
   ];
 
   meta = {

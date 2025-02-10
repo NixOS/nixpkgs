@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SdxcNbe8/dNZ4JcxKksWmDBAvQorpC8ePvQgnyeKgxU=";
   };
 
-  cargoHash = "sha256-PQbp9jZZB/dsyKAlckZwl8xOpXks3anqUm+Ld7IhMFI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5URvuHnpaceRbMqzTA+NRvpp/WLdf+zfmYhIMPiOhNk=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 

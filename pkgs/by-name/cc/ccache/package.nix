@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   binutils,
   asciidoctor,
   cmake,
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Darwin.
     # Additionally, when cross compiling, the correct target prefix
     # needs to be set.
-    (substituteAll {
-      src = ./fix-objdump-path.patch;
+    (replaceVars ./fix-objdump-path.patch {
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];

@@ -6,67 +6,65 @@
   gettext,
   git,
   qt5,
-  gitUpdater,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.10.1";
+  version = "4.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
-    rev = "v${version}";
-    hash = "sha256-tOd+LSS6inGLRb6Wm92tta0JbjSZw+88hqFDJmSSJlY=";
+    tag = "v${version}";
+    hash = "sha256-aFdjkuQrVYgYALTnupdwVL58kSsp4SC6xsXefA1NnKI=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    qt5.qtwayland
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];
 
-  propagatedBuildInputs = with python3Packages; [
-    setuptools
-    git
-    pyqt5
-    qtpy
-    send2trash
-    polib
-  ];
+  propagatedBuildInputs =
+    [ git ]
+    ++ (with python3Packages; [
+      setuptools
+      pyqt5
+      qtpy
+      send2trash
+      polib
+    ]);
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
+  nativeBuildInputs = [
     gettext
     qt5.wrapQtAppsHook
+    python3Packages.setuptools-scm
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
     git
-    pytestCheckHook
+    python3Packages.pytestCheckHook
+    versionCheckHook
   ];
 
-  disabledTestPaths =
-    [
-      "qtpy/"
-      "contrib/win32"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "cola/inotify.py"
-    ];
+  versionCheckProgramArg = "--version";
+
+  disabledTestPaths = [
+    "qtpy/"
+    "contrib/win32"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "cola/inotify.py" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://github.com/git-cola/git-cola";
+  meta = {
     description = "Sleek and powerful Git GUI";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.bobvanderlinden ];
+    homepage = "https://git-cola.github.io/";
+    changelog = "https://github.com/git-cola/git-cola/blob/v${version}/CHANGES.rst";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
     mainProgram = "git-cola";
   };
 }

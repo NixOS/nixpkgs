@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vcyzMw2tWil4MULEkf25S6kXzqMG6JXIx6GibxxspkY=";
   };
 
-  cargoHash = "sha256-WI+dz7FKa3kot3gWr/JK/v6Ua/u2ioZ04Jwk8t9r1ls=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KlWzcJtNBTLCDDH01vI1mn9H7LUqni5o/Q6PsNeI7HE=";
 
   cargoPatches = [
     ./0001-update-version-in-lock-file.patch

@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-lHjChrjjqO7pApj7OA8BM2XvmU3iS+kEMPYSfb/C61U=";
   };
 
-  cargoHash = "sha256-5uxy2iAIUh60QjEPtkOP7A86ha4CY5+1QgzdIsEKPIs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9KLvVgmUun8tuAfxYMvAa5qpeXiOKe9JndZ81PmPpjA=";
 
   meta = with lib; {
     description = "Command line tool for debugging, ad hoc benchmarking and generating regular expressions";

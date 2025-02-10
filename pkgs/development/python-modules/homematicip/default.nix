@@ -10,7 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0_21,
   requests,
   setuptools,
   setuptools-scm,
@@ -48,8 +48,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp-wsgi
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override {
+      pytest-asyncio = pytest-asyncio_0_21;
+    })
+    pytest-asyncio_0_21
     pytest7CheckHook
   ];
 

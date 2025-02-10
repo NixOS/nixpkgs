@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
-  poetry-core,
   hatchling,
 
   # dependencies
@@ -34,19 +34,14 @@ buildPythonPackage rec {
   version = "1.7.2";
   pyproject = true;
 
+  disabled = pythonOlder "3.9";
+
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     tag = version;
     hash = "sha256-65qNalbcg9MR5QhUJeutp3Y2Uox7cKX+ffo21LACeXE=";
   };
-
-  pythonRelaxDeps = [
-    "docstring-parser"
-    "jiter"
-    "pydantic"
-    "tenacity"
-  ];
 
   build-system = [ hatchling ];
 
@@ -96,7 +91,6 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    broken = lib.versionOlder pydantic.version "2"; # ImportError: cannot import name 'TypeAdapter' from 'pydantic'
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
     changelog = "https://github.com/jxnl/instructor/releases/tag/${version}";

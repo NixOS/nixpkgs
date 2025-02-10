@@ -53,7 +53,8 @@ rustPlatform.buildRustPackage rec {
     "youki"
   ];
 
-  cargoHash = "sha256-3a6KlDTQCKXIPaz6134MVmFYvwUk/t6H/jeBFDH+FrA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JI37KtuWLhFiusQTqKy2DpSdgTY4jNuzsEkoyhLPieI=";
 
   meta = with lib; {
     description = "Container runtime written in Rust";

@@ -17,8 +17,8 @@ let
     sha256Hash = "sha256-UxxofUCJGhQTLMwHGaSdNDqWnjkpRVwm2oqLLp3jR8E=";
   };
   latestVersion = {
-    version = "2024.3.2.1"; # "Android Studio Meerkat Feature Drop | 2024.3.2 Canary 1"
-    sha256Hash = "sha256-qJKkuB8v4wOqEQwnDyMegLbRLzxVwCq/hS1TQ3lhBKk=";
+    version = "2024.3.2.2"; # "Android Studio Meerkat Feature Drop | 2024.3.2 Canary 2"
+    sha256Hash = "sha256-P0yBlqcuTSmJ4gmSvSCW31ARqDBC3NC8PozQHIXPS8Y=";
   };
 in {
   # Attributes are named by their corresponding release channels

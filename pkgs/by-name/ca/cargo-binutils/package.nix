@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tRh3+X6QCdkkJE1O60ZRkDBRbznGZ1aB1AOmcz0EINI=";
   };
 
-  cargoHash = "sha256-lZJcsCg7e5ZmClnzKFjm/roXBIyhkPTzS7R6BTmcNIk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QdW0HiVhKFuXj7hWZw1lkrFmvVIqbeMKRF2qnBX9wRI=";
 
   meta = with lib; {
     description = "Cargo subcommands to invoke the LLVM tools shipped with the Rust toolchain";

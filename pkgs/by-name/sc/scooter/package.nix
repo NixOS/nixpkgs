@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dojVVBdXBtWvD/YIfouRmnsf1AWgfB3CYjH2KhtCsvI=";
   };
 
-  cargoHash = "sha256-moRqtxLMO/7fBNpq6Xcnzu9HgmE2vDf0xn9SlvY8ZU0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yQhnN1GoosUx8YjUJsjtg2okDbSOFx0sUV26ggRDGI8=";
 
   meta = {
     description = "Interactive find and replace in the terminal";

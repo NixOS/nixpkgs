@@ -50,7 +50,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-d68dNAAGY+a0DpL82S/qntu2XOsoVqHpfU2L9NcoJQc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IHsHvr50rhS4CH+27613OVBFC2oI37xvhKLjZY36oo8=";
 
   cargoBuildFlags = [ "--package rerun-cli" ];
   cargoTestFlags = [ "--package rerun-cli" ];

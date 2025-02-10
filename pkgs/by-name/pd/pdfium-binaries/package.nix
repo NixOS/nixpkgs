@@ -6,7 +6,7 @@
 }:
 let
   # also update rev of headers in python3Packages.pypdfium2
-  version = "6968";
+  version = "6996";
   src =
     let
       inherit (stdenv.hostPlatform) system;
@@ -18,10 +18,10 @@ let
         aarch64-darwin = "mac-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-jITBi7w8jhZVkwimFp4nmWpQahPWXAGIJj/zHe5TVCU=";
-        aarch64-linux = "sha256-rDyLhRuRzw/R9Z1ZuSadXKJ+74U+RVJIC9NSCddd5lg=";
-        x86_64-darwin = "sha256-ofqKS54ZKcXLVGEs2mhFGC4W7+d87JfhCS+HqcJkzTg=";
-        aarch64-darwin = "sha256-g8iHsGVp/wCu4FU9ds6RBzabuMIONPA1H/M14BNjPu8=";
+        x86_64-linux = "sha256-DAu9t7PA8R3F2BotYaoPLoQFMkDIdJOnf4ljkJYMXxI=";
+        aarch64-linux = "sha256-pNXBX0t6+ShaXGTSmM6J1UWaTLW/ZXoyfF7/gWl7rhc=";
+        x86_64-darwin = "sha256-GlEoDifWTVC2tAVoHmkRpVdV+V6vsPUkZZVYP15oeXc=";
+        aarch64-darwin = "sha256-OtUpNxo7HvrEIWSdCWC6MVf0fLQL2vqovhtRMzrrb5I=";
       };
     in
     fetchzip {

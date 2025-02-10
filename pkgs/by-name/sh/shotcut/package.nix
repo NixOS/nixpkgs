@@ -17,15 +17,16 @@
   gitUpdater,
   ffmpeg,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "24.11.17";
+  version = "25.01.25";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sOBGLQYRGHcXNoKTmqbBqmheUFHe7p696BTCiwtF5JY=";
+    hash = "sha256-YrnmhxD7Yf2LgdEaBU4mmRdvZdO6VQ6IAb4s+V9QvLM=";
   };
 
   nativeBuildInputs = [

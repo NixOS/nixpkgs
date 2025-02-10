@@ -6,6 +6,7 @@
   numpy,
   pydantic,
   jsonschema,
+  opencv-python-headless,
   sentencepiece,
   typing-extensions,
   tiktoken,
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     numpy
     pydantic
     jsonschema
+    opencv-python-headless
     sentencepiece
     typing-extensions
     tiktoken

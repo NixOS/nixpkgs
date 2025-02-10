@@ -36,7 +36,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "wyoming"
+    "pyring-buffer"
     "zeroconf"
   ];
 

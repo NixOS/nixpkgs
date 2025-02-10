@@ -26,7 +26,6 @@ let
   python = python312.override {
     self = python;
     packageOverrides = self: super: {
-      paho-mqtt = super.paho-mqtt_2;
     };
   };
 

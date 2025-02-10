@@ -1,27 +1,36 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   requests,
+  pytestCheckHook,
   pythonOlder,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyvesync";
-  version = "2.1.12";
-  format = "setuptools";
+  version = "2.1.17";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-k9eAbHFFo5rFYTNVxN4qEFnW2zmXThr3Ki1lZtj9V/g=";
+  src = fetchFromGitHub {
+    owner = "webdjoe";
+    repo = "pyvesync";
+    tag = version;
+    hash = "sha256-h5pxoPtIZVfhSHyvCkde2uVMzNjqXEYaMM8+gsNMd/k=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  # Test are not available (not in PyPI tarball and there are no GitHub releases)
-  doCheck = false;
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "pyvesync" ];
 

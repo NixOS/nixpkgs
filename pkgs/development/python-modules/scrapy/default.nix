@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.11.2";
+  version = "2.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = "scrapy";
     tag = version;
-    hash = "sha256-EaO1kQ3VSTwEW+r0kSKycOxHNTPwwCVjch1ZBrTU0qQ=";
+    hash = "sha256-o3+57+bZRohgrld2EuoQDU2LioJu0jmaC/RPREvI1t8=";
   };
 
   pythonRelaxDeps = [
@@ -148,7 +148,7 @@ buildPythonPackage rec {
       range of purposes, from data mining to monitoring and automated testing.
     '';
     homepage = "https://scrapy.org/";
-    changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
+    changelog = "https://github.com/scrapy/scrapy/raw/${src.tag}/docs/news.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ vinnymeller ];
   };

@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./update_time_crate.patch ];
 
-  cargoHash = "sha256-EYD1gQgkHemT/3VewdsU5kOGQKY3OjIHRiTSqSRNwtU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4lYywaPTfoOHEYHy+h7HfWn+OaDdk166tQ8ZFx9XZK0=";
 
   nativeBuildInputs = [
     cmake

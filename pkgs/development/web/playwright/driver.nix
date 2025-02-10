@@ -27,20 +27,20 @@ let
     }
     .${system} or throwSystem;
 
-  version = "1.48.1";
+  version = "1.50.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-VMp/Tjd5w2v+IHD+CMaR/XdMJHkS/u7wFe0hNxa1TbE=";
+    hash = "sha256-s4lJRdsA4H+Uf9LjriZ6OimBl5A9Pf4fvhWDw2kOMkg=";
   };
 
   babel-bundle = buildNpmPackage {
     pname = "babel-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/babel";
-    npmDepsHash = "sha256-kHuNFgxmyIoxTmvT+cyzDRfKNy18zzeUH3T+gJopWeA=";
+    npmDepsHash = "sha256-HrDTkP2lHl2XKD8aGpmnf6YtSe/w9UePH5W9QfbaoMg=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -60,7 +60,7 @@ let
     pname = "utils-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/utils";
-    npmDepsHash = "sha256-d+nE11x/493BexI70mVbnZFLQClU88sscbNwruXjx1M=";
+    npmDepsHash = "sha256-tyk9bv1ethQSm8PKDpLthwsmqJugLIpsUOf9G8TOKRc=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -70,7 +70,7 @@ let
     pname = "utils-bundle-core";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/utils";
-    npmDepsHash = "sha256-aktxEDQKxsDcInyjDKDuIu4zwtrAH0lRda/mP1IayPA=";
+    npmDepsHash = "sha256-TarWFVp5JFCKZIvBUTohzzsFaLZHV79lN5+G9+rCP8Y=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -92,7 +92,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-cmUmYuUL7zfB7WEBKft43r69f7vaZDEjku8uwR3RZ1A=";
+    npmDepsHash = "sha256-RoKw3Ie41/4DsjCeqkMhKFyjDPuvMgxajZYZhRdiTuY=";
 
     nativeBuildInputs = [ cacert ];
 
@@ -163,6 +163,7 @@ let
       browsers-chromium = browsers {
         withFirefox = false;
         withWebkit = false;
+        withChromiumHeadlessShell = false;
       };
     };
   });
@@ -198,6 +199,7 @@ let
       withFirefox ? true,
       withWebkit ? true,
       withFfmpeg ? true,
+      withChromiumHeadlessShell ? true,
       fontconfig_file ? makeFontsConf {
         fontDirectories = [ ];
       },
@@ -205,6 +207,7 @@ let
     let
       browsers =
         lib.optionals withChromium [ "chromium" ]
+        ++ lib.optionals withChromiumHeadlessShell [ "chromium-headless-shell" ]
         ++ lib.optionals withFirefox [ "firefox" ]
         ++ lib.optionals withWebkit [ "webkit" ]
         ++ lib.optionals withFfmpeg [ "ffmpeg" ];
@@ -214,11 +217,12 @@ let
         map (
           name:
           let
-            value = playwright-core.passthru.browsersJSON.${name};
+            revName = if name == "chromium-headless-shell" then "chromium" else name;
+            value = playwright-core.passthru.browsersJSON.${revName};
           in
           lib.nameValuePair
             # TODO check platform for revisionOverrides
-            "${name}-${value.revision}"
+            "${lib.replaceStrings [ "-" ] [ "_" ] name}-${value.revision}"
             (
               callPackage (./. + "/${name}.nix") (
                 {

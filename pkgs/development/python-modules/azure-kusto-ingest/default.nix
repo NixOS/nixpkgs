@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for Kusto Ingest";
     homepage = "https://github.com/Azure/azure-kusto-python/tree/master/azure-kusto-ingest";
-    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/v${version}";
+    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };

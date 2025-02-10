@@ -7,27 +7,26 @@
   pytestCheckHook,
   python-dateutil,
   setuptools,
-  text-unidecode,
+  typing-extensions,
   ukpostcodeparser,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "25.9.2";
+  version = "33.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "Faker";
-    inherit version;
-    hash = "sha256-ypSENgCkCJqROUAj/vAUu0H+5Qn4xL7vFTABg3PncPs=";
+    inherit pname version;
+    hash = "sha256-Sd3jsGpWAhd7wq0BMUm29gopC3FUU5GA03tvh2rnmyA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
-    text-unidecode
+    typing-extensions
   ];
 
   nativeCheckInputs = [

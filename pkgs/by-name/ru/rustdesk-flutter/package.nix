@@ -24,6 +24,7 @@
   rustc,
   rustfmt,
   xdotool,
+  pipewire,
 }:
 let
 
@@ -146,6 +147,7 @@ flutter319.buildFlutterApplication rec {
     libva
     libvdpau
     libvpx
+    pipewire
     libxkbcommon
     libyuv
     pam

@@ -68,7 +68,7 @@ buildPythonPackage rec {
     description = "Library for saving/loading, sharing, and deploying scikit-learn based models";
     mainProgram = "skops";
     homepage = "https://skops.readthedocs.io/en/stable";
-    changelog = "https://github.com/skops-dev/skops/releases/tag/v${version}";
+    changelog = "https://github.com/skops-dev/skops/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bcdarwin ];
   };

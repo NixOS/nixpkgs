@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.5.6";
+  version = "2.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs-ble";
     tag = "v${version}";
-    hash = "sha256-EJKFlHw+lwNKUFVYg/wa0BqPeuui/2WXfWYwgG/kbHw=";
+    hash = "sha256-u9NNSaO/xqpmMXwIkgzZREjZEzVFKFIHJJVKLS0EwJs=";
   };
 
   build-system = [ poetry-core ];

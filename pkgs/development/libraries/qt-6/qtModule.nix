@@ -38,6 +38,9 @@ stdenv.mkDerivation (
       (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or [ ])
       ++ (args.propagatedBuildInputs or [ ]);
 
+    cmakeFlags = args.cmakeFlags or [ ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON";
+
     moveToDev = false;
 
     outputs =

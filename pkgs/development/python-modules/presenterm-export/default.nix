@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "presenterm-export";
-  version = "0.2.5";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "presenterm_export";
     inherit version;
-    hash = "sha256-jof/0phASV/0bE0wNaio9PVCfIgm30EWzlLWxPMw8Rs=";
+    hash = "sha256-ZC/U0G3DEMoqzl/5mcKShOyOm1Zw6VQhP1txA7tlMR8=";
   };
 
   pythonRelaxDeps = true;

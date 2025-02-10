@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-icAe54Mv1xpOjUPSk8QDZaMk2ueNvjER6UyJ9uyUL6s=";
   };
 
-  cargoHash = "sha256-bpNIGuh74nwEmHPeXtPmsML9vJOb00xkdjK0Nd7esAc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OLKqfAYHGgEkjU5lVkbuH2eVZIZ3cw9w9n4/MkqbX/8=";
 
   meta = {
     description = "one CLI to format the code tree";

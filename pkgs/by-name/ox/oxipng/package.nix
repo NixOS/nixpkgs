@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8EOEcIw10hCyYi9SwDLDZ8J3ezLXa30RUY5I9ksfqTs=";
   };
 
-  cargoHash = "sha256-4PCLtBJliK3uteL8EVKLBVR2YZW1gwQOiSLQok+rqug=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4c9YcIQRZsbDJvl8P9Pkd3atTVM+RbQ/4BMb7rE84po=";
 
   # See https://github.com/shssoichiro/oxipng/blob/14b8b0e93a/.cargo/config.toml#L5
   nativeCheckInputs = [ qemu ];

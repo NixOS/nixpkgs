@@ -8,6 +8,7 @@
   newScope,
   callPackage,
   ncVersion,
+  nextcloud-notify_push,
 }:
 
 let
@@ -51,6 +52,9 @@ let
             inherit pname data;
           }
         ) pkgs
+        // {
+          notify_push = nextcloud-notify_push.app;
+        }
       )
     ) generatedJson;
 

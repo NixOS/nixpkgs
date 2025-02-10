@@ -18,11 +18,11 @@ let
   defaultMinifyOpts = {
     script = {
       enable = false;
-      target = "es2021";
+      target = "es2020";
     };
     style = {
       enable = false;
-      browserslist = "defaults, Firefox ESR, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
+      browserslist = "defaults, Firefox ESR, Firefox 91, last 20 Firefox major versions, last 20 Chrome major versions, last 3 Safari major versions, last 1 KaiOS version, and supports css-variables";
     };
     svg = {
       enable = false;
@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.29";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hAOT3n0i9t3uWMjqWJlOs4Vakq3y4+GhiFZ4n3jVqtw=";
+    hash = "sha256-8YbRqlppD4tWqCki6v3F1cP8BcG66kAa3njEdPIRPhs=";
   };
 
   php = php.buildEnv (
@@ -98,7 +98,7 @@ php.buildComposerProject2 (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-+twzmUayrAj65ixEsweHM6886nN/6PYUCTSLMc+EmVE=";
+  vendorHash = "sha256-Y1H7jvO/P4R+Rb4V87pha3Icd2Iy7VyzwVDPX72aMqA=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -123,47 +123,63 @@ php.buildComposerProject2 (finalAttrs: {
   '';
 
   preBuild =
-    lib.optionalString minify.script.enable ''
-      find ./public -type f -iname "*.js" -print0 \
-        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
-          file="$1"
-          tmp="$(mktemp)"
-          esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
-          [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
-        ''}
-    ''
-    + lib.optionalString minify.style.enable ''
-      find ./public -type f -iname "*.css" -print0 \
-        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
-          export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
-          file="$1"
-          tmp="$(mktemp)"
-          lightningcss $file --minify --browserslist --output-file=$tmp
-          [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
-        ''}
-    ''
-    + lib.optionalString minify.svg.enable ''
-      find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
-        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
-          file="$1"
-          tmp="$(mktemp)"
-          scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
-          [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
-        ''}
-    '';
+    lib.optionalString minify.script.enable
+      # sh
+      ''
+        find ./public -type f -iname "*.js" -print0 \
+          | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
+            file="$1"
+            tmp="$(mktemp)"
+            esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
+            [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+          ''}
+      ''
+    +
+      lib.optionalString minify.style.enable
+        # sh
+        ''
+          find ./public -type f -iname "*.css" -print0 \
+            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
+              export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
+              file="$1"
+              tmp="$(mktemp)"
+              lightningcss $file --minify --browserslist --output-file=$tmp
+              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+            ''}
+        ''
+    +
+      lib.optionalString minify.svg.enable
+        # sh
+        ''
+          find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
+            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
+              file="$1"
+              tmp="$(mktemp)"
+              scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
+              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+            ''}
+        '';
 
   postInstall = ''
     mkdir -p $out/bin
-    echo "#!${lib.getExe dash}" > $out/bin/movim
-    echo "${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php \"\$@\"" >> $out/bin/${finalAttrs.meta.mainProgram}
-    chmod +x $out/bin/${finalAttrs.meta.mainProgram}
+    cat << EOF > $out/bin/movim
+    #!${lib.getExe dash}
+    ${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php "\$@"
+    EOF
+    chmod +x $out/bin/movim
 
-
-    mkdir -p $out/share/{bash-completion/completion,fish/vendor_completions.d,zsh/site-functions}
+    mkdir -p \
+      $out/share/bash-completion/completion \
+      $out/share/fish/vendor_completions.d \
+      $out/share/zsh/site-functions
     $out/bin/movim completion bash | sed "s/daemon.php/movim/g" > $out/share/bash-completion/completion/movim.bash
     $out/bin/movim completion fish | sed "s/daemon.php/movim/g" > $out/share/fish/vendor_completions.d/movim.fish
     $out/bin/movim completion zsh | sed "s/daemon.php/movim/g" > $out/share/zsh/site-functions/_movim
-    chmod +x $out/share/{bash-completion/completion/movim.bash,fish/vendor_completions.d/movim.fish,zsh/site-functions/_movim}
+
+    chmod +x \
+      $out/share/bash-completion/completion/movim.bash \
+      $out/share/fish/vendor_completions.d/movim.fish \
+      $out/share/zsh/site-functions/_movim
   '';
 
   passthru = {

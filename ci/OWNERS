@@ -245,6 +245,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # PostgreSQL and related stuff
+/pkgs/by-name/ps/psqlodbc @NixOS/postgres
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /pkgs/development/tools/rust/cargo-pgrx @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
@@ -395,8 +396,8 @@ pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
 /pkgs/development/ocaml-modules     @ulrikstrid
 
 # Zig
-/pkgs/development/compilers/zig @figsoda
-/doc/hooks/zig.section.md       @figsoda
+/pkgs/development/compilers/zig @figsoda @RossComputerGuy
+/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
 
 # Buildbot
 nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq

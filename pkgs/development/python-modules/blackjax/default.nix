@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.2.4";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = version;
-    hash = "sha256-qaQBbRAKExRHr4Uhm5/Q1Ydon6ePsjG2PWbwSdR9QZM=";
+    hash = "sha256-2GTjKjLIWFaluTjdWdUF9Iim973y81xv715xspghRZI=";
   };
 
   build-system = [ setuptools-scm ];

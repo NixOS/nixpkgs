@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-VZ4suSaWg2TfBjcxTuV9Ptkq/rBNmhBygtjsi5twJrk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8+h2B3q3cFH7lLilathipnSJKx5nAts0EiUUiqFENFU=";
   cargoBuildFlags = "--package flutter_rust_bridge_codegen";
   cargoTestFlags = "--package flutter_rust_bridge_codegen";
 

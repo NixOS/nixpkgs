@@ -2,11 +2,12 @@
   lib,
   fetchFromGitHub,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "psalm";
-  version = "6.0.0";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "vimeo";
@@ -18,7 +19,13 @@ php.buildComposerProject2 (finalAttrs: {
   # Missing `composer.lock` from the repository.
   # Issue open at https://github.com/vimeo/psalm/issues/10446
   composerLock = ./composer.lock;
-  vendorHash = "sha256-WdWlG4tX/wLB2nj4iiqkIhEe2coYfG3q+0JoXescWbM=";
+  vendorHash = "sha256-6eGj0gTXktm1zGHjHKKsMnudb9RfmAFgwcmDV/QMV5Y=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";

@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "topiary";
     tag = "v${version}";
-    hash = "sha256-Vsyl4tZ9AWTydpXw9IyvrD2tYiG8ySAD39lPwxRflSc=";
+    hash = "sha256-nRVxjdEtYvgF8Vpw0w64hUd1scZh7f+NjFtbTg8L5Qc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-bk5993v0wn/emzJKvxaPBYjqCmP0BpOuFMga7ZOyqXg=";
+  cargoHash = "sha256-EqalIF1wx3F/5CiD21IaYsPdks6Mv1VfwL8OTRWsWaU=";
 
   # https://github.com/NixOS/nixpkgs/pull/359145#issuecomment-2542418786
   depsExtraArgs.postBuild = ''
@@ -46,12 +46,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_fmt_dir"
     "--skip=test_fmt_files"
     "--skip=test_fmt_files_query_fallback"
+    "--skip=test_fmt_invalid"
     "--skip=test_fmt_stdin"
     "--skip=test_fmt_stdin_query"
     "--skip=test_fmt_stdin_query_fallback"
     "--skip=test_vis"
     "--skip=formatted_query_tester"
     "--skip=input_output_tester"
+    "--skip=coverage_tester"
   ];
 
   env.TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/queries";

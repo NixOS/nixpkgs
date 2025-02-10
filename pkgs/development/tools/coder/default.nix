@@ -14,21 +14,21 @@ let
 
   channels = {
     stable = {
-      version = "2.18.3";
+      version = "2.18.5";
       hash = {
-        x86_64-linux = "sha256-ehQvvtEiaFyTZWG1BlFbX2lx7uTG7GrsnZ6cv2m57zY=";
-        x86_64-darwin = "sha256-pR8kgbIakBaXhcnCOV9Y84ryX9trFe2Y8Mfx4YV2Nvs=";
-        aarch64-linux = "sha256-4rAwZ/YXRDeuOnlEhV+jo0LrIrYN5KkKN44rS2T3xdg=";
-        aarch64-darwin = "sha256-r+IqiXPUQHq1Ta60PNLQ+uvXJyjXUWKjXcJyujsAhtk=";
+        x86_64-linux = "sha256-thoe1TYT4b2tm1t9ZTGGMl9AzW/zP74LavIYweUs8Yw=";
+        x86_64-darwin = "sha256-HOHNzUKSt1ZO2onmydeHDeYdekwxfyy19Ps4q8xdurI=";
+        aarch64-linux = "sha256-dU6XdW/uOHMgSTnokvw9bDGULQM4urm8Szc7RRUEEcs=";
+        aarch64-darwin = "sha256-u1/yWTZv0NgviED6+VywONPv4CJsgWBpXjstyL1dBg4=";
       };
     };
     mainline = {
-      version = "2.18.3";
+      version = "2.18.5";
       hash = {
-        x86_64-linux = "sha256-ehQvvtEiaFyTZWG1BlFbX2lx7uTG7GrsnZ6cv2m57zY=";
-        x86_64-darwin = "sha256-pR8kgbIakBaXhcnCOV9Y84ryX9trFe2Y8Mfx4YV2Nvs=";
-        aarch64-linux = "sha256-4rAwZ/YXRDeuOnlEhV+jo0LrIrYN5KkKN44rS2T3xdg=";
-        aarch64-darwin = "sha256-r+IqiXPUQHq1Ta60PNLQ+uvXJyjXUWKjXcJyujsAhtk=";
+        x86_64-linux = "sha256-thoe1TYT4b2tm1t9ZTGGMl9AzW/zP74LavIYweUs8Yw=";
+        x86_64-darwin = "sha256-HOHNzUKSt1ZO2onmydeHDeYdekwxfyy19Ps4q8xdurI=";
+        aarch64-linux = "sha256-dU6XdW/uOHMgSTnokvw9bDGULQM4urm8Szc7RRUEEcs=";
+        aarch64-darwin = "sha256-u1/yWTZv0NgviED6+VywONPv4CJsgWBpXjstyL1dBg4=";
       };
     };
   };

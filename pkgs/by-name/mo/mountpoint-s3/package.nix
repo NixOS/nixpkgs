@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-lyxuYrmmB1hQCR3fKEMXI69xYcubisRi/bc6M7hQl70=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QeRCCu7d4fdRfiw3qdbyFk+N0nT+IYKVJ/NvieejVQg=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3

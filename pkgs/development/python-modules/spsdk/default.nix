@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
     tag = "v${version}";
-    hash = "sha256-WRR4YyA4HaYoyOZSt/RYivhH2E/20DKLXExWg2yOL48=";
+    hash = "sha256-Ua32c6hNjwfjsQIugiqtRL50AvOrPgqyKoG1Lb0NVqE=";
   };
 
   postPatch = ''
@@ -129,7 +129,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/v${version}/docs/release_notes.rst";
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = lib.licenses.bsd3;

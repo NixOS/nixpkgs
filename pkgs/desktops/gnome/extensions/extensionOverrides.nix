@@ -1,5 +1,7 @@
 { lib
+, fetchFromGitLab
 , fetchzip
+, cpio
 , ddcutil
 , easyeffects
 , gjs
@@ -18,6 +20,8 @@
 , procps
 , smartmontools
 , replaceVars
+, stdenvNoCC
+, substituteAll
 , touchegg
 , util-linux
 , vte
@@ -106,6 +110,35 @@ super: lib.trivial.pipe super [
         util_linux = util-linux;
         xdg_utils = xdg-utils;
         nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
+      })
+    ];
+  }))
+
+  (patchExtension "lunarcal@ailin.nemui" (old: let
+    chinese-calendar = stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = "chinese-calendar";
+      version = "20240107";
+      nativeBuildInputs = [
+        cpio # used in install.sh
+      ];
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "Nei";
+        repo = "ChineseCalendar";
+        tag = finalAttrs.version;
+        hash = "sha256-z8Af9e70bn3ztUZteIEt/b3nJIFosbnoy8mwKMM6Dmc=";
+      };
+      installPhase = ''
+        runHook preInstall
+        HOME=$out ./install.sh
+        runHook postInstall
+      '';
+    });
+  in {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/lunarcal_at_ailin.nemui.patch;
+        chinese_calendar_path = chinese-calendar;
       })
     ];
   }))

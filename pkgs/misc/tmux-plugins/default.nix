@@ -537,7 +537,8 @@ in rec {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
       rev = "ca6468e2deef11efadfe3a62832ae67742505432";
-      hash = "sha256-dkiIbTPIn3ampK7LItndOL69cMVfuJyOIQZL4lt58jQ=";
+      hash = "sha256-wl9/5XvFq+AjV8CwYgIZjPOE0/kIuEYBNQqNDidjNFo=";
+      fetchSubmodules = true;
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";

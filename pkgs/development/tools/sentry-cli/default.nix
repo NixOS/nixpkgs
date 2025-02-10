@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security SystemConfiguration ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  cargoHash = "sha256-kpGe6IjoVmmwSXaNDgi4PMjL0Hc6520xPcGr2CViZqo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3TSLgOBvf9IVE7zyxYnDTEQbbL/QAtpyhPmCDbTLs1s=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sentry-cli \

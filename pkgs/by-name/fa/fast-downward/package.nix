@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fast-downward";
-  version = "24.06.0";
+  version = "24.06.1";
 
   src = fetchFromGitHub {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
-    sha256 = "sha256-iIBoJZCFd05bKUeftvl2YBTmSQuFvATIQAYMITDywWA=";
+    sha256 = "sha256-JwBdV44h6LAJeIjKHPouvb3ZleydAc55QiuaFGrFx1Y=";
   };
 
   nativeBuildInputs = [

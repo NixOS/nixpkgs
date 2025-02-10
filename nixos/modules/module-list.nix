@@ -862,6 +862,7 @@
   ./services/misc/radicle.nix
   ./services/misc/readarr.nix
   ./services/misc/realmd.nix
+  ./services/misc/recyclarr.nix
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
@@ -925,6 +926,7 @@
   ./services/monitoring/gatus.nix
   ./services/monitoring/gitwatch.nix
   ./services/monitoring/glances.nix
+  ./services/monitoring/glpi-agent.nix
   ./services/monitoring/goss.nix
   ./services/monitoring/grafana-agent.nix
   ./services/monitoring/grafana-image-renderer.nix

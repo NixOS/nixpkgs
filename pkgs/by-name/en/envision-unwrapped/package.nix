@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version;
     # TODO: Use srcOnly instead
     src = applyPatches {
       inherit (finalAttrs) src patches;
     };
-    hash = "sha256-zWaw6K2H67PEmFISDNce5jDUXKV39qu35SO+Ai0DP90=";
+    hash = "sha256-O3+urY2FlnHfxoJLn4iehnVWf1Y0uATEteyQVnZLxTQ=";
   };
 
   nativeBuildInputs = [

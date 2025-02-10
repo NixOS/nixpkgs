@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pdb2pqr";
-  version = "3.6.2";
+  version = "3.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-He301TJ1bzWub0DZ6Ro/Xc+JMtJBbyygVpWjPY6RMbA=";
+    hash = "sha256-BbXEZAIqOtEclZfG/H9wxWBhxGabFJelGVjakNlZFS8=";
   };
 
   pythonRelaxDeps = [ "docutils" ];

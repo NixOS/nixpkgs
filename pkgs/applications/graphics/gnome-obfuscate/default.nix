@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/Plvvn1tle8t/bsPcsamn5d81CqnyGCyGYPF6j6U5NI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-9lrxK2psdIPGsOC6p8T+3AGPrX6PjrK9mFirdJqBSMM=";
+    hash = "sha256-Llgn+dYNKZ9Mles9f9Xor+GZoCCQ0cERkXz4MicZglY=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {

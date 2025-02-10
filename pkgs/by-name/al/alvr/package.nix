@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   pkg-config,
   autoAddDriverRunpath,
@@ -54,8 +54,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-DE88nMC6qpbPJsBpdyITv6igMgwy4g40VCgFQQuRRTA=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-finding-libs.patch;
+    (replaceVars ./fix-finding-libs.patch {
       ffmpeg = lib.getDev ffmpeg;
       x264 = lib.getDev x264;
     })

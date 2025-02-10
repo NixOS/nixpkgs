@@ -10,21 +10,18 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.8";
+  version = "2.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-obDK6wn+oo8zDQsidogwKTIgT5wuUH/l4y+12cttkd0=";
+    hash = "sha256-Bs8XWSyI/6a756iWXT40vvNIe/XZ/vnMsZbXjTW3770=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
@@ -53,6 +50,7 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = langgraph-sdk.updateScript;
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
   };
 
   meta = {

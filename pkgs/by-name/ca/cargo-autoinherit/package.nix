@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ai2BqBfZlCOA1DIlzZerH71sbUMi6C65FRv5VDU0DPU=";
   };
 
-  cargoHash = "sha256-bPbwUqw2IFwZTi7qFm1BQgGYBAb6OG8QSU8xTdx/1zM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Yw9W7ewdDRVOEXy2GXBC+LoaWTJMDCADvbazUxg3ZoE=";
 
   meta = with lib; {
     description = "Automatically DRY up your Rust dependencies";
