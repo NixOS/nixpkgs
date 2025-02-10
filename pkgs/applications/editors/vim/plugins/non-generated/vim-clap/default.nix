@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   libgit2,
   zlib,
@@ -12,13 +13,13 @@
 }:
 
 let
-  version = "0.54-unstable-2024-08-11";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
-    rev = "3e8d001f5c9be10e4bb680a1d409326902c96c10";
-    hash = "sha256-7bgbKYjJX2Tfprb69/imyvhsCsurrmPWBXVVLX+ZMnM=";
+    tag = "v${version}";
+    hash = "sha256-rhCum59GCIAwdi5QgSaPfrALelAIMncNetu81i53Q8c=";
   };
 
   meta = with lib; {
@@ -39,6 +40,15 @@ let
 
     nativeBuildInputs = [
       pkg-config
+    ];
+
+    # Remove after next release
+    cargoPatches = [
+      (fetchpatch {
+        name = "rust-1.80";
+        url = "https://github.com/liuchengxu/vim-clap/commit/3e8d001f5c9be10e4bb680a1d409326902c96c10.patch";
+        hash = "sha256-qMflfQEssH4OGXmLFUcQwzbYWgPD0S/pClb35ZRUaPM=";
+      })
     ];
 
     buildInputs =
