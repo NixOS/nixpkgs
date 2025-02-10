@@ -6,17 +6,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.8.1";
+  version = "0.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     tag = version;
-    hash = "sha256-JE9WgAtCDksfVq17LIDdfvjR9IW02vkH2JhY7eLOgF0=";
+    hash = "sha256-QIvnGU1BHKsJ/UMcS9zS2v9rn51wKoXvx50rGBIAzm4=";
   };
 
   pythonRelaxDeps = [
+    "aiosql"
     "aiosqlite"
     "httpx"
     "ollama"
