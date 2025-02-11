@@ -2521,9 +2521,6 @@ self: super: {
   # transformers <0.3
   monads-fd = doJailbreak super.monads-fd;
 
-  # HTF <0.15
-  cases = doJailbreak super.cases;
-
   # exceptions <0.9
   eprocess = doJailbreak super.eprocess;
 
