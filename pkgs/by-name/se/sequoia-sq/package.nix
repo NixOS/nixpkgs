@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   env.ASSET_OUT_DIR = "/tmp/";
+  env.RUST_BACKTRACE = "full";
 
   doCheck = true;
 
