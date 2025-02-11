@@ -1937,7 +1937,6 @@ self: super: {
 
   cli-git = addBuildTool pkgs.git super.cli-git;
 
-  # Need https://github.com/obsidiansystems/cli-nix/pull/5 and more
   cli-nix = addBuildTools [
     pkgs.nix
     pkgs.nix-prefetch-git
