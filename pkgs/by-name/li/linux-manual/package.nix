@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     mandir=$out/share/man/man9
     mkdir -p $mandir
 
-    KBUILD_BUILD_TIMESTAMP=$(stat -c %Y Makefile) \
+    KBUILD_BUILD_TIMESTAMP="$(date -u -d "@$SOURCE_DATE_EPOCH")" \
     grep -F -l -Z \
       --exclude-dir Documentation \
       --exclude-dir tools \
