@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-PAZOenugZrKYIP7zzxozerjkauwg7VN0mAlex0WPttQ=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/evansmurithi/cloak";
