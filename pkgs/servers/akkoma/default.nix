@@ -1,14 +1,16 @@
-{ lib
-, beamPackages
-, fetchFromGitea
-, fetchFromGitHub
-, fetchFromGitLab
-, cmake
-, file
-, nixosTests
-, nix-update-script
-, ...
+{
+  lib,
+  beamPackages,
+  fetchFromGitea,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  cmake,
+  file,
+  nixosTests,
+  nix-update-script,
+  ...
 }:
+
 beamPackages.mixRelease rec {
   pname = "akkoma";
   version = "3.14.1";
@@ -35,7 +37,8 @@ beamPackages.mixRelease rec {
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = final: prev:
+    overrides =
+      final: prev:
       let
         mimeTypePatchPhase = ''
           mkdir -p config
@@ -59,11 +62,14 @@ beamPackages.mixRelease rec {
         # However, we can't just recompile things like we would on other systems.
         # Therefore, we need to add it to mime's compile-time config too, and also in every package that depends on mime, directly or indirectly.
         # We take the lazy way out and just add it to every dependency - it won't make a difference in packages that don't depend on `mime`.
-        addMimeTypes = _: p: p.override {
-          patchPhase = mimeTypePatchPhase;
-        };
+        addMimeTypes =
+          _: p:
+          p.override {
+            patchPhase = mimeTypePatchPhase;
+          };
       in
-      (lib.attrsets.mapAttrs addMimeTypes prev) // {
+      (lib.attrsets.mapAttrs addMimeTypes prev)
+      // {
         # mix2nix does not support git dependencies yet,
         # so we need to add them manually
         captcha = beamPackages.buildMix rec {
@@ -82,6 +88,7 @@ beamPackages.mixRelease rec {
           # the binary is not getting installed by default
           postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
         };
+
         concurrent_limiter = beamPackages.buildMix rec {
           name = "concurrent_limiter";
           version = "0.1.1";
@@ -94,6 +101,7 @@ beamPackages.mixRelease rec {
             hash = "sha256-A7ucZnXks4K+JDVY5vV2cT5KfEOUOo/OHO4rga5mGys=";
           };
         };
+
         elasticsearch = beamPackages.buildMix rec {
           name = "elasticsearch";
           version = "1.0.1";
@@ -106,6 +114,7 @@ beamPackages.mixRelease rec {
             hash = "sha256-CtmQHVl+VTpemne+nxbkYGcErrgCo+t3ZBPbkFSpyF0=";
           };
         };
+
         mfm_parser = beamPackages.buildMix rec {
           name = "mfm_parser";
           version = "0.1.0";
@@ -118,9 +127,14 @@ beamPackages.mixRelease rec {
             hash = "sha256-couG5jrAo0Fbk/WABd4n3vhXpDUp+9drxExKc5NM9CI=";
           };
 
-          beamDeps = with final; [ phoenix_view temple ];
+          beamDeps = with final; [
+            phoenix_view
+            temple
+          ];
+
           patchPhase = mimeTypePatchPhase;
         };
+
         search_parser = beamPackages.buildMix rec {
           name = "search_parser";
           version = "0.1.0";
@@ -134,6 +148,7 @@ beamPackages.mixRelease rec {
 
           beamDeps = with final; [ nimble_parsec ];
         };
+
         temple = beamPackages.buildMix rec {
           name = "temple";
           version = "0.9.0-rc.0";
@@ -147,7 +162,15 @@ beamPackages.mixRelease rec {
           };
 
           mixEnv = "dev";
-          beamDeps = with final; [ earmark_parser ex_doc makeup makeup_elixir makeup_erlang nimble_parsec ];
+          beamDeps = with final; [
+            earmark_parser
+            ex_doc
+            makeup
+            makeup_elixir
+            makeup_erlang
+            nimble_parsec
+          ];
+
           patchPhase = mimeTypePatchPhase;
         };
 
@@ -156,6 +179,7 @@ beamPackages.mixRelease rec {
           nativeBuildInputs = [ cmake ];
           dontUseCmakeConfigure = true;
         };
+
         http_signatures = beamPackages.buildMix rec {
           name = "http_signatures";
           version = "0.1.3";
@@ -168,12 +192,19 @@ beamPackages.mixRelease rec {
             hash = "sha256-o5xF++AIJLVMFuQwldNyWpYJGWFHZZTfGy1V80TZzR8=";
           };
 
-          beamDeps = with final; [ credo ex_doc dialyxir temple ];
+          beamDeps = with final; [
+            credo
+            ex_doc
+            dialyxir
+            temple
+          ];
+
           patchPhase = ''
             substituteInPlace mix.exs --replace ":logger" ":logger, :public_key"
             ${mimeTypePatchPhase}
           '';
         };
+
         majic = beamPackages.buildMix {
           name = "majic";
           version = "1.0.0";
@@ -187,7 +218,16 @@ beamPackages.mixRelease rec {
           };
 
           buildInputs = [ file ];
-          beamDeps = with final; [ nimble_pool mime plug credo dialyxir ex_doc elixir_make ];
+          beamDeps = with final; [
+            nimble_pool
+            mime
+            plug
+            credo
+            dialyxir
+            ex_doc
+            elixir_make
+          ];
+
           patchPhase = mimeTypePatchPhase;
         };
 
@@ -198,7 +238,10 @@ beamPackages.mixRelease rec {
   };
 
   passthru = {
-    tests = with nixosTests; { inherit akkoma akkoma-confined; };
+    tests = with nixosTests; {
+      inherit akkoma akkoma-confined;
+    };
+
     inherit mixNixDeps;
 
     # Used to make sure the service uses the same version of elixir as
