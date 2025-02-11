@@ -57,6 +57,7 @@ buildPythonApplication rec {
     "textual-slider"
     "textual"
     "rich"
+    "xmltodict"
   ];
 
   meta = {
