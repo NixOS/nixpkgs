@@ -22,8 +22,8 @@ buildPythonPackage rec {
     pname
     version
     src
-    meta
     ;
+
   pyproject = true;
 
   sourceRoot = "${src.name}/catboost/python-package";
@@ -55,4 +55,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "catboost" ];
+
+  meta = catboost.meta // {
+    # Incompatible with numpy >= 2.0
+    # https://github.com/catboost/catboost/issues/2671
+    broken = true;
+  };
 }
