@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  perl,
   linuxPackages_latest,
+  perl,
+  man,
 }:
 
 stdenv.mkDerivation {
@@ -10,9 +11,11 @@ stdenv.mkDerivation {
   inherit (linuxPackages_latest.kernel) version src;
 
   nativeBuildInputs = [ perl ];
+  nativeInstallCheckInputs = [ man ];
 
   dontConfigure = true;
   dontBuild = true;
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs --build \
@@ -35,9 +38,16 @@ stdenv.mkDerivation {
         "$SHELL" -c '{ scripts/kernel-doc -man "$@" || :; } \
           | scripts/split-man.pl "$mandir"' kernel-doc
 
-    test -f "$mandir/kmalloc.9"
-
     runHook postInstall
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Check for well‐known man page
+    man -M "$out/share/man" -P cat 9 kmalloc >/dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = {
