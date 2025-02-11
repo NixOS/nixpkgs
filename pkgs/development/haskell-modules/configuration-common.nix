@@ -2618,6 +2618,8 @@ self: super: {
   # https://github.com/google/ghc-source-gen/issues/120
   ghc-source-gen = doJailbreak super.ghc-source-gen;
   ghc-source-gen_0_4_5_0 = doJailbreak super.ghc-source-gen_0_4_5_0;
+  # https://github.com/byteverse/bytebuild/issues/20#issuecomment-2652113837
+  bytebuild = doJailbreak super.bytebuild;
 
   # Support tasty-quickcheck 0.11: https://github.com/Bodigrim/mod/pull/26
   mod = appendPatch (fetchpatch {
