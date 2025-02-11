@@ -915,7 +915,12 @@ with pkgs;
 
   akkoma = callPackage ../servers/akkoma {
     elixir = beam_nox.packages.erlang_26.elixir_1_16;
-    beamPackages = beam_nox.packages.erlang_26.extend (self: super: { elixir = self.elixir_1_16; });
+    beamPackages = beam_nox.packages.erlang_26.extend (self: super: {
+      elixir = self.elixir_1_16;
+      rebar3 = self.rebar3WithPlugins {
+        plugins = with self; [ pc ];
+      };
+    });
   };
   akkoma-frontends = recurseIntoAttrs {
     akkoma-fe = callPackage ../servers/akkoma/akkoma-fe { };
