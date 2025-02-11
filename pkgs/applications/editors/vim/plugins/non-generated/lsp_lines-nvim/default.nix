@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "lsp_lines.nvim";
-  version = "unstable-2024-12-10";
+  version = "3.0.0";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";

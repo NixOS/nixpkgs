@@ -1,32 +1,38 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  decorator,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  decorator,
   imageio,
   imageio-ffmpeg,
-  matplotlib,
   numpy,
   proglog,
   python-dotenv,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
   requests,
+  tqdm,
+
+  # optional-dependencies
+  matplotlib,
   scikit-image,
   scikit-learn,
   scipy,
-  setuptools,
-  tqdm,
   yt-dlp,
+
+  # tests
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "moviepy";
   version = "2.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Zulko";
@@ -69,20 +75,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "moviepy" ];
 
-  disabledTests = [
-    # stalls
-    "test_doc_examples"
-    # video orientation mismatch, 0 != 180
-    "test_PR_529"
-    # video orientation [1920, 1080] != [1080, 1920]
-    "test_ffmpeg_parse_video_rotation"
-    "test_correct_video_rotation"
-    # media duration mismatch: assert 230.0 == 30.02
-    "test_ffmpeg_parse_infos_decode_file"
-    # Failed: DID NOT RAISE <class 'OSError'>
-    "test_ffmpeg_resize"
-    "test_ffmpeg_stabilize_video"
-  ];
+  disabledTests =
+    [
+      # stalls
+      "test_doc_examples"
+      # video orientation mismatch, 0 != 180
+      "test_PR_529"
+      # video orientation [1920, 1080] != [1080, 1920]
+      "test_ffmpeg_parse_video_rotation"
+      "test_correct_video_rotation"
+      # media duration mismatch: assert 230.0 == 30.02
+      "test_ffmpeg_parse_infos_decode_file"
+      # Failed: DID NOT RAISE <class 'OSError'>
+      "test_ffmpeg_resize"
+      "test_ffmpeg_stabilize_video"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Failed: Timeout >30.0s
+      "test_issue_1682"
+    ];
 
   disabledTestPaths = [
     "tests/test_compositing.py"
@@ -93,11 +104,11 @@ buildPythonPackage rec {
     "tests/test_videotools.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
-    changelog = "https://github.com/Zulko/moviepy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
