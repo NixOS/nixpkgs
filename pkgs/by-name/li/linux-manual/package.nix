@@ -21,19 +21,19 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mandir=$out/share/man/man9
-    mkdir -p $mandir
+    export mandir="$out/share/man/man9"
+    mkdir -p "$mandir"
 
     KBUILD_BUILD_TIMESTAMP="$(date -u -d "@$SOURCE_DATE_EPOCH")" \
     grep -F -l -Z \
       --exclude-dir Documentation \
       --exclude-dir tools \
       -R '/**' \
-      | xargs -0 -n 256 -P $NIX_BUILD_CORES \
-        $SHELL -c '{ scripts/kernel-doc -man "$@" || :; } \
-          | scripts/split-man.pl '$mandir kernel-doc
+      | xargs -0 -n 256 -P "$NIX_BUILD_CORES" \
+        "$SHELL" -c '{ scripts/kernel-doc -man "$@" || :; } \
+          | scripts/split-man.pl "$mandir"' kernel-doc
 
-    test -f $mandir/kmalloc.9
+    test -f "$mandir/kmalloc.9"
   '';
 
   meta = {
