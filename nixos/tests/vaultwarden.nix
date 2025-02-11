@@ -69,14 +69,13 @@ let
 
               driver.find_element(By.XPATH, "//button[contains(., 'Continue')]").click()
 
-              driver.find_element(By.CSS_SELECTOR, 'input#login_input_master-password').send_keys(
+              driver.find_element(By.XPATH, '//input[@type="password"]').send_keys(
                   '${userPassword}'
               )
-              driver.find_element(By.XPATH, "//button[contains(., 'Log in')]").click()
+              driver.find_element(By.XPATH, "//button[contains(., 'Log in with master password')]").click()
 
-              wait.until(EC.title_contains("Vaults"))
-
-              driver.find_element(By.XPATH, "//button[contains(., 'New item')]").click()
+              wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'button#newItemDropdown'))).click()
+              driver.find_element(By.XPATH, "//button[contains(., 'Item')]").click()
 
               driver.find_element(By.CSS_SELECTOR, 'input#name').send_keys(
                   'secrets'
