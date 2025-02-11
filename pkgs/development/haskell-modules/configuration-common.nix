@@ -2621,7 +2621,6 @@ self: super: {
   webauthn = dontCheck super.webauthn;
 
   # multiple bounds too strict
-  co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
   # calls ghc in tests
