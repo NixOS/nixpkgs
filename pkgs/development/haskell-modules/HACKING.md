@@ -192,10 +192,6 @@ Before doing this, make sure of the following:
         If `maintained` packages are failing on Darwin, it is helpful to
         mark them as broken on that platform.
 
-When you've double-checked these points, go ahead and merge the `haskell-updates` PR.
-After merging, **make sure not to delete the `haskell-updates` branch**, since it
-causes all currently open Haskell-related pull-requests to be automatically closed on GitHub.
-
 ## Script for Merging `haskell-updates` and Opening a New PR
 
 There is a script that automates merging the current `haskell-updates` PR and
