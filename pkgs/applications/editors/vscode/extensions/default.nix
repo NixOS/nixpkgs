@@ -3126,6 +3126,8 @@ let
         };
       };
 
+      marus25.cortex-debug = callPackage ./marus25.cortex-debug { };
+
       matangover.mypy = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "mypy";
