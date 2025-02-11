@@ -11372,14 +11372,19 @@ with pkgs;
 
   kanidm_1_3 = callPackage ../by-name/ka/kanidm/1_3.nix { };
   kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { };
+  kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix { };
 
-  kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_4;
+  kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
 
   kanidmWithSecretProvisioning_1_3 = callPackage ../by-name/ka/kanidm/1_3.nix {
     enableSecretProvisioning = true;
   };
 
   kanidmWithSecretProvisioning_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix {
+    enableSecretProvisioning = true;
+  };
+
+  kanidmWithSecretProvisioning_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix {
     enableSecretProvisioning = true;
   };
 
