@@ -1992,10 +1992,6 @@ self: super: {
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
-  # https://github.com/softwarefactory-project/matrix-client-haskell/issues/36
-  # Restrictive bounds on aeson
-  matrix-client = doJailbreak super.matrix-client;
-
   cabal2nix-unstable = overrideCabal {
     passthru = {
       updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
