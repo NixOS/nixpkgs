@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyvera";
-  version = "0.3.15";
+  version = "0.3.16";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pavoni";
     repo = pname;
-    rev = version;
-    hash = "sha256-1+xIqOogRUt+blX7AZSKIiU8lpR4AzKIIW/smCSft94=";
+    tag = version;
+    hash = "sha256-WLzVOQEykST2BsVRHmcBhrsd/am0jI/f7D0PmpCTbdQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];
