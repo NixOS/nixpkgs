@@ -36,6 +36,7 @@ in
 
   # extensions
   anonymizer = importWithArgs ./anonymizer.nix;
+  citus = importWithArgs ./citus.nix;
   pgjwt = importWithArgs ./pgjwt.nix;
   pgvecto-rs = importWithArgs ./pgvecto-rs.nix;
   timescaledb = importWithArgs ./timescaledb.nix;
