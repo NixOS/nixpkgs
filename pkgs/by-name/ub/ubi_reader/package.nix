@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  gitUpdater,
   lib,
   python3,
 }:
@@ -22,6 +23,13 @@ python3.pkgs.buildPythonApplication rec {
 
   # There are no tests in the source
   doCheck = false;
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "_[a-z]+$";
+    };
+  };
 
   meta = {
     description = "Python scripts capable of extracting and analyzing the contents of UBI and UBIFS images";
