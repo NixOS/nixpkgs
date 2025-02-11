@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/evansmurithi/cloak";
     description = "Command-line OTP authenticator application";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mvs ];
     mainProgram = "cloak";
   };
 }
