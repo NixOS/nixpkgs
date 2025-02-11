@@ -20,14 +20,14 @@ let
           hash = "sha256-2xbn9UWlcf37n9jZdZKyyevzsag6SW9YuQH/bYCRmLQ=";
         };
       }
-      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   passthru = {
     inherit pname version src;
   };
 
   meta = {
-    homepage = "https://github.com/Future-Scholars/paperlib?";
+    homepage = "https://github.com/Future-Scholars/paperlib";
     description = "Open-source academic paper management tool";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ByteSudoer ];
@@ -55,8 +55,10 @@ if stdenv.hostPlatform.isDarwin then
 
     installPhase = ''
       runHook preInstall
-      mkdir -p "$out/Applications"
+
+      mkdir -p $out/Applications
       mv Paperlib.app $out/Applications/
+
       runHook postInstall
     '';
   }
