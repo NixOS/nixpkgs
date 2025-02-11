@@ -14,6 +14,7 @@
   v2ray,
   v2ray-geoip,
   v2ray-domain-list-community,
+  nix-update-script,
 }:
 let
   pname = "v2raya";
@@ -86,6 +87,16 @@ buildGoModule {
       --prefix PATH ":" "${lib.makeBinPath [ v2ray ]}" \
       --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
   '';
+
+  passthru = {
+    inherit web;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "web"
+      ];
+    };
+  };
 
   meta = {
     description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
