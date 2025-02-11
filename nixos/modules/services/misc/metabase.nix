@@ -94,7 +94,7 @@ in {
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;
-        ExecStart = "${cfg.package}/bin/metabase";
+        ExecStart = lib.getExe cfg.package;
       };
     };
 
