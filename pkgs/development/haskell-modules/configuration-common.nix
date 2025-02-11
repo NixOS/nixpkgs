@@ -2140,6 +2140,8 @@ self: super: {
 
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
+  # 2025-02-11: Too strict bounds on bytestring
+  streamly-bytestring = doJailbreak super.streamly-bytestring;
 
   # Stackage LTS 19 still has 10.*
   hadolint = super.hadolint.override {
