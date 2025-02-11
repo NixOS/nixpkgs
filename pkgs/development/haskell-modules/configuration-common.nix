@@ -2808,6 +2808,10 @@ self: super: {
   # https://github.com/well-typed/large-records/issues/168
   large-generics = doJailbreak super.large-generics;
 
+  # Too strict bound on bytestring < 0.12
+  # https://github.com/raehik/heystone/issues/2
+  heystone = doJailbreak super.heystone;
+
   # Too strict bounds on base, ghc-prim, primitive
   # https://github.com/kowainik/typerep-map/pull/128
   typerep-map = doJailbreak super.typerep-map;
