@@ -1,12 +1,29 @@
 { pkgs, haskellLib }:
 
+self: super:
+
 let
   inherit (pkgs) lib;
+
+  versionAtMost = a: b: lib.versionAtLeast b a;
+
+  warnVersion =
+    predicate: ver: pkg:
+    let
+      pname = pkg.pname;
+    in
+    lib.warnIf (predicate ver
+      super.${pname}.version
+    ) "override for haskell.packages.ghc912.${pname} may no longer be needed" pkg;
+
+  warnAfterVersion = warnVersion lib.versionOlder;
+  warnFromVersion = warnVersion versionAtMost;
+
 in
 
 with haskellLib;
 
-self: super: {
+{
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries
@@ -58,6 +75,12 @@ self: super: {
   xhtml = null;
 
   doctest = self.doctest_0_23_0;
+
+  constraints-extras = warnFromVersion "0.4.0.2" (doDistribute self.constraints-extras_0_4_0_2);
+  dependent-sum-template = warnFromVersion "0.2.0.2" (
+    doDistribute self.dependent-sum-template_0_2_0_2
+  );
+  haskell-src-meta = warnFromVersion "0.8.15" (doDistribute self.haskell-src-meta_0_8_15);
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
   time-compat = doDistribute (doJailbreak self.time-compat_1_9_8); # too strict lower bound on QuickCheck
@@ -83,4 +106,7 @@ self: super: {
         export alex_datadir="$(pwd)/data"
       '';
   }) super.alex;
+
+  # https://github.com/sjakobi/newtype-generics/pull/28/files
+  newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
 }
