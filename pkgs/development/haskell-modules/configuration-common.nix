@@ -1880,9 +1880,8 @@ self: super: {
   # Missing test files in 1.8.1.0, fixed in 1.8.1.1
   sequence-formats = dontCheck super.sequence-formats;
 
-  # Test suite has overly strict bounds on tasty, jailbreaking fails.
-  # https://github.com/input-output-hk/nothunks/issues/9
-  nothunks = dontCheck super.nothunks;
+  # 2025-02-11: Too strict bounds on hedgehog < 1.5
+  nothunks = doJailbreak super.nothunks;
 
   # Allow building with older versions of http-client.
   http-client-restricted = doJailbreak super.http-client-restricted;
