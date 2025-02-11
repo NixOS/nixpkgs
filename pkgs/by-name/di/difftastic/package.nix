@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
       ethancedwards8
       figsoda
       matthiasbeyer
+      defelo
     ];
     mainProgram = "difft";
   };
