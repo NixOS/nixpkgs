@@ -5,14 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.10.7";
+  version = "4.0.0";
   format = "setuptools";
   pname = "thespian";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-HcHvZtMpBtNXq9Yp2ayeHTuIf7gpBUb6xZqjaECbfgo=";
+    hash = "sha256-92krWgkXCmH7Qa0Q+0cY2KKwKjDeJYLA8I0DtSmoRog=";
   };
 
   # Do not run the test suite: it takes a long time and uses
