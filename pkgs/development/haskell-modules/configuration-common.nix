@@ -2604,7 +2604,6 @@ self: super: {
   heist-extra = doJailbreak super.heist-extra;  # base <4.18.0.0.0
   unionmount = doJailbreak super.unionmount;  # base <4.18
   tailwind = doJailbreak super.tailwind;  # base <=4.17.0.0
-  tagtree = doJailbreak super.tagtree;  # base <=4.17  https://github.com/srid/tagtree/issues/1
   commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
 
   # 2024-03-02: Apply unreleased changes necessary for compatibility
