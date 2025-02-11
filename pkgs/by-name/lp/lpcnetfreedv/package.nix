@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   cmake,
+  nix-update-script,
 }:
 
 let
@@ -30,6 +31,10 @@ stdenv.mkDerivation rec {
     mkdir build
     ln -s ${data} build/lpcnet_${dataVersion}.tgz
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     homepage = "https://freedv.org/";
