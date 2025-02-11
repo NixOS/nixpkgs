@@ -15,12 +15,12 @@
   responses,
   freezegun,
   pytest-subprocess,
-  pytest-logdog,
+  logassert,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.1.0";
+  version = "2.1.1";
 
   pyproject = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-+j3uwvecffl8cK+yNidWbL243VnPkX72DMYv8RXMaXE=";
+    hash = "sha256-aW3efKy3c7ZGXS4wsvby0ww3Gwjt+1tMKsJCGprkcZo=";
   };
 
   patches = [
@@ -69,10 +69,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    logassert
     pytest-check
     pytest-mock
     pytest-subprocess
-    pytest-logdog
     pytestCheckHook
     responses
   ];
