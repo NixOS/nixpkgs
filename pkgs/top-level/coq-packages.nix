@@ -171,7 +171,7 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version = with lib.versions; lib.switch self.coq.version [
-              { case = range "8.15" "8.19"; out = "3.13.1"; }
+              { case = range "8.15" "8.18"; out = "3.13.1"; }
               { case = isEq "8.14"; out = "3.11"; }
             ] null;
           };
