@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8JeF1HxsP+Y+C1g3YJ0B0+JHoRFkBjz4/T8rVr2KgGw=";
   };
 
+  buildAndTestSubdir = "harper-ls";
   useFetchCargoVendor = true;
   cargoHash = "sha256-uVjDFo5mJi4Xbq0Z+XOjy5VqXqkm0a+4xu+dVnjWXCU=";
 
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Automattic/harper";
     changelog = "https://github.com/Automattic/harper/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pbsds ];
-    mainProgram = "harper-cli";
+    maintainers = with lib.maintainers; [
+      pbsds
+      sumnerevans
+    ];
+    mainProgram = "harper-ls";
   };
 }
