@@ -750,9 +750,9 @@
   },
   "nginx": {
     "pname": "nginx",
-    "version": "2.0.0b6",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/nginx-2.0.0b6-py2.py3-none-any.whl",
-    "hash": "sha256-2U93wSzmlFyCP376hCOOOYta7IeBVrvfMRLw3vHriWA=",
+    "version": "2.0.0b8",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/nginx-2.0.0b8-py2.py3-none-any.whl",
+    "hash": "sha256-d/ELXpGjr/oR7rnIQqddcWA88X2n5BizhAuWYSNb1JM=",
     "description": "Microsoft Azure Command-Line Tools Nginx Extension"
   },
   "notification-hub": {
