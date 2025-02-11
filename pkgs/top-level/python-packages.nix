@@ -15222,6 +15222,8 @@ self: super: with self; {
 
   snowflake-sqlalchemy = callPackage ../development/python-modules/snowflake-sqlalchemy { };
 
+  snowplow-tracker = callPackage ../development/python-modules/snowplow-tracker { };
+
   snscrape = callPackage ../development/python-modules/snscrape { };
 
   snuggs = callPackage ../development/python-modules/snuggs { };
