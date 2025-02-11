@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "martian-mono";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchzip {
     url = "https://github.com/evilmartians/mono/releases/download/v${version}/martian-mono-${version}-otf.zip";
-    sha256 = "sha256-hC08IHWqg+x3qoEf4EL98ZbGeqdwjnMpDovEiWrWPpI=";
+    sha256 = "sha256-L+T9XxTH7+yFJwhZ8UXAlq3rAkPFn/8dRBoGfbiHuGA=";
     stripRoot = false;
   };
 

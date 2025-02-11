@@ -29,7 +29,6 @@ mkKdeDerivation {
       qdbus = lib.getExe' qttools "qdbus";
       xmessage = lib.getExe xorg.xmessage;
       xrdb = lib.getExe xorg.xrdb;
-      xsetroot = lib.getExe xorg.xsetroot;
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
@@ -66,7 +65,7 @@ mkKdeDerivation {
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb} ${xorg.xsetroot}" > $out/nix-support/depends
+    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb}" > $out/nix-support/depends
   '';
 
   passthru.providedSessions = [

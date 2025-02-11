@@ -220,6 +220,7 @@ stdenv.mkDerivation rec {
       "InstantMessaging"
     ];
     mimeTypes = [ "x-scheme-handler/discord" ];
+    startupWMClass = "discord";
   };
 
   passthru = {

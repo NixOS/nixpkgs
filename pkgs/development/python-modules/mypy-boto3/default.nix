@@ -86,8 +86,8 @@ rec {
       "sha256-wqul7cHa1ui2Wbyl01bnwZgIUZZodniAn6EQ24bgfkI=";
 
   mypy-boto3-apigatewayv2 =
-    buildMypyBoto3Package "apigatewayv2" "1.36.0"
-      "sha256-UDfSHfLkzNNcecERrGCJIYnVJE27qCECZ2CRmFxvGRM=";
+    buildMypyBoto3Package "apigatewayv2" "1.36.17"
+      "sha256-VntzS1WAuNtSpl0+i6mTQk/Xs7yuDQgnu4IbdDaDabc=";
 
   mypy-boto3-appconfig =
     buildMypyBoto3Package "appconfig" "1.36.0"
@@ -230,8 +230,8 @@ rec {
       "sha256-g8YpVNduF0EAsCwheQCS2xX2yoIKuYTQ1DY/DRdwkt8=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.36.0"
-      "sha256-6HRqoRpUsrvPVrNvVlQodzjWpfk5Eq472jCzNVMULzM=";
+    buildMypyBoto3Package "cloudfront" "1.36.17"
+      "sha256-jfYI2Kn4er6cG3LpxdVV0QacKbpTDzAiBmVzD5D76UI=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.36.0"
@@ -338,8 +338,8 @@ rec {
       "sha256-VK7/vxmSeMHYNow/ifwEYB8w/35PQfUiMhinyKNlDJ8=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.36.3"
-      "sha256-thT1nWwkUSsmhLQOyV5QiR17jGHvkxbxcwMGwV5gFXE=";
+    buildMypyBoto3Package "connect" "1.36.17"
+      "sha256-8uSSGygW+4wKLt09LGUdr8q07bJLiIAK8avQOhoKpQI=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.36.0"
@@ -414,8 +414,8 @@ rec {
       "sha256-si7pjgKzxg++SfVdOsIQP37rXG84IZM0ltcwc2+wn3I=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.36.13"
-      "sha256-D8d8TAjSlxNw5xumOLyzIBb92C7Blh3f3Mo1WOPxzP4=";
+    buildMypyBoto3Package "dms" "1.36.17"
+      "sha256-XymlDkObpiUJqGjheovvypfDS8xDGLy6MKT4+mhBePs=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.36.0"
