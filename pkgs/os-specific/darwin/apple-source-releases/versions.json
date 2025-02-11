@@ -52,8 +52,8 @@
     "version": "448.0.3"
   },
   "libffi": {
-    "hash": "sha256-tQJdKCz2OIwVtorHQapq9Xs2e1Ac96lGEzIWUXmsasY=",
-    "version": "35"
+    "hash": "sha256-YjRMS3H3hIEfQm5MVSxGNTBtFc/9al7iQGDeZy6m/0U=",
+    "version": "39"
   },
   "libiconv": {
     "hash": "sha256-4I70hci8SUQ5QERbImP3htjYCGXdZZ0a6RM7ggUnVa4=",
