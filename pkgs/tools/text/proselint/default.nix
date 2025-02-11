@@ -17,8 +17,8 @@ buildPythonApplication rec {
     sha256 = "YklkJyvqFHZ+XfJWHYfdMHZ5OMjLUvsjWFvDdYBoDoY=";
   };
 
-  nativeBuildInputs = [python3Packages.poetry-core];
-  propagatedBuildInputs = [click];
+  nativeBuildInputs = [ python3Packages.poetry-core ];
+  propagatedBuildInputs = [ click ];
 
   meta = with lib; {
     description = "A linter for prose.";
@@ -26,12 +26,12 @@ buildPythonApplication rec {
 
     homepage = "https://github.com/amperser/proselint";
     changelog = "https://github.com/amperser/proselint/blob/main/CHANGELOG.md#proselint${
-      lib.replaceStrings ["."] [""] version
+      lib.replaceStrings [ "." ] [ "" ] version
     }";
 
     downloadPage = "https://pypi.org/project/proselint/${version}/#files";
 
     license = licenses.bsd3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
