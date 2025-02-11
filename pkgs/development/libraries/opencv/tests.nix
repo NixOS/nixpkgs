@@ -26,7 +26,7 @@ let
     "video"
     #"videoio" # - a lot of GStreamer warnings and failed tests
     #"dnn" #- some caffe tests failed, probably because github workflow also downloads additional models
-  ] ++ lib.optionals (!stdenv.isAarch64 && enableGStreamer) [ "gapi" ]
+  ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && enableGStreamer) [ "gapi" ]
   ++ lib.optionals (enableGtk2 || enableGtk3) [ "highgui" ];
   perfTestNames = [
     "calib3d"
@@ -38,8 +38,8 @@ let
     "photo"
     "stitching"
     "video"
-  ] ++ lib.optionals (!stdenv.isAarch64 && enableGStreamer) [ "gapi" ];
-  testRunner = lib.optionalString (!stdenv.isDarwin) "${lib.getExe xvfb-run} -a ";
+  ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64 && enableGStreamer) [ "gapi" ];
+  testRunner = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${lib.getExe xvfb-run} -a ";
   testsPreparation = ''
     touch $out
     # several tests want a write access, so we have to copy files
@@ -49,8 +49,9 @@ let
     export OPENCV_TEST_DATA_PATH="$tmpPath/opencv_extra/testdata"
     export OPENCV_SAMPLES_DATA_PATH="${opencv4.package_tests}/samples/data"
 
-    #ignored tests because of gtest error - "Test code is not available due to compilation error with GCC 11"
-    export GTEST_FILTER="-AsyncAPICancelation/cancel*"
+    # ignored tests because of gtest error - "Test code is not available due to compilation error with GCC 11"
+    # ignore test due to numerical instability
+    export GTEST_FILTER="-AsyncAPICancelation/cancel*:Photo_CalibrateDebevec.regression"
   '';
   accuracyTests = lib.optionalString runAccuracyTests ''
     ${ builtins.concatStringsSep "\n"

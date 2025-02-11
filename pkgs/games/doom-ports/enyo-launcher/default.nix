@@ -1,14 +1,20 @@
-{ mkDerivation, lib, fetchFromGitLab, cmake, qtbase }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  qtbase,
+}:
 
 mkDerivation rec {
   pname = "enyo-launcher";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-launcher";
     rev = version;
-    sha256 = "sha256-qdVP5QN2t0GK4VBWuFGrnRfgamQDZGRjwaAe6TIK604=";
+    hash = "sha256-k6Stc1tQOcdS//j+bFUNfnOUlwuhIPKxf9DHU+ng164=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,6 +24,7 @@ mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/sdcofer70/enyo-launcher";
     description = "Frontend for Doom engines";
+    mainProgram = "enyo-launcher";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.usrfriendly ];

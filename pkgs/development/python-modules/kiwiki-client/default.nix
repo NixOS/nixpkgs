@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-dateutil
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dateutil,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c7h";
     repo = "kiwiki_client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CIBed8HzbUqUIzNy1lHxIgjneA6R8uKtmd43LU92M0Q=";
   };
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "kiwiki"
-  ];
+  pythonImportsCheck = [ "kiwiki" ];
 
   meta = with lib; {
     description = "Module to interact with the KIWI.KI API";

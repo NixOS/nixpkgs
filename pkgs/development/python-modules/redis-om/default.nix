@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, unasync
-, poetry-core
-, python
-, click
-, hiredis
-, more-itertools
-, pydantic
-, python-ulid
-, redis
-, types-redis
-, typing-extensions
-, pkgs
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  unasync,
+  poetry-core,
+  python,
+  click,
+  hiredis,
+  more-itertools,
+  pydantic,
+  python-ulid,
+  redis,
+  types-redis,
+  typing-extensions,
+  pkgs,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.2.1";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,16 +29,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-om-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jQS0VTYZeAj3+OVFy+JP4mUFBPo+a5D/kdJKagFraaA=";
+    tag = "v${version}";
+    hash = "sha256-Pp404HaFpYEPie9xknoabotFrqcI2ibDlPTM+MmnMbg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     unasync
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  # it has not been maintained at all for a half year and some dependencies are outdated
+  # https://github.com/redis/redis-om-python/pull/554
+  # https://github.com/redis/redis-om-python/pull/577
+  pythonRelaxDeps = true;
+
+  dependencies = [
     click
     hiredis
     more-itertools
@@ -77,8 +83,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object mapping, and more, for Redis and Python";
+    mainProgram = "migrate";
     homepage = "https://github.com/redis/redis-om-python";
-    changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.rev}";
+    changelog = "https://github.com/redis/redis-om-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

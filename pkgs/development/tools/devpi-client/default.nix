@@ -1,37 +1,32 @@
-{ lib
-, devpi-server
-, git
-, glibcLocales
-, python3
-, fetchPypi
+{
+  lib,
+  devpi-server,
+  git,
+  glibcLocales,
+  python3,
+  fetchPypi,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "7.0.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AI/GNubb7+nwz/vM6v/JoUtWup6rBJieKXtFQzrdPkE=";
+    pname = "devpi-client";
+    inherit version;
+    hash = "sha256-wUM2hFjDh4unvuah2bQY4uZZVxo4VmFPWNdriigmnXs=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace "--flake8" ""
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
     setuptools-changelog-shortener
-    wheel
   ];
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     build
     check-manifest
     devpi-common
@@ -41,19 +36,21 @@ python3.pkgs.buildPythonApplication rec {
     platformdirs
   ];
 
-  nativeCheckInputs = [
-    devpi-server
-    git
-  ] ++ (with python3.pkgs; [
-    mercurial
-    mock
-    pypitoken
-    pytestCheckHook
-    sphinx
-    virtualenv
-    webtest
-    wheel
-  ]);
+  nativeCheckInputs =
+    [
+      devpi-server
+      git
+    ]
+    ++ (with python3.pkgs; [
+      mercurial
+      mock
+      pypitoken
+      pytestCheckHook
+      sphinx
+      virtualenv
+      webtest
+      wheel
+    ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -68,15 +65,19 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "devpi"
-  ];
+  pythonImportsCheck = [ "devpi" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Client for devpi, a pypi index server and packaging meta tool";
     homepage = "http://doc.devpi.net";
     changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo makefu ];
+    maintainers = with maintainers; [
+      lewo
+      makefu
+    ];
+    mainProgram = "devpi";
   };
 }

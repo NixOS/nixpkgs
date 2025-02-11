@@ -1,4 +1,11 @@
-{ config, lib, pkgs, ... }: with lib; let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+let
   cfg = config.services.icingaweb2;
   fpm = config.services.phpfpm.pools.${poolName};
   poolName = "icingaweb2";
@@ -8,25 +15,26 @@
       module_path = "${pkgs.icingaweb2}/modules";
     };
   };
-in {
-  meta.maintainers = with maintainers; [ das_j ];
+in
+{
+  meta.maintainers = teams.helsinki-systems.members;
 
   options.services.icingaweb2 = with types; {
-    enable = mkEnableOption (lib.mdDoc "the icingaweb2 web interface");
+    enable = mkEnableOption "the icingaweb2 web interface";
 
     pool = mkOption {
       type = str;
       default = poolName;
-      description = lib.mdDoc ''
-         Name of existing PHP-FPM pool that is used to run Icingaweb2.
-         If not specified, a pool will automatically created with default values.
+      description = ''
+        Name of existing PHP-FPM pool that is used to run Icingaweb2.
+        If not specified, a pool will automatically created with default values.
       '';
     };
 
     libraryPaths = mkOption {
       type = attrsOf package;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Libraries to add to the Icingaweb2 library path.
         The name of the attribute is the name of the library, the value
         is the package to add.
@@ -36,7 +44,7 @@ in {
     virtualHost = mkOption {
       type = nullOr str;
       default = "icingaweb2";
-      description = lib.mdDoc ''
+      description = ''
         Name of the nginx virtualhost to use and setup. If null, no virtualhost is set up.
       '';
     };
@@ -45,26 +53,26 @@ in {
       type = str;
       default = "UTC";
       example = "Europe/Berlin";
-      description = lib.mdDoc "PHP-compliant timezone specification";
+      description = "PHP-compliant timezone specification";
     };
 
     modules = {
-      doc.enable = mkEnableOption (lib.mdDoc "the icingaweb2 doc module");
-      migrate.enable = mkEnableOption (lib.mdDoc "the icingaweb2 migrate module");
-      setup.enable = mkEnableOption (lib.mdDoc "the icingaweb2 setup module");
-      test.enable = mkEnableOption (lib.mdDoc "the icingaweb2 test module");
-      translation.enable = mkEnableOption (lib.mdDoc "the icingaweb2 translation module");
+      doc.enable = mkEnableOption "the icingaweb2 doc module";
+      migrate.enable = mkEnableOption "the icingaweb2 migrate module";
+      setup.enable = mkEnableOption "the icingaweb2 setup module";
+      test.enable = mkEnableOption "the icingaweb2 test module";
+      translation.enable = mkEnableOption "the icingaweb2 translation module";
     };
 
     modulePackages = mkOption {
       type = attrsOf package;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           "snow" = icingaweb2Modules.theme-snow;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Name-package attrset of Icingaweb 2 modules packages to enable.
 
         If you enable modules manually (e.g. via the web ui), they will not be touched.
@@ -84,7 +92,7 @@ in {
           level = "CRITICAL";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         config.ini contents.
         Will automatically be converted to a .ini file.
         If you don't set global.module_path, the module will take care of it.
@@ -108,7 +116,7 @@ in {
           dbname = "icingaweb2";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         resources.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -127,7 +135,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         authentication.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -145,7 +153,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         groups.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -163,7 +171,7 @@ in {
           permissions = "*";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         roles.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -178,7 +186,11 @@ in {
       ${poolName} = {
         user = "icingaweb2";
         phpEnv = {
-          ICINGAWEB_LIBDIR = toString (pkgs.linkFarm "icingaweb2-libdir" (mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths));
+          ICINGAWEB_LIBDIR = toString (
+            pkgs.linkFarm "icingaweb2-libdir" (
+              mapAttrsToList (name: path: { inherit name path; }) cfg.libraryPaths
+            )
+          );
         };
         phpPackage = pkgs.php.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
         phpOptions = ''
@@ -233,11 +245,19 @@ in {
     };
 
     # /etc/icingaweb2
-    environment.etc = let
-      doModule = name: optionalAttrs (cfg.modules.${name}.enable) { "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}"; };
-    in {}
+    environment.etc =
+      let
+        doModule =
+          name:
+          optionalAttrs (cfg.modules.${name}.enable) {
+            "icingaweb2/enabledModules/${name}".source = "${pkgs.icingaweb2}/modules/${name}";
+          };
+      in
+      { }
       # Module packages
-      // (mapAttrs' (k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }) cfg.modulePackages)
+      // (mapAttrs' (
+        k: v: nameValuePair "icingaweb2/enabledModules/${k}" { source = v; }
+      ) cfg.modulePackages)
       # Built-in modules
       // doModule "doc"
       // doModule "migrate"
@@ -245,14 +265,24 @@ in {
       // doModule "test"
       // doModule "translation"
       # Configs
-      // optionalAttrs (cfg.generalConfig != null) { "icingaweb2/config.ini".text = generators.toINI {} (defaultConfig // cfg.generalConfig); }
-      // optionalAttrs (cfg.resources != null) { "icingaweb2/resources.ini".text = generators.toINI {} cfg.resources; }
-      // optionalAttrs (cfg.authentications != null) { "icingaweb2/authentication.ini".text = generators.toINI {} cfg.authentications; }
-      // optionalAttrs (cfg.groupBackends != null) { "icingaweb2/groups.ini".text = generators.toINI {} cfg.groupBackends; }
-      // optionalAttrs (cfg.roles != null) { "icingaweb2/roles.ini".text = generators.toINI {} cfg.roles; };
+      // optionalAttrs (cfg.generalConfig != null) {
+        "icingaweb2/config.ini".text = generators.toINI { } (defaultConfig // cfg.generalConfig);
+      }
+      // optionalAttrs (cfg.resources != null) {
+        "icingaweb2/resources.ini".text = generators.toINI { } cfg.resources;
+      }
+      // optionalAttrs (cfg.authentications != null) {
+        "icingaweb2/authentication.ini".text = generators.toINI { } cfg.authentications;
+      }
+      // optionalAttrs (cfg.groupBackends != null) {
+        "icingaweb2/groups.ini".text = generators.toINI { } cfg.groupBackends;
+      }
+      // optionalAttrs (cfg.roles != null) {
+        "icingaweb2/roles.ini".text = generators.toINI { } cfg.roles;
+      };
 
     # User and group
-    users.groups.icingaweb2 = {};
+    users.groups.icingaweb2 = { };
     users.users.icingaweb2 = {
       description = "Icingaweb2 service user";
       group = "icingaweb2";

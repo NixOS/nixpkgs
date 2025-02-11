@@ -1,24 +1,20 @@
 # GPaste.
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
-  # Added 2019-08-09
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gpaste" "enable" ]
-      [ "programs" "gpaste" "enable" ])
-  ];
-
   ###### interface
   options = {
-     programs.gpaste = {
-      enable = mkOption {
-        type = types.bool;
+    programs.gpaste = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable GPaste, a clipboard manager.
         '';
       };
@@ -26,11 +22,13 @@ with lib;
   };
 
   ###### implementation
-  config = mkIf config.programs.gpaste.enable {
-    environment.systemPackages = [ pkgs.gnome.gpaste ];
-    services.dbus.packages = [ pkgs.gnome.gpaste ];
-    systemd.packages = [ pkgs.gnome.gpaste ];
+  config = lib.mkIf config.programs.gpaste.enable {
+    environment.systemPackages = [ pkgs.gpaste ];
+    services.dbus.packages = [ pkgs.gpaste ];
+    systemd.packages = [ pkgs.gpaste ];
     # gnome-control-center crashes in Keyboard Shortcuts pane without the GSettings schemas.
-    services.xserver.desktopManager.gnome.sessionPath = [ pkgs.gnome.gpaste ];
+    services.xserver.desktopManager.gnome.sessionPath = [ pkgs.gpaste ];
+    # gpaste-reloaded applet doesn't work without the typelib
+    services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
   };
 }

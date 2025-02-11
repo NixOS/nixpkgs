@@ -1,5 +1,7 @@
-{ lib, stdenv, runCommand, fetchFromSavannah, fetchpatch, flex, bison, python3, autoconf, automake, libtool, bash
-, rsync, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+{ lib, stdenv, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
+, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+, help2man
+, fetchzip
 , buildPackages
 , nixosTests
 , fuse # only needed for grub-mount
@@ -49,26 +51,17 @@ let
 
   src = fetchFromSavannah {
     repo = "grub";
-    rev = "grub-2.12-rc1";
-    hash = "sha256-DrNFzi2o7ZUfL3bMdG63xivZIjcTgv8RODJz7hLJ3WY=";
+    rev = "grub-2.12";
+    hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
-  # HACK: the translations are stored on a different server,
-  # not versioned and not included in the git repo, so fetch them
-  # and hope they don't change often
-  locales = runCommand "grub-locales" {
-    nativeBuildInputs = [rsync];
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-XpQ4tu5eNRARdbg95LOjqp+2RCVRj1qZWe+Sc0O5zNg=";
-  }
-  ''
-    mkdir -p po
-    ${src}/linguas.sh
-
-    mv po $out
-  '';
+  # The locales are fetched from translationproject.org at build time,
+  # but those translations are not versioned/stable. For that reason
+  # we take them from the nearest release tarball instead:
+  locales = fetchzip {
+    url = "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.gz";
+    hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
+  };
 in (
 
 assert efiSupport -> canEfi;
@@ -77,20 +70,12 @@ assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
-  version = "2.12-rc1";
+  version = "2.12";
   inherit src;
 
   patches = [
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
-
-    # Revert upstream commit that breaks reading XFS filesystems
-    # FIXME: remove when fixed upstream
-    (fetchpatch {
-      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ef7850c757fb3dd2462a512cfa0ff19c89fcc0b1";
-      revert = true;
-      hash = "sha256-p8Kcv9d7ri4eJU6Fgqyzdj0hV5MHSe50AF02FPDJx2Y=";
-    })
   ];
 
   postPatch = if kbdcompSupport then ''
@@ -101,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoconf automake ];
+  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoconf automake help2man ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
     ++ lib.optional doCheck qemu
     ++ lib.optional zfsSupport zfs;
@@ -112,8 +97,8 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = !xenSupport;
 
-  preConfigure =
-    '' for i in "tests/util/"*.in
+  preConfigure = ''
+       for i in "tests/util/"*.in
        do
          sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
@@ -142,7 +127,7 @@ stdenv.mkDerivation rec {
         exit 1
       fi
 
-      cp -f --no-preserve=mode ${locales}/* po
+      cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
 
       ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
@@ -199,24 +184,24 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNU GRUB, the Grand Unified Boot Loader";
 
-    longDescription =
-      '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
-         Unified Bootloader, which was originally designed and implemented by
-         Erich Stefan Boleyn.
+    longDescription = ''
+      GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
+      Unified Bootloader, which was originally designed and implemented by
+      Erich Stefan Boleyn.
 
-         Briefly, the boot loader is the first software program that runs when a
-         computer starts.  It is responsible for loading and transferring
-         control to the operating system kernel software (such as the Hurd or
-         the Linux).  The kernel, in turn, initializes the rest of the
-         operating system (e.g., GNU).
-      '';
+      Briefly, the boot loader is the first software program that runs when a
+      computer starts.  It is responsible for loading and transferring
+      control to the operating system kernel software (such as the Hurd or
+      the Linux).  The kernel, in turn, initializes the rest of the
+      operating system (e.g., GNU).
+    '';
 
     homepage = "https://www.gnu.org/software/grub/";
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = if xenSupport then [ "x86_64-linux" "i686-linux" ] else platforms.gnu ++ platforms.linux;
 
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ ];
   };
 })

@@ -1,22 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkgsStatic
-, byacc
-, ed
-, ncurses
-, readline
-, installShellFiles
-, historySupport ? true
-, readlineSupport ? true
-, lineEditingLibrary ? if (stdenv.hostPlatform.isDarwin
-                           || stdenv.hostPlatform.isStatic)
-                       then "null"
-                       else "readline"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgsStatic,
+  byacc,
+  ed,
+  ncurses,
+  readline,
+  installShellFiles,
+  historySupport ? true,
+  readlineSupport ? true,
+  lineEditingLibrary ?
+    if (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isStatic) then "null" else "readline",
 }:
 
-assert lib.elem lineEditingLibrary [ "null" "edit" "editline" "readline" "vrl" ];
-assert !(lib.elem lineEditingLibrary [ "edit" "editline" "vrl" ]); # broken
+assert lib.elem lineEditingLibrary [
+  "null"
+  "edit"
+  "editline"
+  "readline"
+  "vrl"
+];
+assert
+  !(lib.elem lineEditingLibrary [
+    "edit"
+    "editline"
+    "vrl"
+  ]); # broken
 assert (lineEditingLibrary == "readline") -> readlineSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "rc";
@@ -29,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Yql3mt7hTO2W7wTfPje+X2zBGTHiNXGGXYORJewJIM8=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   # TODO: think on a less ugly fixup
   postPatch = ''
@@ -52,16 +65,17 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [
-    ncurses
-  ]
-  ++ lib.optionals readlineSupport [
-    readline
-  ];
+  buildInputs =
+    [
+      ncurses
+    ]
+    ++ lib.optionals readlineSupport [
+      readline
+    ];
 
   strictDeps = true;
 
-  makeFlags  = [
+  makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "PREFIX=${placeholder "out"}"
     "MANPREFIX=${placeholder "man"}/share/man"
@@ -69,11 +83,13 @@ stdenv.mkDerivation (finalAttrs: {
     "EDIT=${lineEditingLibrary}"
   ];
 
-  buildFlags = [
-    "all"
-  ] ++ lib.optionals historySupport [
-    "history"
-  ];
+  buildFlags =
+    [
+      "all"
+    ]
+    ++ lib.optionals historySupport [
+      "history"
+    ];
 
   postInstall = lib.optionalString historySupport ''
     installManPage history.1
@@ -86,10 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/rakitzis/rc";
-    description = "The Plan 9 shell";
+    description = "Plan 9 shell";
     license = [ lib.licenses.zlib ];
     mainProgram = "rc";
-    maintainers = with lib.maintainers; [ ramkromberg AndersonTorres ];
+    maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,22 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   version = "0.3.3";
   pname = "ofxhome";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1rpyfqr2q9pnin47rjd4qapl8ngk1m9jx36iqckhdhr8s8gla445";
+  src = fetchFromGitHub {
+    owner = "captin411";
+    repo = "ofxhome";
+    rev = "v${version}";
+    hash = "sha256-i16bE9iuafhAKco2jYfg5T5QCWFHdnYVztf1z2XbO9g=";
   };
 
-  buildInputs = [ nose ];
+  build-system = [ setuptools ];
 
-  # ImportError: No module named tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  # These are helper functions that should not be called as tests
+  disabledTests = [
+    "testfile_name"
+    "testfile"
+  ];
+
+  meta = {
     homepage = "https://github.com/captin411/ofxhome";
     description = "ofxhome.com financial institution lookup REST client";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }

@@ -31,7 +31,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
 
         local qmlDir="$1/${qtQmlPrefix:?}"
         if [ -d "$qmlDir" ]; then
-            qtWrapperArgs+=(--prefix QML2_IMPORT_PATH : "$qmlDir")
+            qtWrapperArgs+=(--prefix NIXPKGS_QT6_QML_IMPORT_PATH : "$qmlDir")
         fi
     }
     addEnvHooks "$targetOffset" qtHostPathHook
@@ -63,7 +63,7 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
         qtHostPathHook "${!outputBin}"
     }
 
-    preFixupPhases+=" qtOwnPathsHook"
+    appendToVar preFixupPhases qtOwnPathsHook
 
     # Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
     wrapQtAppsHook() {

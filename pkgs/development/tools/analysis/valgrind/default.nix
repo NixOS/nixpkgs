@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.22.0";
+  version = "3.24.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-yBHbWt0sX3KZRMr0fE56Zdyqu5Rh5HK1eHZd179tLUw=";
+    hash = "sha256-ca7iAr3vGuc4mMz36cMVE0+n22wkYGOvxQOu9wLsA70=";
   };
 
   patches = [
@@ -27,18 +27,10 @@ stdenv.mkDerivation rec {
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
     # Fix build on armv7l.
-    # https://bugs.kde.org/show_bug.cgi?id=454346
+    # see also https://bugs.kde.org/show_bug.cgi?id=454346
     (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
-      sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
-    })
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
-      sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
-    })
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
-      sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
+      url = "https://git.yoctoproject.org/poky/plain/meta/recipes-devtools/valgrind/valgrind/use-appropriate-march-mcpu-mfpu-for-ARM-test-apps.patch?id=b7a9250590a16f1bdc8c7b563da428df814d4292";
+      sha256 = "sha256-sBZzn98Sf/ETFv8ubivgA6Y6fBNcyR8beB3ICDAyAH0=";
     })
   ];
 
@@ -48,18 +40,18 @@ stdenv.mkDerivation rec {
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [ autoreconfHook perl ];
 
   enableParallelBuilding = true;
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
-  preConfigure = lib.optionalString stdenv.isFreeBSD ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace configure --replace '`uname -r`' \
         ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
-  '' + lib.optionalString stdenv.isDarwin (
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -114,7 +106,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://www.valgrind.org/";
+    homepage = "https://valgrind.org/";
     description = "Debugging and profiling tool suite";
 
     longDescription = ''
@@ -132,6 +124,6 @@ stdenv.mkDerivation rec {
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
+    broken = stdenv.hostPlatform.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

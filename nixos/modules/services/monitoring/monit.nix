@@ -1,7 +1,9 @@
-{config, pkgs, lib, ...}:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.monit;
 in
@@ -9,17 +11,17 @@ in
 {
   options.services.monit = {
 
-    enable = mkEnableOption (lib.mdDoc "Monit");
+    enable = lib.mkEnableOption "Monit";
 
-    config = mkOption {
-      type = types.lines;
+    config = lib.mkOption {
+      type = lib.types.lines;
       default = "";
-      description = lib.mdDoc "monitrc content";
+      description = "monitrc content";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.monit ];
 
@@ -44,5 +46,5 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ ryantm ];
+  meta.maintainers = with lib.maintainers; [ ryantm ];
 }

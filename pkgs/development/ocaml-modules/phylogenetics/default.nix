@@ -1,44 +1,40 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, ppx_deriving
-, bppsuite
-, alcotest
-, angstrom-unix
-, biocaml
-, core
-, gsl
-, lacaml
-, menhir
-, menhirLib
-, printbox-text
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  bppsuite,
+  alcotest,
+  angstrom-unix,
+  biotk,
+  core,
+  gsl,
+  lacaml,
+  menhir,
+  menhirLib,
+  printbox-text,
 }:
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "unstable-2022-05-06";
+  version = "0.3.0";
 
-  src = fetchFromGitHub {
-    owner = "biocaml";
-    repo = pname;
-    rev = "cd7c624d0f98e31b02933ca4511b9809b26d35b5";
-    sha256 = "sha256:0w0xyah3hj05hxg1rsa40hhma3dm1cyq0zvnjrihhf22laxap7ga";
+  src = fetchurl {
+    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/phylogenetics-${version}.tbz";
+    hash = "sha256-3oZ9fMAXqOQ02rQ+8W8PZJWXOJLNe2qERrGOeTk3BKg=";
   };
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   nativeCheckInputs = [ bppsuite ];
   checkInputs = [ alcotest ];
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
     angstrom-unix
-    biocaml
+    biotk
     core
     gsl
     lacaml
     menhirLib
-    ppx_deriving
     printbox-text
   ];
 

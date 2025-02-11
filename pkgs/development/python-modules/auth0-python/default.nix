@@ -1,30 +1,34 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, callee
-, fetchFromGitHub
-, mock
-, poetry-core
-, poetry-dynamic-versioning
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  callee,
+  cryptography,
+  fetchFromGitHub,
+  mock,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pyjwt,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.6.1";
-  format = "pyproject";
+  version = "4.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-weXEwrOP+TKVwhqCeFVqUw4x+q2Wplr0QWVUzpbNPSc=";
+    tag = version;
+    hash = "sha256-E+vZJ4yuWA5iy5/7PAGnk8rcSd9gWbgIoezyfnnvP7M=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +37,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    requests
+    aiohttp
+    cryptography
     pyjwt
+    pyopenssl
+    requests
+    urllib3
   ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
@@ -45,6 +53,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonRelaxDeps = [ "cryptography" ];
+
   disabledTests = [
     # Tries to ping websites (e.g. google.com)
     "can_timeout"
@@ -52,15 +62,13 @@ buildPythonPackage rec {
     "test_options_are_used_and_override"
   ];
 
-  pythonImportsCheck = [
-    "auth0"
-  ];
+  pythonImportsCheck = [ "auth0" ];
 
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

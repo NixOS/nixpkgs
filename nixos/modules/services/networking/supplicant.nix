@@ -26,12 +26,15 @@ let
       ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
       bridgeArg = optionalString (suppl.bridge!="") "-b${suppl.bridge}";
-      confFileArg = optionalString (suppl.configFile.path!=null) "-c${suppl.configFile.path}";
       extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceStrings [" "] ["-"] iface}" ''
         ${optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
         ${optionalString suppl.configFile.writable "update_config=1"}
         ${suppl.extraConf}
       '';
+      confArgs = escapeShellArgs
+        (if suppl.configFile.path == null
+         then [ "-c${extraConfFile}" ]
+         else [ "-c${suppl.configFile.path}" "-I${extraConfFile}" ]);
     in
       { description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
         wantedBy = [ "multi-user.target" ] ++ deps;
@@ -51,7 +54,7 @@ let
           ''}
         '';
 
-        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confFileArg} -I${extraConfFile} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
+        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confArgs} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
 
       };
 
@@ -74,7 +77,7 @@ in
               type = types.nullOr types.path;
               default = null;
               example = literalExpression "/etc/wpa_supplicant.conf";
-              description = lib.mdDoc ''
+              description = ''
                 External `wpa_supplicant.conf` configuration file.
                 The configuration options defined declaratively within `networking.supplicant` have
                 precedence over options defined in `configFile`.
@@ -84,7 +87,7 @@ in
             writable = mkOption {
               type = types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether the configuration file at `configFile.path` should be written to by
                 `wpa_supplicant`.
               '';
@@ -109,7 +112,7 @@ in
               model_name=NixOS_Unstable
               model_number=2015
             '';
-            description = lib.mdDoc ''
+            description = ''
               Configuration options for `wpa_supplicant.conf`.
               Options defined here have precedence over options in `configFile`.
               NOTE: Do not write sensitive data into `extraConf` as it will
@@ -122,20 +125,19 @@ in
             type = types.str;
             default = "";
             example = "-e/run/wpa_supplicant/entropy.bin";
-            description =
-              lib.mdDoc "Command line arguments to add when executing `wpa_supplicant`.";
+            description = "Command line arguments to add when executing `wpa_supplicant`.";
           };
 
           driver = mkOption {
             type = types.nullOr types.str;
             default = "nl80211,wext";
-            description = lib.mdDoc "Force a specific wpa_supplicant driver.";
+            description = "Force a specific wpa_supplicant driver.";
           };
 
           bridge = mkOption {
             type = types.str;
             default = "";
-            description = lib.mdDoc "Name of the bridge interface that wpa_supplicant should listen at.";
+            description = "Name of the bridge interface that wpa_supplicant should listen at.";
           };
 
           userControlled = {
@@ -143,7 +145,7 @@ in
             enable = mkOption {
               type = types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
                 This is useful for laptop users that switch networks a lot and don't want
                 to depend on a large package such as NetworkManager just to pick nearby
@@ -154,14 +156,14 @@ in
             socketDir = mkOption {
               type = types.str;
               default = "/run/wpa_supplicant";
-              description = lib.mdDoc "Directory of sockets for controlling wpa_supplicant.";
+              description = "Directory of sockets for controlling wpa_supplicant.";
             };
 
             group = mkOption {
               type = types.str;
               default = "wheel";
               example = "network";
-              description = lib.mdDoc "Members of this group can control wpa_supplicant.";
+              description = "Members of this group can control wpa_supplicant.";
             };
 
           };
@@ -184,7 +186,7 @@ in
         }
       '';
 
-      description = lib.mdDoc ''
+      description = ''
         Interfaces for which to start {command}`wpa_supplicant`.
         The supplicant is used to scan for and associate with wireless networks,
         or to authenticate with 802.1x capable network switches.

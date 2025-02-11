@@ -1,13 +1,39 @@
-{ stdenv, lib, fetchurl, perlPackages
-, autoconf, perl, gperf, optipng, pngnq, rsync, imagemagick, blitz
-, pkg-config, glib, boost, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perlPackages,
+  autoconf,
+  perl,
+  gperf,
+  optipng,
+  pngnq,
+  rsync,
+  imagemagick,
+  blitz,
+  pkg-config,
+  glib,
+  boost,
+  makeWrapper,
 }:
 
 let
   perl-deps = with perlPackages; [
-    AnyEvent AnyEventAIO AnyEventBDB AnyEventIRC
-    CompressLZF commonsense Coro CoroEV
-    Deliantra DigestSHA1 EV PodPOM SafeHole URI YAMLLibYAML
+    AnyEvent
+    AnyEventAIO
+    AnyEventBDB
+    AnyEventIRC
+    CompressLZF
+    commonsense
+    Coro
+    CoroEV
+    Deliantra
+    DigestSHA1
+    EV
+    PodPOM
+    SafeHole
+    URI
+    YAMLLibYAML
   ];
 in
 stdenv.mkDerivation rec {
@@ -20,14 +46,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf perl gperf optipng pngnq rsync imagemagick
-    pkg-config makeWrapper
+    autoconf
+    perl
+    gperf
+    optipng
+    pngnq
+    rsync
+    imagemagick
+    pkg-config
+    makeWrapper
   ];
 
   propagatedBuildInputs = perl-deps;
 
   buildInputs = [
-    blitz boost glib
+    blitz
+    boost
+    glib
   ];
 
   hardeningDisable = [ "format" ];
@@ -35,7 +70,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-abs.patch
     ./0002-datadir.patch
+    ./0003-swap.patch
   ];
+
+  env.CXXFLAGS = "-std=c++11";
 
   postFixup = ''
     wrapProgram $out/bin/cfutil --prefix PERL5LIB : $PERL5LIB
@@ -45,7 +83,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Server for the Deliantra free MMORPG";
     homepage = "http://www.deliantra.net/";
-    license = with licenses; [ gpl2Plus agpl3Plus ];
+    license = with licenses; [
+      gpl2Plus
+      agpl3Plus
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ ToxicFrog ];
   };

@@ -1,4 +1,13 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corepins";
@@ -23,7 +32,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A bookmarking app from the C Suite";
+    description = "Bookmarking app from the C Suite";
+    mainProgram = "corepins";
     homepage = "https://gitlab.com/cubocore/coreapps/corepins";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

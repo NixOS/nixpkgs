@@ -1,4 +1,10 @@
-{ lib, stdenv, zig, libyuv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  zig,
+  libyuv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "backlight-auto";
   version = "0.0.1";
@@ -20,9 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Automatically set screen brightness with a webcam";
+    mainProgram = "backlight-auto";
     homepage = "https://len.falken.directory/backlight-auto.html";
     license = licenses.mit;
-    maintainers = [ maintainers.lf- ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

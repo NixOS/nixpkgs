@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "binserve";
@@ -8,12 +12,8 @@ rustPlatform.buildRustPackage rec {
     owner = "mufeedvh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Chm2xPB0BrLXSZslg9wnbDyHSJRQAvOtpH0Rw6w1q1s=";
+    hash = "sha256-Chm2xPB0BrLXSZslg9wnbDyHSJRQAvOtpH0Rw6w1q1s=";
   };
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreServices
-  ];
 
   cargoLock.lockFile = ./Cargo.lock;
   postPatch = ''
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A fast production-ready static web server";
+    description = "Fast production-ready static web server";
     homepage = "https://github.com/mufeedvh/binserve";
     longDescription = ''
       A fast production-ready static web server with TLS

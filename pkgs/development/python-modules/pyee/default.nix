@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, twisted
-, typing-extensions
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  twisted,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "11.0.0";
+  version = "12.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J8aCvOYL2txdPiPqzUEB3zKMAoCISj2cB/Ok4+WV3ic=";
+    hash = "sha256-u8M8CeL/gn90GR4+W7xr59oC9ie37DDYb1zhpvskJKM=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   nativeCheckInputs = [
     mock
@@ -43,12 +42,10 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [
-    "pyee"
-  ];
+  pythonImportsCheck = [ "pyee" ];
 
   meta = with lib; {
-    description = "A port of Node.js's EventEmitter to Python";
+    description = "Port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];

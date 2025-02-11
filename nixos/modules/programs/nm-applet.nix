@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   meta = {
@@ -6,12 +11,12 @@
   };
 
   options.programs.nm-applet = {
-    enable = lib.mkEnableOption (lib.mdDoc "nm-applet");
+    enable = lib.mkEnableOption "nm-applet, a NetworkManager control applet for GNOME";
 
     indicator = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to use indicator instead of status icon.
         It is needed for Appindicator environments, like Enlightenment.
       '';

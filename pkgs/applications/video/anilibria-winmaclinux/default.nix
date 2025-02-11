@@ -1,74 +1,90 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, qmake
-, qtbase
-, qtquickcontrols2
-, qtwebsockets
-, qtmultimedia
-, gst_all_1
-, wrapQtAppsHook
-, makeDesktopItem
-, copyDesktopItems
-, libvlc
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  qtbase,
+  qtquickcontrols2,
+  qtwebsockets,
+  qtmultimedia,
+  gst_all_1,
+  wrapQtAppsHook,
+  makeDesktopItem,
+  copyDesktopItems,
+
+  withVLC ? true,
+  libvlc,
+  withMPV ? true,
+  mpv-unwrapped,
 }:
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "1.2.12";
+  version = "2.2.24";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    sha256 = "sha256-J9MBnHrVnDaJ8Ykf/n8OkWKbK/JfMxorH9E+mKe3T8k=";
+    hash = "sha256-FAnVgrH6ZXfIp8FaacSpcHIwF6DCFt4K5e+UMAUb6qI=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
+  qmakeFlags =
+    [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optionals withVLC [ "CONFIG+=unixvlc" ]
+    ++ lib.optionals withMPV [ "CONFIG+=unixmpv" ];
 
   patches = [
     ./0001-fix-installation-paths.patch
     ./0002-disable-version-check.patch
-    ./0003-build-with-vlc.patch
   ];
 
   preConfigure = ''
     substituteInPlace AniLibria.pro \
-      --replace "\$\$PREFIX" '${placeholder "out"}' \
-      --replace '@VLC_PATH@' '${libvlc}/include'
+      --replace "\$\$PREFIX" '${placeholder "out"}'
   '';
 
   qtWrapperArgs = [
-    "--prefix GST_PLUGIN_PATH : ${(with gst_all_1; lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+    "--prefix GST_PLUGIN_PATH : ${
+      (
+        with gst_all_1;
+        lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
+          gst-plugins-bad
+          gst-plugins-good
+          gst-plugins-base
+          gst-libav
+          gstreamer
+        ]
+      )
+    }"
+  ];
+
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    wrapQtAppsHook
+    copyDesktopItems
+  ];
+
+  buildInputs =
+    [
+      qtbase
+      qtquickcontrols2
+      qtwebsockets
+      qtmultimedia
+    ]
+    ++ (with gst_all_1; [
       gst-plugins-bad
       gst-plugins-good
       gst-plugins-base
       gst-libav
       gstreamer
-    ])}"
-  ];
-
-  nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
-    copyDesktopItems
-  ];
-
-  buildInputs = [
-    qtbase
-    qtquickcontrols2
-    qtwebsockets
-    qtmultimedia
-    libvlc
-  ] ++ (with gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-good
-    gst-plugins-base
-    gst-libav
-    gstreamer
-  ]);
+    ])
+    ++ lib.optionals withVLC [ libvlc ]
+    ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
     (makeDesktopItem (rec {
@@ -77,7 +93,11 @@ mkDerivation rec {
       icon = "anilibria";
       comment = meta.description;
       genericName = "AniLibria desktop client";
-      categories = [ "Qt" "AudioVideo" "Player" ];
+      categories = [
+        "Qt"
+        "AudioVideo"
+        "Player"
+      ];
       keywords = [ "anime" ];
       exec = name;
       terminal = false;

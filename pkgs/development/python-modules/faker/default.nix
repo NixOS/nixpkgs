@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, freezegun
-, pillow
-, pytestCheckHook
-, python-dateutil
-, text-unidecode
-, ukpostcodeparser
-, validators
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  freezegun,
+  pillow,
+  pytestCheckHook,
+  python-dateutil,
+  setuptools,
+  typing-extensions,
+  ukpostcodeparser,
+  validators,
 }:
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "19.6.1";
+  version = "33.3.1";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "Faker";
-    inherit version;
-    hash = "sha256-XWt4gLO+pwgHXd+Rk4QkRT8HBTpZ+PoEU8GHDfb/MpI=";
+    inherit pname version;
+    hash = "sha256-Sd3jsGpWAhd7wq0BMUm29gopC3FUU5GA03tvh2rnmyA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
-    text-unidecode
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -34,13 +38,12 @@ buildPythonPackage rec {
   ];
 
   # avoid tests which import random2, an abandoned library
-  pytestFlagsArray = [
-    "--ignore=tests/providers/test_ssn.py"
-  ];
+  pytestFlagsArray = [ "--ignore=tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {
     description = "Python library for generating fake user data";
+    mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];

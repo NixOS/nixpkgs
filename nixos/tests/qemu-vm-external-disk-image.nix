@@ -11,63 +11,82 @@ let
   rootFslabel = "external";
   rootFsDevice = "/dev/disk/by-label/${rootFslabel}";
 
-  externalModule = { config, lib, pkgs, ... }: {
-    boot.loader.systemd-boot.enable = true;
+  externalModule =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      boot.loader.systemd-boot.enable = true;
 
-    fileSystems = {
-      "/".device = rootFsDevice;
-    };
+      fileSystems = {
+        "/".device = rootFsDevice;
+      };
 
-    system.build.diskImage = import ../lib/make-disk-image.nix {
-      inherit config lib pkgs;
-      label = rootFslabel;
-      partitionTableType = "efi";
-      format = "qcow2";
-      bootSize = "32M";
-      additionalSpace = "0M";
-      copyChannel = false;
+      system.build.diskImage = import ../lib/make-disk-image.nix {
+        inherit config lib pkgs;
+        label = rootFslabel;
+        partitionTableType = "efi";
+        format = "qcow2";
+        bootSize = "32M";
+        additionalSpace = "0M";
+        copyChannel = false;
+      };
     };
-  };
 in
 {
   name = "qemu-vm-external-disk-image";
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
-  nodes.machine = { config, lib, pkgs, ... }: {
-    virtualisation.directBoot.enable = false;
-    virtualisation.mountHostNixStore = false;
-    virtualisation.useEFIBoot = true;
+  nodes.machine =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      virtualisation.directBoot.enable = false;
+      virtualisation.mountHostNixStore = false;
+      virtualisation.useEFIBoot = true;
 
-    # This stops the qemu-vm module from overriding the fileSystems option
-    # with virtualisation.fileSystems.
-    virtualisation.fileSystems = lib.mkForce { };
+      # This stops the qemu-vm module from overriding the fileSystems option
+      # with virtualisation.fileSystems.
+      virtualisation.fileSystems = lib.mkForce { };
 
-    imports = [ externalModule ];
-  };
+      imports = [ externalModule ];
+    };
 
-  testScript = { nodes, ... }: ''
-    import os
-    import subprocess
-    import tempfile
+  testScript =
+    { nodes, ... }:
+    ''
+      import os
+      import subprocess
+      import tempfile
 
-    tmp_disk_image = tempfile.NamedTemporaryFile()
+      tmp_disk_image = tempfile.NamedTemporaryFile()
 
-    subprocess.run([
-      "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
-      "create",
-      "-f",
-      "qcow2",
-      "-b",
-      "${nodes.machine.system.build.diskImage}/nixos.qcow2",
-      "-F",
-      "qcow2",
-      tmp_disk_image.name,
-    ])
+      subprocess.run([
+        "${nodes.machine.virtualisation.qemu.package}/bin/qemu-img",
+        "create",
+        "-f",
+        "qcow2",
+        "-b",
+        "${nodes.machine.system.build.diskImage}/nixos.qcow2",
+        "-F",
+        "qcow2",
+        tmp_disk_image.name,
+      ])
 
-    # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
-    os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+      # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+      os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
 
-    machine.succeed("findmnt --kernel --source ${rootFsDevice} --target /")
-  '';
+      machine.succeed("findmnt --kernel --source ${rootFsDevice} --target /")
+
+      # Make sure systemd boot didn't clobber this
+      machine.succeed("[ ! -e /homeless-shelter ]")
+    '';
 }

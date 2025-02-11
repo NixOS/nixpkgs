@@ -1,19 +1,19 @@
 { lib, stdenv, fetchurl, ocaml, findlib
 , lambda-term, cppo, makeWrapper, buildDunePackage
-, xdg, zed, logs, lwt, react, lwt_react
+, xdg, zed, logs
 }:
 
 buildDunePackage rec {
   pname = "utop";
 
-  version = "2.13.1";
+  version = "2.15.0";
   propagatedBuildInputs = [ findlib lambda-term xdg zed logs ];
 
   minimalOCamlVersion = "4.11";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "sha256-sE7Co5TRpqKKeURMWPZuq3e390QB9HFKpubxwhJab/0=";
+    url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tar.gz";
+    hash = "sha256-dlneoKf3pbFuMAJO5oFEUXn4wPh2MOXNrlVCgNrNb6w=";
   };
 
   nativeBuildInputs = [ makeWrapper cppo ];

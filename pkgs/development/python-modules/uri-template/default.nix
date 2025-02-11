@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +18,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plinss";
     repo = "uri_template";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-38HFFqM6yfpsPrhIpE639ePy/NbLqKw7gbnE3y8sL3w=";
   };
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -32,14 +31,12 @@ buildPythonPackage rec {
     ${python.interpreter} test.py
   '';
 
-  pythonImportsCheck = [
-    "uri_template"
-  ];
+  pythonImportsCheck = [ "uri_template" ];
 
   meta = with lib; {
-    description = "An implementation of RFC 6570 URI Templates";
+    description = "Implementation of RFC 6570 URI Templates";
     homepage = "https://github.com/plinss/uri_template/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

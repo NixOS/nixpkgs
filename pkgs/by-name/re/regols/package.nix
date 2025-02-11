@@ -1,21 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "regols";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "kitagry";
     repo = "regols";
     rev = "v${version}";
-    hash = "sha256-2ZwmIlv3kJ26p15t7NvB9sX2GO+B3ypeNl50b7XA0Iw=";
+    hash = "sha256-1L9ehqTMN9KHlvE7FBccVAXA7f3NNsLXJaTkOChT8Xo=";
   };
 
-  vendorHash = "sha256-N6gtkZSNLXz3B961grM3xHzm7x4/kzcLkDOgiFLGp8U=";
+  vendorHash = "sha256-yJYWVQq6pbLPdmK4BVse6moMkurlmt6TBd6/vYM1xcU=";
 
   meta = with lib; {
     description = "OPA Rego language server";
+    mainProgram = "regols";
     homepage = "https://github.com/kitagry/regols";
+    changelog = "https://github.com/kitagry/regols/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ alias-dev ];
   };

@@ -1,22 +1,24 @@
-{ lib
-, python3
-, fetchPypi
-, copyDesktopItems
-, libsForQt5
-, makeDesktopItem
+{
+  lib,
+  python3,
+  fetchPypi,
+  copyDesktopItems,
+  libsForQt5,
+  makeDesktopItem,
 }:
 
 let
   # get rid of rec
   pname = "pyspread";
-  version = "2.2.2";
+  version = "2.3.1";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vbBu/dMXQf14F7qWvyHX5T8/AkjeZhaQt1eQ6Nidpsc=";
+    hash = "sha256-l6b02CIUqPnT16zqOWl6gDdAobkhiqBMFvT+R1Dvtek=";
   };
   inherit (libsForQt5)
     qtsvg
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
@@ -54,7 +56,11 @@ python3.pkgs.buildPythonApplication {
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
       comment = "A Python-oriented spreadsheet application";
-      categories = [ "Office" "Development" "Spreadsheet" ];
+      categories = [
+        "Office"
+        "Development"
+        "Spreadsheet"
+      ];
     })
   ];
 
@@ -64,7 +70,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = {
     homepage = "https://pyspread.gitlab.io/";
-    description = "A Python-oriented spreadsheet application";
+    description = "Python-oriented spreadsheet application";
     longDescription = ''
       pyspread is a non-traditional spreadsheet application that is based on and
       written in the programming language Python. The goal of pyspread is to be

@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, glib
-, glib-networking
-, libxml2
-, gtk3
-, libsoup
-, tzdata
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  glib-networking,
+  libxml2,
+  gtk3,
+  libsoup_2_4,
+  tzdata,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.26.2";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ylCoFYZlXPU6j5Z2a5zpCk0H7Q/hYr1eFdra3QBgx/Y=";
+    sha256 = "VUNz3rWzk7nYSydd0spmyaSi0ObskgRPq4qlPjAy0rU=";
   };
 
   strictDeps = true;
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_2_4
     tzdata
   ];
 

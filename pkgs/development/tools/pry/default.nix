@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "pry";
@@ -8,10 +12,10 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "pry";
 
   meta = with lib; {
-    description = "A Ruby runtime developer console and IRB alternative";
-    homepage    = "https://pryrepl.org";
-    license     = licenses.mit;
+    description = "Ruby runtime developer console and IRB alternative";
+    homepage = "https://pryrepl.org";
+    license = licenses.mit;
     maintainers = [ maintainers.tckmn ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

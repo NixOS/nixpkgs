@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
-  version = "1.9.17";
+  version = "1.9.20";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
     rev = "v${version}";
-    sha256 = "1qq45l1vxxa970cm0wjvgj0w88hd4vsisa85pf5i54yvfzf11sqw";
+    hash = "sha256-nEDvG2Q6uMYWyb49EKOZimkOfEavCjvfFgucwi3u64k=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib cups libpng libjpeg ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation SystemConfiguration ];
 
   # do not generate universal binary on Darwin
   # because it is not supported by Nix's clang
   postPatch = ''
-    substituteInPlace configure --replace "-arch x86_64 -arch arm64" ""
+    substituteInPlace configure --replace-fail "-arch x86_64 -arch arm64" ""
   '';
 
   passthru.tests = testers.testVersion {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://michaelrsweet.github.io/htmldoc";
     changelog   = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
     license     = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.unix;
 
     longDescription = ''

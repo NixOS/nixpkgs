@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -28,6 +29,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/facebook/create-react-app";
     license = lib.licenses.mit;
     mainProgram = "create-react-app";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

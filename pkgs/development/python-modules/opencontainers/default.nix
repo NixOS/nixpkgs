@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     sed -i "/pytest-runner/d" setup.py
   '';
 
-  passthru.optional-dependencies.reggie = [
-    requests
-  ];
+  optional-dependencies.reggie = [ requests ];
 
-  pythonImportsCheck = [
-    "opencontainers"
-  ];
+  pythonImportsCheck = [ "opencontainers" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.reggie;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.reggie;
 
   __darwinAllowLocalNetworking = true;
 
@@ -37,6 +32,6 @@ buildPythonPackage rec {
     description = "Python module for oci specifications";
     homepage = "https://github.com/vsoch/oci-python";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
   };
 }

@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, audiofile
-, libtiff
-, buildPackages
-, fetchpatch
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  audiofile,
+  libtiff,
+  buildPackages,
+  fetchpatch,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,11 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  propagatedBuildInputs = [ audiofile libtiff ];
+  propagatedBuildInputs = [
+    audiofile
+    libtiff
+  ];
 
   configureFlags = [
     # This flag is required to prevent linking error in the cross-compilation case.
@@ -42,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    description = "A portable and modular SIP User-Agent with audio and video support";
+    description = "Portable and modular SIP User-Agent with audio and video support";
     homepage = "https://github.com/freeswitch/spandsp";
     platforms = with lib.platforms; unix;
-    maintainers = with lib.maintainers; [ ajs124 misuzu ];
+    maintainers = with lib.maintainers; [ misuzu ];
     license = lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
   };

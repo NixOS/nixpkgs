@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gettext
-, pkg-config
-, wrapGAppsHook
-, sqlite
-, libpinyin
-, db
-, ibus
-, glib
-, gtk3
-, python3
-, lua
-, opencc
-, libsoup
-, json-glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  sqlite,
+  libpinyin,
+  db,
+  ibus,
+  glib,
+  gtk3,
+  python3,
+  lua,
+  opencc,
+  libsoup_3,
+  json-glib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.15.3";
+  version = "1.15.8";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
     rev = version;
-    hash = "sha256-6M4tgIpMQul3R8xI29vyPIWX0n6YItZhdVA8vT9FIRw=";
+    hash = "sha256-u21avBSSu/78tLoyFI9XGocC7rT/64L5HqQQj3Zg1Mc=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   configureFlags = [
@@ -46,15 +47,17 @@ stdenv.mkDerivation rec {
     glib
     sqlite
     libpinyin
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages (
+      pypkgs: with pypkgs; [
+        pygobject3
+        (toPythonModule ibus)
+      ]
+    ))
     gtk3
     db
     lua
     opencc
-    libsoup
+    libsoup_3
     json-glib
   ];
 
@@ -62,7 +65,10 @@ stdenv.mkDerivation rec {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ linsui ericsagnes ];
+    maintainers = with maintainers; [
+      linsui
+      ericsagnes
+    ];
     platforms = platforms.linux;
   };
 }

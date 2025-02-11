@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, tinydb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  tinydb,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eugene-eeo";
     repo = "tinyrecord";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mF4hpHuNyiQ5DurRnyLck5e/Vp26GCLkhD8eeSB4NYs=";
   };
 
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     tinydb
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "tinyrecord"
-  ];
+  pythonImportsCheck = [ "tinyrecord" ];
 
   meta = with lib; {
     description = "Transaction support for TinyDB";

@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, makeWrapper
-, llvm, libclang
-, flex
-, zlib
-, perlPackages
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  llvm,
+  libclang,
+  flex,
+  zlib,
+  perlPackages,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,29 +22,67 @@ stdenv.mkDerivation rec {
     sha256 = "2xwPEjln8k1iCwQM69UwAb89zwPkAPeFVqL/LhH+oGM=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper llvm.dev ];
-  buildInputs = [
-    # Ensure stdenv's CC is on PATH before clang-unwrapped
-    stdenv.cc
-    # Actual deps:
-    llvm libclang
-    flex zlib
-  ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
+  patches = [
+    # Port to LLVM 15
+    (fetchpatch {
+      url = "https://github.com/csmith-project/creduce/commit/e507cca4ccb32585c5692d49b8d907c1051c826c.patch";
+      hash = "sha256-jO5E85AvHcjlErbUhzuQDXwQkhQsXklcTMQfWBd09OU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/csmith-project/creduce/commit/8d56bee3e1d2577fc8afd2ecc03b1323d6873404.patch";
+      hash = "sha256-dRaBaJAYkvMyxKvfriOcg4D+4i6+6orZ85zws1AFx/s=";
+    })
+    # Port to LLVM 16
+    (fetchpatch {
+      url = "https://github.com/csmith-project/creduce/commit/8ab9a69caf13ce24172737e8bfd09de51a1ecb6a.patch";
+      hash = "sha256-gPNXxYHnsyUvXmC0CGtsulH2Fu/EMnDE4GdOYc0UbiQ=";
+    })
+  ];
 
-  # On Linux, c-reduce's preferred way to reason about
-  # the cpu architecture/topology is to use 'lscpu',
-  # so let's make sure it knows where to find it:
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace creduce/creduce_utils.pm --replace \
-      lscpu ${util-linux}/bin/lscpu
-  '';
+  postPatch =
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace "-std=c++11" "-std=c++17"
+    ''
+    # On Linux, c-reduce's preferred way to reason about
+    # the cpu architecture/topology is to use 'lscpu',
+    # so let's make sure it knows where to find it:
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace creduce/creduce_utils.pm --replace \
+        lscpu ${util-linux}/bin/lscpu
+    '';
+
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    llvm.dev
+  ];
+  buildInputs =
+    [
+      # Ensure stdenv's CC is on PATH before clang-unwrapped
+      stdenv.cc
+      # Actual deps:
+      llvm
+      libclang
+      flex
+      zlib
+    ]
+    ++ (with perlPackages; [
+      perl
+      ExporterLite
+      FileWhich
+      GetoptTabular
+      RegexpCommon
+      TermReadKey
+    ]);
 
   postInstall = ''
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"
   '';
 
   meta = with lib; {
-    description = "A C program reducer";
+    description = "C program reducer";
+    mainProgram = "creduce";
     homepage = "https://embed.cs.utah.edu/creduce";
     # Officially, the license is: https://github.com/csmith-project/creduce/blob/master/COPYING
     license = licenses.ncsa;
@@ -48,7 +93,7 @@ stdenv.mkDerivation rec {
       property.  It is intended for use by people who discover and report
       bugs in compilers and other tools that process C/C++ code.
     '';
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -1,21 +1,35 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+  nixosTests,
+}:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "postorius";
-  version = "1.3.8";
+  version = "1.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1mSt+PVx3xUJDc5JwrCmKiRNIDwbsjjbM2Fi5Sgz6h8=";
+    hash = "sha256-GmbIqO+03LgbUxJ1nTStXrYN3t2MfvzbeYRAipfTW1o=";
   };
 
-  propagatedBuildInputs = [ django-mailman3 readme_renderer ];
-  nativeCheckInputs = [ beautifulsoup4 vcrpy mock ];
+  propagatedBuildInputs = [
+    django-mailman3
+    readme-renderer
+  ] ++ readme-renderer.optional-dependencies.md;
+  nativeCheckInputs = [
+    beautifulsoup4
+    vcrpy
+    mock
+  ];
 
   # Tries to connect to database.
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) mailman; };
 
   meta = with lib; {
     homepage = "https://docs.mailman3.org/projects/postorius";

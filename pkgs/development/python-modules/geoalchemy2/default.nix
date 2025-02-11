@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, setuptools
-, setuptools-scm
-, shapely
-, sqlalchemy
-, alembic
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  sqlalchemy,
+  alembic,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.14.2";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,16 +22,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geoalchemy";
     repo = "geoalchemy2";
-    rev = "refs/tags/${version}";
-    hash = "sha256-C/F1hpL2DnzC4UPAGGFntlQlULCx5Ufzkw7EIrzRV7I=";
+    tag = version;
+    hash = "sha256-MxoX5WGJATIvzfeuHFqYGlnaxPNzvqD/v82Zm4Iav1g=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     sqlalchemy
     packaging
   ];
@@ -38,11 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     alembic
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.shapely;
-
-  env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  };
+  ] ++ optional-dependencies.shapely;
 
   disabledTestPaths = [
     # tests require live databases
@@ -60,11 +57,9 @@ buildPythonPackage rec {
     "tests/test_pickle.py"
   ];
 
-  pythonImportsCheck = [
-    "geoalchemy2"
-  ];
+  pythonImportsCheck = [ "geoalchemy2" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     shapely = [ shapely ];
   };
 

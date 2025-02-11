@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, gym
-, scipy
-, tqdm
-, joblib
-, dill
-, progressbar2
-, cloudpickle
-, click
-, pyzmq
-, tensorflow
-, mpi4py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  gym,
+  scipy,
+  tqdm,
+  joblib,
+  dill,
+  progressbar2,
+  cloudpickle,
+  click,
+  pyzmq,
+  tensorflow,
+  mpi4py,
 }:
 
 buildPythonPackage {
   pname = "baselines";
   version = "0.1.6"; # remember to manually adjust the rev
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";
@@ -45,15 +47,13 @@ buildPythonPackage {
     # Needed for the atari wrapper, but the gym-atari package is not supported
     # in nixos anyways. Since opencv-python is not currently packaged, we
     # disable it.
-    sed -ie '/opencv-python/d' setup.py
+    sed -i -e '/opencv-python/d' setup.py
   '';
 
   # fails to create a daemon, probably because of sandboxing
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "High-quality implementations of reinforcement learning algorithms";

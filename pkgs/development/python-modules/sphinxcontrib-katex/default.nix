@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  sphinx,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
-  version = "0.9.7";
-  format = "setuptools";
+  version = "0.9.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OmdUsc/JDhQeP3Pgg16vyCYtpfr+ekxnT6cI+rec69c=";
+    pname = "sphinxcontrib_katex";
+    inherit version;
+    hash = "sha256-MJqS2uJF28WE/36l+2VJcnuuleTlIAi3TSWdL9GtDew=";
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  build-system = [ setuptools ];
 
-  # There are no unit tests
-  doCheck = false;
+  dependencies = [ sphinx ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.katex"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "sphinxcontrib.katex" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 

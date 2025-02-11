@@ -1,40 +1,35 @@
-{ lib
-, async-timeout
-, bleak
-, bluetooth-adapters
-, dbus-fast
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytest-asyncio
+{
+  lib,
+  async-timeout,
+  bleak,
+  bluetooth-adapters,
+  dbus-fast,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "bleak-retry-connector";
-  version = "3.3.0";
-  format = "pyproject";
+  version = "3.8.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5yhr+W2ZSy/uSgmz23pyIKcoJ34h/eDsoyv+N9Hi36w=";
+    repo = "bleak-retry-connector";
+    tag = "v${version}";
+    hash = "sha256-Vkmn+CKQm+i+MRx12U6AmDGUyhtagoXbpeC/uou311o=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bleak_retry_connector --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     bleak
     bluetooth-adapters
@@ -43,6 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -53,14 +49,12 @@ buildPythonPackage rec {
     "test_establish_connection_without_dangerous_use_cached_services"
   ];
 
-  pythonImportsCheck = [
-    "bleak_retry_connector"
-  ];
+  pythonImportsCheck = [ "bleak_retry_connector" ];
 
   meta = with lib; {
     description = "Connector for Bleak Clients that handles transient connection failures";
     homepage = "https://github.com/bluetooth-devices/bleak-retry-connector";
-    changelog = "https://github.com/bluetooth-devices/bleak-retry-connector/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bluetooth-devices/bleak-retry-connector/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

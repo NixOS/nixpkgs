@@ -1,15 +1,19 @@
-{ pkgs, config, lib, ... }:
-
-with lib;
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.zmap;
-in {
+in
+{
   options.programs.zmap = {
-    enable = mkEnableOption (lib.mdDoc "ZMap");
+    enable = lib.mkEnableOption "ZMap, a network scanner designed for Internet-wide network surveys";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.zmap ];
 
     environment.etc."zmap/blacklist.conf".source = "${pkgs.zmap}/etc/zmap/blacklist.conf";

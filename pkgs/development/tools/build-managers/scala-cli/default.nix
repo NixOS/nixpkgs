@@ -1,13 +1,16 @@
-{ stdenv
-, coreutils
-, lib
-, installShellFiles
-, zlib
-, autoPatchelfHook
-, fetchurl
-, makeWrapper
-, callPackage
-, jre
+{
+  stdenv,
+  coreutils,
+  lib,
+  installShellFiles,
+  zlib,
+  autoPatchelfHook,
+  fetchurl,
+  makeWrapper,
+  callPackage,
+  jre,
+  testers,
+  scala-cli,
 }:
 
 let
@@ -19,16 +22,24 @@ let
 in
 stdenv.mkDerivation {
   inherit pname version;
-  nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs =
     assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
       scala-cli requires Java 17 or newer, but ${jre.name} is ${jre.version}
     '';
-    [ coreutils zlib stdenv.cc.cc ];
+    [
+      coreutils
+      zlib
+      stdenv.cc.cc
+    ];
   src =
     let
-      asset = assets."${stdenv.hostPlatform.system}" or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+      asset =
+        assets."${stdenv.hostPlatform.system}"
+          or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
     in
     fetchurl {
       url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
@@ -52,19 +63,21 @@ stdenv.mkDerivation {
   # We need to call autopatchelf before generating completions
   dontAutoPatchelf = true;
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    autoPatchelf $out
-  '' + ''
-    # hack to ensure the completion function looks right
-    # as $0 is used to generate the compdef directive
-    mkdir temp
-    cp $out/bin/.scala-cli-wrapped temp/scala-cli
-    PATH="./temp:$PATH"
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      autoPatchelf $out
+    ''
+    + ''
+      # hack to ensure the completion function looks right
+      # as $0 is used to generate the compdef directive
+      mkdir temp
+      cp $out/bin/.scala-cli-wrapped temp/scala-cli
+      PATH="./temp:$PATH"
 
-    installShellCompletion --cmd scala-cli \
-      --bash <(scala-cli completions bash) \
-      --zsh <(scala-cli completions zsh)
-  '';
+      installShellCompletion --cmd scala-cli \
+        --bash <(scala-cli completions bash) \
+        --zsh <(scala-cli completions zsh)
+    '';
 
   meta = with lib; {
     homepage = "https://scala-cli.virtuslab.org";
@@ -72,9 +85,18 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
-    maintainers = [ maintainers.kubukoz ];
+    mainProgram = "scala-cli";
+    maintainers = with maintainers; [
+      kubukoz
+      agilesteel
+    ];
     inherit platforms;
   };
 
   passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };
+
+  passthru.tests.version = testers.testVersion {
+    package = scala-cli;
+    command = "scala-cli version --offline";
+  };
 }

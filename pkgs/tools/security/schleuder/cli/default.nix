@@ -1,7 +1,8 @@
-{ lib
-, bundlerApp
-, ruby
-, bundlerUpdateScript
+{
+  lib,
+  bundlerApp,
+  ruby,
+  bundlerUpdateScript,
 }:
 
 bundlerApp {
@@ -20,7 +21,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "schleuder-cli";
 
   meta = with lib; {
-    description = "A command line tool to create and manage schleuder-lists";
+    description = "Command line tool to create and manage schleuder-lists";
     longDescription = ''
       Schleuder-cli enables creating, configuring, and deleting lists,
       subscriptions, keys, etc. It uses the Schleuder API, provided by

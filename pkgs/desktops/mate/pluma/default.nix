@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, perl
-, itstool
-, isocodes
-, enchant
-, libxml2
-, python3
-, adwaita-icon-theme
-, gtksourceview4
-, libpeas
-, mate-desktop
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  perl,
+  itstool,
+  isocodes,
+  enchant,
+  libxml2,
+  python3,
+  gtksourceview4,
+  libpeas,
+  mate-desktop,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pluma";
-  version = "1.26.1";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "WVns49cRjhBmWfZNIC0O0XY60Qu7ul0qzYy/ui45lPE=";
+    sha256 = "qorflYk0UJOlDjCyft5KeKJCHRcnwn9GX8h8Q1llodQ=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     itstool
     perl
     pkg-config
-    wrapGAppsHook
+    python3.pkgs.wrapPython
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    adwaita-icon-theme
     enchant
     gtksourceview4
     libpeas
@@ -47,12 +47,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  pythonPath = with python3.pkgs; [
+    pycairo
+    six
+  ];
+
+  postFixup = ''
+    buildPythonPath "$pythonPath"
+    patchPythonScript $out/lib/pluma/plugins/snippets/Snippet.py
+  '';
+
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Powerful text editor for the MATE desktop";
+    mainProgram = "pluma";
     homepage = "https://mate-desktop.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };

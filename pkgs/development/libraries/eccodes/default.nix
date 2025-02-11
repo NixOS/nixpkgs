@@ -1,26 +1,27 @@
-{ fetchurl
-, lib
-, stdenv
-, cmake
-, netcdf
-, openjpeg
-, libaec
-, libpng
-, gfortran
-, perl
-, enablePython ? false
-, pythonPackages
-, enablePosixThreads ? false
-, enableOpenMPThreads ? false
+{
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  netcdf,
+  openjpeg,
+  libaec,
+  libpng,
+  gfortran,
+  perl,
+  enablePython ? false,
+  pythonPackages,
+  enablePosixThreads ? false,
+  enableOpenMPThreads ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.32.1";
+  version = "2.39.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "sha256-rSrBvzZXex01xKdxtNF0oG9SKh5e9sH15Tp5X7Ykhj4=";
+    hash = "sha256-DE10ZwCsxJr5yHiSXxsmvdQkQ/98LXxnbesrq7aEevs=";
   };
 
   postPatch = ''
@@ -38,7 +39,11 @@ stdenv.mkDerivation rec {
       --replace '$'{CMAKE_INSTALL_PREFIX}/'$'{INSTALL_INCLUDE_DIR} '$'{'$'{PROJECT_NAME}_FULL_INSTALL_INCLUDE_DIR}
   '';
 
-  nativeBuildInputs = [ cmake gfortran perl ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    perl
+  ];
 
   buildInputs = [
     netcdf
@@ -69,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };

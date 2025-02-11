@@ -1,23 +1,29 @@
-{ lib
-, fetchFromGitHub
-, buildGo121Module
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  athens,
 }:
-buildGo121Module rec {
+
+buildGoModule rec {
   pname = "athens";
-  version = "0.12.1";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "gomods";
-    repo = pname;
+    repo = "athens";
     rev = "v${version}";
-    hash = "sha256-m75Ut1UVwz7uWneBwPxUL7aPOXIpy6YPqIXMwczHOpY=";
+    hash = "sha256-6NBdif8rQ1aj4nTYXhrWyErzRv0q8WpIheRnb2FCnkU=";
   };
 
-  vendorHash = "sha256-zK4EE242Gbgew33oxAUNxylKdhRdPhqP0Hrpu4sYiFg=";
+  vendorHash = "sha256-W65lQYGrRg8LwFERj5MBOPFAn2j+FE7ep4ANuAGmfgM=";
 
-  CGO_ENABLED = "0";
-  ldflags = [ "-s" "-w" "-buildid=" "-X github.com/gomods/athens/pkg/build.version=${version}" ];
-  flags = [ "-trimpath" ];
+  env.CGO_ENABLED = "0";
+  ldflags = [
+    "-s"
+    "-X github.com/gomods/athens/pkg/build.version=${version}"
+  ];
 
   subPackages = [ "cmd/proxy" ];
 
@@ -25,13 +31,20 @@ buildGo121Module rec {
     mv $out/bin/proxy $out/bin/athens
   '';
 
+  passthru = {
+    tests.version = testers.testVersion { package = athens; };
+  };
+
   meta = with lib; {
-    description = "A Go module datastore and proxy";
+    description = "Go module datastore and proxy";
     homepage = "https://github.com/gomods/athens";
     changelog = "https://github.com/gomods/athens/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "athens";
-    maintainers = with maintainers; [ katexochen malt3 ];
+    maintainers = with maintainers; [
+      katexochen
+      malt3
+    ];
     platforms = platforms.unix;
   };
 }

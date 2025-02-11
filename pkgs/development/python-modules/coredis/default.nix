@@ -1,19 +1,21 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, pympler
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, redis
-, wrapt
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  pympler,
+  pytest-asyncio,
+  pytest-lazy-fixtures,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "coredis";
-  version = "4.16.0";
+  version = "4.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-7qpoNc5/z8/EKtGWULrPPwfH9swYe9TqqUL+zxrFQSk=";
+    tag = version;
+    hash = "sha256-QZKE6/pkHdhpl3uBaY+tOg7FzUzzfxYzkqbEY+HhAYQ=";
   };
 
   postPatch = ''
@@ -41,11 +43,10 @@ buildPythonPackage rec {
     pytestCheckHook
     redis
     pytest-asyncio
+    pytest-lazy-fixtures
   ];
 
-  pythonImportsCheck = [
-    "coredis"
-  ];
+  pythonImportsCheck = [ "coredis" ];
 
   pytestFlagsArray = [
     # All other tests require Docker
@@ -56,9 +57,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An async redis client with support for redis server, cluster & sentinel";
+    description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
-    changelog = "https://github.com/alisaifee/coredis/blob/${src.rev}/HISTORY.rst";
+    changelog = "https://github.com/alisaifee/coredis/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
     maintainers = teams.wdz.members;
   };

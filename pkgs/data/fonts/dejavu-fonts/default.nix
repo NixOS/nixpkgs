@@ -1,10 +1,17 @@
-{ fetchFromGitHub, lib, stdenv, fontforge, perl, perlPackages }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  fontforge,
+  perl,
+  perlPackages,
+}:
 
 let
   version = "2.37";
 
   meta = {
-    description = "A typeface family based on the Bitstream Vera fonts";
+    description = "Typeface family based on the Bitstream Vera fonts";
     longDescription = ''
       The DejaVu fonts are TrueType fonts based on the BitStream Vera fonts,
       providing more styles and with greater coverage of Unicode.
@@ -26,12 +33,17 @@ let
   full-ttf = stdenv.mkDerivation {
     pname = "dejavu-fonts-full";
     inherit version;
-    nativeBuildInputs = [fontforge perl perlPackages.IOString perlPackages.FontTTF];
+    nativeBuildInputs = [
+      fontforge
+      perl
+      perlPackages.IOString
+      perlPackages.FontTTF
+    ];
 
     src = fetchFromGitHub {
       owner = "dejavu-fonts";
       repo = "dejavu-fonts";
-      rev = "version_${lib.replaceStrings ["."] ["_"] version}";
+      rev = "version_${lib.replaceStrings [ "." ] [ "_" ] version}";
       sha256 = "1xknlg2h287dx34v2n5r33bpcl4biqf0cv7nak657rjki7s0k4bk";
     };
 
@@ -52,7 +64,8 @@ let
     '';
     inherit meta;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "dejavu-fonts";
   inherit version;
   buildCommand = ''

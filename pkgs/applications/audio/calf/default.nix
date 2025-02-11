@@ -1,30 +1,62 @@
-{ lib, stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk2, libjack2, ladspaH , libglade, lv2, pkg-config }:
-
+{
+  lib,
+  stdenv,
+  cairo,
+  expat,
+  fftwSinglePrec,
+  fluidsynth,
+  glib,
+  gtk2,
+  libjack2,
+  ladspaH,
+  libglade,
+  lv2,
+  pkg-config,
+  fetchFromGitHub,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "calf";
-  version = "0.90.3";
+  version = "0.90.4";
 
-  src = fetchurl {
-    url = "https://calf-studio-gear.org/files/${pname}-${version}.tar.gz";
-    sha256 = "17x4hylgq4dn9qycsdacfxy64f5cv57n2qgkvsdp524gnqzw4az3";
+  src = fetchFromGitHub {
+    owner = "calf-studio-gear";
+    repo = "calf";
+    tag = version;
+    hash = "sha256-E9H2YG1HAhIN+zJxDKIJTkJapbNz8h9dfd5YfZp9Zp0=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    cairo expat fftwSinglePrec fluidsynth glib gtk2 libjack2 ladspaH
-    libglade lv2
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  meta = with lib; {
+  buildInputs = [
+    cairo
+    expat
+    fftwSinglePrec
+    fluidsynth
+    glib
+    gtk2
+    libjack2
+    ladspaH
+    libglade
+    lv2
+  ];
+
+  meta = {
     homepage = "https://calf-studio-gear.org";
-    description = "A set of high quality open source audio plugins for musicians";
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    description = "Set of high quality open source audio plugins for musicians";
+    license = lib.licenses.lgpl2;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    mainProgram = "calfjackhost";
   };
 }

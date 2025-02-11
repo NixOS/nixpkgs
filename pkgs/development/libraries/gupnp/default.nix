@@ -1,30 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch2
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_45
-, glib
-, gssdp
-, libsoup
-, libxml2
-, libuuid
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch2,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  docbook_xml_dtd_45,
+  glib,
+  gssdp,
+  libsoup_2_4,
+  libxml2,
+  libuuid,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
   version = "1.4.4";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -75,7 +78,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glib
     gssdp
-    libsoup
+    libsoup_2_4
     libxml2
   ];
 
@@ -84,7 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Bail out! ERROR:../tests/test-bugs.c:168:test_on_timeout: code should not be reached
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -95,7 +98,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.gupnp.org/";
-    description = "An implementation of the UPnP specification";
+    description = "Implementation of the UPnP specification";
+    mainProgram = "gupnp-binding-tool-1.2";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
   };

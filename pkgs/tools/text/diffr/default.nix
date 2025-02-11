@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "diffr";
@@ -11,9 +17,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ylZE2NtTXbGqsxE72ylEQCacTyxBO+/WgvEpoXd5OZI=";
   };
 
-  cargoHash = "sha256-RmQu55OnKfeuDGcJrfjhMKnxDatdowkvh3Kh4N8I8Sg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pbGfoEk8peWBA0F0EdiAJJtan74O5RD6TmNJUTY2ijA=";
 
-  buildInputs = (lib.optional stdenv.isDarwin Security);
+  buildInputs = (lib.optional stdenv.hostPlatform.isDarwin Security);
 
   preCheck = ''
     export DIFFR_TESTS_BINARY_PATH=$releaseDir/diffr
@@ -21,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Yet another diff highlighting tool";
+    mainProgram = "diffr";
     homepage = "https://github.com/mookid/diffr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ davidtwco ];

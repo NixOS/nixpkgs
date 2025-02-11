@@ -1,22 +1,23 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fixplate
-, tasty
-, tasty-hunit
-, tasty-th
-, streamly
-, mtl
-, path
-, pretty-terminal
-, text
-, base
-, aeson
-, path-io
-, cmdargs
-, containers
-, hnix
-, bytestring
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fixplate,
+  tasty,
+  tasty-hunit,
+  tasty-th,
+  streamly,
+  mtl,
+  path,
+  pretty-terminal,
+  text,
+  base,
+  aeson,
+  path-io,
+  cmdargs,
+  containers,
+  hnix,
+  bytestring,
 }:
 
 mkDerivation rec {
@@ -33,13 +34,30 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   libraryHaskellDepends = [ fixplate ];
-  executableHaskellDepends = [ streamly mtl path pretty-terminal text base aeson cmdargs containers hnix bytestring path-io ];
-  testHaskellDepends = [ tasty tasty-hunit tasty-th ];
+  executableHaskellDepends = [
+    streamly
+    mtl
+    path
+    pretty-terminal
+    text
+    base
+    aeson
+    cmdargs
+    containers
+    hnix
+    bytestring
+    path-io
+  ];
+  testHaskellDepends = [
+    tasty
+    tasty-hunit
+    tasty-th
+  ];
 
   description = "Linter for Nix(pkgs), based on hnix";
   homepage = "https://github.com/Synthetica9/nix-linter";
   license = lib.licenses.bsd3;
-  maintainers = [ lib.maintainers.marsam ];
+  maintainers = [ ];
 
   # doesn't build on ghc92
   hydraPlatforms = lib.platforms.none;

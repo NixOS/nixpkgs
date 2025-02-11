@@ -1,41 +1,48 @@
-{ lib
-, mkDerivation
-, fetchurl
-, autoPatchelfHook
-, pkg-config
-, curl
-, ffmpeg
-, openssl
-, qtbase
-, zlib
+{
+  autoPatchelfHook,
+  common-updater-scripts,
+  curl,
+  fetchurl,
+  ffmpeg,
+  lib,
+  mkDerivation,
+  openssl,
+  pkg-config,
+  qtbase,
+  rubyPackages,
+  writeShellApplication,
+  zlib,
 
-, withJava ? true
-, jre_headless
+  withJava ? true,
+  jre_headless,
 }:
 
 let
-  version = "1.17.5";
+  version = "1.17.8";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "ywCcMfaWAeL2bjFZJaCa0XW60EHyfFCW17Bt1QBN8E8=";
+    hash = "sha256-jg9UdDDZr+7ZdseJtb7N+y7Prhyq3hLo4+EZpzRxcEE=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "/C9LDcUxF6tJkn2aQV+nMILRpK5H3wxOMMxHEMTC/CI=";
+    hash = "sha256-knUrzj/J+Xk5N1tg0q9iIXT+hqStkkjL3Yc2Yp5tvIo=";
   };
-
-in mkDerivation {
+in
+mkDerivation {
   pname = "makemkv";
   inherit version;
 
-  srcs = [ src_bin src_oss ];
+  srcs = [
+    src_bin
+    src_oss
+  ];
 
   sourceRoot = "makemkv-oss-${version}";
 
@@ -43,18 +50,25 @@ in mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    pkg-config
+  ];
 
-  buildInputs = [ ffmpeg openssl qtbase zlib ];
+  buildInputs = [
+    ffmpeg
+    openssl
+    qtbase
+    zlib
+  ];
 
   runtimeDependencies = [ (lib.getLib curl) ];
 
   qtWrapperArgs =
     let
       binPath = lib.makeBinPath [ jre_headless ];
-    in lib.optionals withJava [
-      "--prefix PATH : ${binPath}"
-    ];
+    in
+    lib.optionals withJava [ "--prefix PATH : ${binPath}" ];
 
   installPhase = ''
     runHook preInstall
@@ -72,6 +86,35 @@ in mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    srcs = {
+      inherit src_bin src_oss;
+    };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-makemkv";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        rubyPackages.nokogiri
+      ];
+      text = ''
+        get_version() {
+          # shellcheck disable=SC2016
+          curl --fail --silent 'https://forum.makemkv.com/forum/viewtopic.php?f=3&t=224' \
+            | nokogiri -e 'puts $_.css("head title").first.text.match(/\bMakeMKV (\d+\.\d+\.\d+) /)[1]'
+        }
+        oldVersion=${lib.escapeShellArg version}
+        newVersion=$(get_version)
+        if [[ $oldVersion == "$newVersion" ]]; then
+          echo "$0: New version same as old version, nothing to do." >&2
+          exit
+        fi
+        update-source-version makemkv "$newVersion" --source-key=passthru.srcs.src_bin
+        update-source-version makemkv "$newVersion" --source-key=passthru.srcs.src_oss --ignore-same-version
+      '';
+    });
+  };
+
   meta = with lib; {
     description = "Convert blu-ray and dvd to mkv";
     longDescription = ''
@@ -84,9 +127,12 @@ in mkDerivation {
       expiration date.
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = [ licenses.unfree licenses.lgpl21 ];
+    license = [
+      licenses.unfree
+      licenses.lgpl21
+    ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [ jchw ];
   };
 }

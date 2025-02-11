@@ -1,5 +1,5 @@
 diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
-index 53200bd5..ef8a781d 100644
+index d948beff..9b3f9ffb 100644
 --- a/tools/yabridgectl/src/config.rs
 +++ b/tools/yabridgectl/src/config.rs
 @@ -22,6 +22,7 @@ use serde_derive::{Deserialize, Serialize};
@@ -58,10 +58,10 @@ index 53200bd5..ef8a781d 100644
                          ));
                      }
 diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
-index 8dcd7dc8..bddca534 100644
+index e66ef0da..bfe9c8bf 100644
 --- a/tools/yabridgectl/src/main.rs
 +++ b/tools/yabridgectl/src/main.rs
-@@ -135,7 +135,7 @@ fn main() -> Result<()> {
+@@ -134,7 +134,7 @@ fn main() -> Result<()> {
                          .long_help(
                              "Path to the directory containing \
                               'libyabridge-chainloader-{clap,vst2,vst3}.so'. If this is not set, \
@@ -69,4 +69,4 @@ index 8dcd7dc8..bddca534 100644
 +                             then yabridgectl will look through 'NIX_PROFILES' and \
                               '~/.local/share/yabridge' by default.",
                          )
-                         .validator(validate_path)
+                         .value_parser(parse_directory_path)

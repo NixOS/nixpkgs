@@ -9,32 +9,40 @@
 # For further information please consult the documentation in the
 # upstream repository at: https://github.com/tazjin/journaldriver/
 
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib; let cfg = config.services.journaldriver;
-in {
+with lib;
+let
+  cfg = config.services.journaldriver;
+in
+{
   options.services.journaldriver = {
     enable = mkOption {
-      type        = types.bool;
-      default     = false;
-      description = lib.mdDoc ''
+      type = types.bool;
+      default = false;
+      description = ''
         Whether to enable journaldriver to forward journald logs to
         Stackdriver Logging.
       '';
     };
 
     logLevel = mkOption {
-      type        = types.str;
-      default     = "info";
-      description = lib.mdDoc ''
+      type = types.str;
+      default = "info";
+      description = ''
         Log level at which journaldriver logs its own output.
       '';
     };
 
     logName = mkOption {
-      type        = with types; nullOr str;
-      default     = null;
-      description = lib.mdDoc ''
+      type = with types; nullOr str;
+      default = null;
+      description = ''
         Configures the name of the target log in Stackdriver Logging.
         This option can be set to, for example, the hostname of a
         machine to improve the user experience in the logging
@@ -43,9 +51,9 @@ in {
     };
 
     googleCloudProject = mkOption {
-      type        = with types; nullOr str;
-      default     = null;
-      description = lib.mdDoc ''
+      type = with types; nullOr str;
+      default = null;
+      description = ''
         Configures the name of the Google Cloud project to which to
         forward journald logs.
 
@@ -55,9 +63,9 @@ in {
     };
 
     logStream = mkOption {
-      type        = with types; nullOr str;
-      default     = null;
-      description = lib.mdDoc ''
+      type = with types; nullOr str;
+      default = null;
+      description = ''
         Configures the name of the Stackdriver Logging log stream into
         which to write journald entries.
 
@@ -67,9 +75,9 @@ in {
     };
 
     applicationCredentials = mkOption {
-      type        = with types; nullOr path;
-      default     = null;
-      description = lib.mdDoc ''
+      type = with types; nullOr path;
+      default = null;
+      description = ''
         Path to the service account private key (in JSON-format) used
         to forward log entries to Stackdriver Logging on non-GCP
         instances.
@@ -83,13 +91,14 @@ in {
   config = mkIf cfg.enable {
     systemd.services.journaldriver = {
       description = "Stackdriver Logging journal forwarder";
-      script      = "${pkgs.journaldriver}/bin/journaldriver";
-      after       = [ "network-online.target" ];
-      wantedBy    = [ "multi-user.target" ];
+      script = "${pkgs.journaldriver}/bin/journaldriver";
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        Restart        = "always";
-        DynamicUser    = true;
+        Restart = "always";
+        DynamicUser = true;
 
         # This directive lets systemd automatically configure
         # permissions on /var/lib/journaldriver, the directory in
@@ -101,10 +110,10 @@ in {
       };
 
       environment = {
-        RUST_LOG                       = cfg.logLevel;
-        LOG_NAME                       = cfg.logName;
-        LOG_STREAM                     = cfg.logStream;
-        GOOGLE_CLOUD_PROJECT           = cfg.googleCloudProject;
+        RUST_LOG = cfg.logLevel;
+        LOG_NAME = cfg.logName;
+        LOG_STREAM = cfg.logStream;
+        GOOGLE_CLOUD_PROJECT = cfg.googleCloudProject;
         GOOGLE_APPLICATION_CREDENTIALS = cfg.applicationCredentials;
       };
     };

@@ -1,7 +1,7 @@
-{ lib
-, lua
-, makeSetupHook
-, makeWrapper
+{
+  lua,
+  makeSetupHook,
+  makeWrapper,
 }:
 
 # defined in trivial-builders
@@ -11,6 +11,4 @@ makeSetupHook {
   propagatedBuildInputs = [ makeWrapper ];
   substitutions.executable = lua.interpreter;
   substitutions.lua = lua;
-  substitutions.LuaPathSearchPaths = lib.escapeShellArgs lua.LuaPathSearchPaths;
-  substitutions.LuaCPathSearchPaths = lib.escapeShellArgs lua.LuaPathSearchPaths;
 } ./wrap.sh

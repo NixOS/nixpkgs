@@ -1,17 +1,32 @@
-{ buildDotnetGlobalTool, lib }:
+{
+  buildDotnetGlobalTool,
+  lib,
+  testers,
+}:
 
-buildDotnetGlobalTool {
+buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.5.0";
+  version = "4.24.0";
 
-  nugetSha256 = "sha256-KeNkS2fuZFnI8WVqSpIRjo2eA+XKuHLLpMIzDzgqXdg=";
+  nugetHash = "sha256-ERewWqfEyyZKpHFFALpMGJT0fDWywBYY5buU/wTZZTg=";
+
+  passthru.tests = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    # the version is written with an escape sequence for colour, and I couldn't
+    # find a way to disable it
+    version = "[37m${finalAttrs.version}";
+  };
 
   meta = with lib; {
     description = "Fable is an F# to JavaScript compiler";
+    mainProgram = "fable";
     homepage = "https://github.com/fable-compiler/fable";
     changelog = "https://github.com/fable-compiler/fable/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ anpin mdarocha ];
+    maintainers = with maintainers; [
+      anpin
+      mdarocha
+    ];
   };
-}
+})

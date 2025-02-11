@@ -1,24 +1,41 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libuuid
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  DarwinTools,
+  fetchurl,
+  libuuid,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbutl";
-  version = "0.15.0";
+  version = "0.17.0";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
-    sha256 = "sha256-yzs6DFt6peJPPaMQ3rtx+kiYu7H+bUuShcdnEN90WWI=";
+    hash = "sha256-sFqaEf6s2rF1YcZjw5J6oY5ol5PbO9vy6NseKjrvTvs=";
   };
 
-  nativeBuildInputs = [
-    build2
+  nativeBuildInputs =
+    [
+      build2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      DarwinTools
+    ];
+
+  patches = [
+    # Install missing .h files needed by dependers
+    # https://github.com/build2/libbutl/issues/5
+    ./install-h-files.patch
   ];
 
   strictDeps = true;
@@ -27,7 +44,7 @@ stdenv.mkDerivation rec {
   # but especially important when bootstrapping
   disallowedReferences = [ build2 ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libbutl/uuid-linux.cxx \
       --replace '"libuuid.so' '"${lib.getLib libuuid}/lib/libuuid.so'
   '';

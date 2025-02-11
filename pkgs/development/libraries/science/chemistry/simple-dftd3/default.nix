@@ -1,35 +1,48 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gfortran
-, cmake
-, mctc-lib
-, mstore
-, toml-f
-, blas
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  meson,
+  ninja,
+  pkg-config,
+  mctc-lib,
+  mstore,
+  toml-f,
+  blas,
 }:
 
 assert !blas.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "simple-dftd3";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "dftd3";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-dfXiKKCGJ69aExSKpVC3Bp//COy256R9PDyxCNmDsfo=";
+    tag = "v${version}";
+    hash = "sha256-c4xctcMcPQ70ippqbwtinygmnZ5en6ZGF5/v0ZWtzys=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [ mctc-lib mstore toml-f blas ];
+  buildInputs = [
+    mctc-lib
+    mstore
+    toml-f
+    blas
+  ];
 
-  postInstall = ''
-    substituteInPlace $out/lib/pkgconfig/s-dftd3.pc \
-      --replace "''${prefix}/" ""
-  '';
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
   preCheck = ''
@@ -38,9 +51,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Reimplementation of the DFT-D3 program";
-    license = with licenses; [ lgpl3Only gpl3Only ];
+    mainProgram = "s-dftd3";
+    license = with licenses; [
+      lgpl3Only
+      gpl3Only
+    ];
     homepage = "https://github.com/dftd3/simple-dftd3";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
 }

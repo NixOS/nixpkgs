@@ -1,39 +1,68 @@
-{ lib
-, nix-update-script
-, python3
-, fetchPypi
+{
+  lib,
+  nix-update-script,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "3.26.4";
-  format = "setuptools";
+  version = "6.7.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "oelint_adv";
-    hash = "sha256-Gb4BQl/CJDpvzvwBDFWYUGvMQBbZZSMCDQh4xbOzp6Y=";
+  src = fetchFromGitHub {
+    owner = "priv-kweihmann";
+    repo = "oelint-adv";
+    tag = version;
+    hash = "sha256-rJ1M5YRXcKbDEGhy0G+N2dGD3sx8KFUfLJSLthYQNtU=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     anytree
+    argcomplete
     colorama
     oelint-parser
     urllib3
   ];
 
-  pythonRelaxDeps = [ "urllib3" ];
-  pythonImportsCheck = [ "oelint_adv" ];
+  nativeCheckInputs = with python3Packages; [
+    pytest-cov-stub
+    pytest-forked
+    pytest-xdist
+    pytestCheckHook
+  ];
 
-  # Fail to run inside the code the build.
-  doCheck = false;
+  disabledTests = [
+    # requires network access
+    "TestClassOelintVarsHomepagePing"
+  ];
+
+  pythonRelaxDeps = [
+    "argcomplete"
+    "urllib3"
+  ];
+
+  pythonImportsCheck = [ "oelint_adv" ];
 
   passthru.updateScript = nix-update-script { };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--random-order-bucket=global" "" \
+      --replace-fail "--random-order"               "" \
+      --replace-fail "--force-sugar"                "" \
+      --replace-fail "--old-summary"                ""
+  '';
+
   meta = with lib; {
     description = "Advanced bitbake-recipe linter";
+    mainProgram = "oelint-adv";
     homepage = "https://github.com/priv-kweihmann/oelint-adv";
-    changelog = "https://github.com/priv-kweihmann/oelint-adv/releases/tag/v${version}";
+    changelog = "https://github.com/priv-kweihmann/oelint-adv/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ otavio ];
   };

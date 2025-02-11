@@ -1,22 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, freezegun
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  freezegun,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ftputil";
-  version = "5.0.4";
+  version = "5.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aInbhkndINm21ApsXw+EzPNAp9rB4L/A8AJAkPwq+zM=";
+    hash = "sha256-6eYtP9MH75xS5Dsz/ZJ1n8lMBNi1F4+F9kGxg5BtQ1M=";
   };
 
   nativeCheckInputs = [
@@ -32,14 +32,12 @@ buildPythonPackage rec {
     "test_upload"
   ];
 
-  pythonImportsCheck = [
-    "ftputil"
-  ];
+  pythonImportsCheck = [ "ftputil" ];
 
   meta = with lib; {
     description = "High-level FTP client library (virtual file system and more)";
     homepage = "https://ftputil.sschwarzer.net/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

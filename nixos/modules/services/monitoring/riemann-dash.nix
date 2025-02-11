@@ -1,45 +1,47 @@
-{ config, pkgs, lib, ... }:
-
-with pkgs;
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.riemann-dash;
 
-  conf = writeText "config.rb" ''
+  conf = pkgs.writeText "config.rb" ''
     riemann_base = "${cfg.dataDir}"
     config.store[:ws_config] = "#{riemann_base}/config/config.json"
     ${cfg.config}
   '';
 
-  launcher = writeScriptBin "riemann-dash" ''
+  launcher = pkgs.writeScriptBin "riemann-dash" ''
     #!/bin/sh
     exec ${pkgs.riemann-dash}/bin/riemann-dash ${conf}
   '';
 
-in {
+in
+{
 
   options = {
 
     services.riemann-dash = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the riemann-dash dashboard daemon.
         '';
       };
-      config = mkOption {
-        type = types.lines;
-        description = lib.mdDoc ''
+      config = lib.mkOption {
+        type = lib.types.lines;
+        description = ''
           Contents added to the end of the riemann-dash configuration file.
         '';
       };
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/riemann-dash";
-        description = lib.mdDoc ''
+        description = ''
           Location of the riemann-base dir. The dashboard configuration file is
           is stored to this directory. The directory is created automatically on
           service start, and owner is set to the riemanndash user.
@@ -49,7 +51,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.groups.riemanndash.gid = config.ids.gids.riemanndash;
 
@@ -59,9 +61,10 @@ in {
       group = "riemanndash";
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - riemanndash riemanndash - -"
-    ];
+    systemd.tmpfiles.settings."10-riemanndash".${cfg.dataDir}.d = {
+      user = "riemanndash";
+      group = "riemanndash";
+    };
 
     systemd.services.riemann-dash = {
       wantedBy = [ "multi-user.target" ];

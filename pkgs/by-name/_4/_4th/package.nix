@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,7 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+W6nTNsqrf3Dvr+NbSz3uJdrXVbBI3OHR5v/rs7en+M=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     # Fix install manual; report this patch to upstream
@@ -43,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://thebeez.home.xs4all.nl/4tH/index.html";
-    description = "A portable Forth compiler";
+    description = "Portable Forth compiler";
     license = lib.licenses.lgpl3Plus;
     mainProgram = "4th";
     maintainers = with lib.maintainers; [ AndersonTorres ];

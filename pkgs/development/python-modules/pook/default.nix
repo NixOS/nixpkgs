@@ -1,47 +1,63 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, furl
-, jsonschema
-, nose
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  furl,
+  hatchling,
+  jsonschema,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-pook,
+  pytestCheckHook,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.1.1";
-  disabled = pythonOlder "3.5";
+  version = "2.1.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "h2non";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nLeJAAsJUKFAetZSAQmOtXP+3ZRHvCTFAzycSkK+kiI=";
+    repo = "pook";
+    tag = "v${version}";
+    hash = "sha256-DDHaKsye28gxyorILulrLRBy/B9zV673jeVZ85uPZAo=";
   };
 
+  nativeBuildInputs = [ hatchling ];
+
   propagatedBuildInputs = [
-    aiohttp
     furl
     jsonschema
-    requests
     xmltodict
   ];
 
   nativeCheckInputs = [
-    nose
+    pytest-asyncio
+    pytest-httpbin
+    pytest-pook
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pook"
+  pythonImportsCheck = [ "pook" ];
+
+  disabledTests = [
+    # furl compat issue
+    "test_headers_not_matching"
+  ];
+
+  disabledTestPaths = [
+    # Don't test integrations
+    "tests/integration/"
+    # Tests require network access
+    "tests/unit/interceptors/"
   ];
 
   meta = with lib; {
-    description = "HTTP traffic mocking and testing made simple in Python";
+    description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";
     changelog = "https://github.com/h2non/pook/blob/v${version}/History.rst";
     license = with licenses; [ mit ];

@@ -42,8 +42,10 @@ The first steps to all these are the same:
     will be safer to use the `nixos-*` channels instead:
 
     ```ShellSession
-    $ nix-channel --add https://nixos.org/channels/nixos-version nixpkgs
+    $ nix-channel --add https://nixos.org/channels/nixos-<version> nixpkgs
     ```
+
+    Where `<version>` corresponds to the latest version available on [channels.nixos.org](https://channels.nixos.org/).
 
     You may want to throw in a `nix-channel --update` for good measure.
 
@@ -89,12 +91,14 @@ The first steps to all these are the same:
     want to add something like this to your `configuration.nix`:
 
     ```nix
-    boot.loader.grub.extraEntries = ''
-      menuentry "Ubuntu" {
-        search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
-        configfile "($ubuntu)/boot/grub/grub.cfg"
-      }
-    '';
+    {
+      boot.loader.grub.extraEntries = ''
+        menuentry "Ubuntu" {
+          search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
+          configfile "($ubuntu)/boot/grub/grub.cfg"
+        }
+      '';
+    }
     ```
 
     (You can find the appropriate UUID for your partition in
@@ -121,7 +125,7 @@ The first steps to all these are the same:
     :::
 
     ```ShellSession
-    $ sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt
+    $ sudo PATH="$PATH" `which nixos-install` --root /mnt
     ```
 
     Again, please refer to the `nixos-install` step in
@@ -156,6 +160,18 @@ The first steps to all these are the same:
     Refer to the `nixos-generate-config` step in
     [](#sec-installation) for more information.
 
+    ::: {.note}
+    On [UEFI](https://en.wikipedia.org/wiki/UEFI) systems, check that your `/etc/nixos/hardware-configuration.nix` did the right thing with the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition).
+    In NixOS, by default, both [systemd-boot](https://systemd.io/BOOT/) and [grub](https://www.gnu.org/software/grub/index.html) expect it to be mounted on `/boot`.
+    However, the configuration generator bases its [](#opt-fileSystems) configuration on the current mount points at the time it is run.
+    If the current system and NixOS's bootloader configuration don't agree on where the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition) is to be mounted, you'll need to manually alter the mount point in `hardware-configuration.nix` before building the system closure.
+    :::
+
+    ::: {.note}
+    The lustrate process will not work if the [](#opt-boot.initrd.systemd.enable) option is set to `true`.
+    If you want to use this option, wait until after the first boot into the NixOS system to enable it and rebuild.
+    :::
+
     You'll likely want to set a root password for your first boot using
     the configuration files because you won't have a chance to enter a
     password until after you reboot. You can initialize the root password
@@ -164,7 +180,9 @@ The first steps to all these are the same:
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
-    users.users.root.initialHashedPassword = "";
+    {
+      users.users.root.initialHashedPassword = "";
+    }
     ```
 
 1.  Build the NixOS closure and install it in the `system` profile:
@@ -200,8 +218,7 @@ The first steps to all these are the same:
         line)
 
     ::: {.note}
-    Support for `NIXOS_LUSTRATE` was added in NixOS 16.09. The act of
-    "lustrating" refers to the wiping of the existing distribution.
+    The act of "lustrating" refers to the wiping of the existing distribution.
     Creating `/etc/NIXOS_LUSTRATE` can also be used on NixOS to remove
     all mutable files from your root partition (anything that's not in
     `/nix` or `/boot` gets "lustrated" on the next boot.
@@ -226,25 +243,45 @@ The first steps to all these are the same:
     $ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
     ```
 
-1.  Finally, move the `/boot` directory of your current distribution out
-    of the way (the lustrate process will take care of the rest once you
-    reboot, but this one must be moved out now because NixOS needs to
-    install its own boot files:
+1.  Finally, install NixOS's boot system, backing up the current boot system's files in the process.
+
+    The details of this step can vary depending on the bootloader configuration in NixOS and the bootloader in use by the current system.
+
+    The commands below should work for:
+
+    - [BIOS](https://en.wikipedia.org/wiki/BIOS) systems.
+
+    - [UEFI](https://en.wikipedia.org/wiki/UEFI) systems where both the current system and NixOS mount the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition) on `/boot`.
+      Both [systemd-boot](https://systemd.io/BOOT/) and [grub](https://www.gnu.org/software/grub/index.html) expect this by default in NixOS, but other distributions vary.
 
     ::: {.warning}
-    Once you complete this step, your current distribution will no
-    longer be bootable! If you didn't get all the NixOS configuration
-    right, especially those settings pertaining to boot loading and root
-    partition, NixOS may not be bootable either. Have a USB rescue
-    device ready in case this happens.
+    Once you complete this step, your current distribution will no longer be bootable!
+    If you didn't get all the NixOS configuration right, especially those settings pertaining to boot loading and root partition, NixOS may not be bootable either.
+    Have a USB rescue device ready in case this happens.
+    :::
+
+    ::: {.warning}
+    On [UEFI](https://en.wikipedia.org/wiki/UEFI) systems, anything on the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition) will be removed by these commands, such as other coexisting OS's bootloaders.
     :::
 
     ```ShellSession
-    $ sudo mv -v /boot /boot.bak &&
-    sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+    $ sudo mkdir /boot.bak && sudo mv /boot/* /boot.bak &&
+    sudo NIXOS_INSTALL_BOOTLOADER=1 /nix/var/nix/profiles/system/bin/switch-to-configuration boot
     ```
 
     Cross your fingers, reboot, hopefully you should get a NixOS prompt!
+
+    In other cases, most commonly where the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition) of the current system is instead mounted on `/boot/efi`, the goal is to:
+
+    - Make sure `/boot` (and the [EFI System Partition](https://en.wikipedia.org/wiki/EFI_system_partition), if mounted elsewhere) are mounted how the NixOS configuration would mount them.
+
+    - Clear them of files related to the current system, backing them up outside of `/boot`.
+      NixOS will move the backups into `/old-root` along with everything else when it first boots.
+
+    - Instruct the NixOS closure built earlier to install its bootloader with:
+      ```ShellSession
+      sudo NIXOS_INSTALL_BOOTLOADER=1 /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+      ```
 
 1.  If for some reason you want to revert to the old distribution,
     you'll need to boot on a USB rescue disk and do something along

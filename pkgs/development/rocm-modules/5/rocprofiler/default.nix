@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, symlinkJoin
-, substituteAll
-, cmake
-, clang
-, clr
-, rocm-core
-, rocm-thunk
-, rocm-device-libs
-, roctracer
-, rocdbgapi
-, rocm-smi
-, hsa-amd-aqlprofile-bin
-, numactl
-, libpciaccess
-, libxml2
-, elfutils
-, mpi
-, systemd
-, gtest
-, python3Packages
-, gpuTargets ? clr.gpuTargets
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  symlinkJoin,
+  substituteAll,
+  cmake,
+  clang,
+  clr,
+  rocm-core,
+  rocm-thunk,
+  rocm-device-libs,
+  roctracer,
+  rocdbgapi,
+  rocm-smi,
+  hsa-amd-aqlprofile-bin,
+  numactl,
+  libpciaccess,
+  libxml2,
+  elfutils,
+  mpi,
+  systemd,
+  gtest,
+  python3Packages,
+  gpuTargets ? clr.gpuTargets,
 }:
 
 let
@@ -44,12 +45,13 @@ let
       rm -rf $out/nix-support
     '';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-1s/7C9y+73ADLF/17Vepw0pZNVtYnKoP24GdwKc9X2Y=";
@@ -127,10 +129,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm-Developer-Tools/rocprofiler";
+    homepage = "https://github.com/ROCm/rocprofiler";
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor clr.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor clr.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

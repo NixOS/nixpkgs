@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # Tests are not shipped and there are no GitHub tags
   doCheck = false;
 
-  pythonImportsCheck = [
-    "policyuniverse"
-  ];
+  pythonImportsCheck = [ "policyuniverse" ];
 
   meta = with lib; {
     description = "Parse and Process AWS IAM Policies, Statements, ARNs and wildcards";

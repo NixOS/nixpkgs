@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper, dpkg, jre_headless, openssl, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  dpkg,
+  jre_headless,
+  openssl,
+  nixosTests,
+}:
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.3-59-g5c48e421";
+  version = "2.3-204-g26cd91bd";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "yFFvdDOdG6/VloQV4VWBr2rv7dh7dNiL6D4cep2QIxE=";
+    sha256 = "bh0WhNPpJcWz+SUWbUn6r5y9EnwKrslTsAPP2Ot9wKY=";
   };
 in
 stdenv.mkDerivation {
@@ -13,9 +22,10 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -43,7 +53,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A WebRTC compatible video router";
+    description = "WebRTC compatible video router";
     longDescription = ''
       Jitsi Videobridge is an XMPP server component that allows for multiuser video communication.
       Unlike the expensive dedicated hardware videobridges, Jitsi Videobridge does not mix the video

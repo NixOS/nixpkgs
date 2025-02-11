@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, openems
-, csxcad
-, numpy
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  openems,
+  csxcad,
+  numpy,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "python-csxcad";
   version = csxcad.version;
+  format = "setuptools";
 
   src = csxcad.src;
 
   sourceRoot = "${src.name}/python";
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = [
     openems
@@ -27,7 +26,11 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  setupPyBuildFlags = [ "-I${openems}/include" "-L${openems}/lib" "-R${openems}/lib" ];
+  setupPyBuildFlags = [
+    "-I${openems}/include"
+    "-L${openems}/lib"
+    "-R${openems}/lib"
+  ];
 
   meta = with lib; {
     description = "Python interface to CSXCAD";

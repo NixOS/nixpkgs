@@ -1,39 +1,50 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cargo
-, gettext
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk4
-, gdk-pixbuf
-, libadwaita
-, Foundation
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  buildPackages,
+  cargo,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  gdk-pixbuf,
+  libadwaita,
+  Foundation,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-obfuscate";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Obfuscate";
-    rev = version;
-    hash = "sha256-aUhzact437V/bSsG2Ddu2mC03LbyXFg+hJiuGy5NQfQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-/Plvvn1tle8t/bsPcsamn5d81CqnyGCyGYPF6j6U5NI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-HUQvdCmzjdmuJGDLtC/86yzbRimLzx+XbW29f+Ua48w=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-Llgn+dYNKZ9Mles9f9Xor+GZoCCQ0cERkXz4MicZglY=";
+  };
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
+    # The vendored gettext does not build with clang 16.
+    GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
   nativeBuildInputs = [
@@ -49,14 +60,20 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    gdk-pixbuf
-    libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      gdk-pixbuf
+      libadwaita
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+    ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Censor private information";
@@ -64,6 +81,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     mainProgram = "obfuscate";
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [ fgaz ] ++ lib.teams.gnome-circle.members;
   };
-}
+})

@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, flit
+{
+  lib,
+  buildPythonPackage,
+  flit,
 }:
 
 buildPythonPackage rec {
@@ -10,7 +11,7 @@ buildPythonPackage rec {
 
   inherit (flit) src patches;
 
-  sourceRoot = "source/flit_core";
+  postPatch = "cd flit_core";
 
   # Tests are run in the "flit" package.
   doCheck = false;

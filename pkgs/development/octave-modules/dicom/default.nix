@@ -1,17 +1,18 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, gdcm
-, cmake
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  gdcm,
+  cmake,
 }:
 
 buildOctavePackage rec {
   pname = "dicom";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-0qNqjpJWWBA0N5IgjV0e0SPQlCvbzIwnIgaWo+2wKw0=";
+    sha256 = "sha256-erUZudOknymgGprqUhCaSvN/WlmWZ1qgH8HDYrNOg2I=";
   };
 
   nativeBuildInputs = [

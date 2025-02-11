@@ -1,19 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, base64
-, omd
-, menhir
-, ott
-, linenoise
-, dune-site
-, pprint
-, makeWrapper
-, lem
-, z3
-, linksem
-, num
-, yojson
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  base64,
+  omd,
+  menhir,
+  ott,
+  linenoise,
+  dune-site,
+  pprint,
+  makeWrapper,
+  lem,
+  linksem,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -54,12 +53,12 @@ buildDunePackage rec {
   # This doesnt work in this case, as sail includes multiple packages in the same source tree
   buildPhase = ''
     runHook preBuild
-    dune build --release ''${enableParallelBuild:+-j $NIX_BUILD_CORES}
+    dune build --release ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
   checkPhase = ''
     runHook preCheck
-    dune runtest ''${enableParallelBuild:+-j $NIX_BUILD_CORES}
+    dune runtest ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postCheck
   '';
   installPhase = ''
@@ -73,7 +72,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/rems-project/sail";
-    description = "A language for describing the instruction-set architecture (ISA) semantics of processors";
+    description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd2;
   };

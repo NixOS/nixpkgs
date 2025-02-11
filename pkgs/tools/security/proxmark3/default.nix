@@ -1,37 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, gcc-arm-embedded
-, readline
-, bzip2
-, openssl
-, jansson
-, whereami
-, lua
-, lz4
-, Foundation
-, AppKit
-, withGui ? true, wrapQtAppsHook, qtbase
-, withPython ? true, python3
-, withBlueshark ? false, bluez5
-, withGeneric ? false
-, withSmall ? false
-, withoutFunctions ? []
-, hardwarePlatform ? if withGeneric then "PM3GENERIC" else "PM3RDV4"
-, hardwarePlatformExtras ? lib.optionalString withBlueshark "BTADDON"
-, standalone ? "LF_SAMYRUN"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gcc-arm-embedded,
+  readline,
+  bzip2,
+  openssl,
+  jansson,
+  gd,
+  whereami,
+  lua,
+  lz4,
+  Foundation,
+  AppKit,
+  withGui ? true,
+  wrapQtAppsHook,
+  qtbase,
+  withPython ? true,
+  python3,
+  withBlueshark ? false,
+  bluez5,
+  withGeneric ? false,
+  withSmall ? false,
+  withoutFunctions ? [ ],
+  hardwarePlatform ? if withGeneric then "PM3GENERIC" else "PM3RDV4",
+  hardwarePlatformExtras ? lib.optionalString withBlueshark "BTADDON",
+  standalone ? "LF_SAMYRUN",
 }:
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proxmark3";
-  version = "4.17511";
+  version = "4.19552";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
-    rev = "v${version}";
-    hash = "sha256-L842Hvdy3M+k67IPiWMcxxpuD0ggCF7j6TDs8YdISZ4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5Rlw5QlceQGiIuVFNZhyrszCdG+idFo8Vvps46VJSlE=";
   };
 
   patches = [
@@ -54,27 +60,35 @@ stdenv.mkDerivation rec {
     pkg-config
     gcc-arm-embedded
   ] ++ lib.optional withGui wrapQtAppsHook;
-  buildInputs = [
-    readline
-    bzip2
-    openssl
-    jansson
-    lz4
-    whereami
-    lua
-  ] ++ lib.optional withGui qtbase
+  buildInputs =
+    [
+      readline
+      bzip2
+      openssl
+      jansson
+      gd
+      lz4
+      whereami
+      lua
+    ]
+    ++ lib.optional withGui qtbase
     ++ lib.optional withPython python3
     ++ lib.optional withBlueshark bluez5
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation AppKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      AppKit
+    ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "UDEV_PREFIX=${placeholder "out"}/etc/udev/rules.d"
-    "PLATFORM=${hardwarePlatform}"
-    "PLATFORM_EXTRAS=${hardwarePlatformExtras}"
-    "STANDALONE=${standalone}"
-    "USE_BREW=0"
-  ] ++ lib.optional withSmall "PLATFORM_SIZE=256"
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "UDEV_PREFIX=${placeholder "out"}/etc/udev/rules.d"
+      "PLATFORM=${hardwarePlatform}"
+      "PLATFORM_EXTRAS=${hardwarePlatformExtras}"
+      "STANDALONE=${standalone}"
+      "USE_BREW=0"
+    ]
+    ++ lib.optional withSmall "PLATFORM_SIZE=256"
     ++ map (x: "SKIP_${x}=1") withoutFunctions;
   enableParallelBuilding = true;
 
@@ -82,7 +96,11 @@ stdenv.mkDerivation rec {
     description = "Client for proxmark3, powerful general purpose RFID tool";
     homepage = "https://github.com/RfidResearchGroup/proxmark3";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nyanotech emilytrau ];
+    maintainers = with maintainers; [
+      nyanotech
+      emilytrau
+    ];
     platforms = platforms.unix;
+    mainProgram = "pm3";
   };
-}
+})

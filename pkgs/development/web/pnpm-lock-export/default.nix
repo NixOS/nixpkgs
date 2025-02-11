@@ -1,4 +1,8 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 buildNpmPackage rec {
   pname = "pnpm-lock-export";
   version = "unstable-2023-07-31";
@@ -23,7 +27,8 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "A utility for converting pnpm-lock.yaml to other lockfile formats";
+    description = "Utility for converting pnpm-lock.yaml to other lockfile formats";
+    mainProgram = "pnpm-lock-export";
     homepage = "https://github.com/cvent/pnpm-lock-export";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];

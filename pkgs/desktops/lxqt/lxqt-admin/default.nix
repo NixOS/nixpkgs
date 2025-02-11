@@ -1,47 +1,50 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtx11extras
-, qttools
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, polkit-qt
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  polkit-qt-1,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-admin";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-wPK3TMBC359GnisjpdY2zU+Jnvr7Hdzb6r+HuUQC3mo=";
+    hash = "sha256-7RyPUv/M8mMoRO+SopFuru+bY9ZwnKz2BkiLz1cW/wg=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtx11extras
-    qtsvg
     kwindowsystem
     liblxqt
     libqtxdg
-    polkit-qt
+    polkit-qt-1
+    qtsvg
+    qtwayland
   ];
 
   postPatch = ''
     for f in lxqt-admin-{time,user}/CMakeLists.txt; do
-      substituteInPlace $f --replace \
+      substituteInPlace $f --replace-fail \
         "\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}" \
         "$out/share/polkit-1/actions"
     done

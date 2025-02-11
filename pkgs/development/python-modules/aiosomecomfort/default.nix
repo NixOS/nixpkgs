@@ -1,38 +1,34 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, prettytable
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  prettytable,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiosomecomfort";
-  version = "0.0.24";
+  version = "0.0.32";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mkmer";
     repo = "AIOSomecomfort";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+kAObq8tbTO6Qlb+/93mF6K+gEHd33TofHug5f+zl+4=";
+    tag = version;
+    hash = "sha256-5hWnKv5ZOfPvBfDQ/0mUAYbPtjMFd1/RdriQ1APIXXg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     prettytable
   ];
 
-  pythonImportsCheck = [
-    "aiosomecomfort"
-  ];
+  pythonImportsCheck = [ "aiosomecomfort" ];
 
   # Tests only run on Windows, due to WindowsSelectorEventLoopPolicy
   doCheck = false;

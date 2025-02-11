@@ -1,5 +1,18 @@
-{ mkDerivation, lib, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw,
-  libpulseaudio, alsa-lib, hamlib, libv4l, fftwFloat }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  qtbase,
+  qmake,
+  openjpeg,
+  pkg-config,
+  fftw,
+  libpulseaudio,
+  alsa-lib,
+  hamlib,
+  libv4l,
+  fftwFloat,
+}:
 
 mkDerivation rec {
   version = "9.5.8";
@@ -15,8 +28,16 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ qtbase openjpeg fftw libpulseaudio alsa-lib hamlib libv4l
-                  fftwFloat ];
+  buildInputs = [
+    qtbase
+    openjpeg
+    fftw
+    libpulseaudio
+    alsa-lib
+    hamlib
+    libv4l
+    fftwFloat
+  ];
 
   postInstall = ''
     # Install desktop icon
@@ -26,6 +47,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based slow-scan TV and fax";
+    mainProgram = "qsstv";
     homepage = "http://users.telenet.be/on4qz/";
     platforms = platforms.linux;
     license = lib.licenses.gpl3;

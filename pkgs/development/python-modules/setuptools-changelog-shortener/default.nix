@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, tomli
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fschulze";
     repo = "setuptools-changelog-shortener";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-K8oVcX40K5j2CwQnulK55HykkEXAmOiUg4mZPg5T+YI=";
   };
 

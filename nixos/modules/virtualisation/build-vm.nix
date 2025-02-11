@@ -1,4 +1,9 @@
-{ config, extendModules, lib, ... }:
+{
+  config,
+  extendModules,
+  lib,
+  ...
+}:
 let
 
   inherit (lib)
@@ -11,13 +16,15 @@ let
 
   vmVariantWithBootLoader = vmVariant.extendModules {
     modules = [
-      ({ config, ... }: {
-        _file = "nixos/default.nix##vmWithBootLoader";
-        virtualisation.useBootLoader = true;
-        virtualisation.useEFIBoot =
-          config.boot.loader.systemd-boot.enable ||
-          config.boot.loader.efi.canTouchEfiVariables;
-      })
+      (
+        { config, ... }:
+        {
+          _file = "nixos/default.nix##vmWithBootLoader";
+          virtualisation.useBootLoader = true;
+          virtualisation.useEFIBoot =
+            config.boot.loader.systemd-boot.enable || config.boot.loader.efi.canTouchEfiVariables;
+        }
+      )
     ];
   };
 in
@@ -25,20 +32,20 @@ in
   options = {
 
     virtualisation.vmVariant = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm`.
       '';
       inherit (vmVariant) type;
-      default = {};
+      default = { };
       visible = "shallow";
     };
 
     virtualisation.vmVariantWithBootLoader = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm-with-bootloader`.
       '';
       inherit (vmVariantWithBootLoader) type;
-      default = {};
+      default = { };
       visible = "shallow";
     };
 

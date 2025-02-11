@@ -1,36 +1,58 @@
-{ fetchFromGitHub
-, lib
-, cmake
-, mkDerivation
-, libxcb
-, qtbase
-, qtsvg
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  cmake,
+  libxcb,
+  qtbase,
+  qtsvg,
+  wrapQtAppsHook,
+  procps,
 }:
 
-mkDerivation rec {
-   pname = "spotify-qt";
-   version = "3.9";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "spotify-qt";
+  version = "3.12";
 
-   src = fetchFromGitHub {
-      owner = "kraxarn";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-8rLpasgXiaL2KpGnYMQdNN2ayjcSkmz5hDkNBnKNWHk=";
-   };
+  src = fetchFromGitHub {
+    owner = "kraxarn";
+    repo = "spotify-qt";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j9g2fq12gsue0pc/fLoCAtDlwwlbCVJ65kxPiTJTqvk=";
+  };
 
-   buildInputs = [ libxcb qtbase qtsvg ];
+  postPatch = ''
+    substituteInPlace src/spotifyclient/helper.cpp \
+      --replace-fail /usr/bin/ps ${lib.getExe' procps "ps"}
+  '';
 
-   nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    libxcb
+    qtbase
+    qtsvg
+  ];
 
-   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=" ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-   installFlags = [ "DESTDIR=$(out)" ];
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "") ];
 
-   meta = with lib; {
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/spotify-qt.app $out/Applications
+    ln $out/Applications/spotify-qt.app/Contents/MacOS/spotify-qt $out/bin/spotify-qt
+  '';
+
+  meta = with lib; {
     description = "Lightweight unofficial Spotify client using Qt";
+    mainProgram = "spotify-qt";
     homepage = "https://github.com/kraxarn/spotify-qt";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ iivusly ];
     platforms = platforms.unix;
-   };
-}
+  };
+})

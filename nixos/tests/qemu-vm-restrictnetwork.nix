@@ -2,13 +2,17 @@ import ./make-test-python.nix ({
   name = "qemu-vm-restrictnetwork";
 
   nodes = {
-    unrestricted = { config, pkgs, ... }: {
-      virtualisation.restrictNetwork = false;
-    };
+    unrestricted =
+      { config, pkgs, ... }:
+      {
+        virtualisation.restrictNetwork = false;
+      };
 
-    restricted = { config, pkgs, ... }: {
-      virtualisation.restrictNetwork = true;
-    };
+    restricted =
+      { config, pkgs, ... }:
+      {
+        virtualisation.restrictNetwork = true;
+      };
   };
 
   testScript = ''
@@ -21,6 +25,8 @@ import ./make-test-python.nix ({
 
     else:
       start_all()
+      unrestricted.systemctl("start network-online.target")
+      restricted.systemctl("start network-online.target")
       unrestricted.wait_for_unit("network-online.target")
       restricted.wait_for_unit("network-online.target")
 
@@ -32,5 +38,5 @@ import ./make-test-python.nix ({
       # 10.0.2.2 is the gateway mapping to the host's loopback interface.
       unrestricted.succeed("curl -s http://10.0.2.2:8000")
       restricted.fail("curl -s http://10.0.2.2:8000")
-    '';
+  '';
 })

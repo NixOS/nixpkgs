@@ -1,29 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, setuptools
-, sip
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  sip,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.15.2";
-  format = "pyproject";
+  version = "1.17.2";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "PyQt-builder";
+    pname = "pyqt_builder";
     inherit version;
-    hash = "sha256-dGz+g8A+v/RFjUeKHAZxR5Dvk+RY7NWii8KDe6yI63Q=";
+    hash = "sha256-zvngareMFHI1peRpHmJXyWPpPCI1/j2x/jjJLxGXdZY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [ packaging sip ];
+  dependencies = [
+    packaging
+    sip
+  ];
 
   pythonImportsCheck = [ "pyqtbuild" ];
 
@@ -32,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PEP 517 compliant build system for PyQt";
-    homepage = "https://pypi.org/project/PyQt-builder/";
+    homepage = "https://github.com/Python-PyQt/PyQt-builder";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nrdxp ];
   };

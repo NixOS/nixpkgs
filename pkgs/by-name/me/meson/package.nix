@@ -1,33 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, coreutils
-, darwin
-, libxcrypt
-, ninja
-, pkg-config
-, python3
-, substituteAll
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  coreutils,
+  darwin,
+  libblocksruntime,
+  llvmPackages,
+  libxcrypt,
+  openldap,
+  ninja,
+  pkg-config,
+  python3,
+  substituteAll,
+  zlib,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation OpenGL;
+  inherit (darwin.apple_sdk.frameworks)
+    AppKit
+    Cocoa
+    Foundation
+    LDAP
+    OpenAL
+    OpenGL
+    ;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.2.3";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dgYYz3tQDG6Z4eE77WO2dXdardxVzzGaFLQ5znPcTlw=";
+    tag = version;
+    hash = "sha256-t0JItqEbf2YqZnu5mVsCO9YGzB7WlCfsIwi76nHJ/WI=";
   };
 
   patches = [
+    # Nixpkgs cmake uses NIXPKGS_CMAKE_PREFIX_PATH for the search path
+    ./000-nixpkgs-cmake-prefix-path.patch
+
     # In typical distributions, RPATH is only needed for internal libraries so
     # meson removes everything else. With Nix, the locations of libraries
     # are not as predictable, therefore we need to keep them in the RPATH.
@@ -66,15 +79,8 @@ python3.pkgs.buildPythonApplication rec {
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
 
-    # Fix passing multiple --define-variable arguments to pkg-config.
-    # https://github.com/mesonbuild/meson/pull/10670
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
-      hash = "sha256-GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
-      excludes = [
-        "docs/yaml/objects/dep.yaml"
-      ];
-    })
+    # This edge case is explicitly part of meson but is wrong for nix
+    ./007-freebsd-pkgconfig-path.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -88,41 +94,64 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
   ];
 
-  checkInputs = [
-    zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    OpenGL
-  ];
+  checkInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+      LDAP
+      OpenAL
+      OpenGL
+      openldap
+    ]
+    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
+      # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+      llvmPackages.openmp
+      # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+      libblocksruntime
+    ];
 
-  checkPhase = lib.concatStringsSep "\n" ([
-    "runHook preCheck"
-    ''
-      patchShebangs 'test cases'
-      substituteInPlace \
-        'test cases/native/8 external program shebang parsing/script.int.in' \
-          --replace /usr/bin/env ${coreutils}/bin/env
-    ''
-  ]
-  # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') [
-    # requires git, creating cyclic dependency
-    ''test cases/common/66 vcstag''
-    # requires glib, creating cyclic dependency
-    ''test cases/linuxlike/6 subdir include order''
-    ''test cases/linuxlike/9 compiler checks with dependencies''
-    # requires static zlib, see #66461
-    ''test cases/linuxlike/14 static dynamic linkage''
-    # Nixpkgs cctools does not have bitcode support.
-    ''test cases/osx/7 bitcode''
-  ])
-  ++ [
-    ''HOME="$TMPDIR" python ./run_project_tests.py''
-    "runHook postCheck"
-  ]);
+  checkPhase = lib.concatStringsSep "\n" (
+    [
+      "runHook preCheck"
+      ''
+        patchShebangs 'test cases'
+        substituteInPlace \
+          'test cases/native/8 external program shebang parsing/script.int.in' \
+          'test cases/common/274 customtarget exe for test/generate.py' \
+            --replace /usr/bin/env ${coreutils}/bin/env
+      ''
+    ]
+    # Remove problematic tests
+    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+      [
+        # requires git, creating cyclic dependency
+        ''test cases/common/66 vcstag''
+        # requires glib, creating cyclic dependency
+        ''test cases/linuxlike/6 subdir include order''
+        ''test cases/linuxlike/9 compiler checks with dependencies''
+        # requires static zlib, see #66461
+        ''test cases/linuxlike/14 static dynamic linkage''
+        # Nixpkgs cctools does not have bitcode support.
+        ''test cases/osx/7 bitcode''
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # requires llvmPackages.openmp, creating cyclic dependency
+        ''test cases/common/184 openmp''
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # pch doesn't work quite right on FreeBSD, I think
+        ''test cases/common/13 pch''
+      ]
+    ))
+    ++ [
+      ''HOME="$TMPDIR" python ./run_project_tests.py''
+      "runHook postCheck"
+    ]
+  );
 
   postInstall = ''
     installShellCompletion --zsh data/shell-completions/zsh/_meson
@@ -148,7 +177,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://mesonbuild.com";
-    description = "An open source, fast and friendly build system made in Python";
+    description = "Open source, fast and friendly build system made in Python";
+    mainProgram = "meson";
     longDescription = ''
       Meson is an open source build system meant to be both extremely fast, and,
       even more importantly, as user friendly as possible.
@@ -159,7 +189,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ qyliss ];
     inherit (python3.meta) platforms;
   };
 }

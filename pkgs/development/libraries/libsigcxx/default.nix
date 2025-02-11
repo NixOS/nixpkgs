@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gnome }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gnome,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsigc++";
@@ -9,7 +17,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qdvuMjNR0Qm3ruB0qcuJyj57z4rY7e8YUfTPNZvVCEM=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
 
   doCheck = true;
 
@@ -24,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libsigcplusplus.github.io/libsigcplusplus/";
-    description = "A typesafe callback system for standard C++";
+    description = "Typesafe callback system for standard C++";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };

@@ -3,6 +3,7 @@
   pkgs ? import ../.. { inherit system config; },
   debug ? false,
   enableUnfree ? false,
+  enableKvm ? false,
   use64bitGuest ? true
 }:
 
@@ -97,7 +98,6 @@ let
     cfg = (import ../lib/eval-config.nix {
       system = if use64bitGuest then "x86_64-linux" else "i686-linux";
       modules = [
-        ../modules/profiles/minimal.nix
         (testVMConfig vmName vmScript)
       ];
     }).config;
@@ -340,7 +340,7 @@ let
     testExtensionPack.vmFlags = enableExtensionPackVMFlags;
   };
 
-  mkVBoxTest = useExtensionPack: vms: name: testScript: makeTest {
+  mkVBoxTest = vboxHostConfig: vms: name: testScript: makeTest {
     name = "virtualbox-${name}";
 
     nodes.machine = { lib, config, ... }: {
@@ -349,14 +349,23 @@ let
         vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
-      virtualisation.qemu.options = ["-cpu" "kvm64,svm=on,vmx=on"];
-      virtualisation.virtualbox.host.enable = true;
+
+      virtualisation.qemu.options = let
+        # IvyBridge is reasonably ancient to be compatible with recent
+        # Intel/AMD hosts and sufficient for the KVM flavor.
+        guestCpu = if config.virtualisation.virtualbox.host.enableKvm then "IvyBridge" else "kvm64";
+      in ["-cpu" "${guestCpu},svm=on,vmx=on"];
+
       test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
-      in lib.mkIf enableHardening (lib.singleton "vboxusers");
-      virtualisation.virtualbox.host.enableExtensionPack = useExtensionPack;
-      nixpkgs.config.allowUnfree = useExtensionPack;
+      in lib.mkIf enableHardening [ "vboxusers" ];
+
+      virtualisation.virtualbox.host = {
+        enable = true;
+      } // vboxHostConfig;
+
+      nixpkgs.config.allowUnfree = config.virtualisation.virtualbox.host.enableExtensionPack;
     };
 
     testScript = ''
@@ -390,7 +399,7 @@ let
     };
   };
 
-  unfreeTests = mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
+  unfreeTests = mapAttrs (mkVBoxTest { enableExtensionPack = true; } vboxVMsWithExtpack) {
     enable-extension-pack = ''
       create_vm_testExtensionPack()
       vbm("startvm testExtensionPack")
@@ -409,7 +418,24 @@ let
     '';
   };
 
-in mapAttrs (mkVBoxTest false vboxVMs) {
+  kvmTests = mapAttrs (mkVBoxTest {
+    enableKvm = true;
+
+    # Once the KVM version supports these, we can enable them.
+    addNetworkInterface = false;
+    enableHardening = false;
+  } vboxVMs) {
+    kvm-headless = ''
+      create_vm_headless()
+      machine.succeed(ru("VBoxHeadless --startvm headless >&2 & disown %1"))
+      wait_for_startup_headless()
+      wait_for_vm_boot_headless()
+      shutdown_vm_headless()
+      destroy_vm_headless()
+    '';
+  };
+
+in mapAttrs (mkVBoxTest {} vboxVMs) {
   simple-gui = ''
     # Home to select Tools, down to move to the VM, enter to start it.
     def send_vm_startup():
@@ -420,7 +446,7 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
 
     create_vm_simple()
     machine.succeed(ru("VirtualBox >&2 &"))
-    machine.wait_until_succeeds(ru("xprop -name 'Oracle VM VirtualBox Manager'"))
+    machine.wait_until_succeeds(ru("xprop -name 'Oracle VirtualBox Manager'"))
     machine.sleep(5)
     machine.screenshot("gui_manager_started")
     send_vm_startup()
@@ -519,4 +545,6 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     destroy_vm_test1()
     destroy_vm_test2()
   '';
-} // (optionalAttrs enableUnfree unfreeTests)
+}
+// (optionalAttrs enableKvm kvmTests)
+// (optionalAttrs enableUnfree unfreeTests)

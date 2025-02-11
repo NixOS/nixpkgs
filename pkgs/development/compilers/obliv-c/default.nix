@@ -1,12 +1,24 @@
-{ lib, stdenv, libgcrypt, fetchFromGitHub, ocamlPackages, perl }:
+{
+  lib,
+  stdenv,
+  libgcrypt,
+  fetchFromGitHub,
+  ocamlPackages,
+  perl,
+}:
 stdenv.mkDerivation rec {
   pname = "obliv-c";
 
   version = "0.0pre20210621";
 
   strictDeps = true;
-  nativeBuildInputs = [ perl ]
-  ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ]);
+  nativeBuildInputs =
+    [ perl ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+      ocamlbuild
+    ]);
   buildInputs = [ ocamlPackages.num ];
   propagatedBuildInputs = [ libgcrypt ];
   src = fetchFromGitHub {
@@ -42,9 +54,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A GCC wrapper that makes it easy to embed secure computation protocols inside regular C programs";
+    description = "GCC wrapper that makes it easy to embed secure computation protocols inside regular C programs";
     license = lib.licenses.bsd3;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
   };
 }

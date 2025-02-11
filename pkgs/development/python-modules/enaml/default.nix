@@ -1,22 +1,23 @@
-{ lib
-, atom
-, buildPythonPackage
-, bytecode
-, cppy
-, fetchFromGitHub
-, kiwisolver
-, pegen
-, ply
-, qtpy
-, setuptools
-, setuptools-scm
-, pythonOlder
-, sip
+{
+  lib,
+  atom,
+  buildPythonPackage,
+  bytecode,
+  cppy,
+  fetchFromGitHub,
+  kiwisolver,
+  pegen,
+  ply,
+  qtpy,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
+  sip,
 }:
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.17.0";
+  version = "0.18.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,11 +25,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-DYLDQ9QwdK/a8eY0bFX31UNgxm8FUOaeNAnisFcyFNI=";
+    tag = version;
+    hash = "sha256-XwBvPABg4DomI5JNuqaRTINsPgjn8h67rO/ZkSRQ39o=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

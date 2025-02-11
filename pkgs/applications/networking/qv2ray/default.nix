@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, symlinkJoin
-, qttools
-, cmake
-, clang_8
-, grpc
-, protobuf
-, openssl
-, pkg-config
-, c-ares
-, libGL
-, zlib
-, curl
-, v2ray
-, v2ray-geoip, v2ray-domain-list-community
-, assets ? [ v2ray-geoip v2ray-domain-list-community ]
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  symlinkJoin,
+  qttools,
+  cmake,
+  grpc,
+  protobuf_21,
+  openssl,
+  pkg-config,
+  c-ares,
+  libGL,
+  zlib,
+  curl,
+  v2ray,
+  v2ray-geoip,
+  v2ray-domain-list-community,
+  assets ? [
+    v2ray-geoip
+    v2ray-domain-list-community
+  ],
 }:
 
 mkDerivation rec {
@@ -31,7 +35,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optionals stdenv.isDarwin ''
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/platforms/macos.cmake \
       --replace \''${QV2RAY_QtX_DIR}/../../../bin/macdeployqt macdeployqt
   '';
@@ -58,7 +62,7 @@ mkDerivation rec {
     libGL
     zlib
     grpc
-    protobuf
+    protobuf_21
     openssl
     c-ares
   ];
@@ -68,17 +72,19 @@ mkDerivation rec {
     pkg-config
     qttools
     curl
-    # The default clang_7 will result in reproducible ICE.
-  ] ++ lib.optional (stdenv.isDarwin) clang_8;
+  ];
 
   meta = with lib; {
-    description = "An GUI frontend to v2ray";
+    description = "GUI frontend to v2ray";
     homepage = "https://github.com/Qv2ray/Qv2ray";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ poscat rewine ];
+    maintainers = with maintainers; [
+      poscat
+      rewine
+    ];
     platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "qv2ray";
   };
 }

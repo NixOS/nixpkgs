@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pass-update";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-update";
     rev = "v${version}";
-    sha256 = "0yx8w97jcp6lv7ad5jxqnj04csbrn2hhc4pskssxknw2sbvg4g6c";
+    sha256 = "sha256-NFdPnGMs8myiHufeHAQUNDUuvDzYeoWYZllI9+4HL+s=";
   };
 
   postPatch = ''
@@ -24,7 +28,11 @@ stdenv.mkDerivation rec {
     description = "Pass extension that provides an easy flow for updating passwords";
     homepage = "https://github.com/roddhjav/pass-update";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
+    maintainers = with maintainers; [
+      lovek323
+      fpletz
+      tadfisher
+    ];
     platforms = platforms.unix;
   };
 }

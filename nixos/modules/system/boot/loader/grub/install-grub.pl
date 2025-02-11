@@ -136,7 +136,6 @@ sub GetFs {
         chomp $fs;
         my @fields = split / /, $fs;
         my $mountPoint = $fields[4];
-        next unless -d $mountPoint;
         my @mountOptions = split /,/, $fields[5];
 
         # Skip the optional fields.
@@ -155,6 +154,11 @@ sub GetFs {
 
         # Is it better than our current match?
         if (length($mountPoint) > length($bestFs->mount)) {
+
+            # -d performs a stat, which can hang forever on network file systems,
+            # so we only make this call last, when it's likely that this is the mount point we need.
+            next unless -d $mountPoint;
+
             $bestFs = Fs->new(device => $device, type => $fsType, mount => $mountPoint);
         }
     }
@@ -523,7 +527,7 @@ sub addGeneration {
     my @links = sort (glob "$path/specialisation/*");
 
     if ($current != 1 && scalar(@links) != 0) {
-        $conf .= "submenu \"> $name$nameSuffix\" --class submenu {\n";
+        $conf .= "submenu \"$name$nameSuffix\" --class submenu {\n";
     }
 
     addEntry("$name" . (scalar(@links) == 0 ? "" : " - Default") . $nameSuffix, $path, $options, $current);

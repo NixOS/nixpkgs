@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.schleuder;
   settingsFormat = pkgs.formats.yaml { };
-  postfixMap = entries: lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") entries);
+  postfixMap =
+    entries: lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") entries);
   writePostfixMap = name: entries: pkgs.writeText name (postfixMap entries);
   configScript = pkgs.writeScript "schleuder-cfg" ''
     #!${pkgs.runtimeShell}
@@ -18,10 +24,12 @@ let
 in
 {
   options.services.schleuder = {
-    enable = lib.mkEnableOption (lib.mdDoc "Schleuder secure remailer");
-    enablePostfix = lib.mkEnableOption (lib.mdDoc "automatic postfix integration") // { default = true; };
+    enable = lib.mkEnableOption "Schleuder secure remailer";
+    enablePostfix = lib.mkEnableOption "automatic postfix integration" // {
+      default = true;
+    };
     lists = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         List of list addresses that should be handled by Schleuder.
 
         Note that this is only handled by the postfix integration, and
@@ -31,9 +39,13 @@ in
       '';
       type = lib.types.listOf lib.types.str;
       default = [ ];
-      example = [ "widget-team@example.com" "security@example.com" ];
+      example = [
+        "widget-team@example.com"
+        "security@example.com"
+      ];
     };
-    /* maybe one day....
+    /*
+      maybe one day....
       domains = lib.mkOption {
       description = "Domains for which all mail should be handled by Schleuder.";
       type = lib.types.listOf lib.types.str;
@@ -42,7 +54,7 @@ in
       };
     */
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Settings for schleuder.yml.
 
         Check the [example configuration](https://0xacab.org/schleuder/schleuder/blob/master/etc/schleuder.yml) for possible values.
@@ -51,7 +63,7 @@ in
         freeformType = settingsFormat.type;
         options.keyserver = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc ''
+          description = ''
             Key server from which to fetch and update keys.
 
             Note that NixOS uses a different default from upstream, since the upstream default sks-keyservers.net is deprecated.
@@ -62,12 +74,12 @@ in
       default = { };
     };
     extraSettingsFile = lib.mkOption {
-      description = lib.mdDoc "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
+      description = "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
       type = lib.types.nullOr lib.types.path;
       default = null;
     };
     listDefaults = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Default settings for lists (list-defaults.yml).
 
         Check the [example configuration](https://0xacab.org/schleuder/schleuder/-/blob/master/etc/list-defaults.yml) for possible values.
@@ -85,7 +97,7 @@ in
         '';
       }
       {
-        assertion = !(lib.any (db: db ? password) (lib.attrValues cfg.settings.database or {}));
+        assertion = !(lib.any (db: db ? password) (lib.attrValues cfg.settings.database or { }));
         message = ''
           A password is defined for at least one database in services.schleuder.settings.database. Defining passwords via NixOS config results in them being copied to the world-readable Nix store. Please use the extraSettingsFile option to store database passwords in a non-public location.
         '';
@@ -93,7 +105,7 @@ in
     ];
     users.users.schleuder.isSystemUser = true;
     users.users.schleuder.group = "schleuder";
-    users.groups.schleuder = {};
+    users.groups.schleuder = { };
     environment.systemPackages = [
       pkgs.schleuder-cli
     ];
@@ -109,15 +121,18 @@ in
       # review: does this make sense?
       localRecipients = lib.mkIf (cfg.lists != [ ]) cfg.lists;
     };
-    systemd.services = let commonServiceConfig = {
-      # We would have liked to use DynamicUser, but since the default
-      # database is SQLite and lives in StateDirectory, and that same
-      # database needs to be readable from the postfix service, this
-      # isn't trivial to do.
-      User = "schleuder";
-      StateDirectory = "schleuder";
-      StateDirectoryMode = "0700";
-    }; in
+    systemd.services =
+      let
+        commonServiceConfig = {
+          # We would have liked to use DynamicUser, but since the default
+          # database is SQLite and lives in StateDirectory, and that same
+          # database needs to be readable from the postfix service, this
+          # isn't trivial to do.
+          User = "schleuder";
+          StateDirectory = "schleuder";
+          StateDirectoryMode = "0700";
+        };
+      in
       {
         schleuder-init = {
           serviceConfig = commonServiceConfig // {
@@ -129,7 +144,11 @@ in
           };
         };
         schleuder-api-daemon = {
-          after = [ "local-fs.target" "network.target" "schleuder-init.service" ];
+          after = [
+            "local-fs.target"
+            "network.target"
+            "schleuder-init.service"
+          ];
           wantedBy = [ "multi-user.target" ];
           requires = [ "schleuder-init.service" ];
           serviceConfig = commonServiceConfig // {
@@ -137,7 +156,10 @@ in
           };
         };
         schleuder-weekly-key-maintenance = {
-          after = [ "local-fs.target" "network.target" ];
+          after = [
+            "local-fs.target"
+            "network.target"
+          ];
           startAt = "weekly";
           serviceConfig = commonServiceConfig // {
             ExecStart = [
@@ -151,7 +173,8 @@ in
     environment.etc."schleuder/schleuder.yml" = lib.mkIf (cfg.extraSettingsFile == null) {
       source = settingsFormat.generate "schleuder.yml" cfg.settings;
     };
-    environment.etc."schleuder/list-defaults.yml".source = settingsFormat.generate "list-defaults.yml" cfg.listDefaults;
+    environment.etc."schleuder/list-defaults.yml".source =
+      settingsFormat.generate "list-defaults.yml" cfg.listDefaults;
 
     services.schleuder = {
       #lists_dir = "/var/lib/schleuder.lists";

@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# bring your own
-, django
+  # build-system
+  setuptools,
 
-# propagates
-, python-stdnum
+  # dependencies
+  django,
+  python-stdnum,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-localflavor";
   version = "4.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django-localflavor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UWp3ei1VlEsEfjbJIE+MpffSzYF4X1HEQw+z+5kZoP0=";
   };
 
-  buildInputs = [
-    django
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    django
     python-stdnum
   ];
 
@@ -44,12 +45,12 @@ buildPythonPackage rec {
     "localflavor.za"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
     description = "Country-specific Django helpers";

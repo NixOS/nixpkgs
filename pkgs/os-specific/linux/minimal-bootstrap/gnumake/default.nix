@@ -1,8 +1,9 @@
-{ lib
-, fetchurl
-, kaem
-, tinycc
-, gnupatch
+{
+  lib,
+  fetchurl,
+  kaem,
+  tinycc,
+  gnupatch,
 }:
 let
   pname = "gnumake";
@@ -137,54 +138,66 @@ let
     "src/version.c"
     "src/vpath.c"
   ];
-  glob_SOURCES = [ "lib/fnmatch.c" "lib/glob.c" ];
-  remote_SOURCES = [ "src/remote-stub.c" ];
-  sources = make_SOURCES ++ glob_SOURCES ++ remote_SOURCES ++ [
-    "src/posixos.c"
+  glob_SOURCES = [
+    "lib/fnmatch.c"
+    "lib/glob.c"
   ];
+  remote_SOURCES = [ "src/remote-stub.c" ];
+  sources =
+    make_SOURCES
+    ++ glob_SOURCES
+    ++ remote_SOURCES
+    ++ [
+      "src/posixos.c"
+    ];
 
-  objects = map (x: lib.replaceStrings [".c"] [".o"] (builtins.baseNameOf x)) sources;
+  objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (builtins.baseNameOf x)) sources;
 in
-kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+kaem.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [ tinycc.compiler gnupatch ];
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnupatch
+    ];
 
-  meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
-    homepage = "https://www.gnu.org/software/make";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    mainProgram = "make";
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  ungz --file ${src} --output make.tar
-  untar --file make.tar
-  rm make.tar
-  cd make-${version}
+    meta = with lib; {
+      description = "Tool to control the generation of non-source files from sources";
+      homepage = "https://www.gnu.org/software/make";
+      license = licenses.gpl3Plus;
+      maintainers = teams.minimal-bootstrap.members;
+      mainProgram = "make";
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    ungz --file ${src} --output make.tar
+    untar --file make.tar
+    rm make.tar
+    cd make-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
-  # Configure
-  catm src/config.h src/mkconfig.h src/mkcustom.h
-  cp lib/glob.in.h lib/glob.h
-  cp lib/fnmatch.in.h lib/fnmatch.h
+    # Configure
+    catm src/config.h src/mkconfig.h src/mkcustom.h
+    cp lib/glob.in.h lib/glob.h
+    cp lib/fnmatch.in.h lib/fnmatch.h
 
-  # Compile
-  alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
-  ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
+    # Compile
+    alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
+    ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
-  # Link
-  CC -o make ${lib.concatStringsSep " " objects}
+    # Link
+    CC -o make ${lib.concatStringsSep " " objects}
 
-  # Check
-  ./make --version
+    # Check
+    ./make --version
 
-  # Install
-  mkdir -p ''${out}/bin
-  cp ./make ''${out}/bin
-  chmod 555 ''${out}/bin/make
-''
+    # Install
+    mkdir -p ''${out}/bin
+    cp ./make ''${out}/bin
+    chmod 555 ''${out}/bin/make
+  ''

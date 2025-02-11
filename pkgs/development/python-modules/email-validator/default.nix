@@ -1,34 +1,32 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, idna
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  idna,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "2.0.0";
+  version = "2.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "JoshData";
-    repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o7UREa+IBiFjmqx0p+4XJCcoHQ/R6r2RtoezEcWvgbg=";
+  src = fetchPypi {
+    pname = "email_validator";
+    inherit version;
+    hash = "sha256-y2kPNExhenFPIuZq53FEWhzrRoIRUt+OFlxfmjZFgrc=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     dnspython
     idna
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # dns.resolver.NoResolverConfiguration: cannot open /etc/resolv.conf
@@ -36,12 +34,11 @@ buildPythonPackage rec {
     "tests/test_main.py"
   ];
 
-  pythonImportsCheck = [
-    "email_validator"
-  ];
+  pythonImportsCheck = [ "email_validator" ];
 
   meta = with lib; {
     description = "Email syntax and deliverability validation library";
+    mainProgram = "email_validator";
     homepage = "https://github.com/JoshData/python-email-validator";
     changelog = "https://github.com/JoshData/python-email-validator/releases/tag/v${version}";
     license = licenses.cc0;

@@ -1,16 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.ethercalc;
-in {
+in
+{
   options = {
     services.ethercalc = {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           ethercalc, an online collaborative spreadsheet server.
 
           Persistent state will be maintained under
@@ -29,13 +35,13 @@ in {
       host = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc "Address to listen on (use 0.0.0.0 to allow access from any address).";
+        description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
       port = mkOption {
         type = types.port;
         default = 8000;
-        description = lib.mdDoc "Port to bind to.";
+        description = "Port to bind to.";
       };
     };
   };
@@ -43,13 +49,13 @@ in {
   config = mkIf cfg.enable {
     systemd.services.ethercalc = {
       description = "Ethercalc service";
-      wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        DynamicUser    =   true;
-        ExecStart        = "${cfg.package}/bin/ethercalc --host ${cfg.host} --port ${toString cfg.port}";
-        Restart          = "always";
-        StateDirectory   = "ethercalc";
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/ethercalc --host ${cfg.host} --port ${toString cfg.port}";
+        Restart = "always";
+        StateDirectory = "ethercalc";
         WorkingDirectory = "/var/lib/ethercalc";
       };
     };

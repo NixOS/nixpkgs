@@ -1,43 +1,74 @@
-{ lib
-, buildPythonPackage
-, python3
-, pythonOlder
-, fetchPypi
-, ftfy
-, appdirs
-, requests
-, setuptools-scm
-, types-mock
-, types-appdirs
-, types-requests
-, types-setuptools
-, argparse
-, doit
-, pyinstaller-versionfile
-, tableauserverclient
-, pytestCheckHook
-, mock
+{
+  lib,
+  appdirs,
+  argparse,
+  buildPythonPackage,
+  doit,
+  fetchPypi,
+  ftfy,
+  mock,
+  pyinstaller-versionfile,
+  pytest-order,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
+  tableauserverclient,
+  types-appdirs,
+  types-mock,
+  types-requests,
+  types-setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tabcmd";
-  version = "2.0.12";
+  version = "2.0.17";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nsQJWDzSzSc1WRk5TBl/E7Mpfk8wGD1CsETAWILKxCM=";
+    hash = "sha256-7qVh8FSor6ZcHGMB/h25RQjMIOwCUgKfr+QDuGa7mas=";
   };
 
-  propagatedBuildInputs = [ ftfy appdirs requests setuptools-scm types-mock types-appdirs argparse doit pyinstaller-versionfile types-requests types-setuptools tableauserverclient ];
-
-  nativeCheckInputs = [ pytestCheckHook mock ];
-
-  # Remove an unneeded dependency that can't be resolved
   prePatch = ''
+    # Remove an unneeded dependency that can't be resolved
+    # https://github.com/tableau/tabcmd/pull/282
     sed -i "/'argparse',/d" pyproject.toml
   '';
+
+  pythonRelaxDeps = [
+    "tableauserverclient"
+    "urllib3"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    appdirs
+    argparse
+    doit
+    ftfy
+    pyinstaller-versionfile
+    requests
+    setuptools-scm
+    tableauserverclient
+    types-appdirs
+    types-mock
+    types-requests
+    types-setuptools
+    urllib3
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytest-order
+    pytestCheckHook
+  ];
 
   # Create a "tabcmd" executable
   postInstall = ''
@@ -47,7 +78,7 @@ buildPythonPackage rec {
     cp -r build/lib/tabcmd/__main__.py $out/bin/
 
     # Create a 'tabcmd' script with python3 shebang
-    echo "#!${python3}/bin/python3" > $out/bin/tabcmd
+    echo "#!${python.interpreter}" > $out/bin/tabcmd
 
     # Append __main__.py contents
     cat $out/bin/__main__.py >> $out/bin/tabcmd
@@ -56,11 +87,15 @@ buildPythonPackage rec {
     chmod +x $out/bin/tabcmd
   '';
 
+  pythonImportsCheck = [ "tabcmd" ];
 
-  meta = {
-    description = "A command line client for working with Tableau Server.";
-    homepage = "https://pypi.org/project/tabcmd/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+  meta = with lib; {
+    broken = true;
+    description = "Command line client for working with Tableau Server";
+    homepage = "https://github.com/tableau/tabcmd";
+    changelog = "https://github.com/tableau/tabcmd/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = [ ];
+    mainProgram = "tabcmd";
   };
 }

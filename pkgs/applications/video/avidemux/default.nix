@@ -1,22 +1,51 @@
-{ stdenv, lib, fetchurl, cmake, pkg-config
-, zlib, gettext, libvdpau, libva, libXv, sqlite
-, yasm, freetype, fontconfig, fribidi
-, makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
-, alsa-lib
-, withX265 ? true, x265
-, withX264 ? true, x264
-, withXvid ? true, xvidcore
-, withLAME ? true, lame
-, withFAAC ? false, faac
-, withVorbis ? true, libvorbis
-, withPulse ? true, libpulseaudio
-, withFAAD ? true, faad2
-, withOpus ? true, libopus
-, withVPX ? true, libvpx
-, withQT ? true
-, withCLI ? true
-, default ? "qt5"
-, withPlugins ? true
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  zlib,
+  gettext,
+  libvdpau,
+  libva,
+  libXv,
+  sqlite,
+  yasm,
+  freetype,
+  fontconfig,
+  fribidi,
+  makeWrapper,
+  libXext,
+  libGLU,
+  qttools,
+  qtbase,
+  wrapQtAppsHook,
+  alsa-lib,
+  withX265 ? true,
+  x265,
+  withX264 ? true,
+  x264,
+  withXvid ? true,
+  xvidcore,
+  withLAME ? true,
+  lame,
+  withFAAC ? false,
+  faac,
+  withVorbis ? true,
+  libvorbis,
+  withPulse ? true,
+  libpulseaudio,
+  withFAAD ? true,
+  faad2,
+  withOpus ? true,
+  libopus,
+  withVPX ? true,
+  libvpx,
+  withQT ? true,
+  withCLI ? true,
+  default ? "qt5",
+  withPlugins ? true,
 }:
 
 assert withQT -> qttools != null && qtbase != null;
@@ -37,13 +66,40 @@ stdenv.mkDerivation rec {
     ./bootstrap_logging.patch
   ];
 
-  nativeBuildInputs =
-    [ yasm cmake pkg-config makeWrapper ]
-    ++ lib.optional withQT wrapQtAppsHook;
-  buildInputs = [
-    zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsa-lib libXext libGLU
-  ] ++ lib.optional withX264 x264
+  postPatch = ''
+    cp ${
+      fetchpatch {
+        # Backport fix for binutils-2.41.
+        name = "binutils-2.41.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
+        hash = "sha256-s9PcYbt0mFb2wvgMcFL1J+2OS6Sxyd2wYkGzLr2qd9M=";
+        stripLen = 1;
+      }
+    } avidemux_core/ffmpeg_package/patches/
+  '';
+
+  nativeBuildInputs = [
+    yasm
+    cmake
+    pkg-config
+    makeWrapper
+  ] ++ lib.optional withQT wrapQtAppsHook;
+  buildInputs =
+    [
+      zlib
+      gettext
+      libvdpau
+      libva
+      libXv
+      sqlite
+      fribidi
+      fontconfig
+      freetype
+      alsa-lib
+      libXext
+      libGLU
+    ]
+    ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
     ++ lib.optional withLAME lame
@@ -52,54 +108,62 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPulse libpulseaudio
     ++ lib.optional withFAAD faad2
     ++ lib.optional withOpus libopus
-    ++ lib.optionals withQT [ qttools qtbase ]
+    ++ lib.optionals withQT [
+      qttools
+      qtbase
+    ]
     ++ lib.optional withVPX libvpx;
 
-  buildCommand = let
-    wrapWith = makeWrapper: filename:
-      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
-    wrapQtApp = wrapWith "wrapQtApp";
-    wrapProgram = wrapWith "wrapProgram";
-  in ''
-    unpackPhase
-    cd "$sourceRoot"
-    patchPhase
+  dontWrapQtApps = true;
 
-    ${stdenv.shell} bootStrap.bash \
-      --with-core \
-      ${if withQT then "--with-qt" else "--without-qt"} \
-      ${if withCLI then "--with-cli" else "--without-cli"} \
-      ${if withPlugins then "--with-plugins" else "--without-plugins"}
+  buildCommand =
+    let
+      wrapWith =
+        makeWrapper: filename:
+        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+      wrapQtApp = wrapWith "wrapQtApp";
+      wrapProgram = wrapWith "wrapProgram";
+    in
+    ''
+      unpackPhase
+      cd "$sourceRoot"
+      patchPhase
 
-    mkdir $out
-    cp -R install/usr/* $out
+      ${stdenv.shell} bootStrap.bash \
+        --with-core \
+        ${if withQT then "--with-qt" else "--without-qt"} \
+        ${if withCLI then "--with-cli" else "--without-cli"} \
+        ${if withPlugins then "--with-plugins" else "--without-plugins"}
 
-    ${wrapProgram "$out/bin/avidemux3_cli"}
+      mkdir $out
+      cp -R install/usr/* $out
 
-    ${lib.optionalString withQT ''
-      ${wrapQtApp "$out/bin/avidemux3_qt5"}
-      ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
-    ''}
+      ${wrapProgram "$out/bin/avidemux3_cli"}
 
-    ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
+      ${lib.optionalString withQT ''
+        ${wrapQtApp "$out/bin/avidemux3_qt5"}
+        ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
+      ''}
 
-    fixupPhase
-  '';
+      ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
+
+      # make the install path match the rpath
+      if [[ -d ''${!outputLib}/lib64 ]]; then
+        mv ''${!outputLib}/lib64 ''${!outputLib}/lib
+        ln -s lib ''${!outputLib}/lib64
+      fi
+      fixupPhase
+    '';
 
   meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
     maintainers = with maintainers; [ abbradar ];
     # "CPU not supported" errors on AArch64
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     license = licenses.gpl2;
-    # Downstream we experience:
-    #
-    # https://github.com/NixOS/nixpkgs/issues/239424
-    #
-    # Upstream doesn't have a contact page / Bug tracker, so it's not easy to
-    # notify them about it. Using firejail might help, as some commented
-    # downstream.
-    broken = true;
   };
 }

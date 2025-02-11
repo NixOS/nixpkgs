@@ -1,46 +1,47 @@
-{ lib
-, buildPythonPackage
-, certifi
-, click
-, elastic-transport
-, elasticsearch8
-, fetchFromGitHub
-, hatchling
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, six
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  click,
+  dotmap,
+  ecs-logging,
+  elastic-transport,
+  elasticsearch8,
+  fetchFromGitHub,
+  hatchling,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  six,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.11.0";
-  format = "pyproject";
+  version = "8.17.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "es_client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VsHpWe37/CZvGm3PqVq4mJCBA9juvOD9FLmDeW8OjiM=";
+    tag = "v${version}";
+    hash = "sha256-j7yaN7FOrGlRjZSBugRCtecfUw/3dNuI252VO/eYnzk=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     click
+    dotmap
+    ecs-logging
     elastic-transport
     elasticsearch8
     pyyaml
@@ -55,17 +56,18 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "es_client"
-  ];
+  pythonImportsCheck = [ "es_client" ];
 
   disabledTests = [
-    # Tests require network access
+    # Tests require local Elasticsearch instance
     "test_bad_version_raises"
+    "test_basic_operation"
     "test_client_info"
+    "test_client_info"
+    "test_exit_if_not_master"
     "test_multiple_hosts_raises"
-    "test_non_dict_passed"
     "test_skip_version_check"
+    "TestCLIExample"
   ];
 
   meta = with lib; {

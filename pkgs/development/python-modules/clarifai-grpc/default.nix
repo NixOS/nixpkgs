@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, googleapis-common-protos
-, grpcio
-, protobuf
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "9.10.6";
+  version = "11.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,19 +20,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OlSbeMBINN4gyFUklLh9zrQNv0VkRZxRwml4jbMjumE=";
+    tag = version;
+    hash = "sha256-28V47bMjVvDQvTuTQSd51ppIsLqB8JcJvBp/UrGFvAE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf
     requests
+  ];
+
+  pythonRelaxDeps = [
+    "grpcio"
   ];
 
   # almost all tests require network access
@@ -39,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clarifai_grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clarifai gRPC API Client";
     homepage = "https://github.com/Clarifai/clarifai-python-grpc";
-    changelog = "https://github.com/Clarifai/clarifai-python-grpc/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/Clarifai/clarifai-python-grpc/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

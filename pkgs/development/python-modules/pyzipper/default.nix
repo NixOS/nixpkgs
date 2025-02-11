@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pycryptodomex
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pycryptodomex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyzipper";
   version = "0.3.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "danifus";
     repo = "pyzipper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+fZXoAUeB/bUI3LrIFlMTktJgn+GNFBiDHvH2Jgo0pg=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
-
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "pyzipper"
-  ];
+  propagatedBuildInputs = [ pycryptodomex ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pyzipper" ];
+
+  doCheck = pythonOlder "3.13"; # depends on removed nntplib battery
 
   disabledTests = [
     # Tests are parsing CLI output
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     "test_main"
     "test_temp_dir__forked_child"
     "test_test_command"
+    # Test wants to import asyncore
+    "test_CleanImport"
   ];
 
   meta = with lib; {

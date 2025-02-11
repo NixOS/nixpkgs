@@ -1,21 +1,23 @@
-{ fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, torch
-, buildPythonPackage
-, lib
+{
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  torch,
+  buildPythonPackage,
+  lib,
 }:
 
 buildPythonPackage rec {
   pname = "ttach";
   version = "0.0.3";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qubvel";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R6QO+9hv0eI7dZW5iJf096+LU1q+vnmOpveurgZemPc=";
   };
 

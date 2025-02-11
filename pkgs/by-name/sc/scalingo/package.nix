@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "scalingo";
-  version = "1.29.1";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
     rev = version;
-    hash = "sha256-xBf+LIwlpauJd/0xJIQdfEa0rxph3BJPuMY4+0s+Bb4=";
+    hash = "sha256-SJFQFOd9m+38TsclIs4FxAl9kejgcUG895qjy4iXKdk=";
   };
 
   vendorHash = null;
@@ -23,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command line client for the Scalingo PaaS";
+    mainProgram = "scalingo";
     homepage = "https://doc.scalingo.com/platform/cli/start";
     changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md";
     license = licenses.bsdOriginal;

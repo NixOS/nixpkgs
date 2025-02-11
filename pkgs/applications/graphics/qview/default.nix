@@ -1,13 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, qttools
-, qtimageformats
-, qtsvg
-, qtx11extras
-, x11Support ? true
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+  qtimageformats,
+  qtsvg,
+  qtx11extras,
+  x11Support ? true,
 }:
 
 mkDerivation rec {
@@ -34,6 +35,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Practical and minimal image viewer";
+    mainProgram = "qview";
     homepage = "https://interversehq.com/qview/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ acowley ];

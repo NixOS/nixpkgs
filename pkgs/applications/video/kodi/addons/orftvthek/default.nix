@@ -1,27 +1,34 @@
-{ lib, buildKodiAddon, fetchFromGitHub, future, kodi-six, simplejson, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  inputstream-adaptive,
+  inputstreamhelper,
+  routing,
+}:
 
 buildKodiAddon rec {
   pname = "orftvthek";
   namespace = "plugin.video.orftvthek";
-  version = "0.12.6";
+  version = "1.0.2+matrix.1";
 
   src = fetchFromGitHub {
     owner = "s0faking";
     repo = namespace;
     rev = version;
-    sha256 = "sha256-r18vQ+2TSeflwByEAX33vIZG5qIGneraf5rLBugl5BU=";
+    sha256 = "sha256-bCVsR7lH0REJmG3OKU8mRRvw/PhSrLfhufmVBmw05+k=";
   };
 
   propagatedBuildInputs = [
-    future
-    kodi-six
-    simplejson
+    # Needed for content decryption with Widevine.
+    inputstream-adaptive
     inputstreamhelper
+    routing
   ];
 
   meta = with lib; {
     homepage = "https://github.com/s0faking/plugin.video.orftvthek";
-    description = "An addon that gives you access to the ORF TVthek Video Platform";
+    description = "Addon for accessing the Austrian ORF ON streaming service";
     license = licenses.gpl2Only;
     maintainers = teams.kodi.members;
   };

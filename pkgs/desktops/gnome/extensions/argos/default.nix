@@ -1,14 +1,19 @@
-{ fetchFromGitHub, lib, stdenv }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
-  pname = "argos-unstable";
-  version = "20230404";
+  pname = "argos";
+  version = "unstable-2024-10-28";
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "argos";
-    rev = "e2d68ea23eed081fccaec06c384e2c5d2acb5b6b";
-    hash = "sha256-OJ/bUQkBQdlfEIqmneyUeIJoytTxyfibdyUDf3SJc0Q=";
+    rev = "cd0de7c79072979bed41e0ad75741bbd8e113950";
+    hash = "sha256-rNS2rvHZOpl9mSoERfsX6UfEaAb6lWTI9y6HXKrl81E=";
   };
 
   installPhase = ''
@@ -19,6 +24,7 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "argos@pew.worldwidemann.com";
     extensionPortalSlug = "argos";
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {

@@ -1,23 +1,17 @@
 diff --git a/platformio/package/manifest/schema.py b/platformio/package/manifest/schema.py
-index 1e5f935a..26d1ac6a 100644
+index 47efae59..6c2cfaed 100644
 --- a/platformio/package/manifest/schema.py
 +++ b/platformio/package/manifest/schema.py
-@@ -276,9 +276,12 @@ class ManifestSchema(BaseSchema):
+@@ -276,9 +276,6 @@ class ManifestSchema(BaseSchema):
      @staticmethod
      @memoized(expire="1h")
      def load_spdx_licenses():
--        version = "3.19"
+-        version = "3.24.0"
 -        spdx_data_url = (
 -            "https://raw.githubusercontent.com/spdx/license-list-data/"
--            "v%s/json/licenses.json" % version
+-            f"v{version}/json/licenses.json"
 -        )
 -        return json.loads(fetch_remote_content(spdx_data_url))
-+        # version = "3.19"
-+        # spdx_data_url = (
-+            # "https://raw.githubusercontent.com/spdx/license-list-data/"
-+            # "v%s/json/licenses.json" % version
-+        # )
-+        # return json.loads(fetch_remote_content(spdx_data_url))
-+        with open("@SPDX_LICENSE_LIST_DATA@/json/licenses.json") as f:
-+            spdx = json.load(f)
++        with open("@spdx_license_list_data@/json/licenses.json") as fd:
++            spdx = json.load(fd)
 +        return spdx

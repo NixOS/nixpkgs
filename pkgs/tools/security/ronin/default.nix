@@ -1,7 +1,14 @@
-{ lib, bundlerEnv, bundlerUpdateScript, defaultGemConfig, yasm }:
+{
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  defaultGemConfig,
+  yasm,
+}:
 
 bundlerEnv {
   name = "ronin";
+  version = "2.1.0";
   gemdir = ./.;
 
   gemConfig = defaultGemConfig // {
@@ -23,9 +30,9 @@ bundlerEnv {
   passthru.updateScript = bundlerUpdateScript "ronin";
 
   meta = with lib; {
-    description = "A free and Open Source Ruby toolkit for security research and development";
-    homepage    = "https://ronin-rb.dev";
-    license     = licenses.gpl3Plus;
+    description = "Free and Open Source Ruby toolkit for security research and development";
+    homepage = "https://ronin-rb.dev";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Ch1keen ];
   };
 }

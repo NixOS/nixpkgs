@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 let
   pname = "wait4x";
-  version = "2.13.0";
+  version = "2.14.3";
 in
 buildGoModule {
   inherit pname version;
@@ -13,10 +14,10 @@ buildGoModule {
     owner = "atkrad";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vhYWt1vRL1iTtdZRhk3HsBnmhcp4hieN+8vsyQS4hpo=";
+    hash = "sha256-tqUqiq+U+C+1KCsCw9h1uufL1ognUyvLwJfRU8aiAWI=";
   };
 
-  vendorHash = "sha256-WY8FPRjjAFcDLMbU22pL3rFTw7fBPwCbXJDjhHDI4Kw=";
+  vendorHash = "sha256-KtEOLLsbTfgaXy/0aj5zT5qbgW6qBFMuU3EnnXRu+Ig=";
 
   # Tests make network access
   doCheck = false;

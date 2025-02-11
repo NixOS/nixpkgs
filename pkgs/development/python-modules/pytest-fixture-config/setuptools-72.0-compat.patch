@@ -1,0 +1,396 @@
+diff --git a/common_setup.py b/common_setup.py
+index 002952b..11ca9c9 100644
+--- a/common_setup.py
++++ b/common_setup.py
+@@ -1,45 +1,5 @@
+ # Common setup.py code shared between all the projects in this repository
+-import sys
+ import os
+-import logging
+-
+-from setuptools.command.test import test as TestCommand
+-from setuptools.command.egg_info import egg_info as EggInfoCommand
+-
+-
+-class PyTest(TestCommand):
+-    pytest_args = []
+-    src_dir = None
+-
+-    def initialize_options(self):
+-        TestCommand.initialize_options(self)
+-
+-    def finalize_options(self):
+-        TestCommand.finalize_options(self)
+-        self.test_args = []
+-        self.test_suite = True
+-
+-    def run_tests(self):
+-        global pytest_args
+-        logging.basicConfig(format='%(asctime)s %(levelname)s %(name)s %(message)s', level='DEBUG')
+-
+-        # import here, cause outside the eggs aren't loaded
+-        import pytest
+-
+-        self.pytest_args.extend(['--junitxml', 'junit.xml'])
+-        errno = pytest.main(self.pytest_args)
+-        sys.exit(errno)
+-
+-
+-class EggInfo(EggInfoCommand):
+-    """ Customisation of the package metadata creation. Changes are:
+-         - Save the test requirements into an extra called 'tests'
+-    """
+-    def run(self):
+-        if self.distribution.extras_require is None:
+-            self.distribution.extras_require = {}
+-        self.distribution.extras_require['tests'] = self.distribution.tests_require
+-        EggInfoCommand.run(self)
+ 
+ 
+ def common_setup(src_dir):
+@@ -57,13 +17,6 @@ def common_setup(src_dir):
+         long_description = open(readme_file).read()
+         changelog = open(changelog_file).read()
+ 
+-    # Gather trailing arguments for pytest, this can't be done using setuptools' api
+-    if 'test' in sys.argv:
+-        PyTest.pytest_args = sys.argv[sys.argv.index('test') + 1:]
+-        if PyTest.pytest_args:
+-            sys.argv = sys.argv[:-len(PyTest.pytest_args)]
+-    PyTest.src_dir = src_dir
+-
+     return dict(
+             # Version is shared between all the projects in this repo
+             version=open(version_file).read().strip(),
+@@ -71,6 +24,5 @@ def common_setup(src_dir):
+             url='https://github.com/manahl/pytest-plugins',
+             license='MIT license',
+             platforms=['unix', 'linux'],
+-            cmdclass={'test': PyTest, 'egg_info': EggInfo},
+             include_package_data=True
+             )
+diff --git a/pytest-devpi-server/setup.py b/pytest-devpi-server/setup.py
+index 8891130..22b460f 100644
+--- a/pytest-devpi-server/setup.py
++++ b/pytest-devpi-server/setup.py
+@@ -27,8 +27,6 @@ install_requires = ['pytest-server-fixtures',
+                     'ruamel.yaml>=0.15;python_version > "3.4"',
+                     ]
+ 
+-tests_require = []
+-
+ entry_points = {
+     'pytest11': [
+         'devpi_server = _pytest_devpi_server',
+@@ -44,7 +42,6 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
+         packages=find_packages(exclude='tests'),
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-fixture-config/setup.py b/pytest-fixture-config/setup.py
+index 164ad33..15a9e16 100644
+--- a/pytest-fixture-config/setup.py
++++ b/pytest-fixture-config/setup.py
+@@ -20,8 +20,9 @@ classifiers = [
+ 
+ install_requires = ['pytest']
+ 
+-tests_require = ['six',
+-                 ]
++extras_require = {
++    'test': ["six"]
++}
+ 
+ if __name__ == '__main__':
+     kwargs = common_setup('pytest_fixture_config')
+@@ -32,7 +33,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_fixture_config'],
+     ))
+     setup(**kwargs)
+diff --git a/pytest-git/setup.py b/pytest-git/setup.py
+index 8f4a1d3..9c4557a 100644
+--- a/pytest-git/setup.py
++++ b/pytest-git/setup.py
+@@ -27,9 +27,6 @@ install_requires = ['pytest',
+                     'gitpython',
+                     ]
+ 
+-tests_require = [
+-                 ]
+-
+ entry_points = {
+     'pytest11': [
+         'git_repo = pytest_git',
+@@ -46,7 +43,6 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
+         py_modules=['pytest_git'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-listener/setup.py b/pytest-listener/setup.py
+index 3ce8897..dcde454 100644
+--- a/pytest-listener/setup.py
++++ b/pytest-listener/setup.py
+@@ -23,8 +23,6 @@ install_requires = ['six',
+                     'pytest-server-fixtures'
+                     ]
+ 
+-tests_require = []
+-
+ entry_points = {
+     'pytest11': [
+         'listener = pytest_listener',
+@@ -40,7 +38,6 @@ if __name__ == '__main__':
+         author_email='drtimcouper@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
+         packages=find_packages(exclude='tests'),
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-profiling/setup.py b/pytest-profiling/setup.py
+index 612899a..fa412da 100644
+--- a/pytest-profiling/setup.py
++++ b/pytest-profiling/setup.py
+@@ -22,9 +22,9 @@ install_requires = ['six',
+                     'gprof2dot',
+                     ]
+ 
+-tests_require = [
+-                 'pytest-virtualenv',
+-                 ]
++extras_require = {
++    'tests': ['pytest-virtualenv']
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -41,7 +41,7 @@ if __name__ == '__main__':
+         author_email='ed@catmur.co.uk',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_profiling'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-pyramid-server/setup.py b/pytest-pyramid-server/setup.py
+index f6fbea0..a02587a 100644
+--- a/pytest-pyramid-server/setup.py
++++ b/pytest-pyramid-server/setup.py
+@@ -26,9 +26,9 @@ install_requires = ['pytest-server-fixtures',
+                     'six',
+                     ]
+ 
+-tests_require = [
+-                 'pyramid-debugtoolbar',
+-                 ]
++extras_require = {
++    'tests': ['pyramid-debugtoolbar']
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -48,7 +48,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_pyramid_server', 'pyramid_server_test'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-qt-app/setup.py b/pytest-qt-app/setup.py
+index 27f367a..3170aaf 100644
+--- a/pytest-qt-app/setup.py
++++ b/pytest-qt-app/setup.py
+@@ -22,8 +22,9 @@ install_requires = ['pytest',
+                     'pytest-shutil',
+                     ]
+ 
+-tests_require = ['pytest-cov'
+-                 ]
++extras_require = {
++    'tests': ['pytest-cov']
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -40,7 +41,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_qt_app'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-server-fixtures/setup.py b/pytest-server-fixtures/setup.py
+index 065c1c2..88af64c 100644
+--- a/pytest-server-fixtures/setup.py
++++ b/pytest-server-fixtures/setup.py
+@@ -36,13 +36,12 @@ extras_require = {
+     's3': ["boto3"],
+     'docker': ["docker"],
+     'kubernetes': ["kubernetes"],
++    'tests': [
++        'mock; python_version<"3.3"',
++        'psutil',
++    ],
+ }
+ 
+-tests_require = [
+-                 'mock; python_version<"3.3"',
+-                 'psutil',
+-                 ]
+-
+ entry_points = {
+     'pytest11': [
+         'httpd_server = pytest_server_fixtures.httpd',
+@@ -66,7 +65,6 @@ if __name__ == '__main__':
+         classifiers=classifiers,
+         install_requires=install_requires,
+         extras_require=extras_require,
+-        tests_require=tests_require,
+         packages=find_packages(exclude='tests'),
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-shutil/setup.py b/pytest-shutil/setup.py
+index 43ed91e..e1d9e56 100644
+--- a/pytest-shutil/setup.py
++++ b/pytest-shutil/setup.py
+@@ -27,8 +27,10 @@ install_requires = ['six',
+                     'termcolor'
+                     ]
+ 
+-tests_require = ['pytest',
+-                 ]
++
++extras_require = {
++    'tests':  ["pytest"],
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -45,7 +47,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         packages=find_packages(exclude='tests'),
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-svn/setup.py b/pytest-svn/setup.py
+index 470181f..9d4d272 100644
+--- a/pytest-svn/setup.py
++++ b/pytest-svn/setup.py
+@@ -21,9 +21,6 @@ install_requires = ['pytest',
+                     'pytest-shutil',
+                     ]
+ 
+-tests_require = [
+-                 ]
+-
+ entry_points = {
+     'pytest11': [
+         'svn_repo = pytest_svn',
+@@ -40,7 +37,6 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
+         py_modules=['pytest_svn'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-verbose-parametrize/setup.py b/pytest-verbose-parametrize/setup.py
+index ae0a482..b6fa5e1 100644
+--- a/pytest-verbose-parametrize/setup.py
++++ b/pytest-verbose-parametrize/setup.py
+@@ -21,10 +21,11 @@ install_requires = ['pytest',
+                     'six',
+                     ]
+ 
+-tests_require = ['mock; python_version<"3.3"',
+-                 'pytest-virtualenv',
+-                 'coverage',
+-                 ]
++extras_require = {
++    'tests': ['mock; python_version<"3.3"',
++              'pytest-virtualenv',
++              'coverage']
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -41,7 +42,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_verbose_parametrize'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-virtualenv/setup.py b/pytest-virtualenv/setup.py
+index 815b59c..55f97e3 100644
+--- a/pytest-virtualenv/setup.py
++++ b/pytest-virtualenv/setup.py
+@@ -25,9 +25,9 @@ install_requires = ['pytest-fixture-config',
+                     'importlib-metadata',
+                     ]
+ 
+-tests_require = [
+-                 'mock; python_version<"3.3"'
+-                 ]
++extras_require = {
++    'tests': ['mock; python_version<"3.3"']
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -44,7 +44,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_virtualenv'],
+         entry_points=entry_points,
+     ))
+diff --git a/pytest-webdriver/setup.py b/pytest-webdriver/setup.py
+index 280818a..afb618b 100644
+--- a/pytest-webdriver/setup.py
++++ b/pytest-webdriver/setup.py
+@@ -23,8 +23,10 @@ install_requires = ['py',
+                     'selenium',
+                     ]
+ 
+-tests_require = ['mock; python_version<"3.3"',
+-                 ]
++
++extras_require = {
++    'tests':  ['mock; python_version,"3.3"'],
++}
+ 
+ entry_points = {
+     'pytest11': [
+@@ -41,7 +43,7 @@ if __name__ == '__main__':
+         author_email='eeaston@gmail.com',
+         classifiers=classifiers,
+         install_requires=install_requires,
+-        tests_require=tests_require,
++        extras_require=extras_require,
+         py_modules=['pytest_webdriver'],
+         entry_points=entry_points,
+     ))

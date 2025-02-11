@@ -1,9 +1,10 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,24 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "tiny-proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-59T09qcOstl/yfzQmNlTNxGerQethZntwDAHwz/5FFM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
 
   # The tests depend on httpx-socks, whose tests depend on tiny-proxy.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tiny_proxy"
-  ];
+  pythonImportsCheck = [ "tiny_proxy" ];
 
   meta = with lib; {
     description = "SOCKS5/SOCKS4/HTTP proxy server";

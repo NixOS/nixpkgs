@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "ppx_derivers";
   version = "1.2.1";
 
@@ -19,6 +23,4 @@ buildDunePackage (rec {
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
   };
-} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
-  duneVersion = "1";
-})
+}

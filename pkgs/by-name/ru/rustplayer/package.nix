@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, alsa-lib
-, ffmpeg_4
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  alsa-lib,
+  ffmpeg_6,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "rustplayer";
-  version = "unstable-2022-12-29";
+  version = "1.1.2-unstable-2024-07-14";
 
   src = fetchFromGitHub {
     owner = "Kingtous";
     repo = "RustPlayer";
-    rev = "a369bc19ab4a8c568c73be25c5e6117e1ee5d848";
-    sha256 = "sha256-x82EdA7ezCzux1C85IcI2ZQ3M95sH6/k97Rv6lqc5eo=";
+    rev = "29a16f01912bc3e92008c7ae2f9569c8d7250bd3";
+    hash = "sha256-+36dLp54rfNK0lSSTG5+J6y51NUtBhtwfhD7L23J5aY=";
   };
 
   # This patch is from the source
@@ -26,11 +27,18 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ffmpeg-sys-next-4.4.0" = "sha256-TBgf+J+ud7nnVjf0r98/rujFPEayjEaVi+vnSE6/5Ak=";
+      "ffmpeg-sys-next-6.0.1" = "sha256-/CcyWDPeVLVSV8NfWFJhj1tGmuqLPnnyvVosIXM27NI=";
     };
   };
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
-  buildInputs = [ alsa-lib openssl ffmpeg_4 ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
+  buildInputs = [
+    alsa-lib
+    openssl
+    ffmpeg_6
+  ];
 
   checkFlags = [
     # network required
@@ -39,7 +47,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/Kingtous/RustPlayer";
-    description = "A local audio player and network m3u8 radio player using a terminal interface";
+    description = "Local audio player and network m3u8 radio player using a terminal interface";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ oluceps ];
     platforms = platforms.unix;

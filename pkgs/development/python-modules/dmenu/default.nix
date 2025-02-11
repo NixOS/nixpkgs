@@ -1,4 +1,9 @@
-{ buildPythonPackage, lib, fetchPypi, dmenu }:
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  dmenu,
+}:
 
 buildPythonPackage rec {
   pname = "dmenu-python";
@@ -16,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A Python wrapper for dmenu";
+    description = "Python wrapper for dmenu";
     homepage = "https://dmenu.readthedocs.io";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nico202 ];

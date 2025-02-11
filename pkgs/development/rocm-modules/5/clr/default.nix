@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, rocmUpdateScript
-, makeWrapper
-, cmake
-, perl
-, clang
-, hip-common
-, hipcc
-, rocm-device-libs
-, rocm-comgr
-, rocm-runtime
-, roctracer
-, rocminfo
-, rocm-smi
-, numactl
-, libGL
-, libxml2
-, libX11
-, python3Packages
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  fetchurl,
+  rocmUpdateScript,
+  makeWrapper,
+  cmake,
+  perl,
+  clang,
+  hip-common,
+  hipcc,
+  rocm-device-libs,
+  rocm-comgr,
+  rocm-runtime,
+  roctracer,
+  rocminfo,
+  rocm-smi,
+  numactl,
+  libGL,
+  libxml2,
+  libX11,
+  python3Packages,
 }:
 
 let
@@ -33,7 +35,18 @@ let
     "--set HSA_PATH ${rocm-runtime}"
     "--set ROCM_PATH $out"
   ];
-in stdenv.mkDerivation (finalAttrs: {
+
+  # https://github.com/NixOS/nixpkgs/issues/305641
+  # Not needed when 3.29.2 is in unstable
+  cmake' = cmake.overrideAttrs (old: rec {
+    version = "3.29.2";
+    src = fetchurl {
+      url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
+      hash = "sha256-NttLaSaqt0G6bksuotmckZMiITIwi03IJNQSPLcwNS4=";
+    };
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
   version = "5.7.1";
 
@@ -43,7 +56,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "ROCm-Developer-Tools";
+    owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-1gZJhvBbUFdKH9p/7SRfzEV/fM+gIN2Qvlxf2VbmAIw=";
@@ -51,7 +64,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    cmake
+    cmake'
     perl
     python3Packages.python
     python3Packages.cppheaderparser
@@ -82,10 +95,15 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DROCM_PATH=${rocminfo}"
 
     # Temporarily set variables to work around upstream CMakeLists issue
-    # Can be removed once https://github.com/ROCm-Developer-Tools/hipamd/issues/55 is fixed
+    # Can be removed once https://github.com/ROCm/rocm-cmake/issues/121 is fixed
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
+
+  patches = [
+    ./add-missing-operators.patch
+    ./static-functions.patch
   ];
 
   postPatch = ''
@@ -98,6 +116,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
+
+    substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
+      --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
+                     '#define ICD_VENDOR_PATH "/run/opengl-driver/etc/OpenCL/vendors/";'
   '';
 
   postInstall = ''
@@ -122,7 +144,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # All known and valid general GPU targets
     # We cannot use this for each ROCm library, as each defines their own supported targets
-    # See: https://github.com/RadeonOpenCompute/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
+    # See: https://github.com/ROCm/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
     gpuTargets = lib.forEach [
       "803"
       "900"
@@ -161,10 +183,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm-Developer-Tools/clr";
+    homepage = "https://github.com/ROCm/clr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

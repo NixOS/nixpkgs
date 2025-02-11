@@ -1,30 +1,45 @@
-{ lib, mkDerivation, fetchFromGitHub }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+}:
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2023-10-11";
+  version = "unstable-2024-08-05";
 
   src = fetchFromGitHub {
-    owner = "plt-amy";
+    owner = "the1lab";
     repo = pname;
-    rev = "c6e0c3c714486fd6c89ace31443428ba48871685";
-    hash = "sha256-PC75NtT0e99HVyFedox+6xz/CY2zP2g4Vzqruj5Bjhc=";
+    rev = "7cc9bf7bbe90be5491e0d64da90a36afa29a540b";
+    hash = "sha256-hOyf6ZzejDAFDRj6liFZsBc9bKdxV5bzTPP4kGXIhW0=";
   };
 
-  # We don't need anything in support; avoid installing LICENSE.agda
   postPatch = ''
+    # We don't need anything in support; avoid installing LICENSE.agda
     rm -rf support
+
+    # Remove verbosity options as they make Agda take longer and use more memory.
+    shopt -s globstar extglob
+    files=(src/**/*.@(agda|lagda.md))
+    sed -Ei '/OPTIONS/s/ -v ?[^ #]+//g' "''${files[@]}"
+
+    # Generate all-pages manually instead of building the build script.
+    mkdir -p _build
+    for f in "''${files[@]}"; do
+      f=''${f#src/} f=''${f%%.*} f=''${f//\//.}
+      echo "open import $f"
+    done > _build/all-pages.agda
   '';
 
-  libraryName = "cubical-1lab";
+  libraryName = "1lab";
   libraryFile = "1lab.agda-lib";
-  everythingFile = "src/index.lagda.md";
+  everythingFile = "_build/all-pages.agda";
 
   meta = with lib; {
-    description =
-      "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
+    description = "A formalised, cross-linked reference resource for mathematics done in Homotopy Type Theory ";
     homepage = src.meta.homepage;
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ncfavier ];
   };

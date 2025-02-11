@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, CoreFoundation
-, Security
-, libsecret
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  CoreFoundation,
+  Security,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
     rev = version;
-    sha256 = "sha256-LclYOuIYn+jYCvg69uHFlV3VcZ2KWdr8lFyCSBIB7Kw=";
+    sha256 = "sha256-/gdozAJbjaaCcttQED2PixaFNRDZOXbBIoV9QLexNUg=";
   };
 
   dontWrapQtApps = true;
-
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qtbase`
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
 
   cmakeFlags = [
     "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"
     "-DQT_TRANSLATIONS_DIR=share/qt/translations"
   ];
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
+  nativeBuildInputs = [ cmake ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ [ qtbase qttools ]
-    ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
+    ++ [
+      qtbase
+      qttools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      Security
+    ];
 
   doInstallCheck = true;
 

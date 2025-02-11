@@ -279,18 +279,6 @@
         "libgnome-keyring"
       ]
     },
-    "gnome-vfs-2.0": {
-      "attrPath": [
-        "gnome2",
-        "gnome_vfs"
-      ]
-    },
-    "gnome-vfs-module-2.0": {
-      "attrPath": [
-        "gnome2",
-        "gnome_vfs"
-      ]
-    },
     "gobject-2.0": {
       "attrPath": [
         "glib"
@@ -590,7 +578,7 @@
     },
     "libsoup-gnome-2.4": {
       "attrPath": [
-        "libsoup"
+        "libsoup_2_4"
       ]
     },
     "libssh2": {
@@ -768,11 +756,6 @@
         "python3"
       ]
     },
-    "ruby-2.7": {
-      "attrPath": [
-        "ruby_2_7"
-      ]
-    },
     "ruby-3.1": {
       "attrPath": [
         "ruby_3_1"
@@ -841,7 +824,7 @@
     },
     "wayland-scanner": {
       "attrPath": [
-        "wayland"
+        "wayland-scanner"
       ]
     },
     "wayland-server": {

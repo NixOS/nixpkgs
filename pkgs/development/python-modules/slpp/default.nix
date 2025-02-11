@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, setuptools
-, six
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -17,25 +18,19 @@ buildPythonPackage rec {
     hash = "sha256-If3ZMoNICQxxpdMnc+juaKq4rX7MMi9eDMAQEUy1Scg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "slpp"
-  ];
+  pythonImportsCheck = [ "slpp" ];
 
   meta = with lib; {
     description = "Simple lua-python parser";
     homepage = "https://github.com/SirAnthony/slpp";
     license = licenses.mit;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = [ ];
   };
 }

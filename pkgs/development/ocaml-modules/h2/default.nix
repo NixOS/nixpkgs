@@ -1,16 +1,15 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, ocaml
-, hpack
-, angstrom
-, faraday
-, base64
-, psq
-, httpaf
-, alcotest
-, yojson
-, hex
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  hpack,
+  angstrom,
+  faraday,
+  base64,
+  psq,
+  httpun-types,
+  alcotest,
+  yojson,
+  hex,
 }:
 
 let
@@ -30,20 +29,16 @@ buildDunePackage rec {
     src
     ;
 
-  duneVersion = "3";
-  minimalOCamlVersion = "4.06";
-
   propagatedBuildInputs = [
     angstrom
     faraday
     base64
     psq
     hpack
-    httpaf
+    httpun-types
   ];
 
-  # Tests fail with ≤ 4.07
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
   preCheck = ''
     ln -s "${http2-frame-test-case}" lib_test/http2-frame-test-case
   '';
@@ -54,6 +49,6 @@ buildDunePackage rec {
   ];
 
   meta = hpack.meta // {
-    description = "A high-performance, memory-efficient, and scalable HTTP/2 library for OCaml";
+    description = "High-performance, memory-efficient, and scalable HTTP/2 library for OCaml";
   };
 }

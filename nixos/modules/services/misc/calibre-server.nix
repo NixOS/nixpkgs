@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.calibre-server;
@@ -9,22 +11,33 @@ let
   documentationLink = "https://manual.calibre-ebook.com";
   generatedDocumentationLink = documentationLink + "/generated/en/calibre-server.html";
 
-  execFlags = (concatStringsSep " "
-    (mapAttrsToList (k: v: "${k} ${toString v}") (filterAttrs (name: value: value != null) {
-      "--listen-on" = cfg.host;
-      "--port" = cfg.port;
-      "--auth-mode" = cfg.auth.mode;
-      "--userdb" = cfg.auth.userDb;
-    }) ++ [(optionalString (cfg.auth.enable == true) "--enable-auth")])
+  execFlags = (
+    lib.concatStringsSep " " (
+      lib.mapAttrsToList (k: v: "${k} ${toString v}") (
+        lib.filterAttrs (name: value: value != null) {
+          "--listen-on" = cfg.host;
+          "--port" = cfg.port;
+          "--auth-mode" = cfg.auth.mode;
+          "--userdb" = cfg.auth.userDb;
+        }
+      )
+      ++ [ (lib.optionalString (cfg.auth.enable == true) "--enable-auth") ]
+      ++ cfg.extraFlags
+    )
   );
 in
 
 {
   imports = [
-    (mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [ "services" "calibre-server" "libraries" ]
-      (config:
-        let libraryDir = getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
-        in [ libraryDir ]
+    (lib.mkChangedOptionModule
+      [ "services" "calibre-server" "libraryDir" ]
+      [ "services" "calibre-server" "libraries" ]
+      (
+        config:
+        let
+          libraryDir = lib.getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
+        in
+        [ libraryDir ]
       )
     )
   ];
@@ -32,74 +45,93 @@ in
   options = {
     services.calibre-server = {
 
-      enable = mkEnableOption (lib.mdDoc "calibre-server");
+      enable = lib.mkEnableOption "calibre-server (e-book software)";
       package = lib.mkPackageOption pkgs "calibre" { };
 
-      libraries = mkOption {
-        type = types.listOf types.path;
+      libraries = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ "/var/lib/calibre-server" ];
-        description = lib.mdDoc ''
+        description = ''
           Make sure each library path is initialized before service startup.
           The directories of the libraries to serve. They must be readable for the user under which the server runs.
           See the [calibredb documentation](${documentationLink}/generated/en/calibredb.html#add) for details.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
-        default = "calibre-server";
-        description = lib.mdDoc "The user under which calibre-server runs.";
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Extra flags to pass to the calibre-server command.
+          See the [calibre-server documentation](${generatedDocumentationLink}) for details.
+        '';
       };
 
-      group = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "calibre-server";
-        description = lib.mdDoc "The group under which calibre-server runs.";
+        description = "The user under which calibre-server runs.";
       };
 
-      host = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
+        default = "calibre-server";
+        description = "The group under which calibre-server runs.";
+      };
+
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         example = "::1";
-        description = lib.mdDoc ''
+        description = ''
           The interface on which to listen for connections.
           See the [calibre-server documentation](${generatedDocumentationLink}#cmdoption-calibre-server-listen-on) for details.
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 8080;
-        type = types.port;
-        description = lib.mdDoc ''
+        type = lib.types.port;
+        description = ''
           The port on which to listen for connections.
           See the [calibre-server documentation](${generatedDocumentationLink}#cmdoption-calibre-server-port) for details.
         '';
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Open ports in the firewall for the Calibre Server web interface.";
+      };
+
       auth = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Password based authentication to access the server.
             See the [calibre-server documentation](${generatedDocumentationLink}#cmdoption-calibre-server-enable-auth) for details.
           '';
         };
 
-        mode = mkOption {
-          type = types.enum [ "auto" "basic" "digest" ];
+        mode = lib.mkOption {
+          type = lib.types.enum [
+            "auto"
+            "basic"
+            "digest"
+          ];
           default = "auto";
-          description = lib.mdDoc ''
+          description = ''
             Choose the type of authentication used.
             Set the HTTP authentication mode used by the server.
             See the [calibre-server documentation](${generatedDocumentationLink}#cmdoption-calibre-server-auth-mode) for details.
           '';
         };
 
-        userDb = mkOption {
+        userDb = lib.mkOption {
           default = null;
-          type = types.nullOr types.path;
-          description = lib.mdDoc ''
+          type = lib.types.nullOr lib.types.path;
+          description = ''
             Choose users database file to use for authentication.
             Make sure users database file is initialized before service startup.
             See the [calibre-server documentation](${documentationLink}/server.html#managing-user-accounts-from-the-command-line-only) for details.
@@ -109,7 +141,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.calibre-server = {
       description = "Calibre Server";
@@ -125,7 +157,7 @@ in
 
     environment.systemPackages = [ pkgs.calibre ];
 
-    users.users = optionalAttrs (cfg.user == "calibre-server") {
+    users.users = lib.optionalAttrs (cfg.user == "calibre-server") {
       calibre-server = {
         home = "/var/lib/calibre-server";
         createHome = true;
@@ -134,11 +166,13 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "calibre-server") {
+    users.groups = lib.optionalAttrs (cfg.group == "calibre-server") {
       calibre-server = {
         gid = config.ids.gids.calibre-server;
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
   };
 

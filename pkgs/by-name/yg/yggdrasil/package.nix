@@ -1,23 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.5.2";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "sha256-+E8CJs6m6iyMQNIqBbKLg8ghZR0FIuY5D1iDoUlaDyo=";
+    hash = "sha256-NlNQnYmK//p35pj2MInD6RVsajM/bGDhOuzOZZYoWRw=";
   };
 
-  vendorHash = "sha256-FXlIrsl3fbWpEpwrY5moaJI0H0yXtrTQhHFu+ktWRVM=";
+  vendorHash = "sha256-xZpUWIR3xTjhhNSwPoHx7GLUgcZJrWfF0FMExlluBmg=";
 
-  subPackages = [ "cmd/genkeys" "cmd/yggdrasil" "cmd/yggdrasilctl" ];
+  subPackages = [
+    "cmd/genkeys"
+    "cmd/yggdrasil"
+    "cmd/yggdrasilctl"
+  ];
 
   ldflags = [
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
-    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=yggdrasil"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/config.defaultAdminListen=unix:///var/run/yggdrasil/yggdrasil.sock"
     "-s"
     "-w"
@@ -26,10 +35,14 @@ buildGoModule rec {
   passthru.tests.basic = nixosTests.yggdrasil;
 
   meta = with lib; {
-    description =
-      "An experiment in scalable routing as an encrypted IPv6 overlay network";
+    description = "An experiment in scalable routing as an encrypted IPv6 overlay network";
     homepage = "https://yggdrasil-network.github.io/";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ ehmry gazally lassulus ];
+    maintainers = with maintainers; [
+      ehmry
+      gazally
+      lassulus
+      peigongdsd
+    ];
   };
 }

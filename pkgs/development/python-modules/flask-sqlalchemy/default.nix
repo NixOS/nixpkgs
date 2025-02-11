@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, mock
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  mock,
+  flit-core,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-5LaLuIGALdoafYeLL8hMBtHuV/tAuHTT3Jfav6NrgxI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     flask
@@ -36,16 +36,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  doCheck = pythonOlder "3.13"; # https://github.com/pallets-eco/flask-sqlalchemy/issues/1379
+
   disabledTests = [
     # flaky
     "test_session_scoping_changing"
-    # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
-    "test_persist_selectable"
+    # https://github.com/pallets-eco/flask-sqlalchemy/issues/1378
+    "test_explicit_table"
   ];
 
-  pythonImportsCheck = [
-    "flask_sqlalchemy"
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+    # datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version.
+    "-W"
+    "ignore::DeprecationWarning"
   ];
+
+  pythonImportsCheck = [ "flask_sqlalchemy" ];
 
   meta = with lib; {
     description = "SQLAlchemy extension for Flask";

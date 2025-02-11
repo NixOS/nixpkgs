@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "pingu";
@@ -18,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/sheepla/pingu/";
     license = licenses.mit;
     maintainers = with maintainers; [ CactiChameleon9 ];
+    mainProgram = "pingu";
   };
 }

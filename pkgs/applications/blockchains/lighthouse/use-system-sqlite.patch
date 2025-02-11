@@ -1,11 +1,11 @@
 diff --git a/Cargo.toml b/Cargo.toml
-index 62c0e7bd2..a089e3c5b 100644
+index b942d1719..da6f245c5 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -138,7 +138,7 @@ rayon = "1.7"
- regex = "1"
- reqwest = { version = "0.11", default-features = false, features = ["blocking", "json", "stream", "rustls-tls"] }
+@@ -148,7 +148,7 @@ regex = "1"
+ reqwest = { version = "0.11", default-features = false, features = ["blocking", "json", "stream", "rustls-tls", "native-tls-vendored"] }
  ring = "0.16"
+ rpds = "0.11"
 -rusqlite = { version = "0.28", features = ["bundled"] }
 +rusqlite = { version = "0.28" }
  serde = { version = "1", features = ["derive"] }

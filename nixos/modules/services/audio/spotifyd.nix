@@ -1,56 +1,66 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.spotifyd;
-  toml = pkgs.formats.toml {};
+  toml = pkgs.formats.toml { };
   warnConfig =
-    if cfg.config != ""
-    then lib.trace "Using the stringly typed .config attribute is discouraged. Use the TOML typed .settings attribute instead."
-    else id;
+    if cfg.config != "" then
+      lib.trace "Using the stringly typed .config attribute is discouraged. Use the TOML typed .settings attribute instead."
+    else
+      lib.id;
   spotifydConf =
-    if cfg.settings != {}
-    then toml.generate "spotify.conf" cfg.settings
-    else warnConfig (pkgs.writeText "spotifyd.conf" cfg.config);
+    if cfg.settings != { } then
+      toml.generate "spotify.conf" cfg.settings
+    else
+      warnConfig (pkgs.writeText "spotifyd.conf" cfg.config);
 in
 {
   options = {
     services.spotifyd = {
-      enable = mkEnableOption (lib.mdDoc "spotifyd, a Spotify playing daemon");
+      enable = lib.mkEnableOption "spotifyd, a Spotify playing daemon";
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "";
-        type = types.lines;
-        description = lib.mdDoc ''
+        type = lib.types.lines;
+        description = ''
           (Deprecated) Configuration for Spotifyd. For syntax and directives, see
-          <https://github.com/Spotifyd/spotifyd#Configuration>.
+          <https://docs.spotifyd.rs/config/File.html>.
         '';
       };
 
-      settings = mkOption {
-        default = {};
+      settings = lib.mkOption {
+        default = { };
         type = toml.type;
-        example = { global.bitrate = 320; };
-        description = lib.mdDoc ''
+        example = {
+          global.bitrate = 320;
+        };
+        description = ''
           Configuration for Spotifyd. For syntax and directives, see
-          <https://github.com/Spotifyd/spotifyd#Configuration>.
+          <https://docs.spotifyd.rs/config/File.html>.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.config == "" || cfg.settings == {};
+        assertion = cfg.config == "" || cfg.settings == { };
         message = "At most one of the .config attribute and the .settings attribute may be set";
       }
     ];
 
     systemd.services.spotifyd = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "sound.target" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+        "sound.target"
+      ];
       description = "spotifyd, a Spotify playing daemon";
       environment.SHELL = "/bin/sh";
       serviceConfig = {
@@ -59,10 +69,10 @@ in
         RestartSec = 12;
         DynamicUser = true;
         CacheDirectory = "spotifyd";
-        SupplementaryGroups = ["audio"];
+        SupplementaryGroups = [ "audio" ];
       };
     };
   };
 
-  meta.maintainers = [ maintainers.anderslundstedt ];
+  meta.maintainers = [ lib.maintainers.anderslundstedt ];
 }

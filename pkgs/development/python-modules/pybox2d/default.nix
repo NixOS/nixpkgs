@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, swig
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  swig,
 }:
 
 buildPythonPackage rec {
@@ -12,13 +13,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pybox2d";
     repo = "pybox2d";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yjLFvsg8GQLxjN1vtZM9zl+kAmD4+eS/vzRkpj0SCjY=";
   };
 
-  nativeBuildInputs = [
-    swig
-  ];
+  nativeBuildInputs = [ swig ];
 
   # We need to build the package explicitly a first time so that the library/Box2D/Box2D.py file
   # gets generated.

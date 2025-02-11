@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, dissect-cstruct
-, dissect-target
-, fetchFromGitHub
-, minio
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, rich
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  dissect-cstruct,
+  dissect-target,
+  fetchFromGitHub,
+  minio,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  rich,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.10";
+  version = "3.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,24 +26,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8fvVK/mH+pgPaaxNKvKOw1qU0ElWAmNVP6YAqvBTwio=";
+    tag = version;
+    hash = "sha256-Ii19VnLLq+UGH0bkyUbLzHqZpJOXffIGeP4VZ9QG7D0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     dissect-cstruct
     dissect-target
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       dissect-target
       minio
@@ -53,13 +52,9 @@ buildPythonPackage rec {
     ] ++ dissect-target.optional-dependencies.full;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
-  pythonImportsCheck = [
-    "acquire"
-  ];
+  pythonImportsCheck = [ "acquire" ];
 
   meta = with lib; {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";

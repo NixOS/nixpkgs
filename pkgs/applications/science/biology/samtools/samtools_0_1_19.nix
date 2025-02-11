@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "samtools";
@@ -25,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for manipulating SAM/BAM/CRAM format";
+    mainProgram = "samtools";
     license = licenses.mit;
     homepage = "https://samtools.sourceforge.net/";
     platforms = platforms.unix;

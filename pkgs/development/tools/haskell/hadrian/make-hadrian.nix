@@ -21,27 +21,30 @@
 # related packages that are managed in the GHC source tree. Its main job is to
 # expose all possible compile time customization in a common interface and
 # take care of all differences between Hadrian versions.
-{ bootPkgs
-, lib
+{
+  bootPkgs,
+  lib,
 }:
 
-{ # GHC source tree and version to build hadrian & friends from.
+{
+  # GHC source tree and version to build hadrian & friends from.
   # These are passed on to the actual package expressions.
-  ghcSrc
-, ghcVersion
+  ghcSrc,
+  ghcVersion,
   # Contents of a non-default UserSettings.hs to use when building hadrian, if any.
   # Should be a string or null.
-, userSettings ? null
-  # Whether to pass --hyperlinked-source to haddock or not. This is a custom
-  # workaround as we wait for this to be configurable via userSettings or similar.
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23625
-, enableHyperlinkedSource ? false
+  userSettings ? null,
 }:
 
 let
-  callPackage' = f: args: bootPkgs.callPackage f ({
-    inherit ghcSrc ghcVersion;
-  } // args);
+  callPackage' =
+    f: args:
+    bootPkgs.callPackage f (
+      {
+        inherit ghcSrc ghcVersion;
+      }
+      // args
+    );
 
   ghc-platform = callPackage' ./ghc-platform.nix { };
   ghc-toolchain = callPackage' ./ghc-toolchain.nix {
@@ -49,11 +52,18 @@ let
   };
 in
 
-callPackage' ./hadrian.nix ({
-  inherit userSettings enableHyperlinkedSource;
-} // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.9") {
-  # Starting with GHC 9.9 development, additional in tree packages are required
-  # to build hadrian. (Hackage-released conditional dependencies are handled
-  # in ./hadrian.nix without requiring intervention here.)
-  inherit ghc-platform ghc-toolchain;
-})
+callPackage' ./hadrian.nix (
+  {
+    inherit userSettings;
+  }
+  // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.9") {
+    # Starting with GHC 9.9 development, additional in tree packages are required
+    # to build hadrian. (Hackage-released conditional dependencies are handled
+    # in ./hadrian.nix without requiring intervention here.)
+    inherit ghc-platform ghc-toolchain;
+  }
+  // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.11") {
+    # See https://gitlab.haskell.org/ghc/ghc/-/commit/145a6477854d4003a07573d5e7ffa0c9a64ae29c
+    Cabal = bootPkgs.Cabal_3_14_1_0;
+  }
+)

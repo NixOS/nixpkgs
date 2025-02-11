@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gperf";
@@ -37,5 +41,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/gperf/";
     platforms = lib.platforms.unix;
+    mainProgram = "gperf";
   };
 }

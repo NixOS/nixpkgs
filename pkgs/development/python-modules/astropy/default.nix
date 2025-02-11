@@ -1,91 +1,168 @@
-{ lib
-, fetchPypi
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  pythonOlder,
 
-# build time
-, astropy-extension-helpers
-, cython
-, jinja2
-, oldest-supported-numpy
-, setuptools-scm
-, wheel
-# testing
-, pytestCheckHook
-, pytest-xdist
-, pytest-astropy
-, python
+  # build time
+  stdenv,
+  cython,
+  extension-helpers,
+  setuptools,
+  setuptools-scm,
 
-# runtime
-, numpy
-, packaging
-, pyerfa
-, pyyaml
+  # dependencies
+  astropy-iers-data,
+  numpy,
+  packaging,
+  pyerfa,
+  pyyaml,
+
+  # optional-depedencies
+  scipy,
+  matplotlib,
+  ipython,
+  ipywidgets,
+  ipykernel,
+  pandas,
+  certifi,
+  dask,
+  h5py,
+  pyarrow,
+  beautifulsoup4,
+  html5lib,
+  sortedcontainers,
+  pytz,
+  jplephem,
+  mpmath,
+  asdf,
+  asdf-astropy,
+  bottleneck,
+  fsspec,
+  s3fs,
+
+  # testing
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-astropy-header,
+  pytest-astropy,
+  threadpoolctl,
+
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "5.3.4";
-  format = "pyproject";
+  version = "7.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1JD34vqsLMwBySRCAtYpFUJZr4qXkQTO2J3ErOTm8dg=";
+    hash = "sha256-6S18n+6G6z34cU5d1Bu/nxY9ND4aGD2Vv2vQnkMTyUA=";
   };
-  # Relax cython dependency to allow this to build, upstream only doesn't
-  # support cython 3 as of writing. See:
-  # https://github.com/astropy/astropy/issues/15315
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'cython==' 'cython>='
-  '';
-
-  nativeBuildInputs = [
-    astropy-extension-helpers
-    cython
-    jinja2
-    oldest-supported-numpy
-    setuptools-scm
-    wheel
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/astropy/astropy/commit/13b89edc9acd6d5f12eea75983084c57cb458130.patch";
+      hash = "sha256-2MgmW4kKBrZnTE1cjYYLOH5hStv5Q6tv4gN4sPSLBpM=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
+
+  build-system = [
+    cython
+    extension-helpers
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    astropy-iers-data
     numpy
     packaging
     pyerfa
     pyyaml
   ];
 
+  optional-dependencies = lib.fix (self: {
+    recommended = [
+      scipy
+      matplotlib
+    ];
+    ipython = [
+      ipython
+    ];
+    jupyter = [
+      ipywidgets
+      ipykernel
+      # ipydatagrid
+      pandas
+    ] ++ self.ipython;
+    all =
+      [
+        certifi
+        dask
+        h5py
+        pyarrow
+        beautifulsoup4
+        html5lib
+        sortedcontainers
+        pytz
+        jplephem
+        mpmath
+        asdf
+        asdf-astropy
+        bottleneck
+        fsspec
+        s3fs
+      ]
+      ++ self.recommended
+      ++ self.ipython
+      ++ self.jupyter
+      ++ dask.optional-dependencies.array
+      ++ fsspec.optional-dependencies.http;
+  });
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    pytest-astropy-header
     pytest-astropy
-  ];
+    threadpoolctl
+  ] ++ optional-dependencies.recommended;
 
-  # Not running it inside the build directory. See:
-  # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
+  pythonImportsCheck = [ "astropy" ];
+
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
-    cd "$out"
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+    # See https://github.com/astropy/astropy/issues/17649 and see
+    # --hypothesis-profile=ci pytest flag below.
+    cp conftest.py $out/
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd "$out"
   '';
-  pythonImportsCheck = [
-    "astropy"
+  pytestFlagsArray = [
+    "--hypothesis-profile=ci"
   ];
-  disabledTests = [
-    # May fail due to parallelism, see:
-    # https://github.com/astropy/astropy/issues/15441
-    "TestUnifiedOutputRegistry"
-  ];
+  postCheck = ''
+    rm conftest.py
+  '';
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ kentjames doronbehar ];
+    maintainers = with lib.maintainers; [
+      kentjames
+      doronbehar
+    ];
   };
 }

@@ -1,31 +1,33 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, polkit
-, polkit-qt
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, pcre
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  pcre,
+  pkg-config,
+  polkit,
+  polkit-qt-1,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-w0o76oBFNy3syQqyFZdAbFUu8yX+uA6cMOHf3WfKPEU=";
+    hash = "sha256-wj9i09F9If5JZO6W358XcZ/rawt9Oj3QwDvLLRvS2Bc=";
   };
 
   nativeBuildInputs = [
@@ -33,25 +35,26 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qtsvg
-    polkit
-    polkit-qt
     kwindowsystem
     liblxqt
     libqtxdg
     pcre
+    polkit
+    polkit-qt-1
+    qtbase
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-policykit";
-    description = "The LXQt PolicyKit agent";
+    description = "LXQt PolicyKit agent";
     mainProgram = "lxqt-policykit-agent";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

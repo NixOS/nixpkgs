@@ -1,8 +1,9 @@
-{ lib
-, mopidy
-, python3Packages
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  mopidy,
+  python3Packages,
+  fetchPypi,
+  fetchpatch,
 }:
 
 python3Packages.buildPythonApplication rec {

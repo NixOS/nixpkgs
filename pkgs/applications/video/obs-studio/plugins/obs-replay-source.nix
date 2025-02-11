@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, libcaption
-, obs-studio
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libcaption,
+  obs-studio,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-replay-source";
-  version = "1.6.12";
+  version = "1.6.13-unstable-2024-02-03";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-replay-source";
-    rev = finalAttrs.version;
-    sha256 = "sha256-MzugH6r/jY5Kg7GIR8/o1BN36FenBzMnqrPUceJmbPs=";
+    rev = "6590fde1c8e4f8c733016646a8165d52e28d094b";
+    hash = "sha256-foIzWNlU72FWXZVWR8TEiqJJMfl1vWYDTyhV6thYJbA=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libcaption obs-studio qtbase ];
+  buildInputs = [
+    libcaption
+    obs-studio
+    qtbase
+  ];
 
   postInstall = ''
     mkdir -p "$out/lib" "$out/share"

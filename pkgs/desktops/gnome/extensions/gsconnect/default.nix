@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , openssl
 , gsound
@@ -9,12 +8,12 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , glib-networking
 , gtk3
 , openssh
-, gnome
+, gnome-shell
 , evolution-data-server-gtk4
 , gjs
 , nixosTests
@@ -23,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "56";
+  version = "58";
 
   outputs = [ "out" "installedTests" ];
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-V2L65Fz1WcJE2ENE8uNgIuVSXLDHokcgM4Caz1sOdZM=";
+    hash = "sha256-bpy4G+f3NJ2iVsycPluV+98at0G2wlp7t5cPEMGM90s=";
   };
 
   patches = [
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection # for locating typelibs
-    wrapGAppsHook # for wrapping daemons
+    wrapGAppsHook3 # for wrapping daemons
     desktop-file-utils # update-desktop-database
   ];
 
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgnome_shell_libdir=${gnome.gnome-shell}/lib"
+    "-Dgnome_shell_libdir=${gnome-shell}/lib"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"
@@ -79,10 +78,8 @@ stdenv.mkDerivation rec {
 
     # TODO: do not include every typelib everywhere
     # for example, we definitely do not need nautilus
-    for file in src/extension.js src/prefs.js; do
-      substituteInPlace "$file" \
-        --subst-var-by typelibPath "$GI_TYPELIB_PATH"
-    done
+    substituteInPlace src/__nix-prepend-search-paths.js \
+      --subst-var-by typelibPath "$GI_TYPELIB_PATH"
 
     # slightly janky fix for gsettings_schemadir being removed
     substituteInPlace data/config.js.in \
@@ -118,7 +115,7 @@ stdenv.mkDerivation rec {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ [ maintainers.doronbehar ];
     platforms = platforms.linux;
   };
 }

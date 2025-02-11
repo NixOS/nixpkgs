@@ -15,7 +15,6 @@
 , x264
 , libintl
 , lib
-, opencore-amr
 , IOKit
 , CoreFoundation
 , DiskArbitration
@@ -26,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.22.6";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-PjFFTJjLL39tLTVezrkzqJL6Dx3Am8NsmryTDY4pykg=";
+    hash = "sha256-nfb9haclYkHvuyX4SzN1deOzRSZvXas4STceRpR3nxg=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     orc
     libintl
-    opencore-amr
   ] ++ lib.optionals enableGplPlugins [
     a52dec
     libcdio
@@ -57,7 +55,7 @@ stdenv.mkDerivation rec {
     libmad
     libmpeg2
     x264
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     CoreFoundation
     DiskArbitration
@@ -93,6 +91,6 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

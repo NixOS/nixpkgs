@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, Carbon, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  Carbon,
+  Cocoa,
+}:
 
 stdenv.mkDerivation rec {
   pname = "khd";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ Carbon Cocoa ];
+  buildInputs = [
+    Carbon
+    Cocoa
+  ];
 
   buildPhase = ''
     make install
@@ -35,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple modal hotkey daemon for OSX";
+    description = "Simple modal hotkey daemon for OSX";
     homepage = "https://github.com/koekeishiya/khd";
     downloadPage = "https://github.com/koekeishiya/khd/releases";
     platforms = platforms.darwin;

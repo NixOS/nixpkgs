@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, buildNpmPackage, ArchiSteamFarm }:
+{
+  lib,
+  fetchFromGitHub,
+  buildNpmPackage,
+  ArchiSteamFarm,
+}:
 
 buildNpmPackage rec {
   pname = "asf-ui";
-  version = "c582499d60f0726b6ec7f0fd27bd533c1f67b937";
+  version = "6be24065cd4904389d94140f4ed1f6738b1f7fbb";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
@@ -10,10 +15,10 @@ buildNpmPackage rec {
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
     rev = version;
-    hash = "sha256-dTSYlswMWWRafieWqNDIi3qCBvNAkcmZWKhQgJiv2Ts=";
+    hash = "sha256-DFl+DCNj4JFKZG1awX5rlsHzj+67OFyBj9d16zDiKRA=";
   };
 
-  npmDepsHash = "sha256-0zzP1z3VO9Y4gBWJ+T7oHhKE/H2dzMUMg71BKupVcH4=";
+  npmDepsHash = "sha256-jZSiWZDckfGfgrBMHTX/sm7Pcl5ap3lfmwGi8SHXqu8=";
 
   installPhase = ''
     runHook preInstall
@@ -25,7 +30,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "The official web interface for ASF";
+    description = "Official web interface for ASF";
     license = licenses.asl20;
     homepage = "https://github.com/JustArchiNET/ASF-ui";
     inherit (ArchiSteamFarm.meta) maintainers platforms;

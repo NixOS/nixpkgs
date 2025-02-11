@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, acme
-, certbot
-, cloudflare
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  cloudflare,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-cloudflare";
+  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";
@@ -20,15 +22,14 @@ buildPythonPackage rec {
     cloudflare
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
+    "-p no:cacheprovider"
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

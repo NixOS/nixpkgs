@@ -1,22 +1,28 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  libbpkg,
+  libbutl,
+  libodb,
+  libodb-sqlite,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bdep";
-  version = "0.15.0";
+  version = "0.17.0";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
-    sha256 = "sha256-dZldNVeQJWim3INBtOaPYP8yQMH3sjBzCLEHemvdxnU=";
+    hash = "sha256-+2Hl5kanxWJmOpfePAvvSBSmG3kZLQv/kYIkT4J+kaQ=";
   };
 
   strictDeps = true;
@@ -36,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "build2 project dependency manager";
+    mainProgram = "bdep";
     # https://build2.org/bdep/doc/bdep.xhtml
     longDescription = ''
       The build2 project dependency manager is used to manage the dependencies

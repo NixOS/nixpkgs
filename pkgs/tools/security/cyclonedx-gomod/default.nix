@@ -1,20 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "cyclonedx-gomod";
-  version = "1.4.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JczDfNBYT/Ap2lDucEvuT8NAwuQgmavOUvtznI6Q+Zc=";
+    repo = "cyclonedx-gomod";
+    tag = "v${version}";
+    hash = "sha256-iD8mDqQl18ufJBoRkpqYZc+I259HfnFNp29guvBtGDk=";
   };
 
-  vendorHash = "sha256-5Mn+f+oVwbn2qGaZct5+9f6tOBXfsB/I72yD7fHUrC8=";
+  vendorHash = "sha256-Yw+lci0vBDWeJVjOX83LKNb7afcsIK/AC5GZPRSzcdo=";
+
+  ldflags = [
+    "-w"
+    "-s"
+  ];
 
   # Tests require network access and cyclonedx executable
   doCheck = false;

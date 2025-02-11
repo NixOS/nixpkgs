@@ -10,6 +10,12 @@ $ ./result/bin/nixos-test-driver
 >>>
 ```
 
+::: {.note}
+By executing the test driver in this way,
+the VMs executed may gain network & Internet access via their backdoor control interface,
+typically recognized as `eth0`.
+:::
+
 You can then take any Python statement, e.g.
 
 ```py
@@ -44,7 +50,7 @@ As an alternative, you can proxy the guest shell to a local TCP server by first
 starting a TCP server in a terminal using the command:
 
 ```ShellSession
-$ socat 'READLINE,PROMPT=$ ' tcp-listen:4444,reuseaddr`
+$ socat 'READLINE,PROMPT=$ ' tcp-listen:4444,reuseaddr
 ```
 
 In the terminal where the test driver is running, connect to this server by

@@ -1,51 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, libusb1
-, gtk3
-, pkg-config
-, wrapGAppsHook
-, withGUI ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libusb1,
+  gtk3,
+  pkg-config,
+  wrapGAppsHook3,
+  withGUI ? false,
 }:
 
 let
   # The Darwin build of stlink explicitly refers to static libusb.
-  libusb1' = if stdenv.isDarwin then libusb1.override { withStatic = true; } else libusb1;
+  libusb1' =
+    if stdenv.hostPlatform.isDarwin then libusb1.override { withStatic = true; } else libusb1;
 
-# IMPORTANT: You need permissions to access the stlink usb devices.
-# Add services.udev.packages = [ pkgs.stlink ] to your configuration.nix
+  # IMPORTANT: You need permissions to access the stlink usb devices.
+  # Add services.udev.packages = [ pkgs.stlink ] to your configuration.nix
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "stlink";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "stlink-org";
     repo = "stlink";
     rev = "v${version}";
-    sha256 = "03xypffpbp4imrczbxmq69vgkr7mbp0ps9dk815br5wwlz6vgygl";
+    sha256 = "sha256-hlFI2xpZ4ldMcxZbg/T5/4JuFFdO9THLcU0DQKSFqrw=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/stlink-org/stlink/commit/468b1d2daa853b975c33ab69876c486734f2c6a7.diff";
-      sha256 = "sha256-ueSi/zc7xbOATl0yBtCL4U64IQ/yqu6sMYDOiPl1JBI=";
+      name = "calloc-argument-order.patch";
+      url = "https://github.com/stlink-org/stlink/commit/6a6718b3342b6c5e282a4e33325b9f97908a0692.patch";
+      includes = [ "src/stlink-lib/chipid.c" ];
+      sha256 = "sha256-sAfcrDdoKy5Gl1o/PHEUr8uL9OBq0g1nfRe7Y0ijWAM=";
     })
   ];
 
-  buildInputs = [
-    libusb1'
-  ] ++ lib.optionals withGUI [
-    gtk3
-  ];
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals withGUI [
-    pkg-config
-    wrapGAppsHook
-  ];
+  buildInputs =
+    [
+      libusb1'
+    ]
+    ++ lib.optionals withGUI [
+      gtk3
+    ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals withGUI [
+      pkg-config
+      wrapGAppsHook3
+    ];
 
   cmakeFlags = [
     "-DSTLINK_MODPROBED_DIR=${placeholder "out"}/etc/modprobe.d"
@@ -56,6 +65,10 @@ in stdenv.mkDerivation rec {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
+    badPlatforms = platforms.darwin;
+    maintainers = [
+      maintainers.bjornfor
+      maintainers.rongcuid
+    ];
   };
 }

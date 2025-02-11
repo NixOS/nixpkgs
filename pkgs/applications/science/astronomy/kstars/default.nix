@@ -1,36 +1,85 @@
 {
-  lib, mkDerivation, extra-cmake-modules, fetchurl,
-
-  kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
-
-
-  qtx11extras, qtwebsockets, qtkeychain, libsecret,
-
-  eigen, zlib,
-
-  cfitsio, indi-full, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
+  lib,
+  stdenv,
+  extra-cmake-modules,
+  fetchurl,
+  kconfig,
+  kdoctools,
+  kguiaddons,
+  ki18n,
+  kinit,
+  kiconthemes,
+  kio,
+  knewstuff,
+  kplotting,
+  kwidgetsaddons,
+  kxmlgui,
+  knotifyconfig,
+  qtx11extras,
+  qtwebsockets,
+  qtkeychain,
+  qtdatavis3d,
+  wrapQtAppsHook,
+  breeze-icons,
+  libsecret,
+  eigen,
+  zlib,
+  cfitsio,
+  indi-full,
+  xplanet,
+  libnova,
+  libraw,
+  gsl,
+  wcslib,
+  stellarsolver,
+  libxisf,
+  curl,
 }:
-
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.6.7";
+  version = "3.7.4";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-uEgzvhlHHpXyvi3Djfwg3GmYeZq+r48m7OJFIDARpe4=";
+    url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
+    hash = "sha256-WdVsPCwDQWW/NIRehuqk5f8rgtucAbGLSbmwZLMLiHM=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapQtAppsHook
+  ];
   buildInputs = [
-    kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
-
-    qtx11extras qtwebsockets qtkeychain libsecret
-
-    eigen zlib
-
-    cfitsio indi-full xplanet libnova libraw gsl wcslib stellarsolver
+    kconfig
+    kdoctools
+    kguiaddons
+    ki18n
+    kinit
+    kiconthemes
+    kio
+    knewstuff
+    kplotting
+    kwidgetsaddons
+    kxmlgui
+    knotifyconfig
+    qtx11extras
+    qtwebsockets
+    qtkeychain
+    qtdatavis3d
+    breeze-icons
+    libsecret
+    eigen
+    zlib
+    cfitsio
+    indi-full
+    xplanet
+    libnova
+    libraw
+    gsl
+    wcslib
+    stellarsolver
+    libxisf
+    curl
   ];
 
   cmakeFlags = [
@@ -40,6 +89,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Virtual planetarium astronomy software";
+    mainProgram = "kstars";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
     longDescription = ''
       It provides an accurate graphical simulation of the night sky, from any location on Earth, at any date and time.
@@ -48,6 +98,9 @@ mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput hjones2199 ];
+    maintainers = with maintainers; [
+      timput
+      hjones2199
+    ];
   };
-}
+})

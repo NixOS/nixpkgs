@@ -1,35 +1,71 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  stdenv,
+  substituteAll,
+
+  # build-system
+  hatchling,
+
+  # native dependencies
+  xorg,
+
+  # tests
+  lsof,
+  pillow,
+  pytest-cov-stub,
+  pytest,
+  pyvirtualdisplay,
+  xvfb-run,
 }:
 
 buildPythonPackage rec {
   pname = "mss";
-  version = "9.0.1";
-  format = "setuptools";
+  version = "10.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bre5AIzydCiBH6M66zXzM024Hj98wt1J7HxuWpSznxI=";
+    hash = "sha256-2QPg1RJivw+HgoQc8W6qbX4+HxLq41q0HC4xiDfGY38=";
   };
 
-  prePatch = ''
-    # By default it attempts to build Windows-only functionality
-    rm src/mss/windows.py
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    (substituteAll {
+      src = ./linux-paths.patch;
+      x11 = "${xorg.libX11}/lib/libX11.so";
+      xfixes = "${xorg.libXfixes}/lib/libXfixes.so";
+      xrandr = "${xorg.libXrandr}/lib/libXrandr.so";
+    })
+  ];
+
+  build-system = [ hatchling ];
+
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = [
+    lsof
+    pillow
+    pytest-cov-stub
+    pytest
+    pyvirtualdisplay
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run pytest -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    runHook postCheck
   '';
 
-  # Skipping tests due to most relying on DISPLAY being set
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "mss"
-  ];
+  pythonImportsCheck = [ "mss" ];
 
   meta = with lib; {
     description = "Cross-platform multiple screenshots module";
+    mainProgram = "mss";
     homepage = "https://github.com/BoboTiG/python-mss";
     changelog = "https://github.com/BoboTiG/python-mss/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

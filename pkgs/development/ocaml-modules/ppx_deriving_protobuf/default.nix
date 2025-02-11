@@ -1,5 +1,11 @@
-{ lib, fetchurl, buildDunePackage, cppo, ppx_deriving
-, ppxlib, dune-configurator
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cppo,
+  ppx_deriving,
+  ppxlib,
+  dune-configurator,
 }:
 
 buildDunePackage rec {
@@ -14,12 +20,15 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ ppxlib dune-configurator ];
+  buildInputs = [
+    ppxlib
+    dune-configurator
+  ];
   propagatedBuildInputs = [ ppx_deriving ];
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-ppx/ppx_deriving_protobuf";
-    description = "A Protocol Buffers codec generator for OCaml";
+    description = "Protocol Buffers codec generator for OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.vyorkin ];
   };

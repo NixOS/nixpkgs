@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, pytestCheckHook
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, setuptools-scm
-, setuptools
-, fast-histogram
-, matplotlib
-, numpy
-, wheel
-, pytest-mpl
+{
+  lib,
+  buildPythonPackage,
+  pytestCheckHook,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  fast-histogram,
+  matplotlib,
+  numpy,
+  wheel,
+  pytest-mpl,
 }:
 
 buildPythonPackage rec {
   pname = "mpl-scatter-density";
-  version = "0.7";
+  version = "0.8";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-MMxM+iv5p9ZLcBpqa3tBBPbsMM/PTg6BXaDpGgSw+DE=";
+    tag = "v${version}";
+    sha256 = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
   };
 
   patches = [
@@ -41,9 +43,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [ matplotlib numpy fast-histogram ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    fast-histogram
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

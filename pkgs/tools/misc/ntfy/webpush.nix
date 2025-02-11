@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pywebpush
-, py-vapid
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pywebpush,
+  py-vapid,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,6 @@ buildPythonPackage rec {
     description = "cloudbell webpush notification support for ntfy";
     homepage = "https://dschep.github.io/ntfy-webpush/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

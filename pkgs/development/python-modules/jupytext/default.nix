@@ -1,86 +1,76 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, gitpython
-, isort
-, jupyter-client
-, jupyter-packaging
-, jupyterlab
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, toml
-, wheel
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-jupyter-builder,
+  hatchling,
+
+  # dependencies
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  packaging,
+  pyyaml,
+  pythonOlder,
+  tomli,
+
+  # tests
+  jupyter-client,
+  notebook,
+  pytest-xdist,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.15.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "1.16.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GvMoz2BsYWk0atrT3xmSnbV7AuO5RJoM/bOJlZ5YIn4=";
+    repo = "jupytext";
+    tag = "v${version}";
+    hash = "sha256-MkFTIHXpe0rYBJsaXwFqDEao+wSL2tG4JtPx1CjHGoY=";
   };
 
-  # Follow https://github.com/mwouts/jupytext/pull/1119 to see if the patch
-  # relaxing jupyter_packaging version can be cleaned up.
-  #
-  # Follow https://github.com/mwouts/jupytext/pull/1077 to see when the patch
-  # relaxing jupyterlab version can be cleaned up.
-  #
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'jupyter_packaging~=' 'jupyter_packaging>=' \
-      --replace 'jupyterlab>=3,<=4' 'jupyterlab>=3'
-  '';
-
-  nativeBuildInputs = [
-    jupyter-packaging
-    jupyterlab
-    setuptools
-    wheel
+  build-system = [
+    hatch-jupyter-builder
+    hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown-it-py
     mdit-py-plugins
     nbformat
+    packaging
     pyyaml
-    toml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
-    gitpython
-    isort
     jupyter-client
     notebook
+    pytest-xdist
     pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
     # Tests that use a Jupyter notebook require $HOME to be writable
     export HOME=$(mktemp -d);
+    export PATH=$out/bin:$PATH;
   '';
 
-  pytestFlagsArray = [
-    # Pre-commit tests expect the source directory to be a Git repository
-    "--ignore-glob='tests/test_pre_commit_*.py'"
+  disabledTestPaths = [
+    # Requires the `git` python module
+    "tests/external"
   ];
 
-  disabledTests = [
-    "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
-  ] ++ lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # requires access to trash
     "test_load_save_rename"
   ];
@@ -90,11 +80,12 @@ buildPythonPackage rec {
     "jupytext.cli"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";
     homepage = "https://github.com/mwouts/jupytext";
-    changelog = "https://github.com/mwouts/jupytext/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = teams.jupyter.members;
+    changelog = "https://github.com/mwouts/jupytext/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupytext";
   };
 }

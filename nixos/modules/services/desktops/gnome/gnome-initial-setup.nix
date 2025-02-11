@@ -1,8 +1,11 @@
 # GNOME Initial Setup.
 
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -45,16 +48,8 @@ in
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  # Added 2021-05-07
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-initial-setup" "enable" ]
-      [ "services" "gnome" "gnome-initial-setup" "enable" ]
-    )
-  ];
 
   ###### interface
 
@@ -62,25 +57,24 @@ in
 
     services.gnome.gnome-initial-setup = {
 
-      enable = mkEnableOption (lib.mdDoc "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system");
+      enable = lib.mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.gnome.gnome-initial-setup.enable {
+  config = lib.mkIf config.services.gnome.gnome-initial-setup.enable {
 
-    environment.systemPackages = [
-      pkgs.gnome.gnome-initial-setup
-    ]
-    ++ optional (versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart
-    ;
+    environment.systemPackages =
+      [
+        pkgs.gnome-initial-setup
+      ]
+      ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart;
 
     systemd.packages = [
-      pkgs.gnome.gnome-initial-setup
+      pkgs.gnome-initial-setup
     ];
 
     systemd.user.targets."gnome-session".wants = [
@@ -94,7 +88,7 @@ in
     ];
 
     programs.dconf.profiles.gnome-initial-setup.databases = [
-      "${pkgs.gnome.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
+      "${pkgs.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
     ];
   };
 

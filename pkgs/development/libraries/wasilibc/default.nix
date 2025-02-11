@@ -1,14 +1,15 @@
-{ stdenv
-, buildPackages
-, fetchFromGitHub
-, lib
-, firefox-unwrapped
-, firefox-esr-unwrapped
+{
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  lib,
+  firefox-unwrapped,
+  firefox-esr-unwrapped,
 }:
 
 let
   pname = "wasilibc";
-  version = "20";
+  version = "22-unstable-2024-10-16";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -16,12 +17,16 @@ stdenv.mkDerivation {
   src = buildPackages.fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
-    rev = "refs/tags/wasi-sdk-${version}";
-    hash = "sha256-H92PDrH1FL7S3eMCK1+wqclryjhwghl21bOlRCAr1U4=";
+    rev = "98897e29fcfc81e2b12e487e4154ac99188330c4";
+    hash = "sha256-NFKhMJj/quvN3mR7lmxzA9w46KhX92iG0rQA9qDeS8I=";
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" "share" ];
+  outputs = [
+    "out"
+    "dev"
+    "share"
+  ];
 
   # clang-13: error: argument unused during compilation: '-rtlib=compiler-rt' [-Werror,-Wunused-command-line-argument]
   postPatch = ''
@@ -62,7 +67,13 @@ stdenv.mkDerivation {
     description = "WASI libc implementation for WebAssembly";
     homepage = "https://wasi.dev";
     platforms = platforms.wasi;
-    maintainers = with maintainers; [ matthewbauer rvolosatovs ];
-    license = with licenses; [ asl20-llvm mit ];
+    maintainers = with maintainers; [
+      matthewbauer
+      rvolosatovs
+    ];
+    license = with licenses; [
+      asl20-llvm
+      mit
+    ];
   };
 }

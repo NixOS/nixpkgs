@@ -1,6 +1,15 @@
-{ lib, stdenv, rustPlatform, rustc, Security, asNightly ? false }:
+{
+  lib,
+  stdenv,
+  cargo,
+  makeWrapper,
+  rustPlatform,
+  rustc,
+  Security,
+  asNightly ? false,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rustfmt" + lib.optionalString asNightly "-nightly";
   inherit (rustc) version src;
 
@@ -11,9 +20,13 @@ rustPlatform.buildRustPackage rec {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
     rustc.llvm
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # rustfmt uses the rustc_driver and std private libraries, and Rust's build process forces them to have
   # an install name of `@rpath/...` [0] [1] instead of the standard on macOS, which is an absolute path
@@ -21,9 +34,9 @@ rustPlatform.buildRustPackage rec {
   #
   # [0]: https://github.com/rust-lang/rust/blob/f77f4d55bdf9d8955d3292f709bd9830c2fdeca5/src/bootstrap/builder.rs#L1543
   # [1]: https://github.com/rust-lang/rust/blob/f77f4d55bdf9d8955d3292f709bd9830c2fdeca5/compiler/rustc_codegen_ssa/src/back/linker.rs#L323-L331
-  preFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -add_rpath "${rustc}/lib" "$out/bin/rustfmt"
-    install_name_tool -add_rpath "${rustc}/lib" "$out/bin/git-rustfmt"
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/rustfmt"
+    install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/git-rustfmt"
   '';
 
   # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
@@ -34,11 +47,22 @@ rustPlatform.buildRustPackage rec {
   CFG_RELEASE = rustc.version;
   CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
 
+  postInstall = ''
+    wrapProgram $out/bin/cargo-fmt \
+      --suffix PATH : ${lib.makeBinPath [ cargo ]}
+  '';
+
   meta = with lib; {
-    description = "A tool for formatting Rust code according to style guidelines";
+    description = "Tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     mainProgram = "rustfmt";
-    maintainers = with maintainers; [ globin basvandijk ];
+    maintainers = with maintainers; [
+      globin
+      basvandijk
+    ];
   };
 }

@@ -1,65 +1,87 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
+  pytestCheckHook,
 
-# propagates
-, flet-core
-, httpx
-, oauthlib
-, packaging
-, typing-extensions
-, watchdog
-, websocket-client
-, websockets
-
+  # propagates
+  fastapi,
+  httpx,
+  oauthlib,
+  packaging,
+  qrcode,
+  repath,
+  cookiecutter,
+  uvicorn,
+  watchdog,
+  websocket-client,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.10.1";
-  format = "pyproject";
+  inherit (flet-client-flutter) version src;
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ogy4F9/beSb3GCpwPsN+8hsVroRoHTSojqg+5eXwcRI=";
-  };
+  sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'httpx = "^0.23' 'httpx = ">=0.23' \
-      --replace 'watchdog = "^2' 'watchdog = ">=2'
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
   ];
 
-  propagatedBuildInputs = [
-    flet-core
-    typing-extensions
+  _flet_version = ''
+    version = "${version}"
+    def update_version():
+      pass
+  '';
+  _flet_utils_pip = ''
+    def install_flet_package(name: str):
+      pass
+  '';
+
+  postPatch = ''
+     # nerf out nagging about pip
+    echo "$_flet_version" > src/flet/version.py
+    echo "$_flet_utils_pip" >> src/flet/utils/pip.py
+  '';
+
+  dependencies = [
+    fastapi
+    uvicorn
     websocket-client
     watchdog
     oauthlib
     websockets
     httpx
     packaging
+    repath
+    qrcode
+    cookiecutter
+    fastapi
+    uvicorn
   ];
 
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "flet"
-  ];
+  pythonImportsCheck = [ "flet" ];
 
   meta = {
-    description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
+    description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.heyimnova ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

@@ -1,31 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, attrs
-, asn1crypto
-, cryptodatahub
-, python-dateutil
-, urllib3
-, pytestCheckHook
+{
+  lib,
+  asn1crypto,
+  attrs,
+  buildPythonPackage,
+  cryptodatahub,
+  fetchPypi,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.12.0";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "CryptoParser";
-    inherit version;
-    hash = "sha256-E32fHcuICUMCH5NYT+oFYU7M73bvXb/g1UoJSChzOiA=";
+    inherit pname version;
+    hash = "sha256-bEvhMVcm9sXlfhxUD2K4N10nusgxpGYFJQLtJE1/qok=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace requirements.txt  \
+      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     attrs
     cryptodatahub
@@ -33,9 +38,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "cryptoparser"
-  ];
+  pythonImportsCheck = [ "cryptoparser" ];
 
   meta = with lib; {
     description = "Security protocol parser and generator";

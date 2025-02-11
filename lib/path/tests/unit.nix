@@ -3,7 +3,17 @@
 { libpath }:
 let
   lib = import libpath;
-  inherit (lib.path) hasPrefix removePrefix append splitRoot subpath;
+  inherit (lib.path)
+    hasPrefix
+    removePrefix
+    append
+    splitRoot
+    hasStorePathPrefix
+    subpath
+    ;
+
+  # This is not allowed generally, but we're in the tests here, so we'll allow ourselves.
+  storeDirPath = /. + builtins.storeDir;
 
   cases = lib.runTests {
     # Test examples from the lib.path.append documentation
@@ -76,19 +86,55 @@ let
 
     testSplitRootExample1 = {
       expr = splitRoot /foo/bar;
-      expected = { root = /.; subpath = "./foo/bar"; };
+      expected = {
+        root = /.;
+        subpath = "./foo/bar";
+      };
     };
     testSplitRootExample2 = {
       expr = splitRoot /.;
-      expected = { root = /.; subpath = "./."; };
+      expected = {
+        root = /.;
+        subpath = "./.";
+      };
     };
     testSplitRootExample3 = {
       expr = splitRoot /foo/../bar;
-      expected = { root = /.; subpath = "./bar"; };
+      expected = {
+        root = /.;
+        subpath = "./bar";
+      };
     };
     testSplitRootExample4 = {
       expr = (builtins.tryEval (splitRoot "/foo/bar")).success;
       expected = false;
+    };
+
+    testHasStorePathPrefixExample1 = {
+      expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz");
+      expected = true;
+    };
+    testHasStorePathPrefixExample2 = {
+      expr = hasStorePathPrefix storeDirPath;
+      expected = false;
+    };
+    testHasStorePathPrefixExample3 = {
+      expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo");
+      expected = true;
+    };
+    testHasStorePathPrefixExample4 = {
+      expr = hasStorePathPrefix /home/user;
+      expected = false;
+    };
+    testHasStorePathPrefixExample5 = {
+      expr = hasStorePathPrefix (
+        storeDirPath + "/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq"
+      );
+      expected = false;
+    };
+    testHasStorePathPrefixExample6 = {
+      expr = hasStorePathPrefix (storeDirPath + "/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv");
+      expected = true;
     };
 
     # Test examples from the lib.path.subpath.isValid documentation
@@ -160,11 +206,18 @@ let
 
     # Test examples from the lib.path.subpath.join documentation
     testSubpathJoinExample1 = {
-      expr = subpath.join [ "foo" "bar/baz" ];
+      expr = subpath.join [
+        "foo"
+        "bar/baz"
+      ];
       expected = "./foo/bar/baz";
     };
     testSubpathJoinExample2 = {
-      expr = subpath.join [ "./foo" "." "bar//./baz/" ];
+      expr = subpath.join [
+        "./foo"
+        "."
+        "bar//./baz/"
+      ];
       expected = "./foo/bar/baz";
     };
     testSubpathJoinExample3 = {
@@ -245,7 +298,11 @@ let
     };
     testSubpathComponentsExample2 = {
       expr = subpath.components "./foo//bar/./baz/";
-      expected = [ "foo" "bar" "baz" ];
+      expected = [
+        "foo"
+        "bar"
+        "baz"
+      ];
     };
     testSubpathComponentsExample3 = {
       expr = (builtins.tryEval (subpath.components "/foo")).success;
@@ -253,5 +310,7 @@ let
     };
   };
 in
-  if cases == [] then "Unit tests successful"
-  else throw "Path unit tests failed: ${lib.generators.toPretty {} cases}"
+if cases == [ ] then
+  "Unit tests successful"
+else
+  throw "Path unit tests failed: ${lib.generators.toPretty { } cases}"

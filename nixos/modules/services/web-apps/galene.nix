@@ -12,12 +12,12 @@ in
 {
   options = {
     services.galene = {
-      enable = mkEnableOption (lib.mdDoc "Galene Service");
+      enable = mkEnableOption "Galene Service";
 
       stateDir = mkOption {
         default = defaultstateDir;
-        type = types.str;
-        description = lib.mdDoc ''
+        type = types.path;
+        description = ''
           The directory where Galene stores its internal state. If left as the default
           value this directory will automatically be created before the Galene server
           starts, otherwise the sysadmin is responsible for ensuring the directory
@@ -28,39 +28,39 @@ in
       user = mkOption {
         type = types.str;
         default = "galene";
-        description = lib.mdDoc "User account under which galene runs.";
+        description = "User account under which galene runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "galene";
-        description = lib.mdDoc "Group under which galene runs.";
+        description = "Group under which galene runs.";
       };
 
       insecure = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether Galene should listen in http or in https. If left as the default
           value (false), Galene needs to be fed a private key and a certificate.
         '';
       };
 
       certFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/path/to/your/cert.pem";
-        description = lib.mdDoc ''
+        description = ''
           Path to the server's certificate. The file is copied at runtime to
           Galene's data directory where it needs to reside.
         '';
       };
 
       keyFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/path/to/your/key.pem";
-        description = lib.mdDoc ''
+        description = ''
           Path to the server's private key. The file is copied at runtime to
           Galene's data directory where it needs to reside.
         '';
@@ -69,45 +69,52 @@ in
       httpAddress = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "HTTP listen address for galene.";
+        description = "HTTP listen address for galene.";
       };
 
       httpPort = mkOption {
         type = types.port;
         default = 8443;
-        description = lib.mdDoc "HTTP listen port.";
+        description = "HTTP listen port.";
+      };
+
+      turnAddress = mkOption {
+        type = types.str;
+        default = "auto";
+        example = "127.0.0.1:1194";
+        description = "Built-in TURN server listen address and port. Set to \"\" to disable.";
       };
 
       staticDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = "${cfg.package.static}/static";
         defaultText = literalExpression ''"''${package.static}/static"'';
         example = "/var/lib/galene/static";
-        description = lib.mdDoc "Web server directory.";
+        description = "Web server directory.";
       };
 
       recordingsDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = defaultrecordingsDir;
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/recordings"'';
         example = "/var/lib/galene/recordings";
-        description = lib.mdDoc "Recordings directory.";
+        description = "Recordings directory.";
       };
 
       dataDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = defaultdataDir;
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/data"'';
         example = "/var/lib/galene/data";
-        description = lib.mdDoc "Data directory.";
+        description = "Data directory.";
       };
 
       groupsDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = defaultgroupsDir;
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/groups"'';
         example = "/var/lib/galene/groups";
-        description = lib.mdDoc "Web server directory.";
+        description = "Web server directory.";
       };
 
       package = mkPackageOption pkgs "galene" { };
@@ -143,8 +150,11 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
-          ExecStart = ''${cfg.package}/bin/galene \
+          ExecStart = ''
+          ${cfg.package}/bin/galene \
           ${optionalString (cfg.insecure) "-insecure"} \
+          -http ${cfg.httpAddress}:${toString cfg.httpPort} \
+          -turn ${cfg.turnAddress} \
           -data ${cfg.dataDir} \
           -groups ${cfg.groupsDir} \
           -recordings ${cfg.recordingsDir} \

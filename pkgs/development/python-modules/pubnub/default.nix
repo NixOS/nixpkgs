@@ -1,34 +1,44 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, busypie
-, cbor2
-, fetchFromGitHub
-, pycryptodomex
-, pytestCheckHook
-, pytest-vcr
-, pytest-asyncio
-, requests
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  busypie,
+  cbor2,
+  fetchFromGitHub,
+  h2,
+  httpx,
+  pycryptodomex,
+  pytest-asyncio,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "7.3.2";
-  format = "setuptools";
+  version = "10.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "pubnub";
     repo = "python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-J6vwdOI/GM/K0TxRwIgkXibNAc+n9wVCpmMkzMhBepw=";
+    tag = version;
+    hash = "sha256-8CASMWTDeIi+UgScZk8R5kWN7Qsu8Bx5JChAFoPQ7iw=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "httpx" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     cbor2
+    h2
+    httpx
     pycryptodomex
     requests
   ];
@@ -52,15 +62,15 @@ buildPythonPackage rec {
     "test_handshaking"
   ];
 
-  pythonImportsCheck = [
-    "pubnub"
-  ];
+  pythonImportsCheck = [ "pubnub" ];
 
   meta = with lib; {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
-    changelog = "https://github.com/pubnub/python/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/pubnub/python/releases/tag/${version}";
+    # PubNub Software Development Kit License Agreement
+    # https://github.com/pubnub/python/blob/master/LICENSE
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ fab ];
   };
 }

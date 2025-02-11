@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
 }:
 
 let
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mutabah's Rust Compiler";
+    mainProgram = "mrustc";
     longDescription = ''
       In-progress alternative rust compiler, written in C++.
       Capable of building a fully-working copy of rustc,
@@ -48,7 +51,10 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ progval r-burns ];
+    maintainers = with maintainers; [
+      progval
+      r-burns
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

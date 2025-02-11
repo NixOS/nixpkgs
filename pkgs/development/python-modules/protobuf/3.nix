@@ -1,12 +1,13 @@
-{ buildPackages
-, buildPythonPackage
-, fetchpatch
-, isPyPy
-, lib
-, protobuf
-, pytestCheckHook
-, pythonAtLeast
-, tzdata
+{
+  buildPackages,
+  buildPythonPackage,
+  fetchpatch,
+  isPyPy,
+  lib,
+  protobuf,
+  pytestCheckHook,
+  pythonAtLeast,
+  tzdata,
 }:
 
 assert lib.versionAtLeast protobuf.version "3.21" -> throw "Protobuf 3.20 or older required";
@@ -45,6 +46,9 @@ buildPythonPackage {
   #
   postPatch = ''
     sed -i "/extra_compile_args.append('-std=c++14')/d" setup.py
+
+    substituteInPlace google/protobuf/internal/json_format_test.py \
+      --replace-fail assertRaisesRegexp assertRaisesRegex
   '';
 
   nativeBuildInputs = lib.optional isPyPy tzdata;
@@ -58,9 +62,7 @@ buildPythonPackage {
 
   setupPyGlobalFlags = [ "--cpp_implementation" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals isPyPy [
     # error message differs
@@ -85,6 +87,6 @@ buildPythonPackage {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
   };
 }

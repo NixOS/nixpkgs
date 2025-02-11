@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "asmrepl";
@@ -8,7 +12,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "asmrepl";
 
   meta = with lib; {
-    description = "A REPL for x86-64 assembly language";
+    description = "REPL for x86-64 assembly language";
     homepage = "https://github.com/tenderlove/asmrepl";
     license = licenses.asl20;
     maintainers = with maintainers; [ lom ];

@@ -1,55 +1,51 @@
 {
   admiral = {
-    owner = "jwaldrip";
-    repo = "admiral.cr";
-    rev = "v1.11.4";
-    sha256 = "1rpybhhzz892s2dp2kzbkkn1c8c7574275ql6amhbvc6ds5j3i46";
+    url = "https://github.com/jwaldrip/admiral.cr.git";
+    rev = "v1.12.1";
+    sha256 = "0x8v9i8ixs7xcwz35kdlqvz0pfm1cqzm6gvwdjfrps0drisk7f6i";
   };
   ameba = {
-    owner = "crystal-ameba";
-    repo = "ameba";
-    rev = "v0.14.2";
-    sha256 = "1l1q1icpzg1zvhfj8948w36j7ikaj7w816677zi29vi6y2d1dmf2";
+    url = "https://github.com/crystal-ameba/ameba.git";
+    rev = "v1.5.0";
+    sha256 = "1idivsbpmi40aqvs82fsv37nrgikirprxrj3ls9chsb876fq9p2d";
+  };
+  ansi-escapes = {
+    url = "https://github.com/gtramontina/ansi-escapes.cr.git";
+    rev = "v1.0.0";
+    sha256 = "106cy7bq0j438cfs0zqcxhj84msjj9dybxlcjr8qhs1fpm02s00b";
+  };
+  backtracer = {
+    url = "https://github.com/sija/backtracer.cr.git";
+    rev = "v1.2.2";
+    sha256 = "1rknyylsi14m7i77x7c3138wdw27i4f6sd78m3srw851p47bwr20";
   };
   baked_file_system = {
-    owner = "schovi";
-    repo = "baked_file_system";
+    url = "https://github.com/schovi/baked_file_system.git";
     rev = "v0.10.0";
     sha256 = "10f25sby8ipps5c2jj4j2q30kscgv4g1s5nhdddmldhg9isj0jli";
   };
   dotenv = {
-    owner = "gdotdesign";
-    repo = "cr-dotenv";
+    url = "https://github.com/gdotdesign/cr-dotenv.git";
     rev = "v1.0.0";
     sha256 = "00pdawysns1w1iqwh6j3shilpwh41ljz1chsqkacn6dj2yn21n0r";
   };
   exception_page = {
-    owner = "crystal-loot";
-    repo = "exception_page";
-    rev = "v0.1.5";
-    sha256 = "0nlph4rmavwsndf94hisdikh3qhhkyyh97cc39mvbqzrqrc6lbx3";
+    url = "https://github.com/crystal-loot/exception_page.git";
+    rev = "v0.3.1";
+    sha256 = "00fpkhwaf94mz9d9qiinsa7hdbs3x2yqjwwzvbjwv86dv8s5008n";
   };
   kemal = {
-    owner = "kemalcr";
-    repo = "kemal";
-    rev = "v1.0.0";
-    sha256 = "0yy6mkqyxlgdi6svj206iprw3njrxw61y2s2wwz78yz7j6sly1wf";
-  };
-  kilt = {
-    owner = "jeromegn";
-    repo = "kilt";
-    rev = "v0.4.1";
-    sha256 = "1bhmmk4djnysf2fr0020dakn1730a33xzi10c8lg1a343x77rm64";
+    url = "https://github.com/kemalcr/kemal.git";
+    rev = "v1.4.0";
+    sha256 = "0pmcnbfzb0bqrnwbqikci4j0hbxsabmkz8a879vprf5gswnr7b63";
   };
   markd = {
-    owner = "icyleaf";
-    repo = "markd";
-    rev = "v0.4.0";
-    sha256 = "0zi39ik7zqnidysafwn6icpr0gdb6z40v63bx5hablarpf2r9637";
+    url = "https://github.com/icyleaf/markd.git";
+    rev = "v0.5.0";
+    sha256 = "1a677z57kwjq6lp4ws7br1ga8jgpgi8990glhd1r8756bdyd8mg0";
   };
   radix = {
-    owner = "luislavena";
-    repo = "radix";
+    url = "https://github.com/luislavena/radix.git";
     rev = "v0.4.1";
     sha256 = "1l08cydkdidq9yyil1wl240hvk41iycv04jrg6nx5mkvzw4z1bzg";
   };

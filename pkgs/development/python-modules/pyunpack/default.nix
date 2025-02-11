@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, easyprocess
-, entrypoint2
-, patool
-, cabextract
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  easyprocess,
+  entrypoint2,
+  patool,
+  cabextract,
 }:
 
 buildPythonPackage rec {
@@ -17,20 +18,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ponty";
     repo = "pyunpack";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1MAdiX6+u35f6S8a0ZcIIebZE8bbxTy+0TnMohJ7J6s=";
   };
 
   postPatch = ''
     substituteInPlace pyunpack/__init__.py \
-      --replace \
+      --replace-fail \
        '_exepath("patool")' \
        '"${lib.getBin patool}/bin/.patool-wrapped"'
   '';
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     easyprocess
     entrypoint2
   ];
@@ -43,6 +44,11 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-x" ];
 
   pythonImportsCheck = [ "pyunpack" ];
+
+  disabledTests = [
+    # pinning test of `--help` sensitive to python version
+    "test_help"
+  ];
 
   disabledTestPaths = [
     # unfree

@@ -1,43 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # tests
+  numpy,
+  pandas,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "param";
-  version = "1.13.0";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5b3UTzb7OXBwcyYyDVCGLUpWxNOYZ3cv8Gfw+x7jsBI=";
+    tag = "v${version}";
+    hash = "sha256-3aqABliOk+JtR84J/qiwda4yAkVgG2lJWewhQuSUgtA=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
   nativeCheckInputs = [
+    numpy
+    pandas
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Version is not set properly
-    substituteInPlace setup.py \
-      --replace 'version=get_setup_version("param"),' 'version="${version}",'
-  '';
-
-  pythonImportsCheck = [
-    "param"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
+
+  pythonImportsCheck = [ "param" ];
 
   meta = with lib; {
     description = "Declarative Python programming using Parameters";
     homepage = "https://param.holoviz.org/";
-    changelog = "https://github.com/holoviz/param/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

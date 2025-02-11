@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, intervaltree
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  intervaltree,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ intervaltree ];
-  pythonImportCheck = [ "ipymarkup" ];
+  pythonImportsCheck = [ "ipymarkup" ];
 
   # Upstream has no tests:
   doCheck = false;

@@ -1,12 +1,12 @@
 {
   rufo = {
-    groups = ["default"];
-    platforms = [];
+    groups = [ "default" ];
+    platforms = [ ];
     source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "11nm1vzr3vd85yy4rd7ndrrx1ygm3m2jmw9r0b9lfxlj8rc1rip2";
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1rqq6mf7fvwvc9m3d5w5ysch3h7z4ml1vvdvy26064fb6lrnn5ai";
       type = "gem";
     };
-    version = "0.16.2";
+    version = "0.17.0";
   };
 }

@@ -1,14 +1,20 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse-unwrapped }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matrix-synapse-unwrapped,
+}:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
-  version = "1.6.4";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
+    sha256 = "sha256-yD7QGsS2Em8Z95po9pGRUDmHgHe4z0j0Jnvy3IG7xKY=";
   };
 
   sourceRoot = "${src.name}/synapse_antispam";
@@ -28,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matrix-org/mjolnir/blob/main/docs/synapse_module.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

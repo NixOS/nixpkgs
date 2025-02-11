@@ -1,10 +1,14 @@
-{ buildPythonPackage, fetchPypi
-, pytest, pytest-cov
+{
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "plaster";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,5 +19,8 @@ buildPythonPackage rec {
     py.test
   '';
 
-  nativeCheckInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [
+    pytest
+    pytest-cov-stub
+  ];
 }

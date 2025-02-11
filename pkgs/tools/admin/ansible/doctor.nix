@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -30,7 +31,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -59,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Annotation based documentation for your Ansible roles";
+    mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
     changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/v${version}";
     license = licenses.lgpl3Only;

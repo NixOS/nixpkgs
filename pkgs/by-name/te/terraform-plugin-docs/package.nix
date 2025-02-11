@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, go
-, testers
-, terraform-plugin-docs
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  go,
+  testers,
+  terraform-plugin-docs,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "terraform-plugin-docs";
-  version = "0.16.0";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-5vbi69GMgkzvN3aEQbNTbk99rg+kfvAvUrdDsuyIm9s=";
+    tag = "v${version}";
+    hash = "sha256-i5J0dBXqfm5YvELU8q5jLTtfgo8r1u/x/VW55TPmJLQ=";
   };
 
-  vendorHash = "sha256-AjW6BokLVDkIWXToJ7wNq/g19xKTAfpQ/gVlKCV5qw0=";
+  vendorHash = "sha256-UmPbtLHy2PAGxDPo1NziHYpNifuI8lsYDASHyjVzGJo=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,7 +30,7 @@ buildGoModule rec {
 
   allowGoReference = true;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

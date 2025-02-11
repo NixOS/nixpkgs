@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, libedit, libsecret, ncurses, pkg-config, readline, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libedit,
+  libsecret,
+  ncurses,
+  pkg-config,
+  readline,
+  Security,
+}:
 
 stdenv.mkDerivation rec {
   pname = "envchain";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sorah";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qxwiqhb8cg0zbn5p0mvnbyxx1xwvgiricrkjlvxz13sf2ngq87p";
+    sha256 = "sha256-QUy38kJzMbYOyT86as4/yq2ctcszSnB8a3eVWxgd4Fo=";
   };
 
   postPatch = ''
@@ -17,8 +27,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libsecret readline ]
-    ++ lib.optionals stdenv.isDarwin [ libedit ncurses Security ];
+  buildInputs =
+    [
+      libsecret
+      readline
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libedit
+      ncurses
+      Security
+    ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -27,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sorah/envchain";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "envchain";
   };
 }

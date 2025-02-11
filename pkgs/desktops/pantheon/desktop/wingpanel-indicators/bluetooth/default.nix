@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, gtk3
-, glib
-, granite
-, libnotify
-, wingpanel
-, libgee
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  glib,
+  granite,
+  libnotify,
+  wingpanel,
+  libgee,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
-  version = "7.0.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VLW3r5X0AWhNRQpajYmCNMIl/UvZCWz14gpxZLlLJdQ=";
+    sha256 = "sha256-N0ehiK8sYAZ/3Lu2u7dut7ZflroFptALFCxjbI0++BA=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
@@ -46,17 +45,13 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Bluetooth Indicator for Wingpanel";
+    mainProgram = "io.elementary.bluetooth";
     homepage = "https://github.com/elementary/wingpanel-indicator-bluetooth";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

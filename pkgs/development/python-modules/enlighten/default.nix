@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, blessed
-, prefixed
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  blessed,
+  prefixed,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "enlighten";
-  version = "1.12.2";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jAn2VxEZdGzuZ3bL9OfASkjoiPTMrm2zd6WHZ0HwiZ8=";
+    hash = "sha256-7nGNqsaHPIP9Nwa8532kcsd2pR4Nb1+G9+YeJ/mtFmo=";
   };
 
   propagatedBuildInputs = [
@@ -25,24 +26,22 @@ buildPythonPackage rec {
     prefixed
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "enlighten"
-  ];
+  pythonImportsCheck = [ "enlighten" ];
 
-  disabledTests = [
-    # AssertionError: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'> is not...
-    "test_init"
-    # AssertionError: Invalid format specifier (deprecated since prefixed 0.4.0)
-    "test_floats_prefixed"
-    "test_subcounter_prefixed"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # https://github.com/Rockhopper-Technologies/enlighten/issues/44
-    "test_autorefresh"
-  ];
+  disabledTests =
+    [
+      # AssertionError: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'> is not...
+      "test_init"
+      # AssertionError: Invalid format specifier (deprecated since prefixed 0.4.0)
+      "test_floats_prefixed"
+      "test_subcounter_prefixed"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # https://github.com/Rockhopper-Technologies/enlighten/issues/44
+      "test_autorefresh"
+    ];
 
   meta = with lib; {
     description = "Enlighten Progress Bar for Python Console Apps";

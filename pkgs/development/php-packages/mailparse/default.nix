@@ -1,10 +1,14 @@
-{ buildPecl, lib, php }:
+{
+  buildPecl,
+  lib,
+  php,
+}:
 
 buildPecl {
   pname = "mailparse";
 
-  version = "3.1.4";
-  sha256 = "sha256-FHSSGzLH7vglFE4r4ZsenUdQWtQJcpgz/VDCXqzflXc=";
+  version = "3.1.8";
+  hash = "sha256-Wb6rTvhRdwxJW6egcmq0DgmBNUaaEdnI5mWwiclu/C8=";
 
   internalDeps = [ php.extensions.mbstring ];
   postConfigure = ''

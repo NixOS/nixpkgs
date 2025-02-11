@@ -1,6 +1,6 @@
 # TeX Live {#sec-language-texlive}
 
-Since release 15.09 there is a new TeX Live packaging that lives entirely under attribute `texlive`.
+There is a TeX Live packaging that lives entirely under attribute `texlive`.
 
 ## User's guide (experimental new interface) {#sec-language-texlive-user-guide-experimental}
 
@@ -83,12 +83,13 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ```nix
   stdenvNoCC.mkDerivation rec {
     src = texlive.pkgs.iwona;
+    dontUnpack = true;
 
     inherit (src) pname version;
 
     installPhase = ''
       runHook preInstall
-      install -Dm644 fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
+      install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
       runHook postInstall
     '';
   }
@@ -181,11 +182,11 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
-      description = "A LaTeX2e class for overhead transparencies";
-      license = licenses.unfreeRedistributable;
-      maintainers = with maintainers; [ veprbl ];
-      platforms = platforms.all;
+    meta = {
+      description = "LaTeX2e class for overhead transparencies";
+      license = lib.licenses.unfreeRedistributable;
+      maintainers = with lib.maintainers; [ veprbl ];
+      platforms = lib.platforms.all;
     };
   };
 
@@ -207,4 +208,24 @@ EOF
   pdflatex test.tex
   cp test.pdf $out
 ''
+```
+
+## LuaLaTeX font cache {#sec-language-texlive-lualatex-font-cache}
+
+The font cache for LuaLaTeX is written to `$HOME`.
+Therefore, it is necessary to set `$HOME` to a writable path, e.g. [before using LuaLaTeX in nix derivations](https://github.com/NixOS/nixpkgs/issues/180639):
+```nix
+runCommandNoCC "lualatex-hello-world" {
+  buildInputs = [ texliveFull ];
+} ''
+  mkdir $out
+  echo '\documentclass{article} \begin{document} Hello world \end{document}' > main.tex
+  env HOME=$(mktemp -d) lualatex  -interaction=nonstopmode -output-format=pdf -output-directory=$out ./main.tex
+''
+```
+
+Additionally, [the cache of a user can diverge from the nix store](https://github.com/NixOS/nixpkgs/issues/278718).
+To resolve font issues that might follow, the cache can be removed by the user:
+```ShellSession
+luaotfload-tool --cache=erase --flush-lookups --force
 ```

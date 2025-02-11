@@ -1,6 +1,7 @@
 # Global configuration {#chap-packageconfig}
 
-Nix comes with certain defaults about what packages can and cannot be installed, based on a package's metadata. By default, Nix will prevent installation if any of the following criteria are true:
+Nix comes with certain defaults about which packages can and cannot be installed, based on a package's metadata.
+By default, Nix will prevent installation if any of the following criteria are true:
 
 -   The package is thought to be broken, and has had its `meta.broken` set to `true`.
 
@@ -10,23 +11,14 @@ Nix comes with certain defaults about what packages can and cannot be installed,
 
 -   The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered in to the package's `meta.knownVulnerabilities`.
 
-Note that all this is checked during evaluation already, and the check includes any package that is evaluated. In particular, all build-time dependencies are checked. `nix-env -qa` will (attempt to) hide any packages that would be refused.
+Each of these criteria can be altered in the Nixpkgs configuration.
 
-Each of these criteria can be altered in the nixpkgs configuration.
+:::{.note}
+All this is checked during evaluation already, and the check includes any package that is evaluated.
+In particular, all build-time dependencies are checked.
+:::
 
-The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, as in the following example:
-
-```nix
-{
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-}
-```
-
-However, this does not allow unfree software for individual users. Their configurations are managed separately.
-
-A user's nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
+A user's Nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
 
 ```nix
 {
@@ -34,7 +26,10 @@ A user's nixpkgs configuration is stored in a user-specific configuration file l
 }
 ```
 
-Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
+:::{.caution}
+Unfree software is not tested or built in Nixpkgs continuous integration, and therefore not cached.
+Most unfree licenses prohibit either executing or distributing the software.
+:::
 
 ## Installing broken packages {#sec-allow-broken}
 
@@ -159,11 +154,13 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     The `allowInsecurePredicate` option is a function which accepts a package and returns a boolean, much like `allowUnfreePredicate`.
 
-    The following configuration example only allows insecure packages with very short names:
+    The following configuration example allows any version of the `ovftool` package:
 
     ```nix
     {
-      allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) <= 5;
+      allowInsecurePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "ovftool"
+      ];
     }
     ```
 
@@ -176,7 +173,7 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 ```nix
 {
   packageOverrides = pkgs: rec {
-    foo = pkgs.foo.override { ... };
+    foo = pkgs.foo.override { /* ... */ };
   };
 }
 ```

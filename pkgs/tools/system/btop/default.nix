@@ -1,30 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, removeReferencesTo
-, btop
-, testers
+{
+  lib,
+  config,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  removeReferencesTo,
+  autoAddDriverRunpath,
+  apple-sdk_15,
+  versionCheckHook,
+  rocmPackages,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.2.13";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-F/muCjhcnM+VqAn6FlD4lv23OLITrmtnHkFc5zv97yk=";
+    hash = "sha256-A5hOBxj8tKlkHd8zDHfDoU6fIu8gDpt3/usbiDk0/G0=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.IOKit
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+    ];
 
-  env.ADDFLAGS = lib.optionalString stdenv.isDarwin
-    "-F${darwin.apple_sdk_11_0.frameworks.IOKit}/Library/Frameworks/";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -32,17 +42,25 @@ stdenv.mkDerivation rec {
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = btop;
-  };
+  postPhases = lib.optionals rocmSupport [ "postPatchelf" ];
+  postPatchelf = lib.optionalString rocmSupport ''
+    patchelf --add-rpath ${lib.getLib rocmPackages.rocm-smi}/lib $out/bin/btop
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
-    description = "A monitor of resources";
+    description = "Monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
     changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [
+      khaneliman
+      rmcgibbo
+    ];
     mainProgram = "btop";
   };
 }

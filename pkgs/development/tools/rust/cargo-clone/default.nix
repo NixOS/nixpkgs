@@ -1,41 +1,55 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-clone";
-  version = "1.1.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "janlikar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lfg47kw07k4r795n0iixl5cnrb13g74hqlbp8jzbypr255bc16q";
+    sha256 = "sha256-kK0J1Vfx1T17CgZ3DV9kQbAUxk4lEfje5p6QvdBS5VQ=";
   };
 
-  cargoSha256 = "sha256-rJcTl5fe3vkNNyLRvm7q5KmzyJXchh1/JuzK0GFhHLk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IbNwlVKGsi70G+ATimRZbHbW91vFddQl//dfAM6JO8I=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      Security
+      SystemConfiguration
+    ];
 
   # requires internet access
   doCheck = false;
 
   meta = with lib; {
-    description = "A cargo subcommand to fetch the source code of a Rust crate";
+    description = "Cargo subcommand to fetch the source code of a Rust crate";
+    mainProgram = "cargo-clone";
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+      janlikar
+    ];
   };
 }

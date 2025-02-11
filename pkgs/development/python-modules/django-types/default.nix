@@ -1,25 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  types-psycopg2,
 }:
 
 buildPythonPackage rec {
   pname = "django-types";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.20.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uOIzTIEIZNer8RzTzbHaOyAVtn5/EnAAfjN3f/G9hlQ=";
+    pname = "django_types";
+    inherit version;
+    hash = "sha256-TlXSxWFV49addd756x2VqJEwPyrBn8z2/oBW2kKT+uc=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  meta = with lib; {
+  dependencies = [ types-psycopg2 ];
+
+  meta = {
     description = "Type stubs for Django";
-    homepage = "https://pypi.org/project/django-types";
-    license = licenses.mit;
-    maintainers = with maintainers; [ thubrecht ];
+    homepage = "https://github.com/sbdchd/django-types";
+    changelog = "https://github.com/sbdchd/django-types/blob/main/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

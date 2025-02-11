@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.duosec;
 
@@ -11,7 +13,7 @@ let
     [duo]
     ikey=${cfg.integrationKey}
     host=${cfg.host}
-    ${optionalString (cfg.groups != "") ("groups="+cfg.groups)}
+    ${lib.optionalString (cfg.groups != "") ("groups=" + cfg.groups)}
     failmode=${cfg.failmode}
     pushinfo=${boolToStr cfg.pushinfo}
     autopush=${boolToStr cfg.autopush}
@@ -19,56 +21,60 @@ let
     fallback_local_ip=${boolToStr cfg.fallbackLocalIP}
   '';
 
-  configFileLogin = configFilePam + ''
-    motd=${boolToStr cfg.motd}
-    accept_env_factor=${boolToStr cfg.acceptEnvFactor}
-  '';
+  configFileLogin =
+    configFilePam
+    + ''
+      motd=${boolToStr cfg.motd}
+      accept_env_factor=${boolToStr cfg.acceptEnvFactor}
+    '';
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "security" "duosec" "group" ] [ "security" "duosec" "groups" ])
-    (mkRenamedOptionModule [ "security" "duosec" "ikey" ] [ "security" "duosec" "integrationKey" ])
-    (mkRemovedOptionModule [ "security" "duosec" "skey" ] "The insecure security.duosec.skey option has been replaced by a new security.duosec.secretKeyFile option. Use this new option to store a secure copy of your key instead.")
+    (lib.mkRenamedOptionModule [ "security" "duosec" "group" ] [ "security" "duosec" "groups" ])
+    (lib.mkRenamedOptionModule [ "security" "duosec" "ikey" ] [ "security" "duosec" "integrationKey" ])
+    (lib.mkRemovedOptionModule [ "security" "duosec" "skey" ]
+      "The insecure security.duosec.skey option has been replaced by a new security.duosec.secretKeyFile option. Use this new option to store a secure copy of your key instead."
+    )
   ];
 
   options = {
     security.duosec = {
-      ssh.enable = mkOption {
-        type = types.bool;
+      ssh.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "If enabled, protect SSH logins with Duo Security.";
+        description = "If enabled, protect SSH logins with Duo Security.";
       };
 
-      pam.enable = mkOption {
-        type = types.bool;
+      pam.enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "If enabled, protect logins with Duo Security using PAM support.";
+        description = "If enabled, protect logins with Duo Security using PAM support.";
       };
 
-      integrationKey = mkOption {
-        type = types.str;
-        description = lib.mdDoc "Integration key.";
+      integrationKey = lib.mkOption {
+        type = lib.types.str;
+        description = "Integration key.";
       };
 
-      secretKeyFile = mkOption {
-        type = types.nullOr types.path;
+      secretKeyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           A file containing your secret key. The security of your Duo application is tied to the security of your secret key.
         '';
         example = "/run/keys/duo-skey";
       };
 
-      host = mkOption {
-        type = types.str;
-        description = lib.mdDoc "Duo API hostname.";
+      host = lib.mkOption {
+        type = lib.types.str;
+        description = "Duo API hostname.";
       };
 
-      groups = mkOption {
-        type = types.str;
+      groups = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "users,!wheel,!*admin guests";
-        description = lib.mdDoc ''
+        description = ''
           If specified, Duo authentication is required only for users
           whose primary group or supplementary group list matches one
           of the space-separated pattern lists. Refer to
@@ -76,29 +82,32 @@ in
         '';
       };
 
-      failmode = mkOption {
-        type = types.enum [ "safe" "secure" ];
+      failmode = lib.mkOption {
+        type = lib.types.enum [
+          "safe"
+          "secure"
+        ];
         default = "safe";
-        description = lib.mdDoc ''
+        description = ''
           On service or configuration errors that prevent Duo
           authentication, fail "safe" (allow access) or "secure" (deny
           access). The default is "safe".
         '';
       };
 
-      pushinfo = mkOption {
-        type = types.bool;
+      pushinfo = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Include information such as the command to be executed in
           the Duo Push message.
         '';
       };
 
-      autopush = mkOption {
-        type = types.bool;
+      autopush = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If `true`, Duo Unix will automatically send
           a push login request to the user’s phone, falling back on a
           phone call if push is unavailable. If
@@ -109,19 +118,23 @@ in
         '';
       };
 
-      motd = mkOption {
-        type = types.bool;
+      motd = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Print the contents of `/etc/motd` to screen
           after a successful login.
         '';
       };
 
-      prompts = mkOption {
-        type = types.enum [ 1 2 3 ];
+      prompts = lib.mkOption {
+        type = lib.types.enum [
+          1
+          2
+          3
+        ];
         default = 3;
-        description = lib.mdDoc ''
+        description = ''
           If a user fails to authenticate with a second factor, Duo
           Unix will prompt the user to authenticate again. This option
           sets the maximum number of prompts that Duo Unix will
@@ -139,10 +152,10 @@ in
         '';
       };
 
-      acceptEnvFactor = mkOption {
-        type = types.bool;
+      acceptEnvFactor = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Look for factor selection or passcode in the
           `$DUO_PASSCODE` environment variable before
           prompting the user for input.
@@ -154,10 +167,10 @@ in
         '';
       };
 
-      fallbackLocalIP = mkOption {
-        type = types.bool;
+      fallbackLocalIP = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Duo Unix reports the IP address of the authorizing user, for
           the purposes of authorization and whitelisting. If Duo Unix
           cannot detect the IP address of the client, setting
@@ -170,10 +183,10 @@ in
         '';
       };
 
-      allowTcpForwarding = mkOption {
-        type = types.bool;
+      allowTcpForwarding = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           By default, when SSH forwarding, enabling Duo Security will
           disable TCP forwarding. By enabling this, you potentially
           undermine some of the SSH based login security. Note this is
@@ -183,23 +196,28 @@ in
     };
   };
 
-  config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
+  config = lib.mkIf (cfg.ssh.enable || cfg.pam.enable) {
     environment.systemPackages = [ pkgs.duo-unix ];
 
-    security.wrappers.login_duo =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.duo-unix.out}/bin/login_duo";
-      };
+    security.wrappers.login_duo = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.duo-unix.out}/bin/login_duo";
+    };
 
     systemd.services.login-duo = lib.mkIf cfg.ssh.enable {
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       script = ''
         if test -f "${cfg.secretKeyFile}"; then
-          mkdir -m 0755 -p /etc/duo
+          mkdir -p /etc/duo
+          chmod 0755 /etc/duo
 
           umask 0077
           conf="$(mktemp)"
@@ -216,11 +234,16 @@ in
 
     systemd.services.pam-duo = lib.mkIf cfg.ssh.enable {
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       script = ''
         if test -f "${cfg.secretKeyFile}"; then
-          mkdir -m 0755 -p /etc/duo
+          mkdir -p /etc/duo
+          chmod 0755 /etc/duo
 
           umask 0077
           conf="$(mktemp)"
@@ -234,16 +257,22 @@ in
       '';
     };
 
-    /* If PAM *and* SSH are enabled, then don't do anything special.
-    If PAM isn't used, set the default SSH-only options. */
-    services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
-    if cfg.pam.enable then "UseDNS no" else ''
-      # Duo Security configuration
-      ForceCommand ${config.security.wrapperDir}/login_duo
-      PermitTunnel no
-      ${optionalString (!cfg.allowTcpForwarding) ''
-        AllowTcpForwarding no
-      ''}
-    '');
+    /*
+      If PAM *and* SSH are enabled, then don't do anything special.
+      If PAM isn't used, set the default SSH-only options.
+    */
+    services.openssh.extraConfig = lib.mkIf (cfg.ssh.enable || cfg.pam.enable) (
+      if cfg.pam.enable then
+        "UseDNS no"
+      else
+        ''
+          # Duo Security configuration
+          ForceCommand ${config.security.wrapperDir}/login_duo
+          PermitTunnel no
+          ${lib.optionalString (!cfg.allowTcpForwarding) ''
+            AllowTcpForwarding no
+          ''}
+        ''
+    );
   };
 }

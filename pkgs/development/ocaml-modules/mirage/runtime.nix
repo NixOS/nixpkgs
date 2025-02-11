@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, fetchurl, ipaddr, functoria-runtime
-, fmt, logs, lwt
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  ipaddr,
+  functoria-runtime,
+  logs,
+  lwt,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -8,15 +13,19 @@ buildDunePackage rec {
   inherit (functoria-runtime) src version;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
-  propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs lwt ];
+  propagatedBuildInputs = [
+    ipaddr
+    functoria-runtime
+    logs
+    lwt
+  ];
   checkInputs = [ alcotest ];
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage";
-    description = "The base MirageOS runtime library, part of every MirageOS unikernel";
+    description = "Base MirageOS runtime library, part of every MirageOS unikernel";
     license = licenses.isc;
     maintainers = with maintainers; [ sternenseemann ];
   };

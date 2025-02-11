@@ -1,31 +1,41 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, prefetch-yarn-deps
-, nodejs
-, yarn
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  nix-update-script,
+  prefetch-yarn-deps,
+  fixup-yarn-lock,
+  nodejs,
+  yarn,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.73.1";
+  version = "0.81.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-t1m9pKsM9E2iAg9vv/nKmQioRi6kMjFGcTXzcT3cMxs=";
+    hash = "sha256-P0JDkuEm5eeVwi0+C7uSytA2NPQXUgJEDxqPiJfRNvs=";
   };
 
-  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps ];
-  buildInputs = [ yarn nodejs ];
+  nativeBuildInputs = [
+    makeWrapper
+    prefetch-yarn-deps
+    fixup-yarn-lock
+  ];
+  buildInputs = [
+    yarn
+    nodejs
+  ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-TRZlkDe7ARLGmfw5a0Dw9hSBRhqWvOfuBfPZ5/Bt/TI=";
+    hash = "sha256-j0mA+2GQZNxQoEi8qwmipUXGjPL4/bY5GHAT0o92Ob0=";
   };
 
   configurePhase = ''
@@ -69,16 +79,27 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    basic-functionality = nixosTests.outline;
+  passthru = {
+    tests = {
+      basic-functionality = nixosTests.outline;
+    };
+    updateScript = nix-update-script { };
+    # alias for nix-update to be able to find and update this attribute
+    offlineCache = yarnOfflineCache;
   };
 
   meta = with lib; {
-    description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
+    description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd xanderio ];
+    maintainers =
+      with maintainers;
+      [
+        cab404
+        yrd
+      ]
+      ++ teams.cyberus.members;
     platforms = platforms.linux;
   };
 }

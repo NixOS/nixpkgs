@@ -1,17 +1,18 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "polaris-web";
-  version = "68";
+  version = "69";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris-web";
     rev = "build-${version}";
-    hash = "sha256-YvVNTqv/DQzRyMuDgDdtCyoQbt4EqVztGa0NO92pO/Q=";
+    hash = "sha256-/UmAOunc/79DpZByUrzqNA7q7JNugEceKRZvyTGhtVQ=";
   };
 
   npmDepsHash = "sha256-c11CWJB76gX+Bxmqac3VxWjJxQVzYCaaf+pmQQpnOds=";

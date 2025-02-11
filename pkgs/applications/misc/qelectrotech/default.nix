@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchzip
-, installShellFiles
-, pkg-config
-, qmake
-, qtbase
-, kcoreaddons
-, kwidgetsaddons
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchzip,
+  installShellFiles,
+  pkg-config,
+  qmake,
+  qtbase,
+  kcoreaddons,
+  kwidgetsaddons,
 }:
 
 mkDerivation rec {
@@ -69,10 +70,11 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Free software to create electric diagrams";
+    mainProgram = "qelectrotech";
     homepage = "https://qelectrotech.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

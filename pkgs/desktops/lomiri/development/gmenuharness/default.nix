@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, glib
-, gtest
-, libqtdbustest
-, lomiri-api
-, pkg-config
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gtest,
+  libqtdbustest,
+  lomiri-api,
+  pkg-config,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-Denable_tests=${lib.boolToString finalAttrs.doCheck}"
+    "-Denable_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   dontWrapQtApps = true;

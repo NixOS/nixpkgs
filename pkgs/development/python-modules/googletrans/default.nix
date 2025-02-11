@@ -1,14 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "googletrans";
-  version = "2.4.0";
+  version = "4.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ssut";
     repo = "py-googletrans";
-    rev = "v${version}";
-    sha256 = "0wzzinn0k9rfv9z1gmfk9l4kljyd4n6kizsjw4wjxv91kfhj92hz";
+    tag = "v${version}";
+    sha256 = "sha256-R6LJLHHitJL8maXBCZyx2W47uJh0ZctVDA9oRIEhG5U=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -20,6 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Googletrans is python library to interact with Google Translate API";
+    mainProgram = "translate";
     homepage = "https://py-googletrans.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ unode ];

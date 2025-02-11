@@ -1,6 +1,12 @@
-{ lib, stdenvNoCC, fetchurl, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  fetchFromGitHub,
+}:
 
-let pname = "mplus-outline-fonts";
+let
+  pname = "mplus-outline-fonts";
 in
 {
   osdnRelease = stdenvNoCC.mkDerivation {
@@ -25,7 +31,7 @@ in
       homepage = "https://mplus-fonts.osdn.jp";
       maintainers = with maintainers; [ uakci ];
       platforms = platforms.all;
-      license = licenses.mit;
+      license = licenses.mplus;
     };
   };
 

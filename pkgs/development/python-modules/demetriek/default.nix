@@ -1,64 +1,71 @@
-{ lib
-, aiohttp
-, awesomeversion
-, backoff
-, buildPythonPackage
-, pydantic
-, fetchFromGitHub
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "1.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-demetriek";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LCHHBcZgO9gw5jyaJiiS4lKyb0ut+PJvKTylIvIKHhc=";
+    tag = "v${version}";
+    hash = "sha256-KqLkct4Kd8wa5eKYJJq1y/5z5PbO0XaK0aGzs3bm8fs=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}"
   '';
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "pydantic" ];
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
-    pydantic
+    mashumaro
+    orjson
     yarl
   ];
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "demetriek"
-  ];
+  pythonImportsCheck = [ "demetriek" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python client for LaMetric TIME devices";
     homepage = "https://github.com/frenck/python-demetriek";
+    changelog = "https://github.com/frenck/python-demetriek/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

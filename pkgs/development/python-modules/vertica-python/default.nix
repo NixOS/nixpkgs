@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, mock
-, parameterized
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  parameterized,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "vertica-python";
-  version = "1.3.7";
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kl8NARHTzEZrh5I//TwmITKp+g44lk5D7vkKPM2ldFI=";
+    hash = "sha256-VCB4ri/t7mlK3tsE2Bxu3Cd7h+10QDApQhB9hqC81EU=";
   };
 
-  propagatedBuildInputs = [
-    future
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     six
   ];
@@ -39,9 +41,7 @@ buildPythonPackage rec {
     "vertica_python/tests/integration_tests"
   ];
 
-  pythonImportsCheck = [
-    "vertica_python"
-  ];
+  pythonImportsCheck = [ "vertica_python" ];
 
   meta = with lib; {
     description = "Native Python client for Vertica database";

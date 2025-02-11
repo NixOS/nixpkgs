@@ -1,8 +1,14 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pyusb }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pyusb,
+}:
 
 buildPythonPackage rec {
   pname = "usbtmc";
   version = "0.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-ivi";

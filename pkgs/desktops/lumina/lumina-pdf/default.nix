@@ -1,4 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+  poppler,
+}:
 
 mkDerivation rec {
   pname = "lumina-pdf";
@@ -13,9 +21,15 @@ mkDerivation rec {
 
   sourceRoot = "${src.name}/src-qt5";
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
 
-  buildInputs = [ qtbase poppler ];
+  buildInputs = [
+    qtbase
+    poppler
+  ];
 
   postPatch = ''
     sed -i '1i\#include <memory>\' Renderer-poppler.cpp
@@ -30,6 +44,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "PDF viewer for the Lumina Desktop";
+    mainProgram = "lumina-pdf";
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
     license = licenses.bsd3;
     platforms = platforms.unix;

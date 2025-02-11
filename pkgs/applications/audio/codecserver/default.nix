@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, udev, protobuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  udev,
+  protobuf,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,5 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = teams.c3d2.members;
+    mainProgram = "codecserver";
   };
 }

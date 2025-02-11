@@ -1,70 +1,71 @@
 # Generic builder for lua packages
-{ lib
-, lua
-, wrapLua
-, luarocks
-, writeTextFile
+{
+  lib,
+  lua,
+  wrapLua,
+  luarocks_bootstrap,
+  writeTextFile,
 
-# Whether the derivation provides a lua module or not.
-, luarocksCheckHook
-, luaLib
+  # Whether the derivation provides a lua module or not.
+  luarocksCheckHook,
+  luaLib,
 }:
 
-{ pname
-, version
-# we need rockspecVersion to find the .rockspec even when version changes
-, rockspecVersion ? version
+{
+  pname,
+  version,
+  # we need rockspecVersion to find the .rockspec even when version changes
+  rockspecVersion ? version,
 
-# by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? "${lua.pname}${lib.versions.majorMinor lua.version}-"
+  # by default prefix `name` e.g. "lua5.2-${name}"
+  namePrefix ? "${lua.pname}${lib.versions.majorMinor lua.version}-",
 
-# Dependencies for building the package
-, buildInputs ? []
+  # Dependencies for building the package
+  buildInputs ? [ ],
 
-# Dependencies needed for running the checkPhase.
-# These are added to nativeBuildInputs when doCheck = true.
-, nativeCheckInputs ? []
+  # Dependencies needed for running the checkPhase.
+  # These are added to nativeBuildInputs when doCheck = true.
+  nativeCheckInputs ? [ ],
 
-# propagate build dependencies so in case we have A -> B -> C,
-# C can import package A propagated by B
-, propagatedBuildInputs ? []
+  # propagate build dependencies so in case we have A -> B -> C,
+  # C can import package A propagated by B
+  propagatedBuildInputs ? [ ],
 
-# used to disable derivation, useful for specific lua versions
-# TODO move from this setting meta.broken to a 'disabled' attribute on the
-# package, then use that to skip/include in each lua${ver}Packages set?
-, disabled ? false
+  # used to disable derivation, useful for specific lua versions
+  # TODO move from this setting meta.broken to a 'disabled' attribute on the
+  # package, then use that to skip/include in each lua${ver}Packages set?
+  disabled ? false,
 
-# Additional arguments to pass to the makeWrapper function, which wraps
-# generated binaries.
-, makeWrapperArgs ? []
+  # Additional arguments to pass to the makeWrapper function, which wraps
+  # generated binaries.
+  makeWrapperArgs ? [ ],
 
-# Skip wrapping of lua programs altogether
-, dontWrapLuaPrograms ? false
-, doCheck ? false
-# Non-Lua / system (e.g. C library) dependencies. Is a list of deps, where
-# each dep is either a derivation, or an attribute set like
-# { name = "rockspec external_dependencies key"; dep = derivation; }
-# The latter is used to work-around luarocks having a problem with
-# multiple-output derivations as external deps:
-# https://github.com/luarocks/luarocks/issues/766<Paste>
-, externalDeps ? []
+  # Skip wrapping of lua programs altogether
+  dontWrapLuaPrograms ? false,
+  doCheck ? false,
+  # Non-Lua / system (e.g. C library) dependencies. Is a list of deps, where
+  # each dep is either a derivation, or an attribute set like
+  # { name = "rockspec external_dependencies key"; dep = derivation; }
+  # The latter is used to work-around luarocks having a problem with
+  # multiple-output derivations as external deps:
+  # https://github.com/luarocks/luarocks/issues/766<Paste>
+  externalDeps ? [ ],
 
-# Appended to the generated luarocks config
-, extraConfig ? ""
-# Inserted into the generated luarocks config in the "variables" table
-, extraVariables ? {}
-# The two above arguments have access to builder variables -- e.g. to $out
+  # Appended to the generated luarocks config
+  extraConfig ? "",
 
-# relative to srcRoot, path to the rockspec to use when using rocks
-, rockspecFilename ? null
-# relative to srcRoot, path to folder that contains the expected rockspec
-, rockspecDir ?  "."
+  # transparent mapping nix <-> lua used as LUAROCKS_CONFIG
+  # Refer to https://github.com/luarocks/luarocks/wiki/Config-file-format for specs
+  luarocksConfig ? { },
 
-# must be set for packages that don't have a rock
-, knownRockspec ? null
+  # relative to srcRoot, path to the rockspec to use when using rocks
+  rockspecFilename ? null,
 
-, ... } @ attrs:
+  # must be set for packages that don't have a rock
+  knownRockspec ? null,
 
+  ...
+}@attrs:
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 
@@ -77,140 +78,181 @@ let
   # configured trees)
   luarocks_config = "luarocks-config.lua";
 
-  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (self: attrs // {
+  luarocksDrv = luaLib.toLuaModule (
+    lua.stdenv.mkDerivation (
+      self:
+      attrs
+      // {
 
-  name = namePrefix + pname + "-" + self.version;
-  inherit rockspecVersion;
+        name = namePrefix + self.pname + "-" + self.version;
+        inherit rockspecVersion;
 
-  __structuredAttrs = true;
-  env = {
-    LUAROCKS_CONFIG = self.configFile;
-  } // attrs.env or {};
+        __structuredAttrs = true;
+        env = {
+          LUAROCKS_CONFIG = self.configFile;
+        } // attrs.env or { };
 
-  generatedRockspecFilename = "${rockspecDir}/${pname}-${rockspecVersion}.rockspec";
+        generatedRockspecFilename = "./${self.pname}-${self.rockspecVersion}.rockspec";
 
-  nativeBuildInputs = [
-    wrapLua
-    luarocks
-  ];
+        nativeBuildInputs = [
+          lua # for lua.h
+          wrapLua
+          luarocks_bootstrap
+        ];
 
-  inherit doCheck extraVariables rockspecFilename knownRockspec externalDeps nativeCheckInputs;
+        inherit
+          doCheck
+          extraConfig
+          rockspecFilename
+          knownRockspec
+          externalDeps
+          nativeCheckInputs
+          ;
 
-  buildInputs = let
-    # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
-    externalDeps' = lib.filter (dep: !lib.isDerivation dep) self.externalDeps;
-    in [ lua.pkgs.luarocks ]
-      ++ buildInputs
-      ++ lib.optionals self.doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs)
-      ++ (map (d: d.dep) externalDeps')
-    ;
+        buildInputs =
+          let
+            # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
+            externalDeps' = lib.filter (dep: !lib.isDerivation dep) self.externalDeps;
+          in
+          [ luarocks_bootstrap ]
+          ++ buildInputs
+          ++ lib.optionals self.doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs)
+          ++ (map (d: d.dep) externalDeps');
 
-  # propagate lua to active setup-hook in nix-shell
-  propagatedBuildInputs = propagatedBuildInputs ++ [ lua ];
+        # propagate lua to active setup-hook in nix-shell
+        propagatedBuildInputs = propagatedBuildInputs ++ [ lua ];
 
-  # @-patterns do not capture formal argument default values, so we need to
-  # explicitly inherit this for it to be available as a shell variable in the
-  # builder
-  rocksSubdir = "${self.pname}-${self.version}-rocks";
+        # @-patterns do not capture formal argument default values, so we need to
+        # explicitly inherit this for it to be available as a shell variable in the
+        # builder
+        rocksSubdir = "${self.pname}-${self.version}-rocks";
 
-  configFile = writeTextFile {
-    name = pname + "-luarocks-config.lua";
-    text = self.luarocks_content;
-  };
+        configFile = writeTextFile {
+          name = self.pname + "-luarocks-config.lua";
+          text = self.luarocks_content;
+        };
 
-  luarocks_content = let
-      externalDepsGenerated = lib.filter (drv: !drv ? luaModule)
-        (self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs);
-    generatedConfig = luaLib.generateLuarocksConfig {
-      externalDeps = lib.unique (self.externalDeps ++ externalDepsGenerated);
-      # Filter out the lua derivation itself from the Lua module dependency
-      # closure, as it doesn't have a rock tree :)
-      # luaLib.hasLuaModule
-      requiredLuaRocks = lib.filter luaLib.hasLuaModule
-        (lua.pkgs.requiredLuaModules (self.nativeBuildInputs ++ self.propagatedBuildInputs));
-      inherit (self) extraVariables rocksSubdir;
-    };
-    in
-      ''
-      ${generatedConfig}
-      ${extraConfig}
-      '';
+        luarocks_content =
+          (lib.generators.toLua { asBindings = true; } self.luarocksConfig)
+          + ''
 
-  configurePhase = ''
-    runHook preConfigure
-  ''
-  + lib.optionalString (self.rockspecFilename == null) ''
-    rockspecFilename="${self.generatedRockspecFilename}"
-  ''
-  + lib.optionalString (self.knownRockspec != null) ''
-    # prevents the following type of error:
-    # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
-    rockspecFilename="$TMP/$(stripHash ${self.knownRockspec})"
-    cp ${self.knownRockspec} "$rockspecFilename"
-  ''
-  + ''
-    runHook postConfigure
-  '';
+            ${self.extraConfig}
+          '';
 
-  buildPhase = ''
-    runHook preBuild
+        # TODO make it the default variable
+        luarocksConfig =
+          let
+            externalDepsGenerated = lib.filter (drv: !drv ? luaModule) (
+              self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs
+            );
 
-    nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
+            generatedConfig = luaLib.generateLuarocksConfig {
+              externalDeps = lib.unique (self.externalDeps ++ externalDepsGenerated);
+              local_cache = "";
 
-    LUAROCKS_EXTRA_ARGS=""
-    if (( ''${NIX_DEBUG:-0} >= 1 )); then
-        LUAROCKS_EXTRA_ARGS=" --verbose"
-    fi
+              # To prevent collisions when creating environments, we install the rock
+              # files into per-package subdirectories
+              rocks_subdir = self.rocksSubdir;
 
-    runHook postBuild
-  '';
+              # Filter out the lua derivation itself from the Lua module dependency
+              # closure, as it doesn't have a rock tree :)
+              # luaLib.hasLuaModule
+              requiredLuaRocks = lib.filter luaLib.hasLuaModule (
+                lua.pkgs.requiredLuaModules (self.nativeBuildInputs ++ self.propagatedBuildInputs)
+              );
+            };
 
-  postFixup = lib.optionalString (!dontWrapLuaPrograms) ''
-    wrapLuaPrograms
-  '' + attrs.postFixup or "";
+            luarocksConfig' = lib.recursiveUpdate luarocksConfig (
+              lib.optionalAttrs (attrs ? extraVariables) (
+                lib.warn "extraVariables in buildLuarocksPackage is deprecated, use luarocksConfig instead" {
+                  variables = attrs.extraVariables;
+                }
+              )
+            );
+          in
+          lib.recursiveUpdate generatedConfig luarocksConfig';
 
-  installPhase = ''
-    runHook preInstall
+        configurePhase =
+          ''
+            runHook preConfigure
+          ''
+          + lib.optionalString (self.rockspecFilename == null) ''
+            rockspecFilename="${self.generatedRockspecFilename}"
+          ''
+          + lib.optionalString (self.knownRockspec != null) ''
+            # prevents the following type of error:
+            # Inconsistency between rockspec filename (42fm1b3d7iv6fcbhgm9674as3jh6y2sh-luv-1.22.0-1.rockspec) and its contents (luv-1.22.0-1.rockspec)
+            rockspecFilename="$TMP/$(stripHash ${self.knownRockspec})"
+            cp ${self.knownRockspec} "$rockspecFilename"
+          ''
+          + ''
+            runHook postConfigure
+          '';
 
-    # work around failing luarocks test for Write access
-    mkdir -p $out
+        buildPhase = ''
+          runHook preBuild
 
-    # luarocks make assumes sources are available in cwd
-    # After the build is complete, it also installs the rock.
-    # If no argument is given, it looks for a rockspec in the current directory
-    # but some packages have several rockspecs in their source directory so
-    # we force the use of the upper level since it is
-    # the sole rockspec in that folder
-    # maybe we could reestablish dependency checking via passing --rock-trees
+          source ${lua}/nix-support/utils.sh
+          nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
-    nix_debug "ROCKSPEC $rockspecFilename"
-    luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
+          LUAROCKS_EXTRA_ARGS=""
+          if (( ''${NIX_DEBUG:-0} >= 1 )); then
+              LUAROCKS_EXTRA_ARGS=" --verbose"
+          fi
 
-    runHook postInstall
-  '';
+          runHook postBuild
+        '';
 
-  checkPhase = ''
-    runHook preCheck
-    luarocks test
-    runHook postCheck
-  '';
+        postFixup =
+          lib.optionalString (!dontWrapLuaPrograms) ''
+            wrapLuaPrograms
+          ''
+          + attrs.postFixup or "";
 
-  shellHook = ''
-    runHook preShell
-    export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
-    runHook postShell
-  '';
+        installPhase = ''
+          runHook preInstall
 
-  passthru = {
-    inherit lua;
-  } // attrs.passthru or { };
+          # work around failing luarocks test for Write access
+          mkdir -p $out
 
-  meta = {
-    platforms = lua.meta.platforms;
-    # add extra maintainer(s) to every package
-    maintainers = (attrs.meta.maintainers or []) ++ [ ];
-    broken = disabled;
-  } // attrs.meta or {};
-}));
+          # luarocks make assumes sources are available in cwd
+          # After the build is complete, it also installs the rock.
+          # If no argument is given, it looks for a rockspec in the current directory
+          # but some packages have several rockspecs in their source directory so
+          # we force the use of the upper level since it is
+          # the sole rockspec in that folder
+          # maybe we could reestablish dependency checking via passing --rock-trees
+
+          nix_debug "ROCKSPEC $rockspecFilename"
+          luarocks $LUAROCKS_EXTRA_ARGS make --deps-mode=all --tree=$out ''${rockspecFilename}
+
+          runHook postInstall
+        '';
+
+        checkPhase = ''
+          runHook preCheck
+          luarocks test
+          runHook postCheck
+        '';
+
+        shellHook = ''
+          runHook preShell
+          export LUAROCKS_CONFIG="$PWD/${luarocks_config}";
+          runHook postShell
+        '';
+
+        passthru = {
+          inherit lua;
+        } // attrs.passthru or { };
+
+        meta = {
+          platforms = lua.meta.platforms;
+          # add extra maintainer(s) to every package
+          maintainers = (attrs.meta.maintainers or [ ]) ++ [ ];
+          broken = disabled;
+        } // attrs.meta or { };
+      }
+    )
+  );
 in
-  luarocksDrv
+luarocksDrv

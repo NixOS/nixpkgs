@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "bird-exporter";
@@ -17,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for the bird routing daemon";
+    mainProgram = "bird_exporter";
     homepage = "https://github.com/czerwonk/bird_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];

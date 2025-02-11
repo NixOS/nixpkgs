@@ -1,7 +1,22 @@
-{ lib, mkDerivationWith, fetchFromGitHub, python3Packages
-, file, intltool, gobject-introspection, libgudev
-, udisks, gexiv2, gst_all_1, libnotify, ifuse, libimobiledevice
-, exiftool, gdk-pixbuf, libmediainfo, vmtouch
+{
+  lib,
+  mkDerivationWith,
+  fetchFromGitHub,
+  python3Packages,
+  file,
+  intltool,
+  gobject-introspection,
+  libgudev,
+  udisks,
+  gexiv2,
+  gst_all_1,
+  libnotify,
+  ifuse,
+  libimobiledevice,
+  exiftool,
+  gdk-pixbuf,
+  libmediainfo,
+  vmtouch,
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
@@ -57,38 +72,46 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   #       "Namespace [Notify / GExiv2 / GUdev] not available"
   strictDeps = false;
 
-  propagatedBuildInputs = with python3Packages; [
-    ifuse
-    libimobiledevice
-    pyqt5
-    pygobject3
-    gphoto2
-    pyzmq
-    tornado
-    psutil
-    pyxdg
-    arrow
-    python-dateutil
-    easygui
-    babel
-    colour
-    pillow
-    pyheif
-    pymediainfo
-    sortedcontainers
-    requests
-    colorlog
-    pyprind
-    setuptools
-    show-in-file-manager
-    tenacity
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      ifuse
+      libimobiledevice
+      pyqt5
+      pygobject3
+      gphoto2
+      pyzmq
+      tornado
+      psutil
+      pyxdg
+      arrow
+      python-dateutil
+      easygui
+      babel
+      colour
+      pillow
+      pyheif
+      pymediainfo
+      sortedcontainers
+      requests
+      colorlog
+      pyprind
+      setuptools
+      show-in-file-manager
+      tenacity
+    ]
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   preFixup = ''
     makeWrapperArgs+=(
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
       --set PYTHONPATH "$PYTHONPATH"
-      --prefix PATH : "${lib.makeBinPath [ exiftool vmtouch ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          exiftool
+          vmtouch
+        ]
+      }"
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmediainfo ]}"
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
       "''${qtWrapperArgs[@]}"
@@ -97,9 +120,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
+    mainProgram = "rapid-photo-downloader";
     homepage = "https://www.damonlynch.net/rapid/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

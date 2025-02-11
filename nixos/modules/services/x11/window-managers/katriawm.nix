@@ -1,15 +1,25 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mdDoc mkEnableOption mkIf mkPackageOption singleton;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkPackageOption
+    singleton
+    ;
   cfg = config.services.xserver.windowManager.katriawm;
 in
 {
   ###### interface
   options = {
     services.xserver.windowManager.katriawm = {
-      enable = mkEnableOption (mdDoc "katriawm");
-      package = mkPackageOption pkgs "katriawm" {};
+      enable = mkEnableOption "katriawm";
+      package = mkPackageOption pkgs "katriawm" { };
     };
   };
 

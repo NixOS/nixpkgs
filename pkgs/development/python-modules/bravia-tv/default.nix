@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "bravia-tv";
   version = "1.0.11";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -28,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dcnielsen90/python-bravia-tv";
     description = "Python library for Sony Bravia TV remote control";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ ];
   };
 }

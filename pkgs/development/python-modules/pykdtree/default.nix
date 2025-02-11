@@ -1,13 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, pytestCheckHook, openmp }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  cython,
+  numpy,
+  setuptools,
+
+  # native dependencies
+  openmp,
+
+  # tests
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.3.7.post0";
+  version = "1.4.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7KHWHTPbYh74An62ka6I25xl0ZarpLLMkMGQy5C7UI4=";
+    hash = "sha256-EISP9qxzMraOZb+MLolme2tisHWq0nI0d0Smm/HIrX4=";
   };
+
+  nativeBuildInputs = [
+    cython
+    numpy
+    setuptools
+  ];
 
   buildInputs = [ openmp ];
 
@@ -15,7 +37,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     # make sure we don't import pykdtree from the source tree
-    mv pykdtree tests
+    mv pykdtree/test_tree.py .
+    rm -rf pykdtree
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

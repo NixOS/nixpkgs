@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  setuptools,
+  fetchPypi,
+  typing-extensions,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.11.2";
-  format = "setuptools";
+  version = "1.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U9zVv/zLmnITbwjQsYdxeV6vTu+wKLuq7V9OF4fw4mg=";
+    hash = "sha256-ytnFOyPO7Wmceva93O1C4sVy/WtAjCV6fU/E6M8uLWs=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   disabledTests = [
     # Requires network access
@@ -33,9 +33,7 @@ buildPythonPackage rec {
     "test_schema_compatibility_type_mismatch"
   ];
 
-  pythonImportsCheck = [
-    "avro"
-  ];
+  pythonImportsCheck = [ "avro" ];
 
   meta = with lib; {
     description = "Python serialization and RPC framework";
@@ -43,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
+    mainProgram = "avro";
   };
 }

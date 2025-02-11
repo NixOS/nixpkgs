@@ -1,45 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  grpc-interceptor,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlparse,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.40.1";
-  format = "setuptools";
+  version = "3.51.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YWsHyGza5seLrSe4qznYznonNRHyuR/iYPFw2SZlPC4=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-spanner";
+    tag = "v${version}";
+    hash = "sha256-ug3xtPykH4emiQuK1UxWGUeKmXqkY/EX0mSncCkGCQg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    deprecated
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
+    grpc-interceptor
     proto-plus
     protobuf
     sqlparse
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [
@@ -54,6 +62,13 @@ buildPythonPackage rec {
     rm -r google
   '';
 
+  disabledTests = [
+    # Requires credentials
+    "test_list_backup"
+    "test_list_database"
+    "test_list_instance"
+  ];
+
   disabledTestPaths = [
     # Requires credentials
     "tests/system/test_backup_api.py"
@@ -66,6 +81,7 @@ buildPythonPackage rec {
     "tests/unit/spanner_dbapi/test_connect.py"
     "tests/unit/spanner_dbapi/test_connection.py"
     "tests/unit/spanner_dbapi/test_cursor.py"
+    "samples/samples/"
   ];
 
   pythonImportsCheck = [
@@ -80,6 +96,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-spanner";
     changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

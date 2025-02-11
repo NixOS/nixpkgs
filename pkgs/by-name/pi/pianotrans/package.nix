@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, ffmpeg
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  ffmpeg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -32,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple GUI for ByteDance's Piano Transcription with Pedals";
+    mainProgram = "pianotrans";
     homepage = "https://github.com/azuwis/pianotrans";
     license = licenses.mit;
     maintainers = with maintainers; [ azuwis ];

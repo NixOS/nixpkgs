@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, astropy
-, pillow
-, pythonOlder
-, pytestCheckHook
-, pytest-astropy
-, requests
-, requests-mock
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  astropy,
+  pillow,
+  pythonOlder,
+  pytestCheckHook,
+  pytest-astropy,
+  requests,
+  requests-mock,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.4.2";
+  version = "1.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zv4piGWs/XJbxfGHUHctfxuImbjluxd1chUgvtV9lcs=";
+    hash = "sha256-2270I+YAjrocpoRZ5+KpHbw0y+G9ovKfZLpX2N9XDKo=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     requests
   ];

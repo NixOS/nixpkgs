@@ -1,45 +1,35 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, django
-, markdown
-, pyyaml
+  # dependencies
+  django,
+  markdown,
+  pyyaml,
 
-# tests
-, beautifulsoup4
-, pytestCheckHook
-, pytest-django
+  # tests
+  beautifulsoup4,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-pattern-library";
-  version = "1.0.1";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-pattern-library";
-    rev = "v${version}";
-    hash = "sha256-Q8rv7RDlstTSlwmbmHV0vrnCV/lwz6VJf27BUllA34Y=";
+    tag = "v${version}";
+    hash = "sha256-2a/Rg6ljBe1J0FOob7Z9aNVZZ3l+gTD34QCRjk4PiQg=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/torchbox/django-pattern-library/pull/232
-      url = "https://github.com/torchbox/django-pattern-library/commit/e7a9a8928a885941391fb584eba81578a292ee7d.patch";
-      hash = "sha256-3uUoxdVYEiF+to88qZRhOkh1++RfmsqCzO9JNMDqz6g=";
-    })
-  ];
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     django

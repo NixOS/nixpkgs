@@ -1,8 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, netlify-cli
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  netlify-cli,
 }:
 
 buildGoModule rec {
@@ -25,7 +25,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A fork of esbuild maintained by netlify";
+    description = "Fork of esbuild maintained by netlify";
     homepage = "https://github.com/netlify/esbuild";
     license = licenses.mit;
     maintainers = with maintainers; [ roberth ];

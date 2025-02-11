@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtquickcontrols2, qtserialport, qtsvg, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtquickcontrols2,
+  qtserialport,
+  qtsvg,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "serial-studio";
@@ -12,12 +21,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtquickcontrols2 qtserialport qtsvg ];
+  buildInputs = [
+    qtquickcontrols2
+    qtserialport
+    qtsvg
+  ];
 
   meta = with lib; {
     description = "Multi-purpose serial data visualization & processing program";
+    mainProgram = "serial-studio";
     homepage = "https://serial-studio.github.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

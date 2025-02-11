@@ -1,20 +1,22 @@
-{ lib
-, mkYarnPackage
-, fetchYarnDeps
-, fetchFromGitHub
-, srcOnly
-, makeWrapper
-, removeReferencesTo
-, python3
-, nodejs
-, matrix-sdk-crypto-nodejs
+{
+  lib,
+  mkYarnPackage,
+  fetchYarnDeps,
+  fetchFromGitHub,
+  srcOnly,
+  makeWrapper,
+  removeReferencesTo,
+  python3,
+  nodejs,
+  matrix-sdk-crypto-nodejs,
 }:
 
 let
   pin = lib.importJSON ./pin.json;
   nodeSources = srcOnly nodejs;
 
-in mkYarnPackage rec {
+in
+mkYarnPackage rec {
   pname = "matrix-appservice-discord";
   inherit (pin) version;
 
@@ -49,7 +51,7 @@ in mkYarnPackage rec {
         find build -type f -exec \
           ${removeReferencesTo}/bin/remove-references-to \
           -t "${nodeSources}" {} \;
-     '';
+      '';
     };
   };
 
@@ -98,10 +100,11 @@ in mkYarnPackage rec {
   };
 
   meta = {
-    description = "A bridge between Matrix and Discord";
+    description = "Bridge between Matrix and Discord";
     homepage = "https://github.com/Half-Shot/matrix-appservice-discord";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pacien ];
+    maintainers = with lib.maintainers; [ euxane ];
     platforms = lib.platforms.linux;
+    mainProgram = "matrix-appservice-discord";
   };
 }

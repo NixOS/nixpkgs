@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fetchmail";
-  version = "6.4.37";
+  version = "6.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "sha256-ShguXYk+mr5qw3rnHlQmUfzm1gYjT8c1wqquGGV+aeo=";
+    sha256 = "sha256-yj/blRQcJ3rKEJvnf01FtH4D7gEAQwWN2QvBgttRjUo=";
   };
 
   buildInputs = [ openssl python3 ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.fetchmail.info/";
-    description = "A full-featured remote-mail retrieval and forwarding utility";
+    description = "Full-featured remote-mail retrieval and forwarding utility";
     longDescription = ''
       A full-featured, robust, well-documented remote-mail retrieval and
       forwarding utility intended to be used over on-demand TCP/IP links
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
+    mainProgram = "fetchmail";
   };
 }

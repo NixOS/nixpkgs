@@ -1,24 +1,28 @@
-{ lib, stdenv
-, autoreconfHook
-, bison
-, fetchFromGitHub
-, flex
-, lksctp-tools
-, openssl
-, pkg-config
-, sqlite
-, util-linux
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  bison,
+  fetchFromGitHub,
+  flex,
+  lksctp-tools,
+  openssl,
+  pkg-config,
+  sqlite,
+  util-linux,
+  unstableGitUpdater,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "unstable-2022-07-12";
+  version = "0-unstable-2025-01-29";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
-    repo = pname;
-    rev = "860187d02895fc953de3475da07a7a06b9380254";
-    hash = "sha256-g8hXmxTfcPDmQ/cu4AI/iJfrhPLaQJEAeMdDhNDsVXs=";
+    repo = "solanum";
+    rev = "7289d455e8f640b3a2607d8049de27f9099abe1c";
+    hash = "sha256-EQq8l48WgP8PuAyOoY6WU0FM1IHYBQisRojAUmyPOpM=";
   };
 
   patches = [
@@ -29,17 +33,19 @@ stdenv.mkDerivation rec {
     substituteInPlace include/defaults.h --replace 'ETCPATH "' '"/etc/solanum'
   '';
 
-  configureFlags = [
-    "--enable-epoll"
-    "--enable-ipv6"
-    "--enable-openssl=${openssl.dev}"
-    "--with-program-prefix=solanum-"
-    "--localstatedir=/var/lib"
-    "--with-rundir=/run"
-    "--with-logdir=/var/log"
-  ] ++ lib.optionals (stdenv.isLinux) [
-    "--enable-sctp=${lksctp-tools.out}/lib"
-  ];
+  configureFlags =
+    [
+      "--enable-epoll"
+      "--enable-ipv6"
+      "--enable-openssl=${openssl.dev}"
+      "--with-program-prefix=solanum-"
+      "--localstatedir=/var/lib"
+      "--with-rundir=/run"
+      "--with-logdir=/var/log"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--enable-sctp=${lksctp-tools.out}/lib"
+    ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   enableParallelBuilding = true;
   # Missing install depends:
@@ -63,8 +69,13 @@ stdenv.mkDerivation rec {
   #   make[4]: *** [Makefile:634: solanum] Error 1
   enableParallelInstalling = false;
 
+  passthru = {
+    tests = { inherit (nixosTests) solanum; };
+    updateScript = unstableGitUpdater { };
+  };
+
   meta = with lib; {
-    description = "An IRCd for unified networks";
+    description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];

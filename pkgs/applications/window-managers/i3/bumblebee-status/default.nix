@@ -1,19 +1,20 @@
-{ pkgs
-, lib
-, glibcLocales
-, python
-, fetchFromGitHub
+{
+  pkgs,
+  lib,
+  glibcLocales,
+  python,
+  fetchpatch,
+  fetchFromGitHub,
   # Usage: bumblebee-status.override { plugins = p: [p.arandr p.bluetooth2]; };
-, plugins ? p: [ ]
+  plugins ? p: [ ],
 }:
 let
   version = "2.2.0";
 
   # { <name> = { name = "..."; propagatedBuildInputs = [ ... ]; buildInputs = [ ... ]; } }
-  allPlugins =
-    lib.mapAttrs
-      (name: value: value // { inherit name; })
-      (import ./plugins.nix { inherit pkgs python; });
+  allPlugins = lib.mapAttrs (name: value: value // { inherit name; }) (
+    import ./plugins.nix { inherit pkgs python; }
+  );
 
   # [ { name = "..."; propagatedBuildInputs = [ ... ]; buildInputs = [ ... ]; } ]
   selectedPlugins = plugins allPlugins;
@@ -29,10 +30,26 @@ python.pkgs.buildPythonPackage {
     hash = "sha256-+RCg2XZv0AJnexi7vnQhEXB1qSoKBN1yKWm3etdys1s=";
   };
 
+  patches = [
+    # fix build with Python 3.12
+    # https://github.com/tobi-wan-kenobi/bumblebee-status/pull/1019
+    (fetchpatch {
+      url = "https://github.com/tobi-wan-kenobi/bumblebee-status/commit/2fe8f1ff1444daf155b18318005f33a76a5d64b4.patch";
+      hash = "sha256-BC1cgQDMJkhuEgq8NJ28521CHbEfqIMueHkFXXlZz2w=";
+    })
+  ];
+
   buildInputs = lib.concatMap (p: p.buildInputs or [ ]) selectedPlugins;
   propagatedBuildInputs = lib.concatMap (p: p.propagatedBuildInputs or [ ]) selectedPlugins;
 
-  checkInputs = with python.pkgs; [ freezegun netifaces psutil pytest pytest-mock requests ];
+  checkInputs = with python.pkgs; [
+    freezegun
+    netifaces
+    psutil
+    pytest
+    pytest-mock
+    requests
+  ];
 
   checkPhase = ''
     runHook preCheck
@@ -57,7 +74,7 @@ python.pkgs.buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A modular, theme-able status line generator for the i3 window manager";
+    description = "Modular, theme-able status line generator for the i3 window manager";
     homepage = "https://github.com/tobi-wan-kenobi/bumblebee-status";
     mainProgram = "bumblebee-status";
     license = licenses.mit;

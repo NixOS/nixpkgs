@@ -1,16 +1,19 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, numpy
-, opencv4
-, lxml
-, xmljson
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  setuptools,
+  numpy,
+  opencv-python,
+  lxml,
+  xmljson,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "imantics";
   version = "0.1.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsbroks";
@@ -19,17 +22,14 @@ buildPythonPackage rec {
     sha256 = "1zv2gj8cbakhh2fyr2611cbqhfk37a56x973ny9n43y70n26pzm8";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
-    opencv4
+    opencv-python
     lxml
     xmljson
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'opencv-python>=3'," ""
-  '';
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, buildLuarocksPackage, lua, pkg-config, lib
-, substituteAll, zenity, AppKit }:
+{
+  stdenv,
+  fetchFromGitHub,
+  buildLuarocksPackage,
+  lua,
+  pkg-config,
+  lib,
+  substituteAll,
+  zenity,
+  AppKit,
+}:
 
 buildLuarocksPackage {
   pname = "nfd";
@@ -20,24 +29,28 @@ buildLuarocksPackage {
       inherit zenity;
     })
   ];
-  rockspecDir = "lua";
+  knownRockspec = "lua/nfd-scm-1.rockspec";
 
-  extraVariables.LUA_LIBDIR = "${lua}/lib";
+  luarocksConfig.variables.LUA_LIBDIR = "${lua}/lib";
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
-  fixupPhase = ''
+  postInstall = ''
     find $out -name nfd_zenity.so -execdir mv {} nfd.so \;
   '';
 
-  disabled = with lua; (luaversion != "5.1");
+  doInstallCheck = true;
+  installCheckInputs = [ lua.pkgs.busted ];
+  installCheckPhase = ''
+    busted lua/spec/
+  '';
 
   meta = {
-    description =
-      "A tiny, neat lua library that portably invokes native file open and save dialogs.";
+    description = "A tiny, neat lua library that portably invokes native file open and save dialogs.";
     homepage = "https://github.com/Alloyed/nativefiledialog/tree/master/lua";
     license = lib.licenses.zlib;
     maintainers = [ lib.maintainers.scoder12 ];
+    broken = lua.luaversion != "5.1";
   };
 }

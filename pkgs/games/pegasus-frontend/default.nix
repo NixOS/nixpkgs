@@ -1,28 +1,29 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, qtbase
-, qtgraphicaleffects
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, SDL2
-, sqlite
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  SDL2,
+  sqlite,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pegasus-frontend";
-  version = "unstable-2023-05-22";
+  version = "0-unstable-2024-11-11";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "pegasus-frontend";
-    rev = "6421d7a75d29a82ea06008e4a08ec14e074430d9";
+    rev = "54362976fd4c6260e755178d97e9db51f7a896af";
     fetchSubmodules = true;
-    sha256 = "sha256-mwJm+3zMP4alcis7OFQUcH3eXlRTZhoZYtxKrvCQGc8=";
+    hash = "sha256-DqtkvDg0oQL9hGB+6rNXe3sDBywvnqy9N31xfyl6nbI=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A cross platform, customizable graphical frontend for launching emulators and managing your game collection.";
+    description = "Cross platform, customizable graphical frontend for launching emulators and managing your game collection";
+    mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tengkuizdihar ];

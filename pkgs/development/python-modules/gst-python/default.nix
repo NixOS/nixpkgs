@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, meson
-, ninja
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  meson,
+  ninja,
 
-, pkg-config
-, python
-, pygobject3
-, gobject-introspection
-, gst_all_1
-, isPy3k
+  pkg-config,
+  python,
+  pygobject3,
+  gobject-introspection,
+  gst_all_1,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.6";
+  version = "1.24.10";
 
   format = "other";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-Ud4tbROxLOCV6sl8C5TuWcKuujcSu3Rit4xNV93hdsU=";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
+    hash = "sha256-E1vPi28UaLwx5WYECf6O04EJ8B3sRHQ1FKovprOGMwk";
   };
 
   # Python 2.x is not supported.
   disabled = !isPy3k;
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -51,8 +53,6 @@ buildPythonPackage rec {
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
-  doCheck = true;
-
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

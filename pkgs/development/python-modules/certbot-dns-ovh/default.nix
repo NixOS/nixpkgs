@@ -1,36 +1,38 @@
-{ buildPythonPackage
-, acme
-, certbot
-, dns-lexicon
-, pytestCheckHook
-, pythonOlder
+{
+  acme,
+  buildPythonPackage,
+  certbot,
+  dns-lexicon,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-ovh";
+  pyproject = true;
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";
 
   sourceRoot = "${src.name}/certbot-dns-ovh";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     certbot
     dns-lexicon
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
+    "-p no:cacheprovider"
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
-    "-W 'ignore:Package lexicon.providers is deprecated and will be removed in Lexicon 4>=.:DeprecationWarning'"
-    "-W 'ignore:Legacy configuration object has been used to load the ConfigResolver.:DeprecationWarning'"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

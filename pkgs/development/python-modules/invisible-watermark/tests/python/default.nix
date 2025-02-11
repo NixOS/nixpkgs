@@ -1,9 +1,10 @@
-{ image
-, invisible-watermark
-, opencv4
-, python3
-, runCommand
-, stdenvNoCC
+{
+  image,
+  invisible-watermark,
+  opencv4,
+  python,
+  runCommand,
+  stdenvNoCC,
 }:
 
 # This test checks if the python code shown in the README works correctly
@@ -12,7 +13,10 @@ let
   message = "fnörd1";
   method = "dwtDct";
 
-  pythonWithPackages = python3.withPackages (pp: with pp; [ invisible-watermark opencv4 ]);
+  pythonWithPackages = python.withPackages (_: [
+    invisible-watermark
+    opencv4
+  ]);
   pythonInterpreter = pythonWithPackages.interpreter;
 
   encode = stdenvNoCC.mkDerivation {

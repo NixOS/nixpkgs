@@ -1,55 +1,59 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-let
-  userUid = 1000;
-  usersGid = 100;
-  busybox = pkgs : pkgs.busybox.override {
-    # Without this, the busybox binary drops euid to ruid for most applets, including id.
-    # See https://bugs.busybox.net/show_bug.cgi?id=15101
-    extraConfig = "CONFIG_FEATURE_SUID n";
-  };
-in
-{
-  name = "wrappers";
-
-  nodes.machine = { config, pkgs, ... }: {
-    ids.gids.users = usersGid;
-
-    users.users = {
-      regular = {
-        uid = userUid;
-        isNormalUser = true;
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  let
+    userUid = 1000;
+    usersGid = 100;
+    busybox =
+      pkgs:
+      pkgs.busybox.override {
+        # Without this, the busybox binary drops euid to ruid for most applets, including id.
+        # See https://bugs.busybox.net/show_bug.cgi?id=15101
+        extraConfig = "CONFIG_FEATURE_SUID n";
       };
-    };
+  in
+  {
+    name = "wrappers";
 
-    security.apparmor.enable = true;
+    nodes.machine =
+      { config, pkgs, ... }:
+      {
+        ids.gids.users = usersGid;
 
-    security.wrappers = {
-      suidRoot = {
-        owner = "root";
-        group = "root";
-        setuid = true;
-        source = "${busybox pkgs}/bin/busybox";
-        program = "suid_root_busybox";
-      };
-      sgidRoot = {
-        owner = "root";
-        group = "root";
-        setgid = true;
-        source = "${busybox pkgs}/bin/busybox";
-        program = "sgid_root_busybox";
-      };
-      withChown = {
-        owner = "root";
-        group = "root";
-        source = "${pkgs.libcap}/bin/capsh";
-        program = "capsh_with_chown";
-        capabilities = "cap_chown+ep";
-      };
-    };
-  };
+        users.users = {
+          regular = {
+            uid = userUid;
+            isNormalUser = true;
+          };
+        };
 
-  testScript =
-    ''
+        security.apparmor.enable = true;
+
+        security.wrappers = {
+          suidRoot = {
+            owner = "root";
+            group = "root";
+            setuid = true;
+            source = "${busybox pkgs}/bin/busybox";
+            program = "suid_root_busybox";
+          };
+          sgidRoot = {
+            owner = "root";
+            group = "root";
+            setgid = true;
+            source = "${busybox pkgs}/bin/busybox";
+            program = "sgid_root_busybox";
+          };
+          withChown = {
+            owner = "root";
+            group = "root";
+            source = "${pkgs.libcap}/bin/capsh";
+            program = "capsh_with_chown";
+            capabilities = "cap_chown+ep";
+          };
+        };
+      };
+
+    testScript = ''
       def cmd_as_regular(cmd):
         return "su -l regular -c '{0}'".format(cmd)
 
@@ -109,4 +113,5 @@ in
       # test for that one.
       machine.succeed("ping -c 1 127.0.0.1")
     '';
-})
+  }
+)

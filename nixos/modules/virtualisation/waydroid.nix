@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.waydroid;
@@ -20,7 +25,7 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = lib.mkEnableOption (lib.mdDoc "Waydroid");
+    enable = lib.mkEnableOption "Waydroid";
   };
 
   config = lib.mkIf cfg.enable {
@@ -32,10 +37,11 @@ in
     system.requiredKernelConfig = [
       (kCfg.isEnabled "ANDROID_BINDER_IPC")
       (kCfg.isEnabled "ANDROID_BINDERFS")
-      (kCfg.isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
+      (kCfg.isEnabled "MEMFD_CREATE")
     ];
 
-    /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
+    /*
+      NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
       as reading the kernel config is not always possible and on kernels where it's
       already on it will be no-op
     */
@@ -55,15 +61,18 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "dbus";
+        UMask = "0022";
         ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
-        ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
-        ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
+        BusName = "id.waydro.Container";
       };
     };
 
     systemd.tmpfiles.rules = [
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
+
+    services.dbus.packages = with pkgs; [ waydroid ];
   };
 
 }

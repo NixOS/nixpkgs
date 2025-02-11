@@ -1,15 +1,17 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, writeText
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, onedrive
+{
+  lib,
+  python3Packages,
+  qt6,
+  fetchFromGitHub,
+  writeText,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  onedrive,
 }:
 
 let
-  version = "1.0.3";
+  version = "1.1.1a";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup
@@ -31,15 +33,28 @@ python3Packages.buildPythonApplication rec {
     owner = "bpozdena";
     repo = "OneDriveGUI";
     rev = "v${version}";
-    hash = "sha256-HutziAzhIDYP8upNPieL2GNrxPBHUCVs09FFxdSqeBs=";
+    hash = "sha256-pcY1JOi74pePvkIMRuHv5mlE4F68NzuBLJTCtgjUFRw=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    qt6.wrapQtAppsHook
+    makeWrapper
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ pyside6 requests ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    pyside6
+    requests
+  ];
 
   # wrap manually to avoid having a bash script in $out/bin with a .py extension
   dontWrapPythonPrograms = true;
+  dontWrapQtApps = true;
 
   doCheck = false; # No tests defined
   pythonImportsCheck = [ "OneDriveGUI" ];
@@ -72,14 +87,18 @@ python3Packages.buildPythonApplication rec {
     rm -r $out/bin/*
 
     makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
+      ''${qtWrapperArgs[@]} \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
-      --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
-      --add-flags $out/lib/${python3Packages.python.libPrefix}/site-packages/OneDriveGUI.py
+      --prefix PYTHONPATH : ${
+        python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])
+      } \
+      --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
   '';
 
   meta = with lib; {
     homepage = "https://github.com/bpozdena/OneDriveGUI";
-    description = "A simple GUI for Linux OneDrive Client, with multi-account support";
+    description = "Simple GUI for Linux OneDrive Client, with multi-account support";
+    mainProgram = "onedrivegui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ chewblacka ];
     platforms = platforms.linux;

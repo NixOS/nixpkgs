@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -16,17 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "magic-filter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MSYIZ/bzngRu6mG3EGblUotSCA+6bi+l3EymFA8NRZA=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  postPatch = ''
+    substituteInPlace magic_filter/__init__.py \
+      --replace '"1"' '"${version}"'
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ hatchling ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "magic_filter" ];
 

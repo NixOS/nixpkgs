@@ -1,51 +1,81 @@
-{ lib
-, asciitree
-, buildPythonPackage
-, fasteners
-, fetchPypi
-, numcodecs
-, numpy
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
+  asciitree,
+  donfig,
+  numpy,
+  fasteners,
+  numcodecs,
+
+  # tests
+  aiohttp,
+  botocore,
+  fsspec,
+  hypothesis,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.16.1";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QnbPS0plNDEELNU/8igrxNKSpoQkEeiFKZZFBPsHMoY=";
+    hash = "sha256-AzhZxWA9ycKeU69JTt4ktC8bdh0rtiVGaZCjuKmvt5I=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asciitree
+    donfig
     numpy
     fasteners
     numcodecs
-  ];
+  ] ++ numcodecs.optional-dependencies.crc32c;
 
   nativeCheckInputs = [
+    aiohttp
+    botocore
+    fsspec
+    hypothesis
+    pytest-asyncio
     pytestCheckHook
+    requests
+    rich
   ];
 
-  pythonImportsCheck = [
-    "zarr"
+  disabledTests = [
+    # flaky
+    "test_vindex"
+    "test_zarr_hierarchy"
+    "test_zarr_store"
   ];
 
-  meta = with lib; {
-    description = "An implementation of chunked, compressed, N-dimensional arrays for Python";
+  pythonImportsCheck = [ "zarr" ];
+
+  meta = {
+    description = "Implementation of chunked, compressed, N-dimensional arrays for Python";
     homepage = "https://github.com/zarr-developers/zarr";
     changelog = "https://github.com/zarr-developers/zarr-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, capstone
-, cmsis-pack-manager
-, colorama
-, importlib-metadata
-, importlib-resources
-, intelhex
-, intervaltree
-, lark
-, natsort
-, prettytable
-, pyelftools
-, pylink-square
-, pyusb
-, pyyaml
-, setuptools
-, setuptools-scm
-, typing-extensions
-, stdenv
-, hidapi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  capstone_4,
+  cmsis-pack-manager,
+  colorama,
+  importlib-metadata,
+  importlib-resources,
+  intelhex,
+  intervaltree,
+  lark,
+  natsort,
+  prettytable,
+  pyelftools,
+  pylink-square,
+  pyusb,
+  pyyaml,
+  setuptools-scm,
+  typing-extensions,
+  stdenv,
+  hidapi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -43,18 +43,12 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "libusb-package>=1.0,<2.0" ""
-  '';
+  pythonRemoveDeps = [ "libusb-package" ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    capstone
+  dependencies = [
+    capstone_4
     cmsis-pack-manager
     colorama
     importlib-metadata
@@ -69,17 +63,17 @@ buildPythonPackage rec {
     pyusb
     pyyaml
     typing-extensions
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    hidapi
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ hidapi ];
+
+  pythonImportsCheck = [ "pyocd" ];
+
+  disabledTests = [
+    # AttributeError: 'not_called' is not a valid assertion
+    # Upstream fix at https://github.com/pyocd/pyOCD/pull/1710
+    "test_transfer_err_not_flushed"
   ];
 
-  pythonImportsCheck = [
-    "pyocd"
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/pyocd/pyOCD/releases/tag/v${version}";
@@ -87,6 +81,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/pyocd/pyOCD";
     homepage = "https://pyocd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    maintainers = with maintainers; [
+      frogamic
+      sbruder
+    ];
   };
 }

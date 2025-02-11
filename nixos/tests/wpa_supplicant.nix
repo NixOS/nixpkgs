@@ -1,79 +1,110 @@
-import ./make-test-python.nix ({ pkgs, lib, ...}:
-{
-  name = "wpa_supplicant";
+{ pkgs, runTest }:
+
+let
+
+  inherit (pkgs) lib;
+
   meta = with lib.maintainers; {
-    maintainers = [ oddlama rnhmjoj ];
+    maintainers = [
+      oddlama
+      rnhmjoj
+    ];
   };
 
-  nodes = let
-    machineWithHostapd = extraConfigModule: { ... }: {
-      imports = [
-        ../modules/profiles/minimal.nix
-        extraConfigModule
-      ];
+  naughtyPassphrase = ''!,./;'[]\-=<>?:"{}|_+@$%^&*()`~ # ceci n'est pas un commentaire'';
 
-      # add a virtual wlan interface
-      boot.kernelModules = [ "mac80211_hwsim" ];
+  runConnectionTest =
+    name: extraConfig:
+    runTest {
+      name = "wpa_supplicant-${name}";
+      inherit meta;
 
-      # wireless access point
-      services.hostapd = {
-        enable = true;
-        radios.wlan0 = {
-          band = "2g";
-          countryCode = "US";
-          networks = {
-            wlan0 = {
-              ssid = "nixos-test-sae";
-              authentication = {
-                mode = "wpa3-sae";
-                saePasswords = [ { password = "reproducibility"; } ];
+      nodes.machine = {
+        # add a virtual wlan interface
+        boot.kernelModules = [ "mac80211_hwsim" ];
+
+        # wireless access point
+        services.hostapd = {
+          enable = true;
+          radios.wlan0 = {
+            band = "2g";
+            channel = 6;
+            countryCode = "US";
+            networks = {
+              wlan0 = {
+                ssid = "nixos-test-sae";
+                authentication = {
+                  mode = "wpa3-sae";
+                  saePasswords = [ { password = naughtyPassphrase; } ];
+                };
+                bssid = "02:00:00:00:00:00";
               };
-              bssid = "02:00:00:00:00:00";
-            };
-            wlan0-1 = {
-              ssid = "nixos-test-mixed";
-              authentication = {
-                mode = "wpa3-sae-transition";
-                saeAddToMacAllow = true;
-                saePasswordsFile = pkgs.writeText "password" "reproducibility";
-                wpaPasswordFile = pkgs.writeText "password" "reproducibility";
+              wlan0-1 = {
+                ssid = "nixos-test-mixed";
+                authentication = {
+                  mode = "wpa3-sae-transition";
+                  saeAddToMacAllow = true;
+                  saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
+                  wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
+                };
+                bssid = "02:00:00:00:00:01";
               };
-              bssid = "02:00:00:00:00:01";
-            };
-            wlan0-2 = {
-              ssid = "nixos-test-wpa2";
-              authentication = {
-                mode = "wpa2-sha256";
-                wpaPassword = "reproducibility";
+              wlan0-2 = {
+                ssid = "nixos-test-wpa2";
+                authentication = {
+                  mode = "wpa2-sha256";
+                  wpaPassword = naughtyPassphrase;
+                };
+                bssid = "02:00:00:00:00:02";
               };
-              bssid = "02:00:00:00:00:02";
             };
           };
         };
+
+        # wireless client
+        networking.wireless = lib.mkMerge [
+          {
+            # the override is needed because the wifi is
+            # disabled with mkVMOverride in qemu-vm.nix.
+            enable = lib.mkOverride 0 true;
+            userControlled.enable = true;
+            interfaces = [ "wlan1" ];
+            fallbackToWPA2 = lib.mkDefault true;
+
+            # secrets
+            secretsFile = pkgs.writeText "wpa-secrets" ''
+              psk_nixos_test=${naughtyPassphrase}
+            '';
+          }
+          extraConfig
+        ];
       };
 
-      # wireless client
-      networking.wireless = {
-        # the override is needed because the wifi is
-        # disabled with mkVMOverride in qemu-vm.nix.
-        enable = lib.mkOverride 0 true;
-        userControlled.enable = true;
-        interfaces = [ "wlan1" ];
-        fallbackToWPA2 = lib.mkDefault true;
+      testScript = ''
+        # save hostapd config file for manual inspection
+        machine.wait_for_unit("hostapd.service")
+        machine.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
 
-        # networks will be added on-demand below for the specific
-        # network that should be tested
-
-        # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_NIXOS_TEST="reproducibility"
-        '';
-      };
+        with subtest("Daemon can connect to the access point"):
+            machine.wait_for_unit("wpa_supplicant-wlan1.service")
+            machine.wait_until_succeeds(
+              "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
+            )
+      '';
     };
-  in {
-    basic = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
 
+in
+
+{
+  # Test the basic setup:
+  #   - automatic interface discovery
+  #   - WPA2 fallbacks
+  #   - connecting to the daemon
+  basic = runTest {
+    name = "wpa_supplicant-basic";
+    inherit meta;
+
+    nodes.machine = {
       # add a virtual wlan interface
       boot.kernelModules = [ "mac80211_hwsim" ];
 
@@ -83,128 +114,112 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
         # disabled with mkVMOverride in qemu-vm.nix.
         enable = lib.mkOverride 0 true;
         userControlled.enable = true;
-        interfaces = [ "wlan1" ];
         fallbackToWPA2 = true;
 
         networks = {
           # test WPA2 fallback
           mixed-wpa = {
             psk = "password";
-            authProtocols = [ "WPA-PSK" "SAE" ];
+            authProtocols = [
+              "WPA-PSK"
+              "SAE"
+            ];
           };
           sae-only = {
             psk = "password";
             authProtocols = [ "SAE" ];
           };
-
-          # secrets substitution test cases
-          test1.psk = "@PSK_VALID@";              # should be replaced
-          test2.psk = "@PSK_SPECIAL@";            # should be replaced
-          test3.psk = "@PSK_MISSING@";            # should not be replaced
-          test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
-        };
-
-        # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_VALID="S0m3BadP4ssw0rd";
-          # taken from https://github.com/minimaxir/big-list-of-naughty-strings
-          PSK_SPECIAL=",./;'[]\-= <>?:\"{}|_+ !@#$%^\&*()`~";
-        '';
-      };
-    };
-
-    # Test connecting to the SAE-only hotspot using SAE
-    machineSae = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = false;
-        networks.nixos-test-sae = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "SAE" ];
         };
       };
     };
 
-    # Test connecting to the SAE and WPA2 mixed hotspot using SAE
-    machineMixedUsingSae = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = false;
-        networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "SAE" ];
-        };
-      };
-    };
-
-    # Test connecting to the SAE and WPA2 mixed hotspot using WPA2
-    machineMixedUsingWpa2 = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = true;
-        networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "WPA-PSK-SHA256" ];
-        };
-      };
-    };
-
-    # Test connecting to the WPA2 legacy hotspot using WPA2
-    machineWpa2 = machineWithHostapd {
-      networking.wireless = {
-        fallbackToWPA2 = true;
-        networks.nixos-test-wpa2 = {
-          psk = "@PSK_NIXOS_TEST@";
-          authProtocols = [ "WPA-PSK-SHA256" ];
-        };
-      };
-    };
-  };
-
-  testScript =
-    ''
-      config_file = "/run/wpa_supplicant/wpa_supplicant.conf"
-
-      with subtest("Configuration file is inaccessible to other users"):
-          basic.wait_for_file(config_file)
-          basic.fail(f"sudo -u nobody ls {config_file}")
-
-      with subtest("Secrets variables have been substituted"):
-          basic.fail(f"grep -q @PSK_VALID@ {config_file}")
-          basic.fail(f"grep -q @PSK_SPECIAL@ {config_file}")
-          basic.succeed(f"grep -q @PSK_MISSING@ {config_file}")
-          basic.succeed(f"grep -q P@ssowrdWithSome@tSymbol {config_file}")
-
-      with subtest("WPA2 fallbacks have been generated"):
-          assert int(basic.succeed(f"grep -c sae-only {config_file}")) == 1
-          assert int(basic.succeed(f"grep -c mixed-wpa {config_file}")) == 2
-
-      # save file for manual inspection
-      basic.copy_from_vm(config_file)
-
+    testScript = ''
       with subtest("Daemon is running and accepting connections"):
-          basic.wait_for_unit("wpa_supplicant-wlan1.service")
-          status = basic.succeed("wpa_cli -i wlan1 status")
+          machine.wait_for_unit("wpa_supplicant.service")
+          status = machine.wait_until_succeeds("wpa_cli status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
 
-      machineSae.wait_for_unit("hostapd.service")
-      machineSae.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
-      with subtest("Daemon can connect to the SAE access point using SAE"):
-          machineSae.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
-          )
+      # get the configuration file
+      cmdline = machine.succeed("cat /proc/$(pgrep wpa)/cmdline").split('\x00')
+      config_file = cmdline[cmdline.index("-c") + 1]
 
-      with subtest("Daemon can connect to the SAE and WPA2 mixed access point using SAE"):
-          machineMixedUsingSae.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
-          )
+      with subtest("WPA2 fallbacks have been generated"):
+          assert int(machine.succeed(f"grep -c sae-only {config_file}")) == 1
+          assert int(machine.succeed(f"grep -c mixed-wpa {config_file}")) == 2
 
-      with subtest("Daemon can connect to the SAE and WPA2 mixed access point using WPA2"):
-          machineMixedUsingWpa2.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
-          )
-
-      with subtest("Daemon can connect to the WPA2 access point using WPA2"):
-          machineWpa2.wait_until_succeeds(
-            "wpa_cli -i wlan1 status | grep -q wpa_state=COMPLETED"
-          )
+      # save file for manual inspection
+      machine.copy_from_vm(config_file)
     '';
-})
+  };
+
+  # Test configuring the daemon imperatively
+  imperative = runTest {
+    name = "wpa_supplicant-imperative";
+    inherit meta;
+
+    nodes.machine = {
+      # add a virtual wlan interface
+      boot.kernelModules = [ "mac80211_hwsim" ];
+
+      # wireless client
+      networking.wireless = {
+        enable = lib.mkOverride 0 true;
+        userControlled.enable = true;
+        allowAuxiliaryImperativeNetworks = true;
+        interfaces = [ "wlan1" ];
+      };
+    };
+
+    testScript = ''
+      with subtest("Daemon is running and accepting connections"):
+          machine.wait_for_unit("wpa_supplicant-wlan1.service")
+          status = machine.wait_until_succeeds("wpa_cli -i wlan1 status")
+          assert "Failed to connect" not in status, \
+                 "Failed to connect to the daemon"
+
+      with subtest("Daemon can be configured imperatively"):
+          machine.succeed("wpa_cli -i wlan1 add_network")
+          machine.succeed("wpa_cli -i wlan1 set_network 0 ssid '\"nixos-test\"'")
+          machine.succeed("wpa_cli -i wlan1 set_network 0 psk '\"reproducibility\"'")
+          machine.succeed("wpa_cli -i wlan1 save_config")
+          machine.succeed("grep -q nixos-test /etc/wpa_supplicant.conf")
+    '';
+  };
+
+  # Test connecting to a SAE-only hotspot using SAE
+  saeOnly = runConnectionTest "sae-only" {
+    fallbackToWPA2 = false;
+    networks.nixos-test-sae = {
+      pskRaw = "ext:psk_nixos_test";
+      authProtocols = [ "SAE" ];
+    };
+  };
+
+  # Test connecting to a mixed SAE/WPA2 hotspot using SAE
+  mixedUsingSae = runConnectionTest "mixed-using-sae" {
+    fallbackToWPA2 = false;
+    networks.nixos-test-mixed = {
+      pskRaw = "ext:psk_nixos_test";
+      authProtocols = [ "SAE" ];
+    };
+  };
+
+  # Test connecting to a mixed SAE/WPA2 hotspot using WPA2
+  mixedUsingWpa2 = runConnectionTest "mixed-using-wpa2" {
+    fallbackToWPA2 = true;
+    networks.nixos-test-mixed = {
+      pskRaw = "ext:psk_nixos_test";
+      authProtocols = [ "WPA-PSK-SHA256" ];
+    };
+  };
+
+  # Test connecting to a legacy WPA2-only hotspot using WPA2
+  legacy = runConnectionTest "legacy" {
+    fallbackToWPA2 = true;
+    networks.nixos-test-wpa2 = {
+      pskRaw = "ext:psk_nixos_test";
+      authProtocols = [ "WPA-PSK-SHA256" ];
+    };
+  };
+}

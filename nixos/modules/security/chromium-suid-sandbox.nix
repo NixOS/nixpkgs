@@ -1,20 +1,25 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  cfg     = config.security.chromiumSuidSandbox;
+  cfg = config.security.chromiumSuidSandbox;
   sandbox = pkgs.chromium.sandbox;
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "programs" "unity3d" "enable" ] [ "security" "chromiumSuidSandbox" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "unity3d" "enable" ]
+      [ "security" "chromiumSuidSandbox" "enable" ]
+    )
   ];
 
-  options.security.chromiumSuidSandbox.enable = mkOption {
-    type = types.bool;
+  options.security.chromiumSuidSandbox.enable = lib.mkOption {
+    type = lib.types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Whether to install the Chromium SUID sandbox which is an executable that
       Chromium may use in order to achieve sandboxing.
 
@@ -26,13 +31,13 @@ in
     '';
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ sandbox ];
-    security.wrappers.${sandbox.passthru.sandboxExecutableName} =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
-      };
+    security.wrappers.${sandbox.passthru.sandboxExecutableName} = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
+    };
   };
 }

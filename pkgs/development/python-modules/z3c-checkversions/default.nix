@@ -1,15 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, zc-buildout
-, zope_testrunner
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  pythonAtLeast,
+  zc-buildout,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
   pname = "z3c-checkversions";
   version = "2.1";
+  format = "setuptools";
+
+  # distutils usage
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit version;
@@ -19,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zc-buildout ];
 
-  nativeCheckInputs = [ zope_testrunner ];
+  nativeCheckInputs = [ zope-testrunner ];
 
   checkPhase = ''
     ${python.interpreter} -m zope.testrunner --test-path=src []
@@ -29,6 +34,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/z3c.checkversions";
     changelog = "https://github.com/zopefoundation/z3c.checkversions/blob/${version}/CHANGES.rst";
     description = "Find newer package versions on PyPI";
+    mainProgram = "checkversions";
     license = licenses.zpl21;
   };
 }

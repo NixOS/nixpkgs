@@ -1,22 +1,29 @@
-{ lib, fetchFromGitHub, buildLua, mpv-unwrapped }:
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  buildLua,
+  mpv-unwrapped,
+}:
 
 buildLua {
   pname = "mpv-thumbfast";
-  version = "unstable-2023-06-04";
+  version = "0-unstable-2025-02-04";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "thumbfast";
-    rev = "4241c7daa444d3859b51b65a39d30e922adb87e9";
-    hash = "sha256-7EnFJVjEzqhWXAvhzURoOp/kad6WzwyidWxug6u8lVw=";
+    rev = "9deb0733c4e36938cf90e42ddfb7a19a8b2f4641";
+    hash = "sha256-avG1CRBrs0UM4HcFMUVAQyOtcIFkZ/H+PbjZJKU7o2A=";
   };
+  passthru.updateScript = unstableGitUpdater { };
 
-  postPatch = ''
-    substituteInPlace thumbfast.lua \
-      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getExe mpv-unwrapped}"'
-  '';
-
-  scriptPath = "thumbfast.lua";
+  passthru.extraWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ mpv-unwrapped ])
+  ];
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";

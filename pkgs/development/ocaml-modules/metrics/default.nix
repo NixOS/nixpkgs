@@ -1,15 +1,20 @@
-{ lib, fetchurl, buildDunePackage, alcotest, fmt }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+  fmt,
+}:
 
 buildDunePackage rec {
   pname = "metrics";
-  version = "0.4.0";
+  version = "0.4.1";
 
   minimalOCamlVersion = "4.04";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/metrics/releases/download/v${version}/metrics-${version}.tbz";
-    sha256 = "sha256-kbh1WktQkDcXE8O1WRm+vtagVfSql8S5gr0bXn/jia8=";
+    sha256 = "sha256-d+DCD7XB0GED27DsC8YEW+48YcAK0EI8l4Uqx/PGFE0=";
   };
 
   propagatedBuildInputs = [ fmt ];

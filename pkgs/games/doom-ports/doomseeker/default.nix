@@ -1,28 +1,63 @@
-{ lib, stdenv, mkDerivation, cmake, fetchFromBitbucket, pkg-config, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromBitbucket,
+  wrapQtAppsHook,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  zlib,
+  bzip2,
+  xxd,
+}:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "doomseeker";
-  version = "2018-03-05";
+  version = "2023-08-09";
 
   src = fetchFromBitbucket {
     owner = "Doomseeker";
     repo = "doomseeker";
-    rev = "c2c7f37b1afb";
-    sha256 = "17fna3a604miqsvply3klnmypps4ifz8axgd3pj96z46ybxs8akw";
+    rev = "4cce0a37b134283ed38ee4814bb282773f9c2ed1";
+    hash = "sha256-J7gesOo8NUPuVaU0o4rCGzLrqr3IIMAchulWZG3HTqg=";
   };
 
-  patches = [ ./fix_paths.patch ./qt_build_fix.patch ];
+  patches = [
+    ./dont_update_gitinfo.patch
+    ./add_gitinfo.patch
+    ./fix_paths.patch
+  ];
 
-  nativeBuildInputs = [ cmake qttools pkg-config xxd ];
-  buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    cmake
+    qttools
+    pkg-config
+    xxd
+  ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    zlib
+    bzip2
+  ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
+
+  # Doomseeker looks for the engines in the program directory
+  postInstall = ''
+    mv $out/bin/* $out/lib/doomseeker/
+    ln -s $out/lib/doomseeker/doomseeker $out/bin/
+  '';
 
   meta = with lib; {
     homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
-    license = licenses.gpl2;
+    mainProgram = "doomseeker";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.MP2E ];
+    maintainers = [ ];
   };
 }

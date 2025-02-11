@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
   # build inputs
-, jsonref
-, jsonschema
-, python-dateutil
-, pyyaml
-, requests
-, simplejson
-, six
-, swagger-spec-validator
-, pytz
-, msgpack
+  jsonref,
+  jsonschema,
+  python-dateutil,
+  pyyaml,
+  requests,
+  simplejson,
+  six,
+  swagger-spec-validator,
+  pytz,
+  msgpack,
   # check inputs
-, pytestCheckHook
-, mock
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
   pname = "bravado-core";
-  version = "6.1.0";
-  format = "setuptools";
+  version = "6.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,12 +31,14 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/ePs3znbwamMHHzb/PD4UHq+7v0j1r1X3J3Bnb4S2VU=";
+    hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jsonref
-    jsonschema # with optional dependencies for format
+    jsonschema # jsonschema[format-nongpl]
     python-dateutil
     pyyaml
     requests
@@ -43,19 +47,13 @@ buildPythonPackage rec {
     swagger-spec-validator
     pytz
     msgpack
-  ] ++ jsonschema.optional-dependencies.format;
+  ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    mock
-  ];
+  checkInputs = [ mock ];
 
-  pythonImportsCheck = [
-    "bravado_core"
-  ];
+  pythonImportsCheck = [ "bravado_core" ];
 
   disabledTestPaths = [
     # skip benchmarks
@@ -69,6 +67,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Yelp/bravado-core";
     changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vanschelven nickcao ];
+    maintainers = with maintainers; [
+      vanschelven
+      nickcao
+    ];
   };
 }

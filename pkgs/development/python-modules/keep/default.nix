@@ -1,37 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pygithub
-, terminaltables
-, click
-, requests
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  flit-core,
+  pygithub,
+  requests,
+  terminaltables3,
 }:
 
 buildPythonPackage rec {
   pname = "keep";
-  version = "2.10.1";
+  version = "2.11";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3abbe445347711cecd9cbb80dab4a0777418972fc14a14e9387d0d2ae4b6adb7";
+    hash = "sha256-Brwvu/Zevr8sOE3KAwakDDzVMc2VoFxIb1orXAes2U0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     click
-    requests
-    terminaltables
     pygithub
+    requests
+    terminaltables3
   ];
 
-  # no tests
+  # Module no tests
   doCheck = false;
+
   pythonImportsCheck = [ "keep" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/orkohunter/keep";
-    description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+  meta = {
+    description = "Meta CLI toolkit to keep personal shell command keeper and manage snippets";
+    homepage = "https://github.com/OrkoHunter/keep";
+    changelog = "https://github.com/OrkoHunter/keep/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
+    mainProgram = "keep";
   };
 }

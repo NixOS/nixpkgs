@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, babelfont
-, kurbopy
-, fonttools
-, skia-pathops
-, tqdm
-, uharfbuzz
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  babelfont,
+  kurbopy,
+  fonttools,
+  skia-pathops,
+  tqdm,
+  uharfbuzz,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "collidoscope";
   version = "0.6.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,11 +30,12 @@ buildPythonPackage rec {
     uharfbuzz
   ];
 
-  doCheck = true;
-  nativeCheckInputs = [
-    unittestCheckHook
+  nativeCheckInputs = [ unittestCheckHook ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
   ];
-  unittestFlagsArray = [ "-s" "test" "-v" ];
 
   meta = with lib; {
     description = "Python library to detect glyph collisions in fonts";

@@ -1,39 +1,51 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, alcotest
-, cstruct
-, domain-name
-, duration
-, gmap
-, ipaddr
-, logs
-, lru
-, metrics
-, ptime
-, fmt
-, base64
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  domain-name,
+  duration,
+  gmap,
+  ipaddr,
+  logs,
+  lru,
+  metrics,
+  ptime,
+  fmt,
+  base64,
+  ohex,
 }:
 
 buildDunePackage rec {
   pname = "dns";
-  version = "7.0.1";
+  version = "9.1.0";
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.13";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-dns/releases/download/v${version}/dns-${version}.tbz";
-    hash = "sha256-vDe1U1NbbIPcD1AmMG265ke7651C64mds7KcFHUN4fU=";
+    hash = "sha256-jz7JWs8U9XQhm1RAponq4azCpJyx2KBm+bI6esaPRPA=";
   };
 
-  propagatedBuildInputs = [ fmt logs ptime domain-name gmap cstruct ipaddr lru duration metrics base64 ];
+  propagatedBuildInputs = [
+    fmt
+    logs
+    ptime
+    domain-name
+    gmap
+    ipaddr
+    lru
+    duration
+    metrics
+    base64
+    ohex
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];
 
   meta = {
-    description = "An Domain Name System (DNS) library";
+    description = "Domain Name System (DNS) library";
     homepage = "https://github.com/mirage/ocaml-dns";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];

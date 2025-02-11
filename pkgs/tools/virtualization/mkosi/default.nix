@@ -1,89 +1,90 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, stdenv
-, python3
-, bubblewrap
-, systemd
-, pandoc
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  python3,
+  systemd,
+  pandoc,
+  kmod,
+  gnutar,
+  util-linux,
+  cpio,
+  bash,
+  coreutils,
+  btrfs-progs,
+  libseccomp,
+  replaceVars,
 
   # Python packages
-, setuptools
-, setuptools-scm
-, wheel
-, buildPythonApplication
-, pytestCheckHook
-, pefile
+  setuptools,
+  setuptools-scm,
+  wheel,
+  buildPythonApplication,
+  pytestCheckHook,
+  pefile,
 
   # Optional dependencies
-, withQemu ? false
-, qemu
-, OVMF
+  withQemu ? false,
+  qemu,
 }:
 let
   # For systemd features used by mkosi, see
   # https://github.com/systemd/mkosi/blob/19bb5e274d9a9c23891905c4bcbb8f68955a701d/action.yaml#L64-L72
-  systemdForMkosi = (systemd.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches ++ [
-      # Enable setting a deterministic verity seed for systemd-repart. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/81e04781106e3db24e9cf63c1d5fdd8215dc3f42.patch";
-        hash = "sha256-KO3poIsvdeepPmXWQXNaJJCPpmBb4sVmO+ur4om9f5k=";
-      })
-      # Propagate SOURCE_DATE_EPOCH to mcopy. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/4947de275a5553399854cc748f4f13e4ae2ba069.patch";
-        hash = "sha256-YIZZyc3f8pQO9fMAxiNhDdV8TtL4pXoh+hwHBzRWtfo=";
-      })
-      # repart: make sure rewinddir() is called before readdir() when performing rm -rf. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/6bbb893b90e2dcb05fb310ba4608f9c9dc587845.patch";
-        hash = "sha256-A6cF2QAeYHGc0u0V1JMxIcV5shzf5x3Q6K+blZOWSn4=";
-      })
-      # Set timezone to UTC when invoking mcopy. Remove when upgrading to systemd 255.
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/b2942c76adc5bb6a3e073aa5cee57834ee3a9813.patch";
-        hash = "sha256-phGln3Gs9p8CsEe+1laGrm9xcUJWVbNBW0W8oR9/7YU=";
-      })
-    ];
-  })).override {
+  systemdForMkosi = systemd.override {
     withRepart = true;
     withBootloader = true;
     withSysusers = true;
     withFirstboot = true;
     withEfi = true;
     withUkify = true;
+    withKernelInstall = true;
   };
 
-  python3pefile = python3.withPackages (ps: with ps; [
-    pefile
-  ]);
+  python3pefile = python3.withPackages (
+    ps: with ps; [
+      pefile
+    ]
+  );
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "19";
+  version = "24.3-unstable-2024-08-28";
   format = "pyproject";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    rev = "v${version}";
-    hash = "sha256-KjJM+KZCgUnsaEN2ZorhH0AR5nmiV2h3i7Vb3KdGFtI=";
+    rev = "8c2f828701a1bdb3dc9b80d6f2ab979f0430a6b8";
+    hash = "sha256-rO/4ki2nAJQN2slmYuHKESGBBDMXC/ikGf6dMDcKFr4=";
   };
 
-  # Fix ctypes finding library
-  # https://github.com/NixOS/nixpkgs/issues/7307
-  postPatch = lib.optionalString stdenv.isLinux ''
+  patches =
+    [
+      (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
+        UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
+        PYTHON_PEFILE = "${python3pefile}/bin/python3.12";
+        MKOSI_SANDBOX = null; # will be replaced in postPatch
+      })
+      (replaceVars ./0002-Fix-library-resolving.patch {
+        LIBC = "${stdenv.cc.libc}/lib/libc.so.6";
+        LIBSECCOMP = "${libseccomp.lib}/lib/libseccomp.so.2";
+      })
+    ]
+    ++ lib.optional withQemu (
+      replaceVars ./0003-Fix-QEMU-firmware-path.patch {
+        QEMU_FIRMWARE = "${qemu}/share/qemu/firmware";
+      }
+    );
+
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
     substituteInPlace mkosi/run.py \
-      --replace 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
-    substituteInPlace mkosi/__init__.py \
-      --replace '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
-  '' + lib.optionalString withQemu ''
-    substituteInPlace mkosi/qemu.py \
-      --replace '/usr/share/ovmf/x64/OVMF_VARS.fd' "${OVMF.variables}" \
-      --replace '/usr/share/ovmf/x64/OVMF_CODE.fd' "${OVMF.firmware}"
+      --replace-fail '@MKOSI_SANDBOX@' "\"$out/bin/mkosi-sandbox\""
   '';
 
   nativeBuildInputs = [
@@ -93,12 +94,20 @@ buildPythonApplication rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    systemdForMkosi
-    bubblewrap
-  ] ++ lib.optional withQemu [
-    qemu
-  ];
+  propagatedBuildInputs =
+    [
+      bash
+      btrfs-progs
+      coreutils
+      cpio
+      gnutar
+      kmod
+      systemdForMkosi
+      util-linux
+    ]
+    ++ lib.optional withQemu [
+      qemu
+    ];
 
   postBuild = ''
     ./tools/make-man-page.sh
@@ -108,19 +117,10 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mkosi"
-  ];
-
   postInstall = ''
     mkdir -p $out/share/man/man1
     mv mkosi/resources/mkosi.1 $out/share/man/man1/
   '';
-
-  makeWrapperArgs = [
-    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
-    "--prefix PYTHONPATH : \"$PYTHONPATH\""
-  ];
 
   meta = with lib; {
     description = "Build legacy-free OS images";
@@ -128,7 +128,12 @@ buildPythonApplication rec {
     changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
     license = licenses.lgpl21Only;
     mainProgram = "mkosi";
-    maintainers = with maintainers; [ malt3 katexochen ];
+    maintainers = with maintainers; [
+      malt3
+      msanft
+    ];
     platforms = platforms.linux;
+    # `mkosi qemu` boot fails in the uefi shell, image isn't found.
+    broken = withQemu;
   };
 }

@@ -1,28 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, glib
-, gssdp_1_6
-, libsoup_3
-, libxml2
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  glib,
+  gssdp_1_6,
+  libsoup_3,
+  libxml2,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
-  version = "1.6.6";
+  version = "1.6.8";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ydxQ6MeLN5LRsObFxfUsk+k0XT2uKJHjEamTpXT1oE8=";
+    hash = "sha256-cKADzr1oV3KT+z5q9J/5AiA7+HaLL8XWUd3B8PoeEek=";
   };
 
   depsBuildBuild = [
@@ -65,7 +70,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.gupnp.org/";
-    description = "An implementation of the UPnP specification";
+    description = "Implementation of the UPnP specification";
+    mainProgram = "gupnp-binding-tool-1.6";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

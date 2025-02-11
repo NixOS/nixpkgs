@@ -1,7 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption singleton types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    singleton
+    types
+    ;
   inherit (pkgs) coreutils charybdis;
   cfg = config.services.charybdis;
 
@@ -18,11 +29,11 @@ in
 
     services.charybdis = {
 
-      enable = mkEnableOption (lib.mdDoc "Charybdis IRC daemon");
+      enable = mkEnableOption "Charybdis IRC daemon";
 
       config = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Charybdis IRC daemon configuration file.
         '';
       };
@@ -30,7 +41,7 @@ in
       statedir = mkOption {
         type = types.path;
         default = "/var/lib/charybdis";
-        description = lib.mdDoc ''
+        description = ''
           Location of the state directory of charybdis.
         '';
       };
@@ -38,7 +49,7 @@ in
       user = mkOption {
         type = types.str;
         default = "ircd";
-        description = lib.mdDoc ''
+        description = ''
           Charybdis IRC daemon user.
         '';
       };
@@ -46,7 +57,7 @@ in
       group = mkOption {
         type = types.str;
         default = "ircd";
-        description = lib.mdDoc ''
+        description = ''
           Charybdis IRC daemon group.
         '';
       };
@@ -54,7 +65,7 @@ in
       motd = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Charybdis MOTD text.
 
           Charybdis will read its MOTD from /etc/charybdis/ircd.motd .
@@ -66,49 +77,50 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable (lib.mkMerge [
-    {
-      users.users.${cfg.user} = {
-        description = "Charybdis IRC daemon user";
-        uid = config.ids.uids.ircd;
-        group = cfg.group;
-      };
-
-      users.groups.${cfg.group} = {
-        gid = config.ids.gids.ircd;
-      };
-
-      systemd.tmpfiles.rules = [
-        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
-      ];
-
-      environment.etc."charybdis/ircd.conf".source = configFile;
-
-      systemd.services.charybdis = {
-        description = "Charybdis IRC daemon";
-        wantedBy = [ "multi-user.target" ];
-        reloadIfChanged = true;
-        restartTriggers = [
-          configFile
-        ];
-        environment = {
-          BANDB_DBPATH = "${cfg.statedir}/ban.db";
+  config = mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        users.users.${cfg.user} = {
+          description = "Charybdis IRC daemon user";
+          uid = config.ids.uids.ircd;
+          group = cfg.group;
         };
-        serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile /etc/charybdis/ircd.conf";
-          ExecReload = "${coreutils}/bin/kill -HUP $MAINPID";
-          Group = cfg.group;
-          User = cfg.user;
+
+        users.groups.${cfg.group} = {
+          gid = config.ids.gids.ircd;
         };
-      };
 
-    }
+        systemd.tmpfiles.settings."10-charybdis".${cfg.statedir}.d = {
+          inherit (cfg) user group;
+        };
 
-    (mkIf (cfg.motd != null) {
-      environment.etc."charybdis/ircd.motd".text = cfg.motd;
-    })
-  ]);
+        environment.etc."charybdis/ircd.conf".source = configFile;
+
+        systemd.services.charybdis = {
+          description = "Charybdis IRC daemon";
+          wantedBy = [ "multi-user.target" ];
+          reloadIfChanged = true;
+          restartTriggers = [
+            configFile
+          ];
+          environment = {
+            BANDB_DBPATH = "${cfg.statedir}/ban.db";
+          };
+          serviceConfig = {
+            ExecStart = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile /etc/charybdis/ircd.conf";
+            ExecReload = "${coreutils}/bin/kill -HUP $MAINPID";
+            Group = cfg.group;
+            User = cfg.user;
+          };
+        };
+
+      }
+
+      (mkIf (cfg.motd != null) {
+        environment.etc."charybdis/ircd.motd".text = cfg.motd;
+      })
+    ]
+  );
 }

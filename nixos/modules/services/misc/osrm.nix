@@ -1,59 +1,68 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.osrm;
 in
 
 {
   options.services.osrm = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc "Enable the OSRM service.";
+      description = "Enable the OSRM service.";
     };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc "IP address on which the web server will listen.";
+      description = "IP address on which the web server will listen.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5000;
-      description = lib.mdDoc "Port on which the web server will run.";
+      description = "Port on which the web server will run.";
     };
 
-    threads = mkOption {
-      type = types.int;
+    threads = lib.mkOption {
+      type = lib.types.int;
       default = 4;
-      description = lib.mdDoc "Number of threads to use.";
+      description = "Number of threads to use.";
     };
 
-    algorithm = mkOption {
-      type = types.enum [ "CH" "CoreCH" "MLD" ];
+    algorithm = lib.mkOption {
+      type = lib.types.enum [
+        "CH"
+        "CoreCH"
+        "MLD"
+      ];
       default = "MLD";
-      description = lib.mdDoc "Algorithm to use for the data. Must be one of CH, CoreCH, MLD";
+      description = "Algorithm to use for the data. Must be one of CH, CoreCH, MLD";
     };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "--max-table-size 1000" "--max-matching-size 1000" ];
-      description = lib.mdDoc "Extra command line arguments passed to osrm-routed";
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "--max-table-size 1000"
+        "--max-matching-size 1000"
+      ];
+      description = "Extra command line arguments passed to osrm-routed";
     };
 
-    dataFile = mkOption {
-      type = types.path;
+    dataFile = lib.mkOption {
+      type = lib.types.path;
       example = "/var/lib/osrm/berlin-latest.osrm";
-      description = lib.mdDoc "Data file location";
+      description = "Data file location";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.osrm = {
       group = config.users.users.osrm.name;

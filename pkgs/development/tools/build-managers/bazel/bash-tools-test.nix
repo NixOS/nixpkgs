@@ -1,4 +1,11 @@
-{ writeText, bazel, runLocal, bazelTest, distDir }:
+{
+  writeText,
+  bazel,
+  runLocal,
+  bazelTest,
+  distDir,
+  extraBazelArgs ? "",
+}:
 
 # Tests that certain executables are available in bazel-executed bash shells.
 
@@ -8,9 +15,9 @@ let
   '';
 
   fileIn = writeText "input.txt" ''
-  one
-  two
-  three
+    one
+    two
+    three
   '';
 
   fileBUILD = writeText "BUILD" ''
@@ -22,7 +29,7 @@ let
     )
   '';
 
-  workspaceDir = runLocal "our_workspace" {} ''
+  workspaceDir = runLocal "our_workspace" { } ''
     mkdir $out
     cp ${WORKSPACE} $out/WORKSPACE
     cp ${fileIn} $out/input.txt
@@ -35,10 +42,11 @@ let
     inherit workspaceDir;
 
     bazelScript = ''
-      ${bazel}/bin/bazel build :tool_usage --distdir=${distDir}
+      ${bazel}/bin/bazel build :tool_usage --distdir=${distDir} ${extraBazelArgs}
       cp bazel-bin/output.txt $out
       echo "Testing content" && [ "$(cat $out | wc -l)" == "2" ] && echo "OK"
     '';
   };
 
-in testBazel
+in
+testBazel

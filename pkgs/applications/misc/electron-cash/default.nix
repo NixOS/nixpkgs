@@ -1,16 +1,20 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook
-, secp256k1 }:
+, secp256k1, qtwayland }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.10";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-m13wJlNBG3BxOdKUyd3qmIhFBM7263FzMKr5lfD1tys=";
+    tag = version;
+    sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
   };
+
+  build-system = with python3Packages; [
+    cython
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     # requirements
@@ -27,6 +31,7 @@ python3Packages.buildPythonApplication rec {
     certifi
     pathvalidate
     dnspython
+    bitcoinrpc
 
     # requirements-binaries
     pyqt5
@@ -35,7 +40,6 @@ python3Packages.buildPythonApplication rec {
     cryptography
 
     # requirements-hw
-    cython
     trezor
     keepkey
     btchip-python
@@ -47,24 +51,14 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
+  buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
+
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
       --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
 
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
-  '';
-
-  nativeCheckInputs = with python3Packages; [ pytest ];
-
-  checkPhase = ''
-    unset HOME
-    pytest electroncash/tests
-  '';
-
-  postInstall = lib.optionalString stdenv.isLinux ''
-    substituteInPlace $out/share/applications/electron-cash.desktop \
-      --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
   '';
 
   # If secp256k1 wasn't added to the library path, the following warning is given:
@@ -85,7 +79,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A Bitcoin Cash SPV Wallet";
+    description = "Bitcoin Cash SPV Wallet";
+    mainProgram = "electron-cash";
     longDescription = ''
       An easy-to-use Bitcoin Cash client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)

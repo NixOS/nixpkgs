@@ -1,29 +1,76 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, fastrlock
-, numpy
-, wheel
-, pytestCheckHook
-, mock
-, setuptools
-, cudaPackages
-, addOpenGLRunpath
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython_0,
+  fastrlock,
+  numpy,
+  wheel,
+  pytestCheckHook,
+  mock,
+  setuptools,
+  cudaPackages,
+  addDriverRunpath,
+  pythonOlder,
+  symlinkJoin,
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
-in buildPythonPackage rec {
+  inherit (cudaPackages) cudnn;
+
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+
+  # some packages are not available on all platforms
+  cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
+  cutensor = shouldUsePkg (cudaPackages.cutensor or null);
+  nccl = shouldUsePkg (cudaPackages.nccl or null);
+
+  outpaths = with cudaPackages; [
+    cuda_cccl # <nv/target>
+    cuda_cudart
+    cuda_nvcc # <crt/host_defines.h>
+    cuda_nvprof
+    cuda_nvrtc
+    cuda_nvtx
+    cuda_profiler_api
+    libcublas
+    libcufft
+    libcurand
+    libcusolver
+    libcusparse
+
+    # Missing:
+    # cusparselt
+  ];
+  cudatoolkit-joined = symlinkJoin {
+    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
+    paths =
+      outpaths
+      ++ lib.concatMap (f: lib.map f outpaths) [
+        lib.getLib
+        lib.getDev
+        (lib.getOutput "static")
+        (lib.getOutput "stubs")
+      ];
+  };
+in
+buildPythonPackage rec {
   pname = "cupy";
-  version = "12.2.0";
+  version = "13.3.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+V/9Cv6sthewSP4Cjt4HuX3J6VrKFhCgIrHz0gqaAn4=";
+  stdenv = cudaPackages.backendStdenv;
+
+  src = fetchFromGitHub {
+    owner = "cupy";
+    repo = "cupy";
+    tag = "v${version}";
+    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
+    fetchSubmodules = true;
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
@@ -32,27 +79,31 @@ in buildPythonPackage rec {
   # very short builds and a few extremely long ones, so setting both ends up
   # working nicely in practice.
   preConfigure = ''
-    export CUDA_PATH=${cudatoolkit}
     export CUPY_NUM_BUILD_JOBS="$NIX_BUILD_CORES"
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
-    addOpenGLRunpath
-    cython
+    setuptools
+    wheel
+    addDriverRunpath
+    cython_0
+    cudaPackages.cuda_nvcc
   ];
 
-  LDFLAGS = "-L${cudatoolkit}/lib/stubs";
-
-  propagatedBuildInputs = [
-    cudatoolkit
+  buildInputs = [
+    cudatoolkit-joined
     cudnn
     cutensor
     nccl
+  ];
+
+  NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+  CUDA_PATH = "${cudatoolkit-joined}";
+
+  propagatedBuildInputs = [
     fastrlock
     numpy
-    setuptools
-    wheel
   ];
 
   nativeCheckInputs = [
@@ -66,18 +117,21 @@ in buildPythonPackage rec {
 
   postFixup = ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      addOpenGLRunpath "$lib"
+      addDriverRunpath "$lib"
     done
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A NumPy-compatible matrix library accelerated by CUDA";
+    description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ hyphon81 ];
   };
 }

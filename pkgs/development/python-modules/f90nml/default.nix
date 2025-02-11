@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, setuptools-scm }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "f90nml";
   version = "1.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshallward";
@@ -11,18 +18,17 @@ buildPythonPackage rec {
     hash = "sha256-nSpVBAS2VvXIQwYK/qVVzEc13bicAQ+ScXpO4Rn2O+8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "f90nml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for working with Fortran Namelists";
+    mainProgram = "f90nml";
     homepage = "https://f90nml.readthedocs.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ loicreynier ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

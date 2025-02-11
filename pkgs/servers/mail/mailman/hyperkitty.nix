@@ -1,47 +1,46 @@
 { lib
 , python3
-, fetchPypi
+, fetchurl
+, nixosTests
 , fetchpatch
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
-  pname = "HyperKitty";
-  version = "1.3.7";
-  disabled = pythonOlder "3.8";
+  pname = "hyperkitty";
+  version = "1.3.12";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-TXSso+wwVGdBymIzns5yOS4pj1EdConmm87b/NyBAss=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchurl {
+    url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
+    hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";
   };
 
   patches = [
-    ./0001-Disable-broken-test_help_output-testcase.patch
+    # Fix test with mistune >= 3.1
     (fetchpatch {
-      url = "https://gitlab.com/mailman/hyperkitty/-/commit/5bb394662882bfc73c3e877458da44343aa06922.patch";
-      hash = "sha256-9vcY6nu3txDftH6aYpdh9qSrLzZceGjVFxuD1Ux18gw=";
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/2d69f420c603356a639a6b6243e1059a0089b7eb.patch";
+      hash = "sha256-zo+dK8DFMkHlMrOVSUtelhAq+cxJE4gLG00LvuAlWKA=";
     })
   ];
 
-  postPatch = ''
-    # isort is a development dependency
-    sed -i '/isort/d' setup.py
-    # Fix mistune imports for mistune >= 2.0.0
-    # https://gitlab.com/mailman/hyperkitty/-/merge_requests/379
-    sed -i 's/mistune.scanner/mistune.util/' hyperkitty/lib/renderer.py
-  '';
+  build-system = [
+    pdm-backend
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-gravatar2
     django-haystack
     django-mailman3
-    django-q
+    django-q2
     django-compressor
     django-extensions
     djangorestframework
-    flufl_lock
+    flufl-lock
     mistune
     networkx
     psycopg2
@@ -50,11 +49,13 @@ buildPythonPackage rec {
   ];
 
   # Some of these are optional runtime dependencies that are not
-  # listed as dependencies in setup.py.  To use these, they should be
-  # dependencies of the Django Python environment, but not of
-  # HyperKitty so they're not included for people who don't need them.
+  # listed as dependencies in pyproject.toml.  To use these, they
+  # should be dependencies of the Django Python environment, but not
+  # of HyperKitty so they're not included for people who don't need
+  # them.
   nativeCheckInputs = [
     beautifulsoup4
+    elastic-transport
     elasticsearch
     mock
     whoosh
@@ -66,7 +67,10 @@ buildPythonPackage rec {
       --settings=hyperkitty.tests.settings_test hyperkitty
   '';
 
+  passthru.tests = { inherit (nixosTests) mailman; };
+
   meta = {
+    changelog = "https://docs.mailman3.org/projects/hyperkitty/en/latest/news.html";
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Archiver for GNU Mailman v3";
     license = lib.licenses.gpl3;

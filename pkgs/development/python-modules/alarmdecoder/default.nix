@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyftdi
-, pyopenssl
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pyftdi,
+  pyopenssl,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  pyusb,
 }:
 
 buildPythonPackage rec {
   pname = "alarmdecoder";
   version = "1.13.11";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -21,6 +23,11 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
   };
+
+  postPatch = ''
+    substituteInPlace test/test_{ad2,devices,messages}.py \
+      --replace-fail assertEquals assertEqual
+  '';
 
   propagatedBuildInputs = [
     pyftdi

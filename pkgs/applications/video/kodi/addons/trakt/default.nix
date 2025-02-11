@@ -1,12 +1,20 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, trakt-module, dateutil }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  trakt-module,
+  dateutil,
+}:
 buildKodiAddon rec {
   pname = "trakt";
   namespace = "script.trakt";
-  version = "3.5.0";
+  version = "3.6.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-OyU6S5r/y3vqW6Wg6OP0+Zn4YchBy8x1i++hzCQHyx0=";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-ZlBucYYRA1cL5c0H1jhXeKE1itReZe2gAJYFFxuUebo=";
   };
 
   propagatedBuildInputs = [

@@ -1,48 +1,61 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
-, testers
-, buildah
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  gpgme,
+  lvm2,
+  btrfs-progs,
+  libapparmor,
+  libselinux,
+  libseccomp,
+  testers,
+  buildah,
 }:
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.32.2";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-Av4wrJ+anVu1pTSFTpaseBhj+7ECsRoKb1bATrUKYuo=";
+    hash = "sha256-R2iZpZkofg6kMTQ/kOjgKLQYw+yQQ5P3AAyBeo81lGU=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   vendorHash = null;
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+  # /nix/store/.../bin/ld: internal/mkcw/embed/entrypoint_amd64.o: relocation R_X86_64_32S against `.rodata.1' can not be used when making a PIE object; recompile with -fPIE
+  hardeningDisable = [ "pie" ];
 
-  buildInputs = [
-    gpgme
-  ] ++ lib.optionals stdenv.isLinux [
-    btrfs-progs
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      gpgme
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      btrfs-progs
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -62,10 +75,15 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = buildah;
+    command = ''
+      XDG_DATA_HOME="$TMPDIR" XDG_CACHE_HOME="$TMPDIR" XDG_CONFIG_HOME="$TMPDIR" \
+      buildah --version
+    '';
   };
 
   meta = with lib; {
-    description = "A tool which facilitates building OCI images";
+    description = "Tool which facilitates building OCI images";
+    mainProgram = "buildah";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;

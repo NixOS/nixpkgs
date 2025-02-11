@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, menhir }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  menhir,
+}:
 
 buildDunePackage rec {
   version = "0.4.0";
@@ -16,7 +21,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
 
   meta = {
-    description = "A simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";
+    description = "Simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;

@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, dacite
-, orjson
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dacite,
+  orjson,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ij8xou8LXC4/BUTApIV6xSgb7ethwLyrHNJvBgxSBYM=";
   };
 
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "zadnegoale"
-  ];
+  pythonImportsCheck = [ "zadnegoale" ];
 
   meta = with lib; {
     description = "Python wrapper for getting allergen concentration data from Żadnego Ale servers";

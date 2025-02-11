@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, ncurses}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rogue";
@@ -17,9 +22,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://rogue.rogueforge.net/rogue-5-4/";
-    description = "The final version of the original Rogue game developed for the UNIX operating system";
+    description = "Final version of the original Rogue game developed for the UNIX operating system";
+    mainProgram = "rogue";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

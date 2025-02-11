@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, numpy
-, pytestCheckHook
-, pythonOlder
-, rdkit
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  rdkit,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "meeko";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "forlilab";
     repo = "Meeko";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pngFu6M63W26P7wd6FUNLuf0NikxtRtVR/pnR5PR6Wo=";
+    tag = "v${version}";
+    hash = "sha256-ViIBiczwxTwraYn8UnFAZFCFT28v3WEYm04W2YpU/4g=";
   };
 
   patches = [
@@ -44,18 +45,14 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "meeko"
-  ];
+  pythonImportsCheck = [ "meeko" ];
 
   meta = {
     description = "Python package for preparing small molecule for docking";
     homepage = "https://github.com/forlilab/Meeko";
-    changelog = "https://github.com/forlilab/Meeko/releases/tag/${src.rev}";
+    changelog = "https://github.com/forlilab/Meeko/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };

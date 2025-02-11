@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, expat
-, pkg-config
-, buildsystem
-, libparserutils
-, libwapcaplet
-, libhubbub
+{
+  lib,
+  stdenv,
+  fetchurl,
+  expat,
+  pkg-config,
+  buildsystem,
+  libparserutils,
+  libwapcaplet,
+  libhubbub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libdom";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libdom-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-mO4HJHHlXiCMmHjlFcQQrUYso2+HtK/L7K0CPzos70o=";
+    hash = "sha256-0F5FrxZUcBTCsKOuzzZw+hPUGfUFs/X8esihSR/DDzw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

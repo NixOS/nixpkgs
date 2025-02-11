@@ -1,36 +1,38 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, dbus
-, lndir
-, setuptools
-, dbus-python
-, sip
-, pyqt6-sip
-, pyqt-builder
-, qt6Packages
-, pythonOlder
-, withMultimedia ? true
-, withWebSockets ? true
-, withLocation ? true
-# Not currently part of PyQt6
-#, withConnectivity ? true
-, withPrintSupport ? true
-, cups
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  dbus,
+  lndir,
+  dbus-python,
+  sip,
+  pyqt6-sip,
+  pyqt-builder,
+  qt6Packages,
+  pythonOlder,
+  mesa,
+  withMultimedia ? true,
+  withWebSockets ? true,
+  withLocation ? true,
+  # Not currently part of PyQt6
+  #, withConnectivity ? true
+  withPrintSupport ? true,
+  cups,
 }:
 
 buildPythonPackage rec {
-  pname = "PyQt6";
-  version = "6.5.2";
-  format = "pyproject";
+  pname = "pyqt6";
+  version = "6.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FIfuc1D5/7ZtYKtBdlGSUsKzcXYsvo+DQP2VH2OAEoA=";
+    pname = "PyQt6";
+    inherit version;
+    hash = "sha256-bYYo3kwqBQ8LdEYuTJy5f4Ob9v+rvKkXEXIv+ygVcNk=";
   };
 
   patches = [
@@ -40,14 +42,32 @@ buildPythonPackage rec {
     # ./pyqt5-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+    # Fix build with Qt 6.8.2
+    # See: https://gitlab.archlinux.org/archlinux/packaging/packages/pyqt6/-/blob/main/qt-6.8.2.patch
+    # FIXME: remove when merged upstream
+    ./pyqt6-qt-6.8.2.patch
+  ];
+
+  build-system = [
+    sip
+    pyqt-builder
+  ];
+
+  dependencies = [
+    pyqt6-sip
+    dbus-python
   ];
 
   # be more verbose
+  # and normalize version
   postPatch = ''
     cat >> pyproject.toml <<EOF
     [tool.sip.project]
     verbose = true
     EOF
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
   '';
 
   enableParallelBuilding = true;
@@ -61,51 +81,48 @@ buildPythonPackage rec {
     export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = with qt6Packages; [
-    pkg-config
-    lndir
-    sip
-    qtbase
-    qtsvg
-    qtdeclarative
-    qtwebchannel
-    qmake
-    qtquick3d
-    qtquicktimeline
-  ]
-  # ++ lib.optional withConnectivity qtconnectivity
-  ++ lib.optional withMultimedia qtmultimedia
-  ++ lib.optional withWebSockets qtwebsockets
-  ++ lib.optional withLocation qtlocation
-  ;
+  nativeBuildInputs =
+    with qt6Packages;
+    [
+      pkg-config
+      lndir
+      qtbase
+      qtsvg
+      qtdeclarative
+      qtwebchannel
+      qmake
+      qtquick3d
+      qtquicktimeline
+    ]
+    # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation;
 
-  buildInputs = with qt6Packages; [
-    dbus
-    qtbase
-    qtsvg
-    qtdeclarative
-    pyqt-builder
-    qtquick3d
-    qtquicktimeline
-  ]
-  # ++ lib.optional withConnectivity qtconnectivity
-  ++ lib.optional withWebSockets qtwebsockets
-  ++ lib.optional withLocation qtlocation
-  ;
+  buildInputs =
+    with qt6Packages;
+    [
+      dbus
+      qtbase
+      qtsvg
+      qtdeclarative
+      qtquick3d
+      qtquicktimeline
+    ]
+    # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation;
 
-  propagatedBuildInputs = [
-    dbus-python
-    pyqt6-sip
-    setuptools
-  ]
-  # ld: library not found for -lcups
-  ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [
-    cups
-  ];
+  propagatedBuildInputs =
+    # ld: library not found for -lcups
+    lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
@@ -116,33 +133,28 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   # Checked using pythonImportsCheck, has no tests
-  doCheck = true;
 
-  pythonImportsCheck = [
-    "PyQt6"
-    "PyQt6.QtCore"
-    "PyQt6.QtQml"
-    "PyQt6.QtWidgets"
-    "PyQt6.QtGui"
-    "PyQt6.QtQuick"
-  ]
-  ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
-  ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
-  # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-  ++ lib.optional withLocation "PyQt6.QtPositioning"
-  ;
+  pythonImportsCheck =
+    [
+      "PyQt6"
+      "PyQt6.QtCore"
+      "PyQt6.QtQml"
+      "PyQt6.QtWidgets"
+      "PyQt6.QtGui"
+      "PyQt6.QtQuick"
+    ]
+    ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
+    ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
+    # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
+    ++ lib.optional withLocation "PyQt6.QtPositioning";
 
-  # fix build with qt 6.6
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-fpermissive"
-  ]
-  ++ lib.optional (stdenv.isDarwin) "-Wno-address-of-temporary");
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ LunNova ];
   };
 }

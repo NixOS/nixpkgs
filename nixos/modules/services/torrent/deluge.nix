@@ -1,16 +1,13 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.deluge;
   cfg_web = config.services.deluge.web;
-  isDeluge1 = versionOlder cfg.package.version "2.0.0";
+  isDeluge1 = lib.versionOlder cfg.package.version "2.0.0";
 
   openFilesLimit = 4096;
   listenPortsDefault = [ 6881 6889 ];
 
-  listToRange = x: { from = elemAt x 0; to = elemAt x 1; };
+  listToRange = x: { from = lib.elemAt x 0; to = lib.elemAt x 1; };
 
   configDir = "${cfg.dataDir}/.config/deluge";
   configFile = pkgs.writeText "core.conf" (builtins.toJSON cfg.config);
@@ -37,20 +34,20 @@ in {
   options = {
     services = {
       deluge = {
-        enable = mkEnableOption (lib.mdDoc "Deluge daemon");
+        enable = lib.mkEnableOption "Deluge daemon";
 
-        openFilesLimit = mkOption {
+        openFilesLimit = lib.mkOption {
           default = openFilesLimit;
-          type = types.either types.int types.str;
-          description = lib.mdDoc ''
+          type = lib.types.either lib.types.int lib.types.str;
+          description = ''
             Number of files to allow deluged to open.
           '';
         };
 
-        config = mkOption {
-          type = types.attrs;
+        config = lib.mkOption {
+          type = lib.types.attrs;
           default = {};
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               download_location = "/srv/torrents/";
               max_upload_speed = "1000.0";
@@ -60,7 +57,7 @@ in {
               listen_ports = [ ${toString listenPortsDefault} ];
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             Deluge core configuration for the core.conf file. Only has an effect
             when {option}`services.deluge.declarative` is set to
             `true`. String values must be quoted, integer and
@@ -70,10 +67,10 @@ in {
           '';
         };
 
-        declarative = mkOption {
-          type = types.bool;
+        declarative = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to use a declarative deluge configuration.
             Only if set to `true`, the options
             {option}`services.deluge.config`,
@@ -83,10 +80,10 @@ in {
           '';
         };
 
-        openFirewall = mkOption {
+        openFirewall = lib.mkOption {
           default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
+          type = lib.types.bool;
+          description = ''
             Whether to open the firewall for the ports in
             {option}`services.deluge.config.listen_ports`. It only takes effet if
             {option}`services.deluge.declarative` is set to
@@ -99,18 +96,18 @@ in {
           '';
         };
 
-        dataDir = mkOption {
-          type = types.path;
+        dataDir = lib.mkOption {
+          type = lib.types.path;
           default = "/var/lib/deluge";
-          description = lib.mdDoc ''
+          description = ''
             The directory where deluge will create files.
           '';
         };
 
-        authFile = mkOption {
-          type = types.path;
+        authFile = lib.mkOption {
+          type = lib.types.path;
           example = "/run/keys/deluge-auth";
-          description = lib.mdDoc ''
+          description = ''
             The file managing the authentication for deluge, the format of this
             file is straightforward, each line contains a
             username:password:level tuple in plaintext. It only has an effect
@@ -121,50 +118,50 @@ in {
           '';
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "deluge";
-          description = lib.mdDoc ''
+          description = ''
             User account under which deluge runs.
           '';
         };
 
-        group = mkOption {
-          type = types.str;
+        group = lib.mkOption {
+          type = lib.types.str;
           default = "deluge";
-          description = lib.mdDoc ''
+          description = ''
             Group under which deluge runs.
           '';
         };
 
-        extraPackages = mkOption {
-          type = types.listOf types.package;
+        extraPackages = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
             Extra packages available at runtime to enable Deluge's plugins. For example,
             extraction utilities are required for the built-in "Extractor" plugin.
             This always contains unzip, gnutar, xz and bzip2.
           '';
         };
 
-        package = mkPackageOption pkgs "deluge-2_x" { };
+        package = lib.mkPackageOption pkgs "deluge-2_x" { };
       };
 
       deluge.web = {
-        enable = mkEnableOption (lib.mdDoc "Deluge Web daemon");
+        enable = lib.mkEnableOption "Deluge Web daemon";
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 8112;
-          description = lib.mdDoc ''
+          description = ''
             Deluge web UI port.
           '';
         };
 
-        openFirewall = mkOption {
-          type = types.bool;
+        openFirewall = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Open ports in the firewall for deluge web daemon
           '';
         };
@@ -172,10 +169,10 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.deluge.package = mkDefault (
-      if versionAtLeast config.system.stateVersion "20.09" then
+    services.deluge.package = lib.mkDefault (
+      if lib.versionAtLeast config.system.stateVersion "20.09" then
         pkgs.deluge-2_x
       else
         # deluge-1_x is no longer packaged and this will resolve to an error
@@ -191,17 +188,25 @@ in {
     # Provide a default set of `extraPackages`.
     services.deluge.extraPackages = with pkgs; [ unzip gnutar xz bzip2 ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config' 0770 ${cfg.user} ${cfg.group}"
-      "d '${cfg.dataDir}/.config/deluge' 0770 ${cfg.user} ${cfg.group}"
-    ]
-    ++ optional (cfg.config ? download_location)
-      "d '${cfg.config.download_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? torrentfiles_location)
-      "d '${cfg.config.torrentfiles_location}' 0770 ${cfg.user} ${cfg.group}"
-    ++ optional (cfg.config ? move_completed_path)
-      "d '${cfg.config.move_completed_path}' 0770 ${cfg.user} ${cfg.group}";
+    systemd.tmpfiles.settings."10-deluged" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0770";
+      };
+    in {
+      "${cfg.dataDir}".d = defaultConfig;
+      "${cfg.dataDir}/.config".d = defaultConfig;
+      "${cfg.dataDir}/.config/deluge".d = defaultConfig;
+    }
+    // lib.optionalAttrs (cfg.config ? download_location) {
+      ${cfg.config.download_location}.d = defaultConfig;
+    }
+    // lib.optionalAttrs (cfg.config ? torrentfiles_location) {
+      ${cfg.config.torrentfiles_location}.d = defaultConfig;
+    }
+    // lib.optionalAttrs (cfg.config ? move_completed_path) {
+      ${cfg.config.move_completed_path}.d = defaultConfig;
+    };
 
     systemd.services.deluged = {
       after = [ "network.target" ];
@@ -225,7 +230,7 @@ in {
       preStart = preStart;
     };
 
-    systemd.services.delugeweb = mkIf cfg_web.enable {
+    systemd.services.delugeweb = lib.mkIf cfg_web.enable {
       after = [ "network.target" "deluged.service"];
       requires = [ "deluged.service" ];
       description = "Deluge BitTorrent WebUI";
@@ -234,7 +239,7 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/deluge-web \
-            ${optionalString (!isDeluge1) "--do-not-daemonize"} \
+            ${lib.optionalString (!isDeluge1) "--do-not-daemonize"} \
             --config ${configDir} \
             --port ${toString cfg.web.port}
         '';
@@ -243,19 +248,19 @@ in {
       };
     };
 
-    networking.firewall = mkMerge [
-      (mkIf (cfg.declarative && cfg.openFirewall && !(cfg.config.random_port or true)) {
-        allowedTCPPortRanges = singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
-        allowedUDPPortRanges = singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
+    networking.firewall = lib.mkMerge [
+      (lib.mkIf (cfg.declarative && cfg.openFirewall && !(cfg.config.random_port or true)) {
+        allowedTCPPortRanges = lib.singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
+        allowedUDPPortRanges = lib.singleton (listToRange (cfg.config.listen_ports or listenPortsDefault));
       })
-      (mkIf (cfg.web.openFirewall) {
+      (lib.mkIf (cfg.web.openFirewall) {
         allowedTCPPorts = [ cfg.web.port ];
       })
     ];
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = mkIf (cfg.user == "deluge") {
+    users.users = lib.mkIf (cfg.user == "deluge") {
       deluge = {
         group = cfg.group;
         uid = config.ids.uids.deluge;
@@ -264,7 +269,7 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.group == "deluge") {
+    users.groups = lib.mkIf (cfg.group == "deluge") {
       deluge = {
         gid = config.ids.gids.deluge;
       };

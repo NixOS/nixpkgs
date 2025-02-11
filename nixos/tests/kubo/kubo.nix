@@ -1,22 +1,28 @@
-{ lib, ...} : {
+{ lib, ... }:
+{
   name = "kubo";
   meta = with lib.maintainers; {
-    maintainers = [ mguentner Luflosi ];
+    maintainers = [
+      mguentner
+      Luflosi
+    ];
   };
 
-  nodes.machine = { config, ... }: {
-    services.kubo = {
-      enable = true;
-      # Also will add a unix domain socket socket API address, see module.
-      startWhenNeeded = true;
-      settings.Addresses.API = "/ip4/127.0.0.1/tcp/2324";
-      dataDir = "/mnt/ipfs";
+  nodes.machine =
+    { config, ... }:
+    {
+      services.kubo = {
+        enable = true;
+        # Also will add a unix domain socket socket API address, see module.
+        startWhenNeeded = true;
+        settings.Addresses.API = "/ip4/127.0.0.1/tcp/2324";
+        dataDir = "/mnt/ipfs";
+      };
+      users.users.alice = {
+        isNormalUser = true;
+        extraGroups = [ config.services.kubo.group ];
+      };
     };
-    users.users.alice = {
-      isNormalUser = true;
-      extraGroups = [ config.services.kubo.group ];
-    };
-  };
 
   testScript = ''
     start_all()
@@ -44,6 +50,13 @@
         )
         machine.succeed(
             f"ipfs --api /unix/run/ipfs.sock cat /ipfs/{ipfs_hash.strip()} | grep fnord2"
+        )
+
+    machine.stop_job("ipfs")
+
+    with subtest("Socket activation for the Gateway"):
+        machine.succeed(
+            f"curl 'http://127.0.0.1:8080/ipfs/{ipfs_hash.strip()}' | grep fnord2"
         )
 
     with subtest("Setting dataDir works properly with the hardened systemd unit"):

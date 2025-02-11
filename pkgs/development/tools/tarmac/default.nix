@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,11 +27,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   # update Cargo.lock to work with openssl 3
   postPatch = ''
@@ -39,6 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Resource compiler and asset manager for Roblox";
+    mainProgram = "tarmac";
     longDescription = ''
       Tarmac is a resource compiler and asset manager for Roblox projects.
       It helps enable hermetic place builds when used with tools like Rojo.

@@ -2,34 +2,52 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, Security
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
-  version = "1.4.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
     rev = "v${version}";
-    hash = "sha256-OK2eoWlqlpf/X8EGMnWTv9Gs5FkYvW5rmQDB/Mkbp60=";
+    hash = "sha256-B421xXt7TrBJVwi04vygnw9t5o7/KLVpuItQtwV4E24=";
   };
 
-  cargoHash = "sha256-gtkpZKOaG5p79uJ9cbbGdiOX57bDFTf2/Bd8+WToJrw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GGEKQgnSB2HW3VIj4CfxzUZaWYE2/nHJPN9ZMmHY5Ns=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export OUT_DIR=$(mktemp -d)
+
+    # Generate shell completions
+    $out/bin/git-cliff-completions
+    installShellCompletion \
+      --bash $OUT_DIR/git-cliff.bash \
+      --fish $OUT_DIR/git-cliff.fish \
+      --zsh $OUT_DIR/_git-cliff
+
+    # Generate man page
+    $out/bin/git-cliff-mangen
+    installManPage $OUT_DIR/git-cliff.1
+  '';
 
   meta = with lib; {
-    description = "A highly customizable Changelog Generator that follows Conventional Commit specifications";
+    description = "Highly customizable Changelog Generator that follows Conventional Commit specifications";
     homepage = "https://github.com/orhun/git-cliff";
     changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [
+      siraben
+      matthiasbeyer
+    ];
+    mainProgram = "git-cliff";
   };
 }

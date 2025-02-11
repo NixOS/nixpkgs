@@ -1,32 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openexr, hdf5-threadsafe, ilmbase }:
-
-stdenv.mkDerivation rec
 {
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openexr,
+  hdf5-threadsafe,
+}:
+
+stdenv.mkDerivation rec {
   pname = "alembic";
-  version = "1.8.6";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
     rev = version;
-    sha256 = "sha256-MND1GtnIGUtRrtyUX1eR9UoGGtuTPtVEIIET3QQ6blA=";
+    hash = "sha256-R69UYyvLnMwv1JzEQ6S6elvR83Rmvc8acBJwSV/+hCk=";
   };
 
   # note: out is unused (but required for outputDoc anyway)
-  outputs = [ "bin" "dev" "out" "lib" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "lib"
+  ];
 
   # Prevent cycle between bin and dev (only occurs on Darwin for some reason)
   propagatedBuildOutputs = [ "lib" ];
 
   nativeBuildInputs = [ cmake ];
 
-  # NOTE: Alembic also support imath instead of ilmbase, but some users of Alembic (e.g. Blender)
-  # are incompatible with the imath version of Alembic
-  buildInputs = [ openexr hdf5-threadsafe ilmbase ];
-
-  # Downstream packages trying to use Alembic via CMake need ilmbase as well
-  # For some reason this won't be picked up correctly otherwise
-  propagatedBuildInputs = [ ilmbase ];
+  buildInputs = [
+    openexr
+    hdf5-threadsafe
+  ];
 
   # These flags along with the postPatch step ensure that all artifacts end up
   # in the correct output without needing to move anything
@@ -59,10 +67,13 @@ stdenv.mkDerivation rec
   '';
 
   meta = with lib; {
-    description = "An open framework for storing and sharing scene data";
+    description = "Open framework for storing and sharing scene data";
     homepage = "http://alembic.io/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ guibou tmarkus ];
+    maintainers = with maintainers; [
+      guibou
+      tmarkus
+    ];
   };
 }

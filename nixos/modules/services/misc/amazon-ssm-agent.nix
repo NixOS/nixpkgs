@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.amazon-ssm-agent;
 
@@ -18,33 +21,45 @@ let
 
   sudoRule = {
     users = [ "ssm-user" ];
-    commands = [ { command = "ALL"; options = [ "NOPASSWD" ]; } ];
+    commands = [
+      {
+        command = "ALL";
+        options = [ "NOPASSWD" ];
+      }
+    ];
   };
-in {
+in
+{
   imports = [
-    (mkRenamedOptionModule [ "services" "ssm-agent" "enable" ] [ "services" "amazon-ssm-agent" "enable" ])
-    (mkRenamedOptionModule [ "services" "ssm-agent" "package" ] [ "services" "amazon-ssm-agent" "package" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "ssm-agent" "enable" ]
+      [ "services" "amazon-ssm-agent" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "ssm-agent" "package" ]
+      [ "services" "amazon-ssm-agent" "package" ]
+    )
   ];
 
   options.services.amazon-ssm-agent = {
-    enable = mkEnableOption (lib.mdDoc "Amazon SSM agent");
-
-    package = mkOption {
-      type = types.path;
-      description = lib.mdDoc "The Amazon SSM agent package to use";
-      default = pkgs.amazon-ssm-agent.override { overrideEtc = false; };
-      defaultText = literalExpression "pkgs.amazon-ssm-agent.override { overrideEtc = false; }";
-    };
+    enable = lib.mkEnableOption "Amazon SSM agent";
+    package = lib.mkPackageOption pkgs "amazon-ssm-agent" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # See https://github.com/aws/amazon-ssm-agent/blob/mainline/packaging/linux/amazon-ssm-agent.service
     systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
-      after    = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ fake-lsb-release pkgs.coreutils ];
+      path = [
+        fake-lsb-release
+        pkgs.coreutils
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/amazon-ssm-agent";
@@ -64,15 +79,17 @@ in {
 
     # On Amazon Linux 2 images, the ssm-user user is pretty much a
     # normal user with its own group. We do the same.
-    users.groups.ssm-user = {};
+    users.groups.ssm-user = { };
     users.users.ssm-user = {
       isNormalUser = true;
       group = "ssm-user";
     };
 
-    environment.etc."amazon/ssm/seelog.xml".source = "${cfg.package}/etc/amazon/ssm/seelog.xml.template";
+    environment.etc."amazon/ssm/seelog.xml".source =
+      "${cfg.package}/etc/amazon/ssm/seelog.xml.template";
 
-    environment.etc."amazon/ssm/amazon-ssm-agent.json".source =  "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
+    environment.etc."amazon/ssm/amazon-ssm-agent.json".source =
+      "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
 
   };
 }

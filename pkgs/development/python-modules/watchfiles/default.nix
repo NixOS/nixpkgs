@@ -1,55 +1,54 @@
-{ lib
-, stdenv
-, anyio
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, rustPlatform
-, rustc
-, pythonOlder
-, dirty-equals
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, CoreServices
-, libiconv
+{
+  lib,
+  stdenv,
+  anyio,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  rustPlatform,
+  rustc,
+  pythonOlder,
+  dirty-equals,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  typing-extensions,
+  CoreServices,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.21.0";
-  format = "pyproject";
+  version = "1.0.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/qNgkPF5N8jzSV3M0YFWvQngZ4Hf4WM/GBS1LtgFbWM=";
+    tag = "v${version}";
+    hash = "sha256-0JBnUi/aRM9UFTkb8OkP9UkJV+BF2EieZptymRvAXc0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-sqHTW1+E7Fp33KW6IYlNa77AYc2iCfaSoBRXzrhEKr8=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     libiconv
   ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
     cargo
     rustc
   ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  build-system = [ rustPlatform.maturinBuildHook ];
+
+  dependencies = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -76,12 +75,11 @@ buildPythonPackage rec {
     "test_awatch_interrupt_raise"
   ];
 
-  pythonImportsCheck = [
-    "watchfiles"
-  ];
+  pythonImportsCheck = [ "watchfiles" ];
 
   meta = with lib; {
     description = "File watching and code reload";
+    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, flit-core
-, ipykernel
-, python
-, pexpect
-, bash
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  filetype,
+  ipykernel,
+  python,
+  pexpect,
+  bashInteractive,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "bash-kernel";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bash_kernel";
     inherit version;
-    hash = "sha256-AYPVPjYP+baEcQUqmiiagWIXMlFrA04njpcgtdFaFis=";
+    hash = "sha256-LtWgpBbEGNHXUecVBb1siJ4SFXREtQxCh6aF2ndcKMo=";
   };
 
   patches = [
     (substituteAll {
       src = ./bash-path.patch;
-      bash = lib.getExe bash;
+      bash = lib.getExe bashInteractive;
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    filetype
     ipykernel
     pexpect
   ];
@@ -45,14 +45,26 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out
   '';
 
-  # no tests
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
 
-  meta = with lib; {
+    # Create a JUPYTER_PATH with the kernelspec
+    export JUPYTER_PATH=$(mktemp -d)
+    mkdir -p $JUPYTER_PATH/kernels/bash
+    echo '{ "language": "bash", "argv": [ "${python}/bin/python", "-m", "bash_kernel", "-f", "{connection_file}" ] }' > $JUPYTER_PATH/kernels/bash/kernel.json
+
+    # Evaluate a test notebook with papermill
+    cd $(mktemp -d)
+    ${python.withPackages (ps: [ ps.papermill ])}/bin/papermill --kernel bash ${./test.ipynb} out.ipynb
+
+    runHook postCheck
+  '';
+
+  meta = {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
     changelog = "https://github.com/takluyver/bash_kernel/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

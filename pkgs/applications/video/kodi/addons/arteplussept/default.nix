@@ -1,13 +1,22 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, requests, xbmcswift2 }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  requests,
+  xbmcswift2,
+}:
 
 buildKodiAddon rec {
   pname = "arteplussept";
   namespace = "plugin.video.arteplussept";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    hash = "sha256-4lPJIFBF4zXr1bEyv9tVUPXw9JFt2by/tcOwihib6aQ=";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
+    hash = "sha256-dqxGKaOnEYOI33Aw76zbjma5z7MqOUh367dFsV87olU=";
   };
 
   propagatedBuildInputs = [

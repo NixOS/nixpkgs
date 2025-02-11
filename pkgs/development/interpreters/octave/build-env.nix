@@ -1,6 +1,6 @@
 { lib, stdenv, octave, buildEnv
-, makeWrapper, texinfo
-, octavePackages
+, makeWrapper
+, locale, texinfo, glibcLocalesUtf8
 , wrapOctave
 , computeRequiredOctavePackages
 , extraLibs ? []
@@ -21,7 +21,7 @@ in buildEnv {
   extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ texinfo wrapOctave ];
+  buildInputs = [ locale texinfo wrapOctave ];
 
   # During "build" we must first unlink the /share symlink to octave's /share
   # Then, we can re-symlink the all of octave/share, except for /share/octave
@@ -34,7 +34,9 @@ in buildEnv {
          cd "${octave}/bin"
          for prg in *; do
              if [ -x $prg ]; then
-                makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc"
+                makeWrapper "${octave}/bin/$prg" "$out/bin/$prg" \
+                            --set OCTAVE_SITE_INITFILE "$out/share/octave/site/m/startup/octaverc" \
+                            --set LOCALE_ARCHIVE "${glibcLocalesUtf8}/lib/locale/locale-archive"
              fi
          done
          cd $out
@@ -63,6 +65,14 @@ in buildEnv {
       addPkgLocalList $out ${octave}
 
       wrapOctavePrograms "${lib.concatStringsSep " " packages}"
+      # We also need to modify the Exec= line of the desktop file, so it will point
+      # to the wrapper we generated above.
+      rm $out/share/applications # should be a symlink to ${octave}/share/applications
+      mkdir $out/share/applications
+      substitute \
+        ${octave}/share/applications/org.octave.Octave.desktop \
+        $out/share/applications/org.octave.Octave.desktop \
+        --replace-fail ${octave}/bin/octave $out/bin/octave
      '' + postBuild;
 
   inherit (octave) meta;

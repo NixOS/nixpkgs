@@ -1,28 +1,58 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, qmake, qtx11extras, qttools, mpv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  qtbase,
+  mpv,
+  wrapQtAppsHook,
+  gitUpdater,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mpc-qt";
-  version = "23.02";
+  version = "24.06";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     rev = "v${version}";
-    sha256 = "sha256-b8efsdWWpwoaiX+oQhHK15KxD6JpvPhESTxCR2kS7Mk=";
+    hash = "sha256-kEG7B99io3BGjN94nEX1pN10Bcjj21rb46Vcn2OtpN8=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake qttools ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ mpv qtx11extras ];
+  buildInputs = [
+    mpv
+  ];
 
-  qmakeFlags = [ "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate" ];
+  postPatch = ''
+    substituteInPlace lconvert.pri --replace "qtPrepareTool(LCONVERT, lconvert)" "qtPrepareTool(LCONVERT, lconvert, , , ${qttools}/bin)"
+  '';
+
+  postConfigure = ''
+    substituteInPlace Makefile --replace ${qtbase}/bin/lrelease ${qttools.dev}/bin/lrelease
+  '';
+
+  qmakeFlags = [
+    "MPCQT_VERSION=${version}"
+  ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Media Player Classic Qute Theater";
     homepage = "https://mpc-qt.github.io";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ romildo ];
     mainProgram = "mpc-qt";
   };

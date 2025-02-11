@@ -1,41 +1,44 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, mpmath
-, numpy
-, pybind11
-, pyfma
-, eigen
-, importlib-metadata
-, pytestCheckHook
-, matplotlib
-, dufte
-, perfplot
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  mpmath,
+  numpy,
+  pybind11,
+  pyfma,
+  eigen,
+  importlib-metadata,
+  pytestCheckHook,
+  matplotlib,
+  dufte,
+  perfplot,
 }:
 
 buildPythonPackage rec {
   pname = "accupy";
   version = "0.3.6";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = pname;
+    repo = "accupy";
     rev = version;
-    sha256 = "0sxkwpp2xy2jgakhdxr4nh1cspqv8l89kz6s832h05pbpyc0n767";
+    hash = "sha256-xxwLmL/rFgDFQNr8mRBFG1/NArQk9wanelL4Lu7ls2s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     pybind11
   ];
 
-  buildInputs = [
-    eigen
-  ];
+  buildInputs = [ eigen ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mpmath
     numpy
     pyfma
@@ -49,8 +52,8 @@ buildPythonPackage rec {
   ];
 
   postConfigure = ''
-   substituteInPlace setup.py \
-     --replace "/usr/include/eigen3/" "${eigen}/include/eigen3/"
+    substituteInPlace setup.py \
+      --replace-fail "/usr/include/eigen3/" "${eigen}/include/eigen3/"
   '';
 
   preBuild = ''
@@ -59,16 +62,21 @@ buildPythonPackage rec {
 
   # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
   # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
-  env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
+  env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "Agg";
 
   # performance tests aren't useful to us and disabling them allows us to
   # decouple ourselves from an unnecessary build dep
   preCheck = ''
     for f in test/test*.py ; do
-      substituteInPlace $f --replace 'import perfplot' ""
+      substituteInPlace $f --replace-quiet 'import perfplot' ""
     done
   '';
-  disabledTests = [ "test_speed_comparison1" "test_speed_comparison2" ];
+
+  disabledTests = [
+    "test_speed_comparison1"
+    "test_speed_comparison2"
+  ];
+
   pythonImportsCheck = [ "accupy" ];
 
   meta = with lib; {

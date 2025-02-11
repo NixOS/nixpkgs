@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, poetry-core
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  poetry-core,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lace";
     repo = "vg";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZNUAfkhjmsxD8cH0fR8Htjs+/F/3R9xfe1XgRyndids=";
   };
 
@@ -27,21 +27,13 @@ buildPythonPackage rec {
       --replace 'requires = ["setuptools", "poetry-core>=1.0.0"]' 'requires = ["poetry-core>=1.0.0"]'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "vg"
-  ];
+  pythonImportsCheck = [ "vg" ];
 
   meta = with lib; {
     description = "Linear algebra for humans: a very good vector-geometry and linear-algebra toolbelt";

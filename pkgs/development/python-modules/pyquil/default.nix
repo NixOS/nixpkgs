@@ -1,116 +1,79 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, ipython
-, lark
-, networkx
-, numpy
-, poetry-core
-, pytest-asyncio
-, pytest-freezegun
-, pytest-httpx
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, qcs-api-client
-, respx
-, retry
-, rpcq
-, scipy
-, tenacity
-, types-deprecated
-, types-python-dateutil
-, types-retry
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  ipython,
+  matplotlib-inline,
+  nest-asyncio,
+  networkx,
+  numpy,
+  packaging,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  qcs-sdk-python,
+  respx,
+  rpcq,
+  scipy,
+  syrupy,
+  types-deprecated,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.5.4";
-  format = "pyproject";
+  version = "4.15.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rigetti";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GQ7vzuUu0PCeLkqKWUSNJyJ01wseOwNL2jJaVTNGF9s=";
+    repo = "pyquil";
+    tag = "v${version}";
+    hash = "sha256-zRXIMSgcFlTZQ5Y/1pSC30ZhvKj1Pn1+7SbTetEdzio=";
   };
 
   pythonRelaxDeps = [
     "lark"
     "networkx"
+    "packaging"
+    "qcs-sdk-python"
+    "rpcq"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
-    lark
+    matplotlib-inline
     networkx
     numpy
-    qcs-api-client
-    retry
+    packaging
+    qcs-sdk-python
     rpcq
     scipy
-    tenacity
     types-deprecated
-    types-python-dateutil
-    types-retry
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    typing-extensions
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
+    nest-asyncio
     pytest-asyncio
-    pytest-freezegun
-    pytest-httpx
     pytest-mock
+    pytestCheckHook
     respx
+    syrupy
     ipython
   ];
 
-  disabledTestPaths = [
-    # Tests require network access
-    "test/e2e/"
-    "test/unit/test_api.py"
-    "test/unit/test_engagement_manager.py"
-    "test/unit/test_operator_estimation.py"
-    "test/unit/test_wavefunction_simulator.py"
-    "test/unit/test_compatibility_v2_operator_estimation.py"
-    "test/unit/test_compatibility_v2_quantum_computer.py"
-    "test/unit/test_compatibility_v2_qvm.py"
-    "test/unit/test_quantum_computer.py"
-    "test/unit/test_qvm.py"
-    "test/unit/test_reference_wavefunction.py"
-    # Out-dated
-    "test/unit/test_qpu_client.py"
-    "test/unit/test_qvm_client.py"
-    "test/unit/test_reference_density.py"
-  ];
+  # tests hang
+  doCheck = false;
 
-  disabledTests = [
-    "test_compile_with_quilt_calibrations"
-    "test_sets_timeout_on_requests"
-    # sensitive to lark parser output
-    "test_memory_commands"
-    "test_classical"
-  ];
-
-  pythonImportsCheck = [
-    "pyquil"
-  ];
+  pythonImportsCheck = [ "pyquil" ];
 
   meta = with lib; {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";

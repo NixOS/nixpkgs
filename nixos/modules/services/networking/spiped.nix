@@ -11,7 +11,7 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = lib.mdDoc "Enable the spiped service module.";
+        description = "Enable the spiped service module.";
       };
 
       config = mkOption {
@@ -21,7 +21,7 @@ in
               encrypt = mkOption {
                 type    = types.bool;
                 default = false;
-                description = lib.mdDoc ''
+                description = ''
                   Take unencrypted connections from the
                   `source` socket and send encrypted
                   connections to the `target` socket.
@@ -31,7 +31,7 @@ in
               decrypt = mkOption {
                 type    = types.bool;
                 default = false;
-                description = lib.mdDoc ''
+                description = ''
                   Take encrypted connections from the
                   `source` socket and send unencrypted
                   connections to the `target` socket.
@@ -40,7 +40,7 @@ in
 
               source = mkOption {
                 type    = types.str;
-                description = lib.mdDoc ''
+                description = ''
                   Address on which spiped should listen for incoming
                   connections.  Must be in one of the following formats:
                   `/absolute/path/to/unix/socket`,
@@ -56,24 +56,24 @@ in
 
               target = mkOption {
                 type    = types.str;
-                description = lib.mdDoc "Address to which spiped should connect.";
+                description = "Address to which spiped should connect.";
               };
 
               keyfile = mkOption {
                 type    = types.path;
-                description = lib.mdDoc ''
-                  Name of a file containing the spiped key. As the
-                  daemon runs as the `spiped` user, the
-                  key file must be somewhere owned by that user. By
-                  default, we recommend putting the keys for any spipe
-                  services in `/var/lib/spiped`.
+                description = ''
+                  Name of a file containing the spiped key.
+                  As the daemon runs as the `spiped` user,
+                  the key file must be readable by that user.
+                  To securely manage the file within your configuration
+                  consider a tool such as agenix or sops-nix.
                 '';
               };
 
               timeout = mkOption {
                 type = types.int;
                 default = 5;
-                description = lib.mdDoc ''
+                description = ''
                   Timeout, in seconds, after which an attempt to connect to
                   the target or a protocol handshake will be aborted (and the
                   connection dropped) if not completed
@@ -83,7 +83,7 @@ in
               maxConns = mkOption {
                 type = types.int;
                 default = 100;
-                description = lib.mdDoc ''
+                description = ''
                   Limit on the number of simultaneous connections allowed.
                 '';
               };
@@ -91,7 +91,7 @@ in
               waitForDNS = mkOption {
                 type = types.bool;
                 default = false;
-                description = lib.mdDoc ''
+                description = ''
                   Wait for DNS. Normally when `spiped` is
                   launched it resolves addresses and binds to its source
                   socket before the parent process returns; with this option
@@ -106,13 +106,13 @@ in
               disableKeepalives = mkOption {
                 type = types.bool;
                 default = false;
-                description = lib.mdDoc "Disable transport layer keep-alives.";
+                description = "Disable transport layer keep-alives.";
               };
 
               weakHandshake = mkOption {
                 type = types.bool;
                 default = false;
-                description = lib.mdDoc ''
+                description = ''
                   Use fast/weak handshaking: This reduces the CPU time spent
                   in the initial connection setup, at the expense of losing
                   perfect forward secrecy.
@@ -122,7 +122,7 @@ in
               resolveRefresh = mkOption {
                 type = types.int;
                 default = 60;
-                description = lib.mdDoc ''
+                description = ''
                   Resolution refresh time for the target socket, in seconds.
                 '';
               };
@@ -130,7 +130,7 @@ in
               disableReresolution = mkOption {
                 type = types.bool;
                 default = false;
-                description = lib.mdDoc "Disable target address re-resolution.";
+                description = "Disable target address re-resolution.";
               };
             };
           }
@@ -155,7 +155,7 @@ in
           }
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Configuration for a secure pipe daemon. The daemon can be
           started, stopped, or examined using
           `systemctl`, under the name
@@ -185,21 +185,12 @@ in
       serviceConfig = {
         Restart   = "always";
         User      = "spiped";
-        PermissionsStartOnly = true;
       };
+      stopIfChanged = false;
 
-      preStart  = ''
-        cd /var/lib/spiped
-        chmod -R 0660 *
-        chown -R spiped:spiped *
-      '';
       scriptArgs = "%i";
       script = "exec ${pkgs.spiped}/bin/spiped -F `cat /etc/spiped/$1.spec`";
     };
-
-    systemd.tmpfiles.rules = lib.mkIf (cfg.config != { }) [
-      "d /var/lib/spiped -"
-    ];
 
     # Setup spiped config files
     environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"

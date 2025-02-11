@@ -1,30 +1,37 @@
-{ name-prefix ? "temurin"
-, brand-name ? "Eclipse Temurin"
-, sourcePerArch
-, knownVulnerabilities ? []
+{
+  name-prefix ? "temurin",
+  brand-name ? "Eclipse Temurin",
+  sourcePerArch,
+  knownVulnerabilities ? [ ],
 }:
 
-{ swingSupport ? true # not used for now
-, lib, stdenv
-, fetchurl
-, setJavaClassPath
+{
+  swingSupport ? true, # not used for now
+  lib,
+  stdenv,
+  fetchurl,
+  setJavaClassPath,
 }:
 
 let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
   validCpuTypes = builtins.attrNames lib.systems.parse.cpuTypes;
-  providedCpuTypes = builtins.filter
-    (arch: builtins.elem arch validCpuTypes)
-    (builtins.attrNames sourcePerArch);
+  providedCpuTypes = builtins.filter (arch: builtins.elem arch validCpuTypes) (
+    builtins.attrNames sourcePerArch
+  );
   result = stdenv.mkDerivation {
-    pname = if sourcePerArch.packageType == "jdk"
-      then "${name-prefix}-bin"
-      else "${name-prefix}-${sourcePerArch.packageType}-bin";
-    version =
-      sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
+    pname =
+      if sourcePerArch.packageType == "jdk" then
+        "${name-prefix}-bin"
+      else
+        "${name-prefix}-${sourcePerArch.packageType}-bin";
+    version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
     src = fetchurl {
-      inherit (sourcePerArch.${cpuName}) url sha256;
+      inherit (sourcePerArch.${cpuName} or (throw "unsupported system ${stdenv.hostPlatform.system}"))
+        url
+        sha256
+        ;
     };
 
     # See: https://github.com/NixOS/patchelf/issues/10
@@ -64,11 +71,16 @@ let
 
     meta = with lib; {
       license = licenses.gpl2Classpath;
+      sourceProvenance = with sourceTypes; [
+        binaryNativeCode
+        binaryBytecode
+      ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes;  # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
+      platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
+      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
       inherit knownVulnerabilities;
       mainProgram = "java";
     };
   };
-in result
+in
+result

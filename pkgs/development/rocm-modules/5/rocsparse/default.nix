@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocprim
-, clr
-, gfortran
-, git
-, gtest
-, boost
-, python3Packages
-, buildTests ? false
-, buildBenchmarks ? false # Seems to depend on tests
-, gpuTargets ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocprim,
+  clr,
+  gfortran,
+  git,
+  gtest,
+  boost,
+  python3Packages,
+  buildTests ? false,
+  buildBenchmarks ? false, # Seems to depend on tests
+  gpuTargets ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
   version = "5.7.1";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    "test"
-  ] ++ lib.optionals buildBenchmarks [
-    "benchmark"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      "test"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "benchmark"
+    ];
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocSPARSE";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-30q9bqgZJUaNrkMXTAG+Z34yjsQ5DpJP+WBcCiEmF58=";
@@ -43,32 +47,38 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs = [
-    rocprim
-    git
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    gtest
-    boost
-    python3Packages.python
-    python3Packages.pyyaml
-  ];
+  buildInputs =
+    [
+      rocprim
+      git
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      gtest
+      boost
+      python3Packages.python
+      python3Packages.pyyaml
+    ];
 
-  cmakeFlags = [
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    "-DBUILD_CLIENTS_TESTS=ON"
-    "-DCMAKE_MATRICES_DIR=/build/source/matrices"
-    "-Dpython=python3"
-  ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_CLIENTS_BENCHMARKS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ]
+    ++ lib.optionals (buildTests || buildBenchmarks) [
+      "-DBUILD_CLIENTS_TESTS=ON"
+      "-DCMAKE_MATRICES_DIR=/build/source/matrices"
+      "-Dpython=python3"
+    ]
+    ++ lib.optionals buildBenchmarks [
+      "-DBUILD_CLIENTS_BENCHMARKS=ON"
+    ];
 
   # We have to manually generate the matrices
   postPatch = lib.optionalString (buildTests || buildBenchmarks) ''
@@ -112,17 +122,19 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  postInstall = lib.optionalString buildBenchmarks ''
-    mkdir -p $benchmark/bin
-    cp -a $out/bin/* $benchmark/bin
-    rm $benchmark/bin/rocsparse-test
-  '' + lib.optionalString (buildTests || buildBenchmarks) ''
-    mkdir -p $test/bin
-    mv $out/bin/* $test/bin
-    rm $test/bin/rocsparse-bench || true
-    mv /build/source/matrices $test
-    rmdir $out/bin
-  '';
+  postInstall =
+    lib.optionalString buildBenchmarks ''
+      mkdir -p $benchmark/bin
+      cp -a $out/bin/* $benchmark/bin
+      rm $benchmark/bin/rocsparse-test
+    ''
+    + lib.optionalString (buildTests || buildBenchmarks) ''
+      mkdir -p $test/bin
+      mv $out/bin/* $test/bin
+      rm $test/bin/rocsparse-bench || true
+      mv /build/source/matrices $test
+      rmdir $out/bin
+    '';
 
   passthru = {
     matrices = import ./deps.nix {
@@ -140,10 +152,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "ROCm SPARSE implementation";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocSPARSE";
+    homepage = "https://github.com/ROCm/rocSPARSE";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, runCommand
-, patchelf
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, pkg-config
-, openssl
-, curl
-, zlib
-, Security
-, CoreServices
-, libiconv
-, xz
+{
+  stdenv,
+  lib,
+  runCommand,
+  patchelf,
+  fetchFromGitHub,
+  rustPlatform,
+  makeBinaryWrapper,
+  pkg-config,
+  openssl,
+  curl,
+  zlib,
+  Security,
+  CoreServices,
+  libiconv,
+  xz,
 }:
 
 let
@@ -23,41 +24,59 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-rdhG9MdjWyvoaMGdjgFyCfQaoV48QtAZE7buA5TkDKg=";
+    sha256 = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CQHpsOGofDqsbLLTcznu5a0MSthJgy27HjBk8AYA72s=";
 
-  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+  ];
 
-  buildInputs = [
-    (curl.override { inherit openssl; })
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
+  buildInputs =
+    [
+      (curl.override { inherit openssl; })
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      Security
+      libiconv
+      xz
+    ];
 
   buildFeatures = [ "no-self-update" ];
 
-  checkFeatures = [ ];
+  checkFeatures = [ "test" ];
 
-  patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC = stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
-      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-        --subst-var patchelf \
-        --subst-var dynamicLinker \
-        --subst-var libPath
-    '')
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    (runCommand "0001-dynamically-patchelf-binaries.patch"
+      {
+        CC = stdenv.cc;
+        patchelf = patchelf;
+        libPath = "${libPath}";
+      }
+      ''
+        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+        substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+          --subst-var patchelf \
+          --subst-var dynamicLinker \
+          --subst-var libPath
+      ''
+    )
   ];
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  # Random tests fail nondeterministically on macOS.
+  # TODO: Investigate this.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # skip failing tests
   checkFlags = [
@@ -96,12 +115,37 @@ rustPlatform.buildRustPackage rec {
     # Note: fish completion script is not supported.
     $out/bin/rustup completions bash cargo > "$out/share/bash-completion/completions/cargo"
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
+
+    # add a wrapper script for ld.lld
+    mkdir -p $out/nix-support
+    substituteAll ${../../../../../pkgs/build-support/wrapper-common/utils.bash} $out/nix-support/utils.bash
+    substituteAll ${../../../../../pkgs/build-support/wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
+    substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-flags.sh} $out/nix-support/add-flags.sh
+    substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-hardening.sh} $out/nix-support/add-hardening.sh
+    export prog='$PROG'
+    export use_response_file_by_default=0
+    substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/ld-wrapper.sh} $out/nix-support/ld-wrapper.sh
+    chmod +x $out/nix-support/ld-wrapper.sh
   '';
 
+  env = lib.optionalAttrs (pname == "rustup") {
+    inherit (stdenv.cc.bintools)
+      expandResponseParams
+      shell
+      suffixSalt
+      wrapperName
+      coreutils_bin
+      ;
+    hardening_unsupported_flags = "";
+  };
+
   meta = with lib; {
-    description = "The Rust toolchain installer";
+    description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = [ maintainers.mic92 ];
   };
 }

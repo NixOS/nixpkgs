@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, blueprint-compiler
-, desktop-file-utils
-, gettext
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook4
-, zint
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  gettext,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  zint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passes";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "pablo-s";
     repo = "passes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SIJLBVWyW9+Hzb6ebfUnBfUuvNmYBm9ojKrnFOS3BGc=";
+    hash = "sha256-RfoqIyqc9zwrWZ5RLhQl+6vTccbCTwtDcMlnWPCDOag=";
   };
 
   postPatch = ''
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (python3.withPackages (pp: [pp.pygobject3]))
+    (python3.withPackages (pp: [ pp.pygobject3 ]))
     wrapGAppsHook4
   ];
 
@@ -57,11 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A digital pass manager";
+    description = "Digital pass manager";
+    mainProgram = "passes";
     homepage = "https://github.com/pablo-s/passes";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Crashes
+    broken = stdenv.hostPlatform.isDarwin; # Crashes
   };
 })

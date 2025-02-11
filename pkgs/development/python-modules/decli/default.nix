@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,21 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "woile";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FZYKNKkQExx/YBn5y/W0+0aMlenuwEctYTL7LAXMZGE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "decli"
-  ];
+  pythonImportsCheck = [ "decli" ];
 
   meta = with lib; {
     description = "Minimal, easy to use, declarative command line interface tool";

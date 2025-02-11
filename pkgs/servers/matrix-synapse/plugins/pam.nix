@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, twisted, python-pam }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  twisted,
+  python-pam,
+}:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-pam";
@@ -11,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "0jgz49cwiyih5cg3hr4byva04zjnq8aj7rima9874la9fc5sd2wf";
   };
 
-  propagatedBuildInputs = [ twisted python-pam ];
+  propagatedBuildInputs = [
+    twisted
+    python-pam
+  ];
 
   # has no tests
   doCheck = false;
@@ -22,6 +31,6 @@ buildPythonPackage rec {
     description = "PAM auth provider for the Synapse Matrix server";
     homepage = "https://github.com/14mRh4X0r/matrix-synapse-pam";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

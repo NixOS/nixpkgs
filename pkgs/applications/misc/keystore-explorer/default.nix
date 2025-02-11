@@ -1,16 +1,26 @@
-{ fetchzip, lib, stdenv, jdk, runtimeShell, glib, wrapGAppsHook }:
+{
+  fetchzip,
+  lib,
+  stdenv,
+  jdk,
+  runtimeShell,
+  glib,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
-  version = "5.5.2";
+  version = "5.5.3";
   pname = "keystore-explorer";
   src = fetchzip {
-    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${lib.replaceStrings ["."] [""] version}.zip";
-    sha256 = "sha256-mDi/TSYumCg2hAnMOI2QpdAOSlDMpdJPqzatFotAqUk=";
+    url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }.zip";
+    sha256 = "sha256-oShVfmien4HMpAfSa9rPr18wLu7RN8ZWEZEUtiBHyBs=";
   };
 
   # glib is necessary so file dialogs don't hang.
   buildInputs = [ glib ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   installPhase = ''
     runHook preInstall
@@ -37,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
+    mainProgram = "keystore-explorer";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.numinit ];

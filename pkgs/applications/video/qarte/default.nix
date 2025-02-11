@@ -1,8 +1,20 @@
-{ mkDerivation, lib, fetchbzr, python3, rtmpdump }:
+{
+  mkDerivation,
+  lib,
+  fetchbzr,
+  python3,
+  rtmpdump,
+}:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ m3u8 pyqt5_with_qtmultimedia ]);
-in mkDerivation {
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      m3u8
+      pyqt5-multimedia
+    ]
+  );
+in
+mkDerivation {
   pname = "qarte";
   version = "5.5.0";
 
@@ -38,7 +50,7 @@ in mkDerivation {
 
   meta = with lib; {
     homepage = "https://launchpad.net/qarte";
-    description = "A recorder for Arte TV Guide and Arte Concert";
+    description = "Recorder for Arte TV Guide and Arte Concert";
     license = licenses.gpl3;
     maintainers = with maintainers; [ vbgl ];
     platforms = platforms.linux;

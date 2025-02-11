@@ -1,8 +1,31 @@
-{ lib, stdenv, fetchurl, fetchpatch2, alsa-lib, boost, bzip2, fftw, fftwFloat, libfishsound
-, libid3tag, liblo, libmad, liboggz, libpulseaudio, libsamplerate
-, libsndfile, lrdf, opusfile, portaudio, rubberband, serd, sord, capnproto
-, wrapQtAppsHook, pkg-config
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  alsa-lib,
+  boost,
+  bzip2,
+  fftw,
+  fftwFloat,
+  libfishsound,
+  libid3tag,
+  liblo,
+  libmad,
+  liboggz,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  lrdf,
+  opusfile,
+  portaudio,
+  rubberband,
+  serd,
+  sord,
+  capnproto,
+  wrapQtAppsHook,
+  pkg-config,
+  libjack2,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,14 +47,34 @@ stdenv.mkDerivation rec {
     ./match-vamp.patch
   ];
 
-  buildInputs =
-    [ alsa-lib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo
-      libmad liboggz libpulseaudio libsamplerate libsndfile lrdf opusfile
-      portaudio rubberband serd sord capnproto
-      libjack2
-    ];
+  buildInputs = [
+    alsa-lib
+    boost
+    bzip2
+    fftw
+    fftwFloat
+    libfishsound
+    libid3tag
+    liblo
+    libmad
+    liboggz
+    libpulseaudio
+    libsamplerate
+    libsndfile
+    lrdf
+    opusfile
+    portaudio
+    rubberband
+    serd
+    sord
+    capnproto
+    libjack2
+  ];
 
-  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   enableParallelBuilding = true;
 
@@ -42,6 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Comparative visualisation of related audio recordings";
+    mainProgram = "sonic-lineup";
     homepage = "https://www.sonicvisualiser.org/sonic-lineup/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.vandenoever ];

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, dpkg
-, fetchurl
-, autoPatchelfHook
-, webkitgtk
+{
+  lib,
+  stdenv,
+  dpkg,
+  fetchurl,
+  autoPatchelfHook,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''
@@ -36,9 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A UI for configuring Ploopy Headphones";
+    description = "UI for configuring Ploopy Headphones";
     homepage = "https://github.com/ploopyco/headphones-toolbox/";
-    maintainers = with maintainers; [ knarkzel nyanbinary ];
+    maintainers = with maintainers; [
+      knarkzel
+      nyabinary
+    ];
     license = licenses.gpl3Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];

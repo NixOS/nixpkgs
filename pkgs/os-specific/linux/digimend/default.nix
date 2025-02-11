@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation rec {
   pname = "digimend";
-  version = "unstable-2023-05-03";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
-    rev = "eca6e1b701bffb80a293234a485ebf6b4bc85562";
-    hash = "sha256-0mjIUgHvbNcVQVzU3xzaloe5R41a4eknDhdhruJH+6c=";
+    rev = "v${version}";
+    hash = "sha256-YYCxTyoZGMnqC2nKkRi5Z1uofldGvJDGY2/sO9iMNIo=";
   };
 
   postPatch = ''
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     rm -r $out/lib/udev
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVERSION=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=${placeholder "out"}"
@@ -38,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "DIGImend graphics tablet drivers for the Linux kernel";
     homepage = "https://digimend.github.io/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.linux;
   };

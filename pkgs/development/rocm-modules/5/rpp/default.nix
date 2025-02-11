@@ -1,45 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocm-docs-core
-, half
-, clr
-, openmp
-, boost
-, python3Packages
-, buildDocs ? false # Needs internet
-, useOpenCL ? false
-, useCPU ? false
-, gpuTargets ? [ ]
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocm-docs-core,
+  half,
+  clr,
+  openmp,
+  boost,
+  python3Packages,
+  buildDocs ? false, # Needs internet
+  useOpenCL ? false,
+  useCPU ? false,
+  gpuTargets ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rpp-" + (
-    if (!useOpenCL && !useCPU) then "hip"
-    else if (!useOpenCL && !useCPU) then "opencl"
-    else "cpu"
-  );
+  pname =
+    "rpp-"
+    + (
+      if (!useOpenCL && !useCPU) then
+        "hip"
+      else if (!useOpenCL && !useCPU) then
+        "opencl"
+      else
+        "cpu"
+    );
 
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "GPUOpen-ProfessionalCompute-Libraries";
+    owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-s6ODmxPBLpR5f8VALaW6F0p0rZSxSd2LH2+60SEfLCk=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    rocm-cmake
-    clr
-  ] ++ lib.optionals buildDocs [
-    rocm-docs-core
-    python3Packages.python
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      rocm-cmake
+      clr
+    ]
+    ++ lib.optionals buildDocs [
+      rocm-docs-core
+      python3Packages.python
+    ];
 
   buildInputs = [
     half
@@ -47,19 +55,24 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
-  cmakeFlags = [
-    "-DROCM_PATH=${clr}"
-  ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ] ++ lib.optionals (!useOpenCL && !useCPU) [
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DBACKEND=HIP"
-  ] ++ lib.optionals (useOpenCL && !useCPU) [
-    "-DBACKEND=OCL"
-  ] ++ lib.optionals useCPU [
-    "-DBACKEND=CPU"
-  ];
+  cmakeFlags =
+    [
+      "-DROCM_PATH=${clr}"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ]
+    ++ lib.optionals (!useOpenCL && !useCPU) [
+      "-DCMAKE_C_COMPILER=hipcc"
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DBACKEND=HIP"
+    ]
+    ++ lib.optionals (useOpenCL && !useCPU) [
+      "-DBACKEND=OCL"
+    ]
+    ++ lib.optionals useCPU [
+      "-DBACKEND=CPU"
+    ];
 
   postPatch = lib.optionalString (!useOpenCL && !useCPU) ''
     # Bad path
@@ -79,10 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Comprehensive high-performance computer vision library for AMD processors";
-    homepage = "https://github.com/GPUOpen-ProfessionalCompute-Libraries/rpp";
+    homepage = "https://github.com/ROCm/rpp";
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

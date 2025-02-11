@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d87a7052d..837867551 100644
+index ffb86d4ac..1775b986f 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -153,19 +153,8 @@ endif()
+@@ -177,19 +177,8 @@ endif()
  
  mapnik_find_package(Freetype REQUIRED)
  
@@ -16,7 +16,7 @@ index d87a7052d..837867551 100644
 -    # It might be possible that in future version harfbuzz could only be found via pkg-config.
 -    # harfbuzz related discussion: https://github.com/harfbuzz/harfbuzz/issues/2653
 -    message(STATUS "harfbuzz not found via cmake. Searching via pkg-config...")
--    pkg_check_modules(harfbuzz REQUIRED IMPORTED_TARGET harfbuzz>=${HARFBUZZ_MIN_VERSION})
+-    mapnik_pkg_check_modules(harfbuzz REQUIRED IMPORTED_TARGET harfbuzz>=${HARFBUZZ_MIN_VERSION})
 -    list(APPEND MAPNIK_OPTIONAL_LIBS PkgConfig::harfbuzz)
 -endif()
 +pkg_check_modules(harfbuzz REQUIRED IMPORTED_TARGET harfbuzz)

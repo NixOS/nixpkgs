@@ -1,28 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildPythonPackage
-, pkgconfig
-, gmp
-, pari
-, mpfr
-, fplll
-, cython
-, cysignals
-, numpy
-, pytest
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  cysignals,
+  cython,
+  pkgconfig,
+  setuptools,
+
+  gmp,
+  pari,
+  mpfr,
+  fplll,
+  numpy,
+
+  # Reverse dependency
+  sage,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.9";
+  version = "0.6.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
-    rev = version;
-    hash = "sha256-T6l6hKzRDevlLyLu5H+bnEdl0OhsPer1coCDiftbPAk=";
+    tag = version;
+    hash = "sha256-3+DXfCUuHQG+VSzJGEPa8qP6oxC+nngMa44XyFCJAVY=";
   };
+
+  nativeBuildInputs = [
+    cython
+    cysignals
+    pkgconfig
+    setuptools
+  ];
 
   buildInputs = [
     gmp
@@ -31,31 +48,25 @@ buildPythonPackage rec {
     fplll
   ];
 
-  propagatedBuildInputs = [
-    cython
-    cysignals
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeBuildInputs = [
-    pkgconfig
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
+  preCheck = ''
     # Since upstream introduced --doctest-modules in
     # https://github.com/fplll/fpylll/commit/9732fdb40cf1bd43ad1f60762ec0a8401743fc79,
     # it is necessary to ignore import mismatches. Not sure why, but the files
     # should be identical anyway.
-    PY_IGNORE_IMPORTMISMATCH=1 pytest
+    export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
-    description = "A Python interface for fplll";
-    changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
+    description = "Python interface for fplll";
+    changelog = "https://github.com/fplll/fpylll/releases/tag/${src.tag}";
     homepage = "https://github.com/fplll/fpylll";
     maintainers = teams.sage.members;
     license = licenses.gpl2Plus;

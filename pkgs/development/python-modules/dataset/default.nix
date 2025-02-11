@@ -1,10 +1,11 @@
-{ lib
-, alembic
-, banal
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sqlalchemy
+{
+  lib,
+  alembic,
+  banal,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sqlalchemy_1_4,
 }:
 
 buildPythonPackage rec {
@@ -20,25 +21,22 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    alembic
+    (alembic.override { sqlalchemy = sqlalchemy_1_4; })
     banal
-    sqlalchemy
+    # SQLAlchemy >= 2.0.0 is unsupported
+    # https://github.com/pudo/dataset/issues/411
+    sqlalchemy_1_4
   ];
 
   # checks attempt to import nonexistent module 'test.test' and fail
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dataset"
-  ];
+  pythonImportsCheck = [ "dataset" ];
 
   meta = with lib; {
     description = "Toolkit for Python-based database access";
     homepage = "https://dataset.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ xfnw ];
-    # SQLAlchemy >= 2.0.0 is unsupported
-    # https://github.com/pudo/dataset/issues/411
-    broken = true;
   };
 }

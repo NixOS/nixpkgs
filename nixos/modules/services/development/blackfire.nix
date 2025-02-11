@@ -1,14 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.blackfire-agent;
 
-  agentConfigFile = lib.generators.toINI {} {
-    blackfire =  cfg.settings;
+  agentConfigFile = lib.generators.toINI { } {
+    blackfire = cfg.settings;
   };
 
   agentSock = "blackfire/agent.sock";
-in {
+in
+{
   meta = {
     maintainers = pkgs.blackfire.meta.maintainers;
     doc = ./blackfire.md;
@@ -16,9 +22,9 @@ in {
 
   options = {
     services.blackfire-agent = {
-      enable = lib.mkEnableOption (lib.mdDoc "Blackfire profiler agent");
+      enable = lib.mkEnableOption "Blackfire profiler agent";
       settings = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           See https://blackfire.io/docs/up-and-running/configuration/agent
         '';
         type = lib.types.submodule {
@@ -27,7 +33,7 @@ in {
           options = {
             server-id = lib.mkOption {
               type = lib.types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Sets the server id used to authenticate with Blackfire
 
                 You can find your personal server-id at https://blackfire.io/my/settings/credentials
@@ -36,7 +42,7 @@ in {
 
             server-token = lib.mkOption {
               type = lib.types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Sets the server token used to authenticate with Blackfire
 
                 You can find your personal server-token at https://blackfire.io/my/settings/credentials

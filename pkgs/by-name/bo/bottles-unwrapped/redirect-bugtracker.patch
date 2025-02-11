@@ -1,0 +1,13 @@
+diff --git a/data/com.usebottles.bottles.metainfo.xml.in.in b/data/com.usebottles.bottles.metainfo.xml.in.in
+index bdda5c6e..9292df50 100644
+--- a/data/com.usebottles.bottles.metainfo.xml.in.in
++++ b/data/com.usebottles.bottles.metainfo.xml.in.in
+@@ -52,7 +52,7 @@
+   <translation type="gettext">@APP_ID@</translation>
+   <content_rating type="oars-1.1"/>
+   <url type="homepage">https://usebottles.com</url>
+-  <url type="bugtracker">https://github.com/bottlesdevs/Bottles/issues</url>
++  <url type="bugtracker">https://github.com/NixOS/nixpkgs/issues</url>
+   <url type="help">https://docs.usebottles.com</url>
+   <url type="donation">https://usebottles.com/funding</url>
+   <url type="translate">https://hosted.weblate.org/engage/bottles</url>

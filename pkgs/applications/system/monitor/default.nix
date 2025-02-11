@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, curl
-, flatpak
-, gettext
-, glib
-, gtk3
-, json-glib
-, libwnck
-, libgee
-, libgtop
-, libhandy
-, sassc
-, udisks2
-, wrapGAppsHook
-, libX11
-, libXext
-, libXNVCtrl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  curl,
+  flatpak,
+  gettext,
+  glib,
+  gtk3,
+  json-glib,
+  libwnck,
+  libgee,
+  libgtop,
+  libhandy,
+  sassc,
+  udisks2,
+  wrapGAppsHook3,
+  libX11,
+  libXext,
+  libXNVCtrl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.17.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-GUNMA4CRO4cKBjNr7i8yRflstbT8g2ciDHppjUUbAOc=";
+    hash = "sha256-Kk3L4hfHon0B6Y6vU7en1UFpg221+EiVCxMX9mvu7pU=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

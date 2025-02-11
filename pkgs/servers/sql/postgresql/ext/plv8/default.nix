@@ -1,24 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, v8
-, perl
-, postgresql
-# For test
-, runCommand
-, coreutils
-, gnugrep
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nodejs_20,
+  perl,
+  postgresql,
+  jitSupport,
+  buildPostgresqlExtension,
+  # For test
+  runCommand,
+  coreutils,
+  gnugrep,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  libv8 = nodejs_20.libv8;
+in
+buildPostgresqlExtension (finalAttrs: {
   pname = "plv8";
-  version = "3.1.5";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LodC2eQJSm5fLckrjm2RuejZhmOyQMJTv9b0iPCnzKQ=";
+    hash = "sha256-ivQZJSNn5giWF351fqZ7mBZoJkGtby5T7beK45g3Zqs=";
   };
 
   patches = [
@@ -32,8 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    v8
-    postgresql
+    libv8
   ];
 
   buildFlags = [ "all" ];
@@ -42,12 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Nixpkgs build a v8 monolith instead of separate v8_libplatform.
     "USE_SYSTEM_V8=1"
     "SHLIB_LINK=-lv8"
-    "V8_OUTDIR=${v8}/lib"
-  ];
-
-  installFlags = [
-    # PGXS only supports installing to postgresql prefix so we need to redirect this
-    "DESTDIR=${placeholder "out"}"
+    "V8_OUTDIR=${libv8}/lib"
   ];
 
   # No configure script.
@@ -55,17 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs ./generate_upgrade.sh
-    # https://github.com/plv8/plv8/pull/506
-    substituteInPlace generate_upgrade.sh \
-      --replace " 2.3.10 " " 2.3.10 2.3.11 2.3.12 2.3.13 2.3.14 2.3.15 "
-  '';
-
-  postInstall = ''
-    # Move the redirected to proper directory.
-    # There appear to be no references to the install directories
-    # so changing them does not cause issues.
-    mv "$out/nix/store"/*/* "$out"
-    rmdir "$out/nix/store"/* "$out/nix/store" "$out/nix"
   '';
 
   passthru = {
@@ -74,13 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
         postgresqlWithSelf = postgresql.withPackages (_: [
           finalAttrs.finalPackage
         ]);
-      in {
-        smoke = runCommand "plv8-smoke-test" {} ''
-          export PATH=${lib.makeBinPath [
-            postgresqlWithSelf
-            coreutils
-            gnugrep
-          ]}
+      in
+      {
+        smoke = runCommand "plv8-smoke-test" { } ''
+          export PATH=${
+            lib.makeBinPath [
+              postgresqlWithSelf
+              coreutils
+              gnugrep
+            ]
+          }
           db="$PWD/testdb"
           initdb "$db"
           postgres -k "$db" -D "$db" &
@@ -103,7 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
 
         regression = stdenv.mkDerivation {
           name = "plv8-regression";
-          inherit (finalAttrs) src patches nativeBuildInputs buildInputs dontConfigure;
+          inherit (finalAttrs)
+            src
+            patches
+            nativeBuildInputs
+            buildInputs
+            dontConfigure
+            ;
 
           buildPhase = ''
             runHook preBuild
@@ -112,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
             echo -e "include Makefile\nprint_regress_files:\n\t@echo \$(REGRESS)" > Makefile.regress
             REGRESS_TESTS=$(make -f Makefile.regress print_regress_files)
 
-            ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+            ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
               --bindir='${postgresqlWithSelf}/bin' \
               --temp-instance=regress-instance \
               --dbname=contrib_regression \
@@ -135,9 +133,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    maintainers = with maintainers; [ marsam ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
+    maintainers = [ ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = licenses.postgresql;
-    broken = postgresql.jitSupport;
+    broken = jitSupport;
   };
 })

@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-eventserver";
   version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
@@ -18,6 +23,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-eventserver";
     description = "Websocket server that emits SkyTemple UI events";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

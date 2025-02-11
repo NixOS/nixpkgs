@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unittestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unittestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "justbases";
   version = "0.15.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mulkieran";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XraUh3beI2JqKPRHYN5W3Tn3gg0GJCwhnhHIOFdzh6U=";
   };
 

@@ -1,34 +1,43 @@
-{ lib
-, go
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  go,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "alertmanager";
-  version = "0.26.0";
+  version = "0.28.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    hash = "sha256-DCVxXSgoa4PrW4qBBWa1SOPN1GwcJFERz7+itsCdtGI=";
+    hash = "sha256-m8UbC9aSzUmoyfCxBNNSCeUQvnQqMlXrcOU0ygH9byE=";
   };
 
-  vendorHash = "sha256-GCcoT7Db0bQf+IGUP54GdxRmHCp1k2261B3T2htmbjk=";
+  vendorHash = "sha256-oIQ7sXBoYC/KSYk8Er8XEg6nf0vJ3kF80hysmInmdIc=";
 
-  subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
-
-  ldflags = let t = "github.com/prometheus/common/version"; in [
-    "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=${src.rev}"
-    "-X ${t}.Branch=unknown"
-    "-X ${t}.BuildUser=nix@nixpkgs"
-    "-X ${t}.BuildDate=unknown"
-    "-X ${t}.GoVersion=${lib.getVersion go}"
+  subPackages = [
+    "cmd/alertmanager"
+    "cmd/amtool"
   ];
+
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
+    [
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=${src.rev}"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+      "-X ${t}.GoVersion=${lib.getVersion go}"
+    ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,11 +48,18 @@ buildGoModule rec {
     installShellCompletion amtool.zsh
   '';
 
+  passthru.tests = { inherit (nixosTests.prometheus) alertmanager; };
+
   meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz globin Frostman ];
+    maintainers = with maintainers; [
+      benley
+      fpletz
+      globin
+      Frostman
+    ];
   };
 }

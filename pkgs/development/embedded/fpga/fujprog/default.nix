@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, IOKit
-, libftdi1
-, libusb-compat-0_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  IOKit,
+  libftdi1,
+  libusb-compat-0_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,10 +28,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libftdi1
     libusb-compat-0_1
-  ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "JTAG programmer for the ULX3S and ULX2S open hardware FPGA development boards";
+    mainProgram = "fujprog";
     homepage = "https://github.com/kost/fujprog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ trepetti ];

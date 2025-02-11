@@ -1,61 +1,78 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, asgiref
-, blinker
-, click
-, flit-core
-, importlib-metadata
-, itsdangerous
-, jinja2
-, python-dotenv
-, werkzeug
-, pytestCheckHook
-, pythonOlder
-  # used in passthru.tests
-, flask-limiter
-, flask-restful
-, flask-restx
-, moto
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  blinker,
+  click,
+  importlib-metadata,
+  itsdangerous,
+  jinja2,
+  werkzeug,
+
+  # optional-dependencies
+  asgiref,
+  python-dotenv,
+
+  # tests
+  greenlet,
+  pytestCheckHook,
+
+  # reverse dependencies
+  flask-limiter,
+  flask-restful,
+  flask-restx,
+  moto,
 }:
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.3.3";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
+    hash = "sha256-X4c8UYTIl8jZ0bBd8ePQGxSRDOaWB6EXvTJ3CYpYNqw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     blinker
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    async = [ asgiref ];
+    dotenv = [ python-dotenv ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   passthru.tests = {
-    inherit flask-limiter flask-restful flask-restx moto;
-  };
-  passthru.optional-dependencies = {
-    dotenv = [ python-dotenv ];
-    async = [ asgiref ];
+    inherit
+      flask-limiter
+      flask-restful
+      flask-restx
+      moto
+      ;
   };
 
   meta = with lib; {
+    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
+      replaceStrings [ "." ] [ "-" ] version
+    }";
     homepage = "https://flask.palletsprojects.com/";
-    description = "The Python micro framework for building web applications";
+    description = "Python micro framework for building web applications";
+    mainProgram = "flask";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is
       designed to make getting started quick and easy, with the ability

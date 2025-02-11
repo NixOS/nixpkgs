@@ -25,6 +25,10 @@ old_linux_version_hash="$(nix-prefetch-url "https://github.com/purescript/puresc
 echo "v${old_version} linux tarball hash (current version): $old_linux_version_hash"
 new_linux_version_hash="$(nix-prefetch-url "https://github.com/purescript/purescript/releases/download/v${new_version}/linux64.tar.gz")"
 echo "v${new_version} linux tarball hash: $new_linux_version_hash"
+old_linux_arm_version_hash="$(nix-prefetch-url "https://github.com/purescript/purescript/releases/download/v${old_version}/linux-arm64.tar.gz")"
+echo "v${old_version} linux tarball hash (current version): $old_linux_arm_version_hash"
+new_linux_arm_version_hash="$(nix-prefetch-url "https://github.com/purescript/purescript/releases/download/v${new_version}/linux-arm64.tar.gz")"
+echo "v${new_version} linux tarball hash: $new_linux_arm_version_hash"
 old_darwin_version_hash="$(nix-prefetch-url "https://github.com/purescript/purescript/releases/download/v${old_version}/macos.tar.gz")"
 echo "v${old_version} darwin tarball hash (current version): $old_darwin_version_hash"
 new_darwin_version_hash="$(nix-prefetch-url "https://github.com/purescript/purescript/releases/download/v${new_version}/macos.tar.gz")"
@@ -37,6 +41,7 @@ echo
 
 echo "Replacing version and hashes in ${purescript_derivation_file}."
 sed -i -e "s/${old_linux_version_hash}/${new_linux_version_hash}/" "$purescript_derivation_file"
+sed -i -e "s/${old_linux_arm_version_hash}/${new_linux_arm_version_hash}/" "$purescript_derivation_file"
 sed -i -e "s/${old_darwin_version_hash}/${new_darwin_version_hash}/" "$purescript_derivation_file"
 sed -i -e "s/${old_darwin_arm_version_hash}/${new_darwin_arm_version_hash}/" "$purescript_derivation_file"
 sed -i -e "s/${old_version}/${new_version}/" "$purescript_derivation_file"

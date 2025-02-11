@@ -1,9 +1,20 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.buildkite-agent;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    optionalString
+    literalExpression
+    ;
 in
 {
   port = 9876;
@@ -11,7 +22,7 @@ in
     tokenPath = mkOption {
       type = types.nullOr types.path;
       apply = final: if final == null then null else toString final;
-      description = lib.mdDoc ''
+      description = ''
         The token from your Buildkite "Agents" page.
 
         A run-time path to the token file, which is supposed to be provisioned
@@ -22,14 +33,14 @@ in
       type = types.str;
       default = "30s";
       example = "1min";
-      description = lib.mdDoc ''
+      description = ''
         How often to update metrics.
       '';
     };
     endpoint = mkOption {
       type = types.str;
       default = "https://agent.buildkite.com/v3";
-      description = lib.mdDoc ''
+      description = ''
         The Buildkite Agent API endpoint.
       '';
     };
@@ -37,7 +48,7 @@ in
       type = with types; nullOr (listOf str);
       default = null;
       example = literalExpression ''[ "my-queue1" "my-queue2" ]'';
-      description = lib.mdDoc ''
+      description = ''
         Which specific queues to process.
       '';
     };

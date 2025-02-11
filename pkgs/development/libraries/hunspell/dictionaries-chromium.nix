@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 
 let
-  mkDictFromChromium = { shortName, dictFileName, shortDescription }:
+  mkDictFromChromium =
+    {
+      shortName,
+      dictFileName,
+      shortDescription,
+    }:
     stdenv.mkDerivation {
       pname = "hunspell-dict-${shortName}-chromium";
       version = "115.0.5790.170";
@@ -35,7 +44,12 @@ let
 
           See https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries/
         '';
-        license = with lib.licenses; [ gpl2 lgpl21 mpl11 lgpl3 ];
+        license = with lib.licenses; [
+          gpl2
+          lgpl21
+          mpl11
+          lgpl3
+        ];
         maintainers = with lib.maintainers; [ networkexception ];
         platforms = lib.platforms.all;
       };
@@ -43,7 +57,7 @@ let
 in
 rec {
 
-  /* ENGLISH */
+  # ENGLISH
 
   en_US = en-us;
   en-us = mkDictFromChromium {
@@ -59,12 +73,21 @@ rec {
     shortDescription = "English (United Kingdom)";
   };
 
-  /* GERMAN */
+  # GERMAN
 
   de_DE = de-de;
   de-de = mkDictFromChromium {
     shortName = "de-de";
     dictFileName = "de-DE-3-0.bdic";
     shortDescription = "German (Germany)";
+  };
+
+  # FRENCH
+
+  fr_FR = fr-fr;
+  fr-fr = mkDictFromChromium {
+    shortName = "fr-fr";
+    dictFileName = "fr-FR-3-0.bdic";
+    shortDescription = "French (France)";
   };
 }

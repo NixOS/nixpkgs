@@ -1,40 +1,43 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-sdk
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, wrapt
-, pytestCheckHook
-, grpcio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchpatch2,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  wrapt,
+  pytestCheckHook,
+  grpcio,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-grpc";
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-grpc";
 
-  format = "pyproject";
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     opentelemetry-api
     opentelemetry-instrumentation
-    opentelemetry-sdk
     opentelemetry-semantic-conventions
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     instruments = [ grpcio ];
+  };
+
+  env = {
+    PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
   };
 
   nativeCheckInputs = [
@@ -43,7 +46,18 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+  preBuild = ''
+    export TMPDIR=$(mktemp -d)
+  '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: Failed to bind to address
+    "TestOpenTelemetryServerInterceptorUnix"
+  ];
+
   pythonImportsCheck = [ "opentelemetry.instrumentation.grpc" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-grpc";

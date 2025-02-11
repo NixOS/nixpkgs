@@ -1,26 +1,31 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gettext,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-i18n";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "kellpossible";
     repo = "cargo-i18n";
     rev = "v${version}";
-    hash = "sha256-ck0GYy9DLngOunpItGQ4+qrlzaWDk0zTnIzuRQt2/Gw=";
+    hash = "sha256-azwQlXsoCgNB/TjSBBE+taUR1POBJXaPnS5Sr+HVR90=";
   };
 
-  cargoHash = "sha256-nvZx2wJDs7PZQLCl8Hrf2blR+lNUBVr6k664VSVQ5iI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7rqfJ3l4qdVcmfMZgZpL8qomnytiOSqWtFFZFeB047I=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  # Devendor gettext in the gettext-sys crate. The paths to the bin/lib/include folders have to be specified because
+  # setting `GETTEXT_SYSTEM` only works on some platforms (i.e., not Darwin).
+  env = {
+    GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
+    GETTEXT_INCLUDE_DIR = "${lib.getInclude gettext}/include";
+  };
 
   cargoTestFlags = [ "--lib" ];
 

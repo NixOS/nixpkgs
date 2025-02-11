@@ -1,29 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fast-ssh";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "julien-r44";
     repo = "fast-ssh";
-    rev = "v${version}";
-    sha256 = "sha256-eHJdMe8RU6Meg/9+NCfIneD5BqNUc2yIiQ8Z5UqUBUI=";
+    tag = "v${version}";
+    hash = "sha256-Wn1kwuY1tRJVe9DJexyQ/h+Z1gNtluj78QpBYjeCbSE=";
   };
 
-  cargoSha256 = "sha256-sIQNoH3UWX3SwCFCPZEREIFR7C28ml4oGsrq6wuOAT0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qkvonLuS18BBPdBUUnIAbmA+9ZJZFmTRaewrnK9PHFE=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "TUI tool to use the SSH config for connections";
     homepage = "https://github.com/julien-r44/fast-ssh";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "fast-ssh";
   };
 }

@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, ant
-, fetchFromGitHub
-, jdk11_headless
-, jre
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trimmomatic";
   version = "0.39";
 
   src = fetchFromGitHub {
     owner = "usadellab";
     repo = "Trimmomatic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-u+ubmacwPy/vsEi0YQCv0fTnVDesQvqeQDEwCbS8M6I=";
   };
 
-  # Set source and target version to 11
+  # Remove jdk version requirement
   postPatch = ''
     substituteInPlace ./build.xml \
-      --replace 'source="1.5" target="1.5"' 'release="11"'
+      --replace 'source="1.5" target="1.5"' ""
   '';
 
-  nativeBuildInputs = [ jdk11_headless ant makeWrapper ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    stripJavaArchivesHook
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -37,17 +44,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share
-    cp dist/jar/trimmomatic-${version}.jar $out/share/
-    cp -r adapters $out/share/
+    install -Dm644 dist/jar/trimmomatic-*.jar -t $out/share/trimmomatic
+    cp -r adapters $out/share/trimmomatic
+
     makeWrapper ${jre}/bin/java $out/bin/trimmomatic \
-      --add-flags "-cp $out/share/trimmomatic-${version}.jar org.usadellab.trimmomatic.Trimmomatic"
+        --add-flags "-jar $out/share/trimmomatic/trimmomatic-*.jar"
 
     runHook postInstall
   '';
 
   meta = {
-    description = "A flexible read trimming tool for Illumina NGS data";
+    changelog = "https://github.com/usadellab/Trimmomatic/blob/main/versionHistory.txt";
+    description = "Flexible read trimming tool for Illumina NGS data";
     longDescription = ''
       Trimmomatic performs a variety of useful trimming tasks for illumina
       paired-end and single ended data: adapter trimming, quality trimming,
@@ -59,8 +67,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     sourceProvenance = [
       lib.sourceTypes.fromSource
-      lib.sourceTypes.binaryBytecode  # source bundles dependencies as jars
+      lib.sourceTypes.binaryBytecode # source bundles dependencies as jars
     ];
+    mainProgram = "trimmomatic";
     maintainers = [ lib.maintainers.kupac ];
   };
-}
+})

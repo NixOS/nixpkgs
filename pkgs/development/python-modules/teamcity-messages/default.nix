@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "teamcity-messages";
-  version = "1.32";
+  version = "1.33";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,21 +16,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9az7kD7nKqMF2b3/eFgF+pOKKIYLvTy2sf4TSJfHRnA=";
+    tag = "v${version}";
+    hash = "sha256-BAwAfe54J+gbbiz03Yiu3eC/9RnI7P0mfR3nfM1oKZw=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit-tests/"
-  ];
+  pytestFlagsArray = [ "tests/unit-tests/" ];
 
-  pythonImportsCheck = [
-    "teamcity"
-  ];
+  pythonImportsCheck = [ "teamcity" ];
 
   meta = with lib; {
     description = "Python unit test reporting to TeamCity";

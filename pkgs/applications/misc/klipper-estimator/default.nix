@@ -1,29 +1,36 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, pkg-config
-, openssl
-, libgit2
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  libgit2,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "klipper-estimator";
-  version = "3.5.0";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "Annex-Engineering";
     repo = "klipper_estimator";
     rev = "v${version}";
-    hash = "sha256-sq0HWK+zH7Rj/XFgMrI4+SVhBXPbvvoSr3A/1Aq/Fa8=";
+    hash = "sha256-EjfW2qeq0ehGhjE2Psz5g/suYMZPvtQi2gaYb+NCa2U=";
   };
 
-  cargoHash = "sha256-QHSydaE867HaY7vBoV+v4p7G5qbQy5l3TemD3k41T4A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wMgFkzgoHjvE+5t+cA5OW2COXbUj/5tWXz0Zp9cd5lw=";
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libgit2 Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libgit2
+      Security
+      SystemConfiguration
+    ];
 
   nativeBuildInputs = [ pkg-config ];
 

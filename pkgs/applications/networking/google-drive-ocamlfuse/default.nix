@@ -1,29 +1,41 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, extlib, ocamlfuse, gapi-ocaml, ocaml_sqlite3
-, tiny_httpd
-, ounit2
+{
+  lib,
+  ocaml,
+  buildDunePackage,
+  fetchFromGitHub,
+  extlib,
+  ocamlfuse,
+  gapi-ocaml,
+  ocaml_sqlite3,
+  tiny_httpd,
+  ounit2,
 }:
 
 buildDunePackage rec {
   pname = "google-drive-ocamlfuse";
-  version = "0.7.30";
-  duneVersion = "3";
+  version = "0.7.32";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";
     rev = "v${version}";
-    sha256 = "sha256-DWG0nBiqeVHaYQfGzU43gGwL4m8X61x5/RT5jD4AwYA=";
+    hash = "sha256-AWr1tcium70rXFKMTv6xcWxndOJua3UXG8Q04TN1Siw=";
   };
 
-  doCheck = true;
+  doCheck = lib.versionOlder ocaml.version "5.0";
   checkInputs = [ ounit2 ];
 
-  buildInputs = [ extlib ocamlfuse gapi-ocaml ocaml_sqlite3 tiny_httpd ];
+  buildInputs = [
+    extlib
+    ocamlfuse
+    gapi-ocaml
+    ocaml_sqlite3
+    tiny_httpd
+  ];
 
   meta = {
     inherit (src.meta) homepage;
-    description = "A FUSE-based file system backed by Google Drive, written in OCaml";
+    description = "FUSE-based file system backed by Google Drive, written in OCaml";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ obadz ];

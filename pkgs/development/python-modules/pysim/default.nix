@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pytest-asyncio
-, colorlog
-, smpp_pdu
-, pyscard
-, packaging
-, gsm0338
-, bidict
-, jsonpath-ng
-, termcolor
-, pyyaml
-, pycryptodomex
-, construct
-, pyserial
-, pytlv
-, cmd2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  colorlog,
+  smpp-pdu,
+  pyscard,
+  packaging,
+  gsm0338,
+  bidict,
+  jsonpath-ng,
+  termcolor,
+  pyyaml,
+  pycryptodomex,
+  construct,
+  pyserial,
+  pytlv,
+  cmd2,
 }:
 
 buildPythonPackage {
@@ -36,9 +36,7 @@ buildPythonPackage {
     substituteInPlace setup.py --replace 'smpp.pdu @ git+https://github.com/hologram-io/smpp.pdu' 'smpp.pdu'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     bidict
@@ -53,20 +51,18 @@ buildPythonPackage {
     pyserial
     pytlv
     pyyaml
-    smpp_pdu
+    smpp-pdu
     termcolor
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pySim" ];
 
   meta = with lib; {
-    description = "A python tool to program SIMs / USIMs / ISIMs.";
+    description = "Python tool to program SIMs / USIMs / ISIMs";
     homepage = "https://github.com/osmocom/pysim";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ flokli janik ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

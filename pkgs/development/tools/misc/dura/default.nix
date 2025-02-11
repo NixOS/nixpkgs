@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  Security,
+  zlib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dura";
@@ -11,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
-  cargoSha256 = "sha256-XOtPtOEKZMJzNeBZBT3Mc/KOjMOcz71byIv/ftcRP48=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Xci9168KqJf+mhx3k0d+nH6Ov5tqNtB6nxiL9BwVYjU=";
 
   cargoPatches = [
     ./Cargo.lock.patch
@@ -19,18 +29,22 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   meta = with lib; {
-    description = "A background process that saves uncommitted changes on git";
+    description = "Background process that saves uncommitted changes on git";
+    mainProgram = "dura";
     longDescription = ''
       Dura is a background process that watches your Git repositories and
       commits your uncommitted changes without impacting HEAD, the current

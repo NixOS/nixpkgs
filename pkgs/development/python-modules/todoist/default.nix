@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, requests
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,18 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-Rkg6eSLiQe8DZaVu2DEnlKLe8RLkRwKmpw+TaYj+lp0=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  pythonImportsCheck = [
-    "todoist"
-  ];
+  pythonImportsCheck = [ "todoist" ];
 
   meta = with lib; {
-    description = "The official Todoist Python API library";
+    description = "Official Todoist Python API library";
     homepage = "https://todoist-python.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

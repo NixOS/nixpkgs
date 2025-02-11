@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-EoQKbxzXEuKC50/W1/tBB2wASJZmNNwg9r1qhIB4Ws8=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # no tests
   doCheck = false;
@@ -29,6 +28,6 @@ buildPythonPackage rec {
     description = "Serve self-contained distribution builds of Swagger UI and Redoc with Django";
     homepage = "https://github.com/tfranzel/drf-spectacular-sidecar";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

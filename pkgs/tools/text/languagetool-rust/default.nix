@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,12 +20,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YsVK72q+A9T00u9bXIUfGDhwQl5kiLMec6onbp9YKkg=";
   };
 
-  cargoHash = "sha256-Yit6zWWEcH5LXpcvy9EXUvRNz+JsyW10fauSNBf1BoU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-R2CjzljguyzosVlq5k96/g0jHiq0/oRiTAjVzjy6xTY=";
 
   buildFeatures = [ "full" ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   checkFlags = [
     # requires network access
@@ -68,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_words_delete"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ltrs \
       --bash <($out/bin/ltrs completions bash) \
       --fish <($out/bin/ltrs completions fish) \

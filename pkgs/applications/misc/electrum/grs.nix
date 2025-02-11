@@ -6,19 +6,20 @@
 , zbar
 , secp256k1
 , enableQt ? true
+, qtwayland
 }:
 
 let
-  version = "4.4.4";
+  version = "4.5.4";
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.{v}"
-    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
+    if stdenv.hostPlatform.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.hostPlatform.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.isLinux then "libzbar.so.0"
-    else if stdenv.isDarwin then "libzbar.0.dylib"
+    if stdenv.hostPlatform.isLinux then "libzbar.so.0"
+    else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
 in
@@ -31,10 +32,11 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
-    sha256 = "0fl01qdvb1z6l6kwipj1lj0qmjk3mzw25wv7yh5j1hh1f5lng0s8";
+    sha256 = "1k078jg3bw4n3kcxy917m30x1skxm679w8hcw8mlxb94ikrjc66h";
   };
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -44,7 +46,7 @@ python3.pkgs.buildPythonApplication {
     bitstring
     cryptography
     dnspython
-    groestlcoin_hash
+    groestlcoin-hash
     jsonrpclib-pelix
     matplotlib
     pbkdf2
@@ -52,16 +54,24 @@ python3.pkgs.buildPythonApplication {
     pysocks
     qrcode
     requests
-    tlslite-ng
+    certifi
+    jsonpatch
     # plugins
     btchip-python
     ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
+    bitbox02
+    cbor
+    pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
+  ];
+
+  checkInputs = with python3.pkgs; lib.optionals enableQt [
+    pyqt6
   ];
 
   postPatch = ''
@@ -80,7 +90,7 @@ python3.pkgs.buildPythonApplication {
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum-grs.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum-grs %u"' \
                 "Exec=$out/bin/electrum-grs %u" \
@@ -112,5 +122,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ gruve-p ];
+    mainProgram = "electrum-grs";
   };
 }

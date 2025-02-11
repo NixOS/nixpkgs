@@ -1,13 +1,13 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, Security
-, nixosTests
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
 }:
 
-let version = "1.5.0";
+let
+  version = "1.11.3";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -15,31 +15,26 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "meilisearch";
-    repo = "MeiliSearch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UP5i89hXmbATbHwN4wu42L6zX2fnd/hF4NEGK5VwmiM=";
+    repo = "meiliSearch";
+    tag = "v${version}";
+    hash = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
   };
 
-  cargoBuildFlags = [
-    "--package=meilisearch"
-  ];
+  cargoBuildFlags = [ "--package=meilisearch" ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
-      "heed-0.12.7" = "sha256-mthHMaTqmNae8gpe4ZnozABKBrgFQdn9KWCvIzJJ+u4=";
-      "lmdb-rkv-sys-0.15.1" = "sha256-zLHTprwF7aa+2jaD7dGYmOZpJYFijMTb4I3ODflNUII=";
-      "nelson-0.1.0" = "sha256-eF672quU576wmZSisk7oDR7QiDafuKlSg0BTQkXnzqY=";
+      "rhai-1.20.0" = "sha256-lirpciSMM+OJh6Z4Ok3nZyJSdP8SNyUG15T9QqPNjII=";
+      "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
+      "tokenizers-0.15.2" = "sha256-lWvCu2hDJFzK6IUBJ4yeL4eZkOA08LHEMfiKXVvkog8=";
     };
   };
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -51,12 +46,21 @@ rustPlatform.buildRustPackage {
   # Tests will try to compile with mini-dashboard features which downloads something from the internet.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Powerful, fast, and an easy to use search engine";
+    mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = [ "aarch64-linux" "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      happysalada
+      bbenno
+    ];
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

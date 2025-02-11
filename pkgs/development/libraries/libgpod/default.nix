@@ -1,22 +1,22 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, perlPackages
-, intltool
-, autoreconfHook
-, pkg-config
-, glib
-, libxml2
-, sqlite
-, zlib
-, sg3_utils
-, gdk-pixbuf
-, taglib
-, libimobiledevice
-, monoSupport ? false
-, mono
-, gtk-sharp-2_0
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  perlPackages,
+  intltool,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  libxml2,
+  sqlite,
+  sg3_utils,
+  gdk-pixbuf,
+  taglib,
+  libimobiledevice,
+  monoSupport ? false,
+  mono,
+  gtk-sharp-2_0,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y4p5WdBOlfHmKrrQK9M3AuTo3++YSFrH2dUDlcN+lV0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     (fetchpatch {
@@ -51,8 +54,16 @@ stdenv.mkDerivation rec {
 
   dontStrip = monoSupport;
 
-  nativeBuildInputs = [ autoreconfHook intltool pkg-config ]
-    ++ (with perlPackages; [ perl XMLParser ])
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      intltool
+      pkg-config
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ])
     ++ lib.optional monoSupport mono;
 
   buildInputs = [
@@ -68,9 +79,17 @@ stdenv.mkDerivation rec {
     libimobiledevice
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     description = "Library used by gtkpod to access the contents of an ipod";
+    mainProgram = "ipod-read-sysinfo-extended";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ ];

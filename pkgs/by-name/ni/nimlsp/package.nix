@@ -1,16 +1,27 @@
-{ lib, buildNimPackage, fetchFromGitHub, srcOnly, nim-unwrapped-1 }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  srcOnly,
+  nim-2_0,
+  nim-unwrapped-2_0,
+}:
 
-buildNimPackage (finalAttrs: {
+let
+  buildNimPackage' = buildNimPackage.override {
+    # Do not build with Nim-2.2.x.
+    nim2 = nim-2_0;
+  };
+in
+buildNimPackage' (finalAttrs: {
   pname = "nimlsp";
-  version = "0.4.4";
-
-  requiredNimVersion = 1;
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Z67iKlL+dnRbxdFt/n/fsUcb2wpZwzPpL/G29jfCaMY=";
+    hash = "sha256-MCtpCx8jMQp0VXuMowh69d1DQreU5cDftBf0lww7PUM=";
   };
 
   lockFile = ./lock.json;
@@ -22,18 +33,23 @@ buildNimPackage (finalAttrs: {
         owner = "PMunch";
         repo = "jsonschema";
         rev = "7b41c03e3e1a487d5a8f6b940ca8e764dc2cbabf";
-        sha256 = "1js64jqd854yjladxvnylij4rsz7212k31ks541pqrdzm6hpblbz";
+        hash = "sha256-f9F1oam/ZXwDKXqGMUUQ5+tMZKTe7t4UlZ4U1LAkRss=";
       };
     in
     [ jsonSchemaSrc ];
 
   nimFlags = [
     "--threads:on"
-    "-d:explicitSourcePath=${srcOnly nim-unwrapped-1}"
+    "-d:explicitSourcePath=${srcOnly nim-unwrapped-2_0}"
     "-d:tempDir=/tmp"
   ];
 
-  nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
+  nimDefines = [
+    "nimcore"
+    "nimsuggest"
+    "debugCommunication"
+    "debugLogging"
+  ];
 
   doCheck = false;
 
@@ -41,6 +57,6 @@ buildNimPackage (finalAttrs: {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.marsam ];
+    maintainers = with lib.maintainers; [ xtrayambak ];
   };
 })

@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, gtk3
-, dbus-glib
-, libnotify
-, libxml2
-, libcanberra-gtk3
-, mod_dnssd
-, apacheHttpd
-, hicolor-icon-theme
-, mate
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  gtk3,
+  caja,
+  dbus-glib,
+  libnotify,
+  libxml2,
+  libcanberra-gtk3,
+  apacheHttpdPackages,
+  hicolor-icon-theme,
+  mate,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
+let
+  inherit (apacheHttpdPackages) apacheHttpd mod_dnssd;
+in
 stdenv.mkDerivation rec {
   pname = "mate-user-share";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1wh0b4qw5wzpl7sg44lpwjb9r6xllch3xfz8c2cchl8rcgbh2kph";
+    sha256 = "iYVgmZkXllE0jkl+8I81C4YIG5expKcwQHfurlc5rjg=";
   };
 
   nativeBuildInputs = [
@@ -31,15 +35,15 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gtk3
+    caja
     dbus-glib
     libnotify
     libcanberra-gtk3
-    mate.caja
     hicolor-icon-theme
     # Should mod_dnssd and apacheHttpd be runtime dependencies?
     # In gnome-user-share they are not.
@@ -65,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "User level public file sharing for the MATE desktop";
+    mainProgram = "mate-file-share-properties";
     homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;

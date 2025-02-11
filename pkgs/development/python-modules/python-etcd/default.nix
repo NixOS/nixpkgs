@@ -1,37 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, mock
-, pyopenssl
-, urllib3
-, dnspython
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  urllib3,
+  dnspython,
+  pytestCheckHook,
+  etcd_3_4,
+  mock,
+  pyopenssl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-etcd";
-  version = "0.4.5";
+  version = "0.5.0-unstable-2023-10-31";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f1b5ebb825a3e8190494f5ce1509fde9069f2754838ed90402a8c11e1f52b8cb";
+  src = fetchFromGitHub {
+    owner = "jplana";
+    repo = "python-etcd";
+    rev = "5aea0fd4461bd05dd96e4ad637f6be7bceb1cee5";
+    hash = "sha256-eVirStLOPTbf860jfkNMWtGf+r0VygLZRjRDjBMCVKg=";
   };
 
-  buildInputs = [ nose mock pyopenssl ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ urllib3 dnspython ];
+  dependencies = [
+    urllib3
+    dnspython
+  ];
 
-  postPatch = ''
-    sed -i '19s/dns/"dnspython"/' setup.py
+  nativeCheckInputs = [
+    pytestCheckHook
+    etcd_3_4
+    mock
+    pyopenssl
+  ];
+
+  # arm64 is an unsupported platform on etcd 3.4. should be able to be removed on >= etcd 3.5
+  doCheck = !stdenv.hostPlatform.isAarch64;
+
+  preCheck = ''
+    for file in "test_auth" "integration/test_simple"; do
+      substituteInPlace src/etcd/tests/$file.py \
+        --replace-fail "assertEquals" "assertEqual"
+    done
   '';
 
-  # Some issues with etcd not in path even though most tests passed
-  doCheck = false;
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Seems to be failing because of network restrictions
+    # AttributeError: Can't get local object 'TestWatch.test_watch_indexed_generator.<locals>.watch_value'
+    "test_watch"
+    "test_watch_generator"
+    "test_watch_indexed"
+    "test_watch_indexed_generator"
+  ];
 
-  meta = with lib; {
-    description = "A python client for Etcd";
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Python client for Etcd";
     homepage = "https://github.com/jplana/python-etcd";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-
 }

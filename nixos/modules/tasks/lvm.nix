@@ -1,12 +1,25 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.lvm;
-in {
+in
+{
   options.services.lvm = {
-    enable = mkEnableOption (lib.mdDoc "lvm2") // {
+    enable = mkEnableOption "lvm2" // {
       default = true;
+      description = ''
+        Whether to enable lvm2.
+
+        :::{.note}
+        The lvm2 package contains device-mapper udev rules and without those tools like cryptsetup do not fully function!
+        :::
+      '';
     };
 
     package = mkOption {
@@ -14,23 +27,25 @@ in {
       default = pkgs.lvm2;
       internal = true;
       defaultText = literalExpression "pkgs.lvm2";
-      description = lib.mdDoc ''
+      description = ''
         This option allows you to override the LVM package that's used on the system
         (udev rules, tmpfiles, systemd services).
         Defaults to pkgs.lvm2, pkgs.lvm2_dmeventd if dmeventd or pkgs.lvm2_vdo if vdo is enabled.
       '';
     };
-    dmeventd.enable = mkEnableOption (lib.mdDoc "the LVM dmevent daemon");
-    boot.thin.enable = mkEnableOption (lib.mdDoc "support for booting from ThinLVs");
-    boot.vdo.enable = mkEnableOption (lib.mdDoc "support for booting from VDOLVs");
+    dmeventd.enable = mkEnableOption "the LVM dmevent daemon";
+    boot.thin.enable = mkEnableOption "support for booting from ThinLVs";
+    boot.vdo.enable = mkEnableOption "support for booting from VDOLVs";
   };
 
-  options.boot.initrd.services.lvm.enable = mkEnableOption (lib.mdDoc "booting from LVM2 in the initrd") // {
-    description = lib.mdDoc ''
+  options.boot.initrd.services.lvm.enable = mkEnableOption "booting from LVM2 in the initrd" // {
+    description = ''
       *This will only be used when systemd is used in stage 1.*
 
       Whether to enable booting from LVM2 in the initrd.
     '';
+    default = config.boot.initrd.systemd.enable && config.services.lvm.enable;
+    defaultText = lib.literalExpression "config.boot.initrd.systemd.enable && config.services.lvm.enable";
   };
 
   config = mkMerge [
@@ -63,9 +78,14 @@ in {
     })
     (mkIf cfg.boot.thin.enable {
       boot.initrd = {
-        kernelModules = [ "dm-snapshot" "dm-thin-pool" ];
+        kernelModules = [
+          "dm-snapshot"
+          "dm-thin-pool"
+        ];
 
-        systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.thin-provisioning-tools ];
+        systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [
+          pkgs.thin-provisioning-tools
+        ];
 
         extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
           for BIN in ${pkgs.thin-provisioning-tools}/bin/*; do
@@ -80,63 +100,90 @@ in {
         '';
       };
 
-      environment.etc."lvm/lvm.conf".text = concatMapStringsSep "\n"
-        (bin: "global/${bin}_executable = ${pkgs.thin-provisioning-tools}/bin/${bin}")
-        [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ];
+      environment.etc."lvm/lvm.conf".text =
+        concatMapStringsSep "\n"
+          (bin: "global/${bin}_executable = ${pkgs.thin-provisioning-tools}/bin/${bin}")
+          [
+            "thin_check"
+            "thin_dump"
+            "thin_repair"
+            "cache_check"
+            "cache_dump"
+            "cache_repair"
+          ];
 
       environment.systemPackages = [ pkgs.thin-provisioning-tools ];
     })
     (mkIf cfg.boot.vdo.enable {
+      assertions = [
+        {
+          assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.9";
+          message = "boot.vdo.enable requires at least kernel version 6.9";
+        }
+      ];
+
       boot = {
         initrd = {
-          kernelModules = [ "kvdo" ];
+          kernelModules = [ "dm-vdo" ];
 
           systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
 
-          extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)''
+          extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
             ls ${pkgs.vdo}/bin/ | while read BIN; do
               copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
             substituteInPlace $out/bin/vdorecover --replace "${pkgs.bash}/bin/bash" "/bin/sh"
-            substituteInPlace $out/bin/adaptLVMVDO.sh --replace "${pkgs.bash}/bin/bash" "/bin/sh"
+            substituteInPlace $out/bin/adaptlvm --replace "${pkgs.bash}/bin/bash" "/bin/sh"
           '';
 
-          extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)''
-            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptLVMVDO|vdorecover)' | while read BIN; do
+          extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
+            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptlvm|vdorecover)' | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';
         };
-        extraModulePackages = [ config.boot.kernelPackages.kvdo ];
       };
 
-      services.lvm.package = mkOverride 999 pkgs.lvm2_vdo;  # this overrides mkDefault
+      services.lvm.package = mkOverride 999 pkgs.lvm2_vdo; # this overrides mkDefault
 
       environment.systemPackages = [ pkgs.vdo ];
     })
     (mkIf (cfg.dmeventd.enable || cfg.boot.thin.enable) {
-      boot.initrd.systemd.contents."/etc/lvm/lvm.conf".text = optionalString (config.boot.initrd.services.lvm.enable && cfg.boot.thin.enable) (concatMapStringsSep "\n"
-          (bin: "global/${bin}_executable = /bin/${bin}")
-          [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
-        ) + "\n" + optionalString cfg.dmeventd.enable ''
+      boot.initrd.systemd.contents."/etc/lvm/lvm.conf".text =
+        optionalString (config.boot.initrd.services.lvm.enable && cfg.boot.thin.enable) (
+          concatMapStringsSep "\n" (bin: "global/${bin}_executable = /bin/${bin}") [
+            "thin_check"
+            "thin_dump"
+            "thin_repair"
+            "cache_check"
+            "cache_dump"
+            "cache_repair"
+          ]
+        )
+        + "\n"
+        + optionalString cfg.dmeventd.enable ''
           dmeventd/executable = /bin/false
           activation/monitoring = 0
         '';
 
       boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) ''
-          mkdir -p /etc/lvm
-          cat << EOF >> /etc/lvm/lvm.conf
-          ${optionalString cfg.boot.thin.enable (
-            concatMapStringsSep "\n"
-              (bin: "global/${bin}_executable = $(command -v ${bin})")
-              [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ]
-            )
-          }
-          ${optionalString cfg.dmeventd.enable ''
-            dmeventd/executable = "$(command -v false)"
-            activation/monitoring = 0
-          ''}
-          EOF
+        mkdir -p /etc/lvm
+        cat << EOF >> /etc/lvm/lvm.conf
+        ${optionalString cfg.boot.thin.enable (
+          concatMapStringsSep "\n" (bin: "global/${bin}_executable = $(command -v ${bin})") [
+            "thin_check"
+            "thin_dump"
+            "thin_repair"
+            "cache_check"
+            "cache_dump"
+            "cache_repair"
+          ]
+        )}
+        ${optionalString cfg.dmeventd.enable ''
+          dmeventd/executable = "$(command -v false)"
+          activation/monitoring = 0
+        ''}
+        EOF
       '';
     })
   ];

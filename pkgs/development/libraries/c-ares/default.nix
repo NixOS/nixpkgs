@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl, writeTextDir
-, withCMake ? true, cmake
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  withCMake ? true,
+  cmake,
 
-# sensitive downstream packages
-, curl
-, grpc # consumes cmake config
+  # sensitive downstream packages
+  curl,
+  grpc, # consumes cmake config
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -13,21 +18,30 @@
 
 stdenv.mkDerivation rec {
   pname = "c-ares";
-  version = "1.19.1";
+  version = "1.27.0";
 
   src = fetchurl {
-    url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-MhcAOZty7Q4DfQB0xinndB9rLsLdqSlWq+PpZx0+Jo4=";
+    # Note: tag name varies in some versions, e.g. v1.30.0, c-ares-1_17_0.
+    url = "https://github.com/c-ares/${pname}/releases/download/cares-${
+      builtins.replaceStrings [ "." ] [ "_" ] version
+    }/${pname}-${version}.tar.gz";
+    hash = "sha256-CnK+ZpWZVcQ+KvL70DQY6Cor1UZGBOyaYhR+N6zrQgs=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
-  nativeBuildInputs = lib.optionals withCMake [ cmake ];
-
-  cmakeFlags = [] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "-DCARES_SHARED=OFF"
-    "-DCARES_STATIC=ON"
+  outputs = [
+    "out"
+    "dev"
+    "man"
   ];
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals withCMake [ cmake ];
+
+  cmakeFlags =
+    [ ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "-DCARES_SHARED=OFF"
+      "-DCARES_STATIC=ON"
+    ];
 
   enableParallelBuilding = true;
 
@@ -37,7 +51,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A C library for asynchronous DNS requests";
+    description = "C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
     changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
     license = licenses.mit;

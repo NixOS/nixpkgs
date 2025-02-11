@@ -1,20 +1,21 @@
-{ rocfft
-, lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clr
-, python3
-, rocm-cmake
-, sqlite
-, boost
-, fftw
-, fftwFloat
-, gtest
-, openmp
-, rocrand
-, gpuTargets ? [ ]
+{
+  rocfft,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clr,
+  python3,
+  rocm-cmake,
+  sqlite,
+  boost,
+  fftw,
+  fftwFloat,
+  gtest,
+  openmp,
+  rocrand,
+  gpuTargets ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "ROCmSoftwarePlatform";
+    owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-GZSi03geTT+NUztBWhGYyghLqJGsFjUQzVAKQ7d03uA=";
@@ -37,18 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ sqlite ];
 
-  cmakeFlags = [
-    "-DCMAKE_C_COMPILER=hipcc"
-    "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
-    # Manually define CMAKE_INSTALL_<DIR>
-    # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ] ++ lib.optionals (gpuTargets != [ ]) [
-    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_C_COMPILER=hipcc"
+      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
+      # Manually define CMAKE_INSTALL_<DIR>
+      # See: https://github.com/NixOS/nixpkgs/pull/197838
+      "-DCMAKE_INSTALL_BINDIR=bin"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+    ];
 
   passthru = {
     test = stdenv.mkDerivation {
@@ -100,10 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
         boost
         finalAttrs.finalPackage
         openmp
-        (python3.withPackages (ps: with ps; [
-          pandas
-          scipy
-        ]))
+        (python3.withPackages (
+          ps: with ps; [
+            pandas
+            scipy
+          ]
+        ))
         rocrand
       ];
 
@@ -160,10 +165,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "FFT implementation for ROCm";
-    homepage = "https://github.com/ROCmSoftwarePlatform/rocFFT";
+    homepage = "https://github.com/ROCm/rocFFT";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ kira-bruneau ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

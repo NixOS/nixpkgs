@@ -1,46 +1,53 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiocoap
-, dtlssocket
-, pydantic
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
+  aiocoap,
+  dtlssocket,
+  pydantic,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytradfri";
   version = "13.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CWv3ebDulZuiFP+nJ2Xr7U/HTDFTqA9VYC0USLkpWR0=";
   };
 
-  propagatedBuildInputs = [
-    pydantic
+  patches = [
+    (fetchpatch2 {
+      name = "pydantic2-compat.patch";
+      url = "https://github.com/home-assistant-libs/pytradfri/commit/ecd099837a0b4538a56301af6260fddde77fbbb1.patch";
+      excludes = [ "requirements.txt" ];
+      hash = "sha256-QsvBTB9evKyE1fcfDaB0SN21kHmNmLgGPs3GJHHsMJc=";
+    })
   ];
 
-  passthru.optional-dependencies = {
+  build-system = [ setuptools ];
+
+  dependencies = [ pydantic ];
+
+  optional-dependencies = {
     async = [
       aiocoap
       dtlssocket
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.async;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
 
-  pythonImportsCheck = [
-    "pytradfri"
-  ];
+  pythonImportsCheck = [ "pytradfri" ];
 
   meta = with lib; {
     description = "Python package to communicate with the IKEA Trådfri ZigBee Gateway";

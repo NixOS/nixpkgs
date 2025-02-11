@@ -2,7 +2,10 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeShellScript, writeText, buildEnv
+{ lib
+#, stdenv
+, gcc12Stdenv
+, fetchurl, runCommand, writeShellScript, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
@@ -11,6 +14,7 @@
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
+let stdenv = gcc12Stdenv; in
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
@@ -39,13 +43,13 @@ let
 
   version = {
     # day of the snapshot being taken
-    year = "2023";
-    month = "03";
-    day = "19";
+    year = "2024";
+    month = "10";
+    day = "27";
     # TeX Live version
-    texliveYear = 2022;
+    texliveYear = 2024;
     # final (historic) release or snapshot
-    final = true;
+    final = false;
   };
 
   # The tarballs on CTAN mirrors for the current release are constantly
@@ -53,22 +57,30 @@ let
   # need to be used instead. Ideally, for the release branches of NixOS we
   # should be switching to the tlnet-final versions
   # (https://tug.org/historic/).
-  mirrors = with version; lib.optionals final  [
+  mirrors = lib.optionals version.final  [
     # tlnet-final snapshot; used when texlive.tlpdb is frozen
     # the TeX Live yearly freeze typically happens in mid-March
-    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString texliveYear}/tlnet-final"
-    "ftp://tug.org/texlive/historic/${toString texliveYear}/tlnet-final"
+    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
+    "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
   ] ++ [
+    # CTAN mirrors
+    "https://mirror.ctan.org/systems/texlive/tlnet"
     # daily snapshots hosted by one of the texlive release managers;
-    # used for non-final snapshots and as fallback for final snapshots that have not reached yet the historic mirrors
-    # please note that this server is not meant for large scale deployment and should be avoided on release branches
+    # used for packages that in the meanwhile have been updated or removed from CTAN
+    # and for packages that have not reached yet the historic mirrors
+    # please note that this server is not meant for large scale deployment
     # https://tug.org/pipermail/tex-live/2019-November/044456.html
-    "https://texlive.info/tlnet-archive/${year}/${month}/${day}/tlnet"
+    # https://texlive.info/ MUST appear last (see tlpdbxz)
+    "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
   ];
 
   tlpdbxz = fetchurl {
-    urls = map (up: "${up}/tlpkg/texlive.tlpdb.xz") mirrors;
-    hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
+    urls =
+      map (up: "${up}/tlpkg/texlive.tlpdb.xz")
+        # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
+        # TODO make this less hacky
+        (if version.final then mirrors else [ (lib.last mirrors) ]);
+    hash = "sha256-jB9FXLpmqYluxdxGl67C50cx9dfN2S8LQwOow4OezcQ=";
   };
 
   tlpdbNix = runCommand "tlpdb.nix" {
@@ -83,7 +95,7 @@ let
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
   buildTeXLivePackage = import ./build-texlive-package.nix {
-    inherit lib fetchurl runCommand bash jdk perl python3 ruby snobol4 tk;
+    inherit lib fetchurl runCommand writeShellScript bash jdk perl python3 ruby snobol4 tk;
     texliveBinaries = bin;
   };
 
@@ -128,7 +140,7 @@ let
         mainDrv = set.out or set.tex or set.tlpkg or set.texdoc or set.texsource; in
     builtins.removeAttrs mainDrv [ "outputSpecified" ];
   toTLPkgSets = { pkgs, ... }: lib.mapAttrsToList toTLPkgSet
-    (builtins.groupBy (p: p.pname) pkgs);
+    (lib.groupBy (p: p.pname) pkgs);
 
   # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
   allPkgLists = lib.mapAttrs (n: drv: { pkgs = toTLPkgList drv; }) tl;
@@ -137,9 +149,9 @@ let
   # now a legacy wrapper around buildTeXEnv
   combine = import ./combine-wrapper.nix { inherit buildTeXEnv lib toTLPkgList toTLPkgSets; };
 
-  assertions = with lib;
-    assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
+  assertions =
+    lib.assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
+    lib.assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
   # Pre-defined evironment packages for TeX Live schemes,
   # to make nix-env usage more comfortable and build selected on Hydra.
@@ -147,25 +159,16 @@ let
   # these license lists should be the sorted union of the licenses of the packages the schemes contain.
   # The correctness of this collation is tested by tests.texlive.licenses
   licenses = with lib.licenses; {
-    scheme-basic = [ free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
-    scheme-bookpub = [ artistic2 asl20 fdl13Only free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain ];
-    scheme-context = [ bsd2 bsd3 cc-by-sa-40 free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21
-      lppl1 lppl13c mit ofl publicDomain x11 ];
-    scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
-      cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth
-      lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-    scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2
-      gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-    scheme-infraonly = [ gpl2 gpl2Plus lgpl21 ];
-    scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only
-      free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl
-      publicDomain x11 ];
-    scheme-minimal = [ free gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
-    scheme-small = [ asl20 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth
-      lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-    scheme-tetex = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0
-      fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a
-      lppl13c mit ofl publicDomain x11];
+    scheme-basic = [ free gfl gpl1Only gpl2Only gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-bookpub = [ artistic2 asl20 bsd3 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus knuth lgpl21 lppl1 lppl12 lppl13c mit ofl publicDomain ];
+    scheme-context = [ bsd2 bsd3 cc-by-sa-40 eupl12 free gfl gfsl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl13c mit ofl publicDomain x11 ];
+    scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-20 cc-by-30 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gfsl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gfsl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-infraonly = [ gpl2Plus lgpl21 ];
+    scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-minimal = [ free gpl1Only gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-small = [ asl20 cc-by-40 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-tetex = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-30 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
   };
 
   meta = {
@@ -181,7 +184,7 @@ let
       (pname:
         (buildTeXEnv {
           __extraName = "combined" + lib.removePrefix "scheme" pname;
-          __extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
+          __extraVersion = if version.final then "-final" else ".${version.year}${version.month}${version.day}";
           requiredTeXPackages = ps: [ ps.${pname} ];
           # to maintain full backward compatibility, enable texlive.combine behavior
           __combine = true;

@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.envfs;
@@ -7,25 +12,38 @@ let
       device = "none";
       fsType = "envfs";
       options = [
-        "fallback-path=${pkgs.runCommand "fallback-path" {} (''
-          mkdir -p $out
-          ln -s ${config.environment.usrbinenv} $out/env
-          ln -s ${config.environment.binsh} $out/sh
-        '' + cfg.extraFallbackPathCommands)}"
+        "bind-mount=/bin"
+        "fallback-path=${
+          pkgs.runCommand "fallback-path" { } (
+            ''
+              mkdir -p $out
+              ln -s ${config.environment.usrbinenv} $out/env
+              ln -s ${config.environment.binsh} $out/sh
+            ''
+            + cfg.extraFallbackPathCommands
+          )
+        }"
         "nofail"
       ];
     };
+    # We need to bind-mount /bin to /usr/bin, because otherwise upgrading
+    # from envfs < 1.0.5 will cause having the old envs with no /bin bind mount.
+    # Systemd is smart enough to not mount /bin if it's already mounted.
     "/bin" = {
       device = "/usr/bin";
       fsType = "none";
-      options = [ "bind" "nofail" ];
+      options = [
+        "bind"
+        "nofail"
+      ];
     };
   };
-in {
+in
+{
   options = {
     services.envfs = {
-      enable = lib.mkEnableOption (lib.mdDoc "Envfs filesystem") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "Envfs filesystem" // {
+        description = ''
           Fuse filesystem that returns symlinks to executables based on the PATH
           of the requesting process. This is useful to execute shebangs on NixOS
           that assume hard coded locations in locations like /bin or /usr/bin
@@ -37,14 +55,14 @@ in {
         type = lib.types.package;
         default = pkgs.envfs;
         defaultText = lib.literalExpression "pkgs.envfs";
-        description = lib.mdDoc "Which package to use for the envfs.";
+        description = "Which package to use for the envfs.";
       };
 
       extraFallbackPathCommands = lib.mkOption {
         type = lib.types.lines;
         default = "";
         example = "ln -s $''{pkgs.bash}/bin/bash $out/bash";
-        description = lib.mdDoc "Extra commands to run in the package that contains fallback executables in case not other executable is found";
+        description = "Extra commands to run in the package that contains fallback executables in case not other executable is found";
       };
     };
   };

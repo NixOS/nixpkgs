@@ -1,23 +1,26 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.clipmenu;
-in {
+in
+{
 
   options.services.clipmenu = {
-    enable = mkEnableOption (lib.mdDoc "clipmenu, the clipboard management daemon");
+    enable = lib.mkEnableOption "clipmenu, the clipboard management daemon";
 
-    package = mkPackageOption pkgs "clipmenu" { };
+    package = lib.mkPackageOption pkgs "clipmenu" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.clipmenu = {
-      enable      = true;
+      enable = true;
       description = "Clipboard management daemon";
       wantedBy = [ "graphical-session.target" ];
-      after    = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
       serviceConfig.ExecStart = "${cfg.package}/bin/clipmenud";
     };
 

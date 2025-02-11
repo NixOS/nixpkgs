@@ -1,36 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytz
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  pytz,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.15.0";
-  format = "setuptools";
+  version = "5.28.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vO/LzLQ7pA/4KcX48dIM9eH6z4XMbse0xGOJxZPcMfo=";
+    tag = version;
+    hash = "sha256-1hq0XuHb7R/ROkeyEyfGQMH//E632aiNYVSjszM1OEY=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # The dynamic versioning adds a postfix (.dev0) to the version
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >=" \
+      --replace-fail "tomlkit ==" "tomlkit >=" \
+      --replace-fail 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
+      --replace-fail '#readme = "README.rst"' 'version = "${version}"'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     pytz
     tomlkit
   ];
 
+  optional-dependencies = {
+    numpy = [ numpy ];
+    pandas = [
+      numpy
+      pandas
+    ];
+    pyarrow = [ pyarrow ];
+  };
+
   # Missing dependencies
   doCheck = false;
 
-  pythonImportsCheck = [
-    "neo4j"
-  ];
+  pythonImportsCheck = [ "neo4j" ];
 
   meta = with lib; {
     description = "Neo4j Bolt Driver for Python";

@@ -1,15 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pexpect
-, notebook
-, nix
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  isPy3k,
+  pexpect,
+  notebook,
+  nix,
 }:
 
 buildPythonPackage rec {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
+  pyproject = true;
 
   disabled = !isPy3k;
 
@@ -22,14 +25,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace nix-kernel/kernel.py \
-      --replace "'nix'" "'${nix}/bin/nix'" \
-      --replace "'nix repl'" "'${nix}/bin/nix repl'"
+      --replace-fail "'nix'" "'${nix}/bin/nix'" \
+      --replace-fail "'nix repl'" "'${nix}/bin/nix repl'"
 
     substituteInPlace setup.py \
-      --replace "cmdclass={'install': install_with_kernelspec}," ""
+      --replace-fail "cmdclass={'install': install_with_kernelspec}," ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pexpect
     notebook
   ];
@@ -43,6 +48,6 @@ buildPythonPackage rec {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

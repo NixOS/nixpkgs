@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchgit
-, dos2unix
-, qtbase
-, qttools
-, qtx11extras
-, wrapQtAppsHook
-, cmake }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  qtbase,
+  qttools,
+  qtx11extras,
+  wrapQtAppsHook,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qscreenshot";
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   ];
   meta = with lib; {
     description = "Simple creation and editing of screenshots";
+    mainProgram = "qScreenshot";
     homepage = "https://sourceforge.net/projects/qscreenshot/";
     license = licenses.gpl2;
     platforms = platforms.all;

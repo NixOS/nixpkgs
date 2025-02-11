@@ -1,72 +1,72 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  olm,
+  libsignal-ffi,
+  versionCheckHook,
+  # This option enables the use of an experimental pure-Go implementation of
+  # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
+  # is not recommended by the mautrix developers, but they are interested in
+  # people trying it out in non-production-critical environments and reporting
+  # any issues they run into.
+  withGoolm ? false,
+}:
 
-python3.pkgs.buildPythonPackage rec {
+buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.4.3";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-QShyuwHiWRcP1hGkvCQfixvoUQ/FXr2DYC5VrcMKX48=";
+    rev = "v${version}";
+    hash = "sha256-iBZoVfHec9g+W7xaBAAew/aY9h/errwLdC05biFaZ78=";
   };
 
-  postPatch = ''
-    # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
-    substituteInPlace setup.py \
-      --replace 'version=version' 'version="${version}"'
+  buildInputs =
+    (lib.optional (!withGoolm) olm)
+    ++ (lib.optional withGoolm stdenv.cc.cc.lib)
+    ++ [
+      # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+      # see https://github.com/mautrix/signal/issues/401
+      libsignal-ffi
+    ];
+
+  tags = lib.optional withGoolm "goolm";
+
+  CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
+
+  vendorHash = "sha256-RKBewWc98+WpdpXF4QA/ULyZXDR0CKym8KdyeSMd0KA=";
+
+  doCheck = true;
+  preCheck =
+    ''
+      # Needed by the tests to be able to find libstdc++
+      export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+    ''
+    + (lib.optionalString (!withGoolm) ''
+      # When using libolm, the tests need explicit linking to libstdc++
+      export CGO_LDFLAGS="-lstdc++"
+    '');
+
+  postCheck = ''
+    unset LD_LIBRARY_PATH
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "mautrix"
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    commonmark
-    aiohttp
-    aiosqlite
-    asyncpg
-    attrs
-    commonmark
-    mautrix
-    phonenumbers
-    pillow
-    prometheus-client
-    pycryptodome
-    python-olm
-    python-magic
-    qrcode
-    ruamel-yaml
-    unpaddedbase64
-    yarl
-  ];
-
-  doCheck = false;
-
-  postInstall = ''
-    mkdir -p $out/bin
-
-    # Make a little wrapper for running mautrix-signal with its dependencies
-    echo "$mautrixSignalScript" > $out/bin/mautrix-signal
-    echo "#!/bin/sh
-      exec python -m mautrix_signal \"\$@\"
-    " > $out/bin/mautrix-signal
-    chmod +x $out/bin/mautrix-signal
-    wrapProgram $out/bin/mautrix-signal \
-      --prefix PATH : "${python3}/bin" \
-      --prefix PYTHONPATH : "$PYTHONPATH"
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
-    description = "A Matrix-Signal puppeting bridge";
+    description = "Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [
+      niklaskorz
+      ma27
+    ];
     mainProgram = "mautrix-signal";
   };
 }

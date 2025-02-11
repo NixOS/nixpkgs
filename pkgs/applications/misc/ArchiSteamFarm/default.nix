@@ -11,40 +11,44 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "5.4.13.4";
+  version = "6.1.1.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-RQx+E/lxdSgB2ddNIeWOd/S2OMMiznXCbYUXdYKRvCM=";
+    hash = "sha256-e0LzM0N5N7BHyQDRQIPziQrAilJN1aUttKyLod/T8rU=";
   };
 
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "ArchiSteamFarm.sln";
-  executables = [ "ArchiSteamFarm" ];
+  executable = "ArchiSteamFarm";
+
+  enableParallelBuilding = false;
+
+  useAppHost = false;
   dotnetFlags = [
-    "-p:PublishSingleFile=true"
-    "-p:PublishTrimmed=true"
+    # useAppHost doesn't explicitly disable this
+    "-p:UseAppHost=false"
+    "-p:RuntimeIdentifiers="
+  ]
+  ;
+  dotnetBuildFlags = [
+    "--framework=net9.0"
   ];
-  dotnetInstallFlags = [
-    "--framework=net7.0"
-  ];
-  selfContainedBuild = true;
+  dotnetInstallFlags = dotnetBuildFlags;
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
   doCheck = true;
 
-  preBuild = ''
-    export projectFile=(ArchiSteamFarm)
-  '';
-
   preInstall = ''
+    dotnetProjectFiles=(ArchiSteamFarm)
+
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
@@ -57,13 +61,18 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
-        --framework=net7.0
-     }
+        $dotnetFlags $dotnetInstallFlags
+    }
 
-     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
+    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
+    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+
+    chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
+    wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm
+    substituteInPlace $out/bin/ArchiSteamFarm \
+      --replace-fail "exec " "exec dotnet "
   '';
 
   passthru = {
@@ -77,6 +86,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 lom ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

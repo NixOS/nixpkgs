@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsa-lib, libjack2
-, libclxclient, libX11, libXft, readline, aeolus-stops
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libclthreads,
+  zita-alsa-pcmi,
+  alsa-lib,
+  libjack2,
+  libclxclient,
+  libX11,
+  libXft,
+  readline,
+  aeolus-stops,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libclthreads zita-alsa-pcmi alsa-lib libjack2 libclxclient
-    libX11 libXft readline
+    libclthreads
+    zita-alsa-pcmi
+    alsa-lib
+    libjack2
+    libclxclient
+    libX11
+    libXft
+    readline
   ];
 
   postPatch = ''
@@ -23,22 +40,33 @@ stdenv.mkDerivation rec {
 
   preBuild = "cd source";
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=$(out)"
+  ];
 
-  postInstall = let cfg = ''
-    # Aeolus system wide default options
-    # Ignored if ~/.aeolusrc with local options exists
-    -u -S ${aeolus-stops}/${aeolus-stops.subdir}
-  ''; in ''
-    mkdir -p $out/etc
-    echo -n "${cfg}" > $out/etc/aeolus.conf
-  '';
+  postInstall =
+    let
+      cfg = ''
+        # Aeolus system wide default options
+        # Ignored if ~/.aeolusrc with local options exists
+        -u -S ${aeolus-stops}/${aeolus-stops.subdir}
+      '';
+    in
+    ''
+      mkdir -p $out/etc
+      echo -n "${cfg}" > $out/etc/aeolus.conf
+    '';
 
   meta = with lib; {
     description = "Synthetized (not sampled) pipe organ emulator";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/aeolus/index.html";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nico202 orivej ];
+    maintainers = with maintainers; [
+      nico202
+      orivej
+    ];
+    mainProgram = "aeolus";
   };
 }

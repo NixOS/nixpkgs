@@ -1,4 +1,10 @@
-{ buildDunePackage, fetchFromGitHub, lib, printbox-text, reason }:
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  lib,
+  printbox-text,
+  reason,
+}:
 
 buildDunePackage rec {
   pname = "reperf";
@@ -35,7 +41,7 @@ buildDunePackage rec {
       Outputs a JSON performance report, and compare it with previous iterations - and fail if a regression is detected.
     '';
     homepage = "https://github.com/bryphe/reperf";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

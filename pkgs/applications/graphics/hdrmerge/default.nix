@@ -1,27 +1,28 @@
-{ lib
-, mkDerivation
-, fetchpatch
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
-, libraw
-, exiv2
-, zlib
-, alglib
-, pkg-config
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  mkDerivation,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  wrapQtAppsHook,
+  libraw,
+  exiv2,
+  zlib,
+  alglib,
+  pkg-config,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 mkDerivation rec {
   pname = "hdrmerge";
-  version = "unstable-2023-01-04";
+  version = "0.5.0-unstable-2024-08-02";
   src = fetchFromGitHub {
     owner = "jcelaya";
     repo = "hdrmerge";
-    rev = "ca38b54f980564942a7f2b014a5f57a64c1d9019";
-    hash = "sha256-DleYgpDXP0NvbmEURXnBfe3OYnT1CaQq+Mw93JQQprE=";
+    rev = "e2a46f97498b321b232cc7f145461212677200f1";
+    hash = "sha256-471gJtF9M36pAId9POG8ZIpNk9H/157EdHqXSAPlhN0=";
   };
 
   nativeBuildInputs = [
@@ -31,19 +32,21 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ qtbase libraw exiv2 zlib alglib ];
+  buildInputs = [
+    qtbase
+    libraw
+    exiv2
+    zlib
+    alglib
+  ];
 
   cmakeFlags = [
     "-DALGLIB_DIR:PATH=${alglib}"
   ];
 
-  patches = [
-    # https://github.com/jcelaya/hdrmerge/pull/222
-    (fetchpatch {
-      name = "exiv2-0.28.patch";
-      url = "https://github.com/jcelaya/hdrmerge/commit/377d8e6f3c7cdd1a45b63bce2493ad177dde03fb.patch";
-      hash = "sha256-lXHML6zGkVeWKvmY5ECoJL2xjmtZz77XJd5prpgJiZo=";
-    })
+  CXXFLAGS = [
+    # GCC 13: error: 'uint32_t' does not name a type
+    "-include cstdint"
   ];
 
   desktopItems = [
@@ -55,7 +58,10 @@ mkDerivation rec {
       icon = "hdrmerge";
       exec = "hdrmerge %F";
       categories = [ "Graphics" ];
-      mimeTypes = [ "image/x-dcraw" "image/x-adobe-dng" ];
+      mimeTypes = [
+        "image/x-dcraw"
+        "image/x-adobe-dng"
+      ];
       terminal = false;
     })
   ];
@@ -67,6 +73,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jcelaya/hdrmerge";
     description = "Combines two or more raw images into an HDR";
+    mainProgram = "hdrmerge";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.paperdigits ];

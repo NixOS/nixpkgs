@@ -1,25 +1,59 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, bison, flex, pkg-config
-, curl, geoip, libmaxminddb, libxml2, lmdb, lua, pcre, pcre2, ssdeep, yajl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
+  curl,
+  geoip,
+  libmaxminddb,
+  libxml2,
+  lmdb,
+  lua,
+  pcre,
+  pcre2,
+  ssdeep,
+  yajl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
-  version = "3.0.10";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
-    owner = "SpiderLabs";
+    owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${version}";
-    sha256 = "sha256-VaoPpJ0twuGWU7G9AvKK4kq9Ed0BeG2J7B81sOuJVrE=";
+    hash = "sha256-+z31t007NLCAFG/Lsj5j/AbBDPkI2wjbH5yM5vipH04=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
-  buildInputs = [ curl geoip libmaxminddb libxml2 lmdb lua pcre pcre2 ssdeep yajl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+  ];
+  buildInputs = [
+    curl
+    geoip
+    libmaxminddb
+    libxml2
+    lmdb
+    lua
+    pcre
+    pcre2
+    ssdeep
+    yajl
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
     "--enable-parser-generation"
@@ -61,7 +95,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/SpiderLabs/ModSecurity";
+    homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     description = ''
       ModSecurity v3 library component.
     '';

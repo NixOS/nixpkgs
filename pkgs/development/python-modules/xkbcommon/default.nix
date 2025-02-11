@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pkg-config
-, libxkbcommon
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
+  pkg-config,
+  libxkbcommon,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xkbcommon";
-  version = "0.8";
+  version = "1.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-W+WXO/W3UlaHpN9shHibQhWQ1/fPkq5W8qqxd7eV1RY=";
+    hash = "sha256-rBdICNv2HTXZ2oBL8zuqx0vG8r4MEIWUrpPHnNFd3DY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

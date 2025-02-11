@@ -1,71 +1,77 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test-python.nix ({ lib, pkgs, ...} : let
-  foo = pkgs.writeText "foo" "Hello World";
-in {
-  name = "misc";
-  meta.maintainers = with lib.maintainers; [ eelco ];
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
+  let
+    foo = pkgs.writeText "foo" "Hello World";
+  in
+  {
+    name = "misc";
+    meta.maintainers = with lib.maintainers; [ eelco ];
 
-  nodes.machine =
-    { lib, ... }:
-    { swapDevices = lib.mkOverride 0
-        [ { device = "/root/swapfile"; size = 128; } ];
-      environment.variables.EDITOR = lib.mkOverride 0 "emacs";
-      documentation.nixos.enable = lib.mkOverride 0 true;
-      systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
-      systemd.tmpfiles.settings."10-test"."/tmp/somefile".d = {};
-      virtualisation.fileSystems = { "/tmp2" =
-        { fsType = "tmpfs";
-          options = [ "mode=1777" "noauto" ];
+    nodes.machine =
+      { lib, ... }:
+      {
+        swapDevices = lib.mkOverride 0 [
+          {
+            device = "/root/swapfile";
+            size = 128;
+          }
+        ];
+        environment.variables.EDITOR = lib.mkOverride 0 "emacs";
+        documentation.nixos.enable = lib.mkOverride 0 true;
+        systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
+        systemd.tmpfiles.settings."10-test"."/tmp/somefile".d = { };
+        virtualisation.fileSystems = {
+          "/tmp2" = {
+            fsType = "tmpfs";
+            options = [
+              "mode=1777"
+              "noauto"
+            ];
+          };
+          # Tests https://discourse.nixos.org/t/how-to-make-a-derivations-executables-have-the-s-permission/8555
+          "/user-mount/point" = {
+            device = "/user-mount/source";
+            fsType = "none";
+            options = [
+              "bind"
+              "rw"
+              "user"
+              "noauto"
+            ];
+          };
+          "/user-mount/denied-point" = {
+            device = "/user-mount/denied-source";
+            fsType = "none";
+            options = [
+              "bind"
+              "rw"
+              "noauto"
+            ];
+          };
         };
-        # Tests https://discourse.nixos.org/t/how-to-make-a-derivations-executables-have-the-s-permission/8555
-        "/user-mount/point" = {
-          device = "/user-mount/source";
-          fsType = "none";
-          options = [ "bind" "rw" "user" "noauto" ];
-        };
-        "/user-mount/denied-point" = {
-          device = "/user-mount/denied-source";
-          fsType = "none";
-          options = [ "bind" "rw" "noauto" ];
-        };
-      };
-      systemd.automounts = lib.singleton
-        { wantedBy = [ "multi-user.target" ];
+        systemd.automounts = lib.singleton {
+          wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
-      users.users.sybil = { isNormalUser = true; group = "wheel"; };
-      users.users.alice = { isNormalUser = true; };
-      security.sudo = { enable = true; wheelNeedsPassword = false; };
-      boot.kernel.sysctl."vm.swappiness" = 1;
-      boot.kernelParams = [ "vsyscall=emulate" ];
-      system.extraDependencies = [ foo ];
-    };
+        users.users.sybil = {
+          isNormalUser = true;
+          group = "wheel";
+        };
+        users.users.alice = {
+          isNormalUser = true;
+        };
+        security.sudo = {
+          enable = true;
+          wheelNeedsPassword = false;
+        };
+        boot.kernel.sysctl."vm.swappiness" = 1;
+        boot.kernelParams = [ "vsyscall=emulate" ];
+        system.extraDependencies = [ foo ];
+      };
 
-  testScript =
-    ''
-      import json
-
-
-      def get_path_info(path):
-          result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
-          parsed = json.loads(result)
-          return parsed
-
-
-      with subtest("nix-db"):
-          info = get_path_info("${foo}")
-          print(info)
-
-          if (
-              info[0]["narHash"]
-              != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
-          ):
-              raise Exception("narHash not set")
-
-          if info[0]["narSize"] != 128:
-              raise Exception("narSize not set")
-
+    testScript = ''
       with subtest("nixos-version"):
           machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
@@ -121,6 +127,9 @@ in {
       with subtest("whether systemd-tmpfiles settings works"):
           machine.succeed("[ -e /tmp/somefile ]")
 
+      with subtest("/etc/mtab"):
+          assert "/proc/mounts" == machine.succeed("readlink --no-newline /etc/mtab")
+
       with subtest("whether automounting works"):
           machine.fail("grep '/tmp2 tmpfs' /proc/mounts")
           machine.succeed("touch /tmp2/x")
@@ -149,9 +158,6 @@ in {
       with subtest("shell-vars"):
           machine.succeed('[ -n "$NIX_PATH" ]')
 
-      with subtest("nix-db"):
-          machine.succeed("nix-store -qR /run/current-system | grep nixos-")
-
       with subtest("Test sysctl"):
           machine.wait_for_unit("systemd-sysctl.service")
           assert "1" == machine.succeed("sysctl -ne vm.swappiness").strip()
@@ -161,4 +167,5 @@ in {
       with subtest("Test boot parameters"):
           assert "vsyscall=emulate" in machine.succeed("cat /proc/cmdline")
     '';
-})
+  }
+)

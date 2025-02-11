@@ -1,23 +1,24 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nix-update-script
-, gettext
-, meson
-, ninja
-, python3
-, sassc
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
+  gettext,
+  meson,
+  ninja,
+  python3,
+  sassc,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "7.3.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
     rev = version;
-    sha256 = "sha256-KrpeDQH43n7seeSPVYKETxy1g0JuUowZerjgktLQg/4=";
+    sha256 = "sha256-l7E5o7JNqfJZzKpyvsjIVd2i9fwLh4Qn8oJ/S5RlFQ8=";
   };
 
   nativeBuildInputs = [

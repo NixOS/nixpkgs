@@ -1,28 +1,55 @@
-{ mkDerivation, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake }:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  doxygen,
+  glib,
+  libaccounts-glib,
+  pkg-config,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qt";
-  version = "1.16";
+  version = "1.17";
 
+  # pinned to fork with Qt6 support
   src = fetchFromGitLab {
-    sha256 = "1vmpjvysm0ld8dqnx8msa15hlhrkny02cqycsh4k2azrnijg0xjz";
-    rev = "VERSION_${version}";
-    repo = "libaccounts-qt";
     owner = "accounts-sso";
+    repo = "libaccounts-qt";
+    rev = "refs/tags/VERSION_${finalAttrs.version}";
+    hash = "sha256-mPZgD4r7vlUP6wklvZVknGqTXZBckSOtNzK7p6e2qSA=";
   };
 
-  propagatedBuildInputs = [ glib libaccounts-glib ];
-  nativeBuildInputs = [ doxygen pkg-config qmake ];
+  propagatedBuildInputs = [
+    glib
+    libaccounts-glib
+  ];
+  buildInputs = [ qtbase ];
+  nativeBuildInputs = [
+    doxygen
+    pkg-config
+    qmake
+    wrapQtAppsHook
+  ];
 
-  # remove forbidden references to $TMPDIR
+  # remove forbidden references to /build
   preFixup = ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "VERSION_";
+  };
+
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";
-    homepage = "https://gitlab.com/accounts-sso";
+    mainProgram = "accountstest";
+    homepage = "https://gitlab.com/accounts-sso/libaccounts-qt";
     license = licenses.lgpl21;
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
-}
+})

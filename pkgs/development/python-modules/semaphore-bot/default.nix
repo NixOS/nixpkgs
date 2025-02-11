@@ -1,26 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, attrs
-, anyio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  python-dateutil,
+  attrs,
+  anyio,
 }:
 
 buildPythonPackage rec {
   pname = "semaphore-bot";
-  version = "0.16.0";
-  format = "setuptools";
+  version = "0.17.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-EOUvzW4a8CgyQSxb2fXnIWfOYs5Xe0v794vDIruSHmI=";
+    hash = "sha256-3zb6+HdOB6+YrVRcmIHsokFKUOlFmKCoVNllvM+aOXQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "anyio>=3.5.0,<=3.6.2" "anyio"
-  '';
+  pythonRelaxDeps = [
+    "anyio"
+    "attrs"
+    "python-dateutil"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     anyio
     attrs
     python-dateutil

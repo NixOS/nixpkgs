@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, fetchpatch
-# Python deps
-, mando
-, colorama
-, pytest-mock
-, tomli
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  fetchpatch,
+  # Python deps
+  mando,
+  colorama,
+  pytest-mock,
+  tomli,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,15 +45,15 @@ buildPythonPackage rec {
     colorama
   ];
 
-  passthru.optional-dependencies = {
-    toml = [
-      tomli
-    ];
+  pythonRelaxDeps = [
+    "mando"
+  ];
+
+  optional-dependencies = {
+    toml = [ tomli ];
   };
 
-  pythonImportsCheck = [
-    "radon"
-  ];
+  pythonImportsCheck = [ "radon" ];
 
   meta = with lib; {
     description = "Various code metrics for Python code";

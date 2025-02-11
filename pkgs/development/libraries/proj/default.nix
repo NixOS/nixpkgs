@@ -1,29 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, buildPackages
-, callPackage
-, sqlite
-, libtiff
-, curl
-, gtest
-, nlohmann_json
-, python3
-, cacert
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  buildPackages,
+  callPackage,
+  sqlite,
+  libtiff,
+  curl,
+  gtest,
+  nlohmann_json,
+  python3,
+  cacert,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.3.0";
+  version = "9.5.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
-    rev = version;
-    hash = "sha256-M1KUXzht4qIjPfHxvzPr7XUnisMwtbegKp18XQjNYHg=";
+    rev = finalAttrs.version;
+    hash = "sha256-gKfsuznAhq29sOw78gpQ7TNZ6xCgmDBad3TcqFzoWVc=";
   };
 
   patches = [
@@ -31,13 +31,27 @@ stdenv.mkDerivation (finalAttrs: rec {
     ./only-add-curl-for-static-builds.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ sqlite libtiff curl nlohmann_json ];
+  buildInputs = [
+    sqlite
+    libtiff
+    curl
+    nlohmann_json
+  ];
 
-  nativeCheckInputs = [ cacert gtest ];
+  nativeCheckInputs = [
+    cacert
+    gtest
+  ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -45,16 +59,20 @@ stdenv.mkDerivation (finalAttrs: rec {
     "-DNLOHMANN_JSON_ORIGIN=external"
     "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
+  CXXFLAGS = [
+    # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+    "-include cstdint"
+  ];
 
   preCheck =
     let
-      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
-      ''
-        export HOME=$TMPDIR
-        export TMP=$TMPDIR
-        export ${libPathEnvVar}=$PWD/lib
-      '';
+    ''
+      export HOME=$TMPDIR
+      export TMP=$TMPDIR
+      export ${libPathEnvVar}=$PWD/lib
+    '';
 
   doCheck = true;
 
@@ -64,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/NEWS";
+    changelog = "https://github.com/OSGeo/PROJ/blob/${finalAttrs.src.rev}/NEWS";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;

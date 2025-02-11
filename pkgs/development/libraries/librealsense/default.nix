@@ -2,13 +2,13 @@
 , config
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , libusb1
+, nlohmann_json
 , ninja
 , pkg-config
 , gcc
-, mesa
+, libgbm
 , gtk3
 , glfw
 , libGLU
@@ -23,7 +23,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.45.0";
+  version = "2.56.3";
 
   outputs = [ "out" "dev" ];
 
@@ -31,37 +31,36 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0aqf48zl7825v7x8c3x5w4d17m4qq377f1mn6xyqzf9b0dnk4i1j";
+    sha256 = "sha256-Stx337mGcpMCg9DlZmvX4LPQmCSzLRFcUQPxaD/Y0Ds=";
   };
 
   buildInputs = [
     libusb1
     gcc.cc.lib
-  ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    nlohmann_json
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
-    ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
+    ++ lib.optionals enableGUI [ libgbm gtk3 glfw libGLU curl ];
 
   patches = [
-    # fix build on aarch64-darwin
-    # https://github.com/IntelRealSense/librealsense/pull/9253
-    (fetchpatch {
-      url = "https://github.com/IntelRealSense/librealsense/commit/beb4c44debc8336de991c983274cad841eb5c323.patch";
-      sha256 = "05mxsd2pz3xrvywdqyxkwdvxx8hjfxzcgl51897avz4v2j89pyq8";
-    })
-    ./py_sitepackage_dir.patch
     ./py_pybind11_no_external_download.patch
+    ./install-presets.patch
   ];
 
   postPatch = ''
-    # https://github.com/IntelRealSense/librealsense/issues/11092
-    # insert a "#include <iostream" at beginning of file
-    sed '1i\#include <iostream>' -i wrappers/python/pyrs_device.cpp
+    # use nixpkgs nlohmann_json instead of fetching it
+    substituteInPlace third-party/CMakeLists.txt \
+      --replace-fail \
+        'include(CMake/external_json.cmake)' \
+        'find_package(nlohmann_json 3.11.3 REQUIRED)'
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
@@ -80,13 +79,13 @@ stdenv.mkDerivation rec {
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
   postInstall = ''
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
-    --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+    --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '' + lib.optionalString enablePython  ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
   meta = with lib; {
-    description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
+    description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn pbsds ];

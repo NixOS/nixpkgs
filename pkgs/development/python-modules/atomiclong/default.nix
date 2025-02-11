@@ -1,16 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, cffi }:
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "atomiclong";
   version = "0.1.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
+    hash = "sha256-yxN4xM1nbW8kNkHFDid1BKv0X3Dx6nbkRu/Nu2liS74=";
   };
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs = [ cffi ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  dependencies = [ cffi ];
+
+  pythonImportsCheck = [ "atomiclong" ];
 
   meta = with lib; {
     description = "Long data type with atomic operations using CFFI";

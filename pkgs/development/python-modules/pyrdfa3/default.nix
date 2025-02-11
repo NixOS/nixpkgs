@@ -1,50 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPy27
-, rdflib
-, html5lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  html5lib,
+  pythonOlder,
+  rdflib,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyrdfa3";
-  version = "3.5.3";
-  disabled = isPy27;
+  version = "3.6.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit version;
-    pname = "pyRdfa3";
-    hash = "sha256-FXZjqSuH3zRbb2m94jXf9feXiRYI4S/h5PqNrWhxMa4=";
+    inherit pname version;
+    hash = "sha256-ZHEtGkvyGCllKzlxW62m58A7zxnLSfliwZCjj0YXIkM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-4396.patch";
-      url = "https://github.com/RDFLib/pyrdfa3/commit/ffd1d62dd50d5f4190013b39cedcdfbd81f3ce3e.patch";
-      hash = "sha256-prRrOwylYcEqKLr/8LIpyJ5Yyt+6+HTUqH5sQXU8tqc=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'html = pyRdfa.rdflibparsers:StructuredDataParser'" "'html = pyRdfa.rdflibparsers:StructuredDataParser'," \
-      --replace "'hturtle = pyRdfa.rdflibparsers:HTurtleParser'" "'hturtle = pyRdfa.rdflibparsers:HTurtleParser',"
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     rdflib
     html5lib
+    requests
   ];
 
-  # Does not work with python3
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "pyRdfa" ];
 
   meta = with lib; {
     description = "RDFa 1.1 distiller/parser library";
-    homepage = "https://www.w3.org/2012/pyRdfa/";
+    homepage = "https://github.com/prrvchr/pyrdfa3/";
+    changelog = "https://github.com/prrvchr/pyrdfa3/releases/tag/v${version}";
     license = licenses.w3c;
     maintainers = with maintainers; [ ambroisie ];
   };

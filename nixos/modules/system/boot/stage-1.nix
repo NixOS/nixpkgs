@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, utils, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -13,15 +13,11 @@ let
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
 
-  modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
-  firmware = config.hardware.firmware;
-
-
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
     rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = modulesTree;
-    firmware = firmware;
+    kernel = config.system.modulesTree;
+    firmware = config.hardware.firmware;
     allowMissing = false;
   };
 
@@ -135,6 +131,7 @@ let
 
       # Copy udev.
       copy_bin_and_libs ${udev}/bin/udevadm
+      cp ${lib.getLib udev.kmod}/lib/libkmod.so* $out/lib
       copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       for BIN in ${udev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
@@ -292,11 +289,8 @@ let
 
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
-  bootStage1 = pkgs.substituteAll {
+  bootStage1 = pkgs.replaceVarsWith {
     src = ./stage-1-init.sh;
-
-    shell = "${extraUtils}/bin/ash";
-
     isExecutable = true;
 
     postInstall = ''
@@ -307,35 +301,39 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit linkUnits udevRules extraUtils;
+    replacements = {
+      shell = "${extraUtils}/bin/ash";
 
-    inherit (config.boot) resumeDevice;
+      inherit linkUnits udevRules extraUtils;
 
-    inherit (config.system.nixos) distroName;
+      inherit (config.boot) resumeDevice;
 
-    inherit (config.system.build) earlyMountScript;
+      inherit (config.system.nixos) distroName;
 
-    inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
+      inherit (config.system.build) earlyMountScript;
 
-    resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
-                             # Don't include zram devices
-                             && !(hasPrefix "/dev/zram" sd.device)
-                            ) config.swapDevices);
+      inherit (config.boot.initrd) checkJournalingFS verbose
+        preLVMCommands preDeviceCommands postDeviceCommands postResumeCommands postMountCommands preFailCommands kernelModules;
 
-    fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
-      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+      resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
+                      (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
+                               # Don't include zram devices
+                               && !(hasPrefix "/dev/zram" sd.device)
+                              ) config.swapDevices);
 
-    setHostId = optionalString (config.networking.hostId != null) ''
-      hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
-        echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
-      '' else ''
-        echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
-      ''}
-    '';
+      fsInfo =
+        let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
+        in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
+
+      setHostId = optionalString (config.networking.hostId != null) ''
+        hi="${config.networking.hostId}"
+        ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
+          echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
+        '' else ''
+          echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
+        ''}
+      '';
+    };
   };
 
 
@@ -352,13 +350,7 @@ let
         { object = "${modulesClosure}/lib";
           symlink = "/lib";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+        { object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = config.environment.etc."modprobe.d/nixos.conf".source;
@@ -414,7 +406,7 @@ let
         ${lib.optionalString (config.boot.initrd.secrets == {})
             "exit 0"}
 
-        export PATH=${pkgs.coreutils}/bin:${pkgs.libarchive}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
         function cleanup {
           if [ -n "$tmp" -a -d "$tmp" ]; then
@@ -435,7 +427,7 @@ let
          }
 
         # mindepth 1 so that we don't change the mode of /
-        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
@@ -448,7 +440,7 @@ in
       type = types.str;
       default = "";
       example = "/dev/sda3";
-      description = lib.mdDoc ''
+      description = ''
         Device for manual resume attempt during boot. This should be used primarily
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
@@ -461,7 +453,7 @@ in
       type = types.bool;
       default = !config.boot.isContainer;
       defaultText = literalExpression "!config.boot.isContainer";
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
         network/encrypted file systems) before continuing the boot process.
@@ -475,11 +467,11 @@ in
           options = {
             source = mkOption {
               type = types.package;
-              description = lib.mdDoc "The object to make available inside the initrd.";
+              description = "The object to make available inside the initrd.";
             };
           };
         });
-      description = lib.mdDoc ''
+      description = ''
         Extra files to link and copy in to the initrd.
       '';
     };
@@ -487,7 +479,7 @@ in
     boot.initrd.prepend = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         Other initrd files to prepend to the final initrd we are building.
       '';
     };
@@ -495,7 +487,7 @@ in
     boot.initrd.checkJournalingFS = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether to run {command}`fsck` on journaling filesystems such as ext3.
       '';
     };
@@ -503,7 +495,7 @@ in
     boot.initrd.preLVMCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately before LVM discovery.
       '';
     };
@@ -511,7 +503,7 @@ in
     boot.initrd.preDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed before udev is started to create
         device nodes.
       '';
@@ -520,7 +512,7 @@ in
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
         {file}`/dev`.
@@ -530,7 +522,7 @@ in
     boot.initrd.postResumeCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately after attempting to resume.
       '';
     };
@@ -538,7 +530,7 @@ in
     boot.initrd.postMountCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
       '';
@@ -547,7 +539,7 @@ in
     boot.initrd.preFailCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed before the failure prompt is shown.
       '';
     };
@@ -556,7 +548,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
         additional utilities in the initial ramdisk.
@@ -567,7 +559,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation after patchelf has done its
         job.  This can be used to test additional utilities
@@ -579,7 +571,7 @@ in
       internal = true;
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands to be executed in the builder of the
         udev-rules derivation.  This can be used to add
         additional udev rules in the initial ramdisk.
@@ -594,7 +586,7 @@ in
       );
       defaultText = literalMD "`zstd` if the kernel supports it (5.9+), `gzip` if not";
       type = types.either types.str (types.functionTo types.str);
-      description = lib.mdDoc ''
+      description = ''
         The compressor to use on the initrd image. May be any of:
 
         - The name of one of the predefined compressors, see {file}`pkgs/build-support/kernel/initrd-compressor-meta.nix` for the definitions.
@@ -609,18 +601,22 @@ in
     boot.initrd.compressorArgs = mkOption {
       default = null;
       type = types.nullOr (types.listOf types.str);
-      description = lib.mdDoc "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
+      description = "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
     };
 
     boot.initrd.secrets = mkOption
       { default = {};
         type = types.attrsOf (types.nullOr types.path);
-        description =
-          lib.mdDoc ''
+        description = ''
             Secrets to append to the initrd. The attribute name is the
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
             path inside and out).
+
+            Note that `nixos-rebuild switch` will generate the initrd
+            also for past generations, so if secrets are moved or deleted
+            you will also have to garbage collect the generations that
+            use those secrets.
           '';
         example = literalExpression
           ''
@@ -631,17 +627,14 @@ in
       };
 
     boot.initrd.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc "Names of supported filesystem types in the initial ramdisk.";
+      default = { };
+      inherit (options.boot.supportedFilesystems) example type description;
     };
 
     boot.initrd.verbose = mkOption {
       default = true;
       type = types.bool;
-      description =
-        lib.mdDoc ''
+      description = ''
           Verbosity of the initrd. Please note that disabling verbosity removes
           only the mandatory messages generated by the NixOS scripts. For a
           completely silent boot, you might also want to set the two following
@@ -656,8 +649,7 @@ in
       { internal = true;
         default = false;
         type = types.bool;
-        description =
-          lib.mdDoc ''
+        description = ''
             Whether the bootloader setup runs append-initrd-secrets.
             If not, any needed secrets must be copied into the initrd
             and thus added to the store.
@@ -669,7 +661,7 @@ in
         options.neededForBoot = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             If set, this file system will be mounted in the initial ramdisk.
             Note that the file system will always be mounted in the initial
             ramdisk if its mount point is one of the following:
@@ -685,7 +677,7 @@ in
 
   config = mkIf config.boot.initrd.enable {
     assertions = [
-      { assertion = any (fs: fs.mountPoint == "/") fileSystems;
+      { assertion = !config.boot.initrd.systemd.enable -> any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";
       }
       { assertion = let inherit (config.boot) resumeDevice; in

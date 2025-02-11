@@ -1,19 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, nix, s2n-tls, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-cal,
+  aws-c-common,
+  nix,
+  s2n-tls,
+  Security,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
-  version = "0.13.29";
+  # nixpkgs-update: no auto update
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZeogbjgpbqdCioLeb34CRol1Fa5BJOloAxxgE50yfQs=";
+    hash = "sha256-/pG/+MHAu/TYTtY/RQrr1U1ev2FZ1p/O8kIRUDDOcvQ=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-cal aws-c-common s2n-tls ];
+  buildInputs = [
+    aws-c-cal
+    aws-c-common
+    s2n-tls
+  ];
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cmakeFlags = [

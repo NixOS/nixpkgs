@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gi-docgen
-, glib
-, json-glib
-, libsoup_3
-, libxml2
-, gobject-introspection
-, gnome
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gi-docgen,
+  glib,
+  json-glib,
+  libsoup_3,
+  libxml2,
+  gobject-introspection,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rest";
   version = "0.9.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -91,7 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Helper library for RESTful services";
-    homepage = "https://wiki.gnome.org/Projects/Librest";
+    homepage = "https://gitlab.gnome.org/GNOME/librest";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, libiconv
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  rustPlatform,
+  libiconv,
+  fetchFromGitHub,
+  darwin,
 }:
 let
   pname = "nh3";
-  version = "0.2.13";
+  version = "0.2.20";
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NILPy+lC0jhOF6ykriUPZWHLlSYBC00tpDdfJ6XjcjA=";
+    hash = "sha256-N+xMS1sb3Qq80eNaI5GUACjCHaCba2d8zZeizayy4kY=";
   };
 in
 buildPythonPackage {
   inherit pname version src;
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Ror2KcIdSeXHa44eUWGiPsKiD935hsBREREySbGedxA=";
+    hash = "sha256-cYdwN/PpG1ae6lBRk5usXSwBjH37BpQEp5JLLQ2NRNU=";
   };
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];

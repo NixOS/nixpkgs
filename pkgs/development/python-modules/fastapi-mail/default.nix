@@ -1,59 +1,59 @@
-{ lib
-, aioredis
-, aiosmtplib
-, blinker
-, buildPythonPackage
-, email-validator
-, fakeredis
-, fastapi
-, fetchFromGitHub
-, httpx
-, jinja2
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, python-multipart
-, pythonOlder
+{
+  lib,
+  aiosmtplib,
+  blinker,
+  buildPythonPackage,
+  email-validator,
+  fakeredis,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  poetry-core,
+  pydantic-settings,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.3.1";
-  format = "pyproject";
+  version = "1.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sabuhish";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-m8d4y75+mSh9A+YVaV/yZhN3ckOe2mV1jdtfeNFtU/w=";
+    repo = "fastapi-mail";
+    tag = version;
+    hash = "sha256-QypW7yE5jBkS1Q4XPIOktWnCmCXGoUzZF/SdWmFsPX8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "1.2.5"' 'version = "${version}"' \
-      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
-      --replace 'pydantic = "^1.8"' 'pydantic = "*"' \
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "aiosmtplib"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
-    aioredis
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiosmtplib
     blinker
     email-validator
     fakeredis
-    fastapi
-    httpx
     jinja2
     pydantic
-    python-multipart
+    pydantic-settings
+    starlette
   ];
+
+  optional-dependencies = {
+    httpx = [ httpx ];
+    redis = [ redis ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -66,9 +66,7 @@ buildPythonPackage rec {
     "test_redis_checker"
   ];
 
-  pythonImportsCheck = [
-    "fastapi_mail"
-  ];
+  pythonImportsCheck = [ "fastapi_mail" ];
 
   meta = with lib; {
     description = "Module for sending emails and attachments";

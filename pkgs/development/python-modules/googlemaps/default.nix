@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlemaps";
     repo = "google-maps-services-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8oGZEMKUGaDHKq4qIZy10cbLNMmVclJnQE/dx877pNQ=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     "test_transit_without_time"
   ];
 
-  pythonImportsCheck = [
-    "googlemaps"
-  ];
+  pythonImportsCheck = [ "googlemaps" ];
 
   meta = with lib; {
     description = "Python client library for Google Maps API Web Services";

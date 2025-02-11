@@ -1,49 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, wayfire
-, wf-config
-, gtkmm3
-, gtk-layer-shell
-, libevdev
-, libinput
-, libxkbcommon
-, xcbutilwm
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  wayland-scanner,
+  wf-config,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  nlohmann_json,
+  xcbutilwm,
+  gtkmm3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire-plugins-extra";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire-plugins-extra";
     rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-OVyP1AgZ1d9DXFkbHnROwtSQIquEX5ccVIkcmCdDZtA=";
+    hash = "sha256-TukDomxqfrM45+C7azfO8jVaqk3E5irdphH8U5IYItg=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "check-dependency-libevdev.patch";
-      url = "https://github.com/WayfireWM/wayfire-plugins-extra/commit/f3bbf1fcbafd28016e36be7a5043bd82574ac9e4.patch";
-      hash = "sha256-8X1lpf8H8NuA845cIslahKDQKW/IA/KiMExU4Snk72o=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace metadata/meson.build \
-      --replace "wayfire.get_variable(pkgconfig: 'metadatadir')" "join_paths(get_option('prefix'), 'share/wayfire/metadata')"
-  '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -52,12 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libinput
     libxkbcommon
+    nlohmann_json
     xcbutilwm
     gtkmm3
-    gtk-layer-shell
   ];
 
-  mesonFlags = [ "--sysconfdir /etc" ];
+  mesonFlags = [
+    # plugins in submodule, packaged individually
+    (lib.mesonBool "enable_windecor" false)
+    (lib.mesonBool "enable_wayfire_shadows" false)
+    (lib.mesonBool "enable_focus_request" false)
+  ];
+
+  env = {
+    PKG_CONFIG_WAYFIRE_METADATADIR = "${placeholder "out"}/share/wayfire/metadata";
+  };
 
   meta = {
     homepage = "https://github.com/WayfireWM/wayfire-plugins-extra";

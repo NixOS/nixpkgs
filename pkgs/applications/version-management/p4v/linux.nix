@@ -1,31 +1,41 @@
-{ stdenv
-, autoPatchelfHook
-, cups
-, dbus
-, fontconfig
-, gccForLibs
-, libX11
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libinput
-, libxcb
-, libxkbcommon
-, nss
-, qttools
-, qtwebengine
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilrenderutil
-, xcbutilwm
+{
+  stdenv,
+  autoPatchelfHook,
+  cups,
+  dbus,
+  fontconfig,
+  gccForLibs,
+  libX11,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libinput,
+  libxcb,
+  libxkbcommon,
+  nss,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwebview,
+  xcbutilimage,
+  xcbutilkeysyms,
+  xcbutilrenderutil,
+  xcbutilwm,
 }:
 
-{ pname, version, src, meta }:
+{
+  pname,
+  version,
+  src,
+  meta,
+}:
 let
   unwrapped = stdenv.mkDerivation {
     pname = "${pname}-unwrapped";
@@ -50,8 +60,12 @@ let
       libxcb
       libxkbcommon
       nss
+      qtbase
+      qtmultimedia
+      qtsvg
       qttools
       qtwebengine
+      qtwebview
       xcbutilimage
       xcbutilkeysyms
       xcbutilrenderutil
@@ -63,10 +77,19 @@ let
     # Don't wrap the Qt apps; upstream has its own wrapper scripts.
     dontWrapQtApps = true;
 
+    postPatch = ''
+      rm -r lib/plugins lib/libQt6* lib/libssl* lib/libicu* lib/libcrypto*
+    '';
+
     installPhase = ''
       mkdir -p $out
       cp -r bin lib $out
       addAutoPatchelfSearchPath $out/lib
+      ln -s "${qtbase}/${qtbase.qtPluginPrefix}" $out/lib/plugins
+    '';
+
+    preFixup = ''
+      patchelf --clear-symbol-version close $out/bin/p4{v,admin}.bin
     '';
   };
 in

@@ -1,38 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, xlsxwriter
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  lxml,
+  pillow,
+  typing-extensions,
+  xlsxwriter,
 }:
+
 buildPythonPackage rec {
   pname = "python-pptx";
-  version = "0.6.23";
+  version = "1.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WHSX/yjneasY27B09tQFKJPIXe3JXtdd8xk2TzMf7e4=";
+  src = fetchFromGitHub {
+    owner = "scanny";
+    repo = "python-pptx";
+    rev = "v${version}";
+    hash = "sha256-KyBttTAtP8sVPjYdrY0XReB+4Xfru8GdyYWuiyNZ67w=";
   };
 
-  # postPatch = ''
-  #   substituteInPlace setup.py \
-  #     --replace "grpcio-tools>=1.47.0, <=1.48.0" "grpcio-tools>=1.47.0, <=1.52.0" \
-  #     --replace "grpcio>=1.47.0,<=1.48.0" "grpcio>=1.47.0,<=1.53.0" \
-  #     --replace "ujson>=2.0.0,<=5.4.0" "ujson>=2.0.0,<=5.7.0"
-  #   '';
-
-  propagatedBuildInputs = [
-    lxml
-    xlsxwriter
-    pillow
+  build-system = [
+    setuptools
   ];
 
-  doCheck = false;
+  dependencies = [
+    lxml
+    pillow
+    typing-extensions
+    xlsxwriter
+  ];
 
-  meta = with lib; {
-    homepage = "https://github.com/scanny/python-pptx";
+  pythonImportsCheck = [
+    "pptx"
+  ];
+
+  meta = {
     description = "Create Open XML PowerPoint documents in Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [happysalada];
+    homepage = "https://github.com/scanny/python-pptx";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

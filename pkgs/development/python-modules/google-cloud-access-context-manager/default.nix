@@ -1,24 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, pythonOlder
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  pythonOlder,
+  protobuf,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.1.16";
-  format = "setuptools";
+  version = "0.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+L5Rre6LHpSlc+yzdQpMLSvURLHd412apDes5zwzdgc=";
+    pname = "google_cloud_access_context_manager";
+    inherit version;
+    hash = "sha256-O/rGqO4ub5UQWo7s9OGJCxp5Y3AuuMZV/s8CVX00joo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
@@ -26,9 +31,7 @@ buildPythonPackage rec {
   # No tests in repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "google.identity.accesscontextmanager"
-  ];
+  pythonImportsCheck = [ "google.identity.accesscontextmanager" ];
 
   meta = with lib; {
     description = "Protobufs for Google Access Context Manager";

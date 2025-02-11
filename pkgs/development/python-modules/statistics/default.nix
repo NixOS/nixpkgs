@@ -1,12 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, docutils
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  docutils,
 }:
 
 buildPythonPackage rec {
   pname = "statistics";
   version = "1.0.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,9 +21,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A Python 2.* port of 3.4 Statistics Module";
+    description = "Python 2.* port of 3.4 Statistics Module";
     homepage = "https://github.com/digitalemagine/py-statistics";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

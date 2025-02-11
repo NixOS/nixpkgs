@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mbstrdecoder
-, python-dateutil
-, pytz
-, packaging
-, pytestCheckHook
-, pythonOlder
-, tcolorpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mbstrdecoder,
+  python-dateutil,
+  pytz,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  tcolorpy,
 }:
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.2";
+  version = "1.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,15 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oIDVjJwapHun0Rk04zOZ4IjAh7qZ2k0BXK6zqFmtVds=";
+    tag = "v${version}";
+    hash = "sha256-lgwXoEtv2nBRKiWQH5bDrAIfikKN3cOqcHLEdnSAMpc=";
   };
 
-  propagatedBuildInputs = [
-    mbstrdecoder
-  ];
+  propagatedBuildInputs = [ mbstrdecoder ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     datetime = [
       python-dateutil
       pytz
@@ -39,16 +38,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     tcolorpy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "typepy"
-  ];
+  pythonImportsCheck = [ "typepy" ];
 
   meta = with lib; {
     description = "Library for variable type checker/validator/converter at a run time";
     homepage = "https://github.com/thombashi/typepy";
-    changelog = "https://github.com/thombashi/typepy/releases/tag/v${version}";
+    changelog = "https://github.com/thombashi/typepy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ genericnerdyusername ];
   };

@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, coverage
-, fetchFromGitHub
-, poetry-core
-, pytest
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  fetchFromGitHub,
+  pytest,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "2.1.0";
+  version = "2.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,28 +18,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tarpas";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-M4636yqzChRI37UdGPOZTjj8POLdrOoJtzmECtZZi4k=";
+    tag = "v${version}";
+    hash = "sha256-LSp3GkvyZ8wX6qelGy4PdCliGIzXo2nJNrYqxdSo/wM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    coverage
-  ];
+  propagatedBuildInputs = [ coverage ];
 
   # The project does not include tests since version 1.3.0
   doCheck = false;
 
-  pythonImportsCheck = [
-    "testmon"
-  ];
+  pythonImportsCheck = [ "testmon" ];
 
   meta = with lib; {
     description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";

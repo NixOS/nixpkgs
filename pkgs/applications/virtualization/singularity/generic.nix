@@ -1,98 +1,118 @@
 # Configurations that should only be overrided by
 # overrideAttrs
-{ pname
-, version
-, src
-, projectName # "apptainer" or "singularity"
-, vendorHash ? null
-, deleteVendor ? false
-, proxyVendor ? false
-, extraConfigureFlags ? [ ]
-, extraDescription ? ""
-, extraMeta ? { }
+{
+  pname,
+  version,
+  src,
+  projectName, # "apptainer" or "singularity"
+  vendorHash ? null,
+  deleteVendor ? false,
+  proxyVendor ? false,
+  extraConfigureFlags ? [ ],
+  extraDescription ? "",
+  extraMeta ? { },
 }:
 
 let
-  # Workaround for vendor-related attributes not overridable (#86349)
-  # should be removed when the issue is resolved
+  # Backward compatibility layer for the obsolete workaround of
+  # the "vendor-related attributes not overridable" issue (#86349),
+  # whose solution is merged and released.
   _defaultGoVendorArgs = {
-    inherit
-      vendorHash
-      deleteVendor
-      proxyVendor
-      ;
+    inherit vendorHash deleteVendor proxyVendor;
   };
 in
-{ lib
-, buildGoModule
-, runCommandLocal
+{
+  lib,
+  buildGoModule,
+  runCommandLocal,
+  replaceVars,
   # Native build inputs
-, makeWrapper
-, pkg-config
-, util-linux
-, which
+  addDriverRunpath,
+  makeWrapper,
+  pkg-config,
+  util-linux,
+  which,
   # Build inputs
-, bash
-, conmon
-, coreutils
-, cryptsetup
-, e2fsprogs
-, fakeroot
-, fuse2fs ? e2fsprogs.fuse2fs
-, go
-, gpgme
-, libseccomp
-, libuuid
+  bash,
+  callPackage,
+  conmon,
+  coreutils,
+  cryptsetup,
+  e2fsprogs,
+  fakeroot,
+  fuse2fs ? e2fsprogs.fuse2fs,
+  go,
+  gpgme,
+  libseccomp,
+  libuuid,
+  mount,
   # This is for nvidia-container-cli
-, nvidia-docker
-, openssl
-, squashfsTools
-, squashfuse
+  nvidia-docker,
+  openssl,
+  squashfsTools,
+  squashfuse,
   # Test dependencies
-, singularity-tools
-, cowsay
-, hello
+  singularity-tools,
+  cowsay,
+  hello,
   # Overridable configurations
-, enableNvidiaContainerCli ? true
+  enableNvidiaContainerCli ? true,
+  # --nvccli currently requires extra privileges:
+  # https://github.com/apptainer/apptainer/issues/1893#issuecomment-1881240800
+  forceNvcCli ? false,
   # Compile with seccomp support
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
-, enableSeccomp ? true
+  enableSeccomp ? true,
   # Whether the configure script treat SUID support as default
   # When equal to enableSuid, it supress the --with-suid / --without-suid build flag
   # It can be set to `null` to always pass either --with-suid or --without-suided
   # Type: null or boolean
-, defaultToSuid ? true
+  defaultToSuid ? true,
   # Whether to compile with SUID support
-, enableSuid ? false
-, starterSuidPath ? null
-  # newuidmapPath and newgidmapPath are to support --fakeroot
-  # where those SUID-ed executables are unavailable from the FHS system PATH.
-  # Path to SUID-ed newuidmap executable
-, newuidmapPath ? null
-  # Path to SUID-ed newgidmap executable
-, newgidmapPath ? null
+  enableSuid ? false,
+  starterSuidPath ? null,
+  # Extra system-wide /**/bin paths to prefix,
+  # useful to specify directories containing binaries with SUID bit set.
+  # The paths take higher precedence over the FHS system PATH specified
+  # inside the upstream source code.
+  # Include "/run/wrappers/bin" by default for the convenience of NixOS users.
+  systemBinPaths ? [ "/run/wrappers/bin" ],
   # External LOCALSTATEDIR
-, externalLocalStateDir ? null
+  externalLocalStateDir ? null,
   # Remove the symlinks to `singularity*` when projectName != "singularity"
-, removeCompat ? false
+  removeCompat ? false,
+  # The defaultPath values to substitute in each source files.
+  #
+  # `defaultPath` are PATH variables hard-coded inside Apptainer/Singularity
+  # binaries to search for third-party utilities, as a hardening for
+  # `$out/bin/starter-suid`.
+  #
+  # The upstream provided values are suitable for FHS-conformant environment.
+  # We substitute them and insert Nixpkgs-specific values.
+  #
+  # Example:
+  # {
+  #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
+  # }
+  sourceFilesWithDefaultPaths ? { },
   # Workaround #86349
   # should be removed when the issue is resolved
-, vendorHash ? _defaultGoVendorArgs.vendorHash
-, deleteVendor ? _defaultGoVendorArgs.deleteVendor
-, proxyVendor ? _defaultGoVendorArgs.proxyVendor
-}:
+  vendorHash ? _defaultGoVendorArgs.vendorHash,
+  deleteVendor ? _defaultGoVendorArgs.deleteVendor,
+  proxyVendor ? _defaultGoVendorArgs.proxyVendor,
+}@args:
 
 let
-  defaultPathOriginal = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
-  privileged-un-utils = if ((newuidmapPath == null) && (newgidmapPath == null)) then null else
-  (runCommandLocal "privileged-un-utils" { } ''
-    mkdir -p "$out/bin"
-    ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
-    ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
-  '');
+  addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
   inherit pname version src;
+
+  patches = lib.optionals (projectName == "apptainer") [
+    (replaceVars ./apptainer/0001-ldCache-patch-for-driverLink.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
+  ];
 
   # Override vendorHash with the output got from
   # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
@@ -128,35 +148,43 @@ in
   # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
   # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
 
-  buildInputs = [
-    bash # To patch /bin/sh shebangs.
-    conmon
-    cryptsetup
-    gpgme
-    libuuid
-    openssl
-    squashfsTools # Required at build time by SingularityCE
-  ]
-  ++ lib.optional enableNvidiaContainerCli nvidia-docker
-  ++ lib.optional enableSeccomp libseccomp
-  ;
+  buildInputs =
+    [
+      bash # To patch /bin/sh shebangs.
+      conmon
+      cryptsetup
+      gpgme
+      libuuid
+      openssl
+      squashfsTools # Required at build time by SingularityCE
+    ]
+    # Optional dependencies.
+    # Formatting: Optional dependencies are likely to increase.
+    # Don't squash them into the same line.
+    ++ lib.optional enableNvidiaContainerCli nvidia-docker
+    ++ lib.optional enableSeccomp libseccomp;
 
   configureScript = "./mconfig";
 
-  configureFlags = [
-    "--localstatedir=${if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"}"
-    "--runstatedir=/var/run"
-  ]
-  ++ lib.optional (!enableSeccomp) "--without-seccomp"
-  ++ lib.optional (enableSuid != defaultToSuid) (if enableSuid then "--with-suid" else "--without-suid")
-  ++ extraConfigureFlags
-  ;
+  configureFlags =
+    [
+      "--localstatedir=${
+        if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
+      }"
+      "--runstatedir=/var/run"
+    ]
+    ++ lib.optional (!enableSeccomp) "--without-seccomp"
+    ++ lib.optional (enableSuid != defaultToSuid) (
+      if enableSuid then "--with-suid" else "--without-suid"
+    )
+    ++ extraConfigureFlags;
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  # Packages to prefix to the Apptainer/Singularity container runtime default PATH
-  # Use overrideAttrs to override
+  # Packages to provide fallback bin paths
+  # to the Apptainer/Singularity container runtime default PATHs.
+  # Override with `<pkg>.overrideAttrs`.
   defaultPathInputs = [
     bash
     coreutils
@@ -164,22 +192,36 @@ in
     fakeroot
     fuse2fs # Mount ext3 filesystems
     go
-    privileged-un-utils
+    mount # mount
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
-  ]
-  ++ lib.optional enableNvidiaContainerCli nvidia-docker
-  ;
+  ] ++ lib.optional enableNvidiaContainerCli nvidia-docker;
 
   postPatch = ''
     if [[ ! -e .git || ! -e VERSION ]]; then
       echo "${version}" > VERSION
     fi
+
     # Patch shebangs for script run during build
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
+
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
-    substituteInPlace cmd/internal/cli/actions.go \
-      --replace "defaultPath = \"${defaultPathOriginal}\"" "defaultPath = \"''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}${defaultPathOriginal}\""
+    ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
+      substituteInPlace ${lib.escapeShellArg fileName} \
+        ${lib.concatMapStringsSep " \\\n  " (
+          originalDefaultPath:
+          lib.concatStringsSep " " [
+            "--replace-fail"
+            (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+          ]
+        ) originalDefaultPaths}
+    '') sourceFilesWithDefaultPaths}
+
+    substituteInPlace internal/pkg/util/gpu/nvidia.go \
+      --replace \
+        'return fmt.Errorf("/usr/bin not writable in the container")' \
+        ""
   '';
 
   postConfigure = ''
@@ -209,10 +251,13 @@ in
   postFixup = ''
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
+    # Respect PATH from the environment/the user.
+    # Fallback to bin paths provided by Nixpkgs packages.
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}"
+      --suffix PATH : "$systemDefaultPath" \
+      --suffix PATH : "$inputsDefaultPath"
     # Make changes in the config file
-    ${lib.optionalString enableNvidiaContainerCli ''
+    ${lib.optionalString forceNvcCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
         --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
@@ -232,16 +277,20 @@ in
         rm "$file"
       done
     ''}
-    ${lib.optionalString enableSuid (lib.warnIf (starterSuidPath == null) "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial." ''
-      chmod +x $out/libexec/${projectName}/bin/starter-suid
-    '')}
+    ${lib.optionalString enableSuid (
+      lib.warnIf (starterSuidPath == null)
+        "${projectName}: Null starterSuidPath when enableSuid produces non-SUID-ed starter-suid and run-time permission denial."
+        ''
+          chmod +x $out/libexec/${projectName}/bin/starter-suid
+        ''
+    )}
     ${lib.optionalString (enableSuid && (starterSuidPath != null)) ''
       mv "$out"/libexec/${projectName}/bin/starter-suid{,.orig}
       ln -s ${lib.escapeShellArg starterSuidPath} "$out/libexec/${projectName}/bin/starter-suid"
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Application containers for linux" + extraDescription;
     longDescription = ''
       Singularity (the upstream) renamed themselves to Apptainer
@@ -250,19 +299,64 @@ in
       https://sylabs.io/2021/05/singularity-community-edition
       https://apptainer.org/news/community-announcement-20211130
     '';
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jbedo ShamrockLee ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jbedo
+      ShamrockLee
+    ];
     mainProgram = projectName;
   } // extraMeta;
-}).overrideAttrs (finalAttrs: prevAttrs: {
-  passthru = prevAttrs.passthru or { } // {
-    tests = {
-      image-hello-cowsay = singularity-tools.buildImage {
-        name = "hello-cowsay";
-        contents = [ hello cowsay ];
-        singularity = finalAttrs.finalPackage;
+}).overrideAttrs
+  (
+    finalAttrs: prevAttrs: {
+      systemDefaultPath = lib.concatStringsSep ":" systemBinPaths;
+      inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
+      passthru = prevAttrs.passthru or { } // {
+        inherit sourceFilesWithDefaultPaths;
+        tests = {
+          image-hello-cowsay = singularity-tools.buildImage {
+            name = "hello-cowsay";
+            contents = [
+              hello
+              cowsay
+            ];
+            singularity = finalAttrs.finalPackage;
+          };
+        };
+        gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
+          # Should be in tests, but Ofborg would skip image-hello-cowsay because
+          # saxpy is unfree.
+          image-saxpy = callPackage (
+            { singularity-tools, cudaPackages }:
+            singularity-tools.buildImage {
+              name = "saxpy";
+              contents = [ cudaPackages.saxpy ];
+              memSize = 2048;
+              diskSize = 2048;
+              singularity = finalAttrs.finalPackage;
+            }
+          ) { };
+          saxpy = callPackage (
+            { runCommand, writeShellScriptBin }:
+            let
+              unwrapped = writeShellScriptBin "apptainer-cuda-saxpy" ''
+                ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
+              '';
+            in
+            runCommand "run-apptainer-cuda-saxpy"
+              {
+                requiredSystemFeatures = [ "cuda" ];
+                nativeBuildInputs = [ unwrapped ];
+                passthru = {
+                  inherit unwrapped;
+                };
+              }
+              ''
+                apptainer-cuda-saxpy
+              ''
+          ) { };
+        };
       };
-    };
-  };
-})
+    }
+  )

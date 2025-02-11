@@ -1,34 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, django
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  django,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "2.1";
+  version = "3.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-rxJ9TgVBiJByiFSLTg/dtAR31Fs14D4sh2axyBcKGTU=";
+    tag = version;
+    hash = "sha256-WBybDzGPoPbeUnrw6O41ton0x0rLjPcHBVMg1RZceWI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "js_asset"
-  ];
+  pythonImportsCheck = [ "js_asset" ];
 
   checkPhase = ''
     runHook preCheck

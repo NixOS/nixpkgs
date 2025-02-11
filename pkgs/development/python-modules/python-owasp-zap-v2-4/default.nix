@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyhamcrest
-, pytestCheckHook
-, requests
-, requests-mock
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyhamcrest,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "python-owasp-zap-v2-4";
   version = "0.0.18";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zaproxy";

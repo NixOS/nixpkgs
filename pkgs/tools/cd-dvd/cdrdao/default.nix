@@ -21,21 +21,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0ZtnyFPF26JAavqrbNeI53817r5jTKxGeVKEd8e+AbY=";
   };
 
-  makeFlags = [ "RM=rm" "LN=ln" "MV=mv" ];
+  makeFlags = [
+    "RM=rm"
+    "LN=ln"
+    "MV=mv"
+  ];
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    libiconv
-    libvorbis
-    libmad
-    libao
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    IOKit
-  ];
+  buildInputs =
+    [
+      libiconv
+      libvorbis
+      libmad
+      libao
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+      IOKit
+    ];
 
   hardeningDisable = [ "format" ];
 
@@ -65,9 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   meta = {
-    description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
+    description = "Tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
     homepage = "https://cdrdao.sourceforge.net/";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 })

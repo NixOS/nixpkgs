@@ -1,53 +1,56 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.readarr;
 in
 {
   options = {
     services.readarr = {
-      enable = mkEnableOption (lib.mdDoc "Readarr");
+      enable = lib.mkEnableOption "Readarr, a Usenet/BitTorrent ebook downloader";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/readarr/";
-        description = lib.mdDoc "The directory where Readarr stores its data files.";
+        description = "The directory where Readarr stores its data files.";
       };
 
-      package = mkPackageOption pkgs "readarr" { };
+      package = lib.mkPackageOption pkgs "readarr" { };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for Readarr
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "readarr";
-        description = lib.mdDoc ''
+        description = ''
           User account under which Readarr runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "readarr";
-        description = lib.mdDoc ''
+        description = ''
           Group under which Readarr runs.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+  config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.settings."10-readarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.readarr = {
       description = "Readarr";
@@ -63,11 +66,11 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 8787 ];
     };
 
-    users.users = mkIf (cfg.user == "readarr") {
+    users.users = lib.mkIf (cfg.user == "readarr") {
       readarr = {
         description = "Readarr service";
         home = cfg.dataDir;
@@ -76,7 +79,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "readarr") {
+    users.groups = lib.mkIf (cfg.group == "readarr") {
       readarr = { };
     };
   };

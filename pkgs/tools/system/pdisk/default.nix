@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, libbsd
-, CoreFoundation
-, IOKit
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libbsd,
+  CoreFoundation,
+  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,24 +43,28 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace makefile \
-      --replace 'cc' '${stdenv.cc.targetPrefix}cc'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace makefile \
-      --replace '-lbsd' '-framework CoreFoundation -framework IOKit'
-  '';
+  postPatch =
+    ''
+      substituteInPlace makefile \
+        --replace 'cc' '${stdenv.cc.targetPrefix}cc'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace makefile \
+        --replace '-lbsd' '-framework CoreFoundation -framework IOKit'
+    '';
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libbsd
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    CoreFoundation
-    IOKit
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libbsd
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      CoreFoundation
+      IOKit
+    ];
 
   env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
@@ -78,11 +83,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A low-level Apple partition table editor for Linux, OSS Apple version";
+    description = "Low-level Apple partition table editor for Linux, OSS Apple version";
     homepage = "https://github.com/apple-oss-distributions/pdisk";
     license = with licenses; [
       hpnd # original license statements seems to match this (in files that are shared with mac-fdisk)
-      apsl10 # new files
+      apple-psl10 # new files
     ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.unix;

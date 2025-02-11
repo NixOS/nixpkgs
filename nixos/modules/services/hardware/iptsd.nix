@@ -1,16 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.iptsd;
   format = pkgs.formats.ini { };
   configFile = format.generate "iptsd.conf" cfg.config;
-in {
+in
+{
   options.services.iptsd = {
-    enable = lib.mkEnableOption (lib.mdDoc "the userspace daemon for Intel Precise Touch & Stylus");
+    enable = lib.mkEnableOption "the userspace daemon for Intel Precise Touch & Stylus";
 
     config = lib.mkOption {
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for IPTSD. See the
         [reference configuration](https://github.com/linux-surface/iptsd/blob/master/etc/iptsd.conf)
         for available options and defaults.
@@ -18,22 +24,22 @@ in {
       type = lib.types.submodule {
         freeformType = format.type;
         options = {
-          Touch = {
+          Touchscreen = {
             DisableOnPalm = lib.mkOption {
               default = false;
-              description = lib.mdDoc "Ignore all touch inputs if a palm was registered on the display.";
+              description = "Ignore all touchscreen inputs if a palm was registered on the display.";
               type = lib.types.bool;
             };
             DisableOnStylus = lib.mkOption {
               default = false;
-              description = lib.mdDoc "Ignore all touch inputs if a stylus is in proximity.";
+              description = "Ignore all touchscreen inputs if a stylus is in proximity.";
               type = lib.types.bool;
             };
           };
           Stylus = {
             Disable = lib.mkOption {
               default = false;
-              description = lib.mdDoc "Disables the stylus. No stylus data will be processed.";
+              description = "Disables the stylus. No stylus data will be processed.";
               type = lib.types.bool;
             };
           };
@@ -43,6 +49,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional (lib.hasAttr "Touch" cfg.config) ''
+      The option `services.iptsd.config.Touch` has been renamed to `services.iptsd.config.Touchscreen`.
+    '';
+
     systemd.packages = [ pkgs.iptsd ];
     environment.etc."iptsd.conf".source = configFile;
     systemd.services."iptsd@".restartTriggers = [ configFile ];

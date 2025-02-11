@@ -1,9 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, eigen, libGL, doxygen, spglib
-, mmtf-cpp, glew, python3, libarchive, libmsym, msgpack, qttools, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  zlib,
+  eigen,
+  libGL,
+  spglib,
+  mmtf-cpp,
+  glew,
+  python3,
+  libarchive,
+  libmsym,
+  msgpack,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 let
-  pythonWP = python3.withPackages (p: with p; [ openbabel-bindings numpy ]);
+  pythonWP = python3.withPackages (
+    p: with p; [
+      openbabel-bindings
+      numpy
+    ]
+  );
 
   # Pure data repositories
   moleculesRepo = fetchFromGitHub {
@@ -18,26 +39,35 @@ let
     rev = "1.0.1";
     sha256 = "sH/WuvLaYu6akOc3ssAKhnxD8KNoDxuafDSozHqJZC4=";
   };
+  fragmentsRepo = fetchFromGitHub {
+    owner = "OpenChemistry";
+    repo = "fragments";
+    rev = "8dc711a59d016604b3e9b6d59dec178b8e6ccd36";
+    hash = "sha256-Valc5zwlaZ//eDupFouCfWCeID7/4ObU1SDLFJ/mo/g=";
+  };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "avogadrolibs";
-  version = "1.97.0";
+  version = "1.100.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = pname;
     rev = version;
-    hash = "sha256-ZGFyUlFyI403aw/6GVze/gronT67XlEOKuw5sfHeVy8=";
+    hash = "sha256-zDn5cgMBJYM27mfQHujxhIf4ZTljFxvFrKl7pNa4K9E=";
   };
 
   postUnpack = ''
     cp -r ${moleculesRepo} molecules
     cp -r ${crystalsRepo} crystals
+    cp -r ${fragmentsRepo} fragments
   '';
 
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
+    pythonWP
   ];
 
   buildInputs = [
@@ -53,9 +83,13 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  postFixup = ''
+  # Fix the broken CMake files to use the correct paths
+  postInstall = ''
     substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsConfig.cmake \
-      --replace "''${AvogadroLibs_INSTALL_PREFIX}/$out" "''${AvogadroLibs_INSTALL_PREFIX}"
+      --replace "$out/" ""
+
+    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsTargets.cmake \
+      --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 
   meta = with lib; {

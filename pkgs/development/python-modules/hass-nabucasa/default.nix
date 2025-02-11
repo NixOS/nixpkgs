@@ -1,49 +1,45 @@
-{ lib
-, acme
-, aiohttp
-, atomicwrites-homeassistant
-, attrs
-, buildPythonPackage
-, ciso8601
-, cryptography
-, fetchFromGitHub
-, pycognito
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, snitun
-, syrupy
-, xmltodict
+{
+  lib,
+  acme,
+  aiohttp,
+  atomicwrites-homeassistant,
+  attrs,
+  buildPythonPackage,
+  ciso8601,
+  cryptography,
+  fetchFromGitHub,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  snitun,
+  syrupy,
+  webrtc-models,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.74.0";
+  version = "0.89.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-r4Huvn9mBqnASpUd+drwORE+fApLV/l6Y3aO/UIiEC8=";
+    repo = "hass-nabucasa";
+    tag = version;
+    hash = "sha256-o6VUfg0mtaXw5isF4Q1afCZrOMSW9FSjbOOUcBne+dY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "acme==" "acme>=" \
-      --replace "pycognito==" "pycognito>=" \
-      --replace "snitun==" "snitun>=" \
-  '';
+  pythonRelaxDeps = [ "acme" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     acme
     aiohttp
     atomicwrites-homeassistant
@@ -51,7 +47,9 @@ buildPythonPackage rec {
     ciso8601
     cryptography
     pycognito
+    pyjwt
     snitun
+    webrtc-models
   ];
 
   nativeCheckInputs = [
@@ -62,14 +60,12 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  pythonImportsCheck = [
-    "hass_nabucasa"
-  ];
+  pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
-    homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Python module for the Home Assistant cloud integration";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
+    homepage = "https://github.com/NabuCasa/hass-nabucasa";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

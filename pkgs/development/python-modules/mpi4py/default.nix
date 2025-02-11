@@ -1,53 +1,57 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage
-, mpi, mpiCheckPhaseHook, openssh
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  setuptools,
+  mpi,
+  pytestCheckHook,
+  mpiCheckPhaseHook,
 }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.1.5";
+  version = "4.0.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pwbnbbklUTXC+10e9Uy097DkrZ4zy62n3idiYgXyoVM=";
+  src = fetchFromGitHub {
+    repo = "mpi4py";
+    owner = "mpi4py";
+    tag = version;
+    hash = "sha256-hsP4aonjiBit2un6EQWQxF+lVjsnMFFqLaAOqBWAzgo=";
   };
+
+  build-system = [
+    cython
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    mpi
+  ];
+
+  dependencies = [
+    mpi
+  ];
+
+  pythonImportsCheck = [ "mpi4py" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mpiCheckPhaseHook
+  ];
 
   passthru = {
     inherit mpi;
   };
 
-  postPatch = ''
-    substituteInPlace test/test_spawn.py --replace \
-                      "unittest.skipMPI('openmpi(<3.0.0)')" \
-                      "unittest.skipMPI('openmpi')"
-  '';
-
-  configurePhase = "";
-
-  installPhase = ''
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-    ${python}/bin/${python.executable} setup.py install \
-      --install-lib=$out/lib/${python.libPrefix}/site-packages \
-      --prefix="$out"
-
-    # --install-lib:
-    # sometimes packages specify where files should be installed outside the usual
-    # python lib prefix, we override that back so all infrastructure (setup hooks)
-    # work as expected
-  '';
-
-  setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
-
-  nativeBuildInputs = [ mpi ];
-
-  __darwinAllowLocalNetworking = true;
-
-  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
-
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    license = licenses.bsd2;
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${version}/CHANGES.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

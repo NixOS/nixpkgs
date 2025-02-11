@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, zlib
-, enableUnfree ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  zlib,
+  enableUnfree ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Modern, parallel SAT solver (${if enableUnfree then "parallel" else "sequential"} version)";
+    description = "Modern, parallel SAT solver (${
+      if enableUnfree then "parallel" else "sequential"
+    } version)";
+    mainProgram = "glucose";
     homepage = "https://www.labri.fr/perso/lsimon/research/glucose/";
     license = if enableUnfree then licenses.unfreeRedistributable else licenses.mit;
     platforms = platforms.unix;

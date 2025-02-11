@@ -1,37 +1,67 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, numpy
-, scikit-learn
-, pytestCheckHook
-, torch
-, torchvision
-, tqdm
-, faiss
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  config,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+  scikit-learn,
+  torch,
+  tqdm,
+
+  # optional-dependencies
+  faiss,
+  tensorboard,
+
+  # tests
+  cudaSupport ? config.cudaSupport,
+  pytestCheckHook,
+  torchvision,
 }:
 
 buildPythonPackage rec {
-  pname   = "pytorch-metric-learning";
-  version = "2.3.0";
+  pname = "pytorch-metric-learning";
+  version = "2.8.1";
+  pyproject = true;
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eDQQPIyUUEkvpXjWAcyljlFgVlu9is4fPPUTudP7NF4=";
+    tag = "v${version}";
+    hash = "sha256-WO/gv8rKkxY3pR627WrEPVyvZnvUZIKMzOierIW8bJA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     torch
     scikit-learn
-    torchvision
     tqdm
   ];
+
+  optional-dependencies = {
+    with-hooks = [
+      # TODO: record-keeper
+      faiss
+      tensorboard
+    ];
+    with-hooks-cpu = [
+      # TODO: record-keeper
+      faiss
+      tensorboard
+    ];
+  };
 
   preCheck = ''
     export HOME=$TMP
@@ -41,27 +71,38 @@ buildPythonPackage rec {
 
   # package only requires `unittest`, but use `pytest` to exclude tests
   nativeCheckInputs = [
-    faiss
     pytestCheckHook
-  ];
+    torchvision
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # TypeError: setup() missing 1 required positional argument: 'world_size'
-    "TestDistributedLossWrapper"
-    # require network access:
-    "TestInference"
-    "test_get_nearest_neighbors"
-    "test_tuplestoweights_sampler"
-    "test_untrained_indexer"
-    "test_metric_loss_only"
-    "test_pca"
-    # flaky
-    "test_distributed_classifier_loss_and_miner"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-    "test_global_embedding_space_tester"
-    "test_with_same_parent_label_tester"
-  ];
+  disabledTests =
+    [
+      # network access
+      "test_tuplestoweights_sampler"
+      "test_metric_loss_only"
+      "test_add_to_indexer"
+      "test_get_nearest_neighbors"
+      "test_list_of_text"
+      "test_untrained_indexer"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
+      "test_single_proc"
+    ]
+    ++ lib.optionals cudaSupport [
+      # crashes with SIGBART
+      "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
+      "test_accuracy_calculator_large_k"
+      "test_custom_knn"
+      "test_global_embedding_space_tester"
+      "test_global_two_stream_embedding_space_tester"
+      "test_index_type"
+      "test_k_warning"
+      "test_many_tied_distances"
+      "test_query_within_reference"
+      "test_tied_distances"
+      "test_with_same_parent_label_tester"
+    ];
 
   meta = {
     description = "Metric learning library for PyTorch";

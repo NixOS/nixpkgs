@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, dnspython
-, m2crypto
-, pygraphviz
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  dnspython,
+  m2crypto,
+  pygraphviz,
 }:
 
 buildPythonApplication rec {
@@ -39,6 +40,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool suite for analyzing and visualizing DNS and DNSSEC behavior";
+    mainProgram = "dnsviz";
     longDescription = ''
       DNSViz is a tool suite for analysis and visualization of Domain Name System (DNS) behavior,
       including its security extensions (DNSSEC).

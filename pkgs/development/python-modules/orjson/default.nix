@@ -1,49 +1,61 @@
-{ lib
-, stdenv
-, pythonOlder
-, rustPlatform
-, fetchFromGitHub
-, buildPythonPackage
-, cffi
-, libiconv
-, numpy
-, psutil
-, pytestCheckHook
-, python-dateutil
-, pytz
-, xxhash
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  rustPlatform,
+  cffi,
+
+  # native dependencies
+  libiconv,
+
+  # tests
+  numpy,
+  psutil,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  xxhash,
+
+  # for passthru.tests
+  falcon,
+  fastapi,
+  gradio,
+  mashumaro,
+  ufolib2,
 }:
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.9.10";
-  format = "pyproject";
+  version = "3.10.15";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ijl";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-MkcuayNDt7/GcswXoFTvzuaZzhQEQV+V7OfKqgJwVIQ=";
+    repo = "orjson";
+    tag = version;
+    hash = "sha256-FlcWf6BhUP2Y5ivRQx1W0G8sgfvbuAQN7qpBJbd3N2I=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2eRV+oZQvsWWJ4AUTeuE0CHtTHC6jNZiX/y5uXuwvns=";
+    hash = "sha256-fHp5Rh2Mzn62ZUoVHETl/6kZ6Iztxkd5mjxira7NVBU=";
   };
 
-  nativeBuildInputs = [
-    cffi
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [ cffi ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     numpy
@@ -54,15 +66,26 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  pythonImportsCheck = [
-    "orjson"
-  ];
+  pythonImportsCheck = [ "orjson" ];
+
+  passthru.tests = {
+    inherit
+      falcon
+      fastapi
+      gradio
+      mashumaro
+      ufolib2
+      ;
+  };
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
     changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ misuzu ];
   };

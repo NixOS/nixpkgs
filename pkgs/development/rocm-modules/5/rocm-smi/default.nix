@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, wrapPython
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  wrapPython,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "rocm_smi_lib";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-NZR4jBgKVfpkRNQFPmav1yCZF872LkcrPBNNcBVTLDU=";
@@ -45,10 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "System management interface for AMD GPUs supported by ROCm";
-    homepage = "https://github.com/RadeonOpenCompute/rocm_smi_lib";
+    mainProgram = "rocm-smi";
+    homepage = "https://github.com/ROCm/rocm_smi_lib";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = [ "x86_64-linux" ];
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

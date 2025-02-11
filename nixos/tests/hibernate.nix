@@ -1,9 +1,10 @@
 # Test whether hibernation from partition works.
 
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-, systemdStage1 ? false
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  systemdStage1 ? false,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -12,21 +13,33 @@ makeTest {
   name = "hibernate";
 
   nodes = {
-    machine = { config, lib, pkgs, ... }: {
-      imports = [
-        ./common/auto-format-root-device.nix
-      ];
+    machine =
+      {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+      {
+        imports = [
+          ./common/auto-format-root-device.nix
+        ];
 
-      systemd.services.backdoor.conflicts = [ "sleep.target" ];
-      powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
+        systemd.services.backdoor.conflicts = [ "sleep.target" ];
+        powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
-      virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];
-      virtualisation.useNixStoreImage = true;
+        virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];
+        virtualisation.useNixStoreImage = true;
 
-      swapDevices = lib.mkOverride 0 [ { device = "/dev/vdc"; options = [ "x-systemd.makefs" ]; } ];
-      boot.resumeDevice = "/dev/vdc";
-      boot.initrd.systemd.enable = systemdStage1;
-    };
+        swapDevices = lib.mkOverride 0 [
+          {
+            device = "/dev/vdc";
+            options = [ "x-systemd.makefs" ];
+          }
+        ];
+        boot.initrd.systemd.enable = systemdStage1;
+        virtualisation.useEFIBoot = true;
+      };
   };
 
   testScript = ''

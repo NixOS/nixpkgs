@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, squashfsTools
-, makeBinaryWrapper
-, alsa-lib
-, atk
-, at-spi2-atk
-, cups
-, gtk3
-, libdrm
-, libsecret
-, libxkbcommon
-, mesa
-, pango
-, sqlite
-, systemd
-, wayland
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  squashfsTools,
+  makeBinaryWrapper,
+  alsa-lib,
+  atk,
+  at-spi2-atk,
+  cups,
+  gtk3,
+  libdrm,
+  libsecret,
+  libxkbcommon,
+  libgbm,
+  pango,
+  sqlite,
+  systemd,
+  wayland,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.6.3";
-  revision = "46";
+  version = "2.9.3";
+  revision = "60";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-jg3VPSfyjh+sYbrLDkqqy1tdUaxuEanQWW1U2SHUQ555tvn9X34pP8uarCFWqu9oye/7KF6KDEjjoIqirUKafw==";
+    hash = "sha256-Oa3YfmXDiqKxEMJloTu6ihJ6LKoz2XwQ0su1KrlSaYo=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     alsa-lib
     atk
     at-spi2-atk
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libsecret
     libxkbcommon
-    mesa
+    libgbm
     pango
     sqlite
     systemd
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp squashfs-root/meta/gui/icon.png $out/share/icons/tradingview.png
 
     mkdir $out/bin
-    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath finalAttrs.buildInputs }
+    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs}
 
     runHook postInstall
   '';

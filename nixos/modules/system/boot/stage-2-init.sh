@@ -69,7 +69,8 @@ fi
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
 if [ -n "@readOnlyNixStore@" ]; then
-    if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
+    # #375257: Ensure that we pick the "top" (i.e. last) mount so we don't get a false positive for a lower mount.
+    if ! [[ "$(findmnt --direction backward --first-only --noheadings --output OPTIONS /nix/store)" =~ (^|,)ro(,|$) ]]; then
         if [ -z "$container" ]; then
             mount --bind /nix/store /nix/store
         else
@@ -123,14 +124,6 @@ ln -sfn "$systemConfig" /run/booted-system
 
 # Run any user-specified commands.
 @shell@ @postBootCommands@
-
-
-# Ensure systemd doesn't try to populate /etc, by forcing its first-boot
-# heuristic off. It doesn't matter what's in /etc/machine-id for this purpose,
-# and systemd will immediately fill in the file when it starts, so just
-# creating it is enough. This `: >>` pattern avoids forking and avoids changing
-# the mtime if the file already exists.
-: >> /etc/machine-id
 
 
 # No need to restore the stdout/stderr streams we never redirected and

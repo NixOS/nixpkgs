@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WY3OLPUwixrL2NSLfNBSSNMXJEoYBL+O6KoglU3Cz9g=";
   };
 
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ almac dotlambda ];
+    maintainers = with maintainers; [
+      almac
+      dotlambda
+    ];
   };
 }

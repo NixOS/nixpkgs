@@ -1,20 +1,28 @@
-{ self, callPackage, fetchFromGitHub, lib, passthruFun }:
+{
+  self,
+  callPackage,
+  fetchFromGitHub,
+  lib,
+  passthruFun,
+}:
 
-callPackage ./default.nix rec {
+callPackage ./default.nix {
   # The patch version is the timestamp of the git commit,
   # obtain via `cat $(nix-build -A luajit_2_0.src)/.relver`
-  version = "2.0.1693340858";
+  version = "2.0.1713483859";
 
   src = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
-    rev = "c6ee7e19d107b4f9a140bb2ccf99162e26318c69";
-    hash = "sha256-3/7ASZRniytw5RkOy0F9arHkZevq6dxmya+Ba3A5IIA=";
+    rev = "9b5e837ac2dfdc0638830c048a47ca9378c504d3";
+    hash = "sha256-GflF/sELSNanc9G4WMzoOadUBOFSs6OwqhAXa4sudWA=";
   };
 
-  extraMeta = { # this isn't precise but it at least stops the useless Hydra build
-    platforms = with lib; filter (p: !hasPrefix "aarch64-" p)
-      (platforms.linux ++ platforms.darwin);
+  extraMeta = {
+    # this isn't precise but it at least stops the useless Hydra build
+    platforms = lib.filter (p: !lib.hasPrefix "aarch64-" p) (
+      lib.platforms.linux ++ lib.platforms.darwin
+    );
   };
   inherit self passthruFun;
 }

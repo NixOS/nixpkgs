@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,19 +11,21 @@ let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
     ${cfg.loadScript}
-    ${optionalString cfg.enableDefaultConfig ''
-      (require 'exwm-config)
-      (exwm-config-default)
-    ''}
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
-  exwm-emacs = pkgs.emacsWithPackages packages;
+  exwm-emacs = pkgs.emacs.pkgs.withPackages packages;
 in
-
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "exwm" "enableDefaultConfig" ]
+      "The upstream EXWM project no longer provides a default configuration, instead copy (parts of) exwm-config.el to your local config."
+    )
+  ];
+
   options = {
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption (lib.mdDoc "exwm");
+      enable = mkEnableOption "exwm";
       loadScript = mkOption {
         default = "(require 'exwm)";
         type = types.lines;
@@ -26,20 +33,14 @@ in
           (require 'exwm)
           (exwm-enable)
         '';
-        description = lib.mdDoc ''
+        description = ''
           Emacs lisp code to be run after loading the user's init
-          file. If enableDefaultConfig is true, this will be run
-          before loading the default config.
+          file.
         '';
-      };
-      enableDefaultConfig = mkOption {
-        default = true;
-        type = lib.types.bool;
-        description = lib.mdDoc "Enable an uncustomised exwm configuration.";
       };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
-        default = epkgs: [];
+        default = epkgs: [ ];
         defaultText = literalExpression "epkgs: []";
         example = literalExpression ''
           epkgs: [
@@ -48,7 +49,7 @@ in
             epkgs.proofgeneral
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra packages available to Emacs. The value must be a
           function which receives the attrset defined in
           {var}`emacs.pkgs` as the sole argument.

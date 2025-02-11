@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -10,12 +15,12 @@ in
 
 {
   options.services.ocserv = {
-    enable = mkEnableOption (lib.mdDoc "ocserv");
+    enable = mkEnableOption "ocserv";
 
     config = mkOption {
       type = types.lines;
 
-      description = lib.mdDoc ''
+      description = ''
         Configuration content to start an OCServ server.
 
         For a full configuration reference,please refer to the online documentation
@@ -80,12 +85,16 @@ in
     environment.systemPackages = [ pkgs.ocserv ];
     environment.etc."ocserv/ocserv.conf".text = cfg.config;
 
-    security.pam.services.ocserv = {};
+    security.pam.services.ocserv = { };
 
     systemd.services.ocserv = {
       description = "OpenConnect SSL VPN server";
       documentation = [ "man:ocserv(8)" ];
-      after = [ "dbus.service" "network-online.target" ];
+      wants = [ "network-online.target" ];
+      after = [
+        "dbus.service"
+        "network-online.target"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

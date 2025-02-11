@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, cerberus
-, django
-, djangorestframework
-, marshmallow
-, pyschemes
-, wtforms
-, email-validator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  cerberus,
+  django,
+  djangorestframework,
+  marshmallow,
+  pyschemes,
+  wtforms,
+  email-validator,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "life4";
     repo = pname;
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-24GTTJSZ55ejyHoWP1/S3DLTKvOolAJr9UhWoOm84CU=";
   };
 
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace "build-backend = \"flit.buildapi\"" "build-backend = \"flit_core.buildapi\""
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook

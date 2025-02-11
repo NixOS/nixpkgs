@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
   pname = "KDSingleApplication";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5YprRbfiFI2UGMJqDf+3VDwXV904USEpMEpoNm0g7KY=";
+    tag = "v${version}";
+    hash = "sha256-Ymm+qOZMWULg7u5xEpGzcAfIrbWBQ3jsndnFSnh6/PA=";
   };
 
   nativeBuildInputs = [ cmake ];

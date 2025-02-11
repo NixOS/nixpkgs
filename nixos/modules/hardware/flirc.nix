@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.flirc;
 in
 {
-  options.hardware.flirc.enable = lib.mkEnableOption (lib.mdDoc "software to configure a Flirc USB device");
+  options.hardware.flirc.enable = lib.mkEnableOption "software to configure a Flirc USB device";
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.flirc ];

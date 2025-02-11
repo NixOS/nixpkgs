@@ -1,17 +1,21 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "helm-s3";
-  version = "0.15.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "hypnoglow";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-D79nUIueOV2FC3I2LreHMzl/xOpzNa+OsfL5wcnyY78=";
+    hash = "sha256-WiK2kZWik81HYZVVmzdqdqIE+jnAcYyu536NbdYWYxk=";
   };
 
-  vendorHash = "sha256-dKKggD/VlBiopt2ygh07+6bTBbRgQfWbiY/1qJSSx/0=";
+  vendorHash = "sha256-AXr+2+iv3oNTHEckK7DXEA5PMgFgT5iAGRttvGoCpQQ=";
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''
@@ -23,7 +27,11 @@ buildGoModule rec {
     go test $(go list ./... | grep -vE '(awsutil|e2e)')
   '';
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   subPackages = [ "cmd/helm-s3" ];
 
@@ -34,7 +42,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Helm plugin that allows to set up a chart repository using AWS S3";
+    description = "Helm plugin that allows to set up a chart repository using AWS S3";
     homepage = "https://github.com/hypnoglow/helm-s3";
     license = licenses.mit;
     maintainers = with maintainers; [ yurrriq ];

@@ -45,30 +45,32 @@ placeholder certificates in place of the real ACME certs. The placeholder
 certs are overwritten when the ACME certs arrive. For
 `foo.example.com` the config would look like this:
 
-```
-security.acme.acceptTerms = true;
-security.acme.defaults.email = "admin+acme@example.com";
-services.nginx = {
-  enable = true;
-  virtualHosts = {
-    "foo.example.com" = {
-      forceSSL = true;
-      enableACME = true;
-      # All serverAliases will be added as extra domain names on the certificate.
-      serverAliases = [ "bar.example.com" ];
-      locations."/" = {
-        root = "/var/www";
+```nix
+{
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "admin+acme@example.com";
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "foo.example.com" = {
+        forceSSL = true;
+        enableACME = true;
+        # All serverAliases will be added as extra domain names on the certificate.
+        serverAliases = [ "bar.example.com" ];
+        locations."/" = {
+          root = "/var/www";
+        };
       };
-    };
 
-    # We can also add a different vhost and reuse the same certificate
-    # but we have to append extraDomainNames manually beforehand:
-    # security.acme.certs."foo.example.com".extraDomainNames = [ "baz.example.com" ];
-    "baz.example.com" = {
-      forceSSL = true;
-      useACMEHost = "foo.example.com";
-      locations."/" = {
-        root = "/var/www";
+      # We can also add a different vhost and reuse the same certificate
+      # but we have to append extraDomainNames manually beforehand:
+      # security.acme.certs."foo.example.com".extraDomainNames = [ "baz.example.com" ];
+      "baz.example.com" = {
+        forceSSL = true;
+        useACMEHost = "foo.example.com";
+        locations."/" = {
+          root = "/var/www";
+        };
       };
     };
   };
@@ -88,47 +90,49 @@ This example uses a vhost called `certs.example.com`, with
 the intent that you will generate certs for all your vhosts and redirect
 everyone to HTTPS.
 
-```
-security.acme.acceptTerms = true;
-security.acme.defaults.email = "admin+acme@example.com";
+```nix
+{
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "admin+acme@example.com";
 
-# /var/lib/acme/.challenges must be writable by the ACME user
-# and readable by the Nginx user. The easiest way to achieve
-# this is to add the Nginx user to the ACME group.
-users.users.nginx.extraGroups = [ "acme" ];
+  # /var/lib/acme/.challenges must be writable by the ACME user
+  # and readable by the Nginx user. The easiest way to achieve
+  # this is to add the Nginx user to the ACME group.
+  users.users.nginx.extraGroups = [ "acme" ];
 
-services.nginx = {
-  enable = true;
-  virtualHosts = {
-    "acmechallenge.example.com" = {
-      # Catchall vhost, will redirect users to HTTPS for all vhosts
-      serverAliases = [ "*.example.com" ];
-      locations."/.well-known/acme-challenge" = {
-        root = "/var/lib/acme/.challenges";
-      };
-      locations."/" = {
-        return = "301 https://$host$request_uri";
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "acmechallenge.example.com" = {
+        # Catchall vhost, will redirect users to HTTPS for all vhosts
+        serverAliases = [ "*.example.com" ];
+        locations."/.well-known/acme-challenge" = {
+          root = "/var/lib/acme/.challenges";
+        };
+        locations."/" = {
+          return = "301 https://$host$request_uri";
+        };
       };
     };
   };
-}
-# Alternative config for Apache
-users.users.wwwrun.extraGroups = [ "acme" ];
-services.httpd = {
-  enable = true;
-  virtualHosts = {
-    "acmechallenge.example.com" = {
-      # Catchall vhost, will redirect users to HTTPS for all vhosts
-      serverAliases = [ "*.example.com" ];
-      # /var/lib/acme/.challenges must be writable by the ACME user and readable by the Apache user.
-      # By default, this is the case.
-      documentRoot = "/var/lib/acme/.challenges";
-      extraConfig = ''
-        RewriteEngine On
-        RewriteCond %{HTTPS} off
-        RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge [NC]
-        RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
-      '';
+  # Alternative config for Apache
+  users.users.wwwrun.extraGroups = [ "acme" ];
+  services.httpd = {
+    enable = true;
+    virtualHosts = {
+      "acmechallenge.example.com" = {
+        # Catchall vhost, will redirect users to HTTPS for all vhosts
+        serverAliases = [ "*.example.com" ];
+        # /var/lib/acme/.challenges must be writable by the ACME user and readable by the Apache user.
+        # By default, this is the case.
+        documentRoot = "/var/lib/acme/.challenges";
+        extraConfig = ''
+          RewriteEngine On
+          RewriteCond %{HTTPS} off
+          RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge [NC]
+          RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
+        '';
+      };
     };
   };
 }
@@ -136,18 +140,20 @@ services.httpd = {
 
 Now you need to configure ACME to generate a certificate.
 
-```
-security.acme.certs."foo.example.com" = {
-  webroot = "/var/lib/acme/.challenges";
-  email = "foo@example.com";
-  # Ensure that the web server you use can read the generated certs
-  # Take a look at the group option for the web server you choose.
-  group = "nginx";
-  # Since we have a wildcard vhost to handle port 80,
-  # we can generate certs for anything!
-  # Just make sure your DNS resolves them.
-  extraDomainNames = [ "mail.example.com" ];
-};
+```nix
+{
+  security.acme.certs."foo.example.com" = {
+    webroot = "/var/lib/acme/.challenges";
+    email = "foo@example.com";
+    # Ensure that the web server you use can read the generated certs
+    # Take a look at the group option for the web server you choose.
+    group = "nginx";
+    # Since we have a wildcard vhost to handle port 80,
+    # we can generate certs for anything!
+    # Just make sure your DNS resolves them.
+    extraDomainNames = [ "mail.example.com" ];
+  };
+}
 ```
 
 The private key {file}`key.pem` and certificate
@@ -167,69 +173,73 @@ see the [lego docs](https://go-acme.github.io/lego/dns/)
 for provider/server specific configuration values. For the sake of these
 docs, we will provide a fully self-hosted example using bind.
 
-```
-services.bind = {
-  enable = true;
-  extraConfig = ''
-    include "/var/lib/secrets/dnskeys.conf";
-  '';
-  zones = [
-    rec {
-      name = "example.com";
-      file = "/var/db/bind/${name}";
-      master = true;
-      extraConfig = "allow-update { key rfc2136key.example.com.; };";
-    }
-  ];
-}
+```nix
+{
+  services.bind = {
+    enable = true;
+    extraConfig = ''
+      include "/var/lib/secrets/dnskeys.conf";
+    '';
+    zones = [
+      rec {
+        name = "example.com";
+        file = "/var/db/bind/${name}";
+        master = true;
+        extraConfig = "allow-update { key rfc2136key.example.com.; };";
+      }
+    ];
+  };
 
-# Now we can configure ACME
-security.acme.acceptTerms = true;
-security.acme.defaults.email = "admin+acme@example.com";
-security.acme.certs."example.com" = {
-  domain = "*.example.com";
-  dnsProvider = "rfc2136";
-  environmentFile = "/var/lib/secrets/certs.secret";
-  # We don't need to wait for propagation since this is a local DNS server
-  dnsPropagationCheck = false;
-};
+  # Now we can configure ACME
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "admin+acme@example.com";
+  security.acme.certs."example.com" = {
+    domain = "*.example.com";
+    dnsProvider = "rfc2136";
+    environmentFile = "/var/lib/secrets/certs.secret";
+    # We don't need to wait for propagation since this is a local DNS server
+    dnsPropagationCheck = false;
+  };
+}
 ```
 
 The {file}`dnskeys.conf` and {file}`certs.secret`
 must be kept secure and thus you should not keep their contents in your
 Nix config. Instead, generate them one time with a systemd service:
 
-```
-systemd.services.dns-rfc2136-conf = {
-  requiredBy = ["acme-example.com.service" "bind.service"];
-  before = ["acme-example.com.service" "bind.service"];
-  unitConfig = {
-    ConditionPathExists = "!/var/lib/secrets/dnskeys.conf";
-  };
-  serviceConfig = {
-    Type = "oneshot";
-    UMask = 0077;
-  };
-  path = [ pkgs.bind ];
-  script = ''
-    mkdir -p /var/lib/secrets
-    chmod 755 /var/lib/secrets
-    tsig-keygen rfc2136key.example.com > /var/lib/secrets/dnskeys.conf
-    chown named:root /var/lib/secrets/dnskeys.conf
-    chmod 400 /var/lib/secrets/dnskeys.conf
+```nix
+{
+  systemd.services.dns-rfc2136-conf = {
+    requiredBy = ["acme-example.com.service" "bind.service"];
+    before = ["acme-example.com.service" "bind.service"];
+    unitConfig = {
+      ConditionPathExists = "!/var/lib/secrets/dnskeys.conf";
+    };
+    serviceConfig = {
+      Type = "oneshot";
+      UMask = 0077;
+    };
+    path = [ pkgs.bind ];
+    script = ''
+      mkdir -p /var/lib/secrets
+      chmod 755 /var/lib/secrets
+      tsig-keygen rfc2136key.example.com > /var/lib/secrets/dnskeys.conf
+      chown named:root /var/lib/secrets/dnskeys.conf
+      chmod 400 /var/lib/secrets/dnskeys.conf
 
-    # extract secret value from the dnskeys.conf
-    while read x y; do if [ "$x" = "secret" ]; then secret="''${y:1:''${#y}-3}"; fi; done < /var/lib/secrets/dnskeys.conf
+      # extract secret value from the dnskeys.conf
+      while read x y; do if [ "$x" = "secret" ]; then secret="''${y:1:''${#y}-3}"; fi; done < /var/lib/secrets/dnskeys.conf
 
-    cat > /var/lib/secrets/certs.secret << EOF
-    RFC2136_NAMESERVER='127.0.0.1:53'
-    RFC2136_TSIG_ALGORITHM='hmac-sha256.'
-    RFC2136_TSIG_KEY='rfc2136key.example.com'
-    RFC2136_TSIG_SECRET='$secret'
-    EOF
-    chmod 400 /var/lib/secrets/certs.secret
-  '';
-};
+      cat > /var/lib/secrets/certs.secret << EOF
+      RFC2136_NAMESERVER='127.0.0.1:53'
+      RFC2136_TSIG_ALGORITHM='hmac-sha256.'
+      RFC2136_TSIG_KEY='rfc2136key.example.com'
+      RFC2136_TSIG_SECRET='$secret'
+      EOF
+      chmod 400 /var/lib/secrets/certs.secret
+    '';
+  };
+}
 ```
 
 Now you're all set to generate certs! You should monitor the first invocation
@@ -250,25 +260,27 @@ first, however instead of setting the options for one certificate
 you will set them as defaults
 (e.g. [](#opt-security.acme.defaults.dnsProvider)).
 
-```
-# Configure ACME appropriately
-security.acme.acceptTerms = true;
-security.acme.defaults.email = "admin+acme@example.com";
-security.acme.defaults = {
-  dnsProvider = "rfc2136";
-  environmentFile = "/var/lib/secrets/certs.secret";
-  # We don't need to wait for propagation since this is a local DNS server
-  dnsPropagationCheck = false;
-};
+```nix
+{
+  # Configure ACME appropriately
+  security.acme.acceptTerms = true;
+  security.acme.defaults.email = "admin+acme@example.com";
+  security.acme.defaults = {
+    dnsProvider = "rfc2136";
+    environmentFile = "/var/lib/secrets/certs.secret";
+    # We don't need to wait for propagation since this is a local DNS server
+    dnsPropagationCheck = false;
+  };
 
-# For each virtual host you would like to use DNS-01 validation with,
-# set acmeRoot = null
-services.nginx = {
-  enable = true;
-  virtualHosts = {
-    "foo.example.com" = {
-      enableACME = true;
-      acmeRoot = null;
+  # For each virtual host you would like to use DNS-01 validation with,
+  # set acmeRoot = null
+  services.nginx = {
+    enable = true;
+    virtualHosts = {
+      "foo.example.com" = {
+        enableACME = true;
+        acmeRoot = null;
+      };
     };
   };
 }
@@ -287,40 +299,42 @@ There is no way to change the user the ACME module uses (it will always be
 Below is an example configuration for OpenSMTPD, but this pattern
 can be applied to any service.
 
-```
-# Configure ACME however you like (DNS or HTTP validation), adding
-# the following configuration for the relevant certificate.
-# Note: You cannot use `systemctl reload` here as that would mean
-# the LoadCredential configuration below would be skipped and
-# the service would continue to use old certificates.
-security.acme.certs."mail.example.com".postRun = ''
-  systemctl restart opensmtpd
-'';
-
-# Now you must augment OpenSMTPD's systemd service to load
-# the certificate files.
-systemd.services.opensmtpd.requires = ["acme-finished-mail.example.com.target"];
-systemd.services.opensmtpd.serviceConfig.LoadCredential = let
-  certDir = config.security.acme.certs."mail.example.com".directory;
-in [
-  "cert.pem:${certDir}/cert.pem"
-  "key.pem:${certDir}/key.pem"
-];
-
-# Finally, configure OpenSMTPD to use these certs.
-services.opensmtpd = let
-  credsDir = "/run/credentials/opensmtpd.service";
-in {
-  enable = true;
-  setSendmail = false;
-  serverConfiguration = ''
-    pki mail.example.com cert "${credsDir}/cert.pem"
-    pki mail.example.com key "${credsDir}/key.pem"
-    listen on localhost tls pki mail.example.com
-    action act1 relay host smtp://127.0.0.1:10027
-    match for local action act1
+```nix
+{
+  # Configure ACME however you like (DNS or HTTP validation), adding
+  # the following configuration for the relevant certificate.
+  # Note: You cannot use `systemctl reload` here as that would mean
+  # the LoadCredential configuration below would be skipped and
+  # the service would continue to use old certificates.
+  security.acme.certs."mail.example.com".postRun = ''
+    systemctl restart opensmtpd
   '';
-};
+
+  # Now you must augment OpenSMTPD's systemd service to load
+  # the certificate files.
+  systemd.services.opensmtpd.requires = ["acme-finished-mail.example.com.target"];
+  systemd.services.opensmtpd.serviceConfig.LoadCredential = let
+    certDir = config.security.acme.certs."mail.example.com".directory;
+  in [
+    "cert.pem:${certDir}/cert.pem"
+    "key.pem:${certDir}/key.pem"
+  ];
+
+  # Finally, configure OpenSMTPD to use these certs.
+  services.opensmtpd = let
+    credsDir = "/run/credentials/opensmtpd.service";
+  in {
+    enable = true;
+    setSendmail = false;
+    serverConfiguration = ''
+      pki mail.example.com cert "${credsDir}/cert.pem"
+      pki mail.example.com key "${credsDir}/key.pem"
+      listen on localhost tls pki mail.example.com
+      action act1 relay host smtp://127.0.0.1:10027
+      match for local action act1
+    '';
+  };
+}
 ```
 
 ## Regenerating certificates {#module-security-acme-regenerate}
@@ -340,7 +354,7 @@ to be regenerated. In this scenario lego will produce the error `JWS verificatio
 The solution is to simply delete the associated accounts file and
 re-run the affected service(s).
 
-```
+```shell
 # Find the accounts folder for the certificate
 systemctl cat acme-example.com.service | grep -Po 'accounts/[^:]*'
 export accountdir="$(!!)"

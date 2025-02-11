@@ -1,37 +1,39 @@
-{ lib
-, glib
-, stdenv
-, dbus
-, freetype
-, fontconfig
-, zlib
-, qtquickcontrols2
-, libXinerama
-, libxcb
-, libSM
-, libXi
-, libglvnd
-, libXext
-, libXrandr
-, mailspring
-, libX11
-, libICE
-, libXrender
-, autoPatchelfHook
-, makeWrapper
-, mkDerivation
-, xkeyboard_config
-, fetchurl
-, buildFHSEnv
-, openal
-, makeDesktopItem
+{
+  lib,
+  glib,
+  stdenv,
+  dbus,
+  freetype,
+  fontconfig,
+  zlib,
+  qtquickcontrols2,
+  libXinerama,
+  libxcb,
+  libSM,
+  libXi,
+  libglvnd,
+  libXext,
+  libXrandr,
+  mailspring,
+  libX11,
+  libICE,
+  libXrender,
+  autoPatchelfHook,
+  makeWrapper,
+  mkDerivation,
+  xkeyboard_config,
+  fetchurl,
+  buildFHSEnv,
+  openal,
+  makeDesktopItem,
 }:
 
 let
+  pname = "unigine-superposition";
+  version = "1.1";
 
-  superposition = stdenv.mkDerivation rec{
-    pname = "unigine-superposition";
-    version = "1.1";
+  superposition = stdenv.mkDerivation rec {
+    inherit pname version;
 
     src = fetchurl {
       url = "https://assets.unigine.com/d/Unigine_Superposition-${version}.run";
@@ -97,7 +99,7 @@ in
 # For that we need use a buildFHSEnv.
 
 buildFHSEnv {
-  name = "Superposition";
+  inherit pname version;
 
   targetPkgs = pkgs: [
     superposition
@@ -137,11 +139,12 @@ buildFHSEnv {
   '';
 
   meta = {
-    description = "The Unigine Superposition GPU benchmarking tool";
+    description = "Unigine Superposition GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/superposition";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "Superposition";
   };
 }

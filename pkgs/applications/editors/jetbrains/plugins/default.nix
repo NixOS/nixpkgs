@@ -63,8 +63,7 @@ let
       ids);
 
 
-in
-rec {
+in {
   # Only use if you know what youre doing
   raw = { inherit files byId byName; };
 
@@ -91,28 +90,41 @@ rec {
       passthru.plugins = plugins ++ (ide.plugins or [ ]);
       newPlugins = plugins;
       disallowedReferences = [ ide ];
-      nativeBuildInputs = [ autoPatchelfHook ] ++ (ide.nativeBuildInputs or [ ]);
+      nativeBuildInputs = (lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook) ++ (ide.nativeBuildInputs or [ ]);
       buildInputs = lib.unique ((ide.buildInputs or [ ]) ++ [ glib ]);
 
       inherit (ide) meta;
 
       buildPhase =
-        let
-          pluginCmdsLines = map (plugin: "ln -s ${plugin} \"$out\"/${meta.mainProgram}/plugins/${baseNameOf plugin}") plugins;
-          pluginCmds = builtins.concatStringsSep "\n" pluginCmdsLines;
-        in
-        ''
-          cp -r ${ide} $out
-          chmod +w -R $out
-          IFS=' ' read -ra pluginArray <<< "$newPlugins"
-          for plugin in "''${pluginArray[@]}"
-          do
-            ln -s "$plugin" -t $out/${meta.mainProgram}/plugins/
-          done
+      let
+        rootDir = if stdenv.hostPlatform.isDarwin then "Applications/${ide.product}.app/Contents" else meta.mainProgram;
+      in
+      ''
+        cp -r ${ide} $out
+        chmod +w -R $out
+        rm -f $out/${rootDir}/plugins/plugin-classpath.txt
+        IFS=' ' read -ra pluginArray <<< "$newPlugins"
+        for plugin in "''${pluginArray[@]}"
+        do
+          pluginfiles=$(ls $plugin);
+          if [ $(echo $pluginfiles | wc -l) -eq 1 ] && echo $pluginfiles | grep -E "\.jar" 1> /dev/null; then
+            # if the plugin contains a single jar file, link it directly into the plugins folder
+            ln -s "$plugin/$(echo $pluginfiles | head -1)" $out/${rootDir}/plugins/
+          else
+            # otherwise link the plugin directory itself
+            ln -s "$plugin" -t $out/${rootDir}/plugins/
+          fi
+        done
+        sed "s|${ide.outPath}|$out|" \
+          -i $(realpath $out/bin/${meta.mainProgram})
+
+        if test -f "$out/bin/${meta.mainProgram}-remote-dev-server"; then
           sed "s|${ide.outPath}|$out|" \
-            -i $(realpath $out/bin/${meta.mainProgram}) \
             -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
-          autoPatchelf $out/${meta.mainProgram}/bin
-        '';
+        fi
+
+      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+        autoPatchelf $out
+      '';
     };
 }

@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boehmgc
-, bison
-, flex
-, protobuf
-, gmp
-, boost
-, python3
-, doxygen
-, graphviz
-, libbpf
-, libllvm
-, enableDocumentation ? true
-, enableBPF ? true
-, enableDPDK ? true
-, enableBMV2 ? true
-, enableGraphBackend ? true
-, enableP4Tests ? true
-, enableGTests ? true
-, enableMultithreading ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boehmgc,
+  bison,
+  flex,
+  protobuf,
+  gmp,
+  boost,
+  python3,
+  doxygen,
+  graphviz,
+  libbpf,
+  libllvm,
+  enableDocumentation ? true,
+  enableBPF ? true,
+  enableDPDK ? true,
+  enableBMV2 ? true,
+  enableGraphBackend ? true,
+  enableP4Tests ? true,
+  enableGTests ? true,
+  enableMultithreading ? false,
 }:
 let
   toCMakeBoolean = v: if v then "ON" else "OFF";
@@ -37,6 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Fix gcc-13 build:
+    #   https://github.com/p4lang/p4c/pull/4084
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/p4lang/p4c/commit/6756816100b7c51e3bf717ec55114a8e8575ba1d.patch";
+      hash = "sha256-wWM1qjgQCNMPdrhQF38jzFgODUsAcaHTajdbV7L3y8o=";
+    })
+  ];
+
   postFetch = ''
     rm -rf backends/ebpf/runtime/contrib/libbpf
     rm -rf control-plane/p4runtime
@@ -52,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_DOCS=${toCMakeBoolean enableDocumentation}"
     "-DENABLE_GC=ON"
     "-DENABLE_GTESTS=${toCMakeBoolean enableGTests}"
-    "-DENABLE_PROTOBUF_STATIC=OFF"  # static protobuf has been removed since 3.21.6
+    "-DENABLE_PROTOBUF_STATIC=OFF" # static protobuf has been removed since 3.21.6
     "-DENABLE_MULTITHREAD=${toCMakeBoolean enableMultithreading}"
     "-DENABLE_GMP=ON"
   ];
@@ -61,13 +73,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    bison
-    flex
-    cmake
-  ]
-  ++ lib.optionals enableDocumentation [ doxygen graphviz ]
-  ++ lib.optionals enableBPF [ libllvm libbpf ];
+  nativeBuildInputs =
+    [
+      bison
+      flex
+      cmake
+      protobuf
+      python3
+    ]
+    ++ lib.optionals enableDocumentation [
+      doxygen
+      graphviz
+    ]
+    ++ lib.optionals enableBPF [
+      libllvm
+      libbpf
+    ];
 
   buildInputs = [
     protobuf
@@ -75,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     boehmgc
     gmp
     flex
-    python3
   ];
 
   meta = {
@@ -83,7 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Reference compiler for the P4 programming language";
     homepage = "https://github.com/p4lang/p4c";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ raitobezarius govanify ];
+    maintainers = with lib.maintainers; [
+      raitobezarius
+      govanify
+    ];
     platforms = lib.platforms.linux;
   };
 })

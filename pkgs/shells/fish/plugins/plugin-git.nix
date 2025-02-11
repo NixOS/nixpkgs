@@ -1,20 +1,28 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "plugin-git";
-  version = "0.1";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "jhillyerd";
     repo = "plugin-git";
-    rev = "v0.1";
-    sha256 = "sha256-MfrRQdcj7UtIUgtqKjt4lqFLpA6YZgKjE03VaaypNzE";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-p7vvwisu3mvVOE1DcALbzuGJqWBcE1h71UjaopGdxE0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git plugin for fish (similar to oh-my-zsh git)";
     homepage = "https://github.com/jhillyerd/plugin-git";
-    license = licenses.mit;
-    maintainers = with maintainers; [ unsolvedcypher ];
+    changelog = "https://github.com/jhillyerd/plugin-git/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      unsolvedcypher
+    ];
   };
 }

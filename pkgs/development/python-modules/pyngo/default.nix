@@ -1,35 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# dependencies
-, django
-, pydantic
-, typing-extensions
+  # dependencies
+  django,
+  pydantic,
+  typing-extensions,
 
-# tests
-, django-stubs
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  django-stubs,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "1.6.0";
+  version = "2.3.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
-    rev = version;
-    hash = "sha256-qOY1ILMDqSguLnbhuu5JJVMvG3uA08Lv2fB70TgrKqI=";
+    tag = version;
+    hash = "sha256-qAq5e/B/gOBt9Wj8Kfhg+uTe/Sa/Qslk2g/o0+ttIag=";
   };
 
   nativeBuildInputs = [
     hatchling
+  ];
+
+  pythonRelaxDeps = [
+    "pydantic"
+    "typing-extensions"
   ];
 
   propagatedBuildInputs = [

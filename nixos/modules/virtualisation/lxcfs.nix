@@ -1,44 +1,49 @@
 # LXC Configuration
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.lxc.lxcfs;
-in {
-  meta.maintainers = [ maintainers.mic92 ];
+in
+{
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   ###### interface
   options.virtualisation.lxc.lxcfs = {
-    enable =
-      mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          This enables LXCFS, a FUSE filesystem for LXC.
-          To use lxcfs in include the following configuration in your
-          container configuration:
-          ```
-          virtualisation.lxc.defaultConfig = "lxc.include = ''${pkgs.lxcfs}/share/lxc/config/common.conf.d/00-lxcfs.conf";
-          ```
-        '';
-      };
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        This enables LXCFS, a FUSE filesystem for LXC.
+        To use lxcfs in include the following configuration in your
+        container configuration:
+        ```
+        virtualisation.lxc.defaultConfig = "lxc.include = ''${pkgs.lxcfs}/share/lxc/config/common.conf.d/00-lxcfs.conf";
+        ```
+      '';
+    };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.lxcfs = {
       description = "FUSE filesystem for LXC";
       wantedBy = [ "multi-user.target" ];
       before = [ "lxc.service" ];
       restartIfChanged = false;
       serviceConfig = {
-        ExecStartPre="${pkgs.coreutils}/bin/mkdir -p /var/lib/lxcfs";
-        ExecStart="${pkgs.lxcfs}/bin/lxcfs /var/lib/lxcfs";
-        ExecStopPost="-${pkgs.fuse}/bin/fusermount -u /var/lib/lxcfs";
-        KillMode="process";
-        Restart="on-failure";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/lxcfs";
+        ExecStart = "${pkgs.lxcfs}/bin/lxcfs /var/lib/lxcfs";
+        ExecStopPost = "-${pkgs.fuse}/bin/fusermount -u /var/lib/lxcfs";
+        KillMode = "process";
+        Restart = "on-failure";
       };
     };
   };

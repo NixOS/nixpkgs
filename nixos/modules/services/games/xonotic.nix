@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -9,41 +10,41 @@ let
 
   serverCfg = pkgs.writeText "xonotic-server.cfg" (
     toString cfg.prependConfig
-      + "\n"
-      + builtins.concatStringsSep "\n" (
-        lib.mapAttrsToList (key: option:
-          let
-            escape = s: lib.escape [ "\"" ] s;
-            quote = s: "\"${s}\"";
+    + "\n"
+    + builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        key: option:
+        let
+          escape = s: lib.escape [ "\"" ] s;
+          quote = s: "\"${s}\"";
 
-            toValue = x: quote (escape (toString x));
+          toValue = x: quote (escape (toString x));
 
-            value = (if lib.isList option then
-              builtins.concatStringsSep
-                " "
-                (builtins.map (x: toValue x) option)
+          value = (
+            if lib.isList option then
+              builtins.concatStringsSep " " (builtins.map (x: toValue x) option)
             else
               toValue option
-            );
-          in
-          "${key} ${value}"
-        ) cfg.settings
-      )
-      + "\n"
-      + toString cfg.appendConfig
+          );
+        in
+        "${key} ${value}"
+      ) cfg.settings
+    )
+    + "\n"
+    + toString cfg.appendConfig
   );
 in
 
 {
   options.services.xonotic = {
-    enable = lib.mkEnableOption (lib.mdDoc "Xonotic dedicated server");
+    enable = lib.mkEnableOption "Xonotic dedicated server";
 
-    package = lib.mkPackageOption pkgs "xonotic-dedicated" {};
+    package = lib.mkPackageOption pkgs "xonotic-dedicated" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open the firewall for TCP and UDP on the specified port.
       '';
     };
@@ -52,30 +53,42 @@ in
       type = lib.types.path;
       readOnly = true;
       default = "/var/lib/xonotic";
-      description = lib.mdDoc ''
+      description = ''
         Data directory.
       '';
     };
 
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Generates the `server.cfg` file. Refer to [upstream's example][0] for
         details.
 
         [0]: https://gitlab.com/xonotic/xonotic/-/blob/master/server/server.cfg
       '';
-      default = {};
+      default = { };
       type = lib.types.submodule {
-        freeformType = with lib.types; let
-          scalars = oneOf [ singleLineStr int float ];
-        in
-        attrsOf (oneOf [ scalars (nonEmptyListOf scalars) ]);
+        freeformType =
+          with lib.types;
+          let
+            scalars = oneOf [
+              singleLineStr
+              int
+              float
+            ];
+          in
+          attrsOf (oneOf [
+            scalars
+            (nonEmptyListOf scalars)
+          ]);
 
         options.sv_public = lib.mkOption {
           type = lib.types.int;
           default = 0;
-          example = [ (-1) 1 ];
-          description = lib.mdDoc ''
+          example = [
+            (-1)
+            1
+          ];
+          description = ''
             Controls whether the server will be publicly listed.
           '';
         };
@@ -83,7 +96,7 @@ in
         options.hostname = lib.mkOption {
           type = lib.types.singleLineStr;
           default = "Xonotic $g_xonoticversion Server";
-          description = lib.mdDoc ''
+          description = ''
             The name that will appear in the server list. `$g_xonoticversion`
             gets replaced with the current version.
           '';
@@ -92,7 +105,7 @@ in
         options.sv_motd = lib.mkOption {
           type = lib.types.singleLineStr;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Text displayed when players join the server.
           '';
         };
@@ -100,7 +113,7 @@ in
         options.sv_termsofservice_url = lib.mkOption {
           type = lib.types.singleLineStr;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             URL for the Terms of Service for playing on your server.
           '';
         };
@@ -108,7 +121,7 @@ in
         options.maxplayers = lib.mkOption {
           type = lib.types.int;
           default = 16;
-          description = lib.mdDoc ''
+          description = ''
             Number of player slots on the server, including spectators.
           '';
         };
@@ -116,7 +129,7 @@ in
         options.net_address = lib.mkOption {
           type = lib.types.singleLineStr;
           default = "0.0.0.0";
-          description = lib.mdDoc ''
+          description = ''
             The address Xonotic will listen on.
           '';
         };
@@ -124,7 +137,7 @@ in
         options.port = lib.mkOption {
           type = lib.types.port;
           default = 26000;
-          description = lib.mdDoc ''
+          description = ''
             The port Xonotic will listen on.
           '';
         };
@@ -136,7 +149,7 @@ in
     appendConfig = lib.mkOption {
       type = with lib.types; nullOr lines;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Literal text to insert at the end of `server.cfg`.
       '';
     };
@@ -145,7 +158,7 @@ in
     prependConfig = lib.mkOption {
       type = with lib.types; nullOr lines;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Literal text to insert at the start of `server.cfg`.
       '';
     };

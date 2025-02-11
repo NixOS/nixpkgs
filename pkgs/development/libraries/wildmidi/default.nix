@@ -1,26 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, writeTextFile, cmake, alsa-lib, OpenAL, freepats }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeTextFile,
+  cmake,
+  alsa-lib,
+  OpenAL,
+  CoreAudioKit,
+  freepats,
+}:
 
 let
   defaultCfgPath = "${placeholder "out"}/etc/wildmidi/wildmidi.cfg";
 in
 stdenv.mkDerivation rec {
   pname = "wildmidi";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "wildmidi";
     rev = "${pname}-${version}";
-    sha256 = "sha256-5El8aDpAgjrW0/4lphZEF+Hfv9Xr7J4DMk1b/Tb+0TU=";
+    sha256 = "sha256-syjs8y75M2ul7whiZxnWMSskRJd0ixFqnep7qsTbiDE=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals stdenv.buildPlatform.isLinux [
-    alsa-lib stdenv.cc.libc/*couldn't find libm*/
-  ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    OpenAL
-  ];
+  buildInputs =
+    lib.optionals stdenv.buildPlatform.isLinux [
+      alsa-lib
+      stdenv.cc.libc # couldn't find libm
+    ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
+      OpenAL
+      CoreAudioKit
+    ];
 
   preConfigure = ''
     # https://github.com/Mindwerks/wildmidi/issues/236
@@ -33,21 +47,24 @@ stdenv.mkDerivation rec {
     "-DWILDMIDI_CFG=${defaultCfgPath}"
   ];
 
-  postInstall = let
-    defaultCfg = writeTextFile {
-      name = "wildmidi.cfg";
-      text = ''
-        dir ${freepats}
-        source ${freepats}/freepats.cfg
-      '';
-    };
-  in ''
-    mkdir -p "$(dirname ${defaultCfgPath})"
-    ln -s ${defaultCfg} ${defaultCfgPath}
-  '';
+  postInstall =
+    let
+      defaultCfg = writeTextFile {
+        name = "wildmidi.cfg";
+        text = ''
+          dir ${freepats}
+          source ${freepats}/freepats.cfg
+        '';
+      };
+    in
+    ''
+      mkdir -p "$(dirname ${defaultCfgPath})"
+      ln -s ${defaultCfg} ${defaultCfgPath}
+    '';
 
   meta = with lib; {
     description = "Software MIDI player and library";
+    mainProgram = "wildmidi";
     longDescription = ''
       WildMIDI is a simple software midi player which has a core softsynth
       library that can be use with other applications.

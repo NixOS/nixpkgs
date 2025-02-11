@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytestCheckHook
-, pythonOlder
-, pytz
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";
   version = "2.1.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
+    hash = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
   };
 
   postPatch = ''
     sed -i '/cov/d' setup.cfg
   '';
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
   LC_ALL = "en_US.UTF-8";
 
@@ -33,9 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "feedgenerator" ];
 
@@ -43,6 +41,6 @@ buildPythonPackage rec {
     description = "Standalone version of Django's feedgenerator module";
     homepage = "https://github.com/getpelican/feedgenerator";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

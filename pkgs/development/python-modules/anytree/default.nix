@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fontconfig
-, graphviz
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, six
-, substituteAll
-, withGraphviz ? true
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fontconfig,
+  graphviz,
+  poetry-core,
+  pytest7CheckHook,
+  pythonOlder,
+  six,
+  substituteAll,
+  withGraphviz ? true,
 }:
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.12.0";
+  version = "2.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c0fec0de";
     repo = "anytree";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8mV9Lf6NLPUDVurXCxG+tqe7+3TrIn2H+7tHa6BpTzk=";
+    tag = version;
+    hash = "sha256-5HU8kR3B2RHiGBraQ2FTgVtGHJi+Lha9U/7rpNsYCCI=";
   };
 
   patches = lib.optionals withGraphviz [
@@ -32,17 +33,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    # drop [project.urls] section, poetry-core 2.0 compat issue
+    sed -i "/project\.urls/,+4d" pyproject.toml
+  '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ six ];
+
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   # Tests print “Fontconfig error: Cannot load default config file”
   preCheck = lib.optionalString withGraphviz ''
@@ -52,9 +52,7 @@ buildPythonPackage rec {
   # Circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
   doCheck = withGraphviz;
 
-  pythonImportsCheck = [
-    "anytree"
-  ];
+  pythonImportsCheck = [ "anytree" ];
 
   meta = with lib; {
     description = "Powerful and Lightweight Python Tree Data Structure";

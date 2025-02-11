@@ -1,11 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  serialDevice =
-    if pkgs.stdenv.hostPlatform.isx86
-    then "ttyS0"
-    else "ttyAMA0"; # aarch64
-in {
+  serialDevice = if pkgs.stdenv.hostPlatform.isx86 then "ttyS0" else "ttyAMA0"; # aarch64
+in
+{
   imports = [
     ./lxc-instance-common.nix
 
@@ -39,7 +42,14 @@ in {
     # image building needs to know what device to install bootloader on
     boot.loader.grub.device = "/dev/vda";
 
-    boot.kernelParams = ["console=tty1" "console=${serialDevice}"];
+    boot.kernelParams = [
+      "console=tty1"
+      "console=${serialDevice}"
+    ];
+
+    services.udev.extraRules = ''
+      SUBSYSTEM=="cpu", CONST{arch}=="x86-64", TEST=="online", ATTR{online}=="0", ATTR{online}="1"
+    '';
 
     virtualisation.lxd.agent.enable = lib.mkDefault true;
   };

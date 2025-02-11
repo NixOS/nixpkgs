@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, catch2
-, pkg-config
-, substituteAll
-, yaml-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  catch2,
+  pkg-config,
+  replaceVars,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation {
@@ -22,9 +23,8 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./remove-fetchcontent-usage.patch {
       # We will download them instead of cmake's fetchContent
-      src = ./remove-fetchcontent-usage.patch;
       catch2Src = catch2.src;
     })
   ];
@@ -54,5 +54,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gaelreyrol ];
+    mainProgram = "ebpf-verifier";
   };
 }

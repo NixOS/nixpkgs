@@ -7,7 +7,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "jenkins";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ bjornfor coconnor domenkozar eelco ];
+    maintainers = [ bjornfor coconnor domenkozar ];
   };
 
   nodes = {
@@ -60,6 +60,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         users.users.jenkins.extraGroups = [ "users" ];
 
         systemd.services.jenkins.serviceConfig.TimeoutStartSec = "6min";
+
+        # Increase disk space to prevent this issue:
+        #
+        # WARNING h.n.DiskSpaceMonitorDescriptor#markNodeOfflineOrOnline: Making Built-In Node offline temporarily due to the lack of disk space
+        virtualisation.diskSize = 2 * 1024;
       };
 
     slave =

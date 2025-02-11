@@ -1,8 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitLab
-, python-musicpd
-, requests}:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitLab,
+  python-musicpd,
+  requests,
+}:
 
 buildPythonApplication rec {
   pname = "mpd-sima";
@@ -11,8 +13,8 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "kaliko";
     repo = "sima";
-     rev = version;
-    sha256 = "sha256-lMvM1EqS1govhv4B2hJzIg5DFQYgEr4yJJtgOQxnVlY=";
+    rev = version;
+    hash = "sha256-lMvM1EqS1govhv4B2hJzIg5DFQYgEr4yJJtgOQxnVlY=";
   };
 
   format = "setuptools";
@@ -29,7 +31,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An autoqueuing mpd client";
+    description = "Autoqueuing mpd client";
     homepage = "https://kaliko.me/mpd-sima/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

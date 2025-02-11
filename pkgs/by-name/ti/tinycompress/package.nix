@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tinycompress";
-  version = "1.2.8";
+  version = "1.2.13";
 
   src = fetchurl {
-    url = "mirror://alsa/tinycompress/${pname}-${version}.tar.bz2";
-    hash = "sha256-L4l+URLNO8pnkLXOz9puBmLIvF7g+6uXKyR6DMYg1mw=";
+    url = "mirror://alsa/tinycompress/tinycompress-${version}.tar.bz2";
+    hash = "sha256-Dv5svXv/MZg+DUFt8ENnZ2ZcxM1w0njAbODoPg7qtds=";
   };
 
   meta = with lib; {
     homepage = "http://www.alsa-project.org/";
-    description = "a userspace library for anyone who wants to use the ALSA compressed APIs";
+    description = "Userspace library for anyone who wants to use the ALSA compressed APIs";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ k900 ];

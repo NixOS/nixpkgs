@@ -1,27 +1,29 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchpatch
-, fetchPypi
-, gssapi
-, icecream
-, invoke
-, mock
-, pyasn1
-, pynacl
-, pytestCheckHook
-, six
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchpatch,
+  fetchPypi,
+  gssapi,
+  icecream,
+  invoke,
+  mock,
+  pyasn1,
+  pynacl,
+  pytest-relaxed,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "3.3.1";
-  format = "setuptools";
+  version = "3.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ajd3qWGshtvvN1xfW41QAUoaltD9fwVKQ7yIATSw/3c=";
+    hash = "sha256-rRHlQNpPVc7dpSkx8aP4Eqgjinr39ipg3lOM2AuygSQ=";
   };
 
   patches = [
@@ -33,16 +35,20 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bcrypt
     cryptography
-    pyasn1
-    six
-  ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
+    pynacl
+  ];
 
-  passthru.optional-dependencies = {
-    gssapi = [ pyasn1 gssapi ];
-    ed25519 = [ pynacl bcrypt ];
+  optional-dependencies = {
+    gssapi = [
+      pyasn1
+      gssapi
+    ];
+    ed25519 = [ ];
     invoke = [ invoke ];
   };
 
@@ -50,31 +56,24 @@ buildPythonPackage rec {
     icecream
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytest-relaxed
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  disabledTestPaths = [
-    # disable tests that require pytest-relaxed, which is broken
-    "tests/test_client.py"
-    "tests/test_ssh_gss.py"
-  ];
-
-  pythonImportsCheck = [
-    "paramiko"
-  ];
+  pythonImportsCheck = [ "paramiko" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/paramiko/paramiko/";
     changelog = "https://github.com/paramiko/paramiko/blob/${version}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     longDescription = ''
       Library for making SSH2 connections (client or server). Emphasis is
       on using SSH2 as an alternative to SSL for making secure connections
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

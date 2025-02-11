@@ -1,27 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-# build
-, cmake
-, pkg-config
+  # build
+  cmake,
+  pkg-config,
 
-# runtime
-, expat
-, ipu6-camera-bin
-, libtool
-, gst_all_1
+  # runtime
+  expat,
+  ipu6-camera-bins,
+  libtool,
+  gst_all_1,
+  libdrm,
+
+  # Pick one of
+  # - ipu6 (Tiger Lake)
+  # - ipu6ep (Alder Lake)
+  # - ipu6epmtl (Meteor Lake)
+  ipuVersion ? "ipu6",
 }:
-
+let
+  ipuTarget =
+    {
+      "ipu6" = "ipu_tgl";
+      "ipu6ep" = "ipu_adl";
+      "ipu6epmtl" = "ipu_mtl";
+    }
+    .${ipuVersion};
+in
 stdenv.mkDerivation {
-  pname = "${ipu6-camera-bin.ipuVersion}-camera-hal";
-  version = "unstable-2023-02-08";
+  pname = "${ipuVersion}-camera-hal";
+  version = "unstable-2024-09-29";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "884b81aae0ea19a974eb8ccdaeef93038136bdd4";
-    hash = "sha256-AePL7IqoOhlxhfPRLpCman5DNh3wYS4MUcLgmgBUcCM=";
+    rev = "f98f72b156563fe8373e4f8d017a9f609676bb33";
+    hash = "sha256-zVcgKW7/GHYd1oMvsaI77cPyj3G68dL+OXBJDz5+Td4=";
   };
 
   nativeBuildInputs = [
@@ -30,48 +46,57 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DIPU_VER=${ipu6-camera-bin.ipuVersion}"
+    "-DIPU_VER=${ipuVersion}"
+    "-DTARGET_SUFFIX=-${ipuVersion}"
     # missing libiacss
     "-DUSE_PG_LITE_PIPE=ON"
-    # missing libipu4
-    "-DENABLE_VIRTUAL_IPU_PIPE=OFF"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+    "-DCMAKE_INSTALL_SUB_PATH=${ipuTarget}"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error"
-    "-I${lib.getDev ipu6-camera-bin}/include/ia_imaging"
-    "-I${lib.getDev ipu6-camera-bin}/include/ia_camera"
   ];
 
   enableParallelBuilding = true;
 
   buildInputs = [
     expat
-    ipu6-camera-bin
+    ipu6-camera-bins
     libtool
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    libdrm
   ];
 
   postPatch = ''
     substituteInPlace src/platformdata/PlatformData.h \
-      --replace '/usr/share/' "${placeholder "out"}/share/"
+      --replace '/usr/share/' "${placeholder "out"}/share/" \
+      --replace '#define CAMERA_DEFAULT_CFG_PATH "/etc/camera/"' '#define CAMERA_DEFAULT_CFG_PATH "${placeholder "out"}/etc/camera/"'
+  '';
+
+  postInstall = ''
+    mkdir -p $out/include/${ipuTarget}/
+    cp -r $src/include $out/include/${ipuTarget}/libcamhal
   '';
 
   postFixup = ''
-    substituteInPlace $out/lib/pkgconfig/libcamhal.pc \
-      --replace 'prefix=/usr' "prefix=$out"
+    for lib in $out/lib/*.so; do
+      patchelf --add-rpath "${ipu6-camera-bins}/lib" $lib
+    done
   '';
 
   passthru = {
-    inherit (ipu6-camera-bin) ipuVersion;
+    inherit ipuVersion ipuTarget;
   };
 
   meta = with lib; {
     description = "HAL for processing of images in userspace";
     homepage = "https://github.com/intel/ipu6-camera-hal";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,9 +1,13 @@
-{ supportedSystems, nixpkgs, pkgs, nix }:
+{
+  supportedSystems,
+  nixpkgs,
+  pkgs,
+}:
 
 pkgs.runCommand "nixpkgs-release-checks"
   {
     src = nixpkgs;
-    buildInputs = [ nix ];
+    buildInputs = [ pkgs.nix ];
     requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~10G RAM; see #227945
   }
   ''
@@ -12,13 +16,13 @@ pkgs.runCommand "nixpkgs-release-checks"
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
-    opts=(--option build-users-group "")
+    opts=()
     nix-store --init
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
     # Make sure that Nixpkgs does not use <nixpkgs>.
-    badFiles=$(find $src/pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
+    badFiles=$(find $src/pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs/' || true)
     if [[ -n $badFiles ]]; then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
         echo "The offending files: $badFiles"
@@ -44,6 +48,9 @@ pkgs.runCommand "nixpkgs-release-checks"
         # Relies on impure eval
         export NIX_ABORT_ON_WARN=true
 
+        # Suppress GC warnings
+        export GC_LARGE_ALLOC_WARN_INTERVAL=100000
+
         set +e
         (
           set -x
@@ -62,7 +69,6 @@ pkgs.runCommand "nixpkgs-release-checks"
         fi
 
         s1=$(sha1sum packages1 | cut -c1-40)
-        echo $s1
 
         nix-env -f $src2 \
             --show-trace --argstr system "$platform" \
@@ -82,9 +88,10 @@ pkgs.runCommand "nixpkgs-release-checks"
         # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
+            echo "Warnings logged:"
+            cat eval-warnings.log
             exit 1
         fi
-        rm eval-warnings.log
 
         nix-env -f $src \
             --show-trace --argstr system "$platform" \
@@ -95,4 +102,4 @@ pkgs.runCommand "nixpkgs-release-checks"
     done
 
     touch $out
-''
+  ''

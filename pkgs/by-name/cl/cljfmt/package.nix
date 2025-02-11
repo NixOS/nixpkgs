@@ -1,18 +1,19 @@
-{ lib
-, buildGraalvmNativeImage
-, fetchurl
-, nix-update-script
-, testers
-, cljfmt
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+  nix-update-script,
+  testers,
+  cljfmt,
 }:
 
 buildGraalvmNativeImage rec {
   pname = "cljfmt";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchurl {
-    url = "https://github.com/weavejester/${pname}/releases/download/${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-vEldQ7qV375mHMn3OUdn0FaPd+f/v9g+C+PuzbSTWtk=";
+    url = "https://github.com/weavejester/cljfmt/releases/download/${version}/cljfmt-${version}-standalone.jar";
+    hash = "sha256-gPIDaFb8mmJyoAIOUWV7ZNNi/rSnuRkYN16Grqly0/c=";
   };
 
   extraNativeImageBuildArgs = [
@@ -34,7 +35,7 @@ buildGraalvmNativeImage rec {
 
   meta = with lib; {
     mainProgram = "cljfmt";
-    description = "A tool for formatting Clojure code";
+    description = "Tool for formatting Clojure code";
     homepage = "https://github.com/weavejester/cljfmt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

@@ -1,33 +1,54 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  libGL,
+  glew,
+  xorg,
+  ffmpeg,
+  libjpeg,
+  libpng,
+  libtiff,
+  eigen,
+  Carbon,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pangolin";
-
-  version = "0.8";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "stevenlovegrove";
     repo = "Pangolin";
     rev = "v${version}";
-    sha256 = "sha256-X8TZWJOQOCItYt/F8E5ahiaPJXoppu9qBlEqfHP0vRc=";
+    sha256 = "sha256-B5YuNcJZHjR3dlVs66rySi68j29O3iMtlQvCjTUZBeY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config doxygen ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    doxygen
+  ];
 
-  buildInputs = [
-    libGL
-    glew
-    xorg.libX11
-    ffmpeg_4
-    libjpeg
-    libpng
-    libtiff
-    eigen
-  ]
-  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+  buildInputs =
+    [
+      libGL
+      glew
+      xorg.libX11
+      ffmpeg
+      libjpeg
+      libpng
+      libtiff
+      eigen
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ];
 
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
@@ -35,7 +56,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   meta = {
-    description = "A lightweight portable rapid development library for managing OpenGL display / interaction and abstracting video input";
+    description = "Lightweight portable rapid development library for managing OpenGL display / interaction and abstracting video input";
     longDescription = ''
       Pangolin is a lightweight portable rapid development library for managing
       OpenGL display / interaction and abstracting video input. At its heart is
@@ -48,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/stevenlovegrove/Pangolin";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.expipiplus1 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

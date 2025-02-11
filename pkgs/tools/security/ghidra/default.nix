@@ -1,12 +1,13 @@
-{ stdenv
-, fetchzip
-, lib
-, makeWrapper
-, autoPatchelfHook
-, openjdk17
-, pam
-, makeDesktopItem
-, icoutils
+{
+  stdenv,
+  fetchzip,
+  lib,
+  makeWrapper,
+  autoPatchelfHook,
+  openjdk21,
+  pam,
+  makeDesktopItem,
+  icoutils,
 }:
 
 let
@@ -20,26 +21,28 @@ let
     desktopName = "Ghidra";
     genericName = "Ghidra Software Reverse Engineering Suite";
     categories = [ "Development" ];
+    terminal = false;
+    startupWMClass = "ghidra-Ghidra";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "10.4";
-  versiondate = "20230928";
+  version = "11.2.1";
+  versiondate = "20241105";
 
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-IiAQ9OKmr8ZgqmGftuW0ITdG06fb9Lr30n2H9GArctk=";
+    hash = "sha256-w6FCAjF2ggFWH8eo7X8V6ZTbSptGkwRzoEMj9nGL5/M=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
-  ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     pam
   ];
 
@@ -63,18 +66,29 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
+    ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
 
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
   meta = with lib; {
-    description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+    description = "Software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+    mainProgram = "ghidra";
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ ck3d govanify mic92 ];
+    maintainers = with maintainers; [
+      ck3d
+      govanify
+      mic92
+    ];
   };
 
 }

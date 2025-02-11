@@ -1,35 +1,57 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, libxslt
-, libxml2
-, libtool
-, pkg-config
-, xmlsec
-, pkgconfig
-, setuptools-scm
-, lxml
-, hypothesis
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  pytestCheckHook,
+  libxslt,
+  libxml2,
+  libtool,
+  pkg-config,
+  xmlsec,
+  pkgconfig,
+  setuptools-scm,
+  lxml,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.13";
+  version = "1.3.14";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kW9deOgEH2zZORq7plnajJSk/vcZbRJtQK8f9Bfyz4Y=";
+    hash = "sha256-k0+ATy+JW824bx6u4ja2YQE1YO5p7BCNKc3W5fKSotk=";
   };
 
-  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
+  patches = [
+    # fixes build error with GCC 14
+    (fetchpatch {
+      url = "https://github.com/xmlsec/python-xmlsec/commit/67cd4ac73e4fceac4b4eb6a320067cad33f79213.patch";
+      hash = "sha256-zU34a2x3S48Hwvo/oDe5mfkZ3jBwdajIrKwKhTRSsko=";
+    })
+  ];
 
-  buildInputs = [ xmlsec libxslt libxml2 libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    pkgconfig
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    xmlsec
+    libxslt
+    libxml2
+    libtool
+  ];
 
   propagatedBuildInputs = [ lxml ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   disabledTestPaths = [
     # Full git clone required for test_doc_examples

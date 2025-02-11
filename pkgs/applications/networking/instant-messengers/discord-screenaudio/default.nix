@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, cmake
-, pkg-config
-, qtbase
-, qtwebengine
-, qtwayland
-, pipewire
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtwebengine,
+  qtwayland,
+  pipewire,
+  kdePackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "discord-screenaudio";
-  version = "1.9.2";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "maltejur";
     repo = "discord-screenaudio";
     rev = "v${version}";
-    hash = "sha256-it7JSmiDz3k1j+qEZrrNhyAuoixiQuiEbXac7lbJmko=";
+    hash = "sha256-+F+XRBQn4AVDVARdM2XtBDE7c6tMPZTR3cntDL8aenw=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +36,9 @@ stdenv.mkDerivation rec {
     qtwebengine
     qtwayland
     pipewire
+    kdePackages.knotifications
+    kdePackages.kxmlgui
+    kdePackages.kglobalaccel
   ];
 
   preConfigure = ''
@@ -45,7 +50,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A custom discord client that supports streaming with audio on Linux";
+    description = "Custom discord client that supports streaming with audio on Linux";
+    mainProgram = "discord-screenaudio";
     homepage = "https://github.com/maltejur/discord-screenaudio";
     downloadPage = "https://github.com/maltejur/discord-screenaudio/releases";
     changelog = "https://github.com/maltejur/discord-screenaudio/releases/tag/v${version}";

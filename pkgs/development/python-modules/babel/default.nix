@@ -1,45 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pythonAtLeast
-, pythonOlder
-, tzdata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pythonOlder,
 
-# tests
-, freezegun
-, pytestCheckHook
-, pytz
+  # build-system
+  setuptools,
+
+  # tests
+  freezegun,
+  pytestCheckHook,
+  pytz,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.12.1";
-  format = "setuptools";
+  version = "2.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Babel";
-    inherit version;
-    hash = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
+    inherit pname version;
+    hash = "sha256-0fNVTKJmBf4XPz3gxl91D1pC+SRJm/E03mQjWCKY4xY=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
-
-  # including backports.zoneinfo for python<3.9 yields infinite recursion
-  doCheck = pythonAtLeast "3.9";
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     freezegun
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
-  ] ++ lib.optionals isPyPy [
-    tzdata
-  ];
+  ] ++ lib.optionals isPyPy [ tzdata ];
 
   disabledTests = [
     # fails on days switching from and to daylight saving time in EST
@@ -47,11 +42,14 @@ buildPythonPackage rec {
     "test_format_time"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "babel" ];
+
+  meta = {
+    description = "Collection of internationalizing tools";
     homepage = "https://babel.pocoo.org/";
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
-    description = "Collection of internationalizing tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "pybabel";
   };
 }

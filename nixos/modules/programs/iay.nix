@@ -1,17 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.iay;
-  inherit (lib) mkEnableOption mkIf mkOption mkPackageOption optionalString types;
-in {
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    optionalString
+    types
+    ;
+in
+{
   options.programs.iay = {
-    enable = mkEnableOption (lib.mdDoc "iay");
-    package = mkPackageOption pkgs "iay" {};
+    enable = mkEnableOption "iay, a minimalistic shell prompt";
+    package = mkPackageOption pkgs "iay" { };
 
     minimalPrompt = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Use minimal one-liner prompt.";
+      description = "Use minimal one-liner prompt.";
     };
   };
 

@@ -1,39 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, freezegun
-, graphql-core
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, snapshottest
-, starlette
-, typing-extensions
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  graphql-core,
+  hatchling,
+  httpx,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  python-multipart,
+  starlette,
+  syrupy,
+  typing-extensions,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.20.1";
-  format = "pyproject";
+  version = "0.24";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mirumee";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-v3CaLMTo/zbNEoE3K+aWnFTCgLetcnN7vOU/sFqLq2k=";
+    repo = "ariadne";
+    tag = version;
+    hash = "sha256-QLMPmep/mtw/ZDto3kK1y/9N+7aZwAke8ZHC6dzwUuM=";
   };
-  patches = [
-    ./remove-opentracing.patch
-  ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  patches = [ ./remove-opentracing.patch ];
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     graphql-core
@@ -43,16 +43,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    httpx
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-    snapshottest
+    python-multipart
+    syrupy
     werkzeug
   ];
 
-  pythonImportsCheck = [
-    "ariadne"
-  ];
+  pythonImportsCheck = [ "ariadne" ];
+
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   disabledTests = [
     # TypeError: TestClient.request() got an unexpected keyword argument 'content'

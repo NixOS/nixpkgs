@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, pkg-config
-, buildsystem
-, libparserutils
-, libwapcaplet
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  pkg-config,
+  buildsystem,
+  libparserutils,
+  libwapcaplet,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libcss";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libcss-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-0tzhbpM5Lo1qcglCDUfC1Wo4EXAaDoGnJPxUHGPTxtw=";
+    hash = "sha256-LfIVu+w01R1gwaBLAbLfTV0Y9RDx86evS4DN21ZxFU4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-fallthrough"
-    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=${if stdenv.cc.isGNU then "maybe-uninitialized" else "uninitialized"}"
   ];
 
   meta = {

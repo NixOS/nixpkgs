@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
-, gnutls, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit, sphinx
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  gnutls,
+  c-ares,
+  libxml2,
+  sqlite,
+  zlib,
+  libssh2,
+  cppunit,
+  sphinx,
+  Security,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +28,28 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    sphinx
+  ];
 
-  buildInputs = [ gnutls c-ares libxml2 sqlite zlib libssh2 ] ++
-    lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    gnutls
+    c-ares
+    libxml2
+    sqlite
+    zlib
+    libssh2
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  outputs = [ "bin" "dev" "out" "doc" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+    "man"
+  ];
 
   configureFlags = [
     "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
@@ -38,12 +66,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    aria2 = nixosTests.aria2;
+  };
+
   meta = with lib; {
     homepage = "https://aria2.github.io";
-    description = "A lightweight, multi-protocol, multi-source, command-line download utility";
+    changelog = "https://github.com/aria2/aria2/releases/tag/release-${version}";
+    description = "Lightweight, multi-protocol, multi-source, command-line download utility";
     mainProgram = "aria2c";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Br1ght0ne koral ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      koral
+      timhae
+    ];
   };
 }

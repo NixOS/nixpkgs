@@ -1,11 +1,13 @@
-{ buildPythonPackage
-, lib
-, stdenv
-, libsixel
+{
+  buildPythonPackage,
+  lib,
+  stdenv,
+  libsixel,
 }:
 
 buildPythonPackage rec {
   version = libsixel.version;
+  format = "setuptools";
   pname = "libsixel";
 
   src = libsixel.src;

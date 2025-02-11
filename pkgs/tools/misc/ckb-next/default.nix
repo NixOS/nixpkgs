@@ -1,6 +1,23 @@
-{ lib, wrapQtAppsHook, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
-, withPulseaudio ? stdenv.isLinux, libpulseaudio, quazip
+{
+  lib,
+  wrapQtAppsHook,
+  fetchFromGitHub,
+  substituteAll,
+  udev,
+  stdenv,
+  pkg-config,
+  qtbase,
+  cmake,
+  zlib,
+  kmod,
+  libXdmcp,
+  qttools,
+  qtx11extras,
+  libdbusmenu,
+  gnused,
+  withPulseaudio ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  quazip,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,12 +64,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postInstall = ''
+    substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \
+      --replace-fail "/usr/bin/env sed" "${lib.getExe gnused}"
+  '';
+
   meta = with lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
     homepage = "https://github.com/ckb-next/ckb-next";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     mainProgram = "ckb-next";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

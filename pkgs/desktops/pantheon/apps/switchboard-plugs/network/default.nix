@@ -1,40 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, substituteAll
-, vala
-, libgee
-, granite
-, gtk3
-, networkmanager
-, networkmanagerapplet
-, libnma
-, switchboard
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  replaceVars,
+  vala,
+  libadwaita,
+  libgee,
+  gettext,
+  granite7,
+  gtk4,
+  networkmanager,
+  networkmanagerapplet,
+  libnma-gtk4,
+  switchboard,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "unstable-2023-09-05"; # 2.4.4 does not support networkmanager 1.44
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "3b69132788ff8734a481d498b49207e05a4f7d70";
-    hash = "sha256-XWiihU/FK6oeWQWRYsc/IxqafuvwA89ZE3o/WzaxudE=";
+    rev = version;
+    hash = "sha256-DXXEMST/EIckZkp5BozNP+NlyutlxF92ZeJngj8+EdM=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit networkmanagerapplet;
     })
   ];
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
     pkg-config
@@ -42,13 +45,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     networkmanager
-    libnma
+    libnma-gtk4
     switchboard
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = nix-update-script { };

@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cgreen, openjdk, pkg-config, which
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cgreen,
+  openjdk,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,12 +41,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cgreen
-    openjdk pkg-config which
+    openjdk
+    pkg-config
+    which
   ];
 
   meta = with lib; {
     homepage = "https://www.alanif.se/";
-    description = "The Alan interactive fiction language";
+    description = "Alan interactive fiction language";
     license = licenses.artistic2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ neilmayhew ];

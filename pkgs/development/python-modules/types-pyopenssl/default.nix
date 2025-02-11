@@ -1,30 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
 }:
 
 buildPythonPackage rec {
   pname = "types-pyopenssl";
-  version = "23.3.0.0";
+  version = "24.1.0.20240722";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types-pyOpenSSL";
     inherit version;
-    hash = "sha256-X/sHf+cLaZyI1cqrmZroDhkv4ov2zaeYm355seTi3NM=";
+    hash = "sha256-R5E7RnigHYefUDoSBERoIh7YV2JjwVQNywSEyiGwjDk=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "OpenSSL-stubs"
-  ];
+  pythonImportsCheck = [ "OpenSSL-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for pyopenssl";

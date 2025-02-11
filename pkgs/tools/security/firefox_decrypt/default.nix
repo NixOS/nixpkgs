@@ -1,16 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, setuptools
-, setuptools-scm
-, wheel
-, nss
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  nss,
+  nix-update-script,
+  stdenv,
 }:
 
 buildPythonApplication rec {
   pname = "firefox_decrypt";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -26,13 +28,19 @@ buildPythonApplication rec {
     wheel
   ];
 
-  makeWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ nss ]) ];
+  makeWrapperArgs = [
+    "--prefix"
+    (if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH")
+    ":"
+    (lib.makeLibraryPath [ nss ])
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/unode/firefox_decrypt";
-    description = "A tool to extract passwords from profiles of Mozilla Firefox and derivates";
+    description = "Tool to extract passwords from profiles of Mozilla Firefox and derivates";
+    mainProgram = "firefox_decrypt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ schnusch ];
   };

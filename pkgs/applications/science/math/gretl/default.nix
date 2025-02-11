@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, fftw
-, gmp
-, gnuplot
-, gtk3
-, gtksourceview3
-, json-glib
-, lapack
-, libxml2
-, mpfr
-, openblas
-, readline
-, Accelerate
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  fftw,
+  gmp,
+  gnuplot,
+  gtk3,
+  gtksourceview3,
+  json-glib,
+  lapack,
+  libxml2,
+  mpfr,
+  openblas,
+  readline,
+  pkg-config,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gretl";
-  version = "2023b";
+  version = "2024d";
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/gretl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Hf025JjFxde43TN/1m9PeA1uHqxKTZMI8+1qf3XJLGs=";
+    hash = "sha256-mQNWjCc9sJtpMbwgd0CNjAiyvaTng6DqWyy8WbW126w=";
   };
 
   buildInputs = [
@@ -39,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     pkg-config
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.cc.isClang "-lomp";
 
   enableParallelBuilding = true;
   # Missing install depends:
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelInstalling = false;
 
   meta = {
-    description = "A software package for econometric analysis";
+    description = "Software package for econometric analysis";
     homepage = "https://gretl.sourceforge.net";
     license = lib.licenses.gpl3;
     longDescription = ''

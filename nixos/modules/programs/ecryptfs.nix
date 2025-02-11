@@ -1,16 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.ecryptfs;
 
-in {
+in
+{
   options.programs.ecryptfs = {
-    enable = mkEnableOption (lib.mdDoc "ecryptfs setuid mount wrappers");
+    enable = lib.mkEnableOption "ecryptfs setuid mount wrappers";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers = {
 
       "mount.ecryptfs_private" = {

@@ -1,40 +1,37 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, prompt-toolkit
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  prompt-toolkit,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-JY0kXomgiGtOrsXfRf0756dTPVgud91teh+jW+kFNdk=";
+    tag = version;
+    hash = "sha256-HiQsOkG3oK+hnyeFjebnVASxpZhUPGBGz69JvPO43fM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "prompt_toolkit" ];
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ prompt-toolkit ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ulimit -n 1024
   '';
 
@@ -43,15 +40,13 @@ buildPythonPackage rec {
     "test_blank_line_fix"
   ];
 
-  pythonImportsCheck = [
-    "questionary"
-  ];
+  pythonImportsCheck = [ "questionary" ];
 
   meta = with lib; {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
     changelog = "https://github.com/tmbo/questionary/blob/${src.rev}/docs/pages/changelog.rst";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,45 +1,56 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mypy,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.2.0";
-  format = "setuptools";
+  version = "3.4.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CfL5rlrwJs9453z+1xPUzs1B3OyjFBaU6klzY7gJCzA=";
+    tag = version;
+    hash = "sha256-z6XUXfNJ4+2Gq2O13MgF1D3j/bVBjgAG2wCWLaNgADE=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=charset_normalizer --cov-report=term-missing" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "mypy>=1.4.1,<=1.14.0" mypy
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  build-system = [
+    mypy
+    setuptools
+    setuptools-scm
   ];
 
-  pythonImportsCheck = [
-    "charset_normalizer"
-  ];
+  env.CHARSET_NORMALIZER_USE_MYPYC = "1";
 
-  passthru.tests = { inherit aiohttp requests; };
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "charset_normalizer" ];
+
+  passthru.tests = {
+    inherit aiohttp requests;
+  };
 
   meta = with lib; {
     description = "Python module for encoding and language detection";
+    mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
-    changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Ousret/charset_normalizer/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

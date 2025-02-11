@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
   imports = [
-    (mkRemovedOptionModule [ "programs" "oblogout" ] "programs.oblogout has been removed from NixOS. This is because the oblogout repository has been archived upstream.")
+    (lib.mkRemovedOptionModule [ "programs" "oblogout" ]
+      "programs.oblogout has been removed from NixOS. This is because the oblogout repository has been archived upstream."
+    )
   ];
 
 }

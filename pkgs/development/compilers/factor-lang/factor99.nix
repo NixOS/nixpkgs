@@ -57,7 +57,7 @@ let
     # Defined in gdk-pixbuf setup hook
     findGdkPixbufLoaders "${librsvg}"
 
-    ${if to then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
+    ${if (builtins.isString to) then "makeWrapper ${from} ${to}" else "wrapProgram ${from}"} \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --argv0 factor \
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs} \
@@ -72,7 +72,7 @@ let
         passthru.runtimeLibs = runtimeLibs ++ interpreter.runtimeLibs;
       }
       (wrapFactorScript {
-        from = "${interpreter}/lib/factor/.factor.wrapped";
+        from = "${interpreter}/lib/factor/.factor-wrapped";
         to = "$out/bin/factor";
         runtimeLibs = (runtimeLibs ++ interpreter.runtimeLibs);
       });
@@ -106,13 +106,13 @@ stdenv.mkDerivation {
   buildInputs = runtimeLibs;
 
   postPatch = ''
-    sed -ie '4i GIT_LABEL = heads/master-${rev}' GNUmakefile
+    sed -i -e '4i GIT_LABEL = heads/master-${rev}' GNUmakefile
 
     # There is no ld.so.cache in NixOS so we patch out calls to that completely.
     # This should work as long as no application code relies on `find-library*`
     # to return a match, which currently is the case and also a justified assumption.
 
-    sed -ie "s#/sbin/ldconfig -p#cat $out/lib/factor/ld.so.cache#g" \
+    sed -i -e "s#/sbin/ldconfig -p#cat $out/lib/factor/ld.so.cache#g" \
       basis/alien/libraries/finder/linux/linux.factor
 
     # Some other hard-coded paths to fix:
@@ -123,7 +123,7 @@ stdenv.mkDerivation {
       extra/terminfo/terminfo.factor
 
     # De-memoize xdg-* functions, otherwise they break the image.
-    sed -ie 's/^MEMO:/:/' basis/xdg/xdg.factor
+    sed -i -e 's/^MEMO:/:/' basis/xdg/xdg.factor
 
     # update default paths in factor-listener.el for fuel mode
     substituteInPlace misc/fuel/fuel-listener.el \
@@ -202,7 +202,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://factorcode.org/";
-    description = "A concatenative, stack-based programming language";
+    description = "Concatenative, stack-based programming language";
     longDescription = ''
       The Factor programming language is a concatenative, stack-based
       programming language with high-level features including dynamic types,
@@ -217,7 +217,7 @@ stdenv.mkDerivation {
       under a BSD license.
     '';
     license = licenses.bsd2;
-    maintainers = with maintainers; [ vrthra spacefrogg ];
+    maintainers = with maintainers; [ spacefrogg ];
     platforms = lib.intersectLists platforms.x86_64 platforms.linux;
     mainProgram = "factor";
   };

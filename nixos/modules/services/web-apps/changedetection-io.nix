@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,12 +12,12 @@ let
 in
 {
   options.services.changedetection-io = {
-    enable = mkEnableOption (lib.mdDoc "changedetection-io");
+    enable = mkEnableOption "changedetection-io";
 
     user = mkOption {
       default = "changedetection-io";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         User account under which changedetection-io runs.
       '';
     };
@@ -20,7 +25,7 @@ in
     group = mkOption {
       default = "changedetection-io";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Group account under which changedetection-io runs.
       '';
     };
@@ -28,19 +33,19 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Address the server will listen on.";
+      description = "Address the server will listen on.";
     };
 
     port = mkOption {
       type = types.port;
       default = 5000;
-      description = lib.mdDoc "Port the server will listen on.";
+      description = "Port the server will listen on.";
     };
 
     datastorePath = mkOption {
       type = types.str;
       default = "/var/lib/changedetection-io";
-      description = lib.mdDoc ''
+      description = ''
         The directory used to store all data for changedetection-io.
       '';
     };
@@ -49,7 +54,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "https://changedetection-io.example";
-      description = lib.mdDoc ''
+      description = ''
         The base url used in notifications and `{base_url}` token.
       '';
     };
@@ -57,7 +62,7 @@ in
     behindProxy = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable this option when changedetection-io runs behind a reverse proxy, so that it trusts X-* headers.
         It is recommend to run changedetection-io behind a TLS reverse proxy.
       '';
@@ -67,7 +72,7 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/changedetection-io.env";
-      description = lib.mdDoc ''
+      description = ''
         Securely pass environment variabels to changedetection-io.
 
         This can be used to set for example a frontend password reproducible via `SALTED_PASS`
@@ -81,7 +86,7 @@ in
     webDriverSupport = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable support for fetching web pages using WebDriver and Chromium.
         This starts a headless chromium controlled by puppeteer in an oci container.
 
@@ -95,7 +100,7 @@ in
     playwrightSupport = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable support for fetching web pages using playwright and Chromium.
         This starts a headless Chromium controlled by puppeteer in an oci container.
 
@@ -109,7 +114,7 @@ in
     chromePort = mkOption {
       type = types.port;
       default = 4444;
-      description = lib.mdDoc ''
+      description = ''
         A free port on which webDriverSupport or playwrightSupport listen on localhost.
       '';
     };
@@ -123,40 +128,40 @@ in
       }
     ];
 
-    systemd = let
-      defaultStateDir = cfg.datastorePath == "/var/lib/changedetection-io";
-    in {
-      services.changedetection-io = {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        preStart = ''
-          mkdir -p ${cfg.datastorePath}
-        '';
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = mkIf defaultStateDir "changedetection-io";
-          StateDirectoryMode = mkIf defaultStateDir "0750";
-          WorkingDirectory = cfg.datastorePath;
-          Environment = [ "HIDE_REFERER=true" ]
-            ++ lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
-            ++ lib.optional cfg.behindProxy "USE_X_SETTINGS=1"
-            ++ lib.optional cfg.webDriverSupport "WEBDRIVER_URL=http://127.0.0.1:${toString cfg.chromePort}/wd/hub"
-            ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
-          EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          ExecStart = ''
-            ${pkgs.changedetection-io}/bin/changedetection.py \
-              -h ${cfg.listenAddress} -p ${toString cfg.port} -d ${cfg.datastorePath}
-          '';
-          ProtectHome = true;
-          ProtectSystem = true;
-          Restart = "on-failure";
+    systemd =
+      let
+        defaultStateDir = cfg.datastorePath == "/var/lib/changedetection-io";
+      in
+      {
+        services.changedetection-io = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          serviceConfig = {
+            User = cfg.user;
+            Group = cfg.group;
+            StateDirectory = mkIf defaultStateDir "changedetection-io";
+            StateDirectoryMode = mkIf defaultStateDir "0750";
+            WorkingDirectory = cfg.datastorePath;
+            Environment =
+              [ "HIDE_REFERER=true" ]
+              ++ lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
+              ++ lib.optional cfg.behindProxy "USE_X_SETTINGS=1"
+              ++ lib.optional cfg.webDriverSupport "WEBDRIVER_URL=http://127.0.0.1:${toString cfg.chromePort}/wd/hub"
+              ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
+            EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+            ExecStart = ''
+              ${pkgs.changedetection-io}/bin/changedetection.py \
+                -h ${cfg.listenAddress} -p ${toString cfg.port} -d ${cfg.datastorePath}
+            '';
+            ProtectHome = true;
+            ProtectSystem = true;
+            Restart = "on-failure";
+          };
         };
+        tmpfiles.rules = mkIf (!defaultStateDir) [
+          "d ${cfg.datastorePath} 0750 ${cfg.user} ${cfg.group} - -"
+        ];
       };
-      tmpfiles.rules = mkIf defaultStateDir [
-        "d ${cfg.datastorePath} 0750 ${cfg.user} ${cfg.group} - -"
-      ];
-    };
 
     users = {
       users = optionalAttrs (cfg.user == "changedetection-io") {

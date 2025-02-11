@@ -1,58 +1,64 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchFromGitHub,
+  hatchling,
+  orjson,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  xdg,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.18.3";
-  format = "pyproject";
+  version = "0.23.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tjmMu7LUne+hLLTXGqHhci9/PZiuQ10mQaARvL2sdIM=";
+    repo = "pylutron-caseta";
+    tag = "v${version}";
+    hash = "sha256-p8c+WY+x5KcF7r6FXeF89JNtAwogRZELqXWgDc2iJek=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
-  ];
+    orjson
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+
+  optional-dependencies = {
+    cli = [
+      click
+      xdg
+      zeroconf
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "pylutron_caseta"
-  ];
+  pythonImportsCheck = [ "pylutron_caseta" ];
 
   meta = with lib; {
-    description = "Python module o control Lutron Caseta devices";
+    description = "Python module to control Lutron Caseta devices";
     homepage = "https://github.com/gurumitts/pylutron-caseta";
     changelog = "https://github.com/gurumitts/pylutron-caseta/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

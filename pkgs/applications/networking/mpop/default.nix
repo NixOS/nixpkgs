@@ -1,26 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, gnutls
-, openssl
-, gsasl
-, libidn
-, pkg-config
-, Security
-, nlsSupport ? true
-, idnSupport ? true
-, gsaslSupport ? true
-, sslLibrary ? "gnutls"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnutls,
+  openssl,
+  gsasl,
+  libidn,
+  pkg-config,
+  Security,
+  nlsSupport ? true,
+  idnSupport ? true,
+  gsaslSupport ? true,
+  sslLibrary ? "gnutls",
 }:
-assert lib.assertOneOf "sslLibrary" sslLibrary ["gnutls" "openssl" "no"];
+assert lib.assertOneOf "sslLibrary" sslLibrary [
+  "gnutls"
+  "openssl"
+  "no"
+];
 
 stdenv.mkDerivation rec {
   pname = "mpop";
-  version = "1.4.18";
+  version = "1.4.21";
 
   src = fetchurl {
     url = "https://marlam.de/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YJmVAYT30JSngtHnq5gzc28SMI00pUSlm0aoRx2fhbc=";
+    sha256 = "sha256-TKDR4NATZv4+DPSQ2I0VTfURJ4+1lWOHE748pnVmWFU=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optional stdenv.isDarwin Security
+    lib.optional stdenv.hostPlatform.isDarwin Security
     ++ lib.optional gsaslSupport gsasl
     ++ lib.optional idnSupport libidn
     ++ lib.optional (sslLibrary == "gnutls") gnutls
@@ -39,9 +44,9 @@ stdenv.mkDerivation rec {
     (lib.withFeature idnSupport "idn")
     (lib.withFeature gsaslSupport "gsasl")
     "--with-tls=${sslLibrary}"
-  ] ++ lib.optional stdenv.isDarwin "--with-macosx-keyring";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-macosx-keyring";
 
-  meta = with lib;{
+  meta = with lib; {
     description = "POP3 mail retrieval agent";
     homepage = "https://marlam.de/mpop";
     license = licenses.gpl3Plus;

@@ -1,5 +1,12 @@
-{ lib, fetchurl, buildPythonApplication, python-dateutil,
-  sqlalchemy, setproctitle, icalendar }:
+{
+  lib,
+  fetchurl,
+  buildPythonApplication,
+  python-dateutil,
+  sqlalchemy,
+  setproctitle,
+  icalendar,
+}:
 
 buildPythonApplication rec {
   pname = "yokadi";
@@ -21,7 +28,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A command line oriented, sqlite powered, todo-list";
+    description = "Command line oriented, sqlite powered, todo-list";
     homepage = "https://yokadi.github.io/index.html";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.nkpvk ];

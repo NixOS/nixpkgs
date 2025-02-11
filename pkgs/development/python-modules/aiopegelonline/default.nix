@@ -1,30 +1,37 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopegelonline";
-  version = "0.0.7";
-  format = "setuptools";
+  version = "0.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aiopegelonline";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r+5b52N/vliKHx6qOLJ4lWcQt1TPEcn5Dz7cZNhRbNg=";
+    tag = "v${version}";
+    hash = "sha256-kDz+q4Y6ImgXbY7OSC/PKXPtKdktixW+ee51xHMX9o4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==75.6.0" "setuptools"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aioresponses
@@ -32,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiopegelonline"
-  ];
+  pythonImportsCheck = [ "aiopegelonline" ];
 
   meta = with lib; {
     description = "Library to retrieve data from PEGELONLINE";

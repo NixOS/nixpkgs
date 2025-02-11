@@ -1,42 +1,79 @@
-{ common-updater-scripts, curl, fetchFromGitHub, jq, lib, php, writeShellScript }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  testers,
+  installShellFiles,
+  platformsh,
+}:
 
-php.buildComposerProject (finalAttrs: {
+let
+  versions = lib.importJSON ./versions.json;
+  arch =
+    if stdenvNoCC.hostPlatform.isx86_64 then
+      "amd64"
+    else if stdenvNoCC.hostPlatform.isAarch64 then
+      "arm64"
+    else
+      throw "Unsupported architecture";
+  os =
+    if stdenvNoCC.hostPlatform.isLinux then
+      "linux"
+    else if stdenvNoCC.hostPlatform.isDarwin then
+      "darwin"
+    else
+      throw "Unsupported os";
+  versionInfo = versions."${os}-${arch}";
+  inherit (versionInfo) hash url;
+
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "platformsh";
-  version = "4.10.0";
+  inherit (versions) version;
 
-  src = fetchFromGitHub {
-    owner = "platformsh";
-    repo = "legacy-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-aEQxlotwMScEIfHrVDdXBgFxMqAIypkEl9TLi1Bvhnw=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  # run ./update
+  src = fetchurl { inherit hash url; };
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  sourceRoot = ".";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 platform $out/bin/platform
+
+    installShellCompletion completion/bash/platform.bash \
+        completion/zsh/_platform
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests.version = testers.testVersion {
+      inherit (finalAttrs) version;
+      package = platformsh;
+    };
   };
 
-  vendorHash = "sha256-e89xxgTI6FajDfj8xr8VYlbxJD6lUZWz5+2UFQTClsY=";
-
-  prePatch = ''
-    substituteInPlace config-defaults.yaml \
-      --replace "@version-placeholder@" "${finalAttrs.version}"
-  '';
-
-  passthru.updateScript = writeShellScript "update-${finalAttrs.pname}" ''
-    set -o errexit
-    export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
-    NEW_VERSION=$(curl -s https://api.github.com/repos/platformsh/legacy-cli/releases/latest | jq .tag_name --raw-output)
-
-    if [[ "v${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-      echo "The new version same as the old version."
-      exit 0
-    fi
-
-    update-source-version "platformsh" "$NEW_VERSION"
-  '';
-
   meta = {
-    description = "The unified tool for managing your Platform.sh services from the command line.";
-    homepage = "https://github.com/platformsh/legacy-cli";
+    description = "Unified tool for managing your Platform.sh services from the command line";
+    homepage = "https://github.com/platformsh/cli";
     license = lib.licenses.mit;
     mainProgram = "platform";
-    maintainers = with lib.maintainers; [ shyim ];
-    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      shyim
+      spk
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

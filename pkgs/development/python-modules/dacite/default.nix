@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "konradhalas";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lvObQ+jyBH2s4GOwyDXEAYmG7ZGQN9WDqL8ftNItPCQ=";
   };
 
@@ -24,17 +25,11 @@ buildPythonPackage rec {
       --replace "--benchmark-autosave --benchmark-json=benchmark.json" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dacite"
-  ];
+  pythonImportsCheck = [ "dacite" ];
 
-  disabledTestPaths = [
-    "tests/performance"
-  ];
+  disabledTestPaths = [ "tests/performance" ];
 
   meta = with lib; {
     description = "Python helper to create data classes from dictionaries";

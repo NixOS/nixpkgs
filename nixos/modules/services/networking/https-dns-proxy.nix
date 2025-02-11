@@ -1,27 +1,48 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     concatStringsSep
-    mkEnableOption mkIf mkOption types;
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 
   cfg = config.services.https-dns-proxy;
 
   providers = {
     cloudflare = {
-      ips = [ "1.1.1.1" "1.0.0.1" ];
+      ips = [
+        "1.1.1.1"
+        "1.0.0.1"
+      ];
       url = "https://cloudflare-dns.com/dns-query";
     };
     google = {
-      ips = [ "8.8.8.8" "8.8.4.4" ];
+      ips = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
       url = "https://dns.google/dns-query";
     };
     quad9 = {
-      ips = [ "9.9.9.9" "149.112.112.112" ];
+      ips = [
+        "9.9.9.9"
+        "149.112.112.112"
+      ];
       url = "https://dns.quad9.net/dns-query";
     };
     opendns = {
-      ips = [ "208.67.222.222" "208.67.220.220" ];
+      ips = [
+        "208.67.222.222"
+        "208.67.220.220"
+      ];
       url = "https://doh.opendns.com/dns-query";
     };
     custom = {
@@ -31,13 +52,12 @@ let
 
   defaultProvider = "quad9";
 
-  providerCfg =
-    concatStringsSep " " [
-      "-b"
-      (concatStringsSep "," providers."${cfg.provider.kind}".ips)
-      "-r"
-      providers."${cfg.provider.kind}".url
-    ];
+  providerCfg = concatStringsSep " " [
+    "-b"
+    (concatStringsSep "," providers."${cfg.provider.kind}".ips)
+    "-r"
+    providers."${cfg.provider.kind}".url
+  ];
 
 in
 {
@@ -46,23 +66,23 @@ in
   ###### interface
 
   options.services.https-dns-proxy = {
-    enable = mkEnableOption (lib.mdDoc "https-dns-proxy daemon");
+    enable = mkEnableOption "https-dns-proxy daemon";
 
     address = mkOption {
-      description = lib.mdDoc "The address on which to listen";
+      description = "The address on which to listen";
       type = types.str;
       default = "127.0.0.1";
     };
 
     port = mkOption {
-      description = lib.mdDoc "The port on which to listen";
+      description = "The port on which to listen";
       type = types.port;
       default = 5053;
     };
 
     provider = {
       kind = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The upstream provider to use or custom in case you do not trust any of
           the predefined providers or just want to use your own.
 
@@ -80,18 +100,18 @@ in
       };
 
       ips = mkOption {
-        description = lib.mdDoc "The custom provider IPs";
+        description = "The custom provider IPs";
         type = types.listOf types.str;
       };
 
       url = mkOption {
-        description = lib.mdDoc "The custom provider URL";
+        description = "The custom provider URL";
         type = types.str;
       };
     };
 
     preferIPv4 = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         https_dns_proxy will by default use IPv6 and fail if it is not available.
         To play it safe, we choose IPv4.
       '';
@@ -100,7 +120,7 @@ in
     };
 
     extraArgs = mkOption {
-      description = lib.mdDoc "Additional arguments to pass to the process.";
+      description = "Additional arguments to pass to the process.";
       type = types.listOf types.str;
       default = [ "-v" ];
     };

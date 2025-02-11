@@ -1,17 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, AudioToolbox
-, AudioUnit
-, CoreServices
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  stdenv,
+  AudioToolbox,
+  AudioUnit,
+  CoreServices,
 }:
 
 buildPythonPackage rec {
   pname = "audiotools";
   version = "3.1.1";
+  pyproject = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  build-system = [ setuptools ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AudioUnit
     CoreServices
@@ -28,6 +33,6 @@ buildPythonPackage rec {
     description = "Utilities and Python modules for handling audio";
     homepage = "https://audiotools.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

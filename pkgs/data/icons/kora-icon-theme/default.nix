@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.5.8";
+  version = "1.6.2";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-ZPjtY6s3Sgl0aU2pAxagTMFIOcwDAZQRYtvOC0FBJaI=";
+    sha256 = "sha256-FBUOmiw3Ak1QVUrpj0+pfFqG/oKNnEXMRNlVKVNzK2I=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec  {
   };
 
   meta = with lib; {
-    description = "An SVG icon theme in four variants";
+    description = "SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;

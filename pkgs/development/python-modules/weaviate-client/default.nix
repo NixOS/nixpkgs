@@ -1,54 +1,104 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, tqdm
-, validators
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  grpcio,
+  grpcio-health-checking,
+  grpcio-tools,
+  httpx,
+  pydantic,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  validators,
+  pytestCheckHook,
+  numpy,
+  pytest-httpserver,
+  pandas,
+  polars,
+  h5py,
+  litestar,
+  pytest-asyncio,
+  flask,
+  fastapi,
 }:
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "3.25.3";
-  format = "setuptools";
+  version = "4.10.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.12";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-iU33APwfCpMvo3ACn2RK9AYvhxgCb9pa0HZH01fZUWc=";
+  src = fetchFromGitHub {
+    owner = "weaviate";
+    repo = "weaviate-python-client";
+    tag = "v${version}";
+    hash = "sha256-I5+xQkGoIFKEniwvK3l3WXB079IzPzwdKVt0JAXK3kU=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "validators>=0.18.2,<=0.21.0" "validators>=0.18.2" \
-      --replace "requests>=2.28.0,<2.29.0" "requests>=2.28.0"
-  '';
-
-  nativeBuildInputs = [
-    setuptools-scm
+  pythonRelaxDeps = [
+    "httpx"
+    "validators"
+    "authlib"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     authlib
-    tqdm
+    grpcio
+    flask
+    grpcio-health-checking
+    grpcio-tools
+    h5py
+    httpx
+    pydantic
+    numpy
+    litestar
+    fastapi
+    polars
+    requests
+    pandas
     validators
   ];
 
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "weaviate"
+  nativeCheckInputs = [
+    pytest-httpserver
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  meta = with lib; {
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    sed -i '/raw.githubusercontent.com/,+1d' test/test_util.py
+    substituteInPlace pytest.ini \
+      --replace-fail "--benchmark-skip" ""
+    rm -rf test/test_embedded.py # Need network
+  '';
+
+  disabledTests = [
+    # Need network
+    "test_bearer_token"
+    "test_auth_header_with_catchall_proxy"
+    "test_token_refresh_timeout"
+    "test_with_simple_auth_no_oidc_via_api_key"
+    "test_client_with_extra_options"
+  ];
+
+  pytestFlagsArray = [
+    "test"
+    "mock_tests"
+  ];
+
+  pythonImportsCheck = [ "weaviate" ];
+
+  meta = {
     description = "Python native client for easy interaction with a Weaviate instance";
     homepage = "https://github.com/weaviate/weaviate-python-client";
-    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

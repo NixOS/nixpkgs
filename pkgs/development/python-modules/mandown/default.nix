@@ -1,37 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, beautifulsoup4
-, comicon
-, feedparser
-, filetype
-, lxml
-, natsort
-, pillow
-, python-slugify
-, requests
-, typer
-, pyside6
+{
+  beautifulsoup4,
+  buildPythonPackage,
+  comicon,
+  feedparser,
+  fetchFromGitHub,
+  filetype,
+  lib,
+  lxml,
+  natsort,
+  nix-update-script,
+  pillow,
+  poetry-core,
+  pyside6,
+  python-slugify,
+  requests,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.6.0";
-  format = "pyproject";
+  version = "1.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2kFzB1xLVEvO7Vo39lwQsVirRY6Z8GMczWK2b1oVYTg=";
+    tag = "v${version}";
+    hash = "sha256-xoRUGtZMM1l3gCtF1wFHBo3vTEGJcNxqkO/yeTuEke8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     comicon
     feedparser
@@ -44,22 +46,24 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
-    gui = [
-      pyside6
-    ];
-  };
+  pythonRelaxDeps = [
+    "pillow"
+    "typer"
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'typer = "^0.7.0"' 'typer = "^0"'
-  '';
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
 
   pythonImportsCheck = [ "mandown" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${version}";
     description = "Comic/manga/webtoon downloader and CBZ/EPUB/MOBI/PDF converter";
     homepage = "https://github.com/potatoeggy/mandown";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

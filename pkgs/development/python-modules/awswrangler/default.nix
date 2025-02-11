@@ -1,47 +1,48 @@
-{ backoff
-, sparqlwrapper
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, gremlinpython
-, jsonpath-ng
-, lib
-, moto
-, openpyxl
-, opensearch-py
-, pandas
-, pg8000
-, poetry-core
-, progressbar2
-, pyarrow
-, pymysql
-, pyodbc
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, redshift-connector
-, requests-aws4auth
+{
+  sparqlwrapper,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gremlinpython,
+  jsonpath-ng,
+  lib,
+  moto,
+  openpyxl,
+  opensearch-py,
+  pandas,
+  pg8000,
+  poetry-core,
+  progressbar2,
+  pyarrow,
+  pymysql,
+  pyodbc,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  redshift-connector,
+  requests-aws4auth,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.4.2";
-  format = "pyproject";
+  version = "3.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-pandas";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fvqtSDd5lResArquOdhcLYqpDo5yFWaknQlq3pODbX8=";
+    tag = version;
+    hash = "sha256-dIdNrfhBrfrzXmspw25yd/y6MbXRrLfDveCQk+AERV0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+
+  dependencies = [
     boto3
     gremlinpython
     jsonpath-ng
@@ -56,11 +57,18 @@ buildPythonPackage rec {
     requests-aws4auth
   ];
 
+  optional-dependencies = {
+    sqlserver = [ pyodbc ];
+    sparql = [ sparqlwrapper ];
+  };
+
   nativeCheckInputs = [
     moto
     pyparsing
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "awswrangler" ];
 
   pytestFlagsArray = [
     # Subset of tests that run in upstream CI (many others require credentials)
@@ -70,15 +78,6 @@ buildPythonPackage rec {
     "tests/unit/test_utils.py"
     "tests/unit/test_moto.py"
   ];
-
-  passthru.optional-dependencies = {
-    sqlserver = [
-      pyodbc
-    ];
-    sparql = [
-      sparqlwrapper
-    ];
-  };
 
   meta = with lib; {
     description = "Pandas on AWS";

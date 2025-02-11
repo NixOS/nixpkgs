@@ -1,14 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, shared ? !stdenv.hostPlatform.isStatic
-, static ? true
-# If true, a separate .static ouput is created and the .a is moved there.
-# In this case `pkg-config` auto detection does not currently work if the
-# .static output is given as `buildInputs` to another package (#66461), because
-# the `.pc` file lists only the main output's lib dir.
-# If false, and if `{ static = true; }`, the .a stays in the main output.
-, splitStaticOutput ? shared && static
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  shared ? !stdenv.hostPlatform.isStatic,
+  static ? true,
+  # If true, a separate .static ouput is created and the .a is moved there.
+  # In this case `pkg-config` auto detection does not currently work if the
+  # .static output is given as `buildInputs` to another package (#66461), because
+  # the `.pc` file lists only the main output's lib dir.
+  # If false, and if `{ static = true; }`, the .a stays in the main output.
+  splitStaticOutput ? shared && static,
+  testers,
+  minizip,
 }:
 
 # Without either the build will actually still succeed because the build
@@ -24,19 +27,21 @@ assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.3";
+  version = "1.3.1";
 
-  src = let
-    inherit (finalAttrs) version;
-  in fetchurl {
-    urls = [
-      # This URL works for 1.2.13 only; hopefully also for future releases.
-      "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
-      # Stable archive path, but captcha can be encountered, causing hash mismatch.
-      "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
-    ];
-    hash = "sha256-/wukwpIBPbwnUws6geH5qBPNOd4Byl4Pi/NVcC76WT4=";
-  };
+  src =
+    let
+      inherit (finalAttrs) version;
+    in
+    fetchurl {
+      urls = [
+        # This URL works for 1.2.13 only; hopefully also for future releases.
+        "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+        # Stable archive path, but captcha can be encountered, causing hash mismatch.
+        "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
+      ];
+      hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
+    };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
@@ -46,8 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-  outputs = [ "out" "dev" ]
-    ++ lib.optional splitStaticOutput "static";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
@@ -69,8 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   # `--static --shared`, `--shared` and giving nothing.
   # Of these, we choose `--static --shared`, for clarity and simpler
   # conditions.
-  configureFlags = lib.optional static "--static"
-                   ++ lib.optional shared "--shared";
+  configureFlags = lib.optional static "--static" ++ lib.optional shared "--shared";
   # We do the right thing manually, above, so don't need these.
   dontDisableStatic = true;
   dontAddStaticConfigureFlags = true;
@@ -83,31 +89,41 @@ stdenv.mkDerivation (finalAttrs: {
   # here (in case zlib ever switches to autoconf in the future),
   # but we don't do it simply to avoid mass rebuilds.
 
-  postInstall = lib.optionalString splitStaticOutput ''
-    moveToOutput lib/libz.a "$static"
-  ''
+  postInstall =
+    lib.optionalString splitStaticOutput ''
+      moveToOutput lib/libz.a "$static"
+    ''
     # jww (2015-01-06): Sometimes this library install as a .so, even on
     # Darwin; others time it installs as a .dylib.  I haven't yet figured out
     # what causes this difference.
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
-      ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
-    done
-  ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for file in $out/lib/*.so* $out/lib/*.dylib* ; do
+        ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
+      done
+    ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
-    ln -s zlib1.dll $out/bin/libz.dll
-  '';
+    + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
+      ln -s zlib1.dll $out/bin/libz.dll
+    '';
 
-  # As zlib takes part in the stdenv building, we don't want references
-  # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
+  env =
+    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      # As zlib takes part in the stdenv building, we don't want references
+      # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+      NIX_CFLAGS_COMPILE = "-static-libgcc";
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
+      # lld 16 enables --no-undefined-version by defualt
+      # This makes configure think it can't build dynamic libraries
+      # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
+      NIX_LDFLAGS = "--undefined-version";
+    };
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   installFlags = lib.optionals stdenv.hostPlatform.isMinGW [
     "BINARY_PATH=$(out)/bin"
@@ -118,17 +134,25 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
-  makeFlags = [
-    "PREFIX=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    "-f" "win32/Makefile.gcc"
-  ] ++ lib.optionals shared [
-    # Note that as of writing (zlib 1.2.11), this flag only has an effect
-    # for Windows as it is specific to `win32/Makefile.gcc`.
-    "SHARED_MODE=1"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${stdenv.cc.targetPrefix}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      "-f"
+      "win32/Makefile.gcc"
+    ]
+    ++ lib.optionals shared [
+      # Note that as of writing (zlib 1.2.11), this flag only has an effect
+      # for Windows as it is specific to `win32/Makefile.gcc`.
+      "SHARED_MODE=1"
+    ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    # uses `zlib` derivation:
+    inherit minizip;
+  };
 
   meta = with lib; {
     homepage = "https://zlib.net";

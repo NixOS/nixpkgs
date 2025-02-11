@@ -1,32 +1,55 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, zope_testrunner
-, manuel
-, docutils
-, pygments
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  manuel,
+  pygments,
+  pytestCheckHook,
+  setuptools,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
-  pname = "ZConfig";
-  version = "3.6.1";
+  pname = "zconfig";
+  version = "4.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RCLH1mOvdizXeVd1NmvGpnq0QKGreW6w90JbDpA08HY=";
+    hash = "sha256-oOS1J3xM7oBgzjNaV4rEWPgsJArpaxZlkgDbxNmL/M4=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
-  buildInputs = [ manuel docutils ];
-  propagatedBuildInputs = [ zope_testrunner ];
-  nativeCheckInputs = [ pygments ];
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail 'setuptools <= 75.6.0' 'setuptools'
+  '';
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  buildInputs = [
+    docutils
+    manuel
+  ];
+
+  dependencies = [ zope-testrunner ];
+
+  nativeCheckInputs = [
+    pygments
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "ZConfig" ];
+
+  pytestFlagsArray = [ "-s" ];
+
+  meta = {
     description = "Structured Configuration Library";
-    homepage = "https://pypi.python.org/pypi/ZConfig";
-    license = licenses.zpl20;
-    maintainers = [ maintainers.goibhniu ];
+    homepage = "https://github.com/zopefoundation/ZConfig";
+    changelog = "https://github.com/zopefoundation/ZConfig/blob/${version}/CHANGES.rst";
+    license = lib.licenses.zpl21;
+    maintainers = [ ];
   };
 }

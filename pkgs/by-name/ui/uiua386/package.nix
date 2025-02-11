@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, uiua }:
+{
+  lib,
+  stdenvNoCC,
+  uiua,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "uiua386";
@@ -8,13 +12,13 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 -t $out/share/fonts/truetype ./site/Uiua386.ttf
+    install -Dm444 -t $out/share/fonts/truetype ./src/algorithm/Uiua386.ttf
 
     runHook postInstall
   '';
 
   meta = {
-    description = "A Uiua font";
+    description = "Uiua font";
     homepage = "https://uiua.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ skykanin ];

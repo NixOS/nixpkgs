@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-mock,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabfuel";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jaDCMGCZZu3STluYeHDNgdEPf2DNq7bXJ0LPV3JZdk0=";
   };
 
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "circuitbreaker"
-  ];
+  pythonImportsCheck = [ "circuitbreaker" ];
 
   meta = with lib; {
     description = "Python Circuit Breaker implementation";

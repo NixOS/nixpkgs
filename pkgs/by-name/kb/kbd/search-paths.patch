@@ -1,0 +1,81 @@
+Add /etc/kbd to the list of directories to search for the console
+fonts, screen mappings, Unicode maps, keytable files, etc.
+
+Without this patch, kbd will only look inside
+/nix/store/<hash>-kbd-x.x.x/share.
+
+--- a/src/libkeymap/analyze.l
++++ b/src/libkeymap/analyze.l
+@@ -109,6 +109,9 @@ static const char *const include_dirpath1[] = {
+ 	NULL
+ };
+ static const char *const include_dirpath3[] = {
++	"/etc/kbd/" KEYMAPDIR "/include/",
++	"/etc/kbd/" KEYMAPDIR "/i386/include/",
++	"/etc/kbd/" KEYMAPDIR "/mac/include/",
+ 	DATADIR "/" KEYMAPDIR "/include/",
+ 	DATADIR "/" KEYMAPDIR "/i386/include/",
+ 	DATADIR "/" KEYMAPDIR "/mac/include/",
+--- a/src/libkfont/context.c
++++ b/src/libkfont/context.c
+@@ -13,5 +13,6 @@
+ /* search for the map file in these directories (with trailing /) */
+ static const char *const mapdirpath[]  = {
++	"/etc/kbd/" TRANSDIR "/",
+ 	DATADIR "/" TRANSDIR "/",
+ 	NULL
+ };
+@@ -28,5 +29,6 @@ static const char *const mapsuffixes[] = {
+ /* search for the font in these directories (with trailing /) */
+ static const char *const fontdirpath[]  = {
++	"/etc/kbd/" FONTDIR "/",
+ 	DATADIR "/" FONTDIR "/",
+ 	NULL
+ };
+@@ -42,5 +44,6 @@ static char const *const fontsuffixes[] = {
+ 
+ static const char *const unidirpath[]  = {
++	"/etc/kbd/" UNIMAPDIR "/",
+ 	DATADIR "/" UNIMAPDIR "/",
+ 	NULL
+ };
+@@ -55,5 +58,6 @@ static const char *const unisuffixes[] = {
+ /* hide partial fonts a bit - loading a single one is a bad idea */
+ static const char *const partfontdirpath[]  = {
++	"/etc/kbd/" FONTDIR "/" PARTIALDIR "/",
+ 	DATADIR "/" FONTDIR "/" PARTIALDIR "/",
+ 	NULL
+ };
+--- a/src/loadkeys.c
++++ b/src/loadkeys.c
+@@ -27,5 +27,6 @@
+ 
+ static const char *const dirpath1[] = {
++	"/etc/kbd/" KEYMAPDIR "/**",
+ 	DATADIR "/" KEYMAPDIR "/**",
+ 	KERNDIR "/",
+ 	NULL
+--- a/src/resizecons.c
++++ b/src/resizecons.c
+@@ -104,6 +104,7 @@ static void vga_set_verticaldisplayend_lowbyte(int);
+ 
+ const char *const dirpath[]  = {
+ 	"",
++	"/etc/kbd/" VIDEOMODEDIR "/",
+ 	DATADIR "/" VIDEOMODEDIR "/",
+ 	NULL
+ };
+--- a/src/setfont.c
++++ b/src/setfont.c
+@@ -48,8 +48,8 @@ usage(void)
+ 		  "\n"
+-		  "Files are loaded from the %s/*/.\n"),
+-		DATADIR);
++		  "Files are loaded from the %s/*/ or %s/*/.\n"),
++		DATADIR, "/etc/kbd");
+ 
+ 	print_report_bugs();
+ 
+ 	exit(retcode);
+ }
+ 

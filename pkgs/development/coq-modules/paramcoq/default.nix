@@ -1,13 +1,30 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "paramcoq";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.version [
-    { case = range "8.10" "8.18"; out = "1.1.3+coq${coq.coq-version}"; }
-    { case = range "8.7"  "8.13"; out = "1.1.2+coq${coq.coq-version}"; }
-  ] null;
-  displayVersion = { paramcoq = "..."; };
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.version [
+      {
+        case = range "8.10" "8.20";
+        out = "1.1.3+coq${coq.coq-version}";
+      }
+      {
+        case = range "8.7" "8.13";
+        out = "1.1.2+coq${coq.coq-version}";
+      }
+    ] null;
+  displayVersion = {
+    paramcoq = "...";
+  };
+  release."1.1.3+coq8.20".sha256 = "sha256-34xDOz/2xO39fnQW6Zb9CI2EKFuJZjrAdOpMEmwuzY0=";
+  release."1.1.3+coq8.19".sha256 = "sha256-5NVsdLXaoz6qrr5ra5YfoHeuK4pEf8JX/X9+SZA0U+U=";
   release."1.1.3+coq8.18".sha256 = "sha256-hNBaj9hB+OzwXsOX+TOXtDLjA5oP4EmEgseLwxFxW+I=";
   release."1.1.3+coq8.17".sha256 = "sha256-m8QGGuwj1lHzDprf4LHgAuzwfoblxtDIHunHBdpmiuM=";
   release."1.1.3+coq8.16".sha256 = "sha256-K7/8hXH6DwiW7Gw41sgQF8UDAO3c32xBGWQQapzG8Mo=";
@@ -21,9 +38,9 @@ mkCoqDerivation {
   release."1.1.2+coq8.12".sha256 = "0qd72r45if4h7c256qdfiimv75zyrs0w0xqij3m866jxaq591v4i";
   release."1.1.2+coq8.11".sha256 = "09c6813988nvq4fpa45s33k70plnhxsblhm7cxxkg0i37mhvigsa";
   release."1.1.2+coq8.10".sha256 = "1lq1mw15w4yky79qg3rm0mpzqi2ir51b6ak04ismrdr7ixky49y8";
-  release."1.1.2+coq8.9".sha256  = "1jjzgpff09xjn9kgp7w69r096jkj0x2ksng3pawrmhmn7clwivbk";
-  release."1.1.2+coq8.8".sha256  = "0rc4lshqvnfdsph98gnscvpmlirs9wx91qcvffggg73xw0p1g9s0";
-  release."1.1.2+coq8.7".sha256  = "09n0ky7ldb24by7yf5j3hv410h85x50ksilf7qacl7xglj4gy5hj";
+  release."1.1.2+coq8.9".sha256 = "1jjzgpff09xjn9kgp7w69r096jkj0x2ksng3pawrmhmn7clwivbk";
+  release."1.1.2+coq8.8".sha256 = "0rc4lshqvnfdsph98gnscvpmlirs9wx91qcvffggg73xw0p1g9s0";
+  release."1.1.2+coq8.7".sha256 = "09n0ky7ldb24by7yf5j3hv410h85x50ksilf7qacl7xglj4gy5hj";
   releaseRev = v: "v${v}";
   mlPlugin = true;
   meta = with lib; {

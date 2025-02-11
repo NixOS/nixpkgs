@@ -1,15 +1,16 @@
-{ lib
-, castxml
-, fetchFromGitHub
-, buildPythonPackage
-, llvmPackages
-, pythonOlder
-, setuptools
+{
+  lib,
+  castxml,
+  fetchFromGitHub,
+  buildPythonPackage,
+  llvmPackages,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pygccxml";
-  version = "2.4.0";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,13 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gccxml";
     repo = "pygccxml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rw99afv68c92LWmKUErB1y0Cts69UEpI0GCxSMvD+B8=";
+    tag = "v${version}";
+    hash = "sha256-SVlzgIlaKVbnestxTJX2yjVaspZ6fq5bBokRy8jzD3Q=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [
     castxml

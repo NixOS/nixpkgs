@@ -1,18 +1,22 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
-, pkg-config
-, libgphoto2
-, setuptools
-, toml
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  pkg-config,
+  libgphoto2,
+  setuptools,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "gphoto2";
-  version = "2.5.0";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l9B6PEIGf8rkUlYApOytW2s9OhgcxMHVlDgfQR5ZnoA=";
+    hash = "sha256-Jgh7ff+iUaeNQtBsXw2Jm+2gj1ctvrY3oahGrbxx3uE=";
   };
 
   # only convert first 2 values from setuptools_version to ints to avoid
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-EXtXlhBx2jCKtMl7HmN87liqiHVAFSeXr11y830AlpY=";
   };
 
-  nativeBuildInputs = [ pkg-config setuptools toml ];
+  nativeBuildInputs = [
+    pkg-config
+    setuptools
+    toml
+  ];
 
   buildInputs = [ libgphoto2 ];
 
@@ -34,6 +42,6 @@ buildPythonPackage rec {
     description = "Python interface to libgphoto2";
     homepage = "https://github.com/jim-easterbrook/python-gphoto2";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

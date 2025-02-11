@@ -1,5 +1,6 @@
-[
-  "de_DE"
-, "fr_FR"
-, "ro_RO"
-]
+{
+  "de_DE": "gpl2Plus",
+  "fr_FR": "gpl2Plus",
+  "ro_RO": "gpl2Plus",
+  "ru_RU": "gpl2Plus"
+}

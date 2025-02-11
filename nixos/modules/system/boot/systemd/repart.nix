@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.systemd.repart;
@@ -6,16 +12,30 @@ let
 
   format = pkgs.formats.ini { };
 
-  definitionsDirectory = utils.systemdUtils.lib.definitions
-    "repart.d"
-    format
-    (lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions);
+  definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
+    lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions
+  );
+
+  partitionAssertions = lib.mapAttrsToList (
+    fileName: definition:
+    let
+      inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
+      labelLength = builtins.stringLength definition.Label;
+    in
+    {
+      assertion = definition ? Label -> GPTMaxLabelLength >= labelLength;
+      message = ''
+        The partition label '${definition.Label}' defined for '${fileName}' is ${toString labelLength}
+        characters long, but the maximum label length supported by systemd is ${toString GPTMaxLabelLength}.
+      '';
+    }
+  ) cfg.partitions;
 in
 {
   options = {
     boot.initrd.systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table at boot time in the initrd.
           systemd-repart only works with GPT partition tables.
 
@@ -26,7 +46,7 @@ in
 
       device = lib.mkOption {
         type = with lib.types; nullOr str;
-        description = lib.mdDoc ''
+        description = ''
           The device to operate on.
 
           If `device == null`, systemd-repart will operate on the device
@@ -39,8 +59,8 @@ in
     };
 
     systemd.repart = {
-      enable = lib.mkEnableOption (lib.mdDoc "systemd-repart") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "systemd-repart" // {
+        description = ''
           Grow and add partitions to a partition table.
           systemd-repart only works with GPT partition tables.
 
@@ -50,7 +70,15 @@ in
       };
 
       partitions = lib.mkOption {
-        type = with lib.types; attrsOf (attrsOf (oneOf [ str int bool ]));
+        type =
+          with lib.types;
+          attrsOf (
+            attrsOf (oneOf [
+              str
+              int
+              bool
+            ])
+          );
         default = { };
         example = {
           "10-root" = {
@@ -62,7 +90,7 @@ in
             SizeMaxBytes = "2G";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Specify partitions as a set of the names of the definition files as the
           key and the partition configuration as its value. The partition
           configuration can use all upstream options. See <link
@@ -81,7 +109,10 @@ in
           'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
         '';
       }
-    ];
+    ] ++ partitionAssertions;
+
+    # systemd-repart uses loopback devices for partition creation
+    boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
 
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
@@ -111,9 +142,10 @@ in
               # When running in the initrd, systemd-repart by default searches
               # for definition files in /sysroot or /sysusr. We tell it to look
               # in the initrd itself.
-              ''${config.boot.initrd.systemd.package}/bin/systemd-repart \
-                  --definitions=/etc/repart.d \
-                  --dry-run=no ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
+              ''
+                ${config.boot.initrd.systemd.package}/bin/systemd-repart \
+                                  --definitions=/etc/repart.d \
+                                  --dry-run=no ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
               ''
             ];
           };
@@ -125,11 +157,7 @@ in
           # on. The service then needs to be ordered to run after this device
           # is available.
           requires = lib.mkIf (initrdCfg.device != null) [ deviceUnit ];
-          after =
-            if initrdCfg.device == null then
-              [ "sysroot.mount" ]
-            else
-              [ deviceUnit ];
+          after = if initrdCfg.device == null then [ "sysroot.mount" ] else [ deviceUnit ];
         };
     };
 

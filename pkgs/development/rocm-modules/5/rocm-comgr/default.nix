@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, rocm-device-libs
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  rocm-device-libs,
+  libxml2,
 }:
 
 let
   llvmNativeTarget =
-    if stdenv.isx86_64 then "X86"
-    else if stdenv.isAarch64 then "AArch64"
-    else throw "Unsupported ROCm LLVM platform";
-in stdenv.mkDerivation (finalAttrs: {
+    if stdenv.hostPlatform.isx86_64 then
+      "X86"
+    else if stdenv.hostPlatform.isAarch64 then
+      "AArch64"
+    else
+      throw "Unsupported ROCm LLVM platform";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
   version = "5.7.1";
 
   src = fetchFromGitHub {
-    owner = "RadeonOpenCompute";
+    owner = "ROCm";
     repo = "ROCm-CompilerSupport";
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-QB3G0V92UTW67hD6+zSuExN1+eMT820iYSlMyZeWSFw=";
@@ -46,10 +51,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "APIs for compiling and inspecting AMDGPU code objects";
-    homepage = "https://github.com/RadeonOpenCompute/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
+    homepage = "https://github.com/ROCm/ROCm-CompilerSupport/tree/amd-stg-open/lib/comgr";
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

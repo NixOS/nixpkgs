@@ -1,7 +1,24 @@
-{ lib, mkDerivation, cmake, fetchFromGitHub, fetchpatch, pkg-config
-, boost, exiv2, fftwFloat, gsl
-, ilmbase, lcms2, libraw, libtiff, openexr
-, qtbase, qtdeclarative, qttools, qtwebengine, eigen
+{
+  lib,
+  mkDerivation,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  boost,
+  exiv2,
+  fftwFloat,
+  gsl,
+  ilmbase,
+  lcms2,
+  libraw,
+  libtiff,
+  openexr,
+  qtbase,
+  qtdeclarative,
+  qttools,
+  qtwebengine,
+  eigen,
 }:
 
 mkDerivation rec {
@@ -26,15 +43,30 @@ mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   buildInputs = [
-    qtbase qtdeclarative qttools qtwebengine eigen
-    boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
+    qtbase
+    qtdeclarative
+    qttools
+    qtwebengine
+    eigen
+    boost
+    exiv2
+    fftwFloat
+    gsl
+    ilmbase
+    lcms2
+    libraw
+    libtiff
+    openexr
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = with lib; {
     homepage = "https://qtpfsgui.sourceforge.net/";
-    description = "A complete open source solution for HDR photography";
+    description = "Complete open source solution for HDR photography";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.hrdinka ];

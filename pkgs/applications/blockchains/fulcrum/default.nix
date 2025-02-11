@@ -1,30 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, qmake
-, python3
-, qtbase
-, rocksdb_7_10
-, zeromq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  python3,
+  qtbase,
+  rocksdb_7_10,
+  zeromq,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fulcrum";
-  version = "1.9.7";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
     rev = "v${version}";
-    sha256 = "sha256-EslrlnMgH6W/0q/P4H/o6n3zbBDNIGuNAFyGWcZBYL4=";
+    sha256 = "sha256-+hBc7jW1MVLVjYXNOV7QvFJJpZ5RzW5/c9NdqOXrsj0=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
 
   dontWrapQtApps = true; # no GUI
 
-  buildInputs = [ python3 qtbase rocksdb_7_10 zeromq ];
+  buildInputs = [
+    python3
+    qtbase
+    rocksdb_7_10
+    zeromq
+  ];
 
   meta = with lib; {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";

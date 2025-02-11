@@ -1,8 +1,13 @@
-{ fetchFromGitHub, buildPythonPackage, lib }:
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "pa-ringbuffer";
   version = "0.1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "spatialaudio";

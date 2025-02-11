@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, kio
 , cmake
 , extra-cmake-modules
 , libvlc
@@ -16,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kaffeine";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = pname;
     owner = "Multimedia";
     rev = "v${version}";
-    hash = "sha256-FOaS9gkzkHglbsNBNMwjzbHCNQg3Mbf+9so/Vfbaquc=";
+    hash = "sha256-AHyUS2vyeuWFLRXdIoy1sbssDgzz7N957vyf5rWiooI=";
   };
 
   nativeBuildInputs = [

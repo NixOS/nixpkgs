@@ -1,8 +1,15 @@
-{ buildPythonPackage, fetchPypi, fetchpatch, pytestCheckHook, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytestCheckHook,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "before-after";
   version = "1.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "before_after";
@@ -29,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "sugar over the Mock library to help test race conditions";
     homepage = "https://github.com/c-oreills/before_after";
-    maintainers = with maintainers; [ yuka ];
+    maintainers = [ ];
     license = licenses.gpl2Only;
   };
 }

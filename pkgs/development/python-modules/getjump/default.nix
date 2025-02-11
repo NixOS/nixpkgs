@@ -1,44 +1,39 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, pillow
-, poetry-core
-, pythonRelaxDepsHook
-, requests
-, rich
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  poetry-core,
+  pythonOlder,
+  requests,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "getjump";
-  version = "2.4.0";
-  format = "pyproject";
+  version = "2.7.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gu6h9Yb0xdfvdmoeZGQPFCJhBJxuQ4iWlQquig1ljnY=";
+    hash = "sha256-tIM7gsgh8DDPphGsrGeV6Y3RmAjdxw9MgxDIt+EQwF0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
-  pythonRelaxDeps = [
-    # remove after https://github.com/eggplants/getjump/pull/123 is released
-    "pillow"
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     pillow
     requests
     rich
   ];
 
-  pythonImportsCheck = [
-    "getjump"
-  ];
+  pythonImportsCheck = [ "getjump" ];
 
   # all the tests talk to the internet
   doCheck = false;
@@ -47,7 +42,7 @@ buildPythonPackage rec {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "jget";
   };
 }

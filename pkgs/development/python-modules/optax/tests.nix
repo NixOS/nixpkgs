@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, dm-haiku
-, pytest-xdist
-, pytestCheckHook
-, tensorflow
-, tensorflow-datasets
-, flax
-, optax
+{
+  buildPythonPackage,
+  dm-haiku,
+  pytest-xdist,
+  pytestCheckHook,
+  tensorflow,
+  tensorflow-datasets,
+  flax,
+  optax,
 }:
 
 buildPythonPackage {

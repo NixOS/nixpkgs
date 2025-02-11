@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gettext
-, magic
-, pexpect
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gettext,
+  magic,
+  pexpect,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.4";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
-    rev = version;
-    sha256 = "sha256-xbL/4CmDnygiL/u3Jsa6fAkO4YfklDzuFMsxSGy1Ra4=";
+    tag = version;
+    sha256 = "sha256-ET0dduAiSPCwfO+JoyG7uK1HAkL94SDbS/uL4IXMhW4=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,6 @@ buildPythonPackage rec {
     description = "Unified tool for collecting system logs and other debug information";
     homepage = "https://github.com/sosreport/sos";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

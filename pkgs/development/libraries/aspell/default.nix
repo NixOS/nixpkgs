@@ -1,9 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl, ncurses
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  fetchzip,
+  perl,
+  ncurses,
 
   # for tests
-, aspell, glibc, runCommand
+  aspell,
+  glibc,
+  runCommand,
 
-, searchNixProfiles ? true
+  searchNixProfiles ? true,
 }:
 
 let
@@ -20,19 +29,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aspell";
-  version = "0.60.8";
+  version = "0.60.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
-    sha256 = "1wi60ankalmh8ds7nplz434jd7j94gdvbahdwsr539rlad8pxdzr";
+    hash = "sha256-1toSs01C1Ff6YE5DWtSEp0su/80SD/QKzWuz+yiH0hs=";
   };
 
   patches = [
+    # fix gcc-15 / clang-19 build. can remove on next update
     (fetchpatch {
-      #  objstack: assert that the alloc size will fit within a chunk
-      name = "CVE-2019-25051.patch";
-      url = "https://github.com/gnuaspell/aspell/commit/0718b375425aad8e54e1150313b862e4c6fd324a.patch";
-      sha256 = "03z259xrk41x3j190gaprf3mqysyfgh3a04rjmch3h625vj95x39";
+      name = "fix-gcc-15-build.patch";
+      url = "https://github.com/GNUAspell/aspell/commit/ee6cbb12ff36a1e6618d7388a78dd4e0a2b44041.patch";
+      hash = "sha256-rW1FcfARdtT4wX+zGd2x/1K8zRp9JZhdR/zRd8RwPZA=";
     })
   ] ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
@@ -41,7 +50,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ ncurses perl ];
+  buildInputs = [
+    ncurses
+    perl
+  ];
 
   doCheck = true;
 
@@ -60,16 +72,19 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    uses-curses = runCommand "${pname}-curses" {
-      buildInputs = [ glibc ];
-    } ''
-      if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
-      then
-        echo "Test failure: It does not look like aspell picked up the curses dependency."
-        exit 1
-      fi
-      touch $out
-    '';
+    uses-curses =
+      runCommand "${pname}-curses"
+        {
+          buildInputs = [ glibc ];
+        }
+        ''
+          if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
+          then
+            echo "Test failure: It does not look like aspell picked up the curses dependency."
+            exit 1
+          fi
+          touch $out
+        '';
   };
 
   meta = {

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, django
-, djangorestframework
-, ujson
+  # dependencies
+  django,
+  djangorestframework,
+  ujson,
 
-# tests
-, pytest-django
-, pytest-mock
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Amertz08";
     repo = "drf_ujson2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kbpZN1zOXHvRPcn+Sjbelq74cWgvCUeMXZy1eFSa6rA=";
   };
 
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
   propagatedBuildInputs = [
     djangorestframework

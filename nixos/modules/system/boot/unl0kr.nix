@@ -1,19 +1,52 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.boot.initrd.unl0kr;
+  settingsFormat = pkgs.formats.ini { };
 in
 {
   options.boot.initrd.unl0kr = {
-    enable = lib.mkEnableOption (lib.mdDoc "unl0kr in initrd") // {
-      description = lib.mdDoc ''
-        Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.
+    enable = lib.mkEnableOption "unl0kr in initrd" // {
+      description = ''Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.'';
+    };
+
+    package = lib.mkPackageOption pkgs "buffybox" { };
+
+    allowVendorDrivers = lib.mkEnableOption "load optional drivers" // {
+      description = ''Whether to load additional drivers for certain vendors (I.E: Wacom, Intel, etc.)'';
+    };
+
+    settings = lib.mkOption {
+      description = ''
+        Configuration for `unl0kr`.
+
+        See `unl0kr.conf(5)` for supported values.
+
+        Alternatively, visit `https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/3.2.0/unl0kr/unl0kr.conf`
       '';
+
+      example = lib.literalExpression ''
+        {
+          general.animations = true;
+          general.backend = "drm";
+          theme = {
+            default = "pmos-dark";
+            alternate = "pmos-light";
+          };
+        }
+      '';
+      default = { };
+      type = lib.types.submodule { freeformType = settingsFormat.type; };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ tomfitzhenry ];
+    meta.maintainers = with lib.maintainers; [ hustlerone ];
     assertions = [
       {
         assertion = cfg.enable -> config.boot.initrd.systemd.enable;
@@ -21,69 +54,48 @@ in
       }
     ];
 
+    warnings = lib.mkMerge [
+      (lib.mkIf (config.hardware.amdgpu.initrd.enable) [
+        ''Use early video loading at your risk. It's not guaranteed to work with unl0kr.''
+      ])
+      (lib.mkIf (config.boot.plymouth.enable) [
+        ''Upstream clearly intends unl0kr to not run with Plymouth. Good luck''
+      ])
+    ];
+
+    boot.initrd.availableKernelModules =
+      lib.optionals cfg.enable [
+        "hid-multitouch"
+        "hid-generic"
+        "usbhid"
+
+        "i2c-designware-core"
+        "i2c-designware-platform"
+        "i2c-hid-acpi"
+
+        "usbtouchscreen"
+        "evdev"
+      ]
+      ++ lib.optionals cfg.allowVendorDrivers [
+        "intel_lpss_pci"
+        "elo"
+        "wacom"
+      ];
+
     boot.initrd.systemd = {
+      contents."/etc/unl0kr.conf".source = settingsFormat.generate "unl0kr.conf" cfg.settings;
       storePaths = with pkgs; [
-        "${pkgs.gnugrep}/bin/grep"
         libinput
         xkeyboard_config
-        "${config.boot.initrd.systemd.package}/lib/systemd/systemd-reply-password"
-        "${pkgs.unl0kr}/bin/unl0kr"
+        (lib.getExe' cfg.package "unl0kr")
+        "${cfg.package}/libexec/unl0kr-agent"
       ];
-      services = {
-        unl0kr-ask-password = {
-          description = "Forward Password Requests to unl0kr";
-          conflicts = [
-            "emergency.service"
-            "initrd-switch-root.target"
-            "shutdown.target"
-          ];
-          unitConfig.DefaultDependencies = false;
-          after = [
-            "systemd-vconsole-setup.service"
-            "udev.service"
-          ];
-          before = [
-            "shutdown.target"
-          ];
-          script = ''
-            # This script acts as a Password Agent: https://systemd.io/PASSWORD_AGENTS/
 
-            DIR=/run/systemd/ask-password/
-            # If a user has multiple encrypted disks, the requests might come in different times,
-            # so make sure to answer as many requests as we can. Once boot succeeds, other
-            # password agents will be responsible for watching for requests.
-            while [ -d $DIR ] && [ "$(ls -A $DIR/ask.*)" ];
-            do
-              for file in `ls $DIR/ask.*`; do
-                socket="$(cat "$file" | ${pkgs.gnugrep}/bin/grep "Socket=" | cut -d= -f2)"
-                ${pkgs.unl0kr}/bin/unl0kr | ${config.boot.initrd.systemd.package}/lib/systemd/systemd-reply-password 1 "$socket"
-              done
-            done
-          '';
-        };
-      };
+      packages = [
+        pkgs.buffybox
+      ];
 
-      paths = {
-        unl0kr-ask-password = {
-          description = "Forward Password Requests to unl0kr";
-          conflicts = [
-            "emergency.service"
-            "initrd-switch-root.target"
-            "shutdown.target"
-          ];
-          unitConfig.DefaultDependencies = false;
-          before = [
-            "shutdown.target"
-            "paths.target"
-            "cryptsetup.target"
-          ];
-          wantedBy = [ "sysinit.target" ];
-          pathConfig = {
-            DirectoryNotEmpty = "/run/systemd/ask-password";
-            MakeDirectory = true;
-          };
-        };
-      };
+      paths.unl0kr-agent.wantedBy = [ "local-fs-pre.target" ];
     };
   };
 }

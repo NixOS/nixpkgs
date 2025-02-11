@@ -1,101 +1,125 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
 
-  inherit (lib) attrValues concatStringsSep filterAttrs length listToAttrs literalExpression
-    makeSearchPathOutput mkEnableOption mkIf mkOption nameValuePair optionals types;
+  inherit (lib)
+    attrValues
+    concatStringsSep
+    filterAttrs
+    length
+    listToAttrs
+    literalExpression
+    makeSearchPathOutput
+    mkEnableOption
+    mkIf
+    mkOption
+    nameValuePair
+    optionals
+    types
+    ;
   inherit (utils) escapeSystemdPath;
 
   cfg = config.services.v4l2-relayd;
 
   kernelPackages = config.boot.kernelPackages;
 
-  gst = (with pkgs.gst_all_1; [
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer.out
-  ]);
+  gst = (
+    with pkgs.gst_all_1;
+    [
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer.out
+    ]
+  );
 
-  instanceOpts = { name, ... }: {
-    options = {
-      enable = mkEnableOption (lib.mdDoc "this v4l2-relayd instance");
+  instanceOpts =
+    { name, ... }:
+    {
+      options = {
+        enable = mkEnableOption "this v4l2-relayd instance";
 
-      name = mkOption {
-        type = types.str;
-        default = name;
-        description = lib.mdDoc ''
-          The name of the instance.
-        '';
-      };
-
-      cardLabel = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
-          The name the camera will show up as.
-        '';
-      };
-
-      extraPackages = mkOption {
-        type = with types; listOf package;
-        default = [ ];
-        description = lib.mdDoc ''
-          Extra packages to add to {env}`GST_PLUGIN_PATH` for the instance.
-        '';
-      };
-
-      input = {
-        pipeline = mkOption {
+        name = mkOption {
           type = types.str;
-          description = lib.mdDoc ''
-            The gstreamer-pipeline to use for the input-stream.
+          default = name;
+          description = ''
+            The name of the instance.
           '';
         };
 
-        format = mkOption {
+        cardLabel = mkOption {
           type = types.str;
-          default = "YUY2";
-          description = lib.mdDoc ''
-            The video-format to read from input-stream.
+          description = ''
+            The name the camera will show up as.
           '';
         };
 
-        width = mkOption {
-          type = types.ints.positive;
-          default = 1280;
-          description = lib.mdDoc ''
-            The width to read from input-stream.
+        extraPackages = mkOption {
+          type = with types; listOf package;
+          default = [ ];
+          description = ''
+            Extra packages to add to {env}`GST_PLUGIN_PATH` for the instance.
           '';
         };
 
-        height = mkOption {
-          type = types.ints.positive;
-          default = 720;
-          description = lib.mdDoc ''
-            The height to read from input-stream.
-          '';
+        input = {
+          pipeline = mkOption {
+            type = types.str;
+            description = ''
+              The gstreamer-pipeline to use for the input-stream.
+            '';
+          };
+
+          format = mkOption {
+            type = types.str;
+            default = "YUY2";
+            description = ''
+              The video-format to read from input-stream.
+            '';
+          };
+
+          width = mkOption {
+            type = types.ints.positive;
+            default = 1280;
+            description = ''
+              The width to read from input-stream.
+            '';
+          };
+
+          height = mkOption {
+            type = types.ints.positive;
+            default = 720;
+            description = ''
+              The height to read from input-stream.
+            '';
+          };
+
+          framerate = mkOption {
+            type = types.ints.positive;
+            default = 30;
+            description = ''
+              The framerate to read from input-stream.
+            '';
+          };
         };
 
-        framerate = mkOption {
-          type = types.ints.positive;
-          default = 30;
-          description = lib.mdDoc ''
-            The framerate to read from input-stream.
-          '';
+        output = {
+          format = mkOption {
+            type = types.str;
+            default = "YUY2";
+            description = ''
+              The video-format to write to output-stream.
+            '';
+          };
         };
+
       };
-
-      output = {
-        format = mkOption {
-          type = types.str;
-          default = "YUY2";
-          description = lib.mdDoc ''
-            The video-format to write to output-stream.
-          '';
-        };
-      };
-
     };
-  };
 
 in
 {
@@ -113,7 +137,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         v4l2-relayd instances to be created.
       '';
     };
@@ -126,7 +150,10 @@ in
       mkInstanceService = instance: {
         description = "Streaming relay for v4l2loopback using GStreamer";
 
-        after = [ "modprobe@v4l2loopback.service" "systemd-logind.service" ];
+        after = [
+          "modprobe@v4l2loopback.service"
+          "systemd-logind.service"
+        ];
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
@@ -152,13 +179,16 @@ in
               "framerate=${toString instance.input.framerate}/1"
             ];
 
-            outputPipeline = [
-              "appsrc name=appsrc ${appsrcOptions}"
-              "videoconvert"
-            ] ++ optionals (instance.input.format != instance.output.format) [
-              "video/x-raw,format=${instance.output.format}"
-              "queue"
-            ] ++ [ "v4l2sink name=v4l2sink device=$(cat $V4L2_DEVICE_FILE)" ];
+            outputPipeline =
+              [
+                "appsrc name=appsrc ${appsrcOptions}"
+                "videoconvert"
+              ]
+              ++ optionals (instance.input.format != instance.output.format) [
+                "video/x-raw,format=${instance.output.format}"
+                "queue"
+              ]
+              ++ [ "v4l2sink name=v4l2sink device=$(cat $V4L2_DEVICE_FILE)" ];
           in
           ''
             exec ${pkgs.v4l2-relayd}/bin/v4l2-relayd -i "${instance.input.pipeline}" -o "${concatStringsSep " ! " outputPipeline}"
@@ -175,11 +205,14 @@ in
         '';
       };
 
-      mkInstanceServices = instances: listToAttrs (map
-        (instance:
-          nameValuePair "v4l2-relayd-${escapeSystemdPath instance.name}" (mkInstanceService instance)
-        )
-        instances);
+      mkInstanceServices =
+        instances:
+        listToAttrs (
+          map (
+            instance:
+            nameValuePair "v4l2-relayd-${escapeSystemdPath instance.name}" (mkInstanceService instance)
+          ) instances
+        );
 
       enabledInstances = attrValues (filterAttrs (n: v: v.enable) cfg.instances);
 

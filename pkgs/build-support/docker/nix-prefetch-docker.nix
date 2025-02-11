@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, nix, skopeo, jq }:
+{ lib, stdenv, makeWrapper, nix, skopeo, jq, coreutils }:
 
 stdenv.mkDerivation {
   name = "nix-prefetch-docker";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   installPhase = ''
     install -vD ${./nix-prefetch-docker} $out/bin/$name;
     wrapProgram $out/bin/$name \
-      --prefix PATH : ${lib.makeBinPath [ nix skopeo jq ]} \
+      --prefix PATH : ${lib.makeBinPath [ nix skopeo jq coreutils ]} \
       --set HOME /homeless-shelter
   '';
 
@@ -18,6 +18,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Script used to obtain source hashes for dockerTools.pullImage";
+    mainProgram = "nix-prefetch-docker";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };

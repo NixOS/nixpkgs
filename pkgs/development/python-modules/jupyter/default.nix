@@ -1,34 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, notebook
-, qtconsole
-, jupyter-console
-, nbconvert
-, ipykernel
-, ipywidgets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ipykernel,
+  ipywidgets,
+  jupyter-console,
+  jupyterlab,
+  nbconvert,
+  notebook,
 }:
 
 buildPythonPackage rec {
-  version = "1.0.0";
   pname = "jupyter";
+  version = "1.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
+    hash = "sha256-1VRnvOq96knX42JK9+M9WcN//1PtOjUOGslXvtcx3no=";
   };
 
-  propagatedBuildInputs = [ notebook qtconsole jupyter-console nbconvert ipykernel ipywidgets ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    ipykernel
+    ipywidgets
+    jupyter-console
+    jupyterlab
+    nbconvert
+    notebook
+  ];
 
   # Meta-package, no tests
   doCheck = false;
+
+  dontUsePythonImportsCheck = true;
 
   meta = with lib; {
     description = "Installs all the Jupyter components in one go";
     homepage = "https://jupyter.org/";
     license = licenses.bsd3;
-    platforms = platforms.all;
     priority = 100; # This is a metapackage which is unimportant
   };
-
 }

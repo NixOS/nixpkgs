@@ -1,54 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, selenium
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  selenium,
 }:
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-DH+XBj+VcS56+nAOGjjrKG0dnSKrqiU6N5vkILm+vSE=";
+    repo = "branca";
+    tag = "v${version}";
+    hash = "sha256-Gnr3ONqWpUNOGiOlyq77d9PxcDT8TjqTHYBGxH+V+xc=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     # We don't want flake8
     rm setup.cfg
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    jinja2
-  ];
+  dependencies = [ jinja2 ];
 
   nativeCheckInputs = [
     pytestCheckHook
     selenium
   ];
 
-  pythonImportsCheck = [
-    "branca"
-  ];
+  pythonImportsCheck = [ "branca" ];
 
   disabledTestPaths = [
     # Some tests require a browser
     "tests/test_utilities.py"
+    "tests/test_iframe.py"
   ];
 
   disabledTests = [
@@ -61,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-visualization/branca";
     changelog = "https://github.com/python-visualization/branca/blob/v${version}/CHANGES.txt";
     license = with licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

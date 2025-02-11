@@ -1,13 +1,14 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+, asar, alsa-lib, gtk3, libxshmfence, libgbm, nss }:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.0.1";
+  version = "3.5.9";
 
   src = fetchurl {
-    url = "https://download.todesktop.com/210203cqcj00tw1/morgen-${version}.deb";
-    sha256 = "sha256-lj+V5mntZzED2ZS62Uwlt/vTXwSuwzXeuEw8y/bA6og=";
+    name = "morgen-${version}.deb";
+    url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
+    hash = "sha256-ZKlj/QuQnrqQepsJY6KCROC2fXK/4Py5tmI/FVnRi9w=";
   };
 
   nativeBuildInputs = [
@@ -17,11 +18,7 @@ stdenv.mkDerivation rec {
     asar
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
-
-  unpackCmd = ''
-    dpkg-deb -x ${src} ./morgen-${pname}
-  '';
+  buildInputs = [ alsa-lib gtk3 libxshmfence libgbm nss ];
 
   installPhase = ''
     runHook preInstall
@@ -41,17 +38,20 @@ stdenv.mkDerivation rec {
       --replace '/opt/Morgen' $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/morgen \
-      --add-flags $out/opt/Morgen/resources/app.asar
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}} $out/opt/Morgen/resources/app.asar"
 
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "All-in-one Calendars, Tasks and Scheduler";
     homepage = "https://morgen.so/download";
+    mainProgram = "morgen";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with maintainers; [ justanotherariel ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, mkDerivation, pkg-config, qtbase, qmake, imagemagick
-, libyubikey, yubikey-personalization }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  mkDerivation,
+  pkg-config,
+  qtbase,
+  qmake,
+  imagemagick,
+  libyubikey,
+  yubikey-personalization,
+}:
 
 mkDerivation rec {
   pname = "yubikey-personalization-gui";
@@ -10,8 +20,16 @@ mkDerivation rec {
     sha256 = "1knyv5yss8lhzaff6jpfqv12fjf1b8b21mfxzx3qi0hw4nl8n2v8";
   };
 
-  nativeBuildInputs = [ pkg-config qmake imagemagick ];
-  buildInputs = [ yubikey-personalization qtbase libyubikey ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    imagemagick
+  ];
+  buildInputs = [
+    yubikey-personalization
+    qtbase
+    libyubikey
+  ];
 
   installPhase = ''
     install -D -m0755 build/release/yubikey-personalization-gui "$out/bin/yubikey-personalization-gui"
@@ -34,9 +52,9 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://developers.yubico.com/yubikey-personalization-gui";
-    description = "A QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
+    description = "QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;
     platforms = platforms.unix;
     mainProgram = "yubikey-personalization-gui";

@@ -1,4 +1,8 @@
-{ lib, fetchPypi, buildPythonApplication }:
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+}:
 
 buildPythonApplication rec {
   pname = "fortran-language-server";
@@ -14,6 +18,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "FORTRAN Language Server for the Language Server Protocol";
+    mainProgram = "fortls";
     homepage = "https://pypi.org/project/fortran-language-server/";
     license = [ licenses.mit ];
     maintainers = [ maintainers.sheepforce ];

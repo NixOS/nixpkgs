@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.rss2email;
-in {
+in
+{
 
   ###### interface
 
@@ -12,27 +15,33 @@ in {
 
     services.rss2email = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable rss2email.";
+        description = "Whether to enable rss2email.";
       };
 
-      to = mkOption {
-        type = types.str;
-        description = lib.mdDoc "Mail address to which to send emails";
+      to = lib.mkOption {
+        type = lib.types.str;
+        description = "Mail address to which to send emails";
       };
 
-      interval = mkOption {
-        type = types.str;
+      interval = lib.mkOption {
+        type = lib.types.str;
         default = "12h";
-        description = lib.mdDoc "How often to check the feeds, in systemd interval format";
+        description = "How often to check the feeds, in systemd interval format";
       };
 
-      config = mkOption {
-        type = with types; attrsOf (oneOf [ str int bool ]);
-        default = {};
-        description = lib.mdDoc ''
+      config = lib.mkOption {
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            int
+            bool
+          ]);
+        default = { };
+        description = ''
           The configuration to give rss2email.
 
           Default will use system-wide `sendmail` to send the
@@ -48,37 +57,38 @@ in {
         '';
       };
 
-      feeds = mkOption {
-        description = lib.mdDoc "The feeds to watch.";
-        type = types.attrsOf (types.submodule {
-          options = {
-            url = mkOption {
-              type = types.str;
-              description = lib.mdDoc "The URL at which to fetch the feed.";
-            };
+      feeds = lib.mkOption {
+        description = "The feeds to watch.";
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              url = lib.mkOption {
+                type = lib.types.str;
+                description = "The URL at which to fetch the feed.";
+              };
 
-            to = mkOption {
-              type = with types; nullOr str;
-              default = null;
-              description = lib.mdDoc ''
-                Email address to which to send feed items.
+              to = lib.mkOption {
+                type = with lib.types; nullOr str;
+                default = null;
+                description = ''
+                  Email address to which to send feed items.
 
-                If `null`, this will not be set in the
-                configuration file, and rss2email will make it default to
-                `rss2email.to`.
-              '';
+                  If `null`, this will not be set in the
+                  configuration file, and rss2email will make it default to
+                  `rss2email.to`.
+                '';
+              };
             };
-          };
-        });
+          }
+        );
       };
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups = {
       rss2email.gid = config.ids.gids.rss2email;
     };
@@ -95,32 +105,40 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
-    systemd.tmpfiles.rules = [
-      "d /var/rss2email 0700 rss2email rss2email - -"
-    ];
-
-    systemd.services.rss2email = let
-      conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
-          DEFAULT = cfg.config;
-        } // lib.mapAttrs' (name: feed: nameValuePair "feed.${name}" (
-          { inherit (feed) url; } //
-          lib.optionalAttrs (feed.to != null) { inherit (feed) to; }
-        )) cfg.feeds
-      ));
-    in
-    {
-      preStart = ''
-        if [ ! -f /var/rss2email/db.json ]; then
-          echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
-        fi
-      '';
-      path = [ pkgs.system-sendmail ];
-      serviceConfig = {
-        ExecStart =
-          "${pkgs.rss2email}/bin/r2e -c ${conf} -d /var/rss2email/db.json run";
-        User = "rss2email";
-      };
+    systemd.tmpfiles.settings."10-rss2email"."/var/rss2email".d = {
+      user = "rss2email";
+      group = "rss2email";
+      mode = "0700";
     };
+
+    systemd.services.rss2email =
+      let
+        conf = pkgs.writeText "rss2email.cfg" (
+          lib.generators.toINI { } (
+            {
+              DEFAULT = cfg.config;
+            }
+            // lib.mapAttrs' (
+              name: feed:
+              lib.nameValuePair "feed.${name}" (
+                { inherit (feed) url; } // lib.optionalAttrs (feed.to != null) { inherit (feed) to; }
+              )
+            ) cfg.feeds
+          )
+        );
+      in
+      {
+        preStart = ''
+          if [ ! -f /var/rss2email/db.json ]; then
+            echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
+          fi
+        '';
+        path = [ pkgs.system-sendmail ];
+        serviceConfig = {
+          ExecStart = "${pkgs.rss2email}/bin/r2e -c ${conf} -d /var/rss2email/db.json run";
+          User = "rss2email";
+        };
+      };
 
     systemd.timers.rss2email = {
       partOf = [ "rss2email.service" ];

@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pg8000
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, sphinx-rtd-theme
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pg8000,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  sphinx-rtd-theme,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiosql";
-  version = "9.0";
+  version = "13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nackjicholson";
     repo = "aiosql";
-    rev = "refs/tags/${version}";
-    hash = "sha256-AwuZ3y/qAyZzffTG6mHLk0b+zFB9307VjAX8g1pvWto=";
+    tag = version;
+    hash = "sha256-GJeYh3xPKrfm2oPsNTrQXnYW75Bx8PN5/brJFslOcTw=";
   };
 
   sphinxRoot = "docs/source";
@@ -39,14 +40,14 @@ buildPythonPackage rec {
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
-    pg8000
-  ];
+  propagatedBuildInputs = [ pg8000 ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "aiosql" ];
 
   meta = with lib; {
     description = "Simple SQL in Python";

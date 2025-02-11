@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.signald;
   dataDir = "/var/lib/signald";
@@ -8,36 +11,36 @@ let
 in
 {
   options.services.signald = {
-    enable = mkEnableOption (lib.mdDoc "the signald service");
+    enable = lib.mkEnableOption "signald, the unofficial daemon for interacting with Signal";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
-      description = lib.mdDoc "User under which signald runs.";
+      description = "User under which signald runs.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
-      description = lib.mdDoc "Group under which signald runs.";
+      description = "Group under which signald runs.";
     };
 
-    socketPath = mkOption {
-      type = types.str;
+    socketPath = lib.mkOption {
+      type = lib.types.str;
       default = "/run/signald/signald.sock";
-      description = lib.mdDoc "Path to the signald socket";
+      description = "Path to the signald socket";
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+  config = lib.mkIf cfg.enable {
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUser) {
+    users.groups = lib.optionalAttrs (cfg.group == defaultUser) {
       ${defaultUser} = { };
     };
 
@@ -51,6 +54,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         ExecStart = "${pkgs.signald}/bin/signald -d ${dataDir} -s ${cfg.socketPath}";
+        ExecStartPre = "${pkgs.signald}/bin/signald -d ${dataDir} -s ${cfg.socketPath} --migrate-data";
         Restart = "on-failure";
         StateDirectory = "signald";
         RuntimeDirectory = "signald";
@@ -90,12 +94,19 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources @setuid @keyring"
+        ];
         TemporaryFileSystem = "/:ro";
         # Does not work well with the temporary root
         #UMask = "0066";

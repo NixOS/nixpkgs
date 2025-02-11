@@ -1,24 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, glib
-, intltool
-, pkg-config
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  glib,
+  intltool,
+  pkg-config,
+  validatePkgConfig,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lomiri-schemas";
-  version = "0.1.3";
+  version = "0.1.7";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-schemas";
-    rev = finalAttrs.version;
-    hash = "sha256-FrDUFqdD0KW2VG2pTA6LMb6/9PdNtQUlYTEo1vnW6QQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-AI/tpTzhnzKygG/zgszQAmvbaM8VdU+Chs9bjd9Jx9A=";
   };
 
   strictDeps = true;
@@ -28,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # glib-compile-schemas
     pkg-config
     intltool
+    validatePkgConfig
   ];
 
   buildInputs = [
@@ -36,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DGSETTINGS_LOCALINSTALL=ON"
-    "-DGSETTINGS_COMPILE=ON"
+    (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
+    (lib.cmakeBool "GSETTINGS_COMPILE" true)
   ];
 
   passthru = {
@@ -45,12 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GSettings / AccountsService schema files for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-schemas";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-schemas/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-schemas"
     ];

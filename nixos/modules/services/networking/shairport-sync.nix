@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the shairport-sync daemon.
 
           Running with a local system-wide or remote pulseaudio server
@@ -27,10 +27,12 @@ in
         '';
       };
 
+      package = lib.options.mkPackageOption pkgs "shairport-sync" { };
+
       arguments = mkOption {
         type = types.str;
         default = "-v -o pa";
-        description = lib.mdDoc ''
+        description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.
         '';
@@ -39,7 +41,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically open ports in the firewall.
         '';
       };
@@ -47,7 +49,7 @@ in
       user = mkOption {
         type = types.str;
         default = "shairport";
-        description = lib.mdDoc ''
+        description = ''
           User account name under which to run shairport-sync. The account
           will be created.
         '';
@@ -56,7 +58,7 @@ in
       group = mkOption {
         type = types.str;
         default = "shairport";
-        description = lib.mdDoc ''
+        description = ''
           Group account name under which to run shairport-sync. The account
           will be created.
         '';
@@ -82,7 +84,7 @@ in
         createHome = true;
         home = "/var/lib/shairport-sync";
         group = cfg.group;
-        extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
+        extraGroups = [ "audio" ] ++ optional (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) "pulse";
       };
       groups.${cfg.group} = {};
     };
@@ -100,12 +102,13 @@ in
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
+          ExecStart = "${lib.getExe cfg.package} ${cfg.arguments}";
+          Restart = "on-failure";
           RuntimeDirectory = "shairport-sync";
         };
       };
 
-    environment.systemPackages = [ pkgs.shairport-sync ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 

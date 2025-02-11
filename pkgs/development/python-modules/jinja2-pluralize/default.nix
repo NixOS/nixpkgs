@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, inflect
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  inflect,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jinja2-pluralize";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "jinja2_pluralize";
@@ -21,13 +23,9 @@ buildPythonPackage rec {
     inflect
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jinja2_pluralize"
-  ];
+  pythonImportsCheck = [ "jinja2_pluralize" ];
 
   meta = with lib; {
     description = "Jinja2 pluralize filters";

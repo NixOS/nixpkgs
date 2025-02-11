@@ -1,23 +1,29 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.xone;
 in
 {
   options.hardware.xone = {
-    enable = mkEnableOption (lib.mdDoc "the xone driver for Xbox One and Xbobx Series X|S accessories");
+    enable = lib.mkEnableOption "the xone driver for Xbox One and Xbox Series X|S accessories";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot = {
-      blacklistedKernelModules = [ "xpad" "mt76x2u" ];
+      blacklistedKernelModules = [
+        "xpad"
+        "mt76x2u"
+      ];
       extraModulePackages = with config.boot.kernelPackages; [ xone ];
     };
     hardware.firmware = [ pkgs.xow_dongle-firmware ];
   };
 
   meta = {
-    maintainers = with maintainers; [ rhysmdnz ];
+    maintainers = with lib.maintainers; [ rhysmdnz ];
   };
 }

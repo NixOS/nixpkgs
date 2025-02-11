@@ -1,93 +1,114 @@
-{ lib, stdenv, pythonPackages, fetchPypi, pkg-config
-, qmake, qtbase, qtsvg, qtwebengine, qtwebchannel, qtdeclarative
-, wrapQtAppsHook
-, darwin
-, buildPackages
+{
+  lib,
+  setuptools,
+  stdenv,
+  fetchPypi,
+  pkg-config,
+  libsForQt5,
+  darwin,
+  buildPythonPackage,
+  python,
+  isPy27,
+  pyqt5,
+  sip,
+  pyqt-builder,
+  mesa,
 }:
 
 let
-  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 sip pyqt-builder;
   inherit (darwin) autoSignDarwinBinariesHook;
-in buildPythonPackage (rec {
-  pname = "PyQtWebEngine";
-  version = "5.15.4";
-  format = "pyproject";
+in
+buildPythonPackage (
+  rec {
+    pname = "pyqtwebengine";
+    version = "5.15.7";
+    format = "pyproject";
 
-  disabled = isPy27;
+    disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
-  };
+    src = fetchPypi {
+      pname = "PyQtWebEngine";
+      inherit version;
+      hash = "sha256-8SGsbkovlqwolhm8/Df2Tmg2LySjRlU/XWxC76Qiik0=";
+    };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
-  '';
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace "[tool.sip.project]" "[tool.sip.project]''\nsip-include-dirs = [\"${pyqt5}/${python.sitePackages}/PyQt5/bindings\"]"
+    '';
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    sip
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    python.pythonOnBuildForHost.pkgs.sip
-  ] ++ [
-    qtbase
-    qtsvg
-    qtwebengine
-    pyqt-builder
-    pythonPackages.setuptools
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    qtdeclarative
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    autoSignDarwinBinariesHook
-  ];
-
-  buildInputs = [
-    sip
-    qtbase
-    qtsvg
-    qtwebengine
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    qtwebchannel
-    qtdeclarative
-  ];
-
-  propagatedBuildInputs = [ pyqt5 ];
-
-  dontWrapQtApps = true;
-
-  # Avoid running qmake, which is in nativeBuildInputs
-  dontConfigure = true;
-
-  # Checked using pythonImportsCheck
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "PyQt5.QtWebEngine"
-    "PyQt5.QtWebEngineWidgets"
-  ];
-
-  enableParallelBuilding = true;
-
-  passthru = {
-    inherit wrapQtAppsHook;
-  };
-
-  meta = with lib; {
-    description = "Python bindings for Qt5";
-    homepage    = "http://www.riverbankcomputing.co.uk";
-    license     = licenses.gpl3;
-    hydraPlatforms = lib.lists.intersectLists qtwebengine.meta.platforms platforms.mesaPlatforms;
-  };
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-  # TODO: figure out why the env hooks aren't adding these inclusions automatically
-  env.NIX_CFLAGS_COMPILE =
-    lib.concatStringsSep " " [
-      "-I${lib.getDev qtbase}/include/QtPrintSupport/"
-      "-I${lib.getDev qtwebchannel}/include/QtWebChannel/"
+    outputs = [
+      "out"
+      "dev"
     ];
-})
+
+    nativeBuildInputs =
+      [
+        pkg-config
+        libsForQt5.qmake
+        libsForQt5.wrapQtAppsHook
+      ]
+      ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ sip ]
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+        python.pythonOnBuildForHost.pkgs.sip
+      ]
+      ++ [
+        libsForQt5.qtbase
+        libsForQt5.qtsvg
+        libsForQt5.qtwebengine
+        pyqt-builder
+        setuptools
+      ]
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ libsForQt5.qtdeclarative ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+        autoSignDarwinBinariesHook
+      ];
+
+    buildInputs =
+      [
+        sip
+        libsForQt5.qtbase
+        libsForQt5.qtsvg
+        libsForQt5.qtwebengine
+      ]
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+        libsForQt5.qtwebchannel
+        libsForQt5.qtdeclarative
+      ];
+
+    propagatedBuildInputs = [ pyqt5 ];
+
+    dontWrapQtApps = true;
+
+    # Avoid running qmake, which is in nativeBuildInputs
+    dontConfigure = true;
+
+    # Checked using pythonImportsCheck
+    doCheck = false;
+
+    pythonImportsCheck = [
+      "PyQt5.QtWebEngine"
+      "PyQt5.QtWebEngineWidgets"
+    ];
+
+    enableParallelBuilding = true;
+
+    passthru = {
+      inherit (libsForQt5) wrapQtAppsHook;
+    };
+
+    meta = {
+      description = "Python bindings for Qt5";
+      homepage = "http://www.riverbankcomputing.co.uk";
+      license = lib.licenses.gpl3;
+      hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
+    };
+  }
+  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    # TODO: figure out why the env hooks aren't adding these inclusions automatically
+    env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+      "-I${lib.getDev libsForQt5.qtbase}/include/QtPrintSupport/"
+      "-I${lib.getDev libsForQt5.qtwebchannel}/include/QtWebChannel/"
+    ];
+  }
+)

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "avell-unofficial-control-center";
@@ -15,11 +19,15 @@ python3Packages.buildPythonApplication rec {
   # No tests included
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [ pyusb elevate ];
+  propagatedBuildInputs = with python3Packages; [
+    pyusb
+    elevate
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rodgomesc/avell-unofficial-control-center";
     description = "Software for controlling RGB keyboard lights on some gaming laptops that use ITE Device(8291) Rev 0.03";
+    mainProgram = "aucc";
     license = licenses.mit;
     maintainers = with maintainers; [ rkitover ];
   };

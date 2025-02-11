@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, coq
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  coq,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -15,7 +16,12 @@ python3.pkgs.buildPythonPackage rec {
     sha256 = "sha256-+Pp51cxeqjg5MW4CEccNWVjNcY9iyFNATIEage9RWJ0=";
   };
 
-  propagatedBuildInputs = (with python3.pkgs; [ ipykernel future ]) ++ [ coq ];
+  propagatedBuildInputs =
+    (with python3.pkgs; [
+      ipykernel
+      future
+    ])
+    ++ [ coq ];
 
   nativeBuildInputs = [ coq ];
 

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "web-cache";
   version = "1.1.0";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

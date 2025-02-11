@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, substituteAll
-, pkgs
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  substituteAll,
+  pkgs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "libevdev";
   version = "0.11";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

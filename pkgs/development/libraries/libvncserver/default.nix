@@ -1,23 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, libjpeg
-, openssl
-, zlib
-, libgcrypt
-, libpng
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, Carbon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libjpeg,
+  openssl,
+  zlib,
+  libgcrypt,
+  libpng,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  Carbon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libvncserver";
   version = "0.9.14";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "LibVNC";
@@ -25,6 +28,11 @@ stdenv.mkDerivation rec {
     rev = "LibVNCServer-${version}";
     sha256 = "sha256-kqVZeCTp+Z6BtB6nzkwmtkJ4wtmjlSQBg05lD02cVvQ=";
   };
+
+  patches = [
+    # fix generated pkg-config files
+    ./pkgconfig.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -34,16 +42,19 @@ stdenv.mkDerivation rec {
     "-DWITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
   ];
 
-  buildInputs = [
-    libjpeg
-    openssl
-    libgcrypt
-    libpng
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-  ];
+  buildInputs =
+    [
+      libjpeg
+      openssl
+      libgcrypt
+      libpng
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+    ];
 
   propagatedBuildInputs = [
     zlib

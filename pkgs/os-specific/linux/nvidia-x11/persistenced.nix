@@ -1,10 +1,11 @@
 nvidia_x11: sha256:
 
-{ stdenv
-, lib
-, fetchFromGitHub
-, m4
-, libtirpc
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  m4,
+  libtirpc,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
-    mainProgram = pname;
+    mainProgram = "nvidia-persistenced";
   };
 }

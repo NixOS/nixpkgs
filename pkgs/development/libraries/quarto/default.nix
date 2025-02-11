@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, pandoc
+, pandoc_3_6
+, typst
 , esbuild
 , deno
 , fetchurl
@@ -12,41 +13,35 @@
 , runCommand
 , python3
 , quarto
-, extraPythonPackages ? ps: with ps; []
+, extraPythonPackages ? ps: []
 , sysctl
 }:
-
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.3.450";
+  version = "1.6.39";
+
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    sha256 = "sha256-bcj7SzEGfQxsw9P8WkcLrKurPupzwpgIGtxoE3KVwAU=";
+    hash = "sha256-15fHlnE6V8FNgRX0mkXWJqFkeGlwlqBCHy0tmA5fnUo=";
   };
+
+  patches = [
+    ./deno2.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  patches = [
-    ./fix-deno-path.patch
-  ];
-
-  postPatch = ''
-    # Compat for Deno >=1.26
-    substituteInPlace bin/quarto.js \
-      --replace 'Deno.setRaw(stdin.rid, ' 'Deno.stdin.setRaw(' \
-      --replace 'Deno.setRaw(Deno.stdin.rid, ' 'Deno.stdin.setRaw('
-  '';
-
   dontStrip = true;
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
-      --prefix PATH : ${lib.makeBinPath [ deno ]} \
-      --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
-      --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
-      --prefix QUARTO_DART_SASS : ${dart-sass}/bin/dart-sass \
+      --prefix QUARTO_DENO : ${lib.getExe deno} \
+      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
+      --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
+      --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
+      --prefix QUARTO_TYPST : ${lib.getExe typst} \
       ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
       ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
   '';
@@ -66,7 +61,7 @@ stdenv.mkDerivation (final: {
 
   passthru.tests = {
     quarto-check = runCommand "quarto-check" {
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
     } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check
@@ -76,6 +71,7 @@ stdenv.mkDerivation (final: {
 
   meta = with lib; {
     description = "Open-source scientific and technical publishing system built on Pandoc";
+    mainProgram = "quarto";
     longDescription = ''
         Quarto is an open-source scientific and technical publishing system built on Pandoc.
         Quarto documents are authored using markdown, an easy to write plain text format.

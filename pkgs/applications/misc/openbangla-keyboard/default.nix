@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, cmake
-, pkg-config
-, rustPlatform
-, rustc
-, wrapQtAppsHook
-, fcitx5
-, ibus
-, qtbase
-, zstd
-, withFcitx5Support ? false
-, withIbusSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  cmake,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapQtAppsHook,
+  fcitx5,
+  ibus,
+  qtbase,
+  zstd,
+  fetchpatch,
+  withFcitx5Support ? false,
+  withIbusSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # prevents runtime crash when fcitx5-based IM attempts to look in /usr
+    (fetchpatch {
+      name = "use-CMAKE_INSTALL_PREFIX-for-loading-data.patch";
+      url = "https://github.com/OpenBangla/OpenBangla-Keyboard/commit/f402472780c29eaa6b4cc841a70289adf171462b.diff";
+      hash = "sha256-YahvtyOxe8F40Wfe+31C6fdmm197QN26/Q67oinOplk=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -38,49 +49,49 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = lib.optionals withFcitx5Support [
-    fcitx5
-  ] ++ lib.optionals withIbusSupport [
-    ibus
-  ] ++ [
-    qtbase
-    zstd
-  ];
+  buildInputs =
+    lib.optionals withFcitx5Support [
+      fcitx5
+    ]
+    ++ lib.optionals withIbusSupport [
+      ibus
+    ]
+    ++ [
+      qtbase
+      zstd
+    ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     postPatch = ''
       cp ${./Cargo.lock} Cargo.lock
     '';
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
+    hash = "sha256-qZMTZi7eqEp5kSmVx7qdS7eDKOzSv9fMjWT0h/MGyeY=";
   };
 
-  cmakeFlags = lib.optionals withFcitx5Support [
-    "-DENABLE_FCITX=YES"
-  ] ++ lib.optionals withIbusSupport [
-    "-DENABLE_IBUS=YES"
-  ];
+  cmakeFlags =
+    lib.optionals withFcitx5Support [
+      "-DENABLE_FCITX=YES"
+    ]
+    ++ lib.optionals withIbusSupport [
+      "-DENABLE_IBUS=YES"
+    ];
 
   cargoRoot = "src/engine/riti";
   postPatch = ''
     cp ${./Cargo.lock} ${cargoRoot}/Cargo.lock
-
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr" "$out"
-
-    substituteInPlace src/shared/FileSystem.cpp \
-      --replace "/usr" "$out"
   '';
 
   meta = {
     isIbusEngine = withIbusSupport;
-    description = "An OpenSource, Unicode compliant Bengali Input Method";
+    description = "OpenSource, Unicode compliant Bengali Input Method";
+    mainProgram = "openbangla-gui";
     homepage = "https://openbangla.github.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant hqurve ];
+    maintainers = with lib.maintainers; [ hqurve ];
     platforms = lib.platforms.linux;
     # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

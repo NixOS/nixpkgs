@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, python3
-, qtbase
-, qttools
-, radare2
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  qtbase,
+  qttools,
+  radare2,
+  wrapQtAppsHook,
 }:
 
 let
   pname = "iaito";
-  version = "5.8.8";
+  version = "5.9.6";
 
   main_src = fetchFromGitHub rec {
     owner = "radareorg";
     repo = pname;
-    rev = version;
-    hash = "sha256-/sXdp6QpDxltesg5i2CD0K2r18CrbGZmmI7HqULvFfA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rkL7qH1BLXw3eXdCoVuan2C6k05pE5LOIOTbIEtfUbE=";
     name = repo;
   };
 
@@ -31,11 +32,13 @@ let
     name = repo;
   };
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  srcs = [ main_src translations_src ];
+  srcs = [
+    main_src
+    translations_src
+  ];
   sourceRoot = "${main_src.name}/src";
 
   postUnpack = ''
@@ -61,9 +64,6 @@ stdenv.mkDerivation rec {
     radare2
   ];
 
-  # the radare2 binary package seems to not install all necessary headers.
-  env.NIX_CFLAGS_COMPILE = toString [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
-
   postBuild = ''
     pushd ../../../${translations_src.name}
     make build -j$NIX_BUILD_CORES PREFIX=$out
@@ -86,15 +86,16 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An official graphical interface of radare2";
+    description = "Official Qt frontend of radare2";
     longDescription = ''
-      iaito is the official graphical interface of radare2. It's the
-      continuation of Cutter for radare2 after the Rizin fork.
+      iaito is the official graphical interface for radare2, a libre reverse
+      engineering framework.
     '';
     homepage = "https://radare.org/n/iaito.html";
-    changelog = "https://github.com/radareorg/iaito/releases/tag/${version}";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/radareorg/iaito/releases/tag/${finalAttrs.version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ azahi ];
+    mainProgram = "iaito";
     platforms = platforms.linux;
   };
-}
+})

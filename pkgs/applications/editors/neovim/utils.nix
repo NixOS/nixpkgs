@@ -1,186 +1,183 @@
-{ lib
-, callPackage
-, vimUtils
-, nodejs
-, neovim-unwrapped
-, bundlerEnv
-, ruby
-, lua
-, python3Packages
-, writeText
-, wrapNeovimUnstable
-, runCommand
+{
+  lib,
+  stdenv,
+  makeSetupHook,
+  callPackage,
+  config,
+  vimUtils,
+  vimPlugins,
+  nodejs,
+  neovim-unwrapped,
+  bundlerEnv,
+  ruby,
+  lua,
+  python3Packages,
+  wrapNeovimUnstable,
 }:
 let
   inherit (vimUtils) toVimPlugin;
 
-   /* returns everything needed for the caller to wrap its own neovim:
-   - the generated content of the future init.vim
-   - the arguments to wrap neovim with
-   The caller is responsible for writing the init.vim and adding it to the wrapped
-   arguments (["-u" writeText "init.vim" GENERATEDRC)]).
-   This makes it possible to write the config anywhere: on a per-project basis
-   .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-   Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-   anymore, $MYVIMRC wont be set etc
-   */
-  makeNeovimConfig =
-    { withPython3 ? true
-    /* the function you would have passed to python3.withPackages */
-    , extraPython3Packages ? (_: [ ])
-    , withNodeJs ? false
-    , withRuby ? true
-    /* the function you would have passed to lua.withPackages */
-    , extraLuaPackages ? (_: [ ])
-
-    # expects a list of plugin configuration
-    # expects { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
-    , plugins ? []
-    # custom viml config appended after plugin-specific config
-    , customRC ? ""
-
-    # for forward compability, when adding new environments, haskell etc.
-    , ...
-    }@args:
+  /*
+    transform all plugins into an attrset
+    { optional = bool; plugin = package; }
+  */
+  normalizePlugins =
+    plugins:
     let
-      rubyEnv = bundlerEnv {
-        name = "neovim-ruby-env";
-        gemdir = ./ruby_provider;
-        postBuild = ''
-          ln -sf ${ruby}/bin/* $out/bin
-        '';
+      defaultPlugin = {
+        plugin = null;
+        config = null;
+        optional = false;
       };
-
-      # transform all plugins into an attrset
-      # { optional = bool; plugin = package; }
-      pluginsNormalized = let
-        defaultPlugin = {
-          plugin = null;
-          config = null;
-          optional = false;
-        };
-      in
-        map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
-
-      pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
-
-      pluginsPartitioned = lib.partition (x: x.optional == true) pluginsNormalized;
-      requiredPlugins = vimUtils.requiredPluginsForPackage myVimPackage;
-      getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
-      myVimPackage = {
-            start = map (x: x.plugin) pluginsPartitioned.wrong;
-            opt = map (x: x.plugin) pluginsPartitioned.right;
-      };
-
-      pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
-      python3Env = python3Packages.python.withPackages (ps:
-        [ ps.pynvim ]
-        ++ (extraPython3Packages ps)
-        ++ (lib.concatMap (f: f ps) pluginPython3Packages));
-
-      luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
-
-      # as expected by packdir
-      packpathDirs.myNeovimPackages = myVimPackage;
-      ## Here we calculate all of the arguments to the 1st call of `makeWrapper`
-      # We start with the executable itself NOTE we call this variable "initial"
-      # because if configure != {} we need to call makeWrapper twice, in order to
-      # avoid double wrapping, see comment near finalMakeWrapperArgs
-      makeWrapperArgs =
-        let
-          binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
-        in
-        [
-          "--inherit-argv0"
-        ] ++ lib.optionals withRuby [
-          "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
-        ] ++ lib.optionals (binPath != "") [
-          "--suffix" "PATH" ":" binPath
-        ] ++ lib.optionals (luaEnv != null) [
-          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
-          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
-        ];
-
-      manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
-      # we call vimrcContent without 'packages' to avoid the init.vim generation
-      neovimRcContent = vimUtils.vimrcContent ({
-        beforePlugins = "";
-        customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
-        packages = null;
-      });
     in
+    map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
 
-    builtins.removeAttrs args ["plugins"] // {
-      wrapperArgs = makeWrapperArgs;
-      inherit packpathDirs;
-      inherit neovimRcContent;
-      inherit manifestRc;
-      inherit python3Env;
-      inherit luaEnv;
-      inherit withNodeJs;
-    } // lib.optionalAttrs withRuby {
-      inherit rubyEnv;
+  /**
+    accepts a list of normalized plugins and convert them into a vim package
+
+    # Type
+
+    ```
+    normalizedPluginsToVimPackage :: [AttrSet] -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+
+    ```nix
+    normalizedPluginsToVimPackage [ { plugin = vim-fugitive; optional = false'} ]
+    => { start = [ vim-fugitive ]; opt = []; }
+    :::
+  */
+  normalizedPluginsToVimPackage =
+    normalizedPlugins:
+    let
+      pluginsPartitioned = lib.partition (x: x.optional == true) normalizedPlugins;
+    in
+    {
+      start = map (x: x.plugin) pluginsPartitioned.wrong;
+      opt = map (x: x.plugin) pluginsPartitioned.right;
     };
 
+  /*
+    returns everything needed for the caller to wrap its own neovim:
+    - the generated content of the future init.vim
+    - the arguments to wrap neovim with
+    The caller is responsible for writing the init.vim and adding it to the wrapped
+    arguments (["-u" writeText "init.vim" GENERATEDRC)]).
+    This makes it possible to write the config anywhere: on a per-project basis
+    .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
+    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
+    anymore, $MYVIMRC wont be set etc
+  */
+  makeNeovimConfig =
+    {
+      customRC ? "",
+      # the function you would have passed to lua.withPackages
+      extraLuaPackages ? (_: [ ]),
+      ...
+    }@attrs:
+    let
+      luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
+    in
+    attrs
+    // {
+      neovimRcContent = customRC;
+      wrapperArgs = lib.optionals (luaEnv != null) [
+        "--prefix"
+        "LUA_PATH"
+        ";"
+        (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+        "--prefix"
+        "LUA_CPATH"
+        ";"
+        (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+      ];
+    };
 
   # to keep backwards compatibility for people using neovim.override
-  legacyWrapper = neovim: {
-    extraMakeWrapperArgs ? ""
-    /* the function you would have passed to python.withPackages */
-    , extraPythonPackages ? (_: [])
-    /* the function you would have passed to python.withPackages */
-    , withPython3 ? true,  extraPython3Packages ? (_: [])
-    /* the function you would have passed to lua.withPackages */
-    , extraLuaPackages ? (_: [])
-    , withNodeJs ? false
-    , withRuby ? true
-    , vimAlias ? false
-    , viAlias ? false
-    , configure ? {}
-    , extraName ? ""
-  }:
+  legacyWrapper =
+    neovim:
+    {
+      extraMakeWrapperArgs ? "",
+      # the function you would have passed to python.withPackages
+      extraPythonPackages ? (_: [ ]),
+      # the function you would have passed to python.withPackages
+      withPython3 ? true,
+      extraPython3Packages ? (_: [ ]),
+      # the function you would have passed to lua.withPackages
+      extraLuaPackages ? (_: [ ]),
+      withNodeJs ? false,
+      withRuby ? false,
+      vimAlias ? false,
+      viAlias ? false,
+      configure ? { },
+      extraName ? "",
+    }:
     let
 
       # we convert from the old configure.format to
-      plugins = if builtins.hasAttr "plug" configure then
+      plugins =
+        if builtins.hasAttr "plug" configure then
           throw "The neovim legacy wrapper doesn't support configure.plug anymore, please setup your plugins via 'configure.packages' instead"
         else
-          lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
-      genPlugin = packageName: {start ? [], opt ? []}:
-        start ++ (map (p: { plugin = p; optional = true; }) opt);
+          lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or { }));
+      genPlugin =
+        packageName:
+        {
+          start ? [ ],
+          opt ? [ ],
+        }:
+        start
+        ++ (map (p: {
+          plugin = p;
+          optional = true;
+        }) opt);
 
       res = makeNeovimConfig {
         inherit withPython3;
         inherit extraPython3Packages;
         inherit extraLuaPackages;
-        inherit withNodeJs withRuby viAlias vimAlias;
+        inherit
+          withNodeJs
+          withRuby
+          viAlias
+          vimAlias
+          ;
         customRC = configure.customRC or "";
         inherit plugins;
         inherit extraName;
       };
     in
-    wrapNeovimUnstable neovim (res // {
-      wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-      wrapRc = (configure != {});
-  });
+    wrapNeovimUnstable neovim (
+      res
+      // {
+        wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
+        wrapRc = (configure != { });
+      }
+    );
 
-  /* Generate vim.g.<LANG>_host_prog lua rc to setup host providers
+  /*
+    Generate vim.g.<LANG>_host_prog lua rc to setup host providers
 
-  Mapping a boolean argument to a key that tells us whether to add
-      vim.g.<LANG>_host_prog=$out/bin/nvim-<LANG>
-  Or this:
-      let g:loaded_${prog}_provider=0
-  While the latter tells nvim that this provider is not available */
-  generateProviderRc = {
-      withPython3 ? true
-    , withNodeJs ? false
-    , withRuby ? true
-    # perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
-    , withPerl ? false
+    Mapping a boolean argument to a key that tells us whether to add
+        vim.g.<LANG>_host_prog=$out/bin/nvim-<LANG>
+    Or this:
+        let g:loaded_${prog}_provider=0
+    While the latter tells nvim that this provider is not available
+  */
+  generateProviderRc =
+    {
+      withPython3 ? true,
+      withNodeJs ? false,
+      withRuby ? true,
+      # perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
+      withPerl ? false,
 
-    # so that we can pass the full neovim config while ignoring it
-    , ...
-    }: let
+      # so that we can pass the full neovim config while ignoring it
+      ...
+    }:
+    let
       hostprog_check_table = {
         node = withNodeJs;
         python = false;
@@ -189,7 +186,8 @@ let
         perl = withPerl;
       };
 
-      genProviderCommand = prog: withProg:
+      genProviderCommand =
+        prog: withProg:
         if withProg then
           "vim.g.${prog}_host_prog='${placeholder "out"}/bin/nvim-${prog}'"
         else
@@ -197,14 +195,19 @@ let
 
       hostProviderLua = lib.mapAttrsToList genProviderCommand hostprog_check_table;
     in
-        lib.concatStringsSep ";" hostProviderLua;
+    lib.concatStringsSep ";" hostProviderLua;
 
+  /*
+    Converts a lua package into a neovim plugin.
+    Does so by installing the lua package with a flat hierarchy of folders
+  */
   buildNeovimPlugin = callPackage ./build-neovim-plugin.nix {
     inherit (vimUtils) toVimPlugin;
     inherit lua;
   };
 
-  grammarToPlugin = grammar:
+  grammarToPlugin =
+    grammar:
     let
       name = lib.pipe grammar [
         lib.getName
@@ -216,18 +219,81 @@ let
         (lib.removePrefix "tree-sitter-")
         (lib.replaceStrings [ "-" ] [ "_" ])
       ];
+
+      nvimGrammars = lib.mapAttrsToList (
+        name: value:
+        value.origGrammar
+          or (builtins.throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+      ) vimPlugins.nvim-treesitter.grammarPlugins;
+      isNvimGrammar = x: builtins.elem x nvimGrammars;
+
+      toNvimTreesitterGrammar = callPackage (
+        { }:
+        makeSetupHook {
+          name = "to-nvim-treesitter-grammar";
+        } ./to-nvim-treesitter-grammar.sh
+      ) { };
     in
 
-    toVimPlugin (runCommand "vimplugin-treesitter-grammar-${name}"
-      {
+    (toVimPlugin (
+      stdenv.mkDerivation {
+        name = "treesitter-grammar-${name}";
+
+        origGrammar = grammar;
+        grammarName = name;
+
+        # Queries for nvim-treesitter's (not just tree-sitter's) officially
+        # supported languages are bundled with nvim-treesitter
+        # Queries from repositories for such languages are incompatible
+        # with nvim's implementation of treesitter.
+        #
+        # We try our best effort to only include queries for niche languages
+        # (there are grammars for them in nixpkgs, but they're in
+        # `tree-sitter-grammars.tree-sitter-*`; `vimPlugins.nvim-treesitter-parsers.*`
+        # only includes officially supported languages)
+        #
+        # To use grammar for a niche language, users usually do:
+        #   packages.all.start = with final.vimPlugins; [
+        #     (pkgs.neovimUtils.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-LANG)
+        #   ]
+        #
+        # See also https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
+        installQueries = !isNvimGrammar grammar;
+
+        dontUnpack = true;
+        __structuredAttrs = true;
+
+        nativeBuildInputs = [ toNvimTreesitterGrammar ];
+
         meta = {
           platforms = lib.platforms.all;
         } // grammar.meta;
       }
-      ''
-        mkdir -p $out/parser
-        ln -s ${grammar}/parser $out/parser/${name}.so
-      '');
+    ));
+
+  /*
+    Fork of vimUtils.packDir that additionnally generates a propagated-build-inputs-file that
+    can be used by the lua hooks to generate a proper LUA_PATH
+
+    Generates a packpath folder as expected by vim
+       Example:
+       packDir ( {myVimPackage = { start = [ vimPlugins.vim-fugitive ]; opt = []; }; })
+       => "/nix/store/xxxxx-pack-dir"
+  */
+  packDir =
+    packages:
+    let
+      rawPackDir = vimUtils.packDir packages;
+
+    in
+    rawPackDir.override ({
+      postBuild = ''
+        mkdir $out/nix-support
+        for i in $(find -L $out -name propagated-build-inputs ); do
+          cat "$i" >> $out/nix-support/propagated-build-inputs
+        done
+      '';
+    });
 
 in
 {
@@ -235,7 +301,11 @@ in
   inherit generateProviderRc;
   inherit legacyWrapper;
   inherit grammarToPlugin;
+  inherit packDir;
+  inherit normalizePlugins normalizedPluginsToVimPackage;
 
   inherit buildNeovimPlugin;
+}
+// lib.optionalAttrs config.allowAliases {
   buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
 }

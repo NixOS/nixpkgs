@@ -1,18 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, wrapQtAppsHook
-, libzip, boost, fftw, qtbase, qtwayland, qtsvg, libusb1
-, python3, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  wrapQtAppsHook,
+  libzip,
+  boost,
+  fftw,
+  libusb1,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  python3,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dsview";
 
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-      owner = "DreamSourceLab";
-      repo = "DSView";
-      rev = "v${version}";
-      sha256 = "sha256-LwrlB+Nwq34YjwGmnbUWS3W//ZHr8Do2Wf2te+2oBeI=";
+    owner = "DreamSourceLab";
+    repo = "DSView";
+    rev = "v${version}";
+    sha256 = "sha256-d/TfCuJzAM0WObOiBhgfsTirlvdROrlCm+oL1cqUrIs=";
   };
 
   patches = [
@@ -20,18 +33,31 @@ stdenv.mkDerivation rec {
     ./install.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    boost fftw qtbase qtwayland qtsvg libusb1 libzip
+    boost
+    fftw
+    qtbase
+    qtsvg
+    libusb1
+    libzip
     python3
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   meta = with lib; {
-    description = "A GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
+    description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
+    mainProgram = "DSView";
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bachp ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      bachp
+      carlossless
+    ];
   };
 }

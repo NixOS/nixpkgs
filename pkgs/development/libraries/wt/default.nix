@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qtbase, libharu
-, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
+, pango, fcgi, firebird, libmysqlclient, libpq, graphicsmagick, glew, openssl
 , pcre, harfbuzz, icu
 }:
 
@@ -20,7 +20,7 @@ let
       nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
         boost doxygen qtbase libharu
-        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
+        pango fcgi firebird libmysqlclient libpq graphicsmagick glew
         openssl pcre harfbuzz icu
       ];
 
@@ -46,7 +46,7 @@ let
     };
 in {
   wt4 = generic {
-    version = "4.10.0";
-    sha256 = "sha256-05WZnyUIwXwJA24mQi5ATCqRZ6PE/tiw2/MO1qYHRsY=";
+    version = "4.11.1";
+    sha256 = "sha256-Vp5vALQqI84NiYnK8amXSyOwX0Fq6VkodBHAf25wAfM=";
   };
 }

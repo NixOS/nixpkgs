@@ -1,12 +1,26 @@
-{ lib, fetchFromGitHub, ocaml, buildDunePackage
-, cmdliner, dap, fmt, iter, logs, lru, lwt_ppx, lwt_react, menhir, menhirLib, path_glob, ppx_deriving_yojson
-, ppx_optcomp
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cmdliner,
+  dap,
+  fmt,
+  iter,
+  logs,
+  lru,
+  lwt_ppx,
+  lwt_react,
+  menhir,
+  menhirLib,
+  path_glob,
+  ppx_deriving_yojson,
+  ppx_optcomp,
+  gitUpdater,
 }:
 
 buildDunePackage rec {
   pname = "earlybird";
-  version = "1.2.1";
+  version = "1.3.3";
 
   minimalOCamlVersion = "4.12";
 
@@ -14,7 +28,7 @@ buildDunePackage rec {
     owner = "hackwaly";
     repo = "ocamlearlybird";
     rev = version;
-    hash = "sha256-p29uTdx8+mZKXUL+ng/FzpKuhnykEe8Sy968Wa/KUn4=";
+    hash = "sha256-TzRJ+0I3VEx4Lvj3lhN9POzlXRgmTTdD5Bg1AX0pf3c=";
   };
 
   nativeBuildInputs = [ menhir ];

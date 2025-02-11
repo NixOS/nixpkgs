@@ -1,4 +1,9 @@
-{ lib, coq, mkCoqPackages, runCommand }:
+{
+  lib,
+  coq,
+  mkCoqPackages,
+  runCommand,
+}:
 
 let
 
@@ -6,7 +11,9 @@ let
   # dontFilter to true here so that _all_ packages are visibile in coqPackages.
   # There may be some versions of the top-level coq and coqPackages that don't
   # build QuickChick, which is what we are using for this test below.
-  coqWithAllPackages = coq // { dontFilter = true; };
+  coqWithAllPackages = coq // {
+    dontFilter = true;
+  };
 
   coqPackages = mkCoqPackages coqWithAllPackages;
 
@@ -15,18 +22,14 @@ let
   #
   # Here, we override the defaultVersion and release arguments to
   # mkCoqDerivation.
-  overriddenQuickChick =
-    coqPackages.lib.overrideCoqDerivation
-      {
-        defaultVersion = "9999";
-        release."9999".sha256 = lib.fakeSha256;
-      }
-      coqPackages.QuickChick;
+  overriddenQuickChick = coqPackages.lib.overrideCoqDerivation {
+    defaultVersion = "9999";
+    release."9999".sha256 = lib.fakeSha256;
+  } coqPackages.QuickChick;
 in
 
-runCommand
-  "coq-overrideCoqDerivation-test-0.1"
-  { meta.maintainers = with lib.maintainers; [cdepillabout]; }
+runCommand "coq-overrideCoqDerivation-test-0.1"
+  { meta.maintainers = with lib.maintainers; [ cdepillabout ]; }
   ''
     # Confirm that the computed version number for the overridden QuickChick does
     # actually become 9999, as set above.

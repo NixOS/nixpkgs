@@ -1,64 +1,109 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
-, boost179, miniupnpc, openssl, unbound
-, zeromq, pcsclite, readline, libsodium, hidapi
-, randomx, rapidjson
-, easyloggingpp
-, CoreData, IOKit, PCSC
-, trezorSupport ? true, libusb1, protobuf, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  miniupnpc,
+  openssl,
+  unbound,
+  zeromq,
+  pcsclite,
+  readline,
+  libsodium,
+  hidapi,
+  randomx,
+  rapidjson,
+  easyloggingpp,
+  CoreData,
+  IOKit,
+  PCSC,
+  trezorSupport ? true,
+  libusb1,
+  protobuf,
+  python3,
+  monero-cli,
 }:
 
 stdenv.mkDerivation rec {
   pname = "haven-cli";
-  version = "3.0.7";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "haven-protocol-org";
     repo = "haven-main";
     rev = "v${version}";
-    sha256 = "sha256-HLZ9j75MtF7FkHA4uefkrYp07pVZe1Ac1wny7T0CMpA=";
+    hash = "sha256-yVFAIyxeD8HNGCcWu52xNDFm9zyHrCdH2zR2+VbpBe8=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./use-system-libraries.patch
-  ];
+  inherit (monero-cli) patches;
 
   postPatch = ''
     # remove vendored libraries
-    rm -r external/{miniupnp,randomx,rapidjson,unbound}
+    rm -r external/{miniupnp,randomx,rapidjson}
     # export patched source for haven-gui
     cp -r . $source
-    # fix build on aarch64-darwin
-    substituteInPlace CMakeLists.txt --replace "-march=x86-64" ""
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
 
-  buildInputs = [
-    boost179 miniupnpc openssl unbound
-    zeromq pcsclite readline
-    libsodium hidapi randomx rapidjson
-    protobuf
-    readline easyloggingpp
-  ]
-    ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
+  buildInputs =
+    [
+      boost
+      miniupnpc
+      openssl
+      unbound
+      zeromq
+      pcsclite
+      readline
+      libsodium
+      hidapi
+      randomx
+      rapidjson
+      protobuf
+      readline
+      easyloggingpp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      IOKit
+      CoreData
+      PCSC
+    ]
+    ++ lib.optionals trezorSupport [
+      libusb1
+      protobuf
+      python3
+    ];
 
-  cmakeFlags = [
-    "-DUSE_DEVICE_TREZOR=ON"
-    "-DBUILD_GUI_DEPS=ON"
-    "-DReadline_ROOT_DIR=${readline.dev}"
-    "-DReadline_INCLUDE_DIR=${readline.dev}/include/readline"
-    "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
+  cmakeFlags =
+    [
+      "-DBUILD_GUI_DEPS=ON"
+      "-DReadline_ROOT_DIR=${readline.dev}"
+      "-DReadline_INCLUDE_DIR=${readline.dev}/include/readline"
+      "-DRandomX_ROOT_DIR=${randomx}"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
+    ++ lib.optional (!trezorSupport) "-DUSE_DEVICE_TREZOR=OFF";
 
-  outputs = [ "out" "source" ];
+  outputs = [
+    "out"
+    "source"
+  ];
 
   meta = with lib; {
     description = "Haven Protocol is the world's only network of private stable asset";
-    homepage    = "https://havenprotocol.org/";
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = "https://havenprotocol.org/";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    badPlatforms = [ "x86_64-darwin" ];
     maintainers = with maintainers; [ kim0 ];
+    mainProgram = "haven-wallet-cli";
   };
 }

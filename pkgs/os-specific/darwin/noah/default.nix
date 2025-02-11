@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, Hypervisor }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  Hypervisor,
+}:
 
 stdenv.mkDerivation rec {
   pname = "noah";
@@ -17,10 +23,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Bash on Ubuntu on macOS";
     homepage = "https://github.com/linux-noah/noah";
-    license = [ licenses.mit licenses.gpl2 ];
-    maintainers = [ maintainers.marsam ];
+    license = [
+      licenses.mit
+      licenses.gpl2Only
+    ];
+    maintainers = [ ];
     platforms = platforms.darwin;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

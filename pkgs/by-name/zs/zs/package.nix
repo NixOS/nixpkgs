@@ -1,4 +1,9 @@
-{ lib, fetchFromGitea, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitea,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "zs";
@@ -31,7 +36,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An extremely minimal static site generator written in Go";
+    description = "Extremely minimal static site generator written in Go";
     homepage = "https://git.mills.io/prologic/zs";
     changelog = "https://git.mills.io/prologic/zs/releases/tag/${version}";
     license = licenses.mit;

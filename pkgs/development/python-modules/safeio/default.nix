@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "safeio";
   version = "1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "safeIO";
@@ -19,6 +21,6 @@ buildPythonPackage rec {
     description = "Safely make I/O operations to files in Python even from multiple threads";
     homepage = "https://github.com/Animenosekai/safeIO";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

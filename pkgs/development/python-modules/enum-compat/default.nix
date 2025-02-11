@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, enum34 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  enum34,
+}:
 
 buildPythonPackage rec {
   pname = "enum-compat";
   version = "0.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

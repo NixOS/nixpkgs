@@ -1,49 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitea, fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
-, python3, pkg-config, libsass
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  yarn,
+  nodejs,
+  git,
+  python3,
+  pkg-config,
+  libsass,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "admin-fe";
-  version = "unstable-2023-02-11";
+  version = "unstable-2024-04-27";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "admin-fe";
-    rev = "130c17808bc50269f8444612f4ab378a08cd5e43";
-    hash = "sha256-+ZU8J4rOyRMSZP+CUyLeOhRI2fKiw2s31coTYAoReWM=";
+    rev = "7e16abcbaab10efa6c2c4589660cf99f820a718d";
+    hash = "sha256-W/2Ay2dNeVQk88lgkyTzKwCNw0kLkfI6+Azlbp0oMm4=";
   };
 
-  patches = [ ./deps.patch ];
-
   offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-h+QUBT2VwPWu2l05Zkcp+0vHN/x40uXxw2KYjq7l/Xk=";
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-acF+YuWXlMZMipD5+XJS+K9vVFRz3wB2fZqc3Hd0Bjc=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
     nodejs
     pkg-config
     python3
+    git
     libsass
   ];
-
-  postPatch = ''
-    cp ${./yarn.lock} yarn.lock
-  '';
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME="$(mktemp -d)"
 
-    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
+    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
     fixup-yarn-lock yarn.lock
+    substituteInPlace yarn.lock \
+      --replace-fail '"git://github.com/adobe-webplatform/eve.git#eef80ed"' '"https://github.com/adobe-webplatform/eve.git#eef80ed"'
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/cross-env
@@ -75,10 +79,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Admin interface for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mvs ];
   };
-}
+})

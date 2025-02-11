@@ -1,4 +1,9 @@
-{ stdenv, go, docker, nixosTests }:
+{
+  stdenv,
+  go,
+  docker,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   name = "tarsum";
@@ -39,4 +44,5 @@ stdenv.mkDerivation {
   };
 
   meta.platforms = go.meta.platforms;
+  meta.mainProgram = "tarsum";
 }

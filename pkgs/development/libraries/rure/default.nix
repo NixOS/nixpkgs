@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  fixDarwinDylibNames,
 }:
 
 let
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # Headers are not handled by cargo nor buildRustPackage
   postInstall = ''
@@ -35,7 +39,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A C API for Rust's regular expression library";
+    description = "C API for Rust's regular expression library";
     homepage = "https://crates.io/crates/rure";
     license = [
       lib.licenses.mit

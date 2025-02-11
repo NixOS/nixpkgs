@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
 
   options.value = lib.mkOption {
     type = lib.types.anything;
@@ -9,17 +10,27 @@
       value.int = 0;
       value.bool = false;
       value.string = "";
-      value.path = /.;
+      value.path = ./.;
       value.null = null;
       value.float = 0.1;
+      value.list = [
+        1
+        "a"
+        { x = null; }
+      ];
     }
     {
       value.int = 0;
       value.bool = false;
       value.string = "";
-      value.path = /.;
+      value.path = ./.;
       value.null = null;
       value.float = 0.1;
+      value.list = [
+        1
+        "a"
+        { x = null; }
+      ];
     }
   ];
 

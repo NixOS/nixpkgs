@@ -1,43 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, matplotlib
-, numpy
-, pandas
-, scipy
-, seaborn
-, statsmodels
-, pytestCheckHook
-, seaborn-data
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  matplotlib,
+  numpy,
+  pandas,
+  scipy,
+  seaborn,
+  statsmodels,
+  pytestCheckHook,
+  seaborn-data,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-posthocs";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "0.11.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
-    rev = "v${version}";
-    hash = "sha256-IkvAc684AWEK427OGAa4qVy6leWmd3b8Dnhd5bYAt5I=";
+    tag = "v${version}";
+    hash = "sha256-ChYBjT7xeAiKJFRI9ov4vOGucy0aK0j/0dndNs4ewBo=";
   };
 
-  patches = [
-    # Fixed on master: https://github.com/maximtrp/scikit-posthocs/commit/02266a00ce0eb6a089e7efe07816da1aa5152fc9
-    ./0001-increased-abs-tolerance-for-wilcoxon-test.patch
-    # Fixed on master: https://github.com/maximtrp/scikit-posthocs/commit/5416ffba3ab01aebab3909400b5a9e847022898e
-    ./0002-Update-test_posthocs.py.patch
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas
@@ -50,9 +40,7 @@ buildPythonPackage rec {
     # tests require to write to home directory
     export SEABORN_DATA=${seaborn-data.exercise}
   '';
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scikit_posthocs" ];
 
   meta = with lib; {

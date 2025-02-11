@@ -1,32 +1,43 @@
 { pkgs, config, lib, ... }:
-with lib;
+
 let
   cfg = config.programs.fzf;
 in
 {
   options = {
     programs.fzf = {
-      fuzzyCompletion = mkEnableOption (mdDoc "fuzzy completion with fzf");
-      keybindings = mkEnableOption (mdDoc "fzf keybindings");
+      fuzzyCompletion = lib.mkEnableOption "fuzzy completion with fzf";
+      keybindings = lib.mkEnableOption "fzf keybindings";
     };
   };
-  config = {
-    environment.systemPackages = optional (cfg.keybindings || cfg.fuzzyCompletion) pkgs.fzf;
 
-    programs.bash.interactiveShellInit = optionalString cfg.fuzzyCompletion ''
-      source ${pkgs.fzf}/share/fzf/completion.bash
-    '' + optionalString cfg.keybindings ''
-      source ${pkgs.fzf}/share/fzf/key-bindings.bash
-    '';
+  config = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) {
+    environment.systemPackages = [ pkgs.fzf ];
 
-    programs.zsh.interactiveShellInit = optionalString (!config.programs.zsh.ohMyZsh.enable)
-      (optionalString cfg.fuzzyCompletion ''
-        source ${pkgs.fzf}/share/fzf/completion.zsh
-      '' + optionalString cfg.keybindings ''
-        source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+    programs = {
+      # load after programs.bash.completion.enable
+      bash.promptPluginInit = lib.mkAfter (lib.optionalString cfg.fuzzyCompletion ''
+        source ${pkgs.fzf}/share/fzf/completion.bash
+      '' + lib.optionalString cfg.keybindings ''
+        source ${pkgs.fzf}/share/fzf/key-bindings.bash
       '');
 
-    programs.zsh.ohMyZsh.plugins = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) [ "fzf" ];
+      zsh = {
+        interactiveShellInit = lib.optionalString (!config.programs.zsh.ohMyZsh.enable)
+        (lib.optionalString cfg.fuzzyCompletion ''
+          source ${pkgs.fzf}/share/fzf/completion.zsh
+        '' + lib.optionalString cfg.keybindings ''
+          source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+        '');
+
+        ohMyZsh.plugins = lib.mkIf config.programs.zsh.ohMyZsh.enable [ "fzf" ];
+      };
+
+      fish.interactiveShellInit = lib.optionalString cfg.keybindings ''
+        source ${pkgs.fzf}/share/fzf/key-bindings.fish
+      '';
+    };
   };
-  meta.maintainers = with maintainers; [ laalsaas ];
+
+  meta.maintainers = with lib.maintainers; [ laalsaas ];
 }

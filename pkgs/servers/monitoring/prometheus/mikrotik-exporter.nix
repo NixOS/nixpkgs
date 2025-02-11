@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "mikrotik-exporter-unstable";
@@ -20,6 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Prometheus MikroTik device(s) exporter";
+    mainProgram = "mikrotik-exporter";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmilata ];
   };

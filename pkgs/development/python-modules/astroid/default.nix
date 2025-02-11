@@ -1,56 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, isPyPy
-, lazy-object-proxy
-, setuptools
-, wheel
-, typing-extensions
-, typed-ast
-, pip
-, pylint
-, pytestCheckHook
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  pip,
+  pylint,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.15.6"; # Check whether the version is compatible with pylint
-  format = "pyproject";
+  version = "3.3.8"; # Check whether the version is compatible with pylint
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0oNNEVD8rYGkM11nGUD+XMwE7xgk7mJIaplrAXaECFg=";
+    repo = "astroid";
+    tag = "v${version}";
+    hash = "sha256-KKQuLomCHhVYMX1gE9WuqbXOfsf2izGlLE0Ml62gY3k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    lazy-object-proxy
-    wrapt
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ] ++ lib.optionals (!isPyPy && pythonOlder "3.8") [
-    typed-ast
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pip
     pytestCheckHook
-    typing-extensions
-  ];
-
-  disabledTests = [
-    # DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('tests.testdata.python3.data.path_pkg_resources_1.package')`.
-    "test_identify_old_namespace_package_protocol"
   ];
 
   passthru.tests = {
@@ -58,10 +38,10 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/PyCQA/astroid/blob/${src.rev}/ChangeLog";
-    description = "An abstract syntax tree for Python with inference support";
+    changelog = "https://github.com/PyCQA/astroid/blob/v${version}/ChangeLog";
+    description = "Abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

@@ -1,13 +1,27 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.junos-czerwonk;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    mkIf
+    concatStringsSep
+    ;
 
-  configFile = if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configurationFile);
+  configFile =
+    if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configurationFile);
 
-  configurationFile = pkgs.writeText "prometheus-junos-czerwonk-exporter.conf" (builtins.toJSON (cfg.configuration));
+  configurationFile = pkgs.writeText "prometheus-junos-czerwonk-exporter.conf" (
+    builtins.toJSON (cfg.configuration)
+  );
 in
 {
   port = 9326;
@@ -15,21 +29,21 @@ in
     environmentFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing env-vars to be substituted into the exporter's config.
       '';
     };
     configurationFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Specify the JunOS exporter configuration file to use.
       '';
     };
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         JunOS exporter configuration as nix attribute set. Mutually exclusive with the `configurationFile` option.
       '';
       example = {
@@ -44,7 +58,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

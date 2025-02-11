@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, buildPythonApplication
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
-, pkg-config
-, cmake
-, flex
-, glib
-, json-glib
-, libxml2
-, appdirs
-, dbus-deviation
-, faust-cchardet
-, feedgen
-, lxml
-, networkx
-, pkgconfig
-, pyyaml
-, schema
-, setuptools
-, toposort
-, wheezy-template
-, llvmPackages
-, gst_all_1
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchpatch,
+  fetchPypi,
+  pytestCheckHook,
+  pkg-config,
+  cmake,
+  flex,
+  glib,
+  json-glib,
+  libxml2,
+  appdirs,
+  dbus-deviation,
+  faust-cchardet,
+  feedgen,
+  lxml,
+  networkx,
+  pkgconfig,
+  pyyaml,
+  schema,
+  setuptools,
+  toposort,
+  wheezy-template,
+  llvmPackages,
+  gst_all_1,
 }:
 
 buildPythonApplication rec {
@@ -66,7 +67,7 @@ buildPythonApplication rec {
     pkgconfig
     pyyaml
     schema
-    setuptools  # for pkg_resources
+    setuptools # for pkg_resources
     toposort
     wheezy-template
   ];
@@ -86,23 +87,28 @@ buildPythonApplication rec {
   ];
 
   # Run the tests by package instead of current dir
-  pytestFlagsArray = [ "--pyargs" "hotdoc" ];
-
-  disabledTests = [
-    # Test does not correctly handle path normalization for test comparison
-    "test_cli_overrides"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
-    "test_index"
+  pytestFlagsArray = [
+    "--pyargs"
+    "hotdoc"
   ];
+
+  disabledTests =
+    [
+      # Test does not correctly handle path normalization for test comparison
+      "test_cli_overrides"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
+      "test_index"
+    ];
 
   # Hardcode libclang paths
   postPatch = ''
     substituteInPlace hotdoc/extensions/c/c_extension.py \
       --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${llvmPackages.libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${llvmPackages.libclang.lib}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${llvmPackages.libclang.lib}/lib"'
+      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
+      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
+      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
   '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
@@ -118,9 +124,9 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "The tastiest API documentation system";
+    description = "Tastiest API documentation system";
     homepage = "https://hotdoc.github.io/";
     license = [ licenses.lgpl21Plus ];
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

@@ -1,15 +1,13 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
-
-with lib;
-
 let
   cfg = config.services.evcc;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "evcc.yml" cfg.settings;
 
   package = pkgs.evcc;
@@ -18,20 +16,20 @@ in
 {
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  options.services.evcc = with types; {
-    enable = mkEnableOption (lib.mdDoc "EVCC, the extensible EV Charge Controller with PV integration");
+  options.services.evcc = with lib.types; {
+    enable = lib.mkEnableOption "EVCC, the extensible EV Charge Controller with PV integration";
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
-      default = [];
-      description = lib.mdDoc ''
+      default = [ ];
+      description = ''
         Extra arguments to pass to the evcc executable.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
-      description = lib.mdDoc ''
+      description = ''
         evcc configuration as a Nix attribute set.
 
         Check for possible options in the sample [evcc.dist.yaml](https://github.com/andig/evcc/blob/${package.version}/evcc.dist.yaml].
@@ -39,8 +37,9 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.evcc = {
+      wants = [ "network-online.target" ];
       after = [
         "network-online.target"
         "mosquitto.target"
@@ -53,7 +52,7 @@ in
         getent
       ];
       serviceConfig = {
-        ExecStart = "${package}/bin/evcc --config ${configFile} ${escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${package}/bin/evcc --config ${configFile} ${lib.escapeShellArgs cfg.extraArgs}";
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [
           "char-ttyUSB"
@@ -62,6 +61,7 @@ in
         DynamicUser = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        Restart = "on-failure";
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
@@ -73,7 +73,7 @@ in
         PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups= true;
+        ProtectControlGroups = true;
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;

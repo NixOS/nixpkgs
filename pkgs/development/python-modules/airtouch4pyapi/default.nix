@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LonePurpleWolf";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RiRwebumidn0nijL/e9J74ZYx0DASi1up5BTNxYoGEA=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   # Project has no tests
   doCheck = false;

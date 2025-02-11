@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, mbstrdecoder
-, pytestCheckHook
-, pythonOlder
-, tcolorpy
-, termcolor
-, typepy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  mbstrdecoder,
+  pytestCheckHook,
+  pythonOlder,
+  tcolorpy,
+  termcolor,
+  typepy,
 }:
 
 buildPythonPackage rec {
   pname = "dataproperty";
-  version = "1.0.1";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-adUxUU9eASkC9n5ppZYNN0MP19u4xcL8XziBWSCp2L8=";
+    tag = "v${version}";
+    hash = "sha256-IEEwdOcC9nKwVumWnjpZlqYKCFGwZebMh7nGdGVjibE=";
   };
 
   propagatedBuildInputs = [
@@ -30,10 +31,8 @@ buildPythonPackage rec {
     tcolorpy
   ] ++ typepy.optional-dependencies.datetime;
 
-  passthru.optional-dependencies = {
-    logging = [
-      loguru
-    ];
+  optional-dependencies = {
+    logging = [ loguru ];
   };
 
   nativeCheckInputs = [
@@ -41,14 +40,12 @@ buildPythonPackage rec {
     termcolor
   ];
 
-  pythonImportsCheck = [
-    "dataproperty"
-  ];
+  pythonImportsCheck = [ "dataproperty" ];
 
   meta = with lib; {
     description = "Library for extracting properties from data";
     homepage = "https://github.com/thombashi/dataproperty";
-    changelog = "https://github.com/thombashi/DataProperty/releases/tag/v${version}";
+    changelog = "https://github.com/thombashi/DataProperty/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ genericnerdyusername ];
   };

@@ -1,31 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libGL
-, libxkbcommon
-, libxml2
-, mesa
-, meson
-, ninja
-, pixman
-, pkg-config
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGL,
+  libxkbcommon,
+  libxml2,
+  libevdev,
+  libinput,
+  libgbm,
+  meson,
+  ninja,
+  pixman,
+  pkg-config,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybox";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "wizbright";
     repo = "waybox";
     rev = finalAttrs.version;
-    hash = "sha256-G8dRa4hgev3x58uqp5To5OzF3zcPSuT3NL9MPnWf2M8=";
+    hash = "sha256-hAXS9laDfigWR2pfNmdPiOeez3NpTIuKHnpeQyYa9IQ=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libxkbcommon
     libxml2
-    mesa # for libEGL
+    libevdev
+    libinput
+    libgbm
     pixman
     udev
     wayland
@@ -56,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/wizbright/waybox";
-    description = "An openbox clone on Wayland";
+    description = "Openbox clone on Wayland";
     license = lib.licenses.mit;
     mainProgram = "waybox";
     maintainers = with lib.maintainers; [ AndersonTorres ];

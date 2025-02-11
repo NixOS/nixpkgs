@@ -1,33 +1,44 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, perl
-, rustPlatform
-, darwin
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  rustPlatform,
+  openssl,
+  darwin,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
-  version = "0.14.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fVgo5Ds/VK0kBpF+F2FdMvBnQj2IB+B5ToOK8ONdq6c=";
+    sha256 = "sha256-uyeePAHBDCzXzwIWrKcc9LHClwSI7DMBYod/o4LfK+Y=";
   };
 
-  cargoSha256 = "sha256-fNqnpLNENLJEhbqxLFUqyjAf8tEPCLoGSRV91gOY9LI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uR5XvkHUmZzCHZITKgScmzqjLOIvbPyrih/0B1OpsAc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [
-    perl
+    pkg-config
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   # This test checks whether the plugins specified in the plugins json file are
   # valid by making a network call to the repo that houses their binaries; but, the
@@ -35,15 +46,6 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "-- --skip=latest_plugins_are_valid_versions"
   ];
-
-  # The rover-client's build script (xtask/src/commands/prep/schema.rs) will try to
-  # download the API's graphql schema at build time to our read-only filesystem.
-  # To avoid this we pre-download it to a location the build script checks.
-  preBuild = ''
-    cp ${./schema}/hash.id              crates/rover-client/.schema/
-    cp ${./schema}/etag.id              crates/rover-client/.schema/
-    cp ${./schema}/schema.graphql       crates/rover-client/.schema/
-  '';
 
   passthru.updateScript = ./update.sh;
 
@@ -55,9 +57,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI for interacting with ApolloGraphQL's developer tooling, including managing self-hosted and GraphOS graphs.";
+    description = "CLI for interacting with ApolloGraphQL's developer tooling, including managing self-hosted and GraphOS graphs";
+    mainProgram = "rover";
     homepage = "https://www.apollographql.com/docs/rover";
     license = licenses.mit;
-    maintainers = [ maintainers.ivanbrennan maintainers.aaronarinder ];
+    maintainers = [
+      maintainers.ivanbrennan
+      maintainers.aaronarinder
+    ];
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, django
-, djangorestframework
-, pytestCheckHook
-, pytest-django
-, ipdb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  django,
+  djangorestframework,
+  pytestCheckHook,
+  pytest-django,
+  ipdb,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alanjds";
     repo = "drf-nested-routers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qlXNDydoQJ9FZB6G7yV/pNmx3BEo+lvRqsfjrvlbdNY=";
   };
 
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
-  propagatedBuildInputs = [
-    djangorestframework
-  ];
+  propagatedBuildInputs = [ djangorestframework ];
 
   nativeCheckInputs = [
     ipdb

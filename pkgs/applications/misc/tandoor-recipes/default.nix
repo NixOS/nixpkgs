@@ -1,38 +1,15 @@
 { callPackage
 , nixosTests
 , python3
-, fetchFromGitHub
-, fetchpatch
 }:
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_4;
-
-      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
-        version = "1.14.0";
-        format = "setuptools";
-
-        src = fetchFromGitHub {
-          owner = "django-crispy-forms";
-          repo = "django-crispy-forms";
-          rev = "refs/tags/${version}";
-          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
-        };
-      });
-
-      # Tests are incompatible with Django 4
-      django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
-        doCheck = false;
-      });
-    };
-  };
+  python = python3;
 
   common = callPackage ./common.nix { };
 
   frontend = callPackage ./frontend.nix { };
 in
-python.pkgs.pythonPackages.buildPythonPackage rec {
+python.pkgs.pythonPackages.buildPythonPackage {
   pname = "tandoor-recipes";
 
   inherit (common) version src;
@@ -40,59 +17,59 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   format = "other";
 
   patches = [
-    # Allow setting MEDIA_ROOT through environment variable
-    ./media-root.patch
-    # https://github.com/TandoorRecipes/recipes/pull/2706
-    (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/8f66f5c3ca61751a80cc133ff4c59019d6fca406.patch";
-      hash = "sha256-oF5YlPg1LEdLvKpxiSqjTmYPbrGquPlRIz6A05031gs=";
-    })
+    ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
   ];
 
+  postPatch = ''
+    substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
-    beautifulsoup4
-    bleach
-    bleach-allowlist
-    boto3
-    cryptography
     django
-    django-allauth
+    cryptography
     django-annoying
-    django-auth-ldap
-    django-autocomplete-light
     django-cleanup
-    django-cors-headers
     django-crispy-forms
-    django-hcaptcha
-    django-js-reverse
-    django-oauth-toolkit
-    django-prometheus
-    django-scopes
-    django-storages
+    django-crispy-bootstrap4
     django-tables2
-    django-webpack-loader
-    django-treebeard
     djangorestframework
     drf-writable-nested
+    django-oauth-toolkit
+    bleach
     gunicorn
-    icalendar
-    jinja2
     lxml
     markdown
-    microdata
     pillow
     psycopg2
-    pyppeteer
     python-dotenv
-    pytube
-    pyyaml
-    recipe-scrapers
     requests
     six
-    uritemplate
-    validators
     webdavclient3
     whitenoise
+    icalendar
+    pyyaml
+    uritemplate
+    beautifulsoup4
+    microdata
+    jinja2
+    django-webpack-loader
+    django-js-reverse
+    django-allauth
+    recipe-scrapers
+    django-scopes
+    django-treebeard
+    django-cors-headers
+    django-storages
+    boto3
+    django-prometheus
+    django-hcaptcha
+    python-ldap
+    django-auth-ldap
+    pyppeteer
+    pytubefix
+    aiohttp
+    inflection
+    redis
   ];
 
   configurePhase = ''
@@ -140,9 +117,24 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
+    mock
     pytestCheckHook
+    pytest-asyncio
+    pytest-cov
     pytest-django
     pytest-factoryboy
+    pytest-html
+    pytest-xdist
+  ];
+
+  # flaky
+  disabledTests = [
+    "test_add_duplicate"
+    "test_reset_inherit_space_fields"
+    "test_search_count"
+    "test_url_import_regex_replace"
+    "test_url_validator"
+    "test_delete"
   ];
 
   passthru = {
@@ -151,7 +143,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
     };
   };
 
@@ -160,5 +152,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
       Application for managing recipes, planning meals, building shopping lists
       and much much more!
     '';
+    mainProgram = "tandoor-recipes";
   };
 }

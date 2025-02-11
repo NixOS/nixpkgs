@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fetchpatch,
 }:
 
 buildGoModule rec {
@@ -30,8 +31,12 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Validate your Kubernetes configuration files";
+    mainProgram = "kubeval";
     homepage = "https://github.com/instrumenta/kubeval";
     license = licenses.asl20;
-    maintainers = with maintainers; [ johanot nicknovitski ];
+    maintainers = with maintainers; [
+      johanot
+      nicknovitski
+    ];
   };
 }

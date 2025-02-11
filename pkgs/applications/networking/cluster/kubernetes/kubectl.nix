@@ -3,7 +3,11 @@
 kubernetes.overrideAttrs (_: rec {
   pname = "kubectl";
 
-  outputs = [ "out" "man" "convert" ];
+  outputs = [
+    "out"
+    "man"
+    "convert"
+  ];
 
   WHAT = lib.concatStringsSep " " [
     "cmd/kubectl"
@@ -27,6 +31,7 @@ kubernetes.overrideAttrs (_: rec {
   meta = kubernetes.meta // {
     description = "Kubernetes CLI";
     homepage = "https://github.com/kubernetes/kubectl";
+    mainProgram = "kubectl";
     platforms = lib.platforms.unix;
   };
 })

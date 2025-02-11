@@ -1,4 +1,16 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libzen, libmediainfo, zlib, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  libzen,
+  libmediainfo,
+  zlib,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "coreinfo";
@@ -26,7 +38,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A file information tool from the C Suite";
+    description = "File information tool from the C Suite";
+    mainProgram = "coreinfo";
     homepage = "https://gitlab.com/cubocore/coreapps/coreinfo";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

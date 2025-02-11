@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pdm-backend
-, pydantic
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pydantic,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "garth";
-  version = "0.4.41";
-  format = "pyproject";
+  version = "0.5.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1CnRgPJTG7cpfa/SyhBwVw0Lj6ENI/YY/q2yNeve9c0=";
+    hash = "sha256-WUrK/ieYnao/+8hGDK8GOAI1nGsfQMmP/Tsh9prcbgk=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  pythonRelaxDeps = [ "requests-oauthlib" ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     pydantic
     requests
     requests-oauthlib
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "garth"
-  ];
+  pythonImportsCheck = [ "garth" ];
 
   disabledTests = [
     # Tests require network access
@@ -59,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Garmin SSO auth and connect client";
     homepage = "https://github.com/matin/garth";
+    changelog = "https://github.com/matin/garth/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

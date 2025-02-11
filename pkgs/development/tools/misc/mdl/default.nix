@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "mdl";
@@ -8,10 +12,15 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "mdl";
 
   meta = with lib; {
-    description = "A tool to check markdown files and flag style issues";
+    description = "Tool to check markdown files and flag style issues";
     homepage = "https://github.com/markdownlint/markdownlint";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli manveru nicknovitski totoroot ];
+    maintainers = with maintainers; [
+      gerschtli
+      manveru
+      nicknovitski
+      totoroot
+    ];
     platforms = platforms.all;
   };
 }

@@ -1,55 +1,63 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gettext
-, glib
-, pkg-config
-, polkit
-, python3
-, sqlite
-, gobject-introspection
-, vala
-, gtk-doc
-, boost
-, meson
-, ninja
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, libxml2
-, gst_all_1
-, gtk3
-, enableCommandNotFound ? false
-, enableBashCompletion ? false
-, bash-completion ? null
-, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gettext,
+  glib,
+  pkg-config,
+  polkit,
+  python3,
+  sqlite,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  boost,
+  meson,
+  ninja,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  libxml2,
+  gst_all_1,
+  gtk3,
+  enableCommandNotFound ? false,
+  enableBashCompletion ? false,
+  bash-completion ? null,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.2.5.1pre";
+  version = "1.3.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "30bb82da8d4161330a6d7a20c9989149303421a1";
-    sha256 = "k2osc2v0OuGrNjwxdqn785RsbHEJP3p79PG9YqnVE3U=";
+    rev = "v${version}";
+    hash = "sha256-MYZFI1Q90F/AXVSJJBhmw+E7IMLXrdwmSuFJwv5D/z4=";
   };
 
-  buildInputs = [
-    glib
-    polkit
-    python3
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gtk3
-    sqlite
-    boost
-  ] ++ lib.optional enableSystemd systemd
-  ++ lib.optional enableBashCompletion bash-completion;
+  buildInputs =
+    [
+      glib
+      polkit
+      python3
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gtk3
+      sqlite
+      boost
+    ]
+    ++ lib.optional enableSystemd systemd
+    ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
     gobject-introspection
     glib
@@ -65,22 +73,23 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  mesonFlags = [
-    (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
-    # often fails to build with nix updates
-    # and remounts /nix/store as rw
-    # https://github.com/NixOS/nixpkgs/issues/177946
-    #"-Dpackaging_backend=nix"
-    "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
-    "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "-Dcron=false"
-    "-Dgtk_doc=true"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ]
-  ++ lib.optional (!enableBashCompletion) "-Dbash_completion=false"
-  ++ lib.optional (!enableCommandNotFound) "-Dbash_command_not_found=false";
+  mesonFlags =
+    [
+      (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
+      # often fails to build with nix updates
+      # and remounts /nix/store as rw
+      # https://github.com/NixOS/nixpkgs/issues/177946
+      #"-Dpackaging_backend=nix"
+      "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
+      "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
+      "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "-Dcron=false"
+      "-Dgtk_doc=true"
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
+    ]
+    ++ lib.optional (!enableBashCompletion) "-Dbash_completion=false"
+    ++ lib.optional (!enableCommandNotFound) "-Dbash_command_not_found=false";
 
   postPatch = ''
     # HACK: we want packagekit to look in /etc for configs but install
@@ -91,6 +100,10 @@ stdenv.mkDerivation rec {
     substituteInPlace data/meson.build \
       --replace "install_dir: join_paths(get_option('localstatedir'), 'lib', 'PackageKit')," "install_dir: join_paths('$out', 'var', 'lib', 'PackageKit'),"
   '';
+
+  passthru.tests = {
+    nixos-test = nixosTests.packagekit;
+  };
 
   meta = with lib; {
     description = "System to facilitate installing and updating packages";

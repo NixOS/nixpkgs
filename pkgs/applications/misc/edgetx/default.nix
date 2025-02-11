@@ -1,7 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttools, SDL, gtest
-, dfu-util
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gcc-arm-embedded,
+  python3Packages,
+  qtbase,
+  qtmultimedia,
+  qttools,
+  SDL,
+  gtest,
+  dfu-util,
 }:
 
 mkDerivation rec {
@@ -13,12 +22,21 @@ mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-bKMAyONy1Udd+2nDVEMrtIsnfqrNuBVMWU7nCqvZ+3E=";
+    hash = "sha256-bKMAyONy1Udd+2nDVEMrtIsnfqrNuBVMWU7nCqvZ+3E=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
+  nativeBuildInputs = [
+    cmake
+    gcc-arm-embedded
+    python3Packages.pillow
+    qttools
+  ];
 
-  buildInputs = [ qtbase qtmultimedia SDL ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    SDL
+  ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -39,10 +57,19 @@ mkDerivation rec {
       firmware to the radio, backing up model settings, editing settings and
       running radio simulators.
     '';
+    mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion version));
     homepage = "https://edgetx.org/";
     license = licenses.gpl2Only;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ elitak lopsided98 wucke13 ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      elitak
+      lopsided98
+      wucke13
+    ];
   };
 
 }

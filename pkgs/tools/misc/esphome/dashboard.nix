@@ -1,17 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchNpmDeps,
+
+  # build-system
+  setuptools,
+  nodejs,
+  npmHooks,
+
 }:
 
 buildPythonPackage rec {
   pname = "esphome-dashboard";
-  version = "20231107.0";
-  format = "setuptools";
+  version = "20241217.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-84iM987nxNidMObnbY3lt78xRbN9USNtqQzfOzkd17k=";
+  src = fetchFromGitHub {
+    owner = "esphome";
+    repo = "dashboard";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Mirihvts8G2D4e5Jn7S0dWEJ+sOHZ+fvzsNaLpAOyMA=";
   };
+
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-fWQvDMeuRjyToHhhZH1KtLWuhgAvq900cCja2dvLQyU=";
+  };
+
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  postPatch = ''
+    # https://github.com/esphome/dashboard/pull/639
+    patchShebangs script/build
+  '';
+
+  preBuild = ''
+    script/build
+  '';
 
   # no tests
   doCheck = false;

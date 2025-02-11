@@ -1,16 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libusb1
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libusb1,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libusb-compat";
   version = "0.1.8";
 
-  outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
+  outputs = [
+    "out"
+    "dev"
+  ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
   src = fetchFromGitHub {
@@ -22,7 +26,10 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ libusb1 ];
 
@@ -35,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://libusb.info/";
     description = "cross-platform user-mode USB device library";
+    mainProgram = "libusb-config";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
       The current API is of 1.0 version (libusb-1.0 API), this library is a wrapper exposing the legacy API.

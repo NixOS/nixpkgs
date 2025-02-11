@@ -1,34 +1,37 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
+{
+  callPackage,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.13.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JUyoOtlypDWK6HxsonVzbfQAdcXk728a8gVI/5GI2fs=";
+    rev = "lychee-v${version}";
+    hash = "sha256-DRGby8Ov7Mosz4FVz/w2ECkvyuBktL9PTnUYds+mCI8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "criterion-0.4.0" = "sha256-0EKLRdxbH2czkZjmuaYLzkTBU687y6Iw9yqNV2TbsDw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-B0bskG5ptUJCwRy/m0ZMo80dE2MTi39mnQLsgQjwTBY=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ];
+
+  cargoTestFlags = [
+    # don't run doctests since they tend to use the network
+    "--lib"
+    "--bins"
+    "--tests"
+  ];
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -43,13 +46,32 @@ rustPlatform.buildRustPackage rec {
     "--skip=client::tests"
     "--skip=collector::tests"
     "--skip=src/lib.rs"
+    # Color error for those tests as we are not in a tty
+    "--skip=formatters::response::color::tests::test_format_response_with_error_status"
+    "--skip=formatters::response::color::tests::test_format_response_with_ok_status"
   ];
 
-  meta = with lib; {
-    description = "A fast, async, stream-based link checker written in Rust.";
+  passthru.tests = {
+    # NOTE: These assume that testers.lycheeLinkCheck uses this exact derivation.
+    #       Which is true most of the time, but not necessarily after overriding.
+    ok = callPackage ./tests/ok.nix { };
+    fail = callPackage ./tests/fail.nix { };
+    fail-emptyDirectory = callPackage ./tests/fail-emptyDirectory.nix { };
+    network = testers.runNixOSTest ./tests/network.nix;
+  };
+
+  meta = {
+    description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
-    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ totoroot tuxinaut ];
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      totoroot
+      tuxinaut
+    ];
+    mainProgram = "lychee";
   };
 }

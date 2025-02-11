@@ -1,21 +1,23 @@
-{ mkXfceDerivation
-, gobject-introspection
-, dbus-glib
-, garcon
-, glib
-, gtk3
-, libX11
-, libXScrnSaver
-, libXrandr
-, libwnck
-, libxfce4ui
-, libxfce4util
-, libxklavier
-, pam
-, python3
-, systemd
-, xfconf
-, lib
+{
+  mkXfceDerivation,
+  gobject-introspection,
+  dbus-glib,
+  garcon,
+  glib,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXrandr,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  pam,
+  python3,
+  systemd,
+  xfconf,
+  xfdesktop,
+  lib,
 }:
 
 let
@@ -25,9 +27,9 @@ in
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screensaver";
-  version = "4.18.2";
+  version = "4.18.4";
 
-  sha256 = "sha256-j5K5i+hl/miyHste73akZL62K6YTxXmN8mmFK9BCecs=";
+  sha256 = "sha256-vkxkryi7JQg1L/JdWnO9qmW6Zx6xP5Urq4kXMe7Iiyc=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -54,6 +56,11 @@ mkXfceDerivation {
   configureFlags = [ "--without-console-kit" ];
 
   makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
+
+  preFixup = ''
+    # For default wallpaper.
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${xfdesktop}/share")
+  '';
 
   meta = with lib; {
     description = "Screensaver for Xfce";

@@ -1,4 +1,12 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtsvg, makeWrapper, xdg-utils }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtsvg,
+  makeWrapper,
+  xdg-utils,
+}:
 
 mkDerivation rec {
   pname = "mytetra";
@@ -11,7 +19,10 @@ mkDerivation rec {
     sha256 = "sha256-jQXnDoLkqbDZxfsYKPDsTOE7p/BFeA8wEznpbkRVGdw=";
   };
 
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [
+    qmake
+    makeWrapper
+  ];
   buildInputs = [ qtsvg ];
 
   hardeningDisable = [ "format" ];
@@ -37,6 +48,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Smart manager for information collecting";
+    mainProgram = "mytetra";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;
     maintainers = [ ];

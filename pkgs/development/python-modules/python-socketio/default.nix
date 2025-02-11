@@ -1,65 +1,82 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, msgpack
-, pytestCheckHook
-, python-engineio
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  bidict,
+  python-engineio,
+
+  # optional-dependencies
+  aiohttp,
+  requests,
+  websocket-client,
+
+  # tests
+  msgpack,
+  pytestCheckHook,
+  simple-websocket,
+  uvicorn,
+
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.9.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "5.12.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
-    rev = "v${version}";
-    hash = "sha256-1lyTZwkRpGRbeBqt6Thv5o+bUzkD1sC3T9T1GbWMEkI=";
+    tag = "v${version}";
+    hash = "sha256-oIlPPddp9zr3oK/2zXYyuzbhL8nAs1k2DVIumvODimQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bidict
     python-engineio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     client = [
       requests
       websocket-client
     ];
-    asyncio_client = [
-      aiohttp
-    ];
+    asyncio_client = [ aiohttp ];
   };
 
   nativeCheckInputs = [
-    mock
     msgpack
     pytestCheckHook
+    uvicorn
+    simple-websocket
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "socketio" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Use fixed ports which leads to failures when building concurrently
+    "tests/async/test_admin.py"
+    "tests/common/test_admin.py"
   ];
 
-  pythonImportsCheck = [
-    "socketio"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python Socket.IO server and client";
     longDescription = ''
       Socket.IO is a lightweight transport protocol that enables real-time
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
-    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/v${version}/CHANGES.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/${src.tag}/CHANGES.md";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   version = "2.15.2";
+  format = "setuptools";
   pname = "pypeg2";
 
   src = fetchPypi {
@@ -26,5 +28,4 @@ buildPythonPackage rec {
     homepage = "http://fdik.org/pyPEG";
     license = licenses.gpl2;
   };
-
 }

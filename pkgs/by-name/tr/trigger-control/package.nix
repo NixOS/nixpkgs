@@ -1,21 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, makeWrapper
-, pkg-config
-, SDL2
-, dbus
-, libdecor
-, libnotify
-, dejavu_fonts
-, gnome
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  makeWrapper,
+  pkg-config,
+  SDL2,
+  dbus,
+  libdecor,
+  libnotify,
+  dejavu_fonts,
+  zenity,
 }:
-
-let
-  inherit (gnome) zenity;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-control";
@@ -36,13 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    dbus
-    libnotify
-  ] ++ lib.optionals stdenv.isLinux [
-    libdecor
-  ];
+  buildInputs =
+    [
+      SDL2
+      dbus
+      libnotify
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libdecor
+    ];
 
   patches = [
     # Fix build on clang https://github.com/Etaash-mathamsetty/trigger-control/pull/23
@@ -66,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/trigger-control \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';

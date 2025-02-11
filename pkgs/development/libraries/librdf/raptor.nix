@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libxml2, curl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "raptor";
@@ -9,16 +15,22 @@ stdenv.mkDerivation rec {
     sha256 = "db3172d6f3c432623ed87d7d609161973d2f7098e3d2233d0702fbcc22cfd8ca";
   };
 
-  buildInputs = [ libxml2 curl ];
+  buildInputs = [
+    libxml2
+    curl
+  ];
 
   preBuild = ''
     sed -e '/curl\/types/d' -i src/*.c src/*.h
   '';
 
   meta = {
-    description = "The RDF Parser Toolkit";
+    description = "RDF Parser Toolkit";
     homepage = "https://librdf.org/raptor";
-    license = with lib.licenses; [ lgpl21 asl20 ];
+    license = with lib.licenses; [
+      lgpl21
+      asl20
+    ];
     maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };

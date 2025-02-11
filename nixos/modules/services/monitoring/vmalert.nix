@@ -1,26 +1,51 @@
-{ config, pkgs, lib, ... }: with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
 let
   cfg = config.services.vmalert;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 
-  confOpts = concatStringsSep " \\\n" (mapAttrsToList mkLine (filterAttrs (_: v: v != false) cfg.settings));
-  confType = with types;
+  confOpts = concatStringsSep " \\\n" (
+    mapAttrsToList mkLine (filterAttrs (_: v: v != false) cfg.settings)
+  );
+  confType =
+    with types;
     let
-      valueType = oneOf [ bool int path str ];
+      valueType = oneOf [
+        bool
+        int
+        path
+        str
+      ];
     in
     attrsOf (either valueType (listOf valueType));
 
-  mkLine = key: value:
-    if value == true then "-${key}"
-    else if isList value then concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
-    else "-${key}=${escapeShellArg (toString value)}"
-  ;
+  mkLine =
+    key: value:
+    if value == true then
+      "-${key}"
+    else if isList value then
+      concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
+    else
+      "-${key}=${escapeShellArg (toString value)}";
 in
 {
   # interface
   options.services.vmalert = {
-    enable = mkEnableOption (mdDoc "vmalert");
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Wether to enable VictoriaMetrics's `vmalert`.
+
+        `vmalert` evaluates alerting and recording rules against a data source, sends notifications via Alertmanager.
+      '';
+    };
 
     package = mkPackageOption pkgs "victoriametrics" { };
 
@@ -32,23 +57,23 @@ in
           "datasource.url" = mkOption {
             type = types.nonEmptyStr;
             example = "http://localhost:8428";
-            description = mdDoc ''
+            description = ''
               Datasource compatible with Prometheus HTTP API.
             '';
           };
 
           "notifier.url" = mkOption {
             type = with types; listOf nonEmptyStr;
-            default = [];
+            default = [ ];
             example = [ "http://127.0.0.1:9093" ];
-            description = mdDoc ''
+            description = ''
               Prometheus Alertmanager URL. List all Alertmanager URLs if it runs in the cluster mode to ensure high availability.
             '';
           };
 
           "rule" = mkOption {
             type = with types; listOf path;
-            description = mdDoc ''
+            description = ''
               Path to the files with alerting and/or recording rules.
 
               ::: {.note}
@@ -70,7 +95,7 @@ in
           "dir/*.yaml"
         ];
       };
-      description = mdDoc ''
+      description = ''
         `vmalert` configuration, passed via command line flags. Refer to
         <https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/app/vmalert/README.md#configuration>
         for details on supported values.
@@ -79,12 +104,14 @@ in
 
     rules = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       example = {
         group = [
-          { name = "TestGroup";
+          {
+            name = "TestGroup";
             rules = [
-              { alert = "ExampleAlertAlwaysFiring";
+              {
+                alert = "ExampleAlertAlwaysFiring";
                 expr = ''
                   sum by(job)
                   (up == 1)
@@ -94,7 +121,7 @@ in
           }
         ];
       };
-      description = mdDoc ''
+      description = ''
         A list of the given alerting or recording rules against configured `"datasource.url"` compatible with
         Prometheus HTTP API for `vmalert` to execute. Refer to
         <https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/app/vmalert/README.md#rules>

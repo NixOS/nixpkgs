@@ -1,83 +1,119 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, awkward
-, hatchling
-, numpy
-, packaging
-, pytestCheckHook
-, lz4
-, pytest-timeout
-, scikit-hep-testdata
-, xxhash
-, zstandard
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  awkward,
+  cramjam,
+  numpy,
+  fsspec,
+  packaging,
+
+  # checks
+  awkward-pandas,
+  pandas,
+  pytestCheckHook,
+  pytest-timeout,
+  rangehttpserver,
+  scikit-hep-testdata,
+  xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.1.2";
+  version = "5.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TMa+j2jdFagJJhlyCx4rNLaxQhrJyq1HdpnA40xiyME=";
+    tag = "v${version}";
+    hash = "sha256-a5gCsv8iBUUASHCJIpxFbgBXTSm/KJOTt6fvSvP/Lio=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
+    cramjam
     numpy
+    fsspec
     packaging
+    xxhash
   ];
 
   nativeCheckInputs = [
+    awkward-pandas
+    pandas
     pytestCheckHook
-    lz4
     pytest-timeout
+    rangehttpserver
     scikit-hep-testdata
-    xxhash
-    zstandard
   ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # Tests that try to download files
-    "test_http"
-    "test_no_multipart"
-    "test_fallback"
-    "test_pickle_roundtrip_http"
-    "test_open_fsspec_local"
-  ];
+  disabledTests =
+    [
+      # Tests that try to download files
+      "test_descend_into_path_classname_of"
+      "test_fallback"
+      "test_fsspec_cache_http"
+      "test_fsspec_cache_http_directory"
+      "test_fsspec_chunks"
+      "test_fsspec_globbing_http"
+      "test_http"
+      "test_http_fallback_workers"
+      "test_http_multipart"
+      "test_http_port"
+      "test_http_size"
+      "test_http_size_port"
+      "test_http_workers"
+      "test_issue176"
+      "test_issue176_again"
+      "test_issue_1054_filename_colons"
+      "test_no_multipart"
+      "test_open_fsspec_github"
+      "test_open_fsspec_http"
+      "test_pickle_roundtrip_http"
+
+      # Cyclic dependency with dask-awkward
+      "test_dask_duplicated_keys"
+      "test_decompression_executor_for_dask"
+      "test_decompression_threadpool_executor_for_dask"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Tries to connect to localhost:22
+      # PermissionError: [Errno 1] Operation not permitted
+      "test_open_fsspec_ssh"
+    ];
 
   disabledTestPaths = [
     # Tests that try to download files
-    "tests/test_0066-fix-http-fallback-freeze.py"
-    "tests/test_0088-read-with-http.py"
-    "tests/test_0220-contiguous-byte-ranges-in-http.py"
-    "tests/test_0916-read-from-s3.py"
-    "tests/test_0930-expressions-in-pandas.py"
+    "tests/test_0066_fix_http_fallback_freeze.py"
+    "tests/test_0220_contiguous_byte_ranges_in_http.py"
   ];
 
-  pythonImportsCheck = [
-    "uproot"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "uproot" ];
+
+  meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
     changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

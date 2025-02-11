@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, packaging
-, pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  packaging,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "12.0";
+  version = "15.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eE9GL6h/6b33gdACfYVrR6S/5sEq8Qj2vYhwV6kXtI4=";
+    hash = "sha256-LZrHuvWfTBOscwtH9vqA51XRugWB2kXOMLcvs1QrRHQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ packaging ];
+
+  dependencies = [ packaging ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

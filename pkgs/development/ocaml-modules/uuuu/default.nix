@@ -1,10 +1,11 @@
-{ angstrom
-, buildDunePackage
-, fetchurl
-, findlib
-, lib
-, ocaml
-, re
+{
+  angstrom,
+  buildDunePackage,
+  fetchurl,
+  findlib,
+  lib,
+  ocaml,
+  re,
 }:
 
 buildDunePackage rec {
@@ -31,7 +32,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   meta = {
-    description = "A library to normalize an ISO-8859 input to Unicode code-point";
+    description = "Library to normalize an ISO-8859 input to Unicode code-point";
     homepage = "https://github.com/mirage/uuuu";
     license = lib.licenses.mit;
     maintainers = [ ];

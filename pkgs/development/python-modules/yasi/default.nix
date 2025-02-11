@@ -1,14 +1,16 @@
-{ lib
-, buildPythonApplication
-, colorama
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "yasi";
   version = "2.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nkmathew";
@@ -17,13 +19,11 @@ buildPythonApplication rec {
     hash = "sha256-xKhVTmh/vrtBkatxtk8R4yqbGroH0I+xTKNYUpuikt4=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ colorama ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -33,7 +33,8 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "yasi" ];
 
   meta = with lib; {
-    description = "A dialect-aware s-expression indenter written in Python and newLISP";
+    description = "Dialect-aware s-expression indenter written in Python and newLISP";
+    mainProgram = "yasi";
     homepage = "https://github.com/nkmathew/yasi-sexp-indenter";
     changelog = "https://github.com/nkmathew/yasi-sexp-indenter/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

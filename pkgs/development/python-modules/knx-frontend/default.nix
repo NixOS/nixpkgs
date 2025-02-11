@@ -1,40 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "knx-frontend";
-  version = "2023.6.23.191712";
-  format = "pyproject";
+  version = "2025.1.30.194235";
+  pyproject = true;
 
   # TODO: source build, uses yarn.lock
   src = fetchPypi {
     pname = "knx_frontend";
     inherit version;
-    hash = "sha256-MeurZ6731qjeBK6HTwXYLVs6+nXF9Hf1p8/NNwxmae4=";
+    hash = "sha256-P3KUpmltw7xX/6xq9RMFlP8UMDp2/ynvVCkK3rvwzk0=";
   };
 
-  patches = [
-    # https://github.com/XKNX/knx-frontend/pull/96
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/XKNX/knx-frontend/commit/72ac6dc42eeeb488992b0709ee58ea4a79287817.patch";
-      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
-  pythonImportsCheck = [
-    "knx_frontend"
-  ];
+  pythonImportsCheck = [ "knx_frontend" ];
 
   # no tests
   doCheck = false;

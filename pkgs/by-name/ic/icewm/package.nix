@@ -1,59 +1,62 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, expat
-, flac
-, fontconfig
-, freetype
-, fribidi
-, gdk-pixbuf
-, gdk-pixbuf-xlib
-, gettext
-, giflib
-, glib
-, imlib2
-, libICE
-, libSM
-, libX11
-, libXcomposite
-, libXdamage
-, libXdmcp
-, libXext
-, libXfixes
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libogg
-, libpng
-, libpthreadstubs
-, libsndfile
-, libtiff
-, libxcb
-, mkfontdir
-, pcre2
-, perl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  flac,
+  fontconfig,
+  freetype,
+  fribidi,
+  gdk-pixbuf,
+  gdk-pixbuf-xlib,
+  gettext,
+  giflib,
+  glib,
+  imlib2,
+  libICE,
+  libSM,
+  libX11,
+  libXcomposite,
+  libXdamage,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libjpeg,
+  libogg,
+  libpng,
+  libpthreadstubs,
+  libsndfile,
+  libtiff,
+  libxcb,
+  mkfontdir,
+  pcre2,
+  perl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.4.4";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     rev = finalAttrs.version;
-    hash = "sha256-bnoNkBsNJ/6CVmm5I/nwy6LGxYhxPXssjZ3TT7FdEz8=";
+    hash = "sha256-gxRKLukwdyCvqQ+gRYb4cv/8B52nRAFwdcps6FcKFXk=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     perl
     pkg-config
+    gettext # msgmerge
   ];
 
   buildInputs = [
@@ -104,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://ice-wm.org/";
-    description = "A simple, lightweight X window manager";
+    description = "Simple, lightweight X window manager";
     longDescription = ''
       IceWM is a window manager for the X Window System. The goal of IceWM is
       speed, simplicity, and not getting in the user’s way. It comes with a

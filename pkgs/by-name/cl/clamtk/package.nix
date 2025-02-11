@@ -1,31 +1,49 @@
-{ lib
-, perlPackages
-, fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, perl
-, clamav
+{
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gobject-introspection,
+  perl,
+  clamav,
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "clamtk";
-  version = "6.16";
+  version = "6.18";
 
   src = fetchFromGitHub {
     owner = "dave-theunsub";
     repo = "clamtk";
     rev = "v${version}";
-    hash = "sha256-o6OaXOXLykTUuF/taKnEhZRV04/3nlU5aNY05ANr1Ko=";
+    hash = "sha256-ClBsBXbGj67zgrkA9EjgK7s3OmXOJA+xV5xLGOcMsbI=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
-  buildInputs = [ perl clamav ];
-  propagatedBuildInputs = with perlPackages; [ Glib LWP LWPProtocolHttps TextCSV JSON LocaleGettext Gtk3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  buildInputs = [
+    perl
+    clamav
+  ];
+  propagatedBuildInputs = with perlPackages; [
+    Glib
+    LWP
+    LWPProtocolHttps
+    TextCSV
+    JSON
+    LocaleGettext
+    Gtk3
+  ];
 
   preConfigure = "touch Makefile.PL";
   # no tests implemented
   doCheck = false;
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postPatch = ''
     # Set correct nix paths in perl scripts
@@ -46,11 +64,12 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D lib/*.pm -t $out/lib/perl5/site_perl/ClamTk
-    install -D clamtk.desktop -t $out/share/applications
-    install -D images/* -t $out/share/pixmaps
-    install -D clamtk.1.gz -t $out/share/man/man1
-    install -D -m755 clamtk -t $out/bin
+    install -Dm755 clamtk -t $out/bin
+    install -Dm444 lib/*.pm -t $out/lib/perl5/site_perl/ClamTk
+    install -Dm444 clamtk.desktop -t $out/share/applications
+    install -Dm444 images/* -t $out/share/pixmaps
+    install -Dm444 clamtk.1.gz -t $out/share/man/man1
+    install -Dm444 {CHANGES,LICENSE,*.md} -t $out/share/doc/clamtk
 
     runHook postInstall
   '';
@@ -66,10 +85,14 @@ perlPackages.buildPerlPackage rec {
     description = ''
       Easy to use, lightweight front-end for ClamAV (Clam Antivirus).
     '';
+    mainProgram = "clamtk";
     license = licenses.gpl1Plus;
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ chewblacka ShamrockLee ];
+    maintainers = with maintainers; [
+      chewblacka
+      ShamrockLee
+    ];
   };
 
 }

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchzip, testers, wireguard-go }:
+{
+  lib,
+  buildGoModule,
+  fetchzip,
+  testers,
+  wireguard-go,
+}:
 
 buildGoModule rec {
   pname = "wireguard-go";
@@ -18,7 +24,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mv $out/bin/wireguard $out/bin/wireguard-go
@@ -33,6 +42,10 @@ buildGoModule rec {
     description = "Userspace Go implementation of WireGuard";
     homepage = "https://git.zx2c4.com/wireguard-go/about/";
     license = licenses.mit;
-    maintainers = with maintainers; [ kirelagin yana zx2c4 ];
+    maintainers = with maintainers; [
+      kirelagin
+      zx2c4
+    ];
+    mainProgram = "wireguard-go";
   };
 }

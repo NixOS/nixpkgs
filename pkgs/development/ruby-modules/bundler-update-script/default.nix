@@ -1,11 +1,28 @@
-{ runtimeShell, lib, writeScript, bundix, bundler, coreutils, git, nix }:
+{
+  runtimeShell,
+  lib,
+  writeScript,
+  bundix,
+  bundler,
+  coreutils,
+  git,
+  nix,
+}:
 
 attrPath:
 
 let
   updateScript = writeScript "bundler-update-script" ''
     #!${runtimeShell}
-    PATH=${lib.makeBinPath [ bundler bundix coreutils git nix ]}
+    PATH=${
+      lib.makeBinPath [
+        bundler
+        bundix
+        coreutils
+        git
+        nix
+      ]
+    }
     set -o errexit
     set -o nounset
     set -o pipefail
@@ -18,7 +35,13 @@ let
 
     cd "$gemdir"
 
+    rm -f gemset.nix Gemfile.lock
+    export BUNDLE_FORCE_RUBY_PLATFORM=1
     bundler lock --update
     bundix
   '';
-in [ updateScript attrPath ]
+in
+[
+  updateScript
+  attrPath
+]

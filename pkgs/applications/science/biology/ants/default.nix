@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, makeBinaryWrapper
-, itk
-, vtk
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeBinaryWrapper,
+  itk,
+  vtk,
+  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ANTs";
-  version = "2.5.0";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "ANTsX";
     repo = "ANTs";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rSibcsprhMC1qsuZN8ou32QPLf8n62BiDzpnTRWRx0Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7df9RcZZwfSkokG8dMQg65bCOk2atDGkJpPo8SrRrfY=";
   };
 
   nativeBuildInputs = [
@@ -24,12 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  buildInputs = [
-    itk
-    vtk
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      itk
+      vtk
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   cmakeFlags = [
     "-DANTS_SUPERBUILD=FALSE"

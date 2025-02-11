@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.heisenbridge;
 
@@ -12,30 +14,32 @@ let
 
   registrationFile = "/var/lib/heisenbridge/registration.yml";
   # JSON is a proper subset of YAML
-  bridgeConfig = builtins.toFile "heisenbridge-registration.yml" (builtins.toJSON {
-    id = "heisenbridge";
-    url = cfg.registrationUrl;
-    # Don't specify as_token and hs_token
-    rate_limited = false;
-    sender_localpart = "heisenbridge";
-    namespaces = cfg.namespaces;
-  });
+  bridgeConfig = builtins.toFile "heisenbridge-registration.yml" (
+    builtins.toJSON {
+      id = "heisenbridge";
+      url = cfg.registrationUrl;
+      # Don't specify as_token and hs_token
+      rate_limited = false;
+      sender_localpart = "heisenbridge";
+      namespaces = cfg.namespaces;
+    }
+  );
 in
 {
   options.services.heisenbridge = {
-    enable = mkEnableOption (lib.mdDoc "the Matrix to IRC bridge");
+    enable = lib.mkEnableOption "the Matrix to IRC bridge";
 
-    package = mkPackageOption pkgs "heisenbridge" { };
+    package = lib.mkPackageOption pkgs "heisenbridge" { };
 
-    homeserver = mkOption {
-      type = types.str;
-      description = lib.mdDoc "The URL to the home server for client-server API calls";
+    homeserver = lib.mkOption {
+      type = lib.types.str;
+      description = "The URL to the home server for client-server API calls";
       example = "http://localhost:8008";
     };
 
-    registrationUrl = mkOption {
-      type = types.str;
-      description = lib.mdDoc ''
+    registrationUrl = lib.mkOption {
+      type = lib.types.str;
+      description = ''
         The URL where the application service is listening for HS requests, from the Matrix HS perspective.#
         The default value assumes the bridge runs on the same host as the home server, in the same network.
       '';
@@ -44,38 +48,38 @@ in
       defaultText = "http://$${cfg.address}:$${toString cfg.port}";
     };
 
-    address = mkOption {
-      type = types.str;
-      description = lib.mdDoc "Address to listen on. IPv6 does not seem to be supported.";
+    address = lib.mkOption {
+      type = lib.types.str;
+      description = "Address to listen on. IPv6 does not seem to be supported.";
       default = "127.0.0.1";
       example = "0.0.0.0";
     };
 
-    port = mkOption {
-      type = types.port;
-      description = lib.mdDoc "The port to listen on";
+    port = lib.mkOption {
+      type = lib.types.port;
+      description = "The port to listen on";
       default = 9898;
     };
 
-    debug = mkOption {
-      type = types.bool;
-      description = lib.mdDoc "More verbose logging. Recommended during initial setup.";
+    debug = lib.mkOption {
+      type = lib.types.bool;
+      description = "More verbose logging. Recommended during initial setup.";
       default = false;
     };
 
-    owner = mkOption {
-      type = types.nullOr types.str;
-      description = lib.mdDoc ''
+    owner = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      description = ''
         Set owner MXID otherwise first talking local user will claim the bridge
       '';
       default = null;
       example = "@admin:example.org";
     };
 
-    namespaces = mkOption {
-      description = lib.mdDoc "Configure the 'namespaces' section of the registration.yml for the bridge and the server";
+    namespaces = lib.mkOption {
+      description = "Configure the 'namespaces' section of the registration.yml for the bridge and the server";
       # TODO link to Matrix documentation of the format
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = jsonType;
       };
 
@@ -91,21 +95,21 @@ in
       };
     };
 
-    identd.enable = mkEnableOption (lib.mdDoc "identd service support");
-    identd.port = mkOption {
-      type = types.port;
-      description = lib.mdDoc "identd listen port";
+    identd.enable = lib.mkEnableOption "identd service support";
+    identd.port = lib.mkOption {
+      type = lib.types.port;
+      description = "identd listen port";
       default = 113;
     };
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
-      description = lib.mdDoc "Heisenbridge is configured over the command line. Append extra arguments here";
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "Heisenbridge is configured over the command line. Append extra arguments here";
       default = [ ];
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.heisenbridge = {
       description = "Matrix<->IRC bridge";
       before = [ "matrix-synapse.service" ]; # So the registration file can be used by Synapse
@@ -191,18 +195,26 @@ in
         RemoveIPC = true;
         UMask = "0077";
 
-        CapabilityBoundingSet = [ "CAP_CHOWN" ] ++ optional (cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)) "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet =
+          [ "CAP_CHOWN" ]
+          ++ lib.optional (
+            cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)
+          ) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
         LockPersonality = true;
         RestrictRealtime = true;
-        SystemCallFilter = ["@system-service" "~@privileged" "@chown"];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "@chown"
+        ];
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_INET AF_INET6";
       };
     };
 
-    users.groups.heisenbridge = {};
+    users.groups.heisenbridge = { };
     users.users.heisenbridge = {
       description = "Service user for the Heisenbridge";
       group = "heisenbridge";
@@ -210,5 +222,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [ ];
 }

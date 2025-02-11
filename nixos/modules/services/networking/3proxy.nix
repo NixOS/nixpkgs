@@ -1,24 +1,29 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   pkg = pkgs._3proxy;
   cfg = config.services._3proxy;
-  optionalList = list: if list == [ ] then "*" else concatMapStringsSep "," toString list;
-in {
+  optionalList = list: if list == [ ] then "*" else lib.concatMapStringsSep "," toString list;
+in
+{
   options.services._3proxy = {
-    enable = mkEnableOption (lib.mdDoc "3proxy");
-    confFile = mkOption {
-      type = types.path;
+    enable = lib.mkEnableOption "3proxy";
+    confFile = lib.mkOption {
+      type = lib.types.path;
       example = "/var/lib/3proxy/3proxy.conf";
-      description = lib.mdDoc ''
+      description = ''
         Ignore all other 3proxy options and load configuration from this file.
       '';
     };
-    usersFile = mkOption {
-      type = types.nullOr types.path;
+    usersFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/var/lib/3proxy/3proxy.passwd";
-      description = lib.mdDoc ''
+      description = ''
         Load users and passwords from this file.
 
         Example users file with plain-text passwords:
@@ -40,179 +45,208 @@ in {
         Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/How-To-%28incomplete%29#USERS) for more information.
       '';
     };
-    services = mkOption {
-      type = types.listOf (types.submodule {
-        options = {
-          type = mkOption {
-            type = types.enum [
-              "proxy"
-              "socks"
-              "pop3p"
-              "ftppr"
-              "admin"
-              "dnspr"
-              "tcppm"
-              "udppm"
-            ];
-            example = "proxy";
-            description = lib.mdDoc ''
-              Service type. The following values are valid:
+    services = lib.mkOption {
+      type = lib.types.listOf (
+        lib.types.submodule {
+          options = {
+            type = lib.mkOption {
+              type = lib.types.enum [
+                "proxy"
+                "socks"
+                "pop3p"
+                "ftppr"
+                "admin"
+                "dnspr"
+                "tcppm"
+                "udppm"
+              ];
+              example = "proxy";
+              description = ''
+                Service type. The following values are valid:
 
-              - `"proxy"`: HTTP/HTTPS proxy (default port 3128).
-              - `"socks"`: SOCKS 4/4.5/5 proxy (default port 1080).
-              - `"pop3p"`: POP3 proxy (default port 110).
-              - `"ftppr"`: FTP proxy (default port 21).
-              - `"admin"`: Web interface (default port 80).
-              - `"dnspr"`: Caching DNS proxy (default port 53).
-              - `"tcppm"`: TCP portmapper.
-              - `"udppm"`: UDP portmapper.
-            '';
-          };
-          bindAddress = mkOption {
-            type = types.str;
-            default = "[::]";
-            example = "127.0.0.1";
-            description = lib.mdDoc ''
-              Address used for service.
-            '';
-          };
-          bindPort = mkOption {
-            type = types.nullOr types.int;
-            default = null;
-            example = 3128;
-            description = lib.mdDoc ''
-              Override default port used for service.
-            '';
-          };
-          maxConnections = mkOption {
-            type = types.int;
-            default = 100;
-            example = 1000;
-            description = lib.mdDoc ''
-              Maximum number of simulationeous connections to this service.
-            '';
-          };
-          auth = mkOption {
-            type = types.listOf (types.enum [ "none" "iponly" "strong" ]);
-            example = [ "iponly" "strong" ];
-            description = lib.mdDoc ''
-              Authentication type. The following values are valid:
+                - `"proxy"`: HTTP/HTTPS proxy (default port 3128).
+                - `"socks"`: SOCKS 4/4.5/5 proxy (default port 1080).
+                - `"pop3p"`: POP3 proxy (default port 110).
+                - `"ftppr"`: FTP proxy (default port 21).
+                - `"admin"`: Web interface (default port 80).
+                - `"dnspr"`: Caching DNS proxy (default port 53).
+                - `"tcppm"`: TCP portmapper.
+                - `"udppm"`: UDP portmapper.
+              '';
+            };
+            bindAddress = lib.mkOption {
+              type = lib.types.str;
+              default = "[::]";
+              example = "127.0.0.1";
+              description = ''
+                Address used for service.
+              '';
+            };
+            bindPort = lib.mkOption {
+              type = lib.types.nullOr lib.types.int;
+              default = null;
+              example = 3128;
+              description = ''
+                Override default port used for service.
+              '';
+            };
+            maxConnections = lib.mkOption {
+              type = lib.types.int;
+              default = 100;
+              example = 1000;
+              description = ''
+                Maximum number of simulationeous connections to this service.
+              '';
+            };
+            auth = lib.mkOption {
+              type = lib.types.listOf (
+                lib.types.enum [
+                  "none"
+                  "iponly"
+                  "strong"
+                ]
+              );
+              example = [
+                "iponly"
+                "strong"
+              ];
+              description = ''
+                Authentication type. The following values are valid:
 
-              - `"none"`: disables both authentication and authorization. You can not use ACLs.
-              - `"iponly"`: specifies no authentication. ACLs authorization is used.
-              - `"strong"`: authentication by username/password. If user is not registered their access is denied regardless of ACLs.
+                - `"none"`: disables both authentication and authorization. You can not use ACLs.
+                - `"iponly"`: specifies no authentication. ACLs authorization is used.
+                - `"strong"`: authentication by username/password. If user is not registered their access is denied regardless of ACLs.
 
-              Double authentication is possible, e.g.
+                Double authentication is possible, e.g.
 
-              ```
-                {
-                  auth = [ "iponly" "strong" ];
-                  acl = [
-                    {
-                      rule = "allow";
-                      targets = [ "192.168.0.0/16" ];
-                    }
-                    {
-                      rule = "allow"
-                      users = [ "user1" "user2" ];
-                    }
-                  ];
+                ```
+                  {
+                    auth = [ "iponly" "strong" ];
+                    acl = [
+                      {
+                        rule = "allow";
+                        targets = [ "192.168.0.0/16" ];
+                      }
+                      {
+                        rule = "allow"
+                        users = [ "user1" "user2" ];
+                      }
+                    ];
+                  }
+                ```
+                In this example strong username authentication is not required to access 192.168.0.0/16.
+              '';
+            };
+            acl = lib.mkOption {
+              type = lib.types.listOf (
+                lib.types.submodule {
+                  options = {
+                    rule = lib.mkOption {
+                      type = lib.types.enum [
+                        "allow"
+                        "deny"
+                      ];
+                      example = "allow";
+                      description = ''
+                        ACL rule. The following values are valid:
+
+                        - `"allow"`: connections allowed.
+                        - `"deny"`: connections not allowed.
+                      '';
+                    };
+                    users = lib.mkOption {
+                      type = lib.types.listOf lib.types.str;
+                      default = [ ];
+                      example = [
+                        "user1"
+                        "user2"
+                        "user3"
+                      ];
+                      description = ''
+                        List of users, use empty list for any.
+                      '';
+                    };
+                    sources = lib.mkOption {
+                      type = lib.types.listOf lib.types.str;
+                      default = [ ];
+                      example = [
+                        "127.0.0.1"
+                        "192.168.1.0/24"
+                      ];
+                      description = ''
+                        List of source IP range, use empty list for any.
+                      '';
+                    };
+                    targets = lib.mkOption {
+                      type = lib.types.listOf lib.types.str;
+                      default = [ ];
+                      example = [
+                        "127.0.0.1"
+                        "192.168.1.0/24"
+                      ];
+                      description = ''
+                        List of target IP ranges, use empty list for any.
+                        May also contain host names instead of addresses.
+                        It's possible to use wildmask in the beginning and in the the end of hostname, e.g. `*badsite.com` or `*badcontent*`.
+                        Hostname is only checked if hostname presents in request.
+                      '';
+                    };
+                    targetPorts = lib.mkOption {
+                      type = lib.types.listOf lib.types.int;
+                      default = [ ];
+                      example = [
+                        80
+                        443
+                      ];
+                      description = ''
+                        List of target ports, use empty list for any.
+                      '';
+                    };
+                  };
                 }
-              ```
-              In this example strong username authentication is not required to access 192.168.0.0/16.
-            '';
+              );
+              default = [ ];
+              example = lib.literalExpression ''
+                [
+                  {
+                    rule = "allow";
+                    users = [ "user1" ];
+                  }
+                  {
+                    rule = "allow";
+                    sources = [ "192.168.1.0/24" ];
+                  }
+                  {
+                    rule = "deny";
+                  }
+                ]
+              '';
+              description = ''
+                Use this option to limit user access to resources.
+              '';
+            };
+            extraArguments = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              example = "-46";
+              description = ''
+                Extra arguments for service.
+                Consult "Options" section in [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available arguments.
+              '';
+            };
+            extraConfig = lib.mkOption {
+              type = lib.types.nullOr lib.types.lines;
+              default = null;
+              description = ''
+                Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
+                Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
+              '';
+            };
           };
-          acl = mkOption {
-            type = types.listOf (types.submodule {
-              options = {
-                rule = mkOption {
-                  type = types.enum [ "allow" "deny" ];
-                  example = "allow";
-                  description = lib.mdDoc ''
-                    ACL rule. The following values are valid:
-
-                    - `"allow"`: connections allowed.
-                    - `"deny"`: connections not allowed.
-                  '';
-                };
-                users = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [ "user1" "user2" "user3" ];
-                  description = lib.mdDoc ''
-                    List of users, use empty list for any.
-                  '';
-                };
-                sources = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [ "127.0.0.1" "192.168.1.0/24" ];
-                  description = lib.mdDoc ''
-                    List of source IP range, use empty list for any.
-                  '';
-                };
-                targets = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [ "127.0.0.1" "192.168.1.0/24" ];
-                  description = lib.mdDoc ''
-                    List of target IP ranges, use empty list for any.
-                    May also contain host names instead of addresses.
-                    It's possible to use wildmask in the beginning and in the the end of hostname, e.g. `*badsite.com` or `*badcontent*`.
-                    Hostname is only checked if hostname presents in request.
-                  '';
-                };
-                targetPorts = mkOption {
-                  type = types.listOf types.int;
-                  default = [ ];
-                  example = [ 80 443 ];
-                  description = lib.mdDoc ''
-                    List of target ports, use empty list for any.
-                  '';
-                };
-              };
-            });
-            default = [ ];
-            example = literalExpression ''
-              [
-                {
-                  rule = "allow";
-                  users = [ "user1" ];
-                }
-                {
-                  rule = "allow";
-                  sources = [ "192.168.1.0/24" ];
-                }
-                {
-                  rule = "deny";
-                }
-              ]
-            '';
-            description = lib.mdDoc ''
-              Use this option to limit user access to resources.
-            '';
-          };
-          extraArguments = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "-46";
-            description = lib.mdDoc ''
-              Extra arguments for service.
-              Consult "Options" section in [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available arguments.
-            '';
-          };
-          extraConfig = mkOption {
-            type = types.nullOr types.lines;
-            default = null;
-            description = lib.mdDoc ''
-              Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
-              Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
-            '';
-          };
-        };
-      });
+        }
+      );
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           {
             type = "proxy";
@@ -234,19 +268,19 @@ in {
           }
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Use this option to define 3proxy services.
       '';
     };
-    denyPrivate = mkOption {
-      type = types.bool;
+    denyPrivate = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to deny access to private IP ranges including loopback.
       '';
     };
-    privateRanges = mkOption {
-      type = types.listOf types.str;
+    privateRanges = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [
         "0.0.0.0/8"
         "127.0.0.0/8"
@@ -258,111 +292,112 @@ in {
         "::1"
         "fc00::/7"
       ];
-      description = lib.mdDoc ''
+      description = ''
         What IP ranges to deny access when denyPrivate is set tu true.
       '';
     };
-    resolution = mkOption {
-      type = types.submodule {
+    resolution = lib.mkOption {
+      type = lib.types.submodule {
         options = {
-          nserver = mkOption {
-            type = types.listOf types.str;
+          nserver = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ ];
-            example = [ "127.0.0.53" "192.168.1.3:5353/tcp" ];
-            description = lib.mdDoc ''
+            example = [
+              "127.0.0.53"
+              "192.168.1.3:5353/tcp"
+            ];
+            description = ''
               List of nameservers to use.
 
               Up to 5 nservers may be specified. If no nserver is configured,
               default system name resolution functions are used.
             '';
           };
-          nscache = mkOption {
-            type = types.int;
+          nscache = lib.mkOption {
+            type = lib.types.int;
             default = 65535;
-            description = lib.mdDoc "Set name cache size for IPv4.";
+            description = "Set name cache size for IPv4.";
           };
-          nscache6 = mkOption {
-            type = types.int;
+          nscache6 = lib.mkOption {
+            type = lib.types.int;
             default = 65535;
-            description = lib.mdDoc "Set name cache size for IPv6.";
+            description = "Set name cache size for IPv6.";
           };
-          nsrecord = mkOption {
-            type = types.attrsOf types.str;
+          nsrecord = lib.mkOption {
+            type = lib.types.attrsOf lib.types.str;
             default = { };
-            example = literalExpression ''
+            example = lib.literalExpression ''
               {
                 "files.local" = "192.168.1.12";
                 "site.local" = "192.168.1.43";
               }
             '';
-            description = lib.mdDoc "Adds static nsrecords.";
+            description = "Adds static nsrecords.";
           };
         };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Use this option to configure name resolution and DNS caching.
       '';
     };
-    extraConfig = mkOption {
-      type = types.nullOr types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.lines;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Extra configuration, appended to the 3proxy configuration file.
         Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    services._3proxy.confFile = mkDefault (pkgs.writeText "3proxy.conf" ''
-      # log to stdout
-      log
+  config = lib.mkIf cfg.enable {
+    services._3proxy.confFile = lib.mkDefault (
+      pkgs.writeText "3proxy.conf" ''
+        # log to stdout
+        log
 
-      ${concatMapStringsSep "\n" (x: "nserver " + x) cfg.resolution.nserver}
+        ${lib.concatMapStringsSep "\n" (x: "nserver " + x) cfg.resolution.nserver}
 
-      nscache ${toString cfg.resolution.nscache}
-      nscache6 ${toString cfg.resolution.nscache6}
+        nscache ${toString cfg.resolution.nscache}
+        nscache6 ${toString cfg.resolution.nscache6}
 
-      ${concatMapStringsSep "\n" (x: "nsrecord " + x)
-      (mapAttrsToList (name: value: "${name} ${value}")
-        cfg.resolution.nsrecord)}
+        ${lib.concatMapStringsSep "\n" (x: "nsrecord " + x) (
+          lib.mapAttrsToList (name: value: "${name} ${value}") cfg.resolution.nsrecord
+        )}
 
-      ${optionalString (cfg.usersFile != null)
-        ''users $"${cfg.usersFile}"''
-      }
+        ${lib.optionalString (cfg.usersFile != null) ''users $"${cfg.usersFile}"''}
 
-      ${concatMapStringsSep "\n" (service: ''
-        auth ${concatStringsSep " " service.auth}
+        ${lib.concatMapStringsSep "\n" (service: ''
+          auth ${lib.concatStringsSep " " service.auth}
 
-        ${optionalString (cfg.denyPrivate)
-        "deny * * ${optionalList cfg.privateRanges}"}
+          ${lib.optionalString (cfg.denyPrivate) "deny * * ${optionalList cfg.privateRanges}"}
 
-        ${concatMapStringsSep "\n" (acl:
-          "${acl.rule} ${
-            concatMapStringsSep " " optionalList [
-              acl.users
-              acl.sources
-              acl.targets
-              acl.targetPorts
-            ]
-          }") service.acl}
+          ${lib.concatMapStringsSep "\n" (
+            acl:
+            "${acl.rule} ${
+              lib.concatMapStringsSep " " optionalList [
+                acl.users
+                acl.sources
+                acl.targets
+                acl.targetPorts
+              ]
+            }"
+          ) service.acl}
 
-        maxconn ${toString service.maxConnections}
+          maxconn ${toString service.maxConnections}
 
-        ${optionalString (service.extraConfig != null) service.extraConfig}
+          ${lib.optionalString (service.extraConfig != null) service.extraConfig}
 
-        ${service.type} -i${toString service.bindAddress} ${
-          optionalString (service.bindPort != null)
-          "-p${toString service.bindPort}"
-        } ${
-          optionalString (service.extraArguments != null) service.extraArguments
-        }
+          ${service.type} -i${toString service.bindAddress} ${
+            lib.optionalString (service.bindPort != null) "-p${toString service.bindPort}"
+          } ${lib.optionalString (service.extraArguments != null) service.extraArguments}
 
-        flush
-      '') cfg.services}
-      ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
-    '');
+          flush
+        '') cfg.services}
+        ${lib.optionalString (cfg.extraConfig != null) cfg.extraConfig}
+      ''
+    );
     systemd.services."3proxy" = {
       description = "Tiny free proxy server";
       documentation = [ "https://github.com/z3APA3A/3proxy/wiki" ];
@@ -377,5 +412,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ misuzu ];
+  meta.maintainers = with lib.maintainers; [ misuzu ];
 }

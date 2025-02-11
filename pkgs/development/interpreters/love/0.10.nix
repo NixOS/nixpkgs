@@ -1,7 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, SDL2, libGLU, libGL, openal, luajit
-, libdevil, freetype, physfs, libmodplug, mpg123, libvorbis, libogg
-, libtheora, which, autoconf, automake, libtool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  libGLU,
+  libGL,
+  openal,
+  luajit,
+  libdevil,
+  freetype,
+  physfs,
+  libmodplug,
+  mpg123,
+  libvorbis,
+  libogg,
+  libtheora,
+  which,
+  autoconf,
+  automake,
+  libtool,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +33,27 @@ stdenv.mkDerivation rec {
     sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+  ];
   buildInputs = [
-    SDL2 libGLU libGL openal luajit libdevil freetype physfs libmodplug mpg123
-    libvorbis libogg libtheora which libtool
+    SDL2
+    libGLU
+    libGL
+    openal
+    luajit
+    libdevil
+    freetype
+    physfs
+    libmodplug
+    mpg123
+    libvorbis
+    libogg
+    libtheora
+    which
+    libtool
   ];
 
   preConfigure = "$shell ./platform/unix/automagic";
@@ -31,7 +66,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://love2d.org";
-    description = "A Lua-based 2D game engine/scripting language";
+    description = "Lua-based 2D game engine/scripting language";
+    mainProgram = "love";
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.raskin ];

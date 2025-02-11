@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, aiosqlite
-, anyio
-, y-py
-, pytest-asyncio
-, pytestCheckHook
-, pythonRelaxDepsHook
-, uvicorn
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  aiosqlite,
+  anyio,
+  y-py,
+  pytest-asyncio,
+  pytestCheckHook,
+  uvicorn,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +23,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "ypy-websocket";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-48x+MUhev9dErC003XOP3oGKd5uOghlBFgcR8Nm/0xs=";
   };
 
-  pythonRelaxDeps = [
-    "aiofiles"
-  ];
+  pythonRelaxDeps = [ "aiofiles" ];
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -42,9 +39,7 @@ buildPythonPackage rec {
     y-py
   ];
 
-  pythonImportsCheck = [
-    "ypy_websocket"
-  ];
+  pythonImportsCheck = [ "ypy_websocket" ];
 
   nativeCheckInputs = [
     pytest-asyncio

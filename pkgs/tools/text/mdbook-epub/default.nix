@@ -1,41 +1,50 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, bzip2
-, CoreServices
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  bzip2,
+  CoreServices,
 }:
 
 let
   pname = "mdbook-epub";
-  version = "unstable-2022-12-25";
-in rustPlatform.buildRustPackage {
+  version = "0.4.37";
+in
+rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "michael-f-bryan";
     repo = pname;
-    rev = "2e1e48d0d1a1b4c1b0f866267e6666b41c598225";
-    hash = "sha256-wjn/7dv/Z2OmwvH/XaEeCz/JOvJWlMJ60q5qozzOEWY=";
+    rev = version;
+    hash = "sha256-ddWClkeGabvqteVUtuwy4pWZGnarrKrIbuPEe62m6es=";
   };
 
-  cargoHash = "sha256-4oSpQUYJDK0srABZMwJ8x8jv6DOnLShXSnjLjf8c9Ac=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3R81PJCOFc22QDHH2BqGB9jjvEcMc1axoySSJLJD3wI=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-  ];
+  buildInputs =
+    [
+      bzip2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+    ];
 
   meta = with lib; {
     description = "mdbook backend for generating an e-book in the EPUB format";
+    mainProgram = "mdbook-epub";
     homepage = "https://michael-f-bryan.github.io/mdbook-epub";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ yuu ];
+    maintainers = with maintainers; [
+      yuu
+      matthiasbeyer
+    ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "macopix";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk openssl ];
+  buildInputs = [
+    gtk
+    openssl
+  ];
 
   preConfigure = ''
     # Build fails on Linux with windres.
@@ -28,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mascot Constructive Pilot for X";
+    mainProgram = "macopix";
     homepage = "http://rosegray.sakura.ne.jp/macopix/index-e.html";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

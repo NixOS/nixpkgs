@@ -2,14 +2,16 @@
 
 with lib;
 
-{
+let
+  json = pkgs.formats.json { };
+in {
   options = {
 
     services.v2ray = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run v2ray server.
 
           Either `configFile` or `config` must be specified.
@@ -22,7 +24,7 @@ with lib;
         type = types.nullOr types.str;
         default = null;
         example = "/etc/v2ray/config.json";
-        description = lib.mdDoc ''
+        description = ''
           The absolute path to the configuration file.
 
           Either `configFile` or `config` must be specified.
@@ -32,7 +34,7 @@ with lib;
       };
 
       config = mkOption {
-        type = types.nullOr (types.attrsOf types.unspecified);
+        type = types.nullOr json.type;
         default = null;
         example = {
           inbounds = [{
@@ -44,7 +46,7 @@ with lib;
             protocol = "freedom";
           }];
         };
-        description = lib.mdDoc ''
+        description = ''
           The configuration object.
 
           Either `configFile` or `config` must be specified.

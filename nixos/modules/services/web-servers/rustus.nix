@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.rustus;
@@ -8,11 +13,11 @@ in
 
   options.services.rustus = {
 
-    enable = mkEnableOption (lib.mdDoc "TUS protocol implementation in Rust");
+    enable = mkEnableOption "TUS protocol implementation in Rust";
 
     host = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The host that rustus will connect to.
       '';
       default = "127.0.0.1";
@@ -21,7 +26,7 @@ in
 
     port = mkOption {
       type = types.port;
-      description = lib.mdDoc ''
+      description = ''
         The port that rustus will connect to.
       '';
       default = 1081;
@@ -29,8 +34,12 @@ in
     };
 
     log_level = mkOption {
-      type = types.enum [ "DEBUG" "INFO" "ERROR" ];
-      description = lib.mdDoc ''
+      type = types.enum [
+        "DEBUG"
+        "INFO"
+        "ERROR"
+      ];
+      description = ''
         Desired log level
       '';
       default = "INFO";
@@ -39,7 +48,7 @@ in
 
     max_body_size = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Maximum body size in bytes
       '';
       default = "10000000"; # 10 mb
@@ -48,7 +57,7 @@ in
 
     url = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         url path for uploads
       '';
       default = "/files";
@@ -56,7 +65,7 @@ in
 
     disable_health_access_logs = mkOption {
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         disable access log for /health endpoint
       '';
       default = false;
@@ -64,24 +73,29 @@ in
 
     cors = mkOption {
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         list of origins allowed to upload
       '';
-      default = ["*"];
-      example = ["*.staging.domain" "*.prod.domain"];
+      default = [ "*" ];
+      example = [
+        "*.staging.domain"
+        "*.prod.domain"
+      ];
     };
 
     tus_extensions = mkOption {
-      type = types.listOf (types.enum [
-        "getting"
-        "creation"
-        "termination"
-        "creation-with-upload"
-        "creation-defer-length"
-        "concatenation"
-        "checksum"
-      ]);
-      description = lib.mdDoc ''
+      type = types.listOf (
+        types.enum [
+          "getting"
+          "creation"
+          "termination"
+          "creation-with-upload"
+          "creation-defer-length"
+          "concatenation"
+          "checksum"
+        ]
+      );
+      description = ''
         Since TUS protocol offers extensibility you can turn off some protocol extensions.
       '';
       default = [
@@ -97,7 +111,7 @@ in
 
     remove_parts = mkOption {
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         remove parts files after successful concatenation
       '';
       default = true;
@@ -105,10 +119,10 @@ in
     };
 
     storage = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Storages are used to actually store your files. You can configure where you want to store files.
       '';
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         {
           type = "hybrid-s3"
@@ -121,44 +135,47 @@ in
       type = lib.types.submodule {
         options = {
           type = lib.mkOption {
-            type = lib.types.enum ["file-storage" "hybrid-s3"];
-            description = lib.mdDoc "Type of storage to use";
+            type = lib.types.enum [
+              "file-storage"
+              "hybrid-s3"
+            ];
+            description = "Type of storage to use";
           };
           s3_access_key_file = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "File path that contains the S3 access key.";
+            description = "File path that contains the S3 access key.";
           };
           s3_secret_key_file = lib.mkOption {
             type = lib.types.path;
-            description = lib.mdDoc "File path that contains the S3 secret key.";
+            description = "File path that contains the S3 secret key.";
           };
           s3_region = lib.mkOption {
             type = lib.types.str;
             default = "us-east-1";
-            description = lib.mdDoc "S3 region name.";
+            description = "S3 region name.";
           };
           s3_bucket = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "S3 bucket.";
+            description = "S3 bucket.";
           };
           s3_url = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "S3 url.";
+            description = "S3 url.";
           };
 
           force_sync = lib.mkOption {
             type = lib.types.bool;
-            description = lib.mdDoc "calls fsync system call after every write to disk in local storage";
+            description = "calls fsync system call after every write to disk in local storage";
             default = true;
           };
           data_dir = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "path to the local directory where all files are stored";
+            description = "path to the local directory where all files are stored";
             default = "/var/lib/rustus";
           };
           dir_structure = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "pattern of a directory structure locally and on s3";
+            description = "pattern of a directory structure locally and on s3";
             default = "{year}/{month}/{day}";
           };
         };
@@ -166,20 +183,20 @@ in
     };
 
     info_storage = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Info storages are used to store information about file uploads. These storages must be persistent, because every time chunk is uploaded rustus updates information about upload. And when someone wants to download file, information about it requested from storage to get actual path of an upload.
       '';
-      default = {};
+      default = { };
       type = lib.types.submodule {
         options = {
           type = lib.mkOption {
-            type = lib.types.enum ["file-info-storage"];
-            description = lib.mdDoc "Type of info storage to use";
+            type = lib.types.enum [ "file-info-storage" ];
+            description = "Type of info storage to use";
             default = "file-info-storage";
           };
           dir = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "directory to store info about uploads";
+            description = "directory to store info about uploads";
             default = "/var/lib/rustus";
           };
         };
@@ -193,64 +210,64 @@ in
       let
         isHybridS3 = cfg.storage.type == "hybrid-s3";
       in
-    {
-      description = "Rustus server";
-      documentation = [ "https://s3rius.github.io/rustus/" ];
+      {
+        description = "Rustus server";
+        documentation = [ "https://s3rius.github.io/rustus/" ];
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      environment = {
-        RUSTUS_SERVER_HOST = cfg.host;
-        RUSTUS_SERVER_PORT = toString cfg.port;
-        RUSTUS_LOG_LEVEL = cfg.log_level;
-        RUSTUS_MAX_BODY_SIZE = cfg.max_body_size;
-        RUSTUS_URL = cfg.url;
-        RUSTUS_DISABLE_HEALTH_ACCESS_LOG = lib.mkIf cfg.disable_health_access_logs "true";
-        RUSTUS_CORS = lib.concatStringsSep "," cfg.cors;
-        RUSTUS_TUS_EXTENSIONS = lib.concatStringsSep "," cfg.tus_extensions;
-        RUSTUS_REMOVE_PARTS= if cfg.remove_parts then "true" else "false";
-        RUSTUS_STORAGE = cfg.storage.type;
-        RUSTUS_DATA_DIR = cfg.storage.data_dir;
-        RUSTUS_DIR_STRUCTURE = cfg.storage.dir_structure;
-        RUSTUS_FORCE_FSYNC = if cfg.storage.force_sync then "true" else "false";
-        RUSTUS_S3_URL = mkIf isHybridS3 cfg.storage.s3_url;
-        RUSTUS_S3_BUCKET = mkIf isHybridS3 cfg.storage.s3_bucket;
-        RUSTUS_S3_REGION = mkIf isHybridS3 cfg.storage.s3_region;
-        RUSTUS_S3_ACCESS_KEY_PATH = mkIf isHybridS3 "%d/S3_ACCESS_KEY_PATH";
-        RUSTUS_S3_SECRET_KEY_PATH = mkIf isHybridS3 "%d/S3_SECRET_KEY_PATH";
-        RUSTUS_INFO_STORAGE = cfg.info_storage.type;
-        RUSTUS_INFO_DIR = cfg.info_storage.dir;
+        environment = {
+          RUSTUS_SERVER_HOST = cfg.host;
+          RUSTUS_SERVER_PORT = toString cfg.port;
+          RUSTUS_LOG_LEVEL = cfg.log_level;
+          RUSTUS_MAX_BODY_SIZE = cfg.max_body_size;
+          RUSTUS_URL = cfg.url;
+          RUSTUS_DISABLE_HEALTH_ACCESS_LOG = lib.mkIf cfg.disable_health_access_logs "true";
+          RUSTUS_CORS = lib.concatStringsSep "," cfg.cors;
+          RUSTUS_TUS_EXTENSIONS = lib.concatStringsSep "," cfg.tus_extensions;
+          RUSTUS_REMOVE_PARTS = if cfg.remove_parts then "true" else "false";
+          RUSTUS_STORAGE = cfg.storage.type;
+          RUSTUS_DATA_DIR = cfg.storage.data_dir;
+          RUSTUS_DIR_STRUCTURE = cfg.storage.dir_structure;
+          RUSTUS_FORCE_FSYNC = if cfg.storage.force_sync then "true" else "false";
+          RUSTUS_S3_URL = mkIf isHybridS3 cfg.storage.s3_url;
+          RUSTUS_S3_BUCKET = mkIf isHybridS3 cfg.storage.s3_bucket;
+          RUSTUS_S3_REGION = mkIf isHybridS3 cfg.storage.s3_region;
+          RUSTUS_S3_ACCESS_KEY_PATH = mkIf isHybridS3 "%d/S3_ACCESS_KEY_PATH";
+          RUSTUS_S3_SECRET_KEY_PATH = mkIf isHybridS3 "%d/S3_SECRET_KEY_PATH";
+          RUSTUS_INFO_STORAGE = cfg.info_storage.type;
+          RUSTUS_INFO_DIR = cfg.info_storage.dir;
+        };
+
+        serviceConfig = {
+          ExecStart = "${pkgs.rustus}/bin/rustus";
+          StateDirectory = "rustus";
+          # User name is defined here to enable restoring a backup for example
+          # You will run the backup restore command as sudo -u rustus in order
+          # to have write permissions to /var/lib
+          User = "rustus";
+          DynamicUser = true;
+          LoadCredential = lib.optionals isHybridS3 [
+            "S3_ACCESS_KEY_PATH:${cfg.storage.s3_access_key_file}"
+            "S3_SECRET_KEY_PATH:${cfg.storage.s3_secret_key_file}"
+          ];
+          # hardening
+          RestrictRealtime = true;
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectHostUserNamespaces = true;
+          ProtectClock = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          CapabilityBoundingSet = "";
+          ProtectProc = "invisible";
+          # TODO consider SystemCallFilter LimitAS ProcSubset
+        };
       };
-
-      serviceConfig = {
-        ExecStart = "${pkgs.rustus}/bin/rustus";
-        StateDirectory = "rustus";
-        # User name is defined here to enable restoring a backup for example
-        # You will run the backup restore command as sudo -u rustus in order
-        # to have write permissions to /var/lib
-        User = "rustus";
-        DynamicUser = true;
-        LoadCredential = lib.optionals isHybridS3 [
-          "S3_ACCESS_KEY_PATH:${cfg.storage.s3_access_key_file}"
-          "S3_SECRET_KEY_PATH:${cfg.storage.s3_secret_key_file}"
-        ];
-        # hardening
-        RestrictRealtime=true;
-        RestrictNamespaces=true;
-        LockPersonality=true;
-        ProtectKernelModules=true;
-        ProtectKernelTunables=true;
-        ProtectKernelLogs=true;
-        ProtectControlGroups=true;
-        ProtectHostUserNamespaces=true;
-        ProtectClock=true;
-        RestrictSUIDSGID=true;
-        SystemCallArchitectures="native";
-        CapabilityBoundingSet="";
-        ProtectProc = "invisible";
-        # TODO consider SystemCallFilter LimitAS ProcSubset
-      };
-    };
   };
 }

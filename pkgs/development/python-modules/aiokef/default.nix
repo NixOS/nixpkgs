@@ -1,15 +1,17 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, tenacity
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "aiokef";
   version = "0.2.17";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -30,9 +32,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
   pythonImportsCheck = [ "aiokef" ];

@@ -1,23 +1,24 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, qtx11extras
-, kcoreaddons
-, kguiaddons
-, kconfig
-, kdecoration
-, kconfigwidgets
-, kwindowsystem
-, kiconthemes
-, kwayland
-, unstableGitUpdater
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  qtx11extras,
+  kcoreaddons,
+  kguiaddons,
+  kconfig,
+  kdecoration,
+  kconfigwidgets,
+  kwindowsystem,
+  kiconthemes,
+  kwayland,
+  unstableGitUpdater,
 }:
 
 mkDerivation rec {
   pname = "material-kwin-decoration";
-  version = "unstable-2023-01-15";
+  version = "7-unstable-2023-01-15";
 
   src = fetchFromGitHub {
     owner = "Zren";
@@ -32,7 +33,10 @@ mkDerivation rec {
       --replace "add_definitions (-Wall -Werror)" "add_definitions (-Wall)"
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   buildInputs = [
     qtx11extras
@@ -47,7 +51,9 @@ mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
   };
 
   meta = with lib; {

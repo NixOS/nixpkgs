@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pipewire
-, cmake
-, extra-cmake-modules
-, gnumake
-, wrapQtAppsHook
-, qtbase
-, qttools
-, kirigami2
-, kcoreaddons
-, ki18n
-, qtquickcontrols2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pipewire,
+  cmake,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  kirigami2,
+  kcoreaddons,
+  ki18n,
+  qtquickcontrols2,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Pipewire control GUI program in Qt (Kirigami2)";
+    mainProgram = "pipecontrol";
     homepage = "https://github.com/portaloffreedom/pipecontrol";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ tilcreator ];

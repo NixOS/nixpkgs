@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages
+{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, openssl, pkgsCross, buildPackages
 
 # Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
 # privilege level EL3, which is above both the kernel and the
@@ -26,13 +26,13 @@ let
            stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    version = "2.9.0";
+    version = "2.10.0";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      hash = "sha256-F7RNYNLh0ORzl5PmzRX9wGK8dZgUQVLKQg1M9oNd0pk=";
+      hash = "sha256-CAuftVST9Fje/DWaaoX0K2SfWwlGMaUFG4huuwsTOSU=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -79,7 +79,7 @@ let
 
     meta = with lib; {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
-      description = "A reference implementation of secure world software for ARMv8-A";
+      description = "Reference implementation of secure world software for ARMv8-A";
       license = [ licenses.bsd3 ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
@@ -149,6 +149,24 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
     platformCanUseHDCPBlob = true;
+  };
+
+  armTrustedFirmwareRK3588 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3588";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+
+    # TODO: remove this once the following get merged:
+    # 1: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840
+    # 2: https://review.trustedfirmware.org/c/ci/tf-a-ci-scripts/+/21833
+    src = fetchFromGitLab {
+      domain = "gitlab.collabora.com";
+      owner = "hardware-enablement/rockchip-3588";
+      repo = "trusted-firmware-a";
+      rev = "002d8e85ce5f4f06ebc2c2c52b4923a514bfa701";
+      hash = "sha256-1XOG7ILIgWa3uXUmAh9WTfSGLD/76OsmWrUhIxm/zTg=";
+    };
   };
 
   armTrustedFirmwareS905 = buildArmTrustedFirmware rec {

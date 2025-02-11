@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "dllogger";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Hpr4yeRl+Dyaz6lRyH/5P6UQT184JEHPqgVlf4qHvOg=";
   };
 
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dllogger" ];
 
   meta = with lib; {
-    description = "A logging tool for deep learning";
+    description = "Logging tool for deep learning";
     homepage = "https://github.com/NVIDIA/dllogger";
     changelog = "https://github.com/NVIDIA/dllogger/releases/tag/v${version}";
     license = licenses.asl20;

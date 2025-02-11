@@ -1,14 +1,19 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-with lib;
 let
   cfg = config.programs.mdevctl;
-in {
+in
+{
   options.programs.mdevctl = {
-    enable = mkEnableOption (lib.mdDoc "Mediated Device Management");
+    enable = lib.mkEnableOption "Mediated Device Management";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mdevctl ];
 
     environment.etc."mdevctl.d/scripts.d/notifiers/.keep".text = "";

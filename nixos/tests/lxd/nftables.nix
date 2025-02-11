@@ -5,46 +5,47 @@
 # iptables to nftables requires a full reboot, which is a bit hard inside NixOS
 # tests.
 
-import ../make-test-python.nix ({ pkgs, ...} : {
-  name = "lxd-nftables";
+import ../make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "lxd-nftables";
 
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ patryk27 ];
-  };
+    nodes.machine =
+      { lib, ... }:
+      {
+        virtualisation = {
+          lxd.enable = true;
+        };
 
-  nodes.machine = { lib, ... }: {
-    virtualisation = {
-      lxd.enable = true;
-    };
+        networking = {
+          firewall.enable = false;
+          nftables.enable = true;
+          nftables.tables."filter".family = "inet";
+          nftables.tables."filter".content = ''
+            chain incoming {
+              type filter hook input priority 0;
+              policy accept;
+            }
 
-    networking = {
-      firewall.enable = false;
-      nftables.enable = true;
-      nftables.tables."filter".family = "inet";
-      nftables.tables."filter".content = ''
-          chain incoming {
-            type filter hook input priority 0;
-            policy accept;
-          }
+            chain forward {
+              type filter hook forward priority 0;
+              policy accept;
+            }
 
-          chain forward {
-            type filter hook forward priority 0;
-            policy accept;
-          }
+            chain output {
+              type filter hook output priority 0;
+              policy accept;
+            }
+          '';
+        };
+      };
 
-          chain output {
-            type filter hook output priority 0;
-            policy accept;
-          }
-      '';
-    };
-  };
+    testScript = ''
+      machine.wait_for_unit("network.target")
 
-  testScript = ''
-    machine.wait_for_unit("network.target")
-
-    with subtest("When nftables are enabled, lxd doesn't depend on iptables anymore"):
-        machine.succeed("lsmod | grep nf_tables")
-        machine.fail("lsmod | grep ip_tables")
-  '';
-})
+      with subtest("When nftables are enabled, lxd doesn't depend on iptables anymore"):
+          machine.succeed("lsmod | grep nf_tables")
+          machine.fail("lsmod | grep ip_tables")
+    '';
+  }
+)

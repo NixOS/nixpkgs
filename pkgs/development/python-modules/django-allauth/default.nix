@@ -1,77 +1,98 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  python,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
-, python3-openid
-, requests
-, requests-oauthlib
-, pyjwt
+  # build-time dependencies
+  gettext,
 
-# optional-dependencies
-, python3-saml
-, qrcode
+  # dependencies
+  asgiref,
+  django,
 
-# tests
-, pillow
-, pytestCheckHook
-, pytest-django
+  # optional-dependencies
+  fido2,
+  python3-openid,
+  python3-saml,
+  requests,
+  requests-oauthlib,
+  pyjwt,
+  qrcode,
 
-# passthru tests
-, dj-rest-auth
+  # tests
+  pillow,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-django,
+
+  # passthru tests
+  dj-rest-auth,
 }:
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.57.0";
-  format = "pyproject";
+  version = "65.3.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pennersr";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zhKqvm43rw28UKNFdfJ2C1dIeZfPqmchb1rJykm1lx4=";
+    repo = "django-allauth";
+    tag = version;
+    hash = "sha256-IgadrtOQt3oY2U/+JWBs5v97aaWz5oinz5QUdGXBqO4=";
   };
 
   nativeBuildInputs = [
+    gettext
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    asgiref
     django
-    python3-openid
-    pyjwt
-    requests
-    requests-oauthlib
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ];
 
-  passthru.optional-dependencies = {
-    saml = [
-      python3-saml
-    ];
+  preBuild = ''
+    ${python.interpreter} -m django compilemessages
+  '';
+
+  optional-dependencies = {
     mfa = [
+      fido2
       qrcode
     ];
+    openid = [ python3-openid ];
+    saml = [ python3-saml ];
+    socialaccount = [
+      requests
+      requests-oauthlib
+      pyjwt
+    ] ++ pyjwt.optional-dependencies.crypto;
+    steam = [ python3-openid ];
   };
 
-  pythonImportsCheck = [
-    "allauth"
-  ];
+  pythonImportsCheck = [ "allauth" ];
 
   nativeCheckInputs = [
     pillow
     pytestCheckHook
+    pytest-asyncio
     pytest-django
-  ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  disabledTests = [
+    # Tests require network access
+    "test_login"
+  ];
 
   passthru.tests = {
     inherit dj-rest-auth;

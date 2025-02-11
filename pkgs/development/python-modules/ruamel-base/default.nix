@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "ruamel-base";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "ruamel.base";
@@ -24,6 +26,6 @@ buildPythonPackage rec {
     description = "Common routines for ruamel packages";
     homepage = "https://sourceforge.net/projects/ruamel-base/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

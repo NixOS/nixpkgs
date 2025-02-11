@@ -1,5 +1,4 @@
 /*
-
   # New packages
 
   READ THIS FIRST
@@ -21,19 +20,21 @@
    from the top of the Nixpkgs tree.
   3. Use `nox-review wip` to check that everything builds.
   4. Commit the changes and open a pull request.
-
 */
 
-{ libsForQt5
-, lib
-, config
-, fetchurl
-, gconf
-, gsettings-desktop-schemas
+{
+  libsForQt5,
+  lib,
+  config,
+  fetchurl,
+  gsettings-desktop-schemas,
 }:
 
 let
-  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  maintainers = with lib.maintainers; [
+    ttuegel
+    nyanloutre
+  ];
   license = with lib.licenses; [
     lgpl21Plus
     lgpl3Plus
@@ -49,20 +50,23 @@ let
     mirror = "mirror://kde";
   };
 
-  qtStdenv = libsForQt5.callPackage ({ stdenv }: stdenv) {};
+  qtStdenv = libsForQt5.callPackage ({ stdenv }: stdenv) { };
 
-  packages = self:
+  packages =
+    self:
     let
 
-      propagate = out:
+      propagate =
+        out:
         let
-          setupHook = { writeScript }:
+          setupHook =
+            { writeScript }:
             writeScript "setup-hook" ''
               if [[ "''${hookName-}" != postHook ]]; then
                   postHooks+=("source @dev@/nix-support/setup-hook")
               else
                   # Propagate $${out} output
-                  propagatedUserEnvPkgs+=" @${out}@"
+                  appendToVar propagatedUserEnvPkgs "@${out}@"
 
                   if [ -z "$outputDev" ]; then
                       echo "error: \$outputDev is unset!" >&2
@@ -72,7 +76,7 @@ let
                   # Propagate $dev so that this setup hook is propagated
                   # But only if there is a separate $dev output
                   if [ "$outputDev" != out ]; then
-                      propagatedBuildInputs+=" @dev@"
+                      appendToVar propagatedBuildInputs "@dev@"
                   fi
               fi
             '';
@@ -84,7 +88,8 @@ let
       callPackage = self.newScope {
         inherit propagate propagateBin;
 
-        mkDerivation = args:
+        mkDerivation =
+          args:
           let
             inherit (args) pname;
             sname = args.sname or pname;
@@ -96,20 +101,34 @@ let
 
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
-            nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ libsForQt5.wrapQtAppsHook ];
+            nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ libsForQt5.wrapQtAppsHook ];
 
             meta =
-              let meta = args.meta or { }; in
-              meta // {
+              let
+                meta = args.meta or { };
+              in
+              meta
+              // {
                 homepage = meta.homepage or "http://www.kde.org";
                 license = meta.license or license;
                 maintainers = (meta.maintainers or [ ]) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
               };
           in
-          qtStdenv.mkDerivation (args // {
-            inherit pname version meta outputs setupHook src nativeBuildInputs;
-          });
+          qtStdenv.mkDerivation (
+            args
+            // {
+              inherit
+                pname
+                version
+                meta
+                outputs
+                setupHook
+                src
+                nativeBuildInputs
+                ;
+            }
+          );
       };
 
     in
@@ -151,11 +170,12 @@ let
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix { };
       plasma-desktop = callPackage ./plasma-desktop { };
       plasma-disks = callPackage ./plasma-disks.nix { };
+      plasma-firewall = callPackage ./plasma-firewall.nix { };
       plasma-integration = callPackage ./plasma-integration { };
       plasma-mobile = callPackage ./plasma-mobile { };
       plasma-nano = callPackage ./plasma-nano { };
       plasma-nm = callPackage ./plasma-nm { };
-      plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-pa = callPackage ./plasma-pa.nix { };
       plasma-remotecontrollers = callPackage ./plasma-remotecontrollers.nix { };
       plasma-sdk = callPackage ./plasma-sdk.nix { };
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
@@ -171,21 +191,26 @@ let
       systemsettings = callPackage ./systemsettings.nix { };
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix { };
 
-      thirdParty = let inherit (libsForQt5) callPackage; in {
-        plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
-        plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
-        bismuth = callPackage ./3rdparty/addons/bismuth { };
-        kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
-        kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
-        krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
-        krunner-ssh = callPackage ./3rdparty/addons/krunner-ssh.nix { };
-        krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
-        kzones = callPackage ./3rdparty/kwin/scripts/kzones.nix { };
-        lightly = callPackage ./3rdparty/lightly { };
-        parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
-      };
+      thirdParty =
+        let
+          inherit (libsForQt5) callPackage;
+        in
+        {
+          plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
+          plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
+          bismuth = callPackage ./3rdparty/addons/bismuth { };
+          kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
+          kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
+          krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+          krunner-ssh = callPackage ./3rdparty/addons/krunner-ssh.nix { };
+          krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
+          kzones = callPackage ./3rdparty/kwin/scripts/kzones.nix { };
+          lightly = callPackage ./3rdparty/lightly { };
+          parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
+        };
 
-    } // lib.optionalAttrs config.allowAliases {
+    }
+    // lib.optionalAttrs config.allowAliases {
       ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
       plasma-phone-components = throw "'plasma-phone-components' has been renamed to/replaced by 'plasma-mobile'";
     };

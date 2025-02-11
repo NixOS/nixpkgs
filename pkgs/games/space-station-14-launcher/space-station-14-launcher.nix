@@ -2,18 +2,10 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
-, libX11
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
 , glew
 , SDL2
 , glfw
@@ -31,11 +23,11 @@
 , gdk-pixbuf
 }:
 let
-  version = "0.24.0";
+  version = "0.29.1";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
-  inherit pname;
+  inherit pname version;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
   name = "${pname}-${version}";
@@ -44,7 +36,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-n0OiNxw9QDibX5HBSzq6jdOxyUd0bPkjKd+mtb/S/BY=";
+    hash = "sha256-Gajs8zINWBJ3BvAPKYan0bCRbEVscz56pyE9WOLiOqU=";
     fetchSubmodules = true;
   };
 
@@ -56,15 +48,15 @@ buildDotnetModule rec {
     "SS14.Launcher/SS14.Launcher.csproj"
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   passthru = {
     inherit version; # Workaround so update script works.
     updateScript = ./update.sh;
   };
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_7_0 sdk_6_0 ];
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:FullRelease=true"
@@ -72,7 +64,7 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook iconConvTools copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 iconConvTools copyDesktopItems ];
 
   runtimeDeps = [
     # Required by the game.
@@ -94,14 +86,6 @@ buildDotnetModule rec {
     gdk-pixbuf
 
     # Avalonia UI dependencies.
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
     glew
   ];
 
@@ -136,7 +120,7 @@ buildDotnetModule rec {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
     homepage = "https://spacestation14.io";
     license = licenses.mit;
-    maintainers = [ maintainers.zumorica ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
   };

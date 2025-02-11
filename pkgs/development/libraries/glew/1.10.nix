@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, libGLU, libXmu, libXi, libXext
-, AGL, OpenGL
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGLU,
+  libXmu,
+  libXi,
+  libXext,
+  AGL,
+  OpenGL,
+  testers,
+  mesa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -8,19 +17,30 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+    url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
-  buildInputs = if stdenv.isDarwin then [ AGL ] else [ libXmu libXi libXext ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs =
+    if stdenv.hostPlatform.isDarwin then
+      [ AGL ]
+    else
+      [
+        libXmu
+        libXi
+        libXext
+      ];
+  propagatedBuildInputs = if stdenv.hostPlatform.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
     ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
+      sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
 
@@ -40,16 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
+    "CC:=$(CC)"
+    "LD:=$(CC)"
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "An OpenGL extension loading library for C(++)";
+    description = "OpenGL extension loading library for C(++)";
     homepage = "https://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
-      #["BSD" "GLX" "SGI-B" "GPL2"]
+    #["BSD" "GLX" "SGI-B" "GPL2"]
     pkgConfigModules = [ "glew" ];
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
   };
 })

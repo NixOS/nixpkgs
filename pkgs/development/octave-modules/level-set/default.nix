@@ -1,11 +1,11 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchgit
-, automake
-, autoconf
-, autoconf-archive
-, parallel
+{
+  buildOctavePackage,
+  lib,
+  fetchgit,
+  automake,
+  autoconf,
+  autoconf-archive,
+  parallel,
 }:
 
 buildOctavePackage rec {

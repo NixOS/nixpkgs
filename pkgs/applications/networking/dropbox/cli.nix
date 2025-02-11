@@ -1,29 +1,34 @@
-{ lib, stdenv
-, substituteAll
-, autoreconfHook
-, pkg-config
-, fetchurl
-, python3
-, dropbox
-, gtk4
-, gnome
-, gdk-pixbuf
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  substituteAll,
+  autoreconfHook,
+  pkg-config,
+  fetchurl,
+  python3,
+  dropbox,
+  gtk4,
+  nautilus,
+  gdk-pixbuf,
+  gobject-introspection,
 }:
 
 let
-  version = "2023.09.06";
+  version = "2024.04.17";
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
   pname = "dropbox-cli";
   inherit version;
 
-  outputs = [ "out" "nautilusExtension" ];
+  outputs = [
+    "out"
+    "nautilusExtension"
+  ];
 
   src = fetchurl {
     url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    hash = "sha256-kZMwj8Fn8Hf58C57wE025TlmiSs5TaKMGEzvb2QjgSw=";
+    hash = "sha256-pqCYzxaqR0f0CBaseT1Z436K47cIDQswYR1sK4Zj8sE=";
   };
 
   strictDeps = true;
@@ -42,16 +47,18 @@ stdenv.mkDerivation {
     gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection
     # but we are using Nix for installation so we will not need that.
-    (python3.withPackages (ps: with ps; [
-      docutils
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        docutils
+        pygobject3
+      ]
+    ))
   ];
 
   buildInputs = [
     python3
     gtk4
-    gnome.nautilus
+    nautilus
   ];
 
   configureFlags = [
@@ -67,7 +74,7 @@ stdenv.mkDerivation {
     description = "Command line client for the dropbox daemon";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dropbox";
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = lib.platforms.linux;
   };

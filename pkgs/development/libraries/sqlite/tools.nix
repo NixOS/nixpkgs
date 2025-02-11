@@ -4,16 +4,16 @@ let
   archiveVersion = import ./archive-version.nix lib;
   mkTool = { pname, makeTarget, description, homepage, mainProgram }: stdenv.mkDerivation rec {
     inherit pname;
-    version = "3.43.2";
+    version = "3.47.2";
 
     # nixpkgs-update: no auto update
     src = assert version == sqlite.version; fetchurl {
-      url = "https://sqlite.org/2023/sqlite-src-${archiveVersion version}.zip";
-      hash = "sha256-62ZRUj9XpccPJC/Ba8QWuB7QLVkmOb+34JnyAeL5otM=";
+      url = "https://sqlite.org/2024/sqlite-src-${archiveVersion version}.zip";
+      hash = "sha256-5qRx8SOCJfNMLEjFYBtUAkzFOARDaCMPWf8Gcr4fxiM=";
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ tcl ] ++ lib.optional stdenv.isDarwin Foundation;
+    buildInputs = [ tcl ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
     makeFlags = [ makeTarget ];
 
@@ -32,15 +32,22 @@ in
   sqldiff = mkTool {
     pname = "sqldiff";
     makeTarget = "sqldiff";
-    description = "A tool that displays the differences between SQLite databases";
+    description = "Tool that displays the differences between SQLite databases";
     homepage = "https://www.sqlite.org/sqldiff.html";
     mainProgram = "sqldiff";
   };
   sqlite-analyzer = mkTool {
     pname = "sqlite-analyzer";
     makeTarget = "sqlite3_analyzer";
-    description = "A tool that shows statistics about SQLite databases";
+    description = "Tool that shows statistics about SQLite databases";
     homepage = "https://www.sqlite.org/sqlanalyze.html";
     mainProgram = "sqlite3_analyzer";
+  };
+  sqlite-rsync = mkTool {
+    pname = "sqlite-rsync";
+    makeTarget = "sqlite3_rsync";
+    description = "Database remote-copy tool for SQLite";
+    homepage = "https://www.sqlite.org/rsync.html";
+    mainProgram = "sqlite3_rsync";
   };
 }

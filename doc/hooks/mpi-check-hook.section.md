@@ -12,13 +12,14 @@ Example:
 
 ```nix
   { mpiCheckPhaseHook, mpi, ... }:
+  {
+    # ...
 
-  ...
-
-  nativeCheckInputs = [
-    openssh
-    mpiCheckPhaseHook
-  ];
+    nativeCheckInputs = [
+      openssh
+      mpiCheckPhaseHook
+    ];
+  }
 ```
 
 

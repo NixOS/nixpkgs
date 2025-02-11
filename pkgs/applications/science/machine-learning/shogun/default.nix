@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
   # build
-, cmake
-, ctags
-, python3Packages
-, swig
+  cmake,
+  ctags,
+  python3Packages,
+  swig,
   # math
-, eigen
-, blas
-, lapack
-, glpk
+  eigen,
+  blas,
+  lapack,
+  glpk,
   # data
-, protobuf
-, json_c
-, libxml2
-, hdf5
-, curl
+  protobuf,
+  json_c,
+  libxml2,
+  hdf5,
+  curl,
   # compression
-, libarchive
-, bzip2
-, xz
-, snappy
-, lzo
+  libarchive,
+  bzip2,
+  xz,
+  snappy,
+  lzo,
   # more math
-, nlopt
-, lp_solve
-, colpack
+  nlopt,
+  lp_solve,
+  colpack,
   # extra support
-, pythonSupport ? false
-, opencvSupport ? false
-, opencv ? null
-, withSvmLight ? false
+  pythonSupport ? false,
+  opencvSupport ? false,
+  opencv ? null,
+  withSvmLight ? false,
 }:
 
 assert pythonSupport -> python3Packages != null;
@@ -52,8 +53,8 @@ let
     toolbox = fetchFromGitHub {
       owner = "shogun-toolbox";
       repo = "shogun";
-      rev =  "shogun_${version}";
-      sha256 = "sha256-38aULxK50wQ2+/ERosSpRyBmssmYSGv5aaWfWSlrSRc=";
+      rev = "shogun_${version}";
+      hash = "sha256-38aULxK50wQ2+/ERosSpRyBmssmYSGv5aaWfWSlrSRc=";
       fetchSubmodules = true;
     };
 
@@ -62,6 +63,7 @@ let
       url = "https://github.com/Reactive-Extensions/RxCpp/archive/v${rxcppVersion}.tar.gz";
       sha256 = "sha256-UOc5WrG8KgAA3xJsaSCjbdPE7gSnFJay9MEK31DWUXg=";
     };
+
     gtest = fetchurl {
       url = "https://github.com/google/googletest/archive/release-${gtestVersion}.tar.gz";
       sha256 = "sha256-WKb0J3yivIVlIis7vVihd2CenEiOinJkk1m6UUUNt9g=";
@@ -69,10 +71,14 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = srcs.toolbox;
 
@@ -107,58 +113,84 @@ stdenv.mkDerivation rec {
 
   ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
-  nativeBuildInputs = [ cmake swig ctags ]
-    ++ (with python3Packages; [ python jinja2 ply ]);
+  nativeBuildInputs =
+    [
+      cmake
+      swig
+      ctags
+    ]
+    ++ (with python3Packages; [
+      python
+      jinja2
+      ply
+    ]);
 
-  buildInputs = [
-    eigen
-    blas
-    lapack
-    glpk
-    protobuf
-    json_c
-    libxml2
-    hdf5
-    curl
-    libarchive
-    bzip2
-    xz
-    snappy
-    lzo
-    nlopt
-    lp_solve
-    colpack
-  ] ++ lib.optionals pythonSupport (with python3Packages; [ python numpy ])
+  buildInputs =
+    [
+      eigen
+      blas
+      lapack
+      glpk
+      protobuf
+      json_c
+      libxml2
+      hdf5
+      curl
+      libarchive
+      bzip2
+      xz
+      snappy
+      lzo
+      nlopt
+      lp_solve
+      colpack
+    ]
+    ++ lib.optionals pythonSupport (
+      with python3Packages;
+      [
+        python
+        numpy
+      ]
+    )
     ++ lib.optional opencvSupport opencv;
 
-  cmakeFlags = let
-    enableIf = cond: if cond then "ON" else "OFF";
-    excludeTestsRegex = lib.concatStringsSep "|" [
-      # sporadic segfault
-      "TrainedModelSerialization"
-      # broken by openblas 0.3.21
-      "mathematics_lapack"
-      # these take too long on CI
-      "evaluation_cross_validation"
-      "modelselection_combined_kernel"
-      "modelselection_grid_search"
+  cmakeFlags =
+    let
+      excludeTestsRegex = lib.concatStringsSep "|" [
+        # segfault
+        "SerializationXML"
+        "TrainedModelSerialization"
+        # broken by openblas 0.3.21
+        "mathematics_lapack"
+        # fails on aarch64
+        "LinearTimeMMD"
+        "QuadraticTimeMMD"
+        "SGVectorTest"
+        "Statistics"
+        # hangs on aarch64
+        "PRange"
+        # these take too long on CI
+        "evaluation_cross_validation"
+        "modelselection_combined_kernel"
+        "modelselection_grid_search"
+      ];
+    in
+    [
+      (lib.cmakeBool "BUILD_META_EXAMPLES" true)
+      (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ARPACK" true)
+      (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ARPREC" true)
+      (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_CPLEX" true)
+      (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_Mosek" true)
+      (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_TFLogger" true)
+      (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ViennaCL" true)
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
+      (lib.cmakeBool "ENABLE_TESTING" finalAttrs.doCheck)
+      (lib.cmakeBool "DISABLE_META_INTEGRATION_TESTS" true)
+      (lib.cmakeBool "TRAVIS_DISABLE_META_CPP" true)
+      (lib.cmakeBool "INTERFACE_PYTHON" pythonSupport)
+      (lib.cmakeBool "OpenCV" opencvSupport)
+      (lib.cmakeBool "USE_SVMLIGHT" withSvmLight)
     ];
-  in [
-    "-DBUILD_META_EXAMPLES=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ARPACK=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ARPREC=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_CPLEX=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Mosek=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_TFLogger=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ViennaCL=ON"
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'${excludeTestsRegex}'"
-    "-DENABLE_TESTING=${enableIf doCheck}"
-    "-DDISABLE_META_INTEGRATION_TESTS=ON"
-    "-DTRAVIS_DISABLE_META_CPP=ON"
-    "-DINTERFACE_PYTHON=${enableIf pythonSupport}"
-    "-DOpenCV=${enableIf opencvSupport}"
-    "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
-  ];
 
   CXXFLAGS = "-faligned-new";
 
@@ -170,21 +202,23 @@ stdenv.mkDerivation rec {
     ln -s ${srcs.gtest} $sourceRoot/third_party/GoogleMock/release-${gtestVersion}.tar.gz
   '';
 
-  postPatch = ''
-    # Fix preprocessing SVMlight code
-    sed -i \
-        -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
-        -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
-        src/shogun/kernel/string/CommUlongStringKernel.cpp
-    sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
-    sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
-    sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
-  '' + lib.optionalString (!withSvmLight) ''
-    # Run SVMlight scrubber
-    patchShebangs scripts/light-scrubber.sh
-    echo "removing SVMlight code"
-    ./scripts/light-scrubber.sh
-  '';
+  postPatch =
+    ''
+      # Fix preprocessing SVMlight code
+      sed -i \
+          -e 's@#ifdef SVMLIGHT@#ifdef USE_SVMLIGHT@' \
+          -e '/^#ifdef USE_SVMLIGHT/,/^#endif/ s@#endif@#endif //USE_SVMLIGHT@' \
+          src/shogun/kernel/string/CommUlongStringKernel.cpp
+      sed -i -e 's/#if USE_SVMLIGHT/#ifdef USE_SVMLIGHT/' src/interfaces/swig/Machine.i
+      sed -i -e 's@// USE_SVMLIGHT@//USE_SVMLIGHT@' src/interfaces/swig/Transfer.i
+      sed -i -e 's@/\* USE_SVMLIGHT \*/@//USE_SVMLIGHT@' src/interfaces/swig/Transfer_includes.i
+    ''
+    + lib.optionalString (!withSvmLight) ''
+      # Run SVMlight scrubber
+      patchShebangs scripts/light-scrubber.sh
+      echo "removing SVMlight code"
+      ./scripts/light-scrubber.sh
+    '';
 
   postInstall = ''
     mkdir -p $doc/share/doc/shogun/examples
@@ -196,13 +230,16 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # CMake incorrectly calculates library path from dev prefix
     substituteInPlace $dev/lib/cmake/shogun/ShogunTargets-release.cmake \
-      --replace "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
   '';
 
   meta = with lib; {
-    description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
+    description = "Toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
     license = if withSvmLight then licenses.unfree else licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo smancill ];
+    maintainers = with maintainers; [
+      edwtjo
+      smancill
+    ];
   };
-}
+})

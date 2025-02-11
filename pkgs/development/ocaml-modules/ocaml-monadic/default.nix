@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, ppxlib
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ppxlib,
 }:
 
 buildDunePackage rec {
@@ -19,7 +22,7 @@ buildDunePackage rec {
 
   meta = {
     inherit (src.meta) homepage;
-    description = "A PPX extension to provide an OCaml-friendly monadic syntax";
+    description = "PPX extension to provide an OCaml-friendly monadic syntax";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
   };

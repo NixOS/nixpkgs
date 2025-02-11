@@ -1,12 +1,13 @@
 { lib
 , stdenv
-, fetchFromGitLab
-, gitUpdater
+, fetchurl
+, directoryListingUpdater
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wayland-scanner
+, wrapGAppsHook4
 , libadwaita
 , libhandy
 , libxkbcommon
@@ -15,9 +16,13 @@
 , pulseaudio
 , evince
 , glib
+, modemmanager
 , gtk4
-, gnome
+, gnome-bluetooth
+, gnome-control-center
 , gnome-desktop
+, gnome-session
+, gnome-shell
 , gcr
 , pam
 , systemd
@@ -32,20 +37,17 @@
 , libsecret
 , evolution-data-server
 , nixosTests
+, gmobile
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.33.0";
+  version = "0.44.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    group = "World";
-    owner = "Phosh";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-t+1MYfsz7KqsMvN8TyLIUrTLTQPWQQpOSk/ysxgE7kg=";
+  src = fetchurl {
+    # Release tarball which includes subprojects gvc and libcall-ui
+    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-rczGr7YSmVFu13oa3iSTmSQ4jsjl7lv38zQtD7WmDis=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +56,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wayland-scanner
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -68,12 +71,15 @@ stdenv.mkDerivation rec {
     evolution-data-server
     pulseaudio
     glib
+    modemmanager
     gcr
     networkmanager
     polkit
-    gnome.gnome-control-center
+    gmobile
+    gnome-bluetooth
+    gnome-control-center
     gnome-desktop
-    gnome.gnome-session
+    gnome-session
     gtk4
     pam
     systemd
@@ -91,10 +97,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [
-    "-Dsystemd=true"
     "-Dcompositor=${phoc}/bin/phoc"
-    # https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+    # Save some time building if tests are disabled
+    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
   ];
 
   checkPhase = ''
@@ -109,35 +114,24 @@ stdenv.mkDerivation rec {
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
-      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gnome-shell}"
+      --set GNOME_SESSION "${gnome-session}/bin/gnome-session"
     )
   '';
 
-  postFixup = ''
-    mkdir -p $out/share/wayland-sessions
-    ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-  '';
-
   passthru = {
-    providedSessions = [
-      "sm.puri.Phosh"
-    ];
-
+    providedSessions = [ "phosh" ];
     tests.phosh = nixosTests.phosh;
-
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = directoryListingUpdater { };
   };
 
   meta = with lib; {
-    description = "A pure Wayland shell prototype for GNOME on mobile devices";
+    description = "Pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
-    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${finalAttrs.version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
     mainProgram = "phosh-session";
   };
-}
+})

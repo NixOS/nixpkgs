@@ -1,15 +1,16 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
   pname = "ga";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-cbP7ucua7DdxLL422INxjZxz/x1pHoIq+jkjrtfaabE=";
+    sha256 = "sha256-hsrjh2rZFhP6WA+qaKjiGfJkDtT2nTlXlKr3jAJ5Y44=";
   };
 
   meta = with lib; {

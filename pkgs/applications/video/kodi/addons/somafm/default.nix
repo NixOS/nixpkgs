@@ -1,4 +1,10 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 
 buildKodiAddon rec {
   pname = "somafm";
@@ -6,7 +12,7 @@ buildKodiAddon rec {
   version = "2.0.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/plugin.audio.somafm/plugin.audio.somafm-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/plugin.audio.somafm/plugin.audio.somafm-${version}.zip";
     sha256 = "sha256-auPLm7QFabU4tXJPjTl17KpE+lqWM2Edbd2HrXPRx40=";
   };
 

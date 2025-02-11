@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.mirbsd.org/mksh.htm";
+    changelog = "https://www.mirbsd.org/mksh.htm#clog";
     description = "MirBSD Korn Shell";
+    mainProgram = "mksh";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI
       approved) successor to pdksh, developed as part of the MirOS
@@ -52,8 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    license = with lib.licenses; [ miros isc unicode-dfs-2016 ];
-    maintainers = with lib.maintainers; [ AndersonTorres joachifm ];
+    license = with lib.licenses; [
+      miros
+      isc
+      unicode-dfs-2016
+    ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      joachifm
+    ];
     platforms = lib.platforms.unix;
   };
 })

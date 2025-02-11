@@ -1,13 +1,14 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchFromGitHub
-, mkdocs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-exclude";
   version = "1.0.2";
+  format = "setuptools";
 
   # Repository has only 3 commits and no tags. Each of these commits has
   # version of 1.0.0, 1.0.1 and 1.0.2 in setup.py, though.
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A mkdocs plugin to exclude files from input using globs or regexes.";
+    description = "Mkdocs plugin to exclude files from input using globs or regexes";
     homepage = "https://github.com/apenwarr/mkdocs-exclude";
     license = licenses.asl20;
     maintainers = with maintainers; [ kaction ];

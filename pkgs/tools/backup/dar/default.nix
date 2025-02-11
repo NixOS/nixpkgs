@@ -22,12 +22,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.7.13";
+  version = "2.7.16";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-d88BwbovhbAn72y5pVd4No+hVydXbtZYHZpdtpo4RGY=";
+    sha256 = "sha256-U1SjboFx1KJs3Ve62cQRj4kkURTUGZmQD077WzldkD0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     xz
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     attr
     e2fsprogs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
   ];
 

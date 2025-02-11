@@ -5,22 +5,28 @@
 , cmake
 , python3Packages
 , Security
+
+# tests
+, firefox-unwrapped
+, firefox-esr-unwrapped
+, mesa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cbindgen";
     rev = "v${version}";
-    hash = "sha256-gyNZAuxpeOjuC+Rh9jAyHSBQRRYUlYoIrBKuCFg3Hao=";
+    hash = "sha256-1GT+EgltLhveEACxhY+748L1HIIyQHbEs7wLKANFWr0=";
   };
 
-  cargoSha256 = "sha256-pdTxhECAZzBx5C01Yx7y/OGwhhAdlEDpqLBdvQcb8bc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-k8n3adoqKp/RXkHybCKV2KlVnaoEhM6vF57BqeCDAP4=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     cmake
@@ -35,15 +41,24 @@ rustPlatform.buildRustPackage rec {
     "--skip lib_default_uses_debug_build"
     "--skip lib_explicit_debug_build"
     "--skip lib_explicit_release_build"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # WORKAROUND: test_body fails when using clang
     # https://github.com/eqrion/cbindgen/issues/628
     "--skip test_body"
   ];
 
+  passthru.tests = {
+    inherit
+      firefox-unwrapped
+      firefox-esr-unwrapped
+      mesa
+    ;
+  };
+
   meta = with lib; {
     changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
-    description = "A project for generating C bindings from Rust code";
+    description = "Project for generating C bindings from Rust code";
+    mainProgram = "cbindgen";
     homepage = "https://github.com/mozilla/cbindgen";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa ];

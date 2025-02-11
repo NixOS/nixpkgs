@@ -1,122 +1,131 @@
-{ lib, config, pkgs, ... }:
-
-with lib;
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.onlyoffice;
 in
 {
   options.services.onlyoffice = {
-    enable = mkEnableOption (lib.mdDoc "OnlyOffice DocumentServer");
+    enable = lib.mkEnableOption "OnlyOffice DocumentServer";
 
-    enableExampleServer = mkEnableOption (lib.mdDoc "OnlyOffice example server");
+    enableExampleServer = lib.mkEnableOption "OnlyOffice example server";
 
-    hostname = mkOption {
-      type = types.str;
+    hostname = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
-      description = lib.mdDoc "FQDN for the onlyoffice instance.";
+      description = "FQDN for the OnlyOffice instance.";
     };
 
-    jwtSecretFile = mkOption {
-      type = types.nullOr types.str;
+    jwtSecretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a file that contains the secret to sign web requests using JSON Web Tokens.
         If left at the default value null signing is disabled.
       '';
     };
 
-    package = mkPackageOption pkgs "onlyoffice-documentserver" { };
+    package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8000;
-      description = lib.mdDoc "Port the OnlyOffice DocumentServer should listens on.";
+      description = "Port the OnlyOffice document server should listen on.";
     };
 
-    examplePort = mkOption {
-      type = types.port;
+    examplePort = lib.mkOption {
+      type = lib.types.port;
       default = null;
-      description = lib.mdDoc "Port the OnlyOffice Example server should listens on.";
+      description = "Port the OnlyOffice example server should listen on.";
     };
 
-    postgresHost = mkOption {
-      type = types.str;
+    postgresHost = lib.mkOption {
+      type = lib.types.str;
       default = "/run/postgresql";
-      description = lib.mdDoc "The Postgresql hostname or socket path OnlyOffice should connect to.";
+      description = "The Postgresql hostname or socket path OnlyOffice should connect to.";
     };
 
-    postgresName = mkOption {
-      type = types.str;
+    postgresName = lib.mkOption {
+      type = lib.types.str;
       default = "onlyoffice";
-      description = lib.mdDoc "The name of database OnlyOffice should user.";
+      description = "The name of database OnlyOffice should use.";
     };
 
-    postgresPasswordFile = mkOption {
-      type = types.nullOr types.str;
+    postgresPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a file that contains the password OnlyOffice should use to connect to Postgresql.
         Unused when using socket authentication.
       '';
     };
 
-    postgresUser = mkOption {
-      type = types.str;
+    postgresUser = lib.mkOption {
+      type = lib.types.str;
       default = "onlyoffice";
-      description = lib.mdDoc ''
+      description = ''
         The username OnlyOffice should use to connect to Postgresql.
         Unused when using socket authentication.
       '';
     };
 
-    rabbitmqUrl = mkOption {
-      type = types.str;
+    rabbitmqUrl = lib.mkOption {
+      type = lib.types.str;
       default = "amqp://guest:guest@localhost:5672";
-      description = lib.mdDoc "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
+      description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
   };
 
   config = lib.mkIf cfg.enable {
     services = {
       nginx = {
-        enable = mkDefault true;
+        enable = lib.mkDefault true;
         # misses text/csv, font/ttf, application/x-font-ttf, application/rtf, application/wasm
-        recommendedGzipSettings = mkDefault true;
-        recommendedProxySettings = mkDefault true;
+        recommendedGzipSettings = lib.mkDefault true;
+        recommendedProxySettings = lib.mkDefault true;
 
         upstreams = {
           # /etc/nginx/includes/http-common.conf
           onlyoffice-docservice = {
-            servers = { "localhost:${toString cfg.port}" = { }; };
+            servers = {
+              "localhost:${toString cfg.port}" = { };
+            };
           };
           onlyoffice-example = lib.mkIf cfg.enableExampleServer {
-            servers = { "localhost:${toString cfg.examplePort}" = { }; };
+            servers = {
+              "localhost:${toString cfg.examplePort}" = { };
+            };
           };
         };
 
         virtualHosts.${cfg.hostname} = {
           locations = {
             # /etc/nginx/includes/ds-docservice.conf
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(web-apps\/apps\/api\/documents\/api\.js)$".extraConfig = ''
-              expires -1;
-              alias ${cfg.package}/var/www/onlyoffice/documentserver/$2;
-            '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(web-apps)(\/.*\.json)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps\\/apps\\/api\\/documents\\/api\\.js)$".extraConfig =
+              ''
+                expires -1;
+                alias ${cfg.package}/var/www/onlyoffice/documentserver/$2;
+              '';
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(sdkjs-plugins)(\/.*\.json)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(sdkjs-plugins)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(web-apps|sdkjs|sdkjs-plugins|fonts)(\/.*)$".extraConfig = ''
-              expires 365d;
-              alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
-            '';
-            "~* ^(\/cache\/files.*)(\/.*)".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps|sdkjs|sdkjs-plugins|fonts)(\\/.*)$".extraConfig =
+              ''
+                expires 365d;
+                alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
+              '';
+            "~* ^(\\/cache\\/files.*)(\\/.*)".extraConfig = ''
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
               add_header Content-Disposition "attachment; filename*=UTF-8''$arg_filename";
 
@@ -132,12 +141,12 @@ in
                 return 410;
               }
             '';
-            "~* ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(internal)(\/.*)$".extraConfig = ''
+            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(internal)(\\/.*)$".extraConfig = ''
               allow 127.0.0.1;
               deny all;
               proxy_pass http://onlyoffice-docservice/$2$3;
             '';
-            "~* ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(info)(\/.*)$".extraConfig = ''
+            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(info)(\\/.*)$".extraConfig = ''
               allow 127.0.0.1;
               deny all;
               proxy_pass http://onlyoffice-docservice/$2$3;
@@ -145,19 +154,19 @@ in
             "/".extraConfig = ''
               proxy_pass http://onlyoffice-docservice;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?(\/doc\/.*)".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?(\\/doc\\/.*)".extraConfig = ''
               proxy_pass http://onlyoffice-docservice$2;
               proxy_http_version 1.1;
             '';
             "/${cfg.package.version}/".extraConfig = ''
               proxy_pass http://onlyoffice-docservice/;
             '';
-            "~ ^(\/[\d]+\.[\d]+\.[\d]+[\.|-][\d]+)?\/(dictionaries)(\/.*)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(dictionaries)(\\/.*)$".extraConfig = ''
               expires 365d;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
             # /etc/nginx/includes/ds-example.conf
-            "~ ^(\/welcome\/.*)$".extraConfig = ''
+            "~ ^(\\/welcome\\/.*)$".extraConfig = ''
               expires 365d;
               alias ${cfg.package}/var/www/onlyoffice/documentserver-example$1;
               index docker.html;
@@ -191,18 +200,28 @@ in
       postgresql = {
         enable = lib.mkDefault true;
         ensureDatabases = [ "onlyoffice" ];
-        ensureUsers = [{
-          name = "onlyoffice";
-          ensureDBOwnership = true;
-        }];
+        ensureUsers = [
+          {
+            name = "onlyoffice";
+            ensureDBOwnership = true;
+          }
+        ];
       };
     };
 
     systemd.services = {
       onlyoffice-converter = {
         description = "onlyoffice converter";
-        after = [ "network.target" "onlyoffice-docservice.service" "postgresql.service" ];
-        requires = [ "network.target" "onlyoffice-docservice.service" "postgresql.service" ];
+        after = [
+          "network.target"
+          "onlyoffice-docservice.service"
+          "postgresql.service"
+        ];
+        requires = [
+          "network.target"
+          "onlyoffice-docservice.service"
+          "postgresql.service"
+        ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper FileConverter/converter /run/onlyoffice/config";
@@ -218,7 +237,16 @@ in
       onlyoffice-docservice =
         let
           onlyoffice-prestart = pkgs.writeShellScript "onlyoffice-prestart" ''
-            PATH=$PATH:${lib.makeBinPath (with pkgs; [ jq moreutils config.services.postgresql.package ])}
+            PATH=$PATH:${
+              lib.makeBinPath (
+                with pkgs;
+                [
+                  jq
+                  moreutils
+                  config.services.postgresql.package
+                ]
+              )
+            }
             umask 077
             mkdir -p /run/onlyoffice/config/ /var/lib/onlyoffice/documentserver/sdkjs/{slide/themes,common}/ /var/lib/onlyoffice/documentserver/{fonts,server/FileConverter/bin}/
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
@@ -260,7 +288,10 @@ in
         in
         {
           description = "onlyoffice documentserver";
-          after = [ "network.target" "postgresql.service" ];
+          after = [
+            "network.target"
+            "postgresql.service"
+          ];
           requires = [ "postgresql.service" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {

@@ -1,14 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools-scm }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "ufonormalizer";
-  version = "0.6.1";
+  version = "0.6.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e61110e75a500083f265385b1354b578610f9542e3bbbeedb98a2a6155e4aa6c";
+    sha256 = "sha256-TFcVu5SDgfLGQa+CuUk4rSQtm1Nl3RxbfOPXVVaibDo=";
     extension = "zip";
   };
 
@@ -16,6 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Script to normalize the XML and other data inside of a UFO";
+    mainProgram = "ufonormalizer";
     homepage = "https://github.com/unified-font-object/ufoNormalizer";
     license = licenses.bsd3;
     maintainers = [ maintainers.sternenseemann ];

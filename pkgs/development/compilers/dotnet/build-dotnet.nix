@@ -1,29 +1,51 @@
-{ type
-, version
-, srcs
-, packages ? null
+{
+  type,
+  version,
+  srcs,
+  commonPackages ? null,
+  hostPackages ? null,
+  targetPackages ? null,
+  runtime ? null,
+  aspnetcore ? null,
 }:
 
-assert builtins.elem type [ "aspnetcore" "runtime" "sdk" ];
-assert if type == "sdk" then packages != null else true;
+assert builtins.elem type [
+  "aspnetcore"
+  "runtime"
+  "sdk"
+];
+assert
+  if type == "sdk" then
+    commonPackages != null
+    && hostPackages != null
+    && targetPackages != null
+    && runtime != null
+    && aspnetcore != null
+  else
+    true;
 
-{ lib
-, stdenv
-, fetchurl
-, writeText
-, autoPatchelfHook
-, makeWrapper
-, libunwind
-, icu
-, libuuid
-, zlib
-, libkrb5
-, curl
-, lttng-ust_2_12
-, testers
-, runCommand
-, writeShellScript
-, mkNugetDeps
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  autoPatchelfHook,
+  makeWrapper,
+  libunwind,
+  icu,
+  libuuid,
+  zlib,
+  libkrb5,
+  openssl,
+  curl,
+  lttng-ust_2_12,
+  testers,
+  runCommand,
+  writeShellScript,
+  mkNugetDeps,
+  callPackage,
+  systemToDotnetRid,
+  xmlstarlet,
 }:
 
 let
@@ -41,129 +63,191 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  packageDeps = if type == "sdk" then mkNugetDeps {
-    name = "${pname}-${version}-deps";
-    nugetDeps = packages;
-  } else null;
+  mkWrapper = callPackage ./wrapper.nix { };
 
-in
-stdenv.mkDerivation (finalAttrs: rec {
-  inherit pname version;
+  hostRid = systemToDotnetRid stdenv.hostPlatform.system;
+  targetRid = systemToDotnetRid stdenv.targetPlatform.system;
 
-  # Some of these dependencies are `dlopen()`ed.
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  sigtool = callPackage ./sigtool.nix { };
+  signAppHost = callPackage ./sign-apphost.nix { };
 
-  buildInputs = [
-    stdenv.cc.cc
-    zlib
-    icu
-    libkrb5
-    curl
-  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
+  hasILCompiler = lib.versionAtLeast version (if hostRid == "osx-arm64" then "8" else "7");
 
-  src = fetchurl (
-    srcs."${stdenv.hostPlatform.system}" or (throw
-      "Missing source (url and hash) for host system: ${stdenv.hostPlatform.system}")
+  extraTargets = writeText "extra.targets" (
+    ''
+      <Project>
+    ''
+    + lib.optionalString hasILCompiler ''
+      <ItemGroup>
+        <CustomLinkerArg Include="-Wl,-rpath,'${
+          lib.makeLibraryPath [
+            icu
+            zlib
+            openssl
+          ]
+        }'" />
+      </ItemGroup>
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      <Import Project="${signAppHost}" />
+    ''
+    + ''
+      </Project>
+    ''
   );
 
-  sourceRoot = ".";
+in
+mkWrapper type (
+  stdenv.mkDerivation (finalAttrs: {
+    inherit pname version;
 
-  dontPatchELF = true;
-  noDumpEnvVars = true;
+    # Some of these dependencies are `dlopen()`ed.
+    nativeBuildInputs =
+      [
+        makeWrapper
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+      ++ lib.optionals (type == "sdk" && stdenv.hostPlatform.isDarwin) [
+        xmlstarlet
+        sigtool
+      ];
 
-  installPhase = ''
-    runHook preInstall
+    buildInputs = [
+      stdenv.cc.cc
+      zlib
+      icu
+      libkrb5
+      curl
+      xmlstarlet
+    ] ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
 
-    mkdir -p $out/bin
-    cp -r ./ $out
+    src = fetchurl (
+      srcs.${hostRid} or (throw "Missing source (url and hash) for host RID: ${hostRid}")
+    );
 
-    mkdir -p $out/share/doc/$pname/$version
-    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
-    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+    sourceRoot = ".";
 
-    ln -s $out/dotnet $out/bin/dotnet
-
-    runHook postInstall
-  '';
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/dotnet --info
-  '';
-
-  # Tell autoPatchelf about runtime dependencies.
-  # (postFixup phase is run before autoPatchelfHook.)
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf \
-      --add-needed libicui18n.so \
-      --add-needed libicuuc.so \
-      $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
-      $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
-    patchelf \
-      --add-needed libgssapi_krb5.so \
-      $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
-    patchelf \
-      --add-needed libssl.so \
-      $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
-  '';
-
-  setupHook = writeText "dotnet-setup-hook" ''
-    if [ ! -w "$HOME" ]; then
-      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
-    fi
-
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
-    export DOTNET_NOLOGO=1 # Disables the welcome message
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1 # Skip integrity check on first run, which fails due to read-only directory
-  '';
-
-  passthru = {
-    inherit icu;
-    packages = packageDeps;
-
-    updateScript =
+    postPatch =
       if type == "sdk" then
-      let
-        majorVersion =
-          with lib;
-          concatStringsSep "." (take 2 (splitVersion version));
-      in
-      writeShellScript "update-dotnet-${majorVersion}" ''
-        pushd pkgs/development/compilers/dotnet
-        exec ${./update.sh} "${majorVersion}"
-      '' else null;
+        (
+          ''
+            xmlstarlet ed \
+              --inplace \
+              -s //_:Project -t elem -n Import \
+              -i \$prev -t attr -n Project -v "${extraTargets}" \
+              sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
+          ''
+          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+            codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
+          ''
+        )
+      else
+        null;
 
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
+    dontPatchELF = true;
+    noDumpEnvVars = true;
 
-      smoke-test = runCommand "dotnet-sdk-smoke-test" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        HOME=$(pwd)/fake-home
-        dotnet new console --no-restore
-        dotnet restore --source "$(mktemp -d)"
-        dotnet build --no-restore
-        output="$(dotnet run --no-build)"
-        # yes, older SDKs omit the comma
-        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
-      '';
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/doc/$pname/$version
+      mv LICENSE.txt $out/share/doc/$pname/$version/
+      mv ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+
+      mkdir -p $out/share/dotnet
+      cp -r ./ $out/share/dotnet
+
+      mkdir -p $out/bin
+      ln -s $out/share/dotnet/dotnet $out/bin/dotnet
+
+      runHook postInstall
+    '';
+
+    # Tell autoPatchelf about runtime dependencies.
+    # (postFixup phase is run before autoPatchelfHook.)
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf \
+        --add-needed libicui18n.so \
+        --add-needed libicuuc.so \
+        $out/share/dotnet/shared/Microsoft.NETCore.App/*/libcoreclr.so \
+        $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
+        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+      patchelf \
+        --add-needed libgssapi_krb5.so \
+        $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
+        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+      patchelf \
+        --add-needed libssl.so \
+        $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
+        $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+    '';
+
+    # fixes: Could not load ICU data. UErrorCode: 2
+    propagatedSandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      (allow file-read* (subpath "/usr/share/icu"))
+      (allow file-read* (subpath "/private/var/db/mds/system"))
+      (allow mach-lookup (global-name "com.apple.SecurityServer")
+                         (global-name "com.apple.system.opendirectoryd.membership"))
+    '';
+
+    passthru =
+      {
+        inherit icu hasILCompiler;
+      }
+      // lib.optionalAttrs (type == "sdk") (
+        let
+          # force evaluation of the SDK package to ensure evaluation failures
+          # (e.g. due to vulnerabilities) propagate to the nuget packages
+          forceSDKEval = builtins.seq finalAttrs.finalPackage.drvPath;
+        in
+        {
+          packages = map forceSDKEval (
+            commonPackages ++ hostPackages.${hostRid} ++ targetPackages.${targetRid}
+          );
+          targetPackages = lib.mapAttrs (_: map forceSDKEval) targetPackages;
+          inherit runtime aspnetcore;
+
+          updateScript =
+            let
+              majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+            in
+            [
+              ./update.sh
+              majorVersion
+            ];
+        }
+      );
+
+    meta = with lib; {
+      description = builtins.getAttr type descriptions;
+      homepage = "https://dotnet.github.io/";
+      license = licenses.mit;
+      maintainers = with maintainers; [
+        kuznero
+        mdarocha
+        corngood
+      ];
+      mainProgram = "dotnet";
+      platforms = lib.filter (
+        platform:
+        let
+          e = builtins.tryEval (systemToDotnetRid platform);
+        in
+        e.success && srcs ? "${e.value}"
+      ) lib.platforms.all;
+      sourceProvenance = with lib.sourceTypes; [
+        binaryBytecode
+        binaryNativeCode
+      ];
+      knownVulnerabilities =
+        lib.optionals
+          (lib.elem (lib.head (lib.splitVersion version)) [
+            "6"
+            "7"
+          ])
+          [
+            "Dotnet SDK ${version} is EOL, please use 8.0 (LTS) or 9.0 (Current)"
+          ];
     };
-  };
-
-  meta = with lib; {
-    description = builtins.getAttr type descriptions;
-    homepage = "https://dotnet.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kuznero mdarocha ];
-    mainProgram = "dotnet";
-    platforms = attrNames srcs;
-  };
-})
+  })
+)

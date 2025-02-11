@@ -1,28 +1,40 @@
-{ stdenv, lib, fetchurl, zlib, unzip }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zlib,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sauce-connect";
-  version = "4.5.4";
+  version = "4.9.1";
 
-  src = fetchurl (
-    if stdenv.hostPlatform.system == "x86_64-linux" then {
-      url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
-      sha256 = "1w8fw47q4bzpk5jfagmc0cbp69jdd6jcv2xl1gx91cbp7xd8mcbf";
-    } else if stdenv.hostPlatform.system == "i686-linux" then {
-      url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
-      sha256 = "1h9n1mzmrmlrbd0921b0sgg7m8z0w71pdb5sif6h1b9f97cp353x";
-    } else {
-      url = "https://saucelabs.com/downloads/sc-${version}-osx.zip";
-      sha256 = "0rkyd402f1n92ad3w1460j1a4m46b29nandv4z6wvg2pasyyf2lj";
-    }
-  );
+  passthru = {
+    sources = {
+      x86_64-linux = fetchurl {
+        url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
+        hash = "sha256-S3vzng6b0giB6Zceaxi62pQOEHysIR/vVQmswkEZ0/M=";
+      };
+      x86_64-darwin = fetchurl {
+        url = "https://saucelabs.com/downloads/sc-${version}-osx.zip";
+        hash = "sha256-6tJayqo+p7PMz8M651ikHz6tEjGjRIffOqQBchkpW5Q=";
+      };
+      aarch64-darwin = passthru.sources.x86_64-darwin;
+    };
+    updateScript = ./update.sh;
+  };
+
+  src =
+    passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ unzip ];
 
-  patchPhase = lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/lib:${lib.makeLibraryPath [zlib]}" \
+      --set-rpath "$out/lib:${lib.makeLibraryPath [ zlib ]}" \
       bin/sc
   '';
 
@@ -34,11 +46,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with lib; {
-    description = "A secure tunneling app for executing tests securely when testing behind firewalls";
+    description = "Secure tunneling app for executing tests securely when testing behind firewalls";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     homepage = "https://docs.saucelabs.com/reference/sauce-connect/";
-    maintainers = with maintainers; [offline];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ offline ];
+    platforms = builtins.attrNames passthru.sources;
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glib
-, libmt32emu
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  libmt32emu,
+  pkg-config,
 }:
 
 let
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://munt.sourceforge.net/";
     description = "Produces a WAVE file from a Standard MIDI file (SMF)";
+    mainProgram = "mt32emu-smf2wav";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

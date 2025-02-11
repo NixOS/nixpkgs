@@ -1,29 +1,32 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, makeWrapper
-, go
-, gcc
-, gtk3
-, webkitgtk
-, nodejs
-, zlib
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  go,
+  nodejs,
+  zlib,
+  # Linux specific dependencies
+  gtk3,
+  webkitgtk_4_0,
 }:
 
 buildGoModule rec {
   pname = "wails";
-  version = "2.6.0";
+  version = "2.9.2";
 
-  src = fetchFromGitHub {
-    owner = "wailsapp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-jY+2I4SOr6gr2MCLrBBE9H0T1sTB13kEb1OJ717kWqg=";
-  } + "/v2";
+  src =
+    fetchFromGitHub {
+      owner = "wailsapp";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-Ta7PLxy6ElJwR0yz7oMbmwYyPwduYfoSFWhvsPAJTYs=";
+    }
+    + "/v2";
 
-  vendorHash = "sha256-56LZQQzfFQTa4fo5bdZtK/VzNDBPyI9hDG4RkP38gcI=";
+  vendorHash = "sha256-nnc9+iGVJDcRstEEL9O5UU07NcG9yEQ6kMECDTS9LO8=";
 
   proxyVendor = true;
 
@@ -41,14 +44,17 @@ buildGoModule rec {
   allowGoReference = true;
 
   # Following packages are required when wails used as a builder.
-  propagatedBuildInputs = [
-    pkg-config
-    go
-    gcc
-    gtk3
-    webkitgtk
-    nodejs
-  ];
+  propagatedBuildInputs =
+    [
+      pkg-config
+      go
+      stdenv.cc
+      nodejs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      gtk3
+      webkitgtk_4_0
+    ];
 
   ldflags = [
     "-s"
@@ -58,17 +64,32 @@ buildGoModule rec {
   # As Wails calls a compiler, certain apps and libraries need to be made available.
   postFixup = ''
     wrapProgram $out/bin/wails \
-      --prefix PATH : ${lib.makeBinPath [ pkg-config go gcc nodejs ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 webkitgtk ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          pkg-config
+          go
+          stdenv.cc
+          nodejs
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath (
+          lib.optionals stdenv.hostPlatform.isLinux [
+            gtk3
+            webkitgtk_4_0
+          ]
+        )
+      }" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Build applications using Go + HTML + CSS + JS";
     homepage = "https://wails.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ianmjones ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    mainProgram = "wails";
+    platforms = lib.platforms.unix;
   };
 }

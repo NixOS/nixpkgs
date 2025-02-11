@@ -1,4 +1,8 @@
-{ lib, fetchurl, perlPackages }:
+{
+  lib,
+  fetchurl,
+  perlPackages,
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "pflogsumm";
@@ -9,7 +13,10 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0hkim9s5f1yg5sfs5048jydhy3sbxafls496wcjk0cggxb113py4";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   buildInputs = [ perlPackages.DateCalc ];
 
   preConfigure = ''
@@ -29,6 +36,7 @@ perlPackages.buildPerlPackage rec {
     homepage = "http://jimsun.linxnet.com/postfix_contrib.html";
     maintainers = with lib.maintainers; [ schneefux ];
     description = "Postfix activity overview";
+    mainProgram = "pflogsumm";
     license = lib.licenses.gpl2Plus;
   };
 }

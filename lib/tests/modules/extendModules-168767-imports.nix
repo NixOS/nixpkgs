@@ -1,8 +1,16 @@
-{ lib
-, extendModules
-, ...
+{
+  lib,
+  extendModules,
+  ...
 }:
-with lib;
+
+let
+  inherit (lib)
+    mkOption
+    mkOverride
+    types
+    ;
+in
 {
   imports = [
 
@@ -10,9 +18,10 @@ with lib;
       options.sub = mkOption {
         default = { };
         type = types.submodule (
-          { config
-          , extendModules
-          , ...
+          {
+            config,
+            extendModules,
+            ...
           }:
           {
             options.value = mkOption {
@@ -23,11 +32,14 @@ with lib;
               default = { };
               inherit
                 (extendModules {
-                  modules = [{
-                    specialisation = mkOverride 0 { };
-                  }];
+                  modules = [
+                    {
+                      specialisation = mkOverride 0 { };
+                    }
+                  ];
                 })
-                type;
+                type
+                ;
             };
           }
         );
@@ -35,7 +47,6 @@ with lib;
     }
 
     { config.sub.value = 1; }
-
 
   ];
 }

@@ -1,13 +1,14 @@
-{ lib
-, asttokens
-, buildPythonPackage
-, executing
-, hatchling
-, fetchFromGitHub
-, pygments
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asttokens,
+  buildPythonPackage,
+  executing,
+  hatchling,
+  fetchFromGitHub,
+  pygments,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0' \
+  '';
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     asttokens
@@ -39,11 +43,6 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
   disabledTests = [
     # Test for Windows32
     "test_print_subprocess"
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     "test_multiple_not_verbose"
     # Sensitive to interpreter output
     "test_simple"
+    "test_expr_render"
   ];
 
   disabledTestPaths = [
@@ -58,9 +58,7 @@ buildPythonPackage rec {
     "tests/test_insert_assert.py"
   ];
 
-  pythonImportsCheck = [
-    "devtools"
-  ];
+  pythonImportsCheck = [ "devtools" ];
 
   meta = with lib; {
     description = "Python's missing debug print command and other development tools";

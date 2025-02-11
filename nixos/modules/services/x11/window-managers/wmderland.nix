@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,12 +13,12 @@ in
 
 {
   options.services.xserver.windowManager.wmderland = {
-    enable = mkEnableOption (lib.mdDoc "wmderland");
+    enable = mkEnableOption "wmderland";
 
     extraSessionCommands = mkOption {
       default = "";
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Shell commands executed just before wmderland is started.
       '';
     };
@@ -38,7 +43,7 @@ in
           rxvt-unicode
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed system wide.
       '';
     };
@@ -55,7 +60,8 @@ in
       '';
     };
     environment.systemPackages = [
-      pkgs.wmderland pkgs.wmderlandc
+      pkgs.wmderland
+      pkgs.wmderlandc
     ] ++ cfg.extraPackages;
   };
 }

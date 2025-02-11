@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.kapacitor;
 
@@ -26,13 +28,13 @@ let
       [storage]
         boltdb = "${cfg.dataDir}/kapacitor.db"
 
-      ${optionalString (cfg.loadDirectory != null) ''
+      ${lib.optionalString (cfg.loadDirectory != null) ''
         [load]
           enabled = true
           dir = "${cfg.loadDirectory}"
       ''}
 
-      ${optionalString (cfg.defaultDatabase.enable) ''
+      ${lib.optionalString (cfg.defaultDatabase.enable) ''
         [[influxdb]]
           name = "default"
           enabled = true
@@ -42,7 +44,7 @@ let
           password = "${cfg.defaultDatabase.password}"
       ''}
 
-      ${optionalString (cfg.alerta.enable) ''
+      ${lib.optionalString (cfg.alerta.enable) ''
         [alerta]
           enabled = true
           url = "${cfg.alerta.url}"
@@ -57,112 +59,112 @@ let
 in
 {
   options.services.kapacitor = {
-    enable = mkEnableOption (lib.mdDoc "kapacitor");
+    enable = lib.mkEnableOption "kapacitor";
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/kapacitor";
-      description = lib.mdDoc "Location where Kapacitor stores its state";
+      description = "Location where Kapacitor stores its state";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 9092;
-      description = lib.mdDoc "Port of Kapacitor";
+      description = "Port of Kapacitor";
     };
 
-    bind = mkOption {
-      type = types.str;
+    bind = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = "0.0.0.0";
-      description = lib.mdDoc "Address to bind to. The default is to bind to all addresses";
+      description = "Address to bind to. The default is to bind to all addresses";
     };
 
-    extraConfig = mkOption {
-      description = lib.mdDoc "These lines go into kapacitord.conf verbatim.";
+    extraConfig = lib.mkOption {
+      description = "These lines go into kapacitord.conf verbatim.";
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "kapacitor";
-      description = lib.mdDoc "User account under which Kapacitor runs";
+      description = "User account under which Kapacitor runs";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "kapacitor";
-      description = lib.mdDoc "Group under which Kapacitor runs";
+      description = "Group under which Kapacitor runs";
     };
 
-    taskSnapshotInterval = mkOption {
-      type = types.str;
-      description = lib.mdDoc "Specifies how often to snapshot the task state  (in InfluxDB time units)";
+    taskSnapshotInterval = lib.mkOption {
+      type = lib.types.str;
+      description = "Specifies how often to snapshot the task state  (in InfluxDB time units)";
       default = "1m0s";
     };
 
-    loadDirectory = mkOption {
-      type = types.nullOr types.path;
-      description = lib.mdDoc "Directory where to load services from, such as tasks, templates and handlers (or null to disable service loading on startup)";
+    loadDirectory = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      description = "Directory where to load services from, such as tasks, templates and handlers (or null to disable service loading on startup)";
       default = null;
     };
 
     defaultDatabase = {
-      enable = mkEnableOption (lib.mdDoc "kapacitor.defaultDatabase");
+      enable = lib.mkEnableOption "kapacitor.defaultDatabase";
 
-      url = mkOption {
-        description = lib.mdDoc "The URL to an InfluxDB server that serves as the default database";
+      url = lib.mkOption {
+        description = "The URL to an InfluxDB server that serves as the default database";
         example = "http://localhost:8086";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      username = mkOption {
-        description = lib.mdDoc "The username to connect to the remote InfluxDB server";
-        type = types.str;
+      username = lib.mkOption {
+        description = "The username to connect to the remote InfluxDB server";
+        type = lib.types.str;
       };
 
-      password = mkOption {
-        description = lib.mdDoc "The password to connect to the remote InfluxDB server";
-        type = types.str;
+      password = lib.mkOption {
+        description = "The password to connect to the remote InfluxDB server";
+        type = lib.types.str;
       };
     };
 
     alerta = {
-      enable = mkEnableOption (lib.mdDoc "kapacitor alerta integration");
+      enable = lib.mkEnableOption "kapacitor alerta integration";
 
-      url = mkOption {
-        description = lib.mdDoc "The URL to the Alerta REST API";
+      url = lib.mkOption {
+        description = "The URL to the Alerta REST API";
         default = "http://localhost:5000";
-        type = types.str;
+        type = lib.types.str;
       };
 
-      token = mkOption {
-        description = lib.mdDoc "Default Alerta authentication token";
-        type = types.str;
+      token = lib.mkOption {
+        description = "Default Alerta authentication token";
+        type = lib.types.str;
         default = "";
       };
 
-      environment = mkOption {
-        description = lib.mdDoc "Default Alerta environment";
-        type = types.str;
+      environment = lib.mkOption {
+        description = "Default Alerta environment";
+        type = lib.types.str;
         default = "Production";
       };
 
-      origin = mkOption {
-        description = lib.mdDoc "Default origin of alert";
-        type = types.str;
+      origin = lib.mkOption {
+        description = "Default origin of alert";
+        type = lib.types.str;
         default = "kapacitor";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kapacitor ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-kapacitor".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+    };
 
     systemd.services.kapacitor = {
       description = "Kapacitor Real-Time Stream Processing Engine";

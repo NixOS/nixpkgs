@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "opentypespec";
   version = "1.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-fOEHmtlCkFhn1jyIA+CsHIfud7x3PPb7UWQsnrVyDqY=";
   };
 
-  doCheck = true;
-  nativeCheckInputs = [
-    unittestCheckHook
+  nativeCheckInputs = [ unittestCheckHook ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
   ];
-  unittestFlagsArray = [ "-s" "test" "-v" ];
 
   meta = with lib; {
     description = "Python library for OpenType specification metadata";
@@ -26,4 +29,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

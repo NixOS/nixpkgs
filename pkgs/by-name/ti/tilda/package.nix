@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, expat
-, gettext
-, gtk3
-, libconfuse
-, makeWrapper
-, pcre2
-, pkg-config
-, vte
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  expat,
+  gettext,
+  gtk3,
+  libconfuse,
+  makeWrapper,
+  pcre2,
+  pkg-config,
+  vte,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tilda";
-  version = "1.5.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lanoxx";
     repo = "tilda";
     rev = "tilda-${finalAttrs.version}";
-    hash = "sha256-uDx28jmjNUyzJbgTJiHbjI9U5mYb9bnfl/9AjbxNUWA=";
+    hash = "sha256-Gseti810JwhYQSaGdE2KRRqnwNmthNBiFvXH9DyVpak=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/lanoxx/tilda/";
-    description = "A Gtk based drop down terminal for Linux and Unix";
+    description = "Gtk based drop down terminal for Linux and Unix";
+    mainProgram = "tilda";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;

@@ -1,4 +1,11 @@
-{ lib, crystal, fetchFromGitHub, fetchurl, jq, bash }:
+{
+  lib,
+  crystal,
+  fetchFromGitHub,
+  fetchurl,
+  jq,
+  bash,
+}:
 let
   icon = fetchurl {
     url = "https://github.com/mawww/kakoune/raw/master/doc/kakoune_logo.svg";
@@ -42,9 +49,12 @@ crystal.buildCrystalPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/alexherbo2/kakoune.cr";
-    description = "A command-line tool for Kakoune";
+    description = "Command-line tool for Kakoune";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ malte-v ];
+    maintainers = with maintainers; [
+      philiptaron
+      malte-v
+    ];
     platforms = platforms.unix;
   };
 }

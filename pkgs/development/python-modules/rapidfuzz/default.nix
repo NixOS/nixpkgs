@@ -1,41 +1,46 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, cython_3
-, ninja
-, scikit-build
-, setuptools
-, numpy
-, hypothesis
-, pandas
-, pytestCheckHook
-, rapidfuzz-cpp
-, taskflow
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  cython,
+  ninja,
+  scikit-build-core,
+  setuptools,
+  numpy,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  rapidfuzz-cpp,
+  taskflow,
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.5.2";
-  format = "pyproject";
+  version = "3.12.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-D7Z0xKqAJAPKSAEK+3Mpz/LaEKqKYczp+m6SqfzufwA=";
+    tag = "v${version}";
+    hash = "sha256-33NwGWulBJ7WAMAE0163OJM9kL04FuHa5P7m66PZL6s=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.0.11, <3.1.0" "Cython"
+  '';
+
+  build-system = [
     cmake
-    cython_3
+    cython
     ninja
-    scikit-build
-    setuptools
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
@@ -45,18 +50,16 @@ buildPythonPackage rec {
     taskflow
   ];
 
-  preBuild = ''
-    export RAPIDFUZZ_BUILD_EXTENSION=1
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
-  '';
+  preBuild =
+    ''
+      export RAPIDFUZZ_BUILD_EXTENSION=1
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+      export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
+    '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
-    "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
-  ]);
-
-  passthru.optional-dependencies = {
-    full = [ numpy ];
+  optional-dependencies = {
+    all = [ numpy ];
   };
 
   preCheck = ''
@@ -69,7 +72,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # segfaults
     "test_cdist"
   ];
@@ -84,7 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
-    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.rst";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -1,31 +1,35 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-wHAPlBNVhIytquEAUdrbxE4m0njVRPxxlYlwjqG9Zlw=";
+    hash = "sha256-th7igqDnLB+Lib2NxYNIGtUTK6IfSQo+72ohO5Ki7Ok=";
   };
 
-  cargoHash = "sha256-BymyjSVNwS3HPNnZcaAu1xUssV2iXmECtpKXPdZpM3g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+EWF21hag2kQ+YT8e+2NtdtOgyGrJL0BR2YMOxQfoDE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
   postInstall = ''
     installManPage tldr.1
-
-    installShellCompletion --name tldr \
-      --bash $releaseDir/build/tlrc-*/out/tldr.bash \
-      --zsh $releaseDir/build/tlrc-*/out/_tldr \
-      --fish $releaseDir/build/tlrc-*/out/tldr.fish
+    installShellCompletion completions/{tldr.bash,_tldr,tldr.fish}
   '';
 
   meta = with lib; {

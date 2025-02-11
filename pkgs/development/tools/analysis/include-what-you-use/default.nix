@@ -1,27 +1,53 @@
-{ lib, stdenv, fetchurl, cmake, llvmPackages, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  llvmPackages,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.19";
+  version = "0.22";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-KxAVe2DqCK3AjjiWtJIcc/yt1exOtlKymjQSnVAeXuA=";
+    hash = "sha256-hZB0tGHqS4MlpzQYwgfKM7XmVmsI5rWH65FkQWVppt0=";
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3 ];
-  buildInputs = with llvmPackages; [ libclang clang-unwrapped python3 ];
+  nativeBuildInputs = with llvmPackages; [
+    cmake
+    llvm.dev
+    llvm
+    python3
+  ];
+  buildInputs = with llvmPackages; [
+    libclang
+    clang-unwrapped
+    python3
+  ];
+
+  clang = llvmPackages.clang;
 
   cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${llvmPackages.llvm.dev}" ];
 
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \
-      --replace "'include-what-you-use'" "'$out/bin/include-what-you-use'"
+      --replace-fail "'include-what-you-use'" "'$out/bin/include-what-you-use'"
+
+
+    mv $out/bin/include-what-you-use $out/bin/.include-what-you-use-unwrapped
+    mv $out/bin/iwyu_tool.py $out/bin/.iwyu_tool.py-unwrapped
+    substituteAll ${./wrapper} $out/bin/include-what-you-use
+    ln -s $out/bin/include-what-you-use $out/bin/iwyu_tool.py
+    chmod +x $out/bin/include-what-you-use
+    patchShebangs $out/bin/include-what-you-use
   '';
 
   meta = with lib; {

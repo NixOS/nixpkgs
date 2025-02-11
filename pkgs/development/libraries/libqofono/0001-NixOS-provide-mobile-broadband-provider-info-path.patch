@@ -16,7 +16,7 @@ index b5877ed..455167c 100644
      QString provider = providerString;
  
 -    query.setFocus(QUrl("/usr/share/mobile-broadband-provider-info/serviceproviders.xml"));
-+    query.setFocus(QUrl("@mobile-broadband-provider-info@/share/mobile-broadband-provider-info/serviceproviders.xml"));
++    query.setFocus(QUrl("@mobileBroadbandProviderInfo@/share/mobile-broadband-provider-info/serviceproviders.xml"));
  
      if (provider.contains("\'")) {
          provider = provider.replace("\'", "&apos;");
@@ -25,7 +25,7 @@ index b5877ed..455167c 100644
  #ifdef QOFONO_PROVISIONING
      QXmlQuery query;
 -    query.setFocus(QUrl("/usr/share/mobile-broadband-provider-info/serviceproviders.xml"));
-+    query.setFocus(QUrl("@mobile-broadband-provider-info@/share/mobile-broadband-provider-info/serviceproviders.xml"));
++    query.setFocus(QUrl("@mobileBroadbandProviderInfo@/share/mobile-broadband-provider-info/serviceproviders.xml"));
  
      QString providerStr = provider;
      if (providerStr.contains("\'")) {

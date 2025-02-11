@@ -1,20 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.lighttpd.cgit;
   pathPrefix = optionalString (stringLength cfg.subdir != 0) ("/" + cfg.subdir);
-  configFile = pkgs.writeText "cgitrc"
-    ''
-      # default paths to static assets
-      css=${pathPrefix}/cgit.css
-      logo=${pathPrefix}/cgit.png
-      favicon=${pathPrefix}/favicon.ico
+  configFile = pkgs.writeText "cgitrc" ''
+    # default paths to static assets
+    css=${pathPrefix}/cgit.css
+    logo=${pathPrefix}/cgit.png
+    favicon=${pathPrefix}/favicon.ico
 
-      # user configuration
-      ${cfg.configText}
-    '';
+    # user configuration
+    ${cfg.configText}
+  '';
 in
 {
 
@@ -23,7 +27,7 @@ in
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         If true, enable cgit (fast web interface for git repositories) as a
         sub-service in lighttpd.
       '';
@@ -33,7 +37,7 @@ in
       default = "cgit";
       example = "";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         The subdirectory in which to serve cgit. The web application will be
         accessible at http://yourserver/''${subdir}
       '';
@@ -50,7 +54,7 @@ in
         '''
       '';
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:
         http://git.zx2c4.com/cgit/tree/cgitrc.5.txt
@@ -65,7 +69,11 @@ in
     environment.systemPackages = [ pkgs.cgit ];
 
     # declare module dependencies
-    services.lighttpd.enableModules = [ "mod_cgi" "mod_alias" "mod_setenv" ];
+    services.lighttpd.enableModules = [
+      "mod_cgi"
+      "mod_alias"
+      "mod_setenv"
+    ];
 
     services.lighttpd.extraConfig = ''
       $HTTP["url"] =~ "^/${cfg.subdir}" {

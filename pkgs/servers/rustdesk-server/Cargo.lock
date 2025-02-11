@@ -779,7 +779,7 @@ dependencies = [
 
 [[package]]
 name = "hbbs"
-version = "1.1.8"
+version = "1.1.12"
 dependencies = [
  "async-speed-limit",
  "async-trait",
@@ -1111,9 +1111,9 @@ dependencies = [
 
 [[package]]
 name = "mac_address"
-version = "1.1.3"
+version = "1.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df1d1bc1084549d60725ccc53a2bfa07f67fe4689fda07b05a36531f2988104a"
+checksum = "4863ee94f19ed315bf3bc00299338d857d4b5bc856af375cc97d237382ad3856"
 dependencies = [
  "nix",
  "winapi",

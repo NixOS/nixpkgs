@@ -1,26 +1,48 @@
-{ lib, fetchurl, buildDunePackage, cmdliner
-, rresult, astring, fmt, logs, bos, fpath, emile, uri
+{
+  lib,
+  buildDunePackage,
+  cmdliner,
+  functoria-runtime,
+  rresult,
+  astring,
+  fmt,
+  logs,
+  bos,
+  fpath,
+  emile,
+  uri,
+  alcotest,
 }:
 
-buildDunePackage rec {
-  pname   = "functoria";
-  version = "4.3.6";
+buildDunePackage {
+  pname = "functoria";
+  inherit (functoria-runtime) version src;
 
   minimalOCamlVersion = "4.08";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-${version}.tbz";
-    hash = "sha256-i/5sZHfxECoKYMdGje+U21GWxJ6dDZreVcQGtbuo4SE=";
-  };
+  propagatedBuildInputs = [
+    cmdliner
+    rresult
+    astring
+    fmt
+    logs
+    bos
+    fpath
+    emile
+    uri
+  ];
 
-  propagatedBuildInputs = [ cmdliner rresult astring fmt logs bos fpath emile uri ];
-
+  # Tests are not compatible with cmdliner 1.3
   doCheck = false;
+  checkInputs = [
+    alcotest
+    functoria-runtime
+  ];
 
   meta = with lib; {
-    description = "A DSL to organize functor applications";
-    homepage    = "https://github.com/mirage/functoria";
-    license     = licenses.isc;
+    description = "DSL to organize functor applications";
+    homepage = "https://github.com/mirage/functoria";
+    license = licenses.isc;
     maintainers = [ maintainers.vbgl ];
   };
 }

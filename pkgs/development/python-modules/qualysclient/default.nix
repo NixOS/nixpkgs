@@ -1,38 +1,42 @@
-{ lib
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, fetchFromGitHub
-, idna
-, lxml
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  certifi,
+  charset-normalizer,
+  fetchFromGitHub,
+  idna,
+  lxml,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "qualysclient";
   version = "0.0.4.8.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "woodtechie1428";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=__version__," 'version="${version}",'
+      --replace-fail "version=__version__," 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     charset-normalizer
     idna
@@ -47,9 +51,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "qualysclient"
-  ];
+  pythonImportsCheck = [ "qualysclient" ];
 
   meta = with lib; {
     description = "Python SDK for interacting with the Qualys API";

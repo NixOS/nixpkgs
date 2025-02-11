@@ -1,29 +1,26 @@
 # Setup hook for unittest.
+# shellcheck shell=bash
+
 echo "Sourcing unittest-check-hook"
 
 unittestCheckPhase() {
     echo "Executing unittestCheckPhase"
     runHook preCheck
 
-    eval "@pythonCheckInterpreter@ -m unittest discover $unittestFlagsArray"
+    local -a flagsArray=()
+
+    # Compatibility layer to the obsolete unittestFlagsArray
+    eval "flagsArray+=(${unittestFlagsArray[*]-})"
+
+    concatTo flagsArray unittestFlags
+    echoCmd 'unittest flags' "${flagsArray[@]}"
+    @pythonCheckInterpreter@ -m unittest discover "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing unittestCheckPhase"
 }
 
-if [ -z "${dontUseUnittestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
+if [[ -z "${dontUseUnittestCheck-}" ]] && [[ -z "${installCheckPhase-}" ]]; then
     echo "Using unittestCheckPhase"
-    preDistPhases+=" unittestCheckPhase"
-
-    # It's almost always the case that setuptoolsCheckPhase should not be ran
-    # when the unittestCheckHook is being ran
-    if [ -z "${useSetuptoolsCheck-}" ]; then
-        dontUseSetuptoolsCheck=1
-
-        # Remove command if already injected into preDistPhases
-        if [[ "$preDistPhases" =~ "setuptoolsCheckPhase" ]]; then
-            echo "Removing setuptoolsCheckPhase"
-            preDistPhases=${preDistPhases/setuptoolsCheckPhase/}
-        fi
-    fi
+    appendToVar preDistPhases unittestCheckPhase
 fi

@@ -1,15 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, twisted
-, pytest-twisted
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchPypi,
+  pyqt5,
+  twisted,
+  pytest-twisted,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qt5reactor";
   version = "0.6.3";
+  format = "setuptools";
+
+  # AttributeError: module 'configparser' has no attribute 'SafeConfigParser'
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

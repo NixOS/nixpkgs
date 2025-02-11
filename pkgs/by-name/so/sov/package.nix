@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch2
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, freetype
-, libglvnd
-, libxkbcommon
-, wayland
-, wayland-protocols
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  freetype,
+  gitUpdater,
+  libglvnd,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sov";
-  version = "0.93";
+  version = "0.94";
 
   src = fetchFromGitHub {
     owner = "milgra";
     repo = "sov";
     rev = finalAttrs.version;
-    hash = "sha256-Oc25ixrl0QX0jBBMV34BPAixyBikvevXJ1JNGZymPhg=";
+    hash = "sha256-JgLah21ye3G9jE3UTZu8r+nanwBDIQXmqv9iP1C+aUw=";
   };
 
   patches = [
@@ -34,11 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  strictDeps = true;
-
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -55,14 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+  strictDeps = true;
+
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    description = "Workspace overview app for sway";
     homepage = "https://github.com/milgra/sov";
+    description = "Workspace overview app for sway";
     license = lib.licenses.gpl3Only;
     mainProgram = "sov";
-    maintainers = with lib.maintainers; [ eclairevoyant ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
+    inherit (wayland.meta) platforms;
+    # sys/timerfd.h header inexistent
+    broken = stdenv.isDarwin;
   };
 })

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pass-wayland
-, coreutils
-, gnugrep
-, libnotify
-, pwgen
-, findutils
-, makeWrapper
-, wl-clipboard
-, wtype
-, wofi
-, extensions ? exts: []
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pass-wayland,
+  coreutils,
+  gnugrep,
+  libnotify,
+  pwgen,
+  findutils,
+  makeWrapper,
+  wl-clipboard,
+  wtype,
+  wofi,
+  extensions ? exts: [ ],
 }:
 
 let
@@ -29,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wofi-pass";
-  version = "23.1.2";
+  version = "24.1.0";
 
   src = fetchFromGitHub {
     owner = "schmidtandreas";
     repo = "wofi-pass";
     rev = "v${version}";
-    sha256 = "sha256-Z1a+nfnL6NXhufpCU7VIkwuifoS88Pf9qI8GCuP/Zqc=";
+    sha256 = "sha256-oRGDhr28UQjr+g//fWcLKWXqKSsRUWtdh39UMFSaPfw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A script to make wofi work with password-store";
+    description = "Script to make wofi work with password-store";
     homepage = "https://github.com/schmidtandreas/wofi-pass";
     maintainers = with lib.maintainers; [ akechishiro ];
     license = lib.licenses.gpl2Plus;

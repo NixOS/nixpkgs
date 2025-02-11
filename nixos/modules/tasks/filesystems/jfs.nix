@@ -1,12 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
-  inInitrd = any (fs: fs == "jfs") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.jfs or false;
 in
 {
-  config = mkIf (any (fs: fs == "jfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.jfs or false) {
 
     system.fsPackages = [ pkgs.jfsutils ];
 

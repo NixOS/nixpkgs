@@ -1,11 +1,15 @@
-{ lib, buildNimPackage, fetchFromSourcehut }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromSourcehut,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "base45";
   version = "20230124";
   src = fetchFromSourcehut {
     owner = "~ehmry";
-    repo = finalAttrs.pname;
+    repo = "base45";
     rev = finalAttrs.version;
     hash = "sha256-9he+14yYVGt2s1IuRLPRsv23xnJzERkWRvIHr3PxFYk=";
   };

@@ -1,21 +1,41 @@
-{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
-, writeShellScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libevent,
+  openssl,
+  zlib,
+  torsocks,
+  libseccomp,
+  systemd,
+  libcap,
+  xz,
+  zstd,
+  scrypt,
+  nixosTests,
+  writeShellScript,
 
-# for update.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+  # for update.nix
+  writeScript,
+  common-updater-scripts,
+  bash,
+  coreutils,
+  curl,
+  gnugrep,
+  gnupg,
+  gnused,
+  nix,
 }:
 let
   tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
-    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
+    PATH="${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+        openssl
+      ]
+    }"
     pem="$(openssl genpkey -algorithm x25519)"
 
     printf private_key=descriptor:x25519:
@@ -30,18 +50,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.8.9";
+  version = "0.4.8.14";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Wbt9iJD2ExtM5TRPPc6l3rIYK39PEP8MtOTYHxGyz2U=";
+    sha256 = "sha256-UEfh3tEtmqxOuFj3Y0pidxTdWM6ZBT1RdpGkswSmbRA=";
   };
 
-  outputs = [ "out" "geoip" ];
+  outputs = [
+    "out"
+    "geoip"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
-    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+  buildInputs =
+    [
+      libevent
+      openssl
+      zlib
+      xz
+      zstd
+      scrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+      systemd
+      libcap
+    ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
@@ -51,12 +86,13 @@ stdenv.mkDerivation rec {
     # https://gitlab.torproject.org/tpo/onion-services/onion-support/-/wikis/Documentation/PoW-FAQ#compiling-c-tor-with-the-pow-defense
     [ "--enable-gpl" ]
     ++
-    # cross compiles correctly but needs the following
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+      # cross compiles correctly but needs the following
+      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
     ++
-    # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
-    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]
-  ;
+      # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
+      lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        "--disable-seccomp"
+      ];
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -70,14 +106,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # disable tests on aarch64-darwin, the following tests fail there:
-  # oom/circbuf: [forking]
-  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
-  #   [circbuf FAILED]
-  # oom/streambuf: [forking]
-  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
-  #   [streambuf FAILED]
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  # disable tests on linux aarch32
+  # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
@@ -100,7 +131,7 @@ stdenv.mkDerivation rec {
         gnugrep
         gnused
         nix
-      ;
+        ;
     };
   };
 
@@ -118,10 +149,16 @@ stdenv.mkDerivation rec {
       the TCP protocol.
     '';
 
-    license = with licenses; [ bsd3 gpl3Only ];
+    license = with licenses; [
+      bsd3
+      gpl3Only
+    ];
 
-    maintainers = with maintainers;
-      [ thoughtpolice joachifm prusnak ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      joachifm
+      prusnak
+    ];
     platforms = platforms.unix;
   };
 }

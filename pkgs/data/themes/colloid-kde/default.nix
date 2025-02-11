@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  kdeclarative,
+  plasma-framework,
+  plasma-workspace,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -18,12 +19,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-AYH9fW20/p+mq6lxR1lcCV1BQ/kgcsjHncpMvYWXnWA=";
   };
 
-  # Propagate sddm theme dependencies to user env otherwise sddm does
-  # not find them. Putting them in buildInputs is not enough.
-  propagatedUserEnvPkgs = [
-    kdeclarative.bin
-    plasma-framework
-    plasma-workspace
+  outputs = [
+    "out"
+    "sddm"
   ];
 
   postPatch = ''
@@ -34,12 +32,12 @@ stdenvNoCC.mkDerivation rec {
       --replace '$HOME/.config' $out/share
 
     substituteInPlace sddm/install.sh \
-      --replace /usr $out \
+      --replace /usr $sddm \
       --replace '$(cd $(dirname $0) && pwd)' . \
       --replace '"$UID" -eq "$ROOT_UID"' true
 
     substituteInPlace sddm/Colloid/Main.qml \
-      --replace /usr $out
+      --replace /usr $sddm
   '';
 
   installPhase = ''
@@ -50,17 +48,27 @@ stdenvNoCC.mkDerivation rec {
     name= HOME="$TMPDIR" \
     ./install.sh --dest $out/share/themes
 
-    mkdir -p $out/share/sddm/themes
+    mkdir -p $sddm/share/sddm/themes
     cd sddm
     source install.sh
 
     runHook postInstall
   '';
 
+  postFixup = ''
+    # Propagate sddm theme dependencies to user env otherwise sddm
+    # does not find them. Putting them in buildInputs is not enough.
+
+    mkdir -p $sddm/nix-support
+
+    printWords ${kdeclarative.bin} ${plasma-framework} ${plasma-workspace} \
+      >> $sddm/nix-support/propagated-user-env-packages
+  '';
+
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A clean and concise theme for KDE Plasma desktop";
+    description = "Clean and concise theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/Colloid-kde-theme";
     license = licenses.gpl3Only;
     platforms = platforms.all;

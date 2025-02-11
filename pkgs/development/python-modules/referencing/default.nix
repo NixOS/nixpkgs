@@ -1,43 +1,43 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, jsonschema
-, pytest-subtests
-, pytestCheckHook
-, pythonOlder
-, rpds-py
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  jsonschema,
+  pytest-subtests,
+  pytestCheckHook,
+  pythonOlder,
+  rpds-py,
+  typing-extensions,
 }:
-
 
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.30.2";
-    format = "pyproject";
+    version = "0.36.1";
+    pyproject = true;
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "python-jsonschema";
       repo = "referencing";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-C2gKjoaMcUWz/QOsqpv4TkozQyI+zEIQf3GMf5w40aw=";
+      hash = "sha256-kMYn41tlBMPb2hMMwHg+o6sNrwp3CHRQwmBzQHsgG1I=";
     };
 
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-    nativeBuildInputs = [
+    build-system = [
       hatch-vcs
       hatchling
     ];
 
-    propagatedBuildInputs = [
+    dependencies = [
       attrs
       rpds-py
+      typing-extensions
     ];
 
     nativeCheckInputs = [
@@ -46,22 +46,20 @@ let
       pytestCheckHook
     ];
 
-    # avoid infinite recursion with jsonschema
+    # Avoid infinite recursion with jsonschema
     doCheck = false;
 
     passthru.tests.referencing = self.overridePythonAttrs { doCheck = true; };
 
-    pythonImportsCheck = [
-      "referencing"
-    ];
+    pythonImportsCheck = [ "referencing" ];
 
     meta = with lib; {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
-      changelog = "https://github.com/python-jsonschema/referencing/blob/${version}/CHANGELOG.rst";
+      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
       license = licenses.mit;
       maintainers = with maintainers; [ fab ];
     };
   };
 in
-  self
+self

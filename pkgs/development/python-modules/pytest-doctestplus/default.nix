@@ -1,39 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, packaging
-, pytest
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitMinimal,
+  numpy,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.0.0";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9lBEDcrt4T7W19pzv7SsWF1AqAREujVC0+buzbJ11J8=";
+  src = fetchFromGitHub {
+    owner = "scientific-python";
+    repo = "pytest-doctestplus";
+    tag = "v${version}";
+    hash = "sha256-jXT+b0aMZo8byAXNR4WcmNkMNYtwkTwsthPVXvAO2K8=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pytest_doctestplus/plugin.py \
+      --replace-fail '"git"' '"${lib.getExe gitMinimal}"'
+  '';
+
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
+  buildInputs = [ pytest ];
+
+  dependencies = [
+    packaging
   ];
 
-  propagatedBuildInputs = [
-    packaging
-    setuptools
-  ];
+  pythonImportsCheck = [ "pytest_doctestplus" ];
 
   nativeCheckInputs = [
     numpy
@@ -55,6 +64,6 @@ buildPythonPackage rec {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

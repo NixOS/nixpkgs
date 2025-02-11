@@ -1,6 +1,8 @@
-{ lib, stdenv
-, makeWrapper
-, mrustc
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  mrustc,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A minimalist builder for Rust";
+    description = "Minimalist builder for Rust";
+    mainProgram = "minicargo";
     longDescription = ''
       A minimalist builder for Rust, similar to Cargo but written in C++.
       Designed to work with mrustc to build Rust projects
@@ -33,7 +36,10 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ progval r-burns ];
+    maintainers = with maintainers; [
+      progval
+      r-burns
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

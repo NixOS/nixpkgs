@@ -1,55 +1,60 @@
-{ lib
-, stdenv
-, aiobotocore
-, aiohttp
-, buildPythonPackage
-, docutils
-, fetchPypi
-, fsspec
-, pythonOlder
+{
+  lib,
+  aiobotocore,
+  aiohttp,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  flask,
+  flask-cors,
+  fsspec,
+  moto,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2023.10.0";
-  format = "setuptools";
+  version = "2024.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xA8jjMyf7/8/bQnUtXYqvWyRO6QuGjKJdrVNA4kBuDU=";
+    hash = "sha256-Gw86j1lGzKW6KYcdZ5KrHkUo7XYjJ9iu+vyBtzuZ/VY=";
   };
 
-  postPatch = ''
-    sed -i 's/fsspec==.*/fsspec/' requirements.txt
-  '';
+  buildInputs = [ docutils ];
 
-  buildInputs = [
-    docutils
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiobotocore
     aiohttp
     fsspec
   ];
 
-  # Depends on `moto` which has a long dependency chain with exact
-  # version requirements that can't be made to work with current
-  # pythonPackages.
-  doCheck = false;
+  pythonImportsCheck = [ "s3fs" ];
 
-  pythonImportsCheck = [
-    "s3fs"
+  nativeCheckInputs = [
+    flask
+    flask-cors
+    moto
+    pytestCheckHook
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A Pythonic file interface for S3";
+  disabledTests = [
+    # require network access
+    "test_async_close"
+  ];
+
+  meta = {
+    description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
     changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

@@ -1,35 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-I0CC/dcDnLdQxkTi03/Ck+c0XqOl8nmrrC9PyWLZuZY=";
+  src = fetchFromGitHub {
+    owner = "mayeut";
+    repo = "pybase64";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-Yl0P9Ygy6IirjSFrutl+fmn4BnUL1nXzbQgADNQFg3I=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
-  pythonImportsCheck = [
-    "pybase64"
-  ];
+  pythonImportsCheck = [ "pybase64" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast Base64 encoding/decoding";
+    mainProgram = "pybase64";
     homepage = "https://github.com/mayeut/pybase64";
     changelog = "https://github.com/mayeut/pybase64/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

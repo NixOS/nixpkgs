@@ -1,25 +1,26 @@
-{ stdenv
-, buildPackages
-, lib
-, fetchzip
-, gpm
-, libffi
-, libGL
-, libX11
-, libXext
-, libXpm
-, libXrandr
-, ncurses
+{
+  stdenv,
+  buildPackages,
+  lib,
+  fetchzip,
+  gpm,
+  libffi,
+  libGL,
+  libX11,
+  libXext,
+  libXpm,
+  libXrandr,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fbc";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchzip {
     # Bootstrap tarball has sources pretranslated from FreeBASIC to C
     url = "https://github.com/freebasic/fbc/releases/download/${version}/FreeBASIC-${version}-source-bootstrap.tar.xz";
-    hash = "sha256-7FmyEfykOAgHaL2AG8zIgftzOszhwVzNKEqskiLGpfk=";
+    hash = "sha256-LBROv3m1DrEfSStMbNuLC+fldYNfSS+D09bJyNMNPP0=";
   };
 
   postPatch = ''
@@ -34,17 +35,19 @@ stdenv.mkDerivation rec {
     buildPackages.libffi
   ];
 
-  buildInputs = [
-    ncurses
-    libffi
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    gpm
-    libGL
-    libX11
-    libXext
-    libXpm
-    libXrandr
-  ];
+  buildInputs =
+    [
+      ncurses
+      libffi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      gpm
+      libGL
+      libX11
+      libXext
+      libXpm
+      libXrandr
+    ];
 
   enableParallelBuilding = true;
 
@@ -72,15 +75,20 @@ stdenv.mkDerivation rec {
       BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld
     make rtlib -j$buildJobs \
       "FBC=$PWD/bin/fbc${stdenv.buildPlatform.extensions.executable} -i $PWD/inc" \
-      ${if (stdenv.buildPlatform == stdenv.hostPlatform) then
-        "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
-      else
-        "TARGET=${stdenv.hostPlatform.config}"
+      ${
+        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+          "BUILD_PREFIX=${buildPackages.stdenv.cc.targetPrefix} LD=${buildPackages.stdenv.cc.targetPrefix}ld"
+        else
+          "TARGET=${stdenv.hostPlatform.config}"
       }
 
     echo Install patched build compiler and host rtlib to local directory
     make install-compiler prefix=$PWD/patched-fbc
-    make install-rtlib prefix=$PWD/patched-fbc ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) "TARGET=${stdenv.hostPlatform.config}"}
+    make install-rtlib prefix=$PWD/patched-fbc ${
+      lib.optionalString (
+        stdenv.buildPlatform != stdenv.hostPlatform
+      ) "TARGET=${stdenv.hostPlatform.config}"
+    }
     make clean
 
     echo Compile patched host everything with previous patched stage
@@ -122,7 +130,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.freebasic.net/";
-    description = "A multi-platform BASIC Compiler";
+    description = "Multi-platform BASIC Compiler";
+    mainProgram = "fbc";
     longDescription = ''
       FreeBASIC is a completely free, open-source, multi-platform BASIC compiler (fbc),
       with syntax similar to (and support for) MS-QuickBASIC, that adds new features

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, guile
-, autoreconfHook
-, guile-gcrypt
-, guile-lzma
-, guile-quickcheck
-, makeWrapper
-, pkg-config
-, zlib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  guile,
+  autoreconfHook,
+  guile-gcrypt,
+  guile-lzma,
+  guile-quickcheck,
+  makeWrapper,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     guile-lzma
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     guile-quickcheck

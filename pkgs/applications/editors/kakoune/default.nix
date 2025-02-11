@@ -1,30 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kakoune-unwrapped";
-  version = "2023.08.05";
+  version = "2024.05.18";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "v${version}";
-    sha256 = "sha256-RR3kw39vEjsg+6cIY6cK2i3ecGHlr1yzuBKaDtGlOGo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1nYSVbvQ4tz1r8p7zCD6w/79haqpelb15qva9r3Fwew=";
   };
-  patches = [
-    # Use explicit target types for gather calls to bypass clang regression
-    #
-    # Since clang-16 there has been a regression in the P0522R0 support.
-    # (Bug report at https://github.com/llvm/llvm-project/issue/63281)
-    #
-    # Closes mawww/kakoune#4892
-    (fetchpatch {
-      url = "https://github.com/mawww/kakoune/commit/7577fa1b668ea81eb9b7b9af690a4161187129dd.patch";
-      hash = "sha256-M0jKaEDhkpvX+n7k8Jf2lWaRNy8bqZ1kRHR4eG4npss=";
-    })
+  makeFlags = [
+    "debug=no"
+    "PREFIX=${placeholder "out"}"
   ];
-  makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
 
-  preConfigure = ''
-    export version="v${version}"
+  postPatch = ''
+    echo "v${finalAttrs.version}" >.version
   '';
 
   enableParallelBuilding = true;
@@ -45,10 +40,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://kakoune.org/";
-    description = "A vim inspired text editor";
+    description = "Vim inspired text editor";
     license = licenses.publicDomain;
     mainProgram = "kak";
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ philiptaron ];
     platforms = platforms.unix;
   };
-}
+})

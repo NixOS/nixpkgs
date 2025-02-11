@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-rawVersion="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/KhronosGroup/VK-GL-CTS/releases" | jq -r  'map(select(.tag_name | startswith("vulkan-cts-"))) | .[0].tag_name')"
+rawVersion="$(curl ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} -s "https://api.github.com/repos/KhronosGroup/VK-GL-CTS/releases" | jq -r  'map(select(.tag_name | startswith("vulkan-cts-"))) | .[0].tag_name')"
 basedir="$(git rev-parse --show-toplevel)"
 
 cd "$basedir"

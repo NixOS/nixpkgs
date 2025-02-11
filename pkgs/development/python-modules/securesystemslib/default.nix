@@ -1,24 +1,25 @@
-{ lib
-, asn1crypto
-, azure-identity
-, azure-keyvault-keys
-, boto3
-, botocore
-, buildPythonPackage
-, cryptography
-, ed25519
-, fetchFromGitHub
-, google-cloud-kms
-, hatchling
-, pynacl
-, pyspx
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  azure-identity,
+  azure-keyvault-keys,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cryptography,
+  ed25519,
+  fetchFromGitHub,
+  google-cloud-kms,
+  hatchling,
+  pynacl,
+  pyspx,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "0.30.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,18 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Jqw65VTMLA/X7VQGxN0BlTzF/lxBYirDKBf+xI9cfhg=";
+    tag = "v${version}";
+    hash = "sha256-HAYsmsW5GKLmfq9FVVsME+tE7Qg0jx9YIWw1UQWwV2c=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  passthru.optional-dependencies = {
-    PySPX = [
-      pyspx
-    ];
+  optional-dependencies = {
+    PySPX = [ pyspx ];
     awskms = [
       boto3
       botocore
@@ -48,9 +45,7 @@ buildPythonPackage rec {
       azure-keyvault-keys
       cryptography
     ];
-    crypto = [
-      cryptography
-    ];
+    crypto = [ cryptography ];
     gcpkms = [
       cryptography
       google-cloud-kms
@@ -58,11 +53,9 @@ buildPythonPackage rec {
     hsm = [
       asn1crypto
       cryptography
-    #   pykcs11
+      #   pykcs11
     ];
-    pynacl = [
-      pynacl
-    ];
+    pynacl = [ pynacl ];
     # Circular dependency
     # sigstore = [
     #   sigstore
@@ -72,11 +65,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "securesystemslib"
-  ];
+  pythonImportsCheck = [ "securesystemslib" ];
 
   disabledTestPaths = [
     # pykcs11 is not available
@@ -88,9 +79,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cryptographic and general-purpose routines";
     homepage = "https://github.com/secure-systems-lab/securesystemslib";
-    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
-

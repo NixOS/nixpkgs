@@ -1,25 +1,28 @@
-{ pkgs
-, buildPythonPackage
-, django
-, fetchPypi
-, pythonOlder
+{
+  pkgs,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-leaflet";
-  version = "0.29.0";
-  format = "setuptools";
+  version = "0.31.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-L23Ixxh/0i5itvK3tC7thpIPgb7DEqplSYHr5byOCGY=";
+    pname = "django_leaflet";
+    inherit version;
+    hash = "sha256-+yt1+Er/YNQFhlkwDzGnEVVMZdEout5fqAiGN/sHUfc=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   # The tests seem to be impure.
   # They are throwing a error about unset configs:
@@ -34,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/makinacorpus/django-leaflet";
     changelog = "https://github.com/makinacorpus/django-leaflet/blob/${version}/CHANGES";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
   };
 }

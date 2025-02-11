@@ -1,14 +1,15 @@
-{ cacert
-, cmake
-, fetchFromGitHub
-, git
-, lib
-, lld
-, ninja
-, nix-update-script
-, perl
-, python3
-, stdenv
+{
+  cacert,
+  cmake,
+  fetchFromGitHub,
+  git,
+  lib,
+  lld,
+  ninja,
+  nix-update-script,
+  perl,
+  python3,
+  stdenv,
 }:
 
 let
@@ -125,17 +126,18 @@ stdenv.mkDerivation {
     "-DLLVM_USE_LINKER=lld"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/codon/*.dylib $out/lib/
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A high-performance, zero-overhead, extensible Python compiler using LLVM";
+    description = "High-performance, zero-overhead, extensible Python compiler using LLVM";
     homepage = "https://docs.exaloop.io/codon";
-    maintainers = [ lib.maintainers.paveloom ];
+    maintainers = [ ];
     license = lib.licenses.bsl11;
     platforms = lib.platforms.all;
+    broken = true; # `codon-llvm` build fails on darwin and linux
   };
 }

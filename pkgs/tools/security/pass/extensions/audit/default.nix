@@ -1,17 +1,22 @@
-{ lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, gnupg }:
+{
+  lib,
+  stdenv,
+  pass,
+  fetchFromGitHub,
+  python3,
+  gnupg,
+}:
 
-let
-  pythonEnv = pythonPackages.python.withPackages (p: [ p.requests p.setuptools p.zxcvbn ]);
-
-in stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pass-audit";
   version = "1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-audit";
     rev = "v${version}";
-    sha256 = "sha256-xigP8LxRXITLF3X21zhWx6ooFNSTKGv46yFSt1dd4vs=";
+    hash = "sha256-xigP8LxRXITLF3X21zhWx6ooFNSTKGv46yFSt1dd4vs=";
   };
 
   patches = [
@@ -21,32 +26,48 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace audit.bash \
-      --replace 'python3' "${pythonEnv}/bin/python3"
-    substituteInPlace Makefile \
-      --replace "install --root" "install --prefix ''' --root"
+      --replace-fail python3 "${lib.getExe python3}"
+    rm Makefile
+    patchShebangs audit.bash
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  buildInputs = [ pythonEnv ];
-  nativeBuildInputs = [ makeWrapper ];
+  build-system = with python3.pkgs; [ setuptools ];
+  dependencies = with python3.pkgs; [
+    requests
+    setuptools
+    zxcvbn
+  ];
 
   # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
-  doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [ pythonPackages.green pass gnupg ];
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [
+    python3.pkgs.green
+    pass
+    gnupg
+  ];
   checkPhase = ''
-    ${pythonEnv}/bin/python3 setup.py green -q
+    python3 -m green -q
   '';
 
-  installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
   postInstall = ''
+    mkdir -p $out/lib/password-store/extensions
+    install -m777 audit.bash $out/lib/password-store/extensions/audit.bash
+    cp -r share $out/
+    buildPythonPath "$out $dependencies"
     wrapProgram $out/lib/password-store/extensions/audit.bash \
-      --prefix PYTHONPATH : "$out/lib/${pythonEnv.libPrefix}/site-packages" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
       --run "export COMMAND"
   '';
 
+  pythonImportsCheck = [ "pass_audit" ];
+
   meta = with lib; {
-    description = "Pass extension for auditing your password repository.";
+    description = "Pass extension for auditing your password repository";
     homepage = "https://github.com/roddhjav/pass-audit";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

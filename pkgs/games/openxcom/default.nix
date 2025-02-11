@@ -1,29 +1,30 @@
-{ boost
-, cmake
-, fetchFromGitHub
-, lib
-, libGLU
-, libGL
-, openssl
-, pkg-config
-, SDL
-, SDL_image
-, SDL_mixer
-, SDL_gfx
-, stdenv
-, yaml-cpp
-, zlib
+{
+  boost,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libGLU,
+  libGL,
+  openssl,
+  pkg-config,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_gfx,
+  stdenv,
+  yaml-cpp,
+  zlib,
 }:
 
 stdenv.mkDerivation {
   pname = "openxcom";
-  version = "1.0.0.2023.08.12";
+  version = "1.0.0.2024.02.28";
 
   src = fetchFromGitHub {
     owner = "OpenXcom";
     repo = "OpenXcom";
-    rev = "bd632cc8569a57fdc3b68ce53f6ea850422ec5ac";
-    hash = "sha256-ouYZ4rAEluqeP+ZUrbEZwCpXCw0cZLWsf1GbIE3jaTc=";
+    rev = "e2c5a1b45c33957ce7e206207c5fb752c1e79ae1";
+    hash = "sha256-2G2dSvoDdacdYsXS51h3aGLCCjbHwcvD4CNnQIH/J6A=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +47,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Open source clone of UFO: Enemy Unknown";
+    mainProgram = "openxcom";
     homepage = "https://openxcom.org";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ cpages ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

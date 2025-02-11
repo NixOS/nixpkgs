@@ -1,54 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pytestCheckHook
-, filelock
-, execnet
-, pytest
-, psutil
-, setproctitle
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  filelock,
+  execnet,
+  pytest,
+  psutil,
+  setproctitle,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.3.1";
+  version = "3.6.1";
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1e4FIOsbe8ylCmClGKt6dweZKBLFeBmPi0T9+seOjJM=";
+    pname = "pytest_xdist";
+    inherit version;
+    hash = "sha256-6tFWpNsjHux2lzf1dmjvWKIISjSy5VxKj6INhhEHMA0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    execnet
-  ];
+  dependencies = [ execnet ];
 
   nativeCheckInputs = [
     filelock
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     psutil = [ psutil ];
     setproctitle = [ setproctitle ];
   };
 
-  pytestFlagsArray = [
-    # pytest can already use xdist at this point
-    "--numprocesses=$NIX_BUILD_CORES"
-  ];
+  # pytest can already use xdist at this point
+  preCheck = ''
+    appendToVar pytestFlags "--numprocesses=$NIX_BUILD_CORES"
+  '';
 
   # access file system
   disabledTests = [
@@ -60,6 +60,8 @@ buildPythonPackage rec {
     "test_rsyncignore"
     # flakey
     "test_internal_errors_propagate_to_controller"
+    # https://github.com/pytest-dev/pytest-xdist/issues/985
+    "test_workqueue_ordered_by_size"
   ];
 
   setupHook = ./setup-hook.sh;

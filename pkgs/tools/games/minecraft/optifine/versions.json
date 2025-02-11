@@ -1,7 +1,19 @@
 {
+    "optifine_1_21_3": {
+        "version": "1.21.3_HD_U_J2",
+        "sha256": "0yv6f6vaxsqxkc4hh4kvfdr7gxi197gzv82w7pwi927xyvgsl5ir"
+    },
+    "optifine_1_21_1": {
+        "version": "1.21.1_HD_U_J1",
+        "sha256": "10lhnxang1zpvc30brg8ansm5b2snmf8x14g5pmbs280vca2svfv"
+    },
+    "optifine_1_20_4": {
+        "version": "1.20.4_HD_U_I7",
+        "sha256": "1zgz5cd2v299hayk5qx639nknd3mcz58y59rpik8srx48da8jw14"
+    },
     "optifine_1_20_1": {
-        "version": "1.20.1_HD_U_I5",
-        "sha256": "0mykd1lg37p59c168gi6qpykphqmbzdx3bs4sk9d8kg21aw7ijrp"
+        "version": "1.20.1_HD_U_I6",
+        "sha256": "0l66pz4hy42qxv9a2jlq1hd7jiiysnv54g9gk1dfbwpd19kwnrqb"
     },
     "optifine_1_19_4": {
         "version": "1.19.4_HD_U_I4",
@@ -148,7 +160,7 @@
         "sha256": "18lzyh639mi7r2hzwnmxv0a6v1ay7dk9bzasvwff82dxq0y9zi7m"
     },
     "optifine-latest": {
-        "version": "1.20.1_HD_U_I5",
-        "sha256": "0mykd1lg37p59c168gi6qpykphqmbzdx3bs4sk9d8kg21aw7ijrp"
+        "version": "1.21.3_HD_U_J2",
+        "sha256": "0yv6f6vaxsqxkc4hh4kvfdr7gxi197gzv82w7pwi927xyvgsl5ir"
     }
 }

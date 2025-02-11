@@ -1,4 +1,13 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests, fetchNpmDeps, npmHooks }:
+{
+  pkgs,
+  nodejs,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nixosTests,
+  fetchNpmDeps,
+  npmHooks,
+}:
 
 with python3Packages;
 
@@ -9,7 +18,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-kZNf7Rlb1DZtQe4dK1B283OkzQQcCX+pbvZzfL65gsA=";
   };
 
@@ -68,7 +77,8 @@ buildPythonApplication rec {
   passthru.tests = { inherit (nixosTests) isso; };
 
   meta = with lib; {
-    description = "A commenting server similar to Disqus";
+    description = "Commenting server similar to Disqus";
+    mainProgram = "isso";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];

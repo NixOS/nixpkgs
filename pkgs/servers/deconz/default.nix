@@ -1,42 +1,46 @@
-{ stdenv
-, lib
-, fetchurl
-, wrapQtAppsHook
-, dpkg
-, autoPatchelfHook
-, qtserialport
-, qtwebsockets
-, openssl
-, libredirect
-, makeWrapper
-, gzip
-, gnutar
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  wrapQtAppsHook,
+  dpkg,
+  autoPatchelfHook,
+  qtserialport,
+  qtwebsockets,
+  openssl,
+  libredirect,
+  makeWrapper,
+  gzip,
+  gnutar,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deconz";
-  version = "2.23.00";
+  version = "2.28.1";
 
   src = fetchurl {
     url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
-    sha256 = "sha256-TMftm1fz8c8ndSyA3HUd7JWT0DINxvbdUSDrmVMwmws=";
+    sha256 = "sha256-uHbo0XerUx81o7gXK570iJKiotkQ0aCXUVcyYelMu4k=";
   };
 
-  devsrc = fetchurl {
-    url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-dev-${version}.deb";
-    sha256 = "sha256-uW5iF3rvFlowFhMBVDTOHkJ2K4LBgAxxC79tXpMhy5U=";
-  };
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+    wrapQtAppsHook
+  ];
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper wrapQtAppsHook ];
-
-  buildInputs = [ qtserialport qtwebsockets openssl ];
+  buildInputs = [
+    qtserialport
+    qtwebsockets
+    openssl
+  ];
 
   unpackPhase = ''
     runHook preUnpack
 
     dpkg -x $src ./deconz-src
-    dpkg -x $devsrc ./deconz-devsrc
 
     runHook postUnpack
   '';
@@ -46,7 +50,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out"
     cp -r deconz-src/* "$out"
-    cp -r deconz-devsrc/* "$out"
 
     # Flatten /usr and manually merge lib/ and usr/lib/, since mv refuses to.
     mv "$out/lib" "$out/orig_lib"
@@ -68,7 +71,12 @@ stdenv.mkDerivation rec {
         wrapProgram "$p" \
             --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
             --set NIX_REDIRECTS "/usr/share=$out/share:/usr/bin=$out/bin" \
-            --prefix PATH : "${lib.makeBinPath [ gzip gnutar ]}"
+            --prefix PATH : "${
+              lib.makeBinPath [
+                gzip
+                gnutar
+              ]
+            }"
     done
 
     runHook postInstall

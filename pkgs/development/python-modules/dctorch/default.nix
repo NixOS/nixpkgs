@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, numpy
-, scipy
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  numpy,
+  scipy,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -17,19 +18,17 @@ buildPythonPackage rec {
     hash = "sha256-TmfLAkiofrQNWYBhIlY4zafbZPgFftISCGloO/rlEG4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     numpy
     scipy
     torch
   ];
 
-  pythonImportsCheck = [
-    "dctorch"
-  ];
+  pythonImportsCheck = [ "dctorch" ];
 
   doCheck = false; # no tests
 

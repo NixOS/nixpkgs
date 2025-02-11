@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, makeWrapper
-, pkg-config
-, lrzsz
-, ncurses
-, libiconv
-, IOKit
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  lrzsz,
+  ncurses,
+  libiconv,
+  IOKit,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+fKvHrApDXm94LItXv+xSDIE5zD7rTY5IeNSuzQglpg=";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ libiconv IOKit ];
+  buildInputs =
+    [ ncurses ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      IOKit
+    ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 
@@ -51,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Modem control and terminal emulation program";
     homepage = "https://salsa.debian.org/minicom-team/minicom";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     longDescription = ''
       Minicom is a menu driven communications program. It emulates ANSI
       and VT102 terminals. It has a dialing directory and auto zmodem

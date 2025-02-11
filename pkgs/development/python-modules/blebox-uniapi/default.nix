@@ -1,35 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, semver
-, deepmerge
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  semver,
+  deepmerge,
+  jmespath,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "blebox";
     repo = "blebox_uniapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cLSI6wa3gHE0QkSVVWMNpb5fyQy0TLDNSqOuGlDJGJc=";
+    tag = "v${version}";
+    hash = "sha256-johTs1AGvC6mGasK87ijhBNbHb1m36Ep9TR8XPG35d0=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
+    jmespath
     semver
   ];
 
@@ -39,9 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "blebox_uniapi"
-  ];
+  pythonImportsCheck = [ "blebox_uniapi" ];
 
   meta = with lib; {
     changelog = "https://github.com/blebox/blebox_uniapi/blob/v${version}/HISTORY.rst";

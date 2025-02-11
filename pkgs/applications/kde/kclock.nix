@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kirigami-addons
-, kirigami2
-, knotifications
-, plasma-framework
-, qtmultimedia
-, qtquickcontrols2
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  knotifications,
+  plasma-framework,
+  qtmultimedia,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {
@@ -41,6 +42,6 @@ mkDerivation rec {
     description = "Clock app for plasma mobile";
     homepage = "https://invent.kde.org/plasma-mobile/kclock";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

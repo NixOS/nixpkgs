@@ -1,23 +1,35 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, curl, sqlite
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  curl,
+  sqlite,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-index";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-index";
     rev = "v${version}";
-    hash = "sha256-WPWd2aMuP4L17UDFz7SI6lqyrCzrPV8c88vGyO6r6jk=";
+    hash = "sha256-r3Vg9ox953HdUp5Csxd2DYUyBe9u61fmA94PpcAZRqo=";
   };
 
-  cargoHash = "sha256-zZhQ3pOid7BCGzcyCrl6sDm0q6IEVKF7K+d6nVs9flk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BKVxtd+gbCHzpnr5LZmKMUMEEZvsZMT0AdlfrLpMYpc=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl curl sqlite ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [
+    openssl
+    curl
+    sqlite
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     substituteInPlace command-not-found.sh \
@@ -26,10 +38,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A files database for nixpkgs";
+    description = "Files database for nixpkgs";
     homepage = "https://github.com/nix-community/nix-index";
     changelog = "https://github.com/nix-community/nix-index/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ bennofs figsoda ncfavier ];
+    maintainers = with maintainers; [
+      bennofs
+      figsoda
+      ncfavier
+    ];
   };
 }

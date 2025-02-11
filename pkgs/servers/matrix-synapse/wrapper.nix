@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, makeWrapper
-, matrix-synapse-unwrapped
-, extras ? [
-    "postgres"
-    "url-preview"
-    "user-search"
-  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd"
-, plugins ? [ ]
-, ...
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  matrix-synapse-unwrapped,
+  extras ?
+    [
+      "postgres"
+      "url-preview"
+      "user-search"
+    ]
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd",
+  plugins ? [ ],
+  ...
 }:
 
 let
-  extraPackages = lib.concatMap (extra: matrix-synapse-unwrapped.optional-dependencies.${extra}) (lib.unique extras);
+  extraPackages = lib.concatMap (extra: matrix-synapse-unwrapped.optional-dependencies.${extra}) (
+    lib.unique extras
+  );
 
-  pluginsEnv = matrix-synapse-unwrapped.python.buildEnv.override {
-    extraLibs = plugins;
+  pythonEnv = matrix-synapse-unwrapped.python.buildEnv.override {
+    extraLibs = extraPackages ++ plugins;
   };
 
-  searchPath = lib.makeSearchPathOutput "lib" matrix-synapse-unwrapped.python.sitePackages (extraPackages ++ [ pluginsEnv ]);
+  searchPath = "${pythonEnv}/${matrix-synapse-unwrapped.python.sitePackages}";
 in
 stdenv.mkDerivation {
   name = (lib.appendToName "wrapped" matrix-synapse-unwrapped).name;
@@ -39,6 +44,9 @@ stdenv.mkDerivation {
     unwrapped = matrix-synapse-unwrapped;
 
     # for backward compatibility
-    inherit (matrix-synapse-unwrapped) plugins tools;
+    inherit (matrix-synapse-unwrapped) plugins tests tools;
   };
+
+  # Carry the maintainer, licenses, and various useful information.
+  inherit (matrix-synapse-unwrapped) meta;
 }

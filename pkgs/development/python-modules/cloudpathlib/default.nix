@@ -1,77 +1,74 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, importlib-metadata
-, typing-extensions
-, cloudpathlib
-, azure-storage-blob
-, google-cloud-storage
-, boto3
-, psutil
-, pydantic
-, pytestCheckHook
-, pytest-cases
-, pytest-cov
-, pytest-xdist
-, python-dotenv
-, shortuuid
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  typing-extensions,
+  azure-identity,
+  azure-storage-blob,
+  azure-storage-file-datalake,
+  google-cloud-storage,
+  boto3,
+  psutil,
+  pydantic,
+  pytestCheckHook,
+  pytest-cases,
+  pytest-cov-stub,
+  pytest-xdist,
+  python-dotenv,
+  shortuuid,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.16.0";
+  version = "0.20.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
-    rev = "v${version}";
-    hash = "sha256-d4CbzPy3H5HQ4YmSRCRMEYaTpwB7F0Bznd26aKWiHTA=";
+    tag = "v${version}";
+    hash = "sha256-821uSJL1QSj1BTdNWyisN8WWomMuXO3HF6IsAdw7Lac=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  postPatch = ''
+    # missing pytest-reportlog test dependency
+    substituteInPlace pyproject.toml \
+      --replace-fail "--report-log reportlog.jsonl" ""
+  '';
 
-  propagatedBuildInputs = [
-    importlib-metadata
-    typing-extensions
-  ];
+  build-system = [ flit-core ];
 
-  passthru.optional-dependencies = {
-    all = [
-      cloudpathlib
-    ];
+  dependencies = lib.optional (pythonOlder "3.11") typing-extensions;
+
+  optional-dependencies = {
+    all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;
     azure = [
       azure-storage-blob
+      azure-storage-file-datalake
     ];
-    gs = [
-      google-cloud-storage
-    ];
-    s3 = [
-      boto3
-    ];
+    gs = [ google-cloud-storage ];
+    s3 = [ boto3 ];
   };
 
   pythonImportsCheck = [ "cloudpathlib" ];
 
   nativeCheckInputs = [
-    azure-storage-blob
-    boto3
-    google-cloud-storage
+    azure-identity
     psutil
     pydantic
     pytestCheckHook
     pytest-cases
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     python-dotenv
     shortuuid
-  ];
+    tenacity
+  ] ++ optional-dependencies.all;
 
   meta = with lib; {
     description = "Python pathlib-style classes for cloud storage services such as Amazon S3, Azure Blob Storage, and Google Cloud Storage";

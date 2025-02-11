@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wraith";
@@ -9,7 +14,10 @@ stdenv.mkDerivation rec {
   };
   hardeningDisable = [ "format" ];
   buildInputs = [ openssl ];
-  patches = [ ./configure.patch ./dlopen.patch ];
+  patches = [
+    ./configure.patch
+    ./dlopen.patch
+  ];
   postPatch = ''
     substituteInPlace configure        --subst-var-by openssl.dev ${openssl.dev} \
                                        --subst-var-by openssl-lib ${lib.getLib openssl}
@@ -23,8 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "An IRC channel management bot written purely in C/C++";
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "IRC channel management bot written purely in C/C++";
     longDescription = ''
       Wraith is an IRC channel management bot written purely in C/C++. It has
       been in development since late 2003. It is based on Eggdrop 1.6.12 but has

@@ -1,27 +1,48 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pyxdg, pytest, pytest-mock }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pyxdg,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-mock,
+  setuptools,
+}:
 
 buildPythonApplication rec {
-  pname   = "pass-git-helper";
-  version = "1.2.0";
+  pname = "pass-git-helper";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner  = "languitar";
-    repo   = "pass-git-helper";
-    rev    = "v${version}";
-    sha256 = "sha256-An9JKnS/Uor7iZ+lbBGR3eOkxOgV+SjnCWN/QmqFI/I=";
+    owner = "languitar";
+    repo = "pass-git-helper";
+    tag = "v${version}";
+    sha256 = "sha256-Dc7oM5xzRCdD6M/F3jetg3JA1KMTITyONd8Tf9VpU5A=";
   };
 
-  propagatedBuildInputs = [ pyxdg ];
-  nativeCheckInputs = [ pytest pytest-mock ];
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  build-system = [ setuptools ];
+
+  dependencies = [ pyxdg ];
+
+  env.HOME = "$TMPDIR";
+
+  pythonImportsCheck = [ "passgithelper" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-mock
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/languitar/pass-git-helper";
-    description = "A git credential helper interfacing with pass, the standard unix password manager";
+    description = "Git credential helper interfacing with pass, the standard unix password manager";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hmenke vanzef ];
+    maintainers = with maintainers; [
+      hmenke
+      vanzef
+    ];
     mainProgram = "pass-git-helper";
   };
 }

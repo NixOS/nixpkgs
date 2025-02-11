@@ -1,124 +1,207 @@
-{ version
-, engineVersion
-, patches
-, dart
-, src
-, lib
-, stdenv
-, darwin
-, git
-, which
-}:
+{
+  useNixpkgsEngine ? false,
+  version,
+  engineVersion,
+  engineHashes ? { },
+  engineUrl ? "https://github.com/flutter/engine.git@${engineVersion}",
+  enginePatches ? [ ],
+  engineRuntimeModes ? [
+    "release"
+    "debug"
+  ],
+  engineSwiftShaderHash,
+  engineSwiftShaderRev,
+  patches,
+  channel,
+  dart,
+  src,
+  pubspecLock,
+  artifactHashes ? null,
+  lib,
+  stdenv,
+  callPackage,
+  makeWrapper,
+  darwin,
+  gitMinimal,
+  which,
+  jq,
+  flutterTools ? null,
+}@args:
 
 let
-  unwrapped =
-    stdenv.mkDerivation {
-      name = "flutter-${version}-unwrapped";
-      inherit src patches version;
+  engine =
+    if args.useNixpkgsEngine or false then
+      callPackage ./engine/default.nix {
+        inherit (args) dart;
+        dartSdkVersion = args.dart.version;
+        flutterVersion = version;
+        swiftshaderRev = engineSwiftShaderRev;
+        swiftshaderHash = engineSwiftShaderHash;
+        version = engineVersion;
+        hashes = engineHashes;
+        url = engineUrl;
+        patches = enginePatches;
+        runtimeModes = engineRuntimeModes;
+      }
+    else
+      null;
 
-      outputs = [ "out" "cache" ];
+  dart = if args.useNixpkgsEngine or false then engine.dart else args.dart;
 
-      buildInputs = [ git ];
-      nativeBuildInputs = [ ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  flutterTools =
+    args.flutterTools or (callPackage ./flutter-tools.nix {
+      inherit dart version;
+      flutterSrc = src;
+      inherit patches;
+      inherit pubspecLock;
+      systemPlatform = stdenv.hostPlatform.system;
+    });
 
-      preConfigure = ''
-        if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
-          echo 1>&2 "The given engine version (${engineVersion}) does not match the version required by the Flutter SDK ($(< bin/internal/engine.version))."
-          exit 1
-        fi
-      '';
+  unwrapped = stdenv.mkDerivation {
+    name = "flutter-${version}-unwrapped";
+    inherit src patches version;
 
-      postPatch = ''
-        patchShebangs --build ./bin/
-      '';
+    nativeBuildInputs = [
+      makeWrapper
+      jq
+      gitMinimal
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    strictDeps = true;
 
-      buildPhase = ''
-        export FLUTTER_ROOT="$(pwd)"
-        export FLUTTER_TOOLS_DIR="$FLUTTER_ROOT/packages/flutter_tools"
-        export SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
+    preConfigure = ''
+      if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
+        echo 1>&2 "The given engine version (${engineVersion}) does not match the version required by the Flutter SDK ($(< bin/internal/engine.version))."
+        exit 1
+      fi
+    '';
 
-        export SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
-        export STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
+    postPatch = ''
+      patchShebangs --build ./bin/
+      patchShebangs packages/flutter_tools/bin
+    '';
 
-        export DART_SDK_PATH="${dart}"
+    buildPhase = ''
+      # The flutter_tools package tries to run many Git commands. In most
+      # cases, unexpected output is handled gracefully, but commands are never
+      # expected to fail completely. A blank repository needs to be created.
+      rm -rf .git # Remove any existing Git directory
+      git init -b nixpkgs
+      GIT_AUTHOR_NAME=Nixpkgs GIT_COMMITTER_NAME=Nixpkgs \
+      GIT_AUTHOR_EMAIL= GIT_COMMITTER_EMAIL= \
+      GIT_AUTHOR_DATE='1/1/1970 00:00:00 +0000' GIT_COMMITTER_DATE='1/1/1970 00:00:00 +0000' \
+        git commit --allow-empty -m "Initial commit"
+      (. '${../../../build-support/fetchgit/deterministic-git}'; make_deterministic_repo .)
 
-        # The Flutter tool compilation requires dependencies to be cached, as there is no Internet access.
-        # Dart expects package caches to be mutable, and does not support composing cache directories.
-        # The packages cached during the build therefore cannot be easily used. They are provided through
-        # the derivation's "cache" output, though, in case they are needed.
-        #
-        # Note that non-cached packages will normally be fetched from the Internet when they are needed, so Flutter
-        # will function without an existing package cache as long as it has an Internet connection.
-        export PUB_CACHE="$cache"
+      mkdir -p bin/cache
 
-        if [ -d .pub-preload-cache ]; then
-          ${dart}/bin/dart pub cache preload .pub-preload-cache/*
-        elif [ -d .pub-cache ]; then
-          mv .pub-cache "$PUB_CACHE"
-        else
-          echo 'ERROR: Failed to locate the Dart package cache required to build the Flutter tool.'
-          exit 1
-        fi
+      # Add a flutter_tools artifact stamp, and build a snapshot.
+      # This is the Flutter CLI application.
+      echo "$(git rev-parse HEAD)" > bin/cache/flutter_tools.stamp
+      ln -s '${flutterTools}/share/flutter_tools.snapshot' bin/cache/flutter_tools.snapshot
 
-        pushd "$FLUTTER_TOOLS_DIR"
-        ${dart}/bin/dart pub get --offline
-        popd
+      # Some of flutter_tools's dependencies contain static assets. The
+      # application attempts to read its own package_config.json to find these
+      # assets at runtime.
+      # TODO: Remove this once Flutter 3.24 is the lowest version in Nixpkgs.
+      # https://github.com/flutter/flutter/pull/150340 makes it redundant.
+      mkdir -p packages/flutter_tools/.dart_tool
+      ln -s '${flutterTools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
 
-        local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
-        ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.dart_tool/package_config.json" "$SCRIPT_PATH"
-        echo "$revision" > "$STAMP_PATH"
-        echo -n "${version}" > version
+      echo -n "${version}" > version
+      cat <<EOF > bin/cache/flutter.version.json
+      {
+        "devToolsVersion": "$(cat "${dart}/bin/resources/devtools/version.json" | jq -r .version)",
+        "flutterVersion": "${version}",
+        "frameworkVersion": "${version}",
+        "channel": "${channel}",
+        "repositoryUrl": "https://github.com/flutter/flutter.git",
+        "frameworkRevision": "nixpkgs000000000000000000000000000000000",
+        "frameworkCommitDate": "1970-01-01 00:00:00",
+        "engineRevision": "${engineVersion}",
+        "dartSdkVersion": "${dart.version}"
+      }
+      EOF
 
-        # Certain prebuilts should be replaced with Nix-built (or at least Nix-patched) equivalents.
-        rm -r \
-          $FLUTTER_ROOT/bin/cache/dart-sdk \
-          $FLUTTER_ROOT/bin/cache/artifacts/engine
-      '';
+      # Suppress a small error now that `.gradle`'s location changed.
+      # Location changed because of the patch "gradle-flutter-tools-wrapper.patch".
+      mkdir -p "$out/packages/flutter_tools/gradle/.gradle"
+    '';
 
-      installPhase = ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        mkdir -p $out
-        cp -r . $out
-        ln -sf ${dart} $out/bin/cache/dart-sdk
+      mkdir -p $out
+      cp -r . $out
+      rm -rf $out/bin/cache/dart-sdk
+      ln -sf ${dart} $out/bin/cache/dart-sdk
 
-        runHook postInstall
-      '';
+      # The regular launchers are designed to download/build/update SDK
+      # components, and are not very useful in Nix.
+      # Replace them with simple links and wrappers.
+      rm "$out/bin"/{dart,flutter}
+      ln -s "$out/bin/cache/dart-sdk/bin/dart" "$out/bin/dart"
+      makeShellWrapper "$out/bin/dart" "$out/bin/flutter" \
+        --set-default FLUTTER_ROOT "$out" \
+        --set FLUTTER_ALREADY_LOCKED true \
+        --add-flags "--disable-dart-dev --packages='${flutterTools.pubcache}/package_config.json' \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
-      doInstallCheck = true;
-      nativeInstallCheckInputs = [ which ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
-      installCheckPhase = ''
-        runHook preInstallCheck
+      runHook postInstall
+    '';
 
-        export HOME="$(mktemp -d)"
-        $out/bin/flutter config --android-studio-dir $HOME
-        $out/bin/flutter config --android-sdk $HOME
-        $out/bin/flutter --version | fgrep -q '${version}'
+    doInstallCheck = true;
+    nativeInstallCheckInputs = [
+      which
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+    installCheckPhase = ''
+      runHook preInstallCheck
 
-        runHook postInstallCheck
-      '';
+      export HOME="$(mktemp -d)"
+      $out/bin/flutter config --android-studio-dir $HOME
+      $out/bin/flutter config --android-sdk $HOME
+      $out/bin/flutter --version | fgrep -q '${builtins.substring 0 10 engineVersion}'
 
-      passthru = {
-        inherit dart engineVersion;
+      runHook postInstallCheck
+    '';
+
+    passthru =
+      {
+        # TODO: rely on engine.version instead of engineVersion
+        inherit
+          dart
+          engineVersion
+          artifactHashes
+          channel
+          ;
+        tools = flutterTools;
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
+      }
+      // lib.optionalAttrs (engine != null) {
+        inherit engine;
       };
 
-      meta = with lib; {
-        description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
-        longDescription = ''
-          Flutter is Google’s UI toolkit for building beautiful,
-          natively compiled applications for mobile, web, and desktop from a single codebase.
-        '';
-        homepage = "https://flutter.dev";
-        license = licenses.bsd3;
-        platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-        maintainers = with maintainers; [ babariviere ericdallo FlafyDev hacker1024 ];
-      };
+    meta = with lib; {
+      description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
+      longDescription = ''
+        Flutter is Google’s UI toolkit for building beautiful,
+        natively compiled applications for mobile, web, and desktop from a single codebase.
+      '';
+      homepage = "https://flutter.dev";
+      license = licenses.bsd3;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+      maintainers =
+        teams.flutter.members
+        ++ (with maintainers; [
+          ericdallo
+        ]);
     };
+  };
 in
 unwrapped

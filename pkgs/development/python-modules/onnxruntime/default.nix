@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, autoPatchelfHook
-, pythonRelaxDepsHook
-, onnxruntime
-, coloredlogs
-, numpy
-, packaging
-, oneDNN
-, re2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  autoPatchelfHook,
+  onnxruntime,
+  coloredlogs,
+  numpy,
+  packaging,
+  oneDNN,
+  re2,
 
 }:
 
@@ -35,11 +35,7 @@ buildPythonPackage {
     chmod +w dist
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
   pythonRemoveDeps = [
@@ -49,11 +45,23 @@ buildPythonPackage {
   ];
 
   # Libraries are not linked correctly.
-  buildInputs = [
-    oneDNN
-    re2
-    onnxruntime.protobuf
-  ];
+  buildInputs =
+    [
+      oneDNN
+      re2
+      onnxruntime.protobuf
+    ]
+    ++ lib.optionals onnxruntime.passthru.cudaSupport (
+      with onnxruntime.passthru.cudaPackages;
+      [
+        libcublas # libcublasLt.so.XX libcublas.so.XX
+        libcurand # libcurand.so.XX
+        libcufft # libcufft.so.XX
+        cudnn # libcudnn.soXX
+        cuda_cudart # libcudart.so.XX
+        nccl # libnccl.so.XX
+      ]
+    );
 
   propagatedBuildInputs = [
     coloredlogs
@@ -64,5 +72,5 @@ buildPythonPackage {
     # sympy
   ];
 
-  meta = onnxruntime.meta // { maintainers = with lib.maintainers; [ fridh ]; };
+  meta = onnxruntime.meta;
 }

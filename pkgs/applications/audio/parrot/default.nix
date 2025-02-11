@@ -1,47 +1,59 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, ffmpeg
-, libopus
-, makeBinaryWrapper
-, nix-update-script
-, openssl
-, pkg-config
-, stdenv
-, yt-dlp
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  ffmpeg,
+  libopus,
+  makeBinaryWrapper,
+  unstableGitUpdater,
+  openssl,
+  pkg-config,
+  stdenv,
+  yt-dlp,
+  Security,
 }:
-let
-  version = "1.6.0";
-in
 rustPlatform.buildRustPackage {
   pname = "parrot";
-  inherit version;
+  version = "1.6.0-unstable-2024-02-28";
 
   src = fetchFromGitHub {
     owner = "aquelemiguel";
     repo = "parrot";
-    rev = "v${version}";
-    hash = "sha256-f6YAdsq2ecsOCvk+A8wsUu+ywQnW//gCAkVLF0HTn8c=";
+    rev = "fcf933818a5e754f5ad4217aec8bfb16935d7442";
+    hash = "sha256-3YTXIKj1iqCB+tN7/0v1DAaMM6aJiSxBYHO98uK8KFo=";
   };
 
-  cargoHash = "sha256-e4NHgwoNkZ0//rugHrP0gU3pntaMeBJsV/YSzJfD8r4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-be/gGKCd8/VgcjzhyMKDl5TzAuavm1rPNYBm8RLTP90=";
 
-  nativeBuildInputs = [ cmake makeBinaryWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeBinaryWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ libopus openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    libopus
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram $out/bin/parrot \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg yt-dlp ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          yt-dlp
+        ]
+      }
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
-    description = "A hassle-free Discord music bot";
+    description = "Hassle-free Discord music bot";
     homepage = "https://github.com/aquelemiguel/parrot";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gerg-l ];

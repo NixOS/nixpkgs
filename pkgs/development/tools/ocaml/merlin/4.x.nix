@@ -1,68 +1,74 @@
-{ lib
-, substituteAll
-, fetchurl
-, ocaml
-, dune_3
-, buildDunePackage
-, yojson
-, csexp
-, merlin-lib
-, dot-merlin-reader
-, jq
-, menhir
-, menhirLib
-, menhirSdk
+{
+  lib,
+  replaceVars,
+  fetchurl,
+  ocaml,
+  dune_3,
+  buildDunePackage,
+  yojson,
+  csexp,
+  merlin-lib,
+  dot-merlin-reader,
+  jq,
+  menhir,
+  menhirLib,
+  menhirSdk,
+  # Each releases of Merlin support a limited range of versions of OCaml.
+  version ?
+    {
+      "4.12.0" = "4.7-412";
+      "4.12.1" = "4.7-412";
+      "4.13.0" = "4.7-413";
+      "4.13.1" = "4.7-413";
+      "4.14.0" = "4.18-414";
+      "4.14.1" = "4.18-414";
+      "4.14.2" = "4.18-414";
+      "5.0.0" = "4.14-500";
+      "5.1.0" = "4.17.1-501";
+      "5.1.1" = "4.17.1-501";
+      "5.2.0" = "5.3-502";
+      "5.2.1" = "5.3-502";
+      "5.3.0" = "5.4.1-503";
+    }
+    ."${ocaml.version}",
 }:
 
 let
-  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.12" else "4.7";
 
   hashes = {
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
     "4.7-413" = "sha256-aVmGWS4bJBLuwsxDKsng/n0A6qlyJ/pnDTcYab/5gyU=";
-    "4.8-414" = "sha256-HMXWhcVOXW058y143rNBcfEOmjt2tZJXcXKHmKZ5i68=";
-    "4.8-500" = "sha256-n5NHKuo0/lZmfe7WskqnW3xm1S0PmXKSS93BDKrpjCI=";
-    "4.9-414" = "sha256-4j/EeBNZEmn/nSfIIJiOUgpmLIndCvfqZSshUXSZy/0=";
-    "4.9-500" = "sha256-uQfGazoxTxclHSiTfjji+tKJv8MKqRdHMPD/xfMZlSY=";
-    "4.10-414" = "sha256-/a1OqASISpb06eh2gsam1rE3wovM4CT8ybPV86XwR2c=";
-    "4.10-500" = "sha256-m9+Qz8DT94yNSwpamTVLQKISHtRVBWnZD3t/yyujSZ0=";
-    "4.12-414" = "sha256-tgMUT4KyFeJubYVY1Sdv9ZvPB1JwcqEGcCuwuMqXHRQ=";
-    "4.12-500" = "sha256-j49R7KVzNKlXDL7WibTHxPG4VSOVv0uaz5/yMZZjkH8=";
-    "4.12-501" = "sha256-zMwzI1SXQDWQ9PaKL4o3J6JlRjmEs7lkXrwauy+QiMA=";
+    "4.14-500" = "sha256-7CPzJPh1UgzYiX8wPMbU5ZXz1wAJFNQQcp8WuGrR1w4=";
+    "4.16-414" = "sha256-xekZdfPfVoSeGzBvNWwxcJorE519V2NLjSHkcyZvzy0="; # Used by ocaml-lsp
+    "4.16-501" = "sha256-2lvzCbBAZFwpKuRXLMagpwDb0rz8mWrBPI5cODbCHiY="; # Used by ocaml-lsp
+    "4.18-414" = "sha256-9tb3omYUHjWMGoaWEsgTXIWRhdVH6julya17tn/jDME=";
+    "4.17.1-501" = "sha256-N2cHqocfCeljlFbT++S4miHJrXXHdOlMu75n+EKwpQA=";
+    "5.3-502" = "sha256-LOpG8SOX+m4x7wwNT14Rwc/ZFu5JQgaUAFyV67OqJLw=";
+    "5.4.1-503" = "sha256-SbO0x3jBISX8dAXnN5CwsxLV15dJ3XPUg4tlYqJTMCI=";
   };
 
-  ocamlVersionShorthand =
-    let
-      v = lib.splitVersion ocaml.version;
-      major = builtins.elemAt v 0;
-      minor = builtins.elemAt v 1;
-      minor_prefix = if builtins.stringLength minor < 2 then "0" else "";
-    in "${toString major}${minor_prefix}${toString minor}";
-
-  version = "${merlinVersion}-${ocamlVersionShorthand}";
 in
-
-if !lib.hasAttr version hashes
-then builtins.throw "merlin ${merlinVersion} is not available for OCaml ${ocaml.version}"
-else
 
 buildDunePackage {
   pname = "merlin";
   inherit version;
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
     sha256 = hashes."${version}";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_3}/bin/dune";
-    })
-  ];
+  patches =
+    let
+      old-patch = lib.versionOlder version "4.17";
+    in
+    [
+      (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
+
+        dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+        dune = "${dune_3}/bin/dune";
+      })
+    ];
 
   strictDeps = true;
 
@@ -73,9 +79,7 @@ buildDunePackage {
   buildInputs = [
     dot-merlin-reader
     yojson
-    (if lib.versionAtLeast version "4.7-414"
-     then merlin-lib
-     else csexp)
+    (if lib.versionAtLeast version "4.7-414" then merlin-lib else csexp)
     menhirSdk
     menhirLib
   ];
@@ -89,9 +93,12 @@ buildDunePackage {
   '';
 
   meta = with lib; {
-    description = "An editor-independent tool to ease the development of programs in OCaml";
+    description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
-    maintainers = [ maintainers.vbgl maintainers.sternenseemann ];
+    maintainers = [
+      maintainers.vbgl
+      maintainers.sternenseemann
+    ];
   };
 }

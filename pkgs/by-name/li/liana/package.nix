@@ -1,19 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, expat
-, fontconfig
-, freetype
-, libGL
-, systemd
-, vulkan-loader
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  udev,
+  libxkbcommon,
+  wayland,
+  vulkan-loader,
+  xorg,
 }:
 
 let
@@ -23,6 +26,10 @@ let
     freetype
     freetype.dev
     libGL
+    pkg-config
+    udev
+    wayland
+    libxkbcommon
     vulkan-loader
     xorg.libX11
     xorg.libXcursor
@@ -32,22 +39,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "2.0";
+  version = "8.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
-    repo = pname;
+    repo = "liana";
     rev = "v${version}";
-    hash = "sha256-GQNPKlqOBoh684x57gVV3CImgO7HBqt3UFp6CHC13do=";
+    hash = "sha256-2aIaRZNIRgFdA+NVnzOkEE3kYA15CoNBrsNGBhIz0nU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "liana-2.0.0" = "sha256-Dv/Ad8Kv7Mit8yhewzANbUbngQjtQaap/NQy9jqnbfA=";
-      "iced_futures-0.6.0" = "sha256-ejkAxU6DwiX1/119eA0GRapSmz7dqwx9M0uMwyDHATQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pjvJ+UNM/2g2BDLptjEs6XVukScBB5miDx55zwHJ/C4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,10 +60,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     fontconfig
-    systemd
+    udev
   ];
 
-  sourceRoot = "source/gui";
+  sourceRoot = "${src.name}/gui";
 
   postInstall = ''
     install -Dm0644 ./ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
@@ -81,11 +83,13 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
+    mainProgram = "liana-gui";
     description = "A Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
+    changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dunxen ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

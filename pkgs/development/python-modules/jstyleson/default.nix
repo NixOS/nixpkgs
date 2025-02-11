@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jstyleson";
   version = "0.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "linjackson78";
@@ -16,14 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-s/0DDfy+07TuUNjHPqKRT3xMMQl6spZCacB7Dweof7A=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jstyleson" ];
 
   meta = with lib; {
-    description = "A python library to parse JSON with js-style comments";
+    description = "Python library to parse JSON with js-style comments";
     homepage = "https://github.com/linjackson78/jstyleson";
     license = licenses.mit;
     maintainers = with maintainers; [ ambroisie ];

@@ -1,32 +1,31 @@
-{ bc
-, zip
-, lib
-, fetchFromGitHub
-, bats
-, buildPythonApplication
-, pythonOlder
-, callPackage
-, kicad
-, numpy
-, click
-, markdown2
-, pytestCheckHook
-, commentjson
-, wxPython_4_2
-, pcbnew-transition
-, pybars3
-, versioneer
+{
+  bc,
+  zip,
+  lib,
+  fetchFromGitHub,
+  bats,
+  buildPythonApplication,
+  pythonOlder,
+  callPackage,
+  kicad,
+  numpy,
+  click,
+  markdown2,
+  openscad,
+  pytestCheckHook,
+  commentjson,
+  wxpython,
+  pcbnewtransition,
+  pybars3,
+  versioneer,
+  shapely,
 }:
 let
   solidpython = callPackage ./solidpython { };
-
-  # https://github.com/yaqwsx/KiKit/issues/574
-  # copy-pasted from nixpkgs#8d8e62e74f511160a599471549a98bc9e4f4818d
-  shapely = callPackage ./shapely { };
 in
 buildPythonApplication rec {
   pname = "kikit";
-  version = "1.3.0";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,8 +33,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yaqwsx";
     repo = "KiKit";
-    rev = "v${version}";
-    hash = "sha256-kDTPk/R3eZtm4DjoUV4tSQzjGQ9k8MKQedX4oUXYzeo=";
+    tag = "v${version}";
+    hash = "sha256-r8LQcy3I6hmcrU/6HfPAYJd+cEZdhad6DUldC9HvXZU=";
   };
 
   propagatedBuildInputs = [
@@ -43,10 +42,13 @@ buildPythonApplication rec {
     numpy
     click
     markdown2
+    # OpenSCAD is an optional dependency (see
+    # https://github.com/yaqwsx/KiKit/blob/v1.5.0/docs/installation/intro.md#optional-dependencies).
+    openscad
     commentjson
     # https://github.com/yaqwsx/KiKit/issues/575
-    wxPython_4_2
-    pcbnew-transition
+    wxpython
+    pcbnewtransition
     pybars3
     shapely
     # https://github.com/yaqwsx/KiKit/issues/576
@@ -81,7 +83,10 @@ buildPythonApplication rec {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
     changelog = "https://github.com/yaqwsx/KiKit/releases/tag/v${version}";
-    maintainers = with maintainers; [ jfly matusf ];
+    maintainers = with maintainers; [
+      jfly
+      matusf
+    ];
     license = licenses.mit;
   };
 }

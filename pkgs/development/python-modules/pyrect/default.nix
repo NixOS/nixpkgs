@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pygame
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pygame,
 }:
 
 buildPythonPackage rec {
   pname = "pyrect";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyRect";
@@ -15,7 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-9lFV9t+bkptnyv+9V8CUfFrlRJ07WA0XgHS/+0egm3g=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook pygame ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pygame
+  ];
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"

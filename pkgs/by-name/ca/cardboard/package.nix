@@ -1,29 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchurl
-, fetchgit
-, ffmpeg
-, libGL
-, libX11
-, libcap
-, libdrm
-, libinput
-, libpng
-, libxcb
-, libxkbcommon
-, mesa
-, meson
-, ninja
-, pandoc
-, pixman
-, pkg-config
-, unzip
-, wayland
-, wayland-protocols
-, xcbutilerrors
-, xcbutilimage
-, xcbutilwm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchurl,
+  fetchgit,
+  ffmpeg,
+  libGL,
+  libX11,
+  libcap,
+  libdrm,
+  libinput,
+  libpng,
+  libxcb,
+  libxkbcommon,
+  libgbm,
+  meson,
+  ninja,
+  pandoc,
+  pixman,
+  pkg-config,
+  unzip,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  xcbutilerrors,
+  xcbutilimage,
+  xcbutilwm,
 }:
 
 let
@@ -45,7 +47,7 @@ let
       name = "expected";
       url = "https://gitlab.com/cardboardwm/expected";
       rev = "0ee13cb2b058809aa9708c45ca18d494e72a759e";
-      sha256 = "sha256-gYr4/pjuLlr3k6Jcrg2/SzJLtbgyA+ZN2oMHkHXANDo=";
+      hash = "sha256-gYr4/pjuLlr3k6Jcrg2/SzJLtbgyA+ZN2oMHkHXANDo=";
     };
 
     # wlroots.wrap
@@ -53,7 +55,7 @@ let
       name = "wlroots";
       url = "https://github.com/swaywm/wlroots";
       rev = "0.12.0";
-      sha256 = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
+      hash = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
     };
 
     # the source itself
@@ -71,7 +73,12 @@ stdenv.mkDerivation {
 
   src = allSources.cardboard;
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -79,6 +86,7 @@ stdenv.mkDerivation {
     pandoc
     pkg-config
     unzip
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -91,7 +99,7 @@ stdenv.mkDerivation {
     libpng
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     wayland-protocols
@@ -127,8 +135,9 @@ stdenv.mkDerivation {
   };
 
   meta = {
+    broken = true; # Upstream is archived, fails to build on gcc-13.
     homepage = "https://gitlab.com/cardboardwm/cardboard";
-    description = "A scrollable, tiling Wayland compositor inspired on PaperWM";
+    description = "Scrollable, tiling Wayland compositor inspired on PaperWM";
     license = lib.licenses.gpl3Only;
     mainProgram = "cardboard";
     maintainers = with lib.maintainers; [ AndersonTorres ];

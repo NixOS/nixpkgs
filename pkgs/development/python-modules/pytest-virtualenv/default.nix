@@ -1,23 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, pytest-cov, mock, cmdline, pytest-fixture-config, pytest-shutil, virtualenv }:
+{
+  lib,
+  buildPythonPackage,
+  cmdline,
+  importlib-metadata,
+  mock,
+  pytestCheckHook,
+  pytest,
+  pytest-fixture-config,
+  pytest-shutil,
+  setuptools,
+  virtualenv,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-virtualenv";
-  version = "1.7.0";
+  inherit (pytest-fixture-config) version src patches;
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "03w2zz3crblj1p6i8nq17946hbn3zqp9z7cfnifw47hi4a4fww12";
-  };
+  postPatch = ''
+    cd pytest-virtualenv
+  '';
 
-  nativeCheckInputs = [ pytest pytest-cov mock cmdline ];
-  propagatedBuildInputs = [ pytest-fixture-config pytest-shutil virtualenv ];
-  checkPhase = "py.test tests/unit ";
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pytest ];
+  buildInputs = [ pytest ];
+
+  dependencies = [
+    importlib-metadata
+    pytest-fixture-config
+    pytest-shutil
+    virtualenv
+  ];
+
+  nativeCheckInputs = [
+    cmdline
+    mock
+    pytestCheckHook
+  ];
+
+  # Don't run integration tests
+  disabledTestPaths = [ "tests/integration/*" ];
 
   meta = with lib; {
-    description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
+    description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed";
     homepage = "https://github.com/manahl/pytest-plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ ryansydnor ];

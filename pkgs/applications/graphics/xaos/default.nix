@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, wrapQtAppsHook, copyDesktopItems }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  copyDesktopItems,
+}:
 
-let datapath = "$out/share/XaoS";
-in stdenv.mkDerivation rec {
+let
+  datapath = "$out/share/XaoS";
+in
+stdenv.mkDerivation rec {
   pname = "xaos";
   version = "4.2.1";
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xaos-project";
@@ -13,11 +27,19 @@ in stdenv.mkDerivation rec {
     hash = "sha256-JLF8Mz/OHZEEJG/aryKQuJ6B5R8hPJdvln7mbKoqXFU=";
   };
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook copyDesktopItems ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+    wrapQtAppsHook
+    copyDesktopItems
+  ];
   buildInputs = [ qtbase ];
 
   QMAKE_LRELEASE = "lrelease";
-  DEFINES = [ "USE_OPENGL" "USE_FLOAT128" ];
+  DEFINES = [
+    "USE_OPENGL"
+    "USE_FLOAT128"
+  ];
 
   postPatch = ''
     substituteInPlace src/include/config.h \
@@ -42,6 +64,7 @@ in stdenv.mkDerivation rec {
 
   meta = src.meta // {
     description = "Real-time interactive fractal zoomer";
+    mainProgram = "xaos";
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];

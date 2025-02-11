@@ -1,10 +1,15 @@
-{ config, lib, pkgs, options, type }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  type,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters."exportarr-${type}";
-  exportarrEnvironment = (
-    lib.mapAttrs (_: toString) cfg.environment
-  ) // {
+  exportarrEnvironment = (lib.mapAttrs (_: toString) cfg.environment) // {
     PORT = toString cfg.port;
     URL = cfg.url;
     API_KEY_FILE = lib.mkIf (cfg.apiKeyFile != null) "%d/api-key";
@@ -16,7 +21,7 @@ in
     url = lib.mkOption {
       type = lib.types.str;
       default = "http://127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         The full URL to Sonarr, Radarr, or Lidarr.
       '';
     };
@@ -24,7 +29,7 @@ in
     apiKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing the api-key.
       '';
     };
@@ -34,7 +39,7 @@ in
     environment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         See [the configuration guide](https://github.com/onedr0p/exportarr#configuration) for available options.
       '';
       example = {
@@ -48,7 +53,10 @@ in
       ExecStart = ''${cfg.package}/bin/exportarr ${type} "$@"'';
       ProcSubset = "pid";
       ProtectProc = "invisible";
-      SystemCallFilter = ["@system-service" "~@privileged"];
+      SystemCallFilter = [
+        "@system-service"
+        "~@privileged"
+      ];
     };
     environment = exportarrEnvironment;
   };

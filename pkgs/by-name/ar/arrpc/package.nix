@@ -1,41 +1,39 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
-
-buildNpmPackage {
+buildNpmPackage rec {
   pname = "arrpc";
-  version = "3.2.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenAsar";
     repo = "arrpc";
-    # Release commits are not tagged
-    # release: 3.2.0
-    rev = "9c3e981437b75606c74ef058c67d1a8c083ce49a";
-    hash = "sha256-tsO58q6tqqXCJLjZmLQGt1VtKsuoqWmh5SlnuDtJafg=";
+    tag = version;
+    hash = "sha256-3xkqWcLhmSIH6Al2SvM9qBpdcLzEqUmUCgwYBPAgVpo=";
   };
 
-  # Make installation less cumbersome
-  # Remove after next release
-  patches = [
-    (fetchpatch {
-      # https://github.com/OpenAsar/arrpc/pull/50
-      url = "https://github.com/OpenAsar/arrpc/commit/7fa6c90204450eb3952ce9cddfecb0a5ba5e4313.patch";
-      hash = "sha256-qFlrbe2a4x811wpmWUcGDe2CPlt9x3HI+/t0P2v4kPc=";
-    })
-  ];
-
-  npmDepsHash = "sha256-vxx0w6UjwxIK4cgpivtjNbIgkb4wKG4ijSHdP/FeQZ4=";
+  npmDepsHash = "sha256-lw6pngFC2Pnk+I8818TOTwN4r+8IsjvdMYIyTsTi49g=";
 
   dontNpmBuild = true;
 
-  meta = with lib; {
+  postInstall = ''
+    mkdir -p $out/lib/systemd/user
+    substitute ${./arrpc.service} $out/lib/systemd/user/arrpc.service \
+      --subst-var-by arrpc $out/bin/arrpc
+  '';
+
+  meta = {
+    changelog = "https://github.com/OpenAsar/arrpc/blob/${version}/changelog.md";
     description = "Open Discord RPC server for atypical setups";
     homepage = "https://arrpc.openasar.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anomalocaris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      anomalocaris
+      NotAShelf
+      ulysseszhan
+    ];
     mainProgram = "arrpc";
   };
 }

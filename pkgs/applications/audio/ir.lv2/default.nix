@@ -1,26 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, fftw, gtk2, lv2, libsamplerate, libsndfile, pkg-config, zita-convolver }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fftw,
+  gtk2,
+  lv2,
+  libsamplerate,
+  libsndfile,
+  pkg-config,
+  zita-convolver,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ir.lv2";
-  version = "1.2.4";
+  version = "0-unstable-2018-06-21";
 
-  src = fetchFromGitHub {
-    owner = "tomszilagyi";
-    repo = "ir.lv2";
-    rev = version;
-    sha256 = "1p6makmgr898fakdxzl4agh48qqwgv1k1kwm8cgq187n0mhiknp6";
+  src = fetchgit {
+    url = "https://git.hq.sig7.se/ir.lv2.git";
+    rev = "38bf3ec7d370d8234dd55be99c14cf9533b43c60";
+    sha256 = "sha256-5toZYQX2oIAfQ5XPMMN+HGNE4FOE/t6mciih/OpU1dw=";
   };
 
-  buildInputs = [ fftw gtk2 lv2 libsamplerate libsndfile zita-convolver ];
+  buildInputs = [
+    fftw
+    gtk2
+    lv2
+    libsamplerate
+    libsndfile
+    zita-convolver
+  ];
 
-  nativeBuildInputs = [  pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
-  postPatch = ''
-     # Fix build with lv2 1.18: https://github.com/tomszilagyi/ir.lv2/pull/20
-     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
-       -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
-   '';
-
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   postBuild = "make convert4chan";
 
@@ -39,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
+    mainProgram = "convert4chan";
   };
 }

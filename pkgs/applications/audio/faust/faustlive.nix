@@ -1,36 +1,93 @@
-{ lib, stdenv, fetchFromGitHub
-, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
-, bc, coreutils, which, libsndfile, flac, libogg, libvorbis, libopus, pkg-config, libxcb, cmake, gnutls, libtasn1, p11-kit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  which,
+  alsa-lib,
+  curl,
+  faust,
+  flac,
+  gnutls,
+  libjack2,
+  libmicrohttpd,
+  libmpg123,
+  libogg,
+  libopus,
+  libsndfile,
+  libtasn1,
+  libvorbis,
+  libxcb,
+  llvm,
+  p11-kit,
+  qrencode,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
   pname = "faustlive";
-  version = "2.5.16";
+  version = "2.5.17";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
     rev = version;
-    sha256 = "sha256-O3IWx6Ht/xcb8NFxI7Biwck3dIHbxyof/zDgYDdzozY=";
+    hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook cmake ];
-
-  buildInputs = [
-    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
-    bc coreutils which libsndfile flac libogg libvorbis libopus libxcb gnutls libtasn1 p11-kit
+  patches = [
+    # move mutex initialization outside assert call
+    # https://github.com/grame-cncm/faustlive/pull/59
+    (fetchpatch {
+      name = "initalize-mutexes.patch";
+      url = "https://github.com/grame-cncm/faustlive/commit/fdd46b12202def9731b9ed2f6363287af16be892.patch";
+      hash = "sha256-yH95Y4Jbqgs8siE9rtutmu5C2sNZwQMJzCgDYqNBDj4=";
+    })
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  strictDeps = true;
 
-  postInstall = ''
-    wrapProgram $out/bin/FaustLive --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmicrohttpd libsndfile faust llvm_10 ]}"
-  '';
+  nativeBuildInputs = [
+    cmake
+    faust
+    llvm
+    pkg-config
+    qt5.wrapQtAppsHook
+    which
+  ];
+
+  buildInputs = [
+    alsa-lib
+    curl
+    faust
+    flac
+    gnutls
+    libjack2
+    libmicrohttpd
+    libmpg123
+    libogg
+    libopus
+    libsndfile
+    libtasn1
+    libvorbis
+    libxcb
+    llvm
+    p11-kit
+    qrencode
+    qt5.qtbase
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+  ];
 
   postPatch = "cd Build";
 
   meta = with lib; {
-    description = "A standalone just-in-time Faust compiler";
+    description = "Standalone just-in-time Faust compiler";
+    mainProgram = "FaustLive";
     longDescription = ''
       FaustLive is a standalone just-in-time Faust compiler. It tries to bring
       together the convenience of a standalone interpreted language with the

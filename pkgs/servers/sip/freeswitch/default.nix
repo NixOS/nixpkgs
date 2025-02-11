@@ -1,115 +1,121 @@
-{ fetchFromGitHub
-, fetchpatch
-, stdenv
-, lib
-, pkg-config
-, autoreconfHook
-, ncurses
-, gnutls
-, readline
-, openssl
-, perl
-, sqlite
-, libjpeg
-, speex
-, pcre
-, libuuid
-, ldns
-, libedit
-, yasm
-, which
-, libsndfile
-, libtiff
-, libxcrypt
-, callPackage
-, SystemConfiguration
-, modules ? null
-, nixosTests
+{
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  pkg-config,
+  autoreconfHook,
+  ncurses,
+  gnutls,
+  readline,
+  openssl,
+  perl,
+  sqlite,
+  libjpeg,
+  speex,
+  pcre,
+  libuuid,
+  ldns,
+  libedit,
+  yasm,
+  which,
+  libsndfile,
+  libtiff,
+  libxcrypt,
+  callPackage,
+  SystemConfiguration,
+  modules ? null,
+  nixosTests,
 }:
 
 let
 
-availableModules = callPackage ./modules.nix { };
+  availableModules = callPackage ./modules.nix { };
 
-# the default list from v1.8.7, except with applications/mod_signalwire also disabled
-defaultModules = mods: with mods; [
-  applications.commands
-  applications.conference
-  applications.db
-  applications.dptools
-  applications.enum
-  applications.esf
-  applications.expr
-  applications.fifo
-  applications.fsv
-  applications.hash
-  applications.httapi
-  applications.sms
-  applications.spandsp
-  applications.valet_parking
-  applications.voicemail
+  # the default list from v1.8.7, except with applications/mod_signalwire also disabled
+  defaultModules =
+    mods:
+    with mods;
+    [
+      applications.commands
+      applications.conference
+      applications.db
+      applications.dptools
+      applications.enum
+      applications.esf
+      applications.expr
+      applications.fifo
+      applications.fsv
+      applications.hash
+      applications.httapi
+      applications.sms
+      applications.spandsp
+      applications.valet_parking
+      applications.voicemail
 
-  applications.curl
+      applications.curl
 
-  codecs.amr
-  codecs.b64
-  codecs.g723_1
-  codecs.g729
-  codecs.h26x
-  codecs.opus
+      codecs.amr
+      codecs.b64
+      codecs.g723_1
+      codecs.g729
+      codecs.h26x
+      codecs.opus
 
-  databases.mariadb
-  databases.pgsql
+      databases.mariadb
+      databases.pgsql
 
-  dialplans.asterisk
-  dialplans.xml
+      dialplans.asterisk
+      dialplans.xml
 
-  endpoints.loopback
-  endpoints.rtc
-  endpoints.skinny
-  endpoints.sofia
-  endpoints.verto
+      endpoints.loopback
+      endpoints.rtc
+      endpoints.skinny
+      endpoints.sofia
+      endpoints.verto
 
-  event_handlers.cdr_csv
-  event_handlers.cdr_sqlite
-  event_handlers.event_socket
+      event_handlers.cdr_csv
+      event_handlers.cdr_sqlite
+      event_handlers.event_socket
 
-  formats.local_stream
-  formats.native_file
-  formats.png
-  formats.sndfile
-  formats.tone_stream
+      formats.local_stream
+      formats.native_file
+      formats.png
+      formats.sndfile
+      formats.tone_stream
 
-  languages.lua
+      languages.lua
 
-  loggers.console
-  loggers.logfile
-  loggers.syslog
+      loggers.console
+      loggers.logfile
+      loggers.syslog
 
-  say.en
+      say.en
 
-  xml_int.cdr
-  xml_int.rpc
-  xml_int.scgi
-] ++ lib.optionals stdenv.isLinux [ endpoints.gsmopen ];
+      xml_int.cdr
+      xml_int.rpc
+      xml_int.scgi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ endpoints.gsmopen ];
 
-enabledModules = (if modules != null then modules else defaultModules) availableModules;
+  enabledModules = (if modules != null then modules else defaultModules) availableModules;
 
-modulesConf = let
-  lst = builtins.map (mod: mod.path) enabledModules;
-  str = lib.strings.concatStringsSep "\n" lst;
-  in builtins.toFile "modules.conf" str;
+  modulesConf =
+    let
+      lst = builtins.map (mod: mod.path) enabledModules;
+      str = lib.strings.concatStringsSep "\n" lst;
+    in
+    builtins.toFile "modules.conf" str;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.10";
+  version = "1.10.12";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3Mm/hbMwnlwbtiOFlODtKItVyj34O3beZDlV8YoJmts=";
+    hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };
 
   postPatch = ''
@@ -126,30 +132,33 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  ## TODO Validate with the next upstream release
-  patches = [
-    (fetchpatch {
-       name = "CVE-2023-44488.patch";
-       url = "https://github.com/signalwire/freeswitch/commit/f1fb05214e4f427dcf922f531431ab649cf0622b.patch";
-       hash = "sha256-6GMebE6O2EBx60NE2LSRVljaiLm9T4zTrkIpwGvaB08=";
-     })
-    (fetchpatch {
-       name = "CVE-2023-5217.patch";
-       url = "https://github.com/signalwire/freeswitch/commit/6f9e72c585265d8def8a613b36cd4f524c201980.patch";
-       hash = "sha256-l64mBpyq/TzRM78n73kbuD0UNsk5zIH5QNJlMKdPfr4=";
-     })
-  ];
-
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
-  buildInputs = [
-    openssl ncurses gnutls readline libjpeg
-    sqlite pcre speex ldns libedit
-    libsndfile libtiff
-    libuuid libxcrypt
-  ]
-  ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
-  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    perl
+    which
+    yasm
+  ];
+  buildInputs =
+    [
+      openssl
+      ncurses
+      gnutls
+      readline
+      libjpeg
+      sqlite
+      pcre
+      speex
+      ldns
+      libedit
+      libsndfile
+      libtiff
+      libuuid
+      libxcrypt
+    ]
+    ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration ];
 
   enableParallelBuilding = true;
 
@@ -181,8 +190,8 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = with lib.platforms; unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

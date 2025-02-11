@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -15,17 +16,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "parsy";
     owner = "python-parsy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/Bu3xZUpXI4WiYJKKWTJTdSFq8pwC1PFDw0Kr8s3Fe8=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "parsy"
-  ];
+  pythonImportsCheck = [ "parsy" ];
 
   meta = with lib; {
     homepage = "https://github.com/python-parsy/parsy";

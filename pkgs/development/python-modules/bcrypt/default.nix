@@ -1,74 +1,67 @@
-{ lib
-, buildPythonPackage
-, cargo
-, rustPlatform
-, rustc
-, setuptools
-, setuptools-rust
-, isPyPy
-, fetchPypi
-, pythonOlder
-, cffi
-, pytestCheckHook
-, libiconv
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  setuptools,
+  setuptoolsRustBuildHook,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  libiconv,
+  stdenv,
   # for passthru.tests
-, asyncssh
-, django_4
-, fastapi
-, paramiko
-, twisted
+  asyncssh,
+  django_4,
+  fastapi,
+  paramiko,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.0.1";
+  version = "4.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
+    hash = "sha256-Z2U4bjq4f1abJ2mIdCA5uqsIeyzbAegJ1050UDwvqv4=";
   };
 
   cargoRoot = "src/_bcrypt";
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+    hash = "sha256-tCeXgypF5Tqnzv7KfoliUZeO6B83YK5cYORhwlvBVnY=";
   };
 
   nativeBuildInputs = [
     setuptools
-    setuptools-rust
+    setuptoolsRustBuildHook
     rustPlatform.cargoSetupHook
     cargo
     rustc
   ];
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "bcrypt"
-  ];
+  pythonImportsCheck = [ "bcrypt" ];
 
   passthru.tests = {
-    inherit asyncssh django_4 fastapi paramiko twisted;
+    inherit
+      asyncssh
+      django_4
+      fastapi
+      paramiko
+      twisted
+      ;
   };
 
   meta = with lib; {

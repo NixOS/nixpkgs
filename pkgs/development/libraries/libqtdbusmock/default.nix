@@ -1,41 +1,41 @@
-{ stdenv
-, lib
-, fetchbzr
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, gtest
-, libqtdbustest
-, networkmanager
-, pkg-config
-, procps
-, python3
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  gtest,
+  libqtdbustest,
+  networkmanager,
+  pkg-config,
+  procps,
+  python3,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbusmock";
-  version = "unstable-2017-03-16";
+  version = "0.9.1";
 
-  src = fetchbzr {
-    url = "lp:libqtdbusmock";
-    rev = "49";
-    sha256 = "sha256-q3jL8yGLgcNxXHPh9M9cTVtUvonrBUPNxuPJIvu7Q/s=";
+  src = fetchFromGitLab {
+    owner = "ubports";
+    repo = "development/core/libqtdbusmock";
+    rev = finalAttrs.version;
+    hash = "sha256-hVw2HnIHlA7vvt0Sr6F2qVhvBZ33aCeqb9vgbu3rgBo=";
   };
 
-  postPatch = ''
-    # Look for the new(?) name
-    substituteInPlace CMakeLists.txt \
-      --replace 'NetworkManager' 'libnm'
-
-    # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
-    sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
-    # Don't build tests when we're not running them
-    sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
+      sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      # Don't build tests when we're not running them
+      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+    '';
 
   strictDeps = true;
 
@@ -55,9 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     dbus-test-runner
     procps
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [

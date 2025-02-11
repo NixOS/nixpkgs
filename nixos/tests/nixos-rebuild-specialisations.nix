@@ -1,5 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ hostPkgs, lib, withNg, ... }: {
   name = "nixos-rebuild-specialisations";
+
+  # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
+  #        make it a _small package instead, then remove pkgsReadOnly = false;.
+  node.pkgsReadOnly = false;
 
   nodes = {
     machine = { lib, pkgs, ... }: {
@@ -21,16 +25,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         pkgs.grub2
       ];
 
+      system.rebuild.enableNg = withNg;
+      system.switch.enable = true;
+
       virtualisation = {
         cores = 2;
-        memorySize = 2048;
+        memorySize = 4096;
       };
     };
   };
 
   testScript =
     let
-      configFile = pkgs.writeText "configuration.nix" ''
+      configFile = hostPkgs.writeText "configuration.nix" /* nix */ ''
         { lib, pkgs, ... }: {
           imports = [
             ./hardware-configuration.nix
@@ -48,6 +55,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           environment.systemPackages = [
             (pkgs.writeShellScriptBin "parent" "")
           ];
+
+          system.rebuild.enableNg = ${lib.boolToString withNg};
 
           specialisation.foo = {
             inheritParentConfig = true;
@@ -72,7 +81,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       '';
 
     in
-    ''
+    /* python */ ''
       machine.start()
       machine.succeed("udevadm settle")
       machine.wait_for_unit("multi-user.target")
@@ -117,4 +126,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           machine.fail("nixos-rebuild boot --specialisation foo")
           machine.fail("nixos-rebuild boot -c foo")
     '';
-})
+}

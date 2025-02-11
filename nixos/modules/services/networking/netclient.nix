@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.netclient;
 in
@@ -6,7 +11,7 @@ in
   meta.maintainers = with lib.maintainers; [ wexder ];
 
   options.services.netclient = {
-    enable = lib.mkEnableOption (lib.mdDoc "Netclient Daemon");
+    enable = lib.mkEnableOption "Netclient Daemon";
     package = lib.mkPackageOption pkgs "netclient" { };
   };
 

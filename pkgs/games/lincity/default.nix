@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libICE, libSM, libpng12, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libX11,
+  libXext,
+  xorgproto,
+  libICE,
+  libSM,
+  libpng12,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lincity";
@@ -10,8 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libICE libpng12 libSM libX11 libXext
-    xorgproto zlib
+    libICE
+    libpng12
+    libSM
+    libX11
+    libXext
+    xorgproto
+    zlib
   ];
 
   patches = [
@@ -33,10 +50,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "City simulation game";
+    mainProgram = "xlincity";
     license = licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,29 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
-  version = "1.3.2";
-  format = "setuptools";
+  version = "1.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-opifyg6IRjtWQyqoIeZLgcPRce43uEdxGJtI6Ll81JY=";
+    pname = "google_cloud_appengine_logging";
+    inherit version;
+    hash = "sha256-OaLfaU2XmB7QDvXfVB98/MqSCpJJZwdVfysHu3up1no=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus

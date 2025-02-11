@@ -1,4 +1,10 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, libX11 }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  dune-configurator,
+  libX11,
+}:
 
 buildDunePackage rec {
 
@@ -17,7 +23,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocaml/graphics";
-    description = "A set of portable drawing primitives";
+    description = "Set of portable drawing primitives";
     license = lib.licenses.lgpl2;
   };
 }

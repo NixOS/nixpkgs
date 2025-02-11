@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, autoreconfHook,
-  which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bap,
+  ocaml,
+  findlib,
+  ctypes,
+  ctypes-foreign,
+  autoreconfHook,
+  which,
+}:
 
 stdenv.mkDerivation {
   pname = "libbap";
@@ -12,8 +22,17 @@ stdenv.mkDerivation {
     hash = "sha256-la47HR+i99ueDEWR91YIXGdKflpE1E0qmmJjeowmGSI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
-  buildInputs = [ bap ctypes ];
+  nativeBuildInputs = [
+    autoreconfHook
+    which
+    ocaml
+    findlib
+  ];
+  buildInputs = [
+    bap
+    ctypes
+    ctypes-foreign
+  ];
 
   preInstall = ''
     mkdir -p $out/lib
@@ -22,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/binaryanalysisplatform/bap-bindings";
-    description = "A C library for interacting with BAP";
+    description = "C library for interacting with BAP";
     maintainers = [ maintainers.maurer ];
     platforms = platforms.unix;
     license = licenses.mit;

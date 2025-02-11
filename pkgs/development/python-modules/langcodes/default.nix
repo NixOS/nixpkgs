@@ -1,52 +1,50 @@
-{ lib
-, buildPythonPackage
-, marisa-trie
-, pythonOlder
-, fetchPypi
-, poetry-core
-, pytestCheckHook
-, language-data
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  marisa-trie,
+  pythonOlder,
+  fetchPypi,
+  pytestCheckHook,
+  language-data,
+  setuptools,
+  setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "3.3.0";
-  format = "pyproject";
+  version = "3.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "794d07d5a28781231ac335a1561b8442f8648ca07cd518310aeb45d6f0807ef6";
+    hash = "sha256-Hu+BaNB+UeExokl//srUtmP2II58OuO43BXFFzSm+AE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     language-data
     marisa-trie
     setuptools # pkg_resources import in language_data/util.py
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: assert 'Unknown language [aqk]' == 'Aninka'
     "test_updated_iana"
   ];
 
-  pythonImportsCheck = [
-    "langcodes"
-  ];
+  pythonImportsCheck = [ "langcodes" ];
 
   meta = with lib; {
     description = "Python toolkit for working with and comparing the standardized codes for languages";
-    homepage = "https://github.com/LuminosoInsight/langcodes";
+    homepage = "https://github.com/georgkrause/langcodes";
     license = licenses.mit;
   };
 }

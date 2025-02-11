@@ -1,9 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests
-, tqdm, websocket-client, pythonOlder }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  tqdm,
+  websocket-client,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";
   version = "1.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -16,7 +24,11 @@ buildPythonPackage rec {
   # 'mpv-jsonipc' does not have any tests
   doCheck = false;
 
-  propagatedBuildInputs = [ requests tqdm websocket-client ];
+  propagatedBuildInputs = [
+    requests
+    tqdm
+    websocket-client
+  ];
 
   pythonImportsCheck = [ "python_mpv_jsonipc" ];
 
@@ -24,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
     description = "Python API to MPV using JSON IPC";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ ];
   };
 }

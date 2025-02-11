@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.hardware.facetimehd;
@@ -12,13 +14,13 @@ in
 
 {
 
-  options.hardware.facetimehd.enable = mkEnableOption (lib.mdDoc "the facetimehd kernel module");
+  options.hardware.facetimehd.enable = lib.mkEnableOption "the facetimehd kernel module";
 
-  options.hardware.facetimehd.withCalibration = mkOption {
+  options.hardware.facetimehd.withCalibration = lib.mkOption {
     default = false;
     example = true;
-    type = types.bool;
-    description = lib.mdDoc ''
+    type = lib.types.bool;
+    description = ''
       Whether to include sensor calibration files for facetimehd.
       This makes colors look much better but is experimental, see
       <https://github.com/patjak/facetimehd/wiki/Extracting-the-sensor-calibration-files>
@@ -26,7 +28,7 @@ in
     '';
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     boot.kernelModules = [ "facetimehd" ];
 
@@ -34,8 +36,9 @@ in
 
     boot.extraModulePackages = [ kernelPackages.facetimehd ];
 
-    hardware.firmware = [ pkgs.facetimehd-firmware ]
-      ++ optional cfg.withCalibration pkgs.facetimehd-calibration;
+    hardware.firmware = [
+      pkgs.facetimehd-firmware
+    ] ++ lib.optional cfg.withCalibration pkgs.facetimehd-calibration;
 
     # unload module during suspend/hibernate as it crashes the whole system
     powerManagement.powerDownCommands = ''

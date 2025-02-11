@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, orjson
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  orjson,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CzNB6ymvDTktiOGdcdCvWLVQ3mKmbdMpc/vezSXCpG4=";
   };
 
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiopyarr"
-  ];
+  pythonImportsCheck = [ "aiopyarr" ];
 
   meta = with lib; {
     description = "Python API client for Lidarr/Radarr/Readarr/Sonarr";

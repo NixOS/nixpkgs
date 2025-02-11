@@ -84,11 +84,11 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
     echo "================= /testing zlib using node ================="
   '';
 
-  postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+  postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
-      --replace '/usr/bin/libtool' 'ar' \
-      --replace 'AR="libtool"' 'AR="ar"' \
-      --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+      --replace-fail '/usr/bin/libtool' 'ar' \
+      --replace-fail 'AR="libtool"' 'AR="ar"' \
+      --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 })
 ```

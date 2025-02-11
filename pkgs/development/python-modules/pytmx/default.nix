@@ -1,28 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, pyglet
-, pysdl2
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygame,
+  pyglet,
+  pysdl2,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytmx";
-  version = "3.31";
-  format = "setuptools";
+  version = "3.32";
 
-  disabled = pythonOlder "3.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bitcraft";
     repo = "PyTMX";
-    rev = "v${version}";
-    sha256 = "05v8zv06fymvgv332g48kcing4k4ncy2iwgpy1qmxrpin1avyynx";
+    # Latest release was not tagged. However, the changes of this commit - the
+    # current HEAD - are part of the 3.32 release on PyPI.
+    rev = "7af805bc916e666fdf7165d5d6ba4c0eddfcde18";
+    hash = "sha256-zRrMk812gAZoCAeYq4Uz/1RwJ0lJc7szyZ3IQDYZOd4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools-scm
+  ];
+
+  dependencies = [
     pygame
     pyglet
     pysdl2
@@ -35,9 +44,7 @@ buildPythonPackage rec {
     "pytmx.util_pysdl2"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError on the property name

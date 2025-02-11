@@ -1,16 +1,18 @@
 # dleyna-renderer service.
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   ###### interface
   options = {
     services.dleyna-renderer = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable dleyna-renderer service, a DBus service
           for handling DLNA renderers.
         '';
@@ -18,9 +20,8 @@ with lib;
     };
   };
 
-
   ###### implementation
-  config = mkIf config.services.dleyna-renderer.enable {
+  config = lib.mkIf config.services.dleyna-renderer.enable {
     environment.systemPackages = [ pkgs.dleyna-renderer ];
 
     services.dbus.packages = [ pkgs.dleyna-renderer ];

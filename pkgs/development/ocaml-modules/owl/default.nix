@@ -1,25 +1,24 @@
-{ stdenv
-, buildDunePackage
-, dune-configurator
-, fetchFromGitHub
-, alcotest
-, ctypes
-, stdio
-, openblasCompat
-, owl-base
-, npy
+{
+  buildDunePackage,
+  dune-configurator,
+  alcotest,
+  ctypes,
+  stdio,
+  openblasCompat,
+  owl-base,
+  npy,
 }:
-
 
 buildDunePackage rec {
   pname = "owl";
 
   inherit (owl-base) version src meta;
 
-  duneVersion = "3";
-
   checkInputs = [ alcotest ];
-  buildInputs = [ dune-configurator stdio ];
+  buildInputs = [
+    dune-configurator
+    stdio
+  ];
   propagatedBuildInputs = [
     ctypes
     openblasCompat
@@ -27,5 +26,5 @@ buildDunePackage rec {
     npy
   ];
 
-  doCheck = !stdenv.isDarwin; # https://github.com/owlbarn/owl/issues/462
+  doCheck = true;
 }

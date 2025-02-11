@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,11 +18,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gabrielcnr";
     repo = "pytest-datadir";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sRLqL+8Jf5Kz+qscuG3hClUuPA+33PQa+ob1ht/7CJE=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

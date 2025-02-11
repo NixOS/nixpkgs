@@ -6,7 +6,7 @@ set -euo pipefail
 RELEASE_NAME=$(curl -s https://api.github.com/repos/infisical/infisical/releases \
   | jq -r 'sort_by(.created_at) | reverse |
            (map
-             (select ((.prerelease == false) and (.draft == false))) |
+             (select ((.prerelease == false) and (.draft == false) and (.name | contains("infisical-cli")))) |
              first
            ) | .name')
 VERSION=$(echo "$RELEASE_NAME" | sed -E 's/^infisical-cli\/v//')

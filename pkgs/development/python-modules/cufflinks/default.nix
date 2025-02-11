@@ -1,48 +1,58 @@
-{ lib, buildPythonPackage, fetchPypi
-, chart-studio
-, colorlover
-, ipython
-, ipywidgets
-, pytest
-, nose
-, numpy
-, pandas
-, six
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  colorlover,
+  ipython,
+  ipywidgets,
+  numpy,
+  pandas,
+  plotly,
+  pytestCheckHook,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "cufflinks";
   version = "0.17.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
+    hash = "sha256-SMGzQG3AMABBIZZkie68VRjOpw/U4/FjebSRMoUBpkQ=";
   };
 
-  propagatedBuildInputs = [
-    chart-studio
+  # replace duplicated pandas method
+  # https://github.com/santosjorge/cufflinks/pull/249#issuecomment-1759619149
+  postPatch = ''
+    substituteInPlace tests.py \
+      --replace-fail "from nose.tools import assert_equals" "def assert_equals(x, y): assert x == y" \
+      --replace-fail "df.ix" "df.loc"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorlover
     ipython
     ipywidgets
     numpy
     pandas
+    plotly
     six
-    statsmodels
   ];
 
-  nativeCheckInputs = [ pytest nose ];
+  pythonImportsCheck = [ "cufflinks" ];
 
-  # ignore tests which are incompatible with pandas>=1.0
-  # https://github.com/santosjorge/cufflinks/issues/236
-  checkPhase = ''
-    pytest tests.py -k 'not bar_row'
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "tests.py" ];
 
   meta = with lib; {
     description = "Productivity Tools for Plotly + Pandas";
     homepage = "https://github.com/santosjorge/cufflinks";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

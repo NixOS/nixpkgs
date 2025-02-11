@@ -1,19 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+  SystemConfiguration,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ferium";
-  version = "4.4.1";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "gorilla-devs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3ILDR6CmR/CTzZfUEPD10TQZRSDKSqHmwxU3GPHIyK8=";
+    hash = "sha256-eeQjezB6pRdnPADLgDLo8b+bUSP12gfBhFNt/uYCwHU=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
-  cargoHash = "sha256-00rzn8eWcxRfPvIT2+EVQLd6e8gnMWx78QrwURpxstg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3YKFKngyLg2ah4GY+LlbPbnVks7/xFawnMf3D1gjmwI=";
 
   # Disable the GUI file picker so that GTK/XDG dependencies aren't used
   buildNoDefaultFeatures = true;
@@ -32,8 +44,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Fast and multi-source CLI program for managing Minecraft mods and modpacks from Modrinth, CurseForge, and GitHub Releases";
+    mainProgram = "ferium";
     homepage = "https://github.com/gorilla-devs/ferium";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ leo60228 soupglasses ];
+    maintainers = with maintainers; [
+      leo60228
+      soupglasses
+    ];
   };
 }

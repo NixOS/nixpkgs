@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchsvn, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ctags";
@@ -13,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # don't use $T(E)MP which is set to the build directory
-  configureFlags= [ "--enable-tmpdir=/tmp" ];
+  configureFlags = [ "--enable-tmpdir=/tmp" ];
 
   patches = [
     # Library defines an `__unused__` which is a reserved name, and may
@@ -23,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A tool for fast source code browsing (exuberant ctags)";
+    description = "Tool for fast source code browsing (exuberant ctags)";
+    mainProgram = "ctags";
     longDescription = ''
       Ctags generates an index (or tag) file of language objects found
       in source files that allows these items to be quickly and easily

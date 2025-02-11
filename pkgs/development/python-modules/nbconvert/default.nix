@@ -1,27 +1,28 @@
-{ lib
-, fetchurl
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatchling
-, beautifulsoup4
-, bleach
-, defusedxml
-, jinja2
-, jupyter-core
-, jupyterlab-pygments
-, markupsafe
-, mistune
-, nbclient
-, packaging
-, pandocfilters
-, pygments
-, tinycss2
-, traitlets
-, importlib-metadata
-, flaky
-, ipywidgets
-, pytestCheckHook
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatchling,
+  beautifulsoup4,
+  bleach,
+  defusedxml,
+  jinja2,
+  jupyter-core,
+  jupyterlab-pygments,
+  markupsafe,
+  mistune,
+  nbclient,
+  packaging,
+  pandocfilters,
+  pygments,
+  traitlets,
+  importlib-metadata,
+  flaky,
+  ipykernel,
+  ipywidgets,
+  pytestCheckHook,
 }:
 
 let
@@ -30,23 +31,22 @@ let
     url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
     hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.11.0";
+  version = "7.16.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q+3AHPVDF3/94L/Cppcm1aR49q8QozL8G/Kfy08M8AA=";
+    hash = "sha256-yDRnu1d3/fqsXru46GTzALJ39oaS7MBNbaty8thEI0Q=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
   # various exporter templates
-  patches = [
-    ./templates.patch
-  ];
+  patches = [ ./templates.patch ];
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
@@ -55,28 +55,26 @@ in buildPythonPackage rec {
     cp ${style-css} share/templates/classic/static/style.css
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-    bleach
-    defusedxml
-    jinja2
-    jupyter-core
-    jupyterlab-pygments
-    markupsafe
-    mistune
-    nbclient
-    packaging
-    pandocfilters
-    pygments
-    tinycss2
-    traitlets
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  dependencies =
+    [
+      beautifulsoup4
+      bleach
+      defusedxml
+      jinja2
+      jupyter-core
+      jupyterlab-pygments
+      markupsafe
+      mistune
+      nbclient
+      packaging
+      pandocfilters
+      pygments
+      traitlets
+    ]
+    ++ bleach.optional-dependencies.css
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -84,8 +82,14 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     flaky
+    ipykernel
     ipywidgets
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = [

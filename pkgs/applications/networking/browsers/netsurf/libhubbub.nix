@@ -1,24 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, pkg-config
-, buildsystem
-, libparserutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gperf,
+  perl,
+  pkg-config,
+  buildsystem,
+  libparserutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libhubbub";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libhubbub-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-nnriU+bJBp51frmtTkhG84tNtSwMoBUURqn6Spd3NbY=";
+    hash = "sha256-isHm9fPUjAUUHVk5FxlTQpDFnNAp78JJ60/brBAs1aU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    gperf
     perl
     buildsystem
     libparserutils

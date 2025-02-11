@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, backports-cached-property
-, blessed
-, buildPythonPackage
-, cwcwidth
-, fetchPypi
-, pyte
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  blessed,
+  buildPythonPackage,
+  cwcwidth,
+  fetchPypi,
+  pyte,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-br4zIVvXyShRpQYEnHIMykz1wZLBZlwdepigTEcCdg4=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
     blessed
     cwcwidth
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    backports-cached-property
   ];
 
   nativeCheckInputs = [
@@ -40,6 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bpython/curtsies/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

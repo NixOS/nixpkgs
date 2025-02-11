@@ -31,6 +31,7 @@ To begin the installation, you have to boot your computer from the install drive
 
      ::: {.note}
      If your computer supports both BIOS and UEFI boot, choose the UEFI option.
+     You will likely need to disable "Secure Boot" to use the UEFI option. The exact steps vary by device manufacturer but generally "Secure Boot" will be listed under "Boot", "Security" or "Advanced" in the BIOS/UEFI menu.
      :::
 
      ::: {.note}
@@ -174,8 +175,6 @@ commands:
 OK
 > set_network 0 psk "mypassword"
 OK
-> set_network 0 key_mgmt WPA-PSK
-OK
 > enable_network 0
 OK
 ```
@@ -190,8 +189,6 @@ OK
 > set_network 0 identity "myname@example.com"
 OK
 > set_network 0 password "mypassword"
-OK
-> set_network 0 key_mgmt WPA-EAP
 OK
 > enable_network 0
 OK
@@ -223,6 +220,8 @@ need to do that yourself.
 The NixOS installer ships with multiple partitioning tools. The examples
 below use `parted`, but also provides `fdisk`, `gdisk`, `cfdisk`, and
 `cgdisk`.
+
+Use the command 'lsblk' to find the name of your 'disk' device.
 
 The recommended partition scheme differs depending if the computer uses
 *Legacy Boot* or *UEFI*.
@@ -272,6 +271,9 @@ update /etc/fstab.
     # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
     # parted /dev/sda -- set 3 esp on
     ```
+    ::: {.note}
+    In case you decided to not create a swap partition, replace `3` by `2`. To be sure of the id number of ESP, run `parted --list`.
+    :::
 
 Once complete, you can follow with
 [](#sec-installation-manual-partitioning-formatting).
@@ -373,7 +375,7 @@ Use the following commands:
 
     ```ShellSession
     # mkdir -p /mnt/boot
-    # mount /dev/disk/by-label/boot /mnt/boot
+    # mount -o umask=077 /dev/disk/by-label/boot /mnt/boot
     ```
 
 3.  If your machine has a limited amount of memory, you may want to
@@ -497,6 +499,12 @@ Use the following commands:
     Retype new password: ***
     ```
 
+    If you have a user account declared in your `configuration.nix` and plan to log in using this user, set a password before rebooting, e.g. for the `alice` user:
+
+    ```ShellSession
+    # nixos-enter --root /mnt -c 'passwd alice'
+    ```
+
     ::: {.note}
     For unattended installations, it is possible to use
     `nixos-install --no-root-passwd` in order to disable the password
@@ -516,15 +524,13 @@ Use the following commands:
     menu. This allows you to easily roll back to a previous
     configuration if something goes wrong.
 
-    You should log in and change the `root` password with `passwd`.
+    Use your declared user account to log in.
+    If you didn’t declare one, you should still be able to log in using the `root` user.
 
-    You'll probably want to create some user accounts as well, which can
-    be done with `useradd`:
-
-    ```ShellSession
-    $ useradd -c 'Eelco Dolstra' -m eelco
-    $ passwd eelco
-    ```
+    ::: {.note}
+    Some graphical display managers such as SDDM do not allow `root` login by default, so you might need to switch to TTY.
+    Refer to [](#sec-user-management) for details on declaring user accounts.
+    :::
 
     You may also want to install some software. This will be covered in
     [](#sec-package-management).
@@ -569,7 +575,7 @@ With a partitioned disk.
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
 # mount /dev/disk/by-label/nixos /mnt
 # mkdir -p /mnt/boot                      # (for UEFI systems only)
-# mount /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
+# mount -o umask=077 /dev/disk/by-label/boot /mnt/boot # (for UEFI systems only)
 # nixos-generate-config --root /mnt
 # nano /mnt/etc/nixos/configuration.nix
 # nixos-install

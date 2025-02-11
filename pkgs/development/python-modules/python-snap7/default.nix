@@ -1,35 +1,34 @@
-{ lib
-, buildPythonPackage
-, snap7
-, fetchFromGitHub
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  snap7,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "python-snap7";
-  version = "1.3";
-  format = "setuptools";
+  version = "2.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";
-    rev = "refs/tags/${version}";
-    hash = "sha256-90WwgqPHsHbuQUY49cSQblN1jfoLydiG0dm1aMF/NCA=";
+    tag = version;
+    hash = "sha256-mcdzgR0z2P5inK9Q+ZQhP5H8vZSaPbRCSEnt+wzG+ro=";
   };
-
-  propagatedBuildInputs = [
-    setuptools
-  ];
 
   prePatch = ''
     substituteInPlace snap7/common.py \
       --replace "lib_location = None" "lib_location = '${snap7}/lib/libsnap7.so'"
   '';
 
-  # Tests require root privileges to open privilaged ports
+  build-system = [ setuptools ];
+
+  # Tests require root privileges to open privileged ports
   doCheck = false;
 
   pythonImportsCheck = [
@@ -39,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for the snap7 PLC communication library";
+    mainProgram = "snap7-server";
     homepage = "https://github.com/gijzelaerr/python-snap7";
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];

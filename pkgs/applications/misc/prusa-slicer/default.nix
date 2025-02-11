@@ -1,22 +1,22 @@
 { stdenv
 , lib
-, openexr
-, jemalloc
-, c-blosc
 , binutils
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
-, wrapGAppsHook
-, boost
+, wrapGAppsHook3
+, boost186
 , cereal
-, cgal_5
+, cgal
 , curl
+, darwin
 , dbus
 , eigen
 , expat
 , glew
 , glib
+, glib-networking
 , gmp
 , gtk3
 , hicolor-icon-theme
@@ -25,19 +25,20 @@
 , mpfr
 , nanosvg
 , nlopt
-, opencascade-occt
+, opencascade-occt_7_6_1
 , openvdb
 , pcre
 , qhull
-, tbb_2021_8
+, tbb_2021_11
 , wxGTK32
 , xorg
 , libbgcode
 , heatshrink
 , catch2
-, fetchpatch
+, webkitgtk_4_0
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , wxGTK-override ? null
+, opencascade-override ? null
 }:
 let
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
@@ -64,39 +65,53 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost tbb_2021_8 jemalloc c-blosc ilmbase ];
-  });
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+  opencascade-override' = if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
+
+  patches = [
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.0";
+  version = "2.9.0";
+  inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-S0z2v6knkQ+xlABB1zedEGtlxA/65X/vxLh304StfbE=";
+    hash = "sha256-6BrmTNIiu6oI/CbKPKoFQIh1aHEVfJPIkxomQou0xKk=";
     rev = "version_${finalAttrs.version}";
   };
+
+  # required for GCC 14
+  # (not applicable to super-slicer fork)
+  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
+    substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
+      --replace-fail \
+      "WritableDataStoreTraits<ArrItem>::template set" \
+      "WritableDataStoreTraits<ArrItem>::set"
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    wxGTK-override'
   ];
 
   buildInputs = [
     binutils
-    boost
+    boost186  # does not build with 1.87, see https://github.com/prusa3d/PrusaSlicer/issues/13799
     cereal
-    cgal_5
+    cgal
     curl
     dbus
     eigen
     expat
     glew
     glib
+    glib-networking
     gmp
     gtk3
     hicolor-icon-theme
@@ -105,19 +120,24 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     nanosvg-fltk
     nlopt
-    opencascade-occt
+    opencascade-override'
     openvdb_tbb_2021_8
     pcre
     qhull
-    tbb_2021_8
+    tbb_2021_11
     wxGTK-override'
     xorg.libX11
     libbgcode
     heatshrink
     catch2
+    webkitgtk_4_0
   ] ++ lib.optionals withSystemd [
     systemd
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
+
+  strictDeps = true;
 
   separateDebugInfo = true;
 
@@ -160,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLIC3R_STATIC=0"
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
+    "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
   ];
 
   postInstall = ''
@@ -194,9 +215,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ moredread tweber tmarkus ];
-  } // lib.optionalAttrs (stdenv.isDarwin) {
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ tweber tmarkus ];
+    platforms = platforms.unix;
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     mainProgram = "PrusaSlicer";
   };
 })

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rstr
-, sre-yield
-, pythonImportsCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rstr,
+  sre-yield,
 }:
 
 buildPythonPackage rec {
   pname = "stringbrewer";
   version = "0.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,9 +19,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     rstr
     sre-yield
-  ];
-  nativeBuildInputs = [
-    pythonImportsCheckHook
   ];
 
   # Package has no tests
@@ -34,4 +32,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

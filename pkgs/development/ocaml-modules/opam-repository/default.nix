@@ -1,24 +1,24 @@
-{ lib, buildDunePackage, unzip, opam-format, curl }:
+{
+  lib,
+  buildDunePackage,
+  opam-format,
+  curl,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opam-repository";
-
-  minimumOCamlVersion = "4.02";
-
-  useDune2 = true;
 
   inherit (opam-format) src version;
 
   patches = [ ./download-tool.patch ];
   postPatch = ''
     substituteInPlace src/repository/opamRepositoryConfig.ml \
-      --replace "SUBSTITUTE_NIXOS_CURL_PATH" "\"${curl}/bin/curl\""
+      --replace-fail "SUBSTITUTE_NIXOS_CURL_PATH" "\"${curl}/bin/curl\""
   '';
 
-  strictDeps = true;
-
-  nativeBuildInputs = [ unzip curl ];
   propagatedBuildInputs = [ opam-format ];
+
+  configureFlags = [ "--disable-checks" ];
 
   meta = opam-format.meta // {
     description = "OPAM repository and remote sources handling, including curl/wget, rsync, git, mercurial, darcs backends";

@@ -1,52 +1,59 @@
-{ name-prefix ? "temurin"
-, brand-name ? "Eclipse Temurin"
-, sourcePerArch
-, knownVulnerabilities ? []
+{
+  name-prefix ? "temurin",
+  brand-name ? "Eclipse Temurin",
+  sourcePerArch,
+  knownVulnerabilities ? [ ],
 }:
 
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, setJavaClassPath
-# minimum dependencies
-, alsa-lib
-, fontconfig
-, freetype
-, libffi
-, xorg
-, zlib
-# runtime dependencies
-, cups
-# runtime dependencies for GTK+ Look and Feel
-# TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
-# which should be fixable, this is a no-rebuild workaround for GHC.
-, gtkSupport ? !stdenv.targetPlatform.isGhcjs
-, cairo
-, glib
-, gtk3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  setJavaClassPath,
+  # minimum dependencies
+  alsa-lib,
+  fontconfig,
+  freetype,
+  libffi,
+  xorg,
+  zlib,
+  # runtime dependencies
+  cups,
+  # runtime dependencies for GTK+ Look and Feel
+  # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+  # which should be fixable, this is a no-rebuild workaround for GHC.
+  gtkSupport ? !stdenv.targetPlatform.isGhcjs,
+  cairo,
+  glib,
+  gtk3,
 }:
 
 let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
-  runtimeDependencies = [
-    cups
-  ] ++ lib.optionals gtkSupport [
-    cairo glib gtk3
-  ];
+  runtimeDependencies =
+    [
+      cups
+    ]
+    ++ lib.optionals gtkSupport [
+      cairo
+      glib
+      gtk3
+    ];
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
   validCpuTypes = builtins.attrNames lib.systems.parse.cpuTypes;
-  providedCpuTypes = builtins.filter
-    (arch: builtins.elem arch validCpuTypes)
-    (builtins.attrNames sourcePerArch);
+  providedCpuTypes = builtins.filter (arch: builtins.elem arch validCpuTypes) (
+    builtins.attrNames sourcePerArch
+  );
   result = stdenv.mkDerivation {
-    pname = if sourcePerArch.packageType == "jdk"
-      then "${name-prefix}-bin"
-      else "${name-prefix}-${sourcePerArch.packageType}-bin";
+    pname =
+      if sourcePerArch.packageType == "jdk" then
+        "${name-prefix}-bin"
+      else
+        "${name-prefix}-${sourcePerArch.packageType}-bin";
 
-    version =
-      sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
+    version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
     src = fetchurl {
       inherit (sourcePerArch.${cpuName}) url sha256;
@@ -56,16 +63,19 @@ let
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       freetype
-      stdenv.cc.cc.lib # libstdc++.so.6
+      (lib.getLib stdenv.cc.cc) # libstdc++.so.6
       xorg.libX11
       xorg.libXext
       xorg.libXi
       xorg.libXrender
       xorg.libXtst
       zlib
-    ] ++ lib.optional stdenv.isAarch32 libffi;
+    ] ++ lib.optional stdenv.hostPlatform.isAarch32 libffi;
 
-    nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      makeWrapper
+    ];
 
     # See: https://github.com/NixOS/patchelf/issues/10
     dontStrip = 1;
@@ -121,11 +131,16 @@ let
 
     meta = with lib; {
       license = licenses.gpl2Classpath;
+      sourceProvenance = with sourceTypes; [
+        binaryNativeCode
+        binaryBytecode
+      ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes;  # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ];
+      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
+      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
       inherit knownVulnerabilities;
       mainProgram = "java";
     };
   };
-in result
+in
+result

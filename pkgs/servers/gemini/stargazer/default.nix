@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, rustPlatform
-, installShellFiles
-, scdoc
-, Security
-, nixosTests
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  installShellFiles,
+  scdoc,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-c0gKvVaMiUOGHlPmtaW6it8J9MusQY7BA/5F9I3ysMc=";
+    hash = "sha256-0vbQDHuLrgrsWiOb2hb6lYylJm5o/wOzoDIw85H8Eh0=";
   };
 
-  cargoHash = "sha256-8VrEZZNSFLAjUagsiRApvjiXusBHLLn1O/+QKtQY4wg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KdHYyuH1RMLRueqYbfADUktBx9aL8yTagB0KxEGQsCs=";
 
-  doCheck = false; # Uses external testing framework that requires network
-
-  passthru.tests = {
-    basic-functionality = nixosTests.stargazer;
+  passthru = {
+    tests.basic-functionality = nixosTests.stargazer;
+    updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
-
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postInstall = ''
     scdoc < doc/stargazer.scd  > stargazer.1
@@ -40,7 +41,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast and easy to use Gemini server";
+    description = "Fast and easy to use Gemini server";
+    mainProgram = "stargazer";
     homepage = "https://sr.ht/~zethra/stargazer/";
     license = licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";

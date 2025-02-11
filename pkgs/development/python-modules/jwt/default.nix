@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cryptography
-, freezegun
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cryptography,
+  freezegun,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "jwt";
   version = "1.3.1";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -26,14 +28,12 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "--flake8" ""
   '';
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook
     freezegun
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "jwt" ];

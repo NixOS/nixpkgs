@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.ratpoison.enable = mkEnableOption (lib.mdDoc "ratpoison");
+    services.xserver.windowManager.ratpoison.enable = mkEnableOption "ratpoison";
   };
 
   ###### implementation

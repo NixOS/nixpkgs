@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
-  inInitrd = lib.any (fs: fs == "erofs") config.boot.initrd.supportedFilesystems;
-  inSystem = lib.any (fs: fs == "erofs") config.boot.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.erofs or false;
+  inSystem = config.boot.supportedFilesystems.erofs or false;
 
 in
 

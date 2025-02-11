@@ -1,4 +1,8 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mus";
@@ -11,10 +15,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yvMV+lhU9Wtwrhw0RKRUNFNznvZP0zcnT6jqPaqzhUs=";
   };
 
-  cargoHash = "sha256-K9B8y9pOHcAOrUCmCB0zW2wy81DTF3K97gPYmAiKwAM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1ruRKqHW5/MH4THRAozofAROZT6zE3JFKGluuWWa1ms=";
 
   meta = with lib; {
-    description = "a pretty good mpd client";
+    description = "Pretty good mpd client";
     homepage = "https://sr.ht/~nbsp/mus";
     license = licenses.mit;
     maintainers = with maintainers; [ nbsp ];

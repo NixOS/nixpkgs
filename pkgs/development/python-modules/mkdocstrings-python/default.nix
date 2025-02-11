@@ -1,44 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, griffe
-, mkdocs-material
-, mkdocstrings
-, pdm-backend
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  griffe,
+  inline-snapshot,
+  mkdocs-autorefs,
+  mkdocs-material,
+  mkdocstrings,
+  pdm-backend,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "1.7.5";
-  format = "pyproject";
+  version = "1.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PfAdECR80kYgvaaL+09zsqOeWa8z4pSnORNFnj+/l7M=";
+    tag = version;
+    hash = "sha256-NgVCKV3AWk4pRT7/+6YGXmKSZETL4ZOWDWGeb/qjdng=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     griffe
+    mkdocs-autorefs
     mkdocstrings
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
+    inline-snapshot
     mkdocs-material
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mkdocstrings_handlers"
+  pythonImportsCheck = [ "mkdocstrings_handlers" ];
+
+  disabledTests = [
+    # Tests fails with AssertionError
+    "test_windows_root_conversion"
+    # TypeError
+    "test_format_code"
   ];
 
   meta = with lib; {

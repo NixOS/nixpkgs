@@ -1,4 +1,10 @@
-{ lib, writeTextFile, runtimeShell, drawio, xvfb-run }:
+{
+  lib,
+  writeTextFile,
+  runtimeShell,
+  drawio,
+  xvfb-run,
+}:
 
 writeTextFile {
   name = "${drawio.pname}-headless-${drawio.version}";
@@ -31,7 +37,10 @@ writeTextFile {
       Runs drawio under xvfb-run, with configuration going to a temporary
       directory.
     '';
-    maintainers = with maintainers; [ qyliss tfc ];
+    maintainers = with maintainers; [
+      qyliss
+      tfc
+    ];
     mainProgram = "drawio";
   };
 }

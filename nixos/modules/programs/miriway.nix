@@ -1,15 +1,21 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.miriway;
-in {
+in
+{
   options.programs.miriway = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       Miriway, a Mir based Wayland compositor. You can manually launch Miriway by
       executing "exec miriway" on a TTY, or launch it from a display manager. Copy
       /etc/xdg/xdg-miriway/miriway-shell.config to ~/.config/miriway-shell.config
       to modify the system-wide configuration on a per-user basis. See <https://github.com/Miriway/Miriway>,
-      and "miriway --help" for more information'');
+      and "miriway --help" for more information'';
 
     config = lib.mkOption {
       type = lib.types.lines;
@@ -50,7 +56,7 @@ in {
         meta=Page_Down:@workspace-down
         ctrl-alt=BackSpace:@exit
       '';
-      description = lib.mdDoc ''
+      description = ''
         Miriway's config. This will be installed system-wide.
         The default will install the miriway package's barebones example config.
       '';
@@ -65,13 +71,15 @@ in {
       };
     };
 
-    hardware.opengl.enable = lib.mkDefault true;
+    hardware.graphics.enable = lib.mkDefault true;
     fonts.enableDefaultPackages = lib.mkDefault true;
     programs.dconf.enable = lib.mkDefault true;
     programs.xwayland.enable = lib.mkDefault true;
 
     # To make the Miriway session available if a display manager like SDDM is enabled:
-    services.xserver.displayManager.sessionPackages = [ pkgs.miriway ];
+    services.displayManager.sessionPackages = [ pkgs.miriway ];
+
+    xdg.icons.enable = true;
   };
 
   meta.maintainers = with lib.maintainers; [ OPNA2608 ];

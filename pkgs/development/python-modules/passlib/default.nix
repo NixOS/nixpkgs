@@ -1,42 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, argon2-cffi
-, bcrypt
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  argon2-cffi,
+  bcrypt,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-xdist,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "passlib";
   version = "1.7.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3v1Q9ytlxUAqssVzgwppeOXyAq0NmEeTyN3ixBUuvgQ";
+  src = fetchFromGitLab {
+    domain = "foss.heptapod.net";
+    owner = "python-libs";
+    repo = "passlib";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Mx2Xg/KAEfvfep2B/gWATTiAPJc+f22MTcsEdRpt3n8=";
   };
 
-  passthru.optional-dependencies = {
+  build-system = [ setuptools ];
+
+  dependencies = [ setuptools ];
+
+  optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
     totp = [ cryptography ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ] ++ passthru.optional-dependencies.argon2
-  ++ passthru.optional-dependencies.bcrypt
-  ++ passthru.optional-dependencies.totp;
+  # Fix for https://foss.heptapod.net/python-libs/passlib/-/issues/190
+  postPatch = ''
+    substituteInPlace passlib/handlers/bcrypt.py \
+      --replace-fail "version = _bcrypt.__about__.__version__" \
+      "version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')"
+  '';
 
-  pythonImportsCheck = [
-    "passlib"
-  ];
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-xdist
+    ]
+    ++ optional-dependencies.argon2
+    ++ optional-dependencies.bcrypt
+    ++ optional-dependencies.totp;
+
+  pythonImportsCheck = [ "passlib" ];
 
   disabledTests = [
     # timming sensitive
@@ -53,10 +69,11 @@ buildPythonPackage rec {
     "--deselect=passlib/tests/test_handlers.py::sha256_crypt_os_crypt_test::test_82_crypt_support"
   ];
 
-  meta = with lib; {
-    description = "A password hashing library for Python";
+  meta = {
+    changelog = "https://foss.heptapod.net/python-libs/passlib/-/blob/${version}/docs/history/${lib.versions.majorMinor version}.rst";
+    description = "Password hashing library for Python";
     homepage = "https://foss.heptapod.net/python-libs/passlib";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,17 +1,57 @@
-{ callPackage, faust, fontconfig, cmake, libvterm-neovim, libevdev, libglvnd, fira-code, ... } @ args:
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  pkg-config,
+  cmake,
+  meson,
+  ninja,
+  faust,
+  fontconfig,
+  glew,
+  libvterm-neovim,
+  lv2,
+  lv2lint,
+  sord,
+  xorg,
+}:
 
-callPackage ./generic.nix (args // rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mephisto";
-  version = "0.16.0";
+  version = "0.18.2";
 
-  sha256 = "0vgr3rsvdj4w0xpc5iqpvyqilk42wr9zs8bg26sfv3f2wi4hb6gx";
+  src = fetchFromSourcehut {
+    domain = "open-music-kontrollers.ch";
+    owner = "~hp";
+    repo = "mephisto.lv2";
+    rev = finalAttrs.version;
+    hash = "sha256-ab6OGt1XVgynKNdszzdXwJ/jVKJSzgSmAv6j1U3/va0=";
+  };
 
-  additionalBuildInputs = [ faust fontconfig cmake libvterm-neovim libevdev libglvnd fira-code ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    fontconfig
+    cmake
+  ];
 
-  # see: https://github.com/OpenMusicKontrollers/mephisto.lv2/issues/6
-  postPatch = ''
-    sed -i 's/llvm-c-dsp/llvm-dsp-c/g' mephisto.c
-  '';
+  buildInputs = [
+    faust
+    libvterm-neovim
+    lv2
+    sord
+    xorg.libX11
+    xorg.libXext
+    glew
+    lv2lint
+  ];
 
-  description = "A Just-in-time FAUST embedded in an LV2 plugin";
+  meta = with lib; {
+    description = "Just-in-time FAUST embedded in an LV2 plugin";
+    homepage = "https://git.open-music-kontrollers.ch/~hp/mephisto.lv2";
+    license = licenses.artistic2;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
+  };
 })

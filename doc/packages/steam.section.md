@@ -31,7 +31,6 @@ Use `programs.steam.enable = true;` if you want to add steam to `systemPackages`
 
 - **Using the FOSS Radeon or nouveau (nvidia) drivers**
 
-  - The `newStdcpp` parameter was removed since NixOS 17.09 and should not be needed anymore.
   - Steam ships statically linked with a version of `libcrypto` that conflicts with the one dynamically loaded by radeonsi_dri.so. If you get the error:
 
     ```
@@ -39,20 +38,6 @@ Use `programs.steam.enable = true;` if you want to add steam to `systemPackages`
     ```
 
     have a look at [this pull request](https://github.com/NixOS/nixpkgs/pull/20269).
-
-- **Java**
-
-  1. There is no java in steam chrootenv by default. If you get a message like:
-
-    ```
-    /home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found
-    ```
-
-    you need to add:
-
-    ```nix
-    steam.override { withJava = true; };
-    ```
 
 ## steam-run {#sec-steam-run}
 

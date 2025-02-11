@@ -1,26 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, protobuf
-, googleapis-common-protos
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  protobuf,
+  googleapis-common-protos,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.22.3";
-  disabled = !isPy3k;
+  version = "1.25.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/c0JcTy9QkgHQNL+KcmQ9/vYhaZ+/DKKqL5u4+n3ams=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "proto-plus-python";
+    tag = "v${version}";
+    hash = "sha256-rRA5t3QPVSeAqy60icrgvYKbvrClv22I3IYxHoMftQ0=";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook pytz googleapis-common-protos ];
+  dependencies = [ protobuf ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytz
+    googleapis-common-protos
+  ];
 
   pythonImportsCheck = [ "proto" ];
 

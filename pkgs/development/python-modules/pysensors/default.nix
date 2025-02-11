@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, unittestCheckHook, fetchFromGitHub, lm_sensors }:
+{
+  lib,
+  buildPythonPackage,
+  unittestCheckHook,
+  fetchFromGitHub,
+  lm_sensors,
+}:
 buildPythonPackage {
   version = "2017-07-13";
+  format = "setuptools";
   pname = "pysensors";
 
   # note that https://pypi.org/project/PySensors/ is a different project
@@ -19,12 +26,15 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   meta = with lib; {
     maintainers = with maintainers; [ guibou ];
     description = "Easy hardware health monitoring in Python for Linux systems";
-    homepage = "https://pysensors.readthedocs.org";
+    homepage = "https://bastienleonard.github.io/pysensors/";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

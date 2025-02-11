@@ -6,15 +6,12 @@
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
 , maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
-}:
+, self_attribute_name
+}@args:
 assert (hash == null) -> (src != null);
 let
-  atLeast24 = lib.versionAtLeast version "2.4pre";
-  atLeast25 = lib.versionAtLeast version "2.5pre";
-  atLeast27 = lib.versionAtLeast version "2.7pre";
-  atLeast210 = lib.versionAtLeast version "2.10pre";
-  atLeast213 = lib.versionAtLeast version "2.13pre";
-  atLeast214 = lib.versionAtLeast version "2.14pre";
+  atLeast224 = lib.versionAtLeast version "2.24pre";
+  atLeast225 = lib.versionAtLeast version "2.25pre";
 in
 { stdenv
 , autoconf-archive
@@ -29,10 +26,12 @@ in
 , callPackage
 , coreutils
 , curl
+, darwin
 , docbook_xsl_ns
 , docbook5
 , editline
 , flex
+, git
 , gnutar
 , gtest
 , gzip
@@ -40,31 +39,30 @@ in
 , lib
 , libarchive
 , libcpuid
+, libgit2
 , libsodium
 , libxml2
 , libxslt
 , lowdown
+, lowdown-unsandboxed
+, toml11
+, man
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
+, nixosTests
 , openssl
 , perl
+, python3
 , pkg-config
 , rapidcheck
 , Security
 , sqlite
 , util-linuxMinimal
 , xz
-
-, enableDocumentation ? !atLeast24 || (
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    # mdbook errors out on risc-v due to a rustc bug
-    # https://github.com/NixOS/nixpkgs/pull/242019
-    # https://github.com/rust-lang/rust/issues/114473
-    !stdenv.buildPlatform.isRiscV
-  )
+, enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
-, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+, withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
 
 , confDir
@@ -73,6 +71,9 @@ in
 
   # passthru tests
 , pkgsi686Linux
+, pkgsStatic
+, runCommand
+, pkgs
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -86,9 +87,13 @@ self = stdenv.mkDerivation {
     [ "out" "dev" ]
     ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
-  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
-  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable = [
+    "shadowstack"
+  ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+
+  nativeInstallCheckInputs = lib.optional atLeast224 [ git man ];
 
   nativeBuildInputs = [
     pkg-config
@@ -97,17 +102,18 @@ self = stdenv.mkDerivation {
     bison
     flex
     jq
-  ] ++ lib.optionals (enableDocumentation && !atLeast24) [
-    libxslt
-    libxml2
-    docbook_xsl_ns
-    docbook5
-  ] ++ lib.optionals (enableDocumentation && atLeast24) [
-    (lib.getBin lowdown)
-    mdbook
-  ] ++ lib.optionals (atLeast213 && enableDocumentation) [
-    mdbook-linkcheck
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals enableDocumentation
+    (if atLeast224 then [
+      (lib.getBin lowdown-unsandboxed)
+      mdbook
+      mdbook-linkcheck
+    ] else [
+      libxslt
+      libxml2
+      docbook_xsl_ns
+      docbook5
+    ])
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal
   ];
 
@@ -124,21 +130,27 @@ self = stdenv.mkDerivation {
     gtest
     libarchive
     lowdown
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ] ++ lib.optionals (stdenv.isx86_64) [
-    libcpuid
-  ] ++ lib.optionals atLeast214 [
+  ] ++ lib.optionals atLeast224 [
+    libgit2
+    toml11
     rapidcheck
+  ] ++ lib.optionals (atLeast225 && enableDocumentation) [
+    python3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+  ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
+    libcpuid
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
+  ] ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin) [
+    darwin.apple_sdk.libs.sandbox
   ];
 
   propagatedBuildInputs = [
     boehmgc
-  ] ++ lib.optionals (atLeast27) [
+  ] ++ lib.optionals atLeast224 [
     nlohmann_json
   ];
 
@@ -153,16 +165,16 @@ self = stdenv.mkDerivation {
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
-        patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+        patchelf --set-rpath $out/lib:${lib.getLib stdenv.cc.cc}/lib $out/lib/libboost_thread.so.*
       ''}
     '' +
     # On all versions before c9f51e87057652db0013289a95deffba495b35e7, which
     # removes config.nix entirely and is not present in 2.3.x, we need to
     # patch around an issue where the Nix configure step pulls in the build
     # system's bash and other utilities when cross-compiling.
-    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast24) ''
+    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && !atLeast224) ''
       mkdir tmp/
       substitute corepkgs/config.nix.in tmp/config.nix.in \
         --subst-var-by bash ${bash}/bin/bash \
@@ -182,18 +194,16 @@ self = stdenv.mkDerivation {
     "--enable-gc"
   ] ++ lib.optionals (!enableDocumentation) [
     "--disable-doc-gen"
-  ] ++ lib.optionals atLeast214 [
-    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
-  ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (atLeast224 && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
     "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [
     # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
     "--disable-seccomp-sandboxing"
-  ] ++ lib.optionals (atLeast210 && stdenv.cc.isGNU && !enableStatic) [
+  ] ++ lib.optionals (atLeast224 && stdenv.cc.isGNU && !enableStatic) [
     "--enable-lto"
   ];
 
@@ -209,18 +219,29 @@ self = stdenv.mkDerivation {
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   doInstallCheck = true;
-  installCheckTarget = if atLeast210 then "installcheck" else null;
+  installCheckTarget = if atLeast224 then "installcheck" else null;
 
   # socket path becomes too long otherwise
-  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+  preInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export TMPDIR=$NIX_BUILD_TOP
   ''
+  # Prevent crashes in libcurl due to invoking Objective-C `+initialize` methods after `fork`.
+  # See http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+  ''
   # See https://github.com/NixOS/nix/issues/5687
-  + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
+  + lib.optionalString (atLeast224 && stdenv.hostPlatform.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
+  '' # TODO: investigate why this broken
+  + lib.optionalString (atLeast224 && stdenv.hostPlatform.system == "aarch64-linux") ''
+    echo "exit 0" > tests/functional/flakes/show.sh
+  '' + ''
+    # nixStatic otherwise does not find its man pages in tests.
+    export MANPATH=$man/share/man:$MANPATH
   '';
 
-  separateDebugInfo = stdenv.isLinux && (atLeast24 -> !enableStatic);
+  separateDebugInfo = stdenv.hostPlatform.isLinux && (atLeast224 -> !enableStatic);
 
   enableParallelBuilding = true;
 
@@ -229,11 +250,15 @@ self = stdenv.mkDerivation {
 
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
-    tests = {
-      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+    tests = import ./tests.nix {
+      inherit runCommand version src lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests self_attribute_name;
+      nix = self;
     };
   };
 
+  # point 'nix edit' and ofborg at the file that defines the attribute,
+  # not this common file.
+  pos = builtins.unsafeGetAttrPos "version" args;
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
     longDescription = ''
@@ -244,7 +269,7 @@ self = stdenv.mkDerivation {
       environments.
     '';
     homepage = "https://nixos.org/";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";

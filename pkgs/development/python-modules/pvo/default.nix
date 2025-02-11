@@ -1,28 +1,30 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  mashumaro,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SvsrvGwIAlj/8hdk90+rxigVrx6n3YInvF/4eux2H04=";
+    tag = "v${version}";
+    hash = "sha256-EQdOPAYh7D9jHtuOuDtokxXnFKKtC0HybSwX77jj6+c=";
   };
 
   postPatch = ''
@@ -32,13 +34,11 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    pydantic
+    mashumaro
     yarl
   ];
 
@@ -46,11 +46,10 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "pvo"
-  ];
+  pythonImportsCheck = [ "pvo" ];
 
   meta = with lib; {
     description = "Python module to interact with the PVOutput API";

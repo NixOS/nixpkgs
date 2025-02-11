@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, callPackage
-, cmake
-, gmp
-, halibut
-, ncurses
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  cmake,
+  gmp,
+  halibut,
+  ncurses,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -41,7 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
-    description = "A command-line exact real calculator";
+    description = "Command-line exact real calculator";
+    mainProgram = "spigot";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;

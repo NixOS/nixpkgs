@@ -1,37 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, jinja2
-, numpy
-, pyparsing
-, setuptools
-, sympy
-, pytest
-, pytest-xdist
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  jinja2,
+  numpy,
+  pyparsing,
+  setuptools,
+  sympy,
+  pytest,
+  pythonOlder,
+  pytest-xdist,
+  setuptools-scm,
+  python,
+  scipy,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "brian2";
-  version = "2.5.4";
+  version = "2.8.0";
+  pyproject = true;
+
+  # https://github.com/python/cpython/issues/117692
+  disabled = pythonOlder "3.12";
 
   src = fetchPypi {
-    pname = "Brian2";
-    inherit version;
-    hash = "sha256-XMXSOwcH8fLgzXCcT+grjYxhBdtF4H/Vr+S7J4GYZSw=";
+    inherit pname version;
+    hash = "sha256-1JSE58y1T0YLuFMgVv2qf7bZoLddeyoyxF2dzgsbuUg=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    ./0001-remove-invalidxyz.patch # invalidxyz are reported as error so I remove it
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+
+    substituteInPlace brian2/codegen/cpp_prefs.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
+
+  build-system = [
+    setuptools-scm
+  ];
+
+  dependencies = [
     cython
     jinja2
     numpy
     pyparsing
     setuptools
     sympy
+    scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-xdist
   ];
@@ -44,10 +69,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
-    description = "A clock-driven simulator for spiking neural networks";
+  meta = {
+    description = "Clock-driven simulator for spiking neural networks";
     homepage = "https://briansimulator.org/";
-    license = licenses.cecill21;
-    maintainers = with maintainers; [ jiegec ];
+    license = lib.licenses.cecill21;
+    maintainers = with lib.maintainers; [ jiegec ];
   };
 }

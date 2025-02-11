@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, fltk13
-, gtk2
-, gtk3
-, makeWrapper
-, pkg-config
-, psmisc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  fltk13,
+  gtk2,
+  gtk3,
+  makeWrapper,
+  pkg-config,
+  psmisc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-tools";
-  version = "1.2.5";
+  version = "1.2.11";
 
   src = fetchurl {
     url = "mirror://alsa/tools/alsa-tools-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-NacQJ6AfTX3kci4iNSDpQN5os8VwtsZxaRVnrij5iT4=";
+    hash = "sha256-CRXJY0pQL9NlXKnFdNJZvJ55mD2R1Frqz/bzwA+K4+k=";
   };
 
   nativeBuildInputs = [
@@ -108,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA Tools";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

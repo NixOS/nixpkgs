@@ -1,18 +1,19 @@
-{ buildPythonApplication
-, fetchPypi
-, lib
-, python-gnupg
-, setuptools
+{
+  buildPythonApplication,
+  fetchPypi,
+  lib,
+  python-gnupg,
+  setuptools,
 }:
 
 buildPythonApplication rec {
   pname = "pass2csv";
-  version = "1.0.0";
-  format = "pyproject";
+  version = "1.1.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-a/PQl/nqdj9xOM2hfAIiLuGy5F4KmEWFJihZ4gilaJw=";
+    hash = "sha256-p7r+zDakKy/N+RbxAfGatvkYCDKRh5T3owoYUrHJ5N0=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +28,10 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Export pass(1), \"the standard unix password manager\", to CSV";
+    description = "Export pass(1), \"Standard unix password manager\", to CSV";
+    mainProgram = "pass2csv";
     homepage = "https://github.com/reinefjord/pass2csv";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

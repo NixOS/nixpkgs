@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, defusedxml
-, fetchFromGitHub
-, httpretty
-, lxml
-, oauthlib
-, pyjwt
-, pytestCheckHook
-, python-jose
-, python3-openid
-, python3-saml
-, pythonOlder
-, requests
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  httpretty,
+  lxml,
+  oauthlib,
+  pyjwt,
+  pytestCheckHook,
+  python-jose,
+  python3-openid,
+  python3-saml,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "social-auth-core";
-  version = "4.4.2";
-  format = "setuptools";
+  version = "4.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-o/qx3bwaj2fiNKM3fafFxOW27JrJ9jG4M4uSnnJDpes=";
+    tag = version;
+    hash = "sha256-tFaRvNoO5K7ytqMhL//Ntasc7jb4PYXB1yyjFvFqQH8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cryptography
@@ -40,23 +44,19 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  passthru.optional-dependencies = {
-    openidconnect = [
-      python-jose
-    ];
+  optional-dependencies = {
+    openidconnect = [ python-jose ];
     saml = [
       lxml
       python3-saml
     ];
-    azuread = [
-      cryptography
-    ];
+    azuread = [ cryptography ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     httpretty
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Disable checking the code coverage
   prePatch = ''
@@ -68,14 +68,13 @@ buildPythonPackage rec {
       --replace "{posargs:-v --cov=social_core}" "{posargs:-v}"
   '';
 
-  pythonImportsCheck = [
-    "social_core"
-  ];
+  pythonImportsCheck = [ "social_core" ];
 
   meta = with lib; {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
+    changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
   };
 }

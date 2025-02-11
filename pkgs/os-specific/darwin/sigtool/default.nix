@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sigtool";
@@ -17,7 +23,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A tool for working with embedded signatures in Mach-O files";
+    description = "Tool for working with embedded signatures in Mach-O files";
     homepage = "https://github.com/thefloweringash/sigtool";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, six, lark, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  lark,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "commentjson";
   version = "0.9.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "vaidik";
@@ -19,7 +27,10 @@ buildPythonPackage rec {
     rm -r commentjson/tests/test_json
   '';
 
-  propagatedBuildInputs = [ lark six ];
+  propagatedBuildInputs = [
+    lark
+    six
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -29,6 +40,6 @@ buildPythonPackage rec {
     description = "Add JavaScript or Python style comments in JSON";
     homepage = "https://github.com/vaidik/commentjson/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

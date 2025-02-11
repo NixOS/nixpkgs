@@ -1,38 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lark
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lark,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cqQ4zuztfS5MiY4hj1WipKunqIfB1kpM+RODcZPERrY=";
+    hash = "sha256-rI/1n7m9Q36im4mn18UH/QoelXhFuumurGnyiSuNaB4=";
   };
 
-  # Nose is required during build process, so can not use `nativeCheckInputs`.
-  buildInputs = [
-    nose
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    lark
-  ];
+  dependencies = [ lark ];
 
   # This fork of python-hcl2 doesn't ship tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hcl2"
-  ];
+  pythonImportsCheck = [ "hcl2" ];
 
   meta = with lib; {
     description = "Parser for HCL2 written in Python using Lark";
@@ -45,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amplify-education/python-hcl2";
     license = licenses.mit;
     maintainers = with maintainers; [ anhdle14 ];
+    mainProgram = "hcl2tojson";
   };
 }

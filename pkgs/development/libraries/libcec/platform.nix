@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "p8-platform";
@@ -18,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Pulse-Eight/platform";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.titanous ];
+    maintainers = teams.kodi.members;
   };
 }

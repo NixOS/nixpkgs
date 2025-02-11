@@ -1,14 +1,14 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, lib
-, arch
-, ocamlPackages
-, ocaml
-, zlib
-, z3
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  arch,
+  ocamlPackages,
+  ocaml,
+  zlib,
+  z3,
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "sail-riscv";
@@ -21,8 +21,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-7PZNNUMaCZEBf0lOCqkquewRgZPooBOjIbGF7JlLnEo=";
   };
 
-  nativeBuildInputs = with ocamlPackages; [ ocamlbuild findlib ocaml z3 sail ];
-  buildInputs = with ocamlPackages; [ zlib linksem ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocamlbuild
+    findlib
+    ocaml
+    z3
+    sail
+  ];
+  buildInputs = with ocamlPackages; [
+    zlib
+    linksem
+  ];
   strictDeps = true;
 
   patches = [
@@ -32,11 +41,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    rm -r prover_snapshots
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace "-flto" ""
-  '';
+  postPatch =
+    ''
+      rm -r prover_snapshots
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace Makefile --replace "-flto" ""
+    '';
 
   makeFlags = [
     "SAIL=sail"
@@ -56,12 +67,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-
   meta = with lib; {
     homepage = "https://github.com/riscv/sail-riscv";
-    description = "A formal specification of the RISC-V architecture, written in Sail";
+    description = "Formal specification of the RISC-V architecture, written in Sail";
     maintainers = with maintainers; [ genericnerdyusername ];
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     license = licenses.bsd2;
   };
 }

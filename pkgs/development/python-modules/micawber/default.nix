@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, beautifulsoup4
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beautifulsoup4,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "micawber";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CsWBS2X/KngfsTlLkaI6ipX3NJK2u49wW67q2C6t1UM=";
+    hash = "sha256-INxOB0wXp0GIC0ic8lWIRcBQmH9beWyP8H6i/wEajI0=";
   };
 
-  propagatedBuildInputs = [
-    beautifulsoup4
-  ];
+  propagatedBuildInputs = [ beautifulsoup4 ];
 
   meta = with lib; {
     homepage = "https://micawber.readthedocs.io/en/latest/";

@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "wheel-filename";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-M3XGHG733X5qKuMS6mvFSFHYOwWPaBMXw+w0eYo6ByE=";
+    tag = "v${version}";
+    hash = "sha256-KAuUrrSq6HJAy+5Gj6svI4M6oV6Fsle1A79E2q2FKW8=";
   };
 
   patches = [
@@ -37,19 +39,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=wheel_filename --no-cov-on-fail" ""
-  '';
-
-  pythonImportsCheck = [
-    "wheel_filename"
-  ];
+  pythonImportsCheck = [ "wheel_filename" ];
 
   meta = with lib; {
     description = "Parse wheel filenames";
+    mainProgram = "wheel-filename";
     homepage = "https://github.com/jwodder/wheel-filename";
     license = with licenses; [ mit ];
     maintainers = with lib.maintainers; [ ayazhafiz ];

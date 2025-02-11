@@ -1,24 +1,35 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wrapQtAppsHook
-, qtdeclarative
-, qtgraphicaleffects
-, qtquickcontrols2
-, kirigami2
-, kpurpose
-, gst_all_1
-, pcre
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wrapQtAppsHook,
+  qtdeclarative,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  kirigami2,
+  kpurpose,
+  gst_all_1,
+  pcre,
 }:
 
 let
-  gst = with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad ];
+  gst = with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ];
 
 in
 mkDerivation {
   pname = "kamoso";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapQtAppsHook
+  ];
   buildInputs = [ pcre ] ++ gst;
   propagatedBuildInputs = [
     qtdeclarative
@@ -39,7 +50,11 @@ mkDerivation {
 
   meta = {
     homepage = "https://apps.kde.org/kamoso/";
-    description = "A simple and friendly program to use your camera";
-    license = with lib.licenses; [ lgpl21Only gpl3Only ];
+    description = "Simple and friendly program to use your camera";
+    mainProgram = "kamoso";
+    license = with lib.licenses; [
+      lgpl21Only
+      gpl3Only
+    ];
   };
 }

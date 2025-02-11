@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, protobuf
-, pytest-asyncio
-, pytest-httpx
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, segno
-, setuptools-scm
-, syrupy
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  protobuf,
+  pytest-asyncio,
+  pytest-httpx,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  segno,
+  setuptools-scm,
+  syrupy,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +25,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EP99AswHmLO+8ZQAPjJyw/P9QqfDawy3AqyJR870Qms=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "protobuf>=4.22.0" "protobuf"
+      --replace-fail "protobuf>=4.22.0" "protobuf"
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     httpx
@@ -56,9 +53,12 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "devolo_plc_api"
+  disabledTests = [
+    # pytest-httpx compat issue
+    "test_wrong_password_type"
   ];
+
+  pythonImportsCheck = [ "devolo_plc_api" ];
 
   meta = with lib; {
     description = "Module to interact with Devolo PLC devices";

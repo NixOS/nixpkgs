@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
-, libbsd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+  libbsd,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,11 +11,16 @@ stdenv.mkDerivation rec {
   version = "20200313";
 
   src = fetchurl {
-    url = "https://www.mirbsd.org/MirOS/dist/mir/rs/${pname}-${version}.tar.gz";
-    sha256 = "0gxwlfk7bzivpp2260w2r6gkyl7vdi05cggn1fijfnp8kzf1b4li";
+    url = "https://www.mirbsd.org/MirOS/dist/mir/rs/rs-${version}.tar.gz";
+    hash = "sha256-kZIV3J/oWiejC/Y9VkBs+1A/n8mCAyPEvTv+daajvD8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
+
+  patches = [
+    # add an implementation of reallocarray() from openbsd (not available on darwin)
+    ./macos-reallocarray.patch
+  ];
 
   buildInputs = [ libbsd ];
 
@@ -38,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.mirbsd.org/htman/i386/man1/rs.htm";
     description = "Reshape a data array from standard input";
+    mainProgram = "rs";
     longDescription = ''
       rs reads the standard input, interpreting each line as a row of blank-
       separated entries in an array, transforms the array according to the op-

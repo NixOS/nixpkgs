@@ -1,12 +1,15 @@
-{ lib
-, writeScript
+{
+  lib,
+  writeScript,
 }:
 
 { version }:
 
 let
   prefix = "hsa-amd-aqlprofile";
-  extVersion = lib.strings.concatStrings (lib.strings.intersperse "0" (lib.versions.splitVersion version));
+  extVersion = lib.strings.concatStrings (
+    lib.strings.intersperse "0" (lib.versions.splitVersion version)
+  );
   major = lib.versions.major version;
   minor = lib.versions.minor version;
   patch = lib.versions.patch version;
@@ -37,6 +40,12 @@ let
 
     extVersion="$(echo $deb | grep -o -P "(?<=\.....).*(?=\..*-)")"
     version="$(echo $extVersion | sed "s/0/./1" | sed "s/0/./1")"
+    IFS='.' read -a version_arr <<< "$version"
+
+    if (( ''${version_arr[0]} > 5 )); then
+      echo "'rocmPackages_5.${prefix}-bin' is already at it's maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${prefix}-bin'." 1>&2
+      exit 1
+    fi
 
     if (( ''${#extVersion} == 5 )); then
       repoVersion="$version"
@@ -48,4 +57,5 @@ let
       update-source-version rocmPackages_5.${prefix}-bin "$version" "" "$apt/$repoVersion/$pool$deb" --ignore-same-hash
     fi
   '';
-in [ updateScript ]
+in
+[ updateScript ]

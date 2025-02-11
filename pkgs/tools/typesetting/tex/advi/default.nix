@@ -1,11 +1,12 @@
-{ fetchurl
-, lib
-, makeWrapper
-, writeShellScriptBin
-, ghostscriptX
-, ocamlPackages
-, texliveMedium
-, which
+{
+  fetchurl,
+  lib,
+  makeWrapper,
+  writeShellScriptBin,
+  ghostscriptX,
+  ocamlPackages,
+  texliveMedium,
+  which,
 }:
 
 let
@@ -51,8 +52,18 @@ ocamlPackages.buildDunePackage rec {
 
   duneVersion = "3";
 
-  nativeBuildInputs = [ fake-opam kpsexpand makeWrapper texliveMedium which ];
-  buildInputs = with ocamlPackages; [ camlimages ghostscriptX graphics ];
+  nativeBuildInputs = [
+    fake-opam
+    kpsexpand
+    makeWrapper
+    texliveMedium
+    which
+  ];
+  buildInputs = with ocamlPackages; [
+    camlimages
+    ghostscriptX
+    graphics
+  ];
 
   # install additional files (such as man pages)
   preInstall = ''
@@ -64,7 +75,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = with lib; {
     homepage = "http://advi.inria.fr/";
-    description = "Active-DVI is a Unix-platform DVI previewer and a programmable presenter for slides written in LaTeX.";
+    description = "Unix-platform DVI previewer and a programmable presenter for slides written in LaTeX";
     license = licenses.lgpl21Only;
     maintainers = [ maintainers.xworld21 ];
   };

@@ -1,137 +1,142 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
+{
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   opt = options.services.rkvm;
   cfg = config.services.rkvm;
   toml = pkgs.formats.toml { };
 in
 {
-  meta.maintainers = with maintainers; [ ckie ];
+  meta.maintainers = [ ];
 
   options.services.rkvm = {
-    enable = mkOption {
+    enable = lib.mkOption {
       default = cfg.server.enable || cfg.client.enable;
-      defaultText = literalExpression "config.${opt.server.enable} || config.${opt.client.enable}";
-      type = types.bool;
-      description = mdDoc ''
+      defaultText = lib.literalExpression "config.${opt.server.enable} || config.${opt.client.enable}";
+      type = lib.types.bool;
+      description = ''
         Whether to enable rkvm, a Virtual KVM switch for Linux machines.
       '';
     };
 
-    package = mkPackageOption pkgs "rkvm" { };
+    package = lib.mkPackageOption pkgs "rkvm" { };
 
     server = {
-      enable = mkEnableOption "the rkvm server daemon (input transmitter)";
+      enable = lib.mkEnableOption "the rkvm server daemon (input transmitter)";
 
-      settings = mkOption {
-        type = types.submodule
-          {
-            freeformType = toml.type;
-            options = {
-              listen = mkOption {
-                type = types.str;
-                default = "0.0.0.0:5258";
-                description = mdDoc ''
-                  An internet socket address to listen on, either IPv4 or IPv6.
-                '';
-              };
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = toml.type;
+          options = {
+            listen = lib.mkOption {
+              type = lib.types.str;
+              default = "0.0.0.0:5258";
+              description = ''
+                An internet socket address to listen on, either IPv4 or IPv6.
+              '';
+            };
 
-              switch-keys = mkOption {
-                type = types.listOf types.str;
-                default = [ "left-alt" "left-ctrl" ];
-                description = mdDoc ''
-                  A key list specifying a host switch combination.
+            switch-keys = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [
+                "left-alt"
+                "left-ctrl"
+              ];
+              description = ''
+                A key list specifying a host switch combination.
 
-                  _A list of key names is available in <https://github.com/htrefil/rkvm/blob/master/switch-keys.md>._
-                '';
-              };
+                _A list of key names is available in <https://github.com/htrefil/rkvm/blob/master/switch-keys.md>._
+              '';
+            };
 
-              certificate = mkOption {
-                type = types.path;
-                default = "/etc/rkvm/certificate.pem";
-                description = mdDoc ''
-                  TLS certificate path.
+            certificate = lib.mkOption {
+              type = lib.types.path;
+              default = "/etc/rkvm/certificate.pem";
+              description = ''
+                TLS certificate path.
 
-                  ::: {.note}
-                  This should be generated with {command}`rkvm-certificate-gen`.
-                  :::
-                '';
-              };
+                ::: {.note}
+                This should be generated with {command}`rkvm-certificate-gen`.
+                :::
+              '';
+            };
 
-              key = mkOption {
-                type = types.path;
-                default = "/etc/rkvm/key.pem";
-                description = mdDoc ''
-                  TLS key path.
+            key = lib.mkOption {
+              type = lib.types.path;
+              default = "/etc/rkvm/key.pem";
+              description = ''
+                TLS key path.
 
-                  ::: {.note}
-                  This should be generated with {command}`rkvm-certificate-gen`.
-                  :::
-                '';
-              };
+                ::: {.note}
+                This should be generated with {command}`rkvm-certificate-gen`.
+                :::
+              '';
+            };
 
-              password = mkOption {
-                type = types.str;
-                description = mdDoc ''
-                  Shared secret token to authenticate the client.
-                  Make sure this matches your client's config.
-                '';
-              };
+            password = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                Shared secret token to authenticate the client.
+                Make sure this matches your client's config.
+              '';
             };
           };
+        };
 
         default = { };
-        description = mdDoc "Structured server daemon configuration";
+        description = "Structured server daemon configuration";
       };
     };
 
     client = {
-      enable = mkEnableOption "the rkvm client daemon (input receiver)";
+      enable = lib.mkEnableOption "the rkvm client daemon (input receiver)";
 
-      settings = mkOption {
-        type = types.submodule
-          {
-            freeformType = toml.type;
-            options = {
-              server = mkOption {
-                type = types.str;
-                example = "192.168.0.123:5258";
-                description = mdDoc ''
-                  An RKVM server's internet socket address, either IPv4 or IPv6.
-                '';
-              };
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = toml.type;
+          options = {
+            server = lib.mkOption {
+              type = lib.types.str;
+              example = "192.168.0.123:5258";
+              description = ''
+                An RKVM server's internet socket address, either IPv4 or IPv6.
+              '';
+            };
 
-              certificate = mkOption {
-                type = types.path;
-                default = "/etc/rkvm/certificate.pem";
-                description = mdDoc ''
-                  TLS ceritficate path.
+            certificate = lib.mkOption {
+              type = lib.types.path;
+              default = "/etc/rkvm/certificate.pem";
+              description = ''
+                TLS ceritficate path.
 
-                  ::: {.note}
-                  This should be generated with {command}`rkvm-certificate-gen`.
-                  :::
-                '';
-              };
+                ::: {.note}
+                This should be generated with {command}`rkvm-certificate-gen`.
+                :::
+              '';
+            };
 
-              password = mkOption {
-                type = types.str;
-                description = mdDoc ''
-                  Shared secret token to authenticate the client.
-                  Make sure this matches your server's config.
-                '';
-              };
+            password = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                Shared secret token to authenticate the client.
+                Make sure this matches your server's config.
+              '';
             };
           };
+        };
 
-        default = {};
-        description = mdDoc "Structured client daemon configuration";
+        default = { };
+        description = "Structured client daemon configuration";
       };
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     systemd.services =
@@ -139,16 +144,22 @@ in
         mkBase = component: {
           description = "RKVM ${component}";
           wantedBy = [ "multi-user.target" ];
-          after = {
-            server = [ "network.target" ];
-            client = [ "network-online.target" ];
-          }.${component};
-          wants = {
-            server = [ ];
-            client = [ "network-online.target" ];
-          }.${component};
+          after =
+            {
+              server = [ "network.target" ];
+              client = [ "network-online.target" ];
+            }
+            .${component};
+          wants =
+            {
+              server = [ ];
+              client = [ "network-online.target" ];
+            }
+            .${component};
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/rkvm-${component} ${toml.generate "rkvm-${component}.toml" cfg.${component}.settings}";
+            ExecStart = "${cfg.package}/bin/rkvm-${component} ${
+              toml.generate "rkvm-${component}.toml" cfg.${component}.settings
+            }";
             Restart = "always";
             RestartSec = 5;
             Type = "simple";
@@ -156,8 +167,8 @@ in
         };
       in
       {
-        rkvm-server = mkIf cfg.server.enable (mkBase "server");
-        rkvm-client = mkIf cfg.client.enable (mkBase "client");
+        rkvm-server = lib.mkIf cfg.server.enable (mkBase "server");
+        rkvm-client = lib.mkIf cfg.client.enable (mkBase "client");
       };
   };
 

@@ -1,37 +1,81 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut, libX11, xorgproto
-, libXi, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGLU,
+  libGL,
+  libglut,
+  libX11,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  xorgproto,
+  libXi,
+  pkg-config,
+  Carbon,
+  Cocoa,
+  Kernel,
+  OpenGL,
+  settingsFile ? "include/box2d/b2_settings.h",
+}:
 
-stdenv.mkDerivation rec {
+let
+  inherit (lib) cmakeBool optionals;
+
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "box2d";
-  version = "2.3.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "erincatto";
     repo = "box2d";
-    rev = "v${version}";
-    sha256 = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yvhpgiZpjTPeSY7Ma1bh4LwIokUUKB10v2WHlamL9D8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libGLU libGL freeglut libX11 xorgproto libXi ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs =
+    [
+      libGLU
+      libGL
+      libglut
+      libX11
+      libXcursor
+      libXinerama
+      libXrandr
+      xorgproto
+      libXi
+    ]
+    ++ optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+      Kernel
+      OpenGL
+    ];
 
   cmakeFlags = [
-    "-DBOX2D_INSTALL=ON"
-    "-DBOX2D_BUILD_SHARED=ON"
-    "-DBOX2D_BUILD_EXAMPLES=OFF"
+    (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   prePatch = ''
-    cd Box2D
-    substituteInPlace Box2D/Common/b2Settings.h \
-      --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
+    substituteInPlace ${settingsFile}  \
+      --replace-fail 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
   '';
+
+  # tests are broken on 2.4.2 and 2.3.x doesn't have tests: https://github.com/erincatto/box2d/issues/677
+  doCheck = lib.versionAtLeast finalAttrs.version "2.4.2";
 
   meta = with lib; {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
-    maintainers = [ maintainers.raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.zlib;
   };
-}
+})

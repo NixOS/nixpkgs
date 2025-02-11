@@ -1,15 +1,23 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, cups, libiconv }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cups,
+  libiconv,
+}:
 
 buildPythonPackage rec {
   pname = "pycups";
-  version = "2.0.1";
+  version = "2.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V0NM5fYlSOsSlJyoIX8Gb07rIaXWq4sTRx3ONQ44DJA=";
+    hash = "sha256-hD44XB2/aUmWyoTvAqfzDCg3YDVYj1++rNa64AXPfI0=";
   };
 
-  buildInputs = [ cups ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ cups ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   # Wants to connect to CUPS
   doCheck = false;

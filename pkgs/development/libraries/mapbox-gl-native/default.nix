@@ -1,5 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, qtbase, curl, libuv, glfw3, rapidjson }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  qtbase,
+  curl,
+  libuv,
+  glfw3,
+  rapidjson,
+}:
 
 mkDerivation rec {
   pname = "mapbox-gl-native";
@@ -47,8 +58,17 @@ mkDerivation rec {
     rm -r vendor/mapbox-base/extras/rapidjson
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ curl libuv glfw3 qtbase rapidjson ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    curl
+    libuv
+    glfw3
+    qtbase
+    rapidjson
+  ];
 
   cmakeFlags = [
     "-DMBGL_WITH_QT=ON"
@@ -58,10 +78,15 @@ mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=type-limits";
 
   meta = with lib; {
+    # Does not build against gcc-13, the repository is archived upstream.
+    broken = true;
     description = "Interactive, thoroughly customizable maps in native Android, iOS, macOS, Node.js, and Qt applications, powered by vector tiles and OpenGL";
     homepage = "https://mapbox.com/mobile";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ Thra11 dotlambda ];
+    maintainers = with maintainers; [
+      Thra11
+      dotlambda
+    ];
     platforms = platforms.linux;
   };
 }

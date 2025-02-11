@@ -1,49 +1,63 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, tzlocal
-, pytest-mock
-, pytest-freezegun
-, pytest-raisin
-, pytest-socket
-, requests-mock
-, pook
-, numpy
-, rich
-, pebble
-, python-dateutil
-, termcolor
-, beautifulsoup4
-, setuptools
-, pythonOlder
+{
+  lib,
+  aocd-example-parser,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pebble,
+  pook,
+  pytest-freezegun,
+  pytest-mock,
+  pytest-raisin,
+  pytest-socket,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  termcolor,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YZvcR97uHceloqwoP+azaBmj3GLusYNbItLIaeJ3QD0=";
+    tag = "v${version}";
+    hash = "sha256-xR9CfyOUsKSSA/1zYi6kCK3oAaX6Kd625mKMWI+ZFMA=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    python-dateutil
-    requests
-    termcolor
+    aocd-example-parser
     beautifulsoup4
     pebble
-    tzlocal
-    setuptools
+    python-dateutil
+    requests
     rich # for example parser aoce. must either be here or checkInputs
+    termcolor
+    tzlocal
+  ];
+
+  nativeCheckInputs = [
+    numpy
+    pook
+    pytest-freezegun
+    pytest-mock
+    pytest-raisin
+    pytest-socket
+    pytestCheckHook
+    requests-mock
   ];
 
   # Too many failing tests
@@ -85,28 +99,12 @@ buildPythonPackage rec {
     "test_submit_float_warns"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-    pytest-freezegun
-    pytest-raisin
-    pytest-socket
-  ];
-
-  checkInputs = [
-    pook
-    numpy
-    requests-mock
-  ];
-
-  pythonImportsCheck = [
-    "aocd"
-  ];
+  pythonImportsCheck = [ "aocd" ];
 
   meta = with lib; {
     description = "Get your Advent of Code data with a single import statement";
     homepage = "https://github.com/wimglenn/advent-of-code-data";
-    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/v${version}";
+    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ aadibajpai ];
     platforms = platforms.unix;

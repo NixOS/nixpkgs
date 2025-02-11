@@ -1,67 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, alembic
-, boto3
-, botorch
-, catboost
-, cma
-, cmaes
-, colorlog
-, distributed
-, fakeredis
-, fastai
-, google-cloud-storage
-, lightgbm
-, matplotlib
-, mlflow
-, moto
-, numpy
-, packaging
-, pandas
-, plotly
-, pytest-xdist
-, pytorch-lightning
-, pyyaml
-, redis
-, scikit-learn
-, scikit-optimize
-, scipy
-, setuptools
-, shap
-, sqlalchemy
-, tensorflow
-, torch
-, torchaudio
-, torchvision
-, tqdm
-, wandb
-, wheel
-, xgboost
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  alembic,
+  boto3,
+  cmaes,
+  colorlog,
+  fakeredis,
+  fvcore,
+  google-cloud-storage,
+  grpcio,
+  kaleido,
+  matplotlib,
+  moto,
+  numpy,
+  packaging,
+  pandas,
+  plotly,
+  protobuf,
+  pytest-xdist,
+  pyyaml,
+  redis,
+  scikit-learn,
+  scipy,
+  setuptools,
+  sqlalchemy,
+  torch,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "3.4.0";
-  format = "pyproject";
+  version = "4.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-WUjO13NxX0FneOPS4nn6aHq48X95r+GJR/Oxir6n8Pk=";
+    tag = "v${version}";
+    hash = "sha256-NNlwrVrGg2WvkC42nmW7K/mRktE3B97GaL8GaSOKF1Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     colorlog
     numpy
@@ -71,72 +59,57 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
-    integration = [
-      botorch
-      catboost
-      cma
-      distributed
-      fastai
-      lightgbm
-      mlflow
-      pandas
-      # pytorch-ignite
-      pytorch-lightning
-      scikit-learn
-      scikit-optimize
-      shap
-      tensorflow
-      torch
-      torchaudio
-      torchvision
-      wandb
-      xgboost
-    ];
+  optional-dependencies = {
     optional = [
       boto3
-      botorch
       cmaes
+      fvcore
       google-cloud-storage
+      grpcio
       matplotlib
       pandas
       plotly
+      protobuf
       redis
       scikit-learn
+      scipy
     ];
   };
 
   preCheck = ''
     export PATH=$out/bin:$PATH
+
+    # grpc tests are racy
+    sed -i '/"grpc",/d' optuna/testing/storages.py
   '';
 
-  nativeCheckInputs = [
-    fakeredis
-    moto
-    pytest-xdist
-    pytestCheckHook
-    scipy
-  ] ++ fakeredis.optional-dependencies.lua
-    ++ passthru.optional-dependencies.optional;
+  nativeCheckInputs =
+    [
+      fakeredis
+      kaleido
+      moto
+      pytest-xdist
+      pytestCheckHook
+      torch
+    ]
+    ++ fakeredis.optional-dependencies.lua
+    ++ optional-dependencies.optional;
 
-  pytestFlagsArray = [
-    "-m 'not integration'"
+  disabledTests = [
+    # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
+    "test_get_pareto_front_plot"
+    # too narrow time limit
+    "test_get_timeline_plot_with_killed_running_trials"
   ];
 
-  disabledTestPaths = [
-    # require unpackaged kaleido and building it is a bit difficult
-    "tests/visualization_tests"
-  ];
-
-  pythonImportsCheck = [
-    "optuna"
-  ];
+  pythonImportsCheck = [ "optuna" ];
 
   meta = with lib; {
-    description = "A hyperparameter optimization framework";
+    description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${src.rev}";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
+    mainProgram = "optuna";
   };
 }

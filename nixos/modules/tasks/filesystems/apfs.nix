@@ -1,15 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
-  inInitrd = any (fs: fs == "apfs") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.apfs or false;
 
 in
 
 {
-  config = mkIf (any (fs: fs == "apfs") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.apfs or false) {
 
     system.fsPackages = [ pkgs.apfsprogs ];
 

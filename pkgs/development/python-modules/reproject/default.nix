@@ -1,33 +1,33 @@
-{ lib
-, astropy
-, astropy-extension-helpers
-, astropy-healpix
-, buildPythonPackage
-, cloudpickle
-, cython
-, dask
-, fetchPypi
-, fsspec
-, numpy
-, oldest-supported-numpy
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools-scm
-, zarr
+{
+  lib,
+  astropy,
+  astropy-extension-helpers,
+  astropy-healpix,
+  buildPythonPackage,
+  cloudpickle,
+  cython,
+  dask,
+  fetchPypi,
+  fsspec,
+  numpy,
+  pytest-astropy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.12.0";
-  format = "pyproject";
+  version = "0.14.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jb4efKT5jMY0ECV+ab5rpUHEk+tT4T2MioCRxs92TbI=";
+    hash = "sha256-U8jqJ5uLVX8zoeQwr14FPNdHACRA4HK65q2TAtRr5Xk=";
   };
 
   postPatch = ''
@@ -39,7 +39,6 @@ buildPythonPackage rec {
     astropy-extension-helpers
     cython
     numpy
-    oldest-supported-numpy
     setuptools-scm
   ];
 
@@ -65,16 +64,17 @@ buildPythonPackage rec {
     "-p no:warnings"
     # Uses network
     "--ignore build/lib*/reproject/interpolation/"
+    # prevent "'filterwarnings' not found in `markers` configuration option" error
+    "-o 'markers=filterwarnings'"
   ];
 
-  pythonImportsCheck = [
-    "reproject"
-  ];
+  pythonImportsCheck = [ "reproject" ];
 
   meta = with lib; {
     description = "Reproject astronomical images";
     downloadPage = "https://github.com/astropy/reproject";
     homepage = "https://reproject.readthedocs.io";
+    changelog = "https://github.com/astropy/reproject/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ smaret ];
   };

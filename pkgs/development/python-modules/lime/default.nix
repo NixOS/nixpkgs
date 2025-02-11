@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 
-, matplotlib
-, numpy
-, scipy
-, tqdm
-, scikit-learn
-, scikit-image
+  matplotlib,
+  numpy,
+  scipy,
+  tqdm,
+  scikit-learn,
+  scikit-image,
 
-, pytestCheckHook
-, pythonOlder
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-dpYOTwVf61Pom1AiODuvyHtj8lusYmWYSwozPRpX94E=";
   };
 
-  propagatedBuildInputs =  [
+  postPatch = ''
+    substituteInPlace lime/tests/test_scikit_image.py \
+      --replace-fail "random_seed" "rng"
+  '';
+
+  propagatedBuildInputs = [
     matplotlib
     numpy
     scipy
@@ -34,9 +40,7 @@ buildPythonPackage rec {
     scikit-image
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # touches network
@@ -51,11 +55,11 @@ buildPythonPackage rec {
     "lime.lime_text"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Local Interpretable Model-Agnostic Explanations for machine learning classifiers";
     homepage = "https://github.com/marcotcr/lime";
     changelog = "https://github.com/marcotcr/lime/releases/tag/${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ khaser ];
   };
 }

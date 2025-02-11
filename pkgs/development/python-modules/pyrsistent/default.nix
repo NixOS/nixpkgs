@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, six
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  setuptools,
+  six,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.19.3";
+  version = "0.20.0";
+  pyproject = true;
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GimUdzcGu7SZXDGpe8lPFBgxSSO9EEjG2WSDcEA3ZEA=";
+    hash = "sha256-TEj3j2KrWWxnkIYITQ3RMlSuTz1scqg//fXr3vjyZaQ=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'pytest<5' 'pytest' \
-      --replace 'hypothesis<5' 'hypothesis'
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   pythonImportsCheck = [ "pyrsistent" ];
 
@@ -36,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

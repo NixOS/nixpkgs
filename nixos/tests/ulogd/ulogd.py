@@ -1,5 +1,6 @@
 start_all()
 machine.wait_for_unit("ulogd.service")
+machine.systemctl("start network-online.target")
 machine.wait_for_unit("network-online.target")
 
 with subtest("Ulogd is running"):

@@ -1,37 +1,70 @@
-{ lib, stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
-, CoreFoundation, IOKit
+{
+  lib,
+  stdenv,
+  fetchurl,
+  sqlite,
+  libpq,
+  zlib,
+  acl,
+  ncurses,
+  openssl,
+  readline,
+  gettext,
+  CoreFoundation,
+  IOKit,
+  Kerberos,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bacula";
-  version = "13.0.3";
+  version = "15.0.2";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
-    sha256 = "sha256-CUnDK+EJBYXojkwB2CgALodgMTbYfFmKKd/0K7PtKkA=";
+    url = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
+    sha256 = "sha256-VVFcKmavmoa5VdrqQIk3i4ZNBRsubjA4O+825pOs6no=";
   };
 
   # libtool.m4 only matches macOS 10.*
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace configure \
       --replace "10.*)" "*)"
   '';
 
-  buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
+  buildInputs =
+    [
+      libpq
+      sqlite
+      zlib
+      ncurses
+      openssl
+      readline
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gettext # bacula requires CoreFoundation, but its `configure` script will only link it when it detects libintl.
       CoreFoundation
       IOKit
+      Kerberos
     ]
     # acl relies on attr, which I can't get to build on darwin
-    ++ lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
-  configureFlags = [
-    "--with-sqlite3=${sqlite.dev}"
-    "--with-postgresql=${postgresql}"
-    "--with-logdir=/var/log/bacula"
-    "--with-working-dir=/var/lib/bacula"
-    "--mandir=\${out}/share/man"
-  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
+  configureFlags =
+    [
+      "--with-sqlite3=${sqlite.dev}"
+      "--with-postgresql=${lib.getDev libpq}"
+      "--with-logdir=/var/log/bacula"
+      "--with-working-dir=/var/lib/bacula"
+      "--mandir=\${out}/share/man"
+    ]
+    ++
+      lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+        "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # bacula’s `configure` script fails to detect CoreFoundation correctly,
+      # but these symbols are available in the nixpkgs CoreFoundation framework.
+      "gt_cv_func_CFLocaleCopyCurrent=yes"
+      "gt_cv_func_CFPreferencesCopyAppValue=yes"
+    ];
 
   installFlags = [
     "logdir=\${out}/logdir"
@@ -45,9 +78,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Enterprise ready, Network Backup Tool";
-    homepage    = "http://bacula.org/";
-    license     = with licenses; [ agpl3Only bsd2 ];
-    maintainers = with maintainers; [ lovek323 eleanor ];
-    platforms   = platforms.all;
+    homepage = "http://bacula.org/";
+    license = with licenses; [
+      agpl3Only
+      bsd2
+    ];
+    maintainers = with maintainers; [
+      lovek323
+      eleanor
+    ];
+    platforms = platforms.all;
   };
 }

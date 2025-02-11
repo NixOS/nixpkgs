@@ -1,43 +1,53 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, eventlet
-, oslo-config
-, oslo-context
-, oslo-serialization
-, oslo-utils
-, oslotest
-, pbr
-, pyinotify
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  oslo-config,
+  oslo-context,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  python-dateutil,
+  pyinotify,
+
+  # tests
+  eventlet,
+  oslotest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.4.0";
-  format = "setuptools";
+  version = "6.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "oslo.log";
-    inherit version;
-    hash = "sha256-LrNVtYVw8lgR2nb6gUU7h1x8lEoZoj0sMFtKTf670iM=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.log";
+    tag = version;
+    hash = "sha256-IEhIhGE95zZiWp602rFc+NLco/Oyx9XEL5e2RExNBMs=";
   };
 
-  propagatedBuildInputs = [
+  # Manually set version because prb wants to get it from the git upstream repository (and we are
+  # installing from tarball instead)
+  PBR_VERSION = version;
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     oslo-config
     oslo-context
     oslo-serialization
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.isLinux [
-    pyinotify
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
 
   nativeCheckInputs = [
     eventlet
@@ -52,15 +62,15 @@ buildPythonPackage rec {
     "test_log_config_append_invalid"
   ];
 
-  pythonImportsCheck = [
-    "oslo_log"
-  ];
+  pythonImportsCheck = [ "oslo_log" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "oslo.log library";
+    mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
-    broken = stdenv.isDarwin;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }

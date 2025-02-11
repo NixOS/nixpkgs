@@ -1,56 +1,68 @@
-{ egl-wayland
-, libepoxy
-, fetchurl
-, fontutil
-, lib
-, libGL
-, libGLU
-, libX11
-, libXau
-, libXaw
-, libXdmcp
-, libXext
-, libXfixes
-, libXfont2
-, libXmu
-, libXpm
-, libXrender
-, libXres
-, libXt
-, libdrm
-, libtirpc
-, withLibunwind ? true, libunwind
-, libxcb
-, libxkbfile
-, libxshmfence
-, libxcvt
-, mesa
-, meson
-, ninja
-, openssl
-, pkg-config
-, pixman
-, stdenv
-, wayland
-, wayland-protocols
-, wayland-scanner
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, zlib
-, defaultFontPath ? ""
-, gitUpdater
+{
+  egl-wayland,
+  bash,
+  libepoxy,
+  fetchurl,
+  fontutil,
+  lib,
+  libdecor,
+  libei,
+  libGL,
+  libGLU,
+  libX11,
+  libXau,
+  libXaw,
+  libXdmcp,
+  libXext,
+  libXfixes,
+  libXfont2,
+  libXmu,
+  libXpm,
+  libXrender,
+  libXres,
+  libXt,
+  libdrm,
+  libtirpc,
+  # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
+  withLibunwind ? !(stdenv.hostPlatform.useLLVM or false),
+  libunwind,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  libxcvt,
+  mesa,
+  meson,
+  ninja,
+  openssl,
+  pkg-config,
+  pixman,
+  stdenv,
+  systemd,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
+  zlib,
+  defaultFontPath ? "",
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "23.2.2";
+  version = "24.1.5";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-n3wJONKkHpQf+gT5nDXl2yvNPuwDSv6NNdXIEKIusKg=";
+    hash = "sha256-y0vRcOb6a1RboFZ76PaT0u7M/GLQTGcDfdFPBtqtNh0=";
   };
+
+  postPatch = ''
+    substituteInPlace os/utils.c \
+      --replace-fail '/bin/sh' '${lib.getExe' bash "sh"}'
+  '';
 
   depsBuildBuild = [
     pkg-config
@@ -61,44 +73,48 @@ stdenv.mkDerivation rec {
     ninja
     wayland-scanner
   ];
-  buildInputs = [
-    egl-wayland
-    libepoxy
-    fontutil
-    libGL
-    libGLU
-    libX11
-    libXau
-    libXaw
-    libXdmcp
-    libXext
-    libXfixes
-    libXfont2
-    libXmu
-    libXpm
-    libXrender
-    libXres
-    libXt
-    libdrm
-    libtirpc
-    libxcb
-    libxkbfile
-    libxshmfence
-    libxcvt
-    mesa
-    openssl
-    pixman
-    wayland
-    wayland-protocols
-    xkbcomp
-    xorgproto
-    xtrans
-    zlib
-  ] ++ lib.optionals withLibunwind [
-    libunwind
-  ];
+  buildInputs =
+    [
+      egl-wayland
+      libdecor
+      libepoxy
+      libei
+      fontutil
+      libGL
+      libGLU
+      libX11
+      libXau
+      libXaw
+      libXdmcp
+      libXext
+      libXfixes
+      libXfont2
+      libXmu
+      libXpm
+      libXrender
+      libXres
+      libXt
+      libdrm
+      libtirpc
+      libxcb
+      libxkbfile
+      libxshmfence
+      libxcvt
+      mesa # uses dri_interface.h
+      openssl
+      pixman
+      systemd
+      wayland
+      wayland-protocols
+      xkbcomp
+      xorgproto
+      xtrans
+      zlib
+    ]
+    ++ lib.optionals withLibunwind [
+      libunwind
+    ];
   mesonFlags = [
-    (lib.mesonBool "xwayland_eglstream" true)
     (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
     (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
@@ -114,11 +130,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An X server for interfacing X11 apps with the Wayland protocol";
+    description = "X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     mainProgram = "Xwayland";
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [
+      emantor
+      k900
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,18 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.magic-wormhole-mailbox-server;
+  # keep semicolon in dataDir for backward compatibility
   dataDir = "/var/lib/magic-wormhole-mailbox-server;";
-  python = pkgs.python3.withPackages (py: [ py.magic-wormhole-mailbox-server py.twisted ]);
+  python = pkgs.python3.withPackages (
+    py: with py; [
+      magic-wormhole-mailbox-server
+      twisted
+    ]
+  );
 in
 {
   options.services.magic-wormhole-mailbox-server = {
-    enable = mkEnableOption (lib.mdDoc "Magic Wormhole Mailbox Server");
+    enable = lib.mkEnableOption "Magic Wormhole Mailbox Server";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.magic-wormhole-mailbox-server = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -23,6 +32,7 @@ in
         StateDirectory = baseNameOf dataDir;
       };
     };
-
   };
+
+  meta.maintainers = [ lib.maintainers.mjoerg ];
 }

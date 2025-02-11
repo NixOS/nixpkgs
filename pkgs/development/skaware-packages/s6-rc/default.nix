@@ -1,16 +1,36 @@
-{ lib, stdenv, skawarePackages, targetPackages }:
+{
+  lib,
+  stdenv,
+  skawarePackages,
+  targetPackages,
+  skalibs,
+  execline,
+  s6,
+}:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-rc";
-  version = "0.5.4.2";
-  sha256 = "AL36WW+nFhUS6XLskoKiq9j9DjHwkXe616K8PY8oOYI=";
+  version = "0.5.4.3";
+  sha256 = "4ycnlqlHkE3jerNOwQQw4mEHuO8FIQ2BBZyLNiA+ap8=";
 
-  description = "A service manager for s6-based systems";
+  manpages = skawarePackages.buildManPages {
+    pname = "s6-rc-man-pages";
+    version = "0.5.4.3.1";
+    sha256 = "Ywke3FG/xhhUd934auDB+iFRDCvy8IJs6IkirP6O/As=";
+    description = "mdoc(7) versions of the documentation for the s6-rc service manager";
+    maintainers = [ lib.maintainers.qyliss ];
+  };
+
+  description = "Service manager for s6-based systems";
   platforms = lib.platforms.unix;
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   configureFlags = [
     "--libdir=\${lib}/lib"
@@ -44,9 +64,9 @@ buildPackage {
   # system we're cross-compiling for.
   postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
     substituteInPlace src/s6-rc/s6-rc-compile.c \
-        --replace '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
-        --replace '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \
-        --replace '<s6-rc/config.h>' '"${targetPackages.s6-rc.dev}/include/s6-rc/config.h"'
+        --replace-fail '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
+        --replace-fail '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \
+        --replace-fail '<s6-rc/config.h>' '"${targetPackages.s6-rc.dev}/include/s6-rc/config.h"'
   '';
 
   postInstall = ''

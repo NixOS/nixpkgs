@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, pkg-config, python3
-, flac, lame, libmpg123, libogg, libopus, libvorbis
-, alsa-lib, Carbon, AudioToolbox
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autogen,
+  pkg-config,
+  python3,
+  flac,
+  lame,
+  libmpg123,
+  libogg,
+  libopus,
+  libvorbis,
+  alsa-lib,
+  Carbon,
+  AudioToolbox,
 
-# for passthru.tests
-, audacity
-, freeswitch
-, gst_all_1
-, libsamplerate
-, moc
-, pipewire
-, pulseaudio
+  # for passthru.tests
+  audacity,
+  freeswitch,
+  gst_all_1,
+  libsamplerate,
+  moc,
+  pipewire,
+  pulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,21 +37,42 @@ stdenv.mkDerivation rec {
     hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
-  buildInputs = [ flac lame libmpg123 libogg libopus libvorbis ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autogen
+    pkg-config
+    python3
+  ];
+  buildInputs =
+    [
+      flac
+      lame
+      libmpg123
+      libogg
+      libopus
+      libvorbis
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      AudioToolbox
+    ];
 
   enableParallelBuilding = true;
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "doc"
+  ];
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
-  preConfigure = lib.optionalString stdenv.isDarwin
-    ''
-      NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
-    '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
+  '';
 
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
@@ -57,21 +92,23 @@ stdenv.mkDerivation rec {
       libsamplerate
       moc
       pipewire
-      pulseaudio;
+      pulseaudio
+      ;
     inherit (python3.pkgs)
       soundfile
-      wavefile;
+      wavefile
+      ;
     inherit (gst_all_1) gst-plugins-bad;
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
 
   meta = with lib; {
-    description = "A C library for reading and writing files containing sampled sound";
-    homepage    = "https://libsndfile.github.io/libsndfile/";
-    changelog   = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
-    license     = licenses.lgpl2Plus;
+    description = "C library for reading and writing files containing sampled sound";
+    homepage = "https://libsndfile.github.io/libsndfile/";
+    changelog = "https://github.com/libsndfile/libsndfile/releases/tag/${version}";
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.all;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

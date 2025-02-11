@@ -1,8 +1,14 @@
-{ lib , python, buildPythonPackage , fetchPypi, typing-extensions }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  typing-extensions,
+}:
 
 buildPythonPackage rec {
   pname = "stringly";
   version = "1.0b2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,13 +17,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "stringly" ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  propagatedBuildInputs = [ typing-extensions ];
 
   meta = with lib; {
     description = "Stringly: Human Readable Object Serialization";

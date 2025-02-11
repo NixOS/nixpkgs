@@ -1,31 +1,32 @@
-{ lib
-, rustPlatform
-, stdenv
-, fetchCrate
-, pkg-config
-, openssl
-, capnproto
-, CoreServices
+{
+  lib,
+  rustPlatform,
+  stdenv,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  capnproto,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "flowgger";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-PRlcfSVfQWt+rQEJjblY7/AMrjhGYO2/G7EX60aGApA=";
+    hash = "sha256-eybahv1A/AIpAXGj6/md8k+b9fu9gSchU16fnAWZP2s=";
   };
 
-  cargoHash = "sha256-hp2LrEVWo0gk95dPROqVcHEEG5N9fWms0mZkY9QILg0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-50/rg1Bo8wEpD9UT1EWIKNLglZLS1FigoPtZudDaL4c=";
 
   nativeBuildInputs = [
     pkg-config
     capnproto
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   checkFlags = [
     # test failed
@@ -35,9 +36,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/flowgger";
-    description = "A fast, simple and lightweight data collector written in Rust";
+    description = "Fast, simple and lightweight data collector written in Rust";
     license = licenses.bsd2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     mainProgram = "flowgger";
   };
 }

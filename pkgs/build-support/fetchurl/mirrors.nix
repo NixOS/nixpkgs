@@ -123,13 +123,8 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
-  # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
-    "https://download.kde.org/download.php?url="
-    "https://ftp.gwdg.de/pub/linux/kde/"
-    "https://mirrors.ocf.berkeley.edu/kde/"
-    "https://mirrors.mit.edu/kde/"
-    "https://mirrors.ustc.edu.cn/kde/"
+    "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
@@ -308,7 +303,13 @@
     "https://cpan.metacpan.org/"
     "https://cpan.perl.org/"
     "https://mirrors.kernel.org/CPAN/"
-    "https://backpan.perl.org/"  # for old releases
+    "https://backpan.perl.org/" # for old releases
+  ];
+
+  # D DUB
+  dub = [
+    "https://code.dlang.org/packages/"
+    "https://codemirror.dlang.org/packages/"
   ];
 
   # Haskell Hackage

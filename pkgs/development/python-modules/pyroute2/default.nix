@@ -1,33 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, mitogen
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.9";
-  format = "pyproject";
+  version = "0.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tp2C8UCwd0MX17pA9sX6HXVQmLo/PrYZmC0W51DcYxo=";
+  src = fetchFromGitHub {
+    owner = "svinota";
+    repo = "pyroute2";
+    tag = version;
+    hash = "sha256-eItzD9ub8COaOkNLEKLtf8uJil4W4rqjzVa95LJahHw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
-    mitogen
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  build-system = [ setuptools ];
 
   # Requires root privileges, https://github.com/svinota/pyroute2/issues/778
   doCheck = false;
@@ -45,12 +38,23 @@ buildPythonPackage rec {
     "pyroute2.protocols"
   ];
 
+  postPatch = ''
+    patchShebangs util
+    make VERSION
+  '';
+
   meta = with lib; {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
     changelog = "https://github.com/svinota/pyroute2/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab mic92 ];
+    license = with licenses; [
+      asl20 # or
+      gpl2Plus
+    ];
+    maintainers = with maintainers; [
+      fab
+      mic92
+    ];
     platforms = platforms.unix;
   };
 }

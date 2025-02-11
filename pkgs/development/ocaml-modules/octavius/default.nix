@@ -1,6 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "octavius";
   version = "1.2.2";
 
@@ -21,6 +25,4 @@ buildDunePackage (rec {
     license = licenses.isc;
     maintainers = with maintainers; [ vbgl ];
   };
-} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
-  duneVersion = "1";
-})
+}

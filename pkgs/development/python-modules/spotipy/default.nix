@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, redis
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  redis,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.23.0";
+  version = "2.25.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dfr+CCOdqubBb6po9gtXddQMQRByXhp8VFrUx/tm1Og=";
+    hash = "sha256-xycg74U1Wv+Vn3/o2J3tSFBNjDO5JYPbkOwW2qwNpU8=";
   };
 
   propagatedBuildInputs = [
     redis
     requests
-    six
     urllib3
   ];
 

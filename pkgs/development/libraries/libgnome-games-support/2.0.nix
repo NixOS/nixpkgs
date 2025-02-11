@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, glib
-, gobject-introspection
-, gtk4
-, libgee
-, gettext
-, vala
-, gnome
-, libintl
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gtk4,
+  libgee,
+  gettext,
+  vala,
+  gnome,
+  libintl,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";
-    homepage = "https://wiki.gnome.org/Apps/Games";
+    homepage = "https://gitlab.gnome.org/GNOME/libgnome-games-support";
     license = licenses.lgpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

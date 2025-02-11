@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, betamax
-, hacking
-, iso8601
-, lxml
-, oauthlib
-, os-service-types
-, oslo-config
-, oslo-utils
-, pbr
-, pycodestyle
-, pyyaml
-, requests
-, requests-kerberos
-, requests-mock
-, six
-, stestr
-, stevedore
-, testresources
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  betamax,
+  fixtures,
+  hacking,
+  iso8601,
+  lxml,
+  oauthlib,
+  os-service-types,
+  oslo-config,
+  oslo-utils,
+  pbr,
+  pycodestyle,
+  pyyaml,
+  requests,
+  requests-kerberos,
+  requests-mock,
+  setuptools,
+  stestr,
+  stevedore,
+  testresources,
+  testtools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.3.0";
+  version = "5.9.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AXwrm1mUU8kpQHUO27IPF2hxIbKJARS/nTbfFKBicRc=";
+    hash = "sha256-+wxm2ELVuWR1ImT/8gs7Src2ENZtm40g0Nz3lroJ3EM=";
   };
 
   postPatch = ''
@@ -37,30 +41,41 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
-    betamax
-    iso8601
-    lxml
-    oauthlib
-    os-service-types
-    pbr
-    requests
-    requests-kerberos
-    six
-    stevedore
-  ];
+  build-system = [ setuptools ];
+
+  dependencies =
+    [
+      iso8601
+      os-service-types
+      pbr
+      requests
+      stevedore
+      typing-extensions
+    ]
+    # TODO: remove this workaround and fix breakages
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  optional-dependencies = {
+    betamax = [
+      betamax
+      pyyaml
+    ];
+    kerberos = [ requests-kerberos ];
+    oauth1 = [ oauthlib ];
+    saml2 = [ lxml ];
+  };
 
   nativeCheckInputs = [
+    fixtures
     hacking
     oslo-config
     oslo-utils
     pycodestyle
-    pyyaml
     requests-mock
     stestr
     testresources
     testtools
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
   # https://bugs.launchpad.net/keystoneauth/+bug/2020112

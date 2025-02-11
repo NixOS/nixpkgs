@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,23 +12,23 @@ let
 in
 {
   options.services.convos = {
-    enable = mkEnableOption (lib.mdDoc "Convos");
+    enable = mkEnableOption "Convos";
     listenPort = mkOption {
       type = types.port;
       default = 3000;
       example = 8080;
-      description = lib.mdDoc "Port the web interface should listen on";
+      description = "Port the web interface should listen on";
     };
     listenAddress = mkOption {
       type = types.str;
       default = "*";
       example = "127.0.0.1";
-      description = lib.mdDoc "Address or host the web interface should listen on";
+      description = "Address or host the web interface should listen on";
     };
     reverseProxy = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enables reverse proxy support. This will allow Convos to automatically
         pick up the `X-Forwarded-For` and
         `X-Request-Base` HTTP headers set in your reverse proxy
@@ -62,7 +67,10 @@ in
         LockPersonality = true;
         RestrictRealtime = true;
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6"];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         SystemCallFilter = "@system-service";
         SystemCallArchitectures = "native";
         CapabilityBoundingSet = "";

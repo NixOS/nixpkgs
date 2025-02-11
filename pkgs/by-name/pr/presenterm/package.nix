@@ -1,26 +1,51 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libsixel,
+  versionCheckHook,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.3.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
-    rev = "v${version}";
-    hash = "sha256-uwLVg/bURz2jLAQZgLujDR2Zewu5pcE9bwEBg/DQ4Iw=";
+    tag = "v${version}";
+    hash = "sha256-giTEDk5bj1x0cE53zEkQ0SU3SQJZabhr1X3keV07rN4=";
   };
 
-  cargoHash = "sha256-tEgXqvSyScO/J/56ykCda3ERrTDQj5jCxlMEDof/fCA=";
+  buildInputs = [
+    libsixel
+  ];
 
-  # Skip test that currently doesn't work
-  checkFlags = [ "--skip=execute::test::shell_code_execution" ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-N3g7QHgsfr8QH6HWA3/Ar7ZZYN8JPE7D7+/2JVJzW9o=";
 
-  meta = with lib; {
-    description = "A terminal based slideshow tool";
+  checkFlags = [
+    # failed to load .tmpEeeeaQ: No such file or directory (os error 2)
+    "--skip=external_snippet"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Terminal based slideshow tool";
+    changelog = "https://github.com/mfontanini/presenterm/releases/tag/v${version}";
     homepage = "https://github.com/mfontanini/presenterm";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "presenterm";
   };
 }

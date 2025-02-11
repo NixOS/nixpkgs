@@ -1,30 +1,27 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "stanio";
-  version = "0.3.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DFBK5nG41Sah2nEYWsAqJ3VQj/5tPbkfJC6shbz2BG8=";
+    hash = "sha256-NI1S+UfexDHhGPS2AcTFKWkpuGQB1NTdWqk3Ow1K5Kw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "stanio" ];
 

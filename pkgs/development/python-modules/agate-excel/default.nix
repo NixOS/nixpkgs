@@ -1,12 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, agate
-, openpyxl
-, xlrd
-, olefile
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  agate,
+  openpyxl,
+  xlrd,
+  olefile,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,19 +29,15 @@ buildPythonPackage rec {
     olefile
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "agate"
-  ];
+  pythonImportsCheck = [ "agate" ];
 
   meta = with lib; {
     description = "Adds read support for excel files to agate";
     homepage = "https://github.com/wireservice/agate-excel";
     changelog = "https://github.com/wireservice/agate-excel/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

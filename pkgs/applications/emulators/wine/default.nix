@@ -6,7 +6,11 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, stdenv, callPackage, darwin,
+{
+  lib,
+  stdenv,
+  callPackage,
+  darwin,
   wineRelease ? "stable",
   wineBuild ? if stdenv.hostPlatform.system == "x86_64-linux" then "wineWow" else "wine32",
   gettextSupport ? false,
@@ -35,31 +39,59 @@
   vulkanSupport ? false,
   sdlSupport ? false,
   usbSupport ? false,
-  mingwSupport ? wineRelease != "stable",
-  waylandSupport ? wineRelease == "wayland",
-  x11Support ? stdenv.isLinux,
+  mingwSupport ? stdenv.hostPlatform.isDarwin,
+  waylandSupport ? false,
+  x11Support ? false,
   embedInstallers ? false, # The Mono and Gecko MSI installers
-  moltenvk ? darwin.moltenvk # Allow users to override MoltenVK easily
+  moltenvk, # Allow users to override MoltenVK easily
 }:
 
-let wine-build = build: release:
-      lib.getAttr build (callPackage ./packages.nix {
+let
+  wine-build =
+    build: release:
+    lib.getAttr build (
+      callPackage ./packages.nix {
         wineRelease = release;
         supportFlags = {
           inherit
-            alsaSupport cairoSupport cupsSupport cursesSupport dbusSupport
-            embedInstallers fontconfigSupport gettextSupport gphoto2Support
-            gstreamerSupport gtkSupport krb5Support mingwSupport netapiSupport
-            odbcSupport openclSupport openglSupport pcapSupport
-            pulseaudioSupport saneSupport sdlSupport tlsSupport udevSupport
-            usbSupport v4lSupport vaSupport vulkanSupport waylandSupport
-            x11Support xineramaSupport
-          ;
+            alsaSupport
+            cairoSupport
+            cupsSupport
+            cursesSupport
+            dbusSupport
+            embedInstallers
+            fontconfigSupport
+            gettextSupport
+            gphoto2Support
+            gstreamerSupport
+            gtkSupport
+            krb5Support
+            mingwSupport
+            netapiSupport
+            odbcSupport
+            openclSupport
+            openglSupport
+            pcapSupport
+            pulseaudioSupport
+            saneSupport
+            sdlSupport
+            tlsSupport
+            udevSupport
+            usbSupport
+            v4lSupport
+            vaSupport
+            vulkanSupport
+            waylandSupport
+            x11Support
+            xineramaSupport
+            ;
         };
         inherit moltenvk;
-      });
+      }
+    );
 
-in if wineRelease == "staging" then
+in
+if wineRelease == "staging" then
   callPackage ./staging.nix {
     wineUnstable = wine-build wineBuild "unstable";
   }

@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkg-config, libidn, expat
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  zlib,
+  freetype,
+  libjpeg,
+  libtiff,
+  fontconfig,
+  openssl,
+  libpng,
+  lua5,
+  pkg-config,
+  libidn,
+  expat,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +25,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XeYH4V8ZK4rZBzgwB1nYjeoPXM3OO/AASKDJMrxkUVQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
-                  libidn expat lua5 ];
+  buildInputs = [
+    zlib
+    freetype
+    libjpeg
+    libtiff
+    fontconfig
+    openssl
+    libpng
+    libidn
+    expat
+    lua5
+  ];
 
   cmakeFlags = [
     "-DPODOFO_BUILD_SHARED=ON"
@@ -24,14 +55,22 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
-  postInstall = ''
-    moveToOutput lib "$lib"
+  postPatch = ''
+    # Use GNU directories to fix multiple outputs
+    failNoMatches='t yes; b no; :yes h; :no p; $ {x; /./{x;q}; q1}'
+    sed -ni src/podofo/CMakeLists.txt \
+        -e 's/LIBDIRNAME/CMAKE_INSTALL_LIBDIR/' -e "$failNoMatches"
+    sed -ni src/podofo/libpodofo.pc.in \
+        -e 's/^libdir=.*/libdir=@CMAKE_INSTALL_LIBDIR@/' -e "$failNoMatches"
   '';
 
   meta = with lib; {
     homepage = "https://podofo.sourceforge.net";
-    description = "A library to work with the PDF file format";
+    description = "Library to work with the PDF file format";
     platforms = platforms.all;
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
   };
 }

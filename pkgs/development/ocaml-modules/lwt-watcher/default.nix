@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, lwt
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  lwt,
 }:
 
 buildDunePackage rec {
@@ -11,7 +12,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-35Z73bSzEEgTabNH2cD9lRdDczsyIMZR2ktyKx4aN9k=";
+    hash = "sha256-35Z73bSzEEgTabNH2cD9lRdDczsyIMZR2ktyKx4aN9k=";
   };
 
   useDune2 = true;

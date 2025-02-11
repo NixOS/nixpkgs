@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, pkg-config
-, qmake
-, qt5compat ? null
-, qtbase
-, qttools
-, qtwayland
-, rtaudio
-, rtmidi
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  qmake,
+  qt5compat ? null,
+  qtbase,
+  qttools,
+  qtwayland,
+  rtaudio_6,
+  rtmidi,
+  wrapQtAppsHook,
 }:
 
 assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-rMYs2jixzoMGem9lxAjDMbFOMrnK8BLFjZIagdZk/Ok=";
+    hash = "sha256-tFUliKR55iZybNyYIF1FXh8RGf8jKEsGrWBuldB277g=";
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
@@ -41,20 +42,29 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    rtmidi
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
-    qt5compat
-  ] ++ rtaudio.buildInputs;
+  buildInputs =
+    [
+      qtbase
+      rtaudio_6
+      rtmidi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ]
+    ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
+      qt5compat
+    ];
 
-  qmakeFlags = [
-    # we don't have RtAudio 6 yet: https://github.com/NixOS/nixpkgs/pull/245075
-    # "CONFIG+=system_rtaudio"
-    "CONFIG+=system_rtmidi"
-  ];
+  qmakeFlags =
+    [
+      "CONFIG+=system_rtaudio"
+      "CONFIG+=system_rtmidi"
+    ]
+    ++ lib.optionals (stdenv.cc.isClang || (lib.versionAtLeast qtbase.version "6.0")) [
+      # Clang is extra-strict about some deprecations
+      # Latest Qt6 deprecated QCheckBox::stateChanged(int)
+      "CONFIG+=no_warnings_are_errors"
+    ];
 
   postConfigure = "make qmake_all";
 
@@ -75,7 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
+    description = "Tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
+    mainProgram = "BambooTracker";
     homepage = "https://bambootracker.github.io/BambooTracker/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

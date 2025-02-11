@@ -1,23 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestExtension,
+  testers,
+  buildPostgresqlExtension,
+}:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg_repack";
-  version = "1.4.8";
+  version = "1.5.2";
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = postgresql.buildInputs;
 
   src = fetchFromGitHub {
-    owner  = "reorg";
-    repo   = "pg_repack";
-    rev    = "ver_${version}";
-    sha256 = "sha256-Et8aMRzG7ez0uy9wG6qsg57/kPPZdUhb+/gFxW86D08=";
+    owner = "reorg";
+    repo = "pg_repack";
+    rev = "ver_${finalAttrs.version}";
+    sha256 = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
   };
 
-  installPhase = ''
-    install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack${postgresql.dlSuffix} -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
-  '';
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    extension = postgresqlTestExtension {
+      inherit (finalAttrs) finalPackage;
+      sql = "CREATE EXTENSION pg_repack;";
+    };
+  };
 
   meta = with lib; {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
@@ -31,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ danbst ];
     inherit (postgresql.meta) platforms;
+    mainProgram = "pg_repack";
   };
-}
+})

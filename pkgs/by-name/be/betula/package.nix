@@ -3,23 +3,24 @@
 , buildGoModule
 }: buildGoModule rec {
   pname = "betula";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchFromSourcehut {
     owner = "~bouncepaw";
     repo = "betula";
     rev = "v${version}";
-    hash = "sha256-MH6YeWG94YVBgx5Es3oMJ9A/hAPPBXpAcIdCJV3HX78=";
+    hash = "sha256-20sA2Hnnppr2RXqu2Qx2bkU/u9FUkH6INUUGx2zKfao=";
   };
-  vendorHash = "sha256-wiMIhoSO7nignNWY16OpDYZCguRbcEwwO/HggKSC5jM=";
+  vendorHash = "sha256-SWcQYF8LP6lw5kWlAVFt3qiwDnvpSOXenmdm6TSfJSc=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
   # These tests use internet, so are failing in Nix build.
   # See also: https://todo.sr.ht/~bouncepaw/betula/91
   checkFlags = "-skip=TestTitles|TestHEntries";
 
   meta = with lib; {
     description = "Single-user self-hosted bookmarking software";
+    mainProgram = "betula";
     homepage = "https://betula.mycorrhiza.wiki/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ GoldsteinE ];

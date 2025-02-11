@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, dataproperty
-, dominate
-, elasticsearch
-, fetchFromGitHub
-, loguru
-, mbstrdecoder
-, pandas
-, pathvalidate
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, simplejson
-, tabledata
-, tcolorpy
-, toml
-, typepy
-, xlsxwriter
-, xlwt
+{
+  lib,
+  buildPythonPackage,
+  dataproperty,
+  dominate,
+  elasticsearch,
+  fetchFromGitHub,
+  loguru,
+  mbstrdecoder,
+  pandas,
+  pathvalidate,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  simplejson,
+  tabledata,
+  tcolorpy,
+  toml,
+  typepy,
+  xlsxwriter,
+  xlwt,
 }:
 
 buildPythonPackage rec {
   pname = "pytablewriter";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,13 +32,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b3YzDqNATaT/FFG4/x9EGlYlhXKPvgNB2xnm0bzvLJQ=";
+    tag = "v${version}";
+    hash = "sha256-YuuSMKTSG3oybvA6TDWNnGg4EiDAw2tRlM0S9mBQlkc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dataproperty
@@ -48,7 +47,7 @@ buildPythonPackage rec {
     typepy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       dominate
       elasticsearch
@@ -61,49 +60,33 @@ buildPythonPackage rec {
       xlsxwriter
       xlwt
     ];
-    es = [
-      elasticsearch
-    ];
-    es8 = [
-      elasticsearch
-    ];
+    es = [ elasticsearch ];
+    es8 = [ elasticsearch ];
     excel = [
       xlwt
       xlsxwriter
     ];
-    html = [
-      dominate
-    ];
-    logging = [
-      loguru
-    ];
+    html = [ dominate ];
+    logging = [ loguru ];
     # from = [
     #   pytablereader
     # ];
-    pandas = [
-      pandas
-    ];
+    pandas = [ pandas ];
     # sqlite = [
     #   simplesqlite
     # ];
     # theme = [
     #   pytablewriter-altrow-theme
     # ];
-    toml = [
-      toml
-    ];
-    yaml = [
-      pyyaml
-    ];
+    toml = [ toml ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "pathvalidate"
-  ];
+  pythonImportsCheck = [ "pathvalidate" ];
 
   disabledTests = [
     # Circular dependency
@@ -121,9 +104,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library to write a table in various formats";
+    description = "Library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
-    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
+    changelog = "https://github.com/thombashi/pytablewriter/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ genericnerdyusername ];
   };

@@ -1,64 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytestCheckHook
-, setuptools
-, six
-, testtools
-, zope_interface
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonAtLeast,
+
+  setuptools,
+
+  boltons,
+  orjson,
+  pyrsistent,
+  zope-interface,
+
+  daemontools,
+  addBinToPathHook,
+  dask,
+  distributed,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  testtools,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.14.0";
-  format = "setuptools";
+  version = "1.16.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wvCZo+jV7PwidFdm58xmSkjbZLa4nZht/ycEkdhoMUk=";
+  src = fetchFromGitHub {
+    owner = "itamarst";
+    repo = "eliot";
+    tag = version;
+    hash = "sha256-KqAXOMrRawzjpt5do2KdqpMMgpBtxeZ+X+th0WwBl+U=";
   };
 
-  propagatedBuildInputs = [
-    aiocontextvars
+  build-system = [ setuptools ];
+
+  dependencies = [
     boltons
+    orjson
     pyrsistent
-    setuptools
-    six
-    zope_interface
+    zope-interface
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
+    dask
+    distributed
     hypothesis
+    pandas
     pytestCheckHook
     testtools
-  ];
+    twisted
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
 
-  pythonImportsCheck = [
-    "eliot"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  # Tests run eliot-prettyprint in out/bin.
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  pythonImportsCheck = [ "eliot" ];
 
   disabledTests = [
-    "test_parse_stream"
-    # AttributeError: module 'inspect' has no attribute 'getargspec'
-    "test_default"
+    # Fails since dask's bump to 2024.12.2
+    # Reported upstream: https://github.com/itamarst/eliot/issues/507
+    "test_compute_logging"
+    "test_future"
+    "test_persist_logging"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dpausp ];
+    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
+    mainProgram = "eliot-prettyprint";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dpausp ];
   };
 }

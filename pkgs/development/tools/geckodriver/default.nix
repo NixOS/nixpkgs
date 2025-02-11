@@ -1,25 +1,30 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, Security
-, libiconv
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  Security,
+  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.33.0";
+  version = "0.35.0";
   pname = "geckodriver";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "geckodriver";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-IBzLxiqfXFiEaDmCVZjAJCPcVInBT1ZZ5fkCOHedZkA=";
+    tag = "v${version}";
+    sha256 = "sha256-3EJP+y+Egz0kj5e+1FRHPGWfneB/tCCVggmgmylMyDE=";
   };
 
-  cargoHash = "sha256-4/VmF8reY0pz8wswQn3IlTNt6SaVunr2v+hv+oM+G/s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-BZosk8tCHpQqQTNFe8BPArdkTHoRN/SViG10xtYs8jY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    Security
+  ];
 
   meta = with lib; {
     description = "Proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers";

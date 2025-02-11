@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
-, wrapGAppsHook
-, pantheon
-, gtksourceview5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  wrapGAppsHook3,
+  pantheon,
+  gtksourceview5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "konbucase";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "konbucase";
     rev = finalAttrs.version;
-    hash = "sha256-g3EDa9EXymi6c8dRHFZYGEAT7k8M2TXUAzZVKTnLzyk=";
+    hash = "sha256-md7drxg1JuW6TRJauKOk4Aqjx/V1RVZ+POa5v6DtKwk=";
     fetchSubmodules = true;
   };
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/ryonakano/konbucase";
-    description = "A case converting app suitable for coding or typing";
+    description = "Case converting app suitable for coding or typing";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ galaxy ];
     platforms = platforms.linux;

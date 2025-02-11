@@ -1,23 +1,53 @@
-{ lib, stdenv, fetchurl
-, cmake, ninja, pkg-config, perl, go, python3
-, protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  pkg-config,
+  perl,
+  go,
+  python3,
+  protobuf,
+  zlib,
+  gtest,
+  brotli,
+  lz4,
+  zstd,
+  libusb1,
+  pcre2,
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: [ ps.protobuf ]);
+  pythonEnv = python3.withPackages (ps: [ ps.protobuf ]);
 in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "34.0.4";
+  version = "35.0.1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-eiL/nOqB/0849WBoeFjo+PtzNiRBJZfjzBqwJi+No6E=";
+    hash = "sha256-ZUAwx/ltJdciTNaGH6wUoEPPHTmA9AKIzfviGflP+vk=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config perl go ];
-  buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    perl
+    go
+  ];
+  buildInputs = [
+    protobuf
+    zlib
+    gtest
+    brotli
+    lz4
+    zstd
+    libusb1
+    pcre2
+  ];
   propagatedBuildInputs = [ pythonEnv ];
 
   preConfigure = ''
@@ -44,7 +74,10 @@ stdenv.mkDerivation rec {
     # https://developer.android.com/studio/command-line#tools-platform
     # https://developer.android.com/studio/releases/platform-tools
     homepage = "https://github.com/nmeum/android-tools";
-    license = with licenses; [ asl20 unicode-dfs-2015 ];
+    license = with licenses; [
+      asl20
+      unicode-dfs-2015
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };

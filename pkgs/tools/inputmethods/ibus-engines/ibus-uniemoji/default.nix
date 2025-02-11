@@ -1,19 +1,24 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gobject-introspection
-, wrapGAppsHook
-, python3
-, ibus
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  wrapGAppsHook3,
+  python3,
+  ibus,
 }:
 
 let
-  python = python3.withPackages (ps: with ps; [
-    pygobject3
-    (toPythonModule ibus)
-    pyxdg
-    levenshtein
-  ]);
-in stdenv.mkDerivation rec {
+  python = python3.withPackages (
+    ps: with ps; [
+      pygobject3
+      (toPythonModule ibus)
+      pyxdg
+      levenshtein
+    ]
+  );
+in
+stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
   version = "0.6.0";
 
@@ -30,9 +35,8 @@ in stdenv.mkDerivation rec {
     ./allow-wrapping.patch
   ];
 
-
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -55,7 +59,10 @@ in stdenv.mkDerivation rec {
     isIbusEngine = true;
     description = "Input method (ibus) for entering unicode symbols and emoji by name";
     homepage = "https://github.com/salty-horse/ibus-uniemoji";
-    license = with licenses; [ gpl3 mit ];
+    license = with licenses; [
+      gpl3
+      mit
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ aske ];
   };

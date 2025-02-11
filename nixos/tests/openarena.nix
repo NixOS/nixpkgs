@@ -1,35 +1,42 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
-let
-  client =
-    { pkgs, ... }:
+  let
+    client =
+      { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
-      hardware.opengl.driSupport = true;
-      environment.systemPackages = [ pkgs.openarena ];
+      {
+        imports = [ ./common/x11.nix ];
+        hardware.graphics.enable = true;
+        environment.systemPackages = [ pkgs.openarena ];
+      };
+
+  in
+  {
+    name = "openarena";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ fpletz ];
     };
 
-in {
-  name = "openarena";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ fpletz ];
-  };
-
-  nodes =
-    { server =
-        { services.openarena = {
-            enable = true;
-            extraFlags = [ "+set g_gametype 0" "+map oa_dm7" "+addbot Angelyss" "+addbot Arachna" ];
-            openPorts = true;
-          };
+    nodes = {
+      server = {
+        services.openarena = {
+          enable = true;
+          extraFlags = [
+            "+set g_gametype 0"
+            "+map oa_dm7"
+            "+addbot Angelyss"
+            "+addbot Arachna"
+          ];
+          openPorts = true;
         };
+      };
 
       client1 = client;
       client2 = client;
     };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       server.wait_for_unit("openarena")
@@ -68,4 +75,5 @@ in {
       client2.screenshot("screen_client2_3")
     '';
 
-})
+  }
+)

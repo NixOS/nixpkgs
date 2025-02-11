@@ -1,61 +1,130 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  inherit (lib.attrsets) optionalAttrs;
+  inherit (lib.generators) toINIWithGlobalSection;
+  inherit (lib.lists) optional;
+  inherit (lib.modules) mkIf mkRemovedOptionModule;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.strings) escape;
+  inherit (lib.types)
+    attrsOf
+    bool
+    int
+    lines
+    oneOf
+    str
+    submodule
+    ;
+
   cfg = config.services.davfs2;
-  cfgFile = pkgs.writeText "davfs2.conf" ''
-    dav_user ${cfg.davUser}
-    dav_group ${cfg.davGroup}
-    ${cfg.extraConfig}
-  '';
+
+  escapeString = escape [
+    "\""
+    "\\"
+  ];
+
+  formatValue =
+    value:
+    if true == value then
+      "1"
+    else if false == value then
+      "0"
+    else if builtins.isString value then
+      "\"${escapeString value}\""
+    else
+      toString value;
+
+  configFile = pkgs.writeText "davfs2.conf" (
+    toINIWithGlobalSection {
+      mkSectionName = escapeString;
+      mkKeyValue = k: v: "${k} ${formatValue v}";
+    } cfg.settings
+  );
 in
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "davfs2" "extraConfig" ] ''
+      The option extraConfig got removed, please migrate to
+      services.davfs2.settings instead.
+    '')
+  ];
+
   options.services.davfs2 = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = lib.mdDoc ''
-        Whether to enable davfs2.
-      '';
-    };
+    enable = mkEnableOption "davfs2";
 
     davUser = mkOption {
-      type = types.str;
+      type = str;
       default = "davfs2";
-      description = lib.mdDoc ''
+      description = ''
         When invoked by root the mount.davfs daemon will run as this user.
         Value must be given as name, not as numerical id.
       '';
     };
 
     davGroup = mkOption {
-      type = types.str;
+      type = str;
       default = "davfs2";
-      description = lib.mdDoc ''
+      description = ''
         The group of the running mount.davfs daemon. Ordinary users must be
         member of this group in order to mount a davfs2 file system. Value must
         be given as name, not as numerical id.
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
-        kernel_fs coda
-        proxy foo.bar:8080
-        use_locks 0
+    settings = mkOption {
+      type = submodule {
+        freeformType =
+          let
+            valueTypes = [
+              bool
+              int
+              str
+            ];
+          in
+          attrsOf (attrsOf (oneOf (valueTypes ++ [ (attrsOf (oneOf valueTypes)) ])));
+      };
+      default = { };
+      example = literalExpression ''
+        {
+          globalSection = {
+            proxy = "foo.bar:8080";
+            use_locks = false;
+          };
+          sections = {
+            "/media/dav" = {
+              use_locks = true;
+            };
+            "/home/otto/mywebspace" = {
+              gui_optimize = true;
+            };
+          };
+        }
       '';
-      description = lib.mdDoc ''
-        Extra lines appended to the configuration of davfs2.
-      ''  ;
+      description = ''
+        Extra settings appended to the configuration of davfs2.
+        See {manpage}`davfs2.conf(5)` for available settings.
+      '';
     };
   };
 
   config = mkIf cfg.enable {
+
     environment.systemPackages = [ pkgs.davfs2 ];
-    environment.etc."davfs2/davfs2.conf".source = cfgFile;
+    environment.etc."davfs2/davfs2.conf".source = configFile;
+
+    services.davfs2.settings = {
+      globalSection = {
+        dav_user = cfg.davUser;
+        dav_group = cfg.davGroup;
+      };
+    };
 
     users.groups = optionalAttrs (cfg.davGroup == "davfs2") {
       davfs2.gid = config.ids.gids.davfs2;

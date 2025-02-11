@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
@@ -8,15 +13,16 @@ let
   format = pkgs.formats.json { };
 
   configFile = format.generate "wiki-js.yml" cfg.settings;
-in {
+in
+{
   options.services.wiki-js = {
-    enable = mkEnableOption (lib.mdDoc "wiki-js");
+    enable = mkEnableOption "wiki-js";
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/root/wiki-js.env";
-      description = lib.mdDoc ''
+      description = ''
         Environment file to inject e.g. secrets into the configuration.
       '';
     };
@@ -24,20 +30,20 @@ in {
     stateDirectoryName = mkOption {
       default = "wiki-js";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Name of the directory in {file}`/var/lib`.
       '';
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       type = types.submodule {
         freeformType = format.type;
         options = {
           port = mkOption {
             type = types.port;
             default = 3000;
-            description = lib.mdDoc ''
+            description = ''
               TCP port the process should listen to.
             '';
           };
@@ -45,7 +51,7 @@ in {
           bindIP = mkOption {
             default = "0.0.0.0";
             type = types.str;
-            description = lib.mdDoc ''
+            description = ''
               IPs the service should listen to.
             '';
           };
@@ -53,8 +59,13 @@ in {
           db = {
             type = mkOption {
               default = "postgres";
-              type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
-              description = lib.mdDoc ''
+              type = types.enum [
+                "postgres"
+                "mysql"
+                "mariadb"
+                "mssql"
+              ];
+              description = ''
                 Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
                 in `pkgs.wiki-js` and it's not recommended by upstream for
@@ -64,14 +75,14 @@ in {
             host = mkOption {
               type = types.str;
               example = "/run/postgresql";
-              description = lib.mdDoc ''
+              description = ''
                 Hostname or socket-path to connect to.
               '';
             };
             db = mkOption {
               default = "wiki";
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Name of the database to use.
               '';
             };
@@ -79,21 +90,28 @@ in {
 
           logLevel = mkOption {
             default = "info";
-            type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
-            description = lib.mdDoc ''
+            type = types.enum [
+              "error"
+              "warn"
+              "info"
+              "verbose"
+              "debug"
+              "silly"
+            ];
+            description = ''
               Define how much detail is supposed to be logged at runtime.
             '';
           };
 
-          offline = mkEnableOption (lib.mdDoc "offline mode") // {
-            description = lib.mdDoc ''
+          offline = mkEnableOption "offline mode" // {
+            description = ''
               Disable latest file updates and enable
               [sideloading](https://docs.requarks.io/install/sideload).
             '';
           };
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Settings to configure `wiki-js`. This directly
         corresponds to [the upstream configuration options](https://docs.requarks.io/install/config).
 

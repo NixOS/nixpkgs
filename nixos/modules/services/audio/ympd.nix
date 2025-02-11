@@ -1,10 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ympd;
-in {
+in
+{
 
   ###### interface
 
@@ -12,27 +15,27 @@ in {
 
     services.ympd = {
 
-      enable = mkEnableOption (lib.mdDoc "ympd, the MPD Web GUI");
+      enable = lib.mkEnableOption "ympd, the MPD Web GUI";
 
-      webPort = mkOption {
-        type = types.either types.str types.port; # string for backwards compat
+      webPort = lib.mkOption {
+        type = lib.types.either lib.types.str lib.types.port; # string for backwards compat
         default = "8080";
-        description = lib.mdDoc "The port where ympd's web interface will be available.";
+        description = "The port where ympd's web interface will be available.";
         example = "ssl://8080:/path/to/ssl-private-key.pem";
       };
 
       mpd = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
-          description = lib.mdDoc "The host where MPD is listening.";
+          description = "The host where MPD is listening.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = config.services.mpd.network.port;
-          defaultText = literalExpression "config.services.mpd.network.port";
-          description = lib.mdDoc "The port where MPD is listening.";
+          defaultText = lib.literalExpression "config.services.mpd.network.port";
+          description = "The port where MPD is listening.";
           example = 6600;
         };
       };
@@ -41,15 +44,15 @@ in {
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.ympd = {
       description = "Standalone MPD Web GUI written in C";
 
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
       serviceConfig = {
@@ -78,7 +81,10 @@ in {
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
 
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
 

@@ -8,6 +8,7 @@
 , libva
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libdrm
 , udev
 , xorg
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.22.6";
+  version = "1.24.10";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-2bovwmvvmMeOmCxZn1hdRru2X+Ei2onC16tB9GilLHs=";
+    hash = "sha256-IVk9veXGvNz+mRld7748P02gHLhfjsEKrpQ4h9Odikw=";
   };
 
   outputs = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     bzip2
-    wayland
+    wayland-scanner
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     xorg.libICE
     nasm
     libvpx
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libGLU
   ];
@@ -86,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

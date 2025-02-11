@@ -1,4 +1,15 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, qtwebengine, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  poppler,
+  qtwebengine,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corepdf";
@@ -25,7 +36,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A PDF viewer from the C Suite";
+    description = "PDF viewer from the C Suite";
+    mainProgram = "corepdf";
     homepage = "https://gitlab.com/cubocore/coreapps/corepdf";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

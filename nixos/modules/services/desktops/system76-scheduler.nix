@@ -1,109 +1,163 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.system76-scheduler;
 
-  inherit (builtins) concatStringsSep map toString attrNames;
-  inherit (lib) boolToString types mkOption literalExpression mdDoc optional mkIf mkMerge;
-  inherit (types) nullOr listOf bool int ints float str enum;
+  inherit (builtins)
+    concatStringsSep
+    map
+    toString
+    attrNames
+    ;
+  inherit (lib)
+    boolToString
+    types
+    mkOption
+    literalExpression
+    optional
+    mkIf
+    mkMerge
+    ;
+  inherit (types)
+    nullOr
+    listOf
+    bool
+    int
+    ints
+    float
+    str
+    enum
+    ;
 
-  withDefaults = optionSpecs: defaults:
-    lib.genAttrs (attrNames optionSpecs) (name:
-      mkOption (optionSpecs.${name} // {
-        default = optionSpecs.${name}.default or defaults.${name} or null;
-      }));
+  withDefaults =
+    optionSpecs: defaults:
+    lib.genAttrs (attrNames optionSpecs) (
+      name:
+      mkOption (
+        optionSpecs.${name}
+        // {
+          default = optionSpecs.${name}.default or defaults.${name} or null;
+        }
+      )
+    );
 
   latencyProfile = withDefaults {
     latency = {
       type = int;
-      description = mdDoc "`sched_latency_ns`.";
+      description = "`sched_latency_ns`.";
     };
     nr-latency = {
       type = int;
-      description = mdDoc "`sched_nr_latency`.";
+      description = "`sched_nr_latency`.";
     };
     wakeup-granularity = {
       type = float;
-      description = mdDoc "`sched_wakeup_granularity_ns`.";
+      description = "`sched_wakeup_granularity_ns`.";
     };
     bandwidth-size = {
       type = int;
-      description = mdDoc "`sched_cfs_bandwidth_slice_us`.";
+      description = "`sched_cfs_bandwidth_slice_us`.";
     };
     preempt = {
-      type = enum [ "none" "voluntary" "full" ];
-      description = mdDoc "Preemption mode.";
+      type = enum [
+        "none"
+        "voluntary"
+        "full"
+      ];
+      description = "Preemption mode.";
     };
   };
   schedulerProfile = withDefaults {
     nice = {
       type = nullOr (ints.between (-20) 19);
-      description = mdDoc "Niceness.";
+      description = "Niceness.";
     };
     class = {
-      type = nullOr (enum [ "idle" "batch" "other" "rr" "fifo" ]);
+      type = nullOr (enum [
+        "idle"
+        "batch"
+        "other"
+        "rr"
+        "fifo"
+      ]);
       example = literalExpression "\"batch\"";
-      description = mdDoc "CPU scheduler class.";
+      description = "CPU scheduler class.";
     };
     prio = {
       type = nullOr (ints.between 1 99);
       example = literalExpression "49";
-      description = mdDoc "CPU scheduler priority.";
+      description = "CPU scheduler priority.";
     };
     ioClass = {
-      type = nullOr (enum [ "idle" "best-effort" "realtime" ]);
+      type = nullOr (enum [
+        "idle"
+        "best-effort"
+        "realtime"
+      ]);
       example = literalExpression "\"best-effort\"";
-      description = mdDoc "IO scheduler class.";
+      description = "IO scheduler class.";
     };
     ioPrio = {
       type = nullOr (ints.between 0 7);
       example = literalExpression "4";
-      description = mdDoc "IO scheduler priority.";
+      description = "IO scheduler priority.";
     };
     matchers = {
       type = nullOr (listOf str);
-      default = [];
+      default = [ ];
       example = literalExpression ''
         [
           "include cgroup=\"/user.slice/*.service\" parent=\"systemd\""
           "emacs"
         ]
       '';
-      description = mdDoc "Process matchers.";
+      description = "Process matchers.";
     };
   };
 
-  cfsProfileToString = name: let
-    p = cfg.settings.cfsProfiles.${name};
-  in
+  cfsProfileToString =
+    name:
+    let
+      p = cfg.settings.cfsProfiles.${name};
+    in
     "${name} latency=${toString p.latency} nr-latency=${toString p.nr-latency} wakeup-granularity=${toString p.wakeup-granularity} bandwidth-size=${toString p.bandwidth-size} preempt=\"${p.preempt}\"";
 
   prioToString = class: prio: if prio == null then "\"${class}\"" else "(${class})${toString prio}";
 
-  schedulerProfileToString = name: a: indent:
-    concatStringsSep " "
-      (["${indent}${name}"]
-       ++ (optional (a.nice != null) "nice=${toString a.nice}")
-       ++ (optional (a.class != null) "sched=${prioToString a.class a.prio}")
-       ++ (optional (a.ioClass != null) "io=${prioToString a.ioClass a.ioPrio}")
-       ++ (optional ((builtins.length a.matchers) != 0) ("{\n${concatStringsSep "\n" (map (m: "  ${indent}${m}") a.matchers)}\n${indent}}")));
+  schedulerProfileToString =
+    name: a: indent:
+    concatStringsSep " " (
+      [ "${indent}${name}" ]
+      ++ (optional (a.nice != null) "nice=${toString a.nice}")
+      ++ (optional (a.class != null) "sched=${prioToString a.class a.prio}")
+      ++ (optional (a.ioClass != null) "io=${prioToString a.ioClass a.ioPrio}")
+      ++ (optional ((builtins.length a.matchers) != 0) (
+        "{\n${concatStringsSep "\n" (map (m: "  ${indent}${m}") a.matchers)}\n${indent}}"
+      ))
+    );
 
-in {
+in
+{
   options = {
     services.system76-scheduler = {
-      enable = lib.mkEnableOption (lib.mdDoc "system76-scheduler");
+      enable = lib.mkEnableOption "system76-scheduler";
 
       package = mkOption {
         type = types.package;
-        default = config.boot.kernelPackages.system76-scheduler;
-        defaultText = literalExpression "config.boot.kernelPackages.system76-scheduler";
-        description = mdDoc "Which System76-Scheduler package to use.";
+        default = pkgs.system76-scheduler;
+        defaultText = literalExpression "pkgs.system76-scheduler";
+        description = "Which System76-Scheduler package to use.";
       };
 
       useStockConfig = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Use the (reasonable and featureful) stock configuration.
 
           When this option is `true`, `services.system76-scheduler.settings`
@@ -116,7 +170,7 @@ in {
           enable = mkOption {
             type = bool;
             default = true;
-            description = mdDoc "Tweak CFS latency parameters when going on/off battery";
+            description = "Tweak CFS latency parameters when going on/off battery";
           };
 
           default = latencyProfile {
@@ -139,26 +193,26 @@ in {
           enable = mkOption {
             type = bool;
             default = true;
-            description = mdDoc "Tweak scheduling of individual processes in real time.";
+            description = "Tweak scheduling of individual processes in real time.";
           };
 
           useExecsnoop = mkOption {
             type = bool;
             default = true;
-            description = mdDoc "Use execsnoop (otherwise poll the precess list periodically).";
+            description = "Use execsnoop (otherwise poll the precess list periodically).";
           };
 
           refreshInterval = mkOption {
             type = int;
             default = 60;
-            description = mdDoc "Process list poll interval, in seconds";
+            description = "Process list poll interval, in seconds";
           };
 
           foregroundBoost = {
             enable = mkOption {
               type = bool;
               default = true;
-              description = mdDoc ''
+              description = ''
                 Boost foreground process priorities.
 
                 (And de-boost background ones).  Note that this option needs cooperation
@@ -181,7 +235,7 @@ in {
             enable = mkOption {
               type = bool;
               default = true;
-              description = mdDoc "Boost Pipewire client priorities.";
+              description = "Boost Pipewire client priorities.";
             };
             profile = schedulerProfile {
               nice = -6;
@@ -193,10 +247,12 @@ in {
       };
 
       assignments = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = schedulerProfile { };
-        });
-        default = {};
+        type = types.attrsOf (
+          types.submodule {
+            options = schedulerProfile { };
+          }
+        );
+        default = { };
         example = literalExpression ''
           {
             nix-builds = {
@@ -209,19 +265,19 @@ in {
             };
           }
         '';
-        description = mdDoc "Process profile assignments.";
+        description = "Process profile assignments.";
       };
 
       exceptions = mkOption {
         type = types.listOf str;
-        default = [];
+        default = [ ];
         example = literalExpression ''
           [
             "include descends=\"schedtool\""
             "schedtool"
           ]
         '';
-        description = mdDoc "Processes that are left alone.";
+        description = "Processes that are left alone.";
       };
     };
   };
@@ -241,7 +297,7 @@ in {
       ];
       serviceConfig = {
         Type = "dbus";
-        BusName= "com.system76.Scheduler";
+        BusName = "com.system76.Scheduler";
         ExecStart = "${cfg.package}/bin/system76-scheduler daemon";
         ExecReload = "${cfg.package}/bin/system76-scheduler daemon reload";
       };
@@ -252,39 +308,59 @@ in {
         # No custom settings: just use stock configuration with a fix for Pipewire
         "system76-scheduler/config.kdl".source = "${cfg.package}/data/config.kdl";
         "system76-scheduler/process-scheduler/00-dist.kdl".source = "${cfg.package}/data/pop_os.kdl";
-        "system76-scheduler/process-scheduler/01-fix-pipewire-paths.kdl".source = ../../../../pkgs/os-specific/linux/system76-scheduler/01-fix-pipewire-paths.kdl;
+        "system76-scheduler/process-scheduler/01-fix-pipewire-paths.kdl".source =
+          ../../../../pkgs/by-name/sy/system76-scheduler/01-fix-pipewire-paths.kdl;
       })
 
-      (let
-        settings = cfg.settings;
-        cfsp = settings.cfsProfiles;
-        ps = settings.processScheduler;
-      in mkIf (!cfg.useStockConfig) {
-        "system76-scheduler/config.kdl".text = ''
-          version "2.0"
-          autogroup-enabled false
-          cfs-profiles enable=${boolToString cfsp.enable} {
-            ${cfsProfileToString "default"}
-            ${cfsProfileToString "responsive"}
-          }
-          process-scheduler enable=${boolToString ps.enable} {
-            execsnoop ${boolToString ps.useExecsnoop}
-            refresh-rate ${toString ps.refreshInterval}
-            assignments {
-              ${if ps.foregroundBoost.enable then (schedulerProfileToString "foreground" ps.foregroundBoost.foreground "    ") else ""}
-              ${if ps.foregroundBoost.enable then (schedulerProfileToString "background" ps.foregroundBoost.background "    ") else ""}
-              ${if ps.pipewireBoost.enable then (schedulerProfileToString "pipewire" ps.pipewireBoost.profile "    ") else ""}
+      (
+        let
+          settings = cfg.settings;
+          cfsp = settings.cfsProfiles;
+          ps = settings.processScheduler;
+        in
+        mkIf (!cfg.useStockConfig) {
+          "system76-scheduler/config.kdl".text = ''
+            version "2.0"
+            autogroup-enabled false
+            cfs-profiles enable=${boolToString cfsp.enable} {
+              ${cfsProfileToString "default"}
+              ${cfsProfileToString "responsive"}
             }
-          }
-        '';
-      })
+            process-scheduler enable=${boolToString ps.enable} {
+              execsnoop ${boolToString ps.useExecsnoop}
+              refresh-rate ${toString ps.refreshInterval}
+              assignments {
+                ${
+                  if ps.foregroundBoost.enable then
+                    (schedulerProfileToString "foreground" ps.foregroundBoost.foreground "    ")
+                  else
+                    ""
+                }
+                ${
+                  if ps.foregroundBoost.enable then
+                    (schedulerProfileToString "background" ps.foregroundBoost.background "    ")
+                  else
+                    ""
+                }
+                ${
+                  if ps.pipewireBoost.enable then
+                    (schedulerProfileToString "pipewire" ps.pipewireBoost.profile "    ")
+                  else
+                    ""
+                }
+              }
+            }
+          '';
+        }
+      )
 
       {
         "system76-scheduler/process-scheduler/02-config.kdl".text =
           "exceptions {\n${concatStringsSep "\n" (map (e: "  ${e}") cfg.exceptions)}\n}\n"
           + "assignments {\n"
-          + (concatStringsSep "\n" (map (name: schedulerProfileToString name cfg.assignments.${name} "  ")
-            (attrNames cfg.assignments)))
+          + (concatStringsSep "\n" (
+            map (name: schedulerProfileToString name cfg.assignments.${name} "  ") (attrNames cfg.assignments)
+          ))
           + "\n}\n";
       }
     ];

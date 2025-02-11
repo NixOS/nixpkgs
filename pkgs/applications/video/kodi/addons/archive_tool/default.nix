@@ -1,4 +1,9 @@
-{ lib, buildKodiAddon, fetchFromGitHub, vfs-libarchive }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  vfs-libarchive,
+}:
 buildKodiAddon rec {
   pname = "archive_tool";
   namespace = "script.module.archive_tool";
@@ -21,7 +26,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/zach-morris/script.module.archive_tool";
-    description = "A set of common python functions to work with the Kodi archive virtual file system (vfs) binary addons";
+    description = "Set of common python functions to work with the Kodi archive virtual file system (vfs) binary addons";
     license = licenses.gpl3Plus;
     maintainers = teams.kodi.members;
   };

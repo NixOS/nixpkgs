@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.gotosocial;
   settingsFormat = pkgs.formats.yaml { };
@@ -27,17 +32,17 @@ let
 in
 {
   meta.doc = ./gotosocial.md;
-  meta.maintainers = with lib.maintainers; [ misuzu ];
+  meta.maintainers = with lib.maintainers; [ blakesmith ];
 
   options.services.gotosocial = {
-    enable = lib.mkEnableOption (lib.mdDoc "ActivityPub social network server");
+    enable = lib.mkEnableOption "ActivityPub social network server";
 
     package = lib.mkPackageOption pkgs "gotosocial" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open the configured port in the firewall.
         Using a reverse proxy instead is highly recommended.
       '';
@@ -46,7 +51,7 @@ in
     setupPostgresqlDB = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to setup a local postgres database and populate the
         `db-type` fields in `services.gotosocial.settings`.
       '';
@@ -59,7 +64,7 @@ in
         application-name = "My GoToSocial";
         host = "gotosocial.example.com";
       };
-      description = lib.mdDoc ''
+      description = ''
         Contents of the GoToSocial YAML config.
 
         Please refer to the
@@ -73,9 +78,9 @@ in
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      description = lib.mdDoc ''
+      description = ''
         File path containing environment variables for configuring the GoToSocial service
-        in the format of an EnvironmentFile as described by systemd.exec(5).
+        in the format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`.
 
         This option could be used to pass sensitive configuration to the GoToSocial daemon.
 
@@ -98,17 +103,20 @@ in
       }
     ];
 
-    services.gotosocial.settings = (lib.mapAttrs (name: lib.mkDefault) (
-      defaultSettings // {
-        web-asset-base-dir = "${cfg.package}/share/gotosocial/web/assets/";
-        web-template-base-dir = "${cfg.package}/share/gotosocial/web/template/";
-      }
-    )) // (lib.optionalAttrs cfg.setupPostgresqlDB {
-      db-type = "postgres";
-      db-address = "/run/postgresql";
-      db-database = "gotosocial";
-      db-user = "gotosocial";
-    });
+    services.gotosocial.settings =
+      (lib.mapAttrs (name: lib.mkDefault) (
+        defaultSettings
+        // {
+          web-asset-base-dir = "${cfg.package}/share/gotosocial/web/assets/";
+          web-template-base-dir = "${cfg.package}/share/gotosocial/web/template/";
+        }
+      ))
+      // (lib.optionalAttrs cfg.setupPostgresqlDB {
+        db-type = "postgres";
+        db-address = "/run/postgresql";
+        db-database = "gotosocial";
+        db-user = "gotosocial";
+      });
 
     environment.systemPackages = [ gotosocial-admin ];
 
@@ -136,8 +144,7 @@ in
     systemd.services.gotosocial = {
       description = "ActivityPub social network server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ]
-        ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
+      after = [ "network.target" ] ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
       requires = lib.optional cfg.setupPostgresqlDB "postgresql.service";
       restartTriggers = [ configFile ];
 

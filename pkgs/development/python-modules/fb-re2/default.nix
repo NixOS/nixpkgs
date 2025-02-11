@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, re2
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  re2,
 }:
 
 buildPythonPackage rec {
   pname = "fb-re2";
   version = "1.0.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

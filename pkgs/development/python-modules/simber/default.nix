@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, colorama
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,21 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kHoFZD7nhVxJu9MqePLkL7KTG2saPecY9238c/oeEco=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "simber"
-  ];
+  pythonImportsCheck = [ "simber" ];
 
   meta = with lib; {
     description = "Simple, minimal and powerful logger for Python";

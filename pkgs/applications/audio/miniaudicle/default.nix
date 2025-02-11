@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.5.0.7";
+  version = "1.5.4.2";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
     rev = "chuck-${finalAttrs.version}";
-    hash = "sha256-CqsajNLcOp7CS5RsVabWM6APnNh4alSKb2/eoZ7F4Ao=";
+    hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
     fetchSubmodules = true;
   };
 
@@ -52,12 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "linux-${audioBackend}" ];
 
   meta = with lib; {
-    description = "A light-weight integrated development environment for the ChucK digital audio programming language";
+    description = "Light-weight integrated development environment for the ChucK digital audio programming language";
+    mainProgram = "miniAudicle";
     homepage = "https://audicle.cs.princeton.edu/mini/";
     downloadPage = "https://audicle.cs.princeton.edu/mini/linux/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # not attempted
+    broken = stdenv.hostPlatform.isDarwin; # not attempted
   };
 })

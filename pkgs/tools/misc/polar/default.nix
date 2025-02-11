@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ruby, bundlerEnv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  bundlerEnv,
+}:
 let
 
   # To create Gemfile.lock and gemset.nix
@@ -31,28 +37,31 @@ stdenv.mkDerivation rec {
       substituteInPlace $script --replace "#{File.dirname(__FILE__)}/lib" "$out/lib/polar"
     done
   '';
-  buildInputs = [ gems ruby ];
+  buildInputs = [
+    gems
+    ruby
+  ];
 
-  # See: https://nixos.wiki/wiki/Packaging/Ruby
+  # See: https://wiki.nixos.org/wiki/Packaging/Ruby
   #
   # Put library content under lib/polar and the raw scripts under share/polar.
   # Then, wrap the scripts so that they use the correct ruby environment and put
   # these wrapped executables under bin.
   installPhase = ''
-    install -Dm644 -t $out/etc/udev/rules.d ./pkg/99-polar.rules
-    mkdir -p $out/{bin,lib/polar,share/polar}
-    cp -r lib/* $out/lib/polar/
-    for script in ./polar_*
-    do
-      raw="$out/share/polar/$script"
-      bin="$out/bin/$script"
-      cp "$script" "$raw"
-      cat > $bin <<EOF
-#!/bin/sh -e
-exec ${gems}/bin/bundle exec ${ruby}/bin/ruby "$raw" "\$@"
-EOF
-      chmod +x $bin
-    done
+        install -Dm644 -t $out/etc/udev/rules.d ./pkg/99-polar.rules
+        mkdir -p $out/{bin,lib/polar,share/polar}
+        cp -r lib/* $out/lib/polar/
+        for script in ./polar_*
+        do
+          raw="$out/share/polar/$script"
+          bin="$out/bin/$script"
+          cp "$script" "$raw"
+          cat > $bin <<EOF
+    #!/bin/sh -e
+    exec ${gems}/bin/bundle exec ${ruby}/bin/ruby "$raw" "\$@"
+    EOF
+          chmod +x $bin
+        done
   '';
 
   meta = with lib; {

@@ -1,25 +1,26 @@
-{ mkDerivation
-, lib
-, fetchurl
-, extra-cmake-modules
-, kdoctools
-, wrapGAppsHook
-, karchive
-, kconfig
-, kcrash
-, kguiaddons
-, kinit
-, kparts
-, kwindowsystem
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  kdoctools,
+  wrapGAppsHook3,
+  karchive,
+  kconfig,
+  kcrash,
+  kguiaddons,
+  kinit,
+  kparts,
+  kwindowsystem,
 }:
 
 mkDerivation rec {
   pname = "krusader";
-  version = "2.8.0";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-jkzwWpMYsLwbCUGBG5iLLyuwwEoNHjeZghKpGQzywpo=";
+    hash = "sha256-N78gRRnQqxukCWSvAnQbwijxHpfyjExRjKBdNY3xgoM=";
   };
 
   patches = [
@@ -30,7 +31,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [

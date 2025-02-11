@@ -1,39 +1,40 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# runtime
-, ffmpeg-headless
+  # runtime
+  ffmpeg-headless,
 
-# propagates
-, more-itertools
-, numba
-, numpy
-, openai-triton
-, scipy
-, tiktoken
-, torch
-, tqdm
-, transformers
+  # propagates
+  more-itertools,
+  numba,
+  numpy,
+  triton,
+  tiktoken,
+  torch,
+  tqdm,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20231117";
+  version = "20240930-unstable-2025-01-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MJ1XjB/GuYUiECCuuHS0NWHvvs+ko0oTvLuDI7zLNiY=";
+    repo = "whisper";
+    rev = "517a43ecd132a2089d85f4ebc044728a71d49f6e";
+    hash = "sha256-RYcQC70E27gtW4gzoPJU132Dm7CnSg8d2/GEfyUyXU4=";
   };
 
   patches = [
@@ -43,21 +44,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     more-itertools
     numba
     numpy
-    openai-triton
-    scipy
     tiktoken
     torch
     tqdm
-    transformers
-  ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -65,6 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ];
 
   disabledTests = [
@@ -78,8 +75,12 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";
     description = "General-purpose speech recognition model";
+    mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa MayNiklas ];
+    maintainers = with maintainers; [
+      hexa
+      MayNiklas
+    ];
   };
 }

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bencode
-, catch2
-, cli11
-, cmake
-, ctre
-, expected-lite
-, fmt
-, gsl-lite
-, howard-hinnant-date
-, yaml-cpp
-, ninja
-, nlohmann_json
-, openssl
-, re2
-, sigslot
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bencode,
+  catch2,
+  cli11,
+  cmake,
+  ctre,
+  expected-lite,
+  fmt,
+  gsl-lite,
+  howard-hinnant-date,
+  yaml-cpp,
+  ninja,
+  nlohmann_json,
+  openssl,
+  re2,
+  sigslot,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,10 @@ stdenv.mkDerivation rec {
   ];
   sourceRoot = "torrenttools";
 
+  patches = [
+    ./fmt-9.patch
+  ];
+
   postUnpack = ''
     cp -pr cliprogress torrenttools/external/cliprogress
     cp -pr dottorrent torrenttools/external/dottorrent
@@ -90,7 +95,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A CLI tool for creating, inspecting and modifying BitTorrent metafiles";
+    description = "CLI tool for creating, inspecting and modifying BitTorrent metafiles";
     homepage = "https://github.com/fbdtemme/torrenttools";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];

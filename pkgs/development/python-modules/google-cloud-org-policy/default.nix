@@ -1,27 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.8.3";
-  format = "setuptools";
+  version = "1.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VU+vB+x2DElwzl1cO7qTdV91Mn1i2Dsq2safnMrwuqI=";
+    pname = "google_cloud_org_policy";
+    inherit version;
+    hash = "sha256-xM9fJH21AbNOrNZG1Ahs+NuhKOxCuKv41mSrJQXjH2Y=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -37,9 +42,7 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pythonImportsCheck = [
-    "google.cloud.orgpolicy"
-  ];
+  pythonImportsCheck = [ "google.cloud.orgpolicy" ];
 
   meta = with lib; {
     description = "Protobufs for Google Cloud Organization Policy";

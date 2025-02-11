@@ -1,22 +1,34 @@
-{ lib, fetchFromGitHub, gerbilPackages, gerbil-support, gerbil, ... }:
+{
+  lib,
+  fetchFromGitHub,
+  gerbilPackages,
+  gerbil-support,
+  gerbil,
+  ...
+}:
 
 rec {
   pname = "gerbil-ethereum";
-  version = "unstable-2023-10-06";
-  git-version = "0.1-1-g08b08fc";
+  version = "unstable-2023-12-04";
+  git-version = "0.2-11-g124ec58";
   softwareName = "Gerbil-ethereum";
   gerbil-package = "clan/ethereum";
   version-path = "version";
 
   gerbilInputs = with gerbilPackages; [
-    gerbil-utils gerbil-crypto gerbil-poo gerbil-persist gerbil-leveldb ];
+    gerbil-utils
+    gerbil-crypto
+    gerbil-poo
+    gerbil-persist
+    gerbil-leveldb
+  ];
 
   pre-src = {
     fun = fetchFromGitHub;
     owner = "mighty-gerbils";
     repo = "gerbil-ethereum";
-    rev = "08b08fce8c83cb59bfb532eebb1c7a2dd4bd57ab";
-    sha256 = "1sy7l869d2xqhq2qflsmkvr343jfhzsq43ixx75rqfpr3cdljz0b";
+    rev = "124ec585157e2c505cd3c449a389c124ca6da9e9";
+    sha256 = "0xg07k421r5p0qx98id66k0k2l3vi1is875857sd8q3h6bks0z54";
   };
 
   postInstall = ''
@@ -29,22 +41,22 @@ rec {
     ORIG_GERBIL_PATH="\$GERBIL_PATH"
     ORIG_GERBIL_HOME="\$GERBIL_HOME"
     unset GERBIL_HOME
-    GERBIL_LOADPATH="${gerbil-support.gerbilLoadPath (["$out"] ++ gerbilInputs)}"
+    GERBIL_LOADPATH="${gerbil-support.gerbilLoadPath ([ "$out" ] ++ gerbilInputs)}"
     GERBIL_PATH="\$HOME/.cache/gerbil-ethereum/gerbil"
     export GERBIL_PATH GERBIL_LOADPATH GLOW_SOURCE ORIG_GERBIL_PATH ORIG_GERBIL_LOADPATH
     exec ${gerbil}/bin/gxi "\$0" "\$@"
     |#
-    (import :clan/ethereum/scripts/run-ethereum-test-net :clan/multicall)
+    (import :clan/ethereum/scripts/run-ethereum-test-net :std/lib/multicall)
     (apply call-entry-point (cdr (command-line)))
     EOF
     chmod a+x $out/bin/run-ethereum-test-net
-    '';
+  '';
 
   meta = with lib; {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
-    homepage    = "https://github.com/fare/gerbil-ethereum";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-ethereum";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

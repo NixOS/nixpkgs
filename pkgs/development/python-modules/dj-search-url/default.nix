@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   version = "0.1";
+  format = "setuptools";
   pname = "dj-search-url";
 
   src = fetchPypi {
@@ -18,5 +20,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = [ ];
   };
-
 }

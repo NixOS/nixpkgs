@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitea, fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
-, jpegoptim, oxipng, nodePackages
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  yarn,
+  nodejs,
+  jpegoptim,
+  oxipng,
+  nodePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
-  version = "unstable-2023-08-05";
+  version = "3.11.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    rev = "e7a558a533dd31de174791f130afdaa5b6893b74";
-    hash = "sha256-BRmfppsC7NjDdcLxQHuLbQZmYGkj4DFPRtQOf/pRCpI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Z7psmIyOo8Rvwcip90JgxLhZ5SkkGB94QInEgm8UOjQ=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-Uet3zdjLdI4qpiuU4CtW2WwWGcFaOhotLLKfnsAUqho=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
     nodejs
     jpegoptim
@@ -33,7 +39,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Build scripts assume to be used within a Git repository checkout
-    sed -E -i '/^let commitHash =/,/;$/clet commitHash = "${builtins.substring 0 7 src.rev}";' \
+    sed -E -i '/^let commitHash =/,/;$/clet commitHash = "${
+      builtins.substring 0 7 finalAttrs.src.rev
+    }";' \
       build/webpack.prod.conf.js
   '';
 
@@ -42,7 +50,7 @@ stdenv.mkDerivation rec {
 
     export HOME="$(mktemp -d)"
 
-    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
+    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
     fixup-yarn-lock yarn.lock
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
@@ -73,10 +81,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Frontend for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mvs ];
   };
-}
+})

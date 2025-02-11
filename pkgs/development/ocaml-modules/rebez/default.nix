@@ -1,4 +1,9 @@
-{ buildDunePackage, fetchFromGitHub, lib, reason }:
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  lib,
+  reason,
+}:
 
 buildDunePackage rec {
   pname = "rebez";
@@ -17,7 +22,7 @@ buildDunePackage rec {
     description = "Cubic bezier implementation in Reason / OCaml";
     homepage = "https://github.com/jchavarri/rebez/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "RebezApp.exe";
   };
 }

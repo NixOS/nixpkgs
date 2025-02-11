@@ -1,0 +1,29 @@
+diff --git a/cmake/par2-turbo.cmake b/cmake/par2-turbo.cmake
+index 4fa76b54..cf293452 100644
+--- a/cmake/par2-turbo.cmake
++++ b/cmake/par2-turbo.cmake
+@@ -24,17 +24,13 @@ if(CMAKE_SYSROOT)
+ 	)
+ endif()
+ 
+-ExternalProject_add(
+-	par2-turbo
+-	PREFIX			par2-turbo
+-	GIT_REPOSITORY	https://github.com/nzbgetcom/par2cmdline-turbo.git
+-	GIT_TAG			v1.1.1-nzbget-20241128
+-	TLS_VERIFY		TRUE
+-	GIT_SHALLOW		TRUE
+-	GIT_PROGRESS	TRUE
+-	DOWNLOAD_EXTRACT_TIMESTAMP	TRUE
+-	CMAKE_ARGS		${CMAKE_ARGS}
+-	INSTALL_COMMAND	""
++
++ExternalProject_Add(
++    par2-turbo
++    PREFIX par2-turbo 
++    SOURCE_DIR ${CMAKE_BINARY_DIR}/par2-turbo/src/par2-turbo
++    CMAKE_ARGS ${CMAKE_ARGS}
++    INSTALL_COMMAND ""
+ )
+ 
+ if(WIN32) 

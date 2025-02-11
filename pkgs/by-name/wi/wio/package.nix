@@ -1,32 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alacritty
-, cage
-, cairo
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, pkg-config
-, udev
-, unstableGitUpdater
-, wayland
-, wayland-protocols
-, wlroots
-, xwayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alacritty,
+  cage,
+  cairo,
+  libxkbcommon,
+  makeWrapper,
+  libgbm,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  udev,
+  unstableGitUpdater,
+  wayland,
+  wayland-protocols,
+  wlroots,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wio";
-  version = "unstable-2023-05-28";
+  version = "0.17.3-unstable-2024-04-30";
 
   src = fetchFromGitHub {
     owner = "Rubo3";
     repo = "wio";
-    rev = "9d33d60839d3005ee16b5b04ae7f42c049939058";
-    hash = "sha256-ylJ8VHQU4TWLrhxGRo6HHOB7RWTVAThMQRw0uAFboNE=";
+    rev = "9d459df379efdcf20ea10906c48c79c506c32066";
+    hash = "sha256-Bn7mCVQPH/kH2WRsGPPGIGgvk0r894zZHCHl6BVmWVg=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
     cairo
     libxkbcommon
-    mesa
+    libgbm
     udev
     wayland
     wayland-protocols
@@ -53,7 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/wio \
-      --prefix PATH ":" "${lib.makeBinPath [ alacritty cage ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          alacritty
+          cage
+        ]
+      }"
   '';
 
   passthru = {

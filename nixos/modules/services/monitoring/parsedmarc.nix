@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.parsedmarc;
@@ -6,30 +12,45 @@ let
   isSecret = v: isAttrs v && v ? _secret && isString v._secret;
   ini = pkgs.formats.ini {
     mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
-      mkValueString = v:
-        if isInt           v then toString v
-        else if isString   v then v
-        else if true  ==   v then "True"
-        else if false ==   v then "False"
-        else if isSecret   v then hashString "sha256" v._secret
-        else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+      mkValueString =
+        v:
+        if isInt v then
+          toString v
+        else if isString v then
+          v
+        else if true == v then
+          "True"
+        else if false == v then
+          "False"
+        else if isSecret v then
+          hashString "sha256" v._secret
+        else
+          throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
     };
   };
-  inherit (builtins) elem isAttrs isString isInt isList typeOf hashString;
+  inherit (builtins)
+    elem
+    isAttrs
+    isString
+    isInt
+    isList
+    typeOf
+    hashString
+    ;
 in
 {
   options.services.parsedmarc = {
 
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       parsedmarc, a DMARC report monitoring service
-    '');
+    '';
 
     provision = {
       localMail = {
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether Postfix and Dovecot should be set up to receive
             mail locally. parsedmarc will be configured to watch the
             local inbox as the automatically created user specified in
@@ -40,7 +61,7 @@ in
         recipientName = lib.mkOption {
           type = lib.types.str;
           default = "dmarc";
-          description = lib.mdDoc ''
+          description = ''
             The DMARC mail recipient name, i.e. the name part of the
             email address which receives DMARC reports.
 
@@ -54,7 +75,7 @@ in
           default = config.networking.fqdn;
           defaultText = lib.literalExpression "config.networking.fqdn";
           example = "monitoring.example.com";
-          description = lib.mdDoc ''
+          description = ''
             The hostname to use when configuring Postfix.
 
             Should correspond to the host's fully qualified domain
@@ -68,7 +89,7 @@ in
       geoIp = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable and configure the [geoipupdate](#opt-services.geoipupdate.enable)
           service to automatically fetch GeoIP databases. Not crucial,
           but recommended for full functionality.
@@ -82,7 +103,7 @@ in
       elasticsearch = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set up and use a local instance of Elasticsearch.
         '';
       };
@@ -95,7 +116,7 @@ in
             config.${opt.provision.elasticsearch} && config.${options.services.grafana.enable}
           '';
           apply = x: x && cfg.provision.elasticsearch;
-          description = lib.mdDoc ''
+          description = ''
             Whether the automatically provisioned Elasticsearch
             instance should be added as a grafana datasource. Has no
             effect unless
@@ -108,7 +129,7 @@ in
           type = lib.types.bool;
           default = config.services.grafana.enable;
           defaultText = lib.literalExpression "config.services.grafana.enable";
-          description = lib.mdDoc ''
+          description = ''
             Whether the official parsedmarc grafana dashboard should
             be provisioned to the local grafana instance.
           '';
@@ -135,7 +156,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration parameters to set in
         {file}`parsedmarc.ini`. For a full list of
         available parameters, see
@@ -159,7 +180,7 @@ in
             save_aggregate = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Save aggregate report data to Elasticsearch and/or Splunk.
               '';
             };
@@ -167,7 +188,7 @@ in
             save_forensic = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Save forensic report data to Elasticsearch and/or Splunk.
               '';
             };
@@ -177,7 +198,7 @@ in
             watch = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Use the IMAP IDLE command to process messages as they arrive.
               '';
             };
@@ -185,7 +206,7 @@ in
             delete = lib.mkOption {
               type = lib.types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Delete messages after processing them, instead of archiving them.
               '';
             };
@@ -195,7 +216,7 @@ in
             host = lib.mkOption {
               type = lib.types.str;
               default = "localhost";
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server hostname or IP address.
               '';
             };
@@ -203,7 +224,7 @@ in
             port = lib.mkOption {
               type = lib.types.port;
               default = 993;
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server port.
               '';
             };
@@ -211,7 +232,7 @@ in
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Use an encrypted SSL/TLS connection.
               '';
             };
@@ -219,7 +240,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server username.
               '';
             };
@@ -227,7 +248,7 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server password.
 
                 Always handled as a secret whether the value is
@@ -243,7 +264,7 @@ in
             host = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server hostname or IP address.
               '';
             };
@@ -251,7 +272,7 @@ in
             port = lib.mkOption {
               type = with lib.types; nullOr port;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server port.
               '';
             };
@@ -259,7 +280,7 @@ in
             ssl = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Use an encrypted SSL/TLS connection.
               '';
             };
@@ -267,7 +288,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server username.
               '';
             };
@@ -275,7 +296,7 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server password.
 
                 Always handled as a secret whether the value is
@@ -289,7 +310,7 @@ in
             from = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The `From` address to use for the
                 outgoing mail.
               '';
@@ -298,19 +319,19 @@ in
             to = lib.mkOption {
               type = with lib.types; nullOr (listOf str);
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The addresses to send outgoing mail to.
               '';
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x: if x == [ ] || x == null then null else lib.concatStringsSep "," x;
             };
           };
 
           elasticsearch = {
             hosts = lib.mkOption {
-              default = [];
+              default = [ ];
               type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
-              description = lib.mdDoc ''
+              apply = x: if x == [ ] then null else lib.concatStringsSep "," x;
+              description = ''
                 A list of Elasticsearch hosts to push parsed reports
                 to.
               '';
@@ -319,7 +340,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Username to use when connecting to Elasticsearch, if
                 required.
               '';
@@ -328,7 +349,7 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The password to use when connecting to Elasticsearch,
                 if required.
 
@@ -343,7 +364,7 @@ in
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to use an encrypted SSL/TLS connection.
               '';
             };
@@ -351,7 +372,7 @@ in
             cert_path = lib.mkOption {
               type = lib.types.path;
               default = "/etc/ssl/certs/ca-certificates.crt";
-              description = lib.mdDoc ''
+              description = ''
                 The path to a TLS certificate bundle used to verify
                 the server's certificate.
               '';
@@ -366,12 +387,23 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    warnings = let
-      deprecationWarning = optname: "Starting in 8.0.0, the `${optname}` option has been moved from the `services.parsedmarc.settings.imap`"
-        + "configuration section to the `services.parsedmarc.settings.mailbox` configuration section.";
-      hasImapOpt = lib.flip builtins.hasAttr cfg.settings.imap;
-      movedOptions = [ "reports_folder" "archive_folder" "watch" "delete" "test" "batch_size" ];
-    in builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
+    warnings =
+      let
+        deprecationWarning =
+          optname:
+          "Starting in 8.0.0, the `${optname}` option has been moved from the `services.parsedmarc.settings.imap`"
+          + "configuration section to the `services.parsedmarc.settings.mailbox` configuration section.";
+        hasImapOpt = lib.flip builtins.hasAttr cfg.settings.imap;
+        movedOptions = [
+          "reports_folder"
+          "archive_folder"
+          "watch"
+          "delete"
+          "test"
+          "batch_size"
+        ];
+      in
+      builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
     services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
 
@@ -402,7 +434,8 @@ in
     };
 
     services.grafana = {
-      declarativePlugins = with pkgs.grafanaPlugins;
+      declarativePlugins =
+        with pkgs.grafanaPlugins;
         lib.mkIf cfg.provision.grafana.dashboard [
           grafana-worldmap-panel
           grafana-piechart-panel
@@ -414,39 +447,41 @@ in
           let
             esVersion = lib.getVersion config.services.elasticsearch.package;
           in
-            lib.mkIf cfg.provision.grafana.datasource [
-              {
-                name = "dmarc-ag";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "http://localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-              {
-                name = "dmarc-fo";
-                type = "elasticsearch";
-                access = "proxy";
-                url = "http://localhost:9200";
-                jsonData = {
-                  timeField = "date_range";
-                  inherit esVersion;
-                };
-              }
-            ];
-        dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
-          name = "parsedmarc";
-          options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
-        }];
+          lib.mkIf cfg.provision.grafana.datasource [
+            {
+              name = "dmarc-ag";
+              type = "elasticsearch";
+              access = "proxy";
+              url = "http://localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+                inherit esVersion;
+              };
+            }
+            {
+              name = "dmarc-fo";
+              type = "elasticsearch";
+              access = "proxy";
+              url = "http://localhost:9200";
+              jsonData = {
+                timeField = "date_range";
+                inherit esVersion;
+              };
+            }
+          ];
+        dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [
+          {
+            name = "parsedmarc";
+            options.path = "${pkgs.parsedmarc.dashboard}";
+          }
+        ];
       };
     };
 
     services.parsedmarc.settings = lib.mkMerge [
       (lib.mkIf cfg.provision.elasticsearch {
         elasticsearch = {
-          hosts = [ "localhost:9200" ];
+          hosts = [ "http://localhost:9200" ];
           ssl = false;
         };
       })
@@ -470,7 +505,14 @@ in
         # lists, empty attrsets and null. This makes it possible to
         # list interesting options in `settings` without them always
         # ending up in the resulting config.
-        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null [] {} ])) cfg.settings;
+        filteredConfig = lib.converge (lib.filterAttrsRecursive (
+          _: v:
+          !elem v [
+            null
+            [ ]
+            { }
+          ]
+        )) cfg.settings;
 
         # Extract secrets (attributes set to an attrset with a
         # "_secret" key) from the settings and generate the commands
@@ -478,61 +520,86 @@ in
         secretPaths = lib.catAttrs "_secret" (lib.collect isSecret filteredConfig);
         parsedmarcConfig = ini.generate "parsedmarc.ini" filteredConfig;
         mkSecretReplacement = file: ''
-          replace-secret ${lib.escapeShellArgs [ (hashString "sha256" file) file "/run/parsedmarc/parsedmarc.ini" ]}
+          replace-secret ${
+            lib.escapeShellArgs [
+              (hashString "sha256" file)
+              file
+              "/run/parsedmarc/parsedmarc.ini"
+            ]
+          }
         '';
         secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
       in
-        {
-          wantedBy = [ "multi-user.target" ];
-          after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
-          path = with pkgs; [ replace-secret openssl shadow ];
-          serviceConfig = {
-            ExecStartPre = let
-              startPreFullPrivileges = ''
-                set -o errexit -o pipefail -o nounset -o errtrace
-                shopt -s inherit_errexit
+      {
+        wantedBy = [ "multi-user.target" ];
+        after = [
+          "postfix.service"
+          "dovecot2.service"
+          "elasticsearch.service"
+        ];
+        path = with pkgs; [
+          replace-secret
+          openssl
+          shadow
+        ];
+        serviceConfig = {
+          ExecStartPre =
+            let
+              startPreFullPrivileges =
+                ''
+                  set -o errexit -o pipefail -o nounset -o errtrace
+                  shopt -s inherit_errexit
 
-                umask u=rwx,g=,o=
-                cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
-                chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
-                ${secretReplacements}
-              '' + lib.optionalString cfg.provision.localMail.enable ''
-                openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
-                replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
-                echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
-                cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
-              '';
+                  umask u=rwx,g=,o=
+                  cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
+                  chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
+                  ${secretReplacements}
+                ''
+                + lib.optionalString cfg.provision.localMail.enable ''
+                  openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
+                  replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
+                  echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
+                  cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
+                '';
             in
-              "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
-            Type = "simple";
-            User = "parsedmarc";
-            Group = "parsedmarc";
-            DynamicUser = true;
-            RuntimeDirectory = "parsedmarc";
-            RuntimeDirectoryMode = "0700";
-            CapabilityBoundingSet = "";
-            PrivateDevices = true;
-            PrivateMounts = true;
-            PrivateUsers = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectProc = "invisible";
-            ProcSubset = "pid";
-            SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-            RestrictRealtime = true;
-            RestrictNamespaces = true;
-            MemoryDenyWriteExecute = true;
-            LockPersonality = true;
-            SystemCallArchitectures = "native";
-            ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
-          };
+            "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
+          Type = "simple";
+          User = "parsedmarc";
+          Group = "parsedmarc";
+          DynamicUser = true;
+          RuntimeDirectory = "parsedmarc";
+          RuntimeDirectoryMode = "0700";
+          CapabilityBoundingSet = "";
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@resources"
+          ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictRealtime = true;
+          RestrictNamespaces = true;
+          MemoryDenyWriteExecute = true;
+          LockPersonality = true;
+          SystemCallArchitectures = "native";
+          ExecStart = "${lib.getExe pkgs.parsedmarc} -c /run/parsedmarc/parsedmarc.ini";
         };
+      };
 
     users.users.${cfg.provision.localMail.recipientName} = lib.mkIf cfg.provision.localMail.enable {
       isNormalUser = true;

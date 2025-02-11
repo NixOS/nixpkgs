@@ -1,44 +1,42 @@
 # rygel service.
 { config, lib, pkgs, ... }:
 
-with lib;
+let
+
+  cfg = config.services.gnome.rygel;
+
+in
 
 {
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  imports = [
-    # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "rygel" "enable" ]
-      [ "services" "gnome" "rygel" "enable" ]
-    )
-  ];
 
   ###### interface
   options = {
     services.gnome.rygel = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Rygel UPnP Mediaserver.
 
           You will need to also allow UPnP connections in firewall, see the following [comment](https://github.com/NixOS/nixpkgs/pull/45045#issuecomment-416030795).
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
+
+      package = lib.options.mkPackageOption pkgs "rygel" { };
     };
   };
 
   ###### implementation
-  config = mkIf config.services.gnome.rygel.enable {
-    environment.systemPackages = [ pkgs.gnome.rygel ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.gnome.rygel ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.gnome.rygel ];
+    systemd.packages = [ cfg.package ];
 
-    environment.etc."rygel.conf".source = "${pkgs.gnome.rygel}/etc/rygel.conf";
+    environment.etc."rygel.conf".source = "${cfg.package}/etc/rygel.conf";
   };
 }

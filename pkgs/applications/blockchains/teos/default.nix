@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, rustfmt
-, stdenv
-, darwin
-, pkg-config
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  rustfmt,
+  stdenv,
+  darwin,
+  pkg-config,
+  openssl,
 }:
 
 let
@@ -31,7 +32,8 @@ in
     pname = "teos";
     inherit version src;
 
-    cargoHash = "sha256-U0imKEPszlBOaS6xEd3kfzy/w2SYe3EY/E1e0L+ViDk=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
 
     buildAndTestSubdir = "teos";
 
@@ -40,7 +42,7 @@ in
       rustfmt
     ];
 
-    buildInputs = lib.optionals stdenv.isDarwin [
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
     ];
 
@@ -49,7 +51,7 @@ in
     __darwinAllowLocalNetworking = true;
 
     meta = meta // {
-      description = "A Lightning watchtower compliant with BOLT13, written in Rust";
+      description = "Lightning watchtower compliant with BOLT13, written in Rust";
     };
   };
 
@@ -57,7 +59,8 @@ in
     pname = "teos-watchtower-plugin";
     inherit version src;
 
-    cargoHash = "sha256-3ke1qTFw/4I5dPLuPjIGp1n2C/eRfPB7A6ErMFfwUzE=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-lod5I94T4wGwXEDtvh2AyaDYM0byCfaSBP8emKV7+3M=";
 
     buildAndTestSubdir = "watchtower-plugin";
 
@@ -67,18 +70,20 @@ in
       rustfmt
     ];
 
-    buildInputs = [
-      openssl
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+    buildInputs =
+      [
+        openssl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        darwin.apple_sdk.frameworks.SystemConfiguration
+      ];
 
     passthru.updateScript = updateScript;
 
     __darwinAllowLocalNetworking = true;
 
     meta = meta // {
-      description = "A Lightning watchtower plugin for clightning";
+      description = "Lightning watchtower plugin for clightning";
       mainProgram = "watchtower-client";
     };
   };

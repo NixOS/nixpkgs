@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, python3
-, snagboot
-, testers
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  snagboot,
+  testers,
+  gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "snagboot";
-  version = "1.2";
-  format = "pyproject";
+  version = "2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
-    rev = "v${version}";
-    hash = "sha256-OuHY5+2puZAERtwmXduUW5Wjus6KeQLJLcGcl48umLA=";
+    tag = "v${version}";
+    hash = "sha256-1WyCzfvcvDpYybxV2Jt/Ty4i2ywapJmEAZtlvxe3dpQ=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = with python3Packages; [
+    setuptools
   ];
 
   pythonRemoveDeps = [
@@ -29,20 +29,22 @@ python3.pkgs.buildPythonApplication rec {
     "swig"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    setuptools
+  dependencies = with python3Packages; [
+    pyyaml
     pyusb
     pyserial
-    hid
-    crccheck
-    six
-    xmodem
-    pyyaml
-    libfdt
     tftpy
+    crccheck
+    # pylibfdt
+    # swig
+    packaging
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  optional-dependencies = with python3Packages; {
+    gui = [ kivy ];
+  };
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     rules="src/snagrecover/50-snagboot.rules"
     if [ ! -f "$rules" ]; then
         echo "$rules is missing, must update the Nix file."

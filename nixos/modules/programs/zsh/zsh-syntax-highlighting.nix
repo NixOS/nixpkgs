@@ -1,37 +1,54 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.zsh.syntaxHighlighting;
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
-    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "enable" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
-    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "highlighters" ] [ "programs" "zsh" "syntaxHighlighting" "highlighters" ])
-    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "patterns" ] [ "programs" "zsh" "syntaxHighlighting" "patterns" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "enableSyntaxHighlighting" ]
+      [ "programs" "zsh" "syntaxHighlighting" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "syntax-highlighting" "enable" ]
+      [ "programs" "zsh" "syntaxHighlighting" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "syntax-highlighting" "highlighters" ]
+      [ "programs" "zsh" "syntaxHighlighting" "highlighters" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "programs" "zsh" "syntax-highlighting" "patterns" ]
+      [ "programs" "zsh" "syntaxHighlighting" "patterns" ]
+    )
   ];
 
   options = {
     programs.zsh.syntaxHighlighting = {
-      enable = mkEnableOption (lib.mdDoc "zsh-syntax-highlighting");
+      enable = lib.mkEnableOption "zsh-syntax-highlighting";
 
-      highlighters = mkOption {
+      highlighters = lib.mkOption {
         default = [ "main" ];
 
         # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-        type = types.listOf(types.enum([
-          "main"
-          "brackets"
-          "pattern"
-          "cursor"
-          "regexp"
-          "root"
-          "line"
-        ]));
+        type = lib.types.listOf (
+          lib.types.enum ([
+            "main"
+            "brackets"
+            "pattern"
+            "cursor"
+            "regexp"
+            "root"
+            "line"
+          ])
+        );
 
-        description = lib.mdDoc ''
+        description = ''
           Specifies the highlighters to be used by zsh-syntax-highlighting.
 
           The following defined options can be found here:
@@ -39,34 +56,34 @@ in
         '';
       };
 
-      patterns = mkOption {
-        default = {};
-        type = types.attrsOf types.str;
+      patterns = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf lib.types.str;
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "rm -rf *" = "fg=white,bold,bg=red";
           }
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Specifies custom patterns to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:
           https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/pattern.md
         '';
       };
-      styles = mkOption {
-        default = {};
-        type = types.attrsOf types.str;
+      styles = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf lib.types.str;
 
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "alias" = "fg=magenta,bold";
           }
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Specifies custom styles to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:
@@ -76,33 +93,36 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ zsh-syntax-highlighting ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.zsh-syntax-highlighting ];
 
     assertions = [
       {
-        assertion = length(attrNames cfg.patterns) > 0 -> elem "pattern" cfg.highlighters;
+        assertion =
+          builtins.length (builtins.attrNames cfg.patterns) > 0 -> builtins.elem "pattern" cfg.highlighters;
         message = ''
           When highlighting patterns, "pattern" needs to be included in the list of highlighters.
         '';
       }
     ];
 
-    programs.zsh.interactiveShellInit = with pkgs;
-      lib.mkAfter (lib.concatStringsSep "\n" ([
-        "source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-      ] ++ optional (length(cfg.highlighters) > 0)
-        "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${concatStringsSep " " cfg.highlighters})"
-        ++ optionals (length(attrNames cfg.patterns) > 0)
-          (mapAttrsToList (
-            pattern: design:
-            "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
-          ) cfg.patterns)
-        ++ optionals (length(attrNames cfg.styles) > 0)
-          (mapAttrsToList (
-            styles: design:
-            "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'"
-          ) cfg.styles)
-      ));
+    programs.zsh.interactiveShellInit = lib.mkAfter (
+      lib.concatStringsSep "\n" (
+        [
+          "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        ]
+        ++ lib.optional (
+          builtins.length (cfg.highlighters) > 0
+        ) "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
+        ++ lib.optionals (builtins.length (builtins.attrNames cfg.patterns) > 0) (
+          lib.mapAttrsToList (
+            pattern: design: "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
+          ) cfg.patterns
+        )
+        ++ lib.optionals (builtins.length (builtins.attrNames cfg.styles) > 0) (
+          lib.mapAttrsToList (styles: design: "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'") cfg.styles
+        )
+      )
+    );
   };
 }

@@ -1,41 +1,50 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, libtool
-, libxml2
-, libcanberra-gtk3
-, gtk3
-, mate
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  libtool,
+  gtk-layer-shell,
+  gtk3,
+  libcanberra-gtk3,
+  libmatemixer,
+  libxml2,
+  mate-desktop,
+  mate-panel,
+  wayland,
+  wrapGAppsHook3,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-media";
-  version = "1.26.1";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "KLKiGiltkVx8BtnSFvSahUHNPOyJWzJZvKBoqF4m6ws=";
+    sha256 = "vNwQLiL2P1XmMWbVxwjpHBE1cOajCodDRaiGCeg6mRI=";
   };
-
-  buildInputs = [
-    libxml2
-    libcanberra-gtk3
-    gtk3
-    mate.libmatemixer
-    mate.mate-panel
-    mate.mate-desktop
-  ];
 
   nativeBuildInputs = [
     pkg-config
     gettext
     libtool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
+
+  buildInputs = [
+    gtk-layer-shell
+    gtk3
+    libcanberra-gtk3
+    libmatemixer
+    libxml2
+    mate-desktop
+    mate-panel
+    wayland
+  ];
+
+  configureFlags = [ "--enable-in-process" ];
 
   enableParallelBuilding = true;
 

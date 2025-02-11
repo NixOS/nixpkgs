@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.graphite;
@@ -10,7 +16,7 @@ in
     graphitePort = lib.mkOption {
       type = lib.types.port;
       default = 9109;
-      description = lib.mdDoc ''
+      description = ''
         Port to use for the graphite server.
       '';
     };
@@ -20,7 +26,7 @@ in
         options = { };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Mapping configuration for the exporter, see
         <https://github.com/prometheus/graphite_exporter#yaml-config> for
         available options.

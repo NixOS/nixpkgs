@@ -1,33 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, psutil
-, pyopenssl
-, pysendfile
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  psutil,
+  pyasyncore,
+  pyasynchat,
+  pyopenssl,
+  pysendfile,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "1.5.9";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mj1MQvFAau203xj69oD2TzLAgP9m9sJgkLpZL1v8Sg8=";
+    hash = "sha256-7w0XKoK/rhDi3sIi6HUzUUYJ1Bv0sP0PB+KdQ4D7lr8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    pyasyncore
+    pyasynchat
     pysendfile
   ];
 
-  passthru.optional-dependencies = {
-    ssl = [
-      pyopenssl
-    ];
+  optional-dependencies = {
+    ssl = [ pyopenssl ];
   };
 
   nativeCheckInputs = [
@@ -39,14 +45,14 @@ buildPythonPackage rec {
   # on Hydra: https://hydra.nixos.org/build/84374861
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyftpdlib"
-  ];
+  pythonImportsCheck = [ "pyftpdlib" ];
 
   meta = with lib; {
     description = "Asynchronous FTP server library";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
+    changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "ftpbench";
   };
 }

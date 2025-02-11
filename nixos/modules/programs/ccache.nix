@@ -1,35 +1,53 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-with lib;
 let
   cfg = config.programs.ccache;
-in {
+in
+{
   options.programs.ccache = {
     # host configuration
-    enable = mkEnableOption (lib.mdDoc "CCache");
-    cacheDir = mkOption {
-      type = types.path;
-      description = lib.mdDoc "CCache directory";
+    enable = lib.mkEnableOption "CCache, a compiler cache for fast recompilation of C/C++ code";
+    cacheDir = lib.mkOption {
+      type = lib.types.path;
+      description = "CCache directory";
       default = "/var/cache/ccache";
     };
     # target configuration
-    packageNames = mkOption {
-      type = types.listOf types.str;
-      description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
-      default = [];
-      example = [ "wxGTK32" "ffmpeg" "libav_all" ];
+    packageNames = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "Nix top-level packages to be compiled using CCache";
+      default = [ ];
+      example = [
+        "wxGTK32"
+        "ffmpeg"
+        "libav_all"
+      ];
+    };
+    owner = lib.mkOption {
+      type = lib.types.str;
+      default = "root";
+      description = "Owner of CCache directory";
+    };
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "nixbld";
+      description = "Group owner of CCache directory";
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     # host configuration
-    (mkIf cfg.enable {
-      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 root nixbld -" ];
+    (lib.mkIf cfg.enable {
+      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 ${cfg.owner} ${cfg.group} -" ];
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {
-        owner = "root";
-        group = "nixbld";
+        inherit (cfg) owner group;
         setuid = false;
         setgid = true;
         source = pkgs.writeScript "nix-ccache.pl" ''
@@ -50,9 +68,14 @@ in {
     })
 
     # target configuration
-    (mkIf (cfg.packageNames != []) {
+    (lib.mkIf (cfg.packageNames != [ ]) {
       nixpkgs.overlays = [
-        (self: super: genAttrs cfg.packageNames (pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }))
+        (
+          self: super:
+          lib.genAttrs cfg.packageNames (
+            pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }
+          )
+        )
 
         (self: super: {
           ccacheWrapper = super.ccacheWrapper.override {
@@ -65,7 +88,7 @@ in {
                 echo "Directory '$CCACHE_DIR' does not exist"
                 echo "Please create it with:"
                 echo "  sudo mkdir -m0770 '$CCACHE_DIR'"
-                echo "  sudo chown root:nixbld '$CCACHE_DIR'"
+                echo "  sudo chown ${cfg.owner}:${cfg.group} '$CCACHE_DIR'"
                 echo "====="
                 exit 1
               fi

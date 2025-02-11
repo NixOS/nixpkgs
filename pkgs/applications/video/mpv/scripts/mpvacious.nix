@@ -1,29 +1,32 @@
-{ lib
-, buildLua
-, fetchFromGitHub
-, curl
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
 
 buildLua rec {
   pname = "mpvacious";
-  version = "0.25";
+  version = "0.37";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-XTnib4cguWFEvZtmsLfkesbjFbkt2YoyYLT587ajyUM=";
+    sha256 = "sha256-sT74uDGtEUSDMJqSTJ6bI9XvdpRnQDNvKebWMx0CRcE=";
   };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \
-      --replace "'curl" "'${curl}/bin/curl"
+      --replace-fail "'curl" "'${lib.getExe curl}"
     substituteInPlace platform/nix.lua \
-      --replace "'curl" "'${curl}/bin/curl" \
-      --replace "'wl-copy" "'${wl-clipboard}/bin/wl-copy" \
-      --replace "'xclip" "'${xclip}/bin/xclip"
+      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
+      --replace-fail "'xclip" "'${lib.getExe xclip}"
   '';
 
   installPhase = ''
@@ -31,6 +34,8 @@ buildLua rec {
     make PREFIX=$out/share/mpv install
     runHook postInstall
   '';
+
+  passthru.scriptName = "mpvacious";
 
   meta = with lib; {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";

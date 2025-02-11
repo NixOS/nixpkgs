@@ -1,45 +1,51 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, qmake
+, cmake
 , pkg-config
-, wrapQtAppsHook
+, qt6
 , libarchive
 , libpng
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "CEmu";
-  version = "unstable-2022-06-29";
+  version = "2.0";
   src = fetchFromGitHub {
     owner = "CE-Programming";
     repo = "CEmu";
-    rev = "880d391ba9f8b7b2ec36ab9b45a34e9ecbf744e9";
-    hash = "sha256-aFwGZJceh1jEP8cEajY5wYlSaFuNhYvSoZ/E1QDfJEI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fohsIJrvPDMmYHoPbmYQlKLMnj/B3XEBaerZYuqxvd8=";
     fetchSubmodules = true;
   };
 
+  sourceRoot = "${finalAttrs.src.name}/gui/qt/";
+
+  patches = [
+    # This is resolved upstream, but I can't apply the patch because the
+    # sourceRoot isn't set to the base of the Git repo.
+    ./resolve-ambiguous-constexpr.patch
+  ];
+
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    cmake
+    qt6.wrapQtAppsHook
     pkg-config
   ];
 
   buildInputs = [
+    qt6.qtbase
     libarchive
     libpng
   ];
 
-  qmakeFlags = [
-    "gui/qt"
-  ];
-
   meta = with lib; {
     description = "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
+    mainProgram = "CEmu";
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ clevor ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
   };
-}
+})

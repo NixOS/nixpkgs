@@ -1,42 +1,43 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtx11extras
-, qttools
-, qtsvg
-, libqtxdg
-, polkit-qt
-, kwindowsystem
-, xorg
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gitUpdater,
+  kwindowsystem,
+  libXScrnSaver,
+  libqtxdg,
+  lxqt-build-tools,
+  polkit-qt-1,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "liblxqt";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-daD4okYc4J2nRrO6423W0IUK9173zcepCvvMtx7Vho4=";
+    hash = "sha256-90t7jukm2vNfkgZ3326UDMXNzwJ+FIVEF3kNZ2SgNN8=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtx11extras
-    qtsvg
-    polkit-qt
     kwindowsystem
+    libXScrnSaver
     libqtxdg
-    xorg.libXScrnSaver
+    polkit-qt-1
+    qtsvg
   ];
 
   # convert name of wrapped binary, e.g. .lxqt-whatever-wrapped to the original name, e.g. lxqt-whatever so binaries can find their resources
@@ -45,7 +46,7 @@ mkDerivation rec {
   postPatch = ''
     # https://github.com/NixOS/nixpkgs/issues/119766
     substituteInPlace lxqtbacklight/linux_backend/driver/libbacklight_backend.c \
-      --replace "pkexec lxqt-backlight_backend" "pkexec $out/bin/lxqt-backlight_backend"
+      --replace-fail "pkexec lxqt-backlight_backend" "pkexec $out/bin/lxqt-backlight_backend"
 
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
@@ -54,6 +55,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Core utility library for all LXQt components";
+    mainProgram = "lxqt-backlight_backend";
     homepage = "https://github.com/lxqt/liblxqt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

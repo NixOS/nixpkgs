@@ -1,46 +1,42 @@
-{ lib
-, anyascii
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, flaky
-, google-cloud-storage
-, mock
-, pillow
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, requests
-, sqlalchemy
+{
+  lib,
+  anyascii,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flaky,
+  google-cloud-storage,
+  legacy-cgi,
+  mock,
+  pillow,
+  pymongo,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "filedepot";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "depot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vPceky5cvmy3MooWz7dRdy68VoAHN7i3a7egBs4dPE8=";
+    tag = version;
+    hash = "sha256-693H/u+Wg2G9sdoUkC6DQo9WkmIlKnh8NKv3ufK/eyQ=";
   };
 
-  patches = [
-    # Add support for Pillow 10, https://github.com/amol-/depot/pull/84
-    (fetchpatch {
-      name = "support-pillow-10.patch";
-      url = "https://github.com/amol-/depot/commit/bdb73d1b3898279068b421bc061ecc18c5108fa4.patch";
-      hash = "sha256-7+VGrdJstkiy0bYAqA9FjF1NftZiurgyPd8Wlz6GUy8=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyascii
     google-cloud-storage
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   nativeCheckInputs = [
     flaky
@@ -62,9 +58,9 @@ buildPythonPackage rec {
     "tests/test_wsgi_middleware.py"
   ];
 
-  pythonImportsCheck = [
-    "depot"
-  ];
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [ "test_notexisting" ];
+
+  pythonImportsCheck = [ "depot" ];
 
   meta = with lib; {
     description = "Toolkit for storing files and attachments in web applications";

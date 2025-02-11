@@ -1,17 +1,17 @@
-{ lib
-, aliyun-python-sdk-core
-, aliyun-python-sdk-kms
-, aliyun-python-sdk-sts
-, buildPythonPackage
-, crcmod
-, fetchFromGitHub
-, mock
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, six
+{
+  lib,
+  aliyun-python-sdk-core,
+  aliyun-python-sdk-kms,
+  aliyun-python-sdk-sts,
+  buildPythonPackage,
+  crcmod,
+  fetchFromGitHub,
+  mock,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +24,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     requests
@@ -49,9 +45,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  pythonImportsCheck = [
-    "oss2"
-  ];
+  pythonImportsCheck = [ "oss2" ];
 
   disabledTestPaths = [
     # Tests require network access

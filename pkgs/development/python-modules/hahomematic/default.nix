@@ -1,47 +1,44 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, orjson
-, pydevccu
-, pytest-aiohttp
-, pytestCheckHook
-, python-slugify
-, pythonOlder
-, setuptools
-, voluptuous
-, websocket-client
-, xmltodict
-, wheel
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  orjson,
+  pydevccu,
+  pytest-aiohttp,
+  pytest-socket,
+  pytestCheckHook,
+  python-slugify,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.11.4";
-  format = "pyproject";
+  version = "2025.2.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
-    owner = "danielperna84";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-LB0BGj/DWjHGAFkyACkkzGY1oYNc7hJ2BeT1lHlNjqU=";
+    owner = "SukramJ";
+    repo = "hahomematic";
+    tag = version;
+    hash = "sha256-cBj5dwCGJ5++qAZ0JxlqIQKm/Lw3vWVH1DBVVDvkFco=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools~=68.2" "setuptools" \
-      --replace "wheel~=0.41.2" "wheel"
+      --replace-fail "setuptools==75.8.0" "setuptools" \
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
     python-slugify
@@ -52,18 +49,20 @@ buildPythonPackage rec {
     freezegun
     pydevccu
     pytest-aiohttp
+    pytest-socket
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "hahomematic"
-  ];
+  pythonImportsCheck = [ "hahomematic" ];
 
   meta = with lib; {
     description = "Python module to interact with HomeMatic devices";
-    homepage = "https://github.com/danielperna84/hahomematic";
-    changelog = "https://github.com/danielperna84/hahomematic/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/SukramJ/hahomematic";
+    changelog = "https://github.com/SukramJ/hahomematic/blob/${src.tag}/changelog.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      dotlambda
+      fab
+    ];
   };
 }

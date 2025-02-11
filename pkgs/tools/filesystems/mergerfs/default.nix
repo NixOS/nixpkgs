@@ -1,29 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gettext, libtool, pandoc, which, attr, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  pkg-config,
+  gettext,
+  libtool,
+  pandoc,
+  which,
+  attr,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
-  version = "2.38.0";
+  version = "2.40.2";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eENtsN9OqPpUQM+O8tPTBzDk26/F/zc2hZ4ZiXiDp2I=";
+    sha256 = "sha256-3DfSGuTtM+h0IdtsIhLVXQxX5/Tj9G5Qcha3DWmyyq4=";
   };
 
   nativeBuildInputs = [
-    automake autoconf pkg-config gettext libtool pandoc which
+    automake
+    autoconf
+    pkg-config
+    gettext
+    libtool
+    pandoc
+    which
   ];
   prePatch = ''
     sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
   '';
-  buildInputs = [ attr libiconv ];
+  buildInputs = [
+    attr
+    libiconv
+  ];
 
   preConfigure = ''
     echo "${version}" > VERSION
   '';
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "XATTR_AVAILABLE=1" "PREFIX=/" "SBINDIR=/bin" ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "XATTR_AVAILABLE=1"
+    "PREFIX=/"
+    "SBINDIR=/bin"
+  ];
   enableParallelBuilding = true;
 
   postFixup = ''
@@ -32,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A FUSE based union filesystem";
+    description = "FUSE based union filesystem";
     homepage = "https://github.com/trapexit/mergerfs";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;

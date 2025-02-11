@@ -1,51 +1,96 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-cov
-, hyppo
-, matplotlib
-, networkx
-, numpy
-, scikit-learn
-, scipy
-, seaborn
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  testfixtures,
+  anytree,
+  beartype,
+  gensim,
+  graspologic-native,
+  hyppo,
+  joblib,
+  matplotlib,
+  networkx,
+  numpy,
+  pot,
+  scikit-learn,
+  scipy,
+  seaborn,
+  statsmodels,
+  typing-extensions,
+  umap-learn,
 }:
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "3.2.0";
-
-  disabled = isPy27;
+  version = "3.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "microsoft";
+    owner = "graspologic-org";
     repo = "graspologic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yXhEI/8qm526D+Ehqqfb+j+sbbh83Q4OWC+UM7cgCjU=";
+    hash = "sha256-taX/4/uCQXW7yFykVHY78hJIGThEIycHwrEOZ3h1LPY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
+
+  pythonRelaxDeps = [
+    "beartype"
+    "hyppo"
+    "scipy"
+  ];
+
+  dependencies = [
+    anytree
+    beartype
+    gensim
+    graspologic-native
     hyppo
+    joblib
     matplotlib
     networkx
     numpy
+    pot
     scikit-learn
     scipy
     seaborn
+    statsmodels
+    typing-extensions
+    umap-learn
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
-  pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
+  env.NUMBA_CACHE_DIR = "$TMPDIR";
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    testfixtures
+  ];
+  pytestFlagsArray = [
+    "tests"
+    "--ignore=docs"
+    "--ignore=tests/test_sklearn.py"
+  ];
   disabledTests = [ "gridplot_outputs" ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SIGABRT
+    "tests/test_plot.py"
+    "tests/test_plot_matrix.py"
+  ];
+
   meta = with lib; {
-    homepage = "https://graspologic.readthedocs.io";
-    description = "A package for graph statistical algorithms";
-    license = licenses.asl20;  # changing to `licenses.mit` in next release
+    description = "Package for graph statistical algorithms";
+    homepage = "https://graspologic-org.github.io/graspologic";
+    changelog = "https://github.com/graspologic-org/graspologic/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
-    # graspologic-native is not available
-    broken = true;
   };
 }

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
   # required dependencies
-, requests
-, setuptools
+  requests,
+  setuptools,
   # optional dependencies
-, pandas
-, tornado
-, sqlalchemy
+  pandas,
+  tornado,
+  sqlalchemy,
   # test dependencies
-, pycurl
-, pytestCheckHook
+  pycurl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = pname;
     owner = "druid-io";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9+xomjSwWDVHkret/mqAZKWOPFRMvVB3CWtFPzrT81k=";
   };
 
@@ -33,30 +34,22 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace '"console_scripts": ["pydruid = pydruid.console:main"],' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pycurl
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "pydruid"
-  ];
+  pythonImportsCheck = [ "pydruid" ];
 
-  passthru = {
-    optional-dependencies = {
-      pandas = [ pandas ];
-      async = [ tornado ];
-      sqlalchemy = [ sqlalchemy ];
-      # druid has a `cli` extra, but it doesn't work with nixpkgs pygments
-    };
+  optional-dependencies = {
+    pandas = [ pandas ];
+    async = [ tornado ];
+    sqlalchemy = [ sqlalchemy ];
+    # druid has a `cli` extra, but it doesn't work with nixpkgs pygments
   };
 
   meta = with lib; {

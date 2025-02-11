@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3
-, gobject-introspection
-, libappindicator-gtk3
-, libindicator-gtk3
-, polkit
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3,
+  gobject-introspection,
+  libayatana-appindicator,
+  polkit,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-polkit";
-  version = "1.26.1";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "9bewtd/FMwLEBAMkWZjrkSGvP1DnFmagmrc7slRSA1c=";
+    sha256 = "NQod0KjtaiycGDz/KiHzlCmelo/MauLoyTxWXa5gSug=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
-    libindicator-gtk3
+    libayatana-appindicator
     polkit
   ];
 

@@ -4,18 +4,18 @@ let
   data = import ./data.nix {};
 in stdenv.mkDerivation {
   pname = "pulumi";
-  version = data.version;
+  inherit (data) version;
 
   postUnpack = ''
     mv pulumi-* pulumi
   '';
 
-  srcs = map (x: fetchurl x) data.pulumiPkgs.${stdenv.hostPlatform.system};
+  srcs = map fetchurl data.pulumiPkgs.${stdenv.hostPlatform.system};
 
   installPhase = ''
     install -D -t $out/bin/ *
-  '' + lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
   '' + ''
     installShellCompletion --cmd pulumi \
       --bash <($out/bin/pulumi completion bash) \
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
       --zsh  <($out/bin/pulumi completion zsh)
   '';
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook makeWrapper ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   meta = with lib; {
@@ -38,5 +38,6 @@ in stdenv.mkDerivation {
       jlesquembre
       cpcloud
     ];
+    hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };
 }

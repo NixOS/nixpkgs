@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, django
-, redis
-, rq
-, sentry-sdk
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  django,
+  redis,
+  rq,
+  sentry-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "django-rq";
-  version = "2.9.0";
+  version = "3.0";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qrAEBAMbw96TCS6J50RG/2fV9K2WhuXyAQevL4RSQhk=";
+    tag = "v${version}";
+    hash = "sha256-5X3Fnud33SuC2dbM1dpSQRDF5s45AHk7/DVsQwzOmjg=";
   };
 
   propagatedBuildInputs = [
@@ -28,16 +29,14 @@ buildPythonPackage rec {
     sentry-sdk
   ];
 
-  pythonImportsCheck = [
-    "django_rq"
-  ];
+  pythonImportsCheck = [ "django_rq" ];
 
   doCheck = false; # require redis-server
 
   meta = with lib; {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
     homepage = "https://github.com/rq/django-rq";
-    changelog = "https://github.com/rq/django-rq/releases/tag/v${version}";
+    changelog = "https://github.com/rq/django-rq/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

@@ -1,4 +1,4 @@
-{ dhallPackages, lib }:
+{ dhallPackages }:
 
 # This file tests that dhallPackages.buildDhallUrl is able to successfully
 # build a Nix Dhall package for a given remote Dhall import.

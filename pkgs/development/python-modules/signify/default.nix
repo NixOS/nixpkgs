@@ -1,60 +1,50 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, certvalidator
-, fetchFromGitHub
-, mscerts
-, oscrypto
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certvalidator,
+  fetchFromGitHub,
+  mscerts,
+  oscrypto,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "signify";
-  version = "0.5.2";
-  format = "setuptools";
+  version = "0.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ralphje";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+UhZF+QYuv8pq/sTu7GDPUrlPNNixFgVZL+L0ulj/ko=";
+    repo = "signify";
+    tag = "v${version}";
+    hash = "sha256-yQCb7vNbz+ZGftqlEUUh6UUuxwv5+zhvBJmUn1eNgqM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     certvalidator
     mscerts
     oscrypto
-    pyasn1
-    pyasn1-modules
+    typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "signify"
-  ];
+  pythonImportsCheck = [ "signify" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    # chain doesn't validate because end-entitys certificate expired
-    # https://github.com/ralphje/signify/issues/27
-    "test_revoked_certificate"
-  ];
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ralphje/signify/blob/refs/tags/${src.tag}/docs/changelog.rst";
     description = "library that verifies PE Authenticode-signed binaries";
     homepage = "https://github.com/ralphje/signify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ baloo ];
-    # No support for pyasn1 > 0.5
-    # https://github.com/ralphje/signify/issues/37
-    broken = true;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

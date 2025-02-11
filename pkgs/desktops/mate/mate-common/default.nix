@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, mateUpdateScript
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  mateUpdateScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mate-common";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "014wpfqpqmfkzv81paap4fz15mj1gsyvaxlrfqsp9a3yxw4f7jaf";
+    sha256 = "QrfCzuJo9x1+HBrU9pvNoOzWVXipZyIYfGt2N40mugo=";
   };
 
   enableParallelBuilding = true;

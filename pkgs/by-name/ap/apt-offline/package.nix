@@ -1,7 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnupg
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnupg,
+  installShellFiles,
 }:
 
 let
@@ -18,12 +20,18 @@ in
 python3Packages.buildPythonApplication {
   inherit pname version src;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
-      --replace /usr/bin/ "$out/bin"
+      --replace-fail /usr/bin/ "$out/bin"
 
     substituteInPlace apt_offline_core/AptOfflineCoreLib.py \
-      --replace /usr/bin/gpgv "${lib.getBin gnupg}/bin/gpgv"
+      --replace-fail /usr/bin/gpgv "${lib.getBin gnupg}/bin/gpgv"
+  '';
+
+  postInstall = ''
+    installManPage apt-offline.8
   '';
 
   postFixup = ''
@@ -34,12 +42,17 @@ python3Packages.buildPythonApplication {
 
   pythonImportsCheck = [ "apt_offline_core" ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "apt-offline";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 # TODO: verify GUI and pkexec

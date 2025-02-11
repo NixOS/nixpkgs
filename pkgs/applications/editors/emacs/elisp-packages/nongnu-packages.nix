@@ -12,7 +12,7 @@ To update the list of packages from nongnu (ELPA),
 
 */
 
-{ lib, buildPackages }:
+{ lib, pkgs, buildPackages }:
 
 self: let
 
@@ -29,9 +29,11 @@ self: let
 
     super = imported;
 
-    overrides = {
-    };
+    commonOverrides = import ./nongnu-common-overrides.nix pkgs lib;
 
-  in super // overrides);
+    overrides = self: super: { };
+
+  in
+  let super' = super // (commonOverrides self super); in super' // (overrides self super'));
 
 in generateNongnu { }

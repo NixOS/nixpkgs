@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, grpcio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  grpcio,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio-gcp";
   version = "0.2.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

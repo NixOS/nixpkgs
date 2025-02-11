@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, writeShellScript
-, SDL
-, SDL_mixer
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
-, buildShareware ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  writeShellScript,
+  SDL,
+  SDL_mixer,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
+  buildShareware ? false,
 }:
 
 let
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [ SDL SDL_mixer ];
+  buildInputs = [
+    SDL
+    SDL_mixer
+  ];
 
   sourceRoot = "rott-${version}/rott";
 
@@ -40,8 +44,8 @@ stdenv.mkDerivation rec {
     "SHAREWARE=${if buildShareware then "1" else "0"}"
   ];
 
-  # when using SDL_compat instead of SDL_classic, SDL_mixer isn't correctly
-  # detected, but there is no harm just specifying it
+  # when using SDL_compat instead of SDL1, SDL_mixer isn't correctly detected,
+  # but there is no harm just specifying it
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev SDL_mixer}/include/SDL"
   ];
@@ -67,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SDL port of Rise of the Triad";
+    mainProgram = "rott";
     homepage = "https://icculus.org/rott/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];

@@ -1,38 +1,56 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
-, onnxruntime
-, opencv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  obs-studio,
+  onnxruntime,
+  opencv,
+  qt6,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-backgroundremoval";
-  version = "0.5.16";
+  version = "1.1.13";
 
   src = fetchFromGitHub {
-    owner = "royshil";
+    owner = "occ-ai";
     repo = "obs-backgroundremoval";
-    rev = "v${version}";
-    hash = "sha256-E+pm/Ma6dZTYlX3DpB49ynTETsRS2TBqgHSCijl/Txc=";
+    rev = version;
+    hash = "sha256-QoC9/HkwOXMoFNvcOxQkGCLLAJmsja801LKCNT9O9T0=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio onnxruntime opencv ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  buildInputs = [
+    obs-studio
+    onnxruntime
+    opencv
+    qt6.qtbase
+    curl
+  ];
 
   dontWrapQtApps = true;
 
   cmakeFlags = [
+    "--preset linux-x86_64"
+    "-DCMAKE_MODULE_PATH:PATH=${src}/cmake"
     "-DUSE_SYSTEM_ONNXRUNTIME=ON"
     "-DUSE_SYSTEM_OPENCV=ON"
+    "-DDISABLE_ONNXRUNTIME_GPU=ON"
   ];
 
-  postInstall = ''
-    mkdir $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    rm -rf $out/obs-plugins
-    mv $out/data $out/share/obs
+  buildPhase = ''
+    cd ..
+    cmake --build build_x86_64 --parallel
+  '';
+
+  installPhase = ''
+    cmake --install build_x86_64 --prefix "$out"
   '';
 
   meta = with lib; {
@@ -40,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/royshil/obs-backgroundremoval";
     maintainers = with maintainers; [ zahrun ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

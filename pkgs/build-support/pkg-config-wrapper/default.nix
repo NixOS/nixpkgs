@@ -1,18 +1,28 @@
 # The wrapper script ensures variables like PKG_CONFIG_PATH and
 # PKG_CONFIG_PATH_FOR_BUILD work properly.
 
-{ stdenvNoCC
-, lib
-, buildPackages
-, pkg-config
-, baseBinName ? "pkg-config"
-, propagateDoc ? pkg-config != null && pkg-config ? man
-, extraPackages ? [], extraBuildCommands ? ""
+{
+  stdenvNoCC,
+  lib,
+  buildPackages,
+  pkg-config,
+  baseBinName ? "pkg-config",
+  propagateDoc ? pkg-config != null && pkg-config ? man,
+  extraPackages ? [ ],
+  extraBuildCommands ? "",
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    attrByPath
+    getBin
+    optional
+    optionalAttrs
+    optionals
+    optionalString
+    replaceStrings
+    ;
+
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -20,12 +30,12 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
-                                        (targetPlatform.config + "-");
+  targetPrefix = optionalString (targetPlatform != hostPlatform) (targetPlatform.config + "-");
 
   # See description in cc-wrapper.
-  suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt = replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config;
 
+  wrapperBinName = "${targetPrefix}${baseBinName}";
 in
 
 stdenv.mkDerivation {
@@ -49,7 +59,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   # Additional flags passed to pkg-config.
-  addFlags = lib.optional stdenv.targetPlatform.isStatic "--static";
+  addFlags = optional stdenv.targetPlatform.isStatic "--static";
 
   installPhase =
     ''
@@ -65,7 +75,7 @@ stdenv.mkDerivation {
 
       echo $pkg-config > $out/nix-support/orig-pkg-config
 
-      wrap ${targetPrefix}${baseBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
+      wrap ${wrapperBinName} ${./pkg-config-wrapper.sh} "${getBin pkg-config}/bin/${baseBinName}"
     ''
     # symlink in share for autoconf to find macros
 
@@ -96,11 +106,14 @@ stdenv.mkDerivation {
     ##
     ## Man page and doc support
     ##
-    + optionalString propagateDoc (''
-      ln -s ${pkg-config.man} $man
-    '' + optionalString (pkg-config ? doc) ''
-      ln -s ${pkg-config.doc} $doc
-    '')
+    + optionalString propagateDoc (
+      ''
+        ln -s ${pkg-config.man} $man
+      ''
+      + optionalString (pkg-config ? doc) ''
+        ln -s ${pkg-config.doc} $doc
+      ''
+    )
 
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
@@ -119,11 +132,18 @@ stdenv.mkDerivation {
   };
 
   meta =
-    let pkg-config_ = lib.optionalAttrs (pkg-config != null) pkg-config; in
-    (lib.optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority"])) //
-    { description =
-        lib.attrByPath ["meta" "description"] "pkg-config" pkg-config_
-        + " (wrapper script)";
+    let
+      pkg-config_ = optionalAttrs (pkg-config != null) pkg-config;
+    in
+    (optionalAttrs (pkg-config_ ? meta) (
+      removeAttrs pkg-config.meta [
+        "priority"
+        "mainProgram"
+      ]
+    ))
+    // {
+      description = attrByPath [ "meta" "description" ] "pkg-config" pkg-config_ + " (wrapper script)";
       priority = 10;
-  };
+      mainProgram = wrapperBinName;
+    };
 }

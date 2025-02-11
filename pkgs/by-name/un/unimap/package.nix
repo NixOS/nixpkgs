@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, makeBinaryWrapper
-, stdenv
-, pkg-config
-, openssl
-, nmap
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  makeBinaryWrapper,
+  stdenv,
+  pkg-config,
+  openssl,
+  nmap,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,19 +28,21 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeBinaryWrapper
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch && stdenv.isLinux) [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+      makeBinaryWrapper
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
+      pkg-config
+    ];
 
   # only depends on openssl on aarch/arm linux
-  buildInputs = lib.optionals (stdenv.hostPlatform.isAarch && stdenv.isLinux) [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) [
     openssl
   ];
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isAarch && stdenv.isLinux) {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isLinux) {
     OPENSSL_NO_VENDOR = true;
   };
 

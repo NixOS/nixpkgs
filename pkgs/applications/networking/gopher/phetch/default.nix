@@ -1,32 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, pkg-config
-, openssl
-, scdoc
-, Security
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  scdoc,
+  Security,
+  which,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "phetch";
   version = "1.2.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xvxx";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J+ka7/B37WzVPPE2Krkd/TIiVwuKfI2QYWmT0JHgBGQ=";
   };
 
-  cargoSha256 = "sha256-y3Y5PnZ51Zc3LmVTijUGnb0KaGm28sWOSYxjuM3A1Zk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2lbQAM3gdytXsoMFzKwLWA1hvQIJf1vBdMRpYx/VLVg=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config scdoc which ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    scdoc
+    which
+  ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     make manual
@@ -36,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A quick lil gopher client for your terminal, written in rust";
+    description = "Quick lil gopher client for your terminal, written in rust";
+    mainProgram = "phetch";
     longDescription = ''
       phetch is a terminal client designed to help you quickly navigate the gophersphere.
       - <1MB executable for Linux, Mac, and NetBSD

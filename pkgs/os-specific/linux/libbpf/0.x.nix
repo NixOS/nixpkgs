@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, elfutils
-, pkg-config
-, stdenv
-, zlib
-, lib
-, nixosTests
+{
+  fetchFromGitHub,
+  elfutils,
+  pkg-config,
+  stdenv,
+  zlib,
+  lib,
+  nixosTests,
 }:
 
 # update bot does not seem to limit updates here to 0.8.x despite
@@ -14,20 +15,26 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    sha256 = "sha256-daVS+TErmDU8ksThOvcepg1A61iD8N8GIkC40cmc9/8=";
+    sha256 = "sha256-J5cUvfUYc+uLdkFa2jx/2bqBoZg/eSzc6SWlgKqcfIc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ elfutils zlib ];
+  buildInputs = [
+    elfutils
+    zlib
+  ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "-C src"
+  ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -47,8 +54,16 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Upstream mirror of libbpf";
     homepage = "https://github.com/libbpf/libbpf";
-    license = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
+    license = with licenses; [
+      lgpl21 # or
+      bsd2
+    ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      vcunat
+      saschagrunert
+      martinetd
+    ];
     platforms = platforms.linux;
   };
 }

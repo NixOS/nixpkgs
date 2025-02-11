@@ -1,39 +1,57 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, scipy
-, torch
-, autograd
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  torch,
+  autograd,
+  matplotlib,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-pDFRYhswcuAHG9pcqvzXIy3Ivhxe5R5Ric7AFRh7MK4=";
+    tag = version;
+    hash = "sha256-LOEulticgCWZBCf3qj5KFBHt0lMd4H85368IhG3DQ4g=";
   };
 
-  propagatedBuildInputs = [ numpy scipy torch ];
-  nativeCheckInputs = [ autograd matplotlib pytestCheckHook ];
+  preConfigure = ''
+    substituteInPlace pyproject.toml --replace-fail "\"pip==22.3.1\"," ""
+  '';
+
+  build-system = [
+    setuptools-scm
+  ];
+  dependencies = [
+    numpy
+    scipy
+    torch
+  ];
+  nativeCheckInputs = [
+    autograd
+    matplotlib
+    pytestCheckHook
+  ];
 
   preCheck = ''
     substituteInPlace "tests/conftest.py" \
-      --replace "import tensorflow as tf" ""
+      --replace-fail "import tensorflow as tf" ""
     substituteInPlace "tests/conftest.py" \
-      --replace "tf.random.set_seed(seed)" ""
+      --replace-fail "tf.random.set_seed(seed)" ""
   '';
 
   disabledTestPaths = [
     "tests/test_examples.py"
     "tests/backends/test_tensorflow.py"
+    "tests/backends/test_jax.py"
     "tests/test_problem.py"
   ];
 
@@ -44,6 +62,5 @@ buildPythonPackage rec {
     homepage = "https://www.pymanopt.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];
-    broken = lib.versionAtLeast scipy.version "1.10.0";
   };
 }

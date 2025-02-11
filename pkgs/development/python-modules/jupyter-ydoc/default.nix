@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-nodejs-version
-, hatchling
-, y-py
-, pytestCheckHook
-, websockets
-, ypy-websocket
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  hatch-nodejs-version,
+  hatchling,
+
+  # dependencies
+  pycrdt,
+  pytestCheckHook,
+
+  # tests
+  websockets,
+  ypy-websocket,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "1.1.1";
-
-  format = "pyproject";
+  version = "3.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-APizOm59VcvhK5G4emqGtnPikz13w6EmG7qLJHU2Rd0=";
+    hash = "sha256-1fHVvD7JV55YdGlJbNM9bypp4Y50Mp4TDCMUELocMdA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-nodejs-version
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    y-py
-  ];
+  dependencies = [ pycrdt ];
 
   pythonImportsCheck = [ "jupyter_ydoc" ];
 

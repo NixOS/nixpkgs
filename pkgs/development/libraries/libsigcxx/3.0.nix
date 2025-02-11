@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,11 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "w9I7N9/W458uCfCRt3sVQfv6F8Twtr9cibrvcikIDhc=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libsigcplusplus.github.io/libsigcplusplus/";
-    description = "A typesafe callback system for standard C++";
+    description = "Typesafe callback system for standard C++";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.all;

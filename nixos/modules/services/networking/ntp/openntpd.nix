@@ -1,4 +1,10 @@
-{ pkgs, lib, config, options, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  options,
+  ...
+}:
 
 with lib;
 
@@ -19,7 +25,7 @@ in
   ###### interface
 
   options.services.openntpd = {
-    enable = mkEnableOption (lib.mdDoc "OpenNTP time synchronization server");
+    enable = mkEnableOption "OpenNTP time synchronization server";
 
     servers = mkOption {
       default = config.services.ntp.servers;
@@ -35,7 +41,7 @@ in
         listen on 127.0.0.1
         listen on ::1
       '';
-      description = lib.mdDoc ''
+      description = ''
         Additional text appended to {file}`openntpd.conf`.
       '';
     };
@@ -44,7 +50,7 @@ in
       type = with types; separatedString " ";
       default = "";
       example = "-s";
-      description = lib.mdDoc ''
+      description = ''
         Extra options used when launching openntpd.
       '';
     };
@@ -67,14 +73,21 @@ in
       description = "OpenNTP daemon user";
       home = "/var/empty";
     };
-    users.groups.ntp = {};
+    users.groups.ntp = { };
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" "time-sync.target" ];
+      wants = [
+        "network-online.target"
+        "time-sync.target"
+      ];
       before = [ "time-sync.target" ];
-      after = [ "dnsmasq.service" "bind.service" "network-online.target" ];
+      after = [
+        "dnsmasq.service"
+        "bind.service"
+        "network-online.target"
+      ];
       serviceConfig = {
         ExecStart = "${package}/sbin/ntpd -p ${pidFile} ${cfg.extraOptions}";
         Type = "forking";

@@ -1,11 +1,19 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, typing_extensions }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  typing_extensions,
+}:
 buildKodiAddon rec {
   pname = "arrow";
   namespace = "script.module.arrow";
   version = "1.2.3";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/script.module.arrow/script.module.arrow-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/script.module.arrow/script.module.arrow-${version}.zip";
     sha256 = "sha256-Et+9FJT1dRE1dFOrAQ70HJJcfylyLsiyay9wPJcSOXs=";
   };
 

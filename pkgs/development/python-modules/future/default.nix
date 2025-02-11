@@ -1,18 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "future";
-  version = "0.18.3";
+  version = "1.0.0";
+  pyproject = true;
 
-  format = "setuptools";
+  # https://github.com/PythonCharmers/python-future/issues/640
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NKF0Nu0elml6hvnePRWjsL4B2LyN6cHf/Vn7gjTtUwc=";
+    hash = "sha256-vSloMJMHhh7a4UWKT4pPNZjAO+Q7l1IQdq6/XZTAewU=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [
     "future.builtins"

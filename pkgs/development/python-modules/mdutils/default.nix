@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mdutils";
   version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "didix21";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xF6z63CjL/qSBQsm/fSTQhwpg9yJU4qrY06cjn1PbCk=";
   };
 
@@ -29,7 +31,7 @@ buildPythonPackage rec {
       this way, mdutils will make things easy for creating Markdown files.
     '';
     homepage = "https://github.com/didix21/mdutils";
-    changelog = "https://github.com/didix21/mdutils/releases/tag/${src.rev}";
+    changelog = "https://github.com/didix21/mdutils/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
   };

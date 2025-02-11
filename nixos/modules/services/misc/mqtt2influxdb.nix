@@ -4,50 +4,45 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.mqtt2influxdb;
-  filterNull = filterAttrsRecursive (n: v: v != null);
-  configFile = (pkgs.formats.yaml {}).generate "mqtt2influxdb.config.yaml" (
-    filterNull {
-      inherit (cfg) mqtt influxdb;
-      points = map filterNull cfg.points;
-    }
-  );
+  filterNull = lib.filterAttrsRecursive (n: v: v != null);
+  configFile = (pkgs.formats.yaml { }).generate "mqtt2influxdb.config.yaml" (filterNull {
+    inherit (cfg) mqtt influxdb;
+    points = map filterNull cfg.points;
+  });
 
-  pointType = types.submodule {
+  pointType = lib.types.submodule {
     options = {
-      measurement = mkOption {
-        type = types.str;
-        description = mdDoc "Name of the measurement";
+      measurement = lib.mkOption {
+        type = lib.types.str;
+        description = "Name of the measurement";
       };
-      topic = mkOption {
-        type = types.str;
-        description = mdDoc "MQTT topic to subscribe to.";
+      topic = lib.mkOption {
+        type = lib.types.str;
+        description = "MQTT topic to subscribe to.";
       };
-      fields = mkOption {
-        type = types.submodule {
+      fields = lib.mkOption {
+        type = lib.types.submodule {
           options = {
-            value = mkOption {
-              type = types.str;
+            value = lib.mkOption {
+              type = lib.types.str;
               default = "$.payload";
-              description = mdDoc "Value to be picked up";
+              description = "Value to be picked up";
             };
-            type = mkOption {
-              type = with types; nullOr str;
+            type = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
-              description = mdDoc "Type to be picked up";
+              description = "Type to be picked up";
             };
           };
         };
-        description = mdDoc "Field selector.";
+        description = "Field selector.";
       };
-      tags = mkOption {
-        type = with types; attrsOf str;
-        default = {};
-        description = mdDoc "Tags applied";
+      tags = lib.mkOption {
+        type = with lib.types; attrsOf str;
+        default = { };
+        description = "Tags applied";
       };
     };
   };
@@ -121,15 +116,17 @@ let
       };
     }
   ];
-in {
+in
+{
   options = {
     services.mqtt2influxdb = {
-      enable = mkEnableOption (mdDoc "BigClown MQTT to InfluxDB bridge.");
-      environmentFiles = mkOption {
-        type = types.listOf types.path;
-        default = [];
+      enable = lib.mkEnableOption "BigClown MQTT to InfluxDB bridge";
+      package = lib.mkPackageOption pkgs [ "python3Packages" "mqtt2influxdb" ] { };
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
         example = [ "/run/keys/mqtt2influxdb.env" ];
-        description = mdDoc ''
+        description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
           syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
@@ -137,25 +134,25 @@ in {
         '';
       };
       mqtt = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
-          description = mdDoc "Host where MQTT server is running.";
+          description = "Host where MQTT server is running.";
         };
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 1883;
-          description = mdDoc "MQTT server port.";
+          description = "MQTT server port.";
         };
-        username = mkOption {
-          type = with types; nullOr str;
+        username = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "Username used to connect to the MQTT server.";
+          description = "Username used to connect to the MQTT server.";
         };
-        password = mkOption {
-          type = with types; nullOr str;
+        password = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc ''
+          description = ''
             MQTT password.
 
             It is highly suggested to use here replacement through
@@ -163,91 +160,91 @@ in {
             the store.
           '';
         };
-        cafile = mkOption {
-          type = with types; nullOr path;
+        cafile = lib.mkOption {
+          type = with lib.types; nullOr path;
           default = null;
-          description = mdDoc "Certification Authority file for MQTT";
+          description = "Certification Authority file for MQTT";
         };
-        certfile = mkOption {
-          type = with types; nullOr path;
+        certfile = lib.mkOption {
+          type = with lib.types; nullOr path;
           default = null;
-          description = mdDoc "Certificate file for MQTT";
+          description = "Certificate file for MQTT";
         };
-        keyfile = mkOption {
-          type = with types; nullOr path;
+        keyfile = lib.mkOption {
+          type = with lib.types; nullOr path;
           default = null;
-          description = mdDoc "Key file for MQTT";
+          description = "Key file for MQTT";
         };
       };
       influxdb = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
-          description = mdDoc "Host where InfluxDB server is running.";
+          description = "Host where InfluxDB server is running.";
         };
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 8086;
-          description = mdDoc "InfluxDB server port";
+          description = "InfluxDB server port";
         };
-        database = mkOption {
-          type = types.str;
-          description = mdDoc "Name of the InfluxDB database.";
+        database = lib.mkOption {
+          type = lib.types.str;
+          description = "Name of the InfluxDB database.";
         };
-        username = mkOption {
-          type = with types; nullOr str;
+        username = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc "Username for InfluxDB login.";
+          description = "Username for InfluxDB login.";
         };
-        password = mkOption {
-          type = with types; nullOr str;
+        password = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = mdDoc ''
+          description = ''
             Password for InfluxDB login.
 
             It is highly suggested to use here replacement through
             environmentFiles as otherwise the password is put world readable to
             the store.
-            '';
+          '';
         };
-        ssl = mkOption {
-          type = types.bool;
+        ssl = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = mdDoc "Use SSL to connect to the InfluxDB server.";
+          description = "Use SSL to connect to the InfluxDB server.";
         };
-        verify_ssl = mkOption {
-          type = types.bool;
+        verify_ssl = lib.mkOption {
+          type = lib.types.bool;
           default = true;
-          description = mdDoc "Verify SSL certificate when connecting to the InfluxDB server.";
+          description = "Verify SSL certificate when connecting to the InfluxDB server.";
         };
       };
-      points = mkOption {
-        type = types.listOf pointType;
+      points = lib.mkOption {
+        type = lib.types.listOf pointType;
         default = defaultPoints;
-        description = mdDoc "Points to bridge from MQTT to InfluxDB.";
+        description = "Points to bridge from MQTT to InfluxDB.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.bigclown-mqtt2influxdb = let
-      envConfig = cfg.environmentFiles != [];
-      finalConfig = if envConfig
-        then "$RUNTIME_DIRECTORY/mqtt2influxdb.config.yaml"
-        else configFile;
-    in {
-      description = "BigClown MQTT to InfluxDB bridge";
-      wantedBy = ["multi-user.target"];
-      wants = mkIf config.services.mosquitto.enable ["mosquitto.service"];
-      preStart = ''
-        umask 077
-        ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
-      '';
-      serviceConfig = {
-        EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${cfg.package}/bin/mqtt2influxdb -dc ${finalConfig}";
-        RuntimeDirectory = "mqtt2influxdb";
+  config = lib.mkIf cfg.enable {
+    systemd.services.bigclown-mqtt2influxdb =
+      let
+        envConfig = cfg.environmentFiles != [ ];
+        finalConfig = if envConfig then "$RUNTIME_DIRECTORY/mqtt2influxdb.config.yaml" else configFile;
+      in
+      {
+        description = "BigClown MQTT to InfluxDB bridge";
+        wantedBy = [ "multi-user.target" ];
+        wants = lib.mkIf config.services.mosquitto.enable [ "mosquitto.service" ];
+        preStart = ''
+          umask 077
+          ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
+        '';
+        serviceConfig = {
+          EnvironmentFile = cfg.environmentFiles;
+          ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
+          RuntimeDirectory = "mqtt2influxdb";
+        };
       };
-    };
   };
 }

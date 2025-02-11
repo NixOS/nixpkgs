@@ -1,10 +1,12 @@
-{ callPackage
-, rocmUpdateScript
-, llvm
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  llvm,
 }:
 
 callPackage ../base.nix rec {
-  inherit rocmUpdateScript;
+  inherit stdenv rocmUpdateScript;
   targetName = "clang-unwrapped";
   targetDir = "clang";
   extraBuildInputs = [ llvm ];

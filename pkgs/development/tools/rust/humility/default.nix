@@ -1,22 +1,31 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, libusb1
-, libftdi
-, cargo-readme
-, pkg-config
-, AppKit
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libusb1,
+  libftdi,
+  cargo-readme,
+  pkg-config,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "humility";
   version = "unstable-2023-11-08";
 
-  nativeBuildInputs = [ pkg-config cargo-readme ];
-  buildInputs = [ libusb1 libftdi ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
+  nativeBuildInputs = [
+    pkg-config
+    cargo-readme
   ];
+  buildInputs =
+    [
+      libusb1
+      libftdi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+    ];
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
@@ -45,6 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Debugger for Hubris";
+    mainProgram = "humility";
     homepage = "https://github.com/oxidecomputer/humility";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ therishidesai ];

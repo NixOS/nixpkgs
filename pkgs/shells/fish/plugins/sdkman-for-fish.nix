@@ -1,14 +1,18 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "sdkman-for-fish";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "reitzig";
     repo = "sdkman-for-fish";
     rev = "v${version}";
-    hash = "sha256-cgDTunWFxFm48GmNv21o47xrXyo+sS6a3CzwHlv0Ezo=";
+    hash = "sha256-7cgyR3hQ30Jv+9lJS5qaBvSaI/0YVT8xPXlUhDBTdFc=";
   };
 
   meta = with lib; {

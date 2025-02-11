@@ -1,52 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-storage
-, google-cloud-testutils
-, libcst
-, mock
-, pandas
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-storage,
+  google-cloud-testutils,
+  libcst,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.11.4";
+  version = "2.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oUMXQWkwHMFI26hpe36mAyoh+bQogtyoDgTaBRactUU=";
+    pname = "google_cloud_automl";
+    inherit version;
+    hash = "sha256-uVR7WyqVmIerI/l4lIZKCeqIqgPMOhdD6+kBBfHZVRU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
-    pandas = [
-      pandas
-    ];
-    storage = [
-      google-cloud-storage
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
+    pandas = [ pandas ];
+    storage = [ google-cloud-storage ];
   };
 
   nativeCheckInputs = [
@@ -81,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-automl";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-automl-v${version}/packages/google-cloud-automl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

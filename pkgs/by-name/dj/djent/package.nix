@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, mpfr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpfr,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +18,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpfr ];
 
-  preBuild = ''
-    sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    sed -i s/-m64//g Makefile
-  '';
+  preBuild =
+    ''
+      sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+      sed -i s/-m64//g Makefile
+    '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
@@ -40,8 +42,12 @@ stdenv.mkDerivation rec {
       A reimplementation of the Fourmilab/John Walker random number test program
       ent with several improvements
     '';
+    mainProgram = "djent";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ orichter thillux ];
+    maintainers = with lib.maintainers; [
+      orichter
+      thillux
+    ];
   };
 }

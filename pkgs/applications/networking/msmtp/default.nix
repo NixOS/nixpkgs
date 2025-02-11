@@ -20,18 +20,21 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , withScripts ? true
+, gitUpdater
+, binlore
+, msmtp
 }:
 
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.22";
+  version = "1.8.26";
 
   src = fetchFromGitHub {
     owner = "marlam";
-    repo = "msmtp-mirror";
+    repo = "msmtp";
     rev = "msmtp-${version}";
-    hash = "sha256-Jt/uvGBrYYr6ua6LVPiP0nuRiIkxBJASdgHBNHivzxQ=";
+    hash = "sha256-MV3fzjjyr7qZw/BbKgsSObX+cxDDivI+0ZlulrPFiWM=";
   };
 
   meta = with lib; {
@@ -40,6 +43,7 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "msmtp";
   };
 
   binaries = stdenv.mkDerivation {
@@ -47,10 +51,10 @@ let
     inherit version src meta;
 
     configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
-      ++ optionals stdenv.isDarwin [ "--with-macosx-keyring" ];
+      ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
 
     buildInputs = [ gnutls gsasl libidn2 ]
-      ++ optionals stdenv.isDarwin [ Security ]
+      ++ optionals stdenv.hostPlatform.isDarwin [ Security ]
       ++ optionals withKeyring [ libsecret ];
 
     nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
@@ -67,7 +71,10 @@ let
     pname = "msmtp-scripts";
     inherit version src meta;
 
-    patches = [ ./paths.patch ];
+    patches = [
+      ./msmtpq-remove-binary-check.patch
+      ./msmtpq-systemd-logging.patch
+    ];
 
     postPatch = ''
       substituteInPlace scripts/msmtpq/msmtpq \
@@ -113,6 +120,7 @@ let
         fix."$MSMTP" = [ "msmtp" ];
         fake.external = [ "ping" ]
           ++ optionals (!withSystemd) [ "systemd-cat" ];
+        keep.source = [ "~/.msmtpqrc" ];
       };
 
       msmtp-queue = {
@@ -131,5 +139,14 @@ if withScripts then
     name = "msmtp-${version}";
     inherit version meta;
     paths = [ binaries scripts ];
-    passthru = { inherit binaries scripts; };
+    passthru = {
+      inherit binaries scripts src;
+      # msmtpq forwards most of its arguments to msmtp [1].
+      #
+      # [1]: <https://github.com/marlam/msmtp/blob/msmtp-1.8.26/scripts/msmtpq/msmtpq#L301>
+      binlore.out = binlore.synthesize msmtp ''
+        wrapper bin/msmtpq bin/msmtp
+      '';
+      updateScript = gitUpdater { rev-prefix = "msmtp-"; };
+    };
   } else binaries

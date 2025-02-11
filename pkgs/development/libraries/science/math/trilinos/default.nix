@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, blas
-, boost
-, cmake
-, gfortran
-, lapack
-, mpi
-, suitesparse
-, swig
-, withMPI ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  blas,
+  boost,
+  cmake,
+  gfortran,
+  lapack,
+  mpi,
+  suitesparse,
+  swig,
+  withMPI ? false,
 }:
 
 # NOTE: Not all packages are enabled.  We specifically enable the ones
@@ -70,17 +71,28 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
   };
 
-  nativeBuildInputs = [ cmake gfortran swig ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    swig
+  ];
 
-  buildInputs = [ blas boost lapack suitesparse ] ++ lib.optionals withMPI [ mpi ];
+  buildInputs = [
+    blas
+    boost
+    lapack
+    suitesparse
+  ] ++ lib.optionals withMPI [ mpi ];
 
   preConfigure =
-    if withMPI then ''
-      cmakeFlagsArray+=(${flagsBase} ${flagsParallel})
-    ''
-    else ''
-      cmakeFlagsArray+=(${flagsBase})
-    '';
+    if withMPI then
+      ''
+        cmakeFlagsArray+=(${flagsBase} ${flagsParallel})
+      ''
+    else
+      ''
+        cmakeFlagsArray+=(${flagsBase})
+      '';
 
   passthru = {
     inherit withMPI;
@@ -88,6 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Engineering and scientific problems algorithms";
+    mainProgram = "nvcc_wrapper";
     longDescription = ''
       The Trilinos Project is an effort to develop algorithms and enabling
       technologies within an object-oriented software framework for the

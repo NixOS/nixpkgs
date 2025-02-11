@@ -1,37 +1,44 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "replibyte";
-  version = "0.9.7";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02bdz0464d6gbkgbvn67sgn6cc6p6pjqacblh8nimy0r8b13x2ki";
+    hash = "sha256-VExA92g+1y65skxLKU62ZPUPOwdm9N73Ne9xW7Q0Sic=";
   };
 
-  # Lockfile was updated in a commit after the release
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/Qovery/Replibyte/commit/15f122cc83fff03ae410be705779ab964fa7b375.patch";
-      sha256 = "sha256-v95V4pl/2WN2do2SLVTJIO+5J7esqhC2BZaGBEtDhe0=";
-    })
-  ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "mongodb-schema-parser-0.5.0" = "sha256-P3srDY4bEDDYyic7Am2Cg+75j/kETf0uC7ui61TUJQA=";
+    };
+  };
 
-  cargoSha256 = "sha256-Y9CXpJTY/uszAVAbafa2+FumWKWFGaOLhK1FY+Nc+EU=";
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   cargoBuildFlags = [ "--all-features" ];
 
@@ -39,6 +46,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Seed your development database with real data";
+    mainProgram = "replibyte";
     homepage = "https://github.com/Qovery/replibyte";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];

@@ -1,46 +1,64 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
-{
-  name = "power-profiles-daemon";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mvnetbiz ];
-  };
-  nodes.machine = { pkgs, ... }: {
-    security.polkit.enable = true;
-    services.power-profiles-daemon.enable = true;
-    environment.systemPackages = [ pkgs.glib ];
-  };
+  {
+    name = "power-profiles-daemon";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ mvnetbiz ];
+    };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        security.polkit.enable = true;
+        services.power-profiles-daemon.enable = true;
+        environment.systemPackages = [
+          pkgs.glib
+          pkgs.power-profiles-daemon
+        ];
+      };
 
-  testScript = ''
-    def get_profile():
-        return machine.succeed(
-            """gdbus call --system --dest net.hadess.PowerProfiles --object-path /net/hadess/PowerProfiles \
-    --method org.freedesktop.DBus.Properties.Get 'net.hadess.PowerProfiles' 'ActiveProfile'
-    """
-        )
-
-
-    def set_profile(profile):
-        return machine.succeed(
-            """gdbus call --system --dest net.hadess.PowerProfiles --object-path /net/hadess/PowerProfiles \
-    --method org.freedesktop.DBus.Properties.Set 'net.hadess.PowerProfiles' 'ActiveProfile' "<'{profile}'>"
-    """.format(
-                profile=profile
-            )
-        )
+    testScript = ''
+      def get_profile():
+          return machine.succeed(
+              """gdbus call --system --dest org.freedesktop.UPower.PowerProfiles --object-path /org/freedesktop/UPower/PowerProfiles \
+      --method org.freedesktop.DBus.Properties.Get 'org.freedesktop.UPower.PowerProfiles' 'ActiveProfile'
+      """
+          )
 
 
-    machine.wait_for_unit("multi-user.target")
+      def set_profile(profile):
+          return machine.succeed(
+              """gdbus call --system --dest org.freedesktop.UPower.PowerProfiles --object-path /org/freedesktop/UPower/PowerProfiles \
+      --method org.freedesktop.DBus.Properties.Set 'org.freedesktop.UPower.PowerProfiles' 'ActiveProfile' "<'{profile}'>"
+      """.format(
+                  profile=profile
+              )
+          )
 
-    set_profile("power-saver")
-    profile = get_profile()
-    if not "power-saver" in profile:
-        raise Exception("Unable to set power-saver profile")
+
+      machine.wait_for_unit("multi-user.target")
+
+      set_profile("power-saver")
+      profile = get_profile()
+      if not "power-saver" in profile:
+          raise Exception("Unable to set power-saver profile")
 
 
-    set_profile("balanced")
-    profile = get_profile()
-    if not "balanced" in profile:
-        raise Exception("Unable to set balanced profile")
-  '';
-})
+      set_profile("balanced")
+      profile = get_profile()
+      if not "balanced" in profile:
+          raise Exception("Unable to set balanced profile")
+
+      # test powerprofilectl CLI
+      machine.succeed("powerprofilesctl set power-saver")
+      profile = get_profile()
+      if not "power-saver" in profile:
+          raise Exception("Unable to set power-saver profile with powerprofilectl")
+
+      machine.succeed("powerprofilesctl set balanced")
+      profile = get_profile()
+      if not "balanced" in profile:
+          raise Exception("Unable to set balanced profile with powerprofilectl")
+    '';
+  }
+)

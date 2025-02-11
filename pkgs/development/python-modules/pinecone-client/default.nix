@@ -1,43 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pyyaml
-, python-dateutil
-, urllib3
-, tqdm
-, dnspython
-, requests
-, typing-extensions
-, loguru
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  loguru,
+  numpy,
+  poetry-core,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  pandas,
+  setuptools,
+  tqdm,
+  typing-extensions,
+  pinecone-plugin-interface,
+  pinecone-plugin-inference,
+  urllib3,
+  googleapis-common-protos,
+  lz4,
+  protobuf,
+  grpcio,
 }:
+
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "2.2.4";
+  version = "5.4.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LBzB1mSLK+ZulE2y/6WRZqN7kWTRE1rVJdnNix4pgWg=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "pinecone-io";
+    repo = "pinecone-python-client";
+    tag = "v${version}";
+    hash = "sha256-5BCjqcJ+xCTTF/Q+PrgNV4Y/GcT2cfNqvY1ydUL6EZ8=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    pyyaml
-    python-dateutil
-    urllib3
-    tqdm
-    dnspython
-    requests
-    typing-extensions
-    loguru
+  build-system = [
+    setuptools
+    poetry-core
   ];
 
-  doCheck = false;
+  dependencies = [
+    dnspython
+    loguru
+    numpy
+    python-dateutil
+    pinecone-plugin-interface
+    pinecone-plugin-inference
+    pyyaml
+    requests
+    tqdm
+    typing-extensions
+    urllib3
+  ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "pinecone" ];
+
+  meta = {
+    description = "Pinecone python client";
     homepage = "https://www.pinecone.io/";
-    description = "The Pinecone python client";
-    license = licenses.mit;
-    maintainers = with maintainers; [happysalada];
+    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

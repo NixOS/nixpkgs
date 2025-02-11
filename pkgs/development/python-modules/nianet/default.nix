@@ -1,41 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, niapy
-, numpy
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, toml-adapt
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  niapy,
+  numpy,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  toml-adapt,
+  tomli,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "nianet";
   version = "1.1.4";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SasoPavlic";
-    repo = pname;
-    rev = "version_${version}";
+    repo = "nianet";
+    tag = "version_${version}";
     sha256 = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
   };
 
-  nativeBuildInputs = [
-    toml-adapt
+  build-system = [
     poetry-core
+    toml-adapt
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     niapy
     numpy
     scikit-learn
     torch
+  ];
+
+  pythonRelaxDeps = [
+    "numpy"
   ];
 
   # create niapy and torch dep version consistent
@@ -44,13 +49,12 @@ buildPythonPackage rec {
     toml-adapt -path pyproject.toml -a change -dep torch -ver X
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    tomli
   ];
 
-  pythonImportsCheck = [
-    "nianet"
-  ];
+  pythonImportsCheck = [ "nianet" ];
 
   meta = with lib; {
     description = "Designing and constructing neural network topologies using nature-inspired algorithms";

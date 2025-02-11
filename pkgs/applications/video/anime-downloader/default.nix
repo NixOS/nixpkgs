@@ -1,4 +1,12 @@
-{ lib, python3, aria2, mpv, nodejs, qt5, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  aria2,
+  mpv,
+  nodejs,
+  qt5,
+  fetchFromGitHub,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "anime-downloader";
@@ -13,25 +21,27 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
-    aria2
-    mpv
-    nodejs
-  ] ++ (with python3.pkgs; [
-    beautifulsoup4
-    cfscrape
-    click
-    coloredlogs
-    fuzzywuzzy
-    jsbeautifier
-    pycryptodome
-    pysmartdl
-    pyqt5
-    requests
-    requests-cache
-    selenium
-    tabulate
-  ]);
+  propagatedBuildInputs =
+    [
+      aria2
+      mpv
+      nodejs
+    ]
+    ++ (with python3.pkgs; [
+      beautifulsoup4
+      cfscrape
+      click
+      coloredlogs
+      fuzzywuzzy
+      jsbeautifier
+      pycryptodome
+      pysmartdl
+      pyqt5
+      requests
+      requests-cache
+      selenium
+      tabulate
+    ]);
 
   preFixup = ''
     wrapQtApp "$out/bin/anime" --prefix PATH : ${lib.makeBinPath propagatedBuildInputs}
@@ -46,10 +56,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/anime-dl/anime-downloader";
-    description = "A simple but powerful anime downloader and streamer";
+    description = "Simple but powerful anime downloader and streamer";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "anime";
   };
 }

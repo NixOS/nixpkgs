@@ -1,28 +1,69 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cython, numpy, pysam, matplotlib, python, isPy27, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  swig,
+  cython,
+  matplotlib,
+  numpy,
+  pandas,
+  pysam,
+  setuptools,
+  pytestCheckHook,
+  nix-update-script,
+}:
 buildPythonPackage rec {
-  version = "0.12.4";
   pname = "htseq";
+  version = "2.0.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "htseq";
     repo = "htseq";
     rev = "release_${version}";
-    sha256 = "0y7vh249sljqjnv81060w4xkdx6f1y5zdqkh38yk926x6v9riijm";
+    hash = "sha256-i83BY7/p98/pfYzebolNW/6yNwtb2R5ARCSG3rAq2/M=";
   };
 
-  nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy pysam matplotlib ];
+  nativeBuildInputs = [ swig ];
 
-  checkPhase = lib.optionalString isPy27 ''
-    ${python.interpreter} python2/test/test_general.py
-  '' + lib.optionalString isPy3k ''
-    ${python.interpreter} python3/test/test_general.py
+  build-system = [
+    cython
+    numpy
+    pysam
+    setuptools
+  ];
+
+  dependencies = [
+    numpy
+    pysam
+  ];
+
+  optional-dependencies = {
+    htseq-qa = [ matplotlib ];
+  };
+
+  pythonImportsCheck = [ "HTSeq" ];
+
+  nativeCheckInputs = [
+    pandas
+    pytestCheckHook
+  ] ++ optional-dependencies.htseq-qa;
+
+  preCheck = ''
+    rm -r src HTSeq
+    export PATH=$out/bin:$PATH
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release_(.+)"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://htseq.readthedocs.io/";
-    description = "A framework to work with high-throughput sequencing data";
+    description = "Framework to work with high-throughput sequencing data";
     maintainers = with maintainers; [ unode ];
-    platforms = platforms.unix;
   };
 }

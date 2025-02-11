@@ -1,6 +1,8 @@
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
+  forgejoPackage ? pkgs.forgejo,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -22,157 +24,268 @@ let
   '';
   signingPrivateKeyId = "4D642DE8B678C79D";
 
-  supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
-  makeGForgejoTest = type: nameValuePair type (makeTest {
-    name = "forgejo-${type}";
-    meta.maintainers = with maintainers; [ bendlas emilylange ];
+  actionsWorkflowYaml = ''
+    run-name: dummy workflow
+    on:
+      push:
+    jobs:
+      cat:
+        runs-on: native
+        steps:
+          - uses: http://localhost:3000/test/checkout@main
+          - run: cat testfile
+  '';
+  # https://github.com/actions/checkout/releases
+  checkoutActionSource = pkgs.fetchFromGitHub {
+    owner = "actions";
+    repo = "checkout";
+    rev = "v4.1.1";
+    hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
+  };
 
-    nodes = {
-      server = { config, pkgs, ... }: {
-        virtualisation.memorySize = 2047;
-        services.forgejo = {
-          enable = true;
-          database = { inherit type; };
-          settings.service.DISABLE_REGISTRATION = true;
-          settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
-          settings.actions.ENABLED = true;
-        };
-        environment.systemPackages = [ config.services.forgejo.package pkgs.gnupg pkgs.jq pkgs.file ];
-        services.openssh.enable = true;
+  metricSecret = "fakesecret";
 
-        specialisation.runner = {
-          inheritParentConfig = true;
-          configuration.services.gitea-actions-runner.instances."test" = {
-            enable = true;
-            name = "ci";
-            url = "http://localhost:3000";
-            labels = [
-              # don't require docker/podman
-              "native:host"
+  supportedDbTypes = [
+    "mysql"
+    "postgres"
+    "sqlite3"
+  ];
+  makeForgejoTest =
+    type:
+    nameValuePair type (makeTest {
+      name = "forgejo-${type}";
+      meta.maintainers = with maintainers; [
+        bendlas
+        emilylange
+      ];
+
+      nodes = {
+        server =
+          { config, pkgs, ... }:
+          {
+            virtualisation.memorySize = 2047;
+            services.forgejo = {
+              enable = true;
+              package = forgejoPackage;
+              database = { inherit type; };
+              settings.service.DISABLE_REGISTRATION = true;
+              settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
+              settings.actions.ENABLED = true;
+              settings.repository = {
+                ENABLE_PUSH_CREATE_USER = true;
+                DEFAULT_PUSH_CREATE_PRIVATE = false;
+              };
+              settings.metrics.ENABLED = true;
+              secrets.metrics.TOKEN = pkgs.writeText "metrics_secret" metricSecret;
+            };
+            environment.systemPackages = [
+              config.services.forgejo.package
+              pkgs.gnupg
+              pkgs.jq
+              pkgs.file
+              pkgs.htmlq
             ];
-            tokenFile = "/var/lib/forgejo/runner_token";
+            services.openssh.enable = true;
+
+            specialisation.runner = {
+              inheritParentConfig = true;
+              configuration.services.gitea-actions-runner = {
+                package = pkgs.forgejo-runner;
+                instances."test" = {
+                  enable = true;
+                  name = "ci";
+                  url = "http://localhost:3000";
+                  labels = [
+                    # type ":host" does not depend on docker/podman/lxc
+                    "native:host"
+                  ];
+                  tokenFile = "/var/lib/forgejo/runner_token";
+                };
+              };
+            };
+            specialisation.dump = {
+              inheritParentConfig = true;
+              configuration.services.forgejo.dump = {
+                enable = true;
+                type = "tar.zst";
+                file = "dump.tar.zst";
+              };
+            };
           };
-        };
-        specialisation.dump = {
-          inheritParentConfig = true;
-          configuration.services.forgejo.dump = {
-            enable = true;
-            type = "tar.zst";
-            file = "dump.tar.zst";
+        client =
+          { ... }:
+          {
+            programs.git = {
+              enable = true;
+              config = {
+                user.email = "test@localhost";
+                user.name = "test";
+                init.defaultBranch = "main";
+              };
+            };
+            programs.ssh.extraConfig = ''
+              Host *
+                StrictHostKeyChecking no
+                IdentityFile ~/.ssh/privk
+            '';
           };
-        };
       };
-      client1 = { config, pkgs, ... }: {
-        environment.systemPackages = [ pkgs.git ];
-      };
-      client2 = { config, pkgs, ... }: {
-        environment.systemPackages = [ pkgs.git ];
-      };
-    };
 
-    testScript = { nodes, ... }:
-      let
-        inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
-        serverSystem = nodes.server.system.build.toplevel;
-        dumpFile = with nodes.server.specialisation.dump.configuration.services.forgejo.dump; "${backupDir}/${file}";
-      in
-      ''
-        import json
-        GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
-        REPO = "forgejo@server:test/repo"
-        PRIVK = "${snakeOilPrivateKey}"
+      testScript =
+        { nodes, ... }:
+        let
+          inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+          serverSystem = nodes.server.system.build.toplevel;
+          dumpFile =
+            with nodes.server.specialisation.dump.configuration.services.forgejo.dump;
+            "${backupDir}/${file}";
+          remoteUri = "forgejo@server:test/repo";
+          remoteUriCheckoutAction = "forgejo@server:test/checkout";
+        in
+        ''
+          import json
 
-        start_all()
+          start_all()
 
-        client1.succeed("mkdir /tmp/repo")
-        client1.succeed("mkdir -p $HOME/.ssh")
-        client1.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-        client1.succeed("chmod 0400 $HOME/.ssh/privk")
-        client1.succeed("git -C /tmp/repo init")
-        client1.succeed("echo hello world > /tmp/repo/testfile")
-        client1.succeed("git -C /tmp/repo add .")
-        client1.succeed("git config --global user.email test@localhost")
-        client1.succeed("git config --global user.name test")
-        client1.succeed("git -C /tmp/repo commit -m 'Initial import'")
-        client1.succeed(f"git -C /tmp/repo remote add origin {REPO}")
+          client.succeed("mkdir -p ~/.ssh")
+          client.succeed("(umask 0077; cat ${snakeOilPrivateKey} > ~/.ssh/privk)")
 
-        server.wait_for_unit("forgejo.service")
-        server.wait_for_open_port(3000)
-        server.wait_for_open_port(22)
-        server.succeed("curl --fail http://localhost:3000/")
+          client.succeed("mkdir /tmp/repo")
+          client.succeed("git -C /tmp/repo init")
+          client.succeed("echo 'hello world' > /tmp/repo/testfile")
+          client.succeed("git -C /tmp/repo add .")
+          client.succeed("git -C /tmp/repo commit -m 'Initial import'")
+          client.succeed("git -C /tmp/repo remote add origin ${remoteUri}")
 
-        server.succeed(
-            "su -l forgejo -c 'gpg --homedir /var/lib/forgejo/data/home/.gnupg "
-            + "--import ${toString (pkgs.writeText "forgejo.key" signingPrivateKey)}'"
-        )
+          server.wait_for_unit("forgejo.service")
+          server.wait_for_open_port(3000)
+          server.wait_for_open_port(22)
+          server.succeed("curl --fail http://localhost:3000/")
 
-        assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
+          server.succeed(
+              "su -l forgejo -c 'gpg --homedir /var/lib/forgejo/data/home/.gnupg "
+              + "--import ${toString (pkgs.writeText "forgejo.key" signingPrivateKey)}'"
+          )
 
-        server.succeed(
-            "curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. "
-            + "Please contact your site administrator.'"
-        )
-        server.succeed(
-            "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea admin user create "
-            + "--username test --password totallysafe --email test@localhost'"
-        )
+          assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
 
-        api_token = server.succeed(
-            "curl --fail -X POST http://test:totallysafe@localhost:3000/api/v1/users/test/tokens "
-            + "-H 'Accept: application/json' -H 'Content-Type: application/json' -d "
-            + "'{\"name\":\"token\",\"scopes\":[\"all\"]}' | jq '.sha1' | xargs echo -n"
-        )
+          api_version = json.loads(server.succeed("curl http://localhost:3000/api/forgejo/v1/version")).get("version")
+          assert "development" != api_version and "${forgejoPackage.version}+gitea-" in api_version, (
+              "/api/forgejo/v1/version should not return 'development' "
+              + f"but should contain a forgejo+gitea compatibility version string. Got '{api_version}' instead."
+          )
 
-        server.succeed(
-            "curl --fail -X POST http://localhost:3000/api/v1/user/repos "
-            + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
-            + f"-H 'Authorization: token {api_token}'"
-            + ' -d \'{"auto_init":false, "description":"string", "license":"mit", "name":"repo", "private":false}\'''
-        )
+          server.succeed(
+              "curl --fail http://localhost:3000/user/sign_up | grep 'Registration is disabled. "
+              + "Please contact your site administrator.'"
+          )
+          server.succeed(
+              "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea admin user create "
+              + "--username test --password totallysafe --email test@localhost --must-change-password=false'"
+          )
 
-        server.succeed(
-            "curl --fail -X POST http://localhost:3000/api/v1/user/keys "
-            + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
-            + f"-H 'Authorization: token {api_token}'"
-            + ' -d \'{"key":"${snakeOilPublicKey}","read_only":true,"title":"SSH"}\'''
-        )
+          api_token = server.succeed(
+              "curl --fail -X POST http://test:totallysafe@localhost:3000/api/v1/users/test/tokens "
+              + "-H 'Accept: application/json' -H 'Content-Type: application/json' -d "
+              + "'{\"name\":\"token\",\"scopes\":[\"all\"]}' | jq '.sha1' | xargs echo -n"
+          )
 
-        client1.succeed(
-            f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git -C /tmp/repo push origin master"
-        )
+          server.succeed(
+              "curl --fail -X POST http://localhost:3000/api/v1/user/repos "
+              + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
+              + f"-H 'Authorization: token {api_token}'"
+              + ' -d \'{"auto_init":false, "description":"string", "license":"mit", "name":"repo", "private":false}\'''
+          )
 
-        client2.succeed("mkdir -p $HOME/.ssh")
-        client2.succeed(f"cat {PRIVK} > $HOME/.ssh/privk")
-        client2.succeed("chmod 0400 $HOME/.ssh/privk")
-        client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
-        client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
+          server.succeed(
+              "curl --fail -X POST http://localhost:3000/api/v1/user/keys "
+              + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
+              + f"-H 'Authorization: token {api_token}'"
+              + ' -d \'{"key":"${snakeOilPublicKey}","read_only":true,"title":"SSH"}\'''
+          )
 
-        with subtest("Testing git protocol version=2 over ssh"):
-            git_protocol = client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' GIT_TRACE2_EVENT=true git -C repo fetch |& grep negotiated-version")
-            version = json.loads(git_protocol).get("value")
-            assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
+          client.succeed("git -C /tmp/repo push origin main")
 
-        server.wait_until_succeeds(
-            'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
-            + '-H "Accept: application/json" | jq length)" = "1"',
-            timeout=10
-        )
+          client.succeed("git clone ${remoteUri} /tmp/repo-clone")
+          print(client.succeed("ls -lash /tmp/repo-clone"))
+          assert "hello world" == client.succeed("cat /tmp/repo-clone/testfile").strip()
 
-        with subtest("Testing runner registration"):
-            server.succeed(
-                "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
-            )
-            server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-            server.wait_for_unit("gitea-runner-test.service")
-            server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+          with subtest("Testing git protocol version=2 over ssh"):
+              git_protocol = client.succeed("GIT_TRACE2_EVENT=true GIT_TRACE2_EVENT_NESTING=3 git -C /tmp/repo-clone fetch |& grep negotiated-version")
+              version = json.loads(git_protocol).get("value")
+              assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
 
-        with subtest("Testing backup service"):
-            server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
-            server.systemctl("start forgejo-dump")
-            assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
-            server.copy_from_vm("${dumpFile}")
-      '';
-  });
+          server.wait_until_succeeds(
+              'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
+              + '-H "Accept: application/json" | jq length)" = "1"',
+              timeout=10
+          )
+
+          with subtest("Testing /metrics endpoint with token from cfg.secrets"):
+              server.fail("curl --fail http://localhost:3000/metrics")
+              server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
+
+          with subtest("Testing runner registration and action workflow"):
+              server.succeed(
+                  "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
+              )
+              server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
+              server.wait_for_unit("gitea-runner-test.service")
+              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+
+              # enable actions feature for this repository, defaults to disabled
+              server.succeed(
+                  "curl --fail -X PATCH http://localhost:3000/api/v1/repos/test/repo "
+                  + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
+                  + f"-H 'Authorization: token {api_token}'"
+                  + ' -d \'{"has_actions":true}\'''
+              )
+
+              # mirror "actions/checkout" action
+              client.succeed("cp -R ${checkoutActionSource}/ /tmp/checkout")
+              client.succeed("git -C /tmp/checkout init")
+              client.succeed("git -C /tmp/checkout add .")
+              client.succeed("git -C /tmp/checkout commit -m 'Initial import'")
+              client.succeed("git -C /tmp/checkout remote add origin ${remoteUriCheckoutAction}")
+              client.succeed("git -C /tmp/checkout push origin main")
+
+              # push workflow to initial repo
+              client.succeed("mkdir -p /tmp/repo/.forgejo/workflows")
+              client.succeed("cp ${pkgs.writeText "dummy-workflow.yml" actionsWorkflowYaml} /tmp/repo/.forgejo/workflows/")
+              client.succeed("git -C /tmp/repo add .")
+              client.succeed("git -C /tmp/repo commit -m 'Add dummy workflow'")
+              client.succeed("git -C /tmp/repo push origin main")
+
+              def poll_workflow_action_status(_) -> bool:
+                  output = server.succeed(
+                      "curl --fail http://localhost:3000/test/repo/actions | "
+                      + 'htmlq ".flex-item-leading span" --attribute "data-tooltip-content"'
+                  ).strip()
+
+                  # values taken from https://codeberg.org/forgejo/forgejo/src/commit/af47c583b4fb3190fa4c4c414500f9941cc02389/options/locale/locale_en-US.ini#L3649-L3661
+                  if output in [ "Failure", "Canceled", "Skipped", "Blocked" ]:
+                      raise Exception(f"Workflow status is '{output}', which we consider failed.")
+                      server.log(f"Command returned '{output}', which we consider failed.")
+
+                  elif output in [ "Unknown", "Waiting", "Running", "" ]:
+                      server.log(f"Workflow status is '{output}'. Waiting some more...")
+                      return False
+
+                  elif output in [ "Success" ]:
+                      return True
+
+                  raise Exception(f"Workflow status is '{output}', which we don't know. Value mappings likely need updating.")
+
+              with server.nested("Waiting for the workflow run to be successful"):
+                  retry(poll_workflow_action_status)
+
+          with subtest("Testing backup service"):
+              server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
+              server.systemctl("start forgejo-dump")
+              assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
+              server.copy_from_vm("${dumpFile}")
+        '';
+    });
 in
 
-listToAttrs (map makeGForgejoTest supportedDbTypes)
+listToAttrs (map makeForgejoTest supportedDbTypes)

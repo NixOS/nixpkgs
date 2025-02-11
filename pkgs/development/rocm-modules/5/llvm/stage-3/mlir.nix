@@ -1,12 +1,12 @@
-{ stdenv
-, callPackage
-, rocmUpdateScript
-, clr
-, vulkan-headers
-, vulkan-loader
-, glslang
-, shaderc
-, lit
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  clr,
+  vulkan-headers,
+  vulkan-loader,
+  glslang,
+  shaderc,
 }:
 
 callPackage ../base.nix rec {
@@ -18,7 +18,7 @@ callPackage ../base.nix rec {
 
   # Fix `DebugTranslation.cpp:139:10: error: no matching function for call to 'get'`
   # We patch at a different source root, so we modify the patch and include it locally
-  # https://github.com/RadeonOpenCompute/llvm-project/commit/f1d1e10ec7e1061bf0b90abbc1e298d9438a5e74.patch
+  # https://github.com/ROCm/llvm-project/commit/f1d1e10ec7e1061bf0b90abbc1e298d9438a5e74.patch
   extraPatches = [ ./0000-mlir-fix-debugtranslation.patch ];
   extraNativeBuildInputs = [ clr ];
 

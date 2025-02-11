@@ -1,7 +1,12 @@
-{ fetchFromGitHub, lib, mkDerivation, standard-library }:
+{
+  fetchFromGitHub,
+  lib,
+  mkDerivation,
+  standard-library,
+}:
 
 mkDerivation rec {
-  version = "0.4.1";
+  version = "0.5.0";
   pname = "functional-linear-algebra";
 
   buildInputs = [ standard-library ];
@@ -10,7 +15,7 @@ mkDerivation rec {
     repo = "functional-linear-algebra";
     owner = "ryanorendorff";
     rev = "v${version}";
-    sha256 = "GrTeMEHEXb0t2RgHWiGfvvofNYl8YYaaoCE18JrG6Q4=";
+    sha256 = "sha256-3nme/eH4pY6bD0DkhL4Dj/Vp/WnZqkQtZTNk+n1oAyY=";
   };
 
   preConfigure = ''

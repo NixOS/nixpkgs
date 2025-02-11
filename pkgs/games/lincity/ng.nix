@@ -1,22 +1,23 @@
-{ stdenv
-, SDL2
-, SDL2_gfx
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, autoreconfHook
-, fetchFromGitHub
-, jam
-, lib
-, libGL
-, libGLU
-, libX11
-, libxml2
-, libxslt
-, physfs
-, pkg-config
-, xorgproto
-, zlib
+{
+  stdenv,
+  SDL2,
+  SDL2_gfx,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  autoreconfHook,
+  fetchFromGitHub,
+  jam,
+  lib,
+  libGL,
+  libGLU,
+  libX11,
+  libxml2,
+  libxslt,
+  physfs,
+  pkg-config,
+  xorgproto,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -77,7 +78,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "City building game";
-    license = licenses.gpl2;
+    mainProgram = "lincity-ng";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

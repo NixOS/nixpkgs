@@ -1,26 +1,26 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, alcotest
-, dedukti
-, bindlib
-, camlp-streams
-, cmdliner
-, menhir
-, pratter
-, sedlex
-, stdlib-shims
-, timed
-, why3
-, yojson
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  alcotest,
+  dedukti,
+  bindlib,
+  camlp-streams,
+  cmdliner,
+  menhir,
+  pratter,
+  sedlex,
+  stdlib-shims,
+  timed,
+  why3,
+  yojson,
 }:
 
 buildDunePackage rec {
   pname = "lambdapi";
   version = "2.3.1";
 
-  minimalOCamlVersion = "4.08";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
@@ -29,10 +29,21 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
-    bindlib camlp-streams cmdliner pratter sedlex stdlib-shims timed why3 yojson
+    bindlib
+    camlp-streams
+    cmdliner
+    pratter
+    sedlex
+    stdlib-shims
+    timed
+    why3
+    yojson
   ];
 
-  checkInputs = [ alcotest dedukti ];
+  checkInputs = [
+    alcotest
+    dedukti
+  ];
   doCheck = false; # anomaly: Sys_error("/homeless-shelter/.why3.conf: No such file or directory")
 
   meta = with lib; {

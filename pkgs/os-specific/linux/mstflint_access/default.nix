@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel, kmod, mstflint }:
+{ lib, stdenv, fetchurl, kernel, kmod, mstflint, kernelModuleMakeFlags }:
 
 stdenv.mkDerivation rec {
   pname = "mstflint_access";
@@ -6,21 +6,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/kernel-mstflint-${version}.tar.gz";
-    hash = "sha256-rfZts0m8x6clVazpbAa2xK+dYgRU9Us5rbcWa0uHJ1M=";
+    hash = "sha256-DfXaU31itartFgTeCtWNZrskjUqc1a62dRO/gTfgCHk=";
   };
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
   enableParallelBuilding = true;
-
-  preConfigure = lib.optionals (lib.versionAtLeast kernel.version "6.4") ''
-    sed -i "s/class_create(THIS_MODULE, dev->name)/class_create(dev->name)/g" mst_main.c
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -31,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A kernel module for Nvidia NIC firmware update";
+    description = "Kernel module for Nvidia NIC firmware update";
     homepage = "https://github.com/Mellanox/mstflint";
     license = [ licenses.gpl2Only ];
     maintainers = with maintainers; [ thillux ];

@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, fetchurl
-, imagemagick
-, pcsclite
-, pyotherside
-, python3
-, qmake
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, yubikey-manager4
-, yubikey-personalization
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  imagemagick,
+  pcsclite,
+  pyotherside,
+  python3,
+  qmake,
+  qtbase,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  yubikey-manager,
+  yubikey-personalization,
 }:
 
 mkDerivation rec {
@@ -18,8 +19,8 @@ mkDerivation rec {
   version = "1.2.5";
 
   src = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
+    url = "https://developers.yubico.com/yubikey-manager-qt/Releases/yubikey-manager-qt-${version}.tar.gz";
+    hash = "sha256-6bKeR3UX2DhXGcKJ1bxvT1aLTgCfc+aNo6ckE89NV+I=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ mkDerivation rec {
   ];
 
   pythonPath = [
-    (yubikey-manager4.override { python3Packages = python3.pkgs; })
+    (yubikey-manager.override { python3Packages = python3.pkgs; })
   ];
 
   postInstall = ''
@@ -67,7 +68,13 @@ mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ pcsclite yubikey-personalization ])
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      pcsclite
+      yubikey-personalization
+    ])
   ];
 
   preFixup = ''

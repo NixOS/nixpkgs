@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, dulwich
-, mercurial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  dulwich,
+  mercurial,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.1.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WoQOh6cKFcnB4GGWvD7VlV53LxHpsYA+iMDJ9VrwNBY=";
+    pname = "hg_git";
+    inherit version;
+    hash = "sha256-XF9vAtvUK5yRP4OxZv83/AA2jde5t7za3jqgyuXc5eU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dulwich
     mercurial
   ];
 
-  pythonImportsCheck = [
-    "hggit"
-  ];
+  pythonImportsCheck = [ "hggit" ];
 
   meta = with lib; {
     description = "Push and pull from a Git server using Mercurial";

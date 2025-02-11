@@ -1,32 +1,44 @@
-{ stdenv, lib, fetchFromGitHub, gcc, postgresql }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
-stdenv.mkDerivation {
-
+buildPostgresqlExtension {
   pname = "pg_similarity";
-  version = "1.0";
+  version = "pg_similarity_1_0-unstable-2021-01-12";
+
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "pg_similarity";
-    rev = "be1a8b08c8716e59b89982557da9ea68cdf868c5";
-    sha256 = "1z4v4r2yccdr8kz3935fnk1bc5vj0qj0apscldyap4wxlyi89xim";
+    rev = "b9cb0a2d501b91e33cd1ef550b05483ca3563f71";
+    sha256 = "sha256-L04ANvyfzHgW7fINeJEY6T77Vojq3SI8P1TWiCRSPs0=";
   };
 
-  buildInputs = [ postgresql gcc ];
-  buildPhase = "USE_PGXS=1 make";
-  installPhase = ''
-    install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
-    install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
-  '';
+  patches = [
+    (fetchpatch {
+      # https://github.com/eulerto/pg_similarity/pull/43
+      # Also applied in debian as https://sources.debian.org/data/main/p/pg-similarity/1.0-8/debian/patches/pg16
+      name = "pg16.patch";
+      url = "https://github.com/eulerto/pg_similarity/commit/f7781ea5ace80f697a8249e03e3ce47d4b0f6b2f.patch";
+      hash = "sha256-MPDvWfNzSg28lXL5u5/Un9pOCJjqJ4Fz9b8XCfalgts=";
+    })
+  ];
+
+  makeFlags = [ "USE_PGXS=1" ];
 
   meta = {
-    description = "An extension to support similarity queries on PostgreSQL";
+    description = "Extension to support similarity queries on PostgreSQL";
     longDescription = ''
-       pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
-       is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
-       operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
+      pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
+      is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
+      operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danbst ];
   };
 }

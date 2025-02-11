@@ -1,13 +1,15 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "mutesync";
   version = "0.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

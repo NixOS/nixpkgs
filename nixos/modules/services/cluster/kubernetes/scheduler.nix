@@ -1,7 +1,10 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
@@ -11,43 +14,43 @@ in
   ###### interface
   options.services.kubernetes.scheduler = with lib.types; {
 
-    address = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening address.";
+    address = lib.mkOption {
+      description = "Kubernetes scheduler listening address.";
       default = "127.0.0.1";
       type = str;
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes scheduler");
+    enable = lib.mkEnableOption "Kubernetes scheduler";
 
-    extraOpts = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler extra command line options.";
+    extraOpts = lib.mkOption {
+      description = "Kubernetes scheduler extra command line options.";
       default = "";
       type = separatedString " ";
     };
 
-    featureGates = mkOption {
-      description = lib.mdDoc "List set of feature gates";
+    featureGates = lib.mkOption {
+      description = "Attribute set of feature gates.";
       default = top.featureGates;
-      defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
+      defaultText = lib.literalExpression "config.${otop.featureGates}";
+      type = attrsOf bool;
     };
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes scheduler";
 
-    leaderElect = mkOption {
-      description = lib.mdDoc "Whether to start leader election before executing main loop.";
+    leaderElect = lib.mkOption {
+      description = "Whether to start leader election before executing main loop.";
       type = bool;
       default = true;
     };
 
-    port = mkOption {
-      description = lib.mdDoc "Kubernetes scheduler listening port.";
+    port = lib.mkOption {
+      description = "Kubernetes scheduler listening port.";
       default = 10251;
       type = port;
     };
 
-    verbosity = mkOption {
-      description = lib.mdDoc ''
+    verbosity = lib.mkOption {
+      description = ''
         Optional glog verbosity level for logging statements. See
         <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
@@ -58,22 +61,29 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.kube-scheduler = {
       description = "Kubernetes Scheduler Service";
       wantedBy = [ "kubernetes.target" ];
       after = [ "kube-apiserver.service" ];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''${top.package}/bin/kube-scheduler \
-          --bind-address=${cfg.address} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
-          --leader-elect=${boolToString cfg.leaderElect} \
-          --secure-port=${toString cfg.port} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-          ${cfg.extraOpts}
+        ExecStart = ''
+          ${top.package}/bin/kube-scheduler \
+                    --bind-address=${cfg.address} \
+                    ${
+                      lib.optionalString (cfg.featureGates != { })
+                        "--feature-gates=${
+                          lib.concatStringsSep "," (
+                            builtins.attrValues (lib.mapAttrs (n: v: "${n}=${lib.trivial.boolToString v}") cfg.featureGates)
+                          )
+                        }"
+                    } \
+                    --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
+                    --leader-elect=${lib.boolToString cfg.leaderElect} \
+                    --secure-port=${toString cfg.port} \
+                    ${lib.optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+                    ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
         User = "kubernetes";
@@ -94,7 +104,7 @@ in
       };
     };
 
-    services.kubernetes.scheduler.kubeconfig.server = mkDefault top.apiserverAddress;
+    services.kubernetes.scheduler.kubeconfig.server = lib.mkDefault top.apiserverAddress;
   };
 
   meta.buildDocsInSandbox = false;

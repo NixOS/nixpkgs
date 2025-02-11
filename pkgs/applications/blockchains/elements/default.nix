@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , autoreconfHook
 , pkg-config
 , util-linux
@@ -24,20 +25,28 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "elements" else "elementsd";
-  version = "22.1.1";
+  version = "23.2.4";
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
     rev = "elements-${version}";
-    sha256 = "sha256-V8Ym4dGshf2E6KsboALXn1DJ5nL3QQvMmVMNdjSw7B8=";
+    sha256 = "sha256-UNjYkEZBjGuhkwBxSkNXjBBcLQqoan/afCLhoR2lOY4=";
   };
+
+  patches = [
+    # upnp: fix build with miniupnpc 2.2.8
+    (fetchpatch2 {
+      url = "https://github.com/bitcoin/bitcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
+      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
+    })
+  ];
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
-    ++ lib.optionals stdenv.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
 
   # fix "Killed: 9  test/test_bitcoin"
   # https://github.com/NixOS/nixpkgs/issues/179474
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "fortify" "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "fortify" "stackprotector" ];
 
   nativeCheckInputs = [ python3 ];
 

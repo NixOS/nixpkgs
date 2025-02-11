@@ -6,14 +6,14 @@
 
 buildOctavePackage rec {
   pname = "netcdf";
-  version = "1.0.16";
+  version = "1.0.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1Lr+6xLRXxSeUhM9+WdCUPFRZSWdxtAQlxpiv4CHJrs=";
+    sha256 = "sha256-ydgcKFh4uWuSlr7zw+k1JFUSzGm9tiWmOHV1IWvlgwk=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     netcdf
   ];
 
@@ -21,6 +21,6 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/netcdf/index.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "A NetCDF interface for Octave";
+    description = "NetCDF interface for Octave";
   };
 }

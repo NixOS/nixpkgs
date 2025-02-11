@@ -1,51 +1,52 @@
-{ lib, stdenv, buildPackages
-, newScope, overrideCC, crossLibcStdenv, libcCross
+{
+  lib,
+  stdenv,
+  buildPackages,
+  newScope,
+  overrideCC,
+  stdenvNoLibc,
+  libcCross,
 }:
 
-lib.makeScope newScope (self: with self; {
+lib.makeScope newScope (
+  self: with self; {
 
-  cygwinSetup = callPackage ./cygwin-setup { };
+    cygwinSetup = callPackage ./cygwin-setup { };
 
-  dlfcn = callPackage ./dlfcn { };
+    dlfcn = callPackage ./dlfcn { };
 
-  w32api = callPackage ./w32api { };
+    w32api = callPackage ./w32api { };
 
-  mingwrt = callPackage ./mingwrt { };
-  mingw_runtime = mingwrt;
+    mingwrt = callPackage ./mingwrt { };
+    mingw_runtime = mingwrt;
 
-  mingw_w64 = callPackage ./mingw-w64 {
-    stdenv = crossLibcStdenv;
-  };
+    mingw_w64 = callPackage ./mingw-w64 {
+      stdenv = stdenvNoLibc;
+    };
 
-  crossThreadsStdenv = overrideCC crossLibcStdenv
-    (if stdenv.hostPlatform.useLLVM or false
-     then buildPackages.llvmPackages_8.clangNoLibcxx
-     else buildPackages.gccWithoutTargetLibc.override (old: {
-       bintools = old.bintools.override {
-         libc = libcCross;
-       };
-       libc = libcCross;
-     }));
+    # FIXME untested with llvmPackages_16 was using llvmPackages_8
+    crossThreadsStdenv = overrideCC stdenvNoLibc (
+      if stdenv.hostPlatform.useLLVM or false then
+        buildPackages.llvmPackages.clangNoLibcxx
+      else
+        buildPackages.gccWithoutTargetLibc.override (old: {
+          bintools = old.bintools.override {
+            libc = libcCross;
+          };
+          libc = libcCross;
+        })
+    );
 
-  mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
+    mingw_w64_headers = callPackage ./mingw-w64/headers.nix { };
 
-  mingw_w64_pthreads = callPackage ./mingw-w64/pthreads.nix {
-    stdenv = crossThreadsStdenv;
-  };
+    mingw_w64_pthreads = callPackage ./mingw-w64/pthreads.nix { stdenv = crossThreadsStdenv; };
 
-  mcfgthreads_pre_gcc_13 = callPackage ./mcfgthreads/pre_gcc_13.nix {
-    stdenv = crossThreadsStdenv;
-  };
+    mcfgthreads = callPackage ./mcfgthreads { stdenv = crossThreadsStdenv; };
 
-  mcfgthreads = callPackage ./mcfgthreads {
-    stdenv = crossThreadsStdenv;
-  };
+    npiperelay = callPackage ./npiperelay { };
 
-  npiperelay = callPackage ./npiperelay { };
+    pthreads = callPackage ./pthread-w32 { };
 
-  pthreads = callPackage ./pthread-w32 { };
-
-  wxMSW = callPackage ./wxMSW-2.8 { };
-
-  libgnurx = callPackage ./libgnurx { };
-})
+    libgnurx = callPackage ./libgnurx { };
+  }
+)

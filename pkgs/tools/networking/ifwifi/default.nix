@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  makeWrapper,
+  networkmanager,
+  iw,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";
@@ -11,26 +20,30 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 
-  cargoHash = "sha256-TL7ZsRbpRdYymJHuoCUCqe/U3Vacb9mtKFh85IOl+PA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oxuOc9FSKYq6UjimZPLayJ+5xsWzh3gZV/mVpPbPWHk=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     wrapProgram "$out/bin/ifwifi" \
-      --prefix PATH : "${lib.makeBinPath (
-        # `ifwifi` runtime dep
-        [ networkmanager ]
-        # `wifiscanner` crate's runtime deps
-        ++ (lib.optional stdenv.isLinux iw)
-        # ++ (lib.optional stdenv.isDarwin airport) # airport isn't packaged
-      )}"
+      --prefix PATH : "${
+        lib.makeBinPath (
+          # `ifwifi` runtime dep
+          [ networkmanager ]
+          # `wifiscanner` crate's runtime deps
+          ++ (lib.optional stdenv.hostPlatform.isLinux iw)
+          # ++ (lib.optional stdenv.hostPlatform.isDarwin airport) # airport isn't packaged
+        )
+      }"
   '';
 
   doCheck = true;
 
   meta = with lib; {
-    description = "A simple wrapper over nmcli using wifiscanner made in rust";
+    description = "Simple wrapper over nmcli using wifiscanner made in rust";
+    mainProgram = "ifwifi";
     longDescription = ''
       In the author's words:
 

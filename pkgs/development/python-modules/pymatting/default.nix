@@ -1,39 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numba
-, numpy
-, pillow
-, scipy
-, pytestCheckHook
-,
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numba,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  scipy,
+  setuptools,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cupy,
+  pyopencl,
 }:
+
 buildPythonPackage rec {
   pname = "pymatting";
-  version = "1.1.2";
-  format = "setuptools";
+  version = "1.1.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
-    rev = "v${version}";
-    hash = "sha256-9eRpsWwXAkp6aw1ZWJsUFf0BMIN0UBFc2rW1lltL2cw=";
+    tag = "v${version}";
+    hash = "sha256-AzdhRZgcT+gfLPZYKJLQUW7uLyXoRy6SP2raHWd9XUY=";
   };
 
-  patches = [ ./01-kdtree-signature.patch ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numba
-    numpy
-    pillow
-    scipy
-  ];
+  dependencies =
+    [
+      numba
+      numpy
+      pillow
+      scipy
+    ]
+    ++ lib.optionals cudaSupport [
+      cupy
+      pyopencl
+    ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pymatting" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
 
   disabledTests = [
     # no access to input data set
@@ -45,11 +54,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for alpha matting";
+    description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";
-    changelog = "https://github.com/pymatting/pymatting/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pymatting/pymatting/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

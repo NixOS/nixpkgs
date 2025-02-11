@@ -9,6 +9,8 @@ image as an uncompressed tarball to stdout:
   the fields with the same name on the image spec [2].
 * "created" can be "now".
 * "created" is also used as mtime for files added to the image.
+* "uid", "gid", "uname", "gname" is the file ownership, for example,
+  0, 0, "root", "root".
 * "store_layers" is a list of layers in ascending order, where each
   layer is the list of store paths to include in that layer.
 
@@ -30,7 +32,7 @@ function does all this.
 [2]: https://github.com/moby/moby/blob/4fb59c20a4fb54f944fe170d0ff1d00eb4a24d6f/image/spec/v1.2.md#image-json-field-descriptions
 """  # noqa: E501
 
-
+import argparse
 import io
 import os
 import re
@@ -45,7 +47,7 @@ from datetime import datetime, timezone
 from collections import namedtuple
 
 
-def archive_paths_to(obj, paths, mtime):
+def archive_paths_to(obj, paths, mtime, uid, gid, uname, gname):
     """
     Writes the given store paths as a tar file to the given stream.
 
@@ -61,14 +63,14 @@ def archive_paths_to(obj, paths, mtime):
 
     def apply_filters(ti):
         ti.mtime = mtime
-        ti.uid = 0
-        ti.gid = 0
-        ti.uname = "root"
-        ti.gname = "root"
+        ti.uid = uid
+        ti.gid = gid
+        ti.uname = uname
+        ti.gname = gname
         return ti
 
     def nix_root(ti):
-        ti.mode = 0o0555  # r-xr-xr-x
+        ti.mode = 0o0755  # rwxr-xr-x
         return ti
 
     def dir(path):
@@ -208,7 +210,7 @@ def overlay_base_config(from_image, final_config):
     return final_config
 
 
-def add_layer_dir(tar, paths, store_dir, mtime):
+def add_layer_dir(tar, paths, store_dir, mtime, uid, gid, uname, gname):
     """
     Appends given store paths to a TarFile object as a new layer.
 
@@ -223,16 +225,13 @@ def add_layer_dir(tar, paths, store_dir, mtime):
     """
 
     invalid_paths = [i for i in paths if not i.startswith(store_dir)]
-    assert len(invalid_paths) == 0, \
-        f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
+    assert (
+        len(invalid_paths) == 0
+    ), f"Expecting absolute paths from {store_dir}, but got: {invalid_paths}"
 
     # First, calculate the tarball checksum and the size.
     extract_checksum = ExtractChecksum()
-    archive_paths_to(
-        extract_checksum,
-        paths,
-        mtime=mtime,
-    )
+    archive_paths_to(extract_checksum, paths, mtime, uid, gid, uname, gname)
     (checksum, size) = extract_checksum.extract()
 
     path = f"{checksum}/layer.tar"
@@ -243,12 +242,9 @@ def add_layer_dir(tar, paths, store_dir, mtime):
     # Then actually stream the contents to the outer tarball.
     read_fd, write_fd = os.pipe()
     with open(read_fd, "rb") as read, open(write_fd, "wb") as write:
+
         def producer():
-            archive_paths_to(
-                write,
-                paths,
-                mtime=mtime,
-            )
+            archive_paths_to(write, paths, mtime, uid, gid, uname, gname)
             write.close()
 
         # Closing the write end of the fifo also closes the read end,
@@ -290,10 +286,7 @@ def add_customisation_layer(target_tar, customisation_layer, mtime):
         target_tar.addfile(tarinfo, f)
 
     return LayerInfo(
-      size=None,
-      checksum=checksum,
-      path=path,
-      paths=[customisation_layer]
+        size=None, checksum=checksum, path=path, paths=[customisation_layer]
     )
 
 
@@ -314,16 +307,56 @@ def add_bytes(tar, path, content, mtime):
     tar.addfile(ti, io.BytesIO(content))
 
 
+now = datetime.now(tz=timezone.utc)
+
+
+def parse_time(s):
+    if s == "now":
+        return now
+    return datetime.fromisoformat(s)
+
+
 def main():
-    with open(sys.argv[1], "r") as f:
+    arg_parser = argparse.ArgumentParser(
+        description="""
+This script generates a Docker image from a set of store paths. Uses
+Docker Image Specification v1.2 as reference [1].
+
+[1]: https://github.com/moby/moby/blob/master/image/spec/v1.2.md
+    """
+    )
+    arg_parser.add_argument(
+        "conf",
+        type=str,
+        help="""
+        JSON file with the following properties and writes the
+        image as an uncompressed tarball to stdout:
+
+        * "architecture", "config", "os", "created", "repo_tag" correspond to
+        the fields with the same name on the image spec [2].
+        * "created" can be "now".
+        * "created" is also used as mtime for files added to the image.
+        * "uid", "gid", "uname", "gname" is the file ownership, for example,
+        0, 0, "root", "root".
+        * "store_layers" is a list of layers in ascending order, where each
+        layer is the list of store paths to include in that layer.
+    """,
+    )
+    arg_parser.add_argument(
+        "--repo_tag", "-t", type=str,
+        help="Override the RepoTags from the configuration"
+    )
+
+    args = arg_parser.parse_args()
+    with open(args.conf, "r") as f:
         conf = json.load(f)
 
-    created = (
-      datetime.now(tz=timezone.utc)
-      if conf["created"] == "now"
-      else datetime.fromisoformat(conf["created"])
-    )
-    mtime = int(created.timestamp())
+    created = parse_time(conf["created"])
+    mtime = int(parse_time(conf["mtime"]).timestamp())
+    uid = int(conf["uid"])
+    gid = int(conf["gid"])
+    uname = conf["uname"]
+    gname = conf["gname"]
     store_dir = conf["store_dir"]
 
     from_image = load_from_image(conf["from_image"])
@@ -334,19 +367,28 @@ def main():
 
         start = len(layers) + 1
         for num, store_layer in enumerate(conf["store_layers"], start=start):
-            print("Creating layer", num, "from paths:", store_layer,
-                  file=sys.stderr)
-            info = add_layer_dir(tar, store_layer, store_dir, mtime=mtime)
+            print(
+                "Creating layer",
+                num,
+                "from paths:",
+                store_layer,
+                file=sys.stderr,
+            )
+            info = add_layer_dir(
+                tar, store_layer, store_dir, mtime, uid, gid, uname, gname
+            )
             layers.append(info)
 
-        print("Creating layer", len(layers) + 1, "with customisation...",
-              file=sys.stderr)
+        print(
+            "Creating layer",
+            len(layers) + 1,
+            "with customisation...",
+            file=sys.stderr,
+        )
         layers.append(
-          add_customisation_layer(
-            tar,
-            conf["customisation_layer"],
-            mtime=mtime
-          )
+            add_customisation_layer(
+                tar, conf["customisation_layer"], mtime=mtime
+            )
         )
 
         print("Adding manifests...", file=sys.stderr)
@@ -362,8 +404,8 @@ def main():
             },
             "history": [
                 {
-                  "created": datetime.isoformat(created),
-                  "comment": f"store paths: {layer.paths}"
+                    "created": datetime.isoformat(created),
+                    "comment": f"store paths: {layer.paths}",
                 }
                 for layer in layers
             ],
@@ -377,7 +419,7 @@ def main():
         manifest_json = [
             {
                 "Config": image_json_path,
-                "RepoTags": [conf["repo_tag"]],
+                "RepoTags": [args.repo_tag or conf["repo_tag"]],
                 "Layers": [layer.path for layer in layers],
             }
         ]

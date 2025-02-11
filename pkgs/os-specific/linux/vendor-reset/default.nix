@@ -1,23 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch, kernel, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vendor-reset";
-  version = "unstable-2021-02-16-${kernel.version}";
+  version = "unstable-2024-04-16-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "vendor-reset";
-    rev = "225a49a40941e350899e456366265cf82b87ad25";
-    sha256 = "sha256-xa7P7+mRk4FVgi+YYCcsFLfyNqPmXvy3xhGoTDVqPxw=";
+    rev = "084881c6e9e11bdadaf05798e669568848e698a3";
+    hash = "sha256-Klu2uysbF5tH7SqVl815DwR7W+Vx6PyVDDLwoMZiqBI=";
   };
 
   patches = [
-    # Fix build with Linux 5.18.
-    # https://github.com/gnif/vendor-reset/pull/58
-    (fetchpatch {
-      url = "https://github.com/gnif/vendor-reset/commit/5bbffcd6fee5348e8808bdbfcb5b21d455b02f55.patch";
-      sha256 = "sha256-L1QxVpcZAVYiaMFCBfL2EJgeMyOR8sDa1UqF1QB3bns=";
-    })
+    # This is a temporary, vendored version of this upstream PR:
+    # https://github.com/gnif/vendor-reset/pull/86
+    # As soon as it is merged, we should be able to update this
+    # module and remove the patch.
+    ./fix-linux-6.12-build.patch
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -39,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Linux kernel vendor specific hardware reset module";
     homepage = "https://github.com/gnif/vendor-reset";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "4.19";
   };

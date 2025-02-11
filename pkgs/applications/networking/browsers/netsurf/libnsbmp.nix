@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libnsbmp";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/libnsbmp-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-ecSTZfhg7UUb/EEJ7d7I3j6bfOWjvgaVlr0qoZJ5Mk8=";
+    hash = "sha256-VAenaCoSK6qqWhW1BSkOLTffVME8Xt70sJ0SyGLYIpM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

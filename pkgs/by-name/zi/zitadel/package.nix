@@ -1,31 +1,33 @@
-{ stdenv
-, buildGo121Module
-, callPackage
-, fetchFromGitHub
-, lib
+{
+  stdenv,
+  buildGoModule,
+  callPackage,
+  fetchFromGitHub,
+  lib,
 
-, buf
-, cacert
-, grpc-gateway
-, protoc-gen-go
-, protoc-gen-go-grpc
-, protoc-gen-validate
-, sass
-, statik
+  buf,
+  cacert,
+  grpc-gateway,
+  protoc-gen-go,
+  protoc-gen-go-grpc,
+  protoc-gen-validate,
+  sass,
+  statik,
 }:
 
 let
-  version = "2.40.3";
+  version = "2.58.3";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-WqsK6DAYkLs5wBNvkVGarLMm/unBLtipFkl07pR90HI=";
+    hash = "sha256-RXcJwGO8OQ38lbuy2uLTSkh6yUbyqY42FpwgMXC3g6c=";
   };
-  goModulesHash = "sha256-IVf1YVnhyEYgZqM31Cv3aBFnPG7v5WW6fCEvlN+sTIE=";
+  goModulesHash = "sha256-gp17dP67HX7Tx3Gq+kEu9xCYkfs/rGpqLFiKT7cKlrc=";
 
-  buildZitadelProtocGen = name:
-    buildGo121Module {
+  buildZitadelProtocGen =
+    name:
+    buildGoModule {
       pname = "protoc-gen-${name}";
       inherit version;
 
@@ -51,23 +53,27 @@ let
   # can download what it needs, and output the relevant generated code for use
   # during the main build.
   generateProtobufCode =
-    { pname
-    , nativeBuildInputs ? [ ]
-    , bufArgs ? ""
-    , workDir ? "."
-    , outputPath
-    , hash
+    {
+      pname,
+      nativeBuildInputs ? [ ],
+      bufArgs ? "",
+      workDir ? ".",
+      outputPath,
+      hash,
     }:
     stdenv.mkDerivation {
       name = "${pname}-buf-generated";
 
       src = zitadelRepo;
+      patches = [ ./console-use-local-protobuf-plugins.patch ];
 
-      nativeBuildInputs = nativeBuildInputs ++ [ buf ];
+      nativeBuildInputs = nativeBuildInputs ++ [
+        buf
+        cacert
+      ];
 
       buildPhase = ''
         cd ${workDir}
-        export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
         HOME=$TMPDIR buf generate ${bufArgs}
       '';
 
@@ -91,23 +97,27 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-xrEF1B4pMoCZs1WO9F6IoqHnSyt5BhPVTIABMWK/q2E=";
+    hash = "sha256-KRf11PNn7LtVFjG3NYUtPEJtLNbnxfzR4B69US07B3k=";
   };
 in
-buildGo121Module rec {
-  name = "zitadel";
+buildGoModule rec {
+  pname = "zitadel";
   inherit version;
 
   src = zitadelRepo;
 
-  nativeBuildInputs = [ sass statik ];
+  nativeBuildInputs = [
+    sass
+    statik
+  ];
 
   proxyVendor = true;
   vendorHash = goModulesHash;
+  ldflags = [ "-X 'github.com/zitadel/zitadel/cmd/build.version=${version}'" ];
 
   # Adapted from Makefile in repo, with dependency fetching and protobuf codegen
   # bits removed
-  buildPhase = ''
+  preBuild = ''
     mkdir -p pkg/grpc
     cp -r ${protobufGenerated}/grpc/github.com/zitadel/zitadel/pkg/grpc/* pkg/grpc
     mkdir -p openapi/v2/zitadel
@@ -122,20 +132,19 @@ buildGo121Module rec {
     go run internal/api/assets/generator/asset_generator.go -directory=internal/api/assets/generator/ -assets=docs/apis/assets/assets.md
 
     cp -r ${passthru.console}/* internal/api/ui/console/static
-    CGO_ENABLED=0 go build -o zitadel -v -ldflags="-s -w -X 'github.com/zitadel/zitadel/cmd/build.version=${version}'"
   '';
+
+  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/bin
-    install -Dm755 zitadel $out/bin/
+    install -Dm755 $GOPATH/bin/zitadel $out/bin/
   '';
 
   passthru = {
-    console = callPackage
-      (import ./console.nix {
-        inherit generateProtobufCode version zitadelRepo;
-      })
-      { };
+    console = callPackage (import ./console.nix {
+      inherit generateProtobufCode version zitadelRepo;
+    }) { };
   };
 
   meta = with lib; {
@@ -145,6 +154,6 @@ buildGo121Module rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
     sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = with maintainers; [ Sorixelle ];
+    maintainers = [ maintainers.nrabulinski ];
   };
 }

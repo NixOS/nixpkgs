@@ -1,18 +1,23 @@
-import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
+import ./make-test-python.nix (
+  {
+    pkgs,
+    latestKernel ? false,
+    ...
+  }:
 
-{
-  name = "login";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
-
-  nodes.machine =
-    { pkgs, lib, ... }:
-    { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
-      sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
+  {
+    name = "login";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
     };
 
-  testScript = ''
+    nodes.machine =
+      { pkgs, lib, ... }:
+      {
+        boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
+      };
+
+    testScript = ''
       machine.start(allow_reboot = True)
 
       machine.wait_for_unit("multi-user.target")
@@ -64,5 +69,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           assert boot_id2 != ""
 
           assert boot_id1 != boot_id2
-  '';
-})
+    '';
+  }
+)

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "python-wink";
   version = "1.10.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

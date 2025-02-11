@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qtbase,
+  qtx11extras,
+  ncurses5,
+  xorg,
+  zlib,
+  python27Packages,
+}:
 stdenv.mkDerivation {
   pname = "fdr";
   version = "4.2.7";
@@ -61,7 +71,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://cocotec.io/fdr/";
-    description = "The CSP refinement checker";
+    description = "CSP refinement checker";
     license = licenses.unfreeRedistributable;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;

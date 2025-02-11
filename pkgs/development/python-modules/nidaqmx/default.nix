@@ -1,59 +1,85 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, numpy
-, pytestCheckHook
-, pykka
-, enum34
-, pythonOlder
-, pythonAtLeast
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  numpy,
+  deprecation,
+  hightime,
+  tzlocal,
+  python-decouple,
+  click,
+  distro,
+  requests,
+  sphinx,
+  sphinx-rtd-theme,
+  grpcio,
+  protobuf,
+  toml,
 }:
-
-# Note we currently do not patch the path to the drivers
-# because those are not available in Nixpkgs.
-# https://github.com/NixOS/nixpkgs/pull/74980
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = src.rev;
-
-  # 3.10 is not supported, upstream inactive
-  disabled = pythonAtLeast "3.10";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    rev = "0.5.7";
-    sha256 = "19m9p99qvdmvvqbwmqrqm6b50x7czgrj07gdsxbbgw04shf5bhrs";
+    rev = "${version}";
+    hash = "sha256-rf5cGq3Iv6ucURSUFuFANQzaGeufBZ+adjKlg4B5DRY=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-    six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
-  ];
+  disabled = pythonOlder "3.8";
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pykka
-  ];
+  build-system = [ poetry-core ];
 
-  dontUseSetuptoolsCheck = true;
+  prePatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
 
-  # Older pytest is needed
-  # https://github.com/ni/nidaqmx-python/issues/80
-  # Fixture "x_series_device" called directly. Fixtures are not meant to be called directly
+    substituteInPlace pyproject.toml \
+      --replace-fail '["poetry>=1.2"]' '["poetry-core>=1.0.0"]'
+  '';
+
+  dependencies =
+    [
+      numpy
+      deprecation
+      hightime
+      tzlocal
+      python-decouple
+      click
+      requests
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      distro
+    ];
+
+  passthru.optional-dependencies = {
+    docs = [
+      sphinx
+      sphinx-rtd-theme
+      toml
+    ];
+    grpc = [
+      grpcio
+      protobuf
+    ];
+  };
+
+  # Tests require hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nidaqmx.task"
-  ];
+  pythonImportsCheck = [ "nidaqmx" ];
 
   meta = {
+    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/v${version}";
     description = "API for interacting with the NI-DAQmx driver";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
+    homepage = "https://github.com/ni/nidaqmx-python";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fsagbuya ];
   };
 }

@@ -1,17 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cpupower-gui;
-in {
+in
+{
   options = {
     services.cpupower-gui = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
         example = true;
-        description = lib.mdDoc ''
+        description = ''
           Enables dbus/systemd service needed by cpupower-gui.
           These services are responsible for retrieving and modifying cpu power
           saving settings.
@@ -20,7 +23,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.cpupower-gui ];
     services.dbus.packages = [ pkgs.cpupower-gui ];
     systemd.user = {

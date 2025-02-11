@@ -1,53 +1,71 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, marshmallow
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, python-dateutil
-, pythonOlder
-, requests
-, requests-pkcs12
-, responses
-, restfly
-, semver
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  gql,
+  graphql-core,
+  marshmallow,
+  pydantic-extra-types,
+  pydantic,
+  pytest-cov-stub,
+  pytest-datafiles,
+  pytest-vcr,
+  pytestCheckHook,
+  python-box,
+  python-dateutil,
+  pythonOlder,
+  requests-pkcs12,
+  requests-toolbelt,
+  requests,
+  responses,
+  restfly,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.14";
+  version = "1.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-EZ6W7DTcmZWjP2BmopU2G3S/82juGG+/ht5Fd8G0W1A=";
+    tag = version;
+    hash = "sha256-IPhuxjUmj4g5UxuCZsthZytgDsFiplPt+dIsCHgfMdg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  pythonRelaxDeps = [
+    "cryptography"
+    "defusedxml"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cryptography
     defusedxml
+    gql
+    graphql-core
     marshmallow
+    pydantic
+    pydantic-extra-types
     python-box
     python-dateutil
     requests
+    requests-toolbelt
     restfly
     semver
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
@@ -71,9 +89,7 @@ buildPythonPackage rec {
     "test_events_list_vcr"
   ];
 
-  pythonImportsCheck = [
-    "tenable"
-  ];
+  pythonImportsCheck = [ "tenable" ];
 
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";

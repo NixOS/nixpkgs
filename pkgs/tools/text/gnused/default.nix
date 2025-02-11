@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  updateAutotoolsGnuConfigScriptsHook,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
@@ -9,9 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
   };
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+    perl
+  ];
   preConfigure = "patchShebangs ./build-aux/help2man";
 
   # Prevents attempts of running 'help2man' on cross-built binaries.

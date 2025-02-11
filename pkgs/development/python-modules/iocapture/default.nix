@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flexmock
-, pytest
-, pytest-cov
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flexmock,
+  pytest,
+  pytest-cov-stub,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "iocapture";
   version = "0.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flexmock
     pytest
-    pytest-cov
+    pytest-cov-stub
     six
   ];
 
@@ -27,7 +29,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Capture stdout, stderr easily.";
+    description = "Capture stdout, stderr easily";
     homepage = "https://github.com/oinume/iocapture";
     license = licenses.mit;
   };

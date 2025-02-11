@@ -1,15 +1,46 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config
-, qtbase, qttools, qtmultimedia, wrapQtAppsHook
-# transports
-, curl, libmms
-# input plugins
-, libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
-, libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi, libbs2b, game-music-emu
-, libarchive, opusfile, soxr, wavpack
-# output plugins
-, alsa-lib, libpulseaudio, pipewire, libjack2
-# effect plugins
-, libsamplerate
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  wrapQtAppsHook,
+  # transports
+  curl,
+  libmms,
+  # input plugins
+  libmad,
+  taglib,
+  libvorbis,
+  libogg,
+  flac,
+  libmpcdec,
+  libmodplug,
+  libsndfile,
+  libcdio,
+  cdparanoia,
+  libcddb,
+  faad2,
+  ffmpeg,
+  wildmidi,
+  libbs2b,
+  game-music-emu,
+  libarchive,
+  opusfile,
+  soxr,
+  wavpack,
+  libxmp,
+  libsidplayfp,
+  # output plugins
+  alsa-lib,
+  libpulseaudio,
+  pipewire,
+  libjack2,
+  # effect plugins
+  libsamplerate,
 }:
 
 # Additional plugins that can be added:
@@ -26,32 +57,62 @@
 
 stdenv.mkDerivation rec {
   pname = "qmmp";
-  version = "2.1.5";
+  version = "2.1.8";
 
   src = fetchurl {
     url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
-    hash = "sha256-Jb4/KxnY1wtrUTbD+X04Wl7b9A2sZ92E/N1K+dVU95U=";
+    hash = "sha256-hGphQ8epqym47C9doiSOQd3yc28XwV2UsNc7ivhaae4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [ # basic requirements
-      qtbase qttools qtmultimedia
-      # transports
-      curl libmms
-      # input plugins
-      libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
-      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi libbs2b game-music-emu
-      libarchive opusfile soxr wavpack
-      # output plugins
-      alsa-lib libpulseaudio pipewire libjack2
-      # effect plugins
-      libsamplerate
-    ];
+  buildInputs = [
+    # basic requirements
+    qtbase
+    qttools
+    qtmultimedia
+    # transports
+    curl
+    libmms
+    # input plugins
+    libmad
+    taglib
+    libvorbis
+    libogg
+    flac
+    libmpcdec
+    libmodplug
+    libsndfile
+    libcdio
+    cdparanoia
+    libcddb
+    faad2
+    ffmpeg
+    wildmidi
+    libbs2b
+    game-music-emu
+    libarchive
+    opusfile
+    soxr
+    wavpack
+    libxmp
+    libsidplayfp
+    # output plugins
+    alsa-lib
+    libpulseaudio
+    pipewire
+    libjack2
+    # effect plugins
+    libsamplerate
+  ];
 
   meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
+    mainProgram = "qmmp";
     homepage = "https://qmmp.ylsoftware.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

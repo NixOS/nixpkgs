@@ -1,33 +1,34 @@
-{ lib
-, pkgconfig
-, wrapGAppsHook
-, gettext
-, gtk3
-, glib
-, dbus
-, gobject-introspection
-, xmodmap
-, pygobject3
-, setuptools
-, evdev
-, pydantic
-, pydbus
-, psutil
-, fetchFromGitHub
-, buildPythonApplication
-, procps
-, gtksourceview4
-, nixosTests
+{
+  lib,
+  pkgconfig,
+  wrapGAppsHook3,
+  gettext,
+  gtk3,
+  glib,
+  dbus,
+  gobject-introspection,
+  xmodmap,
+  pygobject3,
+  setuptools,
+  evdev,
+  pydantic,
+  pydbus,
+  psutil,
+  fetchFromGitHub,
+  buildPythonApplication,
+  procps,
+  gtksourceview4,
+  nixosTests,
   # Change the default log level to debug for easier debugging of package issues
-, withDebugLogLevel ? false
+  withDebugLogLevel ? false,
   # Xmodmap is an optional dependency
   # If you use Xmodmap to set keyboard mappings (or your DE does)
   # it is required to correctly map keys
-, withXmodmap ? true
+  withXmodmap ? true,
   # Some tests are flakey under high CPU load and could cause intermittent
   # failures when building. Override this to true to run tests anyway
   # See upstream issue: https://github.com/sezanzeb/input-remapper/issues/306
-, withDoCheck ? false
+  withDoCheck ? false,
 }:
 
 let
@@ -44,14 +45,16 @@ in
     hash = "sha256-rwlVGF/cWSv6Bsvhrs6nMDQ8avYT80aasrhWyQv55/A=";
   };
 
-  postPatch = ''
-    # fix FHS paths
-    substituteInPlace inputremapper/configs/data.py \
-      --replace "/usr/share"  "$out/usr/share"
-  '' + lib.optionalString withDebugLogLevel ''
-    # if debugging
-    substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
-  '';
+  postPatch =
+    ''
+      # fix FHS paths
+      substituteInPlace inputremapper/configs/data.py \
+        --replace "/usr/share"  "$out/usr/share"
+    ''
+    + lib.optionalString withDebugLogLevel ''
+      # if debugging
+      substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
+    '';
 
   doCheck = withDoCheck;
   nativeCheckInputs = [
@@ -81,14 +84,22 @@ in
         <allow own=\"*\"/>
       </policy>
     </busconfig>" > dbus.cfg
-    PATH=${lib.makeBinPath ([ dbus procps ] ++ maybeXmodmap)}:$PATH \
+    PATH=${
+      lib.makeBinPath (
+        [
+          dbus
+          procps
+        ]
+        ++ maybeXmodmap
+      )
+    }:$PATH \
       USER="$(id -u -n)" \
       DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket \
       ${dbus}/bin/dbus-run-session --config-file dbus.cfg \
       python tests/test.py --start-dir unit
   '';
 
-  # Nixpkgs 15.9.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.
+  # Nixpkgs 15.9.4.3. When using wrapGAppsHook3 with special derivers you can end up with double wrapped binaries.
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=(
@@ -98,7 +109,7 @@ in
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext # needed to build translations
     gtk3
     glib
@@ -117,18 +128,21 @@ in
   ];
 
   postInstall = ''
-    sed -r "s#RUN\+\=\"/bin/input-remapper-control#RUN\+\=\"$out/bin/input-remapper-control#g" -i data/99-input-remapper.rules
-    sed -r "s#ExecStart\=/usr/bin/input-remapper-service#ExecStart\=$out/bin/input-remapper-service#g" -i data/input-remapper.service
+    substituteInPlace data/99-input-remapper.rules \
+      --replace-fail 'RUN+="/bin/input-remapper-control' "RUN+=\"$out/bin/input-remapper-control"
+    substituteInPlace data/input-remapper.service \
+      --replace-fail 'ExecStart=/usr/bin/input-remapper-service' "ExecStart=$out/bin/input-remapper-service"
+    substituteInPlace data/input-remapper-*.desktop \
+      --replace-fail 'Icon=/usr/share/input-remapper/input-remapper.svg' 'Icon=input-remapper.svg'
 
-    chmod +x data/*.desktop
-
-    install -D -t $out/share/applications/ data/*.desktop
-    install -D -t $out/share/polkit-1/actions/ data/input-remapper.policy
-    install -D data/99-input-remapper.rules $out/etc/udev/rules.d/99-input-remapper.rules
-    install -D data/input-remapper.service $out/lib/systemd/system/input-remapper.service
-    install -D data/input-remapper.policy $out/share/polkit-1/actions/input-remapper.policy
-    install -D data/inputremapper.Control.conf $out/etc/dbus-1/system.d/inputremapper.Control.conf
-    install -D -t $out/usr/share/input-remapper/ data/*
+    install -m644 -D -t $out/share/applications/ data/*.desktop
+    install -m644 -D -t $out/share/polkit-1/actions/ data/input-remapper.policy
+    install -m644 -D data/99-input-remapper.rules $out/etc/udev/rules.d/99-input-remapper.rules
+    install -m644 -D data/input-remapper.service $out/lib/systemd/system/input-remapper.service
+    install -m644 -D data/input-remapper.policy $out/share/polkit-1/actions/input-remapper.policy
+    install -m644 -D data/inputremapper.Control.conf $out/etc/dbus-1/system.d/inputremapper.Control.conf
+    install -m644 -D data/input-remapper.svg $out/share/icons/hicolor/scalable/apps/input-remapper.svg
+    install -m644 -D -t $out/usr/share/input-remapper/ data/*
 
     # Only install input-remapper prefixed binaries, we don't care about deprecated key-mapper ones
     install -m755 -D -t $out/bin/ bin/input-remapper*
@@ -137,21 +151,26 @@ in
   passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
-    description = "An easy to use tool to change the mapping of your input device buttons";
+    description = "Easy to use tool to change the mapping of your input device buttons";
     homepage = "https://github.com/sezanzeb/input-remapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ LunNova ];
     mainProgram = "input-remapper-gtk";
   };
-}).overrideAttrs (final: prev: {
-  # Set in an override as buildPythonApplication doesn't yet support
-  # the `final:` arg yet from #119942 'overlay style overridable recursive attributes'
-  # this ensures the rev matches the input src's rev after overriding
-  # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
-  # discussion
-  postPatch = prev.postPatch or "" + ''
-    # set revision for --version output
-    echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
-  '';
-})
+}).overrideAttrs
+  (
+    final: prev: {
+      # Set in an override as buildPythonApplication doesn't yet support
+      # the `final:` arg yet from #119942 'overlay style overridable recursive attributes'
+      # this ensures the rev matches the input src's rev after overriding
+      # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
+      # discussion
+      postPatch =
+        prev.postPatch or ""
+        + ''
+          # set revision for --version output
+          echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
+        '';
+    }
+  )

@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, arrow
-, six
-, hypothesis
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  arrow,
+  six,
+  hypothesis,
+  num2words,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.28";
+  version = "1.33";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,13 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RA8/or3HTS/rQmG4A/Eg5j24YElaTEpnHa1yksARVMQ=";
+    tag = "v${version}";
+    hash = "sha256-YX+YT3pocauIAsxsfIM+TchiXYMGYVwiE84NnXoZDqQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     arrow
@@ -33,13 +33,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    num2words
     pytestCheckHook
     hypothesis
   ];
 
-  disabledTests = [
-    "test_prostrate"
-  ];
+  disabledTests = [ "test_prostrate" ];
 
   meta = with lib; {
     description = "Print and logging utilities";

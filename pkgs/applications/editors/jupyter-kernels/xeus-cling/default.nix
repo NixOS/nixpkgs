@@ -1,12 +1,11 @@
-{ callPackage
-, clangStdenv
-, cling
-, fetchurl
-, lib
-, llvmPackages_9
-, makeWrapper
-, runCommand
-, stdenv
+{
+  callPackage,
+  cling,
+  fetchurl,
+  jq,
+  makeWrapper,
+  python3,
+  stdenv,
 }:
 
 # Jupyter console:
@@ -16,48 +15,79 @@
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions = { cpp17 = cpp17-kernel; }; }'
 
 let
-  xeus-cling = callPackage ./xeus-cling.nix {};
+  xeus-cling-unwrapped = callPackage ./xeus-cling.nix { };
 
-  mkDefinition = std:
-    let
-      versionSuffix =
-        if std == "c++11" then " 11"
-        else if std == "c++14" then " 14"
-        else if std == "c++17" then " 17"
-        else if std == "c++17" then " 17"
-        else if std == "c++2a" then " 2a"
-        else throw "Unexpected C++ std for cling: ${std}";
-    in
+  xeus-cling = xeus-cling-unwrapped.overrideAttrs (oldAttrs: {
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
+
+    # xcpp needs a collection of flags to start up properly, so wrap it by default.
+    # We'll provide the unwrapped version as a passthru
+    flags = cling.flags ++ [
+      "-resource-dir"
+      "${cling.unwrapped}"
+      "-L"
+      "${cling.unwrapped}/lib"
+      "-l"
+      "${cling.unwrapped}/lib/cling.so"
+    ];
+
+    fixupPhase = ''
+      runHook preFixup
+
+      wrapProgram $out/bin/xcpp --add-flags "$flags"
+
+      runHook postFixup
+    '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preCheck
+
+      # Smoke check: run a test notebook using Papermill by creating a simple kernelspec
+      mkdir -p kernels/cpp17
+      export JUPYTER_PATH="$(pwd)"
+      cat << EOF > kernels/cpp17/kernel.json
       {
-        displayName = "C++" + versionSuffix;
-        argv = [
-          "${xeus-cling}/bin/xcpp"
-        ]
-        ++ cling.flags
-        ++ [
-          "-resource-dir" "${cling.unwrapped}"
-          "-L" "${cling.unwrapped}/lib"
-          "-l" "${cling.unwrapped}/lib/cling.so"
-          "-std=${std}"
-          # "-v"
-          "-f" "{connection_file}"
-        ];
-        language = "cpp";
-        logo32 = fetchurl {
-          url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/32px-ISO_C%2B%2B_Logo.svg.png";
-          hash = "sha256-cr0TB8/j2mkcFhfCkz9F7ZANOuTlWA2OcWtDcXyOjHw=";
-        };
-        logo64 = fetchurl {
-          url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/64px-ISO_C%2B%2B_Logo.svg.png";
-          hash = "sha256-nZtJ4bR7GmQttvqEJC9KejOxphrjjxT36L9yOIITFLk=";
-        };
-      };
+        "argv": ["$out/bin/xcpp", "-std=c++17", "-f", "{connection_file}"],
+        "language": "cpp17"
+      }
+      EOF
+
+      ${python3.pkgs.papermill}/bin/papermill ${./test.ipynb} out.ipynb
+      result="$(cat out.ipynb | ${jq}/bin/jq -r '.cells[0].outputs[0].text[0]')"
+      if [[ "$result" != "Hello world." ]]; then
+        echo "Kernel test gave '$result'. Expected: 'Hello world.'"
+        exit 1
+      fi
+
+      runHook postCheck
+    '';
+
+    passthru = (oldAttrs.passthru or { }) // {
+      unwrapped = xeus-cling-unwrapped;
+    };
+  });
+
+  mkKernelSpec = std: {
+    displayName = builtins.replaceStrings [ "c++" ] [ "C++ " ] std;
+    argv = [
+      "${xeus-cling}/bin/xcpp"
+      "-std=${std}"
+      "-f"
+      "{connection_file}"
+    ];
+    language = "cpp";
+    logo32 = "${xeus-cling-unwrapped}/share/jupyter/kernels/xcpp17/logo-32x32.png";
+    logo64 = "${xeus-cling-unwrapped}/share/jupyter/kernels/xcpp17/logo-64x64.png";
+  };
 
 in
 
 {
-  cpp11-kernel = mkDefinition "c++11";
-  cpp14-kernel = mkDefinition "c++14";
-  cpp17-kernel = mkDefinition "c++17";
-  cpp2a-kernel = mkDefinition "c++2a";
+  cpp11-kernel = mkKernelSpec "c++11";
+  cpp14-kernel = mkKernelSpec "c++14";
+  cpp17-kernel = mkKernelSpec "c++17";
+  cpp2a-kernel = mkKernelSpec "c++2a";
+
+  inherit xeus-cling;
 }

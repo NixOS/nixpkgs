@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
-, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nasm,
+  SDL,
+  zlib,
+  libpng,
+  ncurses,
+  libGLU,
+  libGL,
+  makeDesktopItem,
+}:
 
 let
   desktopItem = makeDesktopItem {
@@ -12,7 +23,8 @@ let
     categories = [ "Game" ];
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "zsnes";
   version = "1.51";
 
@@ -28,7 +40,15 @@ in stdenv.mkDerivation {
     ./fortify3.patch
   ];
 
-  buildInputs = [ nasm SDL zlib libpng ncurses libGLU libGL ];
+  buildInputs = [
+    nasm
+    SDL
+    zlib
+    libpng
+    ncurses
+    libGLU
+    libGL
+  ];
 
   prePatch = ''
     for i in $(cat debian/patches/series); do
@@ -65,10 +85,14 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A Super Nintendo Entertainment System Emulator";
+    description = "Super Nintendo Entertainment System Emulator";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sander ];
     homepage = "https://www.zsnes.com";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
+    mainProgram = "zsnes";
   };
 }

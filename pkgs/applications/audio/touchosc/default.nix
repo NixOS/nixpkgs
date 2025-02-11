@@ -18,7 +18,7 @@
 , libXrender
 , libXxf86vm
 , libglvnd
-, gnome
+, zenity
 }:
 
 let
@@ -39,13 +39,13 @@ let
   ];
 
   runBinDeps = [
-    gnome.zenity
+    zenity
   ];
 in
 
 stdenv.mkDerivation rec {
   pname = "touchosc";
-  version = "1.2.5.183";
+  version = "1.3.8.222";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-V5615E2jVqk7CcCBbW5A0JEyEi6secC0Rj8KrQpfjns=";
-      armv7l-linux  = "sha256-0nyRffx8/OieVJTvJRtUIvrx5IyqmqEMMEZszPPDXb0=";
-      x86_64-linux  = "sha256-oV2T7l5/3JqXXoyiR3PeYJyHQe4GcDUxsi6cNxLUcng=";
+      aarch64-linux = "sha256-TuO0dzV2j2YRbb5NJ/iIS186XCJ1E+15P8k7hVxElCE=";
+      armv7l-linux  = "sha256-LJ4a9TZQr4LGuS5gGpmW1yp1q0Smsr8mIhz18ISM3sc=";
+      x86_64-linux  = "sha256-l+7wefJC6q+hgjKuRMqCuD5XHNiw9DQANP99FkjIWOk=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     alsa-lib
   ];
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     description = "Next generation modular control surface";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
     mainProgram = "TouchOSC";
   };

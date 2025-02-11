@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "apcaccess";
   version = "0.0.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "flyte";
@@ -20,16 +22,13 @@ buildPythonPackage rec {
       --replace "setup_requires='pytest-runner'," ""
   '';
 
-  pythonImportsCheck = [
-    "apcaccess"
-  ];
+  pythonImportsCheck = [ "apcaccess" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Library offers programmatic access to the status information provided by apcupsd over its Network Information Server";
+    mainProgram = "apcaccess";
     homepage = "https://github.com/flyte/apcaccess";
     license = licenses.mit;
     maintainers = with maintainers; [ uvnikita ];

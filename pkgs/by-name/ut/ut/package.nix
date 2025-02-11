@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ut";
-  version = "2.0.0";
+  version = "2.3.0";
 
   cmakeFlags = [
     "-DBOOST_UT_ALLOW_CPM_USE=OFF"
@@ -16,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "boost-ext";
     repo = "ut";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nMRhVtbnORMnZxIdrv6pvfj8/fv/buh4Y7mz0cr4p+E=";
+    hash = "sha256-3H3kyf58gy+VdNfj4gmIe+D1+douMwZQU7+iphO+utU=";
   };
 
   nativeBuildInputs = [
@@ -32,4 +33,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
   };
 })
-

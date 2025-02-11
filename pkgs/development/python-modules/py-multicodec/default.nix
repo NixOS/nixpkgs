@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, morphys
-, pytestCheckHook
-, pythonOlder
-, six
-, varint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  morphys,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  varint,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "multiformats";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2aK+bfhqCMqSO+mtrHIfNQmQpQHpwd7yHseI/3O7Sp4=";
   };
 
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     varint
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "multicodec"
-  ];
+  pythonImportsCheck = [ "multicodec" ];
 
   meta = with lib; {
     description = "Compact self-describing codecs";

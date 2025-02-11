@@ -1,27 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "asciitree";
   version = "0.3.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mbr";
-    repo = pname;
+    repo = "asciitree";
     rev = version;
-    sha256 = "071wlpyi8pa262sj9xdy0zbj163z84dasxad363z3sfndqxw78h1";
+    hash = "sha256-AaLDO27W6fGHGU11rRpBf5gg1we+9SS1MEJdFP2lPBw=";
   };
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Draws ASCII trees";

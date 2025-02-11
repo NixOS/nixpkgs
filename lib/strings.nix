@@ -1,4 +1,6 @@
-/* String manipulation functions. */
+/**
+  String manipulation functions.
+*/
 { lib }:
 let
 
@@ -39,190 +41,627 @@ rec {
     unsafeDiscardStringContext
     ;
 
-  /* Concatenate a list of strings.
+  /**
+    Concatenate a list of strings.
 
-    Type: concatStrings :: [string] -> string
+    # Type
 
-     Example:
-       concatStrings ["foo" "bar"]
-       => "foobar"
+    ```
+    concatStrings :: [string] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatStrings` usage example
+
+    ```nix
+    concatStrings ["foo" "bar"]
+    => "foobar"
+    ```
+
+    :::
   */
   concatStrings = builtins.concatStringsSep "";
 
-  /* Map a function over a list and concatenate the resulting strings.
+  /**
+    Map a function over a list and concatenate the resulting strings.
 
-    Type: concatMapStrings :: (a -> string) -> [a] -> string
 
-     Example:
-       concatMapStrings (x: "a" + x) ["foo" "bar"]
-       => "afooabar"
+    # Inputs
+
+    `f`
+    : 1\. Function argument
+
+    `list`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    concatMapStrings :: (a -> string) -> [a] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatMapStrings` usage example
+
+    ```nix
+    concatMapStrings (x: "a" + x) ["foo" "bar"]
+    => "afooabar"
+    ```
+
+    :::
   */
   concatMapStrings = f: list: concatStrings (map f list);
 
-  /* Like `concatMapStrings` except that the f functions also gets the
-     position as a parameter.
+  /**
+    Like `concatMapStrings` except that the f functions also gets the
+    position as a parameter.
 
-     Type: concatImapStrings :: (int -> a -> string) -> [a] -> string
 
-     Example:
-       concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
-       => "1-foo2-bar"
+    # Inputs
+
+    `f`
+    : 1\. Function argument
+
+    `list`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    concatImapStrings :: (int -> a -> string) -> [a] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatImapStrings` usage example
+
+    ```nix
+    concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
+    => "1-foo2-bar"
+    ```
+
+    :::
   */
   concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
-  /* Place an element between each element of a list
+  /**
+    Place an element between each element of a list
 
-     Type: intersperse :: a -> [a] -> [a]
 
-     Example:
-       intersperse "/" ["usr" "local" "bin"]
-       => ["usr" "/" "local" "/" "bin"].
+    # Inputs
+
+    `separator`
+    : Separator to add between elements
+
+    `list`
+    : Input list
+
+    # Type
+
+    ```
+    intersperse :: a -> [a] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.intersperse` usage example
+
+    ```nix
+    intersperse "/" ["usr" "local" "bin"]
+    => ["usr" "/" "local" "/" "bin"].
+    ```
+
+    :::
   */
   intersperse =
-    # Separator to add between elements
     separator:
-    # Input list
     list:
     if list == [] || length list == 1
     then list
     else tail (lib.concatMap (x: [separator x]) list);
 
-  /* Concatenate a list of strings with a separator between each element
+  /**
+    Concatenate a list of strings with a separator between each element
 
-     Type: concatStringsSep :: string -> [string] -> string
+    # Inputs
 
-     Example:
-        concatStringsSep "/" ["usr" "local" "bin"]
-        => "usr/local/bin"
+    `sep`
+    : Separator to add between elements
+
+    `list`
+    : List of input strings
+
+    # Type
+
+    ```
+    concatStringsSep :: string -> [string] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatStringsSep` usage example
+
+    ```nix
+    concatStringsSep "/" ["usr" "local" "bin"]
+    => "usr/local/bin"
+    ```
+
+    :::
   */
-  concatStringsSep = builtins.concatStringsSep or (separator: list:
-    lib.foldl' (x: y: x + y) "" (intersperse separator list));
+  concatStringsSep = builtins.concatStringsSep;
 
-  /* Maps a function over a list of strings and then concatenates the
-     result with the specified separator interspersed between
-     elements.
+  /**
+    Maps a function over a list of strings and then concatenates the
+    result with the specified separator interspersed between
+    elements.
 
-     Type: concatMapStringsSep :: string -> (a -> string) -> [a] -> string
 
-     Example:
-        concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
-        => "FOO-BAR-BAZ"
+    # Inputs
+
+    `sep`
+    : Separator to add between elements
+
+    `f`
+    : Function to map over the list
+
+    `list`
+    : List of input strings
+
+    # Type
+
+    ```
+    concatMapStringsSep :: string -> (a -> string) -> [a] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatMapStringsSep` usage example
+
+    ```nix
+    concatMapStringsSep "-" (x: toUpper x)  ["foo" "bar" "baz"]
+    => "FOO-BAR-BAZ"
+    ```
+
+    :::
   */
   concatMapStringsSep =
-    # Separator to add between elements
     sep:
-    # Function to map over the list
     f:
-    # List of input strings
     list: concatStringsSep sep (map f list);
 
-  /* Same as `concatMapStringsSep`, but the mapping function
-     additionally receives the position of its argument.
+  /**
+    Same as `concatMapStringsSep`, but the mapping function
+    additionally receives the position of its argument.
 
-     Type: concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
 
-     Example:
-       concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
-       => "6-3-2"
+    # Inputs
+
+    `sep`
+    : Separator to add between elements
+
+    `f`
+    : Function that receives elements and their positions
+
+    `list`
+    : List of input strings
+
+    # Type
+
+    ```
+    concatIMapStringsSep :: string -> (int -> a -> string) -> [a] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatImapStringsSep` usage example
+
+    ```nix
+    concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
+    => "6-3-2"
+    ```
+
+    :::
   */
   concatImapStringsSep =
-    # Separator to add between elements
     sep:
-    # Function that receives elements and their positions
     f:
-    # List of input strings
     list: concatStringsSep sep (lib.imap1 f list);
 
-  /* Concatenate a list of strings, adding a newline at the end of each one.
-     Defined as `concatMapStrings (s: s + "\n")`.
+  /**
+    Like [`concatMapStringsSep`](#function-library-lib.strings.concatMapStringsSep)
+    but takes an attribute set instead of a list.
 
-     Type: concatLines :: [string] -> string
+    # Inputs
 
-     Example:
-       concatLines [ "foo" "bar" ]
-       => "foo\nbar\n"
+    `sep`
+    : Separator to add between item strings
+
+    `f`
+    : Function that takes each key and value and return a string
+
+    `attrs`
+    : Attribute set to map from
+
+    # Type
+
+    ```
+    concatMapAttrsStringSep :: String -> (String -> Any -> String) -> AttrSet -> String
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.strings.concatMapAttrsStringSep` usage example
+
+    ```nix
+    concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; }
+    => "a: foo-0.1.0\nb: foo-0.2.0"
+    ```
+
+    :::
+  */
+  concatMapAttrsStringSep =
+    sep: f: attrs:
+    concatStringsSep sep (lib.attrValues (lib.mapAttrs f attrs));
+
+  /**
+    Concatenate a list of strings, adding a newline at the end of each one.
+    Defined as `concatMapStrings (s: s + "\n")`.
+
+    # Inputs
+
+    `list`
+    : List of strings. Any element that is not a string will be implicitly converted to a string.
+
+    # Type
+
+    ```
+    concatLines :: [string] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.concatLines` usage example
+
+    ```nix
+    concatLines [ "foo" "bar" ]
+    => "foo\nbar\n"
+    ```
+
+    :::
   */
   concatLines = concatMapStrings (s: s + "\n");
 
-  /*
-    Replicate a string n times,
+  /**
+    Repeat a string `n` times,
     and concatenate the parts into a new string.
 
-    Type: replicate :: int -> string -> string
 
-    Example:
-      replicate 3 "v"
-      => "vvv"
-      replicate 5 "hello"
-      => "hellohellohellohellohello"
+    # Inputs
+
+    `n`
+    : 1\. Function argument
+
+    `s`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    replicate :: int -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.replicate` usage example
+
+    ```nix
+    replicate 3 "v"
+    => "vvv"
+    replicate 5 "hello"
+    => "hellohellohellohellohello"
+    ```
+
+    :::
   */
   replicate = n: s: concatStrings (lib.lists.replicate n s);
 
-  /* Construct a Unix-style, colon-separated search path consisting of
-     the given `subDir` appended to each of the given paths.
+  /**
+    Remove leading and trailing whitespace from a string `s`.
 
-     Type: makeSearchPath :: string -> [string] -> string
+    Whitespace is defined as any of the following characters:
+      " ", "\t" "\r" "\n"
 
-     Example:
-       makeSearchPath "bin" ["/root" "/usr" "/usr/local"]
-       => "/root/bin:/usr/bin:/usr/local/bin"
-       makeSearchPath "bin" [""]
-       => "/bin"
+    # Inputs
+
+    `s`
+    : The string to trim
+
+    # Type
+
+    ```
+    trim :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.trim` usage example
+
+    ```nix
+    trim "   hello, world!   "
+    => "hello, world!"
+    ```
+
+    :::
+  */
+  trim = trimWith {
+    start = true;
+    end = true;
+  };
+
+  /**
+    Remove leading and/or trailing whitespace from a string `s`.
+
+    To remove both leading and trailing whitespace, you can also use [`trim`](#function-library-lib.strings.trim)
+
+    Whitespace is defined as any of the following characters:
+      " ", "\t" "\r" "\n"
+
+    # Inputs
+
+    `config` (Attribute set)
+    : `start`
+      : Whether to trim leading whitespace (`false` by default)
+
+    : `end`
+      : Whether to trim trailing whitespace (`false` by default)
+
+    `s`
+    : The string to trim
+
+    # Type
+
+    ```
+    trimWith :: { start :: Bool; end :: Bool } -> String -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.trimWith` usage example
+
+    ```nix
+    trimWith { start = true; } "   hello, world!   "}
+    => "hello, world!   "
+
+    trimWith { end = true; } "   hello, world!   "}
+    => "   hello, world!"
+    ```
+    :::
+  */
+  trimWith =
+    {
+      start ? false,
+      end ? false,
+    }:
+    let
+      # Define our own whitespace character class instead of using
+      # `[:space:]`, which is not well-defined.
+      chars = " \t\r\n";
+
+      # To match up until trailing whitespace, we need to capture a
+      # group that ends with a non-whitespace character.
+      regex =
+        if start && end then
+          "[${chars}]*(.*[^${chars}])[${chars}]*"
+        else if start then
+          "[${chars}]*(.*)"
+        else if end then
+          "(.*[^${chars}])[${chars}]*"
+        else
+          "(.*)";
+    in
+    s:
+    let
+      # If the string was empty or entirely whitespace,
+      # then the regex may not match and `res` will be `null`.
+      res = match regex s;
+    in
+    optionalString (res != null) (head res);
+
+  /**
+    Construct a Unix-style, colon-separated search path consisting of
+    the given `subDir` appended to each of the given paths.
+
+    # Inputs
+
+    `subDir`
+    : Directory name to append
+
+    `paths`
+    : List of base paths
+
+    # Type
+
+    ```
+    makeSearchPath :: string -> [string] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.makeSearchPath` usage example
+
+    ```nix
+    makeSearchPath "bin" ["/root" "/usr" "/usr/local"]
+    => "/root/bin:/usr/bin:/usr/local/bin"
+    makeSearchPath "bin" [""]
+    => "/bin"
+    ```
+
+    :::
   */
   makeSearchPath =
-    # Directory name to append
     subDir:
-    # List of base paths
     paths:
     concatStringsSep ":" (map (path: path + "/" + subDir) (filter (x: x != null) paths));
 
-  /* Construct a Unix-style search path by appending the given
-     `subDir` to the specified `output` of each of the packages. If no
-     output by the given name is found, fallback to `.out` and then to
-     the default.
+  /**
+    Construct a Unix-style search path by appending the given
+    `subDir` to the specified `output` of each of the packages.
 
-     Type: string -> string -> [package] -> string
+    If no output by the given name is found, fallback to `.out` and then to
+    the default.
 
-     Example:
-       makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+
+    # Inputs
+
+    `output`
+    : Package output to use
+
+    `subDir`
+    : Directory name to append
+
+    `pkgs`
+    : List of packages
+
+    # Type
+
+    ```
+    makeSearchPathOutput :: string -> string -> [package] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.makeSearchPathOutput` usage example
+
+    ```nix
+    makeSearchPathOutput "dev" "bin" [ pkgs.openssl pkgs.zlib ]
+    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+    ```
+
+    :::
   */
   makeSearchPathOutput =
-    # Package output to use
     output:
-    # Directory name to append
     subDir:
-    # List of packages
     pkgs: makeSearchPath subDir (map (lib.getOutput output) pkgs);
 
-  /* Construct a library search path (such as RPATH) containing the
-     libraries for a set of packages
+  /**
+    Construct a library search path (such as RPATH) containing the
+    libraries for a set of packages
 
-     Example:
-       makeLibraryPath [ "/usr" "/usr/local" ]
-       => "/usr/lib:/usr/local/lib"
-       pkgs = import <nixpkgs> { }
-       makeLibraryPath [ pkgs.openssl pkgs.zlib ]
-       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+    # Inputs
+
+    `packages`
+    : List of packages
+
+    # Type
+
+    ```
+    makeLibraryPath :: [package] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.makeLibraryPath` usage example
+
+    ```nix
+    makeLibraryPath [ "/usr" "/usr/local" ]
+    => "/usr/lib:/usr/local/lib"
+    pkgs = import <nixpkgs> { }
+    makeLibraryPath [ pkgs.openssl pkgs.zlib ]
+    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
+    ```
+
+    :::
   */
   makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
-  /* Construct a binary search path (such as $PATH) containing the
-     binaries for a set of packages.
+  /**
+    Construct an include search path (such as C_INCLUDE_PATH) containing the
+    header files for a set of packages or paths.
 
-     Example:
-       makeBinPath ["/root" "/usr" "/usr/local"]
-       => "/root/bin:/usr/bin:/usr/local/bin"
+    # Inputs
+
+    `packages`
+    : List of packages
+
+    # Type
+
+    ```
+    makeIncludePath :: [package] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.makeIncludePath` usage example
+
+    ```nix
+    makeIncludePath [ "/usr" "/usr/local" ]
+    => "/usr/include:/usr/local/include"
+    pkgs = import <nixpkgs> { }
+    makeIncludePath [ pkgs.openssl pkgs.zlib ]
+    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev/include:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8-dev/include"
+    ```
+
+    :::
+  */
+  makeIncludePath = makeSearchPathOutput "dev" "include";
+
+  /**
+    Construct a binary search path (such as $PATH) containing the
+    binaries for a set of packages.
+
+    # Inputs
+
+    `packages`
+    : List of packages
+
+    # Type
+
+    ```
+    makeBinPath :: [package] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.makeBinPath` usage example
+
+    ```nix
+    makeBinPath ["/root" "/usr" "/usr/local"]
+    => "/root/bin:/usr/bin:/usr/local/bin"
+    ```
+
+    :::
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
-  /* Normalize path, removing extraneous /s
+  /**
+    Normalize path, removing extraneous /s
 
-     Type: normalizePath :: string -> string
 
-     Example:
-       normalizePath "/a//b///c/"
-       => "/a/b/c/"
+    # Inputs
+
+    `s`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    normalizePath :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.normalizePath` usage example
+
+    ```nix
+    normalizePath "/a//b///c/"
+    => "/a/b/c/"
+    ```
+
+    :::
   */
   normalizePath = s:
     warnIf
@@ -239,37 +678,75 @@ rec {
           (stringToCharacters s)
       );
 
-  /* Depending on the boolean `cond', return either the given string
-     or the empty string. Useful to concatenate against a bigger string.
+  /**
+    Depending on the boolean `cond', return either the given string
+    or the empty string. Useful to concatenate against a bigger string.
 
-     Type: optionalString :: bool -> string -> string
 
-     Example:
-       optionalString true "some-string"
-       => "some-string"
-       optionalString false "some-string"
-       => ""
+    # Inputs
+
+    `cond`
+    : Condition
+
+    `string`
+    : String to return if condition is true
+
+    # Type
+
+    ```
+    optionalString :: bool -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.optionalString` usage example
+
+    ```nix
+    optionalString true "some-string"
+    => "some-string"
+    optionalString false "some-string"
+    => ""
+    ```
+
+    :::
   */
   optionalString =
-    # Condition
     cond:
-    # String to return if condition is true
     string: if cond then string else "";
 
-  /* Determine whether a string has given prefix.
+  /**
+    Determine whether a string has given prefix.
 
-     Type: hasPrefix :: string -> string -> bool
 
-     Example:
-       hasPrefix "foo" "foobar"
-       => true
-       hasPrefix "foo" "barfoo"
-       => false
+    # Inputs
+
+    `pref`
+    : Prefix to check for
+
+    `str`
+    : Input string
+
+    # Type
+
+    ```
+    hasPrefix :: string -> string -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.hasPrefix` usage example
+
+    ```nix
+    hasPrefix "foo" "foobar"
+    => true
+    hasPrefix "foo" "barfoo"
+    => false
+    ```
+
+    :::
   */
   hasPrefix =
-    # Prefix to check for
     pref:
-    # Input string
     str:
     # Before 23.05, paths would be copied to the store before converting them
     # to strings and comparing. This was surprising and confusing.
@@ -283,20 +760,39 @@ rec {
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
       (substring 0 (stringLength pref) str == pref);
 
-  /* Determine whether a string has given suffix.
+  /**
+    Determine whether a string has given suffix.
 
-     Type: hasSuffix :: string -> string -> bool
 
-     Example:
-       hasSuffix "foo" "foobar"
-       => false
-       hasSuffix "foo" "barfoo"
-       => true
+    # Inputs
+
+    `suffix`
+    : Suffix to check for
+
+    `content`
+    : Input string
+
+    # Type
+
+    ```
+    hasSuffix :: string -> string -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.hasSuffix` usage example
+
+    ```nix
+    hasSuffix "foo" "foobar"
+    => false
+    hasSuffix "foo" "barfoo"
+    => true
+    ```
+
+    :::
   */
   hasSuffix =
-    # Suffix to check for
     suffix:
-    # Input string
     content:
     let
       lenContent = stringLength content;
@@ -316,19 +812,40 @@ rec {
         && substring (lenContent - lenSuffix) lenContent content == suffix
       );
 
-  /* Determine whether a string contains the given infix
+  /**
+    Determine whether a string contains the given infix
 
-    Type: hasInfix :: string -> string -> bool
 
-    Example:
-      hasInfix "bc" "abcd"
-      => true
-      hasInfix "ab" "abcd"
-      => true
-      hasInfix "cd" "abcd"
-      => true
-      hasInfix "foo" "abcd"
-      => false
+    # Inputs
+
+    `infix`
+    : 1\. Function argument
+
+    `content`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    hasInfix :: string -> string -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.hasInfix` usage example
+
+    ```nix
+    hasInfix "bc" "abcd"
+    => true
+    hasInfix "ab" "abcd"
+    => true
+    hasInfix "cd" "abcd"
+    => true
+    hasInfix "foo" "abcd"
+    => false
+    ```
+
+    :::
   */
   hasInfix = infix: content:
     # Before 23.05, paths would be copied to the store before converting them
@@ -342,35 +859,74 @@ rec {
             This behavior is deprecated and will throw an error in the future.''
       (builtins.match ".*${escapeRegex infix}.*" "${content}" != null);
 
-  /* Convert a string to a list of characters (i.e. singleton strings).
-     This allows you to, e.g., map a function over each character.  However,
-     note that this will likely be horribly inefficient; Nix is not a
-     general purpose programming language. Complex string manipulations
-     should, if appropriate, be done in a derivation.
-     Also note that Nix treats strings as a list of bytes and thus doesn't
-     handle unicode.
+  /**
+    Convert a string `s` to a list of characters (i.e. singleton strings).
+    This allows you to, e.g., map a function over each character.  However,
+    note that this will likely be horribly inefficient; Nix is not a
+    general purpose programming language. Complex string manipulations
+    should, if appropriate, be done in a derivation.
+    Also note that Nix treats strings as a list of bytes and thus doesn't
+    handle unicode.
 
-     Type: stringToCharacters :: string -> [string]
 
-     Example:
-       stringToCharacters ""
-       => [ ]
-       stringToCharacters "abc"
-       => [ "a" "b" "c" ]
-       stringToCharacters "🦄"
-       => [ "�" "�" "�" "�" ]
+    # Inputs
+
+    `s`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    stringToCharacters :: string -> [string]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.stringToCharacters` usage example
+
+    ```nix
+    stringToCharacters ""
+    => [ ]
+    stringToCharacters "abc"
+    => [ "a" "b" "c" ]
+    stringToCharacters "🦄"
+    => [ "�" "�" "�" "�" ]
+    ```
+
+    :::
   */
   stringToCharacters = s:
     genList (p: substring p 1 s) (stringLength s);
 
-  /* Manipulate a string character by character and replace them by
-     strings before concatenating the results.
+  /**
+    Manipulate a string character by character and replace them by
+    strings before concatenating the results.
 
-     Type: stringAsChars :: (string -> string) -> string -> string
 
-     Example:
-       stringAsChars (x: if x == "a" then "i" else x) "nax"
-       => "nix"
+    # Inputs
+
+    `f`
+    : Function to map over each individual character
+
+    `s`
+    : Input string
+
+    # Type
+
+    ```
+    stringAsChars :: (string -> string) -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.stringAsChars` usage example
+
+    ```nix
+    stringAsChars (x: if x == "a" then "i" else x) "nax"
+    => "nix"
+    ```
+
+    :::
   */
   stringAsChars =
     # Function to map over each individual character
@@ -380,51 +936,126 @@ rec {
       map f (stringToCharacters s)
     );
 
-  /* Convert char to ascii value, must be in printable range
+  /**
+    Convert char to ascii value, must be in printable range
 
-     Type: charToInt :: string -> int
 
-     Example:
-       charToInt "A"
-       => 65
-       charToInt "("
-       => 40
+    # Inputs
 
+    `c`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    charToInt :: string -> int
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.charToInt` usage example
+
+    ```nix
+    charToInt "A"
+    => 65
+    charToInt "("
+    => 40
+    ```
+
+    :::
   */
   charToInt = c: builtins.getAttr c asciiTable;
 
-  /* Escape occurrence of the elements of `list` in `string` by
-     prefixing it with a backslash.
+  /**
+    Escape occurrence of the elements of `list` in `string` by
+    prefixing it with a backslash.
 
-     Type: escape :: [string] -> string -> string
 
-     Example:
-       escape ["(" ")"] "(foo)"
-       => "\\(foo\\)"
+    # Inputs
+
+    `list`
+    : 1\. Function argument
+
+    `string`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    escape :: [string] -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escape` usage example
+
+    ```nix
+    escape ["(" ")"] "(foo)"
+    => "\\(foo\\)"
+    ```
+
+    :::
   */
   escape = list: replaceStrings list (map (c: "\\${c}") list);
 
-  /* Escape occurrence of the element of `list` in `string` by
-     converting to its ASCII value and prefixing it with \\x.
-     Only works for printable ascii characters.
+  /**
+    Escape occurrence of the element of `list` in `string` by
+    converting to its ASCII value and prefixing it with \\x.
+    Only works for printable ascii characters.
 
-     Type: escapeC = [string] -> string -> string
 
-     Example:
-       escapeC [" "] "foo bar"
-       => "foo\\x20bar"
+    # Inputs
 
+    `list`
+    : 1\. Function argument
+
+    `string`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    escapeC = [string] -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeC` usage example
+
+    ```nix
+    escapeC [" "] "foo bar"
+    => "foo\\x20bar"
+    ```
+
+    :::
   */
   escapeC = list: replaceStrings list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
 
-  /* Escape the string so it can be safely placed inside a URL
-     query.
+  /**
+    Escape the `string` so it can be safely placed inside a URL
+    query.
 
-     Type: escapeURL :: string -> string
+    # Inputs
 
-     Example:
-       escapeURL "foo/bar baz"
-       => "foo%2Fbar%20baz"
+    `string`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeURL :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeURL` usage example
+
+    ```nix
+    escapeURL "foo/bar baz"
+    => "foo%2Fbar%20baz"
+    ```
+
+    :::
   */
   escapeURL = let
     unreserved = [ "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "-" "_" "." "~" ];
@@ -432,55 +1063,137 @@ rec {
   in
     replaceStrings (builtins.attrNames toEscape) (lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape);
 
-  /* Quote string to be used safely within the Bourne shell.
+  /**
+    Quote `string` to be used safely within the Bourne shell if it has any
+    special characters.
 
-     Type: escapeShellArg :: string -> string
 
-     Example:
-       escapeShellArg "esc'ape\nme"
-       => "'esc'\\''ape\nme'"
+    # Inputs
+
+    `string`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeShellArg :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeShellArg` usage example
+
+    ```nix
+    escapeShellArg "esc'ape\nme"
+    => "'esc'\\''ape\nme'"
+    ```
+
+    :::
   */
-  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
+  escapeShellArg = arg:
+    let
+      string = toString arg;
+    in
+      if match "[[:alnum:],._+:@%/-]+" string == null
+      then "'${replaceStrings ["'"] ["'\\''"] string}'"
+      else string;
 
-  /* Quote all arguments to be safely passed to the Bourne shell.
+  /**
+    Quote all arguments that have special characters to be safely passed to the
+    Bourne shell.
 
-     Type: escapeShellArgs :: [string] -> string
+    # Inputs
 
-     Example:
-       escapeShellArgs ["one" "two three" "four'five"]
-       => "'one' 'two three' 'four'\\''five'"
+    `args`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeShellArgs :: [string] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeShellArgs` usage example
+
+    ```nix
+    escapeShellArgs ["one" "two three" "four'five"]
+    => "one 'two three' 'four'\\''five'"
+    ```
+
+    :::
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
-  /* Test whether the given name is a valid POSIX shell variable name.
+  /**
+    Test whether the given `name` is a valid POSIX shell variable name.
 
-     Type: string -> bool
 
-     Example:
-       isValidPosixName "foo_bar000"
-       => true
-       isValidPosixName "0-bad.jpg"
-       => false
+    # Inputs
+
+    `name`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    string -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.isValidPosixName` usage example
+
+    ```nix
+    isValidPosixName "foo_bar000"
+    => true
+    isValidPosixName "0-bad.jpg"
+    => false
+    ```
+
+    :::
   */
   isValidPosixName = name: match "[a-zA-Z_][a-zA-Z0-9_]*" name != null;
 
-  /* Translate a Nix value into a shell variable declaration, with proper escaping.
+  /**
+    Translate a Nix value into a shell variable declaration, with proper escaping.
 
-     The value can be a string (mapped to a regular variable), a list of strings
-     (mapped to a Bash-style array) or an attribute set of strings (mapped to a
-     Bash-style associative array). Note that "string" includes string-coercible
-     values like paths or derivations.
+    The value can be a string (mapped to a regular variable), a list of strings
+    (mapped to a Bash-style array) or an attribute set of strings (mapped to a
+    Bash-style associative array). Note that "string" includes string-coercible
+    values like paths or derivations.
 
-     Strings are translated into POSIX sh-compatible code; lists and attribute sets
-     assume a shell that understands Bash syntax (e.g. Bash or ZSH).
+    Strings are translated into POSIX sh-compatible code; lists and attribute sets
+    assume a shell that understands Bash syntax (e.g. Bash or ZSH).
 
-     Type: string -> (string | listOf string | attrsOf string) -> string
 
-     Example:
-       ''
-         ${toShellVar "foo" "some string"}
-         [[ "$foo" == "some string" ]]
-       ''
+    # Inputs
+
+    `name`
+    : 1\. Function argument
+
+    `value`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    string -> ( string | [string] | { ${name} :: string; } ) -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toShellVar` usage example
+
+    ```nix
+    ''
+      ${toShellVar "foo" "some string"}
+      [[ "$foo" == "some string" ]]
+    ''
+    ```
+
+    :::
   */
   toShellVar = name: value:
     lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
@@ -496,120 +1209,304 @@ rec {
       "${name}=${escapeShellArg value}"
     );
 
-  /* Translate an attribute set into corresponding shell variable declarations
-     using `toShellVar`.
+  /**
+    Translate an attribute set `vars` into corresponding shell variable declarations
+    using `toShellVar`.
 
-     Type: attrsOf (string | listOf string | attrsOf string) -> string
 
-     Example:
-       let
-         foo = "value";
-         bar = foo;
-       in ''
-         ${toShellVars { inherit foo bar; }}
-         [[ "$foo" == "$bar" ]]
-       ''
+    # Inputs
+
+    `vars`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    toShellVars :: {
+      ${name} :: string | [ string ] | { ${key} :: string; };
+    } -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toShellVars` usage example
+
+    ```nix
+    let
+      foo = "value";
+      bar = foo;
+    in ''
+      ${toShellVars { inherit foo bar; }}
+      [[ "$foo" == "$bar" ]]
+    ''
+    ```
+
+    :::
   */
   toShellVars = vars: concatStringsSep "\n" (lib.mapAttrsToList toShellVar vars);
 
-  /* Turn a string into a Nix expression representing that string
+  /**
+    Turn a string `s` into a Nix expression representing that string
 
-     Type: string -> string
+    # Inputs
 
-     Example:
-       escapeNixString "hello\${}\n"
-       => "\"hello\\\${}\\n\""
+    `s`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeNixString :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeNixString` usage example
+
+    ```nix
+    escapeNixString "hello\${}\n"
+    => "\"hello\\\${}\\n\""
+    ```
+
+    :::
   */
   escapeNixString = s: escape ["$"] (toJSON s);
 
-  /* Turn a string into an exact regular expression
+  /**
+    Turn a string `s` into an exact regular expression
 
-     Type: string -> string
+    # Inputs
 
-     Example:
-       escapeRegex "[^a-z]*"
-       => "\\[\\^a-z]\\*"
+    `s`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeRegex :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeRegex` usage example
+
+    ```nix
+    escapeRegex "[^a-z]*"
+    => "\\[\\^a-z]\\*"
+    ```
+
+    :::
   */
   escapeRegex = escape (stringToCharacters "\\[{()^$?*+|.");
 
-  /* Quotes a string if it can't be used as an identifier directly.
+  /**
+    Quotes a string `s` if it can't be used as an identifier directly.
 
-     Type: string -> string
 
-     Example:
-       escapeNixIdentifier "hello"
-       => "hello"
-       escapeNixIdentifier "0abc"
-       => "\"0abc\""
+    # Inputs
+
+    `s`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeNixIdentifier :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeNixIdentifier` usage example
+
+    ```nix
+    escapeNixIdentifier "hello"
+    => "hello"
+    escapeNixIdentifier "0abc"
+    => "\"0abc\""
+    ```
+
+    :::
   */
   escapeNixIdentifier = s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
     if match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null
     then s else escapeNixString s;
 
-  /* Escapes a string such that it is safe to include verbatim in an XML
-     document.
+  /**
+    Escapes a string `s` such that it is safe to include verbatim in an XML
+    document.
 
-     Type: string -> string
+    # Inputs
 
-     Example:
-       escapeXML ''"test" 'test' < & >''
-       => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
+    `s`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    escapeXML :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.escapeXML` usage example
+
+    ```nix
+    escapeXML ''"test" 'test' < & >''
+    => "&quot;test&quot; &apos;test&apos; &lt; &amp; &gt;"
+    ```
+
+    :::
   */
   escapeXML = builtins.replaceStrings
     ["\"" "'" "<" ">" "&"]
     ["&quot;" "&apos;" "&lt;" "&gt;" "&amp;"];
 
   # warning added 12-12-2022
-  replaceChars = lib.warn "replaceChars is a deprecated alias of replaceStrings, replace usages of it with replaceStrings." builtins.replaceStrings;
+  replaceChars = lib.warn "lib.replaceChars is a deprecated alias of lib.replaceStrings." builtins.replaceStrings;
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-  /* Converts an ASCII string to lower-case.
+  /**
+    Converts an ASCII string `s` to lower-case.
 
-     Type: toLower :: string -> string
+    # Inputs
 
-     Example:
-       toLower "HOME"
-       => "home"
+    `s`
+    : The string to convert to lower-case.
+
+    # Type
+
+    ```
+    toLower :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toLower` usage example
+
+    ```nix
+    toLower "HOME"
+    => "home"
+    ```
+
+    :::
   */
   toLower = replaceStrings upperChars lowerChars;
 
-  /* Converts an ASCII string to upper-case.
+  /**
+    Converts an ASCII string `s` to upper-case.
 
-     Type: toUpper :: string -> string
+    # Inputs
 
-     Example:
-       toUpper "home"
-       => "HOME"
+    `s`
+    : The string to convert to upper-case.
+
+
+    # Type
+
+    ```
+    toUpper :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toUpper` usage example
+
+    ```nix
+    toUpper "home"
+    => "HOME"
+    ```
+
+    :::
   */
   toUpper = replaceStrings lowerChars upperChars;
 
-  /* Appends string context from another string.  This is an implementation
-     detail of Nix and should be used carefully.
+  /**
+    Appends string context from string like object `src` to `target`.
 
-     Strings in Nix carry an invisible `context` which is a list of strings
-     representing store paths.  If the string is later used in a derivation
-     attribute, the derivation will properly populate the inputDrvs and
-     inputSrcs.
+    :::{.warning}
+    This is an implementation
+    detail of Nix and should be used carefully.
+    :::
 
-     Example:
-       pkgs = import <nixpkgs> { };
-       addContextFrom pkgs.coreutils "bar"
-       => "bar"
+    Strings in Nix carry an invisible `context` which is a list of strings
+    representing store paths. If the string is later used in a derivation
+    attribute, the derivation will properly populate the inputDrvs and
+    inputSrcs.
+
+
+    # Inputs
+
+    `src`
+    : The string to take the context from. If the argument is not a string,
+      it will be implicitly converted to a string.
+
+    `target`
+    : The string to append the context to. If the argument is not a string,
+      it will be implicitly converted to a string.
+
+    # Type
+
+    ```
+    addContextFrom :: string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.addContextFrom` usage example
+
+    ```nix
+    pkgs = import <nixpkgs> { };
+    addContextFrom pkgs.coreutils "bar"
+    => "bar"
+    ```
+
+    The context can be displayed using the `toString` function:
+
+    ```nix
+    nix-repl> builtins.getContext (lib.strings.addContextFrom pkgs.coreutils "bar")
+    {
+      "/nix/store/m1s1d2dk2dqqlw3j90jl3cjy2cykbdxz-coreutils-9.5.drv" = { ... };
+    }
+    ```
+
+    :::
   */
-  addContextFrom = a: b: substring 0 0 a + b;
+  addContextFrom = src: target: substring 0 0 src + target;
 
-  /* Cut a string with a separator and produces a list of strings which
-     were separated by this separator.
+  /**
+    Cut a string with a separator and produces a list of strings which
+    were separated by this separator.
 
-     Example:
-       splitString "." "foo.bar.baz"
-       => [ "foo" "bar" "baz" ]
-       splitString "/" "/usr/local/bin"
-       => [ "" "usr" "local" "bin" ]
+    # Inputs
+
+    `sep`
+    : 1\. Function argument
+
+    `s`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    splitString :: string -> string -> [string]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.splitString` usage example
+
+    ```nix
+    splitString "." "foo.bar.baz"
+    => [ "foo" "bar" "baz" ]
+    splitString "/" "/usr/local/bin"
+    => [ "" "usr" "local" "bin" ]
+    ```
+
+    :::
   */
   splitString = sep: s:
     let
@@ -617,20 +1514,39 @@ rec {
     in
       map (addContextFrom s) splits;
 
-  /* Return a string without the specified prefix, if the prefix matches.
 
-     Type: string -> string -> string
+  /**
+    Return a string without the specified prefix, if the prefix matches.
 
-     Example:
-       removePrefix "foo." "foo.bar.baz"
-       => "bar.baz"
-       removePrefix "xxx" "foo.bar.baz"
-       => "foo.bar.baz"
+    # Inputs
+
+    `prefix`
+    : Prefix to remove if it matches
+
+    `str`
+    : Input string
+
+    # Type
+
+    ```
+    removePrefix :: string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.removePrefix` usage example
+
+    ```nix
+    removePrefix "foo." "foo.bar.baz"
+    => "bar.baz"
+    removePrefix "xxx" "foo.bar.baz"
+    => "foo.bar.baz"
+    ```
+
+    :::
   */
   removePrefix =
-    # Prefix to remove if it matches
     prefix:
-    # Input string
     str:
     # Before 23.05, paths would be copied to the store before converting them
     # to strings and comparing. This was surprising and confusing.
@@ -650,20 +1566,39 @@ rec {
       else
         str);
 
-  /* Return a string without the specified suffix, if the suffix matches.
+  /**
+    Return a string without the specified suffix, if the suffix matches.
 
-     Type: string -> string -> string
 
-     Example:
-       removeSuffix "front" "homefront"
-       => "home"
-       removeSuffix "xxx" "homefront"
-       => "homefront"
+    # Inputs
+
+    `suffix`
+    : Suffix to remove if it matches
+
+    `str`
+    : Input string
+
+    # Type
+
+    ```
+    removeSuffix :: string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.removeSuffix` usage example
+
+    ```nix
+    removeSuffix "front" "homefront"
+    => "home"
+    removeSuffix "xxx" "homefront"
+    => "homefront"
+    ```
+
+    :::
   */
   removeSuffix =
-    # Suffix to remove if it matches
     suffix:
-    # Input string
     str:
     # Before 23.05, paths would be copied to the store before converting them
     # to strings and comparing. This was surprising and confusing.
@@ -683,70 +1618,180 @@ rec {
       else
         str);
 
-  /* Return true if string v1 denotes a version older than v2.
+  /**
+    Return true if string `v1` denotes a version older than `v2`.
 
-     Example:
-       versionOlder "1.1" "1.2"
-       => true
-       versionOlder "1.1" "1.1"
-       => false
+
+    # Inputs
+
+    `v1`
+    : 1\. Function argument
+
+    `v2`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    versionOlder :: String -> String -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.versionOlder` usage example
+
+    ```nix
+    versionOlder "1.1" "1.2"
+    => true
+    versionOlder "1.1" "1.1"
+    => false
+    ```
+
+    :::
   */
   versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
-  /* Return true if string v1 denotes a version equal to or newer than v2.
+  /**
+    Return true if string v1 denotes a version equal to or newer than v2.
 
-     Example:
-       versionAtLeast "1.1" "1.0"
-       => true
-       versionAtLeast "1.1" "1.1"
-       => true
-       versionAtLeast "1.1" "1.2"
-       => false
+
+    # Inputs
+
+    `v1`
+    : 1\. Function argument
+
+    `v2`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    versionAtLeast :: String -> String -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.versionAtLeast` usage example
+
+    ```nix
+    versionAtLeast "1.1" "1.0"
+    => true
+    versionAtLeast "1.1" "1.1"
+    => true
+    versionAtLeast "1.1" "1.2"
+    => false
+    ```
+
+    :::
   */
   versionAtLeast = v1: v2: !versionOlder v1 v2;
 
-  /* This function takes an argument that's either a derivation or a
-     derivation's "name" attribute and extracts the name part from that
-     argument.
+  /**
+    This function takes an argument `x` that's either a derivation or a
+    derivation's "name" attribute and extracts the name part from that
+    argument.
 
-     Example:
-       getName "youtube-dl-2016.01.01"
-       => "youtube-dl"
-       getName pkgs.youtube-dl
-       => "youtube-dl"
+    # Inputs
+
+    `x`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    getName :: String | Derivation -> String
+    ```
+
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.getName` usage example
+
+    ```nix
+    getName "youtube-dl-2016.01.01"
+    => "youtube-dl"
+    getName pkgs.youtube-dl
+    => "youtube-dl"
+    ```
+
+    :::
   */
-  getName = x:
-   let
-     parse = drv: (parseDrvName drv).name;
-   in if isString x
-      then parse x
-      else x.pname or (parse x.name);
+  getName = let
+    parse = drv: (parseDrvName drv).name;
+  in x:
+    if isString x
+    then parse x
+    else x.pname or (parse x.name);
 
-  /* This function takes an argument that's either a derivation or a
-     derivation's "name" attribute and extracts the version part from that
-     argument.
+  /**
+    This function takes an argument `x` that's either a derivation or a
+    derivation's "name" attribute and extracts the version part from that
+    argument.
 
-     Example:
-       getVersion "youtube-dl-2016.01.01"
-       => "2016.01.01"
-       getVersion pkgs.youtube-dl
-       => "2016.01.01"
+
+    # Inputs
+
+    `x`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    getVersion :: String | Derivation -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.getVersion` usage example
+
+    ```nix
+    getVersion "youtube-dl-2016.01.01"
+    => "2016.01.01"
+    getVersion pkgs.youtube-dl
+    => "2016.01.01"
+    ```
+
+    :::
   */
-  getVersion = x:
-   let
-     parse = drv: (parseDrvName drv).version;
-   in if isString x
-      then parse x
-      else x.version or (parse x.name);
+  getVersion = let
+    parse = drv: (parseDrvName drv).version;
+  in x:
+    if isString x
+    then parse x
+    else x.version or (parse x.name);
 
-  /* Extract name with version from URL. Ask for separator which is
-     supposed to start extension.
+  /**
+    Extract name and version from a URL as shown in the examples.
 
-     Example:
-       nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "-"
-       => "nix"
-       nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "_"
-       => "nix-1.7-x86"
+    Separator `sep` is used to determine the end of the extension.
+
+
+    # Inputs
+
+    `url`
+    : 1\. Function argument
+
+    `sep`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    nameFromURL :: String -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.nameFromURL` usage example
+
+    ```nix
+    nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "-"
+    => "nix"
+    nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "_"
+    => "nix-1.7-x86"
+    ```
+
+    :::
   */
   nameFromURL = url: sep:
     let
@@ -755,181 +1800,416 @@ rec {
       name = head (splitString sep filename);
     in assert name != filename; name;
 
-  /* Create a "-D<feature>:<type>=<value>" string that can be passed to typical
-     CMake invocations.
+  /**
+    Create a `"-D<feature>:<type>=<value>"` string that can be passed to typical
+    CMake invocations.
 
-    Type: cmakeOptionType :: string -> string -> string -> string
+    # Inputs
 
-     @param feature The feature to be set
-     @param type The type of the feature to be set, as described in
-                 https://cmake.org/cmake/help/latest/command/set.html
-                 the possible values (case insensitive) are:
-                 BOOL FILEPATH PATH STRING INTERNAL
-     @param value The desired value
+    `feature`
+    : The feature to be set
 
-     Example:
-       cmakeOptionType "string" "ENGINE" "sdl2"
-       => "-DENGINE:STRING=sdl2"
+    `type`
+    : The type of the feature to be set, as described in
+      https://cmake.org/cmake/help/latest/command/set.html
+      the possible values (case insensitive) are:
+      BOOL FILEPATH PATH STRING INTERNAL
+
+    `value`
+    : The desired value
+
+    # Type
+
+    ```
+    cmakeOptionType :: string -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.cmakeOptionType` usage example
+
+    ```nix
+    cmakeOptionType "string" "ENGINE" "sdl2"
+    => "-DENGINE:STRING=sdl2"
+    ```
+
+    :::
   */
-  cmakeOptionType = type: feature: value:
-    assert (lib.elem (lib.toUpper type)
-      [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ]);
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    "-D${feature}:${lib.toUpper type}=${value}";
+  cmakeOptionType = let
+    types = [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ];
+  in type: feature: value:
+    assert (elem (toUpper type) types);
+    assert (isString feature);
+    assert (isString value);
+    "-D${feature}:${toUpper type}=${value}";
 
-  /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
-     CMake invocations.
+  /**
+    Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
+    CMake invocations.
 
-    Type: cmakeBool :: string -> bool -> string
 
-     @param condition The condition to be made true or false
-     @param flag The controlling flag of the condition
+    # Inputs
 
-     Example:
-       cmakeBool "ENABLE_STATIC_LIBS" false
-       => "-DENABLESTATIC_LIBS:BOOL=FALSE"
+    `condition`
+    : The condition to be made true or false
+
+    `flag`
+    : The controlling flag of the condition
+
+    # Type
+
+    ```
+    cmakeBool :: string -> bool -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.cmakeBool` usage example
+
+    ```nix
+    cmakeBool "ENABLE_STATIC_LIBS" false
+    => "-DENABLESTATIC_LIBS:BOOL=FALSE"
+    ```
+
+    :::
   */
   cmakeBool = condition: flag:
     assert (lib.isString condition);
     assert (lib.isBool flag);
     cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
 
-  /* Create a -D<feature>:STRING=<value> string that can be passed to typical
-     CMake invocations.
-     This is the most typical usage, so it deserves a special case.
+  /**
+    Create a -D<feature>:STRING=<value> string that can be passed to typical
+    CMake invocations.
+    This is the most typical usage, so it deserves a special case.
 
-    Type: cmakeFeature :: string -> string -> string
 
-     @param condition The condition to be made true or false
-     @param flag The controlling flag of the condition
+    # Inputs
 
-     Example:
-       cmakeFeature "MODULES" "badblock"
-       => "-DMODULES:STRING=badblock"
+    `feature`
+    : The feature to be set
+
+    `value`
+    : The desired value
+
+
+    # Type
+
+    ```
+    cmakeFeature :: string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.cmakeFeature` usage example
+
+    ```nix
+    cmakeFeature "MODULES" "badblock"
+    => "-DMODULES:STRING=badblock"
+    ```
+
+    :::
   */
   cmakeFeature = feature: value:
     assert (lib.isString feature);
     assert (lib.isString value);
     cmakeOptionType "string" feature value;
 
-  /* Create a -D<feature>=<value> string that can be passed to typical Meson
-     invocations.
+  /**
+    Create a -D<feature>=<value> string that can be passed to typical Meson
+    invocations.
 
-    Type: mesonOption :: string -> string -> string
 
-     @param feature The feature to be set
-     @param value The desired value
+    # Inputs
 
-     Example:
-       mesonOption "engine" "opengl"
-       => "-Dengine=opengl"
+    `feature`
+    : The feature to be set
+
+    `value`
+    : The desired value
+
+    # Type
+
+    ```
+    mesonOption :: string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.mesonOption` usage example
+
+    ```nix
+    mesonOption "engine" "opengl"
+    => "-Dengine=opengl"
+    ```
+
+    :::
   */
   mesonOption = feature: value:
     assert (lib.isString feature);
     assert (lib.isString value);
     "-D${feature}=${value}";
 
-  /* Create a -D<condition>={true,false} string that can be passed to typical
-     Meson invocations.
+  /**
+    Create a -D<condition>={true,false} string that can be passed to typical
+    Meson invocations.
 
-    Type: mesonBool :: string -> bool -> string
 
-     @param condition The condition to be made true or false
-     @param flag The controlling flag of the condition
+    # Inputs
 
-     Example:
-       mesonBool "hardened" true
-       => "-Dhardened=true"
-       mesonBool "static" false
-       => "-Dstatic=false"
+    `condition`
+    : The condition to be made true or false
+
+    `flag`
+    : The controlling flag of the condition
+
+    # Type
+
+    ```
+    mesonBool :: string -> bool -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.mesonBool` usage example
+
+    ```nix
+    mesonBool "hardened" true
+    => "-Dhardened=true"
+    mesonBool "static" false
+    => "-Dstatic=false"
+    ```
+
+    :::
   */
   mesonBool = condition: flag:
     assert (lib.isString condition);
     assert (lib.isBool flag);
     mesonOption condition (lib.boolToString flag);
 
-  /* Create a -D<feature>={enabled,disabled} string that can be passed to
-     typical Meson invocations.
+  /**
+    Create a -D<feature>={enabled,disabled} string that can be passed to
+    typical Meson invocations.
 
-    Type: mesonEnable :: string -> bool -> string
 
-     @param feature The feature to be enabled or disabled
-     @param flag The controlling flag
+    # Inputs
 
-     Example:
-       mesonEnable "docs" true
-       => "-Ddocs=enabled"
-       mesonEnable "savage" false
-       => "-Dsavage=disabled"
+    `feature`
+    : The feature to be enabled or disabled
+
+    `flag`
+    : The controlling flag
+
+    # Type
+
+    ```
+    mesonEnable :: string -> bool -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.mesonEnable` usage example
+
+    ```nix
+    mesonEnable "docs" true
+    => "-Ddocs=enabled"
+    mesonEnable "savage" false
+    => "-Dsavage=disabled"
+    ```
+
+    :::
   */
   mesonEnable = feature: flag:
     assert (lib.isString feature);
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
-  /* Create an --{enable,disable}-<feature> string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{enable,disable}-<feature> string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       enableFeature true "shared"
-       => "--enable-shared"
-       enableFeature false "shared"
-       => "--disable-shared"
+
+    # Inputs
+
+    `flag`
+    : 1\. Function argument
+
+    `feature`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    enableFeature :: bool -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.enableFeature` usage example
+
+    ```nix
+    enableFeature true "shared"
+    => "--enable-shared"
+    enableFeature false "shared"
+    => "--disable-shared"
+    ```
+
+    :::
   */
   enableFeature = flag: feature:
     assert lib.isBool flag;
     assert lib.isString feature; # e.g. passing openssl instead of "openssl"
     "--${if flag then "enable" else "disable"}-${feature}";
 
-  /* Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       enableFeatureAs true "shared" "foo"
-       => "--enable-shared=foo"
-       enableFeatureAs false "shared" (throw "ignored")
-       => "--disable-shared"
+
+    # Inputs
+
+    `flag`
+    : 1\. Function argument
+
+    `feature`
+    : 2\. Function argument
+
+    `value`
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    enableFeatureAs :: bool -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.enableFeatureAs` usage example
+
+    ```nix
+    enableFeatureAs true "shared" "foo"
+    => "--enable-shared=foo"
+    enableFeatureAs false "shared" (throw "ignored")
+    => "--disable-shared"
+    ```
+
+    :::
   */
   enableFeatureAs = flag: feature: value:
     enableFeature flag feature + optionalString flag "=${value}";
 
-  /* Create an --{with,without}-<feature> string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{with,without}-<feature> string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       withFeature true "shared"
-       => "--with-shared"
-       withFeature false "shared"
-       => "--without-shared"
+
+    # Inputs
+
+    `flag`
+    : 1\. Function argument
+
+    `feature`
+    : 2\. Function argument
+
+
+    # Type
+
+    ```
+    withFeature :: bool -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.withFeature` usage example
+
+    ```nix
+    withFeature true "shared"
+    => "--with-shared"
+    withFeature false "shared"
+    => "--without-shared"
+    ```
+
+    :::
   */
   withFeature = flag: feature:
     assert isString feature; # e.g. passing openssl instead of "openssl"
     "--${if flag then "with" else "without"}-${feature}";
 
-  /* Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
-     standard GNU Autoconf scripts.
+  /**
+    Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
+    standard GNU Autoconf scripts.
 
-     Example:
-       withFeatureAs true "shared" "foo"
-       => "--with-shared=foo"
-       withFeatureAs false "shared" (throw "ignored")
-       => "--without-shared"
+
+    # Inputs
+
+    `flag`
+    : 1\. Function argument
+
+    `feature`
+    : 2\. Function argument
+
+    `value`
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    withFeatureAs :: bool -> string -> string -> string
+    ```
+
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.withFeatureAs` usage example
+
+    ```nix
+    withFeatureAs true "shared" "foo"
+    => "--with-shared=foo"
+    withFeatureAs false "shared" (throw "ignored")
+    => "--without-shared"
+    ```
+
+    :::
   */
   withFeatureAs = flag: feature: value:
     withFeature flag feature + optionalString flag "=${value}";
 
-  /* Create a fixed width string with additional prefix to match
-     required width.
+  /**
+    Create a fixed width string with additional prefix to match
+    required width.
 
-     This function will fail if the input string is longer than the
-     requested length.
+    This function will fail if the input string is longer than the
+    requested length.
 
-     Type: fixedWidthString :: int -> string -> string -> string
 
-     Example:
-       fixedWidthString 5 "0" (toString 15)
-       => "00015"
+    # Inputs
+
+    `width`
+    : 1\. Function argument
+
+    `filler`
+    : 2\. Function argument
+
+    `str`
+    : 3\. Function argument
+
+    # Type
+
+    ```
+    fixedWidthString :: int -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.fixedWidthString` usage example
+
+    ```nix
+    fixedWidthString 5 "0" (toString 15)
+    => "00015"
+    ```
+
+    :::
   */
   fixedWidthString = width: filler: str:
     let
@@ -942,23 +2222,67 @@ rec {
             toString strw})";
       if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
-  /* Format a number adding leading zeroes up to fixed width.
+  /**
+    Format a number adding leading zeroes up to fixed width.
 
-     Example:
-       fixedWidthNumber 5 15
-       => "00015"
+
+    # Inputs
+
+    `width`
+    : 1\. Function argument
+
+    `n`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    fixedWidthNumber :: int -> int -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.fixedWidthNumber` usage example
+
+    ```nix
+    fixedWidthNumber 5 15
+    => "00015"
+    ```
+
+    :::
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
-  /* Convert a float to a string, but emit a warning when precision is lost
-     during the conversion
+  /**
+    Convert a float to a string, but emit a warning when precision is lost
+    during the conversion
 
-     Example:
-       floatToString 0.000001
-       => "0.000001"
-       floatToString 0.0000001
-       => trace: warning: Imprecise conversion from float to string 0.000000
-          "0.000000"
+
+    # Inputs
+
+    `float`
+    : 1\. Function argument
+
+
+    # Type
+
+    ```
+    floatToString :: float -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.floatToString` usage example
+
+    ```nix
+    floatToString 0.000001
+    => "0.000001"
+    floatToString 0.0000001
+    => trace: warning: Imprecise conversion from float to string 0.000000
+       "0.000000"
+    ```
+
+    :::
   */
   floatToString = float: let
     result = toString float;
@@ -966,45 +2290,109 @@ rec {
   in lib.warnIf (!precise) "Imprecise conversion from float to string ${result}"
     result;
 
-  /* Soft-deprecated function. While the original implementation is available as
-     isConvertibleWithToString, consider using isStringLike instead, if suitable. */
-  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
+  /**
+    Check whether a value `val` can be coerced to a string.
+
+    :::{.warning}
+    Soft-deprecated function. While the original implementation is available as
+    `isConvertibleWithToString`, consider using `isStringLike` instead, if suitable.
+    :::
+
+    # Inputs
+
+    `val`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    isCoercibleToString :: a -> bool
+    ```
+  */
+  isCoercibleToString = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
     "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
     isConvertibleWithToString;
 
-  /* Check whether a list or other value can be passed to toString.
+  /**
+    Check whether a list or other value `x` can be passed to toString.
 
-     Many types of value are coercible to string this way, including int, float,
-     null, bool, list of similarly coercible values.
+    Many types of value are coercible to string this way, including `int`, `float`,
+    `null`, `bool`, `list` of similarly coercible values.
+
+    # Inputs
+
+    `val`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    isConvertibleWithToString :: a -> bool
+    ```
   */
-  isConvertibleWithToString = x:
+  isConvertibleWithToString = let
+    types = [ "null" "int" "float" "bool" ];
+  in x:
     isStringLike x ||
-    elem (typeOf x) [ "null" "int" "float" "bool" ] ||
+    elem (typeOf x) types ||
     (isList x && lib.all isConvertibleWithToString x);
 
-  /* Check whether a value can be coerced to a string.
-     The value must be a string, path, or attribute set.
+  /**
+    Check whether a value can be coerced to a string.
+    The value must be a string, path, or attribute set.
 
-     String-like values can be used without explicit conversion in
-     string interpolations and in most functions that expect a string.
-   */
+    String-like values can be used without explicit conversion in
+    string interpolations and in most functions that expect a string.
+
+
+    # Inputs
+
+    `x`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    isStringLike :: a -> bool
+    ```
+  */
   isStringLike = x:
     isString x ||
     isPath x ||
     x ? outPath ||
     x ? __toString;
 
-  /* Check whether a value is a store path.
+  /**
+    Check whether a value `x` is a store path.
 
-     Example:
-       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
-       => false
-       isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
-       => true
-       isStorePath pkgs.python
-       => true
-       isStorePath [] || isStorePath 42 || isStorePath {} || …
-       => false
+
+    # Inputs
+
+    `x`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    isStorePath :: a -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.isStorePath` usage example
+
+    ```nix
+    isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
+    => false
+    isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11"
+    => true
+    isStorePath pkgs.python
+    => true
+    isStorePath [] || isStorePath 42 || isStorePath {} || …
+    => false
+    ```
+
+    :::
   */
   isStorePath = x:
     if isStringLike x then
@@ -1014,44 +2402,62 @@ rec {
     else
       false;
 
-  /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
-  ambiguity between zero-padded and octal numbers. See toIntBase10.
+  /**
+    Parse a string as an int. Does not support parsing of integers with preceding zero due to
+    ambiguity between zero-padded and octal numbers. See toIntBase10.
 
-     Type: string -> int
+    # Inputs
 
-     Example:
+    `str`
+    : A string to be interpreted as an int.
 
-       toInt "1337"
-       => 1337
+    # Type
 
-       toInt "-4"
-       => -4
+    ```
+    toInt :: string -> int
+    ```
 
-       toInt " 123 "
-       => 123
+    # Examples
+    :::{.example}
+    ## `lib.strings.toInt` usage example
 
-       toInt "00024"
-       => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
+    ```nix
+    toInt "1337"
+    => 1337
 
-       toInt "3.14"
-       => error: floating point JSON numbers are not supported
+    toInt "-4"
+    => -4
+
+    toInt " 123 "
+    => 123
+
+    toInt "00024"
+    => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
+
+    toInt "3.14"
+    => error: floating point JSON numbers are not supported
+    ```
+
+    :::
   */
-  toInt = str:
+  toInt =
+    let
+      matchStripInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*";
+      matchLeadingZero = match "0[[:digit:]]+";
+    in
+    str:
     let
       # RegEx: Match any leading whitespace, possibly a '-', one or more digits,
       # and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*(-?[[:digit:]]+)[[:space:]]*" str;
+      strippedInput = matchStripInput str;
 
       # RegEx: Match a leading '0' then one or more digits.
-      isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
+      isLeadingZero = matchLeadingZero (head strippedInput) == [];
 
       # Attempt to parse input
       parsedInput = fromJSON (head strippedInput);
 
       generalError = "toInt: Could not convert ${escapeNixString str} to int.";
-
-      octalAmbigError = "toInt: Ambiguity in interpretation of ${escapeNixString str}"
-      + " between octal and zero padded integer.";
 
     in
       # Error on presence of non digit characters.
@@ -1059,7 +2465,7 @@ rec {
       then throw generalError
       # Error on presence of leading zero/octal ambiguity.
       else if isLeadingZero
-      then throw octalAmbigError
+      then throw "toInt: Ambiguity in interpretation of ${escapeNixString str} between octal and zero padded integer."
       # Error if parse function fails.
       else if !isInt parsedInput
       then throw generalError
@@ -1067,35 +2473,57 @@ rec {
       else parsedInput;
 
 
-  /* Parse a string as a base 10 int. This supports parsing of zero-padded integers.
+  /**
+    Parse a string as a base 10 int. This supports parsing of zero-padded integers.
 
-     Type: string -> int
+    # Inputs
 
-     Example:
-       toIntBase10 "1337"
-       => 1337
+    `str`
+    : A string to be interpreted as an int.
 
-       toIntBase10 "-4"
-       => -4
+    # Type
 
-       toIntBase10 " 123 "
-       => 123
+    ```
+    toIntBase10 :: string -> int
+    ```
 
-       toIntBase10 "00024"
-       => 24
+    # Examples
+    :::{.example}
+    ## `lib.strings.toIntBase10` usage example
 
-       toIntBase10 "3.14"
-       => error: floating point JSON numbers are not supported
+    ```nix
+    toIntBase10 "1337"
+    => 1337
+
+    toIntBase10 "-4"
+    => -4
+
+    toIntBase10 " 123 "
+    => 123
+
+    toIntBase10 "00024"
+    => 24
+
+    toIntBase10 "3.14"
+    => error: floating point JSON numbers are not supported
+    ```
+
+    :::
   */
-  toIntBase10 = str:
+  toIntBase10 =
+    let
+      matchStripInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*";
+      matchZero = match "0+";
+    in
+    str:
     let
       # RegEx: Match any leading whitespace, then match any zero padding,
       # capture possibly a '-' followed by one or more digits,
       # and finally match any trailing whitespace.
-      strippedInput = match "[[:space:]]*0*(-?[[:digit:]]+)[[:space:]]*" str;
+      strippedInput = matchStripInput str;
 
       # RegEx: Match at least one '0'.
-      isZero = match "0+" (head strippedInput) == [];
+      isZero = matchZero (head strippedInput) == [];
 
       # Attempt to parse input
       parsedInput = fromJSON (head strippedInput);
@@ -1115,22 +2543,50 @@ rec {
       # Return result.
       else parsedInput;
 
-  /* Read a list of paths from `file`, relative to the `rootPath`.
-     Lines beginning with `#` are treated as comments and ignored.
-     Whitespace is significant.
+  /**
+    Read a list of paths from `file`, relative to the `rootPath`.
+    Lines beginning with `#` are treated as comments and ignored.
+    Whitespace is significant.
 
-     NOTE: This function is not performant and should be avoided.
+    :::{.warning}
+    This function is deprecated and should be avoided.
+    :::
 
-     Example:
-       readPathsFromFile /prefix
-         ./pkgs/development/libraries/qt-5/5.4/qtbase/series
-       => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
-            "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
-            "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
-            "/prefix/nix-profiles-library-paths.patch"
-            "/prefix/compose-search-path.patch" ]
+    :::{.note}
+    This function is not performant and should be avoided.
+    :::
+
+    # Inputs
+
+    `rootPath`
+    : 1\. Function argument
+
+    `file`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    readPathsFromFile :: string -> string -> [string]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.readPathsFromFile` usage example
+
+    ```nix
+    readPathsFromFile /prefix
+      ./pkgs/development/libraries/qt-5/5.4/qtbase/series
+    => [ "/prefix/dlopen-resolv.patch" "/prefix/tzdir.patch"
+         "/prefix/dlopen-libXcursor.patch" "/prefix/dlopen-openssl.patch"
+         "/prefix/dlopen-dbus.patch" "/prefix/xdg-config-dirs.patch"
+         "/prefix/nix-profiles-library-paths.patch"
+         "/prefix/compose-search-path.patch" ]
+    ```
+
+    :::
   */
-  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
+  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead."
     (rootPath: file:
       let
         lines = lib.splitString "\n" (readFile file);
@@ -1140,30 +2596,65 @@ rec {
       in
         absolutePaths);
 
-  /* Read the contents of a file removing the trailing \n
+  /**
+    Read the contents of a file removing the trailing \n
 
-     Type: fileContents :: path -> string
 
-     Example:
-       $ echo "1.0" > ./version
+    # Inputs
 
-       fileContents ./version
-       => "1.0"
+    `file`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    fileContents :: path -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.fileContents` usage example
+
+    ```nix
+    $ echo "1.0" > ./version
+
+    fileContents ./version
+    => "1.0"
+    ```
+
+    :::
   */
   fileContents = file: removeSuffix "\n" (readFile file);
 
 
-  /* Creates a valid derivation name from a potentially invalid one.
+  /**
+    Creates a valid derivation name from a potentially invalid one.
 
-     Type: sanitizeDerivationName :: String -> String
+    # Inputs
 
-     Example:
-       sanitizeDerivationName "../hello.bar # foo"
-       => "-hello.bar-foo"
-       sanitizeDerivationName ""
-       => "unknown"
-       sanitizeDerivationName pkgs.hello
-       => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+    `string`
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    sanitizeDerivationName :: String -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.sanitizeDerivationName` usage example
+
+    ```nix
+    sanitizeDerivationName "../hello.bar # foo"
+    => "-hello.bar-foo"
+    sanitizeDerivationName ""
+    => "unknown"
+    sanitizeDerivationName pkgs.hello
+    => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+    ```
+
+    :::
   */
   sanitizeDerivationName =
   let okRegex = match "[[:alnum:]+_?=-][[:alnum:]+._?=-]*";
@@ -1190,19 +2681,41 @@ rec {
     (x: if stringLength x == 0 then "unknown" else x)
   ];
 
-  /* Computes the Levenshtein distance between two strings.
-     Complexity O(n*m) where n and m are the lengths of the strings.
-     Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
+  /**
+    Computes the Levenshtein distance between two strings `a` and `b`.
 
-     Type: levenshtein :: string -> string -> int
+    Complexity O(n*m) where n and m are the lengths of the strings.
+    Algorithm adjusted from https://stackoverflow.com/a/9750974/6605742
 
-     Example:
-       levenshtein "foo" "foo"
-       => 0
-       levenshtein "book" "hook"
-       => 1
-       levenshtein "hello" "Heyo"
-       => 3
+
+    # Inputs
+
+    `a`
+    : 1\. Function argument
+
+    `b`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    levenshtein :: string -> string -> int
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.levenshtein` usage example
+
+    ```nix
+    levenshtein "foo" "foo"
+    => 0
+    levenshtein "book" "hook"
+    => 1
+    levenshtein "hello" "Heyo"
+    => 3
+    ```
+
+    :::
   */
   levenshtein = a: b: let
     # Two dimensional array with dimensions (stringLength a + 1, stringLength b + 1)
@@ -1223,7 +2736,23 @@ rec {
         ( d (i - 1) (j - 1) + c );
   in d (stringLength a) (stringLength b);
 
-  /* Returns the length of the prefix common to both strings.
+  /**
+    Returns the length of the prefix that appears in both strings `a` and `b`.
+
+
+    # Inputs
+
+    `a`
+    : 1\. Function argument
+
+    `b`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    commonPrefixLength :: string -> string -> int
+    ```
   */
   commonPrefixLength = a: b:
     let
@@ -1231,7 +2760,23 @@ rec {
       go = i: if i >= m then m else if substring i 1 a == substring i 1 b then go (i + 1) else i;
     in go 0;
 
-  /* Returns the length of the suffix common to both strings.
+  /**
+    Returns the length of the suffix common to both strings `a` and `b`.
+
+
+    # Inputs
+
+    `a`
+    : 1\. Function argument
+
+    `b`
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    commonSuffixLength :: string -> string -> int
+    ```
   */
   commonSuffixLength = a: b:
     let
@@ -1239,23 +2784,46 @@ rec {
       go = i: if i >= m then m else if substring (stringLength a - i - 1) 1 a == substring (stringLength b - i - 1) 1 b then go (i + 1) else i;
     in go 0;
 
-  /* Returns whether the levenshtein distance between two strings is at most some value
-     Complexity is O(min(n,m)) for k <= 2 and O(n*m) otherwise
+  /**
+    Returns whether the levenshtein distance between two strings `a` and `b` is at most some value `k`.
 
-     Type: levenshteinAtMost :: int -> string -> string -> bool
+    Complexity is O(min(n,m)) for k <= 2 and O(n*m) otherwise
 
-     Example:
-       levenshteinAtMost 0 "foo" "foo"
-       => true
-       levenshteinAtMost 1 "foo" "boa"
-       => false
-       levenshteinAtMost 2 "foo" "boa"
-       => true
-       levenshteinAtMost 2 "This is a sentence" "this is a sentense."
-       => false
-       levenshteinAtMost 3 "This is a sentence" "this is a sentense."
-       => true
+    # Inputs
 
+    `k`
+    : Distance threshold
+
+    `a`
+    : String `a`
+
+    `b`
+    : String `b`
+
+    # Type
+
+    ```
+    levenshteinAtMost :: int -> string -> string -> bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.levenshteinAtMost` usage example
+
+    ```nix
+    levenshteinAtMost 0 "foo" "foo"
+    => true
+    levenshteinAtMost 1 "foo" "boa"
+    => false
+    levenshteinAtMost 2 "foo" "boa"
+    => true
+    levenshteinAtMost 2 "This is a sentence" "this is a sentense."
+    => false
+    levenshteinAtMost 3 "This is a sentence" "this is a sentense."
+    => true
+    ```
+
+    :::
   */
   levenshteinAtMost = let
     infixDifferAtMost1 = x: y: stringLength x <= 1 && stringLength y <= 1;

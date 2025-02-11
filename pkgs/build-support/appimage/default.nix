@@ -11,23 +11,29 @@
 }:
 
 rec {
-  appimage-exec = pkgs.substituteAll {
+  appimage-exec = pkgs.replaceVarsWith {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = lib.makeBinPath [
-      bash
-      binutils-unwrapped
-      coreutils
-      gawk
-      libarchive
-      pv
-      squashfsTools
-    ];
+    replacements = {
+      inherit (pkgs) runtimeShell;
+      path = lib.makeBinPath [
+        bash
+        binutils-unwrapped
+        coreutils
+        gawk
+        libarchive
+        pv
+        squashfsTools
+      ];
+    };
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
-      buildInputs = [ appimage-exec ];
+  extract = args@{ pname, version, name ? null, postExtract ? "", src, ... }:
+    assert lib.assertMsg (name == null) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+    pkgs.runCommand "${pname}-${version}-extracted" {
+      nativeBuildInputs = [ appimage-exec ];
+      strictDeps = true;
     } ''
       appimage-exec.sh -x $out ${src}
       ${postExtract}
@@ -39,15 +45,12 @@ rec {
   wrapType1 = wrapType2;
 
   wrapAppImage = args@{
-    name ? "${args.pname}-${args.version}",
     src,
-    extraPkgs,
+    extraPkgs ? pkgs: [ ],
     meta ? {},
     ...
   }: buildFHSEnv
     (defaultFhsEnvArgs // {
-      inherit name;
-
       targetPkgs = pkgs: [ appimage-exec ]
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
@@ -56,12 +59,12 @@ rec {
       meta = {
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       } // meta;
-    } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
+    } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
+  wrapType2 = args@{ src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
-      inherit name extraPkgs;
-      src = extract { inherit name src; };
+      inherit extraPkgs;
+      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "pname" "version" "src" ]) args);
 
       # passthru src to make nix-update work
       # hack to keep the origin position (unsafeGetAttrPos)
@@ -73,13 +76,11 @@ rec {
     });
 
   defaultFhsEnvArgs = {
-    name = "appimage-env";
-
     # Most of the packages were taken from the Steam chroot
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome.zenity
+      zenity
       xorg.xrandr
       which
       perl
@@ -155,31 +156,28 @@ rec {
       libuuid
       libogg
       libvorbis
-      SDL
       SDL2_image
       glew110
       openssl
       libidn
       tbb
       wayland
-      mesa
+      libgbm
       libxkbcommon
       vulkan-loader
 
       flac
-      freeglut
+      libglut
       libjpeg
       libpng12
       libpulseaudio
       libsamplerate
       libmikmod
+      libthai
       libtheora
       libtiff
       pixman
       speex
-      SDL_image
-      SDL_ttf
-      SDL_mixer
       SDL2_ttf
       SDL2_mixer
       libappindicator-gtk2
@@ -205,9 +203,12 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
-      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
       pciutils # for FreeCAD
+      pipewire # immersed-vr wayland support
+
+      libsecret # For bitwarden
+      libmpg123 # Slippi launcher
     ];
   };
 }

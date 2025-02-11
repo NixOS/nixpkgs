@@ -1,36 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, clang
-, libclang
-, libxml2
-, zlib
-, openexr
-, openimageio
-, llvm
-, boost
-, flex
-, bison
-, partio
-, pugixml
-, util-linux
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  clang,
+  libclang,
+  libxml2,
+  zlib,
+  openexr,
+  openimageio,
+  llvm,
+  boost,
+  flex,
+  bison,
+  partio,
+  pugixml,
+  util-linux,
+  python3,
 }:
 
 let
 
   boost_static = boost.override { enableStatic = true; };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
-  version = "1.12.14.0";
+  version = "1.13.11.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${version}";
-    hash = "sha256-x8t7uC4q29MkTCIS1rK0ICw78u5zZG+/zyhwttLOBr4=";
+    hash = "sha256-E/LUTtT0ZU0SBuwtJPA0FznvOuc2a3aJn2/n3ru5l0s=";
   };
 
   cmakeFlags = [
@@ -57,20 +59,22 @@ in stdenv.mkDerivation rec {
     flex
   ];
 
-  buildInputs = [
-    boost_static
-    libclang
-    llvm
-    openexr
-    openimageio
-    partio
-    pugixml
-    python3.pkgs.pybind11
-    util-linux # needed just for hexdump
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libxml2
-  ];
+  buildInputs =
+    [
+      boost_static
+      libclang
+      llvm
+      openexr
+      openimageio
+      partio
+      pugixml
+      python3.pkgs.pybind11
+      util-linux # needed just for hexdump
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libxml2
+    ];
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/*.pc \

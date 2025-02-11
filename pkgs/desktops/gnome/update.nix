@@ -1,15 +1,33 @@
-{ stdenv, pkgs, lib, writeScript, python3, common-updater-scripts }:
-{ packageName, attrPath ? packageName, versionPolicy ? "tagged", freeze ? false }:
+{
+  stdenv,
+  pkgs,
+  lib,
+  writeScript,
+  python3,
+  common-updater-scripts,
+}:
+{
+  packageName,
+  attrPath ? packageName,
+  versionPolicy ? "tagged",
+  freeze ? false,
+}:
 
 let
-  python = python3.withPackages (p: [ p.requests p.libversion ]);
-  package = lib.attrByPath (lib.splitString "." attrPath) (throw "Cannot find attribute ‘${attrPath}’.") pkgs;
+  python = python3.withPackages (p: [
+    p.requests
+    p.libversion
+  ]);
+  package =
+    lib.attrByPath (lib.splitString "." attrPath) (throw "Cannot find attribute ‘${attrPath}’.")
+      pkgs;
   packageVersion = lib.getVersion package;
   upperBound =
     let
       versionComponents = lib.versions.splitVersion packageVersion;
       minorVersion = lib.versions.minor packageVersion;
-      minorAvailable = builtins.length versionComponents > 1 && builtins.match "[0-9]+" minorVersion != null;
+      minorAvailable =
+        builtins.length versionComponents > 1 && builtins.match "[0-9]+" minorVersion != null;
       nextMinor = builtins.fromJSON minorVersion + 1;
       upperBound = "${lib.versions.major packageVersion}.${builtins.toString nextMinor}";
     in
@@ -77,9 +95,16 @@ let
 
     print(json.dumps(report))
   '';
-in {
+in
+{
   name = "gnome-update-script";
-  command = [ updateScript attrPath packageName packageVersion versionPolicy ] ++ upperBound;
+  command = [
+    updateScript
+    attrPath
+    packageName
+    packageVersion
+    versionPolicy
+  ] ++ upperBound;
   supportedFeatures = [
     "commit"
   ];

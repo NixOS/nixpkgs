@@ -1,46 +1,62 @@
-{ lib, bundlerApp, bundlerUpdateScript, makeWrapper,
-  withPngcrush ? true,       pngcrush,
-  withPngout ? false,        pngout, # disabled by default because it's unfree
-  withAdvpng ? true,         advancecomp,
-  withOptipng ? true,        optipng,
-  withPngquant ? true,       pngquant,
-  withOxipng ? true,         oxipng,
-  withJhead ? true,          jhead,
-  withJpegoptim ? true,      jpegoptim,
-  withJpegrecompress ? true, jpeg-archive,
-  withJpegtran ? true,       libjpeg,
-  withGifsicle ? true,       gifsicle,
-  withSvgo ? true,           svgo
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeWrapper,
+  withPngcrush ? true,
+  pngcrush,
+  withPngout ? false,
+  pngout, # disabled by default because it's unfree
+  withAdvpng ? true,
+  advancecomp,
+  withOptipng ? true,
+  optipng,
+  withPngquant ? true,
+  pngquant,
+  withOxipng ? true,
+  oxipng,
+  withJhead ? true,
+  jhead,
+  withJpegoptim ? true,
+  jpegoptim,
+  withJpegrecompress ? true,
+  jpeg-archive,
+  withJpegtran ? true,
+  libjpeg,
+  withGifsicle ? true,
+  gifsicle,
+  withSvgo ? true,
+  svgo,
 }:
 
-with lib;
-
 let
-  optionalDepsPath = optional withPngcrush pngcrush
-    ++ optional withPngout pngout
-    ++ optional withAdvpng advancecomp
-    ++ optional withOptipng optipng
-    ++ optional withPngquant pngquant
-    ++ optional withOxipng oxipng
-    ++ optional withJhead jhead
-    ++ optional withJpegoptim jpegoptim
-    ++ optional withJpegrecompress jpeg-archive
-    ++ optional withJpegtran libjpeg
-    ++ optional withGifsicle gifsicle
-    ++ optional withSvgo svgo;
+  optionalDepsPath =
+    lib.optional withPngcrush pngcrush
+    ++ lib.optional withPngout pngout
+    ++ lib.optional withAdvpng advancecomp
+    ++ lib.optional withOptipng optipng
+    ++ lib.optional withPngquant pngquant
+    ++ lib.optional withOxipng oxipng
+    ++ lib.optional withJhead jhead
+    ++ lib.optional withJpegoptim jpegoptim
+    ++ lib.optional withJpegrecompress jpeg-archive
+    ++ lib.optional withJpegtran libjpeg
+    ++ lib.optional withGifsicle gifsicle
+    ++ lib.optional withSvgo svgo;
 
-  disabledWorkersFlags = optional (!withPngcrush) "--no-pngcrush"
-    ++ optional (!withPngout) "--no-pngout"
-    ++ optional (!withAdvpng) "--no-advpng"
-    ++ optional (!withOptipng) "--no-optipng"
-    ++ optional (!withPngquant) "--no-pngquant"
-    ++ optional (!withOxipng) "--no-oxipng"
-    ++ optional (!withJhead) "--no-jhead"
-    ++ optional (!withJpegoptim) "--no-jpegoptim"
-    ++ optional (!withJpegrecompress) "--no-jpegrecompress"
-    ++ optional (!withJpegtran) "--no-jpegtran"
-    ++ optional (!withGifsicle) "--no-gifsicle"
-    ++ optional (!withSvgo) "--no-svgo";
+  disabledWorkersFlags =
+    lib.optional (!withPngcrush) "--no-pngcrush"
+    ++ lib.optional (!withPngout) "--no-pngout"
+    ++ lib.optional (!withAdvpng) "--no-advpng"
+    ++ lib.optional (!withOptipng) "--no-optipng"
+    ++ lib.optional (!withPngquant) "--no-pngquant"
+    ++ lib.optional (!withOxipng) "--no-oxipng"
+    ++ lib.optional (!withJhead) "--no-jhead"
+    ++ lib.optional (!withJpegoptim) "--no-jpegoptim"
+    ++ lib.optional (!withJpegrecompress) "--no-jpegrecompress"
+    ++ lib.optional (!withJpegtran) "--no-jpegtran"
+    ++ lib.optional (!withGifsicle) "--no-gifsicle"
+    ++ lib.optional (!withSvgo) "--no-svgo";
 in
 
 bundlerApp {
@@ -53,7 +69,7 @@ bundlerApp {
 
   postBuild = ''
     wrapProgram $out/bin/image_optim \
-      --prefix PATH : ${lib.escapeShellArg (makeBinPath optionalDepsPath)} \
+      --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath optionalDepsPath)} \
       --add-flags "${lib.concatStringsSep " " disabledWorkersFlags}"
   '';
 
@@ -69,7 +85,11 @@ bundlerApp {
     '';
     homepage = "https://github.com/toy/image_optim";
     license = licenses.mit;
-    maintainers = with maintainers; [ srghma nicknovitski ];
+    maintainers = with maintainers; [
+      srghma
+      nicknovitski
+    ];
     platforms = platforms.all;
+    mainProgram = "image_optim";
   };
 }

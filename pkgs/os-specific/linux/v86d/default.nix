@@ -1,13 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, klibc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  klibc,
 }:
 
 let
   pversion = "0.1.10";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "v86d";
   version = "${pversion}-${kernel.version}";
 
@@ -22,7 +24,10 @@ in stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  configureFlags = [ "--with-klibc" "--with-x86emu" ];
+  configureFlags = [
+    "--with-klibc"
+    "--with-x86emu"
+  ];
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -38,10 +43,14 @@ in stdenv.mkDerivation rec {
   buildInputs = [ klibc ];
 
   meta = with lib; {
-    description = "A daemon to run x86 code in an emulated environment";
+    description = "Daemon to run x86 code in an emulated environment";
+    mainProgram = "v86d";
     homepage = "https://github.com/mjanusz/v86d";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ codyopel ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

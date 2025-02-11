@@ -1,76 +1,88 @@
-{ lib
-, buildPythonPackage
-, environs
-, fetchFromGitHub
-, gitpython
-, grpcio
-, grpcio-testing
-, mmh3
-, pandas
-, pytestCheckHook
-, python
-, pythonOlder
-, pythonRelaxDepsHook
-, scikit-learn
-, setuptools-scm
-, ujson
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  gitpython,
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  grpcio,
+  # milvus-lite, (unpackaged)
+  pandas,
+  protobuf,
+  python-dotenv,
+  ujson,
+
+  # tests
+  grpcio-testing,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.5.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milvus-io";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hp00iUT1atyTQk532z7VAajpfvtnKE8W2la9MW7NxoE=";
+    repo = "pymilvus";
+    tag = "v${version}";
+    hash = "sha256-w7ZsBXmmkCp3K+YaitZXPHK5pxh/dSJm8aR7xM0VrfU=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  build-system = [
+    gitpython
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "grpcio"
   ];
 
-  nativeBuildInputs = [
-    gitpython
-    pythonRelaxDepsHook
-    setuptools-scm
-    wheel
+  pythonRemoveDeps = [
+    "milvus-lite"
   ];
 
-  propagatedBuildInputs = [
-    environs
+  dependencies = [
     grpcio
-    mmh3
+    # milvus-lite
     pandas
+    protobuf
+    python-dotenv
+    setuptools
     ujson
   ];
 
   nativeCheckInputs = [
     grpcio-testing
     pytestCheckHook
-    scikit-learn
+    # scikit-learn
   ];
 
-  pythonImportsCheck = [
-    "pymilvus"
-  ];
+  pythonImportsCheck = [ "pymilvus" ];
 
   disabledTests = [
+    # Tries to read .git
     "test_get_commit"
+
+    # milvus-lite is not packaged
+    "test_milvus_lite"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # pymilvus.exceptions.MilvusException: <MilvusException: (code=2, message=Fail connecting to server on localhost:19530, illegal connection params or server unavailable)>
+    "examples/test_bitmap_index.py"
+  ];
+
+  meta = {
     description = "Python SDK for Milvus";
     homepage = "https://github.com/milvus-io/pymilvus";
     changelog = "https://github.com/milvus-io/pymilvus/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -8,6 +8,9 @@
 , aws-crt-cpp
 , CoreAudio
 , AudioToolbox
+, nix
+, arrow-cpp
+, aws-sdk-cpp
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -24,18 +27,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.11.118";
+  # nixpkgs-update: no auto update
+  version = "1.11.448";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-jqGXh8xLD2gIjV9kSvlldrxA5TxTTXQoC/B66FVprvk=";
+    hash = "sha256-K0UFs7vOeZeQIs3G5L4FfEWXDGTXT9ssr/vQwa1l2lw=";
   };
-
-  patches = [
-    ./cmake-dirs.patch
-  ];
 
   postPatch = ''
     # Append the dev output to path hints in finding Aws.h to avoid
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
     # TestRandomURLMultiThreaded fails
     rm tests/aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-  '' + lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.hostPlatform.isi686 ''
     # EPSILON is exceeded
     rm tests/aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
   '';
@@ -72,15 +72,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl openssl zlib
-  ] ++ lib.optionals (stdenv.isDarwin &&
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];
 
   # propagation is needed for Security.framework to be available when linking
   propagatedBuildInputs = [ aws-crt-cpp ];
-  # Ensure the linker is using atomic when compiling for RISC-V, otherwise fails
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
@@ -109,12 +107,48 @@ stdenv.mkDerivation rec {
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru = {
+    tests = {
+      inherit nix arrow-cpp;
+      cmake-find-package = stdenv.mkDerivation {
+        pname = "aws-sdk-cpp-cmake-find-package-test";
+        version = "0";
+        dontUnpack = true;
+        nativeBuildInputs = [ cmake ];
+        buildInputs = [ aws-sdk-cpp ];
+        buildCommand = ''
+          cat > CMakeLists.txt <<'EOF'
+          find_package(AWSSDK)
+          EOF
+
+          # Intentionally not using 'cmakeConfigurePhase' to test that find_package works without it.
+          mkdir build && cd build
+          if output=$(cmake -Wno-dev .. 2>&1); then
+            if grep -Fw -- "Found AWS" - <<< "$output"; then
+              touch "$out"
+            else
+              echo "'Found AWS' not found in the cmake output!" >&2
+              echo "The output was:" >&2
+              echo "$output" >&2
+              exit 1
+            fi
+          else
+            echo -n "'cmake -Wno-dev ..'" >&2
+            echo " returned a non-zero exit code." >&2
+            echo "$output" >&2
+            exit 1
+          fi
+        '';
+      };
+    };
+  };
+
   meta = with lib; {
-    description = "A C++ interface for Amazon Web Services";
+    description = "C++ interface for Amazon Web Services";
     homepage = "https://github.com/aws/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ eelco orivej ];
+    maintainers = with maintainers; [ orivej ];
     # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
     broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
   };

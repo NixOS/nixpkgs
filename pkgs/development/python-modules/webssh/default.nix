@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, pytestCheckHook
-, tornado
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  paramiko,
+  pytestCheckHook,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -17,30 +18,26 @@ buildPythonPackage rec {
     hash = "sha256-mRestRJukaf7ti3vIs/MM/R+zpGmK551j5HAM2chBsE=";
   };
 
+  patches = [
+    ./remove-typo-in-test-case.patch
+  ];
+
   propagatedBuildInputs = [
     paramiko
     tornado
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "webssh"
-  ];
-
-  disabledTests = [
-    # Test fails with AttributeError (possibly related to paramiko update)
-    "test_app_with_bad_host_key"
-  ];
+  pythonImportsCheck = [ "webssh" ];
 
   meta = with lib; {
     description = "Web based SSH client";
+    mainProgram = "wssh";
     homepage = "https://github.com/huashengdun/webssh/";
     changelog = "https://github.com/huashengdun/webssh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

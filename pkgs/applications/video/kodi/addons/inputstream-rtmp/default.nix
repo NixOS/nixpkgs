@@ -1,18 +1,30 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, openssl, rtmpdump, zlib }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  openssl,
+  rtmpdump,
+  zlib,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "inputstream-rtmp";
   namespace = "inputstream.rtmp";
-  version = "20.3.0";
+  version = "21.1.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.rtmp";
     rev = "${version}-${rel}";
-    sha256 = "sha256-VF2DpQXXU+rj76e/de5YB1T7dzeOjmO0dpsPVqEnMy4=";
+    sha256 = "sha256-M6LFokWQRzBZ7inzRsMxyWzkV0XsGHh4d0CPhv1NCfI=";
   };
 
-  extraBuildInputs = [ openssl rtmpdump zlib ];
+  extraBuildInputs = [
+    openssl
+    rtmpdump
+    zlib
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/inputstream.rtmp/";

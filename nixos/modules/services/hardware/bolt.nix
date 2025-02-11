@@ -1,18 +1,19 @@
-# Thunderbolt 3 device manager
-
-{ config, lib, pkgs, ...}:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.hardware.bolt;
+in
 {
   options = {
-
     services.hardware.bolt = {
-
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Bolt, a userspace daemon to enable
           security levels for Thunderbolt 3 on GNU/Linux.
 
@@ -20,15 +21,13 @@ with lib;
         '';
       };
 
+      package = lib.mkPackageOption pkgs "bolt" { };
     };
-
   };
 
-  config = mkIf config.services.hardware.bolt.enable {
-
-    environment.systemPackages = [ pkgs.bolt ];
-    services.udev.packages = [ pkgs.bolt ];
-    systemd.packages = [ pkgs.bolt ];
-
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+    services.udev.packages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
   };
 }

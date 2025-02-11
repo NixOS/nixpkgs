@@ -1,42 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autoslot";
-  version = "2022.12.1";
-  format = "pyproject";
+  version = "2024.12.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cjrh";
     repo = "autoslot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fG4rRwRubJt2aXChEsMybEKal6LscZI7GA2uwtK5Vtg=";
+    tag = "v${version}";
+    hash = "sha256-wYjsBrjvSZFHDt0HLrnS9Xwk8EHVQupfPSkQnUFmMAk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'requires = ["flit"]' 'requires = ["flit_core"]' \
-      --replace 'build-backend = "flit.buildapi"' 'build-backend = "flit_core.buildapi"'
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "autoslot"
-  ];
+  pythonImportsCheck = [ "autoslot" ];
 
   meta = with lib; {
     description = "Automatic __slots__ for your Python classes";

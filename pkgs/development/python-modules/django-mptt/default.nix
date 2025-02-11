@@ -1,37 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-js-asset
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  django,
+  django-js-asset,
 }:
 
 buildPythonPackage rec {
   pname = "django-mptt";
-  version = "0.13.4";
-  format = "setuptools";
+  version = "0.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "django-mptt";
+    repo = "django-mptt";
     rev = version;
-    sha256 = "12y3chxhqxk2yxin055f0f45nabj0s8hil12hw0lwzlbax6k9ss6";
+    hash = "sha256-vWnXKWzaa5AWoNaIc8NA1B2mnzKXRliQmi5VdrRMadE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     django
     django-js-asset
   ];
 
-  pythonImportsCheck = [
-    "mptt"
-  ];
+  pythonImportsCheck = [ "mptt" ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} tests/manage.py test
-    runHook postCheck
-  '';
+  # No pytest checks, since they depend on model_mommy, which is deprecated
+  doCheck = false;
 
   meta = with lib; {
     description = "Utilities for implementing a modified pre-order traversal tree in Django";

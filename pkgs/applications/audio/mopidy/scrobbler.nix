@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, mopidy }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Scrobbler";
@@ -9,7 +14,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "11vxgax4xgkggnq4fr1rh2rcvzspkkimck5p3h4phdj3qpnj0680";
   };
 
-  propagatedBuildInputs = with python3Packages; [ mopidy pylast ];
+  propagatedBuildInputs = with python3Packages; [
+    mopidy
+    pylast
+  ];
 
   # no tests implemented
   doCheck = false;
@@ -17,7 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-scrobbler";
-    description = "Mopidy extension for scrobbling played tracks to Last.fm.";
+    description = "Mopidy extension for scrobbling played tracks to Last.fm";
     license = licenses.asl20;
     maintainers = with maintainers; [ jakeisnt ];
   };

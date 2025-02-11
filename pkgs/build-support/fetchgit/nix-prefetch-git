@@ -17,9 +17,9 @@ branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 out=${out:-}
 http_proxy=${http_proxy:-}
 
-# allow overwriting cacert's ca-bundle.crt with a custom one
-# this can be done by setting NIX_GIT_SSL_CAINFO and NIX_SSL_CERT_FILE environment variables for the nix-daemon
-GIT_SSL_CAINFO=${NIX_GIT_SSL_CAINFO:-$GIT_SSL_CAINFO}
+# NOTE: use of NIX_GIT_SSL_CAINFO is for backwards compatibility; NIX_SSL_CERT_FILE is preferred
+# as of PR#303307
+GIT_SSL_CAINFO=${NIX_GIT_SSL_CAINFO:-$NIX_SSL_CERT_FILE}
 
 # populated by clone_user_rev()
 fullRev=
@@ -120,7 +120,7 @@ init_remote(){
         git config remote.origin.partialclonefilter "blob:none"
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
-    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
+    ( [ -n "$http_proxy" ] && clean_git config --global http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -166,7 +166,7 @@ checkout_hash(){
     clean_git fetch -t ${builder:+--progress} origin || return 1
 
     local object_type=$(git cat-file -t "$hash")
-    if [[ "$object_type" == "commit" ]]; then
+    if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
         clean_git checkout -b "$branchName" "$hash" || return 1
     elif [[ "$object_type" == "tree" ]]; then
         clean_git config user.email "nix-prefetch-git@localhost"
@@ -412,6 +412,7 @@ remove_tmpPath() {
 }
 
 remove_tmpHomePath() {
+    chmod -R u+w "$tmpHomePath"
     rm -rf "$tmpHomePath"
 }
 
@@ -452,8 +453,9 @@ else
     # If we don't know the hash or a path with that hash doesn't exist,
     # download the file and add it to the store.
     if test -z "$finalPath"; then
-
-        tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
+        # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+        # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+        tmpPath="$(realpath "$(mktemp -d --tmpdir git-checkout-tmp-XXXXXXXX)")"
         exit_handlers+=(remove_tmpPath)
 
         tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"

@@ -1,63 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  flit-core,
 
-# dependencies
-, astroid
-, anyascii
-, jinja2
-, pyyaml
-, sphinx
+  # dependencies
+  astroid,
+  jinja2,
+  pyyaml,
+  sphinx,
+  stdlib-list,
 
-# tests
-, beautifulsoup4
-, mock
-, pytestCheckHook
+  # tests
+  beautifulsoup4,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "2.1.1";
-  format = "pyproject";
+  version = "3.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+625bnkCDWsOxF2IhRe/gW1rWHotNA++HsMRNeMApsg=";
+  src = fetchFromGitHub {
+    owner = "readthedocs";
+    repo = "sphinx-autoapi";
+    tag = "v${version}";
+    hash = "sha256-EOrbNs1IAeQbdrmOcNaBx2mxN/ec9IvjKTcOr/xR3YA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    anyascii
-    astroid
-    jinja2
-    pyyaml
-    sphinx
-  ];
+  dependencies =
+    [
+      astroid
+      jinja2
+      pyyaml
+      sphinx
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      stdlib-list
+    ];
 
   nativeCheckInputs = [
     beautifulsoup4
-    mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # failing typing assertions
+    # require network access
     "test_integration"
-    "test_annotations"
   ];
 
-  pythonImportsCheck = [
-    "autoapi"
-  ];
+  pythonImportsCheck = [ "autoapi" ];
 
   meta = with lib; {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";

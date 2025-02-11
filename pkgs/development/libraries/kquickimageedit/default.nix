@@ -1,10 +1,13 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
-, extra-cmake-modules
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  extra-cmake-modules,
+  qtbase,
+  qtdeclarative,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kquickimageeditor";
   version = "0.3.0";
 
@@ -17,6 +20,12 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Set of QtQuick components providing basic image editing capabilities";

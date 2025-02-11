@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pandas
-, pytz
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytest7CheckHook,
+  numpy,
+  pandas,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mverleg";
     repo = "pyjson_tricks";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xddMc4PvVI+mqB3eeVqECZmdeSKAURsdbOnUAXahqM0=";
   };
 
@@ -26,12 +27,10 @@ buildPythonPackage rec {
     numpy
     pandas
     pytz
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
-  pythonImportsCheck = [
-    "json_tricks"
-  ];
+  pythonImportsCheck = [ "json_tricks" ];
 
   meta = with lib; {
     description = "Extra features for Python JSON handling";

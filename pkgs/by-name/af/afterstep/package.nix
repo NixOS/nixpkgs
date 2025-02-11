@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, dbus
-, fltk13
-, gtk2
-, libICE
-, libSM
-, libtiff
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  dbus,
+  fltk13,
+  gtk2,
+  libICE,
+  libSM,
+  libtiff,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -87,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.afterstep.org/";
-    description = "A NEXTStep-inspired window manager";
+    description = "NEXTStep-inspired window manager";
     longDescription = ''
       AfterStep is a window manager for the Unix X Window System. Originally
       based on the look and feel of the NeXTStep interface, it provides end

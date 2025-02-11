@@ -1,38 +1,40 @@
---- a/gtk2/immodule/Makefile.in	2015-11-24 16:21:08.967087208 +0900
-+++ b/gtk2/immodule/Makefile.in	2015-11-24 16:22:53.316095150 +0900
-@@ -928,7 +928,6 @@
+diff --git a/gtk2/immodule/Makefile.am b/gtk2/immodule/Makefile.am
+index d219a5a4b0..331e127122 100644
+--- a/gtk2/immodule/Makefile.am
++++ b/gtk2/immodule/Makefile.am
+@@ -37,6 +37,7 @@
+ GTK_RC_GET_IMMODULE_FILE = $(top_builddir)/gtk2/immodule/gtk-rc-get-immodule-file
+ QUERY_COMMAND = gtk-query-immodules-2.0
  
- install-data-am: install-moduleLTLIBRARIES
- 	@$(NORMAL_INSTALL)
--	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
- install-dvi: install-dvi-am
++if FALSE
+ install-data-hook: gtk-rc-get-immodule-file
+ 	if test -z $(DESTDIR); then \
+ 	  if test $(libdir) = $(GTK_LIBDIR); then \
+@@ -82,6 +83,7 @@
+ 	    fi \
+ 	  fi \
+ 	fi
++endif
+ else
+ install-data-hook:
  
- install-dvi-am:
-@@ -993,7 +992,7 @@
- 	distclean-compile distclean-generic distclean-libtool \
- 	distclean-tags distdir dvi dvi-am html html-am info info-am \
- 	install install-am install-data install-data-am \
--	install-data-hook install-dvi install-dvi-am install-exec \
-+	install-dvi install-dvi-am install-exec \
- 	install-exec-am install-html install-html-am install-info \
- 	install-info-am install-man install-moduleLTLIBRARIES \
- 	install-pdf install-pdf-am install-ps install-ps-am \
---- a/gtk3/immodule/Makefile.in	2015-11-24 16:21:08.971087209 +0900
-+++ b/gtk3/immodule/Makefile.in	2015-11-24 16:23:28.251097832 +0900
-@@ -896,7 +896,6 @@
+diff --git a/gtk3/immodule/Makefile.am b/gtk3/immodule/Makefile.am
+index de58b88916..d519b03b1d 100644
+--- a/gtk3/immodule/Makefile.am
++++ b/gtk3/immodule/Makefile.am
+@@ -39,6 +39,7 @@
  
- install-data-am: install-moduleLTLIBRARIES
- 	@$(NORMAL_INSTALL)
--	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
- install-dvi: install-dvi-am
+ QUERY_COMMAND = gtk-query-immodules-3.0
  
- install-dvi-am:
-@@ -959,7 +958,7 @@
- 	cscopelist-am ctags ctags-am distclean distclean-compile \
- 	distclean-generic distclean-libtool distclean-tags distdir dvi \
- 	dvi-am html html-am info info-am install install-am \
--	install-data install-data-am install-data-hook install-dvi \
-+	install-data install-data-am install-dvi \
- 	install-dvi-am install-exec install-exec-am install-html \
- 	install-html-am install-info install-info-am install-man \
- 	install-moduleLTLIBRARIES install-pdf install-pdf-am \
++if FALSE
+ install-data-hook:
+ 	if test -z $(DESTDIR); then \
+ 	  if test $(libdir) = $(GTK3_LIBDIR); then \
+@@ -74,6 +75,7 @@
+ 	    fi \
+ 	  fi \
+ 	fi
++endif
+ else
+ install-data-hook:
+ 

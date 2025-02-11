@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "asitop";
-  version = "0.0.23";
+  version = "0.0.24";
   format = "setuptools";
 
   disabled = python3.pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BNncgQRNAd6Pgur5D1xVQi3LSsijSAYIYvhsuiVyi9Q=";
+    hash = "sha256-Xfe1kwRXKpSPcc+UuHrcYThpqKh6kzWVsbPia/QsPjc=";
   };
 
   # has no tests

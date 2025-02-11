@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 let
-  version = "1.6.1";
+  version = "1.9.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "fangfrisch";
@@ -13,8 +14,8 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "fangfrisch";
-    rev = version;
-    hash = "sha256-yXXzwN0BI//NqpNNmKIhwFv3hDwNZLl1K81hUD/tCrQ=";
+    tag = version;
+    hash = "sha256-B2fVXVYzrtWMh/WjgFBOqrq8Jt+jqudbtpY/w4rJG08=";
   };
 
   nativeBuildInputs = [

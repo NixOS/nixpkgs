@@ -1,225 +1,78 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, pkg-config
-, cmake
-, ninja
-, clang
-, python3
-, wrapQtAppsHook
-, removeReferencesTo
-, extra-cmake-modules
-, qtbase
-, qtimageformats
-, qtsvg
-, kwayland
-, lz4
-, xxHash
-, ffmpeg_4
-, openalSoft
-, minizip
-, libopus
-, alsa-lib
-, libpulseaudio
-, range-v3
-, tl-expected
-, hunspell
-, glibmm
-, jemalloc
-, rnnoise
-, abseil-cpp
-, microsoft-gsl
-, wayland
-, libicns
-, Cocoa
-, CoreFoundation
-, CoreServices
-, CoreText
-, CoreGraphics
-, CoreMedia
-, OpenGL
-, AudioUnit
-, ApplicationServices
-, Foundation
-, AGL
-, Security
-, SystemConfiguration
-, Carbon
-, AudioToolbox
-, VideoToolbox
-, VideoDecodeAcceleration
-, AVFoundation
-, CoreAudio
-, CoreVideo
-, CoreMediaIO
-, QuartzCore
-, AppKit
-, CoreWLAN
-, WebKit
-, IOKit
-, GSS
-, MediaPlayer
-, IOSurface
-, Metal
-, MetalKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  yasm,
+  withWebkit ? true,
 }:
 
 let
-  tg_owt = callPackage ./tg_owt.nix {
-    abseil-cpp = abseil-cpp.override {
-      # abseil-cpp should use the same compiler
-      inherit stdenv;
-      cxxStandard = "20";
+  telegram-desktop = libsForQt5.callPackage ../telegram-desktop { inherit stdenv; };
+  version = "1.4.9";
+  tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
+    version = "0-unstable-2024-06-15";
+
+    src = fetchFromGitHub {
+      owner = "desktop-app";
+      repo = "tg_owt";
+      rev = "c9cc4390ab951f2cbc103ff783a11f398b27660b";
+      hash = "sha256-FfWmSYaeryTDbsGJT3R7YK1oiyJcrR7YKKBOF+9PmpY=";
+      fetchSubmodules = true;
     };
 
-    # tg_owt should use the same compiler
-    inherit stdenv;
+    patches = (oldAttrs.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "src/";
+        hash = "sha256-goxnuRRbwcdfIk1jFaKGiKCTCYn2saEj7En1Iyglzko=";
+      })
+    ];
 
-    inherit Cocoa AppKit IOKit IOSurface Foundation AVFoundation CoreMedia VideoToolbox
-      CoreGraphics CoreVideo OpenGL Metal MetalKit CoreFoundation ApplicationServices;
-  };
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
+  });
 in
-stdenv.mkDerivation rec {
+telegram-desktop.override {
   pname = "kotatogram-desktop";
-  version = "1.4.9";
+  inherit withWebkit;
+  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+    pname = "kotatogram-desktop-unwrapped";
+    version = "${version}-unstable-2024-09-27";
 
-  src = fetchFromGitHub {
-    owner = "kotatogram";
-    repo = "kotatogram-desktop";
-    rev = "k${version}";
-    sha256 = "sha256-6bF/6fr8mJyyVg53qUykysL7chuewtJB8E22kVyxjHw=";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "kotatogram";
+      repo = "kotatogram-desktop";
+      rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
+      hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
+      fetchSubmodules = true;
+    };
 
-  patches = [
-    ./kf594.patch
-    ./shortcuts-binary-path.patch
-  ];
+    patches = [
+      ./macos-qt5.patch
+      (fetchpatch {
+        url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
+        stripLen = 1;
+        extraPrefix = "cmake/external/glib/cppgir/";
+        hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
+      })
+    ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i "13i#import <CoreAudio/CoreAudio.h>" Telegram/lib_webrtc/webrtc/mac/webrtc_media_devices_mac.mm
-    substituteInPlace Telegram/CMakeLists.txt \
-      --replace 'COMMAND iconutil' 'COMMAND png2icns' \
-      --replace '--convert icns' "" \
-      --replace '--output AppIcon.icns' 'AppIcon.icns' \
-      --replace "\''${appicon_path}" "\''${appicon_path}/icon_16x16.png \''${appicon_path}/icon_32x32.png \''${appicon_path}/icon_128x128.png \''${appicon_path}/icon_256x256.png \''${appicon_path}/icon_512x512.png"
-  '';
+    meta = with lib; {
+      description = "Kotatogram – experimental Telegram Desktop fork";
+      longDescription = ''
+        Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    python3
-    wrapQtAppsHook
-    removeReferencesTo
-  ] ++ lib.optionals stdenv.isLinux [
-    # to build bundled libdispatch
-    clang
-    extra-cmake-modules
-  ];
-
-  buildInputs = [
-    qtbase
-    qtimageformats
-    qtsvg
-    lz4
-    xxHash
-    ffmpeg_4
-    openalSoft
-    minizip
-    libopus
-    range-v3
-    tl-expected
-    rnnoise
-    tg_owt
-    microsoft-gsl
-  ] ++ lib.optionals stdenv.isLinux [
-    kwayland
-    alsa-lib
-    libpulseaudio
-    hunspell
-    glibmm
-    jemalloc
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    CoreFoundation
-    CoreServices
-    CoreText
-    CoreGraphics
-    CoreMedia
-    OpenGL
-    AudioUnit
-    ApplicationServices
-    Foundation
-    AGL
-    Security
-    SystemConfiguration
-    Carbon
-    AudioToolbox
-    VideoToolbox
-    VideoDecodeAcceleration
-    AVFoundation
-    CoreAudio
-    CoreVideo
-    CoreMediaIO
-    QuartzCore
-    AppKit
-    CoreWLAN
-    WebKit
-    IOKit
-    GSS
-    MediaPlayer
-    IOSurface
-    Metal
-    libicns
-  ];
-
-  enableParallelBuilding = true;
-
-  cmakeFlags = [
-    "-DTDESKTOP_API_TEST=ON"
-    "-DDESKTOP_APP_QT6=OFF"
-  ];
-
-  installPhase = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    cp -r Kotatogram.app $out/Applications
-    ln -s $out/Applications/Kotatogram.app/Contents/MacOS $out/bin
-  '';
-
-  preFixup = ''
-    binName=${if stdenv.isLinux then "kotatogram-desktop" else "Kotatogram"}
-    remove-references-to -t ${stdenv.cc.cc} $out/bin/$binName
-    remove-references-to -t ${microsoft-gsl} $out/bin/$binName
-    remove-references-to -t ${tg_owt.dev} $out/bin/$binName
-  '';
-
-  passthru = {
-    inherit tg_owt;
-  };
-
-  meta = with lib; {
-    description = "Kotatogram – experimental Telegram Desktop fork";
-    longDescription = ''
-      Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
-
-      It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
-    '';
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{version}";
-    maintainers = with maintainers; [ ilya-fedin ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+        It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
+      '';
+      license = licenses.gpl3Only;
+      platforms = platforms.all;
+      homepage = "https://kotatogram.github.io";
+      changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
+      maintainers = with maintainers; [ ilya-fedin ];
+      mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
+    };
   };
 }

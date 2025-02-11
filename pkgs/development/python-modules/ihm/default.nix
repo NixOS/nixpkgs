@@ -1,38 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, swig
-, wheel
-, msgpack
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  swig,
+  msgpack,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ihm";
-  version = "0.41";
+  version = "1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-weeOizVWFcOxD45QsvEaoknTofZjglCvidyvXpyRKwc=";
+    tag = version;
+    hash = "sha256-Uz/4Egd7swY4kDl6FR564eiaYEdY9IUoz2Lv5pJ1C30=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    swig
-    wheel
-  ];
+  nativeBuildInputs = [ swig ];
 
-  propagatedBuildInputs = [
-    msgpack
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ msgpack ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires network access

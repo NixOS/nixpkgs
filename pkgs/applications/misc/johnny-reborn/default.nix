@@ -1,38 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "johnny-reborn-engine";
-  version = "unstable-2020-12-06";
+  version = "0.45";
 
   src = fetchFromGitHub {
-    owner = "jno6809";
+    owner = "xesf";
     repo = "jc_reborn";
-    rev = "524a5803e4fa65f840379c781f40ce39a927032e";
-    hash = "sha256-YKAOCgdRnvNMzL6LJVXN0pLvjyJk4Zv/RCqGtDPFR90=";
+    rev = "v${version}";
+    hash = "sha256-PDh2RKdvm4LkDKi963CB5RiraWcS3FED6ug8T1J65GM=";
   };
-
-  makefile = "Makefile.linux";
 
   buildInputs = [ SDL2 ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp jc_reborn $out/
+    mkdir -p $out/bin
+    cp jc_reborn $out/bin/
 
     runHook postInstall
   '';
 
   meta = {
-    description = "An open-source engine for the classic \"Johnny Castaway\" screensaver (engine only)";
-    homepage = "https://github.com/jno6809/jc_reborn";
+    description = "Open-source engine for the classic \"Johnny Castaway\" screensaver (engine only)";
+    homepage = "https://github.com/xesf/jc_reborn";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pedrohlc ];
+    mainProgram = "jc_reborn";
     inherit (SDL2.meta) platforms;
   };
 }

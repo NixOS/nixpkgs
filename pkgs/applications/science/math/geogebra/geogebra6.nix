@@ -1,4 +1,12 @@
-{ lib, stdenv, unzip, fetchurl, electron, makeWrapper, geogebra }:
+{
+  lib,
+  stdenv,
+  unzip,
+  fetchurl,
+  electron,
+  makeWrapper,
+  geogebra,
+}:
 let
   pname = "geogebra";
   version = "6-0-794-0";
@@ -14,14 +22,17 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ voidless sikmir ];
+    maintainers = with maintainers; [
+      voidless
+      sikmir
+    ];
     license = licenses.geogebra;
     sourceProvenance = with sourceTypes; [
       binaryBytecode
-      binaryNativeCode  # some jars include native binaries
+      binaryNativeCode # some jars include native binaries
     ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linuxPkg = stdenv.mkDerivation {
@@ -50,7 +61,9 @@ let
     installPhase = ''
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
-      makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
+      makeWrapper ${lib.getBin electron}/bin/electron $out/bin/geogebra \
+        --add-flags "$out/resources/app" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm644 "${desktopItem}/share/applications/"* \
         -t $out/share/applications/
 
@@ -84,6 +97,4 @@ let
     };
   };
 in
-if stdenv.isDarwin
-then darwinPkg
-else linuxPkg
+if stdenv.hostPlatform.isDarwin then darwinPkg else linuxPkg

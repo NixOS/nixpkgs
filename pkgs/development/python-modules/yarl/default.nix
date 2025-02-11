@@ -1,45 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonAtLeast
-, pythonOlder
-, idna
-, multidict
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  expandvars,
+  setuptools,
+  idna,
+  multidict,
+  propcache,
+  hypothesis,
+  pytest-codspeed,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.9.2";
+  version = "1.18.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BKudS59YfAbYAcKr/pMXt3zfmWxlqQ1ehOzEUBCCNXE=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "yarl";
+    tag = "v${version}";
+    hash = "sha256-j2z6YAFbQe26YUQGLBwLr9ztUoxMDJJGS9qYeVqSob0=";
   };
 
-  patches = [
-    # https://github.com/aio-libs/yarl/issues/876
-    (fetchpatch {
-      url = "https://github.com/aio-libs/yarl/commit/0a94c6e4948e00fff072c0cf367afbf4ac36f906.patch";
-      hash = "sha256-bqT46OLZLkBef8FQ1L95ITD70mC3+WIkr3+h2ekKrvE=";
-    })
+  build-system = [
+    cython
+    expandvars
+    setuptools
   ];
 
-  postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     idna
     multidict
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
+    propcache
   ];
 
   preCheck = ''
@@ -48,6 +45,10 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    hypothesis
+    pytest-codspeed
+    pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
   ];
 

@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, expat
-, fontconfig
-, freetype
-, libGL
-, xorg
-, darwin
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  xorg,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,29 +19,39 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vv9k";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-k0WQu1n1sAHVor58jr060vD5/2rDrt1k5zzJlrK9WrU=";
+    # Upstream has rewritten tags on multiple occasions.
+    rev = "14ee92e049780406fffdc1e4a83bf1433775663f";
+    sha256 = "sha256-gjqAQrGJ9KFdzn2a3fOgu0VJ9zrX5stsbzriOGJaD/4=";
   };
 
-  cargoSha256 = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-r/0aNzU8jm2AqiZWq4plxXY/H7qKVC8nEI9BwOUKCdA=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    expat
-    fontconfig
-    freetype
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      expat
+      fontconfig
+      freetype
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+    ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postInstall = ''
+    install -Dm444 assets/epick.desktop -t $out/share/applications
+    install -Dm444 assets/icon.svg $out/share/icons/hicolor/scalable/apps/epick.svg
+    install -Dm444 assets/icon.png $out/share/icons/hicolor/48x48/apps/epick.png
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 
@@ -51,5 +61,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/vv9k/epick/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "epick";
   };
 }

@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.bumblebee;
 
@@ -26,27 +29,27 @@ in
   options = {
     hardware.bumblebee = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Enable the bumblebee daemon to manage Optimus hybrid video cards.
           This should power off secondary GPU until its use is requested
           by running an application with optirun.
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "wheel";
         example = "video";
-        type = types.str;
-        description = lib.mdDoc "Group for bumblebee socket";
+        type = lib.types.str;
+        description = "Group for bumblebee socket";
       };
 
-      connectDisplay = mkOption {
+      connectDisplay = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Set to true if you intend to connect your discrete card to a
           monitor. This option will set up your Nvidia card for EDID
           discovery and to turn on the monitor signal.
@@ -55,18 +58,26 @@ in
         '';
       };
 
-      driver = mkOption {
+      driver = lib.mkOption {
         default = "nvidia";
-        type = types.enum [ "nvidia" "nouveau" ];
-        description = lib.mdDoc ''
+        type = lib.types.enum [
+          "nvidia"
+          "nouveau"
+        ];
+        description = ''
           Set driver used by bumblebeed. Supported are nouveau and nvidia.
         '';
       };
 
-      pmMethod = mkOption {
+      pmMethod = lib.mkOption {
         default = "auto";
-        type = types.enum [ "auto" "bbswitch" "switcheroo" "none" ];
-        description = lib.mdDoc ''
+        type = lib.types.enum [
+          "auto"
+          "bbswitch"
+          "switcheroo"
+          "none"
+        ];
+        description = ''
           Set preferred power management method for unused card.
         '';
       };
@@ -74,12 +85,21 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
-    boot.kernelModules = optional useBbswitch "bbswitch";
-    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
+  config = lib.mkIf cfg.enable {
+    boot.blacklistedKernelModules = [
+      "nvidia-drm"
+      "nvidia"
+      "nouveau"
+    ];
+    boot.kernelModules = lib.optional useBbswitch "bbswitch";
+    boot.extraModulePackages =
+      lib.optional useBbswitch kernel.bbswitch
+      ++ lib.optional useNvidia kernel.nvidia_x11.bin;
 
-    environment.systemPackages = [ bumblebee primus ];
+    environment.systemPackages = [
+      bumblebee
+      primus
+    ];
 
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";

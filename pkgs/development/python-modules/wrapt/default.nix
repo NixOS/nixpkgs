@@ -1,41 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, sphinxHook
-, sphinx-rtd-theme
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.14.1";
-  outputs = [ "out" "doc" ];
-  format = "setuptools";
+  version = "1.17.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
-    repo = pname;
-    rev = version;
-    hash = "sha256-nXwDuNo4yZxgjnkus9bVwIZltPaSH93D+PcZMGT2nGM=";
+    repo = "wrapt";
+    tag = version;
+    hash = "sha256-k1OuGzUFF2gRsx3xrJ5/YwpXB6ksK0TsaZq6x3+ckf0=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     sphinxHook
     sphinx-rtd-theme
   ];
 
-  pythonImportsCheck = [
-    "wrapt"
+  outputs = [
+    "out"
+    "doc"
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "wrapt" ];
 
   meta = with lib; {
     description = "Module for decorators, wrappers and monkey patching";
     homepage = "https://github.com/GrahamDumpleton/wrapt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

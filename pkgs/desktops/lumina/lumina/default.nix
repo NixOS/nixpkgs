@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fluxbox
-, hicolor-icon-theme
-, libarchive
-, numlockx
-, qmake
-, qtbase
-, qtmultimedia
-, qtsvg
-, qttools
-, qtx11extras
-, xorg
-, xscreensaver
-, wrapGAppsHook
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fluxbox,
+  hicolor-icon-theme,
+  libarchive,
+  numlockx,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  qtx11extras,
+  xorg,
+  xscreensaver,
+  wrapGAppsHook3,
 }:
 
 mkDerivation rec {
@@ -30,7 +31,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -99,7 +100,7 @@ mkDerivation rec {
   passthru.providedSessions = [ "Lumina-DE" ];
 
   meta = with lib; {
-    description = "A lightweight, portable desktop environment";
+    description = "Lightweight, portable desktop environment";
     longDescription = ''
       The Lumina Desktop Environment is a lightweight system interface
       that is designed for use on any Unix-like operating system. It

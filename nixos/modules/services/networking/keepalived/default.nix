@@ -59,9 +59,11 @@ let
         ${optionalString i.vmacXmitBase "vmac_xmit_base"}
 
         ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
-        unicast_peer {
-          ${concatStringsSep "\n" i.unicastPeers}
-        }
+        ${optionalString (builtins.length i.unicastPeers > 0) ''
+          unicast_peer {
+            ${concatStringsSep "\n" i.unicastPeers}
+          }
+        ''}
 
         virtual_ipaddress {
           ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
@@ -138,6 +140,7 @@ let
 
 in
 {
+  meta.maintainers = [ lib.maintainers.raitobezarius ];
 
   options = {
     services.keepalived = {
@@ -145,15 +148,17 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Keepalived.
         '';
       };
 
+      package = lib.mkPackageOption pkgs "keepalived" { };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically allow VRRP and AH packets in the firewall.
         '';
       };
@@ -161,7 +166,7 @@ in
       enableScriptSecurity = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Don't run scripts configured to be run as root if any part of the path is writable by a non-root user.
         '';
       };
@@ -171,7 +176,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable the builtin AgentX subagent.
           '';
         };
@@ -179,7 +184,7 @@ in
         socket = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Socket to use for connecting to SNMP master agent. If this value is
             set to null, keepalived's default will be used, which is
             unix:/var/agentx/master, unless using a network namespace, when the
@@ -190,7 +195,7 @@ in
         enableKeepalived = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of vrrp element of KEEPALIVED MIB.
           '';
         };
@@ -198,7 +203,7 @@ in
         enableChecker = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of checker element of KEEPALIVED MIB.
           '';
         };
@@ -206,7 +211,7 @@ in
         enableRfc = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of RFC2787 and RFC6527 VRRP MIBs.
           '';
         };
@@ -214,7 +219,7 @@ in
         enableRfcV2 = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of RFC2787 VRRP MIB.
           '';
         };
@@ -222,7 +227,7 @@ in
         enableRfcV3 = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP handling of RFC6527 VRRP MIB.
           '';
         };
@@ -230,7 +235,7 @@ in
         enableTraps = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Enable SNMP traps.
           '';
         };
@@ -242,7 +247,7 @@ in
           inherit lib;
         }));
         default = {};
-        description = lib.mdDoc "Declarative vrrp script config";
+        description = "Declarative vrrp script config";
       };
 
       vrrpInstances = mkOption {
@@ -250,13 +255,13 @@ in
           inherit lib;
         }));
         default = {};
-        description = lib.mdDoc "Declarative vhost config";
+        description = "Declarative vhost config";
       };
 
       extraGlobalDefs = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the 'global_defs' block of the
           configuration file
         '';
@@ -265,7 +270,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra lines to be added verbatim to the configuration file.
         '';
       };
@@ -274,7 +279,7 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/keepalived.env";
-        description = lib.mdDoc ''
+        description = ''
           Environment variables from this file will be interpolated into the
           final config file using envsubst with this syntax: `$ENVIRONMENT`
           or `''${VARIABLE}`.
@@ -305,7 +310,7 @@ in
 
     systemd.timers.keepalived-boot-delay = {
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       requires = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       timerConfig = {
@@ -318,7 +323,7 @@ in
       finalConfigFile = if cfg.secretFile == null then keepalivedConf else "/run/keepalived/keepalived.conf";
     in {
       description = "Keepalive Daemon (LVS and VRRP)";
-      after = [ "network.target" "network-online.target" "syslog.target" ];
+      after = [ "network.target" "network-online.target" ];
       wants = [ "network-online.target" ];
       serviceConfig = {
         Type = "forking";
@@ -331,7 +336,7 @@ in
           umask 077
           ${pkgs.envsubst}/bin/envsubst -i "${keepalivedConf}" > ${finalConfigFile}
         '');
-        ExecStart = "${pkgs.keepalived}/sbin/keepalived"
+        ExecStart = "${lib.getExe cfg.package}"
           + " -f ${finalConfigFile}"
           + " -p ${pidFile}"
           + optionalString cfg.snmp.enable " --snmp";

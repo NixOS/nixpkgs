@@ -1,30 +1,34 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, obs-studio
-, pkg-config
-, fftwFloat
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
+  pkg-config,
+  fftwFloat,
 }:
 
 stdenv.mkDerivation rec {
   pname = "waveform";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "phandasm";
     repo = "waveform";
     rev = "v${version}";
-    sha256 = "sha256-DR3+ZBbWoGybUvDwVXLvarp+IGsTPl9Y0mFe739Ar8E=";
+    hash = "sha256-Bg1n1yV4JzNFEXFNayNa1exsSZhmRJ0RLHDjLWmqGZE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postFixup = ''
-    mkdir $out/lib $out/share
+    mkdir -p $out/lib $out/share/obs/obs-plugins
     mv $out/${pname}/bin/64bit $out/lib/obs-plugins
-    mv $out/${pname}/data $out/share/obs
+    mv $out/${pname}/data $out/share/obs/obs-plugins/${pname}
     rm -rf $out/${pname}
   '';
 
@@ -38,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phandasm/waveform";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.gpl3;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

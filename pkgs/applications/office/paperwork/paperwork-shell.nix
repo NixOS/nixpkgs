@@ -1,26 +1,27 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
+{
+  buildPythonPackage,
+  lib,
+  callPackage,
 
-, isPy3k
-, isPyPy
+  isPy3k,
+  isPyPy,
 
-, openpaperwork-core
-, openpaperwork-gtk
-, paperwork-backend
-, fabulous
-, rich
-, getkey
-, psutil
-, shared-mime-info
-, setuptools-scm
+  openpaperwork-core,
+  openpaperwork-gtk,
+  paperwork-backend,
+  fabulous,
+  rich,
+  getkey,
+  psutil,
+  shared-mime-info,
+  setuptools-scm,
 
-, pkgs
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "paperwork-shell";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (callPackage ./src.nix { }) version src;
   format = "pyproject";
 
   sourceRoot = "${src.name}/paperwork-shell";
@@ -32,8 +33,6 @@ buildPythonPackage rec {
     chmod a+w -R ..
     patchShebangs ../tools
   '';
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     openpaperwork-core
     paperwork-backend
@@ -67,6 +66,9 @@ buildPythonPackage rec {
     description = "CLI for Paperwork";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [
+      aszlig
+      symphorien
+    ];
   };
 }

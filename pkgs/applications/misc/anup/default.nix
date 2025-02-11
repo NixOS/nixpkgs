@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, sqlite, xdg-utils}:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+  sqlite,
+  xdg-utils,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "anup";
@@ -11,12 +19,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-4pXF4p4K8+YihVB9NdgT6bOidmQEgWXUbcbvgXJ0IDA=";
   };
 
-  buildInputs = [
-    sqlite
-    xdg-utils
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      sqlite
+      xdg-utils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -27,8 +37,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Acizza/anup";
-    description = "An anime tracker for AniList featuring a TUI";
+    description = "Anime tracker for AniList featuring a TUI";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ natto1784 ];
+    mainProgram = "anup";
   };
 }

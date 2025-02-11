@@ -1,19 +1,26 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.statsd;
 
-  isBuiltinBackend = name:
-    builtins.elem name [ "graphite" "console" "repeater" ];
+  isBuiltinBackend =
+    name:
+    builtins.elem name [
+      "graphite"
+      "console"
+      "repeater"
+    ];
 
-  backendsToPackages = let
-    mkMap = list: name:
-      if isBuiltinBackend name then list
-      else list ++ [ pkgs.nodePackages.${name} ];
-  in foldl mkMap [];
+  backendsToPackages =
+    let
+      mkMap = list: name: if isBuiltinBackend name then list else list ++ [ pkgs.nodePackages.${name} ];
+    in
+    lib.foldl mkMap [ ];
 
   configFile = pkgs.writeText "statsd.conf" ''
     {
@@ -22,20 +29,19 @@ let
       mgmt_address: "${cfg.mgmt_address}",
       mgmt_port: "${toString cfg.mgmt_port}",
       backends: [${
-        concatMapStringsSep "," (name:
-          if (isBuiltinBackend name)
-          then ''"./backends/${name}"''
-          else ''"${name}"''
-        ) cfg.backends}],
-      ${optionalString (cfg.graphiteHost!=null) ''graphiteHost: "${cfg.graphiteHost}",''}
-      ${optionalString (cfg.graphitePort!=null) ''graphitePort: "${toString cfg.graphitePort}",''}
+        lib.concatMapStringsSep "," (
+          name: if (isBuiltinBackend name) then ''"./backends/${name}"'' else ''"${name}"''
+        ) cfg.backends
+      }],
+      ${lib.optionalString (cfg.graphiteHost != null) ''graphiteHost: "${cfg.graphiteHost}",''}
+      ${lib.optionalString (cfg.graphitePort != null) ''graphitePort: "${toString cfg.graphitePort}",''}
       console: {
         prettyprint: false
       },
       log: {
         backend: "stdout"
       },
-      automaticConfigReload: false${optionalString (cfg.extraConfig != null) ","}
+      automaticConfigReload: false${lib.optionalString (cfg.extraConfig != null) ","}
       ${cfg.extraConfig}
     }
   '';
@@ -56,72 +62,71 @@ in
 
   options.services.statsd = {
 
-    enable = mkEnableOption (lib.mdDoc "statsd");
+    enable = lib.mkEnableOption "statsd";
 
-    listenAddress = mkOption {
-      description = lib.mdDoc "Address that statsd listens on over UDP";
+    listenAddress = lib.mkOption {
+      description = "Address that statsd listens on over UDP";
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    port = mkOption {
-      description = lib.mdDoc "Port that stats listens for messages on over UDP";
+    port = lib.mkOption {
+      description = "Port that stats listens for messages on over UDP";
       default = 8125;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    mgmt_address = mkOption {
-      description = lib.mdDoc "Address to run management TCP interface on";
+    mgmt_address = lib.mkOption {
+      description = "Address to run management TCP interface on";
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    mgmt_port = mkOption {
-      description = lib.mdDoc "Port to run the management TCP interface on";
+    mgmt_port = lib.mkOption {
+      description = "Port to run the management TCP interface on";
       default = 8126;
-      type = types.int;
+      type = lib.types.int;
     };
 
-    backends = mkOption {
-      description = lib.mdDoc "List of backends statsd will use for data persistence";
-      default = [];
+    backends = lib.mkOption {
+      description = "List of backends statsd will use for data persistence";
+      default = [ ];
       example = [
         "graphite"
         "console"
         "repeater"
         "statsd-librato-backend"
-        "stackdriver-statsd-backend"
         "statsd-influxdb-backend"
       ];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
     };
 
-    graphiteHost = mkOption {
-      description = lib.mdDoc "Hostname or IP of Graphite server";
+    graphiteHost = lib.mkOption {
+      description = "Hostname or IP of Graphite server";
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
     };
 
-    graphitePort = mkOption {
-      description = lib.mdDoc "Port of Graphite server (i.e. carbon-cache).";
+    graphitePort = lib.mkOption {
+      description = "Port of Graphite server (i.e. carbon-cache).";
       default = null;
-      type = types.nullOr types.int;
+      type = lib.types.nullOr lib.types.int;
     };
 
-    extraConfig = mkOption {
-      description = lib.mdDoc "Extra configuration options for statsd";
+    extraConfig = lib.mkOption {
+      description = "Extra configuration options for statsd";
       default = "";
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
     };
 
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = map (backend: {
-      assertion = !isBuiltinBackend backend -> hasAttrByPath [ backend ] pkgs.nodePackages;
+      assertion = !isBuiltinBackend backend -> lib.hasAttrByPath [ backend ] pkgs.nodePackages;
       message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
     }) cfg.backends;
 

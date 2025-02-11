@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, pkg-config, openssl, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zee";
@@ -18,17 +26,18 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # disable downloading and building the tree-sitter grammars at build time
   # grammars can be configured in a config file and installed with `zee --build`
   # see https://github.com/zee-editor/zee#syntax-highlighting
-  ZEE_DISABLE_GRAMMAR_BUILD=1;
+  ZEE_DISABLE_GRAMMAR_BUILD = 1;
 
-  cargoHash = "sha256-fBBjtjM7AnyAL6EOFstL4h6yS+UoLgxck6Mc0tJcXaI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-auwbpavF/WZQIE/htYXJ4di6xoRtXkBBkP/Bj4lFp6U=";
 
   meta = with lib; {
-    description = "A modern text editor for the terminal written in Rust";
+    description = "Modern text editor for the terminal written in Rust";
     homepage = "https://github.com/zee-editor/zee";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner ];

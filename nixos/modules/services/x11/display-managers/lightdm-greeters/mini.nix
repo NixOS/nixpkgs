@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,8 +13,7 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.mini;
 
-  miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf"
-    ''
+  miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf" ''
     [greeter]
     user = ${cfg.user}
     show-password-label = true
@@ -44,7 +48,7 @@ let
     password-border-width = 2px
 
     ${cfg.extraConfig}
-    '';
+  '';
 
 in
 {
@@ -55,19 +59,19 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable lightdm-mini-greeter as the lightdm greeter.
 
           Note that this greeter starts only the default X session.
           You can configure the default X session using
-          [](#opt-services.xserver.displayManager.defaultSession).
+          [](#opt-services.displayManager.defaultSession).
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "root";
-        description = lib.mdDoc ''
+        description = ''
           The user to login as.
         '';
       };
@@ -75,7 +79,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration that should be put in the lightdm-mini-greeter.conf
           configuration file.
         '';

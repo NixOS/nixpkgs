@@ -1,19 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.octoprint;
 
   baseConfig = {
     plugins.curalegacy.cura_engine = "${pkgs.curaengine_stable}/bin/CuraEngine";
-    server.host = cfg.host;
     server.port = cfg.port;
     webcam.ffmpeg = "${pkgs.ffmpeg.bin}/bin/ffmpeg";
-  };
+  } // lib.optionalAttrs (cfg.host != null) { server.host = cfg.host; };
 
-  fullConfig = recursiveUpdate cfg.extraConfig baseConfig;
+  fullConfig = lib.recursiveUpdate cfg.extraConfig baseConfig;
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
@@ -29,60 +30,60 @@ in
 
     services.octoprint = {
 
-      enable = mkEnableOption (lib.mdDoc "OctoPrint, web interface for 3D printers");
+      enable = lib.mkEnableOption "OctoPrint, web interface for 3D printers";
 
-      host = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = lib.mdDoc ''
+      host = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
           Host to bind OctoPrint to.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5000;
-        description = lib.mdDoc ''
+        description = ''
           Port to bind OctoPrint to.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for OctoPrint.";
+        description = "Open ports in the firewall for OctoPrint.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "octoprint";
-        description = lib.mdDoc "User for the daemon.";
+        description = "User for the daemon.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "octoprint";
-        description = lib.mdDoc "Group for the daemon.";
+        description = "Group for the daemon.";
       };
 
-      stateDir = mkOption {
-        type = types.path;
+      stateDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/octoprint";
-        description = lib.mdDoc "State directory of the daemon.";
+        description = "State directory of the daemon.";
       };
 
-      plugins = mkOption {
-        type = types.functionTo (types.listOf types.package);
+      plugins = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = plugins: [ ];
-        defaultText = literalExpression "plugins: []";
-        example = literalExpression "plugins: with plugins; [ themeify stlviewer ]";
-        description = lib.mdDoc "Additional plugins to be used. Available plugins are passed through the plugins input.";
+        defaultText = lib.literalExpression "plugins: []";
+        example = lib.literalExpression "plugins: with plugins; [ themeify stlviewer ]";
+        description = "Additional plugins to be used. Available plugins are passed through the plugins input.";
       };
 
-      extraConfig = mkOption {
-        type = types.attrs;
+      extraConfig = lib.mkOption {
+        type = lib.types.attrs;
         default = { };
-        description = lib.mdDoc "Extra options which are added to OctoPrint's YAML configuration file.";
+        description = "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
     };
@@ -91,16 +92,16 @@ in
 
   ##### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == "octoprint") {
+    users.users = lib.optionalAttrs (cfg.user == "octoprint") {
       octoprint = {
         group = cfg.group;
         uid = config.ids.uids.octoprint;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "octoprint") {
+    users.groups = lib.optionalAttrs (cfg.group == "octoprint") {
       octoprint.gid = config.ids.gids.octoprint;
     };
 
@@ -137,6 +138,6 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
   };
 }

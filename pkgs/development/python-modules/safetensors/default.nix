@@ -1,70 +1,76 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, h5py
-, numpy
-, pythonOlder
-, pytestCheckHook
-, rustc
-, rustPlatform
-, setuptools-rust
-, torch
-, libiconv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+
+  # nativeBuildInputs
+  cargo,
+  rustc,
+  setuptools-rust,
+
+  # tests
+  h5py,
+  numpy,
+  pytestCheckHook,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.3.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.5.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-U+indMoLFN6vMZkJTWFG08lsdXuK5gOfgaHmUVl6DPk=";
+    repo = "safetensors";
+    tag = "v${version}";
+    hash = "sha256-dtHHLiTgrg/a/SQ/Z1w0BsuFDClgrMsGiSTCpbJasUs=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${src.name}/bindings/python";
-    hash = "sha256-MhRs9tFCmVZI5O0EVRUbo4ZnUVRQ0EfQTU+E1K+qKZI=";
+    hash = "sha256-hjV2cfS/0WFyAnATt+A8X8sQLzQViDzkNI7zN0ltgpU=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
-    setuptools-rust
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
   nativeCheckInputs = [
-    h5py numpy pytestCheckHook torch
+    h5py
+    numpy
+    pytestCheckHook
+    torch
   ];
   pytestFlagsArray = [ "tests" ];
   # don't require PaddlePaddle (not in Nixpkgs), Flax, or Tensorflow (onerous) to run tests:
-  disabledTestPaths = [
-    "tests/test_flax_comparison.py"
-    "tests/test_paddle_comparison.py"
-    "tests/test_tf_comparison.py"
-  ];
+  disabledTestPaths =
+    [
+      "tests/test_flax_comparison.py"
+      "tests/test_paddle_comparison.py"
+      "tests/test_tf_comparison.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # don't require mlx (not in Nixpkgs) to run tests
+      "tests/test_mlx_comparison.py"
+    ];
 
-  pythonImportsCheck = [
-    "safetensors"
-  ];
+  pythonImportsCheck = [ "safetensors" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/huggingface/safetensors";
     description = "Fast (zero-copy) and safe (unlike pickle) format for storing tensors";
     changelog = "https://github.com/huggingface/safetensors/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

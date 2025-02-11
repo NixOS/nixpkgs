@@ -1,122 +1,130 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, cmake
-, libiconv
-, zlib
-, enableShared ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  testers,
+  cmake,
+  libiconv,
+  zlib,
+  enableShared ? (!stdenv.hostPlatform.isStatic),
 
-, enableAudio ? true
-, withWaveWrite ? true
-, withWinMM ? stdenv.hostPlatform.isWindows
-, withDirectSound ? stdenv.hostPlatform.isWindows
-, withXAudio2 ? stdenv.hostPlatform.isWindows
-, withWASAPI ? stdenv.hostPlatform.isWindows
-, withOSS ? stdenv.hostPlatform.isFreeBSD
-, withSADA ? stdenv.hostPlatform.isSunOS
-, withALSA ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, withPulseAudio ? stdenv.hostPlatform.isLinux
-, libpulseaudio
-, withCoreAudio ? stdenv.hostPlatform.isDarwin
-, CoreAudio
-, AudioToolbox
-, withLibao ? true
-, libao
+  enableAudio ? true,
+  withWaveWrite ? true,
+  withWinMM ? stdenv.hostPlatform.isWindows,
+  withDirectSound ? stdenv.hostPlatform.isWindows,
+  withXAudio2 ? stdenv.hostPlatform.isWindows,
+  withWASAPI ? stdenv.hostPlatform.isWindows,
+  withOSS ? stdenv.hostPlatform.isFreeBSD,
+  withSADA ? stdenv.hostPlatform.isSunOS,
+  withALSA ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  withPulseAudio ? stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  withCoreAudio ? stdenv.hostPlatform.isDarwin,
+  CoreAudio,
+  AudioToolbox,
+  withLibao ? true,
+  libao,
 
-, enableEmulation ? true
-, withAllEmulators ? true
-, emulators ? [ ]
+  enableEmulation ? true,
+  withAllEmulators ? true,
+  emulators ? [ ],
 
-, enableLibplayer ? true
+  enableLibplayer ? true,
 
-, enableTools ? false
+  enableTools ? false,
 }:
 
 assert enableTools -> enableAudio && enableEmulation && enableLibplayer;
 
-let
-  inherit (lib) optional optionals;
-  onOff = val: if val then "ON" else "OFF";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvgm";
-  version = "unstable-2023-08-14";
+  version = "0-unstable-2024-10-17";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "libvgm";
-    rev = "079c4e737e6a73b38ae20125521d7d9eafda28e9";
-    sha256 = "hmaGIf9AQOYqrpnmKAB9I2vO+EXrzvoRaQ6Epdygy4o=";
+    rev = "7b694e53e42a75ce48b846c53d08e4a33f627842";
+    hash = "sha256-u+mBzmEixJT3rwuipITktFI4iVswnXftfF7syBw4t/w=";
   };
 
   outputs = [
     "out"
     "dev"
-  ] ++ optional enableTools "bin";
+  ] ++ lib.optionals enableTools [ "bin" ];
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [
-    libiconv
-    zlib
-  ] ++ optionals withALSA [
-    alsa-lib
-  ] ++ optionals withPulseAudio [
-    libpulseaudio
-  ] ++ optionals withCoreAudio [
-    CoreAudio
-    AudioToolbox
-  ] ++ optionals withLibao [
-    libao
-  ];
+  propagatedBuildInputs =
+    [
+      libiconv
+      zlib
+    ]
+    ++ lib.optionals withALSA [ alsa-lib ]
+    ++ lib.optionals withPulseAudio [ libpulseaudio ]
+    ++ lib.optionals withCoreAudio [
+      CoreAudio
+      AudioToolbox
+    ]
+    ++ lib.optionals withLibao [ libao ];
 
-  cmakeFlags = [
-    "-DBUILD_LIBAUDIO=${onOff enableAudio}"
-    "-DBUILD_LIBEMU=${onOff enableEmulation}"
-    "-DBUILD_LIBPLAYER=${onOff enableLibplayer}"
-    "-DBUILD_TESTS=${onOff enableTools}"
-    "-DBUILD_PLAYER=${onOff enableTools}"
-    "-DBUILD_VGM2WAV=${onOff enableTools}"
-    "-DLIBRARY_TYPE=${if enableShared then "SHARED" else "STATIC"}"
-    "-DUSE_SANITIZERS=ON"
-  ] ++ optionals enableAudio [
-    "-DAUDIODRV_WAVEWRITE=${onOff withWaveWrite}"
-    "-DAUDIODRV_WINMM=${onOff withWinMM}"
-    "-DAUDIODRV_DSOUND=${onOff withDirectSound}"
-    "-DAUDIODRV_XAUDIO2=${onOff withXAudio2}"
-    "-DAUDIODRV_WASAPI=${onOff withWASAPI}"
-    "-DAUDIODRV_OSS=${onOff withOSS}"
-    "-DAUDIODRV_SADA=${onOff withSADA}"
-    "-DAUDIODRV_ALSA=${onOff withALSA}"
-    "-DAUDIODRV_PULSE=${onOff withPulseAudio}"
-    "-DAUDIODRV_APPLE=${onOff withCoreAudio}"
-    "-DAUDIODRV_LIBAO=${onOff withLibao}"
-  ] ++ optionals enableEmulation ([
-    "-DSNDEMU__ALL=${onOff withAllEmulators}"
-  ] ++ optionals (!withAllEmulators)
-    (lib.lists.forEach emulators (x: "-DSNDEMU_${x}=ON"))
-  ) ++ optionals enableTools [
-    "-DUTIL_CHARCNV_ICONV=ON"
-    "-DUTIL_CHARCNV_WINAPI=${onOff stdenv.hostPlatform.isWindows}"
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_LIBAUDIO" enableAudio)
+      (lib.cmakeBool "BUILD_LIBEMU" enableEmulation)
+      (lib.cmakeBool "BUILD_LIBPLAYER" enableLibplayer)
+      (lib.cmakeBool "BUILD_TESTS" enableTools)
+      (lib.cmakeBool "BUILD_PLAYER" enableTools)
+      (lib.cmakeBool "BUILD_VGM2WAV" enableTools)
+      (lib.cmakeFeature "LIBRARY_TYPE" (if enableShared then "SHARED" else "STATIC"))
+      (lib.cmakeBool "USE_SANITIZERS" true)
+    ]
+    ++ lib.optionals enableAudio [
+      (lib.cmakeBool "AUDIODRV_WAVEWRITE" withWaveWrite)
+      (lib.cmakeBool "AUDIODRV_WINMM" withWinMM)
+      (lib.cmakeBool "AUDIODRV_DSOUND" withDirectSound)
+      (lib.cmakeBool "AUDIODRV_XAUDIO2" withXAudio2)
+      (lib.cmakeBool "AUDIODRV_WASAPI" withWASAPI)
+      (lib.cmakeBool "AUDIODRV_OSS" withOSS)
+      (lib.cmakeBool "AUDIODRV_SADA" withSADA)
+      (lib.cmakeBool "AUDIODRV_ALSA" withALSA)
+      (lib.cmakeBool "AUDIODRV_PULSE" withPulseAudio)
+      (lib.cmakeBool "AUDIODRV_APPLE" withCoreAudio)
+      (lib.cmakeBool "AUDIODRV_LIBAO" withLibao)
+    ]
+    ++ lib.optionals enableEmulation (
+      [ (lib.cmakeBool "SNDEMU__ALL" withAllEmulators) ]
+      ++ lib.optionals (!withAllEmulators) (
+        lib.lists.forEach emulators (x: (lib.cmakeBool "SNDEMU_${x}" true))
+      )
+    )
+    ++ lib.optionals enableTools [
+      (lib.cmakeBool "UTIL_CHARCNV_ICONV" true)
+      (lib.cmakeBool "UTIL_CHARCNV_WINAPI" stdenv.hostPlatform.isWindows)
+    ];
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/ValleyBell/libvgm.git";
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/ValleyBell/libvgm";
+  meta = {
     description = "More modular rewrite of most components from VGMPlay";
+    homepage = "https://github.com/ValleyBell/libvgm";
     license =
-      if (enableEmulation && (withAllEmulators || (lib.lists.any (core: core == "WSWAN_ALL") emulators))) then
-        licenses.unfree # https://github.com/ValleyBell/libvgm/issues/43
+      if
+        (enableEmulation && (withAllEmulators || (lib.lists.any (core: core == "WSWAN_ALL") emulators)))
+      then
+        lib.licenses.unfree # https://github.com/ValleyBell/libvgm/issues/43
       else
-        licenses.gpl2Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+        lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
+    pkgConfigModules =
+      [ "vgm-utils" ]
+      ++ lib.optionals enableAudio [ "vgm-audio" ]
+      ++ lib.optionals enableEmulation [ "vgm-emu" ]
+      ++ lib.optionals enableLibplayer [ "vgm-player" ];
   };
-}
+})

@@ -1,43 +1,42 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, siobrultech-protocols
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  siobrultech-protocols,
 }:
 
 buildPythonPackage rec {
   pname = "greeneye-monitor";
-  version = "5.0.1";
-  format = "pyproject";
+  version = "5.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jkeljo";
     repo = "greeneye-monitor";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zNGizNOuZuPRdz82y8IaVvwrTos4lZSqTP5FwOlnRao=";
+    tag = "v${version}";
+    hash = "sha256-7EDuQ+wECcTzxkEufMpg3WSzosWeiwfxcVIVtQi+0BI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     siobrultech-protocols
   ];
 
   nativeCheckInputs = [
+    pytest-socket
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "greeneye.monitor"
-  ];
+  pythonImportsCheck = [ "greeneye.monitor" ];
 
   meta = with lib; {
     description = "Receive data packets from GreenEye Monitor";

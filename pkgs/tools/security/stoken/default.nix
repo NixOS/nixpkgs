@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libxml2
-, nettle
-, withGTK3 ? true
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  nettle,
+  withGTK3 ? !stdenv.hostPlatform.isStatic,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,12 +28,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libxml2
-    nettle
-  ] ++ lib.optionals withGTK3 [
-    gtk3
-  ];
+  buildInputs =
+    [
+      libxml2
+      nettle
+    ]
+    ++ lib.optionals withGTK3 [
+      gtk3
+    ];
 
   meta = with lib; {
     description = "Software Token for Linux/UNIX";

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, git }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 # Changing the variables CPPFLAGS and BUILD_CONFIG_NAME can be done by
 # overriding the same-named attributes. See ./presets.nix for examples.
@@ -12,11 +16,16 @@ stdenv.mkDerivation rec {
     repo = "mkspiffs";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "1fgw1jqdlp83gv56mgnxpakky0q6i6f922niis4awvxjind8pbm1";
+    hash = "sha256-oa6Lmo2yb66IjtEKkZyJBgM/p7rdvmrKfgNd2rAM/Lk=";
   };
 
-  nativeBuildInputs = [ git ];
   buildFlags = [ "dist" ];
+
+  makeFlags = [
+    "VERSION=${version}"
+    "SPIFFS_VERSION=unknown"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp mkspiffs $out/bin

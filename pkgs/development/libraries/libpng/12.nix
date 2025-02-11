@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1izw9ybm27llk8531w6h4jp4rk2rxy2s9vil16nwik5dp0amyqxl";
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace pngconf.h --replace-fail '<fp.h>' '<math.h>'
+  '';
+
   outputs = [ "out" "dev" "man" ];
 
   propagatedBuildInputs = [ zlib ];
@@ -28,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The official reference implementation for the PNG file format";
+    description = "Official reference implementation for the PNG file format";
     homepage = "http://www.libpng.org/pub/png/libpng.html";
     license = licenses.libpng;
     maintainers = [ ];

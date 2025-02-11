@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, haskellPackages
-, haskell
+{
+  lib,
+  stdenv,
+  haskellPackages,
+  haskell,
 
-# Which GHC versions this hls can support.
-# These are looked up in nixpkgs as `pkgs.haskell.packages."ghc${version}`.
-# Run
-#  $ nix-instantiate --eval -E 'with import <nixpkgs> {}; builtins.attrNames pkgs.haskell.packages'
-# to list for your nixpkgs version.
-, supportedGhcVersions ? [ "94" ]
+  # Which GHC versions this hls can support.
+  # These are looked up in nixpkgs as `pkgs.haskell.packages."ghc${version}`.
+  # Run
+  #  $ nix-instantiate --eval -E 'with import <nixpkgs> {}; builtins.attrNames pkgs.haskell.packages'
+  # to list for your nixpkgs version.
+  supportedGhcVersions ? [ "96" ],
 
-# Whether to build hls with the dynamic run-time system.
-# See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
-, dynamic ? true
+  # Whether to build hls with the dynamic run-time system.
+  # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
+  dynamic ? true,
 
-# Which formatters are supported. Pass `[]` to remove all formatters.
-#
-# Maintainers: if a new formatter is added, add it here and down in knownFormatters
-, supportedFormatters ? [ "ormolu" "fourmolu" "floskell" "stylish-haskell" ]
+  # Which formatters are supported. Pass `[]` to remove all formatters.
+  #
+  # Maintainers: if a new formatter is added, add it here and down in knownFormatters
+  supportedFormatters ? [
+    "ormolu"
+    "fourmolu"
+    "floskell"
+    "stylish-haskell"
+  ],
 }:
 
 # make sure the user only sets GHC versions that actually exist
-assert supportedGhcVersions != [];
-assert
-  lib.asserts.assertEachOneOf
-    "supportedGhcVersions"
-    supportedGhcVersions
-    (lib.pipe haskell.packages [
-      lib.attrNames
-      (lib.filter (lib.hasPrefix "ghc"))
-      (map (lib.removePrefix "ghc"))
-    ]);
+assert supportedGhcVersions != [ ];
+assert lib.asserts.assertEachOneOf "supportedGhcVersions" supportedGhcVersions (
+  lib.pipe haskell.packages [
+    lib.attrNames
+    (lib.filter (lib.hasPrefix "ghc"))
+    (map (lib.removePrefix "ghc"))
+  ]
+);
 
 let
   # A mapping from formatter name to
@@ -66,11 +70,9 @@ let
 in
 
 # make sure any formatter that is set is actually supported by us
-assert
-  lib.asserts.assertEachOneOf
-    "supportedFormatters"
-    supportedFormatters
-    (lib.attrNames knownFormatters);
+assert lib.asserts.assertEachOneOf "supportedFormatters" supportedFormatters (
+  lib.attrNames knownFormatters
+);
 
 #
 # The recommended way to override this package is
@@ -95,7 +97,7 @@ let
     let
       # only formatters that were not requested
       unwanted = lib.pipe knownFormatters [
-        (lib.filterAttrs (fmt: _: ! (lib.elem fmt supportedFormatters)))
+        (lib.filterAttrs (fmt: _: !(lib.elem fmt supportedFormatters)))
         lib.attrsToList
       ];
       # all flags to disable
@@ -108,45 +110,51 @@ let
 
       # remove all unwanted dependencies of formatters we don’t want
       stripDeps = overrideCabal (drv: {
-        libraryHaskellDepends = lib.pipe (drv.libraryHaskellDepends or []) [
+        libraryHaskellDepends = lib.pipe (drv.libraryHaskellDepends or [ ]) [
           # the existing list may contain nulls, so let’s strip them first
           stripNulls
-          (lib.filter (dep: ! (lib.elem dep.pname deps)))
+          (lib.filter (dep: !(lib.elem dep.pname deps)))
         ];
       });
 
-    in drv: lib.pipe drv ([stripDeps] ++ map disableCabalFlag flags);
+    in
+    drv: lib.pipe drv ([ stripDeps ] ++ map disableCabalFlag flags);
 
-  tunedHls = hsPkgs:
-    lib.pipe hsPkgs.haskell-language-server ([
-      (haskell.lib.compose.overrideCabal (old: {
-        enableSharedExecutables = dynamic;
-        ${if !dynamic then "postInstall" else null} = ''
-          ${old.postInstall or ""}
+  tunedHls =
+    hsPkgs:
+    lib.pipe hsPkgs.haskell-language-server (
+      [
+        (haskell.lib.compose.overrideCabal (old: {
+          enableSharedExecutables = dynamic;
+          ${if !dynamic then "postInstall" else null} = ''
+            ${old.postInstall or ""}
 
-          remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
-        '';
-      }))
-      ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
-      removeUnnecessaryFormatters
-    ]
-    ++ lib.optionals (!dynamic) [
-      justStaticExecutables
-    ]);
+            remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
+          '';
+        }))
+        ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
+        removeUnnecessaryFormatters
+      ]
+      ++ lib.optionals (!dynamic) [
+        justStaticExecutables
+      ]
+    );
 
-  targets = version:
-    let packages = getPackages version;
-    in [ "haskell-language-server-${packages.ghc.version}" ];
+  targets =
+    version:
+    let
+      packages = getPackages version;
+    in
+    [ "haskell-language-server-${packages.ghc.version}" ];
 
-  makeSymlinks = version:
-    lib.concatMapStringsSep "\n"
-      (x:
-        "ln -s ${
-          tunedHls (getPackages version)
-        }/bin/haskell-language-server $out/bin/${x}")
-      (targets version);
+  makeSymlinks =
+    version:
+    lib.concatMapStringsSep "\n" (
+      x: "ln -s ${tunedHls (getPackages version)}/bin/haskell-language-server $out/bin/${x}"
+    ) (targets version);
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "haskell-language-server";
   version = haskellPackages.haskell-language-server.version;
 
@@ -160,8 +168,7 @@ in stdenv.mkDerivation {
     maintainers = [ lib.maintainers.maralorn ];
     longDescription = ''
       This package provides the executables ${
-        lib.concatMapStringsSep ", " (x: lib.concatStringsSep ", " (targets x))
-        supportedGhcVersions
+        lib.concatMapStringsSep ", " (x: lib.concatStringsSep ", " (targets x)) supportedGhcVersions
       } and haskell-language-server-wrapper.
       You can choose for which ghc versions to install hls with pkgs.haskell-language-server.override { supportedGhcVersions = [ "90" "92" ]; }.
     '';

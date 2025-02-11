@@ -1,25 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, six
-, icu
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  six,
+  icu,
 }:
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.11";
+  version = "2.14";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyICU";
     inherit version;
-    hash = "sha256-OrUxJkz+kTKz0qxdcI2ppGSdJfbmgTcwrIjPBAoIqEQ=";
+    hash = "sha256-rMfrkr1cVU7VdyScaXhFCk/toKpvAUcBUrOns4KgITI=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails testExemplarSet2 test due to sjd locale not having an auxiliary
+    # esType. icuReal doesn't have an sjd locale
+    ./skip-sjd-local.diff
+  ];
 
   nativeBuildInputs = [ icu ]; # for icu-config, but should be replaced with pkg-config
   buildInputs = [ icu ];
-  nativeCheckInputs = [ pytestCheckHook six ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    six
+  ];
 
   pythonImportsCheck = [ "icu" ];
 

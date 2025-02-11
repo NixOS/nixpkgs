@@ -1,13 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gettext
-, installShellFiles
-, ncurses
-, ui ? "terminal"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  installShellFiles,
+  ncurses,
+  ui ? "terminal",
 }:
 
-assert lib.elem ui [ "terminal" "curses" ];
+assert lib.elem ui [
+  "terminal"
+  "curses"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = "2048-cli";
   version = "unstable-2019-12-10";
@@ -30,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gettext
-  ]
-  ++ (lib.optional (ui == "curses") ncurses);
+  ] ++ (lib.optional (ui == "curses") ncurses);
 
   dontConfigure = true;
 
@@ -53,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/tiehuis/2048-cli";
-    description = "The game 2048 for your Linux terminal";
+    description = "Game 2048 for your Linux terminal";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;

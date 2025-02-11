@@ -1,5 +1,6 @@
-{ lib
-, mkPulumiPackage
+{
+  lib,
+  mkPulumiPackage,
 }:
 mkPulumiPackage rec {
   owner = "pulumi";
@@ -32,8 +33,12 @@ mkPulumiPackage rec {
   __darwinAllowLocalNetworking = true;
   meta = with lib; {
     description = "Native Azure Pulumi Provider";
+    mainProgram = "pulumi-resource-azure-native";
     homepage = "https://github.com/pulumi/pulumi-azure-native";
     license = licenses.asl20;
-    maintainers = with maintainers; [ veehaitch trundle ];
+    maintainers = with maintainers; [
+      veehaitch
+      trundle
+    ];
   };
 }

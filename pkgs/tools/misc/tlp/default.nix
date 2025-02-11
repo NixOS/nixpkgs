@@ -1,36 +1,38 @@
-{ stdenv
-, lib
-, checkbashisms
-, coreutils
-, ethtool
-, fetchFromGitHub
-, gawk
-, gnugrep
-, gnused
-, hdparm
-, iw
-, kmod
-, makeWrapper
-, pciutils
-, perl
-, perlcritic
-, shellcheck
-, smartmontools
-, systemd
-, util-linux
-, x86_energy_perf_policy
+{
+  stdenv,
+  lib,
+  checkbashisms,
+  coreutils,
+  ethtool,
+  fetchFromGitHub,
+  gawk,
+  gnugrep,
+  gnused,
+  hdparm,
+  iw,
+  kmod,
+  makeWrapper,
+  pciutils,
+  perl,
+  perlcritic,
+  shellcheck,
+  smartmontools,
+  systemd,
+  util-linux,
+  x86_energy_perf_policy,
   # RDW only works with NetworkManager, and thus is optional with default off
-, enableRDW ? false
-, networkmanager
-}: stdenv.mkDerivation rec {
+  enableRDW ? false,
+  networkmanager,
+}:
+stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-CxO1KU7F6sT5D8vjKOmntjDxcieoRSHTvuSqXfplcHk=";
+    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -38,6 +40,10 @@
     ./patches/0001-makefile-correctly-sed-paths.patch
     ./patches/0002-reintroduce-tlp-sleep-service.patch
   ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail ' ?= /usr/' ' ?= /'
+  '';
 
   buildInputs = [ perl ];
   nativeBuildInputs = [ makeWrapper ];
@@ -55,52 +61,54 @@
     "TLP_WITH_SYSTEMD=1"
 
     "DESTDIR=${placeholder "out"}"
-    "TLP_BATD=/share/tlp/bat.d"
-    "TLP_BIN=/bin"
-    "TLP_CONFDEF=/share/tlp/defaults.conf"
-    "TLP_CONFREN=/share/tlp/rename.conf"
-    "TLP_FLIB=/share/tlp/func.d"
-    "TLP_MAN=/share/man"
-    "TLP_META=/share/metainfo"
-    "TLP_SBIN=/sbin"
-    "TLP_SHCPL=/share/bash-completion/completions"
-    "TLP_TLIB=/share/tlp"
   ];
 
-  installTargets = [ "install-tlp" "install-man" ]
-  ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
+  installTargets =
+    [
+      "install-tlp"
+      "install-man"
+    ]
+    ++ lib.optionals enableRDW [
+      "install-rdw"
+      "install-man-rdw"
+    ];
 
   doCheck = true;
-  nativeCheckInputs = [ checkbashisms perlcritic shellcheck ];
+  nativeCheckInputs = [
+    checkbashisms
+    perlcritic
+    shellcheck
+  ];
   checkTarget = [ "checkall" ];
 
   # TODO: Consider using resholve here
-  postInstall = let
-    paths = lib.makeBinPath (
-      [
-        coreutils
-        ethtool
-        gawk
-        gnugrep
-        gnused
-        hdparm
-        iw
-        kmod
-        pciutils
-        perl
-        smartmontools
-        systemd
-        util-linux
-      ] ++ lib.optional enableRDW networkmanager
+  postInstall =
+    let
+      paths = lib.makeBinPath (
+        [
+          coreutils
+          ethtool
+          gawk
+          gnugrep
+          gnused
+          hdparm
+          iw
+          kmod
+          pciutils
+          perl
+          smartmontools
+          systemd
+          util-linux
+        ]
+        ++ lib.optional enableRDW networkmanager
         ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform x86_energy_perf_policy) x86_energy_perf_policy
-    );
-  in
+      );
+    in
     ''
       fixup_perl=(
         $out/share/tlp/tlp-pcilist
         $out/share/tlp/tlp-readconfs
         $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
       )
       for f in "''${fixup_perl[@]}"; do
         wrapProgram "$f" --prefix PATH : "${paths}"
@@ -125,11 +133,14 @@
 
   meta = with lib; {
     description = "Advanced Power Management for Linux";
-    homepage =
-      "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+    homepage = "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
     changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar lovesegfault ];
+    mainProgram = "tlp";
+    maintainers = with maintainers; [
+      abbradar
+      lovesegfault
+    ];
     license = licenses.gpl2Plus;
   };
 }

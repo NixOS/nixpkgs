@@ -1,6 +1,7 @@
 { lib
 , fetchurl
 , runCommand
+, writeShellScript
 
   # script interpreters
 , bash
@@ -18,6 +19,16 @@
 /* Convert an attribute set extracted from tlpdb.nix (with the deps attribute
   already processed) to a fake multi-output derivation with possible outputs
   [ "tex" "texdoc" "texsource" "tlpkg" "out" "man" "info" ]
+
+  The multi-output is emulated as follows:
+  - the main derivation is a multi-output derivation that builds links to the
+    containers (tex, texdoc, ...)
+  - the output attributes are replaced with the actual containers with the
+    outputSpecified attribute set to true
+
+  In this way, when texlive.withPackages picks an output such as drv.tex, it
+  receives the actual container, avoiding superfluous dependencies on the other
+  containers (for instance doc containers).
 */
 
 # TODO stabilise a generic interface decoupled from the finer details of the
@@ -27,7 +38,7 @@
 , version ? toString revision
 , extraRevision ? ""
 , extraVersion ? ""
-, sha512
+, sha512 ? { }
 , mirrors
 , fixedHashes ? { }
 , postUnpack ? ""
@@ -37,8 +48,10 @@
 , hasHyphens ? false
 , hasInfo ? false
 , hasManpages ? false
-, hasRunfiles ? false
+, hasRunfiles ? (sha512 ? run)
 , hasTlpkg ? false
+, hasCatalogue ? true
+, catalogue ? pname
 , extraNativeBuildInputs ? [ ]
 , ...
 }@args:
@@ -50,46 +63,52 @@ let
     license = map (x: lib.licenses.${x}) license;
     # TeX Live packages should not be installed directly into the user profile
     outputsToInstall = [ ];
+    longDescription = ''
+      This package cannot be installed or used directly. Please use `texlive.withPackages (ps: [ ps.${lib.strings.escapeNixIdentifier pname} ])`.
+    '';
+    # discourage nix-env from matching this package
+    priority = 10;
+    platforms = lib.platforms.all;
+    # These create a large number of jobs, which puts load on Hydra
+    # without any appreciable benefit (as the combined packages already
+    # cause them all to be built and cached anyway).
+    hydraPlatforms = [ ];
+  } // lib.optionalAttrs (args ? shortdesc) {
+    description = args.shortdesc;
+  } // lib.optionalAttrs hasCatalogue {
+    homepage = "https://ctan.org/pkg/${catalogue}";
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
   hasDocfiles = sha512 ? doc;
   hasSource = sha512 ? source;
 
-  # emulate drv.all, drv.outputs lists
-  all = lib.optional hasBinfiles bin ++
-    lib.optional hasRunfiles tex ++
-    lib.optional hasDocfiles texdoc ++
-    lib.optional hasSource texsource ++
-    lib.optional hasTlpkg tlpkg ++
-    lib.optional hasManpages man ++
-    lib.optional hasInfo info;
-  outputs = lib.catAttrs "tlOutputName" all;
+  # containers that will be built by Hydra
+  outputs = lib.optional hasBinfiles "out" ++
+    lib.optional hasRunfiles "tex" ++
+    lib.optional hasDocfiles "texdoc" ++
+    # omit building sources, since as far as we know, installing them is not common
+    # the sources will still be available under drv.texsource
+    # lib.optional hasSource "texsource" ++
+    lib.optional hasTlpkg "tlpkg" ++
+    lib.optional hasManpages "man" ++
+    lib.optional hasInfo "info";
+  outputDrvs = lib.getAttrs outputs containers;
 
-  mainDrv = if hasBinfiles then bin
-    else if hasRunfiles then tex
-    else if hasTlpkg then tlpkg
-    else if hasDocfiles then texdoc
-    else if hasSource then texsource
-    else tex; # fall back to attrset tex if there is no derivation
-
-  # emulate multi-output derivation plus additional metadata
-  # (out is handled in mkContainer)
   passthru = {
-    inherit all outputs pname;
+    # metadata
+    inherit pname;
     revision = toString revision + extraRevision;
     version = version + extraVersion;
+    # containers behave like specified outputs
     outputSpecified = true;
-    inherit tex;
   } // lib.optionalAttrs (args ? deps) { tlDeps = args.deps; }
+  // lib.optionalAttrs (args ? fontMaps) { inherit (args) fontMaps; }
   // lib.optionalAttrs (args ? formats) { inherit (args) formats; }
-  // lib.optionalAttrs hasHyphens { inherit hasHyphens; }
+  // lib.optionalAttrs (args ? hyphenPatterns) { inherit (args) hyphenPatterns; }
   // lib.optionalAttrs (args ? postactionScript) { inherit (args) postactionScript; }
-  // lib.optionalAttrs hasDocfiles { texdoc = texdoc; }
-  // lib.optionalAttrs hasSource { texsource = texsource; }
-  // lib.optionalAttrs hasTlpkg { tlpkg = tlpkg; }
-  // lib.optionalAttrs hasManpages { man = man; }
-  // lib.optionalAttrs hasInfo { info = info; };
+  // lib.optionalAttrs hasSource { inherit (containers) texsource; }
+  // lib.optionalAttrs (! hasRunfiles) { tex = fakeTeX; };
 
   # build run, doc, source, tlpkg containers
   mkContainer = tlType: tlOutputName: sha512:
@@ -99,14 +118,12 @@ let
       # tlpkg is not a true container but a subfolder of the run container
       urlName = pname + (lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}");
       urls = map (up: "${up}/archive/${urlName}.r${toString revision}.tar.xz") mirrors;
-      # TODO switch to simpler "${name}-${tlOutputName}" (requires new fixed hashes)
-      container = runCommand "texlive-${pname}${lib.optionalString (tlType != "run") ".${tlType}"}-${version}${extraVersion}"
+      container = runCommand "${name}-${tlOutputName}"
         ({
           src = fetchurl { inherit urls sha512; };
-          # save outputName as fixed output derivations cannot change nor override outputName
-          passthru = passthru // { inherit tlOutputName; };
-          # TODO remove tlType from derivation (requires a rebuild)
-          inherit meta stripPrefix tlType;
+          inherit passthru;
+          # save outputName, since fixed output derivations cannot change nor override outputName
+          inherit meta stripPrefix tlOutputName;
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha256";
@@ -114,7 +131,7 @@ let
         })
         (''
           mkdir "$out"
-          if [[ "$tlType"  == "tlpkg" ]]; then
+          if [[ "$tlOutputName"  == "tlpkg" ]]; then
             tar -xf "$src" \
               --strip-components=1 \
               -C "$out" --anchored --exclude=tlpkg/tlpobj --keep-old-files \
@@ -126,24 +143,12 @@ let
           fi
         '' + postUnpack);
     in
-    # remove the standard drv.out, optionally replace it with the bin container
-    builtins.removeAttrs container [ "out" ] // lib.optionalAttrs hasBinfiles { out = bin; };
+    # remove drv.out to avoid confusing texlive.withPackages
+    removeAttrs container [ "out" ]
+    // outputDrvs;
 
-  tex =
-    if hasRunfiles then mkContainer "run" "tex" sha512.run
-    else passthru
-      // { inherit meta; tlOutputName = "tex"; }
-      // lib.optionalAttrs hasBinfiles { out = bin; };
-
-  texdoc = mkContainer "doc" "texdoc" sha512.doc;
-
-  texsource = mkContainer "source" "texsource" sha512.source;
-
-  tlpkg = mkContainer "tlpkg" "tlpkg" sha512.run;
-
-  # build bin container
+  # find interpreters for the script extensions found in tlpdb
   extToInput = {
-    # find interpreters for the script extensions found in tlpdb
     jar = jdk;
     lua = texliveBinaries.luatex;
     py = python3;
@@ -154,55 +159,95 @@ let
     tlu = texliveBinaries.luatex;
   };
 
-  # TODO switch to simpler "${name}" (requires a rebuild)
-  bin = runCommand "texlive-${pname}.bin-${version}"
+  # fake derivation for resolving dependencies in the absence of a "tex" containers
+  fakeTeX = passthru
+    // { inherit meta; tlOutputName = "tex"; inherit build; }
+    // outputDrvs;
+
+  containers = rec {
+    tex = mkContainer "run" "tex" sha512.run;
+    texdoc = mkContainer "doc" "texdoc" sha512.doc;
+    texsource = mkContainer "source" "texsource" sha512.source;
+    tlpkg = mkContainer "tlpkg" "tlpkg" sha512.run;
+
+    # bin container
+    out = runCommand "${name}"
+      {
+        inherit meta;
+        passthru = passthru // { tlOutputName = "out"; };
+        # shebang interpreters
+        buildInputs = let outName = builtins.replaceStrings [ "-" ] [ "_" ] pname; in
+          [
+            texliveBinaries.core.${outName} or null
+            texliveBinaries.${pname} or null
+            texliveBinaries.core-big.${outName} or null
+          ]
+          ++ (args.extraBuildInputs or [ ]) ++ [ bash perl ]
+          ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
+        nativeBuildInputs = extraNativeBuildInputs;
+        # absolute scripts folder
+        scriptsFolder = lib.optionals (hasRunfiles && tex ? outPath) (map (f: tex.outPath + "/scripts/" + f) (lib.toList args.scriptsFolder or pname));
+        # binaries info
+        inherit (args) binfiles;
+        binlinks = builtins.attrNames (args.binlinks or { });
+        bintargets = builtins.attrValues (args.binlinks or { });
+        # build scripts
+        patchScripts = ./patch-scripts.sed;
+        makeBinContainers = ./make-bin-containers.sh;
+      }
+      ''
+        . "$makeBinContainers"
+        ${args.postFixup or ""}
+      '' // outputDrvs;
+
+    # build man, info containers
+    man = removeAttrs
+      (runCommand "${name}-man"
+        {
+          inherit meta texdoc;
+          passthru = passthru // { tlOutputName = "man"; };
+        }
+        ''
+          mkdir -p "$out"/share
+          ln -s {"$texdoc"/doc,"$out"/share}/man
+        '') [ "out" ] // outputDrvs;
+
+    info = removeAttrs
+      (runCommand "${name}-info"
+        {
+          inherit meta texdoc;
+          passthru = passthru // { tlOutputName = "info"; };
+        }
+        ''
+          mkdir -p "$out"/share
+          ln -s {"$texdoc"/doc,"$out"/share}/info
+        '') [ "out" ] // outputDrvs;
+  };
+
+  # multioutput derivation to be exported under texlivePackages
+  # to make Hydra build all containers
+  build = runCommand name
     {
-      inherit meta;
-      passthru = passthru // { tlOutputName = "out"; };
-      # shebang interpreters
-      buildInputs =let outName = builtins.replaceStrings [ "-" ] [ "_" ] pname; in
-        [ texliveBinaries.core.${outName} or null
-          texliveBinaries.${pname} or null
-          texliveBinaries.core-big.${outName} or null ]
-        ++ (args.extraBuildInputs or [ ]) ++ [ bash perl ]
-        ++ (lib.attrVals (args.scriptExts or [ ]) extToInput);
-      nativeBuildInputs = extraNativeBuildInputs;
-      # absolute scripts folder
-      scriptsFolder = lib.optionalString (tex ? outPath) (tex.outPath + "/scripts/" + args.scriptsFolder or pname);
-      # binaries info
-      inherit (args) binfiles;
-      binlinks = builtins.attrNames (args.binlinks or { });
-      bintargets = builtins.attrValues (args.binlinks or { });
-      # build scripts
-      patchScripts = ./patch-scripts.sed;
-      makeBinContainers = ./make-bin-containers.sh;
+      __structuredAttrs = true;
+      inherit meta outputDrvs;
+      outputs = if outputs != [ ] then outputs else [ "out" ];
+      passthru = removeAttrs passthru [ "outputSpecified" ] // { inherit build; };
+
+      # force output name in case "out" is missing
+      preHook = lib.optionalString (!hasBinfiles && outputs != [ ]) ''
+        export out="''${${builtins.head outputs}-}"
+      '';
     }
+    # each output is just a symlink to the corresponding container
+    # if the container is missing (that is, outputs == [ ]), create a file, to prevent passing the package to .withPackages
     ''
-      . "$makeBinContainers"
-      ${args.postFixup or ""}
+      for outputName in ''${!outputs[@]} ; do
+        if [[ -n ''${outputDrvs[$outputName]} ]] ; then
+          ln -s "''${outputDrvs[$outputName]}" "''${outputs[$outputName]}"
+        else
+          touch "''${outputs[$outputName]}"
+        fi
+      done
     '';
-
-  # build man, info containers
-  # TODO switch to simpler "${name}-man" (requires a rebuild)
-  man = builtins.removeAttrs (runCommand "texlive-${pname}.man-${version}${extraVersion}"
-    {
-      inherit meta texdoc;
-      passthru = passthru // { tlOutputName = "man"; };
-    }
-    ''
-      mkdir -p "$out"/share
-      ln -s {"$texdoc"/doc,"$out"/share}/man
-    '') [ "out" ] // lib.optionalAttrs hasBinfiles { out = bin; };
-
-  # TODO switch to simpler "${name}-info" (requires a rebuild)
-  info = builtins.removeAttrs (runCommand "texlive-${pname}.info-${version}${extraVersion}"
-    {
-      inherit meta texdoc;
-      passthru = passthru // { tlOutputName = "info"; };
-    }
-    ''
-      mkdir -p "$out"/share
-      ln -s {"$texdoc"/doc,"$out"/share}/info
-    '') [ "out" ] // lib.optionalAttrs hasBinfiles { out = bin; };
 in
-builtins.removeAttrs mainDrv [ "outputSpecified" ]
+if outputs == [ ] then removeAttrs fakeTeX [ "outputSpecified" ] else build // outputDrvs

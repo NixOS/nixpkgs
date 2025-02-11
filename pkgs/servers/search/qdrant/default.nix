@@ -1,46 +1,56 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, stdenv
-, pkg-config
-, openssl
-, rust-jemalloc-sys
-, nix-update-script
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  stdenv,
+  pkg-config,
+  openssl,
+  rust-jemalloc-sys,
+  nix-update-script,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.6.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-G9nA0F3KKl6mLgcpuMW1uikOyBcBsJ1qd2IlMhW4vhg=";
+    tag = "v${version}";
+    sha256 = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quantization-0.1.0" = "sha256-FfjLNSPjgVTx2ReqqMeyYujnCz9fPgjWX99r3Lik8oA=";
-      "tonic-0.9.2" = "sha256-ZlcDUZy/FhxcgZE7DtYhAubOq8DMSO17T+TCmXar1jE=";
-      "wal-0.1.2" = "sha256-sMleBUAZcSnUx7/oQZr9lSDmVHxUjfGaVodvVtFEle0=";
+      "tar-0.4.41" = "sha256-32n96yoGbDzhgVZvISLGwxHuv7PGtxde5ma/YlsR1Gg=";
+      "wal-0.1.2" = "sha256-QcyS0v7O1BziVT3oahebpq+u4l5JGaujCaRIPdmsJl4=";
     };
   };
 
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  buildInputs =
+    [
+      openssl
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
-  buildInputs = [
-    openssl
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+  env = {
+    # Needed to get openssl-sys to use pkg-config.
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   passthru = {
     updateScript = nix-update-script { };

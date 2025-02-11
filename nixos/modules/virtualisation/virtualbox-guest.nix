@@ -1,93 +1,156 @@
 # Module for VirtualBox guests.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-
   cfg = config.virtualisation.virtualbox.guest;
   kernel = config.boot.kernelPackages;
 
+  mkVirtualBoxUserService = serviceArgs: verbose: {
+    description = "VirtualBox Guest User Services ${serviceArgs}";
+
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+
+    # The graphical session may not be ready when starting the service
+    # Hence, check if the DISPLAY env var is set, otherwise fail, wait and retry again
+    startLimitBurst = 20;
+
+    unitConfig.ConditionVirtualization = "oracle";
+
+    # Check if the display environment is ready, otherwise fail
+    preStart = "${pkgs.bash}/bin/bash -c \"if [ -z $DISPLAY ]; then exit 1; fi\"";
+    serviceConfig = {
+      ExecStart =
+        "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient"
+        + (lib.strings.optionalString verbose " --verbose")
+        + " --foreground ${serviceArgs}";
+      # Wait after a failure, hoping that the display environment is ready after waiting
+      RestartSec = 2;
+      Restart = "always";
+    };
+  };
+
+  mkVirtualBoxUserX11OnlyService =
+    serviceArgs: verbose:
+    (mkVirtualBoxUserService serviceArgs verbose)
+    // {
+      unitConfig.ConditionEnvironment = "XDG_SESSION_TYPE=x11";
+    };
 in
-
 {
-
-  ###### interface
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "virtualisation"
+        "virtualbox"
+        "guest"
+        "draganddrop"
+      ]
+      [
+        "virtualisation"
+        "virtualbox"
+        "guest"
+        "dragAndDrop"
+      ]
+    )
+  ];
 
   options.virtualisation.virtualbox.guest = {
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable the VirtualBox service and other guest additions.";
+      type = lib.types.bool;
+      description = "Whether to enable the VirtualBox service and other guest additions.";
     };
 
-    x11 = mkOption {
+    clipboard = lib.mkOption {
       default = true;
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable x11 graphics";
+      type = lib.types.bool;
+      description = "Whether to enable clipboard support.";
+    };
+
+    seamless = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to enable seamless mode. When activated windows from the guest appear next to the windows of the host.";
+    };
+
+    dragAndDrop = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to enable drag and drop support.";
+    };
+
+    verbose = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = "Whether to verbose logging for guest services.";
+    };
+
+    vboxsf = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to load vboxsf";
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [{
-    assertions = [{
-      assertion = pkgs.stdenv.hostPlatform.isx86;
-      message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-    }];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        assertions = [
+          {
+            assertion = pkgs.stdenv.hostPlatform.isx86;
+            message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
+          }
+        ];
 
-    environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
+        environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
-    boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
-    boot.supportedFilesystems = [ "vboxsf" ];
-    boot.initrd.supportedFilesystems = [ "vboxsf" ];
+        systemd.services.virtualbox = {
+          description = "VirtualBox Guest Services";
 
-    users.groups.vboxsf.gid = config.ids.gids.vboxsf;
+          wantedBy = [ "multi-user.target" ];
+          requires = [ "dev-vboxguest.device" ];
+          after = [ "dev-vboxguest.device" ];
 
-    systemd.services.virtualbox =
-      { description = "VirtualBox Guest Services";
+          unitConfig.ConditionVirtualization = "oracle";
 
-        wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-vboxguest.device" ];
-        after = [ "dev-vboxguest.device" ];
+          serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
+        };
 
-        unitConfig.ConditionVirtualization = "oracle";
+        services.udev.extraRules = ''
+          # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
+          # should restrict this to logged-in users.
+          KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
 
-        serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
-      };
+          # Allow systemd dependencies on vboxguest.
+          SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
+        '';
 
-    services.udev.extraRules =
-      ''
-        # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
-        # should restrict this to logged-in users.
-        KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+        systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session" cfg.verbose;
+      }
+      (lib.mkIf cfg.vboxsf {
+        boot.supportedFilesystems = [ "vboxsf" ];
+        boot.initrd.supportedFilesystems = [ "vboxsf" ];
 
-        # Allow systemd dependencies on vboxguest.
-        SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
-      '';
-  } (mkIf cfg.x11 {
-    services.xserver.videoDrivers = [ "vmware" "virtualbox" "modesetting" ];
-
-    services.xserver.config =
-      ''
-        Section "InputDevice"
-          Identifier "VBoxMouse"
-          Driver "vboxmouse"
-        EndSection
-      '';
-
-    services.xserver.serverLayoutSection =
-      ''
-        InputDevice "VBoxMouse"
-      '';
-
-    services.xserver.displayManager.sessionCommands =
-      ''
-        PATH=${makeBinPath [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver.out ]}:$PATH \
-          ${kernel.virtualboxGuestAdditions}/bin/VBoxClient-all
-      '';
-  })]);
-
+        users.groups.vboxsf.gid = config.ids.gids.vboxsf;
+      })
+      (lib.mkIf cfg.clipboard {
+        systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard" cfg.verbose;
+      })
+      (lib.mkIf cfg.seamless {
+        systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserX11OnlyService "--seamless" cfg.verbose;
+      })
+      (lib.mkIf cfg.dragAndDrop {
+        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop" cfg.verbose;
+      })
+    ]
+  );
 }

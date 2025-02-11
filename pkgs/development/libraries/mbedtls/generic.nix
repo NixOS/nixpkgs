@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, version
-, hash
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  version,
+  hash,
+  patches ? [ ],
+  fetchFromGitHub,
 
-, cmake
-, ninja
-, perl # Project uses Perl for scripting and testing
-, python3
+  cmake,
+  ninja,
+  perl, # Project uses Perl for scripting and testing
+  python3,
 
-, enableThreading ? true # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
+  enableThreading ? true, # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +23,18 @@ stdenv.mkDerivation rec {
     repo = "mbedtls";
     rev = "${pname}-${version}";
     inherit hash;
+    # mbedtls >= 3.6.0 uses git submodules
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja perl python3 ];
+  inherit patches;
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    perl
+    python3
+  ];
 
   strictDeps = true;
 
@@ -52,7 +63,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
     changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
-    license = licenses.asl20;
+    license = [
+      licenses.asl20 # or
+      licenses.gpl2Plus
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ raphaelr ];
   };

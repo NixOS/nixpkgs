@@ -1,47 +1,43 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, segno
-, setuptools
-, trustme
-, wheel
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  segno,
+  setuptools,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "66";
-  format = "pyproject";
+  version = "81";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Kane610";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UWKsx7giGrNR04X/2vgdaCFulxbzQkvlRfCEodVoHY8=";
+    repo = "aiounifi";
+    tag = "v${version}";
+    hash = "sha256-QuECmv/xWTNsC42JmPlYwN710Pu6L9jNbtOPJsUdM9k=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools==" "setuptools>=" \
-      --replace "wheel==" "wheel>="
-
-    sed -i '/--cov=/d' pyproject.toml
+      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "wheel==" "wheel>="
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
     segno
@@ -51,23 +47,21 @@ buildPythonPackage rec {
     aioresponses
     pytest-aiohttp
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     trustme
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "aiounifi"
-  ];
+  pythonImportsCheck = [ "aiounifi" ];
 
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";
     homepage = "https://github.com/Kane610/aiounifi";
     changelog = "https://github.com/Kane610/aiounifi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = [ ];
+    mainProgram = "aiounifi";
   };
 }

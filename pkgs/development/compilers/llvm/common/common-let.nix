@@ -4,11 +4,15 @@
 , gitRelease ? null
 , officialRelease ? null
 , monorepoSrc' ? null
-}:
+, version ? null,
+}@args:
 
 rec {
   llvm_meta = {
-    license = lib.licenses.ncsa;
+    license = with lib.licenses; [ ncsa ] ++
+      # Contributions after June 1st, 2024 are only licensed under asl20-llvm:
+      # https://github.com/llvm/llvm-project/pull/92394
+      lib.optional (lib.versionAtLeast release_version "19") asl20-llvm;
     maintainers = lib.teams.llvm.members;
 
     # See llvm/cmake/config-ix.cmake.
@@ -21,17 +25,18 @@ rec {
       lib.platforms.wasi ++
       lib.platforms.x86 ++
       lib.optionals (lib.versionAtLeast release_version "7") lib.platforms.riscv ++
-      lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k;
+      lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k ++
+      lib.optionals (lib.versionAtLeast release_version "16") lib.platforms.loongarch64;
   };
 
   releaseInfo =
     if gitRelease != null then rec {
       original = gitRelease;
-      release_version = original.version;
+      release_version = args.version or original.version;
       version = gitRelease.rev-version;
     } else rec {
       original = officialRelease;
-      release_version = original.version;
+      release_version = args.version or original.version;
       version =
         if original ? candidate then
           "${release_version}-${original.candidate}"
@@ -51,10 +56,11 @@ rec {
           else
             "llvmorg-${releaseInfo.version}";
       in
-      fetchFromGitHub {
+      fetchFromGitHub rec {
         owner = "llvm";
         repo = "llvm-project";
         inherit rev sha256;
+        passthru = { inherit owner repo rev; };
       };
 
 }

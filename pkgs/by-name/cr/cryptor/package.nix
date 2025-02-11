@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeBinaryWrapper
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook
-, gocryptfs
-, gtk3
-, json-glib
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  gocryptfs,
+  gtk3,
+  json-glib,
+  libgee,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cryptor";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "moson-mo";
     repo = "cryptor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bgOOueOKSc6dLyxGU+ds9XYWM5mO+qCKC4dkCu2B1sQ=";
+    hash = "sha256-EqiaWgwhSLwZnovqYQ9rfHwvhWucmK0ujSsOhMJEJ1A=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/cryptor \
       --prefix PATH : "${lib.makeBinPath [ gocryptfs ]}"
+
+    install -Dm444 $src/resources/misc/cryptor.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/cryptor.desktop \
+      --replace-warn '/usr/bin/cryptor' 'cryptor'
   '';
 
   meta = {

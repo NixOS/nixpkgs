@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphincs";
     repo = "pyspx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hMZ7JZoo5RdUwQYpGjtZznH/O6rBUXv+svfOAI0cjqs=";
     fetchSubmodules = true;
   };
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyspx"
-  ];
+  pythonImportsCheck = [ "pyspx" ];
 
   meta = with lib; {
     description = "Python bindings for SPHINCS";

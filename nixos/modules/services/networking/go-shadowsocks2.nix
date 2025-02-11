@@ -1,20 +1,24 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.go-shadowsocks2.server;
-in {
+in
+{
   options.services.go-shadowsocks2.server = {
-    enable = mkEnableOption (lib.mdDoc "go-shadowsocks2 server");
+    enable = lib.mkEnableOption "go-shadowsocks2 server";
 
-    listenAddress = mkOption {
-      type = types.str;
-      description = lib.mdDoc "Server listen address or URL";
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
+      description = "Server listen address or URL";
       example = "ss://AEAD_CHACHA20_POLY1305:your-password@:8488";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.go-shadowsocks2-server = {
       description = "go-shadowsocks2 server";
 

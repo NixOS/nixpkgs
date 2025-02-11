@@ -1,29 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, installShellFiles
-, Security
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  installShellFiles,
+  Security,
+  curl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sheldon";
-  version = "0.7.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "rossmacarthur";
     repo = pname;
     rev = version;
-    hash = "sha256-vGFR8NL3bOCUuNr0KQuAbjQMxvFbN/T9aVmf7Wxt9JU=";
+    hash = "sha256-C4rGE+tKlpEJabyGAexIoPmUiLvl87GkL6XH5aJHCrU=";
   };
 
-  cargoSha256 = "sha256-wVB+yL+h90f7NnASDaX5gxT5z45M8I1rxIJwY8uyB4k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5Ho41WU/DzAdBOGDPmJYipcJMAji6J+Jg8lNQYionng=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      curl
+    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   # Needs network connection
   checkFlags = [
@@ -50,18 +60,18 @@ rustPlatform.buildRustPackage rec {
     "--skip lock_and_source_profiles"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sheldon \
       --bash <($out/bin/sheldon completions --shell bash) \
       --zsh <($out/bin/sheldon completions --shell zsh)
   '';
 
   meta = with lib; {
-    description = "A fast and configurable shell plugin manager";
+    description = "Fast and configurable shell plugin manager";
     homepage = "https://github.com/rossmacarthur/sheldon";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ seqizz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "sheldon";
   };
 }

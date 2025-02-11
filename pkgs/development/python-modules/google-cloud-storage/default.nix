@@ -1,42 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-cloud-core
-, google-cloud-iam
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-cloud-core,
+  google-cloud-iam,
+  google-cloud-kms,
+  google-cloud-testutils,
+  google-resumable-media,
+  mock,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.10.0";
-  format = "setuptools";
+  version = "2.19.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-k0sx6tXzmU5TYPn/V1CYLFtrEWBNwHK8RSwlll4Hbcc=";
+    pname = "google_cloud_storage";
+    inherit version;
+    hash = "sha256-zQXp5xkbpstok02Ot2BU2b5FYqqJ28Qjb+7k19UTQrI=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "google-auth" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     google-cloud-core
     google-resumable-media
     requests
   ];
 
-  passthru.optional-dependencies = {
-    protobuf = [
-      protobuf
-    ];
+  optional-dependencies = {
+    protobuf = [ protobuf ];
   };
 
   nativeCheckInputs = [
@@ -47,20 +52,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Disable tests which require credentials and network access
   disabledTests = [
+    # Disable tests which require credentials and network access
     "create"
     "download"
     "get"
     "post"
-    "upload"
+    "test_anonymous_client_access_to_public_bucket"
     "test_build_api_url"
     "test_ctor_mtls"
+    "test_ctor_w_api_endpoint_override"
+    "test_ctor_w_custom_endpoint_use_auth"
     "test_hmac_key_crud"
     "test_list_buckets"
     "test_open"
-    "test_anonymous_client_access_to_public_bucket"
-    "test_ctor_w_custom_endpoint_use_auth"
+    "test_restore_bucket"
+    "test_set_api_request_attr"
+    "upload"
   ];
 
   disabledTestPaths = [
@@ -80,15 +88,13 @@ buildPythonPackage rec {
     rm tests/conformance/test_conformance.py
   '';
 
-  pythonImportsCheck = [
-    "google.cloud.storage"
-  ];
+  pythonImportsCheck = [ "google.cloud.storage" ];
 
   meta = with lib; {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
     changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

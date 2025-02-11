@@ -1,44 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, alsa-lib
-, dssi
-, fluidsynth
-, ladspaH
-, lash
-, libinstpatch
-, libjack2
-, liblo
-, libsamplerate
-, libsndfile
-, lilv
-, lrdf
-, lv2
-, qtsvg
-, rtaudio
-, rubberband
-, sord
-, serd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  dssi,
+  fluidsynth,
+  ladspaH,
+  lash,
+  libinstpatch,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
+  lilv,
+  lrdf,
+  lv2,
+  qtsvg,
+  rtaudio,
+  rubberband,
+  sord,
+  serd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "muse-sequencer";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "muse-sequencer";
     repo = "muse";
     rev = finalAttrs.version;
-    hash = "sha256-JPvoximDL4oKO8reXW7alMegwUyUTSAcdq3ueXeUMMY=";
+    hash = "sha256-LxibuqopMHuKEfTWXSEXc1g3wTm2F3NQRiV71FHvaY0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -74,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       it is published under the GNU General Public License.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant orivej ];
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = lib.platforms.linux;
     mainProgram = "muse4";
   };

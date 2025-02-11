@@ -1,435 +1,485 @@
 {
   # texlive package set
-  tl
-, bin
+  tl,
+  bin,
 
-, lib
-, buildEnv
-, libfaketime
-, makeFontsConf
-, makeWrapper
-, runCommand
-, writeShellScript
-, writeText
-, toTLPkgSets
-, bash
-, perl
+  lib,
+  buildEnv,
+  libfaketime,
+  makeFontsConf,
+  makeWrapper,
+  runCommand,
+  writeShellScript,
+  writeText,
+  toTLPkgSets,
+  bash,
+  perl,
 
   # common runtime dependencies
-, coreutils
-, gawk
-, gnugrep
-, gnused
-, ghostscript
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  ghostscript,
 }:
 
-lib.fix (self: {
-  withDocs ? false
-, withSources ? false
-, requiredTeXPackages ? ps: [ ps.scheme-infraonly ]
+lib.fix (
+  self:
+  {
+    withDocs ? false,
+    withSources ? false,
+    requiredTeXPackages ? ps: [ ps.scheme-infraonly ],
 
-### texlive.combine backward compatibility
-, __extraName ? "combined"
-, __extraVersion ? ""
-# emulate the old texlive.combine (e.g. add man pages to main output)
-, __combine ? false
-# adjust behavior further if called from the texlive.combine wrapper
-, __fromCombineWrapper ? false
-}@args:
+    ### texlive.combine backward compatibility
+    __extraName ? "combined",
+    __extraVersion ? "",
+    # emulate the old texlive.combine (e.g. add man pages to main output)
+    __combine ? false,
+    # adjust behavior further if called from the texlive.combine wrapper
+    __fromCombineWrapper ? false,
+    # build only the formats of a package (for internal use!)
+    __formatsOf ? null,
+  }@args:
 
-let
-  ### texlive.combine backward compatibility
-  # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
-  isOldPkgList = p: ! p.outputSpecified or false && p ? pkgs && builtins.all (p: p ? tlType) p.pkgs;
-  ensurePkgSets = ps: if ! __fromCombineWrapper && builtins.any isOldPkgList ps
-    then let oldPkgLists = builtins.partition isOldPkgList ps;
-      in oldPkgLists.wrong ++ lib.concatMap toTLPkgSets oldPkgLists.right
-    else ps;
+  let
+    ### buildEnv with custom attributes
+    buildEnv' =
+      args:
+      (
+        buildEnv ({ inherit (args) name paths; })
+        // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
+      ).overrideAttrs
+        (
+          removeAttrs args [
+            "extraOutputsToInstall"
+            "name"
+            "paths"
+            "pkgs"
+          ]
+        );
 
-  pkgList = rec {
-    # resolve dependencies of the packages that affect the runtime
-    all =
-      let
-        # order of packages is irrelevant
-        packages = builtins.sort (a: b: a.pname < b.pname) (ensurePkgSets (requiredTeXPackages tl));
-        runtime = builtins.partition
-          (p: p.outputSpecified or false -> builtins.elem (p.tlOutputName or p.outputName) [ "out" "tex" "tlpkg" ])
-          packages;
-        keySet = p: {
-          key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
-          inherit p;
-          tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
-        };
-      in
-      # texlive.combine: the wrapper already resolves all dependencies
-      if __fromCombineWrapper then requiredTeXPackages null else
-        builtins.catAttrs "p" (builtins.genericClosure {
-          startSet = map keySet runtime.right;
-          operator = p: map keySet p.tlDeps;
-        }) ++ runtime.wrong;
+    ### texlive.combine backward compatibility
+    # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
+    isOldPkgList = p: !p.outputSpecified or false && p ? pkgs && builtins.all (p: p ? tlType) p.pkgs;
+    ensurePkgSets =
+      ps:
+      if !__fromCombineWrapper && builtins.any isOldPkgList ps then
+        let
+          oldPkgLists = builtins.partition isOldPkgList ps;
+        in
+        oldPkgLists.wrong ++ lib.concatMap toTLPkgSets oldPkgLists.right
+      else
+        ps;
 
-    # group the specified outputs
-    specified = builtins.partition (p: p.outputSpecified or false) all;
-    specifiedOutputs = lib.groupBy (p: p.tlOutputName or p.outputName) specified.right;
-    otherOutputNames = builtins.catAttrs "key" (builtins.genericClosure {
-      startSet = map (key: { inherit key; }) (lib.concatLists (builtins.catAttrs "outputs" specified.wrong));
-      operator = _: [ ];
-    });
-    otherOutputs = lib.genAttrs otherOutputNames (n: builtins.catAttrs n specified.wrong);
-    outputsToInstall = builtins.catAttrs "key" (builtins.genericClosure {
-      startSet = map (key: { inherit key; })
-        ([ "out" ] ++ lib.optional (splitOutputs ? man) "man"
-          ++ lib.concatLists (builtins.catAttrs "outputsToInstall" (builtins.catAttrs "meta" specified.wrong)));
-      operator = _: [ ];
-    });
+    pkgList = rec {
+      # resolve dependencies of the packages that affect the runtime
+      all =
+        let
+          packages = ensurePkgSets (requiredTeXPackages tl);
+          runtime = builtins.partition (
+            p:
+            p.outputSpecified or false
+            -> builtins.elem (p.tlOutputName or p.outputName) [
+              "out"
+              "tex"
+              "tlpkg"
+            ]
+          ) packages;
+          keySet = p: {
+            key =
+              p.pname or p.name
+              + lib.optionalString (p.outputSpecified or false) ("-" + p.tlOutputName or p.outputName or "");
+            inherit p;
+            tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
+          };
+        in
+        # texlive.combine: the wrapper already resolves all dependencies
+        if __fromCombineWrapper then
+          requiredTeXPackages null
+        else
+          builtins.catAttrs "p" (
+            builtins.genericClosure {
+              startSet = map keySet runtime.right;
+              operator = p: map keySet p.tlDeps;
+            }
+          )
+          ++ runtime.wrong;
 
-    # split binary and tlpkg from tex, texdoc, texsource
-    bin = if __fromCombineWrapper
-      then builtins.filter (p: p.tlType == "bin") all # texlive.combine: legacy filter
-      else otherOutputs.out or [ ] ++ specifiedOutputs.out or [ ];
-    tlpkg = if __fromCombineWrapper
-      then builtins.filter (p: p.tlType == "tlpkg") all # texlive.combine: legacy filter
-      else otherOutputs.tlpkg or [ ] ++ specifiedOutputs.tlpkg or [ ];
+      # group the specified outputs
+      specified = builtins.partition (p: p.outputSpecified or false) all;
+      specifiedOutputs = lib.groupBy (p: p.tlOutputName or p.outputName) specified.right;
+      otherOutputNames = builtins.catAttrs "key" (
+        builtins.genericClosure {
+          startSet = map (key: { inherit key; }) (
+            lib.concatLists (builtins.catAttrs "outputs" specified.wrong)
+          );
+          operator = _: [ ];
+        }
+      );
+      otherOutputs = lib.genAttrs otherOutputNames (n: builtins.catAttrs n specified.wrong);
+      outputsToInstall = builtins.catAttrs "key" (
+        builtins.genericClosure {
+          startSet = map (key: { inherit key; }) (
+            [ "out" ]
+            ++ lib.optional (otherOutputs ? man) "man"
+            ++ lib.concatLists (builtins.catAttrs "outputsToInstall" (builtins.catAttrs "meta" specified.wrong))
+          );
+          operator = _: [ ];
+        }
+      );
 
-    nonbin = if __fromCombineWrapper then builtins.filter (p: p.tlType != "bin" && p.tlType != "tlpkg") all # texlive.combine: legacy filter
-      else (if __combine then # texlive.combine: emulate old input ordering to avoid rebuilds
-        lib.concatMap (p: lib.optional (p ? tex) p.tex
-          ++ lib.optional ((withDocs || p ? man) && p ? texdoc) p.texdoc
-          ++ lib.optional (withSources && p ? texsource) p.texsource) specified.wrong
-        else otherOutputs.tex or [ ]
-          ++ lib.optionals withDocs (otherOutputs.texdoc or [ ])
-          ++ lib.optionals withSources (otherOutputs.texsource or [ ]))
-        ++ specifiedOutputs.tex or [ ] ++ specifiedOutputs.texdoc or [ ] ++ specifiedOutputs.texsource or [ ];
+      # split binary and tlpkg from tex, texdoc, texsource
+      bin =
+        if __fromCombineWrapper then
+          builtins.filter (p: p.tlType == "bin") all # texlive.combine: legacy filter
+        else
+          otherOutputs.out or [ ] ++ specifiedOutputs.out or [ ];
+      tlpkg =
+        if __fromCombineWrapper then
+          builtins.filter (p: p.tlType == "tlpkg") all # texlive.combine: legacy filter
+        else
+          otherOutputs.tlpkg or [ ] ++ specifiedOutputs.tlpkg or [ ];
 
-    # outputs that do not become part of the environment
-    nonEnvOutputs = lib.subtractLists [ "out" "tex" "texdoc" "texsource" "tlpkg" ] otherOutputNames;
-  };
+      nonbin =
+        if __fromCombineWrapper then
+          builtins.filter (p: p.tlType != "bin" && p.tlType != "tlpkg") all # texlive.combine: legacy filter
+        else
+          (
+            if __combine then # texlive.combine: emulate old input ordering to avoid rebuilds
+              lib.concatMap (
+                p:
+                lib.optional (p ? tex) p.tex
+                ++ lib.optional ((withDocs || p ? man) && p ? texdoc) p.texdoc
+                ++ lib.optional (withSources && p ? texsource) p.texsource
+              ) specified.wrong
+            else
+              otherOutputs.tex or [ ]
+              ++ lib.optionals withDocs (otherOutputs.texdoc or [ ])
+              ++ lib.optionals withSources (otherOutputs.texsource or [ ])
+          )
+          ++ specifiedOutputs.tex or [ ]
+          ++ specifiedOutputs.texdoc or [ ]
+          ++ specifiedOutputs.texsource or [ ];
 
-  # list generated by inspecting `grep -IR '\([^a-zA-Z]\|^\)gs\( \|$\|"\)' "$TEXMFDIST"/scripts`
-  # and `grep -IR rungs "$TEXMFDIST"`
-  # and ignoring luatex, perl, and shell scripts (those must be patched using postFixup)
-  needsGhostscript = lib.any (p: lib.elem p.pname [ "context" "dvipdfmx" "latex-papersize" "lyluatex" ]) pkgList.bin;
+      # outputs that do not become part of the environment
+      nonEnvOutputs = lib.subtractLists [ "out" "tex" "texdoc" "texsource" "tlpkg" ] otherOutputNames;
 
-  name = if __combine then "texlive-${__extraName}-${bin.texliveYear}${__extraVersion}" # texlive.combine: old name name
-    else "texlive-${bin.texliveYear}-env";
+      # packages that contribute to config files and formats
+      fontMaps = lib.filter (p: p ? fontMaps && (p.tlOutputName or p.outputName == "tex")) nonbin;
+      sortedFontMaps = builtins.sort (a: b: a.pname < b.pname) fontMaps;
+      hyphenPatterns = lib.filter (
+        p: p ? hyphenPatterns && (p.tlOutputName or p.outputName == "tex")
+      ) nonbin;
+      sortedHyphenPatterns = builtins.sort (a: b: a.pname < b.pname) hyphenPatterns;
+      formatPkgs = lib.filter (
+        p:
+        p ? formats
+        && (p.outputSpecified or false -> p.tlOutputName or p.outputName == "tex")
+        && builtins.any (f: f.enabled or true) p.formats
+      ) all;
+      sortedFormatPkgs =
+        if __formatsOf != null then [ __formatsOf ] else builtins.sort (a: b: a.pname < b.pname) formatPkgs;
+      formats = map (
+        p:
+        self {
+          requiredTeXPackages =
+            ps:
+            [
+              ps.scheme-infraonly
+              p
+            ]
+            ++ hyphenPatterns;
+          __formatsOf = p;
+        }
+      ) sortedFormatPkgs;
+    };
 
-  texmfdist = (buildEnv {
-    name = "${name}-texmfdist";
+    # list generated by inspecting `grep -IR '\([^a-zA-Z]\|^\)gs\( \|$\|"\)' "$TEXMFDIST"/scripts`
+    # and `grep -IR rungs "$TEXMFDIST"`
+    # and ignoring luatex, perl, and shell scripts (those must be patched using postFixup)
+    needsGhostscript = lib.any (
+      p:
+      lib.elem p.pname [
+        "context"
+        "dvipdfmx"
+        "latex-papersize"
+        "lyluatex"
+      ]
+    ) pkgList.bin;
 
-    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
-    paths = builtins.catAttrs "outPath" pkgList.nonbin;
+    name =
+      if __combine then
+        "texlive-${__extraName}-${bin.texliveYear}${__extraVersion}" # texlive.combine: old name name
+      else
+        "texlive-${bin.texliveYear}-" + (if __formatsOf != null then "${__formatsOf.pname}-fmt" else "env");
 
-    # mktexlsr
-    nativeBuildInputs = [ tl."texlive.infra" ];
+    texmfdist = buildEnv' {
+      name = "${name}-texmfdist";
 
-    postBuild = # generate ls-R database
-    ''
-      mktexlsr "$out"
-    '';
-  }).overrideAttrs (_: { allowSubstitutes = true; });
+      # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+      paths = builtins.catAttrs "outPath" pkgList.nonbin;
 
-  tlpkg = (buildEnv {
-    name = "${name}-tlpkg";
+      # mktexlsr
+      nativeBuildInputs = [ tl."texlive.infra" ];
 
-    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
-    paths = builtins.catAttrs "outPath" pkgList.tlpkg;
-  }).overrideAttrs (_: { allowSubstitutes = true; });
+      postBuild = # generate ls-R database
+        ''
+          mktexlsr "$out"
+        '';
+    };
 
-  # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist
-  # and sometimes look into $TEXMFROOT/tlpkg (notably fmtutil, updmap look for perl modules in both)
-  texmfroot = runCommand "${name}-texmfroot" {
-    inherit texmfdist tlpkg;
-  } ''
-    mkdir -p "$out"
-    ln -s "$texmfdist" "$out"/texmf-dist
-    ln -s "$tlpkg" "$out"/tlpkg
-  '';
+    tlpkg = buildEnv {
+      name = "${name}-tlpkg";
 
-  # texlive.combine: expose info and man pages in usual /share/{info,man} location
-  doc = buildEnv {
-    name = "${name}-doc";
+      # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+      paths = builtins.catAttrs "outPath" pkgList.tlpkg;
+    };
 
-    paths = [ (texmfdist.outPath + "/doc") ];
-    extraPrefix = "/share";
+    # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist
+    # and sometimes look into $TEXMFROOT/tlpkg (notably fmtutil, updmap look for perl modules in both)
+    texmfroot =
+      runCommand "${name}-texmfroot"
+        {
+          inherit texmfdist tlpkg;
+        }
+        ''
+          mkdir -p "$out"
+          ln -s "$texmfdist" "$out"/texmf-dist
+          ln -s "$tlpkg" "$out"/tlpkg
+        '';
 
-    pathsToLink = [
-      "/info"
-      "/man"
-    ];
-  };
+    # texlive.combine: expose info and man pages in usual /share/{info,man} location
+    doc = buildEnv {
+      name = "${name}-doc";
 
-  meta = {
-    description = "TeX Live environment"
-      + lib.optionalString withDocs " with documentation"
-      + lib.optionalString (withDocs && withSources) " and"
-      + lib.optionalString withSources " with sources";
-    platforms = lib.platforms.all;
-    longDescription = "Contains the following packages and their transitive dependencies:\n - "
-      + lib.concatMapStringsSep "\n - "
-          (p: p.pname + (lib.optionalString (p.outputSpecified or false) " (${p.tlOutputName or p.outputName})"))
-          (requiredTeXPackages tl);
-  };
+      paths = [ (texmfdist.outPath + "/doc") ];
+      extraPrefix = "/share";
 
-  # emulate split output derivation
-  splitOutputs = {
-    out = out // { outputSpecified = true; };
-    texmfdist = texmfdist // { outputSpecified = true; };
-    texmfroot = texmfroot // { outputSpecified = true; };
-  } // (lib.genAttrs pkgList.nonEnvOutputs (outName: (buildEnv {
-    inherit name;
-    paths = builtins.catAttrs "outPath"
-      (pkgList.otherOutputs.${outName} or [ ] ++ pkgList.specifiedOutputs.${outName} or [ ]);
-    # force the output to be ${outName} or nix-env will not work
-    nativeBuildInputs = [ (writeShellScript "force-output.sh" ''
-      export out="''${${outName}-}"
-    '') ];
-    inherit meta passthru;
-  }).overrideAttrs { outputs = [ outName ]; } // { outputSpecified = true; }));
+      pathsToLink = [
+        "/info"
+        "/man"
+      ];
+    };
 
-  passthru = lib.optionalAttrs (! __combine) (splitOutputs // {
-    all = builtins.attrValues splitOutputs;
-    outputs = [ "out" ] ++ pkgList.nonEnvOutputs;
-  }) // {
-    # This is set primarily to help find-tarballs.nix to do its job
-    requiredTeXPackages = builtins.filter lib.isDerivation (pkgList.bin ++ pkgList.nonbin
-      ++ lib.optionals (! __fromCombineWrapper)
-        (lib.concatMap (n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ]))) pkgList.nonEnvOutputs);
-    # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
-    fonts = "${texmfroot}/texmf-dist/fonts";
-    # support variants attrs, (prev: attrs)
-    __overrideTeXConfig = newArgs:
-      let appliedArgs = if builtins.isFunction newArgs then newArgs args else newArgs; in
+    meta = {
+      description =
+        "TeX Live environment"
+        + lib.optionalString withDocs " with documentation"
+        + lib.optionalString (withDocs && withSources) " and"
+        + lib.optionalString withSources " with sources";
+      platforms = lib.platforms.all;
+      longDescription =
+        "Contains the following packages and their transitive dependencies:\n - "
+        + lib.concatMapStringsSep "\n - " (
+          p:
+          p.pname + (lib.optionalString (p.outputSpecified or false) " (${p.tlOutputName or p.outputName})")
+        ) (requiredTeXPackages tl);
+    };
+
+    # other outputs
+    nonEnvOutputs = lib.genAttrs pkgList.nonEnvOutputs (
+      outName:
+      buildEnv' {
+        inherit name;
+        outputs = [ outName ];
+        paths = builtins.catAttrs "outPath" (
+          pkgList.otherOutputs.${outName} or [ ] ++ pkgList.specifiedOutputs.${outName} or [ ]
+        );
+        # force the output to be ${outName} or nix-env will not work
+        nativeBuildInputs = [
+          (writeShellScript "force-output.sh" ''
+            export out="''${${outName}-}"
+          '')
+        ];
+        inherit meta passthru;
+      }
+    );
+
+    passthru = {
+      # This is set primarily to help find-tarballs.nix to do its job
+      requiredTeXPackages = builtins.filter lib.isDerivation (
+        pkgList.bin
+        ++ pkgList.nonbin
+        ++ lib.optionals (!__fromCombineWrapper) (
+          lib.concatMap (
+            n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ])
+          ) pkgList.nonEnvOutputs
+        )
+      );
+      # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
+      fonts = "${texmfroot}/texmf-dist/fonts";
+      # support variants attrs, (prev: attrs)
+      __overrideTeXConfig =
+        newArgs:
+        let
+          appliedArgs = if builtins.isFunction newArgs then newArgs args else newArgs;
+        in
         self (args // { __fromCombineWrapper = false; } // appliedArgs);
-    withPackages = reqs: self (args // { requiredTeXPackages = ps: requiredTeXPackages ps ++ reqs ps; __fromCombineWrapper = false; });
-  };
+      withPackages =
+        reqs:
+        self (
+          args
+          // {
+            requiredTeXPackages = ps: reqs ps ++ requiredTeXPackages ps;
+            __fromCombineWrapper = false;
+          }
+        );
+    };
 
-  out = (if (! __combine)
-    # meta.outputsToInstall = [ "out" "man" ] is invalid within buildEnv:
-    # checkMeta will notice that there is no actual "man" output, and fail
-    # so we set outputsToInstall from the outside, where it is safe
-    then lib.addMetaAttrs { inherit (pkgList) outputsToInstall; }
-    else x: x) # texlive.combine: man pages used to be part of out
-# no indent for git diff purposes
-((buildEnv {
+    # TeXLive::TLOBJ::fmtutil_cnf_lines
+    fmtutilLine =
+      {
+        name,
+        engine,
+        enabled ? true,
+        patterns ? [ "-" ],
+        options ? "",
+        ...
+      }:
+      lib.optionalString (!enabled) "#! "
+      + "${name} ${engine} ${lib.concatStringsSep "," patterns} ${options}";
+    fmtutilLines =
+      { pname, formats, ... }:
+      [
+        "#"
+        "# from ${pname}:"
+      ]
+      ++ map fmtutilLine formats;
 
-  inherit name;
+    # TeXLive::TLOBJ::language_dat_lines
+    langDatLine =
+      {
+        name,
+        file,
+        synonyms ? [ ],
+        ...
+      }:
+      [ "${name} ${file}" ] ++ map (s: "=" + s) synonyms;
+    langDatLines =
+      { pname, hyphenPatterns, ... }:
+      [ "% from ${pname}:" ] ++ builtins.concatMap langDatLine hyphenPatterns;
 
-  ignoreCollisions = false;
+    # TeXLive::TLOBJ::language_def_lines
+    # see TeXLive::TLUtils::parse_AddHyphen_line for default values
+    langDefLine =
+      {
+        name,
+        file,
+        lefthyphenmin ? "",
+        righthyphenmin ? "",
+        synonyms ? [ ],
+        ...
+      }:
+      map (
+        n:
+        "\\addlanguage{${n}}{${file}}{}{${if lefthyphenmin == "" then "2" else lefthyphenmin}}{${
+          if righthyphenmin == "" then "3" else righthyphenmin
+        }}"
+      ) ([ name ] ++ synonyms);
+    langDefLines =
+      { pname, hyphenPatterns, ... }:
+      [ "% from ${pname}:" ] ++ builtins.concatMap langDefLine hyphenPatterns;
 
-  # remove fake derivations (without 'outPath') to avoid undesired build dependencies
-  paths = builtins.catAttrs "outPath" pkgList.bin
-    ++ lib.optional __combine doc;
-  pathsToLink = [
-    "/"
-    "/share/texmf-var/scripts"
-    "/share/texmf-var/tex/generic/config"
-    "/share/texmf-var/web2c"
-    "/share/texmf-config"
-    "/bin" # ensure these are writeable directories
-  ];
+    # TeXLive::TLOBJ::language_lua_lines
+    # see TeXLive::TLUtils::parse_AddHyphen_line for default values
+    langLuaLine =
+      {
+        name,
+        file,
+        lefthyphenmin ? "",
+        righthyphenmin ? "",
+        synonyms ? [ ],
+        ...
+      }@args:
+      ''
+        ''\t['${name}'] = {
+        ''\t''\tloader = '${file}',
+        ''\t''\tlefthyphenmin = ${if lefthyphenmin == "" then "2" else lefthyphenmin},
+        ''\t''\trighthyphenmin = ${if righthyphenmin == "" then "3" else righthyphenmin},
+        ''\t''\tsynonyms = { ${lib.concatStringsSep ", " (map (s: "'${s}'") synonyms)} },
+      ''
+      + lib.optionalString (args ? file_patterns) "\t\tpatterns = '${args.file_patterns}',\n"
+      + lib.optionalString (args ? file_exceptions) "\t\thyphenation = '${args.file_exceptions}',\n"
+      + lib.optionalString (args ? luaspecial) "\t\tspecial = '${args.luaspecial}',\n"
+      + "\t},";
+    langLuaLines =
+      { pname, hyphenPatterns, ... }: [ "-- from ${pname}:" ] ++ map langLuaLine hyphenPatterns;
 
-  nativeBuildInputs = [
-    makeWrapper
-    libfaketime
-    tl."texlive.infra" # mktexlsr
-    tl.texlive-scripts # fmtutil, updmap
-    tl.texlive-scripts-extra # texlinks
-    perl
-  ];
+    assembleConfigLines = f: packages: builtins.concatStringsSep "\n" (builtins.concatMap f packages);
 
-  inherit meta passthru;
+    updmapLines = { pname, fontMaps, ... }: [ "# from ${pname}:" ] ++ fontMaps;
 
-  postBuild =
-    # environment variables (note: only export the ones that are used in the wrappers)
-  ''
-    TEXMFROOT="${texmfroot}"
-    TEXMFDIST="${texmfdist}"
-    export PATH="$out/bin:$PATH"
-    TEXMFSYSCONFIG="$out/share/texmf-config"
-    TEXMFSYSVAR="$out/share/texmf-var"
-    export TEXMFCNF="$TEXMFSYSVAR/web2c"
-  '' +
-    # wrap executables with required env vars as early as possible
-    # 1. we use the wrapped binaries in the scripts below, to catch bugs
-    # 2. we do not want to wrap links generated by texlinks
-  ''
-    enable -f '${bash}/lib/bash/realpath' realpath
-    declare -i wrapCount=0
-    for link in "$out"/bin/*; do
-      target="$(realpath "$link")"
-      if [[ "''${target##*/}" != "''${link##*/}" ]] ; then
-        # detected alias with different basename, use immediate target of $link to preserve $0
-        # relevant for mktexfmt, repstopdf, ...
-        target="$(readlink "$link")"
-      fi
+    out =
+      # no indent for git diff purposes
+      buildEnv' {
 
-      rm "$link"
-      makeWrapper "$target" "$link" \
-        --inherit-argv0 \
-        --prefix PATH : "${
-          # very common dependencies that are not detected by tests.texlive.binaries
-          lib.makeBinPath ([ coreutils gawk gnugrep gnused ] ++ lib.optional needsGhostscript ghostscript)}:$out/bin" \
-        --set-default TEXMFCNF "$TEXMFCNF" \
-        --set-default FONTCONFIG_FILE "${
-          # necessary for XeTeX to find the fonts distributed with texlive
-          makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; }
-        }"
-      wrapCount=$((wrapCount + 1))
-    done
-    echo "wrapped $wrapCount binaries and scripts"
-  '' +
-    # patch texmf-dist  -> $TEXMFDIST
-    # patch texmf-local -> $out/share/texmf-local
-    # patch texmf.cnf   -> $TEXMFSYSVAR/web2c/texmf.cnf
-    # TODO: perhaps do lua actions?
-    # tried inspiration from install-tl, sub do_texmf_cnf
-  ''
-    mkdir -p "$TEXMFCNF"
-    if [ -e "$TEXMFDIST/web2c/texmfcnf.lua" ]; then
-      sed \
-        -e "s,\(TEXMFOS[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFROOT\",g" \
-        -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFDIST\",g" \
-        -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSVAR\",g" \
-        -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1\"$TEXMFSYSCONFIG\",g" \
-        -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
-        -e "s,\$SELFAUTOLOC,$out,g" \
-        -e "s,selfautodir:/,$out/share/,g" \
-        -e "s,selfautodir:,$out/share/,g" \
-        -e "s,selfautoparent:/,$out/share/,g" \
-        -e "s,selfautoparent:,$out/share/,g" \
-        "$TEXMFDIST/web2c/texmfcnf.lua" > "$TEXMFCNF/texmfcnf.lua"
-    fi
+        inherit name;
 
-    sed \
-      -e "s,\(TEXMFROOT[ ]*=[ ]*\)[^\,]*,\1$TEXMFROOT,g" \
-      -e "s,\(TEXMFDIST[ ]*=[ ]*\)[^\,]*,\1$TEXMFDIST,g" \
-      -e "s,\(TEXMFSYSVAR[ ]*=[ ]*\)[^\,]*,\1$TEXMFSYSVAR,g" \
-      -e "s,\(TEXMFSYSCONFIG[ ]*=[ ]*\)[^\,]*,\1$TEXMFSYSCONFIG,g" \
-      -e "s,\$SELFAUTOLOC,$out,g" \
-      -e "s,\$SELFAUTODIR,$out/share,g" \
-      -e "s,\$SELFAUTOPARENT,$out/share,g" \
-      -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
-      -e "/^mpost,/d" `# CVE-2016-10243` \
-      "$TEXMFDIST/web2c/texmf.cnf" > "$TEXMFCNF/texmf.cnf"
-  '' +
-    # now filter hyphenation patterns and formats
-  (let
-    hyphens = lib.filter (p: p.hasHyphens or false && p.tlOutputName or p.outputName == "tex") pkgList.nonbin;
-    hyphenPNames = map (p: p.pname) hyphens;
-    formats = lib.filter (p: p ? formats && p.tlOutputName or p.outputName == "tex") pkgList.nonbin;
-    formatPNames = map (p: p.pname) formats;
-    # sed expression that prints the lines in /start/,/end/ except for /end/
-    section = start: end: "/${start}/,/${end}/{ /${start}/p; /${end}/!p; };\n";
-    script =
-      writeText "hyphens.sed" (
-        # document how the file was generated (for language.dat)
-        "1{ s/^(% Generated by .*)$/\\1, modified by ${if __combine then "texlive.combine" else "Nixpkgs"}/; p; }\n"
-        # pick up the header
-        + "2,/^% from/{ /^% from/!p; };\n"
-        # pick up all sections matching packages that we combine
-        + lib.concatMapStrings (pname: section "^% from ${pname}:$" "^% from|^%%% No changes may be made beyond this point.$") hyphenPNames
-        # pick up the footer (for language.def)
-        + "/^%%% No changes may be made beyond this point.$/,$p;\n"
-      );
-    scriptLua =
-      writeText "hyphens.lua.sed" (
-        "1{ s/^(-- Generated by .*)$/\\1, modified by ${if __combine then "texlive.combine" else "Nixpkgs"}/; p; }\n"
-        + "2,/^-- END of language.us.lua/p;\n"
-        + lib.concatMapStrings (pname: section "^-- from ${pname}:$" "^}$|^-- from") hyphenPNames
-        + "$p;\n"
-      );
-    # formats not being installed must be disabled by prepending #! (see man fmtutil)
-    # sed expression that enables the formats in /start/,/end/
-    enableFormats = pname: "/^# from ${pname}:$/,/^# from/{ s/^#! //; };\n";
-    fmtutilSed =
-      writeText "fmtutil.sed" (
-        # document how file was generated
-        "1{ s/^(# Generated by .*)$/\\1, modified by ${if __combine then "texlive.combine" else "Nixpkgs"}/; }\n"
-        # disable all formats, even those already disabled
-        + "s/^([^#]|#! )/#! \\1/;\n"
-        # enable the formats from the packages being installed
-        + lib.concatMapStrings enableFormats formatPNames
-        # clean up formats that have been disabled twice
-        + "s/^#! #! /#! /;\n"
-      );
-  in ''
-    mkdir -p "$TEXMFSYSVAR/tex/generic/config"
-    for fname in tex/generic/config/language.{dat,def}; do
-      [[ -e "$TEXMFDIST/$fname" ]] && sed -E -n -f '${script}' "$TEXMFDIST/$fname" > "$TEXMFSYSVAR/$fname"
-    done
-    [[ -e "$TEXMFDIST"/tex/generic/config/language.dat.lua ]] && sed -E -n -f '${scriptLua}' \
-      "$TEXMFDIST"/tex/generic/config/language.dat.lua > "$TEXMFSYSVAR"/tex/generic/config/language.dat.lua
-    [[ -e "$TEXMFDIST"/web2c/fmtutil.cnf ]] && sed -E -f '${fmtutilSed}' "$TEXMFDIST"/web2c/fmtutil.cnf > "$TEXMFCNF"/fmtutil.cnf
+        # use attrNames, attrValues to ensure the two lists are sorted in the same way
+        outputs = [
+          "out"
+        ] ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
+        otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
+          builtins.attrValues nonEnvOutputs
+        );
 
-    # create $TEXMFSYSCONFIG database, make new $TEXMFSYSVAR files visible to kpathsea
-    mktexlsr "$TEXMFSYSCONFIG" "$TEXMFSYSVAR"
-  '') +
-    # generate format links (reads fmtutil.cnf to know which ones) *after* the wrappers have been generated
-  ''
-    texlinks --quiet "$out/bin"
-  '' +
-  # texlive postactions (see TeXLive::TLUtils::_do_postaction_script)
-  (lib.concatMapStrings (pkg: ''
-    postaction='${pkg.postactionScript}'
-    case "$postaction" in
-      *.pl) postInterp=perl ;;
-      *.texlua) postInterp=texlua ;;
-      *) postInterp= ;;
-    esac
-    echo "postaction install script for ${pkg.pname}: ''${postInterp:+$postInterp }$postaction install $TEXMFROOT"
-    $postInterp "$TEXMFROOT/$postaction" install "$TEXMFROOT"
-  '') (lib.filter (pkg: pkg ? postactionScript) pkgList.tlpkg)) +
-    # generate formats
-  ''
-    # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
-    # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
-    # we cannot fix further randomness caused by luatex; for further details, see
-    # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/2006-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    # note that calling faketime and fmtutil is fragile (faketime uses LD_PRELOAD, fmtutil calls /bin/sh, causing potential glibc issues on non-NixOS)
-    # so we patch fmtutil to use faketime, rather than calling faketime fmtutil
-    substitute "$TEXMFDIST"/scripts/texlive/fmtutil.pl fmtutil \
-      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
-    FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
+        # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+        paths =
+          builtins.catAttrs "outPath" pkgList.bin
+          ++ lib.optionals (!__combine && __formatsOf == null) pkgList.formats
+          ++ lib.optional __combine doc;
+        pathsToLink = [
+          "/"
+          "/share/texmf-var/scripts"
+          "/share/texmf-var/tex/generic/config"
+          "/share/texmf-var/web2c"
+          "/share/texmf-config"
+          "/bin" # ensure these are writeable directories
+        ];
 
-    # Disable unavailable map files
-    echo y | updmap --sys --syncwithtrees --force 2>&1 | grep '^\(updmap\|  /\)'
-    # Regenerate the map files (this is optional)
-    updmap --sys --force 2>&1 | grep '^\(updmap\|  /\)'
+        nativeBuildInputs = [
+          makeWrapper
+          libfaketime
+          tl."texlive.infra" # mktexlsr
+          tl.texlive-scripts # fmtutil, updmap
+          tl.texlive-scripts-extra # texlinks
+          perl
+        ];
 
-    # sort entries to improve reproducibility
-    [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
+        buildInputs = [
+          coreutils
+          gawk
+          gnugrep
+          gnused
+        ] ++ lib.optional needsGhostscript ghostscript;
 
-    mktexlsr "$TEXMFSYSCONFIG" "$TEXMFSYSVAR" # to make sure (of what?)
-  '' +
-    # remove *-sys scripts since /nix/store is readonly
-  ''
-    rm "$out"/bin/*-sys
-  '' +
-  # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
-    # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
+        inherit meta passthru __combine;
+        __formatsOf = __formatsOf.pname or null;
 
-  # MkIV uses its own lookup mechanism and we need to initialize
-  # caches for it.
-  # We use faketime to fix the embedded timestamps and patch the uuids
-  # with some random but constant values.
-  ''
-    if [[ -e "$out/bin/mtxrun" ]]; then
-      substitute "$TEXMFDIST"/scripts/context/lua/mtxrun.lua mtxrun.lua \
-        --replace 'cache_uuid=osuuid()' 'cache_uuid="e2402e51-133d-4c73-a278-006ea4ed734f"' \
-        --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
-      FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
-    fi
-  '' +
-  # Get rid of all log files. They are not needed, but take up space
-  # and render the build unreproducible by their embedded timestamps
-  # and other non-deterministic diagnostics.
-  ''
-    find "$TEXMFSYSVAR"/web2c -name '*.log' -delete
-  '' +
-  # link TEXMFDIST in $out/share for backward compatibility
-  ''
-    ln -s "$TEXMFDIST" "$out"/share/texmf
-  ''
-  ;
-}).overrideAttrs (_: { allowSubstitutes = true; }));
-in out)
+        inherit texmfdist texmfroot;
+
+        fontconfigFile = makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; };
+
+        fmtutilCnf = assembleConfigLines fmtutilLines pkgList.sortedFormatPkgs;
+        updmapCfg = assembleConfigLines updmapLines pkgList.sortedFontMaps;
+
+        languageDat = assembleConfigLines langDatLines pkgList.sortedHyphenPatterns;
+        languageDef = assembleConfigLines langDefLines pkgList.sortedHyphenPatterns;
+        languageLua = assembleConfigLines langLuaLines pkgList.sortedHyphenPatterns;
+
+        postactionScripts = builtins.catAttrs "postactionScript" pkgList.tlpkg;
+
+        postBuild = ''
+          . "${./build-tex-env.sh}"
+        '';
+
+        allowSubstitutes = true;
+        preferLocalBuild = false;
+      };
+  in
+  # outputsToInstall must be set *after* overrideAttrs (used in buildEnv') or it fails the checkMeta tests
+  if __combine || __formatsOf != null then
+    out
+  else
+    lib.addMetaAttrs { inherit (pkgList) outputsToInstall; } out
+)

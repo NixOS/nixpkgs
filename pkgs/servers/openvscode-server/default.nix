@@ -1,53 +1,65 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, cacert
-, moreutils
-, jq
-, git
-, pkg-config
-, yarn
-, python3
-, esbuild
-, nodejs
-, node-gyp
-, libsecret
-, libkrb5
-, xorg
-, ripgrep
-, AppKit
-, Cocoa
-, Security
-, cctools
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  cacert,
+  moreutils,
+  jq,
+  git,
+  pkg-config,
+  yarn,
+  python3,
+  esbuild,
+  nodejs,
+  node-gyp,
+  libsecret,
+  libkrb5,
+  xorg,
+  ripgrep,
+  AppKit,
+  Cocoa,
+  Security,
+  cctools,
+  nixosTests,
 }:
 
 let
   system = stdenv.hostPlatform.system;
 
   yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress" ];
+  defaultYarnOpts = [
+    "frozen-lockfile"
+    "non-interactive"
+    "no-progress"
+  ];
 
-  vsBuildTarget = {
-    x86_64-linux = "linux-x64";
-    aarch64-linux = "linux-arm64";
-    x86_64-darwin = "darwin-x64";
-    aarch64-darwin = "darwin-arm64";
-  }.${system} or (throw "Unsupported system ${system}");
+  vsBuildTarget =
+    {
+      x86_64-linux = "linux-x64";
+      aarch64-linux = "linux-arm64";
+      x86_64-darwin = "darwin-x64";
+      aarch64-darwin = "darwin-arm64";
+    }
+    .${system} or (throw "Unsupported system ${system}");
 
   esbuild' = esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.17.14";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.17.14";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
 
   # replaces esbuild's download script with a binary from nixpkgs
@@ -60,19 +72,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.84.0";
+  version = "1.88.1";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-kYKvJrHWKHDIqJsN0j1WFN3OBWwEyNgY5hjNHBg+kKQ=";
+    hash = "sha256-Yc16L13Z8AmsGoSFbvy+4+KBdHxvqLMwZLeU2/dAQVU=";
   };
 
   yarnCache = stdenv.mkDerivation {
     name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
     inherit (finalAttrs) src;
-    nativeBuildInputs = [ cacert yarn' git ];
+    nativeBuildInputs = [
+      cacert
+      yarn'
+      git
+    ];
     buildPhase = ''
       export HOME=$PWD
 
@@ -89,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-oW/JngHpXb8kscikscI7N9csSyZsZQgG75jOdWll6dw=";
+    outputHash = "sha256-89c6GYLT2RzHqwxBKegYqB6g5rEJ6/nH53cnfV7b0Ts=";
   };
 
   nativeBuildInputs = [
@@ -103,19 +119,27 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
-    ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Security
-    cctools
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
+    ++ (with xorg; [
+      libX11
+      libxkbfile
+      libkrb5
+    ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Cocoa
+      Security
+      cctools
+    ];
 
   patches = [
     # Patch out remote download of nodejs from build script
     ./remove-node-download.patch
   ];
+
+  # Disable NAPI_EXPERIMENTAL to allow to build with Node.js≥18.20.0.
+  env.NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
 
   postPatch = ''
     export HOME=$PWD
@@ -156,54 +180,57 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    ''
+      runHook preBuild
 
-    # install dependencies
-    yarn --offline --ignore-scripts
+      # install dependencies
+      yarn --offline --ignore-scripts
 
-    # run yarn install everywhere, skipping postinstall so we can patch esbuild
-    find . -path "*node_modules" -prune -o \
-      -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --frozen-lockfile --offline --ignore-scripts --ignore-engines
+      # run yarn install everywhere, skipping postinstall so we can patch esbuild
+      find . -path "*node_modules" -prune -o \
+        -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {} yarn --cwd {} \
+            --frozen-lockfile --offline --ignore-scripts --ignore-engines
 
-    ${patchEsbuild "./build" "0.12.6"}
-    ${patchEsbuild "./extensions" "0.11.23"}
+      ${patchEsbuild "./build" "0.12.6"}
+      ${patchEsbuild "./extensions" "0.11.23"}
 
-    # patch shebangs of node_modules to allow binary packages to build
-    patchShebangs ./remote/node_modules
+      # patch shebangs of node_modules to allow binary packages to build
+      patchShebangs ./remote/node_modules
 
-    # put ripgrep binary into bin so postinstall does not try to download it
-    find -path "*@vscode/ripgrep" -type d \
-      -execdir mkdir -p {}/bin \; \
-      -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
-  '' + lib.optionalString stdenv.isDarwin ''
-    # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-    # (see issue #101229)
-    pushd ./remote/node_modules/@parcel/watcher
-    mkdir -p ./build/Release
-    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
-    jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
-    popd
-  '' + ''
-    export NODE_OPTIONS=--openssl-legacy-provider
+      # put ripgrep binary into bin so postinstall does not try to download it
+      find -path "*@vscode/ripgrep" -type d \
+        -execdir mkdir -p {}/bin \; \
+        -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
+      # (see issue #101229)
+      pushd ./remote/node_modules/@parcel/watcher
+      mkdir -p ./build/Release
+      mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+      jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
+      popd
+    ''
+    + ''
+      export NODE_OPTIONS=--openssl-legacy-provider
 
-    # rebuild binaries, we use npm here, as yarn does not provide an alternative
-    # that would not attempt to try to reinstall everything and break our
-    # patching attempts
-    npm --prefix ./remote rebuild --build-from-source
+      # rebuild binaries, we use npm here, as yarn does not provide an alternative
+      # that would not attempt to try to reinstall everything and break our
+      # patching attempts
+      npm --prefix ./remote rebuild --build-from-source
 
-    # run postinstall scripts after patching
-    find . -path "*node_modules" -prune -o \
-      -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+      # run postinstall scripts after patching
+      find . -path "*node_modules" -prune -o \
+        -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
 
-    # build and minify
-    yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
+      # build and minify
+      yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -227,8 +254,17 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/gitpod-io/openvscode-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dguenther ghuntley emilytrau ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with lib.maintainers; [
+      dguenther
+      ghuntley
+      emilytrau
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "openvscode-server";
   };
 })

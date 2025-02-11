@@ -1,18 +1,30 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused, jre }:
-
-with lib;
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  openjdk17,
+}:
 
 stdenv.mkDerivation rec {
   pname = "marvin";
-  version = "23.12.0";
+  version = "23.17.0";
 
   src = fetchurl {
     name = "marvin-${version}.deb";
-    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${versions.majorMinor version}.deb";
-    hash = "sha256-5ycOteXcdgZaeDl3WQ95H2lD0OnnobCbmnVlfYwVdeI=";
+    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${lib.versions.majorMinor version}.deb";
+    hash = "sha256-zE/9EaOsNJwzE4Doasm9N8QG4t7wDOxqpV/Nhc4p7Ws=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   unpackPhase = ''
     dpkg-deb -x $src opt
@@ -21,8 +33,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
-        --set INSTALL4J_JAVA_HOME "${jre}" \
-        --prefix PATH : ${makeBinPath [ coreutils gawk gnugrep gnused ]}
+        --set INSTALL4J_JAVA_HOME "${openjdk17}" \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            gawk
+            gnugrep
+            gnused
+          ]
+        }
     }
     cp -r opt $out
     mkdir -p $out/bin $out/share/pixmaps $out/share/applications
@@ -33,13 +52,21 @@ stdenv.mkDerivation rec {
     for name in cxcalc cxtrain evaluate molconvert mview msketch; do
       wrapBin $out/opt/chemaxon/marvinsuite/bin/$name
     done
-    ${concatStrings (map (name: ''
-      substitute ${./. + "/${name}.desktop"} $out/share/applications/${name}.desktop --subst-var out
-    '') [ "LicenseManager" "MarvinSketch" "MarvinView" ])}
+    ${lib.concatStrings (
+      map
+        (name: ''
+          substitute ${./. + "/${name}.desktop"} $out/share/applications/${name}.desktop --subst-var out
+        '')
+        [
+          "LicenseManager"
+          "MarvinSketch"
+          "MarvinView"
+        ]
+    )}
   '';
 
-  meta = {
-    description = "A chemical modelling, analysis and structure drawing program";
+  meta = with lib; {
+    description = "Chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
     maintainers = with maintainers; [ fusion809 ];
     license = licenses.unfree;

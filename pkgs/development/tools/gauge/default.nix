@@ -1,24 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gauge";
-  version = "1.5.4";
+  version = "1.6.12";
+
+  patches = [
+    # adds a check which adds an error message when trying to
+    # install plugins imperatively when using the wrapper
+    ./nix-check.patch
+  ];
 
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
     rev = "v${version}";
-    hash = "sha256-BJyc8umtJUsZgj4jdoYf6PSaDg41mnrZNd6rAdewWro=";
+    hash = "sha256-CstlH7KOSUK3Oe5d8LyUswcebwusVv5iuB7gaZOKpVg=";
   };
 
-  vendorHash = "sha256-K0LoAJzYzQorKp3o1oH5qruMBbJiCQrduBgoZ0naaLc=";
+  vendorHash = "sha256-nqyzNbD2j6b34QpFiv2yVxEVkrZkuzcwAt9uqAB2iA4=";
 
-  excludedPackages = [ "build" "man" ];
+  excludedPackages = [
+    "build"
+    "man"
+  ];
 
   meta = with lib; {
     description = "Light weight cross-platform test automation";
+    mainProgram = "gauge";
     homepage = "https://gauge.org";
     license = licenses.asl20;
-    maintainers = [ maintainers.vdemeester ];
+    maintainers = with maintainers; [
+      vdemeester
+      marie
+    ];
   };
 }

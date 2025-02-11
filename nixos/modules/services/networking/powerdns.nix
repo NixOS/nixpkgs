@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,15 +11,16 @@ let
   cfg = config.services.powerdns;
   configDir = pkgs.writeTextDir "pdns.conf" "${cfg.extraConfig}";
   finalConfigDir = if cfg.secretFile == null then configDir else "/run/pdns";
-in {
+in
+{
   options = {
     services.powerdns = {
-      enable = mkEnableOption (lib.mdDoc "PowerDNS domain name server");
+      enable = mkEnableOption "PowerDNS domain name server";
 
       extraConfig = mkOption {
         type = types.lines;
         default = "launch=bind";
-        description = lib.mdDoc ''
+        description = ''
           PowerDNS configuration. Refer to
           <https://doc.powerdns.com/authoritative/settings.html>
           for details on supported values.
@@ -25,7 +31,7 @@ in {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/powerdns.env";
-        description = lib.mdDoc ''
+        description = ''
           Environment variables from this file will be interpolated into the
           final config file using envsubst with this syntax: `$ENVIRONMENT`
           or `''${VARIABLE}`.
@@ -44,16 +50,25 @@ in {
 
     systemd.services.pdns = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
+      after = [
+        "network.target"
+        "mysql.service"
+        "postgresql.service"
+        "openldap.service"
+      ];
 
       serviceConfig = {
         EnvironmentFile = lib.optional (cfg.secretFile != null) cfg.secretFile;
-        ExecStartPre = lib.optional (cfg.secretFile != null)
-          (pkgs.writeShellScript "pdns-pre-start" ''
+        ExecStartPre = lib.optional (cfg.secretFile != null) (
+          pkgs.writeShellScript "pdns-pre-start" ''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${configDir}/pdns.conf" > ${finalConfigDir}/pdns.conf
-          '');
-        ExecStart = [ "" "${pkgs.pdns}/bin/pdns_server --config-dir=${finalConfigDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no" ];
+          ''
+        );
+        ExecStart = [
+          ""
+          "${pkgs.pdns}/bin/pdns_server --config-dir=${finalConfigDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no"
+        ];
       };
     };
 
@@ -63,7 +78,7 @@ in {
       description = "PowerDNS";
     };
 
-    users.groups.pdns = {};
+    users.groups.pdns = { };
 
   };
 }

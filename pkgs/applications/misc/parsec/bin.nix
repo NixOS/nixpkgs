@@ -1,45 +1,44 @@
-{ stdenvNoCC
-, stdenv
-, lib
-, dpkg
-, autoPatchelfHook
-, makeWrapper
-, fetchurl
-, alsa-lib
-, openssl
-, udev
-, libglvnd
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXfixes
-, libpulseaudio
-, libva
-, ffmpeg
-, libpng
-, libjpeg8
-, curl
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  fetchurl,
+  alsa-lib,
+  openssl,
+  udev,
+  libglvnd,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libXfixes,
+  libpulseaudio,
+  libva,
+  ffmpeg_6,
+  libpng,
+  libjpeg8,
+  curl,
+  vulkan-loader,
+  zenity,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_90c";
+  version = "150_95";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20231028212419/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-rFSdl7BgnuJAj6w5in0/yszO8b5qcr9b+wjF1WkAU70=";
+    url = "https://web.archive.org/web/20240725203323/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-9F56u+jYj2CClhbnGlLi65FxS1Vq00coxwu7mjVTY1w=";
   };
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    dpkg-deb -x $src .
-
-    runHook postUnpack
-  '';
-
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     stdenv.cc.cc # libstdc++
@@ -55,7 +54,7 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg
+    ffmpeg_6
     libpng
     libjpeg8
     curl
@@ -64,6 +63,11 @@ stdenvNoCC.mkDerivation {
     libXi
     libXrandr
     libXfixes
+    vulkan-loader
+  ];
+
+  binPath = lib.makeBinPath [
+    zenity
   ];
 
   prepareParsec = ''
@@ -80,6 +84,7 @@ stdenvNoCC.mkDerivation {
     mv usr/* $out
 
     wrapProgram $out/bin/parsecd \
+      --prefix PATH : "$binPath" \
       --prefix LD_LIBRARY_PATH : "$runtimeDependenciesPath" \
       --run "$prepareParsec"
 
@@ -108,7 +113,10 @@ stdenvNoCC.mkDerivation {
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
     license = licenses.unfree;
-    maintainers = with maintainers; [ arcnmx ];
+    maintainers = with maintainers; [
+      arcnmx
+      pabloaul
+    ];
     platforms = platforms.linux;
     mainProgram = "parsecd";
   };

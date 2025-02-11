@@ -1,9 +1,10 @@
-{ lib
-, fetchurl
-, kaem
-, tinycc
-, gnumake
-, gnupatch
+{
+  lib,
+  fetchurl,
+  kaem,
+  tinycc,
+  gnumake,
+  gnupatch,
 }:
 let
   pname = "bootstrap-coreutils";
@@ -70,48 +71,50 @@ let
     })
   ];
 in
-kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+kaem.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    gnumake
-    gnupatch
-  ];
+    nativeBuildInputs = [
+      tinycc.compiler
+      gnumake
+      gnupatch
+    ];
 
-  meta = with lib; {
-    description = "The GNU Core Utilities";
-    homepage = "https://www.gnu.org/software/coreutils";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  ungz --file ${src} --output coreutils.tar
-  untar --file coreutils.tar
-  rm coreutils.tar
-  cd coreutils-${version}
+    meta = with lib; {
+      description = "GNU Core Utilities";
+      homepage = "https://www.gnu.org/software/coreutils";
+      license = licenses.gpl3Plus;
+      maintainers = teams.minimal-bootstrap.members;
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    ungz --file ${src} --output coreutils.tar
+    untar --file coreutils.tar
+    rm coreutils.tar
+    cd coreutils-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
 
-  # Configure
-  catm config.h
-  cp lib/fnmatch_.h lib/fnmatch.h
-  cp lib/ftw_.h lib/ftw.h
-  cp lib/search_.h lib/search.h
-  rm src/dircolors.h
+    # Configure
+    catm config.h
+    cp lib/fnmatch_.h lib/fnmatch.h
+    cp lib/ftw_.h lib/ftw.h
+    cp lib/search_.h lib/search.h
+    rm src/dircolors.h
 
-  # Build
-  make -f ${makefile} \
-    CC="tcc -B ${tinycc.libs}/lib" \
-    PREFIX=''${out}
+    # Build
+    make -f ${makefile} \
+      CC="tcc -B ${tinycc.libs}/lib" \
+      PREFIX=''${out}
 
-  # Check
-  ./src/echo "Hello coreutils!"
+    # Check
+    ./src/echo "Hello coreutils!"
 
-  # Install
-  ./src/mkdir -p ''${out}/bin
-  make -f ${makefile} install PREFIX=''${out}
-''
+    # Install
+    ./src/mkdir -p ''${out}/bin
+    make -f ${makefile} install PREFIX=''${out}
+  ''

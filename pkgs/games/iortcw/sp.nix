@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, opusfile, libogg, SDL2, openal, freetype
-, libjpeg, curl, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  opusfile,
+  libogg,
+  SDL2,
+  openal,
+  freetype,
+  libjpeg,
+  curl,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iortcw-sp";
@@ -26,7 +37,13 @@ stdenv.mkDerivation rec {
   installTargets = [ "copyfiles" ];
 
   buildInputs = [
-    opusfile libogg SDL2 freetype libjpeg openal curl
+    opusfile
+    libogg
+    SDL2
+    freetype
+    libjpeg
+    openal
+    curl
   ];
   nativeBuildInputs = [ makeWrapper ];
 
@@ -47,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rjpcasalino ];
   };
 }

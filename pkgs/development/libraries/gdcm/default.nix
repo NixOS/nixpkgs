@@ -4,12 +4,10 @@
 , cmake
 , enableVTK ? true
 , vtk
-, ApplicationServices
-, Cocoa
-, libiconv
+, DarwinTools # sw_vers
 , enablePython ? false
 , python ? null
-, swig4
+, swig
 , expat
 , libuuid
 , openjpeg
@@ -18,14 +16,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gdcm";
-  version = "3.0.22";
+  pname = if enablePython then "python-gdcm" else "gdcm";
+  version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-geWNGbBJGKPs5hNO42vtVOj0rOWyM6zmcocvRhWW4s0=";
+    tag = "v${version}";
+    hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 
   cmakeFlags = [
@@ -44,13 +42,13 @@ stdenv.mkDerivation rec {
     "-DGDCM_USE_VTK=ON"
   ] ++ lib.optionals enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
-    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
+    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}/python_gdcm"
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools;
 
   buildInputs = [
     expat
@@ -59,11 +57,14 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals enableVTK [
     vtk
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Cocoa
-    libiconv
-  ] ++ lib.optionals enablePython [ swig4 python ];
+  ] ++ lib.optionals enablePython [ swig python ];
+
+  postInstall = lib.optionalString enablePython ''
+    substitute \
+      ${./python_gdcm.egg-info} \
+      $out/${python.sitePackages}/python_gdcm-${version}.egg-info \
+      --subst-var-by GDCM_VER "${version}"
+  '';
 
   disabledTests = [
     # require networking:
@@ -71,12 +72,14 @@ stdenv.mkDerivation rec {
     "TestFind"
     "gdcmscu-echo-dicomserver"
     "gdcmscu-find-dicomserver"
-    # seemingly ought to be be disabled when the test data submodule is not present:
+    # seemingly ought to be disabled when the test data submodule is not present:
     "TestvtkGDCMImageReader2_3"
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    # AttributeError: module 'gdcm' has no attribute 'UIDGenerator_SetRoot'; maybe a wrapping regression:
+    "TestUIDGeneratorPython"
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"
   ];
 
@@ -90,7 +93,7 @@ stdenv.mkDerivation rec {
   # a number of additional but much slower tests are enabled
 
   meta = with lib; {
-    description = "The grassroots cross-platform DICOM implementation";
+    description = "Grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.
       GDCM includes a file format definition and a network communications protocol, both of which should be extended to provide a full set of tools for a researcher or small medical imaging vendor to interface with an existing medical database.

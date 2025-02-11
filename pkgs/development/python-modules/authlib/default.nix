@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, cachelib
-, cryptography
-, fetchFromGitHub
-, flask
-, flask-sqlalchemy
-, httpx
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, starlette
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  cacert,
+  cachelib,
+  cryptography,
+  fetchFromGitHub,
+  flask,
+  flask-sqlalchemy,
+  httpx,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  starlette,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.2.1";
-  format = "setuptools";
+  version = "1.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-K6u590poZ9C3Uzi3a8k8aXMeSeRgn91e+p2PWYno3Y8=";
+    tag = "v${version}";
+    hash = "sha256-1Iygc35+Vc1zyn8rjubnSLmpvjckY4TRKOtf2bkrkdI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    requests
   ];
 
   nativeCheckInputs = [
@@ -42,13 +46,17 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    requests
     starlette
     werkzeug
   ];
 
-  pythonImportsCheck = [
-    "authlib"
-  ];
+  preCheck = ''
+    # httpx 0.28.0+ requires SSL_CERT_FILE or SSL_CERT_DIR
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
+  pythonImportsCheck = [ "authlib" ];
 
   disabledTestPaths = [
     # Django tests require a running instance

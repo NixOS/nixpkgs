@@ -1,31 +1,36 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, requests
-, retrying
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pythonOlder,
+  pycryptodomex,
+  requests,
+  retrying,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "meross-iot";
-  version = "0.4.6.0";
-  format = "setuptools";
+  version = "0.4.7.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "albertogeniola";
     repo = "MerossIot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8DnzTwW4fQQIGAHZJbu2aKkqOUU6a6IGgif5tIZCing=";
+    tag = version;
+    hash = "sha256-CEBZVbUkRMWw95imL1k3q7Z3Nkyzwleh5C/s0XxfhfQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     paho-mqtt
+    pycryptodomex
     requests
     retrying
   ];
@@ -33,11 +38,11 @@ buildPythonPackage rec {
   # Test require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "meross_iot"
-  ];
+  pythonImportsCheck = [ "meross_iot" ];
 
   meta = with lib; {
+    # https://github.com/albertogeniola/MerossIot/pull/413
+    broken = lib.versionAtLeast paho-mqtt.version "2";
     description = "Python library to interact with Meross devices";
     homepage = "https://github.com/albertogeniola/MerossIot";
     changelog = "https://github.com/albertogeniola/MerossIot/releases/tag/${version}";

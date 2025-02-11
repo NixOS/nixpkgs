@@ -1,52 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, fsspec
-, lightning-utilities
-, numpy
-, packaging
-, pyyaml
-, tensorboardx
-, torch
-, torchmetrics
-, tqdm
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# tests
-, psutil
-, pytestCheckHook
+  # build-system
+  setuptools,
+
+  # dependencies
+  fsspec,
+  lightning-utilities,
+  numpy,
+  packaging,
+  pyyaml,
+  tensorboardx,
+  torch,
+  torchmetrics,
+  tqdm,
+  traitlets,
+
+  # tests
+  psutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.1.2";
-  format = "pyproject";
+  version = "2.5.0.post0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
-    rev = "refs/tags/${version}";
-    hash = "sha256-d5DKAx67uuIPxtSgazIQnxLiHTBD0lwHaB6LD3R6vKA=";
+    tag = version;
+    hash = "sha256-TkwDncyfv1VoV/IErUgF4p0Or5PJbwKoABqo1xXGLVg=";
   };
 
   preConfigure = ''
     export PACKAGE_NAME=pytorch
- '';
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fsspec
+    lightning-utilities
     numpy
     packaging
     pyyaml
     tensorboardx
     torch
-    lightning-utilities
     torchmetrics
     tqdm
     traitlets
-  ]
-  ++ fsspec.optional-dependencies.http;
+  ] ++ fsspec.optional-dependencies.http;
 
   nativeCheckInputs = [
     psutil
@@ -57,14 +63,13 @@ buildPythonPackage rec {
   # models, which doesn't work in the sandbox.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytorch_lightning"
-  ];
+  pythonImportsCheck = [ "pytorch_lightning" ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
-    homepage = "https://pytorch-lightning.readthedocs.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    homepage = "https://github.com/Lightning-AI/pytorch-lightning";
+    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

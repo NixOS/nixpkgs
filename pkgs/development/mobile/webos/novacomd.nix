@@ -1,7 +1,14 @@
-{ lib, stdenv,
-fetchFromGitHub, fetchpatch,
-webos, cmake, pkg-config,
-libusb-compat-0_1 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  webos,
+  cmake,
+  pkg-config,
+  nixosTests,
+  libusb-compat-0_1,
+}:
 
 stdenv.mkDerivation rec {
   pname = "novacomd";
@@ -25,7 +32,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config webos.cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    webos.cmake-modules
+  ];
 
   buildInputs = [ libusb-compat-0_1 ];
 
@@ -36,10 +47,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWEBOS_TARGET_MACHINE_IMPL=host" ];
 
+  passthru.tests = { inherit (nixosTests) novacomd; };
+
   meta = with lib; {
     description = "Daemon for communicating with WebOS devices";
+    mainProgram = "novacomd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

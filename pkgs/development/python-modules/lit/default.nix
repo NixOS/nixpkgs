@@ -1,17 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "lit";
-  version = "17.0.1";
+  version = "18.1.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RIZ65Xa1eQVnsSC8Pw2fAh2slCTRsIQMdazYX0YQrAQ=";
+    hash = "sha256-R8F0oYaUGugw8E3tdqNERgC+Z9Xl+4KCw3g/umccTts=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   passthru = {
     inherit python;
@@ -25,8 +30,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Portable tool for executing LLVM and Clang style test suites";
+    mainProgram = "lit";
     homepage = "http://llvm.org/docs/CommandGuide/lit.html";
     license = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

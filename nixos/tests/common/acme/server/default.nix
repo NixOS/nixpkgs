@@ -49,15 +49,15 @@
 #
 # Also make sure that whenever you use a resolver from a different test node
 # that it has to be started _before_ the ACME service.
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   testCerts = import ./snakeoil-certs.nix;
   domain = testCerts.domain;
-
-  resolver = let
-    message = "You need to define a resolver for the acme test module.";
-    firstNS = lib.head config.networking.nameservers;
-  in if config.networking.nameservers == [] then throw message else firstNS;
 
   pebbleConf.pebble = {
     listenAddress = "0.0.0.0:443";
@@ -73,7 +73,8 @@ let
 
   pebbleConfFile = pkgs.writeText "pebble.conf" (builtins.toJSON pebbleConf);
 
-in {
+in
+{
   imports = [ ../../resolver.nix ];
 
   options.test-support.acme = {
@@ -81,7 +82,7 @@ in {
       type = lib.types.str;
       readOnly = true;
       default = domain;
-      description = lib.mdDoc ''
+      description = ''
         A domain name to use with the `nodes` attribute to
         identify the CA server.
       '';
@@ -90,7 +91,7 @@ in {
       type = lib.types.path;
       readOnly = true;
       default = testCerts.ca.cert;
-      description = lib.mdDoc ''
+      description = ''
         A certificate file to use with the `nodes` attribute to
         inject the test CA certificate used in the ACME server into
         {option}`security.pki.certificateFiles`.
@@ -100,15 +101,22 @@ in {
 
   config = {
     test-support = {
-      resolver.enable = let
-        isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
-      in lib.mkOverride 900 isLocalResolver;
+      resolver.enable =
+        let
+          isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
+        in
+        lib.mkOverride 900 isLocalResolver;
     };
 
     # This has priority 140, because modules/testing/test-instrumentation.nix
     # already overrides this with priority 150.
     networking.nameservers = lib.mkOverride 140 [ "127.0.0.1" ];
-    networking.firewall.allowedTCPPorts = [ 80 443 15000 4002 ];
+    networking.firewall.allowedTCPPorts = [
+      80
+      443
+      15000
+      4002
+    ];
 
     networking.extraHosts = ''
       127.0.0.1 ${domain}

@@ -1,36 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, qttools
-, wrapQtAppsHook
+  cmake,
+  qttools,
+  wrapQtAppsHook,
 
-, curl
-, ffmpeg
-, libmediainfo
-, libzen
-, qt5compat ? null # qt6 only
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qtsvg
-, qtwayland
-, quazip
+  curl,
+  ffmpeg,
+  libmediainfo,
+  libzen,
+  qt5compat ? null, # qt6 only
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  qtsvg,
+  qtwayland,
+  quazip,
 }:
 let
   qtVersion = lib.versions.major qtbase.version;
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.10.4";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    hash = "sha256-gNpnmyUKDXf40+1JmJzNyEPIv/DO8b3CdJAphheEvTU=";
+    hash = "sha256-m2d4lnyD8HhhqovMdeG36dMK+4kJA7rlPHE2tlhfevo=";
     fetchSubmodules = true;
   };
 
@@ -40,21 +40,22 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    curl
-    ffmpeg
-    libmediainfo
-    libzen
-    qtbase
-    qtdeclarative
-    qtmultimedia
-    qtsvg
-    qtwayland
-    quazip
-  ] ++ lib.optionals (qtVersion == "6") [
-    qt5compat
-  ];
-
+  buildInputs =
+    [
+      curl
+      ffmpeg
+      libmediainfo
+      libzen
+      qtbase
+      qtdeclarative
+      qtmultimedia
+      qtsvg
+      qtwayland
+      quazip
+    ]
+    ++ lib.optionals (qtVersion == "6") [
+      qt5compat
+    ];
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
+    mainProgram = "MediaElch";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;

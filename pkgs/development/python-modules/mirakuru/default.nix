@@ -1,28 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, psutil
-, netcat
-, ps
-, python-daemon
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  psutil,
+  netcat,
+  ps,
+  python-daemon,
 }:
 
 buildPythonPackage rec {
   pname = "mirakuru";
-  version = "2.5.2";
+  version = "2.5.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-I1TKP0ESuBMTcReZf0tryjvGpSpwzofwmOiQqhyr6Zg=";
+    tag = "v${version}";
+    hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
   };
+
+  patches = [
+    # https://github.com/ClearcodeHQ/mirakuru/pull/810
+    ./tmpdir.patch
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -35,6 +42,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
   pythonImportsCheck = [ "mirakuru" ];
+
+  # Necessary for the tests to pass on Darwin with sandbox enabled.
+  __darwinAllowLocalNetworking = true;
+
+  # Those are failing in the darwin sandbox with:
+  # > ps: %mem: requires entitlement
+  # > ps: vsz: requires entitlement
+  # > ps: rss: requires entitlement
+  # > ps: time: requires entitlement
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_forgotten_stop"
+    "test_mirakuru_cleanup"
+    "test_daemons_killing"
+  ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/mirakuru";

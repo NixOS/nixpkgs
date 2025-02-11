@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, libyaml }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libyaml,
+}:
 
 stdenv.mkDerivation {
   pname = "rewrite-tbd";
@@ -20,11 +25,16 @@ stdenv.mkDerivation {
 
   buildInputs = [ libyaml ];
 
-  makeFlags = [ "-f" "Makefile.boot" "PREFIX=${placeholder "out"}"];
+  makeFlags = [
+    "-f"
+    "Makefile.boot"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/thefloweringash/rewrite-tbd/";
     description = "Rewrite filepath in .tbd to Nix applicable format";
+    mainProgram = "rewrite-tbd";
     platforms = platforms.unix;
     license = licenses.mit;
   };

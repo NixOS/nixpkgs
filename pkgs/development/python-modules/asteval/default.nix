@@ -1,43 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.31";
-  format = "setuptools";
+  version = "1.0.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "newville";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-XIRDm/loZOOPQ7UO/XAo86TzhtHHRrnWFU7MNI4f1vM=";
+    owner = "lmfit";
+    repo = "asteval";
+    tag = version;
+    hash = "sha256-DzLVe8TlWAPQXzai9CJlDAow6UTSmkA/DW3fT30YfZY=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=asteval --cov-report xml" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=asteval --cov-report html" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "asteval"
-  ];
+  pythonImportsCheck = [ "asteval" ];
 
   disabledTests = [
     # AssertionError: 'ImportError' != None
@@ -46,8 +39,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "AST evaluator of Python expression using ast module";
-    homepage = "https://github.com/newville/asteval";
-    changelog = "https://github.com/newville/asteval/releases/tag/${version}";
+    homepage = "https://github.com/lmfit/asteval";
+    changelog = "https://github.com/lmfit/asteval/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mailhog;
 
@@ -11,60 +13,73 @@ let
       "-smtp-bind-addr :${toString cfg.smtpPort}"
       "-ui-bind-addr :${toString cfg.uiPort}"
       "-storage ${cfg.storage}"
-    ] ++ lib.optional (cfg.storage == "maildir")
-      "-maildir-path $STATE_DIRECTORY"
+    ]
+    ++ lib.optional (cfg.storage == "maildir") "-maildir-path $STATE_DIRECTORY"
     ++ cfg.extraArgs
   );
 
+  mhsendmail = pkgs.writeShellScriptBin "mailhog-sendmail" ''
+    exec ${lib.getExe pkgs.mailhog} sendmail $@
+  '';
 in
 {
   ###### interface
 
   imports = [
-    (mkRemovedOptionModule [ "services" "mailhog" "user" ] "")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "mailhog"
+      "user"
+    ] "")
   ];
 
   options = {
 
     services.mailhog = {
-      enable = mkEnableOption (lib.mdDoc "MailHog");
+      enable = lib.mkEnableOption "MailHog, web and API based SMTP testing";
 
-      storage = mkOption {
-        type = types.enum [ "maildir" "memory" ];
+      setSendmail = lib.mkEnableOption "set the system sendmail to mailhogs's" // {
+        default = true;
+      };
+
+      storage = lib.mkOption {
+        type = lib.types.enum [
+          "maildir"
+          "memory"
+        ];
         default = "memory";
-        description = lib.mdDoc "Store mails on disk or in memory.";
+        description = "Store mails on disk or in memory.";
       };
 
-      apiPort = mkOption {
-        type = types.port;
+      apiPort = lib.mkOption {
+        type = lib.types.port;
         default = 8025;
-        description = lib.mdDoc "Port on which the API endpoint will listen.";
+        description = "Port on which the API endpoint will listen.";
       };
 
-      smtpPort = mkOption {
-        type = types.port;
+      smtpPort = lib.mkOption {
+        type = lib.types.port;
         default = 1025;
-        description = lib.mdDoc "Port on which the SMTP endpoint will listen.";
+        description = "Port on which the SMTP endpoint will listen.";
       };
 
-      uiPort = mkOption {
-        type = types.port;
+      uiPort = lib.mkOption {
+        type = lib.types.port;
         default = 8025;
-        description = lib.mdDoc "Port on which the HTTP UI will listen.";
+        description = "Port on which the HTTP UI will listen.";
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc "List of additional arguments to pass to the MailHog process.";
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "List of additional arguments to pass to the MailHog process.";
       };
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.mailhog = {
       description = "MailHog - Web and API based SMTP testing";
@@ -72,11 +87,21 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${pkgs.mailhog}/bin/MailHog ${args}";
+        ExecStart = "${lib.getExe pkgs.mailhog} ${args}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "mailhog";
       };
     };
+
+    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
+      program = "sendmail";
+      source = lib.getExe mhsendmail;
+      # Communication happens through the network, no data is written to disk
+      owner = "nobody";
+      group = "nogroup";
+    };
   };
+
+  meta.maintainers = with lib.maintainers; [RTUnreal];
 }

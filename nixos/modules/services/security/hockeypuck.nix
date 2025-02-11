@@ -1,18 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.hockeypuck;
   settingsFormat = pkgs.formats.toml { };
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ etu ];
 
   options.services.hockeypuck = {
-    enable = lib.mkEnableOption (lib.mdDoc "Hockeypuck OpenPGP Key Server");
+    enable = lib.mkEnableOption "Hockeypuck OpenPGP Key Server";
 
     port = lib.mkOption {
       default = 11371;
       type = lib.types.port;
-      description = lib.mdDoc "HKP port to listen on.";
+      description = "HKP port to listen on.";
     };
 
     settings = lib.mkOption {
@@ -37,7 +43,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration file for hockeypuck, here you can override
         certain settings (`loglevel` and
         `openpgp.db.dsn`) by just setting those values.
@@ -85,11 +91,14 @@ in {
       group = "hockeypuck";
       description = "Hockeypuck user";
     };
-    users.groups.hockeypuck = {};
+    users.groups.hockeypuck = { };
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";
-      after = [ "network.target" "postgresql.target" ];
+      after = [
+        "network.target"
+        "postgresql.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         WorkingDirectory = "/var/lib/hockeypuck";

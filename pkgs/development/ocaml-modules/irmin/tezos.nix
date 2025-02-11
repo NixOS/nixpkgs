@@ -1,13 +1,24 @@
-{ lib, buildDunePackage
-, irmin, irmin-pack, ppx_irmin, digestif, cmdliner, fmt, yojson, tezos-base58
-, alcotest, hex, irmin-test, fpath
+{
+  lib,
+  buildDunePackage,
+  irmin,
+  irmin-pack,
+  ppx_irmin,
+  digestif,
+  cmdliner,
+  fmt,
+  yojson,
+  tezos-base58,
+  alcotest,
+  hex,
+  irmin-test,
+  fpath,
 }:
 
 buildDunePackage rec {
   pname = "irmin-tezos";
 
-  inherit (irmin) version src strictDeps;
-  duneVersion = "3";
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [
     irmin
@@ -23,7 +34,12 @@ buildDunePackage rec {
     yojson
   ];
 
-  checkInputs = [ alcotest hex irmin-test fpath ];
+  checkInputs = [
+    alcotest
+    hex
+    irmin-test
+    fpath
+  ];
 
   doCheck = true;
 

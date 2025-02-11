@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  vte,
+  gtk3,
+  ncurses,
+  pcre2,
+  wrapGAppsHook3,
+  nixosTests,
+}:
 
 let
 
@@ -6,8 +18,8 @@ let
   # https://github.com/thestinger/vte-ng
   #
   # three of the patches have been locally modified to cleanly apply on 0.62
-  vte-ng =  vte.overrideAttrs (attrs: {
-    patches = attrs.patches or [] ++ [
+  vte-ng = vte.overrideAttrs (attrs: {
+    patches = attrs.patches or [ ] ++ [
       (fetchpatch {
         name = "0001-expose-functions-for-pausing-unpausing-output.patch";
         url = "https://github.com/thestinger/vte-ng/commit/342e26574f50dcd40bbeaad9e839c2a6144d0c1c.patch";
@@ -27,7 +39,8 @@ let
     ];
   });
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "termite";
   version = "15";
 
@@ -40,22 +53,39 @@ in stdenv.mkDerivation rec {
   };
 
   # https://github.com/thestinger/termite/pull/516
-  patches = [ ./url_regexp_trailing.patch ./add_errno_header.patch
+  patches = [
+    ./url_regexp_trailing.patch
+    ./add_errno_header.patch
     # Fix off-by-one in select_text() on libvte >= 0.55.0
     # Expected to be included in next release (16).
     (fetchpatch {
       url = "https://github.com/thestinger/termite/commit/7e9a93b421b9596f8980645a46ac2ad5468dac06.patch";
       sha256 = "0vph2m5919f7w1xnc8i6z0j44clsm1chxkfg7l71nahxyfw5yh4j";
     })
-  ] ++ lib.optional stdenv.isDarwin ./remove_ldflags_macos.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./remove_ldflags_macos.patch;
 
-  makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
+  makeFlags = [
+    "VERSION=v${version}"
+    "PREFIX="
+    "DESTDIR=$(out)"
+  ];
 
-  buildInputs = [ vte-ng gtk3 ncurses pcre2 ];
+  buildInputs = [
+    vte-ng
+    gtk3
+    ncurses
+    pcre2
+  ];
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    pkg-config
+  ];
 
-  outputs = [ "out" "terminfo" ];
+  outputs = [
+    "out"
+    "terminfo"
+  ];
 
   passthru = {
     inherit vte-ng;
@@ -71,7 +101,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple VTE-based terminal";
+    description = "Simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";
     maintainers = with maintainers; [ koral ];

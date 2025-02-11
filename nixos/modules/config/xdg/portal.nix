@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
@@ -6,29 +11,24 @@ let
     mkIf
     mkOption
     mkRenamedOptionModule
+    mkRemovedOptionModule
     teams
-    types;
+    types
+    ;
 
-  associationOptions = with types; attrsOf (
-    coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str
-  );
+  associationOptions =
+    with types;
+    attrsOf (coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str);
 in
 
 {
   imports = [
     (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
-
-    ({ config, lib, options, ... }:
-      let
-        from = [ "xdg" "portal" "gtkUsePortal" ];
-        fromOpt = lib.getAttrFromPath from options;
-      in
-      {
-        warnings = lib.mkIf config.xdg.portal.gtkUsePortal [
-          "The option `${lib.showOption from}' defined in ${lib.showFiles fromOpt.files} has been deprecated. Setting the variable globally with `environment.sessionVariables' NixOS option can have unforeseen side-effects."
-        ];
-      }
-    )
+    (mkRemovedOptionModule [
+      "xdg"
+      "portal"
+      "gtkUsePortal"
+    ] "This option has been removed due to being unsupported and discouraged by the GTK developers.")
   ];
 
   meta = {
@@ -37,14 +37,15 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption (lib.mdDoc ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'') // {
+      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)''
+      // {
         default = false;
       };
 
     extraPortals = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
         a desktop portal implementation should be listed. GNOME and KDE already
@@ -54,22 +55,10 @@ in
       '';
     };
 
-    gtkUsePortal = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
-      description = lib.mdDoc ''
-        Sets environment variable `GTK_USE_PORTAL` to `1`.
-        This will force GTK-based programs ran outside Flatpak to respect and use XDG Desktop Portals
-        for features like file chooser but it is an unsupported hack that can easily break things.
-        Defaults to `false` to respect its opt-in nature.
-      '';
-    };
-
     xdgOpenUsePortal = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Sets environment variable `NIXOS_XDG_OPEN_USE_PORTAL` to `1`
         This will make `xdg-open` use the portal to open programs, which resolves bugs involving
         programs opening inside FHS envs or with unexpected env vars set from wrappers.
@@ -82,21 +71,27 @@ in
       default = { };
       example = {
         x-cinnamon = {
-          default = [ "xapp" "gtk" ];
+          default = [
+            "xapp"
+            "gtk"
+          ];
         };
         pantheon = {
-          default = [ "pantheon" "gtk" ];
+          default = [
+            "pantheon"
+            "gtk"
+          ];
           "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
         };
         common = {
           default = [ "gtk" ];
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Sets which portal backend should be used to provide the implementation
         for the requested interface. For details check {manpage}`portals.conf(5)`.
 
-        Configs will be linked to `/etx/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
+        Configs will be linked to `/etc/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
         for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.common`
         as an exception.
       '';
@@ -105,8 +100,8 @@ in
     configPackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      example = lib.literalExpression "[ pkgs.gnome.gnome-session ]";
-      description = lib.mdDoc ''
+      example = lib.literalExpression "[ pkgs.gnome-session ]";
+      description = ''
         List of packages that provide XDG desktop portal configuration, usually in
         the form of `share/xdg-desktop-portal/$desktop-portals.conf`.
 
@@ -119,19 +114,6 @@ in
     let
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
-      configPackages = cfg.configPackages;
-
-      joinedPortals = pkgs.buildEnv {
-        name = "xdg-portals";
-        paths = packages;
-        pathsToLink = [ "/share/xdg-desktop-portal/portals" "/share/applications" ];
-      };
-
-      joinedPortalConfigs = pkgs.buildEnv {
-        name = "xdg-portal-configs";
-        paths = configPackages;
-        pathsToLink = [ "/share/xdg-desktop-portal" ];
-      };
     in
     mkIf cfg.enable {
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
@@ -158,24 +140,28 @@ in
       systemd.packages = packages;
 
       environment = {
-        # fixes screen sharing on plasmawayland on non-chromium apps by linking
-        # share/applications/*.desktop files
-        # see https://github.com/NixOS/nixpkgs/issues/145174
-        systemPackages = [ joinedPortals ];
-        pathsToLink = [ "/share/applications" ];
+        systemPackages = packages ++ cfg.configPackages;
+        pathsToLink = [
+          # Portal definitions and upstream desktop environment portal configurations.
+          "/share/xdg-desktop-portal"
+          # .desktop files to register fallback icon and app name.
+          "/share/applications"
+        ];
 
         sessionVariables = {
-          GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
-          XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
-          NIXOS_XDG_DESKTOP_PORTAL_CONFIG_DIR = mkIf (cfg.configPackages != [ ]) "${joinedPortalConfigs}/share/xdg-desktop-portal";
+          NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
-        etc = lib.concatMapAttrs
-          (desktop: conf: lib.optionalAttrs (conf != { }) {
-            "xdg/xdg-desktop-portal/${lib.optionalString (desktop != "common") "${desktop}-"}portals.conf".text =
+        etc = lib.concatMapAttrs (
+          desktop: conf:
+          lib.optionalAttrs (conf != { }) {
+            "xdg/xdg-desktop-portal/${
+              lib.optionalString (desktop != "common") "${desktop}-"
+            }portals.conf".text =
               lib.generators.toINI { } { preferred = conf; };
-          }) cfg.config;
+          }
+        ) cfg.config;
       };
     };
 }

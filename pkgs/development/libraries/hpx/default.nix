@@ -1,19 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, asio, boost, cmake, hwloc, gperftools, ninja
-, pkg-config, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asio,
+  boost,
+  cmake,
+  hwloc,
+  gperftools,
+  pkg-config,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hpx";
-  version = "1.8.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
-    rev = version;
-    sha256 = "sha256-YJ4wHaPE5E6ngUAYrQB1SkW4IoHW71tUDKKNANVA9Xw=";
+    rev = "v${version}";
+    hash = "sha256-yrKG0n5BhrUNXjFWZRpb38/GYQlvMr0PSqUbhmZlgm0=";
   };
 
-  buildInputs = [ asio boost hwloc gperftools ];
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  propagatedBuildInputs = [ hwloc ];
+  buildInputs = [
+    asio
+    boost
+    gperftools
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ];
 
   strictDeps = true;
 

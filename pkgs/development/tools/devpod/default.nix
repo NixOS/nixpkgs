@@ -9,7 +9,7 @@
 , installShellFiles
 , jq
 , libayatana-appindicator
-, libsoup
+, libsoup_2_4
 , makeDesktopItem
 , mkYarnPackage
 , openssl
@@ -18,22 +18,23 @@
 , rustPlatform
 , stdenv
 , testers
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 let
   pname = "devpod";
-  version = "0.4.2";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e9sa9LniG5fj3S+x9T91v6ILPI0CD2y3QnZxXcKy6Ik=";
+    sha256 = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
   };
 
   meta = with lib; {
     description = "Codespaces but open-source, client-only and unopinionated: Works with any IDE and lets you use any cloud, kubernetes or just localhost docker";
+    mainProgram = "devpod";
     homepage = "https://devpod.sh";
     license = licenses.mpl20;
     maintainers = with maintainers; [ maxbrunet ];
@@ -45,7 +46,7 @@ rec {
 
     vendorHash = null;
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
     ldflags = [
       "-X github.com/loft-sh/devpod/pkg/version.version=v${version}"
@@ -63,7 +64,8 @@ rec {
     '';
 
     passthru.tests.version = testers.testVersion {
-      package = pname;
+      package = devpod;
+      command = "devpod version";
       version = "v${version}";
     };
   };
@@ -78,7 +80,7 @@ rec {
 
         offlineCache = fetchYarnDeps {
           yarnLock = "${src}/desktop/yarn.lock";
-          sha256 = "sha256-Nezh2nGhrxmNLLqZVugJqr895CIa2QWE3CNLjkjrEEs=";
+          hash = "sha256-vUV4yX+UvEKrP0vHxjGwtW2WyONGqHVmFor+WqWbkCc=";
         };
 
         packageJSON = ./package.json;
@@ -94,7 +96,7 @@ rec {
         dontInstall = true;
       };
 
-      rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+      rustTargetPlatformSpec = stdenv.hostPlatform.rust.rustcTarget;
     in
     rustPlatform.buildRustPackage {
       inherit version src;
@@ -105,7 +107,7 @@ rec {
       cargoLock = {
         lockFile = ./Cargo.lock;
         outputHashes = {
-          "tauri-plugin-log-0.1.0" = "sha256-Ei0j7UNzsK45c8fEV8Yw3pyf4oSG5EYgLB4BRfafq6A=";
+          "tauri-plugin-log-0.0.0" = "sha256-tM6oLJe/wwqDDNMKBeMa5nNVvsmi5b104xMOvtm974Y=";
         };
       };
 
@@ -120,7 +122,7 @@ rec {
         cp -r ${frontend-build} frontend-build
 
         substituteInPlace tauri.conf.json --replace '"distDir": "../dist",' '"distDir": "frontend-build",'
-      '' + lib.optionalString stdenv.isLinux ''
+      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
         substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
           --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
@@ -132,20 +134,20 @@ rec {
       nativeBuildInputs = [
         copyDesktopItems
         pkg-config
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         jq
-      ] ++ lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         desktopToDarwinBundle
       ];
 
       buildInputs = [
-        libsoup
+        libsoup_2_4
         openssl
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         gtk3
         libayatana-appindicator
-        webkitgtk
-      ] ++ lib.optionals stdenv.isDarwin [
+        webkitgtk_4_0
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         darwin.apple_sdk.frameworks.Carbon
         darwin.apple_sdk.frameworks.Cocoa
         darwin.apple_sdk.frameworks.WebKit

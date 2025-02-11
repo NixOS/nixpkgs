@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, jmespath
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  jmespath,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-core";
-  version = "2.14.0";
-  format = "setuptools";
+  version = "2.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yAaBWkj/24lMxbzhW4JZuaMBLMDNoBvi89+7hE8/TyE=";
+    hash = "sha256-ZRyq1ZfrOdT61s+FEz3/6Sg31TvfYtudjzfatlCLuPk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     jmespath
   ];
@@ -31,11 +32,7 @@ buildPythonPackage rec {
   # All components are stored in a mono repo
   doCheck = false;
 
-  pythonRelaxDeps = true;
-
-  pythonImportsCheck = [
-    "aliyunsdkcore"
-  ];
+  pythonImportsCheck = [ "aliyunsdkcore" ];
 
   meta = with lib; {
     description = "Core module of Aliyun Python SDK";

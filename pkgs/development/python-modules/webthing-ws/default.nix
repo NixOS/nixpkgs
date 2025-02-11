@@ -1,10 +1,10 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-j7nc4yJczDs28RVFDHeQ2ZIG9mIW2m25AAeErVKi4E4=";
   };
 
@@ -29,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "webthing_ws"
-  ];
+  pythonImportsCheck = [ "webthing_ws" ];
 
   meta = with lib; {
     description = "WebThing WebSocket consumer and API client";

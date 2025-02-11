@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -12,17 +13,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JDongian";
     repo = "python-jamo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QHI3Rqf1aQOsW49A/qnIwRnPuerbtyerf+eWIiEvyho=";
   };
 
-  pythonImportsCheck = [
-    "jamo"
-  ];
+  pythonImportsCheck = [ "jamo" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/JDongian/python-jamo/releases/tag/v${version}";

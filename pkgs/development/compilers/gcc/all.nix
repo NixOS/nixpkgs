@@ -1,50 +1,64 @@
-{ lib
-, stdenv
-, gccStdenv
-, gcc7Stdenv
-, callPackage
-, isl_0_11, isl_0_14, isl_0_17, isl_0_20
-, libcCross
-, threadsCrossFor
-, noSysDirs
-, texinfo5
-, cloog_0_18_0, cloog
-, lowPrio
-, wrapCC
+{
+  lib,
+  stdenv,
+  pkgs,
+  callPackage,
+  isl_0_20,
+  libcCross,
+  threadsCross,
+  noSysDirs,
+  lowPrio,
+  wrapCC,
 }@args:
 
 let
   versions = import ./versions.nix;
-  gccForMajorMinorVersion = majorMinorVersion:
+  gccForMajorMinorVersion =
+    majorMinorVersion:
     let
+      majorVersion = lib.versions.major majorMinorVersion;
       atLeast = lib.versionAtLeast majorMinorVersion;
-      attrName = "gcc${lib.replaceStrings ["."] [""] majorMinorVersion}";
-      pkg = lowPrio (wrapCC (callPackage ./default.nix ({
-        inherit noSysDirs;
-        inherit majorMinorVersion;
-        reproducibleBuild = true;
-        profiledCompiler = false;
-        libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
-        threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor majorMinorVersion else { };
-        isl = if       stdenv.isDarwin then null
-              else if    atLeast "9"   then isl_0_20
-              else if    atLeast "7"   then isl_0_17
-              else if    atLeast "6"   then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
-              else if    atLeast "4.9" then isl_0_11
-              else            /* "4.8" */   isl_0_14;
-      } // lib.optionalAttrs (majorMinorVersion == "4.8") {
-        texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
-      } // lib.optionalAttrs (!(atLeast "6")) {
-        cloog = if stdenv.isDarwin
-                then null
-                else if atLeast "4.9" then cloog_0_18_0
-                else          /* 4.8 */    cloog;
-      } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
-        # gcc 10 is too strict to cross compile gcc <= 8
-        stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
-      })));
+      attrName = "gcc${lib.replaceStrings [ "." ] [ "" ] majorMinorVersion}";
+      pkg = lowPrio (
+        wrapCC (
+          callPackage ./default.nix {
+            inherit noSysDirs;
+            inherit majorMinorVersion;
+            reproducibleBuild = true;
+            profiledCompiler = false;
+            libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
+            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+            isl = if stdenv.hostPlatform.isDarwin then null else isl_0_20;
+            # do not allow version skew when cross-building gcc
+            #
+            # When `gcc` is cross-built (`build` != `target` && `host` == `target`)
+            # `gcc` assumes that it has a compatible cross-compiler in the environment
+            # that can build target libraries. Version of a cross-compiler has to
+            # match the compiler being cross-built as libraries frequently use fresh
+            # compiler features, like `-std=c++26` or target-specific types like
+            # `_Bfloat16`.
+            # Version mismatch causes build failures like:
+            #     https://github.com/NixOS/nixpkgs/issues/351905
+            #
+            # Similar problems (but on a smaller scale) happen when a `gcc`
+            # cross-compiler is built (`build` == `host` && `host` != `target`) built
+            # by a mismatching version of a native compiler (`build` == `host` &&
+            # `host` == `target`).
+            #
+            # Let's fix both problems by requiring the same compiler version for
+            # cross-case.
+            stdenv =
+              if
+                (stdenv.targetPlatform != stdenv.buildPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+                && stdenv.cc.isGNU
+              then
+                pkgs."gcc${majorVersion}Stdenv"
+              else
+                stdenv;
+          }
+        )
+      );
     in
-      lib.nameValuePair attrName pkg;
+    lib.nameValuePair attrName pkg;
 in
 lib.listToAttrs (map gccForMajorMinorVersion versions.allMajorVersions)
-

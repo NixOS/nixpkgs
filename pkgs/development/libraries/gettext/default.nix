@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchurl, fetchpatch, libiconv, xz, bash
-, gnulib
+{
+  stdenv,
+  lib,
+  fetchurl,
+  libiconv,
+  bash,
+  updateAutotoolsGnuConfigScriptsHook,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -9,61 +14,82 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.21.1";
+  version = "0.22.5";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
+    hash = "sha256-7BcFselpuDqfBzFE7IBhUduIEn9eQP5alMtsj6SJlqA=";
   };
   patches = [
     ./absolute-paths.diff
     # fix reproducibile output, in particular in the grub2 build
     # https://savannah.gnu.org/bugs/index.php?59658
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-  ] ++ lib.optional stdenv.hostPlatform.isWindows (fetchpatch {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/gettext_formatstring-ruby.patch?h=mingw-w64-gettext&id=e8b577ee3d399518d005e33613f23363a7df07ee";
-    name = "gettext_formatstring-ruby.patch";
-    sha256 = "sha256-6SxZObOMkQDxuKJuJY+mQ/VuJJxSeGbf97J8ZZddCV0=";
-  });
-
-  outputs = [ "out" "man" "doc" "info" ];
-
-  hardeningDisable = [ "format" ];
-
-  LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
-
-  configureFlags = [
-     "--disable-csharp" "--with-xz"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # On cross building, gettext supposes that the wchar.h from libc
-    # does not fulfill gettext needs, so it tries to work with its
-    # own wchar.h file, which does not cope well with the system's
-    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-    "gl_cv_func_wcwidth_works=yes"
   ];
 
-  postPatch = ''
-   substituteAllInPlace gettext-runtime/src/gettext.sh.in
-   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-  '';
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "info"
+  ];
+
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
+
+  configureFlags =
+    [
+      "--disable-csharp"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # On cross building, gettext supposes that the wchar.h from libc
+      # does not fulfill gettext needs, so it tries to work with its
+      # own wchar.h file, which does not cope well with the system's
+      # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+      "gl_cv_func_wcwidth_works=yes"
+    ];
+
+  postPatch =
+    ''
+      # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
+      # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
+      # replace whatever (probably compatible) version of `extern-inline.m4` with one that probalby won’t work
+      # because `autopoint` will copy the autoconf macros from the project’s required version of gettext.
+      # Fixing this requires replacing all the older copies of the problematic file with a new one.
+      #
+      # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
+      declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
+      oldFilesDir=$(mktemp -d)
+      for oldFile in "''${oldFiles[@]}"; do
+        mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
+        cp gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
+      done
+      tar uf gettext-tools/misc/archive.dir.tar -C "$oldFilesDir" "''${oldFiles[@]}"
+
+      substituteAllInPlace gettext-runtime/src/gettext.sh.in
+      substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+      substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+      substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+    ''
+    + lib.optionalString stdenv.hostPlatform.isCygwin ''
+      sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+      sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMinGW ''
+      sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
+    '';
 
   strictDeps = true;
   nativeBuildInputs = [
-    xz
-    xz.bin
+    updateAutotoolsGnuConfigScriptsHook
   ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
-    bash
-  ]
-  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
-    # HACK, see #10874 (and 14664)
-    libiconv
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isMinGW) [
+      bash
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
+      # HACK, see #10874 (and 14664)
+      libiconv
+    ];
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -90,22 +116,22 @@ stdenv.mkDerivation rec {
       computer screen showing a lot less of English, and far more of their
       own language.
 
-      GNU `gettext' is an important step for the GNU Translation Project, as
+      GNU `gettext` is an important step for the GNU Translation Project, as
       it is an asset on which we may build many other steps. This package
       offers to programmers, translators, and even users, a well integrated
-      set of tools and documentation. Specifically, the GNU `gettext'
+      set of tools and documentation. Specifically, the GNU `gettext`
       utilities are a set of tools that provides a framework to help other
       GNU packages produce multi-lingual messages.
     '';
 
     homepage = "https://www.gnu.org/software/gettext/";
 
-    maintainers = with maintainers; [ zimbatm vrthra ];
+    maintainers = with maintainers; [ zimbatm ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }
 
-// lib.optionalAttrs stdenv.isDarwin {
+// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
   makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

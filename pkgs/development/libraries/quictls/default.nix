@@ -13,15 +13,15 @@
 , withCryptodev ? false
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.1.4-quic1";
+  version = "3.3.0-quic1";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "openssl-${finalAttrs.version}";
-    hash = "sha256-WOWoY6rmAAUvuWWXPTWsllUkew5ZIULjL1CEg/RRPsE=";
+    rev = "openssl-${version}";
+    hash = "sha256-kBPwldTJbJSuvBVylJNcLSJvF/Hbqh0mfT4Ub5Xc6dk=";
   };
 
   patches = [
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     ../openssl/3.0/openssl-disable-kernel-detection.patch
 
     (if stdenv.hostPlatform.isDarwin
-    then ../openssl/use-etc-ssl-certs-darwin.patch
-    else ../openssl/use-etc-ssl-certs.patch)
+    then ../openssl/3.3/use-etc-ssl-certs-darwin.patch
+    else ../openssl/3.3/use-etc-ssl-certs.patch)
   ];
 
   postPatch = ''
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
     then "./Configure BSD-x86_64"
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
-    then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+    then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
     else if stdenv.hostPlatform.isBSD
     then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
     else if stdenv.hostPlatform.isMinGW
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableSSL3 "enable-ssl3"
   # We select KTLS here instead of the configure-time detection (which we patch out).
   # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-  ++ lib.optional (stdenv.isLinux && lib.versionAtLeast finalAttrs.version "3.0.0") "enable-ktls"
+  ++ lib.optional (stdenv.hostPlatform.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
   ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
   # OpenSSL needs a specific `no-shared` configure flag.
   # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -176,11 +176,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/quictls/openssl/blob/${finalAttrs.src.rev}/CHANGES.md";
+    changelog = "https://github.com/quictls/openssl/blob/openssl-${version}/CHANGES.md";
     description = "TLS/SSL and crypto library with QUIC APIs";
     homepage = "https://quictls.github.io";
     license = lib.licenses.openssl;
     maintainers = with lib.maintainers; [ izorkin ];
     platforms = lib.platforms.all;
   };
-})
+}

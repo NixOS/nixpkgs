@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchurl, ocaml, cmdliner, ptime }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocaml,
+  cmdliner,
+  ptime,
+}:
 
 buildDunePackage rec {
 
@@ -16,7 +23,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ptime ];
 
-  outputs = [ "lib" "bin" "out" ];
+  outputs = [
+    "lib"
+    "bin"
+    "out"
+  ];
 
   installPhase = ''
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib/
@@ -25,6 +36,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/mirage/ocaml-crunch";
     description = "Convert a filesystem into a static OCaml module";
+    mainProgram = "ocaml-crunch";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };

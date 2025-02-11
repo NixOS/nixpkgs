@@ -1,0 +1,26 @@
+diff --git a/common/include/lib.mak.in b/common/include/lib.mak.in
+index 3afbb14..b8df9d9 100644
+--- a/common/include/lib.mak.in
++++ b/common/include/lib.mak.in
+@@ -22,7 +22,7 @@ static: $(STATIC_LIB)
+ shared: $(SHARED_LIB)
+ 
+ $(STATIC_LIB): $(OBJECTS)
+-	ar rcs $(STATIC_LIB) $(OBJECTS)
++	$(AR) rcs $(STATIC_LIB) $(OBJECTS)
+ 
+ $(SHARED_LIB): $(OBJECTS)
+ 	$(CC) -shared -Wl,-soname,$(SO_NAME) $(LDFLAGS) -o $(SHARED_LIB) \
+diff --git a/configure.ac b/configure.ac
+index 82ca3e1..0a78283 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -15,6 +15,8 @@ if test "$YACC" != "bison -y"; then
+ 	AC_MSG_ERROR([bison not found])
+ fi
+ 
++AC_CHECK_TOOL([AR], [ar], [:])
++
+ AC_ARG_WITH(
+ 	[python],
+ 	[AS_HELP_STRING([--without-python],[compile without python support])],

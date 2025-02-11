@@ -1,49 +1,51 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, python
-, root
-, makeWrapper
-, zlib
-, withRootSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  bash,
+  python,
+  root,
+  makeWrapper,
+  zlib,
+  withRootSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.8";
+  version = "2.0.2";
 
-  src = fetchurl {
-    url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-e8MGJGirulCv8+y4sizmdxlgNgCYkGiO9FM6qn+S5uQ=";
+  src = fetchFromGitLab {
+    owner = "hepcedar";
+    repo = pname;
+    rev = "yoda-${version}";
+    hash = "sha256-sHvwgLH22fvdlh4oLjr4fzZ2WtBJMAlvr4Vxi9Xdf84=";
   };
 
-  patches = [
-    # A bugfix https://gitlab.com/hepcedar/yoda/-/merge_requests/116
-    (fetchpatch {
-      url = "https://gitlab.com/hepcedar/yoda/-/commit/ba1275033522c66bc473dfeffae1a7971e985611.diff";
-      hash = "sha256-/8UJuypiQzywarE+o3BEMtqM+f+YzkHylugi+xTJf+w=";
-      excludes = [ "ChangeLog" ];
-    })
-  ];
-
   nativeBuildInputs = with python.pkgs; [
+    autoreconfHook
+    bash
     cython
     makeWrapper
   ];
 
-  buildInputs = [
-    python
-  ] ++ (with python.pkgs; [
-    numpy
-    matplotlib
-  ]) ++ lib.optionals withRootSupport [
-    root
-  ];
+  buildInputs =
+    [
+      python
+    ]
+    ++ (with python.pkgs; [
+      numpy
+      matplotlib
+    ])
+    ++ lib.optionals withRootSupport [
+      root
+    ];
 
   propagatedBuildInputs = [
     zlib
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    patchShebangs --build $out/bin/yoda-config
     for prog in "$out"/bin/*; do
       wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
     done

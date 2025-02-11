@@ -1,31 +1,33 @@
-{ lib
-, stdenv
-, glibcLocales
+{
+  lib,
+  stdenv,
+  glibcLocales,
   # The GraalVM derivation to use
-, graalvmDrv
-, removeReferencesTo
-, executable ? args.pname
+  graalvmDrv,
+  removeReferencesTo,
+  executable ? args.pname,
   # JAR used as input for GraalVM derivation, defaults to src
-, jar ? args.src
-, dontUnpack ? (jar == args.src)
+  jar ? args.src,
+  dontUnpack ? (jar == args.src),
   # Default native-image arguments. You probably don't want to set this,
   # except in special cases. In most cases, use extraNativeBuildArgs instead
-, nativeImageBuildArgs ? [
-    (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
-    (lib.optionalString (stdenv.isLinux && stdenv.isAarch64) "-H:PageSize=64K")
+  nativeImageBuildArgs ? [
+    (lib.optionalString stdenv.hostPlatform.isDarwin "-H:-CheckToolchain")
+    (lib.optionalString (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+    ) "-H:PageSize=64K")
     "-H:Name=${executable}"
     "-march=compatibility"
     "--verbose"
-    "-J-Dsun.stdout.encoding=UTF-8"
-    "-J-Dsun.stderr.encoding=UTF-8"
-  ]
+  ],
   # Extra arguments to be passed to the native-image
-, extraNativeImageBuildArgs ? [ ]
+  extraNativeImageBuildArgs ? [ ],
   # XMX size of GraalVM during build
-, graalvmXmx ? "-J-Xmx6g"
-, meta ? { }
-, ...
-} @ args:
+  graalvmXmx ? "-J-Xmx6g",
+  meta ? { },
+  LC_ALL ? "en_US.UTF-8",
+  ...
+}@args:
 
 let
   extraArgs = builtins.removeAttrs args [
@@ -42,42 +44,53 @@ let
     "postInstall"
   ];
 in
-stdenv.mkDerivation ({
-  inherit dontUnpack jar;
+stdenv.mkDerivation (
+  {
+    inherit dontUnpack jar;
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales removeReferencesTo ];
+    env = { inherit LC_ALL; };
 
-  nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
+    nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+      graalvmDrv
+      glibcLocales
+      removeReferencesTo
+    ];
 
-  buildPhase = args.buildPhase or ''
-    runHook preBuild
+    nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
-    native-image -jar "$jar" ''${nativeImageBuildArgs[@]}
+    buildPhase =
+      args.buildPhase or ''
+        runHook preBuild
 
-    runHook postBuild
-  '';
+        native-image -jar "$jar" ''${nativeImageBuildArgs[@]}
 
-  installPhase = args.installPhase or ''
-    runHook preInstall
+        runHook postBuild
+      '';
 
-    install -Dm755 ${executable} -t $out/bin
+    installPhase =
+      args.installPhase or ''
+        runHook preInstall
 
-    runHook postInstall
-  '';
+        install -Dm755 ${executable} -t $out/bin
 
-  postInstall = ''
-    remove-references-to -t ${graalvmDrv} $out/bin/${executable}
-    ${args.postInstall or ""}
-  '';
+        runHook postInstall
+      '';
 
-  disallowedReferences = [ graalvmDrv ];
+    postInstall = ''
+      remove-references-to -t ${graalvmDrv} $out/bin/${executable}
+      ${args.postInstall or ""}
+    '';
 
-  passthru = { inherit graalvmDrv; };
+    disallowedReferences = [ graalvmDrv ];
 
-  meta = {
-    # default to graalvm's platforms
-    platforms = graalvmDrv.meta.platforms;
-    # default to executable name
-    mainProgram = executable;
-  } // meta;
-} // extraArgs)
+    passthru = { inherit graalvmDrv; };
+
+    meta = {
+      # default to graalvm's platforms
+      platforms = graalvmDrv.meta.platforms;
+      # default to executable name
+      mainProgram = executable;
+    } // meta;
+  }
+  // extraArgs
+)

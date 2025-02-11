@@ -8,20 +8,14 @@
 let
   hsPkg = haskellPackages.changelog-d;
 
-  addCompletions = haskellPackages.generateOptparseApplicativeCompletions ["changelog-d"];
+  addCompletions = haskellPackages.generateOptparseApplicativeCompletions [ "changelog-d" ];
 
-  haskellModifications =
-    lib.flip lib.pipe [
-      addCompletions
-      haskell.lib.justStaticExecutables
-    ];
+  haskellModifications = lib.flip lib.pipe [
+    addCompletions
+    haskell.lib.justStaticExecutables
+  ];
 
   mkDerivationOverrides = finalAttrs: oldAttrs: {
-
-    version = oldAttrs.version + "-git-${lib.strings.substring 0 7 oldAttrs.src.rev}";
-
-    # nix-shell ./maintainers/scripts/update.nix --argstr package changelog-d
-    passthru.updateScript = lib.getExe (callPackage ./updateScript.nix { });
 
     # nix-build -A changelog-d.tests
     passthru.tests = {
@@ -35,4 +29,4 @@ let
 
   };
 in
-  (haskellModifications hsPkg).overrideAttrs mkDerivationOverrides
+(haskellModifications hsPkg).overrideAttrs mkDerivationOverrides

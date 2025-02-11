@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,7 +14,7 @@ let
 in
 {
   options.services.peroxide = {
-    enable = mkEnableOption (lib.mdDoc "peroxide");
+    enable = mkEnableOption "peroxide";
 
     package = mkPackageOption pkgs "peroxide" {
       default = [ "peroxide" ];
@@ -17,10 +22,18 @@ in
 
     logLevel = mkOption {
       # https://github.com/sirupsen/logrus#level-logging
-      type = types.enum [ "Panic" "Fatal" "Error" "Warning" "Info" "Debug" "Trace" ];
+      type = types.enum [
+        "Panic"
+        "Fatal"
+        "Error"
+        "Warning"
+        "Info"
+        "Debug"
+        "Trace"
+      ];
       default = "Warning";
       example = "Info";
-      description = lib.mdDoc "Only log messages of this priority or higher.";
+      description = "Only log messages of this priority or higher.";
     };
 
     settings = mkOption {
@@ -31,25 +44,25 @@ in
           UserPortImap = mkOption {
             type = types.port;
             default = 1143;
-            description = lib.mdDoc "The port on which to listen for IMAP connections.";
+            description = "The port on which to listen for IMAP connections.";
           };
 
           UserPortSmtp = mkOption {
             type = types.port;
             default = 1025;
-            description = lib.mdDoc "The port on which to listen for SMTP connections.";
+            description = "The port on which to listen for SMTP connections.";
           };
 
           ServerAddress = mkOption {
             type = types.str;
             default = "[::0]";
             example = "localhost";
-            description = lib.mdDoc "The address on which to listen for connections.";
+            description = "The address on which to listen for connections.";
           };
         };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for peroxide.  See
         [config.example.yaml](https://github.com/ljanyst/peroxide/blob/master/config.example.yaml)
         for an example configuration.
@@ -90,7 +103,10 @@ in
         LogsDirectoryMode = "0750";
         # Specify just "peroxide" so that the user has write permission, because
         # peroxide deletes and recreates the cache directory on startup.
-        CacheDirectory = [ "peroxide" "peroxide/cache" ];
+        CacheDirectory = [
+          "peroxide"
+          "peroxide/cache"
+        ];
         CacheDirectoryMode = "0700";
         StateDirectory = stateDir;
         StateDirectoryMode = "0700";
@@ -127,5 +143,8 @@ in
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with maintainers; [ aanderse aidalgol ];
+  meta.maintainers = with maintainers; [
+    aanderse
+    aidalgol
+  ];
 }

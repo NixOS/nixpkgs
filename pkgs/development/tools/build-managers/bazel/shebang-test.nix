@@ -1,10 +1,11 @@
 {
-  bazel
-, bazelTest
-, distDir
-, extracted
-, runLocal
-, unzip
+  bazel,
+  bazelTest,
+  extracted,
+  ripgrep,
+  runLocal,
+  unzip,
+  ...
 }:
 
 # Tests that all shebangs are patched appropriately.
@@ -13,7 +14,7 @@
 
 let
 
-  workspaceDir = runLocal "our_workspace" {} "mkdir $out";
+  workspaceDir = runLocal "our_workspace" { } "mkdir $out";
 
   testBazel = bazelTest {
     name = "bazel-test-shebangs";
@@ -24,18 +25,26 @@ let
       FAIL=
       check_shebangs() {
         local dir="$1"
-        { grep -Re '#!/usr/bin' $dir && FAIL=1; } || true
-        { grep -Re '#![^[:space:]]*/bin/env' $dir && FAIL=1; } || true
+        { rg -e '#!/usr/bin' -e '#![^[:space:]]*/bin/env' $dir -e && echo && FAIL=1; } || true
       }
-      BAZEL_EXTRACTED=${extracted bazel}/install
-      check_shebangs $BAZEL_EXTRACTED
-      while IFS= read -r -d "" zip; do
-        unzipped="./$zip/UNPACKED"
-        mkdir -p "$unzipped"
-        unzip -qq $zip -d "$unzipped"
-        check_shebangs "$unzipped"
-        rm -rf unzipped
-      done < <(find $BAZEL_EXTRACTED -type f -name '*.zip' -or -name '*.jar' -print0)
+      extract() {
+        local dir="$1"
+        find "$dir" -type f '(' -name '*.zip' -or -name '*.jar' ')' -print0 \
+        | while IFS="" read -r -d "" zip ; do
+          echo "Extracting $zip"
+          local unzipped="$zip-UNPACKED"
+          mkdir -p "$unzipped"
+          unzip -qq $zip -d "$unzipped"
+          extract "$unzipped"
+          rm -rf "$unzipped" "$zip" || true
+        done
+        check_shebangs "$dir"
+      }
+
+      mkdir install_root
+      cp --no-preserve=all -r ${extracted bazel}/install/*/* install_root/
+      extract ./install_root
+
       if [[ $FAIL = 1 ]]; then
         echo "Found files in the bazel distribution with illegal shebangs." >&2
         echo "Replace those by explicit Nix store paths." >&2
@@ -43,7 +52,11 @@ let
         exit 1
       fi
     '';
-    buildInputs = [ unzip ];
+    buildInputs = [
+      unzip
+      ripgrep
+    ];
   };
 
-in testBazel
+in
+testBazel

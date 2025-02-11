@@ -1,7 +1,16 @@
-{ lib, fetchFromGitHub, cmake, curl, xorg, avahi, qtbase, mkDerivation,
-  openssl, wrapGAppsHook,
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  xorg,
+  avahi,
+  qtbase,
+  mkDerivation,
+  openssl,
+  wrapGAppsHook3,
   avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; },
-  fetchpatch
+  fetchpatch,
 }:
 
 mkDerivation rec {
@@ -12,7 +21,7 @@ mkDerivation rec {
     owner = "debauchee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
+    hash = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
     fetchSubmodules = true;
   };
 
@@ -26,8 +35,23 @@ mkDerivation rec {
     })
   ];
 
-  buildInputs = [ curl xorg.libX11 xorg.libXext xorg.libXtst avahiWithLibdnssdCompat qtbase ];
-  nativeBuildInputs = [ cmake wrapGAppsHook ];
+  CXXFLAGS = [
+    # error: 'uint8_t' is not a member of 'std'; did you mean 'wint_t'?
+    "-include cstdint"
+  ];
+
+  buildInputs = [
+    curl
+    xorg.libX11
+    xorg.libXext
+    xorg.libXtst
+    avahiWithLibdnssdCompat
+    qtbase
+  ];
+  nativeBuildInputs = [
+    cmake
+    wrapGAppsHook3
+  ];
 
   postFixup = ''
     substituteInPlace "$out/share/applications/barrier.desktop" --replace "Exec=barrier" "Exec=$out/bin/barrier"

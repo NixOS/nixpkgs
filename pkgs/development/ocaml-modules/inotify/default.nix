@@ -1,22 +1,29 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, lwt # optional lwt support
-, ounit2, fileutils # only for tests
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  lwt, # optional lwt support
+  ounit2,
+  fileutils, # only for tests
 }:
 
 buildDunePackage rec {
-  version = "2.4.1";
+  version = "2.6";
   pname = "inotify";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "ocaml-inotify";
     rev = "v${version}";
-    hash = "sha256-2ATFF3HeATjhWgW4dG4jheQ9m1oE8xTQ7mpMT/1Jdp8=";
+    hash = "sha256-Vg9uVIx6/OMS1WoJIHwZbSt5ZyFy+Xgw5167FJWGslg=";
   };
 
   buildInputs = [ lwt ];
 
-  checkInputs = [ ounit2 fileutils ];
+  checkInputs = [
+    ounit2
+    fileutils
+  ];
 
   doCheck = true;
 

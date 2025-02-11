@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, xmltodict
-, responses
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  xmltodict,
+  responses,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "colinodell";
     repo = "python-qnapstats";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dpxl6a61h8zB7eS/2lxG+2//bOTzV6s4T1W+DVj0fnI=";
   };
 
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    responses
-  ];
+  nativeCheckInputs = [ responses ];
 
   checkPhase = ''
     runHook preCheck

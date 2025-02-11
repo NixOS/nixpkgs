@@ -1,11 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, guileSupport ? false, guile
-# avoid guile depend on bootstrap to prevent dependency cycles
-, inBootstrap ? false
-, pkg-config
-, gnumake
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  guileSupport ? false,
+  guile,
+  # avoid guile depend on bootstrap to prevent dependency cycles
+  inBootstrap ? false,
+  pkg-config,
+  gnumake,
 }:
 
 let
@@ -21,31 +24,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
-  # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
-  patches = [
-    # Replaces /bin/sh with sh, see patch file for reasoning
-    ./0001-No-impure-bin-sh.patch
-    # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
-    # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
-    # included Makefiles, don't look in /usr/include and friends.
-    ./0002-remove-impure-dirs.patch
-  ];
+  # To update patches:
+  #  $ version=4.4.1
+  #  $ git clone https://git.savannah.gnu.org/git/make.git
+  #  $ cd make && git checkout -b nixpkgs $version
+  #  $ git am --directory=../patches
+  #  $ # make changes, resolve conflicts, etc.
+  #  $ git format-patch --output-directory ../patches --diff-algorithm=histogram $version
+  #
+  # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
+  # convenient to keep them in a separate directory but we can defer listing the
+  # directory until derivation realization to avoid unnecessary Nix evaluations.
+  patches = lib.filesystem.listFilesRecursive ./patches;
 
-  nativeBuildInputs = lib.optionals guileEnabled [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
-  configureFlags = lib.optional guileEnabled "--with-guile"
+  configureFlags = lib.optional guileEnabled "--with-guile";
 
-    # Make uses this test to decide whether it should keep track of
-    # subseconds. Apple made this possible with APFS and macOS 10.13.
-    # However, we still support macOS 10.11 and 10.12. Binaries built
-    # in Nixpkgs will be unable to use futimens to set mtime less than
-    # a second. So, tell Make to ignore nanoseconds in mtime here by
-    # overriding the autoconf test for the struct.
-    # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
-    ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
-
-  outputs = [ "out" "man" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ];
   separateDebugInfo = true;
 
   passthru.tests = {
@@ -54,7 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
+    description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -68,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/make/";
 
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vrthra ];
+    maintainers = [ ];
     mainProgram = "make";
     platforms = platforms.all;
   };

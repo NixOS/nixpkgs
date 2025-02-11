@@ -1,50 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  httpx,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "0.5.1";
-  format = "pyproject";
+  version = "1.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r7ROEdgHdjXkveVUbuALHtwCX4IO0lwx9Zo3u6R9I58=";
+    tag = "v${version}";
+    hash = "sha256-XE+VdxUjq8KBSIU6rUlBweKEkZD3gqJuy9J4u9JVy7Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov --cov-report term-missing --cov=src/pywaze " ""
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  propagatedBuildInputs = [
-    httpx
-  ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     respx
   ];
 
-  pythonImportsCheck = [
-    "pywaze"
-  ];
+  pythonImportsCheck = [ "pywaze" ];
 
   meta = with lib; {
     description = "Module for calculating WAZE routes and travel times";

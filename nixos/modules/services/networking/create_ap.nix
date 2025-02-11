@@ -1,18 +1,27 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.create_ap;
-  configFile = pkgs.writeText "create_ap.conf" (generators.toKeyValue { } cfg.settings);
-in {
+  configFile = pkgs.writeText "create_ap.conf" (lib.generators.toKeyValue { } cfg.settings);
+in
+{
   options = {
     services.create_ap = {
-      enable = mkEnableOption (lib.mdDoc "setting up wifi hotspots using create_ap");
-      settings = mkOption {
-        type = with types; attrsOf (oneOf [ int bool str ]);
-        default = {};
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "setting up wifi hotspots using create_ap";
+      settings = lib.mkOption {
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            int
+            bool
+            str
+          ]);
+        default = { };
+        description = ''
           Configuration for `create_ap`.
           See [upstream example configuration](https://raw.githubusercontent.com/lakinduakash/linux-wifi-hotspot/master/src/scripts/create_ap.conf)
           for supported values.
@@ -27,7 +36,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       services.create_ap = {

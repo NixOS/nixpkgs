@@ -1,15 +1,16 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, bash
-, cmake
-, boost
-, xercesc
-, xalanc
-, qtbase
-, qttools
-, qtmultimedia
-, qtsvg
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  boost,
+  xercesc,
+  xalanc,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  qtsvg,
 }:
 
 mkDerivation rec {
@@ -23,8 +24,18 @@ mkDerivation rec {
     sha256 = "sha256-PqaiZ2eLH8+qRRkIolnQClTL9O9EgHMqFH/nUffosV8=";
   };
 
-  nativeBuildInputs = [ cmake boost xercesc xalanc ];
-  buildInputs = [ qtbase qttools qtmultimedia qtsvg ];
+  nativeBuildInputs = [
+    cmake
+    boost
+    xercesc
+    xalanc
+  ];
+  buildInputs = [
+    qtbase
+    qttools
+    qtmultimedia
+    qtsvg
+  ];
 
   preConfigure = ''
     chmod +x configure
@@ -33,6 +44,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Open source beer recipe creation tool";
+    mainProgram = "brewtarget";
     homepage = "http://www.brewtarget.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.mmahut ];

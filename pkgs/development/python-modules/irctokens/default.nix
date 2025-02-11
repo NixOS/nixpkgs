@@ -1,15 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pyyaml
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  pyyaml,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "irctokens";
   version = "2.0.2";
-  disabled = pythonOlder "3.6";  # f-strings
+  pyproject = true;
+
+  disabled = pythonOlder "3.6"; # f-strings
 
   src = fetchFromGitHub {
     owner = "jesopo";
@@ -18,10 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-Y9NBqxGUkt48hnXxsmfydHkJmWWb+sRrElV8C7l9bpw=";
   };
 
-  nativeCheckInputs = [ pyyaml ];
-  checkPhase = ''
-    ${python.interpreter} -m unittest test
-  '';
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    pyyaml
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "irctokens" ];
 

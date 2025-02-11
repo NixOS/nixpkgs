@@ -1,29 +1,32 @@
 { lib
+, fetchFromGitLab
+, fetchzip
+, cpio
 , ddcutil
 , easyeffects
 , gjs
 , glib
-, gnome
+, nautilus
 , gobject-introspection
 , gsound
 , hddtemp
-, libgda
+, libgda6
 , libgtop
+, libhandy
 , liquidctl
 , lm_sensors
 , netcat-gnu
 , nvme-cli
 , procps
-, pulseaudio
-, python3
 , smartmontools
+, replaceVars
+, stdenvNoCC
 , substituteAll
 , touchegg
 , util-linux
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
-, xprop
 }:
 let
   # Helper method to reduce redundancy
@@ -47,26 +50,33 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
-    nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
-    buildInputs = [ vte ];
+    nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
+    buildInputs = [ vte libhandy gjs ];
     postFixup = ''
+      patchShebangs "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
     '';
   }))
 
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {
+    # Make glib-compile-schemas available
+    nativeBuildInputs = [ glib ];
     # Has a hard-coded path to a run-time dependency
     # https://github.com/NixOS/nixpkgs/issues/136111
     postPatch = ''
-      substituteInPlace "extension.js" --replace "/usr/bin/ddcutil" "${ddcutil}/bin/ddcutil"
+      substituteInPlace "schemas/org.gnome.shell.extensions.display-brightness-ddcutil.gschema.xml" \
+        --replace-fail "/usr/bin/ddcutil" ${lib.getExe ddcutil}
+    '';
+    postFixup = ''
+      rm "$out/share/gnome-shell/extensions/display-brightness-ddcutil@themightydeity.github.com/schemas/gschemas.compiled"
+      glib-compile-schemas "$out/share/gnome-shell/extensions/display-brightness-ddcutil@themightydeity.github.com/schemas"
     '';
   }))
 
   (patchExtension "eepresetselector@ulville.github.io" (old: {
     patches = [
       # Needed to find the currently set preset
-      (substituteAll {
-        src = ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch;
+      (replaceVars ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch {
         easyeffects_gsettings_path = "${glib.getSchemaPath easyeffects}";
       })
     ];
@@ -74,8 +84,7 @@ super: lib.trivial.pipe super [
 
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch;
+      (replaceVars ./extensionOverridesPatches/freon_at_UshakovVasilii_Github.yahoo.com.patch {
         inherit hddtemp liquidctl lm_sensors procps smartmontools;
         netcat = netcat-gnu;
         nvmecli = nvme-cli;
@@ -94,53 +103,83 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
-    nativeBuildInputs = [ wrapGAppsHook ];
+    nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [
-      (substituteAll {
-        inherit gjs util-linux xdg-utils;
+      (replaceVars ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch {
+        inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
-        src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
-        nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
+        nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
       })
     ];
-    postFixup = ''
-      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/ding.js"
-      wrapGApp "$out/share/gnome-shell/extensions/gtk4-ding@smedius.gitlab.com/app/createThumbnail.js"
+  }))
+
+  (patchExtension "lunarcal@ailin.nemui" (old: let
+    chinese-calendar = stdenvNoCC.mkDerivation (finalAttrs: {
+      pname = "chinese-calendar";
+      version = "20240107";
+      nativeBuildInputs = [
+        cpio # used in install.sh
+      ];
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "Nei";
+        repo = "ChineseCalendar";
+        tag = finalAttrs.version;
+        hash = "sha256-z8Af9e70bn3ztUZteIEt/b3nJIFosbnoy8mwKMM6Dmc=";
+      };
+      installPhase = ''
+        runHook preInstall
+        HOME=$out ./install.sh
+        runHook postInstall
+      '';
+    });
+  in {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/lunarcal_at_ailin.nemui.patch;
+        chinese_calendar_path = chinese-calendar;
+      })
+    ];
+  }))
+
+  (patchExtension "pano@elhan.io" (final: prev: {
+    version = "v23-alpha3";
+    src = fetchzip {
+      url = "https://github.com/oae/gnome-shell-pano/releases/download/${final.version}/pano@elhan.io.zip";
+      hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
+      stripRoot = false;
+    };
+    preInstall = ''
+      substituteInPlace extension.js \
+        --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
+        --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
     '';
   }))
 
-  (patchExtension "pano@elhan.io" (old: {
+  (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/pano_at_elhan.io.patch;
-        inherit gsound libgda;
+      (replaceVars ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch {
+        gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
   }))
 
-  (patchExtension "tophat@fflewddur.github.io" (old: {
+  (patchExtension "system-monitor-next@paradoxxx.zero.gmail.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
+      (replaceVars ./extensionOverridesPatches/system-monitor-next_at_paradoxxx.zero.gmail.com.patch {
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
+    meta.maintainers = with lib.maintainers; [ andersk ];
   }))
 
   (patchExtension "Vitals@CoreCoding.com" (old: {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/vitals_at_corecoding.com.patch;
+      (replaceVars ./extensionOverridesPatches/vitals_at_corecoding.com.patch {
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
-  }))
-
-  (patchExtension "unite@hardpixel.eu" (old: {
-    buildInputs = [ xprop ];
-
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   }))
 
   (patchExtension "x11gestures@joseexposito.github.io" (old: {

@@ -1,121 +1,44 @@
 # Go {#sec-language-go}
 
-## Go modules {#ssec-language-go}
+## Building Go modules with `buildGoModule` {#ssec-language-go}
 
-The function `buildGoModule` builds Go programs managed with Go modules. It builds a [Go Modules](https://github.com/golang/go/wiki/Modules) through a two phase build:
+The function `buildGoModule` builds Go programs managed with Go modules. It builds [Go Modules](https://go.dev/wiki/Modules) through a two phase build:
 
-- An intermediate fetcher derivation. This derivation will be used to fetch all of the dependencies of the Go module.
+- An intermediate fetcher derivation called `goModules`. This derivation will be used to fetch all the dependencies of the Go module.
 - A final derivation will use the output of the intermediate derivation to build the binaries and produce the final output.
 
 ### Example for `buildGoModule` {#ex-buildGoModule}
 
-In the following is an example expression using `buildGoModule`, the following arguments are of special significance to the function:
-
-- `vendorHash`: is the hash of the output of the intermediate fetcher derivation.
-
-  `vendorHash` can also be set to `null`.
-  In that case, rather than fetching the dependencies and vendoring them, the dependencies vendored in the source repo will be used.
-
-  To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`
-
-  To obtain the actual hash, set `vendorHash = lib.fakeHash;` and run the build ([more details here](#sec-source-hashes)).
-- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform-dependent `vendorHash` checksums.
-- `modPostBuild`: Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash`. Note that if you change this attribute, you need to update `vendorHash` attribute.
+The following is an example expression using `buildGoModule`:
 
 ```nix
-pet = buildGoModule rec {
-  pname = "pet";
-  version = "0.3.4";
+{
+  pet = buildGoModule rec {
+    pname = "pet";
+    version = "0.3.4";
 
-  src = fetchFromGitHub {
-    owner = "knqyf263";
-    repo = "pet";
-    rev = "v${version}";
-    hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
-  };
+    src = fetchFromGitHub {
+      owner = "knqyf263";
+      repo = "pet";
+      rev = "v${version}";
+      hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
+    };
 
-  vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
+    vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
 
-  meta = with lib; {
-    description = "Simple command-line snippet manager, written in Go";
-    homepage = "https://github.com/knqyf263/pet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    meta = {
+      description = "Simple command-line snippet manager, written in Go";
+      homepage = "https://github.com/knqyf263/pet";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ kalbasit ];
+    };
   };
 }
 ```
 
-## `buildGoPackage` (legacy) {#ssec-go-legacy}
+## Attributes of `buildGoModule` {#buildgomodule-parameters}
 
-The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
-
-### Example for `buildGoPackage` {#example-for-buildgopackage}
-
-In the following is an example expression using buildGoPackage, the following arguments are of special significance to the function:
-
-- `goPackagePath` specifies the package's canonical Go import path.
-- `goDeps` is where the Go dependencies of a Go program are listed as a list of package source identified by Go import path. It could be imported as a separate `deps.nix` file for readability. The dependency data structure is described below.
-
-```nix
-deis = buildGoPackage rec {
-  pname = "deis";
-  version = "1.13.0";
-
-  goPackagePath = "github.com/deis/deis";
-
-  src = fetchFromGitHub {
-    owner = "deis";
-    repo = "deis";
-    rev = "v${version}";
-    hash = "sha256-XCPD4LNWtAd8uz7zyCLRfT8rzxycIUmTACjU03GnaeM=";
-  };
-
-  goDeps = ./deps.nix;
-}
-```
-
-The `goDeps` attribute can be imported from a separate `nix` file that defines which Go libraries are needed and should be included in `GOPATH` for `buildPhase`:
-
-```nix
-# deps.nix
-[ # goDeps is a list of Go dependencies.
-  {
-    # goPackagePath specifies Go package import path.
-    goPackagePath = "gopkg.in/yaml.v2";
-    fetch = {
-      # `fetch type` that needs to be used to get package source.
-      # If `git` is used there should be `url`, `rev` and `hash` defined next to it.
-      type = "git";
-      url = "https://gopkg.in/yaml.v2";
-      rev = "a83829b6f1293c91addabc89d0571c246397bbf4";
-      hash = "sha256-EMrdy0M0tNuOcITaTAmT5/dPSKPXwHDKCXFpkGbVjdQ=";
-    };
-  }
-  {
-    goPackagePath = "github.com/docopt/docopt-go";
-    fetch = {
-      type = "git";
-      url = "https://github.com/docopt/docopt-go";
-      rev = "784ddc588536785e7299f7272f39101f7faccc3f";
-      hash = "sha256-Uo89zjE+v3R7zzOq/gbQOHj3SMYt2W1nDHS7RCUin3M=";
-    };
-  }
-]
-```
-
-To extract dependency information from a Go package in automated way use [go2nix](https://github.com/kamilchm/go2nix). It can produce complete derivation and `goDeps` file for Go programs.
-
-You may use Go packages installed into the active Nix profiles by adding the following to your ~/.bashrc:
-
-```bash
-for p in $NIX_PROFILES; do
-    GOPATH="$p/share/go:$GOPATH"
-done
-```
-
-## Attributes used by the builders {#ssec-go-common-attributes}
-
-Many attributes [controlling the build phase](#variables-controlling-the-build-phase) are respected by both `buildGoModule` and `buildGoPackage`. Note that `buildGoModule` reads the following attributes also when building the `vendor/` goModules fixed output derivation as well:
+Many attributes [controlling the build phase](#variables-controlling-the-build-phase) are respected by `buildGoModule`. Note that `buildGoModule` reads the following attributes also when building the `vendor/` goModules fixed output derivation as well:
 
 - [`sourceRoot`](#var-stdenv-sourceRoot)
 - [`prePatch`](#var-stdenv-prePatch)
@@ -123,44 +46,262 @@ Many attributes [controlling the build phase](#variables-controlling-the-build-p
 - [`patchFlags`](#var-stdenv-patchFlags)
 - [`postPatch`](#var-stdenv-postPatch)
 - [`preBuild`](#var-stdenv-preBuild)
+- `env`: useful for passing down variables such as `GOWORK`.
 
-In addition to the above attributes, and the many more variables respected also by `stdenv.mkDerivation`, both `buildGoModule` and `buildGoPackage` respect Go-specific attributes that tweak them to behave slightly differently:
+To control test execution of the build derivation, the following attributes are of interest:
+
+- [`checkInputs`](#var-stdenv-checkInputs)
+- [`preCheck`](#var-stdenv-preCheck)
+- [`checkFlags`](#var-stdenv-checkFlags)
+
+In addition to the above attributes, and the many more variables respected also by `stdenv.mkDerivation`, `buildGoModule` respects Go-specific attributes that tweak them to behave slightly differently:
+
+### `vendorHash` {#var-go-vendorHash}
+
+Hash of the output of the intermediate fetcher derivation (the dependencies of the Go modules).
+
+`vendorHash` can be set to `null`.
+In that case, rather than fetching the dependencies, the dependencies already vendored in the `vendor` directory of the source repo will be used.
+
+To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`.
+You can read more about [vendoring in the Go documentation](https://go.dev/ref/mod#vendoring).
+
+To obtain the hash, set `vendorHash = lib.fakeHash;` and run the build. ([more details here](#sec-source-hashes)).
+Another way is to use use `nix-prefetch` to obtain the hash. The following command gets the value of `vendorHash` for package `pet`:
+
+
+```sh
+cd path/to/nixpkgs
+nix-prefetch -E "{ sha256 }: ((import ./. { }).my-package.overrideAttrs { vendorHash = sha256; }).goModules"
+```
+
+`vendorHash` can be overridden with `overrideAttrs`. Override the above example like this:
+
+```nix
+{
+  pet_0_4_0 = pet.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.4.0";
+      src = fetchFromGitHub {
+        inherit (previousAttrs.src) owner repo;
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
+      };
+      vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";
+    }
+  );
+}
+```
+
+### `proxyVendor` {#var-go-proxyVendor}
+
+If `true`, the intermediate fetcher downloads dependencies from the
+[Go module proxy](https://go.dev/ref/mod#module-proxy) (using `go mod download`) instead of vendoring them. The resulting
+[module cache](https://go.dev/ref/mod#module-cache) is then passed to the final derivation.
+
+This is useful if your code depends on C code and `go mod tidy` does not include the needed sources to build or
+if any dependency has case-insensitive conflicts which will produce platform-dependent `vendorHash` checksums.
+
+Defaults to `false`.
+
+
+### `modPostBuild` {#var-go-modPostBuild}
+
+Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash`.
+Note that if you change this attribute, you need to update `vendorHash` attribute.
+
+
+### `modRoot` {#var-go-modRoot}
+
+The root directory of the Go module that contains the `go.mod` file.
+
+Defaults to `./`, which is the root of `src`.
 
 ### `ldflags` {#var-go-ldflags}
 
-Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build`. The most common use case for this argument is to make the resulting executable aware of its own version. For example:
+A string list of flags to pass to the Go linker tool via the `-ldflags` argument of `go build`. Possible values can be retrieved by running `go tool link --help`.
+The most common use case for this argument is to make the resulting executable aware of its own version by injecting the value of string variable using the `-X` flag. For example:
 
 ```nix
+{
   ldflags = [
-    "-s" "-w"
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];
+}
 ```
 
 ### `tags` {#var-go-tags}
 
-Arguments to pass to the Go via the `-tags` argument of `go build`. For example:
+A string list of [Go build tags (also called build constraints)](https://pkg.go.dev/cmd/go#hdr-Build_constraints) that are passed via the `-tags` argument of `go build`.  These constraints control whether Go files from the source should be included in the build. For example:
 
 ```nix
+{
   tags = [
     "production"
     "sqlite"
   ];
+}
 ```
 
+Tags can also be set conditionally:
+
 ```nix
+{
   tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
+}
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
 
-Removes the pre-existing vendor directory. This should only be used if the dependencies included in the vendor folder are broken or incomplete.
+If set to `true`, removes the pre-existing vendor directory. This should only be used if the dependencies included in the vendor folder are broken or incomplete.
 
 ### `subPackages` {#var-go-subPackages}
 
 Specified as a string or list of strings. Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
 
+Many Go projects keep the main package in a `cmd` directory.
+Following example could be used to only build the example-cli and example-server binaries:
+
+```nix
+{
+  subPackages = [
+    "cmd/example-cli"
+    "cmd/example-server"
+  ];
+}
+```
+
 ### `excludedPackages` {#var-go-excludedPackages}
 
-Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values. If `excludedPackages` is not specified, all child packages will be built.
+Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values.
+
+### `enableParallelBuilding` {#var-go-enableParallelBuilding}
+
+Whether builds and tests should run in parallel.
+
+Defaults to `true`.
+
+### `allowGoReference` {#var-go-allowGoReference}
+
+Whether the build result should be allowed to contain references to the Go tool chain. This might be needed for programs that are coupled with the compiler, but shouldn't be set without a good reason.
+
+Defaults to `false`
+
+## Overriding `goModules` {#buildGoModule-goModules-override}
+
+Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation.
+
+Alternatively, the primary derivation provides an overridable `passthru.overrideModAttrs` function to store the attribute overlay implicitly taken by `goModules.overrideAttrs`. Here's an example usage of `overrideModAttrs`:
+
+```nix
+{
+  pet-overridden = pet.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      passthru = previousAttrs.passthru // {
+        # If the original package has an `overrideModAttrs` attribute set, you'd
+        # want to extend it, and not replace it. Hence we use
+        # `lib.composeExtensions`. If you are sure the `overrideModAttrs` of the
+        # original package trivially does nothing, you can safely replace it
+        # with your own by not using `lib.composeExtensions`.
+        overrideModAttrs = lib.composeExtensions previousAttrs.passthru.overrideModAttrs (
+          finalModAttrs: previousModAttrs: {
+            # goModules-specific overriding goes here
+            postBuild = ''
+              # Here you have access to the `vendor` directory.
+              substituteInPlace vendor/github.com/example/repo/file.go \
+                --replace-fail "panic(err)" ""
+            '';
+          }
+        );
+      };
+    }
+  );
+}
+```
+
+## Controlling the Go environment {#ssec-go-environment}
+
+The Go build can be further tweaked by setting environment variables via the `env` attribute. In most cases, this isn't needed. Possible values can be found in the [Go documentation of accepted environment variables](https://pkg.go.dev/cmd/go#hdr-Environment_variables). Notice that some of these flags are set by the build helper itself and should not be set explicitly. If in doubt, grep the implementation of the build helper.
+
+`buildGoModule` officially supports the following environment variables:
+
+### `env.CGO_ENABLED` {#var-go-CGO_ENABLED}
+
+When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As consequence, the build
+program can't link against C libraries anymore, and the resulting binary is statically linked.
+
+When building with CGO enabled, Go will likely link some packages from the Go standard library against C libraries,
+even when the target code does not explicitly call into C dependencies. With `env.CGO_ENABLED = 0;`, Go
+will always use the Go native implementation of these internal packages. For reference see
+[net](https://pkg.go.dev/net#hdr-Name_Resolution) and [os/user](https://pkg.go.dev/os/user#pkg-overview) packages.
+Notice that the decision whether these packages should use native Go implementation or not can also be controlled
+on a per package level using build tags (`tags`). In case CGO is disabled, these tags have no additional effect.
+
+When a Go program depends on C libraries, place those dependencies in `buildInputs`:
+
+```nix
+{
+  buildInputs = [
+    libvirt
+    libxml2
+  ];
+}
+```
+
+`env.CGO_ENABLED` defaults to `1`.
+
+## Skipping tests {#ssec-skip-go-tests}
+
+`buildGoModule` runs tests by default. Failing tests can be disabled using the `checkFlags` parameter.
+This is done with the [`-skip` or `-run`](https://pkg.go.dev/cmd/go#hdr-Testing_flags) flags of the `go test` command.
+
+For example, only a selection of tests could be run with:
+
+```nix
+{
+  # -run and -skip accept regular expressions
+  checkFlags = [
+    "-run=^Test(Simple|Fast)$"
+  ];
+}
+```
+
+If a larger amount of tests should be skipped, the following pattern can be used:
+
+```nix
+{
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestNetwork"
+        "TestDatabase/with_mysql" # exclude only the subtest
+        "TestIntegration"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+}
+```
+
+To disable tests altogether, set `doCheck = false;`.
+
+## Migrating from `buildGoPackage` to `buildGoModule` {#buildGoPackage-migration}
+
+::: {.warning}
+`buildGoPackage` was removed for the 25.05 release. It was used to build legacy Go programs
+that do not support Go modules.
+:::
+
+Go modules, released 6y ago, are now widely adopted in the ecosystem.
+Most upstream projects are using Go modules, and the tooling previously used for dependency management in Go is mostly deprecated, archived or at least unmaintained at this point.
+
+In case a project doesn't have external dependencies or dependencies are vendored in a way understood by `go mod init`, migration can be done with a few changes in the package.
+
+- Switch the builder from `buildGoPackage` to `buildGoModule`
+- Remove `goPackagePath` and other attributes specific to `buildGoPackage`
+- Set `vendorHash = null;`
+- Run `go mod init <module name>` in `postPatch`
+
+In case the package has external dependencies that aren't vendored or the build setup is more complex the upstream source might need to be patched.
+Examples for the migration can be found in the [issue tracking migration withing nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).

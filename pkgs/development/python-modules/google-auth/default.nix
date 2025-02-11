@@ -1,64 +1,53 @@
-{ lib
-, stdenv
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, cachetools
-, cryptography
-, fetchpatch
-, fetchPypi
-, flask
-, freezegun
-, grpcio
-, mock
-, oauth2client
-, pyasn1-modules
-, pyopenssl
-, pytest-asyncio
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, pyu2f
-, requests
-, responses
-, rsa
-, six
-, urllib3
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchPypi,
+  flask,
+  freezegun,
+  grpcio,
+  mock,
+  oauth2client,
+  pyasn1-modules,
+  pyjwt,
+  pyopenssl,
+  pytest-asyncio,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
+  pyu2f,
+  requests,
+  responses,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.21.0";
-  format = "setuptools";
+  version = "2.37.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-so6ASOV3J+fPDlvY5ydrISrvR2ZUoJURNUqoJ1O0XGY=";
+    pname = "google_auth";
+    inherit version;
+    hash = "sha256-AFRiOr8fnINJLGPT9H538KVEyqPUCy2Y4JmmEcLdXQA=";
   };
 
-  patches = [
-    # Although the migration to urllib3-2.0.0 is incomplete,
-    # the discussion in the following PR has addressed the concerns.
-    # https://github.com/googleapis/google-auth-library-python/pull/1290
-    (fetchpatch {
-      name = "support-urllib3_2.patch";
-      url = "https://github.com/googleapis/google-auth-library-python/commit/9ed006d02d7c9de3e6898ee819648c2fd3367c1d.patch";
-      hash = "sha256-64g0GzZeyO8l/s1jqfsogr8pTOBbG9xfp/UeVZNA4q8=";
-      includes = [ "google/auth/transport/urllib3.py" ];
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     pyasn1-modules
     rsa
-    six
-    urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       requests
@@ -68,43 +57,44 @@ buildPythonPackage rec {
       pyopenssl
     ];
     pyopenssl = [
+      cryptography
       pyopenssl
     ];
-    reauth = [
-      pyu2f
+    pyjwt = [
+      cryptography
+      pyjwt
     ];
-    requests = [
-      requests
-    ];
+    reauth = [ pyu2f ];
+    requests = [ requests ];
   };
 
-  nativeCheckInputs = [
-    aioresponses
-    flask
-    freezegun
-    grpcio
-    mock
-    oauth2client
-    pytest-asyncio
-    pytest-localserver
-    pytestCheckHook
-    responses
-  ] ++ passthru.optional-dependencies.aiohttp
-  # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
-  ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
-  ++ passthru.optional-dependencies.reauth;
+  nativeCheckInputs =
+    [
+      aioresponses
+      flask
+      freezegun
+      grpcio
+      mock
+    ]
+    ++ lib.optionals (pythonOlder "3.13") [
+      oauth2client
+    ]
+    ++ [
+      pytest-asyncio
+      pytest-localserver
+      pytestCheckHook
+      responses
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # Disable tests using pyOpenSSL as it does not build on M1 Macs
-    "tests/transport/test__mtls_helper.py"
-    "tests/transport/test_requests.py"
-    "tests/transport/test_urllib3.py"
-    "tests/transport/test__custom_tls_signer.py"
+  pytestFlagsArray = [
+    # cryptography 44 compat issue
+    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -118,6 +108,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

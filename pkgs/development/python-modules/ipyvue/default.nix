@@ -1,25 +1,27 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
   # Python Inputs
-, ipywidgets
+  setuptools,
+  ipywidgets,
 }:
 
 buildPythonPackage rec {
   pname = "ipyvue";
-  version = "1.10.1";
-
-  disabled = isPy27;
+  version = "1.11.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IGFc6GulFs8Leq2EzGB+TiyRBCMulUzQ7MvzNTCl4dQ=";
+    hash = "sha256-OxOBvRIBhPlwpdZt6sM7hZKmZsjhq3pa/TPs/zQuCpU=";
   };
 
-  propagatedBuildInputs = [ ipywidgets ];
+  build-system = [ setuptools ];
 
-  doCheck = false;  # No tests in package or GitHub
+  dependencies = [ ipywidgets ];
+
+  doCheck = false; # No tests in package or GitHub
   pythonImportsCheck = [ "ipyvue" ];
 
   meta = with lib; {

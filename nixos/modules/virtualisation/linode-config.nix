@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 {
   imports = [ ../profiles/qemu-guest.nix ];
@@ -35,7 +40,7 @@ with lib;
     autoResize = true;
   };
 
-  swapDevices = mkDefault [{ device = "/dev/sdb"; }];
+  swapDevices = mkDefault [ { device = "/dev/sdb"; } ];
 
   # Enable LISH and Linode Booting w/ GRUB
   boot = {
@@ -59,7 +64,6 @@ with lib;
 
       grub = {
         enable = true;
-        version = 2;
         forceInstall = true;
         device = "nodev";
 

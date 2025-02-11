@@ -1,26 +1,24 @@
-{ lib
-, callPackage
-, clangStdenv
-, cmake
-, fetchFromGitHub
-, gcc
-, git
-, llvmPackages_9
-# Libraries
-, argparse
-, cling
-, cppzmq
-, libuuid
-, ncurses
-, openssl
-, pugixml
-, xeus
-, xeus-zmq
-, xtl
-, zeromq
-, zlib
-# Settings
-, debug ? false
+{
+  lib,
+  clangStdenv,
+  cmake,
+  fetchFromGitHub,
+  llvmPackages_13,
+  # Libraries
+  argparse,
+  cling,
+  cppzmq,
+  libuuid,
+  ncurses,
+  openssl,
+  pugixml,
+  xeus,
+  xeus-zmq,
+  xtl,
+  zeromq,
+  zlib,
+  # Settings
+  debug ? false,
 }:
 
 let
@@ -60,7 +58,7 @@ clangStdenv.mkDerivation rec {
     cling.unwrapped
     cppzmq
     libuuid
-    llvmPackages_9.llvm
+    llvmPackages_13.llvm
     ncurses
     openssl
     pugixml
@@ -71,14 +69,22 @@ clangStdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = lib.optionals debug [
-    "-DCMAKE_BUILD_TYPE=Debug"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
+
+  postPatch = ''
+    substituteInPlace src/xmagics/executable.cpp \
+      --replace "getDataLayout" "getDataLayoutString"
+    substituteInPlace src/xmagics/execution.cpp \
+      --replace "simplisticCastAs" "castAs"
+    substituteInPlace src/xmime_internal.hpp \
+      --replace "code.str()" "code.str().str()"
+  '';
 
   dontStrip = debug;
 
   meta = {
     description = "Jupyter kernel for the C++ programming language";
+    mainProgram = "xcpp";
     homepage = "https://github.com/jupyter-xeus/xeus-cling";
     maintainers = with lib.maintainers; [ thomasjm ];
     platforms = lib.platforms.unix;

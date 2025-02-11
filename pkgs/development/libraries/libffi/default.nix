@@ -1,20 +1,25 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
 
   # test suite depends on dejagnu which cannot be used during bootstrapping
   # dejagnu also requires tcl which can't be built statically at the moment
-, doCheck ? !(stdenv.hostPlatform.isStatic)
-, dejagnu
-, nix-update-script
+  doCheck ? !(stdenv.hostPlatform.isStatic),
+  dejagnu,
+  nix-update-script,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libffi";
-  version = "3.4.4";
+  version = "3.4.6";
 
   src = fetchurl {
-    url = "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1mxWrSWags8qnfxAizK/XaUjcVALhHRff7i2RXEt9nY=";
+    url =
+      with finalAttrs;
+      "https://github.com/libffi/libffi/releases/download/v${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-sN6p3yPIY6elDoJUQPPr/6vWXfFJcQjl1Dd0eEOJWk4=";
   };
 
   # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,14 +27,25 @@ stdenv.mkDerivation rec {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    # https://github.com/libffi/libffi/pull/857
+    # function label needs to come before .cfi_startproc
+    ./label-before-cfi_startproc.patch
   ];
 
   strictDeps = true;
-  outputs = [ "out" "dev" "man" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "info"
+  ];
 
   enableParallelBuilding = true;
 
-  configurePlatforms = [ "build" "host" ];
+  configurePlatforms = [
+    "build"
+    "host"
+  ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
@@ -50,10 +66,15 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
-    description = "A foreign function call interface library";
+    description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a
@@ -72,5 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
+    pkgConfigModules = [ "libffi" ];
   };
-}
+})

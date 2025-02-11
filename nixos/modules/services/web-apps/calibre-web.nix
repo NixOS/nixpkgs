@@ -2,13 +2,14 @@
 
 let
   cfg = config.services.calibre-web;
+  dataDir = if lib.hasPrefix "/" cfg.dataDir then cfg.dataDir else "/var/lib/${cfg.dataDir}";
 
   inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionalString types;
 in
 {
   options = {
     services.calibre-web = {
-      enable = mkEnableOption (lib.mdDoc "Calibre-Web");
+      enable = mkEnableOption "Calibre-Web";
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
 
@@ -16,7 +17,7 @@ in
         ip = mkOption {
           type = types.str;
           default = "::1";
-          description = lib.mdDoc ''
+          description = ''
             IP address that Calibre-Web should listen on.
           '';
         };
@@ -24,7 +25,7 @@ in
         port = mkOption {
           type = types.port;
           default = 8083;
-          description = lib.mdDoc ''
+          description = ''
             Listen port for Calibre-Web.
           '';
         };
@@ -33,27 +34,28 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = lib.mdDoc ''
-          The directory below {file}`/var/lib` where Calibre-Web stores its data.
+        description = ''
+          Where Calibre-Web stores its data.
+          Either an absolute path, or the directory name below {file}`/var/lib`.
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = lib.mdDoc "User account under which Calibre-Web runs.";
+        description = "User account under which Calibre-Web runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = lib.mdDoc "Group account under which Calibre-Web runs.";
+        description = "Group account under which Calibre-Web runs.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the server.
         '';
       };
@@ -62,7 +64,7 @@ in
         calibreLibrary = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to Calibre library.
           '';
         };
@@ -70,17 +72,17 @@ in
         enableBookConversion = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Configure path to the Calibre's ebook-convert in the DB.
           '';
         };
 
-        enableKepubify = mkEnableOption (lib.mdDoc "kebup conversion support");
+        enableKepubify = mkEnableOption "kebup conversion support";
 
         enableBookUploading = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Allow books to be uploaded via Calibre-Web UI.
           '';
         };
@@ -89,7 +91,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Enable authorization using auth proxy.
             '';
           };
@@ -97,7 +99,7 @@ in
           header = mkOption {
             type = types.str;
             default = "";
-            description = lib.mdDoc ''
+            description = ''
               Auth proxy header name.
             '';
           };
@@ -107,9 +109,16 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.settings = lib.optionalAttrs (lib.hasPrefix "/" cfg.dataDir) {
+      "10-calibre-web".${dataDir}.d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
+    };
+
     systemd.services.calibre-web = let
-      appDb = "/var/lib/${cfg.dataDir}/app.db";
-      gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
+      appDb = "${dataDir}/app.db";
+      gdriveDb = "${dataDir}/gdrive.db";
       calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
       settings = concatStringsSep ", " (
@@ -134,7 +143,6 @@ in
           User = cfg.user;
           Group = cfg.group;
 
-          StateDirectory = cfg.dataDir;
           ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
             ''
               __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
@@ -147,6 +155,8 @@ in
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
           Restart = "on-failure";
+        } // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
         };
       };
 

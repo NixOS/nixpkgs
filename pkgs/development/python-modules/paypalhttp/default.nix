@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, pyopenssl
-, requests
-, six
+  # propagates
+  pyopenssl,
+  requests,
+  six,
 
-# tests
-, pytestCheckHook
-, responses
+  # tests
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "paypal";
     repo = "paypalhttp_python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3ihcpYtpcejPkiyf4g4jveyNU6flQB2sv9EZ5Pd7tUc=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/http_response_test.py \
+      --replace-fail assertEquals assertEqual
+  '';
 
   propagatedBuildInputs = [
     requests

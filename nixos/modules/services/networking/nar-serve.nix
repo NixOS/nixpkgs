@@ -1,21 +1,31 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-with lib;
 let
+  inherit (lib) mkOption types;
   cfg = config.services.nar-serve;
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary maintainers.zimbatm ];
+    maintainers = with lib.maintainers; [
+      rizary
+      zimbatm
+    ];
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption (lib.mdDoc "serving NAR file contents via HTTP");
+      enable = lib.mkEnableOption "serving NAR file contents via HTTP";
+
+      package = lib.mkPackageOption pkgs "nar-serve" { };
 
       port = mkOption {
         type = types.port;
         default = 8383;
-        description = lib.mdDoc ''
+        description = ''
           Port number where nar-serve will listen on.
         '';
       };
@@ -23,7 +33,7 @@ in
       cacheURL = mkOption {
         type = types.str;
         default = "https://cache.nixos.org/";
-        description = lib.mdDoc ''
+        description = ''
           Binary cache URL to connect to.
 
           The URL format is compatible with the nix remote url style, such as:
@@ -32,10 +42,21 @@ in
           - gs:// for binary caches stored in Google Cloud Storage
         '';
       };
+
+      domain = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          When set, enables the feature of serving <nar-hash>.<domain>
+          on top of <domain>/nix/store/<nar-hash>-<pname>.
+
+          Useful to preview static websites where paths are absolute.
+        '';
+      };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.nar-serve = {
       description = "NAR server";
       after = [ "network.target" ];
@@ -47,7 +68,7 @@ in
       serviceConfig = {
         Restart = "always";
         RestartSec = "5s";
-        ExecStart = "${pkgs.nar-serve}/bin/nar-serve";
+        ExecStart = lib.getExe cfg.package;
         DynamicUser = true;
       };
     };

@@ -2,12 +2,15 @@
 # central list to prevent id collisions.
 
 # IMPORTANT!
-# We only add static uids and gids for services where it is not feasible
-# to change uids/gids on service start, for example a service with a lot of
-# files. Please also check if the service is applicable for systemd's
-# DynamicUser option and does not need a uid/gid allocation at all.
-# Systemd can also change ownership of service directories using the
-# RuntimeDirectory/StateDirectory options.
+#
+# https://github.com/NixOS/rfcs/blob/master/rfcs/0052-dynamic-ids.md
+#
+# Use of static ids is deprecated within NixOS. Dynamic allocation is
+# required, barring special circumstacnes. Please check if the service
+# is applicable for systemd's DynamicUser option and does not need a
+# uid/gid allocation at all.  Systemd can also change ownership of
+# service directories using the RuntimeDirectory/StateDirectory
+# options.
 
 { lib, ... }:
 
@@ -19,7 +22,7 @@ in
 
     ids.uids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The user IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -27,14 +30,13 @@ in
 
     ids.gids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The group IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
     };
 
   };
-
 
   config = {
 
@@ -111,7 +113,7 @@ in
       postgres = 71;
       #vboxusers = 72; # unused
       #vboxsf = 73; # unused
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -180,7 +182,7 @@ in
       #dnsmasq = 141;# dynamically allocated as of 2021-09-03
       #uhub = 142; # unused
       yandexdisk = 143;
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145;# dynamically allocated as of 2021-09-03
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -237,7 +239,7 @@ in
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
-      #shout = 206; # dynamically allocated as of 2021-09-18
+      #shout = 206; # dynamically allocated as of 2021-09-18, module removed 2024-10-19
       gateone = 207;
       namecoin = 208;
       #lxd = 210; # unused
@@ -288,16 +290,16 @@ in
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
-      ipfs  = 261;
+      ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
-      gogs = 268;
+      # gogs = 268; # unused, removed in 2024-10-12
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
@@ -313,7 +315,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       #monero = 287; # dynamically allocated as of 2021-05-08
@@ -327,7 +329,7 @@ in
       hdfs = 295;
       mapred = 296;
       hadoop = 297;
-      hydron = 298;
+      #hydron = 298; # removed 2024-08-03
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
@@ -357,7 +359,24 @@ in
       localtimed = 325;
       automatic-timezoned = 326;
 
-      # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
+      # When adding a uid, make sure it doesn't match an existing gid.
+      #
+      # !!! Don't use uids above "399"! !!!
+      #
+      # The reason behind this restriction is that, NixOS by default allocates
+      # system user UIDs/GIDs in the range of `400..999`. System users/groups
+      # created using command like `useradd` will have UID and GID in this range[1].
+      #
+      # If a newly added ID goes beyond "399", it may conflict with existing
+      # system user or group of the same id in someone else's NixOS.
+      # This could break their system and make that person upset for a whole day.
+      #
+      # Sidenote: the default is defined in `shadow` module[2], and the relavent change
+      # was made way back in 2014[3].
+      #
+      # [1]: https://man7.org/linux/man-pages/man5/login.defs.5.html#:~:text=SYS_UID_MAX%20(number)%2C%20SYS_UID_MIN%20(number)
+      # [2]: <nixos/modules/programs/shadow.nix>
+      # [3]: https://github.com/NixOS/nixpkgs/commit/0e23a175de3687df8232fe118cbe87f04228ff28
 
       nixbld = 30000; # start of range of uids
       nobody = 65534;
@@ -436,7 +455,7 @@ in
       postgres = 71;
       vboxusers = 72;
       vboxsf = 73;
-      smbguest = 74;  # unused
+      smbguest = 74; # unused
       varnish = 75;
       datadog = 76;
       lighttpd = 77;
@@ -503,7 +522,7 @@ in
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      mxisd = 144; # was once collectd
+      # mxisd = 144; # removed 2024-07-10
       #consul = 145; # unused
       #mailpile = 146; # removed 2022-01-12
       redmine = 147;
@@ -599,7 +618,7 @@ in
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
@@ -608,7 +627,7 @@ in
       sickbeard = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
-      gogs = 268;
+      # gogs = 268; # unused, removed in 2024-10-12
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
       #geoip = 272; # unused
@@ -623,7 +642,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       # monero = 287; # dynamically allocated as of 2021-05-08
@@ -637,7 +656,7 @@ in
       hdfs = 295;
       mapred = 296;
       hadoop = 297;
-      hydron = 298;
+      #hydron = 298; # removed 2024-08-03
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
@@ -669,7 +688,24 @@ in
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
-      # uids and gids. Also, don't use gids above 399!
+      # uids and gids.
+      #
+      # !!! Don't use gids above "399"! !!!
+      #
+      # The reason behind this restriction is that, NixOS by default allocates
+      # system user UIDs/GIDs in the range of `400..999`. System users/groups
+      # created using command like `useradd` will have UID and GID in this range[1].
+      #
+      # If a newly added ID goes beyond "399", it may conflict with existing
+      # system user or group of the same id in someone else's NixOS.
+      # This could break their system and make that person upset for a whole day.
+      #
+      # Sidenote: the default is defined in `shadow` module[2], and the relavent change
+      # was made way back in 2014[3].
+      #
+      # [1]: https://man7.org/linux/man-pages/man5/login.defs.5.html#:~:text=SYS_UID_MAX%20(number)%2C%20SYS_UID_MIN%20(number)
+      # [2]: <nixos/modules/programs/shadow.nix>
+      # [3]: https://github.com/NixOS/nixpkgs/commit/0e23a175de3687df8232fe118cbe87f04228ff28
 
       # For exceptional cases where you really need a gid above 399, leave a
       # comment stating why.

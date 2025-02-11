@@ -1,26 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, bzip2
-, curl
-, zlib
-, zstd
-, libiconv
-, CoreServices
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  bzip2,
+  curl,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-cinnabar";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     rev = finalAttrs.version;
-    hash = "sha256-1Y4zd4rYNRatemDXRMkQQwBJdkfOGfDWk9QBvJOgi7s=";
+    hash = "sha256-RUrklp2hobHKnBZKVvxMGquNSZBG/rVWaD/m+7AWqHo=";
     fetchSubmodules = true;
   };
 
@@ -35,19 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    CoreServices
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-p85AS2DukUzEbW9UGYmiF3hpnZvPrZ2sRaeA9dU8j/8=";
+    hash = "sha256-B2wLxSedFEgL+DPH4D6qL46ovcBZhPSacsYJKscKDYQ=";
   };
 
   ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
+
+  # Disable automated version-check
+  buildNoDefaultFeatures = true;
+  checkNoDefaultFeatures = true;
 
   installPhase = ''
     runHook preInstall

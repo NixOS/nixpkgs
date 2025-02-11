@@ -1,43 +1,44 @@
-{ lib, stdenv
-, substituteAll
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, gettext
-, makeWrapper
-, pkg-config
-, vala
-, wrapGAppsHook
-, dbus
-, systemd
-, dconf ? null
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, gtk2
-, gtk3
-, gtk4
-, gtk-doc
-, runCommand
-, isocodes
-, cldr-annotations
-, unicode-character-database
-, unicode-emoji
-, python3
-, json-glib
-, libnotify ? null
-, enableUI ? true
-, withWayland ? false
-, libxkbcommon
-, wayland
-, buildPackages
-, runtimeShell
-, nixosTests
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  autoreconfHook,
+  gettext,
+  makeWrapper,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  dbus,
+  systemd,
+  dconf ? null,
+  glib,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  gtk-doc,
+  libdbusmenu-gtk3,
+  runCommand,
+  isocodes,
+  cldr-annotations,
+  unicode-character-database,
+  unicode-emoji,
+  python3,
+  json-glib,
+  libnotify ? null,
+  enableUI ? true,
+  withWayland ? true,
+  libxkbcommon,
+  wayland,
+  buildPackages,
+  runtimeShell,
+  nixosTests,
 }:
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
-  python3BuildEnv = python3.buildEnv.override {
+  python3BuildEnv = python3.pythonOnBuildForHost.buildEnv.override {
     # ImportError: No module named site
     postBuild = ''
       makeWrapper ${glib.dev}/bin/gdbus-codegen $out/bin/gdbus-codegen --unset PYTHONPATH
@@ -47,23 +48,26 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
-      makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus}/share/dbus-1/session.conf
-  '';
+  dbus-launch =
+    runCommand "sandbox-dbus-launch"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+      }
+      ''
+        makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+          --add-flags --config-file=${dbus}/share/dbus-1/session.conf
+      '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.28";
+  version = "1.5.31";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-zjV+QkhVkrHFs9Vt1FpbvmS4nRHxwKaKU3mQkSgyLaQ=";
+    sha256 = "sha256-YMCtLIK/9iUdS37Oiow7WMhFFPKhomNXvzWbLzlUkdQ=";
   };
 
   patches = [
@@ -73,22 +77,21 @@ stdenv.mkDerivation rec {
       pythonSitePackages = python3.sitePackages;
     })
     ./build-without-dbus-launch.patch
-    # unicode and emoji input are broken before 1.5.29
-    # https://github.com/NixOS/nixpkgs/issues/226526
-    (fetchpatch {
-      url = "https://github.com/ibus/ibus/commit/7c8abbe89403c2fcb08e3fda42049a97187e53ab.patch";
-      hash = "sha256-59HzAdLq8ahrF7K+tFGLjTodwIiTkJGEkFe8quqIkhU=";
-    })
-    # fix SIGABRT in X11 https://github.com/ibus/ibus/issues/2484
-    (fetchpatch {
-      url = "https://github.com/ibus/ibus/commit/8f706d160631f1ffdbfa16543a38b9d5f91c16ad.patch";
-      hash = "sha256-YzS9TmUWW0OmheDeCeU00kFK2U2QEmKYMSRJAbu14ec=";
-    })
   ];
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   postPatch = ''
+    # Maintainer does not want to create separate tarballs for final release candidate and release versions,
+    # so we need to set `ibus_released` to `1` in `configure.ac`. Otherwise, anyone running `ibus version` gets
+    # a version with an inaccurate `-rcX` suffix.
+    # https://github.com/ibus/ibus/issues/2584
+    substituteInPlace configure.ac --replace "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
+
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
     substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
@@ -98,27 +101,34 @@ stdenv.mkDerivation rec {
   preAutoreconf = "touch ChangeLog";
 
   configureFlags = [
+    # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
+    # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
+    # https://github.com/NixOS/nixpkgs/issues/21751
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
     "--disable-memconf"
     (lib.enableFeature (dconf != null) "dconf")
     (lib.enableFeature (libnotify != null) "libnotify")
     (lib.enableFeature withWayland "wayland")
     (lib.enableFeature enableUI "ui")
+    "--disable-gtk2"
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
+    "--with-python=${python3BuildEnv.interpreter}"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
-
-  # missing make dependency
-  # https://github.com/NixOS/nixpkgs/pull/218120#issuecomment-1514027173
-  preBuild = ''
-    make -C src ibusenumtypes.h
-  '';
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
     "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -129,7 +139,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3BuildEnv
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     dbus-launch
     gobject-introspection
   ];
@@ -138,22 +148,25 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs = [
-    dbus
-    systemd
-    dconf
-    gdk-pixbuf
-    python3.pkgs.pygobject3 # for pygobject overrides
-    gtk2
-    gtk3
-    gtk4
-    isocodes
-    json-glib
-    libnotify
-  ] ++ lib.optionals withWayland [
-    libxkbcommon
-    wayland
-  ];
+  buildInputs =
+    [
+      dbus
+      systemd
+      dconf
+      gdk-pixbuf
+      python3.pkgs.pygobject3 # for pygobject overrides
+      gtk3
+      gtk4
+      isocodes
+      json-glib
+      libnotify
+      libdbusmenu-gtk3
+      vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+    ]
+    ++ lib.optionals withWayland [
+      libxkbcommon
+      wayland
+    ];
 
   enableParallelBuilding = true;
 
@@ -187,6 +200,6 @@ stdenv.mkDerivation rec {
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel yana ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

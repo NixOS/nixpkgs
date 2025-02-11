@@ -1,47 +1,49 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, removeReferencesTo
-, cppSupport ? false
-, fortranSupport ? false
-, fortran
-, zlibSupport ? true
-, zlib
-, szipSupport ? false
-, szip
-, mpiSupport ? false
-, mpi
-, enableShared ? !stdenv.hostPlatform.isStatic
-, javaSupport ? false
-, jdk
-, usev110Api ? false
-, threadsafe ? false
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  removeReferencesTo,
+  cppSupport ? true,
+  fortranSupport ? false,
+  fortran,
+  zlibSupport ? true,
+  zlib,
+  szipSupport ? false,
+  szip,
+  mpiSupport ? false,
+  mpi,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  javaSupport ? false,
+  jdk,
+  usev110Api ? false,
+  threadsafe ? false,
+  python3,
 }:
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
 assert !cppSupport || !mpiSupport;
 
-let inherit (lib) optional optionals; in
+let
+  inherit (lib) optional optionals;
+in
 
 stdenv.mkDerivation rec {
-  version = "1.14.3";
-  pname = "hdf5"
+  version = "1.14.5";
+  pname =
+    "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
     + lib.optionalString mpiSupport "-mpi"
     + lib.optionalString threadsafe "-threadsafe";
 
-  src = fetchurl {
-    url =
-      let
-        majorMinor = lib.versions.majorMinor version;
-        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
-      in
-      "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-lCXyJO110SgLtG1vJpI92Tj5BA5+rr9X5m7HNXwI+Rc=";
+  src = fetchFromGitHub {
+    owner = "HDFGroup";
+    repo = "hdf5";
+    rev = "hdf5_${version}";
+    hash = "sha256-bvtSeyqqrBXVAMzUtiKOhO9RR4SCO+3GnsLux4Mig6I=";
   };
 
   passthru = {
@@ -58,38 +60,73 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
-  nativeBuildInputs = [ removeReferencesTo cmake ]
-    ++ optional fortranSupport fortran;
+  nativeBuildInputs = [
+    removeReferencesTo
+    cmake
+  ] ++ optional fortranSupport fortran;
 
-  buildInputs = optional fortranSupport fortran
-    ++ optional szipSupport szip
-    ++ optional javaSupport jdk;
+  buildInputs =
+    optional fortranSupport fortran ++ optional szipSupport szip ++ optional javaSupport jdk;
 
-  propagatedBuildInputs = optional zlibSupport zlib
-    ++ optional mpiSupport mpi;
+  propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
-  cmakeFlags = [
-    "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
-  ] ++ lib.optional stdenv.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
+  cmakeFlags =
+    [
+      "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
+      "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
     ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
     ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
     ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
-    ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" "CC=${mpi}/bin/mpicc" ]
+    ++ lib.optionals mpiSupport [ "-DHDF5_ENABLE_PARALLEL=ON" ]
     ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
     ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
     ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
-    ++ lib.optionals threadsafe [ "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON" "-DHDF5_BUILD_HL_LIB=OFF" ]
-  ;
+    ++ lib.optionals threadsafe [
+      "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON"
+      "-DHDF5_BUILD_HL_LIB=OFF"
+    ]
+    # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
+    # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
+    ++ lib.optional (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+    ) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF";
 
-  postInstall = ''
-    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    moveToOutput 'bin/h5cc' "''${!outputDev}"
-    moveToOutput 'bin/h5c++' "''${!outputDev}"
-    moveToOutput 'bin/h5fc' "''${!outputDev}"
-    moveToOutput 'bin/h5pcc' "''${!outputDev}"
-  '';
+  postInstall =
+    ''
+      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+      moveToOutput 'bin/' "''${!outputBin}"
+      moveToOutput 'bin/h5cc' "''${!outputDev}"
+      moveToOutput 'bin/h5c++' "''${!outputDev}"
+      moveToOutput 'bin/h5fc' "''${!outputDev}"
+      moveToOutput 'bin/h5pcc' "''${!outputDev}"
+      moveToOutput 'bin/h5hlcc' "''${!outputDev}"
+      moveToOutput 'bin/h5hlc++' "''${!outputDev}"
+    ''
+    +
+      lib.optionalString enableShared
+        # The shared build creates binaries with -shared suffixes,
+        # so we remove these suffixes.
+        ''
+          pushd ''${!outputBin}/bin
+          for file in *-shared; do
+            mv "$file" "''${file%%-shared}"
+          done
+          popd
+        ''
+    + lib.optionalString fortranSupport ''
+      mv $out/mod/shared $dev/include
+      rm -r $out/mod
+
+      find "$out" -type f -exec remove-references-to -t ${fortran} '{}' +
+    '';
 
   enableParallelBuilding = true;
 

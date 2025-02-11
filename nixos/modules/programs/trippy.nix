@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.trippy;
@@ -7,7 +12,7 @@ in
 {
   options = {
     programs.trippy = {
-      enable = lib.mkEnableOption (lib.mdDoc "trippy");
+      enable = lib.mkEnableOption "trippy, a network diagnostic tool";
     };
   };
 

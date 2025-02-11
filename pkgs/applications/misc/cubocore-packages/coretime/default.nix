@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtmultimedia, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  qtmultimedia,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "coretime";
@@ -24,7 +34,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A time related task manager from the C Suite";
+    description = "Time related task manager from the C Suite";
+    mainProgram = "coretime";
     homepage = "https://gitlab.com/cubocore/coreapps/coretime";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

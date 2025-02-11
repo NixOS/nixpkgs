@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, extra-cmake-modules
-, pkg-config
-, qtbase
-, qtquickcontrols2
-, qtx11extras
-, kdelibs4support
-, kpipewire
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qtx11extras ? null, # qt5 only
+  kcoreaddons,
+  ki18n,
+  knotifications,
+  kpipewire,
+  kstatusnotifieritem ? null, # qt6 only
+  kwindowsystem,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwaylandvideobridge";
-  version = "0.2";
+  version = "0.4.0";
 
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "system";
-    repo = "xwaylandvideobridge";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-79Z4BH7C85ZF+1Zivs3bTey7IdUnaDKhvZxzL6sDqUs=";
+  src = fetchurl {
+    url = "mirror://kde/stable/xwaylandvideobridge/xwaylandvideobridge-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6nKseypnV46ZlNywYZYC6tMJekb7kzZmHaIA5jkn6+Y=";
   };
 
   nativeBuildInputs = [
@@ -33,16 +35,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtbase
-    qtquickcontrols2
+    qtdeclarative
     qtx11extras
-    kdelibs4support
+    kcoreaddons
+    ki18n
+    knotifications
     kpipewire
+    kstatusnotifieritem
+    kwindowsystem
   ];
+
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
 
   meta = {
     description = "Utility to allow streaming Wayland windows to X applications";
     homepage = "https://invent.kde.org/system/xwaylandvideobridge";
-    license = lib.licenses.gpl2Plus;
+    license = with lib.licenses; [
+      bsd3
+      cc0
+      gpl2Plus
+    ];
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = lib.platforms.linux;
     mainProgram = "xwaylandvideobridge";

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, nixosTests, jre_headless, version, url, sha1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  jre_headless,
+  makeWrapper,
+  udev,
+  version,
+  url,
+  sha1,
+}:
 stdenv.mkDerivation {
   pname = "minecraft-server";
   inherit version;
@@ -7,16 +18,18 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
-    mkdir -p $out/bin $out/lib/minecraft
-    cp -v $src $out/lib/minecraft/server.jar
+    runHook preInstall
 
-    cat > $out/bin/minecraft-server << EOF
-    #!/bin/sh
-    exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
-    EOF
+    install -Dm644 $src $out/lib/minecraft/server.jar
 
-    chmod +x $out/bin/minecraft-server
+    makeWrapper ${lib.getExe jre_headless} $out/bin/minecraft-server \
+      --append-flags "-jar $out/lib/minecraft/server.jar nogui" \
+      ${lib.optionalString stdenv.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
+
+    runHook postInstall
   '';
 
   dontUnpack = true;
@@ -32,6 +45,10 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice tomberek costrouc joelkoen ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      tomberek
+      costrouc
+    ];
   };
 }

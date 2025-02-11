@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, libX11
-, libXrandr
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  libX11,
+  libXrandr,
 }:
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   pname = "spice-autorandr";
   version = "0.0.2";
 
@@ -18,8 +19,14 @@ stdenv.mkDerivation  {
     hash = "sha256-eBvzalWT3xI8+uNns0/ZyRes91ePpj0beKb8UBVqo0E=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libX11 libXrandr ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libX11
+    libXrandr
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -31,7 +38,8 @@ stdenv.mkDerivation  {
   '';
 
   meta = {
-    description = "Automatically adjust the client window resolution in Linux KVM guests using the SPICE driver.";
+    description = "Automatically adjust the client window resolution in Linux KVM guests using the SPICE driver";
+    mainProgram = "spice-autorandr";
     longDescription = ''
       Some desktop environments update the display resolution automatically,
       this package is only useful when running without a DE or with a DE that
@@ -45,6 +53,6 @@ stdenv.mkDerivation  {
     maintainers = with lib.maintainers; [
       dmytrokyrychuk
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, imlib2, file, lcms2, libexif } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  imlib2,
+  file,
+  lcms2,
+  libexif,
+}:
 
 stdenv.mkDerivation (rec {
   version = "2.3.3";
@@ -10,9 +20,15 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 imlib2 file lcms2 libexif ];
+  buildInputs = [
+    gtk2
+    imlib2
+    file
+    lcms2
+    libexif
+  ];
 
-  preBuild=''
+  preBuild = ''
     substituteInPlace Makefile --replace /usr/local "$out"
     substituteInPlace Makefile --replace /man/ /share/man/
     substituteInPlace Makefile --replace /share/share/ /share/
@@ -23,5 +39,6 @@ stdenv.mkDerivation (rec {
     homepage = "http://spiegl.de/qiv/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    mainProgram = "qiv";
   };
 })

@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beautifulsoup4,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pylyrics";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyLyrics";
@@ -22,9 +29,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Pythonic Implementation of lyrics.wikia.com for getting lyrics of songs ";
+    description = "Pythonic Implementation of lyrics.wikia.com for getting lyrics of songs";
     homepage = "https://github.com/geekpradd/PyLyrics";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,8 +1,16 @@
-{ lib, makeSetupHook, dart, yq, jq }:
+{
+  lib,
+  makeSetupHook,
+  dart,
+  yq,
+  jq,
+}:
 
 {
   dartConfigHook = makeSetupHook {
     name = "dart-config-hook";
+    substitutions.yq = "${yq}/bin/yq";
+    substitutions.jq = "${jq}/bin/jq";
   } ./dart-config-hook.sh;
   dartBuildHook = makeSetupHook {
     name = "dart-build-hook";

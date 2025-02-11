@@ -1,39 +1,34 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+  apr,
+  aprutil,
+  bash,
+  gcc,
+  pycxx,
+  subversion,
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.20";
-  format = "other";
+  version = "1.9.23";
+  pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
-    hash = "sha256-LbAz+KjEY3nkSJAzJNwlnSRYoWr4i1ITRUPV3ZBH7cc=";
+    hash = "sha256-ABru1nng1RaYfZwe0Z0NxE90rU/J2h/BhzUnvgrasCk=";
   };
 
-  patches = [
-    ./replace-python-first.patch
-  ];
+  patches = [ ./replace-python-first.patch ];
 
-  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  buildInputs = [
+    subversion
+    apr
+    aprutil
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
@@ -49,14 +44,12 @@ buildPythonPackage rec {
       --svn-bin-dir=${subversion.out}/bin
   '';
 
-  nativeCheckInputs = [ glibcLocales ];
-
   checkPhase = ''
     runHook preCheck
 
     # It is not only shebangs, some tests also write scripts dynamically
     # so it is easier to simply search and replace
-    sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
+    sed -i "s|/bin/bash|${lib.getExe bash}|" ../Tests/test-*.sh
     make -C ../Tests
 
     runHook postCheck
@@ -80,6 +73,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
     # g++: command not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

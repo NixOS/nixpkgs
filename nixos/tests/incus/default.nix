@@ -2,13 +2,48 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../../.. { inherit system config; },
-  handleTestOn,
+  lts ? true,
+  ...
 }:
+let
+  incusTest = import ./incus-tests.nix;
+in
 {
-  container = import ./container.nix { inherit system pkgs; };
-  preseed = import ./preseed.nix { inherit system pkgs; };
-  socket-activated = import ./socket-activated.nix { inherit system pkgs; };
-  virtual-machine = handleTestOn [ "x86_64-linux" ] ./virtual-machine.nix {
-    inherit system pkgs;
+  all = incusTest {
+    inherit lts pkgs system;
+    allTests = true;
+  };
+
+  container = incusTest {
+    inherit lts pkgs system;
+    instanceContainer = true;
+  };
+
+  lvm = incusTest {
+    inherit lts pkgs system;
+    storageLvm = true;
+  };
+
+  lxd-to-incus = import ./lxd-to-incus.nix {
+    inherit lts pkgs system;
+  };
+
+  openvswitch = incusTest {
+    inherit lts pkgs system;
+    networkOvs = true;
+  };
+
+  ui = import ./ui.nix {
+    inherit lts pkgs system;
+  };
+
+  virtual-machine = incusTest {
+    inherit lts pkgs system;
+    instanceVm = true;
+  };
+
+  zfs = incusTest {
+    inherit lts pkgs system;
+    storageLvm = true;
   };
 }

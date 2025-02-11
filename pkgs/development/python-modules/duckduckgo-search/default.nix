@@ -1,49 +1,51 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, setuptools
-, aiofiles
-, click
-, h2
-, httpx
-, lxml
-, requests
-, socksio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  click,
+  primp,
+
+  # Optional dependencies
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "3.9.4";
+  version = "7.2.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "duckduckgo_search";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-R96ezs0INIZAXTcD1eWXuj4MSJvCbtbgzgC3ls7wYyI=";
+    tag = "v${version}";
+    hash = "sha256-6hYSABD66yfvkL8bmy84ElIWp49SMQ1R1/B2mDwWIS0=";
   };
 
-  format = "pyproject";
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
-    aiofiles
+  dependencies = [
     click
-    h2
-    httpx
-    lxml
-    requests
-    socksio
-  ] ++ httpx.optional-dependencies.brotli
-    ++ httpx.optional-dependencies.http2
-    ++ httpx.optional-dependencies.socks;
+    primp
+  ] ++ optional-dependencies.lxml;
+
+  optional-dependencies = {
+    lxml = [ lxml ];
+  };
+
+  doCheck = false; # tests require network access
 
   pythonImportsCheck = [ "duckduckgo_search" ];
 
   meta = {
-    description = "A python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";
+    description = "Python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";
+    mainProgram = "ddgs";
     homepage = "https://github.com/deedy5/duckduckgo_search";
+    changelog = "https://github.com/deedy5/duckduckgo_search/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }

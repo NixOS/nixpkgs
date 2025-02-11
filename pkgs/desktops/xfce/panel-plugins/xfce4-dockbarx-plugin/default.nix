@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bash
-, cmake
-, dockbarx
-, gobject-introspection
-, keybinder3
-, pkg-config
-, python3Packages
-, wrapGAppsHook
-, xfce
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  dockbarx,
+  gobject-introspection,
+  keybinder3,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook3,
+  xfce,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     pkg-config
     python3Packages.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -41,8 +42,7 @@ stdenv.mkDerivation rec {
     python3Packages.python
     xfce.xfce4-panel
     xfce.xfconf
-  ]
-  ++ pythonPath;
+  ] ++ pythonPath;
 
   postPatch = ''
     # We execute the wrapped xfce4-panel-plug directly.

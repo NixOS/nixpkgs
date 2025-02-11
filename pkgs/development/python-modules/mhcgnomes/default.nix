@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pandas
-, pyyaml
-, serializable
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pandas,
+  pyyaml,
+  serializable,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-KKiBlnFlavRnaQnOpAzG0dyxmFB+zF9L6t/H05LkFZE=";
   };
 
-  propagatedBuildInputs = [ pandas pyyaml serializable ];
+  propagatedBuildInputs = [
+    pandas
+    pyyaml
+    serializable
+  ];
 
   pythonImportsCheck = [ "mhcgnomes" ];
 

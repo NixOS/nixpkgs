@@ -1,9 +1,11 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }@moduleArgs:
 
 with lib;
 with utils;
 
 let
+  # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+  escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
 
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
@@ -30,15 +32,19 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
+      enable = mkEnableOption "the filesystem mount" // {
+        default = true;
+      };
+
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
-        description = lib.mdDoc "Location of the mounted file system.";
+        description = "Location of the mounted file system.";
       };
 
       stratis.poolUuid = lib.mkOption {
         type = types.uniq (types.nullOr types.str);
-        description = lib.mdDoc ''
+        description = ''
           UUID of the stratis pool that the fs is located in
         '';
         example = "04c68063-90a5-4235-b9dd-6180098a20d9";
@@ -49,20 +55,23 @@ let
         default = null;
         example = "/dev/sda";
         type = types.nullOr nonEmptyStr;
-        description = lib.mdDoc "Location of the device.";
+        description = "Location of the device.";
       };
 
       fsType = mkOption {
         default = "auto";
         example = "ext3";
         type = nonEmptyStr;
-        description = lib.mdDoc "Type of the file system.";
+        description = "Type of the file system.";
       };
 
       options = mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
-        description = lib.mdDoc "Options used to mount the file system.";
+        description = ''
+          Options used to mount the file system.
+          See {manpage}`mount(8)` for common options.
+        '';
         type = types.nonEmptyListOf nonEmptyStr;
       };
 
@@ -70,7 +79,7 @@ let
         default = [ ];
         example = [ "/persist" ];
         type = types.listOf nonEmptyWithoutTrailingSlash;
-        description = lib.mdDoc ''
+        description = ''
           List of paths that should be mounted before this one. This filesystem's
           {option}`device` and {option}`mountPoint` are always
           checked and do not need to be included explicitly. If a path is added
@@ -97,15 +106,15 @@ let
         default = null;
         example = "root-partition";
         type = types.nullOr nonEmptyStr;
-        description = lib.mdDoc "Label of the device (if any).";
+        description = "Label of the device (if any).";
       };
 
       autoFormat = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           If the device does not currently contain a filesystem (as
-          determined by {command}`blkid`, then automatically
+          determined by {command}`blkid`), then automatically
           format it with the filesystem type specified in
           {option}`fsType`.  Use with caution.
         '';
@@ -120,7 +129,7 @@ let
       autoResize = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           If set, the filesystem is grown to its maximum size before
           being mounted. (This is typically the size of the containing
           partition.) This is currently only supported for ext2/3/4
@@ -131,15 +140,28 @@ let
       noCheck = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Disable running fsck on this filesystem.";
+        description = "Disable running fsck on this filesystem.";
       };
 
     };
 
-    config.options = mkMerge [
+    config.device = lib.mkIf (config.label != null) (lib.mkDefault "/dev/disk/by-label/${escape config.label}");
+
+    config.options = let
+      inInitrd = utils.fsNeededForBoot config;
+    in mkMerge [
       (mkIf config.autoResize [ "x-systemd.growfs" ])
       (mkIf config.autoFormat [ "x-systemd.makefs" ])
       (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+      (mkIf
+        # With scripted stage 1, depends is implemented by sorting 'config.system.build.fileSystems'
+        (lib.length config.depends > 0 && (inInitrd -> moduleArgs.config.boot.initrd.systemd.enable))
+        (
+          map (
+            x: "x-systemd.requires-mounts-for=${optionalString inInitrd "/sysroot"}${x}"
+          ) config.depends
+        )
+      )
     ];
 
   };
@@ -185,11 +207,8 @@ let
       ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
-      # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
-      escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
     in fstabFileSystems: { }: concatMapStrings (fs:
       (if fs.device != null then escape fs.device
-         else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType
@@ -222,7 +241,8 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
-      description = lib.mdDoc ''
+      apply = lib.filterAttrs (_: fs: fs.enable);
+      description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (`mountPoint = "/"`).  Each
         entry in the list is an attribute set with the following fields:
@@ -242,21 +262,35 @@ in
     system.fsPackages = mkOption {
       internal = true;
       default = [ ];
-      description = lib.mdDoc "Packages supplying file system mounters and checkers.";
+      description = "Packages supplying file system mounters and checkers.";
     };
 
     boot.supportedFilesystems = mkOption {
-      default = [ ];
-      example = [ "btrfs" ];
-      type = types.listOf types.str;
-      description = lib.mdDoc "Names of supported filesystem types.";
+      default = { };
+      example = lib.literalExpression ''
+        {
+          btrfs = true;
+          zfs = lib.mkForce false;
+        }
+      '';
+      type = types.coercedTo
+        (types.listOf types.str)
+        (enabled: lib.listToAttrs (map (fs: lib.nameValuePair fs true) enabled))
+        (types.attrsOf types.bool);
+      description = ''
+        Names of supported filesystem types, or an attribute set of file system types
+        and their state. The set form may be used together with `lib.mkForce` to
+        explicitly disable support for specific filesystems, e.g. to disable ZFS
+        with an unsupported kernel.
+      '';
     };
 
     boot.specialFileSystems = mkOption {
       default = {};
       type = types.attrsOf (types.submodule coreFileSystemOpts);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         Special filesystems that are mounted very early during boot.
       '';
     };
@@ -265,8 +299,8 @@ in
       default = "5%";
       example = "32m";
       type = types.str;
-      description = lib.mdDoc ''
-        Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+      description = ''
+        Size limit for the /dev tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -275,8 +309,8 @@ in
       default = "50%";
       example = "256m";
       type = types.str;
-      description = lib.mdDoc ''
-        Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+      description = ''
+        Size limit for the /dev/shm tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -285,8 +319,8 @@ in
       default = "25%";
       example = "256m";
       type = types.str;
-      description = lib.mdDoc ''
-        Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+      description = ''
+        Size limit for the /run tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -329,7 +363,15 @@ in
           options.
         '';
       }
-    ];
+    ] ++ lib.map (fs: {
+      assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
+      message = ''
+        The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
+          label: ${toString fs.label}
+          device: ${toString fs.device}
+        'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
+      '';
+    }) fileSystems;
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
@@ -406,7 +448,8 @@ in
             ConditionVirtualization = "!container";
             DefaultDependencies = false; # needed to prevent a cycle
           };
-          before = [ "systemd-pstore.service" ];
+          before = [ "systemd-pstore.service" "shutdown.target" ];
+          conflicts = [ "shutdown.target" ];
           wantedBy = [ "systemd-pstore.service" ];
         };
       };

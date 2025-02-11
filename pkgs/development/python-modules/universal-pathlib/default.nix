@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, setuptools-scm
-, fsspec
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  fsspec,
 }:
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.1.4";
-  format = "pyproject";
+  version = "0.2.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-guXYbRaifg6hrcfYisvLqdAtWkVIgWMXT5bZrCidsuQ=";
+    hash = "sha256-UIF6rqqfQWPLHnb1vfhCB/oFznKLI/13lHmzRi5UMKw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    fsspec
-  ];
+  dependencies = [ fsspec ];
 
   pythonImportsCheck = [ "upath" ];
 

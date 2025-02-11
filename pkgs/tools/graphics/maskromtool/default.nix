@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, qt6
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qt6,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "maskromtool";
-  version = "2023-09-13";
+  version = "2024-08-18";
 
   src = fetchFromGitHub {
     owner = "travisgoodspeed";
     repo = "maskromtool";
     rev = "v${version}";
-    hash = "sha256-HZOQFFEADjmd3AbZLK3Qr57Jw+DKkRa3cMxW0mU77Us=";
+    hash = "sha256-iuCjAAVEKVwJuAgKITwkXGhKau2DVWhFQLPjp28tjIo=";
   };
 
   buildInputs = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A CAD tool for extracting bits from Mask ROM photographs";
+    description = "CAD tool for extracting bits from Mask ROM photographs";
     homepage = "https://github.com/travisgoodspeed/maskromtool";
     license = [
       lib.licenses.beerware

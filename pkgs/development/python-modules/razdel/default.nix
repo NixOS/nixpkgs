@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,12 +15,13 @@ buildPythonPackage rec {
     hash = "sha256-QzTA/f401OiIzw7YVJaMnfFPClR9+Qmnf0Y0+f/mJuY=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
   pytestFlagsArray = [ "razdel" ];
-  pythonImportCheck = [ "razdel" ];
+  pythonImportsCheck = [ "razdel" ];
 
   meta = with lib; {
     description = "Rule-based system for Russian sentence and word tokenization";
+    mainProgram = "razdel-ctl";
     homepage = "https://github.com/natasha/razdel";
     license = licenses.mit;
     maintainers = with maintainers; [ npatsakula ];

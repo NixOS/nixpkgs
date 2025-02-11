@@ -59,24 +59,24 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
-    rustc.config = "armv7-linux-androideabi";
-    sdkVer = "28";
-    ndkVer = "24";
+    rust.rustcTarget = "armv7-linux-androideabi";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
-    rustc.config = "aarch64-linux-android";
-    sdkVer = "28";
-    ndkVer = "24";
+    rust.rustcTarget = "aarch64-linux-android";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "30";
-    ndkVer = "24";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
@@ -207,7 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
-    rustc.config = "aarch64-unknown-none";
+    rust.rustcTarget = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
@@ -235,6 +235,11 @@ rec {
     libc = "newlib";
   };
 
+  microblaze-embedded = {
+    config = "microblazeel-none-elf";
+    libc = "newlib";
+  };
+
   #
   # Redox
   #
@@ -251,7 +256,7 @@ rec {
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
@@ -260,7 +265,7 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
@@ -269,7 +274,7 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
     darwinPlatform = "ios-simulator";
@@ -279,7 +284,7 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
     darwinPlatform = "ios-simulator";
@@ -320,10 +325,23 @@ rec {
     libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  # LLVM-based mingw-w64 for ARM
+  ucrtAarch64 = {
+    config = "aarch64-w64-mingw32";
+    libc = "ucrt";
+    rust.rustcTarget = "aarch64-pc-windows-gnullvm";
+    useLLVM = true;
+  };
+
   # BSDs
 
+  aarch64-freebsd = {
+    config = "aarch64-unknown-freebsd";
+    useLLVM = true;
+  };
+
   x86_64-freebsd = {
-    config = "x86_64-unknown-freebsd13";
+    config = "x86_64-unknown-freebsd";
     useLLVM = true;
   };
 
@@ -337,12 +355,23 @@ rec {
     useLLVM = true;
   };
 
+  x86_64-openbsd = {
+    config = "x86_64-unknown-openbsd";
+    useLLVM = true;
+  };
+
   #
   # WASM
   #
 
   wasi32 = {
     config = "wasm32-unknown-wasi";
+    useLLVM = true;
+  };
+
+  wasm32-unknown-none = {
+    config = "wasm32-unknown-none";
+    rust.rustcTarget = "wasm32-unknown-unknown";
     useLLVM = true;
   };
 

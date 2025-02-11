@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, getmac
-, pythonOlder
-, requests
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  getmac,
+  pythonOlder,
+  requests,
+  setuptools,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.79";
-  format = "setuptools";
+  version = "0.2.105";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tschamm";
-    repo = pname;
-    rev = version;
-    hash = "sha256-boz4CiAmB9guhM9irW3m2ZRlt4mmcopWD+/3Y6O/Mxk=";
+    repo = "boschshcpy";
+    tag = version;
+    hash = "sha256-aouZryqn2qMdfqTFXP49UUY0X1HzQCldLQUBfnlUfHI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     getmac
     requests
@@ -32,9 +36,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "boschshcpy"
-  ];
+  pythonImportsCheck = [ "boschshcpy" ];
 
   meta = with lib; {
     description = "Python module to work with the Bosch Smart Home Controller API";

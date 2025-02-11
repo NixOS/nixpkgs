@@ -1,24 +1,26 @@
-{ pname
-, channel
-, lib
-, writeScript
-, xidel
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, runtimeShell
-, baseName ? "firefox"
-, basePath ? "pkgs/applications/networking/browsers/firefox-bin"
-, baseUrl
+{
+  pname,
+  channel,
+  lib,
+  writeScript,
+  xidel,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  runtimeShell,
+  baseName ? "firefox",
+  basePath ? "pkgs/applications/networking/browsers/firefox-bin",
+  baseUrl,
+  versionSuffix ? "",
 }:
 
 let
-  isBeta =
-    channel != "release";
+  isBeta = channel != "release";
 
-in writeScript "update-${pname}" ''
+in
+writeScript "update-${pname}" ''
   #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
@@ -27,7 +29,7 @@ in writeScript "update-${pname}" ''
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
 
-  gpg --receive-keys ADD7079479700DCADFDD5337E36D3B13F3D93274
+  curl https://keys.openpgp.org/vks/v1/by-fingerprint/14F26682D0916CDD81E37B6D61B7B526D98F0353 | gpg --import -
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -47,7 +49,9 @@ in writeScript "update-${pname}" ''
            grep "^[0-9]" | \
            sort --version-sort | \
            grep -v "funnelcake" | \
-           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
+           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)${versionSuffix}$" | ${
+             lib.optionalString (!isBeta) "grep -v \"b\" |"
+           } \
            tail -1`
 
   curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"
@@ -56,7 +60,7 @@ in writeScript "update-${pname}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep tar.bz2`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep tar.xz`
 
   cat > $tmpfile <<EOF
   {
@@ -71,11 +75,12 @@ in writeScript "update-${pname}" ''
     #  - inteprets sha and path as 2 lines
     for line in `echo "$shasums" | \
                  grep $arch | \
-                 grep "${baseName}-$version.tar.bz2$" | \
+                 grep "${baseName}-$version.tar.xz$" | \
                  tr " " ":"`; do
       # create an entry for every locale
       cat >> $tmpfile <<EOF
-      { url = "$url$version/`echo $line | cut -d":" -f3`";
+      {
+        url = "$url$version/`echo $line | cut -d":" -f3`";
         locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
         arch = "$arch";
         sha256 = "`echo $line | cut -d":" -f1`";
@@ -84,7 +89,7 @@ in writeScript "update-${pname}" ''
     done
   done
   cat >> $tmpfile <<EOF
-      ];
+    ];
   }
   EOF
 

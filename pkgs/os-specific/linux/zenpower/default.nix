@@ -1,4 +1,9 @@
-{ lib, stdenv, kernel, fetchFromGitea }:
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitea,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
@@ -24,9 +29,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs.";
+    description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexbakker artturin ];
+    maintainers = with maintainers; [
+      alexbakker
+      artturin
+    ];
     platforms = [ "x86_64-linux" ];
     broken = versionOlder kernel.version "4.14";
   };

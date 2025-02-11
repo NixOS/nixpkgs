@@ -1,37 +1,47 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, protobuf, stdenv
-, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  protobuf,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "svix-server";
-  version = "1.13.0";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-6758ej7bTvwZPWifl239rQMazM8uw+Y4+3EbjE8XsTg=";
+    hash = "sha256-3rUyfFtsDOqJYwTipor1YSCdP+9ORYWmzl5Tt3/Kung=";
   };
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "aide-0.10.0" = "sha256-hUUer5D6OA4F0Co3JgygY3g89cKIChFest67ABIX+4M=";
-      "hyper-0.14.23" = "sha256-7MBCAjKYCdDbqCmYg3eYE74h7K7yTjfVoo0sjxr4g/s=";
+      "hyper-0.14.28" = "sha256-4HGGpM9Ce3l3EJnu5XsGfqhrD9EykpR+ihEJlSZc03Q=";
+      "omniqueue-0.2.1" = "sha256-ab0/WO45m1A56EUY8nLUuxKI9NZqjDar9Y0ua77UCi8=";
     };
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+      protobuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -44,11 +54,11 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "svix-server";
-    description = "The enterprise-ready webhooks service";
+    description = "Enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
-    changelog =
-      "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
+    changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ techknowlogick ];
+    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }

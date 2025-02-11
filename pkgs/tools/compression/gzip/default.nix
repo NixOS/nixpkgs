@@ -1,7 +1,8 @@
 { lib, stdenv
 , fetchurl
-, makeWrapper
-, xz
+, makeShellWrapper
+, updateAutotoolsGnuConfigScriptsHook
+, runtimeShellPackage
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ xz.bin makeWrapper ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeShellWrapper ];
+  buildInputs = [ runtimeShellPackage ];
 
   makeFlags = [
     "SHELL=/bin/sh"
@@ -53,20 +55,22 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
 
-    longDescription =
-      ''gzip (GNU zip) is a popular data compression program written by
-        Jean-loup Gailly for the GNU project.  Mark Adler wrote the
-        decompression part.
+    longDescription = ''
+      gzip (GNU zip) is a popular data compression program written by
+      Jean-loup Gailly for the GNU project.  Mark Adler wrote the
+      decompression part.
 
-        We developed this program as a replacement for compress because of
-        the Unisys and IBM patents covering the LZW algorithm used by
-        compress.  These patents made it impossible for us to use compress,
-        and we needed a replacement.  The superior compression ratio of gzip
-        is just a bonus.
-      '';
+      We developed this program as a replacement for compress because of
+      the Unisys and IBM patents covering the LZW algorithm used by
+      compress.  These patents made it impossible for us to use compress,
+      and we needed a replacement.  The superior compression ratio of gzip
+      is just a bonus.
+    '';
 
     platforms = lib.platforms.all;
 
     license = lib.licenses.gpl3Plus;
+
+    mainProgram = "gzip";
   };
 }

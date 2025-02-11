@@ -1,38 +1,57 @@
-{ lib, stdenv, fetchurl, jdk, ant } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ant,
+  jdk,
+  makeWrapper,
+  stripJavaArchivesHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "java-cup";
   version = "11b-20160615";
 
   src = fetchurl {
-    url = "http://www2.cs.tum.edu/projects/cup/releases/java-cup-src-${version}.tar.gz";
-    sha256 = "1ymz3plngxclh7x3xr31537rvvak7lwyd0qkmnl1mkj5drh77rz0";
+    url = "http://www2.cs.tum.edu/projects/cup/releases/java-cup-src-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4OdzYG5FzhqorROD5jk9U+2dzyhh5D76gZT1Z+kdv/o=";
   };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ jdk ant ];
-
   patches = [ ./javacup-0.11b_beta20160615-build-xml-git.patch ];
 
-  buildPhase = "ant";
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    stripJavaArchivesHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    ant
+    runHook postBuild
+  '';
 
   installPhase = ''
-    mkdir -p $out/{bin,share/{java,java-cup}}
-    cp dist/java-cup-11b.jar $out/share/java-cup/
-    cp dist/java-cup-11b-runtime.jar $out/share/java/
-    cat > $out/bin/javacup <<EOF
-    #! $shell
-    exec ${jdk.jre}/bin/java -jar $out/share/java-cup/java-cup-11b.jar "\$@"
-    EOF
-    chmod a+x $out/bin/javacup
+    runHook preInstall
+
+    install -Dm644 dist/java-cup-11b.jar -t $out/share/java-cup
+    install -Dm644 dist/java-cup-11b-runtime.jar -t $out/share/java
+
+    makeWrapper ${jdk.jre}/bin/java $out/bin/javacup \
+        --add-flags "-jar $out/share/java-cup/java-cup-11b.jar"
+
+    runHook postInstall
   '';
 
   meta = {
-    homepage = "http://www2.cs.tum.edu/projects/cup/";
     description = "LALR parser generator for Java";
+    homepage = "http://www2.cs.tum.edu/projects/cup/";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
+    mainProgram = "javacup";
     maintainers = [ lib.maintainers.romildo ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, AppKit
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  AppKit,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,9 +18,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-/z2VEfeCCuffxlMh4WOpYkMSAgmh+sbx3ajcD5d4DdE=";
   };
 
-  cargoSha256 = "sha256-i2Pp9sfTBth3DtrQ99Vw+KLnGECrkqtlRNAKiwSWf48=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sJSU85f4bLh89qo8fojWJNfJ9t7i/Hlg5pnLcxcwKt4=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Security
   ];
@@ -33,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   meta = with lib; {
-    description = "A tool for generating realistic data using a declarative data model";
+    description = "Tool for generating realistic data using a declarative data model";
     homepage = "https://github.com/getsynth/synth";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];

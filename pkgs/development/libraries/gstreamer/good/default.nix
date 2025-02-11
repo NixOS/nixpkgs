@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
+, substituteAll
 , meson
 , nasm
 , ninja
@@ -16,7 +16,9 @@
 , libavc1394
 , libiec61883
 , libvpx
+, libdrm
 , speex
+, opencore-amr
 , flac
 , taglib
 , libshout
@@ -24,9 +26,10 @@
 , gdk-pixbuf
 , aalib
 , libcaca
-, libsoup
+, libsoup_3
 , libpulseaudio
 , libintl
+, libxml2
 , Cocoa
 , lame
 , mpg123
@@ -36,31 +39,43 @@
 , qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
-, enableX11 ? stdenv.isLinux, xorg
+, enableX11 ? stdenv.hostPlatform.isLinux, xorg
 , ncurses
+, enableWayland ? stdenv.hostPlatform.isLinux
 , wayland
 , wayland-protocols
 , libgudev
 , wavpack
 , glib
+, openssl
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 # MMAL is not supported on aarch64, see:
 # https://github.com/raspberrypi/userland/issues/688
-assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
+assert raspiCameraSupport -> (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.6";
+  version = "1.24.10";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-s7B/4/HOf+k6qb5yF4ZgRFSPNcSneSKA7sfhCKMvmBc=";
+    hash = "sha256-/OdI+mbXqO4fsmFInlnQHj+nh2I9bVw1BoQW/nzQrLM=";
   };
+
+  patches = [
+    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
+    ./souploader-darwin.diff
+    # dlopen libsoup_3 with an absolute path
+    (substituteAll {
+      src = ./souploader.diff;
+      nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
+    })
+  ];
 
   strictDeps = true;
 
@@ -84,7 +99,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals qt6Support (with qt6; [
     qtbase
     qttools
-  ]) ++ lib.optionals stdenv.isLinux [
+  ]) ++ lib.optionals enableWayland [
     wayland-protocols
   ];
 
@@ -95,26 +110,31 @@ stdenv.mkDerivation rec {
     libdv
     libvpx
     speex
+    opencore-amr
     flac
     taglib
     cairo
     gdk-pixbuf
     aalib
     libcaca
-    libsoup
+    libsoup_3
     libshout
+    libxml2
     lame
     mpg123
     twolame
     libintl
     ncurses
     wavpack
+    openssl
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
   ] ++ lib.optionals enableX11 [
     xorg.libXext
     xorg.libXfixes
     xorg.libXdamage
+    xorg.libXtst
+    xorg.libXi
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -127,15 +147,17 @@ stdenv.mkDerivation rec {
     qtbase
     qtdeclarative
     qtwayland
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libdrm
     libGL
     libv4l
     libpulseaudio
     libavc1394
     libiec61883
     libgudev
+  ] ++ lib.optionals enableWayland [
     wayland
   ] ++ lib.optionals enableJack [
     libjack2
@@ -155,7 +177,7 @@ stdenv.mkDerivation rec {
     "-Dximagesrc=disabled" # Linux-only
   ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Ddv1394=disabled" # Linux only
     "-Doss4=disabled" # Linux only
     "-Doss=disabled" # Linux only
@@ -195,6 +217,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

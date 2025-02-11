@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  zlib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cache";
@@ -11,16 +17,26 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
   };
 
-  cargoSha256 = "sha256-275QREIcncgBk4ah/CivSz5N2m6s/XPCfp6JGChpr38=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cwTHJ5Cd17ur8AhEQb8FTS0mcgqg83VGjvCQP00JY6s=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
-  checkFlagsArray = [ "offline_tests" ];
+  checkFlags = [ "offline_tests" ];
 
   meta = with lib; {
     description = "Manage cargo cache (\${CARGO_HOME}, ~/.cargo/), print sizes of dirs and remove dirs selectively";
+    mainProgram = "cargo-cache";
     homepage = "https://github.com/matthiaskrgr/cargo-cache";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ Br1ght0ne matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      matthiasbeyer
+    ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, csxcad
-, qcsxcad
-, hdf5
-, vtkWithQt5
-, qtbase
-, fparser
-, tinyxml
-, cgal
-, boost
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  csxcad,
+  qcsxcad,
+  hdf5,
+  vtkWithQt5,
+  qtbase,
+  fparser,
+  tinyxml,
+  cgal,
+  boost,
 }:
 
 mkDerivation {
@@ -46,6 +47,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Minimal Application using the QCSXCAD library";
+    mainProgram = "AppCSXCAD";
     homepage = "https://github.com/thliebig/AppCSXCAD";
     license = licenses.gpl3;
     maintainers = with maintainers; [ matthuszagh ];

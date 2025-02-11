@@ -1,32 +1,43 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, fuse
-, readline
-, pkg-config
-, qtbase
-, qttools
-, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  fuse,
+  readline,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+}:
 
 mkDerivation rec {
   pname = "android-file-transfer";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "125rq8ji83nw6chfw43i0h9c38hjqh1qjibb0gnf9wrigar9zc8b";
+    sha256 = "sha256-UOARMtOnG6tekmOsIWRZbl2y32mR0kPD6w7IHRG8VsU=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];
 
-  nativeBuildInputs = [ cmake readline pkg-config wrapQtAppsHook ];
-  buildInputs = [ fuse qtbase qttools ];
+  nativeBuildInputs = [
+    cmake
+    readline
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    fuse
+    qtbase
+    qttools
+  ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/*.app $out/Applications
   '';

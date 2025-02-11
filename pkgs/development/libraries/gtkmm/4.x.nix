@@ -1,30 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, python3
-, gtk4
-, glib
-, glibmm_2_68
-, cairomm_1_16
-, pangomm_2_48
-, libepoxy
-, gnome
-, makeFontsConf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gtk4,
+  glib,
+  glibmm_2_68,
+  cairomm_1_16,
+  pangomm_2_48,
+  libepoxy,
+  gnome,
+  makeFontsConf,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.12.0";
+  version = "4.16.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+8PnYYEjNFwBSO9xq7ZUjUIfUrsiT72jSHW2d9wDLJI=";
+    hash = "sha256-OyP9Or+PsiOwDpmDtgEK8tuA44yJq2mUuLYjCqhdYPk=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
   ];
 
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    ${lib.optionalString (!stdenv.isDarwin) "xvfb-run -s '-screen 0 800x600x24'"} \
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "xvfb-run -s '-screen 0 800x600x24'"} \
       meson test --print-errorlogs
 
     runHook postCheck

@@ -1,41 +1,48 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, writeText
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, pkg-config
-, ninja
-, python3
-, makeWrapper
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  makeWrapper,
 
-, glm
-, lua5_4
-, SDL2
-, SDL2_mixer
-, enet
-, libuv
-, libuuid
-, wayland-protocols
-, Carbon
-, CoreServices
-# optionals
-, opencl-headers
-, OpenCL
+  backward-cpp,
+  curl,
+  enet,
+  freetype,
+  glm,
+  gtest,
+  libbfd,
+  libdwarf,
+  libjpeg,
+  libuuid,
+  libuv,
+  lua5_4,
+  lzfse,
+  opencl-headers,
+  SDL2,
+  SDL2_mixer,
+  wayland-protocols,
+  Carbon,
+  CoreServices,
+  OpenCL,
 
-, callPackage
-, nixosTests
+  callPackage,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.27";
+  version = "0.0.34";
 
   src = fetchFromGitHub {
-    owner = "mgerhardy";
+    owner = "vengi-voxel";
     repo = "vengi";
-    rev = "v${version}";
-    hash = "sha256-A37IY66wZZK7Tv0zWsORO6CuRRRj7YmKLnEPSbfAvwI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-a78Oiwln3vyzCyjNewbK1/05bnGcSixxzKIgz4oiDmA=";
   };
 
   nativeBuildInputs = [
@@ -46,40 +53,46 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    glm
-    lua5_4
-    SDL2
-    SDL2_mixer
-    enet
-    libuv
-    libuuid
-    # Only needed for the game
-    #postgresql
-    #libpqxx
-    #mosquitto
-  ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
-    ++ lib.optional (!stdenv.isDarwin) opencl-headers;
+  buildInputs =
+    [
+      libbfd
+      libdwarf
+      backward-cpp
+      curl
+      enet
+      freetype
+      glm
+      libjpeg
+      libuuid
+      libuv
+      lua5_4
+      lzfse
+      SDL2
+      SDL2_mixer
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreServices
+      OpenCL
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
-  cmakeFlags = [
-    # Disable tests due to a problem in linking gtest:
-    # ld: /build/vengi-tests-core.LDHlV1.ltrans0.ltrans.o: in function `main':
-    # <artificial>:(.text.startup+0x3f): undefined reference to `testing::InitGoogleMock(int*, char**)'
-    "-DUNITTESTS=OFF"
-    "-DVISUALTESTS=OFF"
-    # We're only interested in the generic tools
-    "-DGAMES=OFF"
-    "-DMAPVIEW=OFF"
-    "-DAIDEBUG=OFF"
-  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+
+  # error: "The plain signature for target_link_libraries has already been used"
+  doCheck = false;
+
+  checkInputs = [
+    gtest
+  ];
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
   # one.
   # This is not needed on darwin, since on that platform data files are saved
   # in *.app/Contents/Resources/ too, and are picked up automatically.
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
         --set CORE_PATH $out/share/$(basename "$prog")/
@@ -87,8 +100,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
-    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
+    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix { };
     run-voxedit = nixosTests.vengi-tools;
   };
 
@@ -101,10 +114,14 @@ stdenv.mkDerivation rec {
       filemanager and a command line tool to convert between several voxel
       formats.
     '';
-    homepage = "https://mgerhardy.github.io/vengi/";
-    downloadPage = "https://github.com/mgerhardy/vengi/releases";
-    license = [ licenses.mit licenses.cc-by-sa-30 ];
+    homepage = "https://vengi-voxel.github.io/vengi/";
+    downloadPage = "https://github.com/vengi-voxel/vengi/releases";
+    license = [
+      licenses.mit
+      licenses.cc-by-sa-30
+    ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

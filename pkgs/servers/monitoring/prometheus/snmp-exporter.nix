@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, net-snmp, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  net-snmp,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "snmp_exporter";
-  version = "0.22.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "snmp_exporter";
     rev = "v${version}";
-    sha256 = "sha256-HncffOX0/z8XIEXTOkt6bcnAfY7xwgNBGhUwC3FIJjo=";
+    sha256 = "sha256-6UTvzcN0BB4uLfyZxr8CkmlMAjggYRV/EmQPRD7ZqmY=";
   };
 
-  vendorHash = "sha256-n0LPKmGPxLZgvzdpyuE67WOJv7MKN28m7PtQpWYdtMk=";
+  vendorHash = "sha256-0WGiVM4HTgcVkCxfjW1c+z1wlf/ay5BXZXuGRPS4guc=";
 
   buildInputs = [ net-snmp ];
 
@@ -23,6 +29,9 @@ buildGoModule rec {
     description = "SNMP Exporter for Prometheus";
     homepage = "https://github.com/prometheus/snmp_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ oida willibutz Frostman ];
+    maintainers = with maintainers; [
+      oida
+      Frostman
+    ];
   };
 }

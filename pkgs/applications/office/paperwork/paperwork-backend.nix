@@ -1,33 +1,34 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-, pyenchant
-, scikit-learn
-, pypillowfight
-, pycountry
-, whoosh
-, termcolor
-, pygobject3
-, pyocr
-, natsort
-, libinsane
-, distro
-, openpaperwork-core
-, openpaperwork-gtk
-, psutil
-, gtk3
-, poppler_gi
-, gettext
-, which
-, shared-mime-info
-, libreoffice
-, unittestCheckHook
-, setuptools-scm
+{
+  buildPythonPackage,
+  lib,
+  callPackage,
+  pyenchant,
+  scikit-learn,
+  pypillowfight,
+  pycountry,
+  whoosh,
+  termcolor,
+  pygobject3,
+  pyocr,
+  natsort,
+  libinsane,
+  distro,
+  openpaperwork-core,
+  openpaperwork-gtk,
+  psutil,
+  gtk3,
+  poppler_gi,
+  gettext,
+  which,
+  shared-mime-info,
+  libreoffice,
+  unittestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "paperwork-backend";
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  inherit (callPackage ./src.nix { }) version src;
   format = "pyproject";
 
   sourceRoot = "${src.name}/paperwork-backend";
@@ -43,8 +44,6 @@ buildPythonPackage rec {
     chmod a+w -R ..
     patchShebangs ../tools
   '';
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     distro
@@ -89,6 +88,9 @@ buildPythonPackage rec {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aszlig symphorien ];
+    maintainers = with maintainers; [
+      aszlig
+      symphorien
+    ];
   };
 }

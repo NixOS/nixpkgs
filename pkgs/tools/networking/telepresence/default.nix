@@ -1,12 +1,24 @@
-{ lib, pythonPackages, fetchFromGitHub, makeWrapper
-, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
-, iptables, bash }:
+{
+  lib,
+  pythonPackages,
+  fetchFromGitHub,
+  makeWrapper,
+  sshfs-fuse,
+  torsocks,
+  sshuttle,
+  conntrack-tools,
+  openssh,
+  coreutils,
+  iptables,
+  bash,
+}:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in pythonPackages.buildPythonPackage rec {
+in
+pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
   version = "0.109";
 
@@ -21,16 +33,18 @@ in pythonPackages.buildPythonPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/telepresence \
-      --prefix PATH : ${lib.makeBinPath [
-        sshfs-fuse
-        torsocks
-        conntrack-tools
-        sshuttle-telepresence
-        openssh
-        coreutils
-        iptables
-        bash
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          sshfs-fuse
+          torsocks
+          conntrack-tools
+          sshuttle-telepresence
+          openssh
+          coreutils
+          iptables
+          bash
+        ]
+      }
   '';
 
   doCheck = false;
@@ -38,6 +52,7 @@ in pythonPackages.buildPythonPackage rec {
   meta = {
     homepage = "https://www.telepresence.io/";
     description = "Local development against a remote Kubernetes or OpenShift cluster";
+    mainProgram = "telepresence";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ offline ];
   };

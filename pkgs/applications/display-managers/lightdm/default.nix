@@ -1,40 +1,46 @@
-{ lib, stdenv
-, buildPackages
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, plymouth
-, pam
-, pkg-config
-, autoconf
-, automake
-, libtool
-, libxcb
-, glib
-, libXdmcp
-, itstool
-, intltool
-, libxklavier
-, libgcrypt
-, audit
-, busybox
-, polkit
-, accountsservice
-, gtk-doc
-, gnome
-, gobject-introspection
-, vala
-, fetchpatch
-, withQt5 ? false
-, qtbase
-, yelp-tools
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
+  plymouth,
+  pam,
+  pkg-config,
+  autoconf,
+  automake,
+  libtool,
+  libxcb,
+  glib,
+  libXdmcp,
+  itstool,
+  intltool,
+  libxklavier,
+  libgcrypt,
+  audit,
+  busybox,
+  polkit,
+  accountsservice,
+  gtk-doc,
+  gobject-introspection,
+  vala,
+  fetchpatch,
+  withQt5 ? false,
+  qtbase,
+  yelp-tools,
+  yelp-xsl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
   version = "1.32.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "canonical";
@@ -47,7 +53,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     yelp-tools
-    gnome.yelp-xsl
+    yelp-xsl
     gobject-introspection
     gtk-doc
     intltool
@@ -79,8 +85,7 @@ stdenv.mkDerivation rec {
     # Hardcode plymouth to fix transitions.
     # For some reason it can't find `plymouth`
     # even when it's in PATH in environment.systemPackages.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
   ];
@@ -115,12 +120,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) lightdm; };
   };
-
 
   meta = with lib; {
     homepage = "https://github.com/canonical/lightdm";
-    description = "A cross-desktop display manager";
+    description = "Cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ] ++ teams.pantheon.members;

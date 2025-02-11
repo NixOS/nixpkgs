@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.evilwm.enable = mkEnableOption (lib.mdDoc "evilwm");
+    services.xserver.windowManager.evilwm.enable = mkEnableOption "evilwm";
   };
 
   ###### implementation

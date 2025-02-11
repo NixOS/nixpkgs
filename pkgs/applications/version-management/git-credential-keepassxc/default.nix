@@ -1,31 +1,29 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, DiskArbitration
-, Foundation
-, withNotification ? false
-, withYubikey ? false
-, withStrictCaller ? false
-, withAll ? false
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  withNotification ? false,
+  withYubikey ? false,
+  withStrictCaller ? false,
+  withAll ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-credential-keepassxc";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "git-credential-keepassxc";
     rev = "v${version}";
-    hash = "sha256-AvnnzLiDQEdfAHPns8ufhdiPPn9d23AnI8Aq2DQS+To=";
+    hash = "sha256-qxNzWuuIoK9BJLVcWtrER+MyA5cyd03xAwGljh8DZC4=";
   };
 
-  cargoHash = "sha256-c2YucWs0UzyWDKWS5KebT3ps+XvWzlI0+ziJ8JX6oiQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jjexSzxRhnNPW+urG7KpZBWfGcy06Cg4lXlQogF3L/A=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
-
-  buildFeatures = []
+  buildFeatures =
+    [ ]
     ++ lib.optional withNotification "notification"
     ++ lib.optional withYubikey "yubikey"
     ++ lib.optional withStrictCaller "strict-caller"

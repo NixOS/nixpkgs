@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl
-, automake, autoconf, libtool, pkg-config, autoconf-archive
-, libxml2, bzip2, libtar
-, languageMachines
+{
+  lib,
+  stdenv,
+  fetchurl,
+  automake,
+  autoconf,
+  libtool,
+  pkg-config,
+  autoconf-archive,
+  libxml2,
+  bzip2,
+  libtar,
+  languageMachines,
 }:
 
 let
@@ -11,20 +20,31 @@ in
 stdenv.mkDerivation {
   pname = "timbl";
   version = release.version;
-  src = fetchurl { inherit (release) url sha256;
-                   name = "timbl-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config automake autoconf ];
-  buildInputs = [ bzip2 libtar libtool autoconf-archive
-                  libxml2
-                  languageMachines.ticcutils
-                ];
+  src = fetchurl {
+    inherit (release) url sha256;
+    name = "timbl-${release.version}.tar.gz";
+  };
+  nativeBuildInputs = [
+    pkg-config
+    automake
+    autoconf
+  ];
+  buildInputs = [
+    bzip2
+    libtar
+    libtool
+    autoconf-archive
+    libxml2
+    languageMachines.ticcutils
+  ];
   preConfigure = "sh bootstrap.sh";
 
   meta = with lib; {
     description = "TiMBL implements several memory-based learning algorithms";
-    homepage    = "https://github.com/LanguageMachines/timbl/";
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
+    mainProgram = "timbl";
+    homepage = "https://github.com/LanguageMachines/timbl/";
+    license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
 
     longDescription = ''

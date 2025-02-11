@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, beautifulsoup4
-, bottle
-, chardet
-, python-dateutil
-, google-api-python-client
-, google-auth-oauthlib
-, lxml
-, oauth2client
-, ply
-, pytest
-, python-magic
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  beautifulsoup4,
+  bottle,
+  chardet,
+  python-dateutil,
+  google-api-python-client,
+  google-auth-oauthlib,
+  lxml,
+  oauth2client,
+  ply,
+  pytest,
+  python-magic,
+  requests,
 }:
 
 buildPythonPackage rec {
-  version = "2.3.6";
+  version = "3.0.0";
+  format = "setuptools";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gB+Tvta1fS4iQ2aIxInVob8fduIQ887RhoB1fmDTR1o=";
+    hash = "sha256-z2aGhpx+o+78CU7hPthmv196K7DGHk1PXfPjX4Rs/98=";
   };
 
   # Tests require files not included in the PyPI archive.
@@ -51,11 +53,14 @@ buildPythonPackage rec {
     homepage = "https://github.com/beancount/beancount";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
-        A double-entry bookkeeping computer language that lets you define
-        financial transaction records in a text file, read them in memory,
-        generate a variety of reports from them, and provides a web interface.
+      A double-entry bookkeeping computer language that lets you define
+      financial transaction records in a text file, read them in memory,
+      generate a variety of reports from them, and provides a web interface.
     '';
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [
+      sharzy
+      polarmutex
+    ];
   };
 }

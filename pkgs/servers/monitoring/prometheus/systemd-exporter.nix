@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "systemd_exporter";
@@ -27,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Exporter for systemd unit metrics";
+    mainProgram = "systemd_exporter";
     homepage = "https://github.com/prometheus-community/systemd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ chkno ];

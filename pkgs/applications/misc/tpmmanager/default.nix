@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, qtbase, qmake, wrapQtAppsHook, trousers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qtbase,
+  qmake,
+  wrapQtAppsHook,
+  trousers,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.8.1";
@@ -23,9 +32,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase trousers ];
+  buildInputs = [
+    qtbase
+    trousers
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -41,13 +56,14 @@ stdenv.mkDerivation rec {
     Exec=$out/bin/tpmmanager
     Terminal=false
     EOF
-    '';
+  '';
 
   meta = {
     homepage = "https://projects.sirrix.com/trac/tpmmanager";
     description = "Tool for managing the TPM";
+    mainProgram = "tpmmanager";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

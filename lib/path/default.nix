@@ -1,4 +1,4 @@
-/* Functions for working with path values. */
+# Functions for working with path values.
 # See ./README.md for internal docs
 { lib }:
 let
@@ -9,6 +9,7 @@ let
     split
     match
     typeOf
+    storeDir
     ;
 
   inherit (lib.lists)
@@ -24,6 +25,8 @@ let
     drop
     ;
 
+  listHasPrefix = lib.lists.hasPrefix;
+
   inherit (lib.strings)
     concatStringsSep
     substring
@@ -38,8 +41,9 @@ let
     ;
 
   # Return the reason why a subpath is invalid, or `null` if it's valid
-  subpathInvalidReason = value:
-    if ! isString value then
+  subpathInvalidReason =
+    value:
+    if !isString value then
       "The given value is of type ${builtins.typeOf value}, but a string was expected"
     else if value == "" then
       "The given string is empty"
@@ -48,11 +52,13 @@ let
     # We don't support ".." components, see ./path.md#parent-directory
     else if match "(.*/)?\\.\\.(/.*)?" value != null then
       "The given string \"${value}\" contains a `..` component, which is not allowed in subpaths"
-    else null;
+    else
+      null;
 
   # Split and normalise a relative path string into its components.
   # Error for ".." components and doesn't include "." components
-  splitRelPath = path:
+  splitRelPath =
+    path:
     let
       # Split the string into its parts using regex for efficiency. This regex
       # matches patterns like "/", "/./", "/././", with arbitrarily many "/"s
@@ -83,26 +89,31 @@ let
       componentCount = partCount - skipEnd - skipStart;
 
     in
-      # Special case of a single "." path component. Such a case leaves a
-      # componentCount of -1 due to the skipStart/skipEnd not verifying that
-      # they don't refer to the same character
-      if path == "." then []
+    # Special case of a single "." path component. Such a case leaves a
+    # componentCount of -1 due to the skipStart/skipEnd not verifying that
+    # they don't refer to the same character
+    if path == "." then
+      [ ]
 
-      # Generate the result list directly. This is more efficient than a
-      # combination of `filter`, `init` and `tail`, because here we don't
-      # allocate any intermediate lists
-      else genList (index:
+    # Generate the result list directly. This is more efficient than a
+    # combination of `filter`, `init` and `tail`, because here we don't
+    # allocate any intermediate lists
+    else
+      genList (
+        index:
         # To get to the element we need to add the number of parts we skip and
         # multiply by two due to the interleaved layout of `parts`
         elemAt parts ((skipStart + index) * 2)
       ) componentCount;
 
   # Join relative path components together
-  joinRelPath = components:
+  joinRelPath =
+    components:
     # Always return relative paths with `./` as a prefix (./path.md#leading-dots-for-relative-paths)
-    "./" +
-    # An empty string is not a valid relative path, so we need to return a `.` when we have no components
-    (if components == [] then "." else concatStringsSep "/" components);
+    "./"
+    +
+      # An empty string is not a valid relative path, so we need to return a `.` when we have no components
+      (if components == [ ] then "." else concatStringsSep "/" components);
 
   # Type: Path -> { root :: Path, components :: [ String ] }
   #
@@ -114,13 +125,45 @@ let
   # because it can distinguish different filesystem roots
   deconstructPath =
     let
-      recurse = components: base:
+      recurse =
+        components: base:
         # If the parent of a path is the path itself, then it's a filesystem root
-        if base == dirOf base then { root = base; inherit components; }
-        else recurse ([ (baseNameOf base) ] ++ components) (dirOf base);
-    in recurse [];
+        if base == dirOf base then
+          {
+            root = base;
+            inherit components;
+          }
+        else
+          recurse ([ (baseNameOf base) ] ++ components) (dirOf base);
+    in
+    recurse [ ];
 
-in /* No rec! Add dependencies on this file at the top. */ {
+  # The components of the store directory, typically [ "nix" "store" ]
+  storeDirComponents = splitRelPath ("./" + storeDir);
+  # The number of store directory components, typically 2
+  storeDirLength = length storeDirComponents;
+
+  # Type: [ String ] -> Bool
+  #
+  # Whether path components have a store path as a prefix, according to
+  # https://nixos.org/manual/nix/stable/store/store-path.html#store-path.
+  componentsHaveStorePathPrefix =
+    components:
+    # path starts with the store directory (typically /nix/store)
+    listHasPrefix storeDirComponents components
+    # is not the store directory itself, meaning there's at least one extra component
+    && storeDirComponents != components
+    # and the first component after the store directory has the expected format.
+    # NOTE: We could change the hash regex to be [0-9a-df-np-sv-z],
+    # because these are the actual ASCII characters used by Nix's base32 implementation,
+    # but this is not fully specified, so let's tie this too much to the currently implemented concept of store paths.
+    # Similar reasoning applies to the validity of the name part.
+    # We care more about discerning store path-ness on realistic values. Making it airtight would be fragile and slow.
+    && match ".{32}-.+" (elemAt components storeDirLength) != null;
+
+in
+# No rec! Add dependencies on this file at the top.
+{
 
   /*
     Append a subpath string to a path.
@@ -169,8 +212,8 @@ in /* No rec! Add dependencies on this file at the top. */ {
     path:
     # The subpath string to append
     subpath:
-    assert assertMsg (isPath path) ''
-      lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected'';
+    assert assertMsg (isPath path)
+      ''lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected'';
     assert assertMsg (isValid subpath) ''
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
@@ -200,25 +243,23 @@ in /* No rec! Add dependencies on this file at the top. */ {
   */
   hasPrefix =
     path1:
-    assert assertMsg
-      (isPath path1)
+    assert assertMsg (isPath path1)
       "lib.path.hasPrefix: First argument is of type ${typeOf path1}, but a path was expected";
     let
       path1Deconstructed = deconstructPath path1;
     in
-      path2:
-      assert assertMsg
-        (isPath path2)
-        "lib.path.hasPrefix: Second argument is of type ${typeOf path2}, but a path was expected";
-      let
-        path2Deconstructed = deconstructPath path2;
-      in
-        assert assertMsg
-        (path1Deconstructed.root == path2Deconstructed.root) ''
-          lib.path.hasPrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
-              first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
-              second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
-        take (length path1Deconstructed.components) path2Deconstructed.components == path1Deconstructed.components;
+    path2:
+    assert assertMsg (isPath path2)
+      "lib.path.hasPrefix: Second argument is of type ${typeOf path2}, but a path was expected";
+    let
+      path2Deconstructed = deconstructPath path2;
+    in
+    assert assertMsg (path1Deconstructed.root == path2Deconstructed.root) ''
+      lib.path.hasPrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
+          first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
+          second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
+    take (length path1Deconstructed.components) path2Deconstructed.components
+    == path1Deconstructed.components;
 
   /*
     Remove the first path as a component-wise prefix from the second path.
@@ -245,33 +286,29 @@ in /* No rec! Add dependencies on this file at the top. */ {
   */
   removePrefix =
     path1:
-    assert assertMsg
-      (isPath path1)
+    assert assertMsg (isPath path1)
       "lib.path.removePrefix: First argument is of type ${typeOf path1}, but a path was expected.";
     let
       path1Deconstructed = deconstructPath path1;
       path1Length = length path1Deconstructed.components;
     in
-      path2:
-      assert assertMsg
-        (isPath path2)
-        "lib.path.removePrefix: Second argument is of type ${typeOf path2}, but a path was expected.";
-      let
-        path2Deconstructed = deconstructPath path2;
-        success = take path1Length path2Deconstructed.components == path1Deconstructed.components;
-        components =
-          if success then
-            drop path1Length path2Deconstructed.components
-          else
-            throw ''
-              lib.path.removePrefix: The first path argument "${toString path1}" is not a component-wise prefix of the second path argument "${toString path2}".'';
-      in
-        assert assertMsg
-        (path1Deconstructed.root == path2Deconstructed.root) ''
-          lib.path.removePrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
-              first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
-              second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
-        joinRelPath components;
+    path2:
+    assert assertMsg (isPath path2)
+      "lib.path.removePrefix: Second argument is of type ${typeOf path2}, but a path was expected.";
+    let
+      path2Deconstructed = deconstructPath path2;
+      success = take path1Length path2Deconstructed.components == path1Deconstructed.components;
+      components =
+        if success then
+          drop path1Length path2Deconstructed.components
+        else
+          throw ''lib.path.removePrefix: The first path argument "${toString path1}" is not a component-wise prefix of the second path argument "${toString path2}".'';
+    in
+    assert assertMsg (path1Deconstructed.root == path2Deconstructed.root) ''
+      lib.path.removePrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
+          first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
+          second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
+    joinRelPath components;
 
   /*
     Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
@@ -311,15 +348,71 @@ in /* No rec! Add dependencies on this file at the top. */ {
   splitRoot =
     # The path to split the root off of
     path:
-    assert assertMsg
-      (isPath path)
+    assert assertMsg (isPath path)
       "lib.path.splitRoot: Argument is of type ${typeOf path}, but a path was expected";
     let
       deconstructed = deconstructPath path;
-    in {
+    in
+    {
       root = deconstructed.root;
       subpath = joinRelPath deconstructed.components;
     };
+
+  /*
+    Whether a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path)
+    has a [store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path)
+    as a prefix.
+
+    :::{.note}
+    As with all functions of this `lib.path` library, it does not work on paths in strings,
+    which is how you'd typically get store paths.
+
+    Instead, this function only handles path values themselves,
+    which occur when Nix files in the store use relative path expressions.
+    :::
+
+    Type:
+      hasStorePathPrefix :: Path -> Bool
+
+    Example:
+      # Subpaths of derivation outputs have a store path as a prefix
+      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz
+      => true
+
+      # The store directory itself is not a store path
+      hasStorePathPrefix /nix/store
+      => false
+
+      # Derivation outputs are store paths themselves
+      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo
+      => true
+
+      # Paths outside the Nix store don't have a store path prefix
+      hasStorePathPrefix /home/user
+      => false
+
+      # Not all paths under the Nix store are store paths
+      hasStorePathPrefix /nix/store/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq
+      => false
+
+      # Store derivations are also store paths themselves
+      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv
+      => true
+  */
+  hasStorePathPrefix =
+    path:
+    let
+      deconstructed = deconstructPath path;
+    in
+    assert assertMsg (isPath path)
+      "lib.path.hasStorePathPrefix: Argument is of type ${typeOf path}, but a path was expected";
+    assert assertMsg
+      # This function likely breaks or needs adjustment if used with other filesystem roots, if they ever get implemented.
+      # Let's try to error nicely in such a case, though it's unclear how an implementation would work even and whether this could be detected.
+      # See also https://github.com/NixOS/nix/pull/6530#discussion_r1422843117
+      (deconstructed.root == /. && toString deconstructed.root == "/")
+      "lib.path.hasStorePathPrefix: Argument has a filesystem root (${toString deconstructed.root}) that's not /, which is currently not supported.";
+    componentsHaveStorePathPrefix deconstructed.components;
 
   /*
     Whether a value is a valid subpath string.
@@ -365,9 +458,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
   */
   subpath.isValid =
     # The value to check
-    value:
-    subpathInvalidReason value == null;
-
+    value: subpathInvalidReason value == null;
 
   /*
     Join subpath strings together using `/`, returning a normalised subpath string.
@@ -430,18 +521,20 @@ in /* No rec! Add dependencies on this file at the top. */ {
     # The list of subpaths to join together
     subpaths:
     # Fast in case all paths are valid
-    if all isValid subpaths
-    then joinRelPath (concatMap splitRelPath subpaths)
+    if all isValid subpaths then
+      joinRelPath (concatMap splitRelPath subpaths)
     else
       # Otherwise we take our time to gather more info for a better error message
       # Strictly go through each path, throwing on the first invalid one
       # Tracks the list index in the fold accumulator
-      foldl' (i: path:
-        if isValid path
-        then i + 1
-        else throw ''
-          lib.path.subpath.join: Element at index ${toString i} is not a valid subpath string:
-              ${subpathInvalidReason path}''
+      foldl' (
+        i: path:
+        if isValid path then
+          i + 1
+        else
+          throw ''
+            lib.path.subpath.join: Element at index ${toString i} is not a valid subpath string:
+                ${subpathInvalidReason path}''
       ) 0 subpaths;
 
   /*

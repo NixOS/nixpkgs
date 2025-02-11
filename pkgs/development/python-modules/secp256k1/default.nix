@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, pytestCheckHook
-, cffi
-, secp256k1
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  pytestCheckHook,
+  cffi,
+  secp256k1,
 }:
 
 buildPythonPackage rec {
   pname = "secp256k1";
   version = "0.14.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +26,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ cffi secp256k1 ];
+  propagatedBuildInputs = [
+    cffi
+    secp256k1
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -41,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ludbb/secp256k1-py";
     description = "Python FFI bindings for secp256k1";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

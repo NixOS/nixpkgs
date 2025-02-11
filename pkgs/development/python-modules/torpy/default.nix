@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cryptography
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cryptography,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "torpy";
   version = "1.1.6";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -23,20 +25,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     requests
-   ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # requires network
     "tests/integration"
   ];
 
-  pythonImportsCheck = [
-    "cryptography"
-  ];
+  pythonImportsCheck = [ "cryptography" ];
 
   meta = with lib; {
     description = "Pure python Tor client";

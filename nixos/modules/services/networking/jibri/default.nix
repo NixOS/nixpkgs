@@ -1,20 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.jibri;
 
-  # Copied from the jitsi-videobridge.nix file.
-  toHOCON = x:
-    if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
-  toVarName = s: "XMPP_PASSWORD_" + stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
+  toVarName =
+    s:
+    "XMPP_PASSWORD_" + stringAsChars (c: if builtins.match "[A-Za-z0-9]" c != null then c else "_") s;
 
   defaultJibriConfig = {
     id = "";
@@ -24,33 +26,35 @@ let
       http.external-api-port = 2222;
       http.internal-api-port = 3333;
 
-      xmpp.environments = flip mapAttrsToList cfg.xmppEnvironments (name: env: {
-        inherit name;
+      xmpp.environments = flip mapAttrsToList cfg.xmppEnvironments (
+        name: env: {
+          inherit name;
 
-        xmpp-server-hosts = env.xmppServerHosts;
-        xmpp-domain = env.xmppDomain;
-        control-muc = {
-          domain = env.control.muc.domain;
-          room-name = env.control.muc.roomName;
-          nickname = env.control.muc.nickname;
-        };
+          xmpp-server-hosts = env.xmppServerHosts;
+          xmpp-domain = env.xmppDomain;
+          control-muc = {
+            domain = env.control.muc.domain;
+            room-name = env.control.muc.roomName;
+            nickname = env.control.muc.nickname;
+          };
 
-        control-login = {
-          domain = env.control.login.domain;
-          username = env.control.login.username;
-          password.__hocon_envvar = toVarName "${name}_control";
-        };
+          control-login = {
+            domain = env.control.login.domain;
+            username = env.control.login.username;
+            password = format.lib.mkSubstitution (toVarName "${name}_control");
+          };
 
-        call-login = {
-          domain = env.call.login.domain;
-          username = env.call.login.username;
-          password.__hocon_envvar = toVarName "${name}_call";
-        };
+          call-login = {
+            domain = env.call.login.domain;
+            username = env.call.login.username;
+            password = format.lib.mkSubstitution (toVarName "${name}_call");
+          };
 
-        strip-from-room-domain = env.stripFromRoomDomain;
-        usage-timeout = env.usageTimeout;
-        trust-all-xmpp-certs = env.disableCertificateVerification;
-      });
+          strip-from-room-domain = env.stripFromRoomDomain;
+          usage-timeout = env.usageTimeout;
+          trust-all-xmpp-certs = env.disableCertificateVerification;
+        }
+      );
     };
 
     recording = {
@@ -67,10 +71,7 @@ let
       "--enabled"
       "--disable-infobars"
       "--autoplay-policy=no-user-gesture-required"
-    ]
-    ++ lists.optional cfg.ignoreCert
-      "--ignore-certificate-errors";
-
+    ] ++ lists.optional cfg.ignoreCert "--ignore-certificate-errors";
 
     stats.enable-stats-d = true;
     webhook.subscribers = [ ];
@@ -85,15 +86,15 @@ let
   };
   # Allow overriding leaves of the default config despite types.attrs not doing any merging.
   jibriConfig = recursiveUpdate defaultJibriConfig cfg.config;
-  configFile = pkgs.writeText "jibri.conf" (toHOCON { jibri = jibriConfig; });
+  configFile = format.generate "jibri.conf" { jibri = jibriConfig; };
 in
 {
   options.services.jibri = with types; {
-    enable = mkEnableOption (lib.mdDoc "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`");
+    enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`";
     config = mkOption {
-      type = attrs;
+      type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Jibri configuration.
         See <https://github.com/jitsi/jibri/blob/master/src/main/resources/reference.conf>
         for default configuration with comments.
@@ -136,7 +137,7 @@ in
         exit 0
         '''''';
       '';
-      description = lib.mdDoc ''
+      description = ''
         This script runs when jibri finishes recording a video of a conference.
       '';
     };
@@ -145,14 +146,14 @@ in
       type = bool;
       default = false;
       example = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the flag "--ignore-certificate-errors" for the Chromium browser opened by Jibri.
         Intended for use in automated tests or anywhere else where using a verified cert for Jitsi-Meet is not possible.
       '';
     };
 
     xmppEnvironments = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         XMPP servers to connect to.
       '';
       example = literalExpression ''
@@ -184,122 +185,130 @@ in
         };
       '';
       default = { };
-      type = attrsOf (submodule ({ name, ... }: {
-        options = {
-          xmppServerHosts = mkOption {
-            type = listOf str;
-            example = [ "xmpp.example.org" ];
-            description = lib.mdDoc ''
-              Hostnames of the XMPP servers to connect to.
-            '';
-          };
-          xmppDomain = mkOption {
-            type = str;
-            example = "xmpp.example.org";
-            description = lib.mdDoc ''
-              The base XMPP domain.
-            '';
-          };
-          control.muc.domain = mkOption {
-            type = str;
-            description = lib.mdDoc ''
-              The domain part of the MUC to connect to for control.
-            '';
-          };
-          control.muc.roomName = mkOption {
-            type = str;
-            default = "JibriBrewery";
-            description = lib.mdDoc ''
-              The room name of the MUC to connect to for control.
-            '';
-          };
-          control.muc.nickname = mkOption {
-            type = str;
-            default = "jibri";
-            description = lib.mdDoc ''
-              The nickname for this Jibri instance in the MUC.
-            '';
-          };
-          control.login.domain = mkOption {
-            type = str;
-            description = lib.mdDoc ''
-              The domain part of the JID for this Jibri instance.
-            '';
-          };
-          control.login.username = mkOption {
-            type = str;
-            default = "jvb";
-            description = lib.mdDoc ''
-              User part of the JID.
-            '';
-          };
-          control.login.passwordFile = mkOption {
-            type = str;
-            example = "/run/keys/jibri-xmpp1";
-            description = lib.mdDoc ''
-              File containing the password for the user.
-            '';
-          };
-
-          call.login.domain = mkOption {
-            type = str;
-            example = "recorder.xmpp.example.org";
-            description = lib.mdDoc ''
-              The domain part of the JID for the recorder.
-            '';
-          };
-          call.login.username = mkOption {
-            type = str;
-            default = "recorder";
-            description = lib.mdDoc ''
-              User part of the JID for the recorder.
-            '';
-          };
-          call.login.passwordFile = mkOption {
-            type = str;
-            example = "/run/keys/jibri-recorder-xmpp1";
-            description = lib.mdDoc ''
-              File containing the password for the user.
-            '';
-          };
-          disableCertificateVerification = mkOption {
-            type = bool;
-            default = false;
-            description = lib.mdDoc ''
-              Whether to skip validation of the server's certificate.
-            '';
-          };
-
-          stripFromRoomDomain = mkOption {
-            type = str;
-            default = "0";
-            example = "conference.";
-            description = lib.mdDoc ''
-              The prefix to strip from the room's JID domain to derive the call URL.
-            '';
-          };
-          usageTimeout = mkOption {
-            type = str;
-            default = "0";
-            example = "1 hour";
-            description = lib.mdDoc ''
-              The duration that the Jibri session can be.
-              A value of zero means indefinitely.
-            '';
-          };
-        };
-
-        config =
-          let
-            nick = mkDefault (builtins.replaceStrings [ "." ] [ "-" ] (
-              config.networking.hostName + optionalString (config.networking.domain != null) ".${config.networking.domain}"
-            ));
-          in
+      type = attrsOf (
+        submodule (
+          { name, ... }:
           {
-            call.login.username = nick;
-            control.muc.nickname = nick;
-          };
-      }));
+            options = {
+              xmppServerHosts = mkOption {
+                type = listOf str;
+                example = [ "xmpp.example.org" ];
+                description = ''
+                  Hostnames of the XMPP servers to connect to.
+                '';
+              };
+              xmppDomain = mkOption {
+                type = str;
+                example = "xmpp.example.org";
+                description = ''
+                  The base XMPP domain.
+                '';
+              };
+              control.muc.domain = mkOption {
+                type = str;
+                description = ''
+                  The domain part of the MUC to connect to for control.
+                '';
+              };
+              control.muc.roomName = mkOption {
+                type = str;
+                default = "JibriBrewery";
+                description = ''
+                  The room name of the MUC to connect to for control.
+                '';
+              };
+              control.muc.nickname = mkOption {
+                type = str;
+                default = "jibri";
+                description = ''
+                  The nickname for this Jibri instance in the MUC.
+                '';
+              };
+              control.login.domain = mkOption {
+                type = str;
+                description = ''
+                  The domain part of the JID for this Jibri instance.
+                '';
+              };
+              control.login.username = mkOption {
+                type = str;
+                default = "jvb";
+                description = ''
+                  User part of the JID.
+                '';
+              };
+              control.login.passwordFile = mkOption {
+                type = str;
+                example = "/run/keys/jibri-xmpp1";
+                description = ''
+                  File containing the password for the user.
+                '';
+              };
+
+              call.login.domain = mkOption {
+                type = str;
+                example = "recorder.xmpp.example.org";
+                description = ''
+                  The domain part of the JID for the recorder.
+                '';
+              };
+              call.login.username = mkOption {
+                type = str;
+                default = "recorder";
+                description = ''
+                  User part of the JID for the recorder.
+                '';
+              };
+              call.login.passwordFile = mkOption {
+                type = str;
+                example = "/run/keys/jibri-recorder-xmpp1";
+                description = ''
+                  File containing the password for the user.
+                '';
+              };
+              disableCertificateVerification = mkOption {
+                type = bool;
+                default = false;
+                description = ''
+                  Whether to skip validation of the server's certificate.
+                '';
+              };
+
+              stripFromRoomDomain = mkOption {
+                type = str;
+                default = "0";
+                example = "conference.";
+                description = ''
+                  The prefix to strip from the room's JID domain to derive the call URL.
+                '';
+              };
+              usageTimeout = mkOption {
+                type = str;
+                default = "0";
+                example = "1 hour";
+                description = ''
+                  The duration that the Jibri session can be.
+                  A value of zero means indefinitely.
+                '';
+              };
+            };
+
+            config =
+              let
+                nick = mkDefault (
+                  builtins.replaceStrings [ "." ] [ "-" ] (
+                    config.networking.hostName
+                    + optionalString (config.networking.domain != null) ".${config.networking.domain}"
+                  )
+                );
+              in
+              {
+                call.login.username = nick;
+                control.muc.nickname = nick;
+              };
+          }
+        )
+      );
     };
   };
 
@@ -310,14 +319,23 @@ in
       isSystemUser = true;
       group = "jibri";
       home = "/var/lib/jibri";
-      extraGroups = [ "jitsi-meet" "adm" "audio" "video" "plugdev" ];
+      extraGroups = [
+        "jitsi-meet"
+        "adm"
+        "audio"
+        "video"
+        "plugdev"
+      ];
     };
 
     systemd.services.jibri-xorg = {
       description = "Jitsi Xorg Process";
 
       after = [ "network.target" ];
-      wantedBy = [ "jibri.service" "jibri-icewm.service" ];
+      wantedBy = [
+        "jibri.service"
+        "jibri-icewm.service"
+      ];
 
       preStart = ''
         cp --no-preserve=mode,ownership ${pkgs.jibri}/etc/jitsi/jibri/* /var/lib/jibri
@@ -365,21 +383,29 @@ in
     systemd.services.jibri = {
       description = "Jibri Process";
 
-      requires = [ "jibri-icewm.service" "jibri-xorg.service" ];
+      requires = [
+        "jibri-icewm.service"
+        "jibri-xorg.service"
+      ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ chromedriver chromium ffmpeg-full ];
+      path = with pkgs; [
+        chromedriver
+        chromium
+        ffmpeg-full
+      ];
 
-      script = (concatStrings (mapAttrsToList
-        (name: env: ''
-          export ${toVarName "${name}_control"}=$(cat ${env.control.login.passwordFile})
-          export ${toVarName "${name}_call"}=$(cat ${env.call.login.passwordFile})
-        '')
-        cfg.xmppEnvironments))
-      + ''
-        ${pkgs.jdk11_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
-      '';
+      script =
+        (concatStrings (
+          mapAttrsToList (name: env: ''
+            export ${toVarName "${name}_control"}=$(cat ${env.control.login.passwordFile})
+            export ${toVarName "${name}_call"}=$(cat ${env.call.login.passwordFile})
+          '') cfg.xmppEnvironments
+        ))
+        + ''
+          ${pkgs.jdk11_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json
+        '';
 
       environment.HOME = "/var/lib/jibri";
 
@@ -395,15 +421,19 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/log/jitsi/jibri 755 jibri jibri"
-    ];
-
-
+    systemd.tmpfiles.settings."10-jibri"."/var/log/jitsi/jibri".d = {
+      user = "jibri";
+      group = "jibri";
+      mode = "755";
+    };
 
     # Configure Chromium to not show the "Chrome is being controlled by automatic test software" message.
-    environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON { CommandLineFlagSecurityWarningsEnabled = false; };
-    warnings = [ "All security warnings for Chromium have been disabled. This is necessary for Jibri, but it also impacts all other uses of Chromium on this system." ];
+    environment.etc."chromium/policies/managed/managed_policies.json".text = builtins.toJSON {
+      CommandLineFlagSecurityWarningsEnabled = false;
+    };
+    warnings = [
+      "All security warnings for Chromium have been disabled. This is necessary for Jibri, but it also impacts all other uses of Chromium on this system."
+    ];
 
     boot = {
       extraModprobeConfig = ''

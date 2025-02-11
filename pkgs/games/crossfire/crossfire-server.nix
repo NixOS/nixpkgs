@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchsvn
-, autoreconfHook
-, autoconf
-, automake
-, libtool
-, flex
-, perl
-, check
-, pkg-config
-, python39 # crossfire-server relies on a parser wich was removed in python >3.9
-, version
-, rev
-, sha256
-, maps
-, arch
+{
+  stdenv,
+  lib,
+  fetchsvn,
+  autoconf,
+  automake,
+  libtool,
+  flex,
+  perl,
+  check,
+  pkg-config,
+  python39, # crossfire-server relies on a parser wich was removed in python >3.9
+  version,
+  rev,
+  sha256,
+  maps,
+  arch,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,20 @@ stdenv.mkDerivation rec {
     rev = "r${rev}";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python39 ];
+  patches = [
+    ./add-cstdint-include-to-crossfire-server.patch
+  ];
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    flex
+    perl
+    check
+    pkg-config
+    python39
+  ];
   hardeningDisable = [ "format" ];
 
   preConfigure = ''

@@ -1,9 +1,10 @@
-{ lib
-, fetchpatch
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-, cups
+{
+  lib,
+  fetchpatch,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cups,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -13,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-S5IrNWVoUp1w+P7DrKlOUOyY3Q16CHSct9ndZOB3UpU=";
   };
 
@@ -56,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     pycups
     qtconsole
     pyqt5
+    setuptools
   ];
 
   # QtApplication.instance() does not work during tests?
@@ -74,7 +76,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [ "--unset" "PYTHONPATH" "\${qtWrapperArgs[@]}" ];
+  makeWrapperArgs = [
+    "--unset"
+    "PYTHONPATH"
+    "\${qtWrapperArgs[@]}"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/inkscape/extensions
@@ -88,6 +94,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.codelv.com/projects/inkcut/";
     description = "Control 2D plotters, cutters, engravers, and CNC machines";
+    mainProgram = "inkcut";
     license = licenses.gpl3;
     maintainers = with maintainers; [ raboof ];
   };

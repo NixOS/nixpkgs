@@ -1,14 +1,15 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytest-httpbin
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytest-httpbin,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iZ2nwBxikf0cTTlxzcGvHJim4N6ZEqIhlK7t1WAYdms=";
   };
 
@@ -48,15 +49,16 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "mechanicalsoup"
-  ];
+  pythonImportsCheck = [ "mechanicalsoup" ];
 
   meta = with lib; {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
     changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich fab ];
+    maintainers = with maintainers; [
+      jgillich
+      fab
+    ];
   };
 }

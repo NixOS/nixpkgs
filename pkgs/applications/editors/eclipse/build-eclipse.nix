@@ -1,8 +1,32 @@
-{ lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
-, makeWrapper, perl, ... }:
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  freetype,
+  fontconfig,
+  libX11,
+  libXrender,
+  zlib,
+  jdk,
+  glib,
+  glib-networking,
+  gtk,
+  libXtst,
+  libsecret,
+  gsettings-desktop-schemas,
+  webkitgtk_4_0,
+  makeWrapper,
+  perl,
+  ...
+}:
 
-{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
+{
+  name,
+  src ? builtins.getAttr stdenv.hostPlatform.system sources,
+  sources ? null,
+  description,
+  productVersion,
+}:
 
 stdenv.mkDerivation rec {
   inherit name src;
@@ -17,11 +41,23 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
-  nativeBuildInputs = [ makeWrapper perl ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
   buildInputs = [
-    fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
-    libXrender libXtst libsecret zlib
-  ] ++ lib.optional (webkitgtk != null) webkitgtk;
+    fontconfig
+    freetype
+    glib
+    gsettings-desktop-schemas
+    gtk
+    jdk
+    libX11
+    libXrender
+    libXtst
+    libsecret
+    zlib
+  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
 
   buildCommand = ''
     # Unpack tarball.
@@ -32,7 +68,15 @@ stdenv.mkDerivation rec {
     interpreter="$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)"
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
-    [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
+    [ -f $libCairo ] && patchelf --set-rpath ${
+      lib.makeLibraryPath [
+        freetype
+        fontconfig
+        libX11
+        libXrender
+        zlib
+      ]
+    } $libCairo
 
     # Create wrapper script.  Pass -configuration to store
     # settings in ~/.eclipse/org.eclipse.platform_<version> rather
@@ -41,7 +85,17 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (
+          [
+            glib
+            gtk
+            libXtst
+            libsecret
+          ]
+          ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0
+        )
+      } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
@@ -60,7 +114,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.eclipse.org/";
     inherit description;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 
 }

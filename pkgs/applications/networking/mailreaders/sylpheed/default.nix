@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, openssl ? null, gpgme ? null
-, gpgSupport ? true, sslSupport ? true, fetchpatch, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  openssl ? null,
+  gpgme ? null,
+  gpgSupport ? true,
+  sslSupport ? true,
+  fetchpatch,
+  Foundation,
+}:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
@@ -30,21 +41,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk2 ]
+  buildInputs =
+    [ gtk2 ]
     ++ lib.optionals gpgSupport [ gpgme ]
     ++ lib.optionals sslSupport [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
-  configureFlags = lib.optional gpgSupport "--enable-gpgme"
-    ++ lib.optional sslSupport "--enable-ssl";
+  configureFlags = lib.optional gpgSupport "--enable-gpgme" ++ lib.optional sslSupport "--enable-ssl";
 
   # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework Foundation";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Foundation";
 
   meta = with lib; {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
-    maintainers = with maintainers; [ eelco ];
+    mainProgram = "sylpheed";
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;
   };

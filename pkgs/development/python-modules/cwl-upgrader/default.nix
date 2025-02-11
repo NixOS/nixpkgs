@@ -1,34 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mypy-extensions
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, schema-salad
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mypy-extensions,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  schema-salad,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwl-upgrader";
-  version = "1.2.9";
-  format = "setuptools";
+  version = "1.2.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yvgGMGo4QK+PRDzqlOH4rP49fnJUlbYB9B5AnlX+LF8=";
+    repo = "cwl-upgrader";
+    tag = "v${version}";
+    hash = "sha256-cfEd1XAu31u+NO27d3RNA5lhCpRpYK8NeaCxhQ/1GNU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "ruamel.yaml >= 0.15, < 0.17.22" "ruamel.yaml" \
-      --replace "setup_requires=PYTEST_RUNNER," ""
-    sed -i "/ruamel.yaml/d" setup.py
+    # Version detection doesn't work for schema_salad
+    substituteInPlace pyproject.toml \
+      --replace '"schema_salad",' ""
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     mypy-extensions
@@ -41,14 +44,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cwlupgrader"
-  ];
+  pythonImportsCheck = [ "cwlupgrader" ];
 
   meta = with lib; {
-    description = "Library to interface with Yolink";
-    homepage = "https://github.com/common-workflow-language/cwl-utils";
-    changelog = "https://github.com/common-workflow-language/cwl-utils/releases/tag/v${version}";
+    description = "Library to upgrade CWL syntax to a newer version";
+    mainProgram = "cwl-upgrader";
+    homepage = "https://github.com/common-workflow-language/cwl-upgrader";
+    changelog = "https://github.com/common-workflow-language/cwl-upgrader/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

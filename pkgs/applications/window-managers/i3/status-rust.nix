@@ -11,31 +11,37 @@
 , lm_sensors
 , iw
 , iproute2
+, pipewire
 , withICUCalendar ? false
+, withPipewire ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.32.3";
+  version = "0.33.2";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CldVak1BQ4VhRt24hHdog5O3crkQBZBkRWNT7uYUw4Y=";
+    hash = "sha256-xJm4MsEU0OVX401WvKllg3zUwgCvjLxlAQzXE/oD1J0=";
   };
 
-  cargoHash = "sha256-gWBmzpgZcsO4u8kXSqtr4FIYvshXpxWbECg/tcyl9Ok=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EFFmH9aG7DvSA5rsAuszc1B8kcLdruSk3Hhp4V9t9Gk=";
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ]
+    ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ];
+  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ]
+    ++ (lib.optionals withPipewire [ pipewire ]);
 
   buildFeatures = [
     "notmuch"
     "maildir"
     "pulseaudio"
-  ] ++ (lib.optionals withICUCalendar [ "icu_calendar" ]);
+  ] ++ (lib.optionals withICUCalendar [ "icu_calendar" ])
+  ++ (lib.optionals withPipewire [ "pipewire" ]);
 
   prePatch = ''
     substituteInPlace src/util.rs \

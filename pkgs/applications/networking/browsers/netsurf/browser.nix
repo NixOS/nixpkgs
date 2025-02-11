@@ -1,54 +1,57 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL
-, check
-, curl
-, expat
-, gtk2
-, gtk3
-, libXcursor
-, libXrandr
-, libidn
-, libjpeg
-, libpng
-, libwebp
-, libxml2
-, makeWrapper
-, openssl
-, perlPackages
-, pkg-config
-, wrapGAppsHook
-, xxd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  check,
+  curl,
+  expat,
+  gperf,
+  gtk2,
+  gtk3,
+  libXcursor,
+  libXrandr,
+  libidn,
+  libjpeg,
+  libjxl,
+  libpng,
+  libwebp,
+  libxml2,
+  makeWrapper,
+  openssl,
+  perlPackages,
+  pkg-config,
+  wrapGAppsHook3,
+  xxd,
 
-# Netsurf-specific dependencies
-, buildsystem
-, libcss
-, libdom
-, libhubbub
-, libnsbmp
-, libnsfb
-, libnsgif
-, libnslog
-, libnspsl
-, libnsutils
-, libparserutils
-, libsvgtiny
-, libutf8proc
-, libwapcaplet
-, nsgenbind
+  # Netsurf-specific dependencies
+  buildsystem,
+  libcss,
+  libdom,
+  libhubbub,
+  libnsbmp,
+  libnsfb,
+  libnsgif,
+  libnslog,
+  libnspsl,
+  libnsutils,
+  libparserutils,
+  libsvgtiny,
+  libutf8proc,
+  libwapcaplet,
+  nsgenbind,
 
-# Configuration
-, uilib
+  # Configuration
+  uilib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf";
-  version = "3.10";
+  version = "3.11";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-NkhEKeGTYUaFwv8kb1W9Cm3d8xoBi+5F4NH3wohRmV4=";
+    hash = "sha256-wopiau/uQo0FOxP4i1xECSIkWXZSLRLq8TfP0y0gHLI=";
   };
 
   nativeBuildInputs = [
@@ -57,40 +60,44 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.perl
     pkg-config
     xxd
-  ]
-  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook;
+  ] ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook3;
 
-  buildInputs = [
-    check
-    curl
-    libXcursor
-    libXrandr
-    libidn
-    libjpeg
-    libpng
-    libwebp
-    libxml2
-    openssl
+  buildInputs =
+    [
+      check
+      curl
+      gperf
+      libXcursor
+      libXrandr
+      libidn
+      libjpeg
+      libjxl
+      libpng
+      libwebp
+      libxml2
+      openssl
 
-    libcss
-    libdom
-    libhubbub
-    libnsbmp
-    libnsfb
-    libnsgif
-    libnslog
-    libnspsl
-    libnsutils
-    libparserutils
-    libsvgtiny
-    libutf8proc
-    libwapcaplet
-    nsgenbind
-  ]
-  ++ lib.optionals (uilib == "framebuffer") [ expat SDL ]
-  ++ lib.optional (uilib == "gtk2") gtk2
-  ++ lib.optional (uilib == "gtk3") gtk3
-  ;
+      libcss
+      libdom
+      libhubbub
+      libnsbmp
+      libnsfb
+      libnsgif
+      libnslog
+      libnspsl
+      libnsutils
+      libparserutils
+      libsvgtiny
+      libutf8proc
+      libwapcaplet
+      nsgenbind
+    ]
+    ++ lib.optionals (uilib == "framebuffer") [
+      expat
+      SDL
+    ]
+    ++ lib.optional (uilib == "gtk2") gtk2
+    ++ lib.optional (uilib == "gtk3") gtk3;
 
   # Since at least 2018 AD, GCC and other compilers run in `-fno-common` mode as
   # default, in order to comply with C standards and also get rid of some bad
@@ -103,8 +110,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
+  patchPhase = lib.optionalString stdenv.cc.isClang ''
+    runHook prePatch
+
+    substituteInPlace Makefile \
+      --replace-warn '--trace' '-t' \
+      --replace-warn '-Wimplicit-fallthrough=3' '-Wimplicit-fallthrough'
+
+    runHook postPatch
+  '';
+
   preConfigure = ''
-    cat <<EOF > Makefile.conf
+    cat <<EOF > Makefile.config
     override NETSURF_GTK_RES_PATH  := $out/share/
     override NETSURF_USE_GRESOURCE := YES
     EOF
@@ -117,7 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
-    description = "A free, open source, small web browser";
+    description = "Free, open source, small web browser";
+    mainProgram = "netsurf-gtk3";
     longDescription = ''
       NetSurf is a free, open source web browser. It is written in C and
       released under the GNU Public Licence version 2. NetSurf has its own

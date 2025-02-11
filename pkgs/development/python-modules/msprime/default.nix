@@ -1,41 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, oldest-supported-numpy
-, setuptools-scm
-, wheel
-, pythonOlder
-, gsl
-, numpy
-, newick
-, tskit
-, demes
-, pytestCheckHook
-, pytest-xdist
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  demes,
+  fetchPypi,
+  gsl,
+  newick,
+  numpy,
+  oldest-supported-numpy,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  tskit,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "msprime";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.3.3";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YAJa2f0w2CenKubnYLbP8HodDhabLB2hAkyw/CPkp6o=";
+    hash = "sha256-2K55gHYWf2Mrj9fszVCJ+qqEyQNMppQi+IZCX5SlsBs=";
   };
 
-  patches = [
-    # upstream patch fixes 2 failing unittests. remove on update
-    (fetchpatch {
-      name = "python311.patch";
-      url = "https://github.com/tskit-dev/msprime/commit/639125ec942cb898cf4a80638f229e11ce393fbc.patch";
-      hash = "sha256-peli4tdu8Bv21xIa5H8SRdfjQnTMO72IPFqybmSBSO8=";
-      includes = [ "tests/test_ancestry.py" ];
-    })
-  ];
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2" "numpy"
+  '';
 
   nativeBuildInputs = [
     gsl
@@ -44,9 +41,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    gsl
-  ];
+  buildInputs = [ gsl ];
 
   propagatedBuildInputs = [
     numpy
@@ -60,10 +55,12 @@ buildPythonPackage rec {
     pytest-xdist
     scipy
   ];
+
   disabledTests = [
     "tests/test_ancestry.py::TestSimulator::test_debug_logging"
     "tests/test_ancestry.py::TestSimulator::test_debug_logging_dtw"
   ];
+
   disabledTestPaths = [
     "tests/test_demography.py"
     "tests/test_algorithms.py"
@@ -79,13 +76,12 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r msprime
   '';
-  pythonImportsCheck = [
-    "msprime"
-  ];
+  pythonImportsCheck = [ "msprime" ];
 
   meta = with lib; {
     description = "Simulate genealogical trees and genomic sequence data using population genetic models";
     homepage = "https://github.com/tskit-dev/msprime";
+    changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alxsimon ];
   };

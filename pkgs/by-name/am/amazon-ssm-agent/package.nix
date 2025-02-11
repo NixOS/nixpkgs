@@ -1,20 +1,20 @@
-{ lib
-, writeShellScriptBin
-, buildGoModule
-, makeWrapper
-, darwin
-, fetchFromGitHub
-, coreutils
-, nettools
-, util-linux
-, stdenv
-, dmidecode
-, bashInteractive
-, nix-update-script
-, nixosTests
-, testers
-, amazon-ssm-agent
-, overrideEtc ? true
+{
+  lib,
+  writeShellScriptBin,
+  buildGoModule,
+  makeWrapper,
+  darwin,
+  fetchFromGitHub,
+  coreutils,
+  nettools,
+  util-linux,
+  stdenv,
+  dmidecode,
+  bashInteractive,
+  nix-update-script,
+  nixosTests,
+  testers,
+  amazon-ssm-agent,
 }:
 
 let
@@ -42,13 +42,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.2.1798.0";
+  version = "3.3.1611.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
-    rev = "refs/tags/${version}";
-    hash = "sha256-A7M8UbOJT9zvbcwlARMwA7a+LGk8KYmo9j31yzh5FDQ=";
+    tag = version;
+    hash = "sha256-mwru2BAnVSYLXoA+g7eizadSYLr9c3ikEJipo7N1n4Y=";
   };
 
   vendorHash = null;
@@ -62,47 +62,51 @@ buildGoModule rec {
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.DarwinTools
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.DarwinTools
+    ];
 
-  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1630.0/makefile#L120-L138
+  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.2143.0/makefile#L121-L147
   # The updater is not built because it cannot work on NixOS
   subPackages = [
     "core"
     "agent"
     "agent/cli-main"
+    "agent/framework/processor/executer/outofproc/sessionworker"
     "agent/framework/processor/executer/outofproc/worker"
     "agent/session/logging"
-    "agent/framework/processor/executer/outofproc/sessionworker"
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  postPatch = ''
-    printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
+  postPatch =
+    ''
+      printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
-    substituteInPlace agent/platform/platform_unix.go \
-      --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
-      --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-      --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
+      substituteInPlace agent/platform/platform_unix.go \
+        --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
+        --replace-fail '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+        --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
-    substituteInPlace agent/session/shell/shell_unix.go \
-      --replace '"script"' '"${util-linux}/bin/script"'
+      substituteInPlace agent/session/shell/shell_unix.go \
+        --replace-fail '"script"' '"${util-linux}/bin/script"'
 
-    substituteInPlace agent/rebooter/rebooter_unix.go \
-      --replace "/sbin/shutdown" "shutdown"
+      substituteInPlace agent/rebooter/rebooter_unix.go \
+        --replace-fail "/sbin/shutdown" "shutdown"
 
-    echo "${version}" > VERSION
-  '' + lib.optionalString overrideEtc ''
-    substituteInPlace agent/appconfig/constants_unix.go \
-      --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
-      --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
-  '';
+      echo "${version}" > VERSION
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
+        --replace-fail /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
+    '';
 
   preBuild = ''
     # Note: if this step fails, please patch the code to fix it! Please only skip
@@ -116,7 +120,11 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
-    declare -A map=(${builtins.concatStringsSep " " (lib.mapAttrsToList (name: value: "[\"${name}\"]=\"${value}\"") binaries)})
+    declare -A map=(${
+      builtins.concatStringsSep " " (
+        lib.mapAttrsToList (name: value: "[\"${name}\"]=\"${value}\"") binaries
+      )
+    })
 
     for key in ''${!map[@]}; do
       install -D -m 0555 -T "$GOPATH/bin/''${key}" "$out/bin/''${map[''${key}]}"
@@ -140,6 +148,7 @@ buildGoModule rec {
   checkFlags = [
     # Skip time dependent/flaky test
     "-skip=TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked"
+    "-skip=TestParallelAccessOfQueue"
   ];
 
   postFixup = ''
@@ -166,6 +175,11 @@ buildGoModule rec {
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
+    maintainers = with maintainers; [
+      copumpkin
+      manveru
+      anthonyroussel
+      arianvp
+    ];
   };
 }

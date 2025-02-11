@@ -1,32 +1,30 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cargo
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
-, libiconv
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cargo,
+  fetchPypi,
+  pytestCheckHook,
+  rustc,
+  rustPlatform,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "rpds-py";
-  version = "0.10.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.22.3";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "rpds_py";
     inherit version;
-    hash = "sha256-/MHrt1YaPiSmWI98be0V2ArsIsZqBwx1dVm1exf/0cs=";
+    hash = "sha256-4y/uirRdPC222hmlMjvDNiI3yLZTxwGUQUuJL9BqCA0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-iWy6BHVsKsZB0SVrh3CVhryaavk4gAQVvRdu9xBiDRg=";
+    hash = "sha256-2skrDC80g0EKvTEeBI4t4LD7ZXb6jp2Gw+owKFrkZzc=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +34,16 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "rpds"
-  ];
+  pythonImportsCheck = [ "rpds" ];
 
   meta = with lib; {
-    description = "Python bindings to Rust's persistent data structures (rpds";
-    homepage = "https://pypi.org/project/rpds-py/";
+    changelog = "https://github.com/crate-py/rpds/releases/tag/v${version}";
+    description = "Python bindings to Rust's persistent data structures";
+    homepage = "https://github.com/crate-py/rpds";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

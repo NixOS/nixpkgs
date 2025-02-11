@@ -1,27 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.13.2";
-  format = "setuptools";
+  version = "2.17.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XEhXMDVdlnI9ZK5jfxsiZPNbV8MB7A7yxtMLLwbcoU4=";
+    pname = "google_cloud_redis";
+    inherit version;
+    hash = "sha256-DYSwTUq3JUZPe7gfQMHwV0/B9wrEoM2vgkIHV3RYTF4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -40,9 +45,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Memorystore for Redis API client library";
-    homepage = "https://github.com/googleapis/python-redis";
-    changelog = "https://github.com/googleapis/python-redis/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-redis";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-redis-v${version}/packages/google-cloud-redis/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

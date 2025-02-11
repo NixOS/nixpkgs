@@ -1,60 +1,79 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, colorlog
-, dataclasses-json
-, langid
-, nltk
-, numpy
-, pandas
-, psutil
-, python-dateutil
-, scipy
-, toml
-, nltk-data
-, symlinkJoin
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  colorlog,
+  dataclasses-json,
+  nltk,
+  numpy,
+  pandas,
+  psutil,
+  py3langid,
+  pytestCheckHook,
+  python-dateutil,
+  scipy,
+  toml,
+  nltk-data,
+  symlinkJoin,
 }:
 let
   testNltkData = symlinkJoin {
     name = "nltk-test-data";
-    paths = [ nltk-data.punkt nltk-data.stopwords ];
+    paths = [
+      nltk-data.punkt
+      nltk-data.punkt_tab
+      nltk-data.stopwords
+    ];
   };
+
+  version = "0.0.20";
+  tag = "v${version}";
 in
 buildPythonPackage rec {
   pname = "type-infer";
-  version = "0.0.16";
-  format = "pyproject";
+  inherit version;
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  # using PyPI because the repo does not have tags or release branches
-  src = fetchPypi {
-    pname = "type_infer";
-    inherit version;
-    hash = "sha256-EWH8odCHAzrEcBtFEYBm5gt4zlrwrK33c6uEfFBgPfA=";
+  src = fetchFromGitHub {
+    owner = "mindsdb";
+    repo = "type_infer";
+    inherit tag;
+    hash = "sha256-2Y+NPwUnQMj0oXoCMfUOG40lqduy9GTcqxfyuFDOkHc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "psutil"
+    "py3langid"
+    "numpy"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     colorlog
     dataclasses-json
-    langid
     nltk
     numpy
     pandas
     psutil
+    py3langid
     python-dateutil
     scipy
     toml
   ];
 
-  # PyPI package does not include tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # test hangs
+    "test_1_stack_overflow_survey"
+  ];
 
   # Package import requires NLTK data to be downloaded
   # It is the only way to set NLTK_DATA environment variable,
@@ -63,8 +82,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "type_infer" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mindsdb/type_infer/releases/tag/${tag}";
     description = "Automated type inference for Machine Learning pipelines";
-    homepage = "https://pypi.org/project/type-infer/";
+    homepage = "https://github.com/mindsdb/type_infer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mbalatsko ];
   };

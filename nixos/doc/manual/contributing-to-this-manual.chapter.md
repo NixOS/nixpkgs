@@ -1,6 +1,6 @@
 # Contributing to this manual {#chap-contributing}
 
-The [DocBook] and CommonMark sources of the NixOS manual are in the [nixos/doc/manual](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual) subdirectory of the [Nixpkgs](https://github.com/NixOS/nixpkgs) repository.
+The sources of the NixOS manual are in the [nixos/doc/manual](https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual) subdirectory of the [Nixpkgs](https://github.com/NixOS/nixpkgs) repository.
 This manual uses the [Nixpkgs manual syntax](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-markup).
 
 You can quickly check your edits with the following:
@@ -16,6 +16,12 @@ If the build succeeds, the manual will be in `./result/share/doc/nixos/index.htm
 There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/unstable/#sec-contributing-devmode).
 
 The above instructions don't deal with the appendix of available `configuration.nix` options, and the manual pages related to NixOS. These are built, and written in a different location and in a different format, as explained in the next sections.
+
+## Testing redirects {#sec-contributing-redirects}
+
+Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
+
+Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
 
 ## Contributing to the `configuration.nix` options documentation {#sec-contributing-options}
 

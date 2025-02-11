@@ -1,14 +1,15 @@
-{ lib
-, buildGo121Module
-, fetchFromGitHub
-, curl
-, stdenv
-, testers
-, static-server
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  curl,
+  stdenv,
+  testers,
+  static-server,
+  replaceVars,
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "static-server";
   version = "1.2.1";
 
@@ -23,8 +24,7 @@ buildGo121Module rec {
 
   patches = [
     # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];
@@ -33,10 +33,13 @@ buildGo121Module rec {
     curl
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # tests sometimes fail with SIGQUIT on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     version = testers.testVersion {
@@ -47,7 +50,7 @@ buildGo121Module rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A simple, zero-configuration HTTP server CLI for serving static files";
+    description = "Simple, zero-configuration HTTP server CLI for serving static files";
     homepage = "https://github.com/eliben/static-server";
     license = licenses.unlicense;
     maintainers = with maintainers; [ figsoda ];

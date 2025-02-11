@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,19 +13,18 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.icewm.enable = mkEnableOption (lib.mdDoc "icewm");
+    services.xserver.windowManager.icewm.enable = mkEnableOption "icewm";
   };
 
   ###### implementation
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "icewm";
-        start =
-          ''
-            ${pkgs.icewm}/bin/icewm &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "icewm";
+      start = ''
+        ${pkgs.icewm}/bin/icewm-session &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ pkgs.icewm ];
   };

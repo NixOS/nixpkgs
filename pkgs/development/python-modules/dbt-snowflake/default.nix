@@ -1,44 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dbt-core
-, pytestCheckHook
-, snowflake-connector-python
+{
+  lib,
+  buildPythonPackage,
+  dbt-core,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  snowflake-connector-python,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.6.2";
-  format = "setuptools";
+  version = "1.9.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AOO3VbU1R3/snH7U7K9XXokBGXtf9Udpv7eR5HCBxss=";
+    repo = "dbt-snowflake";
+    tag = "v${version}";
+    hash = "sha256-Oyh+f8IQrxWbMOwcZzoqkytVH2E5FVbCjEqXUtMxfsw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dbt-core
     snowflake-connector-python
   ] ++ snowflake-connector-python.optional-dependencies.secure-local-storage;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "dbt.adapters.snowflake"
-  ];
+  pythonImportsCheck = [ "dbt.adapters.snowflake" ];
 
   meta = with lib; {
     description = "Plugin enabling dbt to work with Snowflake";
     homepage = "https://github.com/dbt-labs/dbt-snowflake";
-    changelog = "https://github.com/dbt-labs/dbt-snowflake/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-snowflake/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tjni ];
   };

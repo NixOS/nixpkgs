@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "doom-bcc";
@@ -12,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   patches = [ ./bcc-warning-fix.patch ];
 
@@ -25,8 +29,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Compiler for Doom/Hexen scripts (ACS, BCS)";
+    mainProgram = "bcc";
     homepage = "https://github.com/wormt/bcc";
     license = licenses.mit;
-    maintainers = with maintainers; [ertes];
+    maintainers = with maintainers; [ ertes ];
   };
 }

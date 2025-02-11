@@ -1,9 +1,12 @@
 { lib, stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
-, sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
-, self, gdbm, db, xz
-, python-setup-hook
+, zlibSupport ? true, zlib
+, bzip2, pkg-config, libffi
+, sqlite, openssl, ncurses, python, expat, tcl, tk, tclPackages, libX11
+, gdbm, db, xz, python-setup-hook
+, optimizationLevel ? "jit", boehmgc
 # For the Python package set
+, hash
+, self
 , packageOverrides ? (self: super: {})
 , pkgsBuildBuild
 , pkgsBuildHost
@@ -12,7 +15,6 @@
 , pkgsTargetTarget
 , sourceVersion
 , pythonVersion
-, hash
 , passthruFun
 , pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
 }:
@@ -40,7 +42,7 @@ let
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
-  pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
+  pythonForPypy = python.withPackages (ppkgs: [ ]);
 
 in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
@@ -59,8 +61,8 @@ in with passthru; stdenv.mkDerivation rec {
     stdenv.cc.libc
   ] ++ lib.optionals zlibSupport [
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libunwind Security
+  ] ++ lib.optionals (lib.any (l: l == optimizationLevel) [ "0" "1" "2" "3"]) [
+    boehmgc
   ];
 
   # Remove bootstrap python from closure
@@ -94,7 +96,7 @@ in with passthru; stdenv.mkDerivation rec {
       --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
     substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" \
-      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
   '';
 
   buildPhase = ''
@@ -102,7 +104,7 @@ in with passthru; stdenv.mkDerivation rec {
 
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
-      -Ojit \
+      -O${optimizationLevel} \
       --batch pypy/goal/targetpypystandalone.py
 
     runHook postBuild
@@ -128,9 +130,9 @@ in with passthru; stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (stdenv.isDarwin) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     mkdir -p $out/${executable}-c/pypy/bin
     mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
     ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
@@ -195,10 +197,12 @@ in with passthru; stdenv.mkDerivation rec {
   enableParallelBuilding = true;  # almost no parallelization without STM
 
   meta = with lib; {
-    homepage = "http://pypy.org/";
+    homepage = "https://www.pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+    mainProgram = "pypy";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    broken = optimizationLevel == "0"; # generates invalid code
     maintainers = with maintainers; [ andersk ];
   };
 }

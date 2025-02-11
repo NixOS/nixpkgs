@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, jinja2
-, markupsafe
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  jinja2,
+  markupsafe,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -47,14 +48,11 @@ buildPythonPackage rec {
     rm tests/conftest.py
   '';
 
-  pythonImportsCheck = [
-    "aiohttp_swagger"
-  ];
+  pythonImportsCheck = [ "aiohttp_swagger" ];
 
   meta = with lib; {
     description = "Swagger API Documentation builder for aiohttp";
     homepage = "https://github.com/cr0hn/aiohttp-swagger";
     license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

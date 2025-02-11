@@ -1,32 +1,44 @@
-{ lib, fetchFromGitHub, beets, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
-  version = "unstable-2021-02-01";
+  version = "0.13.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
-    rev = "288299e3aa9a1602717b04c28696fce5ce4259bf";
-    sha256 = "sha256-Xl7AHr33hXQqQDuFbWuj8HrIugeipJFPmvNXpCkU/mI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-i67Bzdh84TuVwcgwo5SgHFp1W04KF3VA6cbrFz82je0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "addopts = --cov --cov-report=term --cov-report=html" ""
-  '';
-
-  nativeBuildInputs = [ beets ];
+  nativeBuildInputs = [
+    beets
+    python3Packages.poetry-core
+  ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-cov
     mock
+    typeguard
   ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
-    maintainers = with maintainers; [ aszlig lovesegfault ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [
+      aszlig
+      lovesegfault
+    ];
+    license = lib.licenses.mit;
   };
 }

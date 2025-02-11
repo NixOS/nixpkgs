@@ -1,33 +1,34 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, callaudiod
-, kcontacts
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kio
-, kirigami-addons
-, kirigami2
-, knotifications
-, kpeople
-, libphonenumber
-, libselinux
-, libsepol
-, modemmanager-qt
-, pcre
-, plasma-wayland-protocols
-, protobuf
-, pulseaudio-qt
-, qtfeedback
-, qtmpris
-, qtquickcontrols2
-, util-linux
-, wayland
-, wayland-protocols
+  callaudiod,
+  kcontacts,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kio,
+  kirigami-addons,
+  kirigami2,
+  knotifications,
+  kpeople,
+  libphonenumber,
+  libselinux,
+  libsepol,
+  modemmanager-qt,
+  pcre,
+  plasma-wayland-protocols,
+  protobuf,
+  pulseaudio-qt,
+  qtfeedback,
+  qtmpris,
+  qtquickcontrols2,
+  util-linux,
+  wayland,
+  wayland-protocols,
 }:
 
 mkDerivation rec {
@@ -79,8 +80,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Dialer for Plasma Mobile";
+    mainProgram = "plasmaphonedialer";
     homepage = "https://invent.kde.org/plasma-mobile/plasma-dialer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

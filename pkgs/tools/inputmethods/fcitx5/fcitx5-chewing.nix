@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, gettext
-, fcitx5
-, libchewing
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  gettext,
+  fcitx5,
+  libchewing,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chewing";
-  version = "5.1.1";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-boIkbtNLPTNXY9e5gdQklhJuDU36ZswOqY2X8nRKqho=";
+    hash = "sha256-WSu78k0udlXxiQ1sAqB/LKmVfThxizshH5C9q2CfZLI=";
   };
 
   nativeBuildInputs = [

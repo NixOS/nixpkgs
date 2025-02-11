@@ -2,10 +2,10 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
+, wayland-scanner
 , cairo
 , pango
 , expat
@@ -20,7 +20,6 @@
 , enchant
 , gdk-pixbuf
 , libGL
-, libevent
 , libuuid
 , libselinux
 , libXdmcp
@@ -35,6 +34,7 @@
 , xcb-imdkit
 , libxkbfile
 , nixosTests
+, gettext
 }:
 let
   enDictVer = "20121020";
@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.1.5";
+  version = "5.1.11";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-HclPnxeDtWzlyOEXKgTrypiHVJezuUCBhfUW+9ytPVg=";
+    hash = "sha256-8J2gr2quZvJELd3zzhgwZUowjkOylpM6VZGJ1G3VomI=";
   };
 
   prePatch = ''
@@ -62,9 +62,12 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
+    wayland-scanner
+    gettext
   ];
 
   buildInputs = [
+    extra-cmake-modules # required to please CMake
     expat
     fmt
     isocodes
@@ -80,7 +83,6 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json_c
     libGL
-    libevent
     libuuid
     libselinux
     libsepol
@@ -95,6 +97,8 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = ./update.py;
     tests = {
@@ -106,6 +110,7 @@ stdenv.mkDerivation rec {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
     license = licenses.lgpl21Plus;
+    mainProgram = "fcitx5";
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
   };

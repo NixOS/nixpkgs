@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "itamae";
@@ -13,5 +17,6 @@ bundlerApp {
     license = with licenses; mit;
     maintainers = with maintainers; [ refi64 ];
     platforms = platforms.unix;
+    mainProgram = "itamae";
   };
 }

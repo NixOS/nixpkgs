@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, lilypond }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lilypond,
+}:
 
 let
 
-  olpFont = { fontName, rev, sha256, version ? rev, ... }:
+  olpFont =
+    {
+      fontName,
+      rev,
+      sha256,
+      version ? rev,
+      ...
+    }:
     stdenv.mkDerivation {
       inherit version;
       pname = "openlilypond-font-${fontName}";
@@ -17,13 +29,17 @@ let
         local fontsdir="$out/share/lilypond/${lilypond.version}/fonts"
 
         install -m755 -d "$fontsdir/otf"
-        for font in {otf,supplementary-fonts}/**.{o,t}tf; do
-          install -Dt "$fontsdir/otf" -m755 "$font"
+
+        shopt -s globstar
+
+        for font in {otf,supplementary-fonts,supplementary-files}/**/*.{o,t}tf; do
+          echo $font
+          install -Dt "$fontsdir/otf" -m644 "$font"
         done
 
         install -m755 -d "$fontsdir/svg"
-        for font in svg/**.{svg,woff}; do
-          install -Dt "$fontsdir/svg" -m755 "$font"
+        for font in {svg,woff}/**.{svg,woff}; do
+          install -Dt "$fontsdir/svg" -m644 "$font"
         done
       '';
 

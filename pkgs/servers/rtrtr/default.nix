@@ -1,25 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rtrtr";
-  version = "0.2.2";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-meZ24qIug2Zkw6PcB697CRuujVRIUuSrgugwnBM9gj8=";
+    hash = "sha256-c1jzUP7cYjqn49gbjXLWTge8ywHBI29gSnhzWDzNCV8=";
   };
 
-  cargoSha256 = "sha256-9wUfgkiQn2Du5UNBOy/+NZkFwqHAQoyqj8xQhIljKFY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RPCT2mmzuvDYSTTDM7S1yRcmCe8RlkA1i80dW7OPVO4=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];
 
   buildNoDefaultFeatures = true;

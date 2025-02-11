@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, openssl, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "graphql-client";
@@ -7,22 +15,27 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     crateName = "graphql_client_cli";
-    sha256 = "sha256-eQ+7Ru3au/rDQZtwFDXYyybqC5uFtNBs6cEzX2QSFI4=";
+    hash = "sha256-eQ+7Ru3au/rDQZtwFDXYyybqC5uFtNBs6cEzX2QSFI4=";
   };
 
-  cargoSha256 = "sha256-fEjt7ax818hlIq2+UrIG6EismQUGdaq7/C3xN+Nrw2s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GPUOIDKlxk2P+cPmOPlpz/EM9TCXvHo41+1fQ0xAqto=";
 
   nativeBuildInputs = [
     pkg-config
   ];
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "A GraphQL tool for Rust projects";
+    description = "GraphQL tool for Rust projects";
+    mainProgram = "graphql-client";
     homepage = "https://github.com/graphql-rust/graphql-client";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ bbigras ];
   };
 }

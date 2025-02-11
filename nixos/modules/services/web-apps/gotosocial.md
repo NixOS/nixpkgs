@@ -8,17 +8,19 @@ The following configuration sets up the PostgreSQL as database backend and binds
 GoToSocial to `127.0.0.1:8080`, expecting to be run behind a HTTP proxy on `gotosocial.example.com`.
 
 ```nix
-services.gotosocial = {
-  enable = true;
-  setupPostgresqlDB = true;
-  settings = {
-    application-name = "My GoToSocial";
-    host = "gotosocial.example.com";
-    protocol = "https";
-    bind-address = "127.0.0.1";
-    port = 8080;
+{
+  services.gotosocial = {
+    enable = true;
+    setupPostgresqlDB = true;
+    settings = {
+      application-name = "My GoToSocial";
+      host = "gotosocial.example.com";
+      protocol = "https";
+      bind-address = "127.0.0.1";
+      port = 8080;
+    };
   };
-};
+}
 ```
 
 Please refer to the [GoToSocial Documentation](https://docs.gotosocial.org/en/latest/configuration/general/)
@@ -30,24 +32,26 @@ Although it is possible to expose GoToSocial directly, it is common practice to 
 HTTP reverse proxy such as nginx.
 
 ```nix
-networking.firewall.allowedTCPPorts = [ 80 443 ];
-services.nginx = {
-  enable = true;
-  clientMaxBodySize = "40M";
-  virtualHosts = with config.services.gotosocial.settings; {
-    "${host}" = {
-      enableACME = true;
-      forceSSL = true;
-      locations = {
-        "/" = {
-          recommendedProxySettings = true;
-          proxyWebsockets = true;
-          proxyPass = "http://${bind-address}:${toString port}";
+{
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  services.nginx = {
+    enable = true;
+    clientMaxBodySize = "40M";
+    virtualHosts = with config.services.gotosocial.settings; {
+      "${host}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations = {
+          "/" = {
+            recommendedProxySettings = true;
+            proxyWebsockets = true;
+            proxyPass = "http://${bind-address}:${toString port}";
+          };
         };
       };
     };
   };
-};
+}
 ```
 
 Please refer to [](#module-security-acme) for details on how to provision an SSL/TLS certificate.

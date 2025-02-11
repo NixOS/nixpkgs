@@ -17,16 +17,19 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/164/275091/IdeaVim-2.1.0.zip",
-        "232.10072.15": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip"
       },
       "name": "ideavim"
     },
@@ -35,9 +38,86 @@
         "idea-ultimate"
       ],
       "builds": {
-        "232.10072.27": "https://plugins.jetbrains.com/files/631/414912/python-232.10072.27.zip"
+        "243.23654.189": "https://plugins.jetbrains.com/files/631/673131/python-243.23654.189.zip"
       },
       "name": "python"
+    },
+    "1347": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "243.22562.218": "https://plugins.jetbrains.com/files/1347/667258/scala-intellij-bin-2024.3.35.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/1347/667258/scala-intellij-bin-2024.3.35.zip"
+      },
+      "name": "scala"
+    },
+    "2162": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip"
+      },
+      "name": "string-manipulation"
+    },
+    "6884": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip"
+      },
+      "name": "handlebars-mustache"
     },
     "6954": {
       "compatible": [
@@ -56,16 +136,19 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/6954/381727/kotlin-plugin-223-1.9.10-release-459-IJ8836.35.zip",
-        "232.10072.15": null,
-        "232.10072.21": null,
-        "232.10072.27": null,
-        "232.10072.28": null,
-        "232.10072.31": null,
-        "232.10072.32": null,
-        "232.9921.42": null,
-        "232.9921.83": null,
-        "233.8264.22": null
+        "243.21565.447": null,
+        "243.22562.218": null,
+        "243.22562.220": null,
+        "243.23654.114": null,
+        "243.23654.126": null,
+        "243.23654.157": null,
+        "243.23654.166": null,
+        "243.23654.167": null,
+        "243.23654.168": null,
+        "243.23654.177": null,
+        "243.23654.180": null,
+        "243.23654.189": null,
+        "243.23654.19": null
       },
       "name": "kotlin"
     },
@@ -86,18 +169,120 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": null,
-        "232.10072.15": "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/6981/407868/ini-232.9921.89.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/6981/407868/ini-232.9921.89.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/6981/407738/ini-233.8264.9.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/6981/633889/ini-243.21565.208.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/6981/654905/ini-243.22562.236.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/6981/654905/ini-243.22562.236.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip"
       },
       "name": "ini"
+    },
+    "7086": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip"
+      },
+      "name": "acejump"
+    },
+    "7125": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip"
+      },
+      "name": "grep-console"
+    },
+    "7177": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/7177/630032/fileWatcher-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/7177/636663/fileWatcher-243.22562.13.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7177/636663/fileWatcher-243.22562.13.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip"
+      },
+      "name": "file-watchers"
     },
     "7219": {
       "compatible": [
@@ -105,8 +290,8 @@
         "phpstorm"
       ],
       "builds": {
-        "232.10072.27": "https://plugins.jetbrains.com/files/7219/419684/Symfony_Plugin-2022.1.259.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/7219/419684/Symfony_Plugin-2022.1.259.zip"
+        "243.23654.168": "https://plugins.jetbrains.com/files/7219/605730/Symfony_Plugin-2024.1.276.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7219/605730/Symfony_Plugin-2024.1.276.zip"
       },
       "name": "symfony-support"
     },
@@ -116,26 +301,135 @@
         "phpstorm"
       ],
       "builds": {
-        "232.10072.27": "https://plugins.jetbrains.com/files/7320/346181/PHP_Annotations-9.4.0.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/7320/346181/PHP_Annotations-9.4.0.zip"
+        "243.23654.168": "https://plugins.jetbrains.com/files/7320/630497/PHP_Annotations-11.1.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7320/630497/PHP_Annotations-11.1.1.zip"
       },
       "name": "php-annotations"
     },
     "7322": {
       "compatible": [
+        "clion",
         "datagrip",
         "goland",
         "idea-community",
+        "idea-ultimate",
+        "pycharm-community",
         "rider",
-        "rust-rover"
+        "rust-rover",
+        "webstorm"
       ],
       "builds": {
-        "232.10072.15": "https://plugins.jetbrains.com/files/7322/414919/python-ce-232.10072.27.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/7322/414919/python-ce-232.10072.27.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/7322/401058/python-ce-232.9921.77.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/7322/405773/python-ce-233.8264.8.zip"
+        "243.22562.218": "https://plugins.jetbrains.com/files/7322/646590/python-ce-243.22562.145.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7322/646590/python-ce-243.22562.145.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip"
       },
       "name": "python-community-edition"
+    },
+    "7391": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip"
+      },
+      "name": "asciidoc"
+    },
+    "7425": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.22562.218": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.167": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.168": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar"
+      },
+      "name": "wakatime"
+    },
+    "7499": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip"
+      },
+      "name": "gittoolbox"
     },
     "8182": {
       "compatible": [
@@ -153,15 +447,18 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/8182/329558/intellij-rust-0.4.194.5382-223.zip",
-        "232.10072.15": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip"
+        "243.21565.447": null,
+        "243.22562.218": null,
+        "243.22562.220": null,
+        "243.23654.114": null,
+        "243.23654.126": null,
+        "243.23654.157": null,
+        "243.23654.166": null,
+        "243.23654.167": null,
+        "243.23654.168": null,
+        "243.23654.177": null,
+        "243.23654.189": null,
+        "243.23654.19": null
       },
       "name": "-deprecated-rust"
     },
@@ -181,33 +478,95 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": null,
-        "232.10072.15": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip"
+        "243.21565.447": null,
+        "243.22562.218": null,
+        "243.22562.220": null,
+        "243.23654.114": null,
+        "243.23654.126": null,
+        "243.23654.157": null,
+        "243.23654.166": null,
+        "243.23654.167": null,
+        "243.23654.168": null,
+        "243.23654.177": null,
+        "243.23654.189": null,
+        "243.23654.19": null
       },
       "name": "-deprecated-rust-beta"
     },
-    "8554": {
+    "8195": {
       "compatible": [
+        "clion",
+        "datagrip",
         "goland",
         "idea-community",
         "idea-ultimate",
+        "mps",
+        "phpstorm",
         "pycharm-community",
         "pycharm-professional",
+        "rider",
         "ruby-mine",
+        "rust-rover",
         "webstorm"
       ],
       "builds": {
-        "232.10072.21": "https://plugins.jetbrains.com/files/8554/374977/featuresTrainer-232.9559.6.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/8554/374977/featuresTrainer-232.9559.6.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/8554/374977/featuresTrainer-232.9559.6.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/8554/374977/featuresTrainer-232.9559.6.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/8195/630064/toml-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/8195/630064/toml-243.21565.122.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/8195/630064/toml-243.21565.122.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip"
+      },
+      "name": "toml"
+    },
+    "8327": {
+      "compatible": [
+        "idea-community",
+        "idea-ultimate"
+      ],
+      "builds": {
+        "243.22562.218": "https://plugins.jetbrains.com/files/8327/615097/Minecraft_Development-2024.3-1.8.2.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/8327/615097/Minecraft_Development-2024.3-1.8.2.zip"
+      },
+      "name": "minecraft-development"
+    },
+    "8554": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/8554/633920/featuresTrainer-243.21565.204.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/8554/654690/featuresTrainer-243.22562.233.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/8554/654690/featuresTrainer-243.22562.233.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip"
       },
       "name": "ide-features-trainer"
     },
@@ -228,27 +587,164 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.10072.15": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip",
-        "233.8264.22": null
+        "243.21565.447": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip"
       },
       "name": "nixidea"
     },
+    "9525": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip"
+      },
+      "name": "-env-files"
+    },
     "9568": {
       "compatible": [
+        "goland",
         "idea-ultimate"
       ],
       "builds": {
-        "232.10072.27": "https://plugins.jetbrains.com/files/9568/414896/go-plugin-232.10072.27.zip"
+        "243.23654.166": "https://plugins.jetbrains.com/files/9568/666746/go-plugin-243.23654.117.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/9568/666746/go-plugin-243.23654.117.zip"
       },
       "name": "go"
+    },
+    "9707": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.22562.218": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.22562.220": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.114": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.126": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.157": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.166": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.167": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.168": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.177": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.180": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.189": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar",
+        "243.23654.19": "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar"
+      },
+      "name": "ansi-highlighter-premium"
+    },
+    "9792": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip"
+      },
+      "name": "key-promoter-x"
+    },
+    "9836": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip"
+      },
+      "name": "randomness"
     },
     "10037": {
       "compatible": [
@@ -267,18 +763,162 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/10037/417700/CSVEditor-3.2.2-223.zip",
-        "232.10072.15": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/10037/417702/CSVEditor-3.2.2-233.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip"
       },
       "name": "csv-editor"
+    },
+    "10080": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip"
+      },
+      "name": "rainbow-brackets"
+    },
+    "10312": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip"
+      },
+      "name": "dot-language"
+    },
+    "11058": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip"
+      },
+      "name": "extra-icons"
+    },
+    "11349": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip"
+      },
+      "name": "aws-toolkit"
+    },
+    "12024": {
+      "compatible": [
+        "rider"
+      ],
+      "builds": {
+        "243.23654.126": "https://plugins.jetbrains.com/files/12024/622380/ReSharperPlugin.CognitiveComplexity-2024.3.0-eap04.zip"
+      },
+      "name": "cognitivecomplexity"
     },
     "12062": {
       "compatible": [
@@ -297,16 +937,19 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": null,
-        "232.10072.15": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/12062/405118/keymap-vscode-233.8264.3.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip"
       },
       "name": "vscode-keymap"
     },
@@ -327,18 +970,54 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": null,
-        "232.10072.15": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/12559/405631/keymap-eclipse-233.8264.9.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip"
       },
       "name": "eclipse-keymap"
+    },
+    "12896": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip"
+      },
+      "name": "rainbow-csv"
     },
     "13017": {
       "compatible": [
@@ -357,18 +1036,87 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": null,
-        "232.10072.15": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/13017/405636/keymap-visualStudio-233.8264.9.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip"
       },
       "name": "visual-studio-keymap"
+    },
+    "13308": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip"
+      },
+      "name": "indent-rainbow"
+    },
+    "14004": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/14004/629971/protoeditor-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip"
+      },
+      "name": "protocol-buffers"
     },
     "14059": {
       "compatible": [
@@ -387,18 +1135,87 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.10072.15": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.10072.21": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.10072.27": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.10072.28": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.10072.31": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.10072.32": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.9921.42": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "232.9921.83": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
-        "233.8264.22": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar"
+        "243.21565.447": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.22562.218": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.22562.220": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.114": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.126": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.157": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.166": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.167": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.168": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.177": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.180": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.189": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar",
+        "243.23654.19": "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar"
       },
       "name": "darcula-pitch-black"
+    },
+    "14708": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.22562.218": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.22562.220": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.114": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.126": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.157": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.166": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.167": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.168": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.177": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.180": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.189": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar",
+        "243.23654.19": "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar"
+      },
+      "name": "mario-progress-bar"
+    },
+    "16604": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip"
+      },
+      "name": "extra-toolwindow-colorful-icons"
     },
     "17718": {
       "compatible": [
@@ -417,16 +1234,19 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.10072.15": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip"
       },
       "name": "github-copilot"
     },
@@ -447,18 +1267,277 @@
         "webstorm"
       ],
       "builds": {
-        "223.8836.1185": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.10072.15": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.10072.21": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.10072.27": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.10072.28": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.10072.31": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.10072.32": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "232.9921.83": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip"
+        "243.21565.447": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip"
       },
       "name": "netbeans-6-5-keymap"
+    },
+    "18824": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip"
+      },
+      "name": "codeglance-pro"
+    },
+    "18922": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.22562.218": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.22562.220": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.114": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.126": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.157": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.166": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.167": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.168": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.177": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.180": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.189": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar",
+        "243.23654.19": "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar"
+      },
+      "name": "gerry-themes"
+    },
+    "19275": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip"
+      },
+      "name": "better-direnv"
+    },
+    "20146": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip"
+      },
+      "name": "mermaid"
+    },
+    "21551": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip"
+      },
+      "name": "ferris"
+    },
+    "21667": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip"
+      },
+      "name": "code-complexity"
+    },
+    "21904": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip"
+      },
+      "name": "developer-tools"
+    },
+    "21962": {
+      "compatible": [
+        "clion",
+        "goland",
+        "idea-ultimate",
+        "phpstorm",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.23654.114": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip"
+      },
+      "name": "dev-containers"
     },
     "22407": {
       "compatible": [
@@ -467,45 +1546,304 @@
         "rust-rover"
       ],
       "builds": {
-        "232.10072.27": "https://plugins.jetbrains.com/files/22407/414874/intellij-rust-232.18264.22.zip",
-        "232.9921.42": "https://plugins.jetbrains.com/files/22407/414874/intellij-rust-232.18264.22.zip",
-        "233.8264.22": "https://plugins.jetbrains.com/files/22407/414871/intellij-rust-233.18264.22.zip"
+        "243.23654.114": "https://plugins.jetbrains.com/files/22407/672481/intellij-rust-243.23654.180.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/22407/672481/intellij-rust-243.23654.180.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/22407/672481/intellij-rust-243.23654.180.zip"
       },
       "name": "rust"
+    },
+    "22707": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip"
+      },
+      "name": "continue"
+    },
+    "22857": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/22857/633914/vcs-gitlab-243.21565.204.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/22857/640903/vcs-gitlab-243.22562.53.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/22857/640903/vcs-gitlab-243.22562.53.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip"
+      },
+      "name": "gitlab"
+    },
+    "23043": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip"
+      },
+      "name": "mermaid-chart"
+    },
+    "23927": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip"
+      },
+      "name": "extra-ide-tweaks"
+    },
+    "24559": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip"
+      },
+      "name": "extra-tools-pack"
+    },
+    "25594": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-ultimate",
+        "phpstorm",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.23654.114": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip"
+      },
+      "name": "nix-lsp"
+    },
+    "26084": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.22562.218": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.114": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.126": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.166": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.168": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.177": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.189": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip",
+        "243.23654.19": "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip"
+      },
+      "name": "markdtask"
     }
   },
   "files": {
-    "https://plugins.jetbrains.com/files/10037/417699/CSVEditor-3.2.2-232.zip": "sha256-3bHSRhzvVO07mvuD6tpkiKFXTF66zCK/wpXFVb8IkfY=",
-    "https://plugins.jetbrains.com/files/10037/417700/CSVEditor-3.2.2-223.zip": "sha256-4Y/DZpCWKljaslJFsaqItq1DVJVVRlQjWpM6GLRo8QA=",
-    "https://plugins.jetbrains.com/files/10037/417702/CSVEditor-3.2.2-233.zip": "sha256-n4psF9fFFU8ohtbOndRx6i20EntjEzL3BvMObAZyOOw=",
-    "https://plugins.jetbrains.com/files/12062/364117/keymap-vscode-232.8660.88.zip": "sha256-q5i1eAANK+6uBYrtioKLzvJf5ALUB0K4d31Ut0vT/lE=",
-    "https://plugins.jetbrains.com/files/12062/405118/keymap-vscode-233.8264.3.zip": "sha256-cB3DTeWhDgAwHlxwYogd0/DuYBzo5DqaRtBvEC/p8I4=",
-    "https://plugins.jetbrains.com/files/12559/364124/keymap-eclipse-232.8660.88.zip": "sha256-eRCsivZbDNrc+kesa9jVsOoMFFz+WpYfSMXxPCCjWjw=",
-    "https://plugins.jetbrains.com/files/12559/405631/keymap-eclipse-233.8264.9.zip": "sha256-d54ipHXOwl3AZD5k72s1vTHzevRA4v+WfGUItGtUIn8=",
-    "https://plugins.jetbrains.com/files/13017/364038/keymap-visualStudio-232.8660.88.zip": "sha256-5S8u7w14fLkaTcjACfUSun9pMNtPk20/8+Dr5Sp9sDE=",
-    "https://plugins.jetbrains.com/files/13017/405636/keymap-visualStudio-233.8264.9.zip": "sha256-A3qx1stw9cTaD/dUmJ8q4j7yLnlvdq6yINZGuA9zDBQ=",
+    "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip": "sha256-frvQ+Dm1ueID6+vNlja0HtecGyn+ppq9GTgmU3kQ+58=",
+    "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip": "sha256-IWRvV8NDYnoxxvQVOf3K3pueD+Hp7ctaWOmFHnaVTJg=",
+    "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip": "sha256-25vtwXuBNiYL9E0pKG4dqJDkwX1FckAErdqRPKXybQA=",
+    "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip": "sha256-bQHgzbSUh7cZEzVGrZQxUJ+fGY7GB4Sy5izwadkkQiQ=",
+    "https://plugins.jetbrains.com/files/11349/674043/aws-toolkit-jetbrains-standalone-3.51-243.zip": "sha256-x+QcNCjBZWwRWa6OuQPhFJMlm4/HeDnlshYmSYYT1GA=",
+    "https://plugins.jetbrains.com/files/12024/622380/ReSharperPlugin.CognitiveComplexity-2024.3.0-eap04.zip": "sha256-X2x7uyWoV4aBI8E5bw35QfzmySWzbEAZ2nvdo5i+t+s=",
+    "https://plugins.jetbrains.com/files/12062/630060/keymap-vscode-243.21565.122.zip": "sha256-phv8MTGKNGzRviKzX+nIVTbkX4WkU82QVO5zXUQLtAo=",
+    "https://plugins.jetbrains.com/files/12559/629985/keymap-eclipse-243.21565.122.zip": "sha256-/g1ucT18ywVJnCePH7WyMWKgM9umowBz5wFObmO7cws=",
+    "https://plugins.jetbrains.com/files/12896/173977/RainbowCSV.zip": "sha256-Q+gqKG/2bHD49Xtn9MNlYJQGtNF/7tIay9F7ndi8uwA=",
+    "https://plugins.jetbrains.com/files/13017/630016/keymap-visualStudio-243.21565.122.zip": "sha256-VQqK0Cm9ddXN63KYIqimuGOh7EB9VvdlErp/VrWx8SA=",
+    "https://plugins.jetbrains.com/files/13308/370912/Indent_Rainbow-2.2.0-signed.zip": "sha256-eKwDE+PMtYhrGbDDZPS5cimssH+1xV4GF6RXXg/3urU=",
+    "https://plugins.jetbrains.com/files/1347/667258/scala-intellij-bin-2024.3.35.zip": "sha256-4I75KqXyFl73S63O+00usrg8QBcuBRBgfjRmCQMpNks=",
+    "https://plugins.jetbrains.com/files/14004/629971/protoeditor-243.21565.122.zip": "sha256-cv6JTujoD5g90ngXTtnj5x31wjbIZlKZ6Zn0H+vHCTk=",
+    "https://plugins.jetbrains.com/files/14004/636643/protoeditor-243.22562.13.zip": "sha256-Tgu8CfDhO6KugfuLNhmxe89dMm+Qo3fmAg/8hwjUaoc=",
     "https://plugins.jetbrains.com/files/14059/82616/darcula-pitch-black.jar": "sha256-eXInfAqY3yEZRXCAuv3KGldM1pNKEioNwPB0rIGgJFw=",
-    "https://plugins.jetbrains.com/files/164/275091/IdeaVim-2.1.0.zip": "sha256-2dM/r79XT+1MHDeRAUnZw6WO3dmw7MZfx9alHmBqMk0=",
-    "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip": "sha256-eFKMFSkzQ0rJKuTUjFo8Yj5Z/mdGoF6REtpSqg/WkNc=",
-    "https://plugins.jetbrains.com/files/17718/415524/github-copilot-intellij-1.3.2.3479.zip": "sha256-K+crYlCWZaHfBYXM4gFhEcEVW00EznfFibPo2ycAIAs=",
+    "https://plugins.jetbrains.com/files/14708/475401/MarioProgressBar-1.9.jar": "sha256-mB09zvUg1hLXl9lgW1NEU+DyVel1utZv6s+mFykckYY=",
+    "https://plugins.jetbrains.com/files/164/666347/IdeaVIM-2.18.1.zip": "sha256-wkh88imoNLt9Q7M6chu28+e0EhudpVGN4ZhvfSdj/l4=",
+    "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip": "sha256-U2kNQtumZ71+G3maxxXPVsLL8Q+8YonpC4ejr1DYMbo=",
+    "https://plugins.jetbrains.com/files/17718/671850/github-copilot-intellij-1.5.32-242.zip": "sha256-WJxjcazelBgNBusqiv9ws9XhtszKpdk+8iNV+jP+ros=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
-    "https://plugins.jetbrains.com/files/22407/414871/intellij-rust-233.18264.22.zip": "sha256-5gTCC+3ZhxQtu2dxc1U5WuYY6NswaSs29n+EOnVn/1U=",
-    "https://plugins.jetbrains.com/files/22407/414874/intellij-rust-232.18264.22.zip": "sha256-V8xmXBe9R/lOyk6ryaUxCr9UCZTxDiFFp7iR9KH0G/A=",
-    "https://plugins.jetbrains.com/files/631/414912/python-232.10072.27.zip": "sha256-avd+FtL7thr3btczmG/d5tsXzi7pVLd6B1mQhL/U6ts=",
-    "https://plugins.jetbrains.com/files/6954/381727/kotlin-plugin-223-1.9.10-release-459-IJ8836.35.zip": "sha256-gHkNQyWh6jtY1986aI7Qo6ZNrniPy+Yq4XLLA0pKJkA=",
-    "https://plugins.jetbrains.com/files/6981/407738/ini-233.8264.9.zip": "sha256-E3xWjwTxtLkOtm9748BbkKGaS4l8SlZOkj3w6VgqlFQ=",
-    "https://plugins.jetbrains.com/files/6981/407868/ini-232.9921.89.zip": "sha256-XIdhTQMxl/nJnntfQlHLlcyA79IS3hnGEGrXhKBFgY0=",
-    "https://plugins.jetbrains.com/files/6981/418297/ini-232.10072.32.zip": "sha256-eC5Zs6ph/4C3Xf6e07DfyqhBmsG3bAFLnvae1JiFzpE=",
-    "https://plugins.jetbrains.com/files/7219/419684/Symfony_Plugin-2022.1.259.zip": "sha256-3UxSPvEXXhAf3zYg2H/jja4F5fuDFWQ6SWFRvcWJ0Iw=",
-    "https://plugins.jetbrains.com/files/7320/346181/PHP_Annotations-9.4.0.zip": "sha256-hT5K4w4lhvNwDzDMDSvsIDGj9lyaRqglfOhlbNdqpWs=",
-    "https://plugins.jetbrains.com/files/7322/401058/python-ce-232.9921.77.zip": "sha256-cr4LxSz8xVzC+Zm+6LnWGLbF6aGBVLW56crCIQOawhc=",
-    "https://plugins.jetbrains.com/files/7322/405773/python-ce-233.8264.8.zip": "sha256-LjN0BkcnX8mVHh2dPULddVwooi9fcABkrRVhTPA7XSo=",
-    "https://plugins.jetbrains.com/files/7322/414919/python-ce-232.10072.27.zip": "sha256-R+5/E65OaEZxHY4FBUJtJUvcNYfrNHKID497FNc/R3g=",
-    "https://plugins.jetbrains.com/files/8182/329558/intellij-rust-0.4.194.5382-223.zip": "sha256-AgaKH4ZaxLhumk1P9BVJGpvluKnpYIulCDIRQpaWlKA=",
-    "https://plugins.jetbrains.com/files/8182/372556/intellij-rust-0.4.200.5420-232-beta.zip": "sha256-ZlSfPvhPixEz5JxU9qyG0nL3jiSjr4gKaf/xYcQI1vQ=",
-    "https://plugins.jetbrains.com/files/8182/395553/intellij-rust-0.4.201.5424-232.zip": "sha256-pVwBEyUCx/DJET9uIm8vxFeChE8FskWyfLjDpfg2mAE=",
-    "https://plugins.jetbrains.com/files/8554/374977/featuresTrainer-232.9559.6.zip": "sha256-HpdQdWJLTWuoYnHFmDB8JIlcuiu+hVfvUsRwvMcQqzw=",
-    "https://plugins.jetbrains.com/files/8607/370632/NixIDEA-0.4.0.10.zip": "sha256-pq9gFDjNmgZAXe11f6SNdN6g0xu18h/06J5L2lxUwgk=",
-    "https://plugins.jetbrains.com/files/9568/414896/go-plugin-232.10072.27.zip": "sha256-uWAy/ugmFQBvYEQvSuuNS7xDYkzZgYGyQdSQbuvt0Lk="
+    "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip": "sha256-AEHZxuRMBEZlT3xTxBUbHEPjEJBOCLxdj1wEYBzlNdk=",
+    "https://plugins.jetbrains.com/files/18922/659279/GerryThemes.jar": "sha256-c6sxbcrEI9sgVxFeSdGhTXrsqiu9oW75zMYbHVpc8aI=",
+    "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip": "sha256-hoFfIid7lClHDiT+ZH3H+tFSvWYb1tSRZH1iif+kWrM=",
+    "https://plugins.jetbrains.com/files/20146/633971/Mermaid-0.0.24_IJ.243.zip": "sha256-jGWRU0g120qYvvFiUFI10zvprTsemuIq3XmIjYxZGts=",
+    "https://plugins.jetbrains.com/files/21551/323564/ferris-2021.1.zip": "sha256-N66Bh0AwHmg5N9PNguRAGtpJ/dLMWMp3rxjTgz9poFo=",
+    "https://plugins.jetbrains.com/files/2162/640476/StringManipulation-9.15.0.zip": "sha256-TZPup3EJ0cBv4i2eVAQwVmmzy0rmt4KptEsk3C7baEM=",
+    "https://plugins.jetbrains.com/files/21667/618339/code-complexity-plugin-1.6.1.zip": "sha256-OGaYvQfSdAh0OZhYSpZJD14uyx8FSagEhUEinZmR3N4=",
+    "https://plugins.jetbrains.com/files/21904/665427/intellij-developer-tools-plugin-6.3.0-signed.zip": "sha256-TEx5wg3Sf3rkhl6oj0hRrMdBJW9KMjZ/yNDgNYaeP28=",
+    "https://plugins.jetbrains.com/files/21962/654853/clouds-docker-gateway-243.23654.19.zip": "sha256-l4XCXUq7ECeHhSjPvvCnwlXIGBylsolw3jIQMZ4Geag=",
+    "https://plugins.jetbrains.com/files/22407/672481/intellij-rust-243.23654.180.zip": "sha256-9MB+kR8GZePzVU6i9sr+vFyeGqGnXwGRThTv6lKouVU=",
+    "https://plugins.jetbrains.com/files/22707/645830/continue-intellij-extension-0.0.83.zip": "sha256-vMV26l2J4vhFnjrJnluwf/3qKoWNSvTfMFKPmquJJ50=",
+    "https://plugins.jetbrains.com/files/22857/633914/vcs-gitlab-243.21565.204.zip": "sha256-dnnbmo9OILtgVr8vXGSqQ6uSGDfxbrPptToAMs9SPRM=",
+    "https://plugins.jetbrains.com/files/22857/640903/vcs-gitlab-243.22562.53.zip": "sha256-lDStIaRy9ZtCXZxM2RRrz/5oZeL90aRVS63wC4XkJNw=",
+    "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip": "sha256-VKGZLlL8ALjr6JEQtjhXiIxNrnTPXIoXMToJkJux2dw=",
+    "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip": "sha256-ssaSY1I6FopLBgVKHUyjBrqzxHLSuI/swtDfQWJ7gxU=",
+    "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip": "sha256-nOPYnvLuApgpQwHBhRE3MJLDl2pE4bCz/6XHQQTZfA8=",
+    "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip": "sha256-U3gxwqLNGWNM26gTLJ7Q/9pBf9hbriSPvMvrE8EZVmc=",
+    "https://plugins.jetbrains.com/files/25594/623962/Nix_LSP-0.1.1.zip": "sha256-Uq5RdVQTyqRMsEwDZT6Kldv2alt0EVMCABEt/xQUHow=",
+    "https://plugins.jetbrains.com/files/26084/673826/markdtask-2025.1.zip": "sha256-Gd2yg0nkI312x4kobfSfFiiOWOduSN+N65kcrIQRmwE=",
+    "https://plugins.jetbrains.com/files/631/673131/python-243.23654.189.zip": "sha256-4uuHNZhmSh+vqARBZ+ilRmkYnr0otZdgeZUPziv+lQc=",
+    "https://plugins.jetbrains.com/files/6884/630038/handlebars-243.21565.122.zip": "sha256-pFKAZ8xFNfUh7/Hi4NYPDQAhRRYm4WKTpCQELqBfb40=",
+    "https://plugins.jetbrains.com/files/6981/633889/ini-243.21565.208.zip": "sha256-CJjUYj3GR9MrNhrejrxJ4reZX/80XQ+gkZffFKd0nhc=",
+    "https://plugins.jetbrains.com/files/6981/654905/ini-243.22562.236.zip": "sha256-kL/A2R8j2JKMU61T/xJahPwKPYmwFCFy55NPSoBh/Xc=",
+    "https://plugins.jetbrains.com/files/6981/672286/ini-243.23654.177.zip": "sha256-5IgVW7Aa+eVh5hUF7/Qa1g7nQtkAQkFKyGY5ROr/5fM=",
+    "https://plugins.jetbrains.com/files/7086/518678/AceJump.zip": "sha256-kVUEgfEKUupV/qlB4Dpzi5pFHjhVvX74XIPetKtjysM=",
+    "https://plugins.jetbrains.com/files/7125/627704/GrepConsole-13.2.0-IJ2023.3.zip": "sha256-KY5VRiLJJwa9OVVog1W3MboZjwVboYwYm+i4eqooo44=",
+    "https://plugins.jetbrains.com/files/7177/630032/fileWatcher-243.21565.122.zip": "sha256-Pjn9LPdlTug6WQaydD2sgjBeqdzTd6KRXPawgl4KM74=",
+    "https://plugins.jetbrains.com/files/7177/636663/fileWatcher-243.22562.13.zip": "sha256-8IHS3kmmbL8uQYnaMW7NgBIpBKT+XDJ4QDiiPZa5pzo=",
+    "https://plugins.jetbrains.com/files/7177/654841/fileWatcher-243.23654.19.zip": "sha256-mlCow96mI2k7c/oGe064DqjUViOFhNgwNjF6DVyak4E=",
+    "https://plugins.jetbrains.com/files/7219/605730/Symfony_Plugin-2024.1.276.zip": "sha256-drNmhJMe+kuY2fcHjY+SQmkACvFk0rVI4vAhyZ/bgLc=",
+    "https://plugins.jetbrains.com/files/7320/630497/PHP_Annotations-11.1.1.zip": "sha256-05aBYbqNIuwe/JTwntFdIqML8NHbTOwVusl1P9FzuYY=",
+    "https://plugins.jetbrains.com/files/7322/646590/python-ce-243.22562.145.zip": "sha256-45UtQRZMtKF6addrrB3A+goeyICMfcZ2FKcJvJSqgg4=",
+    "https://plugins.jetbrains.com/files/7322/673130/python-ce-243.23654.189.zip": "sha256-7P9JsxCDWUf0HPHZNPjoF8Ivh3Ks7AO5s2kWm+Cq9j4=",
+    "https://plugins.jetbrains.com/files/7391/658997/asciidoctor-intellij-plugin-0.43.6.zip": "sha256-3RJ7YVFtynyqeLIzdrirCMbWNZmUkJ+DT/9my71H0Dk=",
+    "https://plugins.jetbrains.com/files/7425/603907/WakaTime.jar": "sha256-Z7ZWDomXnTdHFKOElMkt53imef6aT7H5XeD6lOOFxfQ=",
+    "https://plugins.jetbrains.com/files/7499/667439/gittoolbox-600.0.14_243-signed.zip": "sha256-rpJ0tPIf3mw5KLSv+wx16mXVKA1PxKTktgCYzKU3cU4=",
+    "https://plugins.jetbrains.com/files/8195/630064/toml-243.21565.122.zip": "sha256-vKigewUGi06by9/6a9HbjN51zPAIafdk6w4MFG4kwG8=",
+    "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip": "sha256-OFoWuz5z0BcZJqWkS+vkcD/Q0e5IUnQRY84/GEQQIb8=",
+    "https://plugins.jetbrains.com/files/8327/615097/Minecraft_Development-2024.3-1.8.2.zip": "sha256-4c1nxjbEsNs9twmQnJllk1OIVmm0nnUYZ0R7f/6bJt4=",
+    "https://plugins.jetbrains.com/files/8554/633920/featuresTrainer-243.21565.204.zip": "sha256-3MCG1SNEy2Mf9r+nTLcRwJ+rIJRvtO0kYKFNjIan86E=",
+    "https://plugins.jetbrains.com/files/8554/654690/featuresTrainer-243.22562.233.zip": "sha256-JugbJM8Lr2kbhP9hdLE3kUStl2vOMUB5wGTwNLxAZd0=",
+    "https://plugins.jetbrains.com/files/8554/672476/featuresTrainer-243.23654.180.zip": "sha256-YRf5sj+quf/dQv6eFU6f190vWW+RHtyGS+S2a6DhUoM=",
+    "https://plugins.jetbrains.com/files/8607/673303/NixIDEA-0.4.0.17.zip": "sha256-OFisV6Vs/xlbDvchxfrREDVgVh7wcfGnot+zUrgQU6M=",
+    "https://plugins.jetbrains.com/files/9525/603167/idea-php-dotenv-plugin-2024.3.zip": "sha256-hR7hC2phDJnHXxPy80WlEDFAhZHtMCu7nqYvAb0VeTI=",
+    "https://plugins.jetbrains.com/files/9568/666746/go-plugin-243.23654.117.zip": "sha256-8Y7JyjX8ytias4ix1azWkhPEVYXDomWRiMQlrKco9zM=",
+    "https://plugins.jetbrains.com/files/9707/628343/ansi-highlighter-premium-24.3.1.jar": "sha256-X+Xks9sajsSVRXLQghJ5k2GuwmllNsZ9SrYBbf36P0c=",
+    "https://plugins.jetbrains.com/files/9792/633158/Key_Promoter_X-2024.2.2.zip": "sha256-Mzmmq0RzMKZeKfBSo7FHvzeEtPGIrwqEDLAONQEsR1M=",
+    "https://plugins.jetbrains.com/files/9836/672013/intellij-randomness-3.3.5-signed.zip": "sha256-2vb1sYPM0td8B95m7bVYfJfKVW+jObWpAHTTqLZB7Ak="
   }
 }

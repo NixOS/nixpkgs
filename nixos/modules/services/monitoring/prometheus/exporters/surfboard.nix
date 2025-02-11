@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.surfboard;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9239;
@@ -11,7 +16,7 @@ in
     modemAddress = mkOption {
       type = types.str;
       default = "192.168.100.1";
-      description = lib.mdDoc ''
+      description = ''
         The hostname or IP of the cable modem.
       '';
     };

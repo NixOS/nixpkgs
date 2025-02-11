@@ -1,12 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, rustPlatform
-, stdenv
-, libiconv }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  rustPlatform,
+  stdenv,
+  libiconv,
+}:
 
 buildPythonPackage rec {
   pname = "py-bip39-bindings";
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-bip39-bindings";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3/KBPUFVFkJifunGWJeAHLnY08KVTb8BHCFzDqKWH18=";
   };
 
@@ -30,9 +32,7 @@ buildPythonPackage rec {
     })
   ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
@@ -43,19 +43,13 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "bip39"
-  ];
+  pythonImportsCheck = [ "bip39" ];
 
   meta = with lib; {
     description = "Python bindings for the tiny-bip39 library";

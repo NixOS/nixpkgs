@@ -3,10 +3,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
 let
   passphrase = "supersecret";
   dataDir = "/ran:dom/data";
+  subDir = "not_anything_here";
+  excludedSubDirFile = "not_this_file_either";
   excludeFile = "not_this_file";
   keepFile = "important_file";
   keepFileData = "important_data";
   localRepo = "/root/back:up";
+  # a repository on a file system which is not mounted automatically
+  localRepoMount = "/noAutoMount";
   archiveName = "my_archive";
   remoteRepo = "borg@server:."; # No need to specify path
   privateKey = pkgs.writeText "id_ed25519" ''
@@ -42,6 +46,12 @@ in {
 
   nodes = {
     client = { ... }: {
+      virtualisation.fileSystems.${localRepoMount} = {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = [ "noauto" ];
+      };
+
       services.borgbackup.jobs = {
 
         local = {
@@ -61,8 +71,16 @@ in {
             yearly = 5;
           };
           exclude = [ "*/${excludeFile}" ];
+          extraCreateArgs = [ "--exclude-caches" "--exclude-if-present" ".dont backup" ];
           postHook = "echo post";
           startAt = [ ]; # Do not run automatically
+        };
+
+        localMount = {
+          paths = dataDir;
+          repo = localRepoMount;
+          encryption.mode = "none";
+          startAt = [ ];
         };
 
         remote = {
@@ -151,8 +169,10 @@ in {
     )
     client.succeed("chmod 0600 /root/id_ed25519.appendOnly")
 
-    client.succeed("mkdir -p ${dataDir}")
+    client.succeed("mkdir -p ${dataDir}/${subDir}")
     client.succeed("touch ${dataDir}/${excludeFile}")
+    client.succeed("touch '${dataDir}/${subDir}/.dont backup'")
+    client.succeed("touch ${dataDir}/${subDir}/${excludedSubDirFile}")
     client.succeed("echo '${keepFileData}' > ${dataDir}/${keepFile}")
 
     with subtest("local"):
@@ -164,6 +184,10 @@ in {
         # Make sure excludeFile has been excluded
         client.fail(
             "{} list '${localRepo}::${archiveName}' | grep -qF '${excludeFile}'".format(borg)
+        )
+        # Make sure excludedSubDirFile has been excluded
+        client.fail(
+            "{} list '${localRepo}::${archiveName}' | grep -qF '${subDir}/${excludedSubDirFile}".format(borg)
         )
         # Make sure keepFile has the correct content
         client.succeed("{} extract '${localRepo}::${archiveName}'".format(borg))
@@ -177,6 +201,17 @@ in {
         assert "${keepFileData}" in client.succeed(
             "cat /mnt/borg/${dataDir}/${keepFile}"
         )
+
+    with subtest("localMount"):
+        # the file system for the repo should not be already mounted
+        client.fail("mount | grep ${localRepoMount}")
+        # ensure trying to write to the mountpoint before the fs is mounted fails
+        client.succeed("chattr +i ${localRepoMount}")
+        borg = "borg"
+        client.systemctl("start --wait borgbackup-job-localMount")
+        client.fail("systemctl is-failed borgbackup-job-localMount")
+        # Make sure exactly one archive has been created
+        assert int(client.succeed("{} list '${localRepoMount}' | wc -l".format(borg))) > 0
 
     with subtest("remote"):
         borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"

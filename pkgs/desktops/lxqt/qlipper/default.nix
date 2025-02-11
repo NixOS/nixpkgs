@@ -1,13 +1,15 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qlipper";
   version = "5.1.2";
 
@@ -21,6 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -31,6 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform clipboard history applet";
+    mainProgram = "qlipper";
     homepage = "https://github.com/pvanek/qlipper";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "not-stirred";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
   };
 
@@ -37,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Print upcoming space-related events in your terminal";
+    mainProgram = "nextinspace";
     homepage = "https://github.com/The-Kid-Gid/nextinspace";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ penguwin ];

@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, qt5, mkDerivation }:
+{
+  lib,
+  fetchFromGitHub,
+  qt5,
+  mkDerivation,
+}:
 
 mkDerivation rec {
   pname = "qtbitcointrader";
@@ -11,7 +16,11 @@ mkDerivation rec {
     sha256 = "sha256-u3+Kwn8KunYUpWCd55TQuVVfoSp8hdti93d6hk7Uqx8=";
   };
 
-  buildInputs = [ qt5.qtbase qt5.qtmultimedia qt5.qtscript ];
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtmultimedia
+    qt5.qtscript
+  ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
@@ -27,6 +36,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Bitcoin trading client";
+    mainProgram = "QtBitcoinTrader";
     homepage = "https://centrabit.com/";
     license = licenses.gpl3;
     platforms = qt5.qtbase.meta.platforms;

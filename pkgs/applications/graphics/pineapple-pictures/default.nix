@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , qtsvg
-, qtwayland
 , qttools
 , exiv2
 , wrapQtAppsHook
@@ -11,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pineapple-pictures";
-  version = "0.7.3";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = finalAttrs.version;
-    hash = "sha256-UZVpyrUFf/uJNs2GHLYXpb81e7yzC8EFuoD+0Bzj6xQ=";
+    hash = "sha256-FgOmdqhsHyIQvwoNhD3pCoWYr4tW+vni0/rlICGu6rc=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtsvg
-    qtwayland
     exiv2
   ];
 

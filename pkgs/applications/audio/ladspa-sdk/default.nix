@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ladspa-sdk";
@@ -14,6 +18,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i 's@/usr/@$(out)/@g'  Makefile
+    substituteInPlace Makefile \
+      --replace /tmp/test.wav $NIX_BUILD_TOP/${sourceRoot}/test.wav
   '';
 
   makeFlags = [
@@ -30,7 +36,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "The SDK for the LADSPA audio plugin standard";
+    description = "SDK for the LADSPA audio plugin standard";
     longDescription = ''
       The LADSPA SDK, including the ladspa.h API header file,
       ten example LADSPA plugins and

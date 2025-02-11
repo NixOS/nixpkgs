@@ -1,31 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pythonOlder
-, numpy
-, jsonschema
-, svgwrite
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pythonOlder,
+  numpy,
+  jsonschema,
+  svgwrite,
 }:
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.5.6";
-  format = "pyproject";
+  version = "0.6.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3f4hPxywY822mCF3IwooBezX38fM1zAm4Th4q//SzkY=";
+    hash = "sha256-ndoqzISujas0hN/ty3IYB6Tv5I4Vn3TySwd4lAS1QQY=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0" "numpy"
+  '';
 
-  propagatedBuildInputs = [
-    numpy
+  build-system = [ setuptools ];
+
+  dependencies = [
     jsonschema
+    numpy
     svgwrite
   ];
 
@@ -33,14 +39,13 @@ buildPythonPackage rec {
   # will ask upstream to include tests in pypi
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tskit"
-  ];
+  pythonImportsCheck = [ "tskit" ];
 
-  meta = with lib; {
-    description = "The tree sequence toolkit";
+  meta = {
+    description = "Tree sequence toolkit";
+    mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ alxsimon ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ alxsimon ];
   };
 }
