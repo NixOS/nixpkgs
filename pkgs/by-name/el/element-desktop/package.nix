@@ -67,8 +67,8 @@ stdenv.mkDerivation (
       yarn --offline run i18n
       yarn --offline run build:res
 
-      rm -rf node_modules/matrix-seshat node_modules/keytar
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
+      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
+      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
       ln -s $seshat node_modules/matrix-seshat
 
       runHook postBuild
