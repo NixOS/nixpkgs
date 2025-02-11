@@ -1888,9 +1888,6 @@ self: super: {
   # Missing test files in 1.8.1.0, fixed in 1.8.1.1
   sequence-formats = dontCheck super.sequence-formats;
 
-  # Break out of overspecified constraint on QuickCheck.
-  haddock-library = doJailbreak super.haddock-library;
-
   # Test suite has overly strict bounds on tasty, jailbreaking fails.
   # https://github.com/input-output-hk/nothunks/issues/9
   nothunks = dontCheck super.nothunks;
