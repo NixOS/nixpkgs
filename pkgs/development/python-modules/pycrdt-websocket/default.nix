@@ -15,6 +15,7 @@
   channels,
 
   # tests
+  cacert,
   httpx-ws,
   hypercorn,
   pytest-asyncio,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.15.3";
+  version = "0.15.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     tag = "v${version}";
-    hash = "sha256-VK4nSsxF/FbCnyS1RM/JHCPS0Omj4rvdwjzLNDq2hjk=";
+    hash = "sha256-yDmi8tb7Tq4ro97mFxbPVLwaHhyYKQbnRLB04u2k5xo=";
   };
 
   build-system = [ hatchling ];
@@ -51,13 +52,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycrdt_websocket" ];
 
   nativeCheckInputs = [
+    cacert
     httpx-ws
     hypercorn
-    pytest-asyncio
     pytestCheckHook
     trio
-    uvicorn
-    websockets
   ];
 
   disabledTestPaths = [
