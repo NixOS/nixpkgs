@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   python3,
 }:
 
@@ -34,6 +35,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # upstream has no tests
   doCheck = false;
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     description = "JFFS2 filesystem extraction tool";
