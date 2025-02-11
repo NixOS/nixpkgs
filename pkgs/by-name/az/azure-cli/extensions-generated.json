@@ -876,9 +876,9 @@
   },
   "resource-graph": {
     "pname": "resource-graph",
-    "version": "2.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/resource_graph-2.1.0-py2.py3-none-any.whl",
-    "hash": "sha256-YsgePWLOYMWgpIWCnQC9sMczFF7pP7YJjBTjsn7ifEA=",
+    "version": "2.1.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/resource_graph-2.1.1-py2.py3-none-any.whl",
+    "hash": "sha256-Q2suhl1/P7a+6izcAXx03UimaZEgmlq43AkkQ+yTFA8=",
     "description": "Support for querying Azure resources with Resource Graph"
   },
   "resource-mover": {
