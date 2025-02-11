@@ -89,7 +89,7 @@ beamPackages.mixRelease rec {
           postInstall = "mv priv/* $out/lib/erlang/lib/${name}-${version}/priv/";
         };
 
-        concurrent_limiter = beamPackages.buildMix rec {
+        concurrent_limiter = beamPackages.buildMix {
           name = "concurrent_limiter";
           version = "0.1.1";
 
@@ -102,7 +102,7 @@ beamPackages.mixRelease rec {
           };
         };
 
-        elasticsearch = beamPackages.buildMix rec {
+        elasticsearch = beamPackages.buildMix {
           name = "elasticsearch";
           version = "1.0.1";
 
@@ -115,7 +115,7 @@ beamPackages.mixRelease rec {
           };
         };
 
-        mfm_parser = beamPackages.buildMix rec {
+        mfm_parser = beamPackages.buildMix {
           name = "mfm_parser";
           version = "0.1.0";
 
@@ -135,7 +135,7 @@ beamPackages.mixRelease rec {
           patchPhase = mimeTypePatchPhase;
         };
 
-        search_parser = beamPackages.buildMix rec {
+        search_parser = beamPackages.buildMix {
           name = "search_parser";
           version = "0.1.0";
 
@@ -149,7 +149,7 @@ beamPackages.mixRelease rec {
           beamDeps = with final; [ nimble_parsec ];
         };
 
-        temple = beamPackages.buildMix rec {
+        temple = beamPackages.buildMix {
           name = "temple";
           version = "0.9.0-rc.0";
 
@@ -180,7 +180,7 @@ beamPackages.mixRelease rec {
           dontUseCmakeConfigure = true;
         };
 
-        http_signatures = beamPackages.buildMix rec {
+        http_signatures = beamPackages.buildMix {
           name = "http_signatures";
           version = "0.1.3";
 
