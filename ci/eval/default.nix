@@ -87,7 +87,8 @@ let
         export NIX_SHOW_STATS_PATH="$outputDir/stats/$myChunk"
         echo "Chunk $myChunk on $system start"
         set +e
-        command time -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
+        command time -o "$outputDir/timestats/$myChunk" \
+          -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
           nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
           --option restrict-eval true \
           --option allow-import-from-derivation false \
@@ -102,9 +103,12 @@ let
           --arg includeBroken ${lib.boolToString includeBroken} \
           -I ${nixpkgs} \
           -I ${attrpathFile} \
-          > "$outputDir/result/$myChunk"
+          > "$outputDir/result/$myChunk" \
+          2> "$outputDir/stderr/$myChunk"
         exitCode=$?
         set -e
+        cat "$outputDir/stderr/$myChunk"
+        cat "$outputDir/timestats/$myChunk"
         if (( exitCode != 0 )); then
           echo "Evaluation failed with exit code $exitCode"
           # This immediately halts all xargs processes
@@ -164,7 +168,7 @@ let
         ''}
 
         chunkOutputDir=$(mktemp -d)
-        mkdir "$chunkOutputDir"/{result,stats}
+        mkdir "$chunkOutputDir"/{result,stats,timestats,stderr}
 
         seq -w 0 "$seq_end" |
           command time -f "%e" -o "$out/total-time" \
