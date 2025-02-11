@@ -2,6 +2,7 @@
 , cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , lua, curl
+, gsl-lite
 , Cocoa, Foundation
 }:
 
@@ -16,10 +17,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-Uk8omtXYZaneyBr4TASRtIKEyJLGwfKWu9vRQNVpdVA=";
   };
 
+  patches = lib.optionals stdenv.cc.isClang [
+    # LLVM 19 removed support for types not officially supported by
+    # `std::char_traits`:
+    # https://libcxx.llvm.org/ReleaseNotes/19.html#deprecations-and-removals
+    # Wesnoth relies on this previously supported non-standard behavior for
+    # some types that should either have been a vector or span:
+    # https://github.com/wesnoth/wesnoth/issues/9546
+    # Unfortunately we can't just use `std::span` as that requires C++20,
+    # and making Wesnoth C++20 compatible is a non-trivial problem.
+    # As a workaround, we make use of gsl-lite, which includes a lightweight
+    # implementation of span.
+    ./llvm_19-compat.patch
+  ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu lua curl ]
+                ++ lib.optionals stdenv.cc.isClang [ gsl-lite ]
                 ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation];
 
   cmakeFlags = [
