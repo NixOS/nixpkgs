@@ -2286,7 +2286,7 @@ self: super: {
   # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
   validation-selective = doJailbreak super.validation-selective;
 
-  # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
+  # 2025-02-11: strict upper bounds on base < 4.18
   shower = doJailbreak super.shower;
 
   # Test suite isn't supposed to succeed yet, apparently…
