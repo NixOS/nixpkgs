@@ -16678,6 +16678,13 @@
     github = "nipeharefa";
     githubId = 12620257;
   };
+  niraethm = {
+    name = "Rémi Akirazar";
+    email = "randormi@devcpu.co";
+    matrix = "@lysgonul:bark.lgbt";
+    github = "niraethm";
+    githubId = 20865531;
+  };
   NIS = {
     name = "NSC IT Solutions";
     github = "dev-nis";
