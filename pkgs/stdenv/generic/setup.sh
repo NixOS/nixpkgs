@@ -1042,19 +1042,15 @@ substituteStream() {
                 pattern="$2"
                 replacement="$3"
                 shift 3
-                local savedvar
-                savedvar="${!var}"
-                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
-                if [ "$pattern" != "$replacement" ]; then
-                    if [ "${!var}" == "$savedvar" ]; then
-                        if [ "$replace_mode" == --replace-warn ]; then
-                            printf "substituteStream() in derivation $name: WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
-                        elif [ "$replace_mode" == --replace-fail ]; then
-                            printf "substituteStream() in derivation $name: ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
-                            return 1
-                        fi
+                if ! [[ "${!var}" == *"$pattern"* ]]; then
+                    if [ "$replace_mode" == --replace-warn ]; then
+                        printf "substituteStream() in derivation $name: WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                    elif [ "$replace_mode" == --replace-fail ]; then
+                        printf "substituteStream() in derivation $name: ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                        return 1
                     fi
                 fi
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 ;;
 
             --subst-var)

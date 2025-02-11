@@ -20,7 +20,7 @@
   python-xmp-toolkit,
   qpdf,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -42,8 +42,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
       mutool = lib.getExe' mupdf-headless "mutool";
     })

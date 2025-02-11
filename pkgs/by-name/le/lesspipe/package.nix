@@ -167,6 +167,7 @@ stdenv.mkDerivation rec {
       };
       execer = [
         "cannot:${iconv}/bin/iconv"
+        "cannot:${file}/bin/file"
       ];
     }}
     ${resholve.phraseSolution "lesscomplete" {
@@ -216,6 +217,9 @@ stdenv.mkDerivation rec {
         ];
         builtin = [ "setopt" ];
       };
+      execer = [
+        "cannot:${file}/bin/file"
+      ];
     }}
   '';
 

@@ -121,6 +121,30 @@ let
 
             touch $out
           '';
+
+      fails-in-check-phase-with-bad-exemption =
+        runCommand "replaceVars-fails"
+          {
+            failed =
+              let
+                src = builtins.toFile "source.txt" ''
+                  @a@
+                  @b@
+                '';
+              in
+              testBuildFailure (
+                callReplaceVars src {
+                  a = "a";
+                  b = null;
+                  c = null;
+                }
+              );
+          }
+          ''
+            grep -e "ERROR: pattern @c@ doesn't match anything in file.*source.txt" $failed/testBuildFailure.log
+
+            touch $out
+          '';
     };
 in
 {

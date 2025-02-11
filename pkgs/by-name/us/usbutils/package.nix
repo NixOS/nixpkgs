@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   fetchpatch,
   meson,
   ninja,
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [
-      (substituteAll {
-        src = ./fix-paths.patch;
+      (replaceVars ./fix-paths.patch {
         inherit hwdata;
       })
     ]
