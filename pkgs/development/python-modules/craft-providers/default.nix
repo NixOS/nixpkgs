@@ -50,7 +50,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==73.0.1" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
