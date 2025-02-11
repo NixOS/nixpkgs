@@ -28,16 +28,18 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     gettext
-    gtest
   ];
 
   buildInputs = [
+    extra-cmake-modules
     fcitx5
     fmt
     gtest
     icu
     json_c
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
