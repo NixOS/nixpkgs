@@ -2277,8 +2277,6 @@ self: super: {
 
   # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
   validation-selective = doJailbreak super.validation-selective;
-  # https://github.com/system-f/validation/issues/57
-  validation = doJailbreak super.validation;
 
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak super.shower;
