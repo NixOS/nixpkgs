@@ -16,7 +16,7 @@ beamPackages.mixRelease rec {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Ygb51jQatdyX/DzJk84X1AEliBGD938f83UnI5OqBPM=";
   };
 
