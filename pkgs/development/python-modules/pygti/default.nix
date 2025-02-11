@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pygti";
-  version = "0.9.4";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "pygti";
-    tag = "v${version}";
+    tag = version;
     hash = "sha256-2T4Yw4XEOkv+IWyB4Xa2dPu929VH0tLeUjQ5S8EVXz0=";
   };
 
