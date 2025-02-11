@@ -16239,6 +16239,8 @@ self: super: with self; {
 
   textual-dev = callPackage ../development/python-modules/textual-dev { };
 
+  textual-serve = callPackage ../development/python-modules/textual-serve { };
+
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
 
   textual-slider = callPackage ../development/python-modules/textual-slider { };
