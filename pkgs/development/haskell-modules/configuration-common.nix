@@ -1945,8 +1945,6 @@ self: super: {
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
 
-  ginger = doJailbreak super.ginger;
-
   # Too strict version bounds on ghc-events
   # https://github.com/mpickering/hs-speedscope/issues/16
   hs-speedscope = doJailbreak super.hs-speedscope;
