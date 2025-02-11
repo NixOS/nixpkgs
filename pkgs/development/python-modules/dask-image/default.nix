@@ -49,6 +49,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dask_image" ];
 
   meta = {
+    # https://github.com/dask/dask-image/issues/392
+    broken = lib.versionAtLeast numpy.version "2";
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
     license = lib.licenses.bsdOriginal;
