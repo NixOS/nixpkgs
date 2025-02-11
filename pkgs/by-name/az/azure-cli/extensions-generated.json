@@ -64,9 +64,9 @@
   },
   "alb": {
     "pname": "alb",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/alb-1.0.0-py3-none-any.whl",
-    "hash": "sha256-sCDNjNPaYpncl4SZ2uRSdot2UcPtjgXy8LMhvZuDVNQ=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/alb-2.0.0-py3-none-any.whl",
+    "hash": "sha256-Z9Pbk2dkAqSyFDlpuyD7jsYidiTsUUnTF6GRtX0WqcM=",
     "description": "Microsoft Azure Command-Line Tools ALB Extension"
   },
   "alertsmanagement": {
