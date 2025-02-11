@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgsCross,
   appstream,
   bison,
   bubblewrap,
@@ -221,6 +222,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     tests = {
+      cross-aarch64 = pkgsCross.aarch64-multiplatform.flatpak;
+
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
 
       validate-icon = runCommand "test-icon-validation" { } ''
