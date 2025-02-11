@@ -1,36 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # optional-dependencies
   # cudf,
   dask,
+  dask-expr,
+  duckdb,
+  fetchFromGitHub,
+  hatchling,
+  hypothesis,
   # modin,
   pandas,
   polars,
   pyarrow,
-
-  # tests
-  duckdb,
-  hypothesis,
   pytest-env,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.25.2";
+  version = "1.22.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-cp/Ang5RXLpgTdpOHRKz9fGN9D+SgFC5KhF3ukf8G+w=";
+    hash = "sha256-I6nJJiiW1v04YH70OPxXKeO80N52nnCPKRzJLILEWmw=";
   };
 
   build-system = [
@@ -41,6 +39,7 @@ buildPythonPackage rec {
     # cudf = [ cudf ];
     dask = [
       dask
+      dask-expr
     ];
     # modin = [ modin ];
     pandas = [ pandas ];
@@ -65,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight and extensible compatibility layer between dataframe libraries";
     homepage = "https://github.com/narwhals-dev/narwhals";
-    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/v${version}";
+    changelog = "https://github.com/narwhals-dev/narwhals/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
