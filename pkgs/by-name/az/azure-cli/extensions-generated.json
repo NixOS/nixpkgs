@@ -622,13 +622,6 @@
     "hash": "sha256-FMGHaMAu6cNwrH7tDyMgbu59NEoQOCowg7F7XhhIz80=",
     "description": "Microsoft Azure Command-Line Tools Logic Extension"
   },
-  "logz": {
-    "pname": "logz",
-    "version": "0.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/logz-0.1.0-py3-none-any.whl",
-    "hash": "sha256-apN9u4xadYspr9Rez8EBdDpb8kkfL7pg6OpRLVt2WEA=",
-    "description": "Microsoft Azure Command-Line Tools MicrosoftLogz Extension"
-  },
   "maintenance": {
     "pname": "maintenance",
     "version": "1.7.0b2",
