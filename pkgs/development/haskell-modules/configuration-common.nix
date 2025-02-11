@@ -2298,7 +2298,7 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   });
 
-  # 2023-07-18: https://github.com/srid/ema/issues/156
+  # 2025-02-11: Too strict bounds on base < 4.17
   ema = doJailbreak super.ema;
 
   # Too strict bounds on text and tls
