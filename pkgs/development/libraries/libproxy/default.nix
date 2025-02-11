@@ -17,17 +17,24 @@
   stdenv,
   replaceVars,
   vala,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
   version = "0.5.9";
 
-  outputs = [
-    "out"
-    "dev"
-    "devdoc"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withIntrospection [
+      "devdoc"
+    ];
 
   src = fetchFromGitHub {
     owner = "libproxy";
@@ -64,14 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "requires_private: 'gobject-2.0'" "requires: 'gobject-2.0'"
   '';
 
-  nativeBuildInputs = [
-    gi-docgen
-    gobject-introspection
-    meson
-    ninja
-    pkg-config
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals withIntrospection [
+      gi-docgen
+      gobject-introspection
+      vala
+    ];
 
   buildInputs =
     [
@@ -94,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # Prevent installing commit hook.
       "-Drelease=true"
+      (lib.mesonBool "docs" withIntrospection)
+      (lib.mesonBool "introspection" withIntrospection)
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Dconfig-gnome=false"
