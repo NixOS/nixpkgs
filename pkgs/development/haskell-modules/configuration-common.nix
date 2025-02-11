@@ -2386,8 +2386,7 @@ self: super: {
   clash-prelude = dontCheck super.clash-prelude;
 
   hermes-json = overrideCabal (drv: {
-    # Upper bounds are too strict:
-    # https://github.com/velveteer/hermes/pull/22
+    # 2025-02-11: Upper bounds on hedgehog < 1.5 too strict.
     jailbreak = true;
 
     # vendored simdjson breaks with clang-19. apply patches that work with
