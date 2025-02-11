@@ -715,7 +715,8 @@ self: super: {
   hquery = dontCheck super.hquery;
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
-  hsexif = dontCheck super.hsexif;
+  # 2025-02-11: Too strict bounds on bytestring
+  hsexif = doJailbreak (dontCheck super.hsexif);
   hspec-server = dontCheck super.hspec-server;
   HTF = overrideCabal (orig: {
     # The scripts in scripts/ are needed to build the test suite.
