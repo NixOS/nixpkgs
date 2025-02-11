@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-PcE3/NfGrLMmr2CmG5hE3RXTdzywXnqc4nbEH3E9dlo=";
   };
 
+  patches = [
+    # https://sqlite.org/forum/forumpost/3380558ea82c8a3e
+    # Can be removed with the next release.
+    # Test: pkgsStatic.gnupg
+    ./Libs.private.patch
+  ];
+
   outputs = [ "bin" "dev" "man" "doc" "out" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux;
 
