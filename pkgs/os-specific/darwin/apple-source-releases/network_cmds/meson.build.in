@@ -19,21 +19,6 @@ add_global_arguments(
 )
 
 
-# Generators
-rpcgen_bin = find_program('rpcgen')
-rpcgen = generator(
-    rpcgen_bin,
-    arguments : [ '-c', '-o', '@OUTPUT@', '@INPUT@' ],
-    output : '@BASENAME@_xdr.c',
-)
-
-rpcgen_header = generator(
-    rpcgen_bin,
-    arguments : [ '-h', '-o', '@OUTPUT@', '@INPUT@' ],
-    output : '@BASENAME@.h',
-)
-
-
 # Dependencies
 cc = meson.get_compiler('c')
 
@@ -340,8 +325,7 @@ executable(
     install : true,
     sources : [
         'spray.tproj/spray.c',
-        rpcgen_header.process('spray.tproj/spray.x'),
-        rpcgen.process('spray.tproj/spray.x'),
+        'spray.tproj/spray_xdr.c',
     ],
 )
 install_man('spray.tproj/spray.8')
