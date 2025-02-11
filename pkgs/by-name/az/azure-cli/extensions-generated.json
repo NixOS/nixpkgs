@@ -288,9 +288,9 @@
   },
   "datafactory": {
     "pname": "datafactory",
-    "version": "1.0.2",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datafactory-1.0.2-py3-none-any.whl",
-    "hash": "sha256-6hNOKWO3zfK8vVAkSm8aQR2ne9TbfkLIyPllFjjIKsc=",
+    "version": "1.0.3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datafactory-1.0.3-py3-none-any.whl",
+    "hash": "sha256-ZvQWykXTiKMvuzc4ByUecOIFNH+j6HBWaW7xaTCa6vs=",
     "description": "Microsoft Azure Command-Line Tools DataFactoryManagementClient Extension"
   },
   "datamigration": {
