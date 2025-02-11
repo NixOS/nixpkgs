@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     description = "Linux kernel API manual pages";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ mvs ];
+    platforms = lib.platforms.linux;
   };
 }
