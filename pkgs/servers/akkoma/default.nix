@@ -6,6 +6,7 @@
 , cmake
 , file
 , nixosTests
+, nix-update-script
 , ...
 }:
 beamPackages.mixRelease rec {
@@ -203,6 +204,8 @@ beamPackages.mixRelease rec {
     # Used to make sure the service uses the same version of elixir as
     # the package
     elixirPackage = beamPackages.elixir;
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
