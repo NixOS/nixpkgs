@@ -1,0 +1,47 @@
+Prevents NextJS from attempting to download fonts during build. The fonts
+directory will be created in the derivation script.
+
+See similar patches:
+ pkgs/by-name/cr/crabfit-frontend/01-localfont.patch
+ pkgs/by-name/al/alcom/use-local-fonts.patch
+ pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
+
+---
+--- a/apps/landing/app/layout.tsx
++++ b/apps/landing/app/layout.tsx
+@@ -1,11 +1,14 @@
+ import type { Metadata } from "next";
+-import { Inter } from "next/font/google";
++import localFont from 'next/font/local';
+
+ import "@hoarder/tailwind-config/globals.css";
+
+ import React from "react";
+
+-const inter = Inter({ subsets: ["latin"] });
++const inter = localFont({
++  subsets: ["latin"],
++  src: "./fonts/InterVariable.ttf",
++});
+
+ export const metadata: Metadata = {
+   title: "Hoarder",
+--- a/apps/web/app/layout.tsx
++++ b/apps/web/app/layout.tsx
+@@ -1,5 +1,5 @@
+ import type { Metadata } from "next";
+-import { Inter } from "next/font/google";
++import localFont from 'next/font/local';
+
+ import "@hoarder/tailwind-config/globals.css";
+
+@@ -13,7 +13,8 @@
+
+ import { clientConfig } from "@hoarder/shared/config";
+
+-const inter = Inter({
++const inter = localFont({
++  src: "./fonts/InterVariable.ttf",
+   subsets: ["latin"],
+   fallback: ["sans-serif"],
+ });

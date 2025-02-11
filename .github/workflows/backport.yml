@@ -1,0 +1,43 @@
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows write access to
+# the GitHub repository. This means that it should not evaluate user input in a
+# way that allows code injection.
+
+name: Backport
+
+on:
+  pull_request_target:
+    types: [closed, labeled]
+
+permissions: {}
+
+jobs:
+  backport:
+    name: Backport Pull Request
+    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event_name != 'labeled' || startsWith('backport', github.event.label.name))
+    runs-on: ubuntu-24.04
+    steps:
+      # Use a GitHub App to create the PR so that CI gets triggered
+      # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
+      - uses: actions/create-github-app-token@67e27a7eb7db372a1c61a7f9bdab8699e9ee57f7 # v1.11.3
+        id: app-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Create backport PRs
+        uses: korthout/backport-action@be567af183754f6a5d831ae90f648954763f17f5 # v3.1.0
+        with:
+          # Config README: https://github.com/korthout/backport-action#backport-action
+          copy_labels_pattern: 'severity:\ssecurity'
+          github_token: ${{ steps.app-token.outputs.token }}
+          pull_description: |-
+            Bot-based backport to `${target_branch}`, triggered by a label in #${pull_number}.
+
+            * [ ] Before merging, ensure that this backport is [acceptable for the release](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
+              * Even as a non-commiter, if you find that it is not acceptable, leave a comment.

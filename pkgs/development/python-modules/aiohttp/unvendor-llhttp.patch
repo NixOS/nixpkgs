@@ -1,0 +1,60 @@
+diff --git a/Makefile b/Makefile
+index b0a3ef32..f36132c6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -79,7 +79,7 @@ vendor/llhttp/node_modules: vendor/llhttp/package.json
+ generate-llhttp: .llhttp-gen
+ 
+ .PHONY: cythonize
+-cythonize: .install-cython $(PYXS:.pyx=.c) aiohttp/_websocket/reader_c.c
++cythonize: $(PYXS:.pyx=.c) aiohttp/_websocket/reader_c.c
+ 
+ .install-deps: .install-cython $(PYXS:.pyx=.c) aiohttp/_websocket/reader_c.c $(call to-hash,$(CYS) $(REQS))
+ 	@python -m pip install -r requirements/dev.in -c requirements/dev.txt
+diff --git a/aiohttp/_cparser.pxd b/aiohttp/_cparser.pxd
+index c2cd5a92..9184ac60 100644
+--- a/aiohttp/_cparser.pxd
++++ b/aiohttp/_cparser.pxd
+@@ -1,7 +1,7 @@
+ from libc.stdint cimport int32_t, uint8_t, uint16_t, uint64_t
+ 
+ 
+-cdef extern from "../vendor/llhttp/build/llhttp.h":
++cdef extern from "@llhttpDev@/include/llhttp.h":
+ 
+     struct llhttp__internal_s:
+         int32_t _index
+diff --git a/setup.py b/setup.py
+index 2f024e87..feebc638 100644
+--- a/setup.py
++++ b/setup.py
+@@ -17,13 +17,6 @@ if sys.implementation.name != "cpython":
+     NO_EXTENSIONS = True
+ 
+ 
+-if IS_GIT_REPO and not (HERE / "vendor/llhttp/README.md").exists():
+-    print("Install submodules when building from git clone", file=sys.stderr)
+-    print("Hint:", file=sys.stderr)
+-    print("  git submodule update --init", file=sys.stderr)
+-    sys.exit(2)
+-
+-
+ # NOTE: makefile cythonizes all Cython modules
+ 
+ extensions = [
+@@ -33,12 +26,11 @@ extensions = [
+         [
+             "aiohttp/_http_parser.c",
+             "aiohttp/_find_header.c",
+-            "vendor/llhttp/build/c/llhttp.c",
+-            "vendor/llhttp/src/native/api.c",
+-            "vendor/llhttp/src/native/http.c",
+         ],
+         define_macros=[("LLHTTP_STRICT_MODE", 0)],
+-        include_dirs=["vendor/llhttp/build"],
++        include_dirs=["@llhttpDev@/include"],
++        library_dirs=["@llhttpLib@/lib"],
++        libraries=["llhttp"],
+     ),
+     Extension("aiohttp._http_writer", ["aiohttp/_http_writer.c"]),
+     Extension("aiohttp._websocket.reader_c", ["aiohttp/_websocket/reader_c.c"]),

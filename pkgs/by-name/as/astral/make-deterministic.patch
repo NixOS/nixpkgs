@@ -1,0 +1,21 @@
+diff --git a/make.sh b/make.sh
+index 3ff6529..937b1a2 100644
+--- a/make.sh
++++ b/make.sh
+@@ -17,6 +17,8 @@ jar cvfm ../astral.$version.jar ../manifest.text phylonet/util/BitSet.* phylonet
+ 
+ cd ..
+ 
++strip-nondeterminism --type jar astral.$version.jar
++
+ chmod +x astral.$version.jar
+ sed -e "s/__astral.jar__/astral.$version.jar/g" -e "s/__astral.zip__/Astral.$version.zip/g" README.template.md > README.md
+ sed -e "s/__astral.jar__/astral.$version.jar/g" -e "s/__astral.zip__/Astral.$version.zip/g" astral-tutorial-template.md > astral-tutorial.md
+@@ -32,6 +34,7 @@ ln -s ../astral-tutorial.pdf .
+ cd ..
+ rm -f Astral.$version.zip
+ zip -r Astral.$version.zip Astral 
++strip-nondeterminism --type zip Astral.$version.zip
+ 
+ set +x
+ echo "

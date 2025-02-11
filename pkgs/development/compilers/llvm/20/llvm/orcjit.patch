@@ -1,0 +1,53 @@
+From 03d6f704d07aa3650a2f59be6f7802a8735460c3 Mon Sep 17 00:00:00 2001
+From: Lang Hames <lhames@gmail.com>
+Date: Wed, 29 Jan 2025 03:58:29 +0000
+Subject: [PATCH] [ORC][LLI] Remove redundant eh-frame registration plugin
+ construction from lli.
+
+As of d0052ebbe2e the setUpGenericLLVMIRPlatform function will automatically
+add an instance of the EHFrameRegistrationPlugin (for LLJIT instances whose
+object linking layers are ObjectLinkingLayers, not RTDyldObjectLinkingLayers).
+
+This commit removes the redundant plugin creation in the object linking
+layer constructor function in lli.cpp to prevent duplicate registration of
+eh-frames, which is likely the cause of recent bot failures, e.g.
+https://lab.llvm.org/buildbot/#/builders/108/builds/8685.
+
+(cherry picked from commit 9052b37ab1aa67a039b34356f37236fecc42bac2)
+---
+ llvm/tools/lli/lli.cpp | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/llvm/tools/lli/lli.cpp b/tools/lli/lli.cpp
+index 448660a539a0b0..19246f03941673 100644
+--- a/llvm/tools/lli/lli.cpp
++++ b/tools/lli/lli.cpp
+@@ -27,9 +27,7 @@
+ #include "llvm/ExecutionEngine/Orc/AbsoluteSymbols.h"
+ #include "llvm/ExecutionEngine/Orc/DebugUtils.h"
+ #include "llvm/ExecutionEngine/Orc/Debugging/DebuggerSupport.h"
+-#include "llvm/ExecutionEngine/Orc/EHFrameRegistrationPlugin.h"
+ #include "llvm/ExecutionEngine/Orc/EPCDynamicLibrarySearchGenerator.h"
+-#include "llvm/ExecutionEngine/Orc/EPCEHFrameRegistrar.h"
+ #include "llvm/ExecutionEngine/Orc/EPCGenericRTDyldMemoryManager.h"
+ #include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
+ #include "llvm/ExecutionEngine/Orc/IRPartitionLayer.h"
+@@ -1033,14 +1031,10 @@ int runOrcJIT(const char *ProgName) {
+     Builder.getJITTargetMachineBuilder()
+         ->setRelocationModel(Reloc::PIC_)
+         .setCodeModel(CodeModel::Small);
+-    Builder.setObjectLinkingLayerCreator([&P](orc::ExecutionSession &ES,
+-                                              const Triple &TT) {
+-      auto L = std::make_unique<orc::ObjectLinkingLayer>(ES);
+-      if (P != LLJITPlatform::ExecutorNative)
+-        L->addPlugin(std::make_unique<orc::EHFrameRegistrationPlugin>(
+-            ES, ExitOnErr(orc::EPCEHFrameRegistrar::Create(ES))));
+-      return L;
+-    });
++    Builder.setObjectLinkingLayerCreator(
++        [&](orc::ExecutionSession &ES, const Triple &TT) {
++          return std::make_unique<orc::ObjectLinkingLayer>(ES);
++        });
+   }
+ 
+   auto J = ExitOnErr(Builder.create());

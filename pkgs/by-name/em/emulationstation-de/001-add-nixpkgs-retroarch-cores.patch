@@ -1,0 +1,12 @@
+--- a/resources/systems/linux/es_find_rules.xml	2024-09-13 16:19:36.000000000 +0300
++++ b/resources/systems/linux/es_find_rules.xml	2024-11-26 23:08:49.204498848 +0200
+@@ -41,6 +41,9 @@
+             <entry>/usr/lib64/libretro</entry>
+             <!-- Manjaro repository -->
+             <entry>/usr/lib/libretro</entry>
++            <!-- NixOS and Nixpkgs repository -->
++            <entry>/run/current-system/sw/lib/retroarch/cores</entry>
++            <entry>~/.nix-profile/lib/retroarch/cores</entry>
+         </rule>
+     </core>
+     <emulator name="3DSEN-WINDOWS">
