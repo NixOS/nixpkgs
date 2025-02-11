@@ -2339,9 +2339,8 @@ self: super: {
   # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
   hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
 
-  # doJailbreak: too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
-  system-fileio = doJailbreak (dontCheck super.system-fileio);
+  system-fileio = dontCheck super.system-fileio;
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   hasura-ekg-core = doJailbreak super.hasura-ekg-core;
