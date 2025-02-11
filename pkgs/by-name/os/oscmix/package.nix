@@ -7,9 +7,12 @@
   pkgsCross,
   pkg-config,
   glib,
+  wrapGAppsHook3,
 
   alsa-lib,
   gtk3,
+  librsvg,
+  hicolor-icon-theme,
 
   oscmix,
   unstableGitUpdater,
@@ -37,10 +40,19 @@ stdenv.mkDerivation {
 
   nativeBuildInputs =
     lib.optionals (alsaSupport || gtkSupport) [ pkg-config ]
-    ++ lib.optionals (gtkSupport) [ glib ]
+    ++ lib.optionals (gtkSupport) [
+      glib
+      wrapGAppsHook3
+    ]
     ++ lib.optionals (enableWebui) [ pkgsCross.wasi32.stdenv.cc.bintools ];
 
-  buildInputs = lib.optionals alsaSupport [ alsa-lib ] ++ lib.optionals gtkSupport [ gtk3 ];
+  buildInputs =
+    lib.optionals alsaSupport [ alsa-lib ]
+    ++ lib.optionals gtkSupport [
+      gtk3
+      librsvg
+      hicolor-icon-theme
+    ];
 
   makeFlags =
     let
@@ -59,6 +71,30 @@ stdenv.mkDerivation {
     "PREFIX=$(out)"
     "MANDIR=$(man)/share/man"
   ];
+
+  postInstall = lib.optionalString gtkSupport ''
+    pushd gtk
+
+    schemadir="${glib.makeSchemaPath "$out" "$name"}"
+
+    mkdir -p "$schemadir"
+    cp gschemas.compiled "$schemadir"
+    cp *.{ui,css,svg} "$schemadir"
+
+    cp oscmix-gtk "$out/bin/"
+
+    popd
+  '';
+
+  dontWrapGApps = true;
+
+  fixupPhase = lib.optionalString gtkSupport ''
+    runHook preFixup
+
+    wrapGApp "$out/bin/oscmix-gtk"
+
+    runHook postFixup
+  '';
 
   passthru = {
     tests = {
