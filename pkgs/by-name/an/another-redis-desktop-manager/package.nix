@@ -56,7 +56,6 @@ if stdenv.hostPlatform.isDarwin then
       src
       meta
       ;
-    sourceRoot = ".";
     nativeBuildInputs = [ undmg ];
     installPhase = ''
       runHook preInstall
