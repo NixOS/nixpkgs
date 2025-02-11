@@ -178,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     testWrapper = runCommand "vcpkg-tool-test-wrapper" { buildInputs = [ finalAttrs.finalPackage ]; } ''
       export NIX_VCPKG_DEBUG_PRINT_ENVVARS=true
+      export VCPKG_ROOT=.
       vcpkg --x-packages-root="test" --x-install-root="test2" contact > "$out"
 
       cat "$out" | head -n 4 | diff - ${writeText "vcpkg-tool-test-wrapper-expected" ''
