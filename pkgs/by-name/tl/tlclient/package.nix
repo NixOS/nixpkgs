@@ -62,7 +62,7 @@ stdenv.mkDerivation (
     };
 
     meta = {
-      description = "Linux remote desktop client built on open source technology";
+      description = "Cendio Thinlinc -- Linux remote desktop client built on open source technology";
       license = {
         fullName = "Cendio End User License Agreement 3.2";
         url = "https://www.cendio.com/thinlinc/docs/legal/eula";
