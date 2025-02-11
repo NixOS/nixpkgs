@@ -5625,10 +5625,8 @@ with pkgs;
   globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
 
   sssd = callPackage ../os-specific/linux/sssd {
+    # NOTE: freeipa and sssd need to be built with the same version of python
     inherit (perlPackages) Po4a;
-    # python312Packages.python-ldap is broken
-    # https://github.com/NixOS/nixpkgs/issues/326296
-    python3 = python311;
   };
 
   sentry-cli = callPackage ../development/tools/sentry-cli {
@@ -9195,6 +9193,7 @@ with pkgs;
   };
 
   freeipa = callPackage ../os-specific/linux/freeipa {
+    # NOTE: freeipa and sssd need to be built with the same version of python
     kerberos = krb5.override {
       withVerto = true;
     };
