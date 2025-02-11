@@ -2283,7 +2283,7 @@ self: super: {
     editedCabalFile = null;
   } super.regex-compat-tdfa);
 
-  # https://github.com/kowainik/validation-selective/issues/64
+  # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
   validation-selective = doJailbreak super.validation-selective;
   # https://github.com/system-f/validation/issues/57
   validation = doJailbreak super.validation;
