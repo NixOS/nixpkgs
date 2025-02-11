@@ -5,7 +5,7 @@
   linuxPackages_latest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "linux-manual";
   inherit (linuxPackages_latest.kernel) version src;
 
