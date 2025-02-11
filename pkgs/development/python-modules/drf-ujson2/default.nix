@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "drf-ujson2";
-  version = "1.7.2";
+  version = "1.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Amertz08";
     repo = "drf_ujson2";
     tag = "v${version}";
-    hash = "sha256-kbpZN1zOXHvRPcn+Sjbelq74cWgvCUeMXZy1eFSa6rA=";
+    hash = "sha256-NtloZWsEmRbPl7pdxPQqpzIzTyyOEFO9KtZ60F7VuUQ=";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/v${version}";
+    changelog = "https://github.com/Amertz08/drf_ujson2/releases/tag/${src.tag}";
     description = "JSON parser and renderer using ujson for Django Rest Framework";
     homepage = "https://github.com/Amertz08/drf_ujson2";
     maintainers = with maintainers; [ hexa ];
