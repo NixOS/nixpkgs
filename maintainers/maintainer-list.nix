@@ -8204,6 +8204,12 @@
     name = "Florian Brandes";
     keys = [ { fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9"; } ];
   };
+  gaelj = {
+    name = "Gaël James";
+    email = "gaeljames@gmail.com";
+    github = "gaelj";
+    githubId = 8884632;
+  };
   gaelreyrol = {
     email = "me@gaelreyrol.dev";
     matrix = "@Zevran:matrix.org";
@@ -16315,6 +16321,12 @@
     githubId = 1859691;
     name = "Amedeo Molnár";
   };
+  nekitdev = {
+    email = "nekit@nekit.dev";
+    github = "nekitdev";
+    githubId = 43587167;
+    name = "Nikita Tikhonov";
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
@@ -18179,6 +18191,12 @@
     github = "photex";
     githubId = 301903;
     name = "Chip Collier";
+  };
+  phrmendes = {
+    name = "Pedro Mendes";
+    email = "pedrohrmendes@proton.me";
+    github = "phrmendes";
+    githubId = 22376151;
   };
   phrogg = {
     name = "Phil Roggenbuck";

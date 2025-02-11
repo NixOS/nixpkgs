@@ -15,7 +15,7 @@
   readosm,
   sqlite,
   testers,
-  spatialite_tools,
+  spatialite-tools,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,21 +53,21 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests.version = testers.testVersion {
-    package = spatialite_tools;
+    package = spatialite-tools;
     command = "! spatialite_tool --version";
     version = "${libspatialite.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Complete sqlite3-compatible CLI front-end for libspatialite";
     homepage = "https://www.gaia-gis.it/fossil/spatialite-tools";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl11
       gpl2Plus
       lgpl21Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    platforms = lib.platforms.unix;
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ dotlambda ]);
     mainProgram = "spatialite_tool";
   };
 }
