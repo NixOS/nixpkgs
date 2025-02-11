@@ -57,8 +57,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Stack Client Application - A secure cloud storage solution";
     longDescription = ''
-      Stack Client is a desktop application that provides secure cloud storage and file 
-      synchronization services by TransIP. It offers a robust set of features for both 
+      Stack Client is a desktop application that provides secure cloud storage and file
+      synchronization services by TransIP. It offers a robust set of features for both
       personal and business users:
 
       Features:
