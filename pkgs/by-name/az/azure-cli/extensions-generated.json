@@ -92,9 +92,9 @@
   },
   "apic-extension": {
     "pname": "apic-extension",
-    "version": "1.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/apic_extension-1.1.0-py3-none-any.whl",
-    "hash": "sha256-AeXrQi6EJoOW3bAlEjC907nUdfRj6BM/BBX7Dw4DJAs=",
+    "version": "1.2.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/apic_extension-1.2.0b1-py3-none-any.whl",
+    "hash": "sha256-v8y6Jgg9dYCO/GuLEl44il77WC9nuKT9cRnMI43wZaM=",
     "description": "Microsoft Azure Command-Line Tools ApicExtension Extension"
   },
   "appservice-kube": {
