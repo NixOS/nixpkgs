@@ -368,7 +368,7 @@ in
 
   openssl_3_4 = common {
     version = "3.4.1";
-    hash = "sha256-1LIlJ6ZFrPdrU+REh6jbaHxu7WIdckaJHQJeOLqMllE=";
+    hash = "sha256-ACotazC1i/S+pGxDvdljZar42qbEKHgqpP7uBtoZffM=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
