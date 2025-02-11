@@ -1892,7 +1892,6 @@ self: super: {
   nothunks = doJailbreak super.nothunks;
 
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
-  vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
   # Test suite does not compile.
