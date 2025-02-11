@@ -2577,9 +2577,6 @@ self: super: {
   # Test suite doesn't compile anymore
   twitter-types = dontCheck super.twitter-types;
 
-  # base <4.14
-  numbered-semigroups = doJailbreak super.numbered-semigroups;
-
   # Tests open file "data/test_vectors_aserti3-2d_run01.txt" but it doesn't exist
   haskoin-core = dontCheck super.haskoin-core;
 
