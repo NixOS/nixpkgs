@@ -113,6 +113,9 @@ let
           echo "Evaluation failed with exit code $exitCode"
           # This immediately halts all xargs processes
           kill $PPID
+        elif [[ -s "$outputDir/stderr/$myChunk" ]]; then
+          echo "Nixpkgs on $system evaluated with warnings, aborting"
+          kill $PPID
         fi
       '';
     in
