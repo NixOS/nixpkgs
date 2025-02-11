@@ -857,6 +857,10 @@ self: super: {
   # "base" dependency.
   haddock-cheatsheet = doJailbreak super.haddock-cheatsheet;
 
+  # Too strict bounds on bytestring < 0.12
+  # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/issues/18
+  pipes-http = doJailbreak super.pipes-http;
+
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
 
