@@ -10,6 +10,7 @@
   python3,
   pkg-config,
   libsass,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R -v dist $out
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch=stable" ];
+  };
 
   meta = {
     description = "Admin interface for Akkoma";
