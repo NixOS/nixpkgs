@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Blob emoji from blobs.gg repacked as APNG";
     homepage = "https://blobs.gg";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mvs ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mvs ];
   };
 }
