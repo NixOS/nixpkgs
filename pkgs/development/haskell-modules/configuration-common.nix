@@ -1949,9 +1949,8 @@ self: super: {
   # https://github.com/mpickering/hs-speedscope/issues/16
   hs-speedscope = doJailbreak super.hs-speedscope;
 
-  # Test suite doesn't support base16-bytestring >= 1.0
-  # https://github.com/centromere/blake2/issues/6
-  blake2 = dontCheck super.blake2;
+  # 2025-02-11: Too strict bounds on base < 4.19, bytestring < 0.12, tasty < 1.5, tasty-quickcheck < 0.11
+  blake2 = doJailbreak super.blake2;
 
   # Test suite doesn't support base16-bytestring >= 1.0
   # https://github.com/serokell/haskell-crypto/issues/25
