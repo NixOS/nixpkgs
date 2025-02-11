@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
+  pandoc,
   pkg-config,
   doxygen,
   graphviz,
@@ -11,16 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "flac";
-  version = "1.4.3";
+  version = "1.5.0";
 
-  src = fetchurl {
-    url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
-    # Official checksum is published at https://github.com/xiph/flac/releases/tag/${version}
-    hash = "sha256-bFjmnNIjSPRBuGEJK4JeWR0Lgi4QbebrDuTQXScgW3A=";
+  src = fetchFromGitHub {
+    owner = "xiph";
+    repo = "flac";
+    tag = version;
+    hash = "sha256-B6XRai5UOAtY/7JXNbI3YuBgazi1Xd2ZOs6vvLq9LIs=";
   };
 
   nativeBuildInputs = [
     cmake
+    pandoc
     pkg-config
     doxygen
     graphviz
