@@ -1891,9 +1891,6 @@ self: super: {
   # 2025-02-11: Too strict bounds on hedgehog < 1.5
   nothunks = doJailbreak super.nothunks;
 
-  # Allow building with older versions of http-client.
-  http-client-restricted = doJailbreak super.http-client-restricted;
-
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
