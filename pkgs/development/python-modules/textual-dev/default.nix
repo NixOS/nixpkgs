@@ -8,6 +8,7 @@
   poetry-core,
   pythonOlder,
   textual,
+  textual-serve,
   typing-extensions,
 }:
 
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     click
     msgpack
     textual
+    textual-serve
     typing-extensions
   ];
 
