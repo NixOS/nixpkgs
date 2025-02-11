@@ -28,7 +28,7 @@ src = fetchFromGitHub {
 
 preConfigure = "cd client";
 
-nativeBuildInputs = [ 
+nativeBuildInputs = [
     cmake
     pkg-config
     qt6.wrapQtAppsHook
