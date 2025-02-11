@@ -5291,6 +5291,8 @@ self: super: with self; {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghome-foyer-api = callPackage ../development/python-modules/ghome-foyer-api { };
+
   ghp-import = callPackage ../development/python-modules/ghp-import { };
 
   ghrepo-stats = callPackage ../development/python-modules/ghrepo-stats { };
@@ -7602,6 +7604,8 @@ self: super: with self; {
   litemapy = callPackage ../development/python-modules/litemapy { };
 
   litestar-htmx = callPackage ../development/python-modules/litestar-htmx { };
+
+  litestar = callPackage ../development/python-modules/litestar { };
 
   littleutils = callPackage ../development/python-modules/littleutils { };
 
@@ -10046,7 +10050,7 @@ self: super: with self; {
 
   paho-mqtt_1 = callPackage ../development/python-modules/paho-mqtt/1.nix { };
   paho-mqtt_2 = callPackage ../development/python-modules/paho-mqtt/default.nix { };
-  paho-mqtt = paho-mqtt_1;
+  paho-mqtt = paho-mqtt_2;
 
   paintcompiler = callPackage ../development/python-modules/paintcompiler { };
 
@@ -12379,6 +12383,10 @@ self: super: with self; {
 
   pyobihai = callPackage ../development/python-modules/pyobihai { };
 
+  pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
+
+  pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
+
   pyocd = callPackage ../development/python-modules/pyocd { };
 
   pyocd-pemicro = callPackage ../development/python-modules/pyocd-pemicro { };
@@ -14503,6 +14511,8 @@ self: super: with self; {
 
   rules = callPackage ../development/python-modules/rules { };
 
+  rumps = callPackage ../development/python-modules/rumps { };
+
   runs = callPackage ../development/python-modules/runs { };
 
   runstats = callPackage ../development/python-modules/runstats { };
@@ -14716,6 +14726,8 @@ self: super: with self; {
   };
 
   sdds = callPackage ../development/python-modules/sdds { };
+
+  sdjson = callPackage ../development/python-modules/sdjson { };
 
   sdkmanager = callPackage ../development/python-modules/sdkmanager { };
 
@@ -16511,6 +16523,8 @@ self: super: with self; {
   torchcrepe = callPackage ../development/python-modules/torchcrepe { };
 
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
+
+  torcheval = callPackage ../development/python-modules/torcheval { };
 
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
 

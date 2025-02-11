@@ -1761,6 +1761,13 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  mini-nvim = super.mini-nvim.overrideAttrs {
+    # reduce closure size
+    postInstall = ''
+      rm -rf $out/{Makefile,benchmarks,readmes,tests,scripts}
+    '';
+  };
+
   git-conflict-nvim = super.git-conflict-nvim.overrideAttrs {
     # TODO: Remove after next fixed version
     # https://github.com/akinsho/git-conflict.nvim/issues/103
@@ -2394,40 +2401,6 @@ in
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
-  };
-
-  nvim-dbee = super.nvim-dbee.overrideAttrs (
-    oa:
-    let
-      dbee-go = buildGoModule {
-        name = "nvim-dbee";
-        src = "${oa.src}/dbee";
-        vendorHash = "sha256-U/3WZJ/+Bm0ghjeNUILsnlZnjIwk3ySaX3Rd4L9Z62A=";
-        buildInputs = [
-          arrow-cpp
-          duckdb
-        ];
-      };
-    in
-    {
-      dependencies = [ self.nui-nvim ];
-
-      # nvim-dbee looks for the go binary in paths returned bu M.dir() and M.bin() defined in lua/dbee/install/init.lua
-      postPatch = ''
-        substituteInPlace lua/dbee/install/init.lua \
-          --replace-fail 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
-      '';
-
-      preFixup = ''
-        mkdir $target/bin
-        ln -s ${dbee-go}/bin/dbee $target/bin/dbee
-      '';
-
-      meta.platforms = lib.platforms.linux;
-    }
-  );
-
-  nvim-impairative = super.nvim-impairative.overrideAttrs {
   };
 
   nvim-navic = super.nvim-navic.overrideAttrs {
@@ -4040,12 +4013,12 @@ in
       "neotest"
       "nui-nvim"
       "nvim-cmp"
+      "nvim-dbee"
       "nvim-nio"
       "orgmode"
       "papis-nvim"
       "rest-nvim"
       "rocks-config-nvim"
-      "rocks-nvim"
       "rtp-nvim"
       "telescope-manix"
       "telescope-nvim"
@@ -4058,3 +4031,20 @@ in
   in
   lib.genAttrs luarocksPackageNames toVimPackage
 )
+// {
+
+  rocks-nvim =
+    (neovimUtils.buildNeovimPlugin {
+      luaAttr = luaPackages.rocks-nvim;
+    }).overrideAttrs
+      (oa: {
+        passthru = oa.passthru // {
+          initLua = ''
+            vim.g.rocks_nvim = {
+              luarocks_binary = "${neovim-unwrapped.lua.pkgs.luarocks_bootstrap}/bin/luarocks"
+              }
+          '';
+        };
+
+      });
+}
