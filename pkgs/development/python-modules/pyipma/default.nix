@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyipma";
-  version = "3.0.8";
+  version = "3.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = pname;
     tag = version;
-    hash = "sha256-iz47BeBiSXIN/rZNOjuZYTFTIm0WAUg8cy0xV20gdwk=";
+    hash = "sha256-1EUOkNwNoZQEetJ5v6httas0S0a3bHLv/lDRXQsT/Ds=";
   };
 
   propagatedBuildInputs = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to retrieve information from Instituto Português do Mar e Atmosfera";
     homepage = "https://github.com/dgomes/pyipma";
-    changelog = "https://github.com/dgomes/pyipma/releases/tag/${version}";
+    changelog = "https://github.com/dgomes/pyipma/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
