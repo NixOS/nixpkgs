@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  setuptools-scm,
   dataproperty,
   typepy,
   pytestCheckHook,
@@ -10,27 +11,29 @@
 buildPythonPackage rec {
   pname = "tabledata";
   version = "1.3.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
+    repo = "tabledata";
     tag = "v${version}";
     hash = "sha256-kZAEKUOcxb3fK3Oh6+4byJJlB/xzDAEGNpUDEKyVkhs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     dataproperty
     typepy
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thombashi/tabledata";
     description = "Library to represent tabular data";
     changelog = "https://github.com/thombashi/tabledata/releases/tag/${src.tag}";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ genericnerdyusername ];
+    license = lib.licenses.mit;
   };
 }
