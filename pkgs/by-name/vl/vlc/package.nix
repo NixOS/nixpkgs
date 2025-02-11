@@ -81,7 +81,7 @@
   srt,
   stdenv,
   systemd,
-  taglib,
+  taglib_1,
   unzip,
   wayland,
   wayland-protocols,
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
       speex
       srt
       systemd
-      taglib
+      taglib_1
       xcbutilkeysyms
       wayland-scanner # only required for configure script
       zlib
