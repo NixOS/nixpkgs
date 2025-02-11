@@ -56,8 +56,8 @@
     "version": "39"
   },
   "libiconv": {
-    "hash": "sha256-4I70hci8SUQ5QERbImP3htjYCGXdZZ0a6RM7ggUnVa4=",
-    "version": "107"
+    "hash": "sha256-eaUp0z7HqX0AW2C90gDVFeiJnmGRxPDuzyb1Jlm1pNc=",
+    "version": "109"
   },
   "libpcap": {
     "hash": "sha256-x5mKK6LXGS3LBRUVNZwxA750a0NoRScTpoDUsumlg+s=",
