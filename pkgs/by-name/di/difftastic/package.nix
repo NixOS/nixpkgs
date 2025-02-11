@@ -5,6 +5,8 @@
   fetchFromGitHub,
   testers,
   difftastic,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -22,8 +24,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "wilfred";
-    repo = pname;
-    rev = version;
+    repo = "difftastic";
+    tag = version;
     hash = "sha256-AAnlopJTb+tjkACISK9OC0k59BDt+8michzt37P1lL8=";
   };
 
@@ -41,14 +43,20 @@ rustPlatform.buildRustPackage rec {
       -p1 < ${mimallocPatch}
   '';
 
-  passthru.tests.version = testers.testVersion { package = difftastic; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/difft";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion { package = difftastic; };
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
     changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ethancedwards8
       figsoda
       matthiasbeyer
