@@ -4,10 +4,10 @@
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
-  fixup-yarn-lock,
   yarn,
   nodejs,
-  fetchYarnDeps,
+  typescript,
+  nodePackages_latest,
   jq,
   electron_33,
   element-web,
@@ -42,17 +42,23 @@ stdenv.mkDerivation (
       hash = desktopSrcHash;
     };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = desktopYarnHash;
+    # TODO: fetchYarnDeps currently does not deal properly with a dependency
+    # declared as a pin to a commit in a specific git repository.
+    # While it does download everything correctly, `yarn install --offline`
+    # always wants to `git ls-remote` to the repository, ignoring the local
+    # cached tarball.
+    offlineCache = callPackage ./yarn.nix {
+      inherit (finalAttrs) version src;
+      hash = desktopYarnHash;
     };
 
     nativeBuildInputs = [
       yarn
-      fixup-yarn-lock
       nodejs
+      typescript
       makeWrapper
       jq
+      nodePackages_latest.prettier
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
@@ -60,11 +66,10 @@ stdenv.mkDerivation (
     configurePhase = ''
       runHook preConfigure
 
-      export HOME=$(mktemp -d)
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      fixup-yarn-lock yarn.lock
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules/
+      mkdir -p node_modules/
+      cp -r $offlineCache/node_modules/* node_modules/
+      sed -i 's/matrix-gen-i18n/node node_modules\/matrix-web-i18n\/scripts\/gen-i18n.js/gi' package.json
+      sed -i 's/tsx /node node_modules\/tsx\/dist\/cli\.mjs /gi' package.json
 
       runHook postConfigure
     '';
@@ -96,6 +101,7 @@ stdenv.mkDerivation (
       ln -s '${element-web}' "$out/share/element/webapp"
       cp -r '.' "$out/share/element/electron"
       cp -r './res/img' "$out/share/element"
+      chmod -R "a+w" "$out/share/element/electron/node_modules"
       rm -rf "$out/share/element/electron/node_modules"
       cp -r './node_modules' "$out/share/element/electron"
       cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
