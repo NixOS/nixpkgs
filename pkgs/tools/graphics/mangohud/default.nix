@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
   fetchFromGitHub,
   fetchurl,
   replaceVars,
@@ -15,17 +14,15 @@
   mangohud32,
   addDriverRunpath,
   appstream,
-  git,
   glslang,
   mako,
-  mesa-demos,
   meson,
   ninja,
   pkg-config,
   unzip,
+  libX11,
   libXNVCtrl,
   wayland,
-  libX11,
   nlohmann_json,
   spdlog,
   glew,
@@ -38,13 +35,18 @@
 }:
 
 let
-  # Derived from subprojects/cmocka.wrap
-  cmocka = {
-    src = fetchFromGitLab {
-      owner = "cmocka";
-      repo = "cmocka";
-      rev = "59dc0013f9f29fcf212fe4911c78e734263ce24c";
-      hash = "sha256-IbAZOC0Q60PrKlKVWsgg/PFDV0PLb/yy+Iz/4Iziny0=";
+  # Derived from subprojects/imgui.wrap
+  imgui = rec {
+    version = "1.89.9";
+    src = fetchFromGitHub {
+      owner = "ocornut";
+      repo = "imgui";
+      tag = "v${version}";
+      hash = "sha256-0k9jKrJUrG9piHNFQaBBY3zgNIKM23ZA879NY+MNYTU=";
+    };
+    patch = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
+      hash = "sha256-myEpDFl9dr+NTus/n/oCSxHZ6mxh6R1kjMyQtChD1YQ=";
     };
   };
 
@@ -54,27 +56,12 @@ let
     src = fetchFromGitHub {
       owner = "epezent";
       repo = "implot";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-/wkVsgz3wiUVZBCgRl2iDD6GWb+AoHN+u0aeqHHgem0=";
     };
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/implot_${version}-1/get_patch";
       hash = "sha256-HGsUYgZqVFL6UMHaHdR/7YQfKCMpcsgtd48pYpNlaMc=";
-    };
-  };
-
-  # Derived from subprojects/imgui.wrap
-  imgui = rec {
-    version = "1.89.9";
-    src = fetchFromGitHub {
-      owner = "ocornut";
-      repo = "imgui";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-0k9jKrJUrG9piHNFQaBBY3zgNIKM23ZA879NY+MNYTU=";
-    };
-    patch = fetchurl {
-      url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      hash = "sha256-myEpDFl9dr+NTus/n/oCSxHZ6mxh6R1kjMyQtChD1YQ=";
     };
   };
 
@@ -84,7 +71,7 @@ let
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-Headers";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-5uyk2nMwV1MjXoa3hK/WUeGLwpINJJEvY16kc5DEaks=";
     };
     patch = fetchurl {
@@ -95,14 +82,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-cj/F/DWUDm2AHTJvHgkKa+KdIrfxPWLzI570Dp4VFhs=";
+    hash = "sha256-yITiu+2l7PItAmL+6gX9p5Tvf/P8ovttGIo6kJAOqxs=";
   };
 
   outputs = [
@@ -115,11 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     (
       cd "$sourceRoot/subprojects"
-      ${lib.optionalString finalAttrs.finalPackage.doCheck ''
-        cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
-      ''}
-      cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
       cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+      cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
       cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
     )
   '';
@@ -133,13 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Hard code dependencies. Can't use makeWrapper since the Vulkan
     # layer can be used without the mangohud executable by setting MANGOHUD=1.
     (replaceVars ./hardcode-dependencies.patch {
-
       path = lib.makeBinPath [
         coreutils
         curl
         gnugrep
         gnused
-        mesa-demos
         xdg-utils
       ];
 
@@ -155,9 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
           [
             (placeholder "out")
           ]
-          ++ lib.optionals lowerBitnessSupport [
-            mangohud32
-          ]
+          ++ lib.optional lowerBitnessSupport mangohud32
         )
       } \
       --subst-var-by version "${finalAttrs.version}" \
@@ -165,8 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     (
       cd subprojects
-      unzip ${implot.patch}
       unzip ${imgui.patch}
+      unzip ${implot.patch}
       unzip ${vulkan-headers.patch}
     )
   '';
@@ -175,17 +155,15 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "-Dwith_wayland=enabled"
       "-Duse_system_spdlog=enabled"
-      "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
+      "-Dtests=disabled" # amdgpu test segfaults in nix sandbox
     ]
     ++ lib.optionals gamescopeSupport [
       "-Dmangoapp=true"
-      "-Dmangoapp_layer=true"
       "-Dmangohudctl=true"
     ];
 
   nativeBuildInputs = [
     addDriverRunpath
-    git
     glslang
     mako
     meson
@@ -195,9 +173,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Only the headers are used from these packages
     # The corresponding libraries are loaded at runtime from the app's runpath
+    libX11
     libXNVCtrl
     wayland
-    libX11
   ];
 
   buildInputs =
@@ -224,11 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString lowerBitnessSupport ''
     ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.x86.json \
       "$out/share/vulkan/implicit_layer.d"
-
-    ${lib.optionalString gamescopeSupport ''
-      ln -s ${mangohud32}/share/vulkan/implicit_layer.d/libMangoApp.x86.json \
-        "$out/share/vulkan/implicit_layer.d"
-    ''}
   '';
 
   postFixup =
@@ -253,10 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString gamescopeSupport ''
       addDriverRunpath "$out/bin/mangoapp"
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      # libcmocka.so is only used for tests
-      rm "$out/lib/libcmocka.so"
     '';
 
   passthru.updateScript = nix-update-script { };
