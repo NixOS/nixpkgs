@@ -3954,7 +3954,6 @@ broken-packages:
   - morfette # failure in job https://hydra.nixos.org/build/233249575 at 2023-09-02
   - morfeusz # failure in job https://hydra.nixos.org/build/233232351 at 2023-09-02
   - morpheus-graphql-cli # failure in job https://hydra.nixos.org/build/233249063 at 2023-09-02
-  - morpheus-graphql-code-gen # failure in job https://hydra.nixos.org/build/252733361 at 2024-03-16
   - morphisms-functors # failure in job https://hydra.nixos.org/build/233255311 at 2023-09-02
   - morphisms-objects # failure in job https://hydra.nixos.org/build/233216076 at 2023-09-02
   - morte # failure in job https://hydra.nixos.org/build/233212193 at 2023-09-02
