@@ -40,8 +40,8 @@
     "hash": "sha256-QozDiwY0Czc0g45vPD7G4v4Ra+3DujCJbSads3fJjjM="
   },
   "15": {
-    "url": "https://swcdn.apple.com/content/downloads/33/46/042-32691-A_3MH7S3118O/3dblccqo9ws17dc5lk3hojfbt3s74q0ql6/CLTools_macOSNMOS_SDK.pkg",
-    "version": "15.0",
-    "hash": "sha256-JhaAPyfX46D+9sematdAYAORw40JP3xvleWRz7Hj/1s="
+    "url": "https://web.archive.org/web/20250210234739/https://swcdn.apple.com/content/downloads/36/33/072-44426-A_G1AII30AST/ddbss9h6gse6a32rg6luosbrm6vgniu033/CLTools_macOSNMOS_SDK.pkg",
+    "version": "15.2",
+    "hash": "sha256-OP5Ah/JnSZ6sD42BD5vGDmikgFzjsfFBmz1hvQD1dOI="
   }
 }
