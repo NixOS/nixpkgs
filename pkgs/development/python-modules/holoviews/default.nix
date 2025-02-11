@@ -18,7 +18,7 @@
 
   # tests
   pytestCheckHook,
-  pytest-cov,
+  pytest-asyncio,
   flaky,
 }:
 
@@ -33,6 +33,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-KdGDBF+vo9hG3tqZnZaHuZuKvcGowGcS5Ur6V2uwKz4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"ignore:No data was collected:coverage.exceptions.CoverageWarning",' ""
+  '';
 
   build-system = [
     hatch-vcs
@@ -50,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-asyncio
     flaky
   ];
 
