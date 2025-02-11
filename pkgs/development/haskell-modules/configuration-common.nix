@@ -2790,8 +2790,6 @@ self: super: {
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
-  lzma = doJailbreak super.lzma;
-
   # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
   currencies = doJailbreak super.currencies;
 
