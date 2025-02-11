@@ -2186,17 +2186,15 @@ self: super: {
   }) super.json-to-haskell;
   # https://github.com/fieldstrength/aeson-deriving/issues/5
   aeson-deriving = dontCheck super.aeson-deriving;
-  # https://github.com/morpheusgraphql/morpheus-graphql/issues/660
-  morpheus-graphql-core = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/field.unexpected-value/&&!/field.missing-field/&&!/argument.unexpected-value/&&!/argument.missing-field/"
-    ] ++ drv.testFlags or [];
-  }) super.morpheus-graphql-core;
-  morpheus-graphql = overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/Test Rendering/"
-    ] ++ drv.testFlags or [];
-  }) super.morpheus-graphql;
+
+  # 2025-02-11: Too strict bounds on tasty < 1.5, all of the below.
+  morpheus-graphql-app = doJailbreak super.morpheus-graphql-app;
+  morpheus-graphql-client = doJailbreak super.morpheus-graphql-client;
+  morpheus-graphql-core = doJailbreak super.morpheus-graphql-core;
+  morpheus-graphql-server = doJailbreak super.morpheus-graphql-server;
+  morpheus-graphql-tests = doJailbreak super.morpheus-graphql-tests;
+  morpheus-graphql = doJailbreak super.morpheus-graphql;
+
   drunken-bishop = doJailbreak super.drunken-bishop;
   # https://github.com/SupercedeTech/dropbox-client/issues/1
   dropbox = overrideCabal (drv: {
