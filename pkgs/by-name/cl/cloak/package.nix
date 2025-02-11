@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "evansmurithi";
     repo = "cloak";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Pd2aorsXdHB1bs609+S5s+WV5M1ql48yIKaoN8SEvsg=";
   };
 
