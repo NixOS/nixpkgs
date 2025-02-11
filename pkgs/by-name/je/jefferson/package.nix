@@ -26,6 +26,8 @@ python3.pkgs.buildPythonApplication rec {
     lzallright
   ];
 
+  pythonRelaxDeps = [ "cstruct" ];
+
   pythonImportsCheck = [
     "jefferson"
   ];

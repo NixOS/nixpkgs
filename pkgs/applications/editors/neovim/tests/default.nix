@@ -103,6 +103,13 @@ let
       ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
     '' + buildCommand);
 
+  nvim_with_rocks_nvim = (
+    wrapNeovimUnstable neovim-unwrapped {
+      extraName = "with-rocks-nvim";
+      wrapperArgs = "--set NVIM_APPNAME test-rocks-nvim";
+      plugins = [ vimPlugins.rocks-nvim ];
+    }
+  );
 in
   pkgs.recurseIntoAttrs (rec {
 
@@ -365,6 +372,11 @@ in
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
+  '';
+
+  inherit nvim_with_rocks_nvim;
+  rocks_install_plenary = runTest nvim_with_rocks_nvim ''
+    ${nvim_with_rocks_nvim}/bin/nvim -V3log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
   '';
 
   inherit (vimPlugins) corePlugins;
