@@ -2804,6 +2804,10 @@ self: super: {
   # 2024-01-24: https://github.com/haskellari/tree-diff/issues/79
   tree-diff = dontCheck super.tree-diff;
 
+  # base <4.19
+  # https://github.com/well-typed/large-records/issues/168
+  large-generics = doJailbreak super.large-generics;
+
   # Too strict bounds on base, ghc-prim, primitive
   # https://github.com/kowainik/typerep-map/pull/128
   typerep-map = doJailbreak super.typerep-map;
