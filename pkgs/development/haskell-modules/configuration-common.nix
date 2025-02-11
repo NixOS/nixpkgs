@@ -2576,9 +2576,6 @@ self: super: {
   # unix-compat <0.5
   hxt-cache = doJailbreak super.hxt-cache;
 
-  # base <4.16
-  fast-builder = doJailbreak super.fast-builder;
-
   # QuickCheck <2.14
   term-rewriting = doJailbreak super.term-rewriting;
 
