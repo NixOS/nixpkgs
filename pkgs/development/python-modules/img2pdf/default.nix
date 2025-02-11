@@ -3,7 +3,7 @@
   buildPythonPackage,
   isPy27,
   fetchFromGitea,
-  substituteAll,
+  replaceVars,
   fetchpatch,
   colord,
   setuptools,
@@ -38,8 +38,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./default-icc-profile.patch;
+    (replaceVars ./default-icc-profile.patch {
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then
           "/System/Library/ColorSync/Profiles/sRGB Profile.icc"

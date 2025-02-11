@@ -4,7 +4,7 @@
   fetchPypi,
   fetchFromGitHub,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   colorama,
   contourpy,
   jinja2,
@@ -64,8 +64,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-nodejs-npmjs-paths.patch;
+    (replaceVars ./hardcode-nodejs-npmjs-paths.patch {
       node_bin = "${nodejs}/bin/node";
       npm_bin = "${nodejs}/bin/npm";
     })
