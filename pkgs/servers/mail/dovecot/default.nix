@@ -15,6 +15,7 @@
   coreutils,
   clucene_core_2,
   icu,
+  libexttextcat,
   openldap,
   libsodium,
   libstemmer,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
       lz4
       clucene_core_2
       icu
+      libexttextcat
       openldap
       libsodium
       libstemmer
@@ -131,6 +133,7 @@ stdenv.mkDerivation rec {
       "--with-ldap"
       "--with-lucene"
       "--with-icu"
+      "--with-textcat"
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "i_cv_epoll_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"

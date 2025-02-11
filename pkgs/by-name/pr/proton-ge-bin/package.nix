@@ -34,16 +34,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir $steamcompattool
     ln -s $src/* $steamcompattool
-    rm $steamcompattool/{compatibilitytool.vdf,proton,version}
-    cp $src/{compatibilitytool.vdf,proton,version} $steamcompattool
+    rm $steamcompattool/compatibilitytool.vdf
+    cp $src/compatibilitytool.vdf $steamcompattool
 
     runHook postInstall
   '';
 
   preFixup = ''
     substituteInPlace "$steamcompattool/compatibilitytool.vdf" \
-      --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
-    substituteInPlace "$steamcompattool/proton" \
       --replace-fail "${finalAttrs.version}" "${steamDisplayName}"
   '';
 
