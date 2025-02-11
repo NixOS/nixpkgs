@@ -10,23 +10,26 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyipma";
   version = "3.0.9";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dgomes";
-    repo = pname;
+    repo =  "pyipma";
     tag = version;
     hash = "sha256-1EUOkNwNoZQEetJ5v6httas0S0a3bHLv/lDRXQsT/Ds=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     geopy
   ];
@@ -52,7 +55,7 @@ buildPythonPackage rec {
     description = "Library to retrieve information from Instituto Português do Mar e Atmosfera";
     homepage = "https://github.com/dgomes/pyipma";
     changelog = "https://github.com/dgomes/pyipma/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
