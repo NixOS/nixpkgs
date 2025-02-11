@@ -2682,9 +2682,6 @@ self: super: {
 
   html-charset = dontCheck super.html-charset;
 
-  # 2024-08-15: primitive >=0.9 && <0.10
-  posix-api = doJailbreak super.posix-api;
-
   # bytestring <0.11.0, optparse-applicative <0.13.0
   # https://github.com/kseo/sfnt2woff/issues/1
   sfnt2woff = doJailbreak super.sfnt2woff;
