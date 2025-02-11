@@ -8,6 +8,7 @@
   libiconv,
   withFzf ? true,
   fzf,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
     "--skip=test_parse_variable_line"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Interactive cheatsheet tool for the command-line and application launchers";
