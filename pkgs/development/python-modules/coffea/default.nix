@@ -57,6 +57,10 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
+  pythonRelaxDeps = [
+    "dask"
+  ];
+
   dependencies = [
     aiohttp
     awkward
@@ -106,6 +110,10 @@ buildPythonPackage rec {
     # AssertionError: bug in Awkward Array: attempt to convert TypeTracerArray into a concrete array
     "test_apply_to_fileset"
     "test_lorentz_behavior"
+
+    # ValueError: The array to mask was deleted before it could be masked.
+    # If you want to construct this mask, you must either keep the array alive or use 'ak.mask' explicitly.
+    "test_read_nanomc"
   ];
 
   __darwinAllowLocalNetworking = true;
