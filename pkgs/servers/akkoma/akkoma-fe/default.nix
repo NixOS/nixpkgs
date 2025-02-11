@@ -9,6 +9,7 @@
   jpegoptim,
   oxipng,
   nodePackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,6 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      ''^v(\d+\.\d+\.\d+)$''
+    ];
+  };
 
   meta = {
     description = "Frontend for Akkoma";
