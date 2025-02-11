@@ -307,6 +307,10 @@ self: super: {
   # 2025-02-10: Too strict bounds on bytestring < 0.12
   ghc-debug-common = doJailbreak super.ghc-debug-common;
 
+  # https://github.com/agrafix/superbuffer/issues/4
+  # Too strict bounds on bytestring < 0.12
+  superbuffer = doJailbreak super.superbuffer;
+
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
