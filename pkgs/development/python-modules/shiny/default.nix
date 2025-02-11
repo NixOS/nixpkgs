@@ -3,21 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
 
   appdirs,
   asgiref,
   click,
   htmltools,
+  libsass,
   linkify-it-py,
   markdown-it-py,
   mdit-py-plugins,
+  narwhals,
+  orjson,
+  packaging,
+  prompt-toolkit,
   python-multipart,
   questionary,
   starlette,
+  typing-extensions,
   uvicorn,
   watchfiles,
   websockets,
 
+  anthropic,
+  cacert,
+  google-generativeai,
+  langchain-core,
+  ollama,
+  openai,
   pytestCheckHook,
   pytest-asyncio,
   pytest-playwright,
@@ -25,6 +38,7 @@
   pytest-timeout,
   pytest-rerunfailures,
   pandas,
+  polars,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +53,11 @@ buildPythonPackage rec {
     hash = "sha256-8bo2RHuIP7X7EaOlHd+2m4XU287owchAwiqPnpjKFjI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   dependencies = [
     appdirs
     asgiref
@@ -48,16 +66,35 @@ buildPythonPackage rec {
     linkify-it-py
     markdown-it-py
     mdit-py-plugins
+    narwhals
+    orjson
+    packaging
+    prompt-toolkit
     python-multipart
     questionary
+    setuptools
     starlette
+    typing-extensions
     uvicorn
     watchfiles
     websockets
   ];
 
+  optional-dependencies = {
+    theme = [
+      libsass
+      # FIXME package brand-yml
+    ];
+  };
+
   pythonImportsCheck = [ "shiny" ];
+
   nativeCheckInputs = [
+    anthropic
+    google-generativeai
+    langchain-core
+    ollama
+    openai
     pytestCheckHook
     pytest-asyncio
     pytest-playwright
@@ -65,6 +102,16 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-rerunfailures
     pandas
+    polars
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  disabledTests = [
+    # ValueError: A tokenizer is required to impose `token_limits` on messages
+    "test_chat_message_trimming"
+    # https://github.com/posit-dev/py-shiny/pull/1791
+    "test_as_ollama_message"
   ];
 
   meta = {
