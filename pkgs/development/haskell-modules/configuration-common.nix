@@ -2630,9 +2630,6 @@ self: super: {
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
 
-  # doctest <0.19
-  polysemy = doJailbreak super.polysemy;
-
   # multiple bounds too strict
   co-log-polysemy = doJailbreak super.co-log-polysemy;
   co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
