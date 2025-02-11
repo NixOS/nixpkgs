@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "badkeys";
-  version = "0.0.12";
+  version = "0.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "badkeys";
     repo = "badkeys";
     tag = "v${version}";
-    hash = "sha256-LFoB/ZHIMRpN/eHg3x8HCxNbMKclf2SJSDPk33OIil8=";
+    hash = "sha256-xukdaqyQKEnwPmAN4WZqeLo5g2tJxPehabTyDgCv8q4=";
   };
 
   build-system = with python3Packages; [
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Tool to find common vulnerabilities in cryptographic public keys";
     homepage = "https://badkeys.info/";
-    changelog = "https://github.com/badkeys/badkeys/releases/tag/v${version}";
+    changelog = "https://github.com/badkeys/badkeys/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "badkeys";
