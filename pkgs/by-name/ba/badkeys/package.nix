@@ -1,7 +1,9 @@
 {
   lib,
+  badkeys,
   fetchFromGitHub,
   python3Packages,
+  testers,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -34,6 +36,10 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "badkeys" ];
+
+  passthru = {
+    tests.version = testers.testVersion { package = badkeys; };
+  };
 
   meta = {
     description = "Tool to find common vulnerabilities in cryptographic public keys";
