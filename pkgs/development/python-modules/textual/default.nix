@@ -78,6 +78,20 @@ buildPythonPackage rec {
       # https://github.com/Textualize/textual/issues/5449
       "test_setting_unknown_language"
       "test_update_highlight_query"
+
+      # Very flaky after pytest-asyncio bump: https://github.com/NixOS/nixpkgs/commit/e7e5cb87912505e13a5aa0125ca13267d7ffeaa3
+      # https://github.com/Textualize/textual/issues/5511
+      "test_focus_chain"
+      "test_allow_focus"
+      "test_focus_next_and_previous_with_type_selector_without_self"
+      "test_focus_next_wrap_around"
+      "test_focus_next_and_previous"
+      "test_focus_previous_wrap_around"
+      "test_no_focus_empty_selector"
+      "test_wrap_around_selector"
+      "test_focus_next_and_previous_with_type_selector"
+      "test_focus_next_and_previous_with_str_selector"
+      "test_focus_next_and_previous_with_str_selector_without_self"
     ]
     ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/Textualize/textual/issues/5327
