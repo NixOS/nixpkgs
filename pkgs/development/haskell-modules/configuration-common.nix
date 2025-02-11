@@ -2122,8 +2122,7 @@ self: super: {
     testFlags = [ "-j1" ];
   } super.libarchive;
 
-  # Too strict bounds on QuickCheck
-  # https://github.com/muesli4/table-layout/issues/16
+  # 2025-02-11: Too strict bounds on doclayout < 0.5
   table-layout = doJailbreak super.table-layout;
 
   # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
