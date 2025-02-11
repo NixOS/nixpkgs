@@ -2048,6 +2048,9 @@ self: super: {
     revision = null;
   } super.llvm-hs-pure);
 
+  # 2025-02-11: Too strict bounds on tasty-quickcheck < 0.11
+  exact-pi = doJailbreak super.exact-pi;
+
   # Too strict bounds on dimensional
   # https://github.com/enomsg/science-constants-dimensional/pull/1
   science-constants-dimensional = doJailbreak super.science-constants-dimensional;
