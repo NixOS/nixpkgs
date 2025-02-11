@@ -70,10 +70,10 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Cool new OpenPGP implementation";
+    description = "A command line application exposing a useful set of OpenPGP functionality for common tasks.";
     homepage = "https://sequoia-pgp.org/";
     changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       minijackson
       doronbehar
