@@ -42,7 +42,29 @@ stdenv.mkDerivation rec {
     "-DENABLE_SYSTEM_LUA=ON"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    app_name="The Battle for Wesnoth"
+    app_bundle="$out/Applications/$app_name.app"
+    app_contents="$app_bundle/Contents"
+
+    mkdir -p "$app_contents"
+    echo "APPL????" > "$app_contents/PkgInfo"
+
+    mv $out/bin "$app_contents/MacOS"
+    mv $out/share/wesnoth "$app_contents/Resources"
+
+    pushd ../projectfiles/Xcode
+
+    substitute Info.plist "$app_contents/Info.plist" \
+      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth \
+      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth \
+      --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
+
+    cp -r Resources/SDLMain.nib "$app_contents/Resources/"
+    install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
+
+    popd
+  '';
 
   meta = with lib; {
     description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
