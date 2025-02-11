@@ -2328,15 +2328,6 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # 2024-01-14: Support hedgehog 1.5 https://github.com/kowainik/relude/pull/463/
-  relude = appendPatch (fetchpatch {
-    url = "https://github.com/kowainik/relude/commit/b6bf99ee83e929d11bd4088d6a1d928c3ce0070b.patch";
-    sha256 = "sha256-YhGZ0l7FuTyLee1b2yGcvxdvwgnOhZBy7qTg7aymmDc=";
-  }) (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.relude);
-
   # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
   hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
 
