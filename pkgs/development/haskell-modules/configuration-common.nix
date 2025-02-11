@@ -2385,17 +2385,6 @@ self: super: {
   doctest-parallel = dontCheck super.doctest-parallel;
   clash-prelude = dontCheck super.clash-prelude;
 
-  # Ships a broken Setup.hs
-  # https://github.com/lehins/conduit-aeson/issues/1
-  conduit-aeson = overrideCabal (drv: {
-    postPatch = ''
-      ${drv.postPatch or ""}
-      rm Setup.hs
-    '';
-    # doctest suite uses doctest-parallel which still doesn't work in nixpkgs
-    testTargets = [ "tests" ];
-  }) super.conduit-aeson;
-
   hermes-json = overrideCabal (drv: {
     # Upper bounds are too strict:
     # https://github.com/velveteer/hermes/pull/22
