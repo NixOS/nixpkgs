@@ -12,6 +12,7 @@
   makeFontsConf,
   makeWrapper,
   runCommand,
+  writeText,
   cacert,
 }:
 let
@@ -188,9 +189,27 @@ let
       runHook postInstall
     '';
 
+    setupHook = writeText "setupHook.sh" ''
+      addBrowsersPath () {
+        if [[ ! -v PLAYWRIGHT_BROWSERS_PATH ]] ; then
+          export PLAYWRIGHT_BROWSERS_PATH="${playwright-core.passthru.browsers}"
+        fi
+      }
+
+      addEnvHooks "$targetOffset" addBrowsersPath
+    '';
+
     meta = playwright.meta // {
       mainProgram = "playwright";
     };
+
+    passthru.tests.env = runCommand "playwright-core-env-test" {
+      buildInputs = [
+        nodejs
+        playwright-core
+        playwright-test
+      ];
+    } "node ${./test.js}";
   });
 
   browsers = lib.makeOverridable (
