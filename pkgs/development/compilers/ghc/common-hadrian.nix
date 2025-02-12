@@ -171,11 +171,10 @@
             # 9.8 and 9.10 don't run into this problem for some reason
             || (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.11");
         in
-        [
-          # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-          (if lib.versionAtLeast version "9.8"
-           then ./docs-sphinx-7-ghc98.patch
-           else ./docs-sphinx-7.patch )
+
+        # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+        lib.optionals (lib.versionOlder version "9.8") [
+           ./docs-sphinx-7.patch
         ]
         ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
           (fetchpatch {
