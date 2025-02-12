@@ -7465,6 +7465,13 @@ with pkgs;
       inherit version;
       hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
     };
+
+    postPatch = ''
+      substituteInPlace lib/ansible/executor/task_executor.py \
+        --replace "[python," "["
+
+      patchShebangs --build packaging/cli-doc/build.py
+    '';
   }));
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
