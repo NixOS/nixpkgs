@@ -163,32 +163,29 @@ stdenv.mkDerivation (finalAttrs: {
       xmlto
     ];
 
-  buildInputs =
-    [
-      appstream
-      curl
-      dconf
-      fuse3
-      gdk-pixbuf
-      glib-networking
-      gpgme
-      gsettings-desktop-schemas
-      json-glib
-      libarchive
-      libcap
-      librsvg # for flatpak-validate-icon
-      libseccomp
-      libxml2
-      malcontent
-      polkit
-      python3
-      wayland
-      wayland-protocols
-      xorg.libXau
-      zstd
-    ]
-    ++ lib.optional withGtkDoc gtk-doc
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [
+    appstream
+    curl
+    dconf
+    fuse3
+    gdk-pixbuf
+    glib-networking
+    gpgme
+    gsettings-desktop-schemas
+    json-glib
+    libarchive
+    libcap
+    librsvg # for flatpak-validate-icon
+    libseccomp
+    libxml2
+    malcontent
+    polkit
+    python3
+    wayland
+    wayland-protocols
+    xorg.libXau
+    zstd
+  ] ++ lib.optional withSystemd systemd;
 
   # Required by flatpak.pc
   propagatedBuildInputs = [
