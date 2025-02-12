@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # required for pkg-config to detect mutter-mtk
     graphene
-    mesa  # actually uses eglmesaext
+    mesa # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [

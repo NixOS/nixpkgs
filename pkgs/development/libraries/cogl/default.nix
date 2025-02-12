@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
-      mesa  # actually uses eglmesaext
+      mesa # actually uses eglmesaext
       libGL
       xorg.libXrandr
       xorg.libXfixes

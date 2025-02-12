@@ -42,54 +42,68 @@ stdenv.mkDerivation rec {
     gfortran
     pkg-config
   ] ++ lib.optional mpiSupport mpi;
-  buildInputs = [
-    blas
-    lapack
-  ] ++ lib.optional hdf5-support hdf5 ++ lib.optional petsc-withp4est p4est ++ lib.optionals withParmetis [ metis parmetis ];
+  buildInputs =
+    [
+      blas
+      lapack
+    ]
+    ++ lib.optional hdf5-support hdf5
+    ++ lib.optional petsc-withp4est p4est
+    ++ lib.optionals withParmetis [
+      metis
+      parmetis
+    ];
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config/install.py \
       --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
   '';
 
-  configureFlags = [
-    "--with-blas=1"
-    "--with-lapack=1"
-    "--with-scalar-type=${petsc-scalar-type}"
-    "--with-precision=${petsc-precision}"
-    "--with-mpi=${if mpiSupport then "1" else "0"}"
-  ] ++ lib.optionals mpiSupport [
-    "--CC=mpicc"
-    "--with-cxx=mpicxx"
-    "--with-fc=mpif90"
-  ] ++ lib.optionals (mpiSupport && withParmetis) [
-    "--with-metis=1"
-    "--with-metis-dir=${metis}"
-    "--with-parmetis=1"
-    "--with-parmetis-dir=${parmetis}"
-  ] ++ lib.optionals petsc-optimized [
-    "--with-debugging=0"
-    "COPTFLAGS=-O3"
-    "FOPTFLAGS=-O3"
-    "CXXOPTFLAGS=-O3"
-    "CXXFLAGS=-O3"
-  ];
-  preConfigure = ''
-    patchShebangs ./lib/petsc/bin
-  '' + lib.optionalString petsc-withp4est ''
-    configureFlagsArray+=(
-      "--with-p4est=1"
-      "--with-zlib-include=${zlib.dev}/include"
-      "--with-zlib-lib=-L${zlib}/lib -lz"
-    )
-  '' + lib.optionalString hdf5-support ''
-    configureFlagsArray+=(
-      "--with-hdf5=1"
-      "--with-hdf5-fortran-bindings=1"
-      "--with-hdf5-include=${hdf5.dev}/include"
-      "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
-    )
-  '';
+  configureFlags =
+    [
+      "--with-blas=1"
+      "--with-lapack=1"
+      "--with-scalar-type=${petsc-scalar-type}"
+      "--with-precision=${petsc-precision}"
+      "--with-mpi=${if mpiSupport then "1" else "0"}"
+    ]
+    ++ lib.optionals mpiSupport [
+      "--CC=mpicc"
+      "--with-cxx=mpicxx"
+      "--with-fc=mpif90"
+    ]
+    ++ lib.optionals (mpiSupport && withParmetis) [
+      "--with-metis=1"
+      "--with-metis-dir=${metis}"
+      "--with-parmetis=1"
+      "--with-parmetis-dir=${parmetis}"
+    ]
+    ++ lib.optionals petsc-optimized [
+      "--with-debugging=0"
+      "COPTFLAGS=-O3"
+      "FOPTFLAGS=-O3"
+      "CXXOPTFLAGS=-O3"
+      "CXXFLAGS=-O3"
+    ];
+  preConfigure =
+    ''
+      patchShebangs ./lib/petsc/bin
+    ''
+    + lib.optionalString petsc-withp4est ''
+      configureFlagsArray+=(
+        "--with-p4est=1"
+        "--with-zlib-include=${zlib.dev}/include"
+        "--with-zlib-lib=-L${zlib}/lib -lz"
+      )
+    ''
+    + lib.optionalString hdf5-support ''
+      configureFlagsArray+=(
+        "--with-hdf5=1"
+        "--with-hdf5-fortran-bindings=1"
+        "--with-hdf5-include=${hdf5.dev}/include"
+        "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
+      )
+    '';
 
   hardeningDisable = lib.optionals (!petsc-optimized) [
     "fortify"

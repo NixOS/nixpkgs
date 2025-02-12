@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, nix-update-script
+{
+  lib,
+  python3,
+  fetchPypi,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -36,6 +37,9 @@ python3.pkgs.buildPythonApplication rec {
     description = "Export your Signal chats to markdown files with attachments";
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ phaer picnoir ];
+    maintainers = with maintainers; [
+      phaer
+      picnoir
+    ];
   };
 }

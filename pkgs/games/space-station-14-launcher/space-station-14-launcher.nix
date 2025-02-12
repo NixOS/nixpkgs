@@ -1,26 +1,27 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, wrapGAppsHook3
-, iconConvTools
-, copyDesktopItems
-, makeDesktopItem
-, glew
-, SDL2
-, glfw
-, glibc
-, libGL
-, freetype
-, openal
-, fluidsynth
-, gtk3
-, pango
-, atk
-, cairo
-, zlib
-, glib
-, gdk-pixbuf
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  iconConvTools,
+  copyDesktopItems,
+  makeDesktopItem,
+  glew,
+  SDL2,
+  glfw,
+  glibc,
+  libGL,
+  freetype,
+  openal,
+  fluidsynth,
+  gtk3,
+  pango,
+  atk,
+  cairo,
+  zlib,
+  glib,
+  gdk-pixbuf,
 }:
 let
   version = "0.29.1";
@@ -64,7 +65,11 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 iconConvTools copyDesktopItems ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    iconConvTools
+    copyDesktopItems
+  ];
 
   runtimeDeps = [
     # Required by the game.

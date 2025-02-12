@@ -31,7 +31,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ postgresql ];
 
-  checkFlags = ["-short"];
+  checkFlags = [ "-short" ];
 
   postInstall = ''
     installShellCompletion --cmd headscale \

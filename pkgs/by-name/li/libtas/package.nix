@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, SDL2
-, alsa-lib
-, ffmpeg
-, lua5_3
-, qt5
-, file
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  SDL2,
+  alsa-lib,
+  ffmpeg,
+  lua5_3,
+  qt5,
+  file,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,8 +24,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-n4iaJG9k+/TFfGMDCYL83Z6paxpm/gY3thP9T84GeQU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook qt5.wrapQtAppsHook pkg-config ];
-  buildInputs = [ SDL2 alsa-lib ffmpeg lua5_3 qt5.qtbase ];
+  nativeBuildInputs = [
+    autoreconfHook
+    qt5.wrapQtAppsHook
+    pkg-config
+  ];
+  buildInputs = [
+    SDL2
+    alsa-lib
+    ffmpeg
+    lua5_3
+    qt5.qtbase
+  ];
 
   configureFlags = [
     "--enable-release-build"
@@ -61,6 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with maintainers; [ skyrina ];
     mainProgram = "libTAS";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 })

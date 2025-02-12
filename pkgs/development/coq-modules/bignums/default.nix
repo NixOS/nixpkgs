@@ -63,18 +63,18 @@
   (
     o:
     # this is just a wrapper for rocPackages.bignums for Rocq >= 9.0
-    lib.optionalAttrs (coq.version != null && (coq.version == "dev"
-                       || lib.versions.isGe "9.0" coq.version)) {
-      configurePhase = ''
-        echo no configuration
-      '';
-      buildPhase = ''
-        echo building nothing
-      '';
-      installPhase = ''
-        echo installing nothing
-      '';
-      propagatedBuildInputs = o.propagatedBuildInputs
-        ++ [ rocqPackages.bignums ];
-    }
+    lib.optionalAttrs
+      (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
+      {
+        configurePhase = ''
+          echo no configuration
+        '';
+        buildPhase = ''
+          echo building nothing
+        '';
+        installPhase = ''
+          echo installing nothing
+        '';
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.bignums ];
+      }
   )

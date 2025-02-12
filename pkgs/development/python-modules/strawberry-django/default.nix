@@ -60,21 +60,23 @@ buildPythonPackage rec {
     enum = [ django-choices-field ];
   };
 
+  nativeCheckInputs =
+    [
+      pytestCheckHook
 
-  nativeCheckInputs = [
-    pytestCheckHook
-
-    django-guardian
-    django-mptt
-    django-polymorphic
-    factory-boy
-    pillow
-    psycopg2
-    pytest-cov-stub
-    pytest-django
-    pytest-mock
-    pytest-snapshot
-  ] ++ optional-dependencies.debug-toolbar ++ optional-dependencies.enum;
+      django-guardian
+      django-mptt
+      django-polymorphic
+      factory-boy
+      pillow
+      psycopg2
+      pytest-cov-stub
+      pytest-django
+      pytest-mock
+      pytest-snapshot
+    ]
+    ++ optional-dependencies.debug-toolbar
+    ++ optional-dependencies.enum;
 
   pythonImportsCheck = [ "strawberry_django" ];
 

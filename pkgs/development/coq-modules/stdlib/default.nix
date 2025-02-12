@@ -16,8 +16,14 @@
   defaultVersion =
     with lib.versions;
     lib.switch coq.version [
-      { case = isEq "9.0"; out = "9.0+rc1"; }
-      { case = isLt "8.21"; out = "8.20"; }
+      {
+        case = isEq "9.0";
+        out = "9.0+rc1";
+      }
+      {
+        case = isLt "8.21";
+        out = "8.20";
+      }
     ] null;
   releaseRev = v: "V${v}";
 
@@ -39,15 +45,18 @@
   (
     o:
     # stdlib is already included in Coq <= 8.20
-    if coq.version != null && coq.version != "dev" && lib.versions.isLt "8.21" coq.version then {
-      configurePhase = ''
-        echo no configuration
-      '';
-      buildPhase = ''
-        echo building nothing
-      '';
-      installPhase = ''
-        touch $out
-      '';
-    } else { propagatedBuildInputs = [ rocqPackages.stdlib ]; }
+    if coq.version != null && coq.version != "dev" && lib.versions.isLt "8.21" coq.version then
+      {
+        configurePhase = ''
+          echo no configuration
+        '';
+        buildPhase = ''
+          echo building nothing
+        '';
+        installPhase = ''
+          touch $out
+        '';
+      }
+    else
+      { propagatedBuildInputs = [ rocqPackages.stdlib ]; }
   )

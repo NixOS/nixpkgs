@@ -44,9 +44,7 @@ let
       fs = pkgs.lib.fileset;
       nixFilesSrc = fs.toSource {
         root = ../.;
-        fileset = fs.difference
-          (fs.fileFilter (file: file.hasExt "nix" ) ../.)
-          (fs.maybeMissing ../.git);
+        fileset = fs.difference (fs.fileFilter (file: file.hasExt "nix") ../.) (fs.maybeMissing ../.git);
       };
     in
     {

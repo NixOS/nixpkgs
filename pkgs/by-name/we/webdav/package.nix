@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGo123Module }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGo123Module,
+}:
 
 buildGo123Module rec {
   pname = "webdav";

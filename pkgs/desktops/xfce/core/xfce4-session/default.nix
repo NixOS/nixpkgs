@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, polkit
-, exo
-, libxfce4util
-, libxfce4ui
-, libxfce4windowing
-, xfconf
-, iceauth
-, gtk3
-, gtk-layer-shell
-, glib
-, libwnck
-, xfce4-session
+{
+  lib,
+  mkXfceDerivation,
+  polkit,
+  exo,
+  libxfce4util,
+  libxfce4ui,
+  libxfce4windowing,
+  xfconf,
+  iceauth,
+  gtk3,
+  gtk-layer-shell,
+  glib,
+  libwnck,
+  xfce4-session,
 }:
 
 mkXfceDerivation {

@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bash
-, cmake
-, cfitsio
-, libusb1
-, kmod
-, zlib
-, boost
-, libev
-, libnova
-, curl
-, libjpeg
-, gsl
-, fftw
-, gtest
-, indi-full
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  cmake,
+  cfitsio,
+  libusb1,
+  kmod,
+  zlib,
+  boost,
+  libev,
+  libnova,
+  curl,
+  libjpeg,
+  gsl,
+  fftw,
+  gtest,
+  indi-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,13 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-  ] ++ lib.optional finalAttrs.finalPackage.doCheck [
-    "-DINDI_BUILD_UNITTESTS=ON"
-    "-DINDI_BUILD_INTEGTESTS=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+      "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+    ]
+    ++ lib.optional finalAttrs.finalPackage.doCheck [
+      "-DINDI_BUILD_UNITTESTS=ON"
+      "-DINDI_BUILD_INTEGTESTS=ON"
+    ];
 
   checkInputs = [ gtest ];
 
@@ -81,7 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 sheepforce returntoreality ];
+    maintainers = with maintainers; [
+      hjones2199
+      sheepforce
+      returntoreality
+    ];
     platforms = platforms.unix;
   };
 })

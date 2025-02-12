@@ -1,4 +1,10 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+{
+  lib,
+  elixir,
+  fetchFromGitHub,
+  fetchMixDeps,
+  mixRelease,
+}:
 # Based on ../elixir-ls/default.nix
 
 let
@@ -12,7 +18,12 @@ let
   };
 in
 mixRelease {
-  inherit pname version src elixir;
+  inherit
+    pname
+    version
+    src
+    elixir
+    ;
 
   stripDebug = true;
 
@@ -49,6 +60,6 @@ mixRelease {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "ex_doc";
-    maintainers = with maintainers; [chiroptical];
+    maintainers = with maintainers; [ chiroptical ];
   };
 }

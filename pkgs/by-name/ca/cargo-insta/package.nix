@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,10 +19,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-bRxtkuNtCelcYJkWPMl8xkMuGcbGCxvdz5cCzPUk44k=";
 
   checkFlags = [
-  # Depends on `rustfmt` and does not matter for packaging.
-  "--skip=utils::test_format_rust_expression"
-  # Requires networking
-  "--skip=test_force_update_snapshots"
+    # Depends on `rustfmt` and does not matter for packaging.
+    "--skip=utils::test_format_rust_expression"
+    # Requires networking
+    "--skip=test_force_update_snapshots"
   ];
 
   meta = with lib; {
@@ -30,6 +31,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      oxalica
+      matthiasbeyer
+    ];
   };
 }

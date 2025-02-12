@@ -1,11 +1,12 @@
-{ stdenv
-, fetchurl
-, sane-backends
-, nss
-, autoPatchelfHook
-, lib
-, libsForQt5
-, pkcs11helper
+{
+  stdenv,
+  fetchurl,
+  sane-backends,
+  nss,
+  autoPatchelfHook,
+  lib,
+  libsForQt5,
+  pkcs11helper,
 }:
 
 stdenv.mkDerivation rec {

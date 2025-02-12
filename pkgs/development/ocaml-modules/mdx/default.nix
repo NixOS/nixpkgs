@@ -1,7 +1,20 @@
-{ lib, fetchurl, buildDunePackage, ocaml, findlib
-, alcotest
-, astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
-, gitUpdater
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  findlib,
+  alcotest,
+  astring,
+  cppo,
+  fmt,
+  logs,
+  ocaml-version,
+  camlp-streams,
+  lwt,
+  re,
+  csexp,
+  gitUpdater,
 }:
 
 buildDunePackage rec {
@@ -17,13 +30,27 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
-    astring fmt logs csexp ocaml-version camlp-streams re findlib
+    astring
+    fmt
+    logs
+    csexp
+    ocaml-version
+    camlp-streams
+    re
+    findlib
   ];
-  checkInputs = [ alcotest lwt ];
+  checkInputs = [
+    alcotest
+    lwt
+  ];
 
   doCheck = true;
 
-  outputs = [ "bin" "lib" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
 
   installPhase = ''
     runHook preInstall

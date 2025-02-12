@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchzip
-, fetchurl
-, cacert
-, unicode-emoji
-, unicode-character-database
-, cmake
-, ninja
-, pkg-config
-, curl
-, libavif
-, libGL
-, libjxl
-, libpulseaudio
-, libwebp
-, libxcrypt
-, openssl
-, python3
-, qt6Packages
-, woff2
-, ffmpeg
-, fontconfig
-, simdutf
-, skia
-, nixosTests
-, unstableGitUpdater
-, apple-sdk_14
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  fetchurl,
+  cacert,
+  unicode-emoji,
+  unicode-character-database,
+  cmake,
+  ninja,
+  pkg-config,
+  curl,
+  libavif,
+  libGL,
+  libjxl,
+  libpulseaudio,
+  libwebp,
+  libxcrypt,
+  openssl,
+  python3,
+  qt6Packages,
+  woff2,
+  ffmpeg,
+  fontconfig,
+  simdutf,
+  skia,
+  nixosTests,
+  unstableGitUpdater,
+  apple-sdk_14,
 }:
 
 let
@@ -104,42 +105,48 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = with qt6Packages; [
-    curl
-    ffmpeg
-    fontconfig
-    libavif
-    libGL
-    libjxl
-    libwebp
-    libxcrypt
-    openssl
-    qtbase
-    qtmultimedia
-    simdutf
-    (skia.overrideAttrs (prev: {
-      gnFlags = prev.gnFlags ++ [
-        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
-        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
-        # Remove when/if this gets upstreamed in skia.
-        "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
-      ];
-    }))
-    woff2
-  ] ++ lib.optional stdenv.hostPlatform.isLinux [
-    libpulseaudio.dev
-    qtwayland
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
-  ];
+  buildInputs =
+    with qt6Packages;
+    [
+      curl
+      ffmpeg
+      fontconfig
+      libavif
+      libGL
+      libjxl
+      libwebp
+      libxcrypt
+      openssl
+      qtbase
+      qtmultimedia
+      simdutf
+      (skia.overrideAttrs (prev: {
+        gnFlags = prev.gnFlags ++ [
+          # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
+          # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
+          # Remove when/if this gets upstreamed in skia.
+          "extra_cflags+=[\"-DSKCMS_API=__attribute__((visibility(\\\"default\\\")))\"]"
+        ];
+      }))
+      woff2
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux [
+      libpulseaudio.dev
+      qtwayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_14
+    ];
 
-  cmakeFlags = [
-    # Disable network operations
-    "-DSERENITY_CACHE_DIR=Caches"
-    "-DENABLE_NETWORK_DOWNLOADS=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-  ];
+  cmakeFlags =
+    [
+      # Disable network operations
+      "-DSERENITY_CACHE_DIR=Caches"
+      "-DENABLE_NETWORK_DOWNLOADS=OFF"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
+    ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
 
@@ -168,7 +175,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ladybird.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "Ladybird";
   };
 })
