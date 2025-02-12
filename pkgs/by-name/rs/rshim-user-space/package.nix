@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.1.5";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = pname;
     rev = "rshim-${version}";
-    hash = "sha256-moU6XxBVSAZiiR/usFfxse2CHk6+003Jb9t62szk1fk=";
+    hash = "sha256-z0Uk520vsBERbeVtxBqXPXSWhO0sLD5GCQy1dQsJdEg=";
   };
 
   nativeBuildInputs = [
@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Mellanox/rshim-user-space";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nikstur ];
+    maintainers = with maintainers; [
+      thillux
+    ];
   };
 }

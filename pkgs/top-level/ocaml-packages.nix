@@ -361,6 +361,8 @@ let
 
     dolmen_loop =  callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
+    dolmen_lsp =  callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+
     dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -1243,6 +1245,10 @@ let
     multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
 
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
+
+    multipart_form =  callPackage ../development/ocaml-modules/multipart_form { };
+
+    multipart_form-lwt =  callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
