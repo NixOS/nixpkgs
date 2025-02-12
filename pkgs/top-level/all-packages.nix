@@ -7457,8 +7457,25 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
-  ansible = ansible_2_17;
-  ansible_2_17 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible = ansible_2_18;
+  ansible_2_18 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_17 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.17.8";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
+    };
+
+    postPatch = ''
+      substituteInPlace lib/ansible/executor/task_executor.py \
+        --replace "[python," "["
+
+      patchShebangs --build packaging/cli-doc/build.py
+
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools >= 66.1.0, <= 75.8.0" setuptools
+    '';
+  }));
   ansible_2_16 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
     version = "2.16.8";
     src = oldAttrs.src.override {
