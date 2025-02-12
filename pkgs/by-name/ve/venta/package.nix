@@ -6,6 +6,7 @@
   gtk-engine-murrine,
   gtk_engines,
   librsvg,
+  marwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/themes
     cp -a Venta* $out/share/themes
+    ln -sfT ${marwaita}/share/themes/Marwaita/plank $out/share/themes/Venta/plank/plank
     runHook postInstall
   '';
 
