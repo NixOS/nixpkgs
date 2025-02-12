@@ -3823,7 +3823,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
-  kakoune-cr = callPackage ../tools/misc/kakoune-cr { crystal = crystal_1_2; };
+  kakoune-cr = callPackage ../tools/misc/kakoune-cr { };
 
   kbs2 = callPackage ../tools/security/kbs2 {
     inherit (darwin.apple_sdk.frameworks) AppKit SystemConfiguration;
