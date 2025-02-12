@@ -1246,6 +1246,10 @@ let
 
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
+    multipart_form =  callPackage ../development/ocaml-modules/multipart_form { };
+
+    multipart_form-lwt =  callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
+
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
