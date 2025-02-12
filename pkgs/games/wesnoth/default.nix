@@ -3,7 +3,6 @@
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , lua, curl
 , gsl-lite
-, Cocoa, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu lua curl ]
-                ++ lib.optionals stdenv.cc.isClang [ gsl-lite ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation];
+                ++ lib.optionals stdenv.cc.isClang [ gsl-lite ];
 
   cmakeFlags = [
     "-DENABLE_SYSTEM_LUA=ON"
