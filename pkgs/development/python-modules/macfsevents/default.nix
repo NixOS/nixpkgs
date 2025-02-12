@@ -16,6 +16,8 @@ buildPythonPackage rec {
     hash = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
+  patches = [ ./fix-packaging.patch ];
+
   buildInputs = [
     CoreFoundation
     CoreServices

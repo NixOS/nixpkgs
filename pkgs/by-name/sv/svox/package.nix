@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     sha256 = "0k3m7vh1ak9gmxd83x29cvhzfkybgz5hnlhd9xj19l1bjyx84s8v";
   };
 
+  patches = [ ./fix-darwin-endian-h-include.patch ];
+
   postPatch = ''
     cd pico
   '';
@@ -29,7 +31,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Text-to-speech engine";
     homepage = "https://android.googlesource.com/platform/external/svox";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ abbradar ];
     mainProgram = "pico2wave";
