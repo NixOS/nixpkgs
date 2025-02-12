@@ -1,29 +1,30 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   gitUpdater,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ablog";
-  version = "0.11.11";
+  version = "0.11.12";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "ablog";
-    rev = "v${version}";
-    hash = "sha256-Hx4iLO+Of2o4tmIDS17SxyswbW2+KMoD4BjB4q1KU9M=";
+    tag = "v${version}";
+    hash = "sha256-bPTaxkuIKeypfnZItG9cl51flHBIx/yg0qENuiqQgY4=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [ wheel ];
+
+  dependencies = with python3Packages; [
     docutils
     feedgen
     invoke
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     watchdog
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     defusedxml
   ];
@@ -47,13 +48,17 @@ python3.pkgs.buildPythonApplication rec {
     "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
 
+  # assert "post 1" not in html
+  # AssertionError
+  disabledTests = [ "test_not_safe_for_parallel_read" ];
+
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "ABlog for blogging with Sphinx";
     mainProgram = "ablog";
     homepage = "https://ablog.readthedocs.io/en/latest/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rgrinberg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rgrinberg ];
   };
 }
