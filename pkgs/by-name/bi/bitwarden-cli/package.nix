@@ -50,9 +50,6 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  # FIXME temporarily disable the symlink check as there are symlink after the build in the `node_modules/@bitwarden` directory linking to `../../`.
-  dontCheckForBrokenSymlinks = true;
-
   npmRebuildFlags = [
     # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
     "--ignore-scripts"
@@ -70,6 +67,13 @@ buildNpmPackage rec {
     shopt -s globstar
     rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
     shopt -u globstar
+  '';
+
+  postInstall = ''
+    # The @bitwarden modules are actually npm workspaces inside the source tree, which
+    # leave dangling symlinks behind. They can be safely removed, because their source is
+    # bundled via webpack and thus not needed at run-time.
+    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
   '';
 
   passthru = {
