@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern Unit Test and Mocking Framework for C and C++";
     mainProgram = "cgreen-runner";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

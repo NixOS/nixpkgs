@@ -15,6 +15,8 @@ in {
     services.metabase = {
       enable = mkEnableOption "Metabase service";
 
+      package = lib.mkPackageOption pkgs "metabase" { };
+
       listen = {
         ip = mkOption {
           type = types.str;
@@ -92,7 +94,7 @@ in {
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = baseNameOf dataDir;
-        ExecStart = "${pkgs.metabase}/bin/metabase";
+        ExecStart = lib.getExe cfg.package;
       };
     };
 

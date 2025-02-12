@@ -13,6 +13,9 @@
   setuptools-scm,
   playwright-driver,
   nixosTests,
+  writeText,
+  runCommand,
+  pythonPackages,
   nodejs,
 }:
 
@@ -81,6 +84,16 @@ buildPythonPackage rec {
     pyee
   ];
 
+  setupHook = writeText "setupHook.sh" ''
+    addBrowsersPath () {
+      if [[ ! -v PLAYWRIGHT_BROWSERS_PATH ]] ; then
+        export PLAYWRIGHT_BROWSERS_PATH="${playwright-driver.browsers}"
+      fi
+    }
+
+    addEnvHooks "$targetOffset" addBrowsersPath
+  '';
+
   postInstall = ''
     ln -s ${driver} $out/${python.sitePackages}/playwright/driver
   '';
@@ -96,6 +109,9 @@ buildPythonPackage rec {
       {
         driver = playwright-driver;
         browsers = playwright-driver.browsers;
+        env = runCommand "playwright-env-test" {
+          buildInputs = [ pythonPackages.playwright ];
+        } "python ${./test.py}";
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         inherit (nixosTests) playwright-python;

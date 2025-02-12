@@ -7,7 +7,6 @@
   autoPatchelfHook,
   cairo,
   cups,
-  curl,
   dbus,
   dpkg,
   expat,
@@ -87,7 +86,6 @@ let
     atk
     cairo
     cups
-    curl
     dbus
     expat
     fontconfig
@@ -154,7 +152,6 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    curl
     libXdamage
     libXtst
     libdrm
@@ -199,12 +196,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     ln -s $out/opt/bytedance/feishu/bytedance-feishu $out/bin/bytedance-feishu
-
-    # feishu comes with a bundled libcurl.so
-    # and has many dependencies that are hard to satisfy
-    # e.g. openldap version 2.4
-    # so replace it with our own libcurl.so
-    ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
 
   passthru = {
