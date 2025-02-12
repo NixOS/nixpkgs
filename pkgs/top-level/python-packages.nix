@@ -9650,6 +9650,8 @@ self: super: with self; {
 
   od = callPackage ../development/python-modules/od { };
 
+  odc-geo = callPackage ../development/python-modules/odc-geo { };
+
   oddsprout = callPackage ../development/python-modules/oddsprout { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
@@ -11380,8 +11382,6 @@ self: super: with self; {
   pwkit = callPackage ../development/python-modules/pwkit { };
 
   pwlf = callPackage ../development/python-modules/pwlf { };
-
-  pwndbg = callPackage ../development/python-modules/pwndbg { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
