@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/leethomason/tinyxml2";
     changelog = "https://github.com/leethomason/tinyxml2/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ zlib ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

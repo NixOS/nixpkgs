@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       delimiter matching, text conversion from/to UTF-8, romanization, etc.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
     mainProgram = "moe";
   };

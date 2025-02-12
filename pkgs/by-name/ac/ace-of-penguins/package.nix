@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       Martin Thornquist).
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
