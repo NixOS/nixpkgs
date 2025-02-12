@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, pkg-config, extra-cmake-modules
-, qt6, zlib, sqlite, kdePackages, callPackage }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  cmake,
+  pkg-config,
+  extra-cmake-modules,
+  qt6,
+  zlib,
+  sqlite,
+  kdePackages,
+  callPackage,
+}:
 
 let
   kdsingleapplication = callPackage ./kdsingleapplication.nix { };
@@ -17,9 +29,16 @@ let
 
     preConfigure = "cd client";
 
-    nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+      qt6.wrapQtAppsHook
+    ];
 
-    buildInputs = [ qt6.qtbase qt6.qttools ];
+    buildInputs = [
+      qt6.qtbase
+      qt6.qttools
+    ];
 
     meta = with lib; {
       description = "C++ Qt client library for Libre Graph API";
@@ -28,21 +47,30 @@ let
       platforms = platforms.linux;
     };
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "stack-client";
   version = "latest";
 
   src = fetchurl {
-    url =
-      "https://filehosting-client.transip.nl/packages/stack-source-latest.tar.gz";
+    url = "https://filehosting-client.transip.nl/packages/stack-source-latest.tar.gz";
     sha256 = "ac69699edb1618ef094e4b642fe72c87bf15e65026029486bef50826a746e19c";
   };
 
-  nativeBuildInputs =
-    [ cmake extra-cmake-modules qt6.qttools qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [ qt6.qtbase kdePackages.qtkeychain zlib sqlite libre-graph-api ];
+  buildInputs = [
+    qt6.qtbase
+    kdePackages.qtkeychain
+    zlib
+    sqlite
+    libre-graph-api
+  ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
