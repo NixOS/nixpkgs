@@ -90,6 +90,7 @@
     propagatedBuildInputs = with python3Packages; [
       docker
       pycomposefile
+      kubernetes
     ];
     meta.maintainers = with lib.maintainers; [ giggio ];
   };
