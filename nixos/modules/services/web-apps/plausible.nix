@@ -68,8 +68,7 @@ in
         description = ''
           Path to the secret used by the `phoenix`-framework. Instructions
           how to generate one are documented in the
-          [
-          framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
+          [framework docs](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Secret.html#content).
         '';
       };
       listenAddress = mkOption {
@@ -92,9 +91,7 @@ in
           Public URL where plausible is available.
 
           Note that `/path` components are currently ignored:
-          [
-            https://github.com/plausible/analytics/issues/1182
-          ](https://github.com/plausible/analytics/issues/1182).
+          <https://github.com/plausible/analytics/issues/1182>.
         '';
       };
     };
