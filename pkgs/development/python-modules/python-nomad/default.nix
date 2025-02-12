@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-nomad";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_nomad";
     inherit version;
-    hash = "sha256-TXCm6FxYoavjN3ASioQ7yXQVsDDXedDKBgGGP8ghQdM=";
+    hash = "sha256-U+bZ7G9mtnKunW0DWRokvi2LVFDdf9vhADgxy5t3+Ec=";
   };
 
   build-system = [ setuptools ];
