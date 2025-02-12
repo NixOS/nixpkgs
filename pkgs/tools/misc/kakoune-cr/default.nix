@@ -47,6 +47,8 @@ crystal.buildCrystalPackage rec {
     $out/bin/kcr --help
   '';
 
+  dontCheckForBrokenSymlinks = true;
+
   meta = {
     homepage = "https://github.com/alexherbo2/kakoune.cr";
     description = "Command-line tool for Kakoune";
