@@ -4,15 +4,18 @@
   fetchFromGitLab,
   nix-update-script,
 }:
+let
+  version = "0.1.1";
+in
 vimUtils.buildVimPlugin {
   pname = "gitlab.vim";
-  version = "0.1.1";
+  inherit version;
 
   src = fetchFromGitLab {
     owner = "gitlab-org/editor-extensions";
     repo = "gitlab.vim";
-    rev = "62a60341df24ccecb73bc9ae34a198674bb12faf";
-    hash = "sha256-9G5H3MUdE++hR7p8nsoxK5kuA84k8oJBMvOa01PZrsA=";
+    rev = "v${version}";
+    hash = "sha256-W/FV+i/QJYX6A8uyxAQN4ov1kMd9UFCghFmSQp1kbnM=";
   };
 
   passthru.updateScript = nix-update-script { };
