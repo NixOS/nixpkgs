@@ -23,7 +23,6 @@ let
     directories of version control system, backup files (*~)
     and some generated files.
 
-
     # Inputs
 
     `name`
@@ -66,13 +65,11 @@ let
   /**
     Filters a source tree removing version control files and directories using cleanSourceFilter.
 
-
     # Inputs
 
     `src`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
@@ -95,7 +92,6 @@ let
     Like `builtins.filterSource`, except it will compose with itself,
     allowing you to chain multiple calls together without any
     intermediate copies being put in the nix store.
-
 
     # Examples
     :::{.example}
@@ -144,7 +140,6 @@ let
   /**
     Add logging to a source, for troubleshooting the filtering behavior.
 
-
     # Inputs
 
     `src`
@@ -181,7 +176,6 @@ let
   /**
     Filter sources by a list of regular expressions.
 
-
     # Inputs
 
     `src`
@@ -191,7 +185,6 @@ let
     `regexes`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -225,7 +218,6 @@ let
     source directory or its descendants, omitting files that do not match
     any suffix. The result of the example below will include files like
     `./dir/module.c` and `./dir/subdir/doc.xml` if present.
-
 
     # Inputs
 
@@ -273,13 +265,11 @@ let
   /**
     Get the commit id of a git repo.
 
-
     # Inputs
 
     `path`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
