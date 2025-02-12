@@ -144,11 +144,4 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open and full-featured framework for image processing";
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
-<<<<<<< HEAD
     maintainers = [ lib.maintainers.timoteuszelle ];
-=======
-    maintainers = [ lib.maintainers.timoteuszelle ];
->>>>>>> 14bfcd8b925f (gmic: fix maintainer name and indentation)
-    platforms = lib.platforms.unix;
-  };
-})
