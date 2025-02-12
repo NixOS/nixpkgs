@@ -18,10 +18,21 @@ let
     pathIsRegularFile
     ;
 
-  /*
+  /**
     A basic filter for `cleanSourceWith` that removes
     directories of version control system, backup files (*~)
     and some generated files.
+
+
+    # Inputs
+
+    `name`
+
+    : 1\. Function argument
+
+    `type`
+
+    : 2\. Function argument
   */
   cleanSourceFilter =
     name: type:
@@ -52,11 +63,26 @@ let
         (type == "unknown")
     );
 
-  /*
+  /**
     Filters a source tree removing version control files and directories using cleanSourceFilter.
 
-    Example:
-             cleanSource ./.
+
+    # Inputs
+
+    `src`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `cleanSource` usage example
+
+    ```nix
+    cleanSource ./.
+    ```
+
+    :::
   */
   cleanSource =
     src:
@@ -65,23 +91,31 @@ let
       inherit src;
     };
 
-  /*
+  /**
     Like `builtins.filterSource`, except it will compose with itself,
     allowing you to chain multiple calls together without any
     intermediate copies being put in the nix store.
 
-    Example:
-        lib.cleanSourceWith {
-          filter = f;
-          src = lib.cleanSourceWith {
-            filter = g;
-            src = ./.;
-          };
-        }
-        # Succeeds!
 
-        builtins.filterSource f (builtins.filterSource g ./.)
-        # Fails!
+    # Examples
+    :::{.example}
+    ## `cleanSourceWith` usage example
+
+    ```nix
+    lib.cleanSourceWith {
+      filter = f;
+      src = lib.cleanSourceWith {
+        filter = g;
+        src = ./.;
+      };
+    }
+    # Succeeds!
+
+    builtins.filterSource f (builtins.filterSource g ./.)
+    # Fails!
+    ```
+
+    :::
   */
   cleanSourceWith =
     {
@@ -107,10 +141,21 @@ let
       name = if name != null then name else orig.name;
     };
 
-  /*
+  /**
     Add logging to a source, for troubleshooting the filtering behavior.
-    Type:
-      sources.trace :: sourceLike -> Source
+
+
+    # Inputs
+
+    `src`
+
+    : Source to debug. The returned source will behave like this source, but also log its filter invocations.
+
+    # Type
+
+    ```
+    sources.trace :: sourceLike -> Source
+    ```
   */
   trace =
     # Source to debug. The returned source will behave like this source, but also log its filter invocations.
@@ -133,10 +178,30 @@ let
       satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
     };
 
-  /*
+  /**
     Filter sources by a list of regular expressions.
 
-    Example: src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+
+    # Inputs
+
+    `src`
+
+    : 1\. Function argument
+
+    `regexes`
+
+    : 2\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `sourceByRegex` usage example
+
+    ```nix
+    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    ```
+
+    :::
   */
   sourceByRegex =
     src: regexes:
@@ -155,16 +220,38 @@ let
       inherit src;
     };
 
-  /*
+  /**
     Get all files ending with the specified suffices from the given
     source directory or its descendants, omitting files that do not match
     any suffix. The result of the example below will include files like
     `./dir/module.c` and `./dir/subdir/doc.xml` if present.
 
-    Type: sourceLike -> [String] -> Source
 
-    Example:
-      sourceFilesBySuffices ./. [ ".xml" ".c" ]
+    # Inputs
+
+    `src`
+
+    : Path or source containing the files to be returned
+
+    `exts`
+
+    : A list of file suffix strings
+
+    # Type
+
+    ```
+    sourceLike -> [String] -> Source
+    ```
+
+    # Examples
+    :::{.example}
+    ## `sourceFilesBySuffices` usage example
+
+    ```nix
+    sourceFilesBySuffices ./. [ ".xml" ".c" ]
+    ```
+
+    :::
   */
   sourceFilesBySuffices =
     # Path or source containing the files to be returned
@@ -183,10 +270,26 @@ let
 
   pathIsGitRepo = path: (_commitIdFromGitRepoOrError path) ? value;
 
-  /*
+  /**
     Get the commit id of a git repo.
 
-    Example: commitIdFromGitRepo <nixpkgs/.git>
+
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `commitIdFromGitRepo` usage example
+
+    ```nix
+    commitIdFromGitRepo <nixpkgs/.git>
+    ```
+
+    :::
   */
   commitIdFromGitRepo =
     path:
