@@ -59,8 +59,8 @@
   zstd,
   withAutoSideloading ? false,
   withDocbookDocs ? true,
-  withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  withMan ? true,
+  withGtkDoc ? withDocbookDocs && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  withMan ? withDocbookDocs,
   withSELinuxModule ? false,
   withSystemd ? true,
 }:
@@ -75,9 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
       "out"
       "dev"
     ]
-    ++ lib.optionals (withDocbookDocs || withGtkDoc) [
-      "devdoc"
+    ++ lib.optionals withDocbookDocs [
       "doc"
+    ]
+    ++ lib.optionals withGtkDoc [
+      "devdoc"
     ]
     ++ lib.optional finalAttrs.doCheck "installedTests"
     ++ lib.optional withMan "man";
@@ -196,6 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "auto_sideloading" withAutoSideloading)
     (lib.mesonBool "installed_tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "docbook_docs" withDocbookDocs)
+    (lib.mesonEnable "gtkdoc" withGtkDoc)
     (lib.mesonEnable "man" withMan)
     (lib.mesonEnable "selinux_module" withSELinuxModule)
     (lib.mesonOption "dbus_config_dir" (placeholder "out" + "/share/dbus-1/system.d"))
