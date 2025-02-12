@@ -383,6 +383,8 @@ let
 
     dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
+    dream-pure = callPackage ../development/ocaml-modules/dream/pure.nix { };
+
     dscheck = callPackage ../development/ocaml-modules/dscheck { };
 
     dssi = callPackage ../development/ocaml-modules/dssi { };
