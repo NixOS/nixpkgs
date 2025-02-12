@@ -1,8 +1,7 @@
 import platform
 import subprocess
 from pathlib import Path
-from typing import Any
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from pytest import MonkeyPatch
 
@@ -79,7 +78,9 @@ def test_flake_to_attr() -> None:
 
 
 @patch(get_qualified_name(platform.node), autospec=True)
-def test_flake_from_arg(mock_node: Any, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
+def test_flake_from_arg(
+    mock_node: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
+) -> None:
     mock_node.return_value = "hostname"
 
     # Flake string
@@ -161,11 +162,12 @@ def test_flake_from_arg(mock_node: Any, monkeypatch: MonkeyPatch, tmpdir: Path) 
 
 
 @patch(get_qualified_name(m.Path.mkdir, m), autospec=True)
-def test_profile_from_arg(mock_mkdir: Any) -> None:
+def test_profile_from_arg(mock_mkdir: Mock) -> None:
     assert m.Profile.from_arg("system") == m.Profile(
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
+    mock_mkdir.assert_not_called()
 
     assert m.Profile.from_arg("something") == m.Profile(
         "something",
