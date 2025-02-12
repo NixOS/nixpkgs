@@ -123,6 +123,7 @@ let
       coreutils
       glib.dev
       pciutils
+      pipewire
       procps
       util-linux
     ]
