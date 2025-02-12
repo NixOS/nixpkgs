@@ -51,7 +51,7 @@ in
     settings = mkOption {
       description = ''
         Cryptpad configuration settings.
-        See https://github.com/cryptpad/cryptpad/blob/main/config/config.example.js for a more extensive
+        See <https://github.com/cryptpad/cryptpad/blob/main/config/config.example.js> for a more extensive
         reference documentation.
         Test your deployed instance through `https://<domain>/checkup/`.
       '';
