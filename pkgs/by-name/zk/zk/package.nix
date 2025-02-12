@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -27,6 +28,8 @@ buildGoModule rec {
     "-X=main.Build=${version}"
     "-X=main.Version=${version}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   tags = [ "fts5" ];
 
