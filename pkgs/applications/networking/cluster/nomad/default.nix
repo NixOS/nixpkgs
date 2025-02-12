@@ -82,7 +82,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_8;
+  nomad = nomad_1_9;
 
   nomad_1_7 = generic {
     buildGoModule = buildGo122Module;
