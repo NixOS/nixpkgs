@@ -1085,26 +1085,26 @@ let
             sources = {
               "x86_64-linux" = {
                 arch = "linux-x64";
-                hash = "sha256-+/0ZQkRS6AD8u5+t2hiPwQxzwhEc+n2F0GVk1s0n74U=";
+                hash = "sha256-0NSmyu+whQOSqaYQIt2C651k5CW1D9zmdn+0aLJF+CQ=";
               };
               "x86_64-darwin" = {
                 arch = "darwin-x64";
-                hash = "sha256-FZbTBPn12pv9bQWqfWwPapFLTpp5nclp0RH/WZc6/r4=";
+                hash = "sha256-Ek5WswTcrHHC3E3zABYz1afC3oic7msq5ddSBLT2+dY=";
               };
               "aarch64-linux" = {
                 arch = "linux-arm64";
-                hash = "sha256-e6zfflFgxVuikWwQuU6ImEuVk8xgi2HyY8uZwBoQiLU=";
+                hash = "sha256-e/vVKvOdt+mHp9gs+Kse13aFWX6DELeUtPdYLeuh9hE=";
               };
               "aarch64-darwin" = {
                 arch = "darwin-arm64";
-                hash = "sha256-SfA9wkvYT2Vb3GpJRjWE6lzZAXdFCnEKoKl0hjT0Llw=";
+                hash = "sha256-1oJ41WBlVUm7AUIwsIOyoucx9EtkReG8pxpYqgdZx5w=";
               };
             };
           in
           {
             name = "continue";
             publisher = "Continue";
-            version = "0.8.54";
+            version = "0.8.68";
           }
           // sources.${stdenv.system};
         nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
