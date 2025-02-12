@@ -50,6 +50,11 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
+  npmRebuildFlags = [
+    # Avoid downloading prebuilt esbuild versions
+    "--ignore-scripts"
+  ];
+
   postConfigure = ''
     # we want to build everything from source
     shopt -s globstar
