@@ -10,15 +10,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "samply";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-7bf1lDIZGhRpvnn8rHNwzH2GBY8CwtYCjuRAUTQgbsA=";
+    hash = "sha256-zTwAsE6zXY3esO7x6UTCO2DbzdUSKZ6qc5Rr9qcI+Z8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-o9YGKHxcC7msF7OPiUiFMLw1XX2WJ0/KVvkSwKNhU/E=";
+  cargoHash = "sha256-mQykzO9Ldokd3PZ1fY4pK/GtLmYMVas2iHj1Pqi9WqQ=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
