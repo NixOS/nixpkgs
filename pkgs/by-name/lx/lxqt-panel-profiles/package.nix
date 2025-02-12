@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace usr/bin/lxqt-panel-profiles \
     --replace-fail "/bin/bash" "${bash}/bin/bash" \
-    --replace-fail "/usr/share/" "$out/usr/share/" \
+    --replace-fail "/usr/share/" "$out/share/" \
     --replace-fail "python3" "${pythonWithPyqt6}/bin/python"
 
     substituteInPlace usr/share/lxqt-panel-profiles/lxqt-panel-profiles.py \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    mv usr $out/usr
+    mv usr/* $out
   '';
 
   meta = {

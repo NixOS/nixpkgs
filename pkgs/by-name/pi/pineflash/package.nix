@@ -15,6 +15,7 @@
   libGL,
   libxkbcommon,
   nix-update-script,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pineflash";
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage rec {
   runtimeDependencies = [
     libGL
     libxkbcommon
+    wayland
   ];
 
   postPatch =
