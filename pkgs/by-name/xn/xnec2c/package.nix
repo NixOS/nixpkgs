@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   wrapGAppsHook3,
   pkg-config,
@@ -17,9 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xnec2c";
   version = "4.4.16";
 
-  src = fetchurl {
-    url = "https://www.xnec2c.org/releases/${finalAttrs.pname}-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-XiZi8pfmfHjGpePkRy/pF1TA+5RdxX4AGuKzG5Wqrmk=";
+  src = fetchFromGitHub {
+    owner = "KJ7LNW";
+    repo = "xnec2c";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W8JwbCSXt5cjgncOzV1wltPnJxwWC6B29eaT8emIU9Y=";
   };
 
   nativeBuildInputs = [
