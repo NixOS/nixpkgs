@@ -6,7 +6,7 @@
 }:
 let
   pname = "git-upstream";
-  version = "1.2.0";
+  version = "1.5.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -15,11 +15,11 @@ rustPlatform.buildRustPackage {
     owner = "9999years";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-GnsqZSztDLXMO4T16nfcOKMKXap88CJzJ5nObzGwhMA=";
+    hash = "sha256-ooqz2Xp/nljx2+zQsc/RjVbGG/5YTeggU6pB8lGK0o8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-DzRiRUCsTslldnSNByaCr5eQGKxyTSifL2duZnMTmNk=";
+  cargoHash = "sha256-oIrUjb+yJgDR5GYrG3hPLpXYJynR9eeX00emcrcjmZY=";
 
   meta = {
     homepage = "https://github.com/9999years/git-upstream";
