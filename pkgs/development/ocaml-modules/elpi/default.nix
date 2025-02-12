@@ -3,6 +3,7 @@
 , ocaml
 , menhir, menhirLib
 , atdgen
+, atdgen-runtime
 , stdlib-shims
 , re, perl, ncurses
 , ppxlib, ppx_deriving
@@ -47,12 +48,11 @@ in buildDunePackage {
 
   minimalOCamlVersion = "4.07";
 
-  # atdgen is both a library and executable
   nativeBuildInputs = [ perl ]
   ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
   ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
   buildInputs = [ ncurses ]
-  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen-runtime;
 
   propagatedBuildInputs = [ re stdlib-shims ]
   ++ (if lib.versionAtLeast version "1.15" || version == "dev"
@@ -73,5 +73,7 @@ in buildDunePackage {
 
   postPatch = ''
     substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
+  '' + lib.optionalString (lib.versionAtLeast version "1.16" || version == "dev") ''
+    substituteInPlace src/dune --replace-warn ' atdgen re' ' atdgen-runtime re'
   '';
 }
