@@ -14,12 +14,12 @@ let
     "serif"
   ];
   pname = "aporetic";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "protesilaos";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5m4iT77FFsJf6N1FIsCtk5Z0IEOVUGCceXiT2n5dZUg=";
+    sha256 = "sha256-5lPViAo9SztOdds6HEmKJpT17tgcxmU/voXDffxTMDI=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont =
