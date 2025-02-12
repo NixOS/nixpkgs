@@ -145,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
     maintainers = [
-      lib.maintainers.AndersonTorres
+      lib.maintainers.
     ];
     platforms = lib.platforms.unix;
   };
