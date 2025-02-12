@@ -6,24 +6,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.14.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-NrtPV2bd9BuA1nnniIcth85gJQmFGy9LHdajqmW8j4Q=";
+    tag = "v${version}";
+    hash = "sha256-KiulbQhSg5CCZlts8FLsfOrN7nz16u3gRnQrWTFAzdc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1bOEOZ1byVm9apCqR9zgESsgA9Z9TdFSondwzwOPfWI=";
+  cargoHash = "sha256-iDulfKsw3Ui5b1v7QakIcf7HXNEBlMbhbzqLekuSsUU=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   preCheck = "HOME=$(mktemp -d)";
 
   checkFlags = [
-    "--skip checker::hunspell::tests::hunspell_binding_is_sane"
+    "--skip=checker::hunspell::tests::hunspell_binding_is_sane"
+    # requires dictionaries
+    "--skip=tests::e2e::issue_226"
   ];
 
   meta = with lib; {

@@ -4,26 +4,37 @@
   fetchFromGitHub,
   makeWrapper,
   hyprland-workspaces,
+  installShellFiles,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-workspaces-tui";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Levizor";
     repo = "hyprland-workspaces-tui";
     tag = version;
-    hash = "sha256-3QmqoyWmtC4ps8dtIWEoLjzdzKAXOujyz+GgOlo172Q=";
+    hash = "sha256-QMwiBQGAybdL8FaUil6tFzSFg4nN/9mGVoqiDFwGZec=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-VjYLqRXJhR8MZD+qcwqgw36Xh0RafJeAnuHzO+pab4s=";
+  cargoHash = "sha256-aT8LfBVOEVUvzgPlBIOXTgT+WXEt3vHMDyCcl9jT5/E=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   buildInputs = [ hyprland-workspaces ];
+
+  postInstall = ''
+    installShellCompletion --cmd hyprland-workspaces-tui \
+      --bash <($out/bin/hyprland-workspaces-tui --completions bash) \
+      --zsh <($out/bin/hyprland-workspaces-tui --completions zsh) \
+      --fish <($out/bin/hyprland-workspaces-tui --completions fish)
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/hyprland-workspaces-tui \

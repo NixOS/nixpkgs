@@ -2747,6 +2747,12 @@
     githubId = 34620799;
     name = "Jacob Bachmann";
   };
+  bcooley = {
+    email = "bradley.m.cooley@gmail.com";
+    github = "Bradley-Cooley";
+    githubId = 5409401;
+    name = "Bradley Cooley";
+  };
   bcyran = {
     email = "bazyli@cyran.dev";
     github = "bcyran";
@@ -8203,6 +8209,12 @@
     githubId = 1883533;
     name = "Florian Brandes";
     keys = [ { fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9"; } ];
+  };
+  gaelj = {
+    name = "Gaël James";
+    email = "gaeljames@gmail.com";
+    github = "gaelj";
+    githubId = 8884632;
   };
   gaelreyrol = {
     email = "me@gaelreyrol.dev";
@@ -16315,6 +16327,12 @@
     githubId = 1859691;
     name = "Amedeo Molnár";
   };
+  nekitdev = {
+    email = "nekit@nekit.dev";
+    github = "nekitdev";
+    githubId = 43587167;
+    name = "Nikita Tikhonov";
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
@@ -16659,6 +16677,13 @@
     email = "nipeharefa@gmail.com";
     github = "nipeharefa";
     githubId = 12620257;
+  };
+  niraethm = {
+    name = "Rémi Akirazar";
+    email = "randormi@devcpu.co";
+    matrix = "@lysgonul:bark.lgbt";
+    github = "niraethm";
+    githubId = 20865531;
   };
   NIS = {
     name = "NSC IT Solutions";
@@ -18179,6 +18204,12 @@
     github = "photex";
     githubId = 301903;
     name = "Chip Collier";
+  };
+  phrmendes = {
+    name = "Pedro Mendes";
+    email = "pedrohrmendes@proton.me";
+    github = "phrmendes";
+    githubId = 22376151;
   };
   phrogg = {
     name = "Phil Roggenbuck";
