@@ -178,7 +178,6 @@ in
 
           append p s == append p (subpath.normalise s)
 
-
     # Inputs
 
     `path`
@@ -249,7 +248,6 @@ in
 
     - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values.
 
-
     # Inputs
 
     `path1`
@@ -308,7 +306,6 @@ in
     - Inverts [`append`](#function-library-lib.path.append) for [normalised subpath string](#function-library-lib.path.subpath.normalise):
 
           removePrefix p (append p s) == subpath.normalise s
-
 
     # Inputs
 
@@ -383,7 +380,6 @@ in
 
           dirOf (splitRoot p).root == (splitRoot p).root
 
-
     # Inputs
 
     `path`
@@ -442,7 +438,6 @@ in
     Instead, this function only handles path values themselves,
     which occur when Nix files in the store use relative path expressions.
     :::
-
 
     # Inputs
 
@@ -516,7 +511,6 @@ in
     - The string doesn't start with a `/`.
 
     - The string doesn't contain any `..` path components.
-
 
     # Inputs
 
@@ -598,7 +592,6 @@ in
 
           ps != [] -> subpath.join ps == subpath.normalise (concatStringsSep "/" ps)
 
-
     # Inputs
 
     `subpaths`
@@ -671,7 +664,6 @@ in
 
           subpath.join (subpath.components s) == subpath.normalise s
 
-
     # Inputs
 
     `subpath`
@@ -741,7 +733,6 @@ in
     - Only error on [invalid subpaths](#function-library-lib.path.subpath.isValid):
 
           builtins.tryEval (subpath.normalise p)).success == subpath.isValid p
-
 
     # Inputs
 
