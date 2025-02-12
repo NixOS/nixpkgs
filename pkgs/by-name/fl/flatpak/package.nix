@@ -140,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs =
     [
       (python3.pythonOnBuildForHost.withPackages (p: [ p.pyparsing ]))
@@ -149,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       pkg-config
       validatePkgConfig
+      wayland-scanner
       wrapGAppsNoGuiHook
     ]
     ++ lib.optional withGtkDoc gtk-doc
@@ -181,7 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       wayland
       wayland-protocols
-      wayland-scanner
       xorg.libXau
       zstd
     ]
