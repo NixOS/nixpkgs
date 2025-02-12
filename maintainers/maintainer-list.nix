@@ -4052,6 +4052,12 @@
     githubId = 6608071;
     name = "Charles Huyghues-Despointes";
   };
+  charludo = {
+    email = "github@charlotteharludo.com";
+    github = "charludo";
+    githubId = 47758554;
+    name = "Charlotte Harludo";
+  };
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
