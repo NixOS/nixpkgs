@@ -7,17 +7,20 @@
   setuptools,
 
   # dependencies
+  apricot-select,
   numpy,
   joblib,
   networkx,
   scipy,
+  scikit-learn,
   pyyaml,
   cython,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.14.8";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -25,18 +28,21 @@ buildPythonPackage rec {
     owner = "jmschrei";
     # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
     tag = "v${version}";
-    hash = "sha256-PoDAtNm/snq4isotkoCTVYUuwr9AKKwiXIojUFMH/YE=";
+    hash = "sha256-p2Gn0FXnsAHvRUeAqx4M1KH0+XvDl3fmUZZ7MiMvPSs=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
+    apricot-select
     numpy
     joblib
     networkx
     scipy
+    scikit-learn
     pyyaml
     cython
+    torch
   ];
 
   # https://github.com/etal/cnvkit/issues/815
