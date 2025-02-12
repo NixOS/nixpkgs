@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/abishekvashok/cmatrix";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "cmatrix";
   };
 }

@@ -25,6 +25,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "Generates (\"tangles\") source code from Markdown documents";
     mainProgram = "md-tangle";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }
