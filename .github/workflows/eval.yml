@@ -241,7 +241,7 @@ jobs:
     steps:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1.11.1
+      - uses: actions/create-github-app-token@67e27a7eb7db372a1c61a7f9bdab8699e9ee57f7 # v1.11.3
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}

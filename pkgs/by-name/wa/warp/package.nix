@@ -19,39 +19,28 @@
   libadwaita,
   zbar,
   gst_all_1,
-  Security,
-  Foundation,
 }:
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "warp";
     rev = "v${version}";
-    hash = "sha256-GRxZ3y1PdJpBDnGCfmOmZgN8n1aaYf9IhyszRwo3MjQ=";
+    hash = "sha256-RmihaFv+U11CAa5ax53WzpwYJ2PFOrhYt4w2iboW4m8=";
   };
-
-  patches = [
-    # https://gitlab.gnome.org/World/warp/-/merge_requests/74
-    (fetchpatch2 {
-      name = "rust-1.80-compat.patch";
-      url = "https://gitlab.gnome.org/World/warp/-/commit/38747cc2dde79089df53fd8451ea2db13f9f3714.patch";
-      hash = "sha256-9P5LwCHaC6J5WR2OnjCaNE+4de/Jv6XGXS7bOfYrM7w=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs build-aux
   '';
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-xF9AzcO2uawHu7XZay7Wwr2r+OVLbXhfSynnBYbVkZM=";
+    hash = "sha256-w3gQhyRpma+aJY7IC9Vb3FdIECHZBJoSjiPmKpJ2nM8=";
   };
 
   nativeBuildInputs = [
@@ -79,11 +68,7 @@ stdenv.mkDerivation rec {
       gstreamer
       gst-plugins-base
       gst-plugins-bad
-    ])
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      Foundation
-    ];
+    ]);
 
   meta = {
     description = "Fast and secure file transfer";
