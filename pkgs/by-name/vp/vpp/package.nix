@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   cmake,
   pkg-config,
   check,
@@ -81,10 +82,13 @@ stdenv.mkDerivation rec {
     "-DVPP_LIBRARY_DIR=lib"
   ] ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optional enableDpdk dpdk' ++ lib.optional enableRdma rdma-core'.dev;
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optional enableDpdk dpdk'
+    ++ lib.optional enableRdma rdma-core'.dev;
 
   buildInputs =
     [
@@ -114,6 +118,10 @@ stdenv.mkDerivation rec {
     ];
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit (nixosTests) vpp;
+  };
 
   meta = {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
