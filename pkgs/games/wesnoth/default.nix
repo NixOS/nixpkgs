@@ -5,14 +5,14 @@
 , gsl-lite
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth";
   version = "1.18.3";
 
   src = fetchFromGitHub {
-    rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
+    tag = finalAttrs.version;
     hash = "sha256-Uk8omtXYZaneyBr4TASRtIKEyJLGwfKWu9vRQNVpdVA=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''
       The Battle for Wesnoth is a Free, turn-based tactical strategy
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.wesnoth.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.unix;
   };
-}
+})
