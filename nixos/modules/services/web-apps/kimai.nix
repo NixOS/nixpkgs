@@ -112,7 +112,7 @@ let
             description = ''
               MySQL *exact* version string. Not used if `createdLocally` is set,
               but must be set otherwise. See
-              https://www.kimai.org/documentation/installation.html#column-table_name-in-where-clause-is-ambiguous
+              <https://www.kimai.org/documentation/installation.html#column-table_name-in-where-clause-is-ambiguous>
               for how to set this value, especially if you're using MariaDB.
             '';
           };
