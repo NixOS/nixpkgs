@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "repgrep";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "acheronfail";
     repo = "repgrep";
     rev = version;
-    hash = "sha256-6ba7EJUts0Ni9EA3ENlK+a2FaPo7JohtCyqwR9DdL1E=";
+    hash = "sha256-Hg6N5ruf6MTf2/jSmDgaNFWnnaSb8ZCQ6hivYAeadfc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-K0HSVmVB7IGIqf+omM83fqJRKNOoMf4a1ZtsDmGR9us=";
+  cargoHash = "sha256-Of0JyAm/XxyfRLBznAHzy701w4fA1d0QMQqOjqIzG00=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       popd
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      # As it can be seen here: https://github.com/acheronfail/repgrep/blob/0.15.0/.github/workflows/release.yml#L206, the completions are just the same as ripgrep
+      # As it can be seen here: https://github.com/acheronfail/repgrep/blob/0.16.0/.github/workflows/release.yml#L206, the completions are just the same as ripgrep
       installShellCompletion --cmd rgr \
         --bash <(${lib.getExe ripgrep} --generate complete-bash | sed 's/-c rg/-c rgr/') \
         --zsh <(${lib.getExe ripgrep} --generate complete-zsh | sed 's/-c rg/-c rgr/') \
