@@ -117,9 +117,14 @@ def test_flake_from_arg(mock_node: Any, monkeypatch: MonkeyPatch, tmpdir: Path) 
             autospec=True,
             return_value=False,
         ),
+        patch(
+            get_qualified_name(m.discover_git, m),
+            autospec=True,
+            return_value="/etc/nixos",
+        ),
     ):
         assert m.Flake.from_arg(None, None) == m.Flake(
-            Path("/etc/nixos"), "nixosConfigurations.hostname"
+            "git+file:///etc/nixos", "nixosConfigurations.hostname"
         )
 
     with (
