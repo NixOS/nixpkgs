@@ -41,17 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs =
     [
       assimp
+      boost
+      eigen
       jrl-cmakemodules
       octomap
       qhull
       zlib
     ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
     ++ lib.optionals pythonSupport [
-      python3Packages.boost
+      python3Packages.boost-python
       python3Packages.eigenpy
     ];
 
