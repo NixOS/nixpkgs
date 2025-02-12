@@ -1085,8 +1085,6 @@ with pkgs;
 
   tailwindcss = callPackage ../development/tools/tailwindcss { };
 
-  tailwindcss_4 = callPackage ../development/tools/tailwindcss_4 { };
-
   ufolint = with python3Packages; toPythonApplication ufolint;
 
   valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
