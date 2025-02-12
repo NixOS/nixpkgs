@@ -276,7 +276,6 @@ rec {
 
     Note that this function is strict, it evaluates the entire tree
 
-
     # Inputs
 
     `path`
@@ -321,7 +320,6 @@ rec {
       While these could be replaced with `null`, that would take another mapAttrs
 
     Note that this function is partially lazy.
-
 
     # Inputs
 
