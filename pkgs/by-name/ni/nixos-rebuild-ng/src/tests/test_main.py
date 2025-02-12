@@ -586,14 +586,49 @@ def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     nixpkgs_path.touch()
 
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-instantiate":
+            return CompletedProcess([], 0, str(nixpkgs_path))
+        elif args[0] == "git":
+            return CompletedProcess([], 0, "")
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
     nr.execute(
-        ["nixos-rebuild", "switch", "--rollback", "--install-bootloader", "--no-reexec"]
+        [
+            "nixos-rebuild",
+            "switch",
+            "--rollback",
+            "--install-bootloader",
+            "--no-reexec",
+            "--no-flake",
+        ]
     )
 
-    assert mock_run.call_count >= 2
-    # ignoring update_nixpkgs_rev calls
+    assert mock_run.call_count == 4
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixpkgs"],
+                check=False,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "git",
+                    "-C",
+                    nixpkgs_path,
+                    "rev-parse",
+                    "--short",
+                    "HEAD",
+                ],
+                check=False,
+                capture_output=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
             call(
                 [
                     "nix-env",
