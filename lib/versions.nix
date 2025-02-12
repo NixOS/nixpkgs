@@ -6,7 +6,6 @@ rec {
   /**
     Break a version string into its component parts.
 
-
     # Examples
     :::{.example}
     ## `splitVersion` usage example
@@ -23,13 +22,11 @@ rec {
   /**
     Get the major version string from a string.
 
-
     # Inputs
 
     `v`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
@@ -47,13 +44,11 @@ rec {
   /**
     Get the minor version string from a string.
 
-
     # Inputs
 
     `v`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
@@ -71,13 +66,11 @@ rec {
   /**
     Get the patch version string from a string.
 
-
     # Inputs
 
     `v`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
@@ -96,13 +89,11 @@ rec {
     Get string of the first two parts (major and minor)
     of a version string.
 
-
     # Inputs
 
     `v`
 
     : 1\. Function argument
-
 
     # Examples
     :::{.example}
@@ -120,7 +111,6 @@ rec {
   /**
     Pad a version string with zeros to match the given number of components.
 
-
     # Inputs
 
     `n`
@@ -130,7 +120,6 @@ rec {
     `version`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
