@@ -3,6 +3,7 @@
   fetchurl,
   appimageTools,
   makeWrapper,
+  nix-update-script,
 }:
 let
   pname = "starc";
@@ -21,14 +22,16 @@ appimageTools.wrapType2 {
     # Fixup desktop item icons
     install -D ${appimageContents}/starc.desktop -t $out/share/applications/
     substituteInPlace $out/share/applications/starc.desktop \
-    --replace-fail "Icon=starc" "${''
-      Icon=dev.storyapps.starc
-      StartupWMClass=Story Architect''}"
+      --replace-fail "Icon=starc" "${''
+        Icon=dev.storyapps.starc
+        StartupWMClass=Story Architect''}"
     cp -r ${appimageContents}/share/* $out/share/
 
     wrapProgram $out/bin/starc \
       --unset QT_PLUGIN_PATH
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Intuitive screenwriting app that streamlines the writing process";
