@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.2.2";
+  version = "3.4.2";
 
   pyproject = true;
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-2MI2cbAohfTgbilxZcFvmxt/iVjR6zJ2o0gequB//hg=";
+    hash = "sha256-6ucF0iQxQrFFz7jlaktYsB538W8jbX+Sw5hP0/VoYsk=";
   };
 
   postPatch = ''
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     humanize
     jinja2
     jsonschema
+    pip
     pydantic
     python-dateutil
     pyyaml
@@ -51,11 +52,14 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "urllib3"
     "craft-application"
+    "pip"
+    "pydantic"
   ];
 
   nativeCheckInputs =
     with python3Packages;
     [
+      freezegun
       hypothesis
       pyfakefs
       pytest-check
