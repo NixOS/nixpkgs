@@ -4,9 +4,11 @@
   dmidecode,
   iproute2,
   lib,
+  libdisplay-info,
   libusb1,
   mesa-demos,
   mkKdeDerivation,
+  pkg-config,
   pciutils,
   pulseaudio,
   qttools,
@@ -21,6 +23,7 @@ let
   tools = {
     aha = lib.getExe aha;
     clinfo = lib.getExe clinfo;
+    di_edid_decode = lib.getExe libdisplay-info;
     dmidecode = lib.getExe' dmidecode "dmidecode";
     eglinfo = lib.getExe' mesa-demos "eglinfo";
     glxinfo = lib.getExe' mesa-demos "glxinfo";
@@ -54,6 +57,7 @@ mkKdeDerivation {
       --replace-fail " aha " " ${lib.getExe aha} "
   '';
 
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ libusb1 ];
 
   # fix wrong symlink of infocenter pointing to a 'systemsettings5' binary in

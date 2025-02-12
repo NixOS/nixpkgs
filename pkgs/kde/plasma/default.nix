@@ -63,6 +63,7 @@
   qqc2-breeze-style = callPackage ./qqc2-breeze-style { };
   sddm-kcm = callPackage ./sddm-kcm { };
   spacebar = callPackage ./spacebar { };
+  spectacle = callPackage ./spectacle { };
   systemsettings = callPackage ./systemsettings { };
   wacomtablet = callPackage ./wacomtablet { };
   xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde { };

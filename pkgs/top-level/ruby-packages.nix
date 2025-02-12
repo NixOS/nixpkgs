@@ -295,6 +295,28 @@
     };
     version = "1.0.0";
   };
+  cf-uaa-lib = {
+    dependencies = ["addressable" "httpclient" "multi_json"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "f03e5fc4630511d39d42d802715d65997abfc5cdd113564fa21aebb610f63a46";
+      type = "gem";
+    };
+    version = "4.0.8";
+  };
+  cf-uaac = {
+    dependencies = ["cf-uaa-lib" "em-http-request" "eventmachine" "highline" "json_pure" "launchy" "rack"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "f31cbbe93f8d791fac8ed6c9ede370f29d58654913b81177b6918c476b675528";
+      type = "gem";
+    };
+    version = "4.27.0";
+  };
   charlock_holmes = {
     groups = ["default"];
     platforms = [];
@@ -304,6 +326,17 @@
       type = "gem";
     };
     version = "0.7.7";
+  };
+  childprocess = {
+    dependecnies = ["logger"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "9a8d484be2fd4096a0e90a0cd3e449a05bc3aa33f8ac9e4d6dcef6ac1455b6ec";
+      type = "gem";
+    };
+    version = "5.1.0";
   };
   claide = {
     groups = ["default"];
@@ -717,6 +750,16 @@
     };
     version = "4.0.4";
   };
+  cookiejar = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "11b16acfc4baf7a0f463c21a6212005e04e25f5554d4d9f24d97f3492dfda0df";
+      type = "gem";
+    };
+    version = "0.3.4";
+  };
   crass = {
     groups = ["default"];
     platforms = [];
@@ -921,6 +964,28 @@
       type = "gem";
     };
     version = "0.1.0";
+  };
+  em-http-request = {
+    dependencies = ["addressable" "cookiejar" "em-socksify" "eventmachine" "http_parser.rb"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1azx5rgm1zvx7391sfwcxzyccs46x495vb34ql2ch83f58mwgyqn";
+      type = "gem";
+    };
+    version = "1.1.7";
+  };
+  em-socksify = {
+    dependencies = ["eventmachine"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0rk43ywaanfrd8180d98287xv2pxyl7llj291cwy87g1s735d5nk";
+      type = "gem";
+    };
+    version = "0.3.3";
   };
   elftools = {
     dependencies = ["bindata"];
@@ -2080,6 +2145,17 @@
     };
     version = "1.7.8";
   };
+  launchy = {
+    dependencies = ["addressable" "childprocess" "logger"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "4964ae775cd802f5a57ae5584fbdb1151a8908cb0c626341563430d614a59572";
+      type = "gem";
+    };
+    version = "3.1.0";
+  };
   language_server-protocol = {
     groups = ["default"];
     platforms = [];
@@ -2171,6 +2247,16 @@
       type = "gem";
     };
     version = "2.1.4";
+  };
+  logger = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "c3cfe56d01656490ddd103d38b8993d73d86296adebc5f58cefc9ec03741e56b";
+      type = "gem";
+    };
+    version = "1.6.5";
   };
   loofah = {
     dependencies = ["crass" "nokogiri"];

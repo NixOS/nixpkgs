@@ -30,21 +30,19 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.8.2";
+  version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-rKeEi9z5eQfjn0Q4FR6CVIz9YDS7Ejg4cqcor5wtz0s=";
+    hash = "sha256-DprItAuGjw8AACeJDrIa6KIWLSyImuWI0qeROpPohtM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.2.0" "setuptools"
+      --replace-fail "setuptools==75.8.0" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];
