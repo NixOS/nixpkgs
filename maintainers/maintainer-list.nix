@@ -16961,7 +16961,7 @@
   nullcube = {
     email = "nullcub3@gmail.com";
     name = "NullCube";
-    github = "nullcub3";
+    github = "nullcubee";
     githubId = 51034487;
     matrix = "@nullcube:matrix.org";
   };
