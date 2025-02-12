@@ -52,6 +52,7 @@ let
     in
     {
       shell = treefmtEval.config.build.devShell;
+      pkg = treefmtEval.config.build.wrapper;
     };
 
 in

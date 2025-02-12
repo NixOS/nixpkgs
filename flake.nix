@@ -133,6 +133,8 @@
           default = import ./shell.nix { inherit system; };
         });
 
+      formatter = forAllSystems (system: (import ./ci { inherit system; }).fmt.pkg);
+
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.
 
