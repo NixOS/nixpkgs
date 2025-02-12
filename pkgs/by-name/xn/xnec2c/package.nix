@@ -9,6 +9,7 @@
   gtk3,
   blas,
   lapack,
+  nix-update-script,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     blas
     lapack
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.xnec2c.org/";
