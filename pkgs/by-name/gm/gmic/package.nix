@@ -144,7 +144,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open and full-featured framework for image processing";
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
-    maintainers = [ ];
-    platforms = lib.platforms.unix;
   };
 })
