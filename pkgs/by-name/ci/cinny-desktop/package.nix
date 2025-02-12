@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   rustPlatform,
   cargo-tauri_1,
@@ -14,33 +13,34 @@
   dbus,
   glib,
   glib-networking,
-  libayatana-appindicator,
   webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.2.3";
+  # TODO: this is temporarily not true for Cinny Desktop v4.3.1
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${version}";
-    hash = "sha256-yNGzgkZXz/VroGGnZFqo5n2v3cE6/tvpQv5U4p27row=";
+    hash = "sha256-lVBKzajxsQ33zC6NhRLMbWK81GxCbIQPtSR61yJHUL4=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-79MO2JaOBKVfiE7OLFR3kobnE2yH5g44mRt2TKIEfxA=";
+  cargoHash = "sha256-a2IyJ5a11cxgHpb2WRDxVF+aoL8kNnjBNwaQpgT3goo=";
 
   postPatch =
     let
       cinny' =
-        assert lib.assertMsg (
-          cinny.version == version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+        # TODO: temporarily disabled for Cinny Desktop v4.3.1 (cinny-unwrapped is still at 4.3.0)
+        # assert lib.assertMsg (
+        #   cinny.version == version
+        # ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;
@@ -82,16 +82,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       openssl
-      dbus
-      glib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+      glib
       glib-networking
       webkitgtk_4_0
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-      darwin.apple_sdk.frameworks.WebKit
     ];
 
   meta = {

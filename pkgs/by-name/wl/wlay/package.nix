@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/atx/wlay";
     description = "Graphical output management for Wayland";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
     mainProgram = "wlay";
   };

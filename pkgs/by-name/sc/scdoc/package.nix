@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "scdoc";
     maintainers = with lib.maintainers; [
       primeos
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
   };
