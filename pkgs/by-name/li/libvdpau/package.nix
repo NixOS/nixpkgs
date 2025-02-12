@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, xorg, mesa, meson, ninja }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  xorg,
+  mesa,
+  meson,
+  ninja,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libvdpau";
@@ -10,14 +19,26 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./tracing.patch ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = with xorg; [ xorgproto libXext ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = with xorg; [
+    xorgproto
+    libXext
+  ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
 
-  mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-Dmoduledir=${mesa.driverLink}/lib/vdpau" ];
+  mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
+    "-Dmoduledir=${mesa.driverLink}/lib/vdpau"
+  ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lX11";
 

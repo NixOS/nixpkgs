@@ -1,59 +1,67 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, gtk-doc
-, gobject-introspection
-, gjs
-, nixosTests
-, pkgsCross
-, curl
-, glib
-, systemd
-, xz
-, e2fsprogs
-, libsoup_2_4
-, glib-networking
-, wrapGAppsNoGuiHook
-, gpgme
-, which
-, makeWrapper
-, autoconf
-, automake
-, libtool
-, fuse3
-, util-linuxMinimal
-, libselinux
-, libsodium
-, libarchive
-, libcap
-, bzip2
-, bison
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, python3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gtk-doc,
+  gobject-introspection,
+  gjs,
+  nixosTests,
+  pkgsCross,
+  curl,
+  glib,
+  systemd,
+  xz,
+  e2fsprogs,
+  libsoup_2_4,
+  glib-networking,
+  wrapGAppsNoGuiHook,
+  gpgme,
+  which,
+  makeWrapper,
+  autoconf,
+  automake,
+  libtool,
+  fuse3,
+  util-linuxMinimal,
+  libselinux,
+  libsodium,
+  libarchive,
+  libcap,
+  bzip2,
+  bison,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  python3,
 
   # Optional ComposeFS support
-, withComposefs ? false
-, composefs
+  withComposefs ? false,
+  composefs,
 }:
 
 let
-  testPython = python3.withPackages (p: with p; [
-    pyyaml
-  ]);
-in stdenv.mkDerivation rec {
+  testPython = python3.withPackages (
+    p: with p; [
+      pyyaml
+    ]
+  );
+in
+stdenv.mkDerivation rec {
   pname = "ostree";
   version = "2024.10";
 
-  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
     sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
   };
-
 
   nativeBuildInputs = [
     autoconf
@@ -71,41 +79,45 @@ in stdenv.mkDerivation rec {
     wrapGAppsNoGuiHook
   ];
 
-  buildInputs = [
-    curl
-    glib
-    systemd
-    e2fsprogs
-    libsoup_2_4
-    glib-networking
-    gpgme
-    fuse3
-    libselinux
-    libsodium
-    libcap
-    libarchive
-    bzip2
-    xz
-    util-linuxMinimal # for libmount
+  buildInputs =
+    [
+      curl
+      glib
+      systemd
+      e2fsprogs
+      libsoup_2_4
+      glib-networking
+      gpgme
+      fuse3
+      libselinux
+      libsodium
+      libcap
+      libarchive
+      bzip2
+      xz
+      util-linuxMinimal # for libmount
 
-    # for installed tests
-    testPython
-    gjs
-  ] ++ lib.optionals withComposefs [
-    (lib.getDev composefs)
-  ];
+      # for installed tests
+      testPython
+      gjs
+    ]
+    ++ lib.optionals withComposefs [
+      (lib.getDev composefs)
+    ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--with-curl"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
-    "--enable-installed-tests"
-    "--with-ed25519-libsodium"
-  ] ++ lib.optionals withComposefs [
-    "--with-composefs"
-  ];
+  configureFlags =
+    [
+      "--with-curl"
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
+      "--enable-installed-tests"
+      "--with-ed25519-libsodium"
+    ]
+    ++ lib.optionals withComposefs [
+      "--with-composefs"
+    ];
 
   makeFlags = [
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
@@ -120,16 +132,18 @@ in stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  postFixup = let
-    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
-      (placeholder "out")
-      gobject-introspection
-    ];
-  in ''
-    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
-      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
-    done
-  '';
+  postFixup =
+    let
+      typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
+        (placeholder "out")
+        gobject-introspection
+      ];
+    in
+    ''
+      for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+        wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
+      done
+    '';
 
   passthru = {
     tests = {

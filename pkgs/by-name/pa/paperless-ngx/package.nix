@@ -80,7 +80,7 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    nodejs = nodejs_20;  # does not build with 22
+    nodejs = nodejs_20; # does not build with 22
 
     postPatch = ''
       cd src-ui

@@ -315,7 +315,10 @@ originalAttrs:
       done
     '';
   }
-  // lib.optionalAttrs ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc) {
-    dontCheckForBrokenSymlinks = true;
-  }
+  //
+    lib.optionalAttrs
+      ((stdenv.targetPlatform.config != stdenv.hostPlatform.config) && withoutTargetLibc)
+      {
+        dontCheckForBrokenSymlinks = true;
+      }
 ))

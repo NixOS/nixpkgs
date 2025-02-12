@@ -88,7 +88,7 @@ buildPythonPackage rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-9fAkP2zV3OfyROdtvmS94ujpkGmlB0wGOaWS13LgJTM=";
-   };
+  };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
   postPatch = ''
@@ -156,26 +156,29 @@ buildPythonPackage rec {
     itsdangerous
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    hypothesis
-    altair
-    boto3
-    gradio-pdf
-    ffmpeg
-    ipython
-    pytest-asyncio
-    respx
-    scikit-image
-    # shap is needed as well, but breaks too often
-    torch
-    tqdm
-    transformers
-    vega-datasets
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      hypothesis
+      altair
+      boto3
+      gradio-pdf
+      ffmpeg
+      ipython
+      pytest-asyncio
+      respx
+      scikit-image
+      # shap is needed as well, but breaks too often
+      torch
+      tqdm
+      transformers
+      vega-datasets
 
-    # mock calls to `shutil.which(...)`
-    (writeShellScriptBin "npm" "false")
-  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
+      # mock calls to `shutil.which(...)`
+      (writeShellScriptBin "npm" "false")
+    ]
+    ++ optional-dependencies.oauth
+    ++ pydantic.optional-dependencies.email;
 
   preBuild = ''
     pnpm build

@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.tzupdate;
-in {
+in
+{
   options.services.tzupdate = {
     enable = lib.mkOption {
       type = lib.types.bool;

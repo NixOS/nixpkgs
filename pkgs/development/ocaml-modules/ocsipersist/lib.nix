@@ -1,5 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, lwt_ppx, lwt
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  lwt_ppx,
+  lwt,
 }:
 
 buildDunePackage rec {

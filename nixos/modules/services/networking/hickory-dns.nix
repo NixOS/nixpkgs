@@ -1,44 +1,57 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hickory-dns;
   toml = pkgs.formats.toml { };
 
-  zoneType = lib.types.submodule ({ config, ... }: {
-    freeformType = toml.type;
-    options = with lib; {
-      zone = mkOption {
-        type = types.str;
-        description = ''
-          Zone name, like "example.com", "localhost", or "0.0.127.in-addr.arpa".
-        '';
-      };
-      zone_type = mkOption {
-        type = types.enum [ "Primary" "Secondary" "Hint" "Forward" ];
-        default = "Primary";
-        description = ''
-          One of:
-          - "Primary" (the master, authority for the zone).
-          - "Secondary" (the slave, replicated from the primary).
-          - "Hint" (a cached zone with recursive resolver abilities).
-          - "Forward" (a cached zone where all requests are forwarded to another resolver).
+  zoneType = lib.types.submodule (
+    { config, ... }:
+    {
+      freeformType = toml.type;
+      options = with lib; {
+        zone = mkOption {
+          type = types.str;
+          description = ''
+            Zone name, like "example.com", "localhost", or "0.0.127.in-addr.arpa".
+          '';
+        };
+        zone_type = mkOption {
+          type = types.enum [
+            "Primary"
+            "Secondary"
+            "Hint"
+            "Forward"
+          ];
+          default = "Primary";
+          description = ''
+            One of:
+            - "Primary" (the master, authority for the zone).
+            - "Secondary" (the slave, replicated from the primary).
+            - "Hint" (a cached zone with recursive resolver abilities).
+            - "Forward" (a cached zone where all requests are forwarded to another resolver).
 
-          For more details about these zone types, consult the documentation for BIND,
-          though note that hickory-dns supports only a subset of BIND's zone types:
-          <https://bind9.readthedocs.io/en/v9_18_4/reference.html#type>
-        '';
+            For more details about these zone types, consult the documentation for BIND,
+            though note that hickory-dns supports only a subset of BIND's zone types:
+            <https://bind9.readthedocs.io/en/v9_18_4/reference.html#type>
+          '';
+        };
+        file = mkOption {
+          type = types.either types.path types.str;
+          default = "${config.zone}.zone";
+          defaultText = literalExpression ''"''${config.zone}.zone"'';
+          description = ''
+            Path to the .zone file.
+            If not fully-qualified, this path will be interpreted relative to the `directory` option.
+            If omitted, defaults to the value of the `zone` option suffixed with ".zone".
+          '';
+        };
       };
-      file = mkOption {
-        type = types.either types.path types.str;
-        default = "${config.zone}.zone";
-        defaultText = literalExpression ''"''${config.zone}.zone"'';
-        description = ''
-          Path to the .zone file.
-          If not fully-qualified, this path will be interpreted relative to the `directory` option.
-          If omitted, defaults to the value of the `zone` option suffixed with ".zone".
-        '';
-      };
-    };
-  });
+    }
+  );
 in
 {
   meta.maintainers = with lib.maintainers; [ colinsane ];
@@ -46,7 +59,10 @@ in
   imports = with lib; [
     (mkRenamedOptionModule [ "services" "trust-dns" "enable" ] [ "services" "hickory-dns" "enable" ])
     (mkRenamedOptionModule [ "services" "trust-dns" "package" ] [ "services" "hickory-dns" "package" ])
-    (mkRenamedOptionModule [ "services" "trust-dns" "settings" ] [ "services" "hickory-dns" "settings" ])
+    (mkRenamedOptionModule
+      [ "services" "trust-dns" "settings" ]
+      [ "services" "hickory-dns" "settings" ]
+    )
     (mkRenamedOptionModule [ "services" "trust-dns" "quiet" ] [ "services" "hickory-dns" "quiet" ])
     (mkRenamedOptionModule [ "services" "trust-dns" "debug" ] [ "services" "hickory-dns" "debug" ])
   ];
@@ -136,7 +152,7 @@ in
             };
             zones = mkOption {
               description = "List of zones to serve.";
-              default = [];
+              default = [ ];
               type = types.listOf (types.coercedTo types.str (zone: { inherit zone; }) zoneType);
             };
           };
@@ -151,12 +167,13 @@ in
       unitConfig.Documentation = "https://hickory-dns.org/";
       serviceConfig = {
         ExecStart =
-        let
-          flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
-          flagsStr = builtins.concatStringsSep " " flags;
-        in ''
-          ${lib.getExe cfg.package} --config ${cfg.configFile} ${flagsStr}
-        '';
+          let
+            flags = (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
+            flagsStr = builtins.concatStringsSep " " flags;
+          in
+          ''
+            ${lib.getExe cfg.package} --config ${cfg.configFile} ${flagsStr}
+          '';
         Type = "simple";
         Restart = "on-failure";
         RestartSec = "10s";
@@ -187,7 +204,11 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
       };
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];

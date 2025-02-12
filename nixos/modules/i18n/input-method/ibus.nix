@@ -1,12 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   imcfg = config.i18n.inputMethod;
   cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
   ibusEngine = lib.types.mkOptionType {
-    name  = "ibus-engine";
+    name = "ibus-engine";
     inherit (lib.types.package) descriptionClass merge;
-    check = x: (lib.types.package.check x) && (lib.attrByPath ["meta" "isIbusEngine"] false x);
+    check = x: (lib.types.package.check x) && (lib.attrByPath [ "meta" "isIbusEngine" ] false x);
   };
 
   impanel = lib.optionalString (cfg.panel != null) "--panel=${cfg.panel}";
@@ -26,21 +31,24 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "ibus" "plugins" ]
+      [ "i18n" "inputMethod" "ibus" "engines" ]
+    )
   ];
 
   options = {
     i18n.inputMethod.ibus = {
       engines = lib.mkOption {
-        type    = with lib.types; listOf ibusEngine;
-        default = [];
+        type = with lib.types; listOf ibusEngine;
+        default = [ ];
         example = lib.literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = lib.filterAttrs (lib.const lib.isDerivation) pkgs.ibus-engines;
-            engines = lib.concatStringsSep ", "
-              (map (name: "`${name}`") (lib.attrNames enginesDrv));
-          in "Enabled IBus engines. Available engines are: ${engines}.";
+            engines = lib.concatStringsSep ", " (map (name: "`${name}`") (lib.attrNames enginesDrv));
+          in
+          "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = lib.mkOption {
         type = with lib.types; nullOr path;

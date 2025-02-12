@@ -1,4 +1,11 @@
-{ lib, stdenv, makeWrapper, fetchurl, unzip, jdk }:
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  unzip,
+  jdk,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlcl";
@@ -9,7 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7+cC7RJ4fXtNwEoZvTc2pVPpChQXxhp2XafrTLny6pw=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   unpackCmd = "unzip $curSrc";
 

@@ -6,7 +6,7 @@
   makeWrapper,
   pkg-config,
   cmake,
-  llvm_18,  # does not build with 19+ due to API changes
+  llvm_18, # does not build with 19+ due to API changes
   emscripten,
   openssl,
   libsndfile,
@@ -94,7 +94,9 @@ let
         for f in **/Makefile **/Makefile.library **/CMakeLists.txt build/Make.llvm.static embedded/faustjava/faust2engine architecture/autodiff/autodiff.sh source/tools/faust2appls/* **/llvm.cmake tools/benchmark/faust2object; do
           echo $f "llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
           substituteInPlace $f \
-            --replace-quiet "llvm-config" "llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+            --replace-quiet "llvm-config" "llvm-config${
+              lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"
+            }"
         done
         shopt -u globstar
         cd build

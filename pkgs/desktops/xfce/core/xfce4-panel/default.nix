@@ -1,20 +1,21 @@
-{ lib
-, mkXfceDerivation
-, cairo
-, exo
-, garcon
-, gobject-introspection
-, gtk-layer-shell
-, gtk3
-, libdbusmenu-gtk3
-, libwnck
-, libxfce4ui
-, libxfce4util
-, libxfce4windowing
-, tzdata
-, vala
-, wayland
-, xfconf
+{
+  lib,
+  mkXfceDerivation,
+  cairo,
+  exo,
+  garcon,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtk3,
+  libdbusmenu-gtk3,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxfce4windowing,
+  tzdata,
+  vala,
+  wayland,
+  xfconf,
 }:
 
 mkXfceDerivation {

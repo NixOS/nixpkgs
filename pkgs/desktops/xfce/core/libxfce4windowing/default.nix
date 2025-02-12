@@ -1,16 +1,17 @@
-{ lib
-, mkXfceDerivation
-, gobject-introspection
-, wayland-scanner
-, glib
-, gtk3
-, libdisplay-info
-, libwnck
-, libX11
-, libXrandr
-, wayland
-, wayland-protocols
-, wlr-protocols
+{
+  lib,
+  mkXfceDerivation,
+  gobject-introspection,
+  wayland-scanner,
+  glib,
+  gtk3,
+  libdisplay-info,
+  libwnck,
+  libX11,
+  libXrandr,
+  wayland,
+  wayland-protocols,
+  wlr-protocols,
 }:
 
 mkXfceDerivation {

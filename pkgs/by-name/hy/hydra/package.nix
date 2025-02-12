@@ -1,57 +1,59 @@
-{ stdenv
-, lib
-, nix
-, perlPackages
-, buildEnv
-, makeWrapper
-, unzip
-, pkg-config
-, libpqxx
-, top-git
-, mercurial
-, darcs
-, subversion
-, breezy
-, openssl
-, bzip2
-, libxslt
-, perl
-, postgresql
-, prometheus-cpp
-, nukeReferences
-, git
-, nlohmann_json
-, openssh
-, openldap
-, gnused
-, coreutils
-, findutils
-, gzip
-, xz
-, gnutar
-, rpm
-, dpkg
-, cdrkit
-, pixz
-, boost
-, mdbook
-, foreman
-, python3
-, libressl
-, cacert
-, glibcLocales
-, meson
-, ninja
-, fetchFromGitHub
-, nixosTests
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  nix,
+  perlPackages,
+  buildEnv,
+  makeWrapper,
+  unzip,
+  pkg-config,
+  libpqxx,
+  top-git,
+  mercurial,
+  darcs,
+  subversion,
+  breezy,
+  openssl,
+  bzip2,
+  libxslt,
+  perl,
+  postgresql,
+  prometheus-cpp,
+  nukeReferences,
+  git,
+  nlohmann_json,
+  openssh,
+  openldap,
+  gnused,
+  coreutils,
+  findutils,
+  gzip,
+  xz,
+  gnutar,
+  rpm,
+  dpkg,
+  cdrkit,
+  pixz,
+  boost,
+  mdbook,
+  foreman,
+  python3,
+  libressl,
+  cacert,
+  glibcLocales,
+  meson,
+  ninja,
+  fetchFromGitHub,
+  nixosTests,
+  unstableGitUpdater,
 }:
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [
+    paths =
+      with perlPackages;
+      lib.closePropagation [
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -134,7 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r+t/0U8Pp6/Lvi3s3v8nDB9xCggvxFsnCEJ9TuZvVJc=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     unzip
@@ -175,7 +180,12 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      rpm
+      dpkg
+      cdrkit
+    ]
   );
 
   nativeBuildInputs = [
@@ -237,7 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra;
-    updateScript = unstableGitUpdater {};
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {

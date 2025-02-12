@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevent, openssl}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libevent,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcouchbase";
@@ -13,8 +21,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libevent openssl ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libevent
+    openssl
+  ];
 
   # Running tests in parallel does not work
   enableParallelChecking = false;
