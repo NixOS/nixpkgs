@@ -433,14 +433,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
         try:
             nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get nixos-version: %s", ex)
             nixos_version = "Unknown"
         try:
             kernel_version = next(
                 (generation_path / "kernel-modules/lib/modules").iterdir()
             ).name
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get kernel version: %s", ex)
             kernel_version = "Unknown"
         specialisations = [
@@ -451,7 +451,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
             ).stdout.strip()
-        except (CalledProcessError, IOError) as ex:
+        except (OSError, CalledProcessError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
@@ -583,7 +583,7 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
@@ -591,7 +591,7 @@ def upgrade_channels(all: bool = False) -> None:
     """
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
-            all
+            all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):

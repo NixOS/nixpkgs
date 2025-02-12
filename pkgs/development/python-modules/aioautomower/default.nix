@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2025.1.0";
+  version = "2025.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     tag = version;
-    hash = "sha256-MEZdYOpBAHmWidzq+7SpEFsHNYlSaIQ4utnGK9Y3/NE=";
+    hash = "sha256-5/NG3VMJfLOCQDqnP1LVRJlT08LDITlZZFb3aYjtm5I=";
   };
 
   postPatch = ''

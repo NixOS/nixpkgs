@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-demetriek";
     tag = "v${version}";
-    hash = "sha256-OTYQFw3Jy+sRGoPYVp5VKgCAzv9Gy2Fn2GjTGdsKjak=";
+    hash = "sha256-KqLkct4Kd8wa5eKYJJq1y/5z5PbO0XaK0aGzs3bm8fs=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for LaMetric TIME devices";
     homepage = "https://github.com/frenck/python-demetriek";
-    changelog = "https://github.com/frenck/python-demetriek/releases/tag/v${version}";
+    changelog = "https://github.com/frenck/python-demetriek/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

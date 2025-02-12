@@ -8,17 +8,17 @@
 }:
 buildNpmPackage rec {
   pname = "immich-public-proxy";
-  version = "1.6.2";
+  version = "1.7.2";
   src = fetchFromGitHub {
     owner = "alangrainger";
     repo = "immich-public-proxy";
     tag = "v${version}";
-    hash = "sha256-R2w11AdOgcV1R1eIzDgt+yexWwystDNJiJ+14MH6WtU=";
+    hash = "sha256-G08xucggEdO+iwW7m1D53nr4Rah9D/qD4xlyLwWwBq0=";
   };
 
   sourceRoot = "${src.name}/app";
 
-  npmDepsHash = "sha256-VXCJ0VaAKOlz342saRAnb1MLZGgIZwPpy/2oS/Gvsj8=";
+  npmDepsHash = "sha256-aXTdKGlF2mK8I+vQMd+V6JNTG49S4jJd1kTNBai6sZE=";
 
   # patch in absolute nix store paths so the process doesn't need to cwd in $out
   postPatch = ''

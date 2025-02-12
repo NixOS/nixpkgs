@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2025.1.0";
+  version = "2025.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     tag = "v${version}";
-    hash = "sha256-l/HjTX3zm1jquAhuvNNI+oaC7TbaICNnmfqXxBNlaic=";
+    hash = "sha256-AGYi1w4e8XJOWRbuPX5eB/rTY5dCPji49zD0VQ4FvAs=";
   };
 
   build-system = [
@@ -98,9 +98,14 @@ buildPythonPackage rec {
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
 
-    # Flaky: FileNotFoundError: [Errno 2] No such file or directory: 'nminusone.npz'
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory
     # https://github.com/scikit-hep/coffea/issues/1246
-    "test_packed_selection_nminusone_dak"
+    "test_packed_selection_cutflow_dak" # cutflow.npz
+    "test_packed_selection_nminusone_dak" # nminusone.npz
+
+    # AssertionError: bug in Awkward Array: attempt to convert TypeTracerArray into a concrete array
+    "test_apply_to_fileset"
+    "test_lorentz_behavior"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -106,11 +106,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "285";
+  version = "288";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-OTS4Lr2OF1mdIAiPGK31Ptc/gr3D216Z1kvKOMNeaJI=";
+    hash = "sha256-HeJfqjmuduVc/C0kfaAsiQuoKrrwlW69lkfYDz1uFlg=";
   };
 
   outputs = [
@@ -121,11 +121,11 @@ python.pkgs.buildPythonApplication rec {
   patches = [ ./ignore_links.patch ];
 
   postPatch = ''
-    # Upstream doesn't provide a PKG-INFO file
-    sed -i setup.py -e "/'rpm-python',/d"
-
     # When generating manpage, use the installed version
-    substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
+    substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
+
+    substituteInPlace diffoscope/comparators/apk.py \
+      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk"
   '';
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyhiveapi";
-  version = "0.5.16";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Pyhass";
     repo = "Pyhiveapi";
     tag = "v${version}";
-    hash = "sha256-gPou5KGLFEFP29qSpRg+6sCiXOwfoF1gyhBVERYJ1LI=";
+    hash = "sha256-/Q6nQb6JyjjWJv7Yj+EJdqOMy+j3cYPIkRpXa3Q48Oo=";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to interface with the Hive API";
     homepage = "https://github.com/Pyhass/Pyhiveapi";
-    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/v${version}";
+    changelog = "https://github.com/Pyhass/Pyhiveapi/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -11,6 +11,7 @@
   xorg,
   libGL,
   freetype,
+  zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           curl
           libjack2
+        ]
+      }" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          zenity
         ]
       }"
 

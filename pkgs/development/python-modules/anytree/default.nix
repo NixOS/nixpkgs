@@ -33,6 +33,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    # drop [project.urls] section, poetry-core 2.0 compat issue
+    sed -i "/project\.urls/,+4d" pyproject.toml
+  '';
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ six ];

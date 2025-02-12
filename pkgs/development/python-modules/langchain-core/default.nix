@@ -13,6 +13,7 @@
   packaging,
   pyyaml,
   tenacity,
+  typing-extensions,
 
   # optional-dependencies
   pydantic,
@@ -21,6 +22,8 @@
   freezegun,
   grandalf,
   httpx,
+  langchain-core,
+  langchain-tests,
   numpy,
   pytest-asyncio,
   pytest-mock,
@@ -34,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.15";
+  version = "0.3.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-lSXAqjjnihuucTZOSwQJk8gtrtFbUOTHN4J587iLKy0=";
+    hash = "sha256-u+Za7NtXVP0Mg6K65CuRLx8OrVpBXEe1ayP0uMUNJG4=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -56,6 +59,7 @@ buildPythonPackage rec {
     packaging
     pyyaml
     tenacity
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -64,10 +68,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_core" ];
 
+  # avoid infinite recursion
+  doCheck = false;
+
   nativeCheckInputs = [
     freezegun
     grandalf
     httpx
+    langchain-tests
     numpy
     pytest-asyncio
     pytest-mock
@@ -78,13 +86,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  # don't add langchain-standard-tests to nativeCheckInputs
-  # to avoid circular import
-  preCheck = ''
-    export PYTHONPATH=${src}/libs/standard-tests:$PYTHONPATH
-  '';
-
   passthru = {
+    tests.pytest = langchain-core.overridePythonAttrs (_: {
+      doCheck = true;
+    });
     # Updates to core tend to drive updates in everything else
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
@@ -105,6 +110,8 @@ buildPythonPackage rec {
       nix-update --commit --version-regex 'langchain-mongodb==(.*)' python3Packages.langchain-mongodb
       nix-update --commit --version-regex 'langchain-openai==(.*)' python3Packages.langchain-openai
     '';
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   disabledTests =
@@ -135,6 +142,7 @@ buildPythonPackage rec {
       "test_schemas"
       # AssertionError: assert [+ received] == [- snapshot]
       "test_graph_sequence_map"
+      "test_representation_of_runnables"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.

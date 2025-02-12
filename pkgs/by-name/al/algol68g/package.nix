@@ -5,10 +5,10 @@
   curl,
   gmp,
   gsl,
+  libpq,
   mpfr,
   ncurses,
   plotutils,
-  postgresql,
   pkg-config,
   withPDFDoc ? true,
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     gsl
     plotutils
-    postgresql
+    libpq
   ];
 
   strictDeps = true;

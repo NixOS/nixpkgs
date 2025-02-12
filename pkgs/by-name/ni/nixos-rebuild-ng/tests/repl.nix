@@ -28,7 +28,7 @@ let
 
   # In case we want/need to evaluate packages or the assertions or whatever,
   # we want to have a linux system.
-  # TODO: make the non-flake test use thise.
+  # TODO: make the non-flake test use this.
   linuxSystem = lib.replaceStrings [ "darwin" ] [ "linux" ] stdenv.hostPlatform.system;
 
 in

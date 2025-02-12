@@ -527,7 +527,7 @@ sub addGeneration {
     my @links = sort (glob "$path/specialisation/*");
 
     if ($current != 1 && scalar(@links) != 0) {
-        $conf .= "submenu \"> $name$nameSuffix\" --class submenu {\n";
+        $conf .= "submenu \"$name$nameSuffix\" --class submenu {\n";
     }
 
     addEntry("$name" . (scalar(@links) == 0 ? "" : " - Default") . $nameSuffix, $path, $options, $current);

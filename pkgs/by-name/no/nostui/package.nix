@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=widgets::text_note::tests::test_created_at"
   ];
 
-  cargoHash = "sha256-8ciA1FoGdnU+GWRcYJc8zU2FpUgGwTZSZynvAi1luYo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tway75ZAP2cGdpn79VpuRd0q/h+ovDvkih1LKitM/EU=";
 
   meta = with lib; {
     homepage = "https://github.com/akiomik/nostui";

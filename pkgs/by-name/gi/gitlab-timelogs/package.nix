@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
       iconv
     ];
 
-  cargoHash = "sha256-MYqrA4uYgiuDJkUuXITpaJ0P555dTUmmQwJcPju9HwY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qSIRcf0HpRg1Eu12L6UcJajHBgjJgfhsHmF1oV1h8HM=";
 
   meta = {
     description = " CLI utility to support you with your time logs in GitLab";

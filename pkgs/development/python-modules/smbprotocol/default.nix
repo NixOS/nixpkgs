@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.14.0";
+  version = "1.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = "smbprotocol";
     tag = "v${version}";
-    hash = "sha256-9J6p3rJeD6ZTOiumUQ7XX7nHI4mC3Sf+Gc+Fw2vwVk4=";
+    hash = "sha256-4BIrJAYazU4Bm6V1bYW/Bw2MXpR7CQpGQ6JammJ75HI=";
   };
 
   propagatedBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SMBv2 and v3 Client";
     homepage = "https://github.com/jborean93/smbprotocol";
-    changelog = "https://github.com/jborean93/smbprotocol/releases/tag/v${version}";
+    changelog = "https://github.com/jborean93/smbprotocol/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

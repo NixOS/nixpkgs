@@ -361,6 +361,8 @@ let
 
     dolmen_loop =  callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
+    dolmen_lsp =  callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+
     dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -418,7 +420,7 @@ let
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     dune-release = callPackage ../development/tools/ocaml/dune-release {
-      inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
+      inherit (pkgs) opam gitMinimal mercurial coreutils gnutar bzip2;
     };
 
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
@@ -793,7 +795,7 @@ let
       then import ../development/ocaml-modules/janestreet/0.17.nix
          {
            inherit self;
-           inherit (pkgs) bash fzf lib openssl zstd;
+           inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
          }
       else if lib.versionOlder "4.13.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.16.nix {
@@ -962,7 +964,9 @@ let
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lambdapi = callPackage ../development/ocaml-modules/lambdapi {
-      why3 = pkgs.why3.override { ocamlPackages = self; };
+      why3 = pkgs.why3.override { ocamlPackages = self;
+        version = "1.7.2"; coqPackages = pkgs.coqPackages_8_18;
+      };
     };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
@@ -1084,6 +1088,8 @@ let
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
+
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -1239,6 +1245,10 @@ let
     multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
 
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
+
+    multipart_form =  callPackage ../development/ocaml-modules/multipart_form { };
+
+    multipart_form-lwt =  callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
@@ -1540,7 +1550,7 @@ let
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
-      inherit (pkgs) postgresql;
+      inherit (pkgs) libpq;
     };
 
     pp = callPackage ../development/ocaml-modules/pp { };
@@ -1673,6 +1683,8 @@ let
     readline = callPackage ../development/ocaml-modules/readline {
       readline = pkgs.readline;
     };
+
+    reanalyze = callPackage ../development/tools/ocaml/reanalyze { };
 
     reason = callPackage ../development/compilers/reason { };
 

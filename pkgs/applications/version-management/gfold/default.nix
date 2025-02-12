@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-z5E+YS2zO4zgsW7mZbVN0z4HOurqoXwXn8hQc++9tks=";
   };
 
-  cargoHash = "sha256-mSqqtHZDm1ySu48DdI2sF7i7A8rDkFS/4/9uB30JOI8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7VPMWou23iJHzKFMXirsjlIvq8kyAnNSeQ26IKxfNZE=";
 
   passthru.tests.version = testers.testVersion {
     package = gfold;

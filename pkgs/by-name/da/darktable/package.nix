@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
     [
       SDL2
       adwaita-icon-theme
-      alsa-lib
       cairo
       curl
       exiv2
@@ -141,7 +140,6 @@ stdenv.mkDerivation rec {
       libwebp
       libxslt
       lua
-      util-linux
       openexr_3
       openjpeg
       osm-gps-map
@@ -151,6 +149,7 @@ stdenv.mkDerivation rec {
       sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
       colord
       colord-gtk
       libselinux
@@ -160,6 +159,7 @@ stdenv.mkDerivation rec {
       libxkbcommon
       libXtst
       ocl-icd
+      util-linux
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;

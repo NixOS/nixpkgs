@@ -2,27 +2,35 @@
   "comment": "This file is kept up to date via update.sh",
   "browsers": {
     "chromium": {
-      "revision": "1134",
-      "browserVersion": "129.0.6668.29"
+      "revision": "1155",
+      "browserVersion": "133.0.6943.16"
     },
     "firefox": {
-      "revision": "1463",
-      "browserVersion": "130.0"
+      "revision": "1471",
+      "browserVersion": "134.0"
     },
     "webkit": {
-      "revision": "2070",
+      "revision": "2123",
       "revisionOverrides": {
+        "debian11-x64": "2105",
+        "debian11-arm64": "2105",
         "mac10.14": "1446",
         "mac10.15": "1616",
         "mac11": "1816",
         "mac11-arm64": "1816",
         "mac12": "2009",
-        "mac12-arm64": "2009"
+        "mac12-arm64": "2009",
+        "ubuntu20.04-x64": "2092",
+        "ubuntu20.04-arm64": "2092"
       },
-      "browserVersion": "18.0"
+      "browserVersion": "18.2"
     },
     "ffmpeg": {
-      "revision": "1010"
+      "revision": "1011",
+      "revisionOverrides": {
+        "mac12": "1010",
+        "mac12-arm64": "1010"
+      }
     }
   }
 }

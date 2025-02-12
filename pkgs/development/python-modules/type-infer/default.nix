@@ -48,6 +48,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "psutil"
     "py3langid"
+    "numpy"
   ];
 
   build-system = [ poetry-core ];

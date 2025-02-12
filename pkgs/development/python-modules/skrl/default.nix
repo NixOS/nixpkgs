@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Toni-SM";
     repo = pname;
     tag = version;
-    hash = "sha256-e08hhO7CTH6V+8ZUhte36GD0fL7XvuW/CgIuARU3c6E=";
+    hash = "sha256-5Poc079E+6jpNsm/WUFBXqsIKWZpIIAW0fmoWLVEZDg=";
   };
 
   nativeBuildInputs = [ setuptools ];

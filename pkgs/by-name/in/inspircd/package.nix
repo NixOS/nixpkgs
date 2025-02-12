@@ -67,7 +67,7 @@ in
 , pkg-config
 , libargon2
 , openldap
-, postgresql
+, libpq
 , libmysqlclient
 , pcre
 , pcre2
@@ -97,7 +97,7 @@ let
     ];
     ldap            = [ openldap ];
     mysql           = [ libmysqlclient ];
-    pgsql           = [ postgresql ];
+    pgsql           = [ libpq ];
     regex_pcre      = [ pcre ];
     regex_pcre2     = [ pcre2 ];
     regex_re2       = [ re2 ];

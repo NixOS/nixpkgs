@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "python-overseerr";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-overseerr";
     tag = "v${version}";
-    hash = "sha256-MdJISHU/YbmQReT/Sf29jERUkuFASNCq4NQnk/BKK70=";
+    hash = "sha256-91h8ooWzCdH2iO1PoInnlHwR6h1m1hZkdNoJE+D4NWQ=";
   };
 
   build-system = [ poetry-core ];

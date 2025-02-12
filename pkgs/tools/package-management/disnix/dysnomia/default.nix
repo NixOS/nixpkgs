@@ -8,7 +8,7 @@
   systemd ? null,
   ejabberd ? null,
   mariadb ? null,
-  postgresql ? null,
+  libpq ? null,
   subversion ? null,
   mongodb ? null,
   mongodb-tools ? null,
@@ -41,7 +41,7 @@
 }:
 
 assert enableMySQLDatabase -> mariadb != null;
-assert enablePostgreSQLDatabase -> postgresql != null;
+assert enablePostgreSQLDatabase -> libpq != null;
 assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
 assert enableMongoDatabase -> (mongodb != null && mongodb-tools != null);
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isLinux systemd
     ++ lib.optional enableEjabberdDump ejabberd
     ++ lib.optional enableMySQLDatabase mariadb.out
-    ++ lib.optional enablePostgreSQLDatabase postgresql
+    ++ lib.optional enablePostgreSQLDatabase libpq
     ++ lib.optional enableSubversionRepository subversion
     ++ lib.optionals enableMongoDatabase [
       mongodb

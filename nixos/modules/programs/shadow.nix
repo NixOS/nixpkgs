@@ -31,7 +31,7 @@ in
         description = ''
           Config options for the /etc/login.defs file, that defines
           the site-specific configuration for the shadow password suite.
-          See login.defs(5) man page for available options.
+          See {manpage}`login.defs(5)` man page for available options.
         '';
         type = lib.types.submodule {
           freeformType = (pkgs.formats.keyValue { }).type;

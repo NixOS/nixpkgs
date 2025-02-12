@@ -11,8 +11,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubedb";
     repo = "cli";
-    rev = "v${version}";
-    sha256 = "sha256-6AhL3IBAQ9Mngquh7XbnXEb4jDX1k2d3bwKBFRhEzHA=";
+    tag = "v${version}";
+    hash = "sha256-e3kP1N6uhLKrOWfvl29vVB9D/bpj1W+1dGlaAuc8es0=";
   };
 
   vendorHash = null;

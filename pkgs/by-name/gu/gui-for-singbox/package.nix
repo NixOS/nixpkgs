@@ -60,7 +60,7 @@ let
     meta = {
       description = "GUI program developed by vue3";
       license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ aucub ];
+      maintainers = with lib.maintainers; [ ];
       platforms = lib.platforms.linux;
     };
   });
@@ -68,11 +68,13 @@ in
 buildGoModule {
   inherit pname version src;
 
-  patches = [
-    (replaceVars ./bridge.patch {
-      basepath = placeholder "out";
-    })
-  ];
+  patches = [ ./bridge.patch ];
+
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace bridge/bridge.go \
+      --replace-fail '@basepath@' "$out"
+  '';
 
   vendorHash = "sha256-OrysyJF+lUMf+0vWmOZHjxUdE6fQCKArmpV4alXxtYs=";
 
@@ -130,7 +132,7 @@ buildGoModule {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
     mainProgram = "GUI.for.SingBox";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

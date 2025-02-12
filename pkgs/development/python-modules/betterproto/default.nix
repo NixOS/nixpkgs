@@ -33,6 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "poetry-core>=1.0.0,<2" "poetry-core"
+  '';
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -78,7 +83,7 @@ buildPythonPackage rec {
     "test_binary_compatibility"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Code generator & library for Protobuf 3 and async gRPC";
     mainProgram = "protoc-gen-python_betterproto";
     longDescription = ''
@@ -88,7 +93,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/danielgtaylor/python-betterproto";
     changelog = "https://github.com/danielgtaylor/python-betterproto/blob/v.${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

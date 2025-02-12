@@ -15,12 +15,12 @@
   responses,
   freezegun,
   pytest-subprocess,
-  pytest-logdog,
+  logassert,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.0.4";
+  version = "2.1.1";
 
   pyproject = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     tag = version;
-    hash = "sha256-f+0AEoVUFL/+v4sRYirc6OD5dYH4dlLk8h7im+CLuhM=";
+    hash = "sha256-aW3efKy3c7ZGXS4wsvby0ww3Gwjt+1tMKsJCGprkcZo=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==73.0.1" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -69,10 +69,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    logassert
     pytest-check
     pytest-mock
     pytest-subprocess
-    pytest-logdog
     pytestCheckHook
     responses
   ];
@@ -102,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

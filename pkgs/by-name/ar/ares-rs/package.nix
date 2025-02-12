@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,10 +14,18 @@ rustPlatform.buildRustPackage rec {
     owner = "bee-san";
     repo = "ares";
     tag = "v${version}";
-    hash = "sha256-F+uBGRL1G8kiNZUCsiPbISBfId5BPwShenusqkcsHug=";
+    hash = "sha256-J+q7KeBthF9Wd08MNv0aHyLHgLUKg3mzQ8ic6+ashto=";
   };
 
-  cargoHash = "sha256-c50HCwWwW4Fyg6hC1JqBfKtwq6kgReSOIBYXvwm04yA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K4qAUEVdi7OqpKAxyEMnKkGTuxSjrdE+UQaYosnUo70=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   meta = with lib; {
     description = "Automated decoding of encrypted text without knowing the key or ciphers used";

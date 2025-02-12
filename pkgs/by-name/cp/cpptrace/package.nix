@@ -8,18 +8,19 @@
   gtest,
   callPackage,
   zstd,
+  nix-update-script,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "0.6.2";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zjPxPtq+OQ104sJoeBD3jpMV9gV57FSHEJS4W6SF8GM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2rDyH9vo47tbqqZrTupAOrMySj4IGKeWX8HBTGjFf+g=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ libdwarf ];
-  propagatedBuildInputs = [ zstd ];
+  propagatedBuildInputs = [ zstd ] ++ (lib.optionals static [ libdwarf ]);
 
   cmakeFlags = [
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
@@ -39,15 +40,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [ gtest ];
+  doCheck = true;
 
-  # Unit tests are flaky and hard to get right.
-  doCheck = false;
-
-  passthru.tests = {
-    findpackage-integration = callPackage ./findpackage-integration.nix {
-      src = "${finalAttrs.src}/test/findpackage-integration";
-      checkOutput = finalAttrs.finalPackage.doCheck;
-    };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests =
+      let
+        mkIntegrationTest =
+          { static }:
+          callPackage ./findpackage-integration.nix {
+            src = "${finalAttrs.src}/test/findpackage-integration";
+            checkOutput = finalAttrs.finalPackage.doCheck;
+            inherit static;
+          };
+      in
+      {
+        findpackage-integration-shared = mkIntegrationTest { static = false; };
+        findpackage-integration-static = mkIntegrationTest { static = true; };
+      };
   };
 
   meta = {

@@ -24,9 +24,8 @@
   syntax-highlighting,
   libmtp,
   libssh,
-  openexr,
+  openexr_3,
   libtirpc,
-  ilmbase,
   phonon,
   qtsvg,
   samba,
@@ -72,7 +71,7 @@ mkDerivation {
     syntax-highlighting
     libmtp
     libssh
-    openexr
+    openexr_3
     libtirpc
     phonon
     qtsvg
@@ -90,5 +89,4 @@ mkDerivation {
       --replace Exec=$out Exec=${kio}
   '';
 
-  CXXFLAGS = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 }

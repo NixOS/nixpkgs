@@ -4,19 +4,16 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iperf";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/iperf2/files/${pname}-${version}.tar.gz";
-    sha256 = "1yflnj2ni988nm0p158q8lnkiq2gn2chmvsglyn2gqmqhwp3jaq6";
+    url = "mirror://sourceforge/iperf2/files/iperf-${finalAttrs.version}.tar.gz";
+    hash = "sha256-dUqwp+KAM9vqgTCO9CS8ffTW4v4xtgzFNrYbUf772Ps=";
   };
 
-  hardeningDisable = [ "format" ];
   configureFlags = [ "--enable-fastsampling" ];
-
-  makeFlags = [ "AR:=$(AR)" ];
 
   postInstall = ''
     mv $out/bin/iperf $out/bin/iperf2
@@ -32,4 +29,4 @@ stdenv.mkDerivation rec {
     # prioritize iperf3
     priority = 10;
   };
-}
+})

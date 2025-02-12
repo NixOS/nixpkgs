@@ -32,9 +32,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/nlpo3-python";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src sourceRoot;
-    hash = "sha256-PDDlG5nLedgA+HFZzkrxtfUjTwwioQhpsk5qlbAe3ws=";
+    hash = "sha256-S5nDOz/3ZenvMs8ruybEu5ULefeYGPIKO8kCW3dTa+E=";
   };
 
   preCheck = ''

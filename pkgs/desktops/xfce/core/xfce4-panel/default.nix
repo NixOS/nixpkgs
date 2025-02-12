@@ -11,7 +11,6 @@
 , libxfce4ui
 , libxfce4util
 , libxfce4windowing
-, perl
 , tzdata
 , vala
 , wayland
@@ -21,13 +20,12 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
-  version = "4.20.0";
+  version = "4.20.3";
 
-  sha256 = "sha256-oB7mlU7RZtRuCQAKgv5I7ZRRu703Za7Ki9+AkHSELRE=";
+  sha256 = "sha256-tLWjU0M7tuE+qqDwaE1CtnOjDiPWno8Mf7hhxYxbvjo=";
 
   nativeBuildInputs = [
     gobject-introspection
-    perl
     vala
   ];
 

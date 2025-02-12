@@ -343,7 +343,7 @@ in
       perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
       # End if legacy environment variables
 
-      preSwitchCheck = config.system.preSwitchChecks.script;
+      preSwitchCheck = config.system.preSwitchChecksScript;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the

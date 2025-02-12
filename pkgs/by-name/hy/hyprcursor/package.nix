@@ -50,7 +50,11 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland cursor format, library and utilities";
     changelog = "https://github.com/hyprwm/hyprcursor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers =
+      lib.teams.hyprland.members
+      ++ (with lib.maintainers; [
+        iynaix
+      ]);
     mainProgram = "hyprcursor-util";
     platforms = lib.platforms.linux;
   };

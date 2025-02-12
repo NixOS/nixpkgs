@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.5.4";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-vlaJv4CbhjbJbiNZHKsedS2vBXp44oE/7ZALgkPASHI=";
+    hash = "sha256-zwVrDdCMapuHKmtlEUnCwxXCBU93C5uT9eqDk5Of2BE=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-g47tK6BC6CE0hqdZbToQMB5QeNdufhO12xPrAjbfMTk=";
+    npmDepsHash = "sha256-G08r+2eelxV3ottsNEZ6xysu13AbzPNTwkwZdY1qadg=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -46,6 +46,8 @@ python312.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
+  build-system = with python312.pkgs; [ hatchling ];
+
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -62,89 +64,93 @@ python312.pkgs.buildPythonApplication rec {
     "pytest-docker"
   ];
 
-  dependencies = with python312.pkgs; [
-    aiocache
-    aiofiles
-    aiohttp
-    alembic
-    anthropic
-    apscheduler
-    argon2-cffi
-    async-timeout
-    authlib
-    bcrypt
-    beautifulsoup4
-    black
-    boto3
-    chromadb
-    colbert-ai
-    docx2txt
-    duckduckgo-search
-    einops
-    extract-msg
-    fake-useragent
-    fastapi
-    faster-whisper
-    flask
-    flask-cors
-    fpdf2
-    ftfy
-    google-api-python-client
-    google-auth-httplib2
-    google-auth-oauthlib
-    google-generativeai
-    googleapis-common-protos
-    iso-639
-    langchain
-    langchain-chroma
-    langchain-community
-    langdetect
-    langfuse
-    ldap3
-    markdown
-    nltk
-    openai
-    opencv-python-headless
-    openpyxl
-    opensearch-py
-    pandas
-    passlib
-    peewee
-    peewee-migrate
-    pgvector
-    psutil
-    psycopg2-binary
-    pydub
-    pyjwt
-    pymdown-extensions
-    pymilvus
-    pymongo
-    pymysql
-    pypandoc
-    pypdf
-    python-dotenv
-    python-jose
-    python-multipart
-    python-pptx
-    python-socketio
-    pytube
-    pyxlsb
-    qdrant-client
-    rank-bm25
-    rapidocr-onnxruntime
-    redis
-    requests
-    sentence-transformers
-    soundfile
-    tiktoken
-    unstructured
-    uvicorn
-    validators
-    xlrd
-    youtube-transcript-api
-  ];
-
-  build-system = with python312.pkgs; [ hatchling ];
+  dependencies =
+    with python312.pkgs;
+    [
+      aiocache
+      aiofiles
+      aiohttp
+      alembic
+      anthropic
+      apscheduler
+      argon2-cffi
+      async-timeout
+      authlib
+      bcrypt
+      beautifulsoup4
+      black
+      boto3
+      chromadb
+      colbert-ai
+      docx2txt
+      duckduckgo-search
+      einops
+      extract-msg
+      fake-useragent
+      fastapi
+      faster-whisper
+      flask
+      flask-cors
+      fpdf2
+      ftfy
+      gcp-storage-emulator
+      google-api-python-client
+      google-auth-httplib2
+      google-auth-oauthlib
+      google-cloud-storage
+      google-generativeai
+      googleapis-common-protos
+      iso-639
+      langchain
+      langchain-community
+      langdetect
+      langfuse
+      ldap3
+      markdown
+      moto
+      nltk
+      openai
+      opencv-python-headless
+      openpyxl
+      opensearch-py
+      pandas
+      passlib
+      peewee
+      peewee-migrate
+      pgvector
+      psutil
+      psycopg2-binary
+      pydub
+      pyjwt
+      pymdown-extensions
+      pymilvus
+      pymongo
+      pymysql
+      pypandoc
+      pypdf
+      python-dotenv
+      python-jose
+      python-multipart
+      python-pptx
+      python-socketio
+      pytube
+      pyxlsb
+      qdrant-client
+      rank-bm25
+      rapidocr-onnxruntime
+      redis
+      requests
+      sentence-transformers
+      soundfile
+      tiktoken
+      transformers
+      unstructured
+      uvicorn
+      validators
+      xlrd
+      youtube-transcript-api
+    ]
+    ++ moto.optional-dependencies.s3;
 
   pythonImportsCheck = [ "open_webui" ];
 

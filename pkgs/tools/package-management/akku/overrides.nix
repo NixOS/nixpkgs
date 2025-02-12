@@ -13,6 +13,7 @@ let
   runTests = pkg: old: { doCheck = true; };
   brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.hostPlatform.isAarch64; };
   brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; };
+  brokenOnDarwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
 in
 {
   chez-srfi = joinOverrides [
@@ -23,12 +24,10 @@ in
         time.sps
         tables-test.ikarus.sps
         lazy.sps
+        pipeline-operators.sps
         '
       '';
     })
-
-    # nothing builds on ARM Macs because of this
-    brokenOnAarch64
   ];
 
   akku-r7rs = pkg: old: {
@@ -74,6 +73,7 @@ in
   # broken tests
   xitomatl = skipTests;
   ufo-threaded-function = skipTests;
+  ufo-try = skipTests;
 
   # unsupported schemes, it seems.
   loko-srfi = broken;
@@ -83,7 +83,7 @@ in
   # system-specific:
 
   # scheme-langserver doesn't work because of this
-  ufo-thread-pool = brokenOnx86_64Darwin;
+  ufo-thread-pool = brokenOnDarwin;
 
   # broken everywhere:
   chibi-math-linalg = broken;

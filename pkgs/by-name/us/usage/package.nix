@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-bS8wMtmD7UPctP+8yDm8KylLIPzPuk6dt9ilWQzFvY0=";
   };
 
-  cargoHash = "sha256-z/McKMlLvr/YBzXSCLFZk9PSIBnrweU7tIPjTwTeiuQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E8C6iqx/Ov01xinHh+A1tmtcpw84z8tyaj/Z8gWSwNY=";
 
   postPatch = ''
     substituteInPlace ./examples/mounted.sh \

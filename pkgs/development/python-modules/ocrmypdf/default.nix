@@ -3,7 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
-  ghostscript,
+  ghostscript_headless,
   hatch-vcs,
   hatchling,
   hypothesis,
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     ./use-pillow-heif.patch
     (substituteAll {
       src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;

@@ -18,13 +18,17 @@
   jsonschema,
   git,
   squashfsTools,
+  socat,
   setuptools-scm,
   stdenv,
+  ant,
+  maven,
+  jdk,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.1.4";
+  version = "2.6.0";
 
   pyproject = true;
 
@@ -32,7 +36,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-z0Om1/0Y6fDFHXB0GKFelmYwNwTH7loTtRjXtmjsjkY=";
+    hash = "sha256-SybDzprUrKeL+Jl7Gm4XYLlvmy056D1OtJB7v/W2flY=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -57,14 +61,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "craft_parts" ];
 
   nativeCheckInputs = [
+    ant
     git
     hypothesis
+    jdk
     jsonschema
+    maven
     pytest-check
     pytest-mock
     pytest-subprocess
     pytestCheckHook
     requests-mock
+    socat
     squashfsTools
   ];
 
@@ -80,6 +88,8 @@ buildPythonPackage rec {
     "test_run_prime"
     "test_get_build_packages_with_source_type"
     "test_get_build_packages"
+    # Relies upon certain paths being present that don't make sense on Nix.
+    "test_java_plugin_jre_not_17"
   ];
 
   disabledTestPaths =
@@ -106,7 +116,7 @@ buildPythonPackage rec {
   meta = {
     description = "Software artifact parts builder from Canonical";
     homepage = "https://github.com/canonical/craft-parts";
-    changelog = "https://github.com/canonical/craft-parts/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-parts/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

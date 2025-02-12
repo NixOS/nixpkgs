@@ -14,10 +14,11 @@ rustPlatform.buildRustPackage rec {
     owner = "avencera";
     repo = "rustywind";
     rev = "v${version}";
-    hash = "sha256-NRIWjmKjteJibqnOjkkUY9eKIM65H7NaRX8rn1MdXmY=";
+    hash = "sha256-4VpSf6ukeDbz8pRxsDt38MxMDgavAOqgzIof/3AaJ04=";
   };
 
-  cargoHash = "sha256-yUODUAhWtRGCj3U9nBlw3+5dNv6vGHXmJzUd8hGKnu0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zpSsDxUhQinKtjWuDeINenKedYKhPyW5u4bglmSgVdk=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security

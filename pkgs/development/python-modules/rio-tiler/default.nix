@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "rio-tiler";
-  version = "7.2.2";
+  version = "7.3.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "cogeotiff";
     repo = "rio-tiler";
     tag = version;
-    hash = "sha256-uVLizNkUL7wGF0vFjPXb2iW9ILVkJcbDssXtp3E8ubE=";
+    hash = "sha256-8Ly1QKKFzct0CPAN/54/kzNUE2FPiwvM+EqmX1utboU=";
   };
 
   build-system = [ hatchling ];

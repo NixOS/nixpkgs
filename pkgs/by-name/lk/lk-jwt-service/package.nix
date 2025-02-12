@@ -6,23 +6,19 @@
 
 buildGoModule rec {
   pname = "lk-jwt-service";
-  version = "0-unstable-2024-04-27";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
-    rev = "4a295044a4d0bd2af4474bf6a8a14fd0596ecf9e";
-    hash = "sha256-dN4iJ8P0u5dbZ93mp/FumcvByP7EpQhOvR+Oe4COWXQ=";
+    tag = "v${version}";
+    hash = "sha256-RbfJdAhLz2wfTC17i533U25TIUtJEkHTgqJC2R+j1uM=";
   };
 
-  vendorHash = "sha256-9qOApmmOW+N1L/9hj9tVy0hLIUI36WL2TGWUcM3ajeM=";
-
-  postInstall = ''
-    mv $out/bin/ec-lms $out/bin/lk-jwt-service
-  '';
+  vendorHash = "sha256-7wruthAqC9jVpAhPiIDdqAB51l38fLHEhl2QOaBJiL0=";
 
   meta = with lib; {
-    description = "Minimal service to provide LiveKit JWTs using Matrix OpenID Connect";
+    description = "Minimal service to issue LiveKit JWTs for MatrixRTC";
     homepage = "https://github.com/element-hq/lk-jwt-service";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ kilimnik ];

@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gmetronome";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "dqpb";
     repo = "gmetronome";
     rev = version;
-    hash = "sha256-w7ziWfpaFU8KTJcCTJUsLghy4Q3cCL1Bi0TxrReiP7s=";
+    hash = "sha256-/UWOvVeZILDR29VjBK+mFJt1hzWcOljOr7J7+cMrKtM=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AO95J138d3m8CpJ7hWYeGP+rRd2009qQXwLxbuHDSDs=";
   };
 
-  cargoHash = "sha256-L7Y5sJe/6xx0JIEyxPHyKWxHRnkNUek5U3X5BL5a0k8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7+isSSjF4V1FQaWRzmNAAW0q3/x/Tqkt8jNzGXsJHAo=";
 
   postPatch = ''
     substituteInPlace vhdl_lang/src/config.rs \

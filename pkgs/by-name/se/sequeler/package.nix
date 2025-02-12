@@ -15,7 +15,7 @@
   gtk3,
   glib,
   libgee,
-  libgda,
+  libgda5,
   gtksourceview,
   libxml2,
   libsecret,
@@ -23,7 +23,7 @@
 }:
 
 let
-  sqlGda = libgda.override {
+  sqlGda = libgda5.override {
     mysqlSupport = true;
     postgresSupport = true;
   };

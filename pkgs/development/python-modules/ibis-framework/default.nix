@@ -112,6 +112,10 @@ buildPythonPackage rec {
   dontBypassPoetryDynamicVersioning = true;
   env.POETRY_DYNAMIC_VERSIONING_BYPASS = lib.head (lib.strings.splitString "-" version);
 
+  pythonRelaxDeps = [
+    "toolz"
+  ];
+
   dependencies = [
     atpublic
     parsy

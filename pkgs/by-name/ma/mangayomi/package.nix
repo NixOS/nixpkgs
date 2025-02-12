@@ -25,7 +25,8 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-6Iraw5gtlVW3iSrT2zQh6JLubVTZy/y8/5quXKee2Ko=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-Qzq1FyWtUy1533/S1KS8XEou5nAnq0O0Vxxlt+Iv8OQ=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
   };
@@ -109,7 +110,7 @@ flutter324.buildFlutterApplication {
     homepage = "https://github.com/kodjodevf/mangayomi";
     mainProgram = "mangayomi";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

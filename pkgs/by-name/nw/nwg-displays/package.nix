@@ -7,13 +7,13 @@
   gtk-layer-shell,
   gtk3,
   pango,
-  python310Packages,
+  python3Packages,
   wrapGAppsHook3,
   hyprlandSupport ? true,
   wlr-randr,
 }:
 
-python310Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nwg-displays";
   version = "0.3.22";
 
@@ -39,9 +39,9 @@ python310Packages.buildPythonApplication rec {
       gdk-pixbuf
       gtk-layer-shell
       pango
-      python310Packages.gst-python
-      python310Packages.i3ipc
-      python310Packages.pygobject3
+      python3Packages.gst-python
+      python3Packages.i3ipc
+      python3Packages.pygobject3
     ]
     ++ lib.optionals hyprlandSupport [
       wlr-randr

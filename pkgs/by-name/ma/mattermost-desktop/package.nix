@@ -2,12 +2,16 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron,
+  electron_33,
   makeWrapper,
   testers,
   mattermost-desktop,
   nix-update-script,
 }:
+
+let
+  electron = electron_33;
+in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
@@ -82,7 +86,9 @@ buildNpmPackage rec {
       # Invoking with `--version` insists on being able to write to a log file.
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+    };
   };
 
   meta = {

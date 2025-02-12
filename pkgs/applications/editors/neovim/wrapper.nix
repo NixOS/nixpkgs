@@ -84,13 +84,9 @@ let
     pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
 
     # a limited RC script used only to generate the manifest for remote plugins
-    manifestRc = vimUtils.vimrcContent { customRC = ""; };
+    manifestRc = "";
     # we call vimrcContent without 'packages' to avoid the init.vim generation
-    neovimRcContent' = vimUtils.vimrcContent {
-      beforePlugins = "";
-      customRC = lib.concatStringsSep "\n" (pluginRC ++ lib.optional (neovimRcContent != null) neovimRcContent);
-      packages = null;
-    };
+    neovimRcContent' = lib.concatStringsSep "\n" (pluginRC ++ lib.optional (neovimRcContent != null) neovimRcContent);
 
     packpathDirs.myNeovimPackages = myVimPackage;
     finalPackdir = neovimUtils.packDir packpathDirs;

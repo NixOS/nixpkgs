@@ -40,6 +40,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ./001-fix-test-inclusion.diff
     # Patching yet another script that fills data based on git commands . . .
     ./002-hardcode-vars.diff
+    # Fix NEON intrinsics usage
+    ./003-fix-NEON-intrinsics.patch
   ];
 
   nativeBuildInputs = [

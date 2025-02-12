@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaAML";
     tag = version;
-    hash = "sha256-3wr+72j/0HR9gRwxdzP4QyLKFaobkrD4QwTtiAUik0Q=";
+    hash = "sha256-i5hjmvN9qJCGVDmRDBTiaNQn+1kZHr2iWNnD7GUimr4=";
   };
 
   pythonRelaxDeps = [

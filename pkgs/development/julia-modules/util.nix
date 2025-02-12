@@ -1,5 +1,5 @@
 {
-  git,
+  gitMinimal,
   runCommand,
 }:
 
@@ -20,7 +20,7 @@
   # Convert an ordinary source checkout into a repo with a single commit
   repoifySimple =
     name: path:
-    runCommand ''${name}-repoified'' { buildInputs = [ git ]; } ''
+    runCommand ''${name}-repoified'' { buildInputs = [ gitMinimal ]; } ''
       mkdir -p $out
       cp -r ${path}/. $out
       cd $out
@@ -36,7 +36,7 @@
   # Convert an dependency source info into a repo with a single commit
   repoifyInfo =
     uuid: info:
-    runCommand ''julia-${info.name}-${info.version}'' { buildInputs = [ git ]; } ''
+    runCommand ''julia-${info.name}-${info.version}'' { buildInputs = [ gitMinimal ]; } ''
       mkdir -p $out
       cp -r ${info.src}/. $out
       cd $out

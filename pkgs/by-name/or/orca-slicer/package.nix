@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   wrapGAppsHook3,
-  boost,
+  boost186,
   cereal,
   cgal,
   curl,
@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "orca-slicer";
-  version = "v2.2.0-unstable-2025-01-06";
+  version = "v2.2.0-unstable-2025-01-23";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
-    rev = "99a0facfb3a5c9b4e661e536825c08393053cb53";
-    hash = "sha256-XWM04Vx65q+Vc+s3YLucS63IhGVw8ODhL2m+47nZKs8=";
+    rev = "1b1288c4353afca44edee323061bdd5c87fcafb9";
+    hash = "sha256-IPdKusP2cB5jgr6JjQVu8ZjJ2kiG6mfmfZtDVSlAFNg=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       binutils
-      (boost.override {
+      (boost186.override {
         enableShared = true;
         enableStatic = false;
         extraFeatures = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
           "filesystem"
         ];
       })
-      boost.dev
+      boost186.dev
       cereal
       cgal
       curl
@@ -127,7 +127,6 @@ stdenv.mkDerivation rec {
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     ./patches/dont-link-opencv-world-orca.patch
-    ./patches/fix-boost.patch
   ];
 
   doCheck = true;
@@ -163,7 +162,7 @@ stdenv.mkDerivation rec {
     (lib.optionalString withSystemd "-ludev")
     "-L${mesa.osmesa}/lib"
     "-L${mesa.drivers}/lib"
-    "-L${boost}/lib"
+    "-L${boost186}/lib"
     "-lboost_log"
     "-lboost_log_setup"
   ];

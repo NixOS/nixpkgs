@@ -11,20 +11,21 @@
   ghostscript,
   glib,
   harfbuzz,
-  html5lib,
   pango,
   pillow,
   pydyf,
   pyphen,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   substituteAll,
   tinycss2,
+  tinyhtml5,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "62.3";
+  version = "63.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-jYaA1zL3+g/LxYdpKlpcsJXDUlYnBmkY1uIDy/Qrf80=";
+    hash = "sha256-y0JOY+jdPxQZW/5fIDUnZGqkCi8ArIGfnTm4MEzsAEQ=";
   };
 
   patches = [
@@ -44,23 +45,27 @@ buildPythonPackage rec {
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
+      harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "tinycss2" ];
+
+  dependencies = [
     cffi
     cssselect2
     fonttools
-    html5lib
     pillow
     pydyf
     pyphen
     tinycss2
+    tinyhtml5
   ] ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     ghostscript
   ];
@@ -73,17 +78,24 @@ buildPythonPackage rec {
     "test_tabulation_character"
     "test_linear_gradients_5"
     "test_linear_gradients_12"
+    # rounding issues in sandbox
+    "test_images_transparent_text"
+    "test_visibility_1"
+    "test_visibility_3"
+    "test_visibility_4"
+    "test_empty_inline_auto_margins"
+    "test_vertical_align_4"
+    "test_margin_boxes_element"
+    "test_running_elements"
+    "test_layout_table_auto_44"
+    "test_layout_table_auto_45"
+    "test_woff_simple"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
-  '';
 
   preCheck = ''
     # Fontconfig wants to create a cache.
@@ -93,6 +105,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = with lib; {
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/v${version}";
     description = "Converts web documents to PDF";
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";

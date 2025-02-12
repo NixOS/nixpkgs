@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "warcio";
-  version = "1.7.4";
+  version = "1.7.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "webrecorder";
     repo = "warcio";
-    rev = "aa702cb321621b233c6e5d2a4780151282a778be"; # Repo has no git tags, see https://github.com/webrecorder/warcio/issues/126
-    hash = "sha256-wn2rd73wRfOqHu9H0GIn76tmEsERBBCQatnk4b/JToU=";
+    tag = "v${version}"; # Repo has no git tags, see https://github.com/webrecorder/warcio/issues/126
+    hash = "sha256-i1bVbXf1RQoWCADFwlVEnFhb3sVZ91vijUtzVLWMc2Q=";
   };
 
   patches = [

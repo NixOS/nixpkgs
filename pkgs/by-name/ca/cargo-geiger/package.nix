@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     ./fix-build-with-rust-1.80.patch
   ];
 
-  cargoHash = "sha256-511KeTykHw3xbnsuwIt2QmBK3mG9yK23z0yrS3eIY74=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-n6RfulzrK9QebC1tgVVd/YnBc21Jf0OSfHApRO1c0ew=";
 
   patches = [
     ./allow-warnings.patch

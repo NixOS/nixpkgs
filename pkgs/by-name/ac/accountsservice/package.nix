@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   glib,
   shadow,
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Hardcode dependency paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit shadow coreutils;
     })
 

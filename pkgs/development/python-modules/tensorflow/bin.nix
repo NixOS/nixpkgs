@@ -29,8 +29,6 @@
   cudaPackages,
   zlib,
   python,
-  keras-applications,
-  keras-preprocessing,
   addDriverRunpath,
   astunparse,
   flatbuffers,
@@ -66,7 +64,7 @@ buildPythonPackage rec {
       cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
       key = "${platform}_${pyVerNoDot}${cuda}";
     in
-    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported configuration: ${key}"));
+    fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
 
   buildInputs = [ llvmPackages.openmp ];
 
@@ -90,8 +88,6 @@ buildPythonPackage rec {
     wrapt
     tensorflow-estimator-bin
     tensorboard
-    keras-applications
-    keras-preprocessing
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 

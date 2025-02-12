@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "flask-cors";
-  version = "4.0.2";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
     tag = version;
-    hash = "sha256-I1iCnUT0+ZThf+c9Vm9GgH5hYL/pcBReOjKJGRNsRrg=";
+    hash = "sha256-DbTeq18CLuwj8lzQnpyPMEfxgR97XlF0s37wkTYd4O4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Flask extension adding a decorator for CORS support";
     homepage = "https://github.com/corydolphin/flask-cors";
-    changelog = "https://github.com/corydolphin/flask-cors/releases/tag/v${version}";
+    changelog = "https://github.com/corydolphin/flask-cors/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ nickcao ];
   };

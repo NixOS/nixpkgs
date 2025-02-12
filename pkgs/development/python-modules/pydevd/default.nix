@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cython,
   setuptools,
   numpy,
   psutil,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "3.0.3";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,17 +26,24 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-aylmLN7lVUza2lt2K48rJsx3XatXPgPjcmPZ05raLX0=";
+    hash = "sha256-IJSy6BoQCHNo2YsnrHGXsEaWsLy5dq3jG6Jn4MgpgCg=";
   };
+
+  postPatch = ''
+    sed -i '/addopts/d' pytest.ini
+  '';
 
   __darwinAllowLocalNetworking = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   nativeCheckInputs = [
     numpy
     psutil
-    pytest-xdist
+    #pytest-xdist
     pytestCheckHook
     trio
     untangle
@@ -56,20 +64,10 @@ buildPythonPackage rec {
       # AssertionError: assert '/usr/bin/' == '/usr/bin'
       # https://github.com/fabioz/PyDev.Debugger/issues/227
       "test_to_server_and_to_client"
-      # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
-      "test_step_next_step_in_multi_threads"
-      "test_tracing_basic"
-      "test_tracing_other_threads"
-      # subprocess.CalledProcessError
-      "test_find_main_thread_id"
-      # numpy 2 compat
-      "test_evaluate_numpy"
+      # Times out
+      "test_case_sys_exit_multiple_exception_attach"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
-      "test_case_handled_and_unhandled_exception_generator"
-      "test_case_stop_async_iteration_exception"
-      "test_case_unhandled_exception_generator"
-      "test_function_breakpoints_async"
       # raise segmentation fault
       # https://github.com/fabioz/PyDev.Debugger/issues/269
       "test_evaluate_expression"

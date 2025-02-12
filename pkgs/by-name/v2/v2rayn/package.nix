@@ -19,13 +19,13 @@
 }:
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.7.0";
+  version = "7.7.1";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-gnGZtHSmmyxTf+/Dp1cEXI1odI8SiFLzATd9PNnAC7E=";
+    hash = "sha256-u73LzCaGc3vdRs9sG9fdv1jrDubgZGkkxCnP55Bqdx8=";
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
@@ -101,7 +101,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

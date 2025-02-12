@@ -4,20 +4,22 @@
   rustPlatform,
   pkg-config,
   openssl,
+  curl,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "pay-respects";
-  version = "0.6.10";
+  version = "0.6.12";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "iff";
     repo = "pay-respects";
     rev = "v${version}";
-    hash = "sha256-cyd0MF5pxa3FhSUmjNtiIwAWrE0/rqtOm8dJxqdwPSk=";
+    hash = "sha256-lDIhI9CnWwVVGyAJAS3gDUEkeXShTvPd8JKC1j9/9yU=";
   };
 
-  cargoHash = "sha256-7j6rRCMazMFbPnzt4/0Lz1BDJP3xtq1ycb+41f2qhe0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-z0nHq5qiT59bCgOWb7D3h25LcejwJlp64j5zaUx9jb0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -25,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+    curl
   ];
 
   meta = {
@@ -34,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       sigmasquadron
       bloxx12
+      ALameLlama
     ];
     mainProgram = "pay-respects";
   };

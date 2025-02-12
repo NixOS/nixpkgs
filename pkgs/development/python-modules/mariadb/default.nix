@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   libmysqlclient,
+  packaging,
   lib,
   pythonOlder,
   setuptools,
@@ -28,6 +29,10 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ libmysqlclient ];
+
+  dependencies = [
+    packaging # do not rely on pythonImportsCheck when removing, it pulls in build-system dependencies
+  ];
 
   # Requires a running MariaDB instance
   doCheck = false;

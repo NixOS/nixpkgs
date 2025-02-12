@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   fetchFromGitHub,
-  fetchpatch,
   fixDarwinDylibNames,
   autoconf,
   aws-sdk-cpp,
@@ -57,11 +56,6 @@
   enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
 
-assert lib.asserts.assertMsg (
-  (enableS3 && stdenv.hostPlatform.isDarwin)
-  -> (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-) "S3 on Darwin requires Boost != 1.69";
-
 let
   arrow-testing = fetchFromGitHub {
     name = "arrow-testing";
@@ -75,11 +69,11 @@ let
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "a7f1d288e693dbb08e3199851c4eb2140ff8dff2";
-    hash = "sha256-zLWJOWcW7OYL32OwBm9VFtHbmG+ibhteRfHlKr9G3CQ=";
+    rev = "c7cf1374cf284c0c73024cd1437becea75558bf8";
+    hash = "sha256-DThjyZ34LajHwXZy1IhYKUGUG/ejQ9WvBNuI8eUKmSs=";
   };
 
-  version = "18.1.0";
+  version = "19.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -89,28 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-Jo3be5bVuDaDcSbW3pS8y9Wc2sz1W2tS6QTwf0XpODA";
+    hash = "sha256-rjU/D362QfmejzjIsYaEwTMcLADbNf/pQohb323ifZI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
-
-  patches = [
-    # fixes build with libcxx-19 (llvm-19) remove on update
-    (fetchpatch {
-      name = "libcxx-19-fixes.patch";
-      url = "https://github.com/apache/arrow/commit/29e8ea011045ba4318a552567a26b2bb0a7d3f05.patch";
-      relative = "cpp";
-      includes = [ "src/arrow/buffer_test.cc" ];
-      hash = "sha256-ZHkznOilypi1J22d56PhLlw/hbz8RqwsOGDMqI1NsMs=";
-    })
-    # https://github.com/apache/arrow/pull/45057 remove on update
-    (fetchpatch {
-      name = "boost-187.patch";
-      url = "https://github.com/apache/arrow/commit/5ec8b64668896ff06a86b6a41e700145324e1e34.patch";
-      relative = "cpp";
-      hash = "sha256-GkB7u4YnnaCApOMQPYFJuLdY7R2LtLzKccMEpKCO9ic=";
-    })
-  ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt

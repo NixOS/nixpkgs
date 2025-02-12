@@ -4,7 +4,6 @@ import ./make-test-python.nix (
     name = "pass-secret-service";
     meta.maintainers = with lib.maintainers; [
       vancluever
-      AndersonTorres
     ];
 
     nodes = {

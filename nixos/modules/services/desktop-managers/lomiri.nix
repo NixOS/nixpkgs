@@ -95,18 +95,19 @@ in
             lomiri-gallery-app
             lomiri-history-service
             lomiri-mediaplayer-app
+            lomiri-music-app
             lomiri-polkit-agent
             lomiri-schemas # exposes some required dbus interfaces
             lomiri-session # wrappers to properly launch the session
             lomiri-sounds
             lomiri-system-settings
+            lomiri-telephony-service
             lomiri-terminal-app
             lomiri-thumbnailer
             lomiri-url-dispatcher
             mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
             morph-browser
             qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
-            telephony-service
             teleports
           ]);
       };
@@ -152,7 +153,7 @@ in
           )
           ++ (
             with pkgs.lomiri;
-            [ telephony-service ]
+            [ lomiri-telephony-service ]
             ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
           );
       };
@@ -198,37 +199,54 @@ in
         "/share/sounds"
       ];
 
-      systemd.user.services = {
-        # Unconditionally run service that collects system-installed URL handlers before LUD
-        # TODO also run user-installed one?
-        "lomiri-url-dispatcher-update-system-dir" = {
-          description = "Lomiri URL dispatcher system directory updater";
-          wantedBy = [ "lomiri-url-dispatcher.service" ];
-          before = [ "lomiri-url-dispatcher.service" ];
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${pkgs.lomiri.lomiri-url-dispatcher}/libexec/lomiri-url-dispatcher/lomiri-update-directory /run/current-system/sw/share/lomiri-url-dispatcher/urls/";
-          };
-        };
-
-        "lomiri-polkit-agent" = rec {
-          description = "Lomiri Polkit agent";
-          wantedBy = [
+      systemd.user.services =
+        let
+          lomiriServiceNames = [
             "lomiri.service"
             "lomiri-full-greeter.service"
             "lomiri-full-shell.service"
             "lomiri-greeter.service"
             "lomiri-shell.service"
           ];
-          after = [ "graphical-session.target" ];
-          partOf = wantedBy;
-          serviceConfig = {
-            Type = "simple";
-            Restart = "always";
-            ExecStart = "${pkgs.lomiri.lomiri-polkit-agent}/libexec/lomiri-polkit-agent/policykit-agent";
+        in
+        {
+          # Unconditionally run service that collects system-installed URL handlers before LUD
+          # TODO also run user-installed one?
+          "lomiri-url-dispatcher-update-system-dir" = {
+            description = "Lomiri URL dispatcher system directory updater";
+            wantedBy = [ "lomiri-url-dispatcher.service" ];
+            before = [ "lomiri-url-dispatcher.service" ];
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = "${pkgs.lomiri.lomiri-url-dispatcher}/libexec/lomiri-url-dispatcher/lomiri-update-directory /run/current-system/sw/share/lomiri-url-dispatcher/urls/";
+            };
+          };
+
+          "lomiri-polkit-agent" = {
+            description = "Lomiri Polkit agent";
+            wantedBy = lomiriServiceNames;
+            after = [ "graphical-session.target" ];
+            partOf = lomiriServiceNames;
+            serviceConfig = {
+              Type = "simple";
+              Restart = "always";
+              ExecStart = "${pkgs.lomiri.lomiri-polkit-agent}/libexec/lomiri-polkit-agent/policykit-agent";
+            };
+          };
+
+          "mediascanner-2.0" = {
+            description = "Media Scanner";
+            wantedBy = lomiriServiceNames;
+            before = lomiriServiceNames;
+            partOf = lomiriServiceNames;
+            serviceConfig = {
+              Type = "dbus";
+              BusName = "com.lomiri.MediaScanner2.Daemon";
+              Restart = "on-failure";
+              ExecStart = "${lib.getExe pkgs.lomiri.mediascanner2}";
+            };
           };
         };
-      };
 
       systemd.services = {
         "dbus-com.lomiri.UserMetrics" = {

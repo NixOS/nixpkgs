@@ -82,6 +82,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/f10a6d04599795732c1d99e2da0a4839ccdcb4f5.diff";
       hash = "sha256-xB0xg8dGLnSMdFK3/B5hkI9yzI5N3lUMhPZ89lDsp3s=";
     })
+
+    # https://github.com/sagemath/sage/pull/39261, landed in 10.6.beta4
+    (fetchpatch {
+      name = "scipy-1.15-update.patch";
+      url = "https://github.com/sagemath/sage/commit/545f5bf75084a7467aae0c0b34bc000ca996df78.diff";
+      hash = "sha256-CMwwZLPalU4jWyRf4jnYncEQbw980gt+7xtAtqypDG4=";
+    })
+
+    # https://github.com/sagemath/sage/pull/38749, to land in 10.6.beta6
+    (fetchpatch {
+      name = "pari-2.17.1-update.patch";
+      url = "https://github.com/sagemath/sage/compare/10.6.beta2...26f411e5939718d4439325ff669635e5a72d50e5.diff";
+      hash = "sha256-Z4JwCuUDpqktAzNtVKRUbrJEh7TmCtFI7PJnOrcEbr4=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
@@ -91,6 +105,9 @@ stdenv.mkDerivation rec {
     "--no-backup-if-mismatch"
     "-p1"
   ];
+
+  # harmless broken symlinks to (not) generated files used by sage-the-distro
+  dontCheckForBrokenSymlinks = true;
 
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment

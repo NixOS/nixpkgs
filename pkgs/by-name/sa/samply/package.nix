@@ -17,7 +17,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7bf1lDIZGhRpvnn8rHNwzH2GBY8CwtYCjuRAUTQgbsA=";
   };
 
-  cargoHash = "sha256-QGvtKx+l6+UxdlziHnF63geAvW55RRlatK2/J8LR0Ck=";
+  # Can't use fetchCargoVendor:
+  # https://github.com/NixOS/nixpkgs/issues/377986
+  cargoLock.lockFile = ./Cargo.lock;
 
   # the dependencies linux-perf-data and linux-perf-event-reader contains both README.md and Readme.md,
   # which causes a hash mismatch on systems with a case-insensitive filesystem

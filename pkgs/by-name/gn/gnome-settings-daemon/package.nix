@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   buildPackages,
   fetchurl,
   meson,
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
     ./add-gnome-session-ctl-option.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit tzdata;
     })
   ];
