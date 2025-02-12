@@ -3,6 +3,7 @@
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , lua, curl
 , gsl-lite
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.wesnoth.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar niklaskorz ];
     platforms = lib.platforms.unix;
   };
 })
