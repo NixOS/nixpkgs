@@ -16,6 +16,7 @@
   stdenv,
   wayland,
   wayland-scanner,
+  nix-update-script,
   xorg,
 }:
 
@@ -129,6 +130,8 @@ rustPlatform.buildRustPackage rec {
       startupWMClass = "gossip";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Desktop client for nostr, an open social media protocol";
