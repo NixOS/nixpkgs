@@ -104,7 +104,7 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: MonkeyPatch) 
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
         build_host,
-        build_flags={"build": True},
+        realise_flags={"realise": True},
         instantiate_flags={"inst": True},
         copy_flags={"copy": True},
     ) == Path("/path/to/config")
@@ -147,7 +147,7 @@ def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: MonkeyPatch) 
                     Path("/path/to/file"),
                     "--add-root",
                     Path("/tmp/tmpdir/00000000000000000000000000000002"),
-                    "--build",
+                    "--realise",
                 ],
                 remote=build_host,
                 stdout=PIPE,
