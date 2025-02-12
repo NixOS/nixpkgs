@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  jq,
-  moreutils,
   stdenv,
   darwin,
 }:
@@ -20,29 +18,6 @@ rustPlatform.buildRustPackage rec {
   # Can't use fetchCargoVendor:
   # https://github.com/NixOS/nixpkgs/issues/377986
   cargoLock.lockFile = ./Cargo.lock;
-
-  # the dependencies linux-perf-data and linux-perf-event-reader contains both README.md and Readme.md,
-  # which causes a hash mismatch on systems with a case-insensitive filesystem
-  # this removes the readme files and updates cargo's checksum file accordingly
-  depsExtraArgs = {
-    nativeBuildInputs = [
-      jq
-      moreutils
-    ];
-
-    postBuild = ''
-      for crate in linux-perf-data linux-perf-event-reader; do
-        pushd $name/$crate
-
-        rm -f README.md Readme.md
-        jq 'del(.files."README.md") | del(.files."Readme.md")' \
-          .cargo-checksum.json -c \
-          | sponge .cargo-checksum.json
-
-        popd
-      done
-    '';
-  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
