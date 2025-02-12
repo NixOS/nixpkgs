@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "wasmi";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-O+8qBYxmiDQtmL2ThkQYenIXSf2wCoYFqLMJOtLP3Ic=";
     fetchSubmodules = true;
   };
