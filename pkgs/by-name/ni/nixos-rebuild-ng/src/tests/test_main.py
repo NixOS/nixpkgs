@@ -1,5 +1,6 @@
 import logging
 import textwrap
+import uuid
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
@@ -393,6 +394,202 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
+@patch(get_qualified_name(nr.nix.uuid4, nr.nix), autospec=True)
+def test_execute_nix_switch_build_target_host(
+    mock_uuid4: Any,
+    mock_cleanup_ssh: Any,
+    mock_run: Any,
+    tmp_path: Path,
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate" and "--find-file" in args:
+            return CompletedProcess([], 1)
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "ssh" and "nix-store" in args:
+            return CompletedProcess([], 0, "/tmp/tmpdir/config")
+        elif args[0] == "ssh" and "mktemp" in args:
+            return CompletedProcess([], 0, "/tmp/tmpdir")
+        elif args[0] == "ssh" and "readlink" in args:
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+    mock_uuid4.return_value = uuid.UUID(int=0)
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "switch",
+            "--no-flake",
+            "--sudo",
+            "--build-host",
+            "user@build-host",
+            "--target-host",
+            "user@target-host",
+            "--no-reexec",
+            # https://github.com/NixOS/nixpkgs/issues/381457
+            "-I",
+            "nixos-config=./configuration.nix",
+            "-I",
+            "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+        ]
+    )
+
+    assert mock_run.call_count == 10
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix-instantiate",
+                    "--find-file",
+                    "nixpkgs",
+                    "--include",
+                    "nixos-config=./configuration.nix",
+                    "--include",
+                    "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+                ],
+                check=False,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "nix-instantiate",
+                    "<nixpkgs/nixos>",
+                    "--attr",
+                    "config.system.build.toplevel",
+                    "--add-root",
+                    nr.tmpdir.TMPDIR_PATH / "00000000000000000000000000000000",
+                    "--include",
+                    "nixos-config=./configuration.nix",
+                    "--include",
+                    "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["nix-copy-closure", "--to", "user@build-host", config_path],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "mktemp",
+                    "-d",
+                    "-t",
+                    "nixos-rebuild.XXXXX",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "nix-store",
+                    "--realise",
+                    str(config_path),
+                    "--add-root",
+                    "/tmp/tmpdir/00000000000000000000000000000000",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "readlink",
+                    "-f",
+                    "/tmp/tmpdir/config",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@build-host",
+                    "--",
+                    "rm",
+                    "-rf",
+                    "/tmp/tmpdir",
+                ],
+                check=False,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "nix",
+                    "copy",
+                    "--from",
+                    "ssh://user@build-host",
+                    "--to",
+                    "ssh://user@target-host",
+                    config_path,
+                ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@target-host",
+                    "--",
+                    "sudo",
+                    "nix-env",
+                    "-p",
+                    "/nix/var/nix/profiles/system",
+                    "--set",
+                    str(config_path),
+                ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    *nr.process.SSH_DEFAULT_OPTS,
+                    "user@target-host",
+                    "--",
+                    "sudo",
+                    "env",
+                    "NIXOS_INSTALL_BOOTLOADER=0",
+                    str(config_path / "bin/switch-to-configuration"),
+                    "switch",
+                ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch.dict(nr.process.os.environ, {}, clear=True)
+@patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
+@patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
 def test_execute_nix_switch_flake_target_host(
     mock_cleanup_ssh: Any,
     mock_run: Any,
@@ -469,7 +666,7 @@ def test_execute_nix_switch_flake_target_host(
                     "sudo",
                     "env",
                     "NIXOS_INSTALL_BOOTLOADER=0",
-                    f"{config_path / 'bin/switch-to-configuration'}",
+                    str(config_path / "bin/switch-to-configuration"),
                     "switch",
                 ],
                 check=True,
@@ -493,7 +690,7 @@ def test_execute_nix_switch_flake_build_host(
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix" and "eval" in args:
             return CompletedProcess([], 0, str(config_path))
-        if args[0] == "ssh" and "nix" in args:
+        elif args[0] == "ssh" and "nix" in args:
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)

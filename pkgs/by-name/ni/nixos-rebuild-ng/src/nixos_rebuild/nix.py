@@ -77,7 +77,7 @@ def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
-    build_flags: Args | None = None,
+    realise_flags: Args | None = None,
     instantiate_flags: Args | None = None,
     copy_flags: Args | None = None,
 ) -> Path:
@@ -112,7 +112,7 @@ def build_remote(
                 drv,
                 "--add-root",
                 remote_tmpdir / uuid4().hex,
-                *dict_to_flags(build_flags),
+                *dict_to_flags(realise_flags),
             ],
             remote=build_host,
             stdout=PIPE,
