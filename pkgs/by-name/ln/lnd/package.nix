@@ -46,6 +46,7 @@ buildGoModule rec {
     homepage = "https://github.com/lightningnetwork/lnd";
     license = licenses.mit;
     maintainers = with maintainers; [
+      bleetube
       cypherpunk2140
       prusnak
     ];
