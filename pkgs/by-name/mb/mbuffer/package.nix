@@ -25,8 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     which
   ];
+  nativeCheckInputs = [
+    openssl
+  ];
 
   doCheck = true;
+  strictDeps = true;
 
   meta = {
     description = "Tool for buffering data streams with a large set of unique features";

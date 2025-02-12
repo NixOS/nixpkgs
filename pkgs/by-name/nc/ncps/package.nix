@@ -8,17 +8,17 @@
 let
   finalAttrs = {
     pname = "ncps";
-    version = "v0.1.1";
+    version = "0.1.1";
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
-      rev = finalAttrs.version;
+      tag = "v${finalAttrs.version}";
       hash = "sha256-Vr/thppCABdZDl1LEc7l7c7Ih55U/EFwJInWSUWoLJA";
     };
 
     ldflags = [
-      "-X github.com/kalbasit/ncps/cmd.Version=${finalAttrs.version}"
+      "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
     ];
 
     subPackages = [ "." ];

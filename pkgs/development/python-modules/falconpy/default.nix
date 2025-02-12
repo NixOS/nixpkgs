@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "falconpy";
-  version = "v1.4.6";
+  version = "1.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CrowdStrike";
     repo = "falconpy";
-    tag = version;
+    tag = "v${version}";
     hash = "sha256-boebQI//NenEqctQbEdxiXKU3/07C6jVzWVHecmJjPk=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "The CrowdStrike Falcon SDK for Python";
     homepage = "https://github.com/CrowdStrike/falconpy";
-    changelog = "https://github.com/CrowdStrike/falconpy/releases/tag/${version}";
+    changelog = "https://github.com/CrowdStrike/falconpy/releases/tag/v${version}";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ levigross ];
   };
