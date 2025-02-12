@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "auto_sideloading" withAutoSideloading)
     (lib.mesonBool "installed_tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "man" withMan)
     (lib.mesonEnable "selinux_module" withSELinuxModule)
     (lib.mesonOption "dbus_config_dir" (placeholder "out" + "/share/dbus-1/system.d"))
     (lib.mesonOption "profile_dir" (placeholder "out" + "/etc/profile.d"))
