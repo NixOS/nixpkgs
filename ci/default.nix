@@ -49,10 +49,19 @@ let
         # See https://github.com/NixOS/nixfmt
         programs.nixfmt.enable = true;
       };
+      fs = pkgs.lib.fileset;
+      nixFilesSrc = fs.toSource {
+        root = ../.;
+        fileset = fs.difference (fs.unions [
+          (fs.fileFilter (file: file.hasExt "nix") ../.)
+          ../.git-blame-ignore-revs
+        ]) (fs.maybeMissing ../.git);
+      };
     in
     {
       shell = treefmtEval.config.build.devShell;
       pkg = treefmtEval.config.build.wrapper;
+      check = treefmtEval.config.build.check nixFilesSrc;
     };
 
 in
