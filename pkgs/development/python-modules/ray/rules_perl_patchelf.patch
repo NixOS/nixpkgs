@@ -1,0 +1,18 @@
+diff --git a/perl/repo.bzl b/perl/repo.bzl
+index da96def..ca153ca 100644
+--- a/perl/repo.bzl
++++ b/perl/repo.bzl
+@@ -3,11 +3,8 @@
+ def _perl_download_impl(ctx):
+     ctx.report_progress("Downloading perl")
+ 
+-    ctx.download_and_extract(
+-        ctx.attr.urls,
+-        sha256 = ctx.attr.sha256,
+-        stripPrefix = ctx.attr.strip_prefix,
+-    )
++    ctx.symlink("@nixpkgs-perl@/bin", "bin")
++    ctx.symlink("@nixpkgs-perl@/lib", "lib")
+ 
+     ctx.report_progress("Creating Perl toolchain files")
+     ctx.template(
