@@ -142,9 +142,9 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "pano@elhan.io" (final: prev: {
-    version = "v23-alpha3";
+    version = "23-alpha3";
     src = fetchzip {
-      url = "https://github.com/oae/gnome-shell-pano/releases/download/${final.version}/pano@elhan.io.zip";
+      url = "https://github.com/oae/gnome-shell-pano/releases/download/v${final.version}/pano@elhan.io.zip";
       hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
       stripRoot = false;
     };

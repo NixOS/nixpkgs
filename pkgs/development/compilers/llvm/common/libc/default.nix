@@ -14,6 +14,7 @@
   ninja,
   isFullBuild ? true,
   linuxHeaders,
+  fetchpatch,
 }:
 let
   pname = "libc";
@@ -25,25 +26,27 @@ let
     cp -r ${monorepoSrc}/llvm "$out"
     cp -r ${monorepoSrc}/${pname} "$out"
   '');
-
-  stdenv' =
-    if stdenv.cc.isClang then
-      stdenv.override {
-        cc = stdenv.cc.override {
-          nixSupport = stdenv.cc.nixSupport // {
-            cc-cflags = lib.remove "-lunwind" (stdenv.cc.nixSupport.cc-cflags or [ ]);
-          };
-        };
-      }
-    else
-      stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
-  inherit pname version patches;
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version;
 
   src = src';
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
+
+  patches =
+    lib.optional (lib.versions.major version == "20")
+      # Removes invalid token from the LLVM version being placed in the namespace.
+      # Can be removed when LLVM 20 bumps to rc2.
+      # PR: https://github.com/llvm/llvm-project/pull/126284
+      (
+        fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/3a3a3230d171e11842a9940b6da0f72022b1c5b3.patch";
+          stripLen = 1;
+          hash = "sha256-QiU1cWp+027ZZNVdvfGVwbIoRd9jqtSbftGsmaW1gig=";
+        }
+      )
+    ++ patches;
 
   nativeBuildInputs =
     [
