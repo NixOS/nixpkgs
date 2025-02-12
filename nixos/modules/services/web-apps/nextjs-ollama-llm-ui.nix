@@ -18,7 +18,7 @@ in
         on your personal computer.
         This service is stateless and doesn't store any data on the server; all data is kept
         locally in your web browser.
-        See https://github.com/jakobhoeg/nextjs-ollama-llm-ui.
+        See <https://github.com/jakobhoeg/nextjs-ollama-llm-ui>.
 
         Required: You need the Ollama backend service running by having
         "services.nextjs-ollama-llm-ui.ollamaUrl" point to the correct url.
