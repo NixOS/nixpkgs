@@ -4007,6 +4007,7 @@ in
       "lush-nvim"
       "lz-n"
       "lze"
+      "lzextras"
       "lzn-auto-require"
       "middleclass"
       "neorg"
