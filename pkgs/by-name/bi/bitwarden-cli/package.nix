@@ -69,6 +69,13 @@ buildNpmPackage rec {
     shopt -u globstar
   '';
 
+  postInstall = ''
+    # Remove the @bitwarden modules as they are broken (but unused) symlinks
+    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/@bitwarden
+    # Remove .bin directory as it contains broken symlinks
+    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/.bin
+  '';
+
   passthru = {
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
