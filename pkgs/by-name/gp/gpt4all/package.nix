@@ -111,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "gpt4all";
     maintainers = with lib.maintainers; [
-      polygon
       titaniumtown
     ];
   };
