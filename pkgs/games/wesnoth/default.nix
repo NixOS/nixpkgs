@@ -65,6 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      # the minor release number also denotes if this is a beta release:
+      # even is stable, odd is beta
+      "^(\\d+\\.\\d*[02468]\\.\\d+)$"
+    ];
+  };
+
   meta = {
     description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''
