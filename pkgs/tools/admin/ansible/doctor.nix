@@ -46,10 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     ruamel-yaml
   ];
 
-  postInstall = ''
-    rm $out/lib/python*/site-packages/LICENSE
-  '';
-
   # Module has no tests
   doCheck = false;
 
