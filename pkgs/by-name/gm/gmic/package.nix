@@ -145,3 +145,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
     maintainers = [ lib.maintainers.timoteuszelle ];
+});
