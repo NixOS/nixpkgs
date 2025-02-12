@@ -16,7 +16,7 @@ let
 
   udevRules = fetchurl {
     url = "https://www.flexoptix.net/static/frontend/Flexoptix/default/en_US/files/99-tprogrammer.rules";
-    hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
+    hash = "sha256-faowRYdrk88WUpOpaEfedzybBgxVRZhvAaYP9HAuzAE=";
   };
 
   appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
