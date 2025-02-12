@@ -1123,6 +1123,7 @@ in
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
   renovate = handleTest ./renovate.nix { };
   replace-dependencies = handleTest ./replace-dependencies { };
+  reposilite = runTest ./reposilite.nix;
   restartByActivationScript = handleTest ./restart-by-activation-script.nix { };
   restic-rest-server = handleTest ./restic-rest-server.nix { };
   restic = handleTest ./restic.nix { };
