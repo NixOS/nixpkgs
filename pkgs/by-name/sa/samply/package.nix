@@ -15,9 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7bf1lDIZGhRpvnn8rHNwzH2GBY8CwtYCjuRAUTQgbsA=";
   };
 
-  # Can't use fetchCargoVendor:
-  # https://github.com/NixOS/nixpkgs/issues/377986
-  cargoLock.lockFile = ./Cargo.lock;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o9YGKHxcC7msF7OPiUiFMLw1XX2WJ0/KVvkSwKNhU/E=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
