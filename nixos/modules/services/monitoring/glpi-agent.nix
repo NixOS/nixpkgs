@@ -77,6 +77,16 @@ in
       }
     ];
 
+    systemd.tmpfiles.settings."10-glpi-agent" = {
+      ${cfg.stateDir} = {
+        d = {
+          mode = "0755";
+          user = "root";
+          group = "root";
+        };
+      };
+    };
+
     systemd.services.glpi-agent = {
       description = "GLPI Agent";
       wantedBy = [ "multi-user.target" ];
