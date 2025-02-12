@@ -123,7 +123,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [
       sorki
-      mmilata
     ];
     platforms = platforms.all;
   };
