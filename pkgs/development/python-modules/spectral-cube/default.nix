@@ -13,8 +13,10 @@
   casa-formats-io,
   dask,
   joblib,
-  looseversion,
+  numpy,
+  packaging,
   radio-beam,
+  tqdm,
 
   # checks
   aplpy,
@@ -27,14 +29,11 @@ buildPythonPackage rec {
   version = "0.6.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
+    pname = "spectral_cube";
+    inherit version;
     hash = "sha256-bjBghr5WrfC4NH5cyiy9RUiCmJSUHBtyD61bd1i/4kM=";
   };
-
-  patches = [ ./distutils-looseversion.patch ];
 
   build-system = [ setuptools-scm ];
 
@@ -43,9 +42,11 @@ buildPythonPackage rec {
     casa-formats-io
     dask
     joblib
-    looseversion
+    numpy
+    packaging
     radio-beam
-  ];
+    tqdm
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     aplpy
