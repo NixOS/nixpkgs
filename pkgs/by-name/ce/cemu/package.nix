@@ -179,7 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zhaofengli
       baduhai
-      AndersonTorres
     ];
     platforms = [ "x86_64-linux" ];
   };
