@@ -1651,8 +1651,8 @@ let
         mktplcRef = {
           name = "EditorConfig";
           publisher = "EditorConfig";
-          version = "0.16.4";
-          sha256 = "0fa4h9hk1xq6j3zfxvf483sbb4bd17fjl5cdm3rll7z9kaigdqwg";
+          version = "0.17.0";
+          hash = "sha256-/NW/0KYVF0sCgat21aR/5nbVyoTHpDoqCPz+6zc0HHs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
