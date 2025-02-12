@@ -8,6 +8,7 @@ let
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
 
+  # Newer mariadb versions warn of the usage of 'mysqldump' and recommend 'mariadb-dump' (https://mariadb.com/kb/en/mysqldump/)
   dumpBinary =
     if
       (
