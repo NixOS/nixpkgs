@@ -70,6 +70,7 @@ stdenv.mkDerivation {
     qtbase
     luajit
     luajit.pkgs.lua-curl
+    luajit.pkgs.luautf8
   ];
 
   installPhase = ''
