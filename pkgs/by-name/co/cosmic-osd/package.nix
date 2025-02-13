@@ -2,11 +2,9 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  libxkbcommon,
+  libcosmicAppHook,
   pulseaudio,
   udev,
-  wayland,
   nix-update-script,
 }:
 
@@ -24,11 +22,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-hJC0t8R+cdPWzdpxHA+j7en4IrhZXt5LM3S2V6/bps0=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ libcosmicAppHook ];
+
   buildInputs = [
-    libxkbcommon
     pulseaudio
-    wayland
     udev
   ];
 
