@@ -1477,6 +1477,8 @@ self: super: {
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
+    # 2025-02-13: Too strict bounds on lens < 5.3 and vector < 0.13
+    jailbreak = true;
     preCheck = old.preCheck or "" + ''
       tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
     '';
