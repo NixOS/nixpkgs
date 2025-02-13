@@ -162,6 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
           ]
           ++ optionals (!fastCross) [
             "wasm32-unknown-unknown"
+            "bpfel-unknown-none"
+            "bpfeb-unknown-none"
 
             # (build!=target): When cross-building a compiler we need to add
             # the build platform as well so rustc can compile build.rs
