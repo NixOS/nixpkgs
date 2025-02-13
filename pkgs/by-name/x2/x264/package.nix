@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "x264";
-  version = "0-unstable-2023-10-01";
+  version = "0-unstable-2025-01-03";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
-    rev = "31e19f92f00c7003fa115047ce50978bc98c3a0d";
-    hash = "sha256-7/FaaDFmoVhg82BIhP3RbFq4iKGNnhviOPxl3/8PWCM=";
+    rev = "373697b467f7cd0af88f1e9e32d4f10540df4687";
+    hash = "sha256-WWtS/UfKA4i1yakHErUnyT/3/+Wy2H5F0U0CmxW4ick=";
   };
 
   patches = [
