@@ -86,7 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source RGB lighting control";
     homepage = "https://gitlab.com/CalcProgrammer1/OpenRGB";
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      liberodark
+    ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "openrgb";
