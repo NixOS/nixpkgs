@@ -287,8 +287,6 @@ with pkgs;
 
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
-  checkov = callPackage ../development/tools/analysis/checkov { };
-
   clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
     stdenv = clangStdenv;
   };
