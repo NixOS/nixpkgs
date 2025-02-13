@@ -5,8 +5,6 @@
   libplist,
   libxml2,
   openssl,
-  CoreFoundation,
-  Security,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,33 +19,22 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs =
-    [
-      libplist
-      libxml2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Security
-    ];
+  buildInputs = [
+    libplist
+    libxml2
+    openssl
+  ];
 
-  NIX_LDFLAGS =
-    [
-      "-lcrypto"
-      "-lplist-2.0"
-      "-lxml2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-framework CoreFoundation"
-      "-framework Security"
-    ];
+  env.NIX_LDFLAGS = toString ([
+    "-lcrypto"
+    "-lplist-2.0"
+  ]);
 
   buildPhase = ''
     runHook preBuild
 
     cc -c -o lookup2.o lookup2.c -I.
-    c++ -std=c++11 -o ldid lookup2.o ldid.cpp -I. ${toString NIX_LDFLAGS}
+    c++ -std=c++11 -o ldid lookup2.o ldid.cpp -I.
 
     runHook postBuild
   '';
