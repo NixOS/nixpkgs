@@ -762,7 +762,7 @@ def test_switch_to_configuration(mock_run: Mock, monkeypatch: MonkeyPatch) -> No
 def test_upgrade_channels(mock_is_dir: Mock, mock_glob: Mock) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(False)
-    mock_run.assert_called_with(["nix-channel", "--update", "nixos"], check=False)
+    mock_run.assert_called_once_with(["nix-channel", "--update", "nixos"], check=False)
 
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(True)
