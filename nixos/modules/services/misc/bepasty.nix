@@ -64,7 +64,7 @@ in
                   description = ''
                     Extra configuration for bepasty server to be appended on the
                     configuration.
-                    see https://bepasty-server.readthedocs.org/en/latest/quickstart.html#configuring-bepasty
+                    see <https://bepasty-server.readthedocs.org/en/latest/quickstart.html#configuring-bepasty>
                     for all options.
                   '';
                   default = "";
