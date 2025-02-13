@@ -32,9 +32,3 @@ symlinkJoin {
     runScript
   ];
 }
-# TODO [ AndersonTorres ]:
-
-# 1. Parse the command line in order to allow the user to set an optional
-# rom-file
-# 2. generate runScript based on symlinkJoin (maybe a postBuild?)
-# 3. a NixOS module to abstract the runner

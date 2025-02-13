@@ -6,7 +6,8 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "docker-init";
-  version = "v1.4.0";
+  version = "1.4.0";
+
   tag = "175267";
 
   src = fetchurl {

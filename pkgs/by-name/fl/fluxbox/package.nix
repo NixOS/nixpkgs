@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://fluxbox.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

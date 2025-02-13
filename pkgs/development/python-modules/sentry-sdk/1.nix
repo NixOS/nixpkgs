@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.45.0";
+  version = "1.45.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-OWoMqJlf0vmBHWWsW6mF4u5X9USzxkFmCJyX7Ws0dD0=";
+    hash = "sha256-ZNJsxbQcW5g/bKqN18z+BspKyI34+vkj6vQ9akE1Ook=";
   };
 
   build-system = [ setuptools ];

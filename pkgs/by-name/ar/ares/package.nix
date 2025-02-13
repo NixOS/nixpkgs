@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ares";
     maintainers = with lib.maintainers; [
       Madouura
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
