@@ -167,6 +167,7 @@ def test_profile_from_arg(mock_mkdir: Mock) -> None:
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
+    mock_mkdir.assert_not_called()
 
     assert m.Profile.from_arg("something") == m.Profile(
         "something",
