@@ -67,7 +67,10 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ mahmoudk1000 ];
+    maintainers = with maintainers; [
+      mahmoudk1000
+      cything
+    ];
   };
 
   passthru = {
