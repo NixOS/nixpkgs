@@ -3342,7 +3342,6 @@ broken-packages:
   - kempe # failure in job https://hydra.nixos.org/build/233221290 at 2023-09-02
   - kesha # failure in job https://hydra.nixos.org/build/233215581 at 2023-09-02
   - Ketchup # failure in job https://hydra.nixos.org/build/233211862 at 2023-09-02
-  - kewar # failure in job https://hydra.nixos.org/build/233237574 at 2023-09-02
   - keycloak-hs # failure in job https://hydra.nixos.org/build/233193019 at 2023-09-02
   - keyed # failure in job https://hydra.nixos.org/build/233251186 at 2023-09-02
   - key # failure in job https://hydra.nixos.org/build/252710595 at 2024-03-16
