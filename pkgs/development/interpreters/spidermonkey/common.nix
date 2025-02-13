@@ -14,20 +14,16 @@
   perl,
   pkg-config,
   python3,
-  python39,
   python311,
   rust-cbindgen,
   rustPlatform,
   rustc,
   which,
   zip,
-  autoconf213,
-  yasm,
   xcbuild,
 
   # runtime
-  icu,
-  icu67,
+  icu75,
   nspr,
   readline,
   zlib,
@@ -96,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   buildInputs =
     [
-      icu
+      icu75
       nspr
       readline
       zlib
