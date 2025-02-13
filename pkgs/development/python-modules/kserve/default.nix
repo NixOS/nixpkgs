@@ -44,6 +44,7 @@
   avro,
   grpcio-testing,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   tomlkit,
 }:
@@ -116,6 +117,7 @@ buildPythonPackage rec {
     avro
     grpcio-testing
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     tomlkit
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
