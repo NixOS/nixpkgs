@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  libpsl,
   dpkg,
   fetchurl,
   autoPatchelfHook,
@@ -12,7 +13,7 @@
   icu70,
   librsvg,
   gdk-pixbuf,
-  libsoup_2_4,
+  libsoup_3,
   glib-networking,
   gsettings-desktop-schemas,
   graphicsmagick_q16,
@@ -30,6 +31,7 @@
   cairo,
   fontconfig,
   pango,
+  publicsuffixList ? (import <nixpkgs> { }).publicsuffix-list,
   xorg,
   libfido2,
   webkitgtk_4_1,
@@ -127,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
     copyDesktopItems
     wrapGAppsHook4
+    glib
   ];
 
   # Crashes at startup when stripping:
@@ -152,15 +155,17 @@ stdenv.mkDerivation (finalAttrs: {
     libkrb5
     libpulseaudio
     librsvg
-    libsoup_2_4
+    libsoup_3
     libtiff
     libusb1
     libva
+    libpsl
     libvdpau
     lmdb
     lttng-ust
     openssl
     pango
+    publicsuffixList
     pcsclite
     protobufc
     sssd
@@ -190,14 +195,36 @@ stdenv.mkDerivation (finalAttrs: {
     # The vendored-in version has libselinux.so.1 linked, which doesn't exist natively on NixOS
     rm $out/lib/dcv/libgio-2.0.so.0
 
-    wrapProgram $out/usr/bin/workspacesclient \
+    mkdir -p $out/share/glib-2.0/schemas
+    if [ -d $out/usr/share/glib-2.0/schemas ]; then
+      cp -r $out/usr/share/glib-2.0/schemas/* $out/share/glib-2.0/schemas/
+    else
+      echo "Creating dummy GSettings schema..."
+      cat > $out/share/glib-2.0/schemas/com.amazon.workspacesclient.proxy.gschema.xml <<EOF
+    <?xml version="1.0" encoding="UTF-8"?>
+    <schemalist>
+      <schema id="com.amazon.workspacesclient.proxy" path="/com/amazon/workspacesclient/proxy/">
+      </schema>
+    </schemalist>
+    EOF
+    fi
+
+    glib-compile-schemas $out/share/glib-2.0/schemas/
+
+    # Move the binary FIRST
+    mv $out/usr/bin/workspacesclient $out/bin/workspacesclient
+
+    mkdir -p $out/share/publicsuffix
+    cp ${publicsuffixList}/share/publicsuffix/public_suffix_list.dat $out/share/publicsuffix/
+
+    # Wrap it in its new location
+    wrapProgram $out/bin/workspacesclient \
       --prefix PATH : "$out/lib/dcv":"${lib.makeBinPath [ custom_lsb_release ]}" \
       --prefix LD_LIBRARY_PATH : "$out/lib/dcv":"${lib.makeLibraryPath finalAttrs.buildInputs}" \
       --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
       --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
-      --set WEBKIT_DISABLE_DMABUF_RENDERER 1
-
-    mv $out/usr/bin/workspacesclient $out/bin/workspacesclient
+      --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
+      --set GSETTINGS_SCHEMA_DIR "$out/share/glib-2.0/schemas" \
 
     runHook postInstall
   '';
