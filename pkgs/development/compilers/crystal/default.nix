@@ -134,10 +134,6 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
-        # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
-        substituteInPlace spec/compiler/loader/unix_spec.cr \
-          --replace 'it "parses file paths"' 'pending "parses file paths"'
       '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
