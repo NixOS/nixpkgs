@@ -9650,6 +9650,8 @@ self: super: with self; {
 
   odc-geo = callPackage ../development/python-modules/odc-geo { };
 
+  odc-stac = callPackage ../development/python-modules/odc-stac { };
+
   oddsprout = callPackage ../development/python-modules/oddsprout { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
