@@ -20,6 +20,8 @@ makeScopeWithSplicing' {
     xmlada = self.callPackage ../development/ada-modules/xmlada { };
     libadasat = self.callPackage ../development/ada-modules/libadasat { };
 
+    libvss = self.callPackage ../development/ada-modules/libvss { };
+
     gnatprove = self.callPackage ../development/ada-modules/gnatprove {
       ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
     };
