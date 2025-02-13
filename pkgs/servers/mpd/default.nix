@@ -209,18 +209,16 @@ let
         sha256 = "sha256-0To+V+4xLjymGpRSpsyE/Une5uUpCEiAg+d041guPA0=";
       };
 
-      buildInputs =
-        [
-          glib
-          boost
-          fmt
-          # According to the configurePhase of meson, gtest is considered a
-          # runtime dependency. Quoting:
-          #
-          #    Run-time dependency GTest found: YES 1.10.0
-          gtest
-        ]
-        ++ concatAttrVals features_ featureDependencies;
+      buildInputs = [
+        glib
+        boost
+        fmt
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        gtest
+      ] ++ concatAttrVals features_ featureDependencies;
 
       nativeBuildInputs = [
         meson
@@ -265,7 +263,9 @@ let
         ]
         ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
-        ++ lib.optional (builtins.elem "zeroconf" features_) ("-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi"))
+        ++ lib.optional (builtins.elem "zeroconf" features_) (
+          "-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
+        )
         ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system";
 
       passthru.tests.nixos = nixosTests.mpd;
