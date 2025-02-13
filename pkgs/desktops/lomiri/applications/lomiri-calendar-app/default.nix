@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   accounts-qml-module,
   buteo-syncfw,
   cmake,
@@ -141,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-calendar-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
