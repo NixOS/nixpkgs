@@ -2,12 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook3,
-  libxkbcommon,
+  libcosmicAppHook,
   sqlite,
-  vulkan-loader,
-  wayland,
   nix-update-script,
 }:
 
@@ -25,27 +21,9 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-91JMgdpMXL0a7oZXAG5xgiulOIyVXQ5x09wN3XDeSy0=";
 
-  nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs = [ libcosmicAppHook ];
 
-  buildInputs = [
-    libxkbcommon
-    sqlite
-    vulkan-loader
-    wayland
-  ];
-
-  postFixup = ''
-    wrapProgram $out/bin/oboete \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libxkbcommon
-          wayland
-        ]
-      }"
-  '';
+  buildInputs = [ sqlite ];
 
   passthru = {
     updateScript = nix-update-script { };
