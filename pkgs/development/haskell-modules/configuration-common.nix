@@ -191,6 +191,13 @@ self: super: {
   # 2025-02-10: Too strict bounds on tasty < 1.5
   tasty-hunit-compat = doJailbreak super.tasty-hunit-compat;
 
+  # make gtk build with pango >= 1.56: https://github.com/gtk2hs/gtk2hs/issues/337
+  pango = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/pull/336/commits/ca7f98bd3e9462deac3661244dc76004a36fc8c3.patch";
+    hash = "sha256-fsZIwh4MY3Jnr3Gv4vZKl/LwUsJ+H+7KJ8unARQBifE=";
+    stripLen = 1;
+  }) super.pango;
+
   # Out of date test data: https://github.com/ocharles/weeder/issues/176
   weeder = appendPatch (pkgs.fetchpatch {
     name = "weeder-2.9.0-test-fix-expected.patch";

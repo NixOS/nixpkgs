@@ -83,6 +83,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "django-phonenumber-field"
     "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"

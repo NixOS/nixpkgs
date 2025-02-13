@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
 
   setuptools,
@@ -46,6 +47,8 @@ buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
   version = "2.30.25";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.13"; # Note: when updating, check if this is still needed
 
   src = fetchFromGitHub {
     owner = "Arelle";

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  makeWrapper,
   ninja,
   perl,
   brotli,
@@ -35,17 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
+    makeWrapper
     ninja
-    perl
   ];
   buildInputs = [
     brotli
     openssl
     libcap
     libuv
+    perl
     zlib
     wslay
   ];
+
+  postInstall = ''
+    EXES="$(find "$out/share/h2o" -type f -executable)"
+    for exe in $EXES; do
+      wrapProgram "$exe" \
+        --set "H2O_PERL" "${lib.getExe perl}"
+    done
+  '';
 
   meta = with lib; {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";

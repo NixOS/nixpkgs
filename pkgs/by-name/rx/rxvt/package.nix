@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       omitting some of its little-used features, like Tektronix 4014
       emulation and toolkit-style configurability.
     '';
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2;
     platforms = platforms.linux;
     knownVulnerabilities = [

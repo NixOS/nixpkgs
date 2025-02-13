@@ -101,6 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           udev
           libGL
+          libpulseaudio
         ]
       }"
 

@@ -15,12 +15,12 @@
 
 let
   pname = "moonfire-nvr";
-  version = "0.7.17";
+  version = "0.7.20";
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     tag = "v${version}";
-    hash = "sha256-kh+SPM08pnVFxKSZ6Gb2LP7Wa8j0VopknZK2urMIFNk=";
+    hash = "sha256-0EaGqZUmYGxLHcJAhlbG2wZMDiVv8U1bcTQqMx0aTo0=";
   };
   ui = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage {
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-fSzwA4R6Z/Awt52ZYhUvy2jhzrZiLU6IXTN8jvjmbTI=";
+  cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
 
   env.VERSION = "v${version}";
 

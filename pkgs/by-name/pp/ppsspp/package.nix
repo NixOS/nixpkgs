@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
       not run those.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "ppsspp";
     platforms = lib.platforms.linux;
   };
