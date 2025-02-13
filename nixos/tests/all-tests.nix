@@ -787,6 +787,7 @@ in
   kafka = handleTest ./kafka { };
   kanboard = runTest ./web-apps/kanboard.nix;
   kanidm = runTest ./kanidm.nix;
+  kanidm-generate-selfsigned = runTest ./kanidm-generate-selfsigned.nix;
   kanidm-provisioning = runTest ./kanidm-provisioning.nix;
   karma = runTest ./karma.nix;
   kavita = runTest ./kavita.nix;

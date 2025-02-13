@@ -139,6 +139,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       kanidm = nixosTests.kanidm.extend {
         modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage; } ];
       };
+      kanidm-generate-selfsigned = nixosTests.kanidm.extend {
+        modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage; } ];
+      };
       kanidm-provisioning = nixosTests.kanidm-provisioning.extend {
         modules = [ { _module.args.kanidmPackage = finalAttrs.finalPackage.withSecretProvisioning; } ];
       };
