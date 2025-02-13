@@ -12545,6 +12545,12 @@
     githubId = 787421;
     name = "Kevin Quick";
   };
+  kr7x = {
+    name = "Carlos Reyes";
+    email = "carlosreyesml18@gmail.com";
+    github = "K4rlosReyes";
+    githubId = 108368394;
+  };
   kraanzu = {
     name = "Murli Tawari";
     email = "kraanzu@gmail.com";
@@ -16976,6 +16982,13 @@
     github = "peeley";
     githubId = 30942198;
     name = "Noah Snelson";
+  };
+  ntbbloodbath = {
+    email = "bloodbathalchemist@protonmail.com";
+    matrix = "@ntbbloodbath:matrix.org";
+    github = "ntbbloodbath";
+    githubId = 36456999;
+    name = "Alejandro Martin";
   };
   nthorne = {
     email = "notrupertthorne@gmail.com";

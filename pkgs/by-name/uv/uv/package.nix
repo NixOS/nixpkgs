@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.5.30";
+  version = "0.5.31";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     tag = version;
-    hash = "sha256-a56y7sf2Os5ygTSu+iNZFjWwKi3HQ9VKo7p7e6LXmUc=";
+    hash = "sha256-Gxn/fBXPoehLkKN1PAg31sL/eMxqQMk1+oineuAO17g=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rodzLpaCuokvHWvwXLB2qgPnDJaP+Qff1T4LfNCQsYM=";
+  cargoHash = "sha256-dop61TB9w2r+our4DiKzPvw9lI07cx9bT0Ujtvhko1E=";
 
   nativeBuildInputs = [
     cmake
