@@ -31,7 +31,7 @@
       name = "cargo-check-hook.sh";
       propagatedBuildInputs = [ cargo ];
       substitutions = {
-        inherit (rust.envVars) rustHostPlatformSpec;
+        inherit (rust.envVars) rustHostPlatformSpec setEnv;
       };
     } ./cargo-check-hook.sh) {};
 
@@ -66,10 +66,10 @@
 
         cargoConfig = ''
           [target."${stdenv.buildPlatform.rust.rustcTarget}"]
-          "linker" = "${rust.envVars.linkerForBuild}"
+          "linker" = "${rust.envVars.ccForBuild}"
           ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
             [target."${stdenv.hostPlatform.rust.rustcTarget}"]
-            "linker" = "${rust.envVars.linkerForHost}"
+            "linker" = "${rust.envVars.ccForHost}"
           ''}
           "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
         '';
@@ -92,7 +92,7 @@
     bindgenHook = callPackage ({}: makeSetupHook {
       name = "rust-bindgen-hook";
       substitutions = {
-        libclang = clang.cc.lib;
+        libclang = (lib.getLib clang.cc);
         inherit clang;
       };
     }

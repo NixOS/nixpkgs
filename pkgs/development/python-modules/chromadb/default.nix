@@ -9,13 +9,13 @@
   darwin,
   fastapi,
   fetchFromGitHub,
-  fetchpatch,
   grpcio,
   httpx,
   hypothesis,
   importlib-resources,
   kubernetes,
   mmh3,
+  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -28,6 +28,7 @@
   pkg-config,
   posthog,
   protobuf,
+  psutil,
   pulsar-client,
   pydantic,
   pypika,
@@ -38,8 +39,8 @@
   requests,
   rustc,
   rustPlatform,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -47,12 +48,11 @@
   typing-extensions,
   uvicorn,
   zstd,
-  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.5";
+  version = "0.5.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -60,29 +60,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    rev = "refs/tags/${version}";
-    hash = "sha256-e6ZctUFeq9hHXWaxGdVTiqFpwaU7A+EKn2EdQPI7DHE=";
+    tag = version;
+    hash = "sha256-DQHkgCHtrn9xi7Kp7TZ5NP1EtFtTH5QOvne9PUvxsWc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-3FmnQEpknYNzI3WlQ3kc8qa4LFcn1zpxKDbkATU7/48=";
+    hash = "sha256-ZtCTg8qNCiqlH7RsZxaWUNAoazdgmXP2GtpjDpRdvbk=";
   };
-
-  patches = [
-    # Remove these on the next release
-    (fetchpatch {
-      name = "pydantic19-fastapi1.patch";
-      url = "https://github.com/chroma-core/chroma/commit/d62c13da29b7bff77bd7dee887123e3c57e2c19e.patch";
-      hash = "sha256-E3xmh9vQZH3NCfG6phvzM65NGwlcHmPgfU6FERKAJ60=";
-    })
-    (fetchpatch {
-      name = "no-union-types-pydantic1.patch";
-      url = "https://github.com/chroma-core/chroma/commit/2fd5b27903dffcf8bdfbb781a25bcecc17b27672.patch";
-      hash = "sha256-nmiA/lKZVrHKXumc+J4uVRiMwrnFrz2tgMpfcay5hhw=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "chroma-hnswlib"
@@ -105,7 +91,7 @@ buildPythonPackage rec {
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   dependencies = [
     bcrypt
@@ -141,6 +127,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
@@ -162,6 +149,8 @@ buildPythonPackage rec {
     # Tests are laky / timing sensitive
     "test_fastapi_server_token_authn_allows_when_it_should_allow"
     "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+    # Issue with event loop
+    "test_http_client_bw_compatibility"
   ];
 
   disabledTestPaths = [
@@ -188,6 +177,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "chroma";
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

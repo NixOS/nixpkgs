@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
-  version = "2.4.7";
+  version = "2.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blockstream";
     repo = "satellite";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OmIQUrUH3kWgf+v+9Hl2OgDdGPwb3guNY0+H64CWkeg=";
+    tag = "v${version}";
+    hash = "sha256-7lSK9IGu/K03xSDxZv+BSTJwLrQoHs+POBq/ixYTVR4=";
   };
 
   pythonRelaxDeps = [ "pyasyncore" ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Blockstream Satellite CLI";
     homepage = "https://github.com/Blockstream/satellite";
-    changelog = "https://github.com/Blockstream/satellite/releases/tag/v${version}";
+    changelog = "https://github.com/Blockstream/satellite/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ prusnak ];
     mainProgram = "blocksat-cli";

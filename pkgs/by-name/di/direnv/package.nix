@@ -1,22 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  bash,
+  fish,
+  zsh,
+}:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.34.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    hash = "sha256-EvzqLS/FiWrbIXDkp0L/T8QNKnRGuQkbMWajI3X3BDw=";
+    hash = "sha256-C4FkBS+2MZGGlpWb7ng4Aa9IvqEuY716M5h2W3b8N1E=";
   };
 
-  vendorHash = "sha256-FfKvLPv+jUT5s2qQ7QlzBMArI+acj7nhpE8FGMPpp5E=";
+  vendorHash = "sha256-O2NZgWn00uKLstYPIj9LwyF4kmitJ1FXltazv8RrmZg=";
 
   # we have no bash at the moment for windows
-  BASH_PATH =
-    lib.optionalString (!stdenv.hostPlatform.isWindows)
-    "${bash}/bin/bash";
+  BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
@@ -27,7 +33,10 @@ buildGoModule rec {
     make install PREFIX=$out
   '';
 
-  nativeCheckInputs = [ fish zsh ];
+  nativeCheckInputs = [
+    fish
+    zsh
+  ];
 
   checkPhase = ''
     export HOME=$(mktemp -d)

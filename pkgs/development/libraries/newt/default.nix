@@ -1,4 +1,11 @@
-{ lib, fetchurl, stdenv, slang, popt, python }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  slang,
+  popt,
+  python,
+}:
 
 let
   pythonIncludePath = "${lib.getDev python}/include/python";
@@ -26,7 +33,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ python ];
-  buildInputs = [ slang popt ];
+  buildInputs = [
+    slang
+    popt
+  ];
 
   NIX_LDFLAGS = "-lncurses";
 
@@ -36,7 +46,7 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-nls"
   ];
 
@@ -44,7 +54,7 @@ stdenv.mkDerivation rec {
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libnewt.so.${version} $out/lib/libnewt.so.${version}
     install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
   '';

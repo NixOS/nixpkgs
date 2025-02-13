@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "3.3.0";
+  version = "3.4.1";
 
   disabled = pythonOlder "3.8";
 
@@ -25,13 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
-    rev = "v${version}";
-    hash = "sha256-1Ggxi61epge6Rxc/vJ7OuuNjjeaQYReEPeOZV8DLghk=";
+    tag = "v${version}";
+    hash = "sha256-JhGKowFtRJwLj/5J1lNpgMTl1d+oWsmV4wI3hfOW5io=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "icalendar" ];
 
   dependencies = [
     icalendar
@@ -47,16 +45,10 @@ buildPythonPackage rec {
     pygments
   ];
 
-  disabledTests = lib.optionals (lib.versionOlder icalendar.version "6") [
-    # ModuleNotFoundError: No module named 'icalendar.timezone'
-    "test_can_import_zoneinfo"
-    "test_documentation_file"
-  ];
-
   pythonImportsCheck = [ "recurring_ical_events" ];
 
   meta = {
-    changelog = "https://github.com/niccokunzmann/python-recurring-ical-events/blob/${src.rev}/README.rst#changelog";
+    changelog = "https://github.com/niccokunzmann/python-recurring-ical-events/blob/${src.tag}/README.rst#changelog";
     description = "Repeat ICalendar events by RRULE, RDATE and EXDATE";
     homepage = "https://github.com/niccokunzmann/python-recurring-ical-events";
     license = lib.licenses.lgpl3Plus;

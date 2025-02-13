@@ -1,4 +1,10 @@
-{ lib, symlinkJoin, nix-index-unwrapped, makeWrapper, nix }:
+{
+  lib,
+  symlinkJoin,
+  nix-index-unwrapped,
+  makeWrapper,
+  nix,
+}:
 
 symlinkJoin {
   inherit (nix-index-unwrapped) name meta;

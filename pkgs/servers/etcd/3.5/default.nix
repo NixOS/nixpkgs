@@ -1,11 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  symlinkJoin,
+  nixosTests,
+  k3s,
+}:
 
 let
-  version = "3.5.15";
-  etcdSrcHash = "sha256-AY6ug9WU4cFP5sHWrigEPYsF7B386DGtlc689dnrbUw=";
-  etcdServerVendorHash = "sha256-aIvZYc0ouJtEv4nf9IA8kZkmCP9KXuqhv9zEpzEwRF8=";
-  etcdUtlVendorHash = "sha256-omBRlu3pOmUHEyhxFvUEaGragTl1y5YXn7iLMlQ95CA=";
-  etcdCtlVendorHash = "sha256-mr2TLEgAM4hMtnN2t8oGIQwI1+8vRQH8VjPDwymfkTY=";
+  version = "3.5.16";
+  etcdSrcHash = "sha256-Y70wWwd+ErRyw6n/8FXNxWM2xcQgJGfnXytdfanfzF8=";
+  etcdServerVendorHash = "sha256-nKwaB2zcrjDArjaOnvGFQndlB0HiOaKH4rY2VsQzfOc=";
+  etcdUtlVendorHash = "sha256-i6EQSMyH89DJItC2n8lEinqJyZ0ACruH/nRSRIGETCk=";
+  etcdCtlVendorHash = "sha256-xEySxidbBpfycKKTg+l5WExnZjhqg2mXbnLueUZOVKc=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -14,7 +21,9 @@ let
     hash = etcdSrcHash;
   };
 
-  CGO_ENABLED = 0;
+  env = {
+    CGO_ENABLED = 0;
+  };
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
@@ -27,7 +36,12 @@ let
   etcdserver = buildGoModule rec {
     pname = "etcdserver";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdServerVendorHash;
 
@@ -47,7 +61,12 @@ let
   etcdutl = buildGoModule rec {
     pname = "etcdutl";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdUtlVendorHash;
 
@@ -57,7 +76,12 @@ let
   etcdctl = buildGoModule rec {
     pname = "etcdctl";
 
-    inherit CGO_ENABLED meta src version;
+    inherit
+      env
+      meta
+      src
+      version
+      ;
 
     vendorHash = etcdCtlVendorHash;
 

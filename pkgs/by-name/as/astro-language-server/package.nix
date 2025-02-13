@@ -2,48 +2,54 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_8,
+  pnpm_9,
   nodejs_22,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.10.0";
+  version = "2.15.4";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "language-tools";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-WdeQQaC9AVHT+/pXLzaC6MZ6ddHsFSpxoDPHqWvqmiQ=";
+    hash = "sha256-NBLUeg1WqxTXtu8eg1fihQSfm8koYAEWhfXAj/fIdC8=";
   };
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      pnpmWorkspace
+      pnpmWorkspaces
       prePnpmInstall
       ;
-    hash = "sha256-n7HTd/rKxJdQKnty5TeOcyvBU9j/EClQ9IHqbBaEwQE=";
+    hash = "sha256-tlpk+wbLjJqt37lu67p2A2RZAR1ZfnZFiYoqIQwvWPQ=";
   };
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_8.configHook
+    pnpm_9.configHook
   ];
 
   buildInputs = [ nodejs_22 ];
 
-  pnpmWorkspace = "@astrojs/language-server";
+  # Must specify to download "@astrojs/yaml2ts" depencendies
+  # https://pnpm.io/filtering#--filter-package_name-1
+  pnpmWorkspaces = [ "@astrojs/language-server..." ];
   prePnpmInstall = ''
+    # Warning section for "pnpm@v8"
+    # https://pnpm.io/cli/install#--filter-package_selector
     pnpm config set dedupe-peer-dependents false
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter=@astrojs/language-server build
+    # Must build the "@astrojs/yaml2ts" package. Dependency is linked via workspace by "pnpm"
+    # (https://github.com/withastro/language-tools/blob/%40astrojs/language-server%402.14.2/pnpm-lock.yaml#L78-L80)
+    pnpm --filter "@astrojs/language-server..." build
 
     runHook postBuild
   '';
@@ -61,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "The Astro language server";
     homepage = "https://github.com/withastro/language-tools";
+    changelog = "https://github.com/withastro/language-tools/blob/@astrojs/language-server@${finalAttrs.version}/packages/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
     mainProgram = "astro-ls";

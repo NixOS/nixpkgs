@@ -1,18 +1,19 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dotbot";
-  version = "1.20.1";
+  version = "1.20.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anishathalye";
     repo = "dotbot";
-    rev = "v${version}";
-    hash = "sha256-Gy+LVGG/BAqXoM6GDuKBkGKxxAkmoYtBRA33y/ihdRE=";
+    tag = "v${version}";
+    hash = "sha256-GnzN8z7LP9rVD0DnKkPxJ0BxiO1YDY7MyMWBt1CAh6g=";
   };
 
   preCheck = ''
@@ -25,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool that bootstraps your dotfiles";
     mainProgram = "dotbot";
     longDescription = ''
@@ -36,9 +37,8 @@ python3Packages.buildPythonApplication rec {
       dotfiles.
     '';
     homepage = "https://github.com/anishathalye/dotbot";
-    changelog =
-      "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ludat ];
+    changelog = "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ludat ];
   };
 }

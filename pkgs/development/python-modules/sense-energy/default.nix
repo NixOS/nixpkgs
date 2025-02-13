@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "sense-energy";
-  version = "0.12.4";
+  version = "0.13.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "scottbonline";
     repo = "sense";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jHYXqlRV1JR95GtO9E6oYj69Jj8TsvLANcI1kl7/Gl4=";
+    tag = version;
+    hash = "sha256-guGWvoR+T3rFumGdMNMKsEYgjpfdvHf9QI1JJ0T3ROE=";
   };
 
   postPatch = ''
@@ -33,9 +33,9 @@ buildPythonPackage rec {
       --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     kasa-crypt

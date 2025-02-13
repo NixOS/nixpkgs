@@ -16,10 +16,10 @@ import ../make-test-python.nix (
         socat
       ];
     };
-    pauseImage = pkgs.dockerTools.streamLayeredImage {
+    pauseImage = pkgs.dockerTools.buildImage {
       name = "test.local/pause";
       tag = "local";
-      contents = imageEnv;
+      copyToRoot = imageEnv;
       config.Entrypoint = [
         "/bin/tini"
         "--"
@@ -75,6 +75,7 @@ import ../make-test-python.nix (
             enable = true;
             role = "server";
             package = k3s;
+            images = [ pauseImage ];
             clusterInit = true;
             extraFlags = [
               "--disable coredns"
@@ -116,23 +117,18 @@ import ../make-test-python.nix (
           services.k3s = {
             inherit tokenFile;
             enable = true;
+            package = k3s;
+            images = [ pauseImage ];
             serverAddr = "https://192.168.1.1:6443";
             clusterInit = false;
-            extraFlags = builtins.toString [
-              "--disable"
-              "coredns"
-              "--disable"
-              "local-storage"
-              "--disable"
-              "metrics-server"
-              "--disable"
-              "servicelb"
-              "--disable"
-              "traefik"
-              "--node-ip"
-              "192.168.1.3"
-              "--pause-image"
-              "test.local/pause:local"
+            extraFlags = [
+              "--disable coredns"
+              "--disable local-storage"
+              "--disable metrics-server"
+              "--disable servicelb"
+              "--disable traefik"
+              "--node-ip 192.168.1.3"
+              "--pause-image test.local/pause:local"
             ];
           };
           networking.firewall.allowedTCPPorts = [
@@ -161,12 +157,12 @@ import ../make-test-python.nix (
             inherit tokenFile;
             enable = true;
             role = "agent";
+            package = k3s;
+            images = [ pauseImage ];
             serverAddr = "https://192.168.1.3:6443";
-            extraFlags = lib.concatStringsSep " " [
-              "--pause-image"
-              "test.local/pause:local"
-              "--node-ip"
-              "192.168.1.2"
+            extraFlags = [
+              "--pause-image test.local/pause:local"
+              "--node-ip 192.168.1.2"
             ];
           };
           networking.firewall.allowedTCPPorts = [ 6443 ];
@@ -183,54 +179,42 @@ import ../make-test-python.nix (
         };
     };
 
-    testScript = ''
-      machines = [server, server2, agent]
-      for m in machines:
-          m.start()
-          m.wait_for_unit("k3s")
+    testScript = # python
+      ''
+        start_all()
 
-      is_aarch64 = "${toString pkgs.stdenv.isAarch64}" == "1"
+        machines = [server, server2, agent]
+        for m in machines:
+            m.wait_for_unit("k3s")
 
-      # wait for the agent to show up
-      server.wait_until_succeeds("k3s kubectl get node agent")
+        # wait for the agent to show up
+        server.wait_until_succeeds("k3s kubectl get node agent")
 
-      for m in machines:
-          # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-          if not is_aarch64:
-              m.succeed("k3s check-config")
-          m.succeed(
-              "${pauseImage} | k3s ctr image import -"
-          )
+        for m in machines:
+            m.succeed("k3s check-config")
 
-      server.succeed("k3s kubectl cluster-info")
-      # Also wait for our service account to show up; it takes a sec
-      server.wait_until_succeeds("k3s kubectl get serviceaccount default")
+        server.succeed("k3s kubectl cluster-info")
+        # Also wait for our service account to show up; it takes a sec
+        server.wait_until_succeeds("k3s kubectl get serviceaccount default")
 
-      # Now create a pod on each node via a daemonset and verify they can talk to each other.
-      server.succeed("k3s kubectl apply -f ${networkTestDaemonset}")
-      server.wait_until_succeeds(f'[ "$(k3s kubectl get ds test -o json | jq .status.numberReady)" -eq {len(machines)} ]')
+        # Now create a pod on each node via a daemonset and verify they can talk to each other.
+        server.succeed("k3s kubectl apply -f ${networkTestDaemonset}")
+        server.wait_until_succeeds(f'[ "$(k3s kubectl get ds test -o json | jq .status.numberReady)" -eq {len(machines)} ]')
 
-      # Get pod IPs
-      pods = server.succeed("k3s kubectl get po -o json | jq '.items[].metadata.name' -r").splitlines()
-      pod_ips = [server.succeed(f"k3s kubectl get po {name} -o json | jq '.status.podIP' -cr").strip() for name in pods]
+        # Get pod IPs
+        pods = server.succeed("k3s kubectl get po -o json | jq '.items[].metadata.name' -r").splitlines()
+        pod_ips = [server.succeed(f"k3s kubectl get po {name} -o json | jq '.status.podIP' -cr").strip() for name in pods]
 
-      # Verify each server can ping each pod ip
-      for pod_ip in pod_ips:
-          server.succeed(f"ping -c 1 {pod_ip}")
-          agent.succeed(f"ping -c 1 {pod_ip}")
-
-      # Verify the pods can talk to each other
-      resp = server.wait_until_succeeds(f"k3s kubectl exec {pods[0]} -- socat TCP:{pod_ips[1]}:8000 -")
-      assert resp.strip() == "server"
-      resp = server.wait_until_succeeds(f"k3s kubectl exec {pods[1]} -- socat TCP:{pod_ips[0]}:8000 -")
-      assert resp.strip() == "server"
-
-      # Cleanup
-      server.succeed("k3s kubectl delete -f ${networkTestDaemonset}")
-
-      for m in machines:
-          m.shutdown()
-    '';
+        # Verify each server can ping each pod ip
+        for pod_ip in pod_ips:
+            server.succeed(f"ping -c 1 {pod_ip}")
+            server2.succeed(f"ping -c 1 {pod_ip}")
+            agent.succeed(f"ping -c 1 {pod_ip}")
+            # Verify the pods can talk to each other
+            for pod in pods:
+                resp = server.succeed(f"k3s kubectl exec {pod} -- socat TCP:{pod_ip}:8000 -")
+                assert resp.strip() == "server"
+      '';
 
     meta.maintainers = lib.teams.k3s.members;
   }

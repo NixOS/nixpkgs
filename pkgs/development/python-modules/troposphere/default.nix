@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.8.1";
+  version = "4.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-qwU0SsS9qxKtUsZcsMZQ9NqB+Ye8lhDO8tR+ThmoxY8=";
+    tag = version;
+    hash = "sha256-1Qq1vV3DsslnwJq0d0MZ9bCadYD08gxLsM3tQmti4Pw=";
   };
 
   propagatedBuildInputs = [ cfn-flip ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     policy = [ awacs ];
   };
 

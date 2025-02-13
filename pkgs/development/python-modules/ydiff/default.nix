@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ydiff";
-  version = "1.3";
+  version = "1.4.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ii6EWI7zHT5SVwD6lksfmqth8MnEYoHgU0GlbgHc17g=";
+    hash = "sha256-NpvmI9zeeVTZiXP7nbF4DWTwNTmCvzrIWBjz1i/0UrA=";
   };
 
   patchPhase = ''

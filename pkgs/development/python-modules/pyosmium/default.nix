@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "4.0.0";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7" || isPyPy;
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "pyosmium";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HYp1MzXSa0tx0hY0JyMf2bmEvm5YuS2R+o25TsO8J6I=";
+    tag = "v${version}";
+    hash = "sha256-pW2w/M4P4DtGhnTy72w0wjMtpLtSgvYGaemme/rRrwM=";
   };
 
   build-system = [ setuptools ];

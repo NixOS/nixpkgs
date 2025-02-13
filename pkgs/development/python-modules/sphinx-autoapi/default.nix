@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   astroid,
@@ -21,18 +21,19 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "sphinx_autoapi";
-    inherit version;
-    hash = "sha256-5EoiWCfQ73F4dIIlpm8wyVRU39AO48Iq+9+4BW99/7U=";
+  src = fetchFromGitHub {
+    owner = "readthedocs";
+    repo = "sphinx-autoapi";
+    tag = "v${version}";
+    hash = "sha256-EOrbNs1IAeQbdrmOcNaBx2mxN/ec9IvjKTcOr/xR3YA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies =
     [

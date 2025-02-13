@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   darwin,
@@ -8,23 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dezoomify-rs";
-  version = "2.12.5";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PbtsrvNHo/SvToQJTTAPLoNDFotDPmSjr6C3IJZUjqU=";
+    tag = "v${version}";
+    hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
   };
 
-  cargoHash = "sha256-K9LNommagWjVxOXq6YUE4eg/3zpj3+MR5BugGCcVUlA=";
-
-  buildInputs = lib.optionals stdenv.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      SystemConfiguration
-    ]
-  );
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v5hlG/VnRyU4lR84IXal5GmrAyfxJTjmwzRKRcfaSIY=";
 
   checkFlags = [
     # Tests failing due to networking errors in Nix build environment

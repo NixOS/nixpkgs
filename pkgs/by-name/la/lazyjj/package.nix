@@ -9,16 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lazyjj";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "lazyjj";
     rev = "v${version}";
-    hash = "sha256-VlGmOdF/XsrZ/9vQ14UuK96LIK8NIkPZk4G4mbS8brg=";
+    hash = "sha256-iT6kRzD+w7cb7ZjMt7NfkqwFJOzbt6kxc5vDjI7By84=";
   };
 
-  cargoHash = "sha256-TAq9FufGsNVsmqCE41REltYRSSLihWJwTMoj0bTxdFc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-48BuZUPY3VH5QmwiNtGVg4BHBvpiBr+Bg98WWfseH0I=";
 
   postInstall = ''
     wrapProgram $out/bin/lazyjj \

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, wrapGAppsHook3
-, qt5
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  qt5,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -31,7 +32,10 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" "\${gappsWrapperArgs[@]}"];
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   postInstall = ''
     substituteInPlace packaging/buttermanager.desktop \

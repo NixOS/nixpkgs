@@ -1,11 +1,15 @@
 {
   lib,
+  stdenvNoLibc,
   symlinkJoin,
   libcMinimal,
   librthread,
   libm,
   librpcsvc,
   libutil,
+  libexecinfo,
+  libkvm,
+  rtld,
   version,
 }:
 
@@ -27,13 +31,18 @@ symlinkJoin rec {
         (lib.getLib p)
         (lib.getMan p)
       ])
-      [
-        libcMinimal
-        libm
-        librthread
-        librpcsvc
-        libutil
-      ];
+      (
+        [
+          libcMinimal
+          libm
+          librthread
+          librpcsvc
+          libutil
+          libexecinfo
+          libkvm
+        ]
+        ++ (lib.optional (!stdenvNoLibc.hostPlatform.isStatic) rtld)
+      );
 
   postBuild = ''
     rm -r "$out/nix-support"

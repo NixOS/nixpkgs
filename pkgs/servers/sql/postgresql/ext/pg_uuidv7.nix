@@ -1,26 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, postgresql
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  buildPostgresqlExtension,
 }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_uuidv7";
-  version = "1.5.0";
-
-  buildInputs = [ postgresql ];
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "fboulnois";
     repo = "pg_uuidv7";
     rev = "v${version}";
-    hash = "sha256-oVyRtjl3KsD3j96qvQb8bFLMhoWO81OudOL4wVXrjzI=";
+    hash = "sha256-lG6dCnbLALnfQc4uclqXXXfYjK/WXLV0lo5I8l1E5p4=";
   };
-
-  installPhase = ''
-      install -D -t $out/lib pg_uuidv7${postgresql.dlSuffix}
-      install -D {sql/pg_uuidv7--${lib.versions.majorMinor version}.sql,pg_uuidv7.control} -t $out/share/postgresql/extension
-  '';
 
   meta = with lib; {
     description = "Tiny Postgres extension to create version 7 UUIDs";

@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BmrJaZ1IKXjx4/QkBDZyXvTTaalfEOKsBp9ZCW8px7I=";
   };
 
-  cargoHash = "sha256-rmVVdes7GuGV+ClqJGxNIrs7oSwe8/ZHFD6OfP/UW7A=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-J7YioL8AIhoaPsYPzOXbwz76sMmBbDI/eql1HgDFgCU=";
 
   nativeBuildInputs = [
     installShellFiles

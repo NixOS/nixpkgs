@@ -21,11 +21,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ imap-tools ];
-
   pythonImportsCheck = [ "deltachat_rpc_client" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    imap-tools
+    pytestCheckHook
+  ];
 
   # requires a chatmail server
   doCheck = false;

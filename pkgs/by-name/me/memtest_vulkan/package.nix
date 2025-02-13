@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  vulkan-loader,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,12 +17,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8tmQtycK7D5bol9v5VL8VkROZbSCndHo+uBvqqFTZjw=";
   };
 
-  cargoHash = "sha256-8x8bS0LcvoxoSBWbGdkKzhxDi/9VNab26eidv8YK9dg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q47UUCD3JYzkVsJa5+E1vTbCgnEQ9Mo5eLgO2lmdnQ4=";
 
   # It doesn't discover this on its own :/
   # https://github.com/GpuZelenograd/memtest_vulkan/issues/36
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/memtest_vulkan --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
+    patchelf $out/bin/memtest_vulkan --add-needed libvulkan.so --add-rpath ${
+      lib.makeLibraryPath [ vulkan-loader ]
+    }
   '';
 
   meta = with lib; {
@@ -32,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "memtest_vulkan";
     broken =
       stdenv.system == "aarch64-linux" # error: linker `aarch64-linux-gnu-gcc` not found
-      || stdenv.isDarwin; # Can't find Vulkan; might work though?
+      || stdenv.hostPlatform.isDarwin; # Can't find Vulkan; might work though?
   };
 }

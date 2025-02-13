@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk4
-, json-glib
-, libadwaita
-, libgee
-, desktop-file-utils
-, meson
-, ninja
-, nix-update-script
-, pkg-config
-, vala
-, wrapGAppsHook4
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk4,
+  json-glib,
+  libadwaita,
+  libgee,
+  desktop-file-utils,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,6 @@ stdenv.mkDerivation rec {
     libgee
   ];
 
-
   patches = [
     # Fixes the compilation error with new Vala compiler. Remove in the next version.
     (fetchpatch {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lainsce/notejot";
     description = "Stupidly-simple notes app";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "io.github.lainsce.Notejot";
   };

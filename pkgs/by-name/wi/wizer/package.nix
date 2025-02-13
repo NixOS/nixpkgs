@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, wizer
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  wizer,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,15 +15,22 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wizer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bx8V/jaKDpJdWRwYm6GrjsdXQpDyTulRMKVnQZlqLNE=";
   };
 
-  cargoHash = "sha256-8iQ6ULdle8tJDPgIoPT9R3jfS32tBBfs4vZNQcV8vfs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TBr+9pWq9kVV01NyzgURJjZnkvyNKTw1LUeCG5VyYiY=";
 
-  cargoBuildFlags = [ "--bin" pname ];
+  cargoBuildFlags = [
+    "--bin"
+    pname
+  ];
 
-  buildFeatures = [ "env_logger" "structopt" ];
+  buildFeatures = [
+    "env_logger"
+    "structopt"
+  ];
 
   # Setting $HOME to a temporary directory is necessary to prevent checks from failing, as
   # the test suite creates a cache directory at $HOME/Library/Caches/BytecodeAlliance.wasmtime.
@@ -39,6 +47,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wizer";
     homepage = "https://github.com/bytecodealliance/wizer";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins amesgen ];
+    maintainers = with maintainers; [
+      lucperkins
+      amesgen
+    ];
   };
 }

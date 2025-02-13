@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
   };
 
@@ -64,7 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     jsonschema
     openpyxl
     stem
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "stem" ];
@@ -75,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = {
-    homepage = "https://sherlock-project.github.io/";
+    homepage = "https://sherlockproject.xyz/";
     description = "Hunt down social media accounts by username across social networks";
     license = lib.licenses.mit;
     mainProgram = "sherlock";

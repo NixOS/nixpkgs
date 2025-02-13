@@ -1,8 +1,9 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, undmg
-, writeScript
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  undmg,
+  writeScript,
 }:
 
 let
@@ -30,8 +31,13 @@ stdenvNoCC.mkDerivation {
   inherit version;
   pname = "libreoffice";
   src = fetchurl {
-    inherit (dist.${stdenvNoCC.hostPlatform.system} or
-      (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")) url sha256;
+    inherit
+      (dist.${stdenvNoCC.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
+      )
+      url
+      sha256
+      ;
   };
 
   nativeBuildInputs = [ undmg ];
@@ -56,15 +62,14 @@ stdenvNoCC.mkDerivation {
       aarch64Url = dist."aarch64-darwin".url;
       x86_64Url = dist."x86_64-darwin".url;
     in
-    writeScript "update-libreoffice.sh"
-      ''
-        #!/usr/bin/env nix-shell
-        #!nix-shell -i bash --argstr aarch64Url ${aarch64Url} --argstr x86_64Url ${x86_64Url} --argstr version ${version} ${updateNix}
-        set -eou pipefail
+    writeScript "update-libreoffice.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash --argstr aarch64Url ${aarch64Url} --argstr x86_64Url ${x86_64Url} --argstr version ${version} ${updateNix}
+      set -eou pipefail
 
-        update-source-version libreoffice-bin $newVersion $newAarch64Sha256 --file=${defaultNixFile} --system=aarch64-darwin --ignore-same-version
-        update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin --ignore-same-version
-      '';
+      update-source-version libreoffice-bin $newVersion $newAarch64Sha256 --file=${defaultNixFile} --system=aarch64-darwin --ignore-same-version
+      update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin --ignore-same-version
+    '';
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
@@ -72,6 +77,9 @@ stdenvNoCC.mkDerivation {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ tricktron ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

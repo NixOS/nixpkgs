@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitLab
-, buildPythonApplication
-, dbus-python
-, pygobject3
-, systemd
-, wirelesstools
-, wrapGAppsNoGuiHook
+{
+  lib,
+  fetchFromGitLab,
+  buildPythonApplication,
+  dbus-python,
+  pygobject3,
+  systemd,
+  wirelesstools,
+  wrapGAppsNoGuiHook,
 }:
 
 buildPythonApplication rec {

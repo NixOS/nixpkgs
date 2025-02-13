@@ -2,23 +2,52 @@
   lib,
   python3,
   fetchFromGitHub,
-  nixosTests
+  nixosTests,
 }:
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      httpx = prev.httpx.overridePythonAttrs (old: rec {
+        version = "0.27.2";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
+        };
+      });
 
-python3.pkgs.toPythonModule (
-  python3.pkgs.buildPythonApplication rec {
+      httpx-socks = prev.httpx-socks.overridePythonAttrs (old: rec {
+        version = "0.9.2";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
+        };
+      });
+
+      starlette = prev.starlette.overridePythonAttrs (old: {
+        disabledTests = old.disabledTests or [ ] ++ [
+          # fails in assertion with spacing issue
+          "test_request_body"
+          "test_request_stream"
+          "test_wsgi_post"
+        ];
+      });
+    };
+  };
+in
+python.pkgs.toPythonModule (
+  python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-06-19";
+    version = "0-unstable-2025-02-09";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "acf3f109b2a99a5e6f25f5f2975016a36673c6ef";
-      hash = "sha256-NdFnB5JEaWo7gt+RwxKxkVtEL8uGLlc4z0ROHN+zoL4=";
+      rev = "a1e2b254677a22f1f8968a06564661ac6203c162";
+      hash = "sha256-DrSj1wQUWq9xVuQqt0BZ79JgyRS9qJqg1cdYTIBb1A8=";
     };
 
     postPatch = ''
-      sed -i 's/==.*$//' requirements.txt
+      sed -i 's/==/>=/' requirements.txt
     '';
 
     preBuild =
@@ -41,21 +70,23 @@ python3.pkgs.toPythonModule (
       '';
 
     dependencies =
-      with python3.pkgs;
+      with python.pkgs;
       [
         babel
+        brotli
         certifi
-        python-dateutil
         fasttext-predict
         flask
         flask-babel
-        brotli
+        isodate
         jinja2
         lxml
+        msgspec
         pygments
-        pytomlpp
+        python-dateutil
         pyyaml
         redis
+        typer
         uvloop
         setproctitle
         httpx
@@ -71,10 +102,10 @@ python3.pkgs.toPythonModule (
     postInstall = ''
       # Create a symlink for easier access to static data
       mkdir -p $out/share
-      ln -s ../${python3.sitePackages}/searx/static $out/share/
+      ln -s ../${python.sitePackages}/searx/static $out/share/
 
       # copy config schema for the limiter
-      cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
+      cp searx/limiter.toml $out/${python.sitePackages}/searx/limiter.toml
     '';
 
     passthru = {

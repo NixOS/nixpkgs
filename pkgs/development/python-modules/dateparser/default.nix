@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.2.0";
+  version = "1.2.1";
 
   disabled = pythonOlder "3.7";
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mnL44hojebOwP6qtEBHs5QM4uRmLuGlVNr+sM3jZEKE=";
+    tag = "v${version}";
+    hash = "sha256-O0FsLWbH0kGjwGCTklBMVVqosxXlXRyS9aAcggtBLsA=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     calendars = [
       hijri-converter
       convertdate
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     parsel
     requests
     ruamel-yaml
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$TEMPDIR"
@@ -73,6 +73,10 @@ buildPythonPackage rec {
     # access network
     "test_custom_language_detect_fast_text_0"
     "test_custom_language_detect_fast_text_1"
+
+    # breaks with latest tzdata: https://github.com/scrapinghub/dateparser/issues/1237
+    # FIXME: look into this more
+    "test_relative_base"
   ];
 
   pythonImportsCheck = [ "dateparser" ];

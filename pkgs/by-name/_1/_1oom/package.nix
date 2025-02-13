@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xEHFuCOyuWmee6kgOc0WUk1iWWFqfFb42F7shGZmutQ=";
   };
 
@@ -54,9 +54,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/1oom-fork/1oom";
+    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${version}";
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

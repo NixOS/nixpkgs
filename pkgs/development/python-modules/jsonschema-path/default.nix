@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-path";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oBzB6Ke19QDcMQm4MpnaS132/prrtnCekAXuPMloZx4=";
   };
 
@@ -31,6 +31,8 @@ buildPythonPackage rec {
   '';
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "referencing" ];
 
   propagatedBuildInputs = [
     pathable

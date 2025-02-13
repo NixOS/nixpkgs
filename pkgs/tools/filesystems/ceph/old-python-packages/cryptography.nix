@@ -41,11 +41,11 @@ buildPythonPackage rec {
     hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+    hash = "sha256-pZHu3Oo9DWRAtldU0UvrH1FIg0bEvyfizPUhj9IBL58=";
   };
 
   # Since Cryptography v40 is quite outdated, we need to backport
@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
       libiconv
     ]
@@ -107,7 +107,7 @@ buildPythonPackage rec {
       # save compute time by not running benchmarks
       "tests/bench"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # aarch64-darwin forbids W+X memory, but this tests depends on it:
       # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
       "tests/hazmat/backends/test_openssl_memleak.py"

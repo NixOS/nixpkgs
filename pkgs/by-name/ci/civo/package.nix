@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "civo";
-  version = "1.0.90";
+  version = "1.1.95";
 
   src = fetchFromGitHub {
     owner = "civo";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-2UWEQZRbtPArYK7Kr0eHtF8+XWXl06v86nAb8nka50g=";
+    hash = "sha256-/byI9QFxkCiyVvxF0K1RjK5xW4EE8l/+LqqKy9GW1Pw=";
   };
 
-  vendorHash = "sha256-ZnomzHbsNKWwAsRjOjESKSdR+KgSiMMlG0xq33qpzX0=";
+  vendorHash = "sha256-ZylfnOeS6tXYaBbXg5znus6CKE+IZXmPSOc9UwYtscc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # Some lint checks fail
   doCheck = false;
@@ -42,11 +42,14 @@ buildGoModule rec {
       --zsh <($out/bin/civo completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for interacting with Civo resources";
     mainProgram = "civo";
     homepage = "https://github.com/civo/cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      techknowlogick
+      rytswd
+    ];
   };
 }

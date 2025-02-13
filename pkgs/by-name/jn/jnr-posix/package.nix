@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, jdk
-, maven
-, which
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  jdk,
+  maven,
+  which,
 }:
 let
   pname = "jnr-posix";
@@ -20,7 +21,10 @@ let
     name = "${pname}-${version}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk maven ];
+    nativeBuildInputs = [
+      jdk
+      maven
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -49,7 +53,10 @@ in
 stdenv.mkDerivation rec {
   inherit version pname src;
 
-  nativeBuildInputs = [ maven which ];
+  nativeBuildInputs = [
+    maven
+    which
+  ];
 
   postPatch = ''
     sed -i "s/\/usr\/bin\/id/$(which id | sed 's#/#\\/#g')/g" src/main/java/jnr/posix/JavaPOSIX.java
@@ -74,7 +81,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "jnr-posix is a lightweight cross-platform POSIX emulation layer for Java, written in Java and is part of the JNR project";
     homepage = "https://github.com/jnr/jnr-posix";
-    license = with licenses; [ epl20 gpl2Only lgpl21Only ];
+    license = with licenses; [
+      epl20
+      gpl2Only
+      lgpl21Only
+    ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
 }

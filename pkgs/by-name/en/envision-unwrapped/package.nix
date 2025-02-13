@@ -1,5 +1,6 @@
 {
   appstream-glib,
+  applyPatches,
   cairo,
   cargo,
   desktop-file-utils,
@@ -25,29 +26,35 @@
   rustc,
   stdenv,
   vte-gtk4,
+  versionCheckHook,
   wrapGAppsHook4,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "0-unstable-2024-09-21";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = "41e9af1676d3cfd458939a34b5c8b06d84c3f764";
-    hash = "sha256-qk9xlHWbkCRpve3SZMtq5ojfS2tRwyXsckqu7fs/Lm0=";
+    rev = finalAttrs.version;
+    hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
   };
+
+  patches = [
+    ./support-headless-cli.patch
+  ];
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-xztevBUaYBm5G3A0ZTb+3GV3g1IAU3SzfSS5BBqfp1Y=";
-      "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version;
+    # TODO: Use srcOnly instead
+    src = applyPatches {
+      inherit (finalAttrs) src patches;
     };
+    hash = "sha256-O3+urY2FlnHfxoJLn4iehnVWf1Y0uATEteyQVnZLxTQ=";
   };
 
   nativeBuildInputs = [
@@ -79,12 +86,20 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # FIXME: error when running `env -i envision`:
+  # "HOME env var not defined: NotPresent"
+  doInstallCheck = false;
+  versionCheckProgram = "${placeholder "out"}/bin/envision";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/envision \
       --prefix PATH : "${lib.makeBinPath [ gdb ]}"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";

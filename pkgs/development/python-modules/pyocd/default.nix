@@ -63,7 +63,7 @@ buildPythonPackage rec {
     pyusb
     pyyaml
     typing-extensions
-  ] ++ lib.optionals (!stdenv.isLinux) [ hidapi ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ hidapi ];
 
   pythonImportsCheck = [ "pyocd" ];
 

@@ -87,6 +87,8 @@ let
     RestrictAddressFamilies = [
       "AF_INET"
       "AF_INET6"
+      "AF_UNIX"
+      "AF_NETLINK"
     ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
@@ -183,7 +185,6 @@ let
   certToConfig = cert: data: let
     acmeServer = data.server;
     useDns = data.dnsProvider != null;
-    useDnsOrS3 = useDns || data.s3Bucket != null;
     destPath = "/var/lib/acme/${cert}";
     selfsignedDeps = lib.optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
@@ -217,7 +218,7 @@ let
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
-      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.propagation-disable-ans" ]
       ++ lib.optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
     ) else if data.s3Bucket != null then [ "--http" "--http.s3-bucket" data.s3Bucket ]
     else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
@@ -344,7 +345,7 @@ let
       serviceConfig = commonServiceConfig // {
         Group = data.group;
 
-        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
+        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
         # This avoids eating them all up if something is misconfigured upon the first try.
         RestartSec = 15 * 60;
 
@@ -367,13 +368,11 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        EnvironmentFile = lib.mkIf useDnsOrS3 data.environmentFile;
+        EnvironmentFile = lib.mkIf (data.environmentFile != null) data.environmentFile;
 
-        Environment = lib.mkIf useDnsOrS3
-          (lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
+        Environment = lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles;
 
-        LoadCredential = lib.mkIf useDnsOrS3
-          (lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
+        LoadCredential = lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles;
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
@@ -968,6 +967,7 @@ in {
 
       users.users.acme = {
         home = "/var/lib/acme";
+        homeMode = "755";
         group = "acme";
         isSystemUser = true;
       };

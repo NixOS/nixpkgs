@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -14,7 +14,8 @@
   tqdm,
   pandas,
 
-  # test dependencies
+  # tests
+  cleanvision,
   datasets,
   fasttext,
   hypothesis,
@@ -27,23 +28,36 @@
   torch,
   torchvision,
   wget,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.6.6";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-08ePFTCRuggr4hTCfr/gbzMhLozz4KCywhPFSKYDNng=";
+    tag = "v${version}";
+    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
   };
 
+  patches = [
+    # https://github.com/cleanlab/cleanlab/pull/1224 (merged)
+    # TODO: remove this patch when updating to the next release (2.8.0)
+    (fetchpatch {
+      name = "numpy2-compatibility";
+      url = "https://github.com/cleanlab/cleanlab/commit/bed10f5bdf538358e760ad98a0965f9b447b45ad.patch";
+      hash = "sha256-czSK05wrLfSpJF2j+YwcDeDIKspkcCEB2hKlX5H3Gns=";
+    })
+  ];
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     numpy
@@ -61,6 +75,7 @@ buildPythonPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
+    cleanvision
     datasets
     fasttext
     hypothesis
@@ -75,10 +90,23 @@ buildPythonPackage rec {
     wget
   ];
 
-  disabledTests = [
-    # Requires the datasets we prevent from downloading
-    "test_create_imagelab"
-  ];
+  disabledTests =
+    [
+      # Requires the datasets we prevent from downloading
+      "test_create_imagelab"
+
+      # Non-trivial numpy2 incompatibilities
+      # assert np.float64(0.492) == 0.491
+      "test_duplicate_points_have_similar_scores"
+      # AssertionError: assert 'Annotators [1] did not label any examples.'
+      "test_label_quality_scores_multiannotator"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # AttributeError: 'called_once_with' is not a valid assertion.
+      # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
+      # Did you mean: 'assert_called_once_with'?
+      "test_custom_issue_manager_not_registered"
+    ];
 
   disabledTestPaths = [
     # Requires internet

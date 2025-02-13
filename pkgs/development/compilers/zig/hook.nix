@@ -1,12 +1,19 @@
-{ lib
-, makeSetupHook
-, zig
+{
+  lib,
+  makeSetupHook,
+  zig,
+  stdenv,
+  xcbuild,
 }:
 
 makeSetupHook {
   name = "zig-hook";
 
-  propagatedBuildInputs = [ zig ];
+  propagatedBuildInputs =
+    [ zig ]
+    # while xcrun is already included in the darwin stdenv, Zig also needs
+    # xcode-select (provided by xcbuild) for SDK detection
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   substitutions = {
     # This zig_default_flags below is meant to avoid CPU feature impurity in
@@ -39,7 +46,10 @@ makeSetupHook {
           else
             "-Drelease-safe=true";
       in
-      [ "-Dcpu=baseline" releaseType ];
+      [
+        "-Dcpu=baseline"
+        releaseType
+      ];
   };
 
   passthru = { inherit zig; };

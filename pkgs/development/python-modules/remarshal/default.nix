@@ -8,8 +8,11 @@
 
   # propagates
   cbor2,
+  colorama,
   python-dateutil,
   pyyaml,
+  rich-argparse,
+  ruamel-yaml,
   tomlkit,
   u-msgpack-python,
 
@@ -19,26 +22,25 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "0.17.1";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
+    repo = "remarshal";
+    tag = "v${version}";
+    hash = "sha256-14vkLX7wKi+AYv2wPeHJ7MhKBKp+GB3oHWqxiPdkQhs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "pytest" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cbor2
+    colorama
     python-dateutil
     pyyaml
+    rich-argparse
+    ruamel-yaml
     tomlkit
     u-msgpack-python
   ];

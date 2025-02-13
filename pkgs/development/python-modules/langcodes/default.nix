@@ -12,22 +12,22 @@
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "3.4.0";
-  format = "pyproject";
+  version = "3.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rlp30aAdDR6RhUpnGJCJK3zpq7YBq3Mn/FyHT4meGXk=";
+    hash = "sha256-Hu+BaNB+UeExokl//srUtmP2II58OuO43BXFFzSm+AE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     language-data
     marisa-trie
     setuptools # pkg_resources import in language_data/util.py

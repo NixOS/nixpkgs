@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.33.0";
+  version = "2.36.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     rev = "v${version}";
-    hash = "sha256-685Tn2/XFhGSk7Onnw1W9VfgDSFNwDETc3KoiKMCS3M=";
+    hash = "sha256-lJEQG2JPOwWMnYaOYBisusRNYKPLHtxtVtaRPhNl+fQ=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     tbb
     zlib
     zstd
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     mimalloc
   ];
 
@@ -49,10 +49,6 @@ stdenv.mkDerivation rec {
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
     "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    "-faligned-allocation"
-  ]);
 
   passthru = {
     updateScript = nix-update-script { };
@@ -91,7 +87,7 @@ stdenv.mkDerivation rec {
       in
       {
         version = testers.testVersion { package = mold; };
-      } // lib.optionalAttrs stdenv.isLinux {
+      } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         adapter-gcc = helloTest "adapter-gcc" (hello.override (old: { stdenv = useMoldLinker gccStdenv; }));
         adapter-llvm = helloTest "adapter-llvm" (hello.override (old: { stdenv = useMoldLinker clangStdenv; }));
         wrapped = helloTest "wrapped" (hello.overrideAttrs (previousAttrs: {

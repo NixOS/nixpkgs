@@ -13,17 +13,19 @@
 
 buildPythonPackage rec {
   pname = "sphinx-intl";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
-    repo = pname;
-    rev = version;
-    hash = "sha256-4sFKrUSk8DqPbEM+Q3cRijXyxRSIdkIEAI/mAmB0wB0=";
+    repo = "sphinx-intl";
+    tag = version;
+    hash = "sha256-VrWtRdI9j/y2m7kN7/m/5cdxpI0dAaiprdXKt8m6MPc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     babel
     click
     setuptools

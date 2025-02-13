@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kiwicom";
     repo = "pytest-recording";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C6uNp3knKKY0AX7fQYU85N82L6kyyO4HcExTz1bBtpE=";
   };
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   disabledTests =
     [ "test_block_network_with_allowed_hosts" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Missing socket.AF_NETLINK
       "test_other_socket"
     ];

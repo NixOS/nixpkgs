@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -43,21 +42,23 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.8.3";
+  version = "2025.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-aOe1U0IWQIgTJgUAs6WZWQmYnOTzdS+hRlK9QgU3qqk=";
+    tag = "v${version}";
+    hash = "sha256-AGYi1w4e8XJOWRbuPX5eB/rTY5dCPji49zD0VQ4FvAs=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   dependencies = [
@@ -100,6 +101,19 @@ buildPythonPackage rec {
     # Requires internet access
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
+
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory
+    # https://github.com/scikit-hep/coffea/issues/1246
+    "test_packed_selection_cutflow_dak" # cutflow.npz
+    "test_packed_selection_nminusone_dak" # nminusone.npz
+
+    # AssertionError: bug in Awkward Array: attempt to convert TypeTracerArray into a concrete array
+    "test_apply_to_fileset"
+    "test_lorentz_behavior"
+
+    # ValueError: The array to mask was deleted before it could be masked.
+    # If you want to construct this mask, you must either keep the array alive or use 'ak.mask' explicitly.
+    "test_read_nanomc"
   ];
 
   __darwinAllowLocalNetworking = true;

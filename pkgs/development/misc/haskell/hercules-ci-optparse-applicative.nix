@@ -1,6 +1,15 @@
-{ mkDerivation, base, fetchFromGitHub, lib, prettyprinter
-, prettyprinter-ansi-terminal, process, QuickCheck, text
-, transformers, transformers-compat
+{
+  mkDerivation,
+  base,
+  fetchFromGitHub,
+  lib,
+  prettyprinter,
+  prettyprinter-ansi-terminal,
+  process,
+  QuickCheck,
+  text,
+  transformers,
+  transformers-compat,
 }:
 mkDerivation {
   pname = "hercules-ci-optparse-applicative";
@@ -12,10 +21,18 @@ mkDerivation {
     rev = "a123939663ba1cd0f1750343f1c6b9864ac21207";
   };
   libraryHaskellDepends = [
-    base prettyprinter prettyprinter-ansi-terminal process text
-    transformers transformers-compat
+    base
+    prettyprinter
+    prettyprinter-ansi-terminal
+    process
+    text
+    transformers
+    transformers-compat
   ];
-  testHaskellDepends = [ base QuickCheck ];
+  testHaskellDepends = [
+    base
+    QuickCheck
+  ];
   homepage = "https://github.com/hercules-ci/optparse-applicative";
   description = "Utilities and combinators for parsing command line options (fork)";
   license = lib.licenses.bsd3;

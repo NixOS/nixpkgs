@@ -1,10 +1,9 @@
-{ fetchFromGitHub
-, lib
-, Security
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,19 +14,20 @@ rustPlatform.buildRustPackage rec {
     owner = "awslabs";
     repo = "dynein";
     rev = "v${version}";
-    sha256 = "sha256-QhasTFGOFOjzNKdQtA+eBhKy51O4dFt6vpeIAIOM2rQ=";
+    hash = "sha256-QhasTFGOFOjzNKdQtA+eBhKy51O4dFt6vpeIAIOM2rQ=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoHash = "sha256-QyhoYgqBfK6LCdtLuo0feVCgIMPueYeA8MMGspGLbGQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rOfJz5G6kO1/IM6M6dZJTJmzJhx/450dIPvAVBHUp5o=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ];
 
   preBuild = ''
     export OPENSSL_DIR=${lib.getDev openssl}

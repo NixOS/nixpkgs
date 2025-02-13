@@ -12,8 +12,8 @@
 stdenv.mkDerivation (
   finalAttrs:
   let
-    version = "4.17.0";
-    buildNum = "3543";
+    version = "4.18.0";
+    buildNum = "3768";
   in
   {
     pname = "tlclient";
@@ -21,7 +21,7 @@ stdenv.mkDerivation (
 
     src = fetchurl {
       url = "https://www.cendio.com/downloads/clients/tl-${finalAttrs.version}-client-linux-dynamic-x86_64.tar.gz";
-      hash = "sha256-7pl97xGNFwSDpWMpBvkz/bfMsWquVsJVGB+feWJvRQY=";
+      hash = "sha256-fTezGhn0UESEQRPrHYVZNcplV48wb5X/xqplIfLRLAA=";
     };
 
     nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (
       changelog = "https://www.cendio.com/thinlinc/docs/relnotes/${version}/";
       maintainers = with lib.maintainers; [ felixalbrigtsen ];
       platforms = with lib.platforms; linux ++ darwin ++ windows;
-      broken = !(stdenv.isLinux && stdenv.isx86_64);
+      broken = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64);
       mainProgram = "tlclient";
     };
   }

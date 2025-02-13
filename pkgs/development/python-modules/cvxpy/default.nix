@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,29 +12,27 @@
   # dependencies
   clarabel,
   cvxopt,
-  ecos,
   osqp,
   scipy,
   scs,
 
   # checks
+  hypothesis,
   pytestCheckHook,
 
-  useOpenmp ? (!stdenv.isDarwin),
+  useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.5.3";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6RaEyFckvF3WhbfeffysMB/zt+aU1NU6B7Nm06znt9k=";
+    tag = "v${version}";
+    hash = "sha256-t2+j0ZrvGvTv6FoNVpD2MVFZKfGgqTaN32OKwBXM3Zw=";
   };
 
   # we need to patch out numpy version caps from upstream
@@ -53,14 +50,16 @@ buildPythonPackage rec {
   dependencies = [
     clarabel
     cvxopt
-    ecos
     numpy
     osqp
     scipy
     scs
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   # Required flags from https://github.com/cvxpy/cvxpy/releases/tag/v1.1.11
   preBuild = lib.optionalString useOpenmp ''
@@ -76,6 +75,11 @@ buildPythonPackage rec {
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+
+    # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    "test_oprelcone_1_m1_k3_complex"
+    "test_oprelcone_1_m3_k1_complex"
+    "test_oprelcone_2"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];
@@ -84,7 +88,7 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ drewrisinger ];
   };

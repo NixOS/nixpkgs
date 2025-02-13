@@ -2,9 +2,8 @@
   lib,
   fetchFromGitLab,
   rustPlatform,
-  llvmPackages,
   pkg-config,
-  xen-slim,
+  xen,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xen-guest-agent";
@@ -17,15 +16,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OhzRsRwDvt0Ov+nLxQSP87G3RDYSLREMz2w9pPtSUYg=";
   };
 
-  cargoHash = "sha256-E6QKh4FFr6sLAByU5n6sLppFwPHSKtKffhQ7FfdXAu4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-o4eQ1ORI7Rw097m6CsvWLeCW5Dtl75uRXi/tcv/Xq0Q=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-    llvmPackages.clang
     pkg-config
   ];
 
-  buildInputs = [ xen-slim ];
+  buildInputs = [ xen ];
 
   postInstall =
     # Install the sample systemd service.
@@ -38,16 +37,14 @@ rustPlatform.buildRustPackage rec {
 
   postFixup =
     # Add the Xen libraries in the runpath so the guest agent can find libxenstore.
-    "patchelf $out/bin/xen-guest-agent --add-rpath ${xen-slim.out}/lib";
+    "patchelf $out/bin/xen-guest-agent --add-rpath ${xen}/lib";
 
   meta = {
     description = "Xen agent running in Linux/BSDs (POSIX) VMs";
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      matdibu
-      sigmasquadron
-    ];
+    maintainers = lib.teams.xen.members;
+    mainProgram = "xen-guest-agent";
   };
 }

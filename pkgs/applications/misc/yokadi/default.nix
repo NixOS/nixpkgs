@@ -1,5 +1,12 @@
-{ lib, fetchurl, buildPythonApplication, python-dateutil,
-  sqlalchemy, setproctitle, icalendar }:
+{
+  lib,
+  fetchurl,
+  buildPythonApplication,
+  python-dateutil,
+  sqlalchemy,
+  setproctitle,
+  icalendar,
+}:
 
 buildPythonApplication rec {
   pname = "yokadi";

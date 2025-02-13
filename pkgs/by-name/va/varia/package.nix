@@ -1,26 +1,27 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, aria2
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  aria2,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "varia";
-  version = "2024.5.7";
+  version = "2025.1.24";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "giantpinkrobots";
     repo = "varia";
-    rev = "v${version}";
-    hash = "sha256-axBBJYIFCt3J0aCY8tMYehho0QN1eIcUMPhWb5g5uDc=";
+    tag = "v${version}";
+    hash = "sha256-bsSAPKs5iD1CMQ+t0i09odglZre137TOSyvJqE5lqN4=";
   };
 
   postPatch = ''

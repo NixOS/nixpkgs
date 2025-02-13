@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "greatfet";
-  version = "2024.0.2";
+  version = "2024.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "greatfet";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1GfyhxwA6Nhf/umvllR/hkh5hyn42141QOT7+6IGAis=";
+    tag = "v${version}";
+    hash = "sha256-3ClM4UzVIDEkVBrFwzvLokbxUHXqdQWyNVqcFtiXCOQ=";
   };
 
   sourceRoot = "${src.name}/host";

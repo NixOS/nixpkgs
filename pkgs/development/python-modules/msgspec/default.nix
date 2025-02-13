@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "msgspec";
-  version = "0.18.6";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,11 +16,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jcrist";
     repo = "msgspec";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xqtV60saQNINPMpOnZRSDnicedPSPBUQwPSE5zJGrTo=";
+    tag = version;
+    hash = "sha256-g2yhw9fMucBHlGx9kAMQL87znXlQT9KbxQ/QcmUetqI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Requires libasan to be accessible
   doCheck = false;

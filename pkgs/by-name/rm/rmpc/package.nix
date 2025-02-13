@@ -9,16 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rmpc";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "mierak";
     repo = "rmpc";
     rev = "v${version}";
-    hash = "sha256-eWscMWOjTGmFCNGwf/6lMU0JbULC7/AFCPbznGQYRQI=";
+    hash = "sha256-IgkYUl1ccwzFgooqZGxmpJFzACEz3wmblostPsTnzSQ=";
   };
 
-  cargoHash = "sha256-PieGA8/C7d8Q5rdu7oRdVuCLNhwGp5LZYz/rM4agqng=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-s8aXDDERy4IxUrXVEFMGny5B5HGE8xsi6I+b/HCHc6w=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,8 +49,11 @@ rustPlatform.buildRustPackage rec {
       album art through kitty image protocol without any ugly hacks. It also features ranger/lf
       inspired browsing of songs and other goodies.
     '';
-    maintainers = with lib.maintainers; [ donovanglover ];
+    maintainers = with lib.maintainers; [
+      donovanglover
+      bloxx12
+    ];
     mainProgram = "rmpc";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

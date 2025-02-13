@@ -20,7 +20,7 @@
 
 let
   # Bcftools needs perl
-  runtime =  [
+  runtime = [
     bcftools
     htslib
     my-python

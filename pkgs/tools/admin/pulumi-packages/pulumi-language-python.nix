@@ -1,6 +1,7 @@
-{ buildGoModule
-, pulumi
-, python3
+{
+  buildGoModule,
+  pulumi,
+  python3,
 }:
 buildGoModule rec {
   inherit (pulumi) version src;

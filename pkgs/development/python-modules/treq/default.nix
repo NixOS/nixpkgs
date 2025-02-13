@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "23.11.0";
+  version = "24.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CRT/kp/RYyzhZ5cjUmD4vBnSD/fEWcHeq9ZbjGjL6sU=";
+    hash = "sha256-Fdp/xATz5O1Z0Kvl+O70lm+rvmGAOaKiO8fBUwXO/qg=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.9.9";
+  version = "2.9.10";
   format = "setuptools";
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0UVL3pP7HiJBZoEWlNYA50ZDDABvuwMeoG7MLqQb8VY=";
+    hash = "sha256-EuwLQLAnP5UpYjPodQRBM5KY5qVy9wOdpbJg48i2DhE=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     sphinx-better-theme
   ];
 
-  buildInputs = [ postgresql ] ++ lib.optionals stdenv.isDarwin [ openssl ];
+  buildInputs = [ postgresql ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ openssl ];
 
   sphinxRoot = "doc/src";
 

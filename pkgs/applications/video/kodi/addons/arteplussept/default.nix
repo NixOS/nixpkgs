@@ -1,4 +1,13 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, dateutil, requests, xbmcswift2 }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  dateutil,
+  requests,
+  xbmcswift2,
+}:
 
 buildKodiAddon rec {
   pname = "arteplussept";

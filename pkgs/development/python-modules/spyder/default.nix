@@ -2,7 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+
+  # nativeBuildInputs
+  pyqtwebengine,
+
+  # build-system
+  setuptools,
 
   # dependencies
   aiohttp,
@@ -28,7 +33,6 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
-  pyqtwebengine,
   python-lsp-black,
   python-lsp-server,
   pyuca,
@@ -41,7 +45,6 @@
   rope,
   rtree,
   scipy,
-  setuptools,
   spyder-kernels,
   superqt,
   textdistance,
@@ -52,18 +55,21 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.0";
+  version = "6.0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/UUtSpSkt1hJeIZfBLe8owP82jRx02kUF6TdfCsq6CY=";
+    hash = "sha256-4AsaO75mAH0rRDnrHGiwwfuQS7A/0/nQ7YPot6y0y+Y=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  build-system = [
+  nativeBuildInputs = [
     pyqtwebengine.wrapQtAppsHook
+  ];
+
+  build-system = [
     setuptools
   ];
 

@@ -1,17 +1,18 @@
-{ lib
-, buildDunePackage
-, substituteAll
-, base64
-, cmdliner
-, digestif
-, git-unix
-, kicadsch
-, lwt
-, lwt_ppx
-, sha
-, tyxml
-, coreutils
-, imagemagick
+{
+  lib,
+  buildDunePackage,
+  substituteAll,
+  base64,
+  cmdliner,
+  digestif,
+  git-unix,
+  kicadsch,
+  lwt,
+  lwt_ppx,
+  sha,
+  tyxml,
+  coreutils,
+  imagemagick,
 }:
 
 buildDunePackage rec {

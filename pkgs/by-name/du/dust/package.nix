@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, AppKit, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   # Originally, this package was under the attribute `du-dust`, since `dust` was taken.
@@ -19,11 +24,10 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoHash = "sha256-o9ynFkdx6a8kHS06NQN7BzWrOIxvdVwnUHmxt4cnmQU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ED4gVlvlTKsa6ghD/m4w2HVSxATd4SNl5a6nZ3hqMn0=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 
   doCheck = false;
 
@@ -32,11 +36,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/dust.{bash,fish} --zsh completions/_dust
   '';
 
-  meta = with lib; {
+  meta = {
     description = "du + rust = dust. Like du but more intuitive";
     homepage = "https://github.com/bootandy/dust";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "dust";
   };
 }

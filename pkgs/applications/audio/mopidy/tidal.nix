@@ -1,7 +1,8 @@
-{ lib
-, python3Packages
-, fetchPypi
-, mopidy
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  mopidy,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -32,5 +33,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
   };
 }
-
-

@@ -37,7 +37,7 @@ convertIconTheme() {
     local -ra scales=([1]="" [2]="@2")
 
     # Based loosely on the algorithm at:
-    # https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#icon_lookup
+    # https://specifications.freedesktop.org/icon-theme-spec/latest/#icon_lookup
     # Assumes threshold = 2 for ease of implementation.
     function findIcon() {
         local -r iconSize=$1
@@ -92,6 +92,7 @@ convertIconTheme() {
 
         echo "desktopToDarwinBundle: resizing icon $in to $out, size $dim" >&2
         magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
+        convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
     }
 
     function synthesizeIcon() {
@@ -107,8 +108,24 @@ convertIconTheme() {
             echo "desktopToDarwinBundle: rasterizing svg $in to $out, size $dim" >&2
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
             magick convert -density "$density" -units PixelsPerInch "$out" "$out"
+            convertIfUnsupportedIcon "$out" "$iconSize" "$scale"
         else
             return 1
+        fi
+    }
+
+    # macOS does not correctly display 16x and 32x png icons on app bundles
+    # they need to be converted to rgb+mask (argb is supported only from macOS 11)
+    function convertIfUnsupportedIcon() {
+        local -r in=$1
+        local -r iconSize=$2
+        local -r scale=$3
+        local -r out=${in%.png}.rgb
+
+        if [[ ($scale -eq 1) && ($iconSize -eq 32 || $iconSize -eq 16) ]]; then
+            echo "desktopToDarwinBundle: converting ${iconSize}x icon to rgb" >&2
+            icnsutil convert "$out" "$in"
+            rm "$in"
         fi
     }
 
@@ -151,6 +168,7 @@ convertIconTheme() {
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
                         magick convert -density "$density" -units PixelsPerInch "$icon" "$result"
+                        convertIfUnsupportedIcon "$result" "$iconSize" "$scale"
                         foundIcon=OTHER
                         ;;
                     threshold)

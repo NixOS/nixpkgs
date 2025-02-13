@@ -1,39 +1,131 @@
-{ lib, fetchurl, appimageTools, makeWrapper, commandLineArgs ? "" }:
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  buildNpmPackage,
+  pkg-config,
+  libsecret,
+  electron,
+  makeDesktopItem,
+  copyDesktopItems,
+  commandLineArgs ? "",
+  nix-update-script,
+}:
 
 let
+  anytype-heart = callPackage ./anytype-heart { };
   pname = "anytype";
-  version = "0.42.8";
-  name = "Anytype-${version}";
-  src = fetchurl {
-    url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
-    hash = "sha256-MIPKfwIZQah6K+WOQZsTpVcOrws+f4oVa7BoW29K5BA=";
+  version = "0.44.0";
+
+  src = fetchFromGitHub {
+    owner = "anyproto";
+    repo = "anytype-ts";
+    tag = "v${version}";
+    hash = "sha256-a2ZnTEAFzzTb+lxtQkC6QLG5SP1+gDSjI9dqUNZWfCg=";
   };
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
-in appimageTools.wrapType2 {
+  description = "P2P note-taking tool";
+
+  locales = fetchFromGitHub {
+    owner = "anyproto";
+    repo = "l10n-anytype-ts";
+    rev = "a5c81ad55383c4e6e9bb7893ecfcb879bac87bea";
+    hash = "sha256-evSB0ohHm++tZiazXRMR4vj34IfW3HIkfZ2gwsi/2dk=";
+  };
+in
+buildNpmPackage {
   inherit pname version src;
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
+  npmDepsHash = "sha256-DDVsrXgijYYOeCc1gIe2nVb+oL8v4Hqq80d7l5b6MR0=";
 
-  extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --add-flags ${lib.escapeShellArg commandLineArgs}
-    install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/anytype.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    for size in 16 32 64 128 256 512 1024; do
-      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${size}x''${size}/apps/anytype.png \
-        $out/share/icons/hicolor/''${size}x''${size}/apps/anytype.png
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
+  buildInputs = [ libsecret ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    cp -r ${anytype-heart}/lib dist/
+    cp -r ${anytype-heart}/bin/anytypeHelper dist/
+
+    for lang in ${locales}/locales/*; do
+      cp "$lang" "dist/lib/json/lang/$(basename $lang)"
     done
+
+    npm run build
+
+    runHook postBuild
   '';
 
-  meta = with lib; {
-    description = "P2P note-taking tool";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/node_modules/anytype
+    cp -r electron.js electron dist node_modules package.json $out/lib/node_modules/anytype/
+
+    for icon in $out/lib/node_modules/anytype/electron/img/icons/*.png; do
+      mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
+      ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/anytype.png"
+    done
+
+    cp LICENSE.md $out/share
+
+    makeWrapper '${lib.getExe electron}' $out/bin/anytype \
+      --set-default ELECTRON_IS_DEV 0 \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags $out/lib/node_modules/anytype/ \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Anytype";
+      exec = "anytype";
+      icon = "anytype";
+      desktopName = "Anytype";
+      comment = description;
+      categories = [
+        "Utility"
+        "Office"
+        "Calendar"
+        "ProjectManagement"
+      ];
+      startupWMClass = "anytype";
+    })
+  ];
+
+  passthru.updateScript = nix-update-script {
+    # Prevent updating to versions with '-' in them.
+    # Necessary since Anytype uses Electron-based 'MAJOR.MINOR.PATCH(-{alpha,beta})?' versioning scheme where each
+    #  {alpha,beta} version increases the PATCH version, releasing a new full release version in GitHub instead of a
+    #  pre-release version.
+    extraArgs = [
+      "--version-regex"
+      "[^-]*"
+    ];
+  };
+
+  meta = {
+    inherit description;
     homepage = "https://anytype.io/";
-    license = licenses.unfree;
+    license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
-    maintainers = with maintainers; [ running-grass ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      running-grass
+      autrimpo
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

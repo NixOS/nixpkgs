@@ -16,6 +16,7 @@
   hyprland,
   iniparser,
   jsoncpp,
+  libcava,
   libdbusmenu-gtk3,
   libevdev,
   libinotify-kqueue,
@@ -37,6 +38,7 @@
   scdoc,
   sndio,
   spdlog,
+  systemdMinimal,
   sway,
   udev,
   upower,
@@ -53,13 +55,15 @@
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
-  mprisSupport ? stdenv.isLinux,
+  mprisSupport ? stdenv.hostPlatform.isLinux,
+  niriSupport ? true,
   nlSupport ? true,
   pipewireSupport ? true,
   pulseSupport ? true,
   rfkillSupport ? true,
   runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   sndioSupport ? true,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   swaySupport ? true,
   traySupport ? true,
   udevSupport ? true,
@@ -71,15 +75,6 @@
   waybar,
 }:
 
-let
-  # Derived from subprojects/cava.wrap
-  libcava.src = fetchFromGitHub {
-    owner = "LukashonakV";
-    repo = "cava";
-    rev = "0.10.2";
-    hash = "sha256-jU7RQV2txruu/nUUl0TzjK4nai7G38J1rcTjO7UXumY=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
   version = "0.11.0";
@@ -87,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
   };
 
@@ -110,13 +105,16 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wayland-scanner
-    wrapGAppsHook3
-  ] ++ lib.optional withMediaPlayer gobject-introspection ++ lib.optional enableManpages scdoc;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      wayland-scanner
+      wrapGAppsHook3
+    ]
+    ++ lib.optional withMediaPlayer gobject-introspection
+    ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
@@ -153,12 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional sndioSupport sndio
     ++ lib.optional swaySupport sway
+    ++ lib.optional systemdSupport systemdMinimal
     ++ lib.optional traySupport libdbusmenu-gtk3
     ++ lib.optional udevSupport udev
     ++ lib.optional upowerSupport upower
     ++ lib.optional wireplumberSupport wireplumber
     ++ lib.optional (cavaSupport || pipewireSupport) pipewire
-    ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
+    ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;
@@ -179,14 +178,19 @@ stdenv.mkDerivation (finalAttrs: {
       "pulseaudio" = pulseSupport;
       "rfkill" = rfkillSupport;
       "sndio" = sndioSupport;
-      "systemd" = true;
+      "systemd" = systemdSupport;
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
     })
-    ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
+    ++ (lib.mapAttrsToList lib.mesonBool {
+      "experimental" = experimentalPatches;
+      "niri" = niriSupport;
+    });
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  env = lib.optionalAttrs systemdSupport {
+    PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  };
 
   postPatch = ''
     substituteInPlace include/util/command.hpp \

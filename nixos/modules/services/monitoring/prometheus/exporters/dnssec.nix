@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.prometheus.exporters.dnssec;
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "dnssec-checks.toml" cfg.configuration;
-in {
+in
+{
   port = 9204;
   extraOpts = {
     configuration = lib.mkOption {
@@ -70,21 +76,26 @@ in {
   };
 
   serviceOpts = {
-    serviceConfig = let
-      startScript = pkgs.writeShellScriptBin "prometheus-dnssec-exporter-start"
-        "${lib.concatStringsSep " "
-        ([ "${pkgs.prometheus-dnssec-exporter}/bin/prometheus-dnssec-exporter" ]
-          ++ lib.optionals (cfg.configuration != null)
-          [ "-config ${configFile}" ]
-          ++ lib.optionals (cfg.listenAddress != null)
-          [ "-listen-address ${lib.escapeShellArg cfg.listenAddress}" ]
-          ++ lib.optionals (cfg.resolvers != [ ]) [
-            "-resolvers ${
-              lib.escapeShellArg (lib.concatStringsSep "," cfg.resolvers)
-            }"
-          ] ++ lib.optionals (cfg.timeout != null)
-          [ "-timeout ${lib.escapeShellArg cfg.timeout}" ] ++ cfg.extraFlags)}";
-    in { ExecStart = lib.getExe startScript; };
+    serviceConfig =
+      let
+        startScript = pkgs.writeShellScriptBin "prometheus-dnssec-exporter-start" "${lib.concatStringsSep
+          " "
+          (
+            [ "${pkgs.prometheus-dnssec-exporter}/bin/prometheus-dnssec-exporter" ]
+            ++ lib.optionals (cfg.configuration != null) [ "-config ${configFile}" ]
+            ++ lib.optionals (cfg.listenAddress != null) [
+              "-listen-address ${lib.escapeShellArg cfg.listenAddress}"
+            ]
+            ++ lib.optionals (cfg.resolvers != [ ]) [
+              "-resolvers ${lib.escapeShellArg (lib.concatStringsSep "," cfg.resolvers)}"
+            ]
+            ++ lib.optionals (cfg.timeout != null) [ "-timeout ${lib.escapeShellArg cfg.timeout}" ]
+            ++ cfg.extraFlags
+          )
+        }";
+      in
+      {
+        ExecStart = lib.getExe startScript;
+      };
   };
 }
-

@@ -312,6 +312,8 @@ have a predefined type and string generator already declared under
     may be transformed into multiple key-value pairs depending on
     `listToValue`).
 
+    The attribute `lib.type.atom` contains the used INI atom.
+
 `pkgs.formats.iniWithGlobalSection` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
 
 :   A function taking an attribute set with values
@@ -333,11 +335,34 @@ have a predefined type and string generator already declared under
     attrset of key-value pairs for a single section, the global section which
     preceedes the section definitions.
 
+    The attribute `lib.type.atom` contains the used INI atom.
+
 `pkgs.formats.toml` { }
 
 :   A function taking an empty attribute set (for future extensibility)
     and returning a set with TOML-specific attributes `type` and
     `generate` as specified [below](#pkgs-formats-result).
+
+`pkgs.formats.xml` { format ? "badgerfish", withHeader ? true}
+
+:   A function taking an attribute set with values
+    and returning a set with XML-specific attributes `type` and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    `format`
+
+    :   Input format. Because XML can not be translated one-to-one, we have to use intermediate formats. Possible values:
+      - `"badgerfish"`: Uses [badgerfish](http://www.sklar.com/badgerfish/) conversion.
+
+    `withHeader`
+
+    :   Outputs the xml with header.
+
+`pkgs.formats.cdn` { }
+
+:   A function taking an empty attribute set (for future extensibility)
+    and returning a set with [CDN](https://github.com/dzikoysk/cdn)-specific
+    attributes `type` and `generate` as specified [below](#pkgs-formats-result).
 
 `pkgs.formats.elixirConf { elixir ? pkgs.elixir }`
 

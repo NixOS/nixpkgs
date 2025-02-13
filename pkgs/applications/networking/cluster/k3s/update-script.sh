@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused jq yq-go nix-prefetch
+#!nix-shell -i bash -p curl gnugrep gnused jq nurl yq-go
 
 set -x -eu -o pipefail
 
@@ -10,6 +10,7 @@ trap "rm -rf ${WORKDIR}" EXIT
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
+OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_1_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_1_${MINOR_VERSION}.name).version" | tr -d '"')"
 cd ${NIXPKGS_K3S_PATH}
 
 cd 1_${MINOR_VERSION}
@@ -69,21 +70,28 @@ cat > chart-versions.nix.update <<EOF
 EOF
 mv chart-versions.nix.update chart-versions.nix
 
+# Concatenate all sha256sums, one entry per line
+SHA256_HASHES="$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-amd64.txt")
+    \n$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm64.txt")
+    \n$(curl -L "https://github.com/k3s-io/k3s/releases/download/v${K3S_VERSION}/sha256sum-arm.txt")"
+
 # Get all airgap images files associated with this release
 IMAGES_ARCHIVES=$(curl "https://api.github.com/repos/k3s-io/k3s/releases/tags/v${K3S_VERSION}" | \
     # Filter the assets so that only zstd archives and text files that have "images" in their name remain
-    # Modify the name and write the modified name and download URL to a string
     jq -r '.assets[] | select(.name | contains("images")) |
         select(.content_type == "application/zstd" or .content_type == "text/plain; charset=utf-8") |
-        .name = (.name | sub("k3s-"; "") | sub(".tar.zst"; "") | sub(".txt"; "-list")) |
         "\(.name) \(.browser_download_url)"')
 
 # Create a JSON object for each airgap images file and prefetch all download URLs in the process
 # Combine all JSON objects and write the result to images-versions.json
 while read -r name url; do
-    jq --null-input --arg name "$name" \
+    # Pick the right hash based on the name
+    sha256=$(grep "$name" <<< "$SHA256_HASHES" | cut -d ' ' -f 1)
+    # Remove the k3s- prefix and file endings
+    clean_name=$(sed -e 's/^k3s-//' -e 's/\.tar\.zst//' -e 's/\.txt/-list/' <<< "$name")
+    jq --null-input --arg name "$clean_name" \
             --arg url "$url" \
-            --arg sha256 "$(nix-prefetch-url --quiet "${url}")" \
+            --arg sha256 "$sha256" \
         '{$name: {"url": $url, "sha256": $sha256}}'
 done <<<"${IMAGES_ARCHIVES}" | jq --slurp 'reduce .[] as $item ({}; . * $item)' > images-versions.json
 
@@ -141,7 +149,7 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_HASH=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules.overrideAttrs (_: { vendorHash = sha256; })")
+K3S_VENDOR_HASH=$(nurl -e "(import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules")
 set -e
 
 if [ -n "${K3S_VENDOR_HASH:-}" ]; then
@@ -153,12 +161,11 @@ fi
 
 # Implement commit
 # See https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
-OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
 cat <<EOF
 [{
     "attrPath": "k3s_1_${MINOR_VERSION}",
     "oldVersion": "$OLD_VERSION",
     "newVersion": "$K3S_VERSION",
-    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix"]
+    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix","$PWD/images-versions.json"]
 }]
 EOF

@@ -67,7 +67,7 @@
 
 buildPythonPackage rec {
   pname = "argilla";
-  version = "1.29.1";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -75,8 +75,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "argilla-io";
     repo = "argilla";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ndendXlgACFdwnZ/P2W22Tr/Ji8AYw/6jtb8F3/zqSA=";
+    tag = "v${version}";
+    hash = "sha256-2e2AIhrCJoPDn6EnO4IGSd2YNV/iSY39nmzbcHNwtOU=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -106,7 +106,7 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server =
       [
         aiofiles
@@ -178,14 +178,14 @@ buildPythonPackage rec {
     pytest-mock
     pytest-asyncio
     factory-boy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 
   meta = with lib; {
     description = "Open-source data curation platform for LLMs";
     homepage = "https://github.com/argilla-io/argilla";
-    changelog = "https://github.com/argilla-io/argilla/releases/tag/v${version}";
+    changelog = "https://github.com/argilla-io/argilla/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     mainProgram = "argilla";

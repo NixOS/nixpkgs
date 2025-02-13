@@ -1,30 +1,42 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "keep-sorted";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "keep-sorted";
-    rev = "v${version}";
-    hash = "sha256-yeps+StUA7h12Jlra24Po2zNzjIPNIQCOyWLazC8F8M=";
+    tag = "v${version}";
+    hash = "sha256-ROvj7w8YMq6+ntx0SWi+HfN4sO6d7RjKWwlb/9gfz8w=";
   };
 
-  vendorHash = "sha256-tPTWWvr+/8wWUnQcI4Ycco2OEgA2mDQt15OGCk/ZjrQ=";
+  vendorHash = "sha256-HTE9vfjRmi5GpMue7lUfd0jmssPgSOljbfPbya4uGsc=";
 
-  CGO_ENABLED = "0";
+  # Inject version string instead of reading version from buildinfo.
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail 'readVersion())' '"v${version}")'
+  '';
 
-  ldfags = [ "-s" "-w" ];
+  env.CGO_ENABLED = "0";
 
-  checkFlags = [
-    # Test tries to find files using git
-    "-skip=^TestGoldens"
-  ];
+  ldflags = [ "-s" ];
+
+  preCheck = ''
+    # Test tries to find files using git in init func.
+    rm goldens/*_test.go
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

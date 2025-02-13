@@ -4,16 +4,16 @@ let
   archiveVersion = import ./archive-version.nix lib;
   mkTool = { pname, makeTarget, description, homepage, mainProgram }: stdenv.mkDerivation rec {
     inherit pname;
-    version = "3.46.0";
+    version = "3.47.2";
 
     # nixpkgs-update: no auto update
     src = assert version == sqlite.version; fetchurl {
       url = "https://sqlite.org/2024/sqlite-src-${archiveVersion version}.zip";
-      hash = "sha256-BwNiEJvraJn2V5dXG5i4gkyPQ39bKSb4juBo2Y7zaOw=";
+      hash = "sha256-5qRx8SOCJfNMLEjFYBtUAkzFOARDaCMPWf8Gcr4fxiM=";
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ tcl ] ++ lib.optional stdenv.isDarwin Foundation;
+    buildInputs = [ tcl ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
     makeFlags = [ makeTarget ];
 
@@ -42,5 +42,12 @@ in
     description = "Tool that shows statistics about SQLite databases";
     homepage = "https://www.sqlite.org/sqlanalyze.html";
     mainProgram = "sqlite3_analyzer";
+  };
+  sqlite-rsync = mkTool {
+    pname = "sqlite-rsync";
+    makeTarget = "sqlite3_rsync";
+    description = "Database remote-copy tool for SQLite";
+    homepage = "https://www.sqlite.org/rsync.html";
+    mainProgram = "sqlite3_rsync";
   };
 }

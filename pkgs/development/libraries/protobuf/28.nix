@@ -2,8 +2,8 @@
 
 callPackage ./generic.nix (
   {
-    version = "28.0";
-    hash = "sha256-dAyXtBPeZAhmAOWbG1Phh57fqMmkH2AbDUr+8A+irJQ=";
+    version = "28.3";
+    hash = "sha256-+bb5RxITzxuX50ItmpQhWEG1kMfvlizWTMJJzwlhhYM=";
   }
   // args
 )

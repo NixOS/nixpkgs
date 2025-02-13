@@ -12,15 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "1.0.2";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-olQZ7e4RmjL1KVtJvPsXICgL2VCOIFnZCW8WjKO3X+Q=";
+    tag = "v${version}";
+    hash = "sha256-Y/9mPaOgynQock8nakjQHCs9VUs7w7EysYsGsDOM87Y=";
   };
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   build-system = [ poetry-core ];
 

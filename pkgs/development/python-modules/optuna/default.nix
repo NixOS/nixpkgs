@@ -6,62 +6,50 @@
   pythonOlder,
   alembic,
   boto3,
-  botorch,
-  catboost,
-  cma,
   cmaes,
   colorlog,
-  distributed,
   fakeredis,
+  fvcore,
   google-cloud-storage,
-  lightgbm,
+  grpcio,
+  kaleido,
   matplotlib,
-  mlflow,
   moto,
   numpy,
   packaging,
   pandas,
   plotly,
+  protobuf,
   pytest-xdist,
-  pytorch-lightning,
   pyyaml,
   redis,
   scikit-learn,
-  scikit-optimize,
   scipy,
   setuptools,
-  shap,
   sqlalchemy,
-  tensorflow,
   torch,
-  torchaudio,
-  torchvision,
   tqdm,
-  wandb,
-  wheel,
-  xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.0.0";
+  version = "4.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZCK6otX90s8SB91TLkKwJ4net2dGmAKdIESeHXy87K0=";
+    tag = "v${version}";
+    hash = "sha256-NNlwrVrGg2WvkC42nmW7K/mRktE3B97GaL8GaSOKF1Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     colorlog
     numpy
@@ -71,59 +59,47 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
-    integration = [
-      botorch
-      catboost
-      cma
-      distributed
-      lightgbm
-      mlflow
-      pandas
-      # pytorch-ignite
-      pytorch-lightning
-      scikit-learn
-      scikit-optimize
-      shap
-      tensorflow
-      torch
-      torchaudio
-      torchvision
-      wandb
-      xgboost
-    ];
+  optional-dependencies = {
     optional = [
       boto3
-      botorch
       cmaes
+      fvcore
       google-cloud-storage
+      grpcio
       matplotlib
       pandas
       plotly
+      protobuf
       redis
       scikit-learn
+      scipy
     ];
   };
 
   preCheck = ''
     export PATH=$out/bin:$PATH
+
+    # grpc tests are racy
+    sed -i '/"grpc",/d' optuna/testing/storages.py
   '';
 
-  nativeCheckInputs = [
-    fakeredis
-    moto
-    pytest-xdist
-    pytestCheckHook
-    scipy
-  ] ++ fakeredis.optional-dependencies.lua ++ passthru.optional-dependencies.optional;
+  nativeCheckInputs =
+    [
+      fakeredis
+      kaleido
+      moto
+      pytest-xdist
+      pytestCheckHook
+      torch
+    ]
+    ++ fakeredis.optional-dependencies.lua
+    ++ optional-dependencies.optional;
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
-
-  disabledTestPaths = [
-    # require unpackaged kaleido and building it is a bit difficult
-    "tests/visualization_tests"
-    # ImportError: cannot import name 'mock_s3' from 'moto'
-    "tests/artifacts_tests/test_boto3.py"
+  disabledTests = [
+    # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
+    "test_get_pareto_front_plot"
+    # too narrow time limit
+    "test_get_timeline_plot_with_killed_running_trials"
   ];
 
   pythonImportsCheck = [ "optuna" ];

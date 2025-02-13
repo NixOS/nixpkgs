@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyipma";
-  version = "3.0.7";
+  version = "3.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-a6UXc8XLZhSyUb8AxnXoPgiyP004GQfuapRmVeOaFQU=";
+    tag = version;
+    hash = "sha256-iz47BeBiSXIN/rZNOjuZYTFTIm0WAUg8cy0xV20gdwk=";
   };
 
   propagatedBuildInputs = [

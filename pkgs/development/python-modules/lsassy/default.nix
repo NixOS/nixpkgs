@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.11";
+  version = "3.1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Hackndo";
     repo = "lsassy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-boPFrmPqaHpezxXM3VM50i+n+n+gXkuwP4ErpMpN/AI=";
+    tag = "v${version}";
+    hash = "sha256-DdIEDseGLI+hUIaUNPBqpkGGe+F+Z+jZ0g/JzXB8pf8=";
   };
 
   pythonRelaxDeps = [
@@ -29,7 +29,6 @@ buildPythonPackage rec {
     "netaddr"
     "rich"
   ];
-
 
   build-system = [ poetry-core ];
 

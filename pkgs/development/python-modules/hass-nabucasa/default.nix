@@ -17,25 +17,25 @@
   setuptools,
   snitun,
   syrupy,
+  webrtc-models,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.81.1";
+  version = "0.90.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/sY/JijBCcGcbMjoX0yuhFIWvU+TFVN8sRxBx+CDVVs=";
+    tag = version;
+    hash = "sha256-OP+KUh0WsE6I0hKUvUBHhzrLCKM7jc5GhO++9OrLh4s=";
   };
 
   pythonRelaxDeps = [ "acme" ];
-
 
   build-system = [ setuptools ];
 
@@ -49,6 +49,7 @@ buildPythonPackage rec {
     pycognito
     pyjwt
     snitun
+    webrtc-models
   ];
 
   nativeCheckInputs = [
@@ -64,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for the Home Assistant cloud integration";
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
-    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

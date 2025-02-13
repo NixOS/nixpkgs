@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "extract-msg";
-  version = "0.49.0";
+  version = "0.53.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-o9kf88IYYpjZDpg1liIaIpxzg0cfFepRx0BdxeLRTz0=";
+    tag = "v${version}";
+    hash = "sha256-vkWINRUQh/zfKzSJifJMn0EVnBdPODLFdS/jMdGI36I=";
   };
 
   pythonRelaxDeps = [

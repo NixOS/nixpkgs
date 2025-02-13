@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-hl7";
+  pname = "hl7";
   version = "0.4.5";
   pyproject = true;
 
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "johnpaulett";
     repo = "python-hl7";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9uFdyL4+9KSWXflyOMOeUudZTv4NwYPa0ADNTmuVbqo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

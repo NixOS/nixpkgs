@@ -11,7 +11,7 @@
 let
   buildVscodeExtension =
     a@{
-      name,
+      pname ? null, # Only optional for backward compatibility.
       src,
       # Same as "Unique Identifier" on the extension's web page.
       # For the moment, only serve as unique extension dir.
@@ -33,10 +33,14 @@ let
       ...
     }:
     stdenv.mkDerivation (
-      (removeAttrs a [ "vscodeExtUniqueId" ])
+      (removeAttrs a [
+        "vscodeExtUniqueId"
+        "pname"
+      ])
+      // (lib.optionalAttrs (pname != null) {
+        pname = "vscode-extension-${pname}";
+      })
       // {
-
-        name = "vscode-extension-${name}";
 
         passthru = passthru // {
           inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
@@ -88,7 +92,7 @@ let
         "vsix"
       ])
       // {
-        name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
+        pname = "${mktplcRef.publisher}-${mktplcRef.name}";
         version = mktplcRef.version;
         src = if (vsix != null) then vsix else fetchVsixFromVscodeMarketplace mktplcRef;
         vscodeExtPublisher = mktplcRef.publisher;

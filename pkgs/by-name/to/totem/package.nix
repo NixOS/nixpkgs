@@ -1,62 +1,43 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, gettext
-, gst_all_1
-, python3Packages
-, shared-mime-info
-, pkg-config
-, gtk3
-, glib
-, gobject-introspection
-, totem-pl-parser
-, wrapGAppsHook3
-, itstool
-, libxml2
-, vala
-, gnome
-, grilo
-, grilo-plugins
-, libpeas
-, libportal-gtk3
-, libhandy
-, adwaita-icon-theme
-, gnome-desktop
-, gsettings-desktop-schemas
-, gdk-pixbuf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  gst_all_1,
+  python3Packages,
+  shared-mime-info,
+  pkg-config,
+  gtk3,
+  glib,
+  gobject-introspection,
+  totem-pl-parser,
+  wrapGAppsHook3,
+  itstool,
+  libxml2,
+  vala,
+  gnome,
+  grilo,
+  grilo-plugins,
+  libpeas,
+  libportal-gtk3,
+  libhandy,
+  adwaita-icon-theme,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gdk-pixbuf,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "43.0";
+  version = "43.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${lib.versions.major version}/totem-${version}.tar.xz";
-    hash = "sha256-s202VZKLWJZGKk05+Dtq1m0328nJnc6wLqii43OUpB4=";
+    hash = "sha256-VmgpHpxkRJhcs//k6k8CEvVMK75g3QERTBqVD5R1nm0=";
   };
-
-  patches = [
-    # Lower X11 dependency version since we do not have it.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/totem/-/commit/140d9eea70c3101ef3234abb4de5974cb84b13db.patch";
-      hash = "sha256-ohppxqMiH8Ksc9B2e3AXighfM6KVN+RNXYL+fLELSN8=";
-      revert = true;
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/totem/-/commit/2610b4536f73493587e4a5a38e01c9961fcabb96.patch";
-      hash = "sha256-nPfzS+LQuAlyQOz67hCdtx93w2frhgWlg1KGX5bEU38=";
-      revert = true;
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/totem/-/commit/5b871aee5292f25bbf39dca18045732e979e7a68.patch";
-      hash = "sha256-LqQLdgyZkIVc+/hQ5sdBLqhtjCVIMDSs9tjVXwMFodg=";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -68,6 +49,7 @@ stdenv.mkDerivation rec {
     itstool
     gobject-introspection
     wrapGAppsHook3
+    gst_all_1.gstreamer # gst-inspect-1.0
   ];
 
   buildInputs = [
@@ -103,9 +85,7 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  # Tests do not work with GStreamer 1.18.
-  # https://gitlab.gnome.org/GNOME/totem/-/issues/450
-  doCheck = false;
+  doCheck = true;
 
   postPatch = ''
     chmod +x meson_compile_python.py # patchShebangs requires executable file
@@ -117,7 +97,7 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     xvfb-run -s '-screen 0 800x600x24' \
-      ninja test
+      meson test --print-errorlogs
 
     runHook postCheck
   '';
@@ -130,9 +110,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apps.gnome.org/Totem/";
+    changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${version}/NEWS?ref_type=tags";
     description = "Movie player for the GNOME desktop based on GStreamer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
     platforms = platforms.linux;
+    # gst-inspect-1.0 is not smart enough for cross compiling
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

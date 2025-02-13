@@ -1,19 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, goreman }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  goreman,
+}:
 
 buildGoModule rec {
   pname = "goreman";
-  version = "0.3.15";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
     rev = "v${version}";
-    hash = "sha256-Z6b245tC6UsTaHTTlKEFH0egb5z8HTmv/554nkileng=";
+    hash = "sha256-hOFnLxHsrauOrsbJYKNrwFFT5yYX/rdZUVjscBIGDLo=";
   };
 
-  vendorHash = "sha256-Qbi2GfBrVLFbH9SMZOd1JqvD/afkrVOjU4ECkFK+dFA=";
+  vendorHash = "sha256-Udm0xdrW8Aky26oxUhdbpsNTWziZxkM0G1ZRKLwyl1Q=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = goreman;

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.8.3";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-H1JfdvxJvX5dmC9aTqIOkjAqFEL44KoUXEhoYj2uRY8=";
+    tag = "v${version}";
+    hash = "sha256-Y53HoLcamoFIrwZtNcL1BOrzBjRD09mT3AiS0QUT7dY=";
   };
 
   postPatch = ''
@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
 
   # k5test is marked as broken on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     k5test

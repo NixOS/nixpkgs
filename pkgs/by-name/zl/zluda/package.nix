@@ -1,4 +1,18 @@
-{ lib, fetchFromGitHub, rocmPackages, python3, cargo, rustc, cmake, clang, zlib, libxml2, libedit, rustPlatform, stdenv }:
+{
+  lib,
+  fetchFromGitHub,
+  rocmPackages,
+  python3,
+  cargo,
+  rustc,
+  cmake,
+  clang,
+  zlib,
+  libxml2,
+  libedit,
+  rustPlatform,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zluda";
@@ -35,7 +49,6 @@ rustPlatform.buildRustPackage rec {
     clang
   ];
 
-  cargoHash = "sha256-gZdLThmaeWVJXoeG7fuusfacgH2RNTHrqm8W0kqkqOY=";
   cargoLock.lockFile = ./Cargo.lock;
 
   # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set

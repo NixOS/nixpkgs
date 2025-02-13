@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, java
-, coreutils
-, which
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  java,
+  coreutils,
+  which,
+  makeWrapper,
   # For the test
-, pkgs
+  pkgs,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     homepage = "https://jena.apache.org";
     downloadPage = "https://archive.apache.org/dist/jena/binaries/";
     mainProgram = "fuseki";

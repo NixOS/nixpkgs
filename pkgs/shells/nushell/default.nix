@@ -1,27 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, zlib
-, zstd
-, pkg-config
-, python3
-, xorg
-, Libsystem
-, AppKit
-, Security
-, nghttp2
-, libgit2
-, withDefaultFeatures ? true
-, additionalFeatures ? (p: p)
-, testers
-, nushell
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  zlib,
+  zstd,
+  pkg-config,
+  python3,
+  xorg,
+  Libsystem,
+  AppKit,
+  Security,
+  nghttp2,
+  libgit2,
+  withDefaultFeatures ? true,
+  additionalFeatures ? (p: p),
+  testers,
+  nushell,
+  nix-update-script,
 }:
 
 let
-  version = "0.98.0";
+  version = "0.102.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -31,25 +32,39 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
-    rev = version;
-    hash = "sha256-0XN26onR4Tk8Ejc/UntdL+b5FPBOoBmDQM0DRommIMo=";
+    tag = version;
+    hash = "sha256-ISiixFQ2m++WKX66SnvF1VZpgYJjgchRWSlo/Cp/Ybs=";
   };
 
-  cargoHash = "sha256-43V0TnYGG2tyWRIGaohIaoN7dxnY1fle2Bp5lDiFlWg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3cmNlCTawMUpr6kSyT/YZzC717FoXkF0uTeE/D8BSFM=";
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib Libsystem Security ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+  buildInputs =
+    [
+      openssl
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+      Libsystem
+      Security
+    ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+      AppKit
+      nghttp2
+      libgit2
+    ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  doCheck = ! stdenv.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
+  doCheck = !stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
@@ -79,7 +94,11 @@ rustPlatform.buildRustPackage {
     description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      johntitor
+      joaquintrinanes
+    ];
     mainProgram = "nu";
   };
 }

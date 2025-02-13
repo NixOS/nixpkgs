@@ -1,33 +1,34 @@
-{ stdenv
-, stdenvNoCC
-, lib
-, makeWrapper
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, autoPatchelfHook
-, openjdk
-, gtk3
-, gsettings-desktop-schemas
-, writeScript
-, bash
-, gnugrep
-, tor
-, zlib
-, openimajgrabber
-, hwi
-, imagemagick
-, gzip
-, gnupg
+{
+  stdenv,
+  stdenvNoCC,
+  lib,
+  makeWrapper,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  autoPatchelfHook,
+  openjdk,
+  gtk3,
+  gsettings-desktop-schemas,
+  writeScript,
+  bash,
+  gnugrep,
+  tor,
+  zlib,
+  openimajgrabber,
+  hwi,
+  imagemagick,
+  gzip,
+  gnupg,
 }:
 
 let
   pname = "sparrow";
-  version = "1.9.1";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "sha256-b1OIizSMTOtLM3/RFiBJPSbkj/C0d0s5ggcUwjCdBBo=";
+    sha256 = "sha256-Z4rA3KObPAOuJeI+TzyYaXDyptAxBAWzYJDTplUvw50=";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
@@ -56,12 +57,12 @@ let
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
-    sha256 = "sha256-2IGhP9Xsli9d0zTzPliJH/tE5TXei1vjVngtjL9vA48=";
+    sha256 = "sha256-qjkKw3WmbRBf+yqcSIYVWmYz8M3u2JxnBriR0Ec/C7A=";
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
-    sha256 = "sha256-FSR9Z+27J/u1MYIR+LrL+pqCP6q4GfVYtRZ0WA9AaKM=";
+    sha256 = "sha256-CRrEzWqFVFQGWsh2+rjSuGHuFmf+y6SetCi2G89jZ/0=";
   };
 
   publicKey = ./publickey.asc;
@@ -136,7 +137,15 @@ let
   sparrow-modules = stdenvNoCC.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [
+      makeWrapper
+      gzip
+      gnugrep
+      openjdk
+      autoPatchelfHook
+      (lib.getLib stdenv.cc.cc)
+      zlib
+    ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.
@@ -202,7 +211,10 @@ in
 stdenvNoCC.mkDerivation rec {
   inherit version src;
   pname = "sparrow-unwrapped";
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -211,8 +223,17 @@ stdenvNoCC.mkDerivation rec {
       icon = "sparrow-desktop";
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
-      categories = [ "Finance" "Network" ];
-      mimeTypes = [ "application/psbt" "application/bitcoin-transaction" "x-scheme-handler/bitcoin" "x-scheme-handler/auth47" "x-scheme-handler/lightning" ];
+      categories = [
+        "Finance"
+        "Network"
+      ];
+      mimeTypes = [
+        "application/psbt"
+        "application/bitcoin-transaction"
+        "x-scheme-handler/bitcoin"
+        "x-scheme-handler/auth47"
+        "x-scheme-handler/lightning"
+      ];
       startupWMClass = "Sparrow";
     })
   ];
@@ -257,7 +278,10 @@ stdenvNoCC.mkDerivation rec {
       binaryNativeCode
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ emmanuelrosa _1000101 ];
+    maintainers = with maintainers; [
+      emmanuelrosa
+      _1000101
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "sparrow-desktop";
   };

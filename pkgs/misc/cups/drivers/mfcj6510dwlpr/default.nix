@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, util-linux, xxd, runtimeShell
-, ghostscript, a2ps }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkgsi686Linux,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gnused,
+  gawk,
+  file,
+  cups,
+  util-linux,
+  xxd,
+  runtimeShell,
+  ghostscript,
+  a2ps,
+}:
 
 # Why:
 # The executable "brprintconf_mfcj6510dw" binary is looking for "/opt/brother/Printers/%s/inf/br%sfunc" and "/opt/brother/Printers/%s/inf/br%src".
@@ -29,7 +45,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups ghostscript dpkg a2ps ];
+  buildInputs = [
+    cups
+    ghostscript
+    dpkg
+    a2ps
+  ];
 
   dontUnpack = true;
 
@@ -73,18 +94,32 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw $out/lib/cups/filter/brother_lpdwrapper_mfcj6510dw
 
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/psconvertij2 \
-      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused gawk ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          gawk
+        ]
+      }
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
-      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
-    '';
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          file
+          ghostscript
+          a2ps
+        ]
+      }
+  '';
 
   meta = with lib; {
-    description  = "Brother MFC-J6510DW LPR driver";
+    description = "Brother MFC-J6510DW LPR driver";
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
-    homepage     = "http://www.brother.com/";
+    homepage = "http://www.brother.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license      = with licenses; unfree;
-    maintainers  = with maintainers; [ ramkromberg ];
-    platforms    = with platforms; linux;
+    license = with licenses; unfree;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = with platforms; linux;
   };
 }

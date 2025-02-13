@@ -1,4 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 stdenvNoCC.mkDerivation rec {
   pname = "armbian-firmware";
   version = "unstable-2023-09-16";

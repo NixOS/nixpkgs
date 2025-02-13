@@ -6,12 +6,13 @@
 , libgit2
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
-, overrideSDK
-, buildPackages
 , Security
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
 
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -68,7 +69,7 @@ let
       rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
       # TestRandomURLMultiThreaded fails
       rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+    '' + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
       # EPSILON is exceeded
       rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
     '';
@@ -87,28 +88,6 @@ let
     requiredSystemFeatures = [ ];
   };
 
-  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
-    nativeBuildInputs = args.nativeBuildInputs or []
-      # gitMinimal does not build on Windows. See packbuilder patch.
-      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-        # Needed for `git apply`; see `prePatch`
-        buildPackages.gitMinimal
-      ];
-    # Only `git apply` can handle git binary patches
-    prePatch = args.prePatch or ""
-      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
-        patch() {
-          git apply
-        }
-      '';
-    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
-    patches = (args.patches or []) ++ [
-      ./patches/libgit2-mempack-thin-packfile.patch
-    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-      ./patches/libgit2-packbuilder-callback-interruptible.patch
-    ];
-  });
-
   common = args:
     callPackage
       (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
@@ -116,7 +95,6 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
-        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -174,79 +152,44 @@ in lib.makeExtensible (self: ({
     enableParallelChecking = false;
   };
 
-  nix_2_18 = common {
-    version = "2.18.7";
-    hash = "sha256-ZfcL4utJHuxCGILb/zIeXVVbHkskgp70+c2IitkFJwA=";
-    self_attribute_name = "nix_2_18";
-  };
-
-  nix_2_19 = common {
-    version = "2.19.6";
-    hash = "sha256-XT5xiwOLgXf+TdyOjbJVOl992wu9mBO25WXHoyli/Tk=";
-    self_attribute_name = "nix_2_19";
-  };
-
-  nix_2_20 = common {
-    version = "2.20.8";
-    hash = "sha256-M2tkMtjKi8LDdNLsKi3IvD8oY/i3rtarjMpvhybS3WY=";
-    self_attribute_name = "nix_2_20";
-  };
-
-  nix_2_21 = common {
-    version = "2.21.4";
-    hash = "sha256-c6nVZ0pSrfhFX3eVKqayS+ioqyAGp3zG9ZPO5rkXFRQ=";
-    self_attribute_name = "nix_2_21";
-  };
-
-  nix_2_22 = common {
-    version = "2.22.3";
-    hash = "sha256-l04csH5rTWsK7eXPWVxJBUVRPMZXllFoSkYFTq/i8WU=";
-    self_attribute_name = "nix_2_22";
-  };
-
-  nix_2_23 = common {
-    version = "2.23.3";
-    hash = "sha256-lAoLGVIhRFrfgv7wcyduEkyc83QKrtsfsq4of+WrBeg=";
-    self_attribute_name = "nix_2_23";
-  };
-
-  nix_2_24 = (common {
-    version = "2.24.7";
-    hash = "sha256-NAyc5MR/T70umcSeMv7y3AVt00ZkmDXGm7LfYKTONfE=";
+  nix_2_24 = common {
+    version = "2.24.12";
+    hash = "sha256-lPiheE0D146tstoUInOUf1451stezrd8j6H6w7+RCv8=";
     self_attribute_name = "nix_2_24";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
+  };
+
+  nix_2_25 = common {
+    version = "2.25.5";
+    hash = "sha256-9xrQhrqHCSqWsQveykZvG/ZMu0se66fUQw3xVSg6BpQ=";
+    self_attribute_name = "nix_2_25";
+  };
+
+  nix_2_26 = (callPackage ./2_26/componentized.nix { }).overrideAttrs (this: old: {
+    passthru = old.passthru or {} // {
+      tests =
+        old.passthru.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (old) version src;
+          nix = this.finalPackage;
+          self_attribute_name = "nix_2_26";
+        };
+    };
   });
 
-  git = (common rec {
+  git = common rec {
     version = "2.25.0";
-    suffix = "pre20240920_${lib.substring 0 8 src.rev}";
+    suffix = "pre20241101_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "ca3fc1693b309ab6b8b0c09408a08d0055bf0363";
-      hash = "sha256-Hp7dkx7zfB9a4l5QusXUob0b1T2qdZ23LFo5dcp3xrU=";
+      rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
+      hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
     };
     self_attribute_name = "git";
-  }).override (lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    stdenv = overrideSDK stdenv { darwinMinVersion = "10.13"; };
-  });
+  };
 
-  latest = self.nix_2_24;
+  latest = self.nix_2_25;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -266,7 +209,7 @@ in lib.makeExtensible (self: ({
       nix;
 
   # Read ./README.md before bumping a major release
-  stable = addFallbackPathsCheck self.nix_2_18;
+  stable = addFallbackPathsCheck self.nix_2_24;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -274,7 +217,7 @@ in lib.makeExtensible (self: ({
       attr = "nix_2_${toString minor}";
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
-  ) (lib.range 4 17))
+  ) (lib.range 4 23))
   // {
     unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
   }

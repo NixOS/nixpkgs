@@ -10,19 +10,19 @@
 , portaudio
 , libsndfile
 , flac
-, usePulseAudio ? config.pulseaudio or stdenv.isLinux
+, usePulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
-  version = "0.7.9";
+  version = "0.7.13";
 
   outputs = [ "out" "dev" "bin" ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    hash = "sha256-A4bpGNddeX551bFO3QhHFl2LNZ6YEe9XZSwKNWot/PQ=";
+    hash = "sha256-3NfN5PnEmOtJbEVW4cG4E1Pip0dH6CcKQlZRF+pC4fE=";
   };
 
   enableParallelBuilding = true;

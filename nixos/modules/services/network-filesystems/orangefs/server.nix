@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...} :
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.orangefs.server;
 
@@ -20,22 +25,28 @@ let
 
       <MetaHandleRanges>
       ${lib.concatStringsSep "\n" (
-          lib.imap0 (i: alias:
-            let
-              begin = i * handleStep + 3;
-              end = begin + handleStep - 1;
-            in "Range ${alias} ${toString begin}-${toString end}") aliases
-       )}
+        lib.imap0 (
+          i: alias:
+          let
+            begin = i * handleStep + 3;
+            end = begin + handleStep - 1;
+          in
+          "Range ${alias} ${toString begin}-${toString end}"
+        ) aliases
+      )}
       </MetaHandleRanges>
 
       <DataHandleRanges>
       ${lib.concatStringsSep "\n" (
-          lib.imap0 (i: alias:
-            let
-              begin = i * handleStep + 3 + (lib.length aliases) * handleStep;
-              end = begin + handleStep - 1;
-            in "Range ${alias} ${toString begin}-${toString end}") aliases
-       )}
+        lib.imap0 (
+          i: alias:
+          let
+            begin = i * handleStep + 3 + (lib.length aliases) * handleStep;
+            end = begin + handleStep - 1;
+          in
+          "Range ${alias} ${toString begin}-${toString end}"
+        ) aliases
+      )}
       </DataHandleRanges>
 
       <StorageHints>
@@ -66,7 +77,8 @@ let
     ${lib.concatStringsSep "\n" fileSystems}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -74,7 +86,12 @@ in {
       enable = lib.mkEnableOption "OrangeFS server";
 
       logType = lib.mkOption {
-        type = with lib.types; enum [ "file" "syslog" ];
+        type =
+          with lib.types;
+          enum [
+            "file"
+            "syslog"
+          ];
         default = "syslog";
         description = "Destination for log messages.";
       };
@@ -96,7 +113,10 @@ in {
       BMIModules = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ "bmi_tcp" ];
-        example = [ "bmi_tcp" "bmi_ib"];
+        example = [
+          "bmi_tcp"
+          "bmi_ib"
+        ];
         description = "List of BMI modules to load.";
       };
 
@@ -114,7 +134,7 @@ in {
 
       servers = lib.mkOption {
         type = with lib.types; attrsOf lib.types.str;
-        default = {};
+        default = { };
         example = {
           node1 = "tcp://node1:3334";
           node2 = "tcp://node2:3334";
@@ -126,7 +146,9 @@ in {
         description = ''
           These options will create the `<FileSystem>` sections of config file.
         '';
-        default = { orangefs = {}; };
+        default = {
+          orangefs = { };
+        };
         example = lib.literalExpression ''
           {
             fs1 = {
@@ -138,45 +160,52 @@ in {
             };
           }
         '';
-        type = with lib.types; attrsOf (submodule ({ ... } : {
-          options = {
-            id = lib.mkOption {
-              type = lib.types.int;
-              default = 1;
-              description = "File system ID (must be unique within configuration).";
-            };
+        type =
+          with lib.types;
+          attrsOf (
+            submodule (
+              { ... }:
+              {
+                options = {
+                  id = lib.mkOption {
+                    type = lib.types.int;
+                    default = 1;
+                    description = "File system ID (must be unique within configuration).";
+                  };
 
-            rootHandle = lib.mkOption {
-              type = lib.types.int;
-              default = 3;
-              description = "File system root ID.";
-            };
+                  rootHandle = lib.mkOption {
+                    type = lib.types.int;
+                    default = 3;
+                    description = "File system root ID.";
+                  };
 
-            extraConfig = lib.mkOption {
-              type = lib.types.lines;
-              default = "";
-              description = "Extra config for `<FileSystem>` section.";
-            };
+                  extraConfig = lib.mkOption {
+                    type = lib.types.lines;
+                    default = "";
+                    description = "Extra config for `<FileSystem>` section.";
+                  };
 
-            troveSyncMeta = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-              description = "Sync meta data.";
-            };
+                  troveSyncMeta = lib.mkOption {
+                    type = lib.types.bool;
+                    default = true;
+                    description = "Sync meta data.";
+                  };
 
-            troveSyncData = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Sync data.";
-            };
+                  troveSyncData = lib.mkOption {
+                    type = lib.types.bool;
+                    default = false;
+                    description = "Sync data.";
+                  };
 
-            extraStorageHints = lib.mkOption {
-              type = lib.types.lines;
-              default = "";
-              description = "Extra config for `<StorageHints>` section.";
-            };
-          };
-        }));
+                  extraStorageHints = lib.mkOption {
+                    type = lib.types.lines;
+                    default = "";
+                    description = "Extra config for `<StorageHints>` section.";
+                  };
+                };
+              }
+            )
+          );
       };
     };
   };
@@ -191,7 +220,7 @@ in {
       isSystemUser = true;
       group = "orangefs";
     };
-    users.groups.orangefs = {};
+    users.groups.orangefs = { };
 
     # To format the file system the config file is needed.
     environment.etc."orangefs/server.conf" = {

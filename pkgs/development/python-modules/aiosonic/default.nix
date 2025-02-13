@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "aiosonic";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "aiosonic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YvqRuxl+Dgnsla/iotvWREdh93jwnXaq+F9py9MGP0o=";
+    tag = version;
+    hash = "sha256-wBYGiSTSRhi11uqTyGgF1YpnBVoDraCr2GKC8VkQEWc=";
   };
 
   postPatch = ''
@@ -90,7 +90,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiosonic" ];
 
   disabledTests =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # need network
       "test_simple_get"
       "test_get_python"
@@ -132,7 +132,7 @@ buildPythonPackage rec {
       "test_get_with_cookies"
       "test_proxy_request"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # "FAILED tests/test_proxy.py::test_proxy_request - Exception: port 8865 never got active"
       "test_proxy_request"
     ];

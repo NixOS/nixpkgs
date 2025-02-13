@@ -1,17 +1,24 @@
-{ lib, buildNpmPackage, fetchFromGitHub, mystmd, testers, nix-update-script }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  mystmd,
+  testers,
+  nix-update-script,
+}:
 
 buildNpmPackage rec {
   pname = "mystmd";
-  version = "1.3.6";
+  version = "1.3.18";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mystmd";
     rev = "mystmd@${version}";
-    hash = "sha256-xcmiWJIeOW+0h2Fd7uAYyrD4+K/tLCWbyyeumD+4MMQ=";
+    hash = "sha256-20Cxs4ib7xRn4UC9ShiQ+KnyrTCmW/vII7QN9BObY78=";
   };
 
-  npmDepsHash = "sha256-X4198iURcZDODA/mrpPwobA/1PG4M9k9G4tClB3qVQ0=";
+  npmDepsHash = "sha256-dcjOxEYTG/EnBRu+RE7cpSEvNmG32QsDDYzItaNTpa0=";
 
   dontNpmInstall = true;
 

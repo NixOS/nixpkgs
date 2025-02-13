@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "influxdb_exporter";
-  version = "0.11.7";
+  version = "0.12.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "influxdb_exporter";
-    hash = "sha256-gaUBRDGbHvHH+Ll1fmOaYEVRAqy2q5HoTyty2PGTwBE=";
+    hash = "sha256-O3cH7fX29tr/rhsovoYnmTL6CE+sZQKGNj4mq1IV/5U=";
   };
 
-  vendorHash = "sha256-47ru0rzLl4/O0UOGqCojH+vqd4TS1S2Hk6zmSzrXriw=";
+  vendorHash = "sha256-RCf52lHpF4alljH/CNhCg+zgfvlYbO5WT2rFX63fyyo=";
 
   ldflags = [
     "-s"

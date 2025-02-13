@@ -15,23 +15,23 @@
 
   # checks
   pytestCheckHook,
-  python,
   pythonOlder,
   tornado,
+  libsodium,
   zeromq,
   pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "26.0.3";
+  version = "26.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-26fZ8uBH36K8o7AfT4SqUkZyUgPWKE43kPLKFfumtAo=";
+    hash = "sha256-BwZywlhYHI5PZAtRWSl1gKmXSwJgQ71KsEcL6e0yTx8=";
   };
 
   build-system = [
@@ -44,7 +44,10 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ zeromq ];
+  buildInputs = [
+    libsodium
+    zeromq
+  ];
 
   dependencies = lib.optionals isPyPy [ cffi ];
 
@@ -56,12 +59,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zmq" ];
 
+  preCheck = ''
+    rm -r zmq
+  '';
+
   pytestFlagsArray = [
-    "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
-    # pytest.ini is missing in pypi's sdist
-    # https://github.com/zeromq/pyzmq/issues/1853#issuecomment-1592731986
-    "--asyncio-mode auto"
-    "--ignore=$out/lib/python3.12/site-packages/zmq/tests/test_mypy.py"
+    "-m"
+    "'not flaky'"
   ];
 
   disabledTests = [

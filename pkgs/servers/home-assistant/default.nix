@@ -1,29 +1,31 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, fetchPypi
-, python312
-, substituteAll
-, ffmpeg-headless
-, inetutils
-, nixosTests
-, home-assistant
-, testers
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  python313,
+  substituteAll,
+  ffmpeg-headless,
+  inetutils,
+  nixosTests,
+  home-assistant,
+  testers,
 
-# Look up dependencies of specified components in component-packages.nix
-, extraComponents ? [ ]
+  # Look up dependencies of specified components in component-packages.nix
+  extraComponents ? [ ],
 
-# Additional packages to add to propagatedBuildInputs
-, extraPackages ? ps: []
+  # Additional packages to add to propagatedBuildInputs
+  extraPackages ? ps: [ ],
 
-# Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-# Applied after defaultOverrides
-, packageOverrides ? self: super: {}
+  # Override Python packages using
+  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+  # Applied after defaultOverrides
+  packageOverrides ? self: super: { },
 
-# Skip pip install of required packages on startup
-, skipPip ? true }:
+  # Skip pip install of required packages on startup
+  skipPip ? true,
+}:
 
 let
   defaultOverrides = [
@@ -43,19 +45,15 @@ let
         ];
       });
 
-      aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
-        version = "2022.12.1";
+      aiomqtt = super.aiomqtt.overridePythonAttrs (rec {
+        version = "2.0.1";
         src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "aiopurpleair";
-          rev = "refs/tags/${version}";
-          hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+          owner = "sbtinstruments";
+          repo = "aiomqtt";
+          tag = "v${version}";
+          hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
         };
-        postPatch = ''
-          substituteInPlace pyproject.toml --replace-fail \
-            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
-            '"poetry-core"'
-        '';
+        meta.broken = false;
       });
 
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
@@ -95,19 +93,40 @@ let
             --replace-fail "poetry>=1.0.0b1" "poetry-core" \
             --replace-fail "poetry.masonry" "poetry.core.masonry"
         '';
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+        propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [ ]) ++ [
           self.pytz
         ];
       });
 
-      geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
+      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
+        version = "4.0.3";
         src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
+          owner = "aio-libs";
+          repo = "async-timeout";
+          tag = "v${version}";
+          hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
         };
-        doCheck = false;
+      });
+
+      eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.1";
+        src = fetchFromGitHub {
+          owner = "EuleMitKeule";
+          repo = "eq3btsmart";
+          tag = version;
+          hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
+        };
+        build-system = with self; [ poetry-core ];
+      });
+
+      govee-local-api = super.govee-local-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.3";
+        src = fetchFromGitHub {
+          owner = "Galorhallen";
+          repo = "govee-local-api";
+          tag = "v${version}";
+          hash = "sha256-qBT0Xub+eL7rfF+lQWlheBJSahEKWjREGJQD6sHjTPk=";
+        };
       });
 
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
@@ -123,6 +142,16 @@ let
         ];
       });
 
+      letpot = super.letpot.overridePythonAttrs (rec {
+        version = "0.3.0";
+        src = fetchFromGitHub {
+          owner = "jpelgrom";
+          repo = "python-letpot";
+          tag = "v${version}";
+          hash = "sha256-OFLQ0DV7roqUlm6zJWAzMRpcmAi/oco8lEHbmfqNaVs=";
+        };
+      });
+
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {
@@ -131,6 +160,8 @@ let
           hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
         };
       });
+
+      paho-mqtt = super.paho-mqtt_1;
 
       pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
         version = "2.5.9";
@@ -174,15 +205,6 @@ let
         };
       });
 
-      pyasn1 = super.pyasn1.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.8";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-rvd8n7lKOsWI6HhBIIvexGRHHZhxvVBQoofMmkdc0Lo=";
-        };
-      });
-
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -193,18 +215,6 @@ let
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
-
-      pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.18";
-        src = fetchFromGitHub {
-          owner = "yaleman";
-          repo = "aussiebb";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-tEdddVsLFCHRvyLCctDakioiop2xWaJlfGE16P1ukHc=";
-        };
-      });
-
-      pydantic = super.pydantic_1;
 
       pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.3";
@@ -224,7 +234,7 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-kIE3y/qlsO9Y1MjEQcX0pfaBeIzCCHk4f1Xa215BBHo=";
         };
-        dependencies = oldAttrs.propagatedBuildInputs or [] ++ [
+        dependencies = oldAttrs.propagatedBuildInputs or [ ] ++ [
           self.pytz
         ];
       });
@@ -248,6 +258,46 @@ let
         };
       });
 
+      pyrail = super.pyrail.overridePythonAttrs (rec {
+        version = "0.0.3";
+        src = fetchPypi {
+          pname = "pyrail";
+          inherit version;
+          hash = "sha256-XxcVcRXMjYAKevANAqNJkGDUWfxDaLqgCL6XL9Lhsf4=";
+        };
+        env.CI_JOB_ID = version;
+        build-system = [ self.setuptools ];
+        dependencies = [ self.requests ];
+      });
+
+      # snmp component does not support pysnmp 7.0+
+      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
+        version = "6.2.6";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmp";
+          tag = "v${version}";
+          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
+        };
+      });
+
+      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.4";
+        src = fetchFromGitHub {
+          owner = "lextudio";
+          repo = "pysnmpcrypto";
+          tag = "v${version}";
+          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
+        };
+        build-system = with self; [ setuptools ];
+        postPatch = ''
+          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
+          substituteInPlace setup.py --replace \
+            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
+            "observed_version = [36, 2, 0]"
+        '';
+      });
+
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -266,79 +316,18 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
-      });
-
-      # newer sigstore version transitivevly require pydantic>=2
-      sigstore = super.sigstore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.2";
-        src = fetchFromGitHub {
-          owner = "sigstore";
-          repo = "sigstore-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-QqY5GOBS75OkbSaF5Ua5jnJAhsYfVRuWLUoWDxX8Ino=";
-        };
-        dependencies = with self; [
-          appdirs
-          cryptography
-          id
-          pydantic
-          pyjwt
-          pyopenssl
-          requests
-          securesystemslib
-          sigstore-protobuf-specs
-          tuf
-        ];
-        doCheck = false; # pytest too new
-      });
-
-      sigstore-protobuf-specs = super.sigstore-protobuf-specs.overridePythonAttrs {
-        version = "0.1.0";
-        src = fetchPypi {
-          pname = "sigstore-protobuf-specs";
-          version = "0.1.0";
-          hash = "sha256-YistIxYToo7T5mYKzYeBhnW06DSG9JoPDBmKxUdfy4E=";
-        };
-        nativeBuildInputs = with self; [
-          flit-core
-        ];
-        pythonRelaxDeps = [
-          "betterproto"
-        ];
-      };
-
-      slack-sdk = super.slack-sdk.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = fetchFromGitHub {
-          owner = "slackapi";
-          repo = "python-slackclient";
-          rev = "refs/tags/${version}";
-          hash = "sha256-U//HUe6e41wOOzoaDl4yXPnEASCzpGBIScHStWMN8tk=";
-        };
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace-fail "pytest-runner" ""
-        '';
-        pythonImportsCheck = [ "slack" ];
-        doCheck = false; # Tests changed a lot for > 3
-      });
-
-      tuf = super.tuf.overridePythonAttrs rec {
-        version = "2.1.0";
-        src = fetchFromGitHub {
-          owner = "theupdateframework";
-          repo = "python-tuf";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-MdPctAZuKn/YAwpMJ5gWU7PXJD3iK7bYprLXV52wNQQ=";
-        };
-        disabledTests = [
-          "test_sign_failures"
-        ];
-      };
-
-      versioningit = super.versioningit.overridePythonAttrs {
+        patches = [ ];
         doCheck = false;
-      };
+      });
+
+      vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {
+        version = "2.3.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
+        };
+      });
 
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
@@ -351,45 +340,17 @@ let
         };
       });
 
-      xbox-webapi = super.xbox-webapi.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.11";
-        src = fetchFromGitHub {
-          owner = "OpenXbox";
-          repo = "xbox-webapi-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-fzMB+I8+ZTJUiZovcuj+d5GdHY9BJyJd6j92EhJeIFI=";
-        };
-        postPatch = ''
-          sed -i '/pytest-runner/d' setup.py
-        '';
-        propagatedBuildInputs = with self; [
-          aiohttp
-          appdirs
-          ms-cv
-          pydantic
-          ecdsa
-        ];
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
-      });
-
-      youtubeaio = super.youtubeaio.overridePythonAttrs (old: {
-        pytestFlagsArray = [
-          # fails with pydantic v1
-          "--deselect=tests/test_video.py::test_fetch_video"
-        ];
-      });
-
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
       homeassistant = self.toPythonModule home-assistant;
-      pytest-homeassistant-custom-component = self.callPackage ./pytest-homeassistant-custom-component.nix { };
+      pytest-homeassistant-custom-component =
+        self.callPackage ./pytest-homeassistant-custom-component.nix
+          { };
     })
   ];
 
-  python = python312.override {
+  python = python313.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
@@ -408,11 +369,14 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.9.2";
+  hassVersion = "2025.2.3";
 
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
-  version = assert (componentPackages.version == hassVersion); hassVersion;
+  version =
+    assert (componentPackages.version == hassVersion);
+    hassVersion;
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
@@ -426,13 +390,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-qAnEdH1MDPsCKDubpYL5AswcsaPqGm+TrKdBcDD3np8=";
+    hash = "sha256-1hCNkBIqRg3YDQn6TSytugxkQwve4/Z7p1/BY4Zwcv0=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-gWQU18GfnsxttRzpoN9WeNeHOgioTxF9DmG2SwNuzEY=";
+    hash = "sha256-4LojranZ9xLR3kpBvvzZ/XJchbgr9ZVYydntNoBkCVE=";
   };
 
   build-system = with python.pkgs; [
@@ -445,18 +409,23 @@ in python.pkgs.buildPythonApplication rec {
     "bcrypt"
     "ciso8601"
     "cryptography"
-    "jinja2"
+    "fnv-hash-fast"
     "hass-nabucasa"
     "httpx"
+    "jinja2"
     "orjson"
     "pillow"
     "pyjwt"
     "pyopenssl"
     "pyyaml"
     "requests"
+    "securetar"
     "sqlalchemy"
     "typing-extensions"
+    "ulid-transform"
     "urllib3"
+    "uv"
+    "voluptuous-openapi"
     "yarl"
   ];
 
@@ -478,18 +447,17 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace tests/test_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
-
-    substituteInPlace pyproject.toml --replace-fail "wheel~=0.43.0" wheel
+    substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
-    sed -i 's/wheel[~=]/wheel>/' pyproject.toml
   '';
 
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiohasupervisor
     aiohttp
+    aiohttp-asyncmdnsresolver
     aiohttp-cors
     aiohttp-fast-zlib
     aiozoneinfo
@@ -497,10 +465,12 @@ in python.pkgs.buildPythonApplication rec {
     async-interrupt
     atomicwrites-homeassistant
     attrs
+    audioop-lts
     awesomeversion
     bcrypt
     certifi
     ciso8601
+    cronsim
     cryptography
     fnv-hash-fast
     hass-nabucasa
@@ -512,17 +482,21 @@ in python.pkgs.buildPythonApplication rec {
     orjson
     packaging
     pillow
-    pip
+    propcache
     psutil-home-assistant
     pyjwt
     pyopenssl
     python-slugify
     pyyaml
     requests
+    securetar
     sqlalchemy
+    standard-aifc
+    standard-telnetlib
     typing-extensions
     ulid-transform
     urllib3
+    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -530,41 +504,42 @@ in python.pkgs.buildPythonApplication rec {
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
     pyotp
     pyqrcode
-    # Implicit dependency via homeassistant/requirements.py
-    packaging
   ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   # upstream only tests on Linux, so do we.
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
-  nativeCheckInputs = with python.pkgs; [
-    # test infrastructure (selectively from requirement_test.txt)
-    freezegun
-    pytest-asyncio
-    pytest-aiohttp
-    pytest-freezer
-    pytest-mock
-    pytest-rerunfailures
-    pytest-socket
-    pytest-timeout
-    pytest-unordered
-    pytest-xdist
-    pytestCheckHook
-    requests-mock
-    respx
-    syrupy
-    tomli
-    # Sneakily imported in tests/conftest.py
-    paho-mqtt
-    # Used in tests/non_packaged_scripts/test_alexa_locales.py
-    beautifulsoup4
-  ] ++ lib.concatMap (component: getPackages component python.pkgs) [
-    # some components are needed even if tests in tests/components are disabled
-    "default_config"
-    "hue"
-  ];
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      # test infrastructure (selectively from requirement_test.txt)
+      freezegun
+      pytest-asyncio
+      pytest-aiohttp
+      pytest-freezer
+      pytest-mock
+      pytest-rerunfailures
+      pytest-socket
+      pytest-timeout
+      pytest-unordered
+      pytest-xdist
+      pytestCheckHook
+      requests-mock
+      respx
+      syrupy
+      tomli
+      # Sneakily imported in tests/conftest.py
+      paho-mqtt
+      # Used in tests/non_packaged_scripts/test_alexa_locales.py
+      beautifulsoup4
+    ]
+    ++ lib.concatMap (component: getPackages component python.pkgs) [
+      # some components are needed even if tests in tests/components are disabled
+      "default_config"
+      "hue"
+    ];
 
   pytestFlagsArray = [
     # assign tests grouped by file to workers
@@ -587,6 +562,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_script.py::test_parallel_error"
     "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
     "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
+    # checks whether pip is installed
+    "--deselect=tests/util/test_package.py::test_check_package_fragment"
     # tests are located in tests/
     "tests"
   ];
@@ -618,7 +595,8 @@ in python.pkgs.buildPythonApplication rec {
       extraComponents
       getPackages
       python
-      supportedComponentsWithTests;
+      supportedComponentsWithTests
+      ;
     pythonPath = python.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
     frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;

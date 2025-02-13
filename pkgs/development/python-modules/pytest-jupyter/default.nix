@@ -30,7 +30,7 @@ let
     src = fetchFromGitHub {
       owner = "jupyter-server";
       repo = "pytest-jupyter";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-RTpXBbVCRj0oyZ1TXXDv3M7sAI4kA6f3ouzTr0rXjwY=";
     };
 
@@ -40,7 +40,7 @@ let
 
     propagatedBuildInputs = [ jupyter-core ];
 
-    passthru.optional-dependencies = {
+    optional-dependencies = {
       client = [
         jupyter-client
         nbformat
@@ -59,7 +59,7 @@ let
     nativeCheckInputs = [
       pytest-timeout
       pytestCheckHook
-    ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {

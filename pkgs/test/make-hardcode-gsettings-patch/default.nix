@@ -1,8 +1,9 @@
-{ runCommandLocal
-, lib
-, git
-, clang-tools
-, makeHardcodeGsettingsPatch
+{
+  runCommandLocal,
+  lib,
+  git,
+  clang-tools,
+  makeHardcodeGsettingsPatch,
 }:
 
 let
@@ -21,8 +22,7 @@ let
         inherit patches;
       });
     in
-    runCommandLocal
-      "makeHardcodeGsettingsPatch-tests-${name}"
+    runCommandLocal "makeHardcodeGsettingsPatch-tests-${name}"
 
       {
         nativeBuildInputs = [

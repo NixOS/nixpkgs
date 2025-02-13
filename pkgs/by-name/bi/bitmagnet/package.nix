@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGo122Module, # builds, but does not start on 1.23
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "bitmagnet";
   version = "0.9.5";
 
@@ -17,7 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-aauXgHPZbSiTW9utuHXzJr7GsWs/2aFiGuukA/B9BRc=";
 
-  ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

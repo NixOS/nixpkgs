@@ -1,7 +1,7 @@
 {
   lib,
   melpaBuild,
-  fetchurl
+  fetchurl,
 }:
 
 let
@@ -25,8 +25,6 @@ melpaBuild {
     mkdir -p ''${!outputDoc}/share/doc/pod-mode/
     install -Dm644 -t ''${!outputDoc}/share/doc/pod-mode/ ChangeLog README
   '';
-
-  ignoreCompilationError = false;
 
   meta = {
     homepage = "https://metacpan.org/dist/pod-mode";

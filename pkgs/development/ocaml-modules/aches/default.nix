@@ -1,4 +1,8 @@
-{ lib, buildDunePackage, ringo }:
+{
+  lib,
+  buildDunePackage,
+  ringo,
+}:
 
 buildDunePackage {
   pname = "aches";

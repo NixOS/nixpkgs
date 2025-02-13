@@ -2,33 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  backports-zoneinfo,
+  replaceVars,
+  hatch-vcs,
+  hatchling,
   python-dateutil,
-  pytz,
+  tzdata,
   hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "5.0.13";
+  version = "6.1.1";
   pname = "icalendar";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
+    tag = "v${version}";
+    hash = "sha256-PP4wBItPv5pPQKkGX4mGPl2RUGxOALOss++imzK4G4E=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    (replaceVars ./no-dynamic-version.patch {
+      inherit version;
+    })
+  ];
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     python-dateutil
-    pytz
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+    tzdata
+  ];
 
   nativeCheckInputs = [
     hypothesis
@@ -38,7 +47,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "src/icalendar" ];
 
   meta = with lib; {
-    changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/berndporr/iir1";
     changelog = "https://github.com/berndporr/iir1/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

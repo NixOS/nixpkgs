@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.7.1";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-piCFynpKh7gTWIGh2g0gJICLS+eg/0XAxaDkyu7v5vs=";
+    tag = "v${version}";
+    hash = "sha256-Y9xkp1tji0+muP8+HqogRj5TGKCtpJzapKYWtmGw+F0=";
   };
 
   postPatch = ''
@@ -40,12 +40,12 @@ buildPythonPackage rec {
       --replace-fail "--cov-branch" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     matplotlib
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     lazy-loader
   ];
 
-  passthru.optional-dependencies.hdf5 = [
+  optional-dependencies.hdf5 = [
     h5io
     pymatreader
   ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -74,8 +74,10 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # Fails due to changes in Numpy types
-    "mne.stats._adjacency.combine_adjacency"
+    # requires qtbot which is unmaintained/not in Nixpkgs:
+    "test_plotting_scalebars"
+    # tries to write a datetime object to hdf5, which fails:
+    "test_hitachi_basic"
   ];
 
   pythonImportsCheck = [ "mne" ];
@@ -84,7 +86,7 @@ buildPythonPackage rec {
     description = "Magnetoencephelography and electroencephalography in Python";
     mainProgram = "mne";
     homepage = "https://mne.tools";
-    changelog = "https://mne.tools/stable/changes/v${version}.html";
+    changelog = "https://mne.tools/stable/changes/${src.tag}.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [
       bcdarwin

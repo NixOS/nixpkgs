@@ -1,16 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, pillow
-, pyside2
-, numpy
-, pyphotonfile
-, shiboken2
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pillow,
+  pyside2,
+  numpy,
+  pyphotonfile,
+  shiboken2,
 }:
 let
   version = "0.1.3+";
 in
- buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "sl1-to-photon";
   inherit version;
 
@@ -21,7 +22,13 @@ in
     sha256 = "ssFfjlBMi3FHosDBUA2gs71VUIBkEdPVcV3STNxmOIM=";
   };
 
-  pythonPath = [ pyphotonfile pillow numpy pyside2 shiboken2 ];
+  pythonPath = [
+    pyphotonfile
+    pillow
+    numpy
+    pyside2
+    shiboken2
+  ];
 
   format = "setuptools";
   dontUseSetuptoolsCheck = true;

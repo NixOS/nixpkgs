@@ -1,5 +1,15 @@
-{ lib, buildDunePackage, fetchurl
-, angstrom-lwt-unix, lwt, logs, lwt_ppx, ppx_deriving_yojson, ppx_expect, ppx_here, react
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  angstrom-lwt-unix,
+  lwt,
+  logs,
+  lwt_ppx,
+  ppx_deriving_yojson,
+  ppx_expect,
+  ppx_here,
+  react,
 }:
 
 buildDunePackage rec {

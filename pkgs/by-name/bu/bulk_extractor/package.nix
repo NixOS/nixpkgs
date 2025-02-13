@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, exiv2
-, flex
-, libewf
-, libxml2
-, openssl
-, zlib
-, pkg-config
-, python310
-, re2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  exiv2,
+  flex,
+  libewf,
+  libxml2,
+  openssl,
+  zlib,
+  pkg-config,
+  python310,
+  re2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     aclocal -I m4
   '';
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
   '';
 

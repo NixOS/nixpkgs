@@ -4,7 +4,7 @@ from functools import cached_property
 import json
 from pathlib import Path
 
-from libfdt import Fdt, FdtException, FDT_ERR_NOSPACE, fdt_overlay_apply
+from libfdt import Fdt, FdtException, FDT_ERR_NOSPACE, FDT_ERR_NOTFOUND, fdt_overlay_apply
 
 
 @dataclass
@@ -25,7 +25,14 @@ class Overlay:
 
 def get_compatible(fdt):
     root_offset = fdt.path_offset("/")
-    return set(fdt.getprop(root_offset, "compatible").as_stringlist())
+
+    try:
+        return set(fdt.getprop(root_offset, "compatible").as_stringlist())
+    except FdtException as e:
+        if e.err == -FDT_ERR_NOTFOUND:
+            return set()
+        else:
+            raise e
 
 
 def apply_overlay(dt: Fdt, dto: Fdt) -> Fdt:
@@ -77,14 +84,15 @@ def main():
         with source_dt.open("rb") as fd:
             dt = Fdt(fd.read())
 
-        dt_compatible = get_compatible(dt)
-
         for overlay in overlays_data:
             if overlay.filter and overlay.filter not in str(rel_path):
                 print(f"  Skipping overlay {overlay.name}: filter does not match")
                 continue
 
-            if not overlay.compatible.intersection(dt_compatible):
+            dt_compatible = get_compatible(dt)
+            if len(dt_compatible) == 0:
+                print(f"  Device tree {rel_path} has no compatible string set. Assuming it's compatible with overlay")
+            elif not overlay.compatible.intersection(dt_compatible):
                 print(f"  Skipping overlay {overlay.name}: {overlay.compatible} is incompatible with {dt_compatible}")
                 continue
 

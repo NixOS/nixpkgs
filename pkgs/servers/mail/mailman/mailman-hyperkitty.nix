@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchPypi
-, mailman
-, nixosTests
+{
+  lib,
+  python3,
+  fetchPypi,
+  mailman,
+  nixosTests,
 }:
 
 with python3.pkgs;

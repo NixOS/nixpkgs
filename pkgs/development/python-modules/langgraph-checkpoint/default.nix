@@ -5,24 +5,23 @@
   fetchFromGitHub,
   langchain-core,
   langgraph-sdk,
+  msgpack,
   poetry-core,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "1.0.9";
+  version = "2.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpoint==${version}";
-    hash = "sha256-3gm+L67pPAKpY1kqnX1lPnca40KoBVZdRZ1Cy6D0dzU=";
+    tag = "checkpoint==${version}";
+    hash = "sha256-Bs8XWSyI/6a756iWXT40vvNIe/XZ/vnMsZbXjTW3770=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
@@ -31,11 +30,16 @@ buildPythonPackage rec {
 
   dependencies = [ langchain-core ];
 
+  propagatedBuildInputs = [ msgpack ];
+
+  pythonRelaxDeps = [ "msgpack" ]; # Can drop after msgpack 1.0.10 lands in nixpkgs
+
   pythonImportsCheck = [ "langgraph.checkpoint" ];
 
   nativeCheckInputs = [
     dataclasses-json
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
   ];
 
@@ -46,6 +50,7 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = langgraph-sdk.updateScript;
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
   };
 
   meta = {

@@ -74,8 +74,8 @@ in
 
       enableMemoryLocking = mkOption {
         type = types.bool;
-        default = config.environment.memoryAllocator.provider != "graphene-hardened";
-        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened"'';
+        default = config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light";
+        defaultText = ''config.environment.memoryAllocator.provider != "graphene-hardened" && config.environment.memoryAllocator.provider != "graphene-hardened-light"'';
         description = ''
           Whether to add the `-m` flag to lock memory.
         '';

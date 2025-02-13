@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, CoreServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-mermaid";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qyt5N6Fito++5lpjDXlzupmguue9kc409IpaDkIRgxw=";
+    tag = "v${version}";
+    hash = "sha256-hqz2zUdDZjbe3nq4YpL68XJ64qpbjANag9S2uAM5nXg=";
   };
 
-  cargoHash = "sha256-ji38ZNOZ+SDL7+9dvaRIA38EsqMqYWpSmZntexJqcMU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yb4EWSl/mQp5q9fmYUq6UEdsknqfUx//BZ8IK/BVs7g=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
   ];
 
@@ -28,6 +30,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/badboy/mdbook-mermaid";
     changelog = "https://github.com/badboy/mdbook-mermaid/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ xrelkd matthiasbeyer ];
+    maintainers = with maintainers; [
+      xrelkd
+      matthiasbeyer
+    ];
   };
 }

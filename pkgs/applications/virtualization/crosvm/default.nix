@@ -1,30 +1,56 @@
-{ lib, rustPlatform, fetchgit
-, pkg-config, protobuf, python3, wayland-scanner
-, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
-, pkgsCross
+{
+  lib,
+  rustPlatform,
+  fetchgit,
+  pkg-config,
+  protobuf,
+  python3,
+  wayland-scanner,
+  libcap,
+  libdrm,
+  libepoxy,
+  minijail,
+  virglrenderer,
+  wayland,
+  wayland-protocols,
+  writeShellScript,
+  unstableGitUpdater,
+  nix-update,
+  pkgsCross,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "127.0";
+  version = "0-unstable-2025-02-04";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "8fdfed12c960850e9d5e809cfd2a40ce3bdd98d6";
-    hash = "sha256-W0zLYM91xoq9vURgYs2noc9F9RtvoXztIIHMx0HVK5g=";
+    rev = "d8e0f16c287b962505c8746c3be08323492186c9";
+    hash = "sha256-kiWYJLtQK9RWWRCHdVAVNcZhb4NPcLd1KIQKe3xZH+A=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-nEJBRlwMqTahaIC9WdtoxGLVfc+U9sJ0ilzLhavcbD0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZXJQust+NOWU70HUNIze6W1xKG+aCig0keK5HXv1D7w=";
 
   nativeBuildInputs = [
-    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
+    pkg-config
+    protobuf
+    python3
+    rustPlatform.bindgenHook
+    wayland-scanner
   ];
 
   buildInputs = [
-    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    libcap
+    libdrm
+    libepoxy
+    minijail
+    virglrenderer
+    wayland
+    wayland-protocols
   ];
 
   preConfigure = ''
@@ -37,7 +63,15 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "virgl_renderer" ];
 
   passthru = {
-    updateScript = ./update.py;
+    updateScript = writeShellScript "update-crosvm.sh" ''
+      set -ue
+      ${lib.escapeShellArgs (unstableGitUpdater {
+        url = "https://chromium.googlesource.com/crosvm/crosvm.git";
+        hardcodeZeroVersion = true;
+      })}
+      exec ${lib.getExe nix-update} --version=skip
+    '';
+
     tests = {
       musl = pkgsCross.musl64.crosvm;
     };
@@ -49,6 +83,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "crosvm";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.bsd3;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

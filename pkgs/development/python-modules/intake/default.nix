@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  appdirs,
+  platformdirs,
   bokeh,
   buildPythonPackage,
   dask,
@@ -19,7 +19,9 @@
   pytestCheckHook,
   python-snappy,
   pythonOlder,
+  pythonAtLeast,
   pyyaml,
+  networkx,
   requests,
   setuptools,
   setuptools-scm,
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "2.0.3";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Fyv85HkoE9OPOoSHR1sgCG0iAFuSiQMT7cyZcQyLvv0=";
+    tag = version;
+    hash = "sha256-F13jbAQP3G3cKeAegM1w/t32xyC0BgL9/67aIlzA4SE=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
+    platformdirs
     dask
     entrypoints
     fsspec
@@ -54,14 +56,15 @@ buildPythonPackage rec {
     jinja2
     pandas
     pyyaml
+    networkx
   ];
 
   nativeCheckInputs = [
     intake-parquet
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [
       msgpack
       python-snappy
@@ -124,11 +127,11 @@ buildPythonPackage rec {
       # Timing-based, flaky on darwin and possibly others
       "test_idle_timer"
     ]
-    ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
-      [
-        # Flaky with older low-res mtime on darwin < 10.13 (#143987)
-        "test_second_load_timestamp"
-      ];
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # Require deprecated distutils
+      "test_which"
+      "test_load"
+    ];
 
   pythonImportsCheck = [ "intake" ];
 

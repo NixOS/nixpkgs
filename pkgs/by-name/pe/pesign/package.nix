@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, nss
-, efivar
-, util-linux
-, popt
-, nspr
-, mandoc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  nss,
+  efivar,
+  util-linux,
+  popt,
+  nspr,
+  mandoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,14 @@ stdenv.mkDerivation rec {
   # containing things we already have in `nss`.
   # We can ignore all the errors pertaining to a missing
   # nss-util.pc I suppose.
-  buildInputs = [ efivar util-linux nss popt nspr mandoc ];
+  buildInputs = [
+    efivar
+    util-linux
+    nss
+    popt
+    nspr
+    mandoc
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [ "INSTALLROOT=$(out)" ];

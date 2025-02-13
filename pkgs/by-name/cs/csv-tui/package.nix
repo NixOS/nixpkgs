@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "csv-tui";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "nathangavin";
     repo = "csv-tui";
     rev = "v${version}";
-    hash = "sha256-IRXLwZ2FHcCDmDVJ0xnV/4q+X2AFXPX/+Ph4Xxo3DyM=";
+    hash = "sha256-T8T9fW4E/wigktSomoc+xPkVqX5T3OnTmL4XIT5YXe8=";
   };
 
-  cargoHash = "sha256-wgeVcX0zSXffAuvKw2eKXC846WlC8F9UGMoxP3IXoLE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bc/7wt7P7v5VJv2Jh/ct9/N4xHdVWshRl+maD2LBSG0=";
 
   meta = {
     description = "Terminal based csv editor which is designed to be memory efficient but still useful";

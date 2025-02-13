@@ -1,16 +1,19 @@
 {
   lib,
+  aiofiles,
   aiohttp,
   aiolimiter,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
+  protobuf,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tesla-fleet-api";
-  version = "0.7.8";
+  version = "0.9.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,15 +21,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-tesla-fleet-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jExS2bnxz35mqzN2f6qrqInpoNWGUYLzueKeXp//9/8=";
+    tag = "v${version}";
+    hash = "sha256-Bm+euNX0n2proyc0DCyYcc7lUlx/YhRWpPInWPr40CY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     aiohttp
     aiolimiter
+    cryptography
+    protobuf
   ];
 
   # Module has no tests

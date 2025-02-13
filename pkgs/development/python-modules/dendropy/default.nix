@@ -7,12 +7,12 @@
   pythonOlder,
   nix-update-script,
   setuptools,
-  paup,
+  paup-cli,
   paupIntegration ? false,
 }:
 
 let
-  paupPath = if paupIntegration then lib.getExe paup else "NONE";
+  paupPath = if paupIntegration then lib.getExe paup-cli else "NONE";
 in
 buildPythonPackage rec {
   pname = "dendropy";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeetsukumaran";
     repo = "dendropy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OiFei/6226FDtL4w1XrXL2OVn3/hfQwnIhTzM4OneKc=";
   };
 

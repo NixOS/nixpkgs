@@ -1,26 +1,28 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, itstool
-, python3
-, wrapGAppsHook4
-, cairo
-, gdk-pixbuf
-, colord
-, glib
-, libadwaita
-, gtk4
-, gusb
-, packagekit
-, libwebp
-, libxml2
-, sane-backends
-, vala
-, gnome
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook4,
+  cairo,
+  gdk-pixbuf,
+  colord,
+  glib,
+  libadwaita,
+  gtk4,
+  gusb,
+  packagekit,
+  libwebp,
+  libxml2,
+  sane-backends,
+  vala,
+  gnome,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,6 +64,11 @@ stdenv.mkDerivation rec {
     patchShebangs data/meson_compile_gschema.py
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/icons/hicolor/scalable/actions/
+    install -m 444 ../data/icons/scalable/actions/* $out/share/icons/hicolor/scalable/actions/
+  '';
+
   doCheck = true;
 
   passthru = {
@@ -82,6 +89,7 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
+    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

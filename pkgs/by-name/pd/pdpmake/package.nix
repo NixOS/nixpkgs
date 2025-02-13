@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation rec {
   pname = "pdpmake";
-  version = "1.4.3";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "rmyorston";
     repo = "pdpmake";
     rev = version;
-    hash = "sha256-drHo8IUC3xQ/O6T4xCMQSK9m+O/6hTOJSw0OMl1W9WA=";
+    hash = "sha256-6lLYtBKZTmi+fBkCyDysJS1O37/Z6ir9hU3pX4X1VHQ=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

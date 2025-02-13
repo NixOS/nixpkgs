@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.0.0";
+  version = "32.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "commoncode";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yqvsBJHrxVkSqp3QnYmHDJr3sef/g4pkSlkSioYuOc4=";
+    tag = "v${version}";
+    hash = "sha256-TzQmAJlgcHaarUhicIH4EbOIn+3feu43QQlLq+Z5ERA=";
   };
 
   dontConfigure = true;
@@ -57,7 +57,7 @@ buildPythonPackage rec {
       "test_walk_can_walk_non_utf8_path_from_unicode_path"
       "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # expected result is tailored towards the quirks of upstream's
       # CI environment on darwin
       "test_searchable_paths"

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = lib.optional stdenv.isDarwin "OPTFLAGS=-O0";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "OPTFLAGS=-O0";
 
   installPhase = ''
     runHook preInstall
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
       semi-graphical user interface through ncurses.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

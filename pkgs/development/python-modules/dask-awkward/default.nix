@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -17,7 +16,7 @@
   # optional-dependencies
   pyarrow,
 
-  # checks
+  # tests
   dask-histogram,
   distributed,
   hist,
@@ -28,19 +27,15 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.7.0";
+  version = "2025.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
-    rev = "refs/tags/${version}";
-    hash = "sha256-xy3rq/gXQUtquvyWSCcBjZ+gUYT3RzxMgXThyT6Fwec=";
+    tag = version;
+    hash = "sha256-hhAY2cPUOYnP86FGsLvxlMeoEwY+sTrjPMKyuZrO0/M=";
   };
-
-  pythonRelaxDeps = [ "awkward" ];
 
   build-system = [
     hatch-vcs
@@ -58,8 +53,8 @@ buildPythonPackage rec {
     io = [ pyarrow ];
   };
 
-  checkInputs = [
-    dask-histogram
+  nativeCheckInputs = [
+    # dask-histogram (circular dependency)
     distributed
     hist
     pandas
@@ -76,6 +71,14 @@ buildPythonPackage rec {
     "test_from_text"
     # ValueError: not a ROOT file: first four bytes...
     "test_basic_root_works"
+    # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
+    "test_distance_behavior"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: Blockwise.__init__() got an unexpected keyword argument 'dsk'
+    # https://github.com/dask-contrib/dask-awkward/issues/557
+    "tests/test_str.py"
   ];
 
   __darwinAllowLocalNetworking = true;

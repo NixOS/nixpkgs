@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, fontconfig
-, freetype
-, libidn
-, libjpeg
-, libpng
-, libtiff
-, libxml2
-, lua5
-, openssl
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  fontconfig,
+  freetype,
+  libidn,
+  libjpeg,
+  libpng,
+  libtiff,
+  libxml2,
+  lua5,
+  openssl,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZY+kyimLzAeEgvDaflXM7MbyzsGgivOnG1aBD9/ozbk=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -57,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/podofo/podofo";
     description = "Library to work with the PDF file format";
     platforms = lib.platforms.all;
-    license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     maintainers = [ ];
   };
 })

@@ -10,25 +10,23 @@
   glib,
   gnome,
   gnome-menus,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "46.2";
+  version = "47.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1ELp0mklEl/yFaXBNCkElWVTgHQdqvuzejqZ1vDH2G8=";
+    hash = "sha256-VDN57FsNBCAO5iofa6JAcWoJ11rQrd3bIFvjjOgpP1g=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_gmenu.patch;
+    (replaceVars ./fix_gmenu.patch {
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
-    (substituteAll {
-      src = ./fix_gtop.patch;
+    (replaceVars ./fix_gtop.patch {
       gtop_path = "${libgtop}/lib/girepository-1.0";
     })
   ];
@@ -71,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

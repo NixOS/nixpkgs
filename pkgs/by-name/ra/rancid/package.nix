@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, writeShellScriptBin
-, autoreconfHook
-, libtool
-, makeBinaryWrapper
-, coreutils
-, expect
-, git
-, gnugrep
-, inetutils # for telnet
-, gnused
-, openssh
-, perl
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  writeShellScriptBin,
+  autoreconfHook,
+  libtool,
+  makeBinaryWrapper,
+  coreutils,
+  expect,
+  git,
+  gnugrep,
+  inetutils, # for telnet
+  gnused,
+  openssh,
+  perl,
+  runtimeShell,
 }:
 
 # we cannot use resholve.mkDerivation yet - the scripts are too hairy, although it might be possible
@@ -21,7 +22,12 @@
 
 let
   inherit (lib)
-    concatStringsSep getExe makeBinPath mapAttrsToList replaceStrings;
+    concatStringsSep
+    getExe
+    makeBinPath
+    mapAttrsToList
+    replaceStrings
+    ;
 
   # The installer executes ping to figure out how to call it and then sets the full path to the
   # binary. This script "handles" it by pretending everything is OK and has very much not been
@@ -67,7 +73,20 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'm4_esyscmd(configure.vers package_version),' ${finalAttrs.version},
 
     substituteInPlace etc/rancid.conf.sample.in \
-      --replace @ENV_PATH@ ${makeBinPath [ "/run/wrappers" (placeholder "out") coreutils git gnugrep gnused openssh perl runtimeShell telnet' ]}
+      --replace @ENV_PATH@ ${
+        makeBinPath [
+          "/run/wrappers"
+          (placeholder "out")
+          coreutils
+          git
+          gnugrep
+          gnused
+          openssh
+          perl
+          runtimeShell
+          telnet'
+        ]
+      }
 
     for f in bin/*.in; do \
       if grep -q /usr/bin/tail $f ; then
@@ -90,18 +109,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook libtool makeBinaryWrapper wrappedPing ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libtool
+    makeBinaryWrapper
+    wrappedPing
+  ];
 
-  buildInputs = [ expect openssh perl telnet' ];
+  buildInputs = [
+    expect
+    openssh
+    perl
+    telnet'
+  ];
 
-  postInstall = concatStringsSep "\n" (mapAttrsToList
-    (n: v: ''
+  postInstall = concatStringsSep "\n" (
+    mapAttrsToList (n: v: ''
       mkdir -p $out/libexec
       mv $out/bin/${n} $out/libexec/
       makeWrapper $out/libexec/${n} $out/bin/${n} \
         --prefix PATH : ${makeBinPath v}
-    '')
-    needsBin);
+    '') needsBin
+  );
 
   meta = with lib; {
     description = "Really Awesome New Cisco confIg Differ";

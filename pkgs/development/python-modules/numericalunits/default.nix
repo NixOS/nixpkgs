@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.25";
+  version = "1.26";
   format = "setuptools";
   pname = "numericalunits";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c32a482adae818a1a8d6c799bf9fb153326461d490c0de9deab9c694a6537eec";
+    sha256 = "sha256-igtplF3WXqz27vjIaLzTKY10OfWIL1B7tgYOwgxyPhI=";
   };
 
   disabled = !isPy3k;

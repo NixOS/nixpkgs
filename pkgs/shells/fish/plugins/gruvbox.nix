@@ -1,4 +1,8 @@
-{ lib , buildFishPlugin , fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 buildFishPlugin {
   pname = "gruvbox";
   version = "0-unstable-2021-10-12";

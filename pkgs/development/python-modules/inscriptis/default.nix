@@ -13,21 +13,21 @@
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.5.0";
+  version = "2.5.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9KEkXcdZ7USXfyIXGDrp4p4kJTzF2q30fvOccxF1hBU=";
+    tag = version;
+    hash = "sha256-s19ldUjJm0dnr0aFiKk0G7sXqnxQPgWo9kJYv96WLjM=";
   };
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lxml
     requests
   ];

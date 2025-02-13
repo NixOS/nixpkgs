@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "pipet";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "pipet";
     rev = version;
-    hash = "sha256-PqOx/aFI5gHt78th1nkSKlTGw/r1eU7Ggz5kvtjMCmI=";
+    hash = "sha256-pu+2sHdLz9TvYHBwvGTtFr/oAD+CreOR8io82YQANxc=";
   };
 
   vendorHash = "sha256-jNIjF5jxcpNLAjuWo7OG/Ac4l6NpQNCKzYUgdAoL+C4=";

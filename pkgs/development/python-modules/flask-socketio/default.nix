@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flask-socketio";
-  version = "5.3.7";
+  version = "5.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3vqhxz+NPrpjTxNt4scZtPxaFfnM3+gyE+jegwgan2E=";
+    tag = "v${version}";
+    hash = "sha256-C/eNyvAfyu2oTBZUFvDhTZqyyB+aohAHDNzShqbD4O4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Socket.IO integration for Flask applications";
     homepage = "https://github.com/miguelgrinberg/Flask-SocketIO/";
-    changelog = "https://github.com/miguelgrinberg/Flask-SocketIO/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/miguelgrinberg/Flask-SocketIO/blob/${src.tag}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };

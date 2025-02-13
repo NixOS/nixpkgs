@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomwojcik";
     repo = "starlette-context";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZKwE2M86clYKdptd0o/j8VYUOj/Y/72uUnpxFbJ65vw=";
   };
 

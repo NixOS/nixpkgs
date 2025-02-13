@@ -1,17 +1,19 @@
-{ lib, buildDunePackage, fetchurl, cstruct }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
 buildDunePackage rec {
   pname = "randomconv";
-  version = "0.1.3";
+  version = "0.2.0";
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/randomconv/releases/download/v${version}/randomconv-v${version}.tbz";
-    sha256 = "1iv3r0s5kqxs893b0d55f0r62k777haiahfkkvvfbqwgqsm6la4v";
+    url = "https://github.com/hannesm/randomconv/releases/download/v${version}/randomconv-${version}.tbz";
+    hash = "sha256-sxce3wfjQaRGj5L/wh4qiGO4LtXDb3R3zJja8F1bY+o=";
   };
-
-  propagatedBuildInputs = [ cstruct ];
 
   meta = {
     homepage = "https://github.com/hannesm/randomconv";

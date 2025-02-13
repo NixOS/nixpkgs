@@ -18,14 +18,16 @@ rustPlatform.buildRustPackage {
     hash = "sha256-1soTvSjoBSIQBUK21COSmw8EKYcMUBjNs+FNs3jzy/E=";
   };
 
-  cargoHash = "sha256-cmW+y57AAK1NNBJ6xE2EvHsSoKddLWgdtnAmSjzAN0k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yoZH1GeQWiv9xQGFb1GRKbPpOKxoXhbLMXtkoiG6zS8=";
 
-  nativeBuildInputs = [pkg-config];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    [openssl]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks; [
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
         Security
         SystemConfiguration
       ]
@@ -35,7 +37,7 @@ rustPlatform.buildRustPackage {
     description = "Static webring generator in Rust";
     homepage = "https://github.com/k3rs3d/ringfairy";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [uncenter];
+    maintainers = with lib.maintainers; [ uncenter ];
     mainProgram = "ringfairy";
   };
 }

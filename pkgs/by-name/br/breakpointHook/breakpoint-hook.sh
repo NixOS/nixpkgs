@@ -1,9 +1,18 @@
 breakpointHook() {
     local red='\033[0;31m'
+    local cyan='\033[0;36m'
+    local green='\033[0;32m'
     local no_color='\033[0m'
 
-    echo -e "${red}build failed in ${curPhase} with exit code ${exitCode}${no_color}"
-    printf "To attach install cntr and run the following command as root:\n\n"
-    sh -c "echo '   cntr attach -t command cntr-${out}'; while true; do sleep 99999999; done"
+    # provide the user with an interactive shell for better experience
+    export bashInteractive="@bashInteractive@"
+    dumpVars
+
+    local id
+    id="$(shuf -i 999999-9999999 -n1)"
+    echo -e "${red}build for ${cyan}${name:-unknown}${red} failed in ${curPhase:-unknown} with exit code ${exitCode:-unknown}${no_color}"
+    echo -e "${green}To attach, run the following command:${no_color}"
+    echo -e "${green}    sudo @attach@ $id${no_color}"
+    sleep "$id"
 }
 failureHooks+=(breakpointHook)

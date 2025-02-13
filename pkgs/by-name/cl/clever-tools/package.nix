@@ -4,13 +4,14 @@
   fetchFromGitHub,
   nodejs_18,
   installShellFiles,
+  makeWrapper,
   stdenv,
 }:
 
 buildNpmPackage rec {
   pname = "clever-tools";
 
-  version = "3.8.3";
+  version = "3.11.0";
 
   nodejs = nodejs_18;
 
@@ -18,27 +19,32 @@ buildNpmPackage rec {
     owner = "CleverCloud";
     repo = "clever-tools";
     rev = version;
-    hash = "sha256-70wyu8+Jb9kR5lIucBZG9UWIufMhsgMBMkT2ohGvE50=";
+    hash = "sha256-3u96bPdXGArvNZPs12uF48zR/15AQNNHXyUWnMgxMmI=";
   };
 
-  npmDepsHash = "sha256-LljwS6Rd/8WnGpxSHwCr87KWLaRR2i7sMdUuuprYiOE=";
+  npmDepsHash = "sha256-zmhGpsRoMHgsq/XKOMGNIgxxsiMju9bG//Qd72HrMSE=";
 
-  dontNpmBuild = true;
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  installPhase = ''
+    mkdir -p $out/bin $out/lib/clever-tools
+    cp build/clever.cjs $out/lib/clever-tools/clever.cjs
 
-  makeWrapperArgs = [ "--set NO_UPDATE_NOTIFIER true" ];
+    makeWrapper ${nodejs}/bin/node $out/bin/clever \
+      --add-flags "$out/lib/clever-tools/clever.cjs" \
+      --set NO_UPDATE_NOTIFIER true
 
-  postInstall =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd clever \
-        --bash <($out/bin/clever --bash-autocomplete-script $out/bin/clever) \
-        --zsh <($out/bin/clever --zsh-autocomplete-script $out/bin/clever)
-    ''
-    + ''
-      rm $out/bin/install-clever-completion
-      rm $out/bin/uninstall-clever-completion
-    '';
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd clever \
+      --bash <($out/bin/clever --bash-autocomplete-script $out/bin/clever) \
+      --zsh <($out/bin/clever --zsh-autocomplete-script $out/bin/clever)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/CleverCloud/clever-tools";

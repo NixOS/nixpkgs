@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix
-, nlohmann_json
-, boost
-, graphviz
-, Security
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  nix,
+  nlohmann_json,
+  boost,
+  graphviz,
+  Security,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,18 +22,25 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-WImnfkBU17SFQG1DzVUdsNq3hkiISNjAVZr2xGbgwHg=";
   };
 
-  cargoHash = "sha256-gE99nCJIi6fsuxzJuU80VWXIZqVbqwBhKM2aRlhmYco=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HUyqkO9uPrfqTCljJzKfQ5sRCh4uj8XL4wSkwmc/Z8A=";
 
   doCheck = true;
-  nativeCheckInputs = [ nix graphviz ];
+  nativeCheckInputs = [
+    nix
+    graphviz
+  ];
 
   buildInputs = [
     boost
     nix
     nlohmann_json
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
   meta = with lib; {
     description = "Tool to determine which gc-roots take space in your nix store";

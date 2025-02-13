@@ -270,6 +270,43 @@ rec {
     list: concatStringsSep sep (lib.imap1 f list);
 
   /**
+    Like [`concatMapStringsSep`](#function-library-lib.strings.concatMapStringsSep)
+    but takes an attribute set instead of a list.
+
+    # Inputs
+
+    `sep`
+    : Separator to add between item strings
+
+    `f`
+    : Function that takes each key and value and return a string
+
+    `attrs`
+    : Attribute set to map from
+
+    # Type
+
+    ```
+    concatMapAttrsStringSep :: String -> (String -> Any -> String) -> AttrSet -> String
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.strings.concatMapAttrsStringSep` usage example
+
+    ```nix
+    concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; }
+    => "a: foo-0.1.0\nb: foo-0.2.0"
+    ```
+
+    :::
+  */
+  concatMapAttrsStringSep =
+    sep: f: attrs:
+    concatStringsSep sep (lib.attrValues (lib.mapAttrs f attrs));
+
+  /**
     Concatenate a list of strings, adding a newline at the end of each one.
     Defined as `concatMapStrings (s: s + "\n")`.
 
@@ -2272,7 +2309,7 @@ rec {
     isCoercibleToString :: a -> bool
     ```
   */
-  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
+  isCoercibleToString = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
     "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
     isConvertibleWithToString;
 

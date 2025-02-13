@@ -2,28 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit,
+  flit-core,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.16.0";
-  format = "pyproject";
+  version = "0.17.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LABrPd8HLJVxq5dgbZqzwmqS6s7UwNWf0dJpiPMI9BM=";
+    hash = "sha256-HROs0c43o4TXYSlUrmx4AbtMUxbaDiuTeyEnunAqPaQ=";
   };
 
-  nativeBuildInputs = [ flit ];
-
-  preCheck = ''
-    sed -i '/addopts/d' pyproject.toml
-  '';
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

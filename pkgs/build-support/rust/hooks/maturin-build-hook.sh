@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 maturinBuildHook() {
     echo "Executing maturinBuildHook"
 
@@ -6,24 +8,32 @@ maturinBuildHook() {
     # Put the wheel to dist/ so that regular Python tooling can find it.
     local dist="$PWD/dist"
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    if [ -n "${buildAndTestSubdir-}" ]; then
         pushd "${buildAndTestSubdir}"
     fi
 
-    (
-    set -x
-    @setEnv@ maturin build \
-        --jobs=$NIX_BUILD_CORES \
-        --offline \
-        --target @rustTargetPlatformSpec@ \
-        --manylinux off \
-        --strip \
-        --release \
-        --out "$dist" \
-        ${maturinBuildFlags-}
+    # This is a huge hack, but it's the least invasive way
+    # to get the required interpreter name for maturin.
+    local interpreter_path="$(command -v python3 || command -v pypy3)"
+    local interpreter_name="$($interpreter_path -c 'import os; import sysconfig; print(os.path.basename(sysconfig.get_config_var('\''INCLUDEPY'\'')))')"
+
+    local flagsArray=(
+        "--jobs=$NIX_BUILD_CORES"
+        "--offline"
+        "--target" "@rustTargetPlatformSpec@"
+        "--manylinux" "off"
+        "--strip"
+        "--release"
+        "--out" "$dist"
+        "--interpreter" "$interpreter_name"
     )
 
-    if [ ! -z "${buildAndTestSubdir-}" ]; then
+    concatTo flagsArray maturinBuildFlags
+
+    echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"
+    @setEnv@ maturin build "${flagsArray[@]}"
+
+    if [ -n "${buildAndTestSubdir-}" ]; then
         popd
     fi
 

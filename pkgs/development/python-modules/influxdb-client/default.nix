@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
-  version = "1.46.0";
+  version = "1.48.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oq6VXsCizqs7ZGocFWvD6SK1HRgQerlAEDW6+SBoM+A=";
+    tag = "v${version}";
+    hash = "sha256-MKTfRsqizZDXPMqJAypUDQBm+a2s6FaEG3TM30wucrI=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiocsv
       aiohttp

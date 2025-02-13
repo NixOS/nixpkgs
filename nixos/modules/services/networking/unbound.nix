@@ -30,7 +30,9 @@ let
     ${confServer}
     ${confNoServer}
   '';
-  confFile = if cfg.checkconf then pkgs.runCommandLocal "unbound-checkconf" { } ''
+  confFile = if cfg.checkconf then pkgs.runCommand "unbound-checkconf" {
+    preferLocalBuild = true;
+  } ''
     cp ${confFileUnchecked} unbound.conf
 
     # fake stateDir which is not accessible in the sandbox

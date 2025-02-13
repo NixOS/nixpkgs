@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchzip, file }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  autoPatchelfHook,
+}:
 let
 
   version = "1.1.0";
@@ -24,30 +29,25 @@ stdenv.mkDerivation {
 
   src = fetchzip dist.${stdenv.hostPlatform.system};
 
-  nativeBuildInputs = [ file ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
     mkdir $out
     cp -r * $out
   '';
 
-  # autoPatchelfHook cannot be used here because of https://github.com/NixOS/nixpkgs/issues/333710
-  postFixup = ''
-    read -r interpreter < "$NIX_BINTOOLS"/nix-support/dynamic-linker
-    for file in $(find "$out"/usr/bin -type f -executable); do
-      if [[ $(file "$file") == *ELF*dynamically* ]]; then
-        patchelf --interpreter "$interpreter" "$file"
-        patchelf --set-rpath "$out/usr/lib" "$file"
-      fi
-    done
-  '';
-
   meta = with lib; {
     description = "A LLVM-based toolchain for Linux designed to build a portable osquery";
     homepage = "https://github.com/osquery/osquery-toolchain";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ gpl2Only asl20 ];
+    license = with licenses; [
+      gpl2Only
+      asl20
+    ];
     maintainers = with maintainers; [ squalus ];
   };
 }

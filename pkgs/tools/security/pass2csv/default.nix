@@ -1,8 +1,9 @@
-{ buildPythonApplication
-, fetchPypi
-, lib
-, python-gnupg
-, setuptools
+{
+  buildPythonApplication,
+  fetchPypi,
+  lib,
+  python-gnupg,
+  setuptools,
 }:
 
 buildPythonApplication rec {

@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.49.1";
+  version = "3.51.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KwANiuzVyqsz+KKTqNPM1WftuoMtUXRI8xbIdAzZF+s=";
+    tag = "v${version}";
+    hash = "sha256-ug3xtPykH4emiQuK1UxWGUeKmXqkY/EX0mSncCkGCQg=";
   };
 
   build-system = [ setuptools ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     sqlparse
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 

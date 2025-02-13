@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, llvmPackages
-, boost
-, cmake
-, spdlog
-, libxml2
-, libffi
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages,
+  boost,
+  cmake,
+  spdlog,
+  libxml2,
+  libffi,
+  Foundation,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-JPuJIM5OU1qCvFZEQ3gDNBZsIiJijtWLAVGp54z7lt0=";
+    sha256 = "sha256-70vvQGYcer3dosb1ulWO1F4xFwKwfo35l/TFSFa5idM=";
   };
 
   nativeBuildInputs = [
@@ -27,21 +28,25 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.lld
   ];
 
-  buildInputs = [
-    boost
-    spdlog
-    llvmPackages.llvm
-    libxml2
-    libffi
-  ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
-  ];
+  buildInputs =
+    [
+      boost
+      spdlog
+      llvmPackages.llvm
+      libxml2
+      libffi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+    ];
 
-  cmakeFlags = [
-    "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
+    ];
 
   postPatch = ''
     echo -n $version > VERSION

@@ -17,11 +17,8 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-    ];
-
-  nativeCheckInputs = [ ];
+  dependencies = [
+  ];
 
   meta = {
     description = "Some handy archive helpers for Python.";

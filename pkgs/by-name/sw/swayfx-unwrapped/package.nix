@@ -4,7 +4,7 @@
   stdenv,
   systemd,
   meson,
-  substituteAll,
+  replaceVars,
   swaybg,
   ninja,
   pkg-config,
@@ -33,6 +33,7 @@
   enableXWayland ? true,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   trayEnabled ? systemdSupport,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-VT+JjQPqCIdtaLeSnRiZ3rES0KgDJR7j5Byxr+d6oRg=";
   };
 
@@ -57,8 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     [
       ./load-configuration-from-etc.patch
 
-      (substituteAll {
-        src = ./fix-paths.patch;
+      (fetchpatch2 {
+        # fix missing switch statement for newer libinput
+        url = "https://github.com/swaywm/sway/pull/8470.patch?full_index=1";
+        hash = "sha256-UTZ2DNEsGi5RYrgZThHkYz3AnnIl/KxieinA1WUZRq4=";
+      })
+
+      (replaceVars ./fix-paths.patch {
         inherit swaybg;
       })
     ]

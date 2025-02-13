@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   matplotlib,
@@ -21,33 +20,31 @@
   pytest,
   scipy,
 
-  # checks
+  # tests
   pytestCheckHook,
   corner,
 }:
 
 buildPythonPackage rec {
   pname = "corner";
-  version = "2.2.2";
+  version = "2.2.3";
   pyproject = true;
-
-  disable = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "corner.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MYos01YCSUwivymSE2hbjV7eKXfaMqG89koD2CWZjcQ=";
+    tag = "v${version}";
+    hash = "sha256-gK2yylteI3VLVJ0p7NB7bR7cirCo2BvFKnYIH3kfyh4=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [ matplotlib ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arviz = [ arviz ];
     docs = [
       arviz
@@ -66,10 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "corner" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ corner.passthru.optional-dependencies.test;
+  nativeCheckInputs = [ pytestCheckHook ] ++ corner.optional-dependencies.test;
 
   # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
   disabledTests = [
+    "test_1d_fig_argument"
     "test_arviz"
     "test_basic"
     "test_bins"
@@ -79,13 +77,18 @@ buildPythonPackage rec {
     "test_extended_overplotting"
     "test_hist_bin_factor"
     "test_labels"
+    "test_levels2"
     "test_lowNfilled"
     "test_no_fill_contours"
+    "test_overplot"
     "test_overplot_log"
     "test_pandas"
     "test_quantiles"
     "test_range_fig_arg"
+    "test_reverse"
     "test_reverse_overplotting"
+    "test_reverse_truths"
+    "test_smooth1"
     "test_tight"
     "test_title_quantiles"
     "test_title_quantiles_default"

@@ -1,16 +1,17 @@
-{stdenv
-,lib
-, cmake
-, pkg-config
-, fetchFromGitHub
-, qtbase
-, qttools
-, kwidgetsaddons
-, kwindowsystem
-, fmt
-, libpsl
-, cxxopts
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  qtbase,
+  qttools,
+  kwidgetsaddons,
+  kwindowsystem,
+  fmt,
+  libpsl,
+  cxxopts,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "apcupsd-exporter";
@@ -20,6 +25,9 @@ buildGoModule rec {
     mainProgram = "apcupsd_exporter";
     homepage = "https://github.com/mdlayher/apcupsd_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 mdlayher ];
+    maintainers = with maintainers; [
+      _1000101
+      mdlayher
+    ];
   };
 }

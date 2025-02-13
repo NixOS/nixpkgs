@@ -1,42 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, nix-update-script
-, gnome-power-manager
-, pkg-config
-, meson
-, ninja
-, vala
-, elementary-settings-daemon
-, gtk3
-, granite
-, libgtop
-, libnotify
-, udev
-, wingpanel
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  nix-update-script,
+  gnome-power-manager,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  elementary-settings-daemon,
+  gettext,
+  gtk3,
+  granite,
+  libgtop,
+  libnotify,
+  udev,
+  wingpanel,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RelK4HIyTQ6kXi7/K8U33sKIrDrhA3IFVnnvX4x88UQ=";
+    sha256 = "sha256-zMvw96uRr9hrgXck+OhMiPku9qu8/zUtusiaJLUcuys=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gnome_power_manager = gnome-power-manager;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config

@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "uplc";
-  version = "1.0.6";
+  version = "1.0.7";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "uplc";
-    rev = version;
-    hash = "sha256-FQH2GE6ihLcHtEavAYFPr8xsRqnUROtZ8yyIfRbY9CQ=";
+    tag = version;
+    hash = "sha256-xK2k0XLybWqyP5Qa2Oby8YBgiiswR++yVK7NPgpdSa0=";
   };
 
   propagatedBuildInputs = [

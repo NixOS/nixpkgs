@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, which
-, pkg-config
-, gtk3
-, lib3270
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  which,
+  pkg-config,
+  gtk3,
+  lib3270,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 sh ./autogen.sh
   '';
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "3270 Virtual Terminal for GTK";

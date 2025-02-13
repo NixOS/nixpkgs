@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-ollama";
-  version = "0.3.1";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,8 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_ollama";
     inherit version;
-    hash = "sha256-Wj51+hS+fisagpN0FsiAIE3JbhsdJibcW96T8CHntUA=";
+    hash = "sha256-/sj6JJ7S+xORLhUR3sshwCWlMpRyiiHyW9LV8w9DWpQ=";
   };
+
+  pythonRelaxDeps = [ "ollama" ];
 
   build-system = [ poetry-core ];
 

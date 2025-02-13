@@ -5,7 +5,7 @@
 [[ $# -ne 1 ]] && echo -e "\e[1;31merror:\e[0m xenBootBuilder must be called with exactly one verbosity argument. See the \e[1;34mvirtualisation.xen.efi.bootBuilderVerbosity\e[0m option." && exit 1
 case "$1" in
     "quiet") true ;;
-    "default" | "info") echo -n "Installing Xen Hypervisor boot entries..." ;;
+    "default" | "info") echo -n "Installing Xen Project Hypervisor boot entries..." ;;
     "debug") echo -e "\e[1;34mxenBootBuilder:\e[0m called with the '$1' flag" ;;
     *)
         echo -e "\e[1;31merror:\e[0m xenBootBuilder was called with an invalid argument. See the \e[1;34mvirtualisation.xen.efi.bootBuilderVerbosity\e[0m option."
@@ -150,7 +150,7 @@ else
     esac
     if [ "$1" = "info" ]; then
         if [[ ${#preGenerations[@]} == "${#postGenerations[@]}" ]]; then
-            echo -e "\e[1;33mNo Change:\e[0m Xen Hypervisor boot entries were refreshed, but their contents are identical."
+            echo -e "\e[1;33mNo Change:\e[0m Xen Project Hypervisor boot entries were refreshed, but their contents are identical."
         else
             echo -e "\e[1;32mSuccess:\e[0m Changed the following boot entries:"
             # We briefly unset errexit and pipefail here, as GNU diff has no option to not fail when files differ.

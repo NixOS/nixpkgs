@@ -1,16 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, libsndfile
-, wxGTK32
-, SDL
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libsndfile,
+  wxGTK32,
+  SDL,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pterm";
   version = "6.0.4";
 
-  buildInputs = [ libsndfile SDL wxGTK32 ];
+  buildInputs = [
+    libsndfile
+    SDL
+    wxGTK32
+  ];
 
   src = fetchurl {
     url = "https://www.cyber1.org/download/linux/pterm-${version}.tar.bz2";
@@ -43,6 +48,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sarcasticadmin ];
     mainProgram = "pterm";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

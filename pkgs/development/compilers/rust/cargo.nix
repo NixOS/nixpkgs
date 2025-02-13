@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage.override {
     zlib
   ];
   buildInputs = [ file curl python3 openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
   # is not compatible with the current version in nixpkgs.
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage.override {
   doInstallCheck = !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
     runHook preInstallCheck
-    readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
+    ${stdenv.cc.targetPrefix}readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
     runHook postInstallCheck
   '';
 

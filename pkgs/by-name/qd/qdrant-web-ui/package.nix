@@ -5,16 +5,16 @@
 }:
 buildNpmPackage rec {
   pname = "qdrant-web-ui";
-  version = "0.1.31";
+  version = "0.1.36";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-web-ui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NNX//0ZkXYMaP14TI4BLMQI4jN+Mxc7uZu4rDZTXHG8=";
+    tag = "v${version}";
+    hash = "sha256-dVRmrlS1y/ZTu2LxrvzBnUVGy3aNNQrEdKN19v7+Ehg=";
   };
 
-  npmDepsHash = "sha256-ZCHsVIbtnfrksBmXbYkZLv4WH+DBNazHCOtsgi+PKPc=";
+  npmDepsHash = "sha256-NYUJhqzJbeav2y5a6ZJVlsQ4vthv/azm5CaQmdSeaBY=";
 
   npmBuildScript = "build-qdrant";
 

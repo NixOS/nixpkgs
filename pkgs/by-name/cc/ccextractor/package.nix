@@ -18,7 +18,7 @@
   zlib,
   utf8proc,
   freetype,
-  ffmpeg_7,
+  ffmpeg,
   libarchive,
   curl,
   libiconv,
@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoRoot = "src/rust";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
     patches = [ ./use-rsmpeg-0.15.patch ];
     patchFlags = [ "-p3" ];
-    hash = "sha256-jh8hHKAad+tCJGwuGdoJp/TMm/IsMrZmz8aag9lj0BA=";
+    hash = "sha256-7v3gQghByUDWZLJRRGa/7X2ivUumirq6BbexNQcCXCk=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       utf8proc
       freetype
-      ffmpeg_7
+      ffmpeg
       libarchive
       curl
       libiconv
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   env = {
-    FFMPEG_INCLUDE_DIR = "${lib.getDev ffmpeg_7}/include";
+    FFMPEG_INCLUDE_DIR = "${lib.getDev ffmpeg}/include";
 
     # Upstream’s FFmpeg binding crate needs an explicit path to a shared
     # object to do dynamic linking. The key word is *an* explicit path;
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
           "swresample"
           "swscale"
         ];
-        ffmpegLibDir = "${lib.getLib ffmpeg_7}/lib";
+        ffmpegLibDir = "${lib.getLib ffmpeg}/lib";
         ffmpegLibExt = stdenv.hostPlatform.extensions.library;
         ffmpegLibPath = ffmpegLibName: "${ffmpegLibDir}/lib${ffmpegLibName}.${ffmpegLibExt}";
         ffmpegLinkerScript = writeTextFile {

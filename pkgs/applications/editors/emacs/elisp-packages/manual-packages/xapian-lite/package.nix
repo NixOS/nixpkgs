@@ -1,4 +1,10 @@
-{ lib, stdenv, emacs, fetchFromSourcehut, xapian }:
+{
+  lib,
+  stdenv,
+  emacs,
+  fetchFromSourcehut,
+  xapian,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xapian-lite";
@@ -16,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     rm emacs-module.h
   '';
 
-  buildInputs = [ xapian emacs ];
+  buildInputs = [
+    xapian
+    emacs
+  ];
 
   installPhase = ''
     runHook preInstall

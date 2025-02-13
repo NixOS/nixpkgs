@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,11 +18,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-T5NfPPl8bAp3pcY1A7Dm37wC3+xrtYdoGEe4QOYgwUw=";
   };
 
-  cargoHash = "sha256-YNdO4b4MegG3JVRFBt71RDXmPXYyksDtI0P740zxLso=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-By7vwdNocNDQAbeD6CUcp0OOlqs5oZ2WLdE4VHSh3cI=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -37,7 +39,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kamiyaa/joshuto";
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda totoroot xrelkd ];
+    maintainers = with maintainers; [
+      figsoda
+      totoroot
+      xrelkd
+    ];
     mainProgram = "joshuto";
   };
 }

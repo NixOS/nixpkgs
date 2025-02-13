@@ -15,8 +15,12 @@
 , lib
 , Cocoa
 , CoreServices
-, rustc
+, xpc
 , testers
+, rustc
+, withRust ?
+    lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms &&
+    lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms
 , gobject-introspection
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -28,9 +32,12 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
+let
+  hasElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.24.3";
+  version = "1.24.10";
 
   outputs = [
     "bin"
@@ -44,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-EiXvSjKfrhytxexyfaskmtVn6AcoeUk1Yc65HtNKpBQ=";
+    hash = "sha256-n8RbGjMuj4EvCelcKBzXWWn20WgtBiqBXbDnvAR1GP0=";
   };
 
   depsBuildBuild = [
@@ -63,26 +70,28 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     glib
     bash-completion
-    rustc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap # for setcap binary
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ] ++ lib.optionals withRust [
+    rustc
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
   buildInputs = [
     bash-completion
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ] ++ lib.optionals hasElfutils [
     elfutils
   ] ++ lib.optionals withLibunwind [
     libunwind
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreServices
+    xpc
   ];
 
   propagatedBuildInputs = [
@@ -92,10 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    (lib.mesonEnable "ptp-helper" withRust)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "libunwind" withLibunwind)
-    (lib.mesonEnable "libdw" withLibunwind)
+    (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
 
   postPatch = ''

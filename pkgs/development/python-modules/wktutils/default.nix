@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-WKTUtils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mB+joEZq/aFPcRqFAzPgwG26Wi7WiRCeQeFottk+4Ho=";
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     shapely
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
       requests
       scikit-learn

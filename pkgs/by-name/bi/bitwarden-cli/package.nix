@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, nodejs_20
-, fetchFromGitHub
-, python3
-, cctools
-, nix-update-script
-, nixosTests
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  nodejs_20,
+  fetchFromGitHub,
+  cctools,
+  nix-update-script,
+  nixosTests,
+  perl,
+  xcbuild,
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.9.0";
+  version = "2025.1.2";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-o5nRG2j73qheDOyeFfSga64D8HbTn1EUrCiN0W+Xn0w=";
+    hash = "sha256-Ibf25+aaEKFUCp5uiqmHySfdZq2JPAu2nBzfiS4Sc/k=";
   };
 
   postPatch = ''
@@ -28,12 +29,11 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-L7/frKCNlq0xr6T+aSqyEQ44yrIXwcpdU/djrhCJNNk=";
+  npmDepsHash = "sha256-+LpF5zxC4TG5tF+RNgimLyEmGYyUfFDXHqs2RH9oQLY=";
 
-  nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ setuptools ]))
-  ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
+    perl
     xcbuild.xcrun
   ];
 
@@ -44,27 +44,44 @@ buildNpmPackage rec {
     npm_config_build_from_source = "true";
   };
 
-  # node-argon2 builds with LTO, but that causes missing symbols. So disable it
-  # and rebuild. See https://github.com/ranisalt/node-argon2/pull/415
-  preConfigure = ''
-    pushd node_modules/argon2
-    substituteInPlace binding.gyp --replace-fail '"-flto", ' ""
-    "$npm_config_node_gyp" rebuild
-    popd
-  '';
-
   npmBuildScript = "build:oss:prod";
 
   npmWorkspace = "apps/cli";
 
   npmFlags = [ "--legacy-peer-deps" ];
 
+  # FIXME temporarily disable the symlink check as there are symlink after the build in the `node_modules/@bitwarden` directory linking to `../../`.
+  dontCheckForBrokenSymlinks = true;
+
+  npmRebuildFlags = [
+    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
+    "--ignore-scripts"
+  ];
+
+  postConfigure = ''
+    # we want to build everything from source
+    shopt -s globstar
+    rm -r node_modules/**/prebuilds
+    shopt -u globstar
+  '';
+
+  postBuild = ''
+    # remove build artifacts that bloat the closure
+    shopt -s globstar
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
+  '';
+
   passthru = {
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^cli-v(.*)$"
+      ];
     };
   };
 

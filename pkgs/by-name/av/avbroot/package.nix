@@ -6,7 +6,6 @@
   protobuf,
   bzip2,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chenxiaolong";
     repo = "avbroot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gG8pR/D5oaPPqq0e815J6z+dDVxh4VSoHIm1Yl3x2p4=";
   };
 
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs = [ bzip2 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ bzip2 ];
 
   meta = {
     description = "Sign (and root) Android A/B OTAs with custom keys while preserving Android Verified Boot";

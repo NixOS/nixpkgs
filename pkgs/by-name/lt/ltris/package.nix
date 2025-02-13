@@ -1,9 +1,10 @@
-{ lib
-, SDL
-, SDL_mixer
-, directoryListingUpdater
-, fetchurl
-, stdenv
+{
+  lib,
+  SDL,
+  SDL_mixer,
+  directoryListingUpdater,
+  fetchurl,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tetris clone from the LGames series";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "ltris";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (SDL.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

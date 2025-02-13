@@ -11,13 +11,13 @@
 
 buildPecl rec {
   pname = "memcached";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "php-memcached-dev";
     repo = "php-memcached";
     rev = "v${version}";
-    sha256 = "sha256-g9IzGSZUxLlOE32o9ZJOa3erb5Qs1ntR8nzS3kRd/EU=";
+    sha256 = "sha256-V4d6bY0m1nuEfjZjt3qio4/HOBcSlD9+XMEl1GPfbhs=";
   };
 
   internalDeps = [ php.extensions.session ];

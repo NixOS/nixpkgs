@@ -10,25 +10,19 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.11.3";
+  version = "1.12.0";
   pyproject = true;
 
-  # distutils usage: https://github.com/search?q=repo%3Aapache%2Favro%20distutils&type=code
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M5O7UTn5zweR0gV1bOHjmltYWGr1sVPWo7WhmWEOnRc=";
+    hash = "sha256-ytnFOyPO7Wmceva93O1C4sVy/WtAjCV6fU/E6M8uLWs=";
   };
 
-  postPatch = lib.optionalString (!pythonOlder "3.12") ''
-    substituteInPlace avro/test/test_tether_word_count.py \
-      --replace-fail 'distutils' 'setuptools._distutils'
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
-
-  nativeBuildInputs = [ setuptools ];
+  dependencies = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [ pytest7CheckHook ];
 
@@ -43,10 +37,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python serialization and RPC framework";
-    mainProgram = "avro";
     homepage = "https://github.com/apache/avro";
     changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
+    mainProgram = "avro";
   };
 }

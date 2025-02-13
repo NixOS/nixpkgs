@@ -26,6 +26,7 @@ bundle lock --remove-platform x86-linux
 bundle lock --remove-platform x86-linux-gnu
 bundle lock --remove-platform x86-linux-musl
 bundle lock --remove-platform x86_64-darwin
+bundle lock --remove-platform x86_64-linux
 bundle lock --remove-platform x86_64-linux-gnu
 bundle lock --remove-platform x86_64-linux-musl
 bundix -l

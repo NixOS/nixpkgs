@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "pyopenweathermap";
-  version = "0.1.1";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "freekode";
     repo = "pyopenweathermap";
     # https://github.com/freekode/pyopenweathermap/issues/2
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OGalKlZP4pKKWKypjM5nVesvFAGLgvvRjMWzrEIp+VQ=";
+    tag = "v${version}";
+    hash = "sha256-UcnELAJf0Ltf0xJOlyzsHb4HQGSBTJ+/mOZ/XSTkA0w=";
   };
 
   build-system = [ poetry-core ];

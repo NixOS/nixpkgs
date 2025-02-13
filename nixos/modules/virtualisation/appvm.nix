@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.virtualisation.appvm;
 
-in {
+in
+{
 
   options = {
     virtualisation.appvm = {
@@ -46,4 +52,3 @@ in {
   };
 
 }
-

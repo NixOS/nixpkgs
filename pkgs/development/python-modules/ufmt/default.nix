@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ufmt";
-  version = "2.7.2";
+  version = "2.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "ufmt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nWdGaW/RlU6kV2ORKpVuJ634QoemhZR2zdcOOO1W9Wk=";
+    tag = "v${version}";
+    hash = "sha256-oEvvXUju7qne3pCwnrckplMs0kBJavB669qieXJZPKw=";
   };
 
   build-system = [ flit-core ];
@@ -44,14 +44,14 @@ buildPythonPackage rec {
     usort
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lsp = [ pygls ];
     ruff = [ ruff-api ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "ufmt" ];
 

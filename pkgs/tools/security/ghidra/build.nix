@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle,
+  gradle_8,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -20,7 +20,7 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.1.2";
+  version = "11.2.1";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -28,7 +28,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-FL1nLaq8A9PI+RzqZg5+O+4+ZsH16MG3cf7OIKimDqw=";
+    hash = "sha256-UVX56yNZSAbUejiQ0AIn00r7R+fUW1DEjZmCr1iYwV4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -52,6 +52,10 @@ let
 
     # Remove build dates from output filenames for easier reference
     ./0003-Remove-build-datestamp.patch
+
+    # Fix build on Gradle 8.12
+    # Upstream: https://github.com/NationalSecurityAgency/ghidra/commit/20285e267d110cfa585676dfd40804a59031598b
+    ./0004-Fix-build-on-Gradle-8.12.patch
   ];
 
   postPatch = ''
@@ -72,6 +76,9 @@ let
     }
     HERE
   '';
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -112,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3
       python3Packages.pip
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
       desktopToDarwinBundle
     ];
@@ -196,6 +203,6 @@ stdenv.mkDerivation (finalAttrs: {
       roblabla
       vringar
     ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

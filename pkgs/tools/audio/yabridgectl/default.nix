@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, yabridge
-, makeWrapper
-, wine
+{
+  lib,
+  rustPlatform,
+  yabridge,
+  makeWrapper,
+  wine,
 }:
 
 rustPlatform.buildRustPackage {
@@ -32,9 +33,11 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram "$out/bin/yabridgectl" \
-      --prefix PATH : ${lib.makeBinPath [
-        wine # winedump
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          wine # winedump
+        ]
+      }
   '';
 
   meta = with lib; {

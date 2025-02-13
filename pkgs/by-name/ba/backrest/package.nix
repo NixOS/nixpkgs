@@ -5,6 +5,7 @@
   lib,
   restic,
   util-linux,
+  stdenv,
 }:
 let
   pname = "backrest";
@@ -13,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qxEZkRKkwKZ+EZ3y3aGcX2ioKOz19SRdi3+9mjF1LpE=";
   };
 
@@ -44,8 +45,17 @@ buildGoModule {
 
   nativeCheckInputs = [ util-linux ];
 
-  # Fails with handler returned wrong content encoding
-  checkFlags = [ "-skip=TestServeIndex" ];
+  checkFlags =
+    let
+      skippedTests =
+        [
+          "TestServeIndex" # Fails with handler returned wrong content encoding
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "TestBackup" # relies on ionice
+        ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck = ''
     # Use restic from nixpkgs, otherwise download fails in sandbox

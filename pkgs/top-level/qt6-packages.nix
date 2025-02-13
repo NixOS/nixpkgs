@@ -5,6 +5,7 @@
 # this file.
 
 { lib
+, config
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
@@ -25,9 +26,8 @@ makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "qt6Packages";
   f = (self: let
     inherit (self) callPackage;
-    noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
+    noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
   in (noExtraAttrs qt6) // {
-  inherit stdenv;
 
   # LIBRARIES
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
@@ -55,10 +55,15 @@ makeScopeWithSplicing' {
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+
   libquotient = callPackage ../development/libraries/libquotient { };
   mlt = pkgs.mlt.override {
     qt = qt6;
   };
+
+  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
   qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
     inherit (qt6) qtbase qt5compat;
@@ -84,12 +89,16 @@ makeScopeWithSplicing' {
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
+  qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
+  qtspell = callPackage ../development/libraries/qtspell { };
+
   qwlroots = callPackage ../development/libraries/qwlroots {
-    wlroots = pkgs.wlroots_0_17;
+    wlroots = pkgs.wlroots_0_18;
   };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -114,8 +123,9 @@ makeScopeWithSplicing' {
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
-  } // lib.optionalAttrs pkgs.config.allowAliases {
-    # Remove completely before 24.11
-    overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
+  xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
+} // lib.optionalAttrs config.allowAliases {
+  # when removing, don't forget to remove a workaround in `pkgs/kde/default.nix`
+  stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "3.2.5";
+  version = "3.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = "pylint";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-b3KkSgTmN6ojMJaVQGwvHIa41M2eZS9prxcL5peX/xU=";
+    tag = "v${version}";
+    hash = "sha256-ldeosRAjh60aB5db/ojtttvevhpKQa3wk7u8MpTq13Q=";
   };
 
   build-system = [ setuptools ];
@@ -101,7 +101,7 @@ buildPythonPackage rec {
       # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
       "test_functional_relation_extraction"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_parallel_execution"
       "test_py3k_jobs_option"
     ];

@@ -11,26 +11,26 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioslimproto";
-    rev = "refs/tags/${version}";
-    hash = "sha256-K7z34fT0PQ5qcV+66VbhYTUhCjqW/OjPnrygBFKIW1k=";
+    tag = version;
+    hash = "sha256-3soqvZld92ohCEwTFaMIOC+cvOjBQyVQOoLmKr53aMA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     pillow
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Module to control Squeezebox players";
     homepage = "https://github.com/home-assistant-libs/aioslimproto";
     changelog = "https://github.com/home-assistant-libs/aioslimproto/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

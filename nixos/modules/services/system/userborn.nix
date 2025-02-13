@@ -100,7 +100,7 @@ in
         lib.nameValuePair (toString opts.home) {
           d = {
             mode = opts.homeMode;
-            user = username;
+            user = opts.name;
             inherit (opts) group;
           };
         }
@@ -141,7 +141,7 @@ in
           ExecStart = "${lib.getExe cfg.package} ${userbornConfigJson} ${cfg.passwordFilesLocation}";
 
           ExecStartPre = lib.mkMerge [
-            (lib.mkIf (!config.system.etc.overlay.mutable) [
+            (lib.mkIf (cfg.passwordFilesLocation != "/etc") [
               "${pkgs.coreutils}/bin/mkdir -p ${cfg.passwordFilesLocation}"
             ])
 

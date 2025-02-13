@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "hydra";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kD4BStnstr5hwyAOxdpPzLAJ9MZqU/CPiHkaD2HnUPI=";
   };
 

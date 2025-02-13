@@ -1,13 +1,13 @@
 # Setup hook to use in case an egg is fetched
 echo "Sourcing egg setup hook"
 
-eggUnpackPhase(){
+eggUnpackPhase() {
     echo "Executing eggUnpackPhase"
     runHook preUnpack
 
     cp "$src" "$(stripHash "$src")"
 
-#     runHook postUnpack # Calls find...?
+    # runHook postUnpack # Calls find...?
     echo "Finished executing eggUnpackPhase"
 }
 

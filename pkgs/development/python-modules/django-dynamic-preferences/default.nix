@@ -1,38 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # dependencies
+  distutils,
   django,
-  persisting-theory,
-  six,
-
-  # tests
   djangorestframework,
+  fetchFromGitHub,
+  persisting-theory,
   pytest-django,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-dynamic-preferences";
-  version = "1.15.0";
-  format = "setuptools";
+  version = "1.17.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "agateblue";
     repo = "django-dynamic-preferences";
-    rev = "refs/tags/${version}";
-    hash = "sha256-S0PAlSrMOQ68mX548pZzARfau/lytXWC4S5uVO1rUmo=";
+    tag = version;
+    hash = "sha256-irnwoWqQQxPueglI86ZIOt8wZcEHneY3eyATBXOuk9Y=";
   };
+
+  build-system = [
+    setuptools
+    distutils
+  ];
 
   buildInputs = [ django ];
 
-  propagatedBuildInputs = [
-    six
-    persisting-theory
-  ];
+  dependencies = [ persisting-theory ];
 
   nativeCheckInputs = [
     djangorestframework
@@ -42,15 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dynamic_preferences" ];
 
-  # Remove once https://github.com/agateblue/django-dynamic-preferences/issues/309 is fixed
-  doCheck = pythonOlder "3.12";
-
   env.DJANGO_SETTINGS = "tests.settings";
 
   meta = with lib; {
-    changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${version}/HISTORY.rst";
-    homepage = "https://github.com/EliotBerriot/django-dynamic-preferences";
     description = "Dynamic global and instance settings for your django project";
+    changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${version}/HISTORY.rst";
+    homepage = "https://github.com/agateblue/django-dynamic-preferences";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

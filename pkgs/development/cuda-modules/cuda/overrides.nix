@@ -247,7 +247,7 @@ filterAndCreateOverrides {
       libcurand,
       libGLU,
       libglvnd,
-      mesa,
+      libgbm,
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -256,9 +256,11 @@ filterAndCreateOverrides {
         libcurand
         libGLU
         libglvnd
-        mesa
+        libgbm
       ];
     };
+
+  cuda_sanitizer_api = _: _: { outputs = [ "out" ]; };
 
   nsight_compute =
     {
@@ -320,7 +322,7 @@ filterAndCreateOverrides {
         "nsight-systems/*/*/libexec"
         "nsight-systems/*/*/libQt*"
         "nsight-systems/*/*/libstdc*"
-        "nsight-systems/*/*/Mesa"
+        "nsight-systems/*/*/libgbm"
         "nsight-systems/*/*/Plugins"
         "nsight-systems/*/*/python/bin/python"
       ];

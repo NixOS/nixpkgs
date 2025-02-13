@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
-  go_1_23,
-  substituteAll,
+  buildGo123Module,
+  replaceVars,
   pandoc,
   nodejs,
   pnpm_9,
@@ -36,24 +35,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.6";
+  version = "3.1.20";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xGxZ6xu8R/JoW4X+drEv943y1jah4ZijHB+RNN6hxig=";
+    hash = "sha256-i02WcXN6IKD4N0z8qMKBvxpzI3rrlWRVSH+7cvlRndw=";
   };
 
-  kernel = buildGoModule.override { go = go_1_23; } {
+  kernel = buildGo123Module {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-I57T4/J0pL8/GISi22H1lpE1gkduNXdINvuo+F3YnAs=";
+    vendorHash = "sha256-YYQYHgb1MX0siYzxc9A2tK4htbCD8OH28tQv3QA1exQ=";
 
     patches = [
-      (substituteAll {
-        src = ./set-pandoc-path.patch;
+      (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];
@@ -91,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-3PdmCbaZZjnTCSpBcvG7nP+zTGamoY/ZXjay7c8Zx5w=";
+    hash = "sha256-HwfOGwT9aB844QxqEDjnEJOFaL98yORZtzyHfU8kKW4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -131,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         --chdir $out/share/siyuan/resources \
         --add-flags $out/share/siyuan/resources/app \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
@@ -143,7 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
@@ -151,7 +154,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      ltrump
+    ];
     platforms = lib.attrNames platformIds;
   };
 })

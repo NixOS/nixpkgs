@@ -17,6 +17,7 @@
 , swig
 , which
 , python3
+, perl
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
@@ -28,10 +29,10 @@
 }:
 
 let
-  defaultVersion = "2024.07";
+  defaultVersion = "2024.10";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-9ZHamrkO89az0XN2bQ3f+QxO1zMGgIl0hhF985DYPI8=";
+    hash = "sha256-so2vSsF+QxVjYweL9RApdYQTf231D87ZsS3zT2GpL7A=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -88,6 +89,7 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
+      perl # for oid build (secureboot)
     ] ++ lib.optionals (!crossTools) toolsDeps;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     buildInputs = lib.optionals crossTools toolsDeps;
@@ -210,6 +212,14 @@ in {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-with-spl.kwb"];
+  };
+
+  ubootCM3588NAS = buildUBoot {
+    defconfig = "cm3588-nas-rk3588_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootCubieboard2 = buildUBoot {
@@ -442,6 +452,14 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePi3B = buildUBoot {
+    defconfig = "orangepi-3b-rk3566_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    BL31 = rkbin.BL31_RK3568;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
+  };
+
   ubootPcduino3Nano = buildUBoot {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -585,6 +603,13 @@ in {
         --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
     '';
     defconfig = "rock64-rk3328_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
+  ubootRockPiE = buildUBoot {
+    defconfig = "rock-pi-e-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
     filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];

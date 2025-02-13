@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchPypi
+{
+  lib,
+  python3Packages,
+  fetchPypi,
 }:
 
 let
@@ -12,7 +13,7 @@ python3Packages.buildPythonApplication {
 
   src = fetchPypi {
     inherit version;
-    pname = "${lib.replaceStrings ["-"] ["_"] pname}";
+    pname = "${lib.replaceStrings [ "-" ] [ "_" ] pname}";
     hash = "sha256-retnbxjdjo+NeA1B0+jpM9kToAX/Rh0ze0yNF9AfDiU=";
   };
 
@@ -25,6 +26,6 @@ python3Packages.buildPythonApplication {
     description = "Browse and preview Base16 Shell themes in your terminal";
     mainProgram = "base16-shell-preview";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

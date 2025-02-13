@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "outils";
@@ -10,6 +15,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-FokJytwQsbGsryBzyglpb1Hg3wti/CPQTOfIGIz9ThA=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/leahneukirchen/outils/commit/50877e1bf7c905044e0b50b227ecff48cfec394b.patch?full_index=1";
+      name = "outils-add-recallocarray-prototype.patch";
+      hash = "sha256-jOnCMPcHKMRR3J0Yh+ZTHAn7P85FO80yXVX0K2vtlVk=";
+    })
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "novnc";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+qjWmCkXJj8J5OImMSjTwXWyApmJ883NMr0157iqPS4=";
   };
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # this test failed on macos
     # https://github.com/novnc/websockify/issues/552
     "test_socket_set_keepalive_options"

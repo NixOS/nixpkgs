@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  cppzmq,
+  doxygen,
+  ffmpeg,
+  imagemagick,
+  jsoncpp,
+  libopenshot-audio,
+  llvmPackages,
+  pkg-config,
+  python3,
+  qtbase,
+  qtmultimedia,
+  swig,
+  zeromq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9X2UIRDD+1kNLbV8AnnPabdO2M0OfTDxQ7xyZtsE10k=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Darwin requires both Magick++ and MagickCore for a successful linkage
     ./0001-link-magickcore.diff
   ];
@@ -41,21 +42,24 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs = [
-    cppzmq
-    ffmpeg
-    imagemagick
-    jsoncpp
-    libopenshot-audio
-    python3
-    qtbase
-    qtmultimedia
-    zeromq
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      cppzmq
+      ffmpeg
+      imagemagick
+      jsoncpp
+      libopenshot-audio
+      python3
+      qtbase
+      qtmultimedia
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
 
   strictDeps = true;
 
@@ -81,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       to the world. API currently supports C++, Python, and Ruby.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

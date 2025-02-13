@@ -1,15 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, bzip2
-, curl
-, zlib
-, zstd
-, libiconv
-, CoreServices
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  bzip2,
+  curl,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,19 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    CoreServices
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-fTwHwZsBvp2F4w5reF94imaXnsw7xfgJQlGRZ3ztnK8=";
+    hash = "sha256-B2wLxSedFEgL+DPH4D6qL46ovcBZhPSacsYJKscKDYQ=";
   };
 
   ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
+
+  # Disable automated version-check
+  buildNoDefaultFeatures = true;
+  checkNoDefaultFeatures = true;
 
   installPhase = ''
     runHook preInstall

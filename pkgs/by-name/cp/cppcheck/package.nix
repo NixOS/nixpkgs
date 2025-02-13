@@ -3,19 +3,25 @@
   stdenv,
   fetchFromGitHub,
 
+  # nativeBuildInputs
   docbook_xml_dtd_45,
   docbook_xsl,
   installShellFiles,
   libxslt,
-  pcre,
   pkg-config,
   python3,
   which,
+
+  # buildInputs
+  pcre,
+
+  versionCheckHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.15.0";
+  version = "2.16.2";
 
   outputs = [
     "out"
@@ -25,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
-    rev = finalAttrs.version;
-    hash = "sha256-6AI3sy4D+YhUOpy02UHJWyhelbqcoEW+Tw/ADCPEbuM=";
+    tag = finalAttrs.version;
+    hash = "sha256-awmWfVl7gMLROEkjYdSpbXnFaWQwEX9Ah8B9E0OOFm0=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +61,28 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   doInstallCheck = true;
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile \
+        --replace-fail 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
+    ''
+    # Expected:
+    # Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid
+    #
+    # Actual:
+    # Internal Error. MathLib::toDoubleNumber: input was not completely consumed: 1invalid
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace test/testmathlib.cpp \
+        --replace-fail \
+          'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1invalid");' \
+          "" \
+        --replace-fail \
+          'ASSERT_THROW_INTERNAL_EQUALS(MathLib::toDoubleNumber("1.1invalid"), INTERNAL, "Internal Error. MathLib::toDoubleNumber: conversion failed: 1.1invalid");' \
+          ""
+    '';
 
   postBuild = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
@@ -71,6 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage cppcheck.1
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -79,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Static analysis tool for C/C++ code";

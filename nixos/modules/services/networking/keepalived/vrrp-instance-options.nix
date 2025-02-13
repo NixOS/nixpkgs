@@ -1,4 +1,4 @@
-{ lib } :
+{ lib }:
 
 with lib;
 {
@@ -12,7 +12,10 @@ with lib;
     };
 
     state = mkOption {
-      type = types.enum [ "MASTER" "BACKUP" ];
+      type = types.enum [
+        "MASTER"
+        "BACKUP"
+      ];
       default = "BACKUP";
       description = ''
         Initial state. As soon as the other machine(s) come up, an election will
@@ -62,8 +65,8 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       description = ''
-         Name of the vmac interface to use. keepalived will come up with a name
-         if you don't specify one.
+        Name of the vmac interface to use. keepalived will come up with a name
+        if you don't specify one.
       '';
     };
 
@@ -79,15 +82,15 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       description = ''
-         Default IP for binding vrrpd is the primary IP on interface. If you
-         want to hide location of vrrpd, use this IP as src_addr for unicast
-         vrrp packets.
+        Default IP for binding vrrpd is the primary IP on interface. If you
+        want to hide location of vrrpd, use this IP as src_addr for unicast
+        vrrp packets.
       '';
     };
 
     unicastPeers = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Do not send VRRP adverts over VRRP multicast group. Instead it sends
         adverts to the following list of ip addresses using unicast design
@@ -98,25 +101,35 @@ with lib;
     };
 
     virtualIps = mkOption {
-      type = types.listOf (types.submodule (import ./virtual-ip-options.nix {
-        inherit lib;
-      }));
-      default = [];
+      type = types.listOf (
+        types.submodule (
+          import ./virtual-ip-options.nix {
+            inherit lib;
+          }
+        )
+      );
+      default = [ ];
       # TODO: example
       description = "Declarative vhost config";
     };
 
     trackScripts = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "chk_cmd1" "chk_cmd2" ];
+      default = [ ];
+      example = [
+        "chk_cmd1"
+        "chk_cmd2"
+      ];
       description = "List of script names to invoke for health tracking.";
     };
 
     trackInterfaces = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "eth0" "eth1" ];
+      default = [ ];
+      example = [
+        "eth0"
+        "eth1"
+      ];
       description = "List of network interfaces to monitor for health tracking.";
     };
 

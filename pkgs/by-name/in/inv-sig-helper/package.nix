@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
 
@@ -9,32 +8,40 @@
 
   # buildInputs
   openssl,
-  darwin,
+
+  # passthru
+  nixosTests,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "inv-sig-helper";
-  version = "0-unstable-2024-08-17";
+  version = "0-unstable-2025-02-07";
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = "inv_sig_helper";
-    rev = "215d32c76e5e9e598de6e4f8542316f80dd92f57";
-    hash = "sha256-Ge0XoWrscyZSrkmtDPkAnv96IVylKZTcgGgonbFV43I=";
+    rev = "ac006283c0b6821c856d6293c2ce49b61fa8c46a";
+    hash = "sha256-cQXWo+idyfFeJ2nnT8HKgjCd0Htc4pOE6aODsl3sf/8=";
   };
 
-  cargoHash = "sha256-JVpLUhNJ7/4WZwLn/zOurpP8kF5WblF3nphJh6keHG8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DnJL7kkcVn5dW3AoPCn829WmkaCjpDZtYUXnpiB857Q=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) invidious;
+    };
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = {
     description = "Rust service that decrypts YouTube signatures and manages player information";

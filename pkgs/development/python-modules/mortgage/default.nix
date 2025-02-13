@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jlumbroso";
     repo = "mortgage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UwSEKfMQqxpcF+7TF/+qD6l8gEO/qDCUklpZz1Nt/Ok=";
   };
 

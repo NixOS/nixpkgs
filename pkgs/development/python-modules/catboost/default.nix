@@ -3,15 +3,18 @@
   buildPythonPackage,
   catboost,
   python,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   graphviz,
   matplotlib,
   numpy,
   pandas,
   plotly,
   scipy,
-  setuptools,
   six,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +22,16 @@ buildPythonPackage rec {
     pname
     version
     src
-    meta
     ;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/catboost/python-package";
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     graphviz
     matplotlib
     numpy
@@ -53,4 +54,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "catboost" ];
+
+  meta = catboost.meta // {
+    # https://github.com/catboost/catboost/issues/2671
+    broken = lib.versionAtLeast numpy.version "2";
+  };
 }

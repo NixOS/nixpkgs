@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, pkg-config
-, gtk3
-, libsoup
-, webkitgtk
+{
+  lib,
+  rustPlatform,
+  buildNpmPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
+  gtk3,
+  libsoup_2_4,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -57,8 +58,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     gtk3
-    libsoup
-    webkitgtk
+    libsoup_2_4
+    webkitgtk_4_0
   ];
 
   postInstall = ''

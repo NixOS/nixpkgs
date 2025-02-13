@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
@@ -66,14 +66,14 @@ buildPythonPackage rec {
     watchdog
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
   };
 
   nativeCheckInputs = [
     unittestCheckHook
     mock
-  ] ++ passthru.optional-dependencies.i18n;
+  ] ++ optional-dependencies.i18n;
 
   unittestFlagsArray = [
     "-v"

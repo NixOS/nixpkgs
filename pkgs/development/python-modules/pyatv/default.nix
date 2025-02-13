@@ -8,7 +8,6 @@
   deepdiff,
   fetchFromGitHub,
   ifaddr,
-  mediafile,
   miniaudio,
   protobuf,
   pydantic,
@@ -19,27 +18,25 @@
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
   srptools,
   stdenv,
   tabulate,
+  tinytag,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8ODhDuc4jaLtrLZYd1yJlpYygO6KaguyR/yLWb/rMR4=";
+    tag = "v${version}";
+    hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
   };
 
   postPatch = ''
@@ -54,7 +51,6 @@ buildPythonPackage rec {
     "chacha20poly1305-reuseable"
     "cryptography"
     "ifaddr"
-    "mediafile"
     "miniaudio"
     "protobuf"
     "requests"
@@ -70,13 +66,13 @@ buildPythonPackage rec {
     chacha20poly1305-reuseable
     cryptography
     ifaddr
-    mediafile
     miniaudio
     protobuf
     pydantic
     requests
     srptools
     tabulate
+    tinytag
     zeroconf
   ];
 
@@ -95,7 +91,7 @@ buildPythonPackage rec {
       # https://github.com/postlund/pyatv/issues/2365
       "test_simple_dispatch"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
       "test_stream_retransmission"
     ];

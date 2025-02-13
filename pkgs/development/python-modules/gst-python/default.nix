@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.24.3";
+  version = "1.24.10";
 
   format = "other";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-7Ns+K6lOosgrk6jHFdWn4E+XJqiDjAprF2lJKP0ehZU=";
+    hash = "sha256-E1vPi28UaLwx5WYECf6O04EJ8B3sRHQ1FKovprOGMwk";
   };
 
   # Python 2.x is not supported.
@@ -52,8 +52,6 @@ buildPythonPackage rec {
     # Exec format error during configure
     "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
-
-  doCheck = true;
 
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390

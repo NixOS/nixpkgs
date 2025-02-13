@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   python-dateutil,
   celery,
   redis,
@@ -15,23 +14,15 @@
 
 buildPythonPackage rec {
   pname = "celery-redbeat";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "redbeat";
-    rev = "v${version}";
-    hash = "sha256-WW/OYa7TWEKkata1eULir29wHaCnavBJebn4GrBzmWY=";
+    tag = "v${version}";
+    hash = "sha256-lAEbhRTp0jYrCgHaTvPrl+lW1NRezmmTqAnUmLdpVwY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # celery 5.3.0 support
-      url = "https://github.com/sibson/redbeat/commit/4240e17172a4d9d2744d5c4da3cfca0e0a024e2e.patch";
-      hash = "sha256-quEfSFhv0sIpsKHX1CpFhbMC8LYXA8NASWYU8MMYPSk=";
-    })
-  ];
 
   propagatedBuildInputs = [
     celery

@@ -411,11 +411,14 @@ let
         (assertValueOneOf "Layer2SpecificHeader" [ "none" "default" ])
       ];
 
-      # NOTE The PrivateKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuard = checkUnitConfig "WireGuard" [
+        (assertKeyIsSystemdCredential "PrivateKey")
         (assertOnlyFields [
+          "PrivateKey"
           "PrivateKeyFile"
           "ListenPort"
           "FirewallMark"
@@ -426,12 +429,15 @@ let
         (assertRange "FirewallMark" 1 4294967295)
       ];
 
-      # NOTE The PresharedKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable,let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuardPeer = checkUnitConfigWithLegacyKey "wireguardPeerConfig" "WireGuardPeer" [
+        (assertKeyIsSystemdCredential "PresharedKey")
         (assertOnlyFields [
           "PublicKey"
+          "PresharedKey"
           "PresharedKeyFile"
           "AllowedIPs"
           "Endpoint"
@@ -666,10 +672,12 @@ let
           "IPv6AcceptRA"
           "IPv6DuplicateAddressDetection"
           "IPv6HopLimit"
+          "IPv6RetransmissionTimeSec"
           "IPv4ReversePathFilter"
           "IPv4AcceptLocal"
           "IPv4RouteLocalnet"
           "IPv4ProxyARP"
+          "IPv4ProxyARPPrivateVLAN"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6SendRA"
@@ -710,7 +718,7 @@ let
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5). Please note that setting these options on multiple interfaces may lead to unintended results, see https://github.com/systemd/systemd/issues/33414 or the relevant sections in systemd.network(5).")
         (assertValueOneOf "IPv4Forwarding" boolValues)
         (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
@@ -720,10 +728,12 @@ let
         (assertMinimum "IPv6DuplicateAddressDetection" 0)
         (assertInt "IPv6HopLimit")
         (assertMinimum "IPv6HopLimit" 0)
+        (assertInt "IPv6RetransmissionTimeSec")
         (assertValueOneOf "IPv4ReversePathFilter" ["no" "strict" "loose"])
         (assertValueOneOf "IPv4AcceptLocal" boolValues)
         (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
+        (assertValueOneOf "IPv4ProxyARPPrivateVLAN" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
@@ -749,6 +759,8 @@ let
           "ManageTemporaryAddress"
           "AddPrefixRoute"
           "AutoJoin"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
@@ -770,6 +782,7 @@ let
           "Priority"
           "IncomingInterface"
           "OutgoingInterface"
+          "L3MasterDevice"
           "SourcePort"
           "DestinationPort"
           "IPProtocol"
@@ -784,6 +797,7 @@ let
         (assertRange "TypeOfService" 0 255)
         (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
+        (assertValueOneOf "L3MasterDevice" boolValues)
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
@@ -855,6 +869,7 @@ let
           "UseGateway"
           "UseRoutes"
           "UseTimezone"
+          "IPv6OnlyMode"
           "ClientIdentifier"
           "VendorClassIdentifier"
           "UserClass"
@@ -862,8 +877,10 @@ let
           "DUIDType"
           "DUIDRawData"
           "IAID"
+          "RequestAddress"
           "RequestBroadcast"
           "RouteMetric"
+          "RapidCommit"
           "RouteTable"
           "RouteMTUBytes"
           "ListenPort"
@@ -875,6 +892,8 @@ let
           "FallbackLeaseLifetimeSec"
           "Label"
           "Use6RD"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -888,10 +907,12 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
+        (assertValueOneOf "RapidCommit" boolValues)
         (assertInt "RouteTable")
         (assertRange "RouteTable" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
@@ -907,7 +928,9 @@ let
           "UseAddress"
           "UseDNS"
           "UseNTP"
+          "SendHostname"
           "UseHostname"
+          "Hostname"
           "UseDomains"
           "RouteMetric"
           "RapidCommit"
@@ -924,10 +947,13 @@ let
           "IAID"
           "UseDelegatedPrefix"
           "SendRelease"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertInt "RouteMetric")
@@ -948,6 +974,8 @@ let
           "Token"
           "ManageTemporaryAddress"
           "RouteMetric"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
@@ -975,6 +1003,8 @@ let
           "UseRoutePrefix"
           "Token"
           "UsePREF64"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -1022,6 +1052,7 @@ let
           "BootServerName"
           "BootFilename"
           "IPv6OnlyPreferredSec"
+          "PersistLeases"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -1036,6 +1067,7 @@ let
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
         (assertValueOneOf "BindToInterface" boolValues)
+        (assertValueOneOf "PersistLeases" boolValues)
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
@@ -1373,6 +1405,7 @@ let
           "Wash"
           "SplitGSO"
           "AckFilter"
+          "RTTSec"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -2824,16 +2857,11 @@ let
         ];
       };
 
-      systemd.services."systemd-network-wait-online@" = {
-        description = "Wait for Network Interface %I to be Configured";
-        conflicts = [ "shutdown.target" ];
-        requisite = [ "systemd-networkd.service" ];
-        after = [ "systemd-networkd.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
-        };
+      systemd.services."systemd-networkd-wait-online@" = {
+        serviceConfig.ExecStart = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %i ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}"
+        ];
       };
 
     })
@@ -2853,6 +2881,7 @@ let
 
       systemd.additionalUpstreamSystemUnits = [
         "systemd-networkd-wait-online.service"
+        "systemd-networkd-wait-online@.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
         "systemd-networkd-persistent-storage.service"
@@ -2872,6 +2901,8 @@ let
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
+        notSocketActivated = true;
+        stopIfChanged = false;
       };
 
       networking.iproute2 = mkIf (cfg.config.addRouteTablesToIPRoute2 && cfg.config.routeTables != { }) {

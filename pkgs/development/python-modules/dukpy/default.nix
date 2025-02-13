@@ -11,15 +11,21 @@
 
 buildPythonPackage rec {
   pname = "dukpy";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "dukpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8RDMz9SfBoUe7LQ9/atsZlJ/2uwLUb0hZxeYdsUOGpU=";
+    tag = version;
+    hash = "sha256-5+SdGHYBron6EwpCf5ByaK8KuqQXhvN73wQUptvgPzc=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/test_webassets_filter.py \
+      --replace-fail "class PyTestTemp" "class _Temp" \
+      --replace-fail "PyTestTemp" "Temp"
+  '';
 
   build-system = [ setuptools ];
 
@@ -45,7 +51,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple JavaScript interpreter for Python";
     homepage = "https://github.com/amol-/dukpy";
-    changelog = "https://github.com/amol-/dukpy/releases/tag/${version}";
+    changelog = "https://github.com/amol-/dukpy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ruby0b ];
     mainProgram = "dukpy";

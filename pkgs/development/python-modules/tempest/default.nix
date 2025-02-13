@@ -19,6 +19,7 @@
   paramiko,
   pbr,
   prettytable,
+  pynacl,
   python,
   pythonOlder,
   pyyaml,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "40.0.0";
+  version = "42.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s2EvD1TDoRoKrvpRc6h3P7xRyT941nW1hveucXDLB4w=";
+    hash = "sha256-nW6cSOhC56YkyUQiXcJTqaojRseIf9q8YGSe4skhTA4=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];
@@ -74,6 +75,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hacking
     oslotest
+    pynacl
     stestr
   ];
 

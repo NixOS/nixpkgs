@@ -45,9 +45,9 @@ By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlS
 
 ## Initializing {#module-services-postgres-initializing}
 
-As of NixOS 23.11,
+As of NixOS 24.05,
 `services.postgresql.ensureUsers.*.ensurePermissions` has been
-deprecated, after a change to default permissions in PostgreSQL 15
+removed, after a change to default permissions in PostgreSQL 15
 invalidated most of its previous use cases:
 
 - In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where
@@ -187,7 +187,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 ```
 For an upgrade, a script like this can be used to simplify the process:
 ```nix
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   environment.systemPackages = [
     (let
@@ -196,6 +196,7 @@ For an upgrade, a script like this can be used to simplify the process:
       newPostgres = pkgs.postgresql_13.withPackages (pp: [
         # pp.plv8
       ]);
+      cfg = config.services.postgresql;
     in pkgs.writeScriptBin "upgrade-pg-cluster" ''
       set -eux
       # XXX it's perhaps advisable to stop all services that depend on postgresql
@@ -205,12 +206,12 @@ For an upgrade, a script like this can be used to simplify the process:
 
       export NEWBIN="${newPostgres}/bin"
 
-      export OLDDATA="${config.services.postgresql.dataDir}"
-      export OLDBIN="${config.services.postgresql.package}/bin"
+      export OLDDATA="${cfg.dataDir}"
+      export OLDBIN="${cfg.package}/bin"
 
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
       sudo -u postgres $NEWBIN/pg_upgrade \
         --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
@@ -260,8 +261,9 @@ Technically, we'd not want to have EOL'ed packages in a stable NixOS release, wh
 Thus:
 - In September/October the new major version will be released and added to nixos-unstable.
 - In November the last minor version for the oldest major will be released.
-- Both the current stable .05 release and nixos-unstable should be updated to the latest minor.
-- In November, before branch-off for the .11 release, the EOL-ed major will be removed from nixos-unstable.
+- Both the current stable .05 release and nixos-unstable should be updated to the latest minor that will usually be released in November.
+  - This is relevant for people who need to use this major for as long as possible. In that case its desirable to be able to pin nixpkgs to a commit that still has it, at the latest minor available.
+- In November, before branch-off for the .11 release and after the update to the latest minor, the EOL-ed major will be removed from nixos-unstable.
 
 This leaves a small gap of a couple of weeks after the latest minor release and the end of our support window for the .05 release, in which there could be an emergency release to other major versions of PostgreSQL - but not the oldest major we have in that branch. In that case: If we can't trivially patch the issue, we will mark the package/version as insecure **immediately**.
 
@@ -288,11 +290,11 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 ...
 ```
 
-To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
+To add plugins via NixOS configuration, set `services.postgresql.extensions`:
 ```nix
 {
-  services.postgresql.package = pkgs.postgresql_12;
-  services.postgresql.extraPlugins = ps: with ps; [
+  services.postgresql.package = pkgs.postgresql_17;
+  services.postgresql.extensions = ps: with ps; [
     pg_repack
     postgis
   ];
@@ -302,7 +304,7 @@ To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
 ```nix
 self: super: {
-  postgresql_custom = self.postgresql_12.withPackages (ps: [
+  postgresql_custom = self.postgresql_17.withPackages (ps: [
     ps.pg_repack
     ps.postgis
   ]);
@@ -362,6 +364,32 @@ postgresql.withJIT.pname
 ```
 
 evaluates to `"foobar"`.
+
+## Service hardening {#module-services-postgres-hardening}
+
+The service created by the [`postgresql`-module](#opt-services.postgresql.enable) uses
+several common hardening options from `systemd`, most notably:
+
+* Memory pages must not be both writable and executable (this only applies to non-JIT setups).
+* A system call filter (see {manpage}`systemd.exec(5)` for details on `@system-service`).
+* A stricter default UMask (`0027`).
+* Only sockets of type `AF_INET`/`AF_INET6`/`AF_NETLINK`/`AF_UNIX` allowed.
+* Restricted filesystem access (private `/tmp`, most of the file-system hierachy is mounted read-only, only process directories in `/proc` that are owned by the same user).
+  * When using [`TABLESPACE`](https://www.postgresql.org/docs/current/manage-ag-tablespaces.html)s, make sure to add the filesystem paths to `ReadWritePaths` like this:
+    ```nix
+    {
+      systemd.services.postgresql.serviceConfig.ReadWritePaths = [
+        "/path/to/tablespace/location"
+      ];
+    }
+    ```
+
+The NixOS module also contains necessary adjustments for extensions from `nixpkgs`
+if these are enabled. If an extension or a postgresql feature from `nixpkgs` breaks
+with hardening, it's considered a bug.
+
+When using extensions that are not packaged in `nixpkgs`, hardening adjustments may
+become necessary.
 
 ## Notable differences to upstream {#module-services-postgres-upstream-deviation}
 

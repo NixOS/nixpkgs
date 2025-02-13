@@ -15,7 +15,8 @@ let
     rev = "a4dc694010217b291ee78ee13a6d1db812f9babd";
     hash = "sha256-SQoNdkWMjnasPjpXQF2yV97MUra8gb27pc3rNoA8Rjw=";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "paho-mqtt";
   version = "2.1.0";
   pyproject = true;
@@ -37,7 +38,7 @@ in buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "paho.mqtt" ];
 

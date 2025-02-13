@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, httpTwoLevelsUpdater }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk3,
+  gnome-icon-theme,
+  tango-icon-theme,
+  hicolor-icon-theme,
+  httpTwoLevelsUpdater,
+}:
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-icon-theme";
+  pname = "xfce4-icon-theme";
   version = "4.4.3";
 
   src = fetchurl {

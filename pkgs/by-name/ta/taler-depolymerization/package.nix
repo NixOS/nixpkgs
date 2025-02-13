@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-HmQ/DPq/O6aODWms/bSsCVgBF7z246xxfYxiHrAkgYw=";
   };
 
-  cargoHash = "sha256-NgoLCTHhEs45cnx21bU2ko3oWxePSzKgUpnCGqhjvTs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P0VrXYbO4RD3cNTai2hfTksbiGldkwoYgZm+C5Jh/4Y=";
 
   outputs = [
     "out"
@@ -35,7 +36,7 @@ rustPlatform.buildRustPackage {
     cp docs/*.conf $out/share/examples
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin (
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
     [
       CoreFoundation
@@ -48,8 +49,6 @@ rustPlatform.buildRustPackage {
     description = "Wire gateway for Bitcoin/Ethereum";
     homepage = "https://git.taler.net/depolymerization.git/";
     license = lib.licenses.agpl3Only;
-    maintainers = [
-      # maintained by the team working on NGI-supported software, no group for this yet
-    ];
+    maintainers = lib.teams.ngi.members;
   };
 }

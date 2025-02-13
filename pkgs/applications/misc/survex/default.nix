@@ -1,39 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, Carbon
-, Cocoa
-, ffmpeg
-, glib
-, libGLU
-, libICE
-, libX11
-, mesa
-, perl
-, pkg-config
-, proj
-, python3
-, wrapGAppsHook3
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  Carbon,
+  Cocoa,
+  ffmpeg,
+  glib,
+  libGLU,
+  libICE,
+  libX11,
+  libgbm,
+  perl,
+  pkg-config,
+  proj,
+  gdal,
+  python3,
+  wrapGAppsHook3,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.4.3";
+  version = "1.4.15";
 
   src = fetchurl {
     url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-7NtGTe9xNRPEvG9fQ2fC6htQLEMHfqGmBM2ezhi6oNM=";
+    hash = "sha256-8RuVHVugJmTP3CBYXzxxZGe5GYGUxJrlkzxXFRakkWI=";
   };
-
-  patches = [
-    # Fix cavern.tst to work with SOURCE_DATE_EPOCH set
-    (fetchpatch {
-      url = "https://github.com/ojwb/survex/commit/b1200a60be7bdea20ffebbd8bb15386041727fa6.patch";
-      hash = "sha256-OtFjqpU+u8XGy+PAHg2iea++b681p/Kl8YslisBs4sA=";
-    })
-  ];
 
   nativeBuildInputs = [
     perl
@@ -42,29 +36,33 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ffmpeg
-    glib
-    proj
-    wxGTK32
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    Cocoa
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # TODO: libGLU doesn't build for macOS because of Mesa issues
-    # (#233265); is it required for anything?
-    libGLU
-    mesa
-    libICE
-    libX11
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      glib
+      proj
+      gdal
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # TODO: libGLU doesn't build for macOS because of Mesa issues
+      # (#233265); is it required for anything?
+      libGLU
+      libgbm
+      libICE
+      libX11
+    ];
 
   postPatch = ''
     patchShebangs .
   '';
 
   enableParallelBuilding = true;
-  doCheck = (!stdenv.isDarwin); # times out
+  doCheck = (!stdenv.hostPlatform.isDarwin); # times out
   enableParallelChecking = false;
 
   meta = with lib; {

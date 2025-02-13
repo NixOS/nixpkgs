@@ -1,23 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix
-, boost
-, pkg-config
-, stdenv
-, installShellFiles
-, darwin
-, crates ? [ "attic-client" ]
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix,
+  nixosTests,
+  boost,
+  pkg-config,
+  stdenv,
+  installShellFiles,
+  darwin,
+  crates ? [ "attic-client" ],
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2024-08-19";
+  version = "0-unstable-2025-02-02";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "acf3c351f8de47c6857f31948ab253f9c7ce2a6f";
-    hash = "sha256-jcY81r8PdMQ9dCGhT0YLZzxPj3kQJXyWCmvQLXbR1EI=";
+    rev = "ff8a897d1f4408ebbf4d45fa9049c06b3e1e3f4e";
+    hash = "sha256-hPYEJ4juK3ph7kbjbvv7PlU1D9pAkkhl+pwx8fZY53U=";
   };
 
   nativeBuildInputs = [
@@ -25,20 +27,21 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = [
-    nix
-    boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      nix
+      boost
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        SystemConfiguration
+      ]
+    );
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nix-base32-0.1.2-alpha.0" = "sha256-wtPWGOamy3+ViEzCxMSwBcoR4HMMD0t8eyLwXfCDFdo=";
-    };
-  };
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
+  cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
+  useFetchCargoVendor = true;
 
   ATTIC_DISTRIBUTOR = "nixpkgs";
   NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
@@ -56,11 +59,22 @@ rustPlatform.buildRustPackage {
     fi
   '';
 
+  passthru = {
+    tests = {
+      inherit (nixosTests) atticd;
+    };
+
+    updateScript = ./update.sh;
+  };
+
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";
     homepage = "https://github.com/zhaofengli/attic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zhaofengli aciceri ];
+    maintainers = with maintainers; [
+      zhaofengli
+      aciceri
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "attic";
   };

@@ -24,6 +24,7 @@
 , openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
+, fftwSupport ? true, fftw
 , potrace
 , coreutils
 , curl
@@ -49,13 +50,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-38";
+  version = "7.1.1-43";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-dyk9kCH1w76Jhy/yBhVFLthTKYaMgXLBn7QGWAFS0XU=";
+    hash = "sha256-4JzCBKtXiKGLsZ29+7z5U+3aN3ppusQ7mz+sOZYpXGY=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature libjxlSupport "jxl")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
+    (lib.withFeature fftwSupport "fftw")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
     "--enable-static" "--disable-shared"
@@ -101,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
     ]
     ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
     ];
@@ -113,12 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional lcms2Support lcms2
     ++ lib.optional libX11Support libX11
     ++ lib.optional libXtSupport libXt
-    ++ lib.optional libwebpSupport libwebp;
+    ++ lib.optional libwebpSupport libwebp
+    ++ lib.optional fftwSupport fftw;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
+    # Q16HDRI = 16 bit quantum depth with HDRI support, and is the default ImageMagick configuration
+    # If the default is changed, or the derivation is modified to use a different configuration
+    # this will need to be changed below.
     moveToOutput "bin/*-config" "$dev"
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
+    configDestination=($out/share/ImageMagick-*)
+    grep -v '/nix/store' $dev/lib/ImageMagick-*/config-Q16HDRI/configure.xml > $configDestination/configure.xml
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '$(command -v $PKG_CONFIG)'"
@@ -146,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
+    maintainers = with maintainers; [ dotlambda rhendric bloxx12 ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

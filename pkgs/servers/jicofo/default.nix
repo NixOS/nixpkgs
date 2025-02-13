@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  jre_headless,
+  nixosTests,
+}:
 
 let
   pname = "jicofo";
-  version = "1.0-1090";
+  version = "1.0-1122";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "CFt/08RoJEOQcB9v9jV9zh54oYroSqd+RsE8YcMmGg8=";
+    sha256 = "szvzp6z0SaMgBZGSwM68P7xrs4VkmHUeX1iTZWeJRHo=";
   };
 in
 stdenv.mkDerivation {
@@ -13,7 +20,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
+  nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
     runHook preInstall

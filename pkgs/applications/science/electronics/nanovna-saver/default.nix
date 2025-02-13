@@ -7,13 +7,13 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.6.4";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-fAVsjknhLhsrGdHu2Q6JWLoFoxZoc+wDCNja+ySCsR4=";
+    tag = "v${version}";
+    sha256 = "sha256-XGm3y0C0bFqKbh2ImbYTKOKSYFJ728mE/1N78/WPJqo=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     qt6.qtbase
   ];
 
-  buildInputs = lib.optional stdenv.isLinux qt6.qtwayland;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     cython

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libusb1
-, libev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
+  libev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "INSTALL_UDEV_RULES" stdenv.isLinux)
+    (lib.cmakeBool "INSTALL_UDEV_RULES" stdenv.hostPlatform.isLinux)
   ];
 
   meta = {
@@ -45,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AlbrechtL/rtl_fm_streamer";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

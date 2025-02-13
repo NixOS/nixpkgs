@@ -20,13 +20,16 @@ rustPlatform.buildRustPackage {
     hash = "sha256-C0/G4JOZ4pTAvcKZhRHsGvlLlwAyWBQ0rMScLvaLSuA=";
   };
 
-  cargoHash = "sha256-zlwIgzqpoEgYqZe4Gv8owJQ3m7UFgPA5joRMiyq+T/M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IgPDe8kuWzJ6nF2DceUbN7fw0eGkoYhu1IGMdlSMFos=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices ]);
 
   __darwinAllowLocalNetworking = true;
 

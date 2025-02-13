@@ -5,7 +5,7 @@
 , makeWrapper
 , wrapGAppsHook3
 
-, withOpenGL ? !stdenv.isDarwin
+, withOpenGL ? !stdenv.hostPlatform.isDarwin
 
 , bison
 , blas
@@ -27,9 +27,9 @@
 , netcdf
 , pdal
 , pkg-config
-, postgresql
+, libpq
 , proj
-, python311Packages
+, python3Packages
 , readline
 , sqlite
 , wxGTK32
@@ -37,10 +37,6 @@
 , zstd
 }:
 
-let
-  pyPackages = python311Packages;
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
   version = "8.4.0";
@@ -62,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for `geos-config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -76,10 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libsvm
     libtiff
-    (libxml2.override { enableHttp = true; })
+    libxml2
     netcdf
     pdal
-    postgresql
+    libpq
     proj
     readline
     sqlite
@@ -87,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ] ++ lib.optionals withOpenGL [ libGLU ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   strictDeps = true;
@@ -106,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-openmp"
     "--with-pdal"
     "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-postgres-libs=${libpq}/lib/"
     "--with-proj-includes=${proj.dev}/include"
     "--with-proj-libs=${proj}/lib"
     "--with-proj-share=${proj}/share/proj"
@@ -117,14 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-odbc"
   ] ++ lib.optionals (! withOpenGL) [
     "--without-opengl"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--without-cairo"
     "--without-freetype"
     "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
-  makeFlags = lib.optional stdenv.isDarwin "GDAL_DYNAMIC=";
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin "GDAL_DYNAMIC=";
 
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
@@ -139,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${pyPackages.python.interpreter} \
+    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include

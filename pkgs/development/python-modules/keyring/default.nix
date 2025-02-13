@@ -19,15 +19,15 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "25.4.0";
+  version = "25.6.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "keyring";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-B1uU4INod2iSXIftPlDOr7mzWPY3FTpLhUuInl1Hg/M=";
+    tag = "v${version}";
+    hash = "sha256-qu9HAlZMLlIVs8c9ClzWUljezhrt88gu1kouklMNxMY=";
   };
 
   build-system = [ setuptools-scm ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       jaraco-context
       jaraco-functools
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       jeepney
       secretstorage
     ]
@@ -68,12 +68,12 @@ buildPythonPackage rec {
   disabledTestPaths =
     [ "tests/backends/test_macOS.py" ]
     # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
-    ++ lib.optional stdenv.isDarwin "tests/test_multiprocess.py";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
 
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage = "https://github.com/jaraco/keyring";
-    changelog = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
+    changelog = "https://github.com/jaraco/keyring/blob/${src.tag}/NEWS.rst";
     license = licenses.mit;
     mainProgram = "keyring";
     maintainers = with maintainers; [

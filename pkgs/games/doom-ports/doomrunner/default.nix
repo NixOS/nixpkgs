@@ -1,26 +1,31 @@
-{ lib
-, stdenv
-, qtbase
-, qmake
-, makeDesktopItem
-, wrapQtAppsHook
-, imagemagick
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  qtbase,
+  qmake,
+  makeDesktopItem,
+  wrapQtAppsHook,
+  imagemagick,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomrunner";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "Youda008";
     repo = "DoomRunner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IUc7qGW4ni/6IwEfY4wpQxKiR14uzKuvTZvHZ3aF++s=";
+    hash = "sha256-NpNhl3cGXpxI8Qu4l8PjojCCXCZdGBEkBzz5XxLm/mY=";
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ qmake wrapQtAppsHook imagemagick ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+    imagemagick
+  ];
 
   makeFlags = [
     "INSTALL_ROOT=${placeholder "out"}"

@@ -1,4 +1,11 @@
-{ lib, stdenv, rustPlatform, fetchCrate, git, CoreServices }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  git,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";
@@ -10,9 +17,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
 
-
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
-  cargoHash = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+2j6xH1Ww1WOLfbjknUPvCmYLAl4W3Zp/mQTaL0qnv0=";
 
   # fac includes a unit test called ls_files_works which assumes it's
   # running in a git repo. Nix's sandbox runs cargo build outside git,
@@ -31,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';

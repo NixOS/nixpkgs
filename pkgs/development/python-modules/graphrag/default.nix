@@ -12,27 +12,27 @@
   datashaper,
   devtools,
   environs,
-  fastparquet,
+  fnllm,
   graspologic,
   json-repair,
   lancedb,
+  matplotlib,
   networkx,
   nltk,
-  numba,
   numpy,
   openai,
+  pandas,
   pyaml-env,
+  pyarrow,
   pydantic,
   python-dotenv,
   pyyaml,
   rich,
-  scipy,
-  swifter,
   tenacity,
-  textual,
   tiktoken,
+  typer,
   typing-extensions,
-  uvloop,
+  umap-learn,
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.3.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-x1boxBF3fO+IqHnJx85mjYQHhEG8h03H90T0dtc3CNQ=";
+    tag = "v${version}";
+    hash = "sha256-z3gO0wV8YBNi2Z53avujAt/Es9mSzugEFa/qRgq7ItM=";
   };
 
   build-system = [
@@ -66,27 +66,27 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
-    fastparquet
+    fnllm
     graspologic
     json-repair
     lancedb
+    matplotlib
     networkx
     nltk
-    numba
     numpy
     openai
+    pandas
     pyaml-env
+    pyarrow
     pydantic
     python-dotenv
     pyyaml
     rich
-    scipy
-    swifter
     tenacity
-    textual
     tiktoken
+    typer
     typing-extensions
-    uvloop
+    umap-learn
   ];
 
   env.NUMBA_CACHE_DIR = "$TMPDIR";
@@ -108,13 +108,14 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context"
     "test_sort_context_max_tokens"
   ];
 
   meta = {
     description = "Modular graph-based Retrieval-Augmented Generation (RAG) system";
     homepage = "https://github.com/microsoft/graphrag";
-    changelog = "https://github.com/microsoft/graphrag/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/graphrag/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

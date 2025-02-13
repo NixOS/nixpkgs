@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = "aiogithubapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z7l7Qx9Kg1FZ9nM0V2NzTyi3gbE2hakbc/GZ1CzDmKw=";
   };
 
@@ -51,27 +51,24 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
-    sigstore
   ];
 
   pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
+
+    # Need sigstore is an optional dependencies and need <2
+    rm -rf tests/test_helper.py
   '';
 
   pythonImportsCheck = [ "aiogithubapi" ];
 
-  disabledTests = [
-    # sigstore.errors.TUFError: Failed to refresh TUF metadata
-    "test_sigstore"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python client for the GitHub API";
     homepage = "https://github.com/ludeeus/aiogithubapi";
     changelog = "https://github.com/ludeeus/aiogithubapi/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

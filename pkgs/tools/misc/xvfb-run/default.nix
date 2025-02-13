@@ -1,17 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, xorg
-, getopt
-, xauth
-, util-linux
-, which
-, fontsConf
-, gawk
-, coreutils
-, installShellFiles
-, xterm
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  xorg,
+  getopt,
+  xauth,
+  util-linux,
+  which,
+  fontsConf,
+  gawk,
+  coreutils,
+  installShellFiles,
+  xterm,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "xvfb-run";
@@ -24,7 +25,10 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-KEg92RYgJd7naHFDKbdXEy075bt6NLcmX8VhQROHVPs=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   dontUnpack = true;
   dontBuild = true;
@@ -39,7 +43,17 @@ stdenvNoCC.mkDerivation rec {
     patchShebangs $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
       --set-default FONTCONFIG_FILE "${fontsConf}" \
-      --prefix PATH : ${lib.makeBinPath [ getopt xorg.xvfb xauth which util-linux gawk coreutils ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          getopt
+          xorg.xvfb
+          xauth
+          which
+          util-linux
+          gawk
+          coreutils
+        ]
+      }
   '';
 
   doInstallCheck = true;

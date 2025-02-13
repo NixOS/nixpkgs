@@ -2,32 +2,41 @@
 , python3
 , fetchurl
 , nixosTests
+, fetchpatch
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
-  pname = "HyperKitty";
-  version = "1.3.9";
+  pname = "hyperkitty";
+  version = "1.3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchurl {
     url = "https://gitlab.com/mailman/hyperkitty/-/releases/${version}/downloads/hyperkitty-${version}.tar.gz";
-    hash = "sha256-BfhCh4zZcfwoIfubW/+MUWXwh1yFOH/jpRdQdsj6lME=";
+    hash = "sha256-3rWCk37FvJ6pwdXYa/t2pNpCm2Dh/qb9aWTnxmfPFh0=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    # Fix test with mistune >= 3.1
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/2d69f420c603356a639a6b6243e1059a0089b7eb.patch";
+      hash = "sha256-zo+dK8DFMkHlMrOVSUtelhAq+cxJE4gLG00LvuAlWKA=";
+    })
+  ];
+
+  build-system = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-gravatar2
     django-haystack
     django-mailman3
-    django-q
+    django-q2
     django-compressor
     django-extensions
     djangorestframework

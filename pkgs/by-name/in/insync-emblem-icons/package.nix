@@ -19,14 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ dpkg ];
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-permissions --no-same-owner
-
-    runHook postUnpack
-  '';
-
   installPhase = ''
     runHook preInstall
 

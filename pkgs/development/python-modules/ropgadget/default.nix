@@ -2,25 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   capstone,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ropgadget";
-  version = "7.4";
-  format = "setuptools";
+  version = "7.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6m8opcTM4vrK+VCPXxNhZttUq6YmS8swLUDhjyfinWE=";
+    tag = "v${version}";
+    hash = "sha256-n7nVtR2HMAZeeSX/hNtDzmpEsnHbgDNO5gdzmPrgSuk=";
   };
 
-  propagatedBuildInputs = [ capstone ];
+  build-system = [ setuptools ];
+
+  dependencies = [ capstone ];
 
   # Test suite is working with binaries
   doCheck = false;

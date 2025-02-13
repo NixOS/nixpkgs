@@ -1,47 +1,48 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, pkg-config
-, protobuf
-, python3
-, ffmpeg
-, libopus
-, wrapQtAppsHook
-, qtbase
-, qtmultimedia
-, qtsvg
-, qtwayland
-, qtdeclarative
-, qtwebengine
-, SDL2
-, libevdev
-, udev
-, curlFull
-, hidapi
-, json_c
-, fftw
-, miniupnpc
-, speexdsp
-, libplacebo
-, vulkan-loader
-, vulkan-headers
-, libunwind
-, shaderc
-, lcms2
-, libdovi
-, xxHash
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  pkg-config,
+  protobuf,
+  python3,
+  ffmpeg,
+  libopus,
+  wrapQtAppsHook,
+  qtbase,
+  qtmultimedia,
+  qtsvg,
+  qtwayland,
+  qtdeclarative,
+  qtwebengine,
+  SDL2,
+  libevdev,
+  udev,
+  curlFull,
+  hidapi,
+  json_c,
+  fftw,
+  miniupnpc,
+  speexdsp,
+  libplacebo,
+  vulkan-loader,
+  vulkan-headers,
+  libunwind,
+  shaderc,
+  lcms2,
+  libdovi,
+  xxHash,
 }:
 
 stdenv.mkDerivation rec {
   pname = "chiaki-ng";
-  version = "1.8.1";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = "chiaki-ng";
     rev = "v${version}";
-    hash = "sha256-wYshjduufxTxLzU2462ZRCj9WP/PZoJUOC/kGzus8ew=";
+    hash = "sha256-rq/8PUIqsN/1Dq9rpGFUslFlZdt/RCHiDUGszKKvGFU=";
     fetchSubmodules = true;
   };
 

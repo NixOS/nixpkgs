@@ -2,11 +2,13 @@
   lib,
   mkKdeDerivation,
   substituteAll,
+  dbus,
   fontconfig,
   xorg,
   lsof,
   pkg-config,
   spirv-tools,
+  qtpositioning,
   qtsvg,
   qtwayland,
   libcanberra,
@@ -22,12 +24,12 @@ mkKdeDerivation {
   patches = [
     (substituteAll {
       src = ./dependency-paths.patch;
-      fc-match = lib.getExe' fontconfig "fc-match";
+      dbusSend = lib.getExe' dbus "dbus-send";
+      fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
       xmessage = lib.getExe xorg.xmessage;
       xrdb = lib.getExe xorg.xrdb;
-      xsetroot = lib.getExe xorg.xsetroot;
     })
   ];
 
@@ -41,6 +43,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtpositioning
     qtsvg
     qtwayland
 
@@ -61,7 +64,7 @@ mkKdeDerivation {
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${lsof} ${xorg.xmessage} ${xorg.xsetroot}" > $out/nix-support/depends
+    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb}" > $out/nix-support/depends
   '';
 
   passthru.providedSessions = [

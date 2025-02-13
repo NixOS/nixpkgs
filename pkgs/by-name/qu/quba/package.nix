@@ -5,22 +5,20 @@
 }:
 
 let
-  version = "1.4.0";
+  version = "1.4.2";
   pname = "quba";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}.AppImage";
-    hash = "sha256-EsTF7W1np5qbQQh3pdqsFe32olvGK3AowGWjqHPEfoM=";
+    hash = "sha256-3goMWN5GeQaLJimUKbjozJY/zJmqc9Mvy2+6bVSt1p0=";
   };
 
-  appimageContents = appimageTools.extractType1 { inherit name src; };
+  appimageContents = appimageTools.extractType1 { inherit pname version src; };
 in
 appimageTools.wrapType1 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'

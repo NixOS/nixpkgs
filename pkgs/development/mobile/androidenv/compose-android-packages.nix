@@ -4,10 +4,10 @@
 
 { cmdLineToolsVersion ? "13.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "35.0.1"
-, buildToolsVersions ? [ "34.0.0" ]
+, platformToolsVersion ? "35.0.2"
+, buildToolsVersions ? [ "35.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "35.1.4"
+, emulatorVersion ? "35.3.10"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +15,7 @@
 , abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "26.3.11579264"
+, ndkVersion ? "27.0.12077973"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -27,8 +27,8 @@
 
 let
   # Determine the Android os identifier from Nix's system identifier
-  os = if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "macosx"
+  os = if stdenv.hostPlatform.isLinux then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx"
     else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
 
   # Uses mkrepo.rb to create a repo spec.
@@ -150,14 +150,8 @@ rec {
 
     postInstall = ''
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
-      ${linkPlugin { name = "patcher"; plugin = patcher; }}
       ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
     '';
-  };
-
-  patcher = callPackage ./patcher.nix {
-    inherit deployAndroidPackage os;
-    package = packages.patcher."1";
   };
 
   build-tools = map (version:
@@ -339,7 +333,6 @@ rec {
       # Symlink all requested plugins
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
       ${linkPlugin { name = "tools"; plugin = tools; check = toolsVersion != null; }}
-      ${linkPlugin { name = "patcher"; plugin = patcher; }}
       ${linkPlugins { name = "build-tools"; plugins = build-tools; }}
       ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
       ${linkPlugins { name = "platforms"; plugins = platforms; }}
@@ -354,16 +347,16 @@ rec {
       # Link extras
       ${lib.concatMapStrings (identifier:
         let
-          path = addons.extras.${identifier}.path;
-          addon = deployAndroidPackage {
-            inherit os;
-            package = addons.extras.${identifier};
+          package = addons.extras.${identifier};
+          path = package.path;
+          extras = callPackage ./extras.nix {
+            inherit deployAndroidPackage package os;
           };
         in
         ''
           targetDir=$(dirname ${path})
           mkdir -p $targetDir
-          ln -s ${addon}/libexec/android-sdk/${path} $targetDir
+          ln -s ${extras}/libexec/android-sdk/${path} $targetDir
         '') includeExtras}
 
       # Expose common executables in bin/

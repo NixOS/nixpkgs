@@ -1,10 +1,15 @@
-{ buildDunePackage, dns, ipaddr, lwt, tcpip }:
+{
+  buildDunePackage,
+  dns,
+  ipaddr,
+  lwt,
+  tcpip,
+}:
 
 buildDunePackage {
   pname = "dns-mirage";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns

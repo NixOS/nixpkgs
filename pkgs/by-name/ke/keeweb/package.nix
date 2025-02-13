@@ -13,7 +13,7 @@
   nss,
   udev,
   gnome-keyring,
-  mesa,
+  libgbm,
   gtk3,
   libusb1,
   libsecret,
@@ -63,7 +63,7 @@ let
     libXtst
     libxshmfence
     gnome-keyring
-    mesa
+    libgbm
     gtk3
     libusb1
     libsecret
@@ -82,7 +82,7 @@ let
     platforms = builtins.attrNames srcs;
   };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
     inherit
       pname
@@ -112,13 +112,10 @@ else
     nativeBuildInputs = [
       autoPatchelfHook
       wrapGAppsHook3
+      dpkg
     ];
 
     buildInputs = libraries;
-
-    unpackPhase = ''
-      ${dpkg}/bin/dpkg-deb --fsys-tarfile $src | tar --extract
-    '';
 
     installPhase = ''
       runHook preInstall

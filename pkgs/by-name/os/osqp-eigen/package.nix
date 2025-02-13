@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osqp-eigen";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "robotology";
     repo = "osqp-eigen";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mN9oU+qXm+Kob8M4rtxv4qNSbXlFCqpN+s8dHedU8Mo=";
+    hash = "sha256-cXH27UC7hw3iswuf7xSf5pHX1fDyHzFxnCzUpW00SLE=";
   };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" true)
-    (lib.cmakeBool "OSQPEIGEN_RUN_Valgrind_tests" stdenv.isLinux)
+    (lib.cmakeBool "OSQPEIGEN_RUN_Valgrind_tests" stdenv.hostPlatform.isLinux)
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     osqp
   ];
   checkInputs = [ catch2 ];
-  nativeCheckInputs = lib.optional stdenv.isLinux valgrind;
+  nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux valgrind;
 
   doCheck = true;
 

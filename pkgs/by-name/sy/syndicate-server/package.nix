@@ -9,15 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "syndicate-server";
-  version = "0.46.0";
+  version = "0.48.0";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "syndicate-lang";
     repo = "syndicate-rs";
     rev = "${pname}-v${version}";
-    hash = "sha256-bTteZIlBSoQ1o5shgd9NeKVvEhZTyG3i2zbeVojWiO8=";
+    hash = "sha256-DVgFlJCqaTmQ7eL2LQ8rkIbvaEfwx+NDeXRA8qB+/Qo=";
   };
-  cargoHash = "sha256-SIpdFXTk6MC/drjCLaaa49BbGsvCMNbPGCfTxAlCo9c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P/NYyoH/9kkyBwCGORK9bxEjyye12SP3hRDnL9c6i78=";
   nativeBuildInputs = [
     pkg-config
     versionCheckHook
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Syndicate broker server";
-    homepage = "http://synit.org/";
+    homepage = "https://synit.org/";
     license = lib.licenses.asl20;
     mainProgram = "syndicate-server";
     maintainers = with lib.maintainers; [ ehmry ];

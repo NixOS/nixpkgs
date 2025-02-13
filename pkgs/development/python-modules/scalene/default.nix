@@ -10,7 +10,7 @@
   numpy,
   nvidia-ml-py,
   psutil,
-  pynvml,
+  pydantic,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -31,27 +31,26 @@ let
     owner = "mpaland";
     repo = "printf";
     name = "printf";
-    rev = "v4.0.0";
+    tag = "v4.0.0";
     sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
   };
 in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.44.1";
+  version = "1.5.51";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
-    rev = "v${version}";
-    hash = "sha256-XMz+gwiNaKiKplD4kOE1yhcg+dkzjEdDYjW0JsDEMQE=";
+    tag = "v${version}";
+    hash = "sha256-507auU1uy3StmDWruwd/sgJDpV1WhbneSj/bTxUuAN0=";
   };
 
   patches = [
     ./01-manifest-no-git.patch
-    ./02-pyproject-unpin-setuptools.patch
   ];
 
   prePatch = ''
@@ -59,8 +58,8 @@ buildPythonPackage rec {
     mkdir vendor/printf
     cp ${printf-src}/printf.c vendor/printf/printf.cpp
     cp -r ${printf-src}/* vendor/printf
-    sed -i"" 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
-    sed -i"" 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
   '';
 
   nativeBuildInputs = [
@@ -74,7 +73,7 @@ buildPythonPackage rec {
     jinja2
     numpy
     psutil
-    pynvml
+    pydantic
     rich
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
@@ -110,5 +109,15 @@ buildPythonPackage rec {
     mainProgram = "scalene";
     license = licenses.asl20;
     maintainers = with maintainers; [ sarahec ];
+    badPlatforms = [
+      # The scalene doesn't seem to account for arm64 linux
+      "aarch64-linux"
+
+      # On darwin, builds 1) assume aarch64 and 2) mistakenly compile one part as
+      # x86 and the other as arm64 then tries to link them into a single binary
+      # which fails.
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

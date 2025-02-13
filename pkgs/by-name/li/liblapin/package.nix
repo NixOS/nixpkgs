@@ -47,7 +47,10 @@ stdenv.mkDerivation {
     libudev-zero
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     description = "Multimedia library for rookies and prototyping";

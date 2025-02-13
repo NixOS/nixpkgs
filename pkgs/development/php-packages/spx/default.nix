@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.4.16";
+  version = "0.4.18";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-1HOLMbCuV1bxi4DV26QOhi93VsBF3NJymk4SMn2ze4g=";
+    hash = "sha256-Dcv8ncYPIug7e24mvL1gn0x0CeLNAck8djm/r/yiPe8=";
   };
 
   configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];

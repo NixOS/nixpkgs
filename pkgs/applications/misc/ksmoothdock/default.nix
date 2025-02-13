@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, kactivities
-, qtbase
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  kactivities,
+  qtbase,
 }:
 
 mkDerivation rec {
@@ -24,9 +25,15 @@ mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace "-Werror" ""
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
-  buildInputs = [ kactivities qtbase ];
+  buildInputs = [
+    kactivities
+    qtbase
+  ];
 
   cmakeDir = "../src";
 

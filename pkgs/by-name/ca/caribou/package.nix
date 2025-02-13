@@ -91,6 +91,13 @@ stdenv.mkDerivation rec {
     substituteInPlace libcaribou/Makefile.am --replace "--shared-library=libcaribou.so.0" "--shared-library=$out/lib/libcaribou.so.0"
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    # This really should be done by latest Vala, but we are using
+    # release tarball here, which dists generated C code.
+    # https://gitlab.gnome.org/GNOME/vala/-/merge_requests/369
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   passthru = {
     updateScript = gnome.updateScript { packageName = "caribou"; };
   };

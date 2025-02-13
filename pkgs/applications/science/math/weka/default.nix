@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchurl, jre, unzip, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  unzip,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "weka";
   version = "3.9.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/weka/${lib.replaceStrings ["."]["-"] "${pname}-${version}"}.zip";
+    url = "mirror://sourceforge/weka/${lib.replaceStrings [ "." ] [ "-" ] "${pname}-${version}"}.zip";
     sha256 = "sha256-8fVN4MXYqXNEmyVtXh1IrauHTBZWgWG8AvsGI5Y9Aj0=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   # The -Xmx1000M comes suggested from their download page:
   # https://www.cs.waikato.ac.nz/ml/weka/downloading.html

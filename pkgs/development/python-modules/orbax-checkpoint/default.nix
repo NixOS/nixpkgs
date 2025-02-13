@@ -13,12 +13,12 @@
   humanize,
   importlib-resources,
   jax,
-  jaxlib,
   msgpack,
   nest-asyncio,
   numpy,
   protobuf,
   pyyaml,
+  simplejson,
   tensorstore,
   typing-extensions,
 
@@ -26,20 +26,22 @@
   chex,
   google-cloud-logging,
   mock,
+  optax,
+  portpicker,
   pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.6.4";
+  version = "0.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xd75/AKBFUdA6a8sQnCB2rVbHl/Foy4LTb07jnwrTjA=";
+    tag = "v${version}";
+    hash = "sha256-zKQcqDW0dOQIGNllrK6bPdTr8mkKU6eevdfvMGssd9w=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -52,12 +54,12 @@ buildPythonPackage rec {
     humanize
     importlib-resources
     jax
-    jaxlib
     msgpack
     nest-asyncio
     numpy
     protobuf
     pyyaml
+    simplejson
     tensorstore
     typing-extensions
   ];
@@ -66,6 +68,8 @@ buildPythonPackage rec {
     chex
     google-cloud-logging
     mock
+    optax
+    portpicker
     pytest-xdist
     pytestCheckHook
   ];
@@ -75,7 +79,7 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
@@ -83,15 +87,26 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # E   absl.flags._exceptions.DuplicateFlagError: The flag 'num_processes' is defined twice.
+    # First from multiprocess_test, Second from orbax.checkpoint._src.testing.multiprocess_test.
+    # Description from first occurrence: Number of processes to use.
+    # https://github.com/google/orbax/issues/1580
+    "orbax/checkpoint/experimental/emergency/"
+
     # Circular dependency flax
+    "orbax/checkpoint/_src/metadata/empty_values_test.py"
+    "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
+    "orbax/checkpoint/_src/metadata/tree_test.py"
+    "orbax/checkpoint/_src/testing/test_tree_utils.py"
+    "orbax/checkpoint/_src/tree/utils_test.py"
+    "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"
-    "orbax/checkpoint/utils_test.py"
   ];
 
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/releases/tag/v${version}";
+    changelog = "https://github.com/google/orbax/blob/v${version}/checkpoint/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

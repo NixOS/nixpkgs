@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   pname,
-  webkitgtk,
   service-cargo-hash,
   meta,
 }:
@@ -18,17 +17,16 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = [
     openssl
-    webkitgtk
   ];
 
   env = {
     OPENSSL_NO_VENDOR = 1;
   };
 
+  useFetchCargoVendor = true;
   cargoHash = service-cargo-hash;
 }

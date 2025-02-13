@@ -2,7 +2,6 @@
   cmake,
   doxygen,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   pkg-config,
   pythonSupport ? false,
@@ -12,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "example-robot-data";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Gepetto";
     repo = "example-robot-data";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Heq+c8SSYNO8ksTv5FphRBRStlTakm9T66jlPXon5tI=";
+    hash = "sha256-IRmqeaN0EaIjYaibTEAR8KhixoNQsl6YydbGQRinP6w=";
   };
 
   outputs = [
@@ -28,16 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-
-  patches = [
-    # Temporary patch for pinocchio v3.0.0 compatibility.
-    # Should be removed on next example-robot-data release
-    (fetchpatch {
-      name = "pin3.patch";
-      url = "https://github.com/Gepetto/example-robot-data/pull/217/commits/a605ceec857005cde153ec5895e227205eb7a5c3.patch";
-      hash = "sha256-cvAWFytrU2XVggo/nCg8cuLcaZBTACXg6LxjL/6YMPs=";
-    })
-  ];
 
   nativeBuildInputs =
     [

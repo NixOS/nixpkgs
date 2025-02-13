@@ -1,19 +1,20 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, ffmpeg
-, yt-dlp
-, libsecret
-, python3
-, pkg-config
-, nodejs
-, electron
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, yarn2nix-moretea
-, fetchYarnDeps
-, chromium
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  ffmpeg,
+  yt-dlp,
+  libsecret,
+  python3,
+  pkg-config,
+  nodejs,
+  electron,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  yarn2nix-moretea,
+  fetchYarnDeps,
+  chromium,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -39,7 +40,10 @@ stdenvNoCC.mkDerivation rec {
       icon = "Sharedown";
       comment = "An Application to save your Sharepoint videos for offline usage.";
       desktopName = "Sharedown";
-      categories = [ "Network" "Archiving" ];
+      categories = [
+        "Network"
+        "Archiving"
+      ];
     })
   ];
 

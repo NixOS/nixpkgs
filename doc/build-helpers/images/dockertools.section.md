@@ -453,7 +453,7 @@ See [](#ex-dockerTools-streamLayeredImage-exploringlayers) to understand how the
 `streamLayeredImage` allows scripts to be run when creating the additional layer with symlinks, allowing custom behaviour to affect the final results of the image (see the documentation of the `extraCommands` and `fakeRootCommands` attributes).
 
 The resulting repository tarball will list a single image as specified by the `name` and `tag` attributes.
-By default, that image will use a static creation date (see documentation for the `created` attribute).
+By default, that image will use a static creation date (see documentation for the `created` and `mtime` attributes).
 This allows the function to produce reproducible images.
 
 ### Inputs {#ssec-pkgs-dockerTools-streamLayeredImage-inputs}
@@ -516,10 +516,23 @@ This allows the function to produce reproducible images.
 `created` (String; _optional_)
 
 : Specifies the time of creation of the generated image.
+  This date will be used for the image metadata.
   This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
 
   :::{.caution}
   Using `"now"` means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
+  :::
+
+  _Default value:_ `"1970-01-01T00:00:01Z"`.
+
+`mtime` (String; _optional_)
+
+: Specifies the time used for the modification timestamp of files within the layers of the generated image.
+  This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
+
+  :::{.caution}
+  Using a non-constant date will cause built layers to have a different hash each time, preventing deduplication.
+  Using `"now"` also means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
   :::
 
   _Default value:_ `"1970-01-01T00:00:01Z"`.
@@ -868,7 +881,7 @@ dockerTools.pullImage {
   imageDigest = "sha256:b8ea88f763f33dfda2317b55eeda3b1a4006692ee29e60ee54ccf6d07348c598";
   finalImageName = "nix";
   finalImageTag = "2.19.3";
-  sha256 = "zRwlQs1FiKrvHPaf8vWOR/Tlp1C5eLn1d9pE4BZg3oA=";
+  hash = "sha256-zRwlQs1FiKrvHPaf8vWOR/Tlp1C5eLn1d9pE4BZg3oA=";
 }
 ```
 :::
@@ -885,7 +898,7 @@ dockerTools.pullImage {
   imageDigest = "sha256:24a23053f29266fb2731ebea27f915bb0fb2ae1ea87d42d890fe4e44f2e27c5d";
   finalImageName = "etcd";
   finalImageTag = "v3.5.11";
-  sha256 = "Myw+85f2/EVRyMB3axECdmQ5eh9p1q77FWYKy8YpRWU=";
+  hash = "sha256-Myw+85f2/EVRyMB3axECdmQ5eh9p1q77FWYKy8YpRWU=";
 }
 ```
 :::
@@ -909,7 +922,7 @@ Writing manifest to image destination
 {
   imageName = "nixos/nix";
   imageDigest = "sha256:498fa2d7f2b5cb3891a4edf20f3a8f8496e70865099ba72540494cd3e2942634";
-  sha256 = "1q6cf2pdrasa34zz0jw7pbs6lvv52rq2aibgxccbwcagwkg2qj1q";
+  hash = "sha256-OEgs3uRPMb4Y629FJXAWZW9q9LqHS/A/GUqr3K5wzOA=";
   finalImageName = "nixos/nix";
   finalImageTag = "latest";
 }

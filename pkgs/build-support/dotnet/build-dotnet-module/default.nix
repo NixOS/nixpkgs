@@ -3,14 +3,15 @@
   runtimeShell,
   stdenvNoCC,
   callPackage,
-  substituteAll,
   writeShellScript,
   makeWrapper,
   dotnetCorePackages,
   cacert,
   addNuGetDeps,
+  dotnet-sdk,
 }:
 let
+  default-sdk = dotnet-sdk;
   transformArgs =
     finalAttrs:
     {
@@ -82,9 +83,9 @@ let
       # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabled
       useAppHost ? true,
       # The dotnet SDK to use.
-      dotnet-sdk ? dotnetCorePackages.sdk_6_0,
+      dotnet-sdk ? default-sdk,
       # The dotnet runtime to use.
-      dotnet-runtime ? dotnetCorePackages.runtime_6_0,
+      dotnet-runtime ? dotnet-sdk.runtime,
       ...
     }@args:
     let
@@ -135,6 +136,7 @@ let
         useDotnetFromEnv
         nugetDeps
         runtimeId
+        dotnet-sdk
         ;
 
       nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
@@ -149,12 +151,7 @@ let
         dotnet-sdk
       ];
 
-      buildInputs =
-        args.buildInputs or [ ]
-        ++ [
-          dotnet-sdk.packages
-        ]
-        ++ projectReferences;
+      buildInputs = args.buildInputs or [ ] ++ dotnet-sdk.packages ++ projectReferences;
 
       # Parse the version attr into a format acceptable for the Version msbuild property
       # The actual version attr is saved in InformationalVersion, which accepts an arbitrary string
@@ -192,7 +189,9 @@ let
 
       # propagate the runtime sandbox profile since the contents apply to published
       # executables
-      propagatedSandboxProfile = toString dotnet-runtime.__propagatedSandboxProfile;
+      propagatedSandboxProfile = lib.optionalString (dotnet-runtime != null) (
+        toString dotnet-runtime.__propagatedSandboxProfile
+      );
 
       meta = (args.meta or { }) // {
         inherit platforms;
@@ -206,7 +205,12 @@ stdenvNoCC.mkDerivation (
   let
     args = if lib.isFunction fnOrAttrs then fnOrAttrs (args' // finalAttrs) else fnOrAttrs;
     args' = transformArgs finalAttrs args;
-    inherit (args') nugetDeps runtimeId meta;
+    inherit (args')
+      nugetDeps
+      runtimeId
+      meta
+      dotnet-sdk
+      ;
     args'' = removeAttrs args' [
       "nugetDeps"
       "runtimeId"
@@ -215,22 +219,25 @@ stdenvNoCC.mkDerivation (
       "projectFile"
       "projectReferences"
       "runtimeDeps"
-      "runtimeId"
       "disabledTests"
       "testProjectFile"
       "buildType"
       "selfContainedBuild"
       "useDotnet"
       "useAppHost"
+      "dotnet-sdk"
     ];
   in
   if nugetDeps != null then
     addNuGetDeps {
       inherit nugetDeps;
       overrideFetchAttrs =
-        a:
-        lib.optionalAttrs ((args'.runtimeId or null) == null) {
+        old:
+        lib.optionalAttrs ((args'.runtimeId or null) == null) rec {
           dotnetRuntimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) meta.platforms;
+          buildInputs =
+            old.buildInputs
+            ++ lib.concatLists (lib.attrValues (lib.getAttrs dotnetRuntimeIds dotnet-sdk.targetPackages));
         };
     } args'' finalAttrs
   else

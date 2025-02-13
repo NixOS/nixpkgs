@@ -35,12 +35,12 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.3.1";
+  version = "11.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U82ZI/Q6OwdypA41YfdGVa3IA4+QJhqz3gW2IR0S7cs=";
+    hash = "sha256-h0Ehk2Lkv5wuQ/LmyuTUmR7Y+d+QY/Q0CKC2WLA9YuI=";
   };
 
   build-system = [
@@ -91,7 +91,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for the OpenStack Networking API";
-    homepage = "https://opendev.org/openstack/python-neutronclient/";
+    homepage = "https://github.com/openstack/python-neutronclient/";
     license = licenses.asl20;
     maintainers = teams.openstack.members;
   };

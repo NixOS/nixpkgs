@@ -1,4 +1,8 @@
-{ lib, gccStdenv, fetchFromGitHub }:
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+}:
 
 gccStdenv.mkDerivation rec {
   pname = "cc65";
@@ -52,7 +56,7 @@ gccStdenv.mkDerivation rec {
       shouldn't be too much work.
     '';
     license = licenses.zlib;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Required for `test/testcpp.c`.
   env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__MATH_LONG_DOUBLE_CONSTANTS=1";
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D__MATH_LONG_DOUBLE_CONSTANTS=1";
   };
 
   doCheck = true;

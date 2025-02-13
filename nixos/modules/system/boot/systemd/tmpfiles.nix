@@ -7,6 +7,10 @@ let
   initrdCfg = config.boot.initrd.systemd.tmpfiles;
   systemd = config.systemd.package;
 
+  attrsWith' = placeholder: elemType: types.attrsWith {
+    inherit elemType placeholder;
+  };
+
   settingsOption = {
     description = ''
       Declare systemd-tmpfiles rules to create, delete, and clean up volatile
@@ -25,7 +29,7 @@ let
       };
     };
     default = {};
-    type = types.attrsOf (types.attrsOf (types.attrsOf (types.submodule ({ name, config, ... }: {
+    type = attrsWith' "config-name" (attrsWith' "tmpfiles-type" (attrsWith' "path" (types.submodule ({ name, config, ... }: {
       options.type = mkOption {
         type = types.str;
         default = name;
@@ -281,15 +285,19 @@ in
     ) cfg.settings);
 
     systemd.tmpfiles.rules = [
-      "d  /nix/var                           0755 root root - -"
-      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
       "d  /run/lock                          0755 root root - -"
       "d  /var/db                            0755 root root - -"
       "L  /var/lock                          -    -    -    - ../run/lock"
-      # Boot-time cleanup
+    ] ++ lib.optionals config.nix.enable [
+      "d  /nix/var                           0755 root root - -"
+      "L+ /nix/var/nix/gcroots/booted-system 0755 root root - /run/booted-system"
+    ]
+    # Boot-time cleanup
+    ++ [
       "R! /etc/group.lock                    -    -    -    - -"
       "R! /etc/passwd.lock                   -    -    -    - -"
       "R! /etc/shadow.lock                   -    -    -    - -"
+    ] ++ lib.optionals config.nix.enable [
       "R! /nix/var/nix/gcroots/tmp           -    -    -    - -"
       "R! /nix/var/nix/temproots             -    -    -    - -"
     ];
@@ -314,7 +322,7 @@ in
         description = "Create Volatile Files and Directories in the Real Root";
         after = [ "initrd-fs.target" ];
         before = [
-          "initrd-nixos-activation.service"
+          "initrd.target"
           "shutdown.target" "initrd-switch-root.target"
         ];
         conflicts = [ "shutdown.target" "initrd-switch-root.target" ];

@@ -9,6 +9,7 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
+, withTermlib ? false
 , unicodeSupport ? true
 , testers
 , binlore
@@ -19,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz";
+    urls = [
+      "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+      "https://ftp.gnu.org/gnu/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
@@ -38,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+    ++ lib.optional withTermlib "--with-termlib"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
@@ -65,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
   strictDeps = true;
 
@@ -77,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
+  buildInputs = lib.optional (mouseSupport && stdenv.hostPlatform.isLinux) gpm;
 
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
@@ -90,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
     )
   ''
-  + lib.optionalString stdenv.isSunOS ''
+  + lib.optionalString stdenv.hostPlatform.isSunOS ''
     sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
            -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
         configure
@@ -102,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   postFixup = let
-    abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
+    abiVersion-extension = if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
   ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, perl
-, python3
-, openssl
-, xorg
-, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  perl,
+  python3,
+  openssl,
+  xorg,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,12 +22,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-IpF5uXRxHBmfWkBBJjNvDsyQG5nzFjKbCmmGpG3howo=";
   };
 
-  nativeBuildInputs = [ perl python3 pkg-config ];
+  nativeBuildInputs = [
+    perl
+    python3
+    pkg-config
+  ];
 
-  buildInputs = [ openssl xorg.xcbutil ]
-    ++ lib.optional stdenv.isDarwin AppKit;
+  buildInputs = [
+    openssl
+    xorg.xcbutil
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
-  cargoHash = "sha256-jm0UCKDy6TrogMPavB86lvk8yKZXubTGGbApk+oP2RQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NRFTrSH2aorBqsvBOTqfKmer5tXEEF1ZMUtlMfZ6vD8=";
 
   meta = with lib; {
     description = "Simple and fast dashboard for Kubernetes";

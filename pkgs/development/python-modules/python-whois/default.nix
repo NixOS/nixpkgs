@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-whois";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_whois";
     inherit version;
-    hash = "sha256-d7xzR7+BXWXM0ZZxHCmDdlLwdYWu2tPDwE3YhWUf16c=";
+    hash = "sha256-GJaMIUhHUvzEuaXwr0d+9rjcLou38b1cM4MUmcDdQco=";
   };
 
   build-system = [ setuptools ];

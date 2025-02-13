@@ -4,7 +4,7 @@
   buildPythonPackage,
   setuptools-scm,
   lxml,
-  wcwidth,
+  cwcwidth,
   pytestCheckHook,
   iniparse,
   vobject,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.13.2";
+  version = "3.14.7";
 
   pyproject = true;
   build-system = [ setuptools-scm ];
@@ -30,12 +30,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "translate_toolkit";
     inherit version;
-    hash = "sha256-95zIAelFSNK5+f1GY8DUgHPDQBS5K+9ULjXaSaa0wWM=";
+    hash = "sha256-5xpvNxEQBuMggHCb2RPCQ/lQWop6Hiep8BpRSey31R0=";
   };
 
   dependencies = [
     lxml
-    wcwidth
+    cwcwidth
   ];
 
   nativeCheckInputs = [

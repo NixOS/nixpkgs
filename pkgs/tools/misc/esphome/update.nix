@@ -1,15 +1,25 @@
-{ writeShellScript
-, lib
-, curl
-, jq
-, git
-, gnugrep
-, gnused
-, nix-update
+{
+  writeShellScript,
+  lib,
+  curl,
+  jq,
+  git,
+  gnugrep,
+  gnused,
+  nix-update,
 }:
 
 writeShellScript "update-esphome" ''
-  PATH=${lib.makeBinPath [ curl gnugrep gnused jq git nix-update ]}
+  PATH=${
+    lib.makeBinPath [
+      curl
+      gnugrep
+      gnused
+      jq
+      git
+      nix-update
+    ]
+  }
 
   LATEST=$(curl https://api.github.com/repos/esphome/esphome/releases/latest | jq -r '.name')
   echo "Latest version: $LATEST"

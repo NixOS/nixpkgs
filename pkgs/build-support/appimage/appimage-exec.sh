@@ -1,4 +1,4 @@
-#!@shell@
+#!@runtimeShell@
 # shellcheck shell=bash
 
 if [ -n "$DEBUG" ] ; then

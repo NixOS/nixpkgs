@@ -7,6 +7,7 @@
   ifaddr,
   poetry-core,
   pytest-asyncio,
+  pytest-codspeed,
   pytest-cov-stub,
   pytest-timeout,
   pythonOlder,
@@ -16,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.133.0";
+  version = "0.144.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nS3zr+56K819GujzA4uLqcZJb4OxbAOV3FfxssDEEQA=";
+    tag = version;
+    hash = "sha256-OpylhsMjM7Xc1/vVv2kNuxeO7XknjQjJ8jFVS2+3188=";
   };
 
   build-system = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-codspeed
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
@@ -62,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

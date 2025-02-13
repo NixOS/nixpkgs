@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage {
   pname = "git-gamble";
   inherit version src;
 
-  cargoHash = "sha256-vrzcNdLY2PkyZ1eLwOiONRHVAolbTDxytEgi09WkDZQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-t58vf/xhJi5HV9lBWvXzKMZ8I2stjTAmCOrdLWPerGI=";
 
   nativeCheckInputs = [ gitMinimal ];
   preCheck = ''

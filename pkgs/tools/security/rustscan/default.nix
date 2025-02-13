@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = "RustScan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6heC/bHo4IqKNvPjch7AiyWTCZDCv4MZHC7DTEX3U5c=";
   };
 
-  cargoHash = "sha256-Fr+m4BeYvUOoSkewwdUgpmdNchweeLK7v/tKLEzFOBs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-M3Nm1eWWofcxHcadx3cxxORWKyiOPZHVzTwY2YIAfiE=";
 
   postPatch = ''
     substituteInPlace src/scripts/mod.rs \
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs fixtures/.rustscan_scripts/*
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     perl

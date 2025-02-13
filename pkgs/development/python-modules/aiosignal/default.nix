@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiosignal";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vx3Fe28r+0it1UFwyDSD9NNyeIN4tywTyr4pVp49WuU=";
+    hash = "sha256-CvNarJpSq8EKnt+PuSerMK/ZVbxL9rp7rQ4dkWykG1M=";
   };
 
   propagatedBuildInputs = [ frozenlist ];

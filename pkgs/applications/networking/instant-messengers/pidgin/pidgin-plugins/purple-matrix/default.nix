@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, json-glib, glib, http-parser, sqlite, olm, libgcrypt } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  pidgin,
+  json-glib,
+  glib,
+  http-parser,
+  sqlite,
+  olm,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-matrix-unstable";
@@ -15,11 +27,20 @@ stdenv.mkDerivation rec {
     # glib-2.62 deprecations
     "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
     # override "-O0 -Werror" set by build system
-    "-O3" "-Wno-error"
+    "-O3"
+    "-Wno-error"
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pidgin json-glib glib http-parser sqlite olm libgcrypt ];
+  buildInputs = [
+    pidgin
+    json-glib
+    glib
+    http-parser
+    sqlite
+    olm
+    libgcrypt
+  ];
 
   makeFlags = [
     "PLUGIN_DIR_PURPLE=${placeholder "out"}/lib/purple-2"

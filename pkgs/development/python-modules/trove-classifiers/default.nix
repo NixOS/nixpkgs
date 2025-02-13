@@ -11,7 +11,7 @@
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2024.7.2";
+    version = "2025.1.15.22";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
@@ -19,13 +19,8 @@ let
     src = fetchPypi {
       pname = "trove_classifiers";
       inherit version;
-      hash = "sha256-gyjyrCzj/Xc8uzfHZaDteoP4ncVkx9RS8Dm2kknQrDU=";
+      hash = "sha256-kK90NY06AbNTK8ezyI2MaglML9UKVj0T2VdheTJtftk=";
     };
-
-    postPatch = ''
-      substituteInPlace setup.py \
-        --replace '"calver"' ""
-    '';
 
     build-system = [
       calver

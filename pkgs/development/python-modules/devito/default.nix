@@ -1,27 +1,32 @@
 {
   lib,
   stdenv,
-  anytree,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  anytree,
   cached-property,
   cgen,
   click,
   codepy,
   distributed,
-  fetchFromGitHub,
-  gcc,
   llvmPackages,
-  matplotlib,
   multidict,
   nbval,
   psutil,
   py-cpuinfo,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
   sympy,
+
+  # tests
+  gcc,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,12 +34,10 @@ buildPythonPackage rec {
   version = "4.8.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
   };
 
@@ -42,6 +45,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements-testing.txt \
       --replace-fail 'pooch; python_version >= "3.8"' "pooch"
+
+    substituteInPlace tests/test_builtins.py \
+      --replace-fail "from scipy.misc import ascent" "from scipy.datasets import ascent"
   '';
 
   pythonRemoveDeps = [ "pip" ];
@@ -99,19 +105,23 @@ buildPythonPackage rec {
       "test_stability_mpi"
       "test_subdomainset_mpi"
       "test_subdomains_mpi"
+
+      # Download dataset from the internet
+      "test_gs_2d_float"
+      "test_gs_2d_int"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
       "test_v0"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # FAILED tests/test_caching.py::TestCaching::test_special_symbols - ValueError: not enough values to unpack (expected 3, got 2)
       "test_special_symbols"
 
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
       "test_v0"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Numerical tests
       "test_lm_fb"
       "test_lm_ds"
@@ -127,7 +137,9 @@ buildPythonPackage rec {
       "tests/test_dse.py"
       "tests/test_gradient.py"
     ]
-    ++ lib.optionals ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin) [ "tests/test_dle.py" ];
+    ++ lib.optionals (
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin
+    ) [ "tests/test_dle.py" ];
 
   pythonImportsCheck = [ "devito" ];
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SheffieldML";
     repo = "GPy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kggXePDKJcgw8qwLIBTxbwhiLw2H4dkx7082FguKP0Y=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     done
   '';
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.hostPlatform.isx86_64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Rounding difference break comparison
     "TestGradientMultiOutputGPModel"
   ];

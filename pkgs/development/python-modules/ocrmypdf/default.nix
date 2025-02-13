@@ -3,7 +3,7 @@
   buildPythonPackage,
   deprecation,
   fetchFromGitHub,
-  ghostscript,
+  ghostscript_headless,
   hatch-vcs,
   hatchling,
   hypothesis,
@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.5.0";
+  version = "16.7.0";
 
   disabled = pythonOlder "3.10";
 
@@ -45,14 +45,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-jqe4BRW0U7gqcf+FtDWjDDvRStAqaEPTuU+B+BrFR5Y=";
+    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
   };
 
   patches = [
     ./use-pillow-heif.patch
     (substituteAll {
       src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;

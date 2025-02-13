@@ -23,7 +23,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pytest ];
   pythonImportsCheck = [ "iwlib" ];
 
-  doCheck = true;
   checkInputs = [ pytest ];
   checkPhase = "python iwlib/_iwlib_build.py; pytest -v";
 

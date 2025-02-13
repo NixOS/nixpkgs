@@ -10,20 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-ci-ls";
-  version = "0.21.1";
+  version = "1.0.1";
   src = fetchFromGitHub {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
     rev = "${version}";
-    hash = "sha256-0aVwI+E/UmYDSQDArQZsaNc0jDXXOG/zDr/5o0I1aLw=";
+    hash = "sha256-G0MKq2qGxcMpNOQDHo9LtewDEExYIA8/kTUkiZdnygg=";
   };
 
-  cargoHash = "sha256-rZXIc9O+pIdR/M8kV7judiHTCwnKcX+7P1LWEqZLeD8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0Ll1C4N3Zx/SDnlXdIzUa88q/SCSsptFYnHM+uVwPZM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 

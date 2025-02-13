@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aocd-example-parser";
-  version = "unstable-2023-12-17";
+  version = "2023.12.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";

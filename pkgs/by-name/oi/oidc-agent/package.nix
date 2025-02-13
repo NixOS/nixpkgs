@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   curl,
-  webkitgtk,
+  webkitgtk_4_0,
   libmicrohttpd,
   libsecret,
   qrencode,
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oidc-agent";
-  version = "5.2.1";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SjpCD/x93kYB5759e/D0btLO48d6g4SkEUAX7PYfm2w=";
+    hash = "sha256-Vj/YoZpbiV8psU70i3SIKJM/qPQYuy96ogEhT8cG7RU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    webkitgtk
+    webkitgtk_4_0
     libmicrohttpd
     libsecret
     qrencode

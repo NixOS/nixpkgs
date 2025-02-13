@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, pkg-config, ibus, ibus-table, python3, cmake }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchFromGitHub,
+  pkg-config,
+  ibus,
+  ibus-table,
+  python3,
+  cmake,
+}:
 
 let
   src = fetchFromGitHub {
@@ -13,11 +23,15 @@ let
     rev = "7d5297759aef4cd086bdfa30cf6d4b2ad9446992";
     sha256 = "0mx9jvxpiva9v2ffaqlyny48iqr073h84yw8ln43z2avv11ipr7n";
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ibus-table-chinese";
   version = "1.8.2";
 
-  srcs = [ src cmakeFedoraSrc ];
+  srcs = [
+    src
+    cmakeFedoraSrc
+  ];
   sourceRoot = src.name;
 
   postUnpack = ''
@@ -31,7 +45,11 @@ in stdenv.mkDerivation {
   '';
 
   # Fails when writing to /prj_info.cmake in https://pagure.io/cmake-fedora/blob/master/f/Modules/ManageVersion.cmake
-  cmakeFlags = [ "-DPRJ_INFO_CMAKE_FILE=/dev/null" "-DPRJ_DOC_DIR=REPLACE" "-DDATA_DIR=share" ];
+  cmakeFlags = [
+    "-DPRJ_INFO_CMAKE_FILE=/dev/null"
+    "-DPRJ_DOC_DIR=REPLACE"
+    "-DDATA_DIR=share"
+  ];
   # Must replace PRJ_DOC_DIR with actual share/ folder for ibus-table-chinese
   # Otherwise it tries to write to /ibus-table-chinese if not defined (!)
   postConfigure = ''
@@ -51,15 +69,22 @@ in stdenv.mkDerivation {
     rm -rf $HOME
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ibus ibus-table python3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    ibus
+    ibus-table
+    python3
+  ];
 
   meta = with lib; {
     isIbusEngine = true;
-    description  = "Chinese tables for IBus-Table";
-    homepage     = "https://github.com/definite/ibus-table-chinese";
-    license      = licenses.gpl3;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ pneumaticat ];
+    description = "Chinese tables for IBus-Table";
+    homepage = "https://github.com/definite/ibus-table-chinese";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pneumaticat ];
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchhg
-, qt5
+{
+  lib,
+  stdenv,
+  fetchhg,
+  qt5,
 }:
 
 let
@@ -58,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
       using them with RPCEmu.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers =  builtins.attrValues {
-      inherit (lib.maintainers) AndersonTorres;
+    maintainers = builtins.attrValues {
+      inherit (lib.maintainers) ;
     };
     platforms = lib.platforms.linux;
   };

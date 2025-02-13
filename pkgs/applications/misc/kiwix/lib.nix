@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config
-, python3
-, curl
-, icu
-, libzim
-, pugixml
-, zlib
-, libmicrohttpd
-, mustache-hpp
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  curl,
+  icu,
+  libzim,
+  pugixml,
+  zlib,
+  libmicrohttpd,
+  mustache-hpp,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

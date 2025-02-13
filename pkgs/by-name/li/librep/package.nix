@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gdbm
-, gmp
-, libffi
-, pkg-config
-, readline
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gdbm,
+  gmp,
+  libffi,
+  pkg-config,
+  readline,
+  texinfo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   # ensure libsystem/ctype functions don't get duplicated when using clang
-  configureFlags = lib.optionals stdenv.isDarwin [ "CFLAGS=-std=gnu89" ];
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CFLAGS=-std=gnu89" ];
 
   setupHook = ./setup-hook.sh;
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       language but is also suitable for standalone scripts.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

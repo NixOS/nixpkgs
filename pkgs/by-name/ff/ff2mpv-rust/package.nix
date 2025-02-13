@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 let
@@ -32,7 +33,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hAhHfNiHzrzACrijpVkzpXqrqGYKI3HIJZtUuTrRIcQ=";
   };
 
-  cargoHash = "sha256-EKmysiq1NTv1aQ1DZGS8bziY4lRr+KssBgXa8MO76Ac=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/OvkUyknboMaUVj1N1lTq1jx6b+MK7aFeEbaHnoP6Xg=";
 
   postInstall = ''
     $out/bin/ff2mpv-rust manifest > manifest.json

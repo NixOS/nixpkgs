@@ -1,46 +1,46 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
-  rust,
   rustPlatform,
-  cargo-tauri,
+  cargo-tauri_1,
   cinny,
-  copyDesktopItems,
+  desktop-file-utils,
   wrapGAppsHook3,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
   dbus,
   glib,
   glib-networking,
-  libayatana-appindicator,
-  webkitgtk,
-  makeDesktopItem,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.2.1";
+  # TODO: this is temporarily not true for Cinny Desktop v4.3.1
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-W73ma8ScF3LGv45yhZCV80zhh7URLuWhbi+JumyTp+4=";
+    tag = "v${version}";
+    hash = "sha256-lVBKzajxsQ33zC6NhRLMbWK81GxCbIQPtSR61yJHUL4=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-ved2W4+Dt7pN9j9vIaDlAkaY517nBEgPKgu8ArcHXsM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-a2IyJ5a11cxgHpb2WRDxVF+aoL8kNnjBNwaQpgT3goo=";
 
   postPatch =
     let
       cinny' =
-        assert lib.assertMsg (
-          cinny.version == version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+        # TODO: temporarily disabled for Cinny Desktop v4.3.1 (cinny-unwrapped is still at 4.3.0)
+        # assert lib.assertMsg (
+        #   cinny.version == version
+        # ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;
@@ -49,67 +49,46 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       substituteInPlace tauri.conf.json \
-        --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
+        --replace-warn '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
       substituteInPlace tauri.conf.json \
-        --replace '"cd cinny && npm run build"' '""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+        --replace-warn '"cd cinny && npm run build"' '""'
     '';
-
-  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cargo tauri build --bundles app --target "${rust.envVars.rustHostPlatform}"
-  '';
 
   postInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -DT icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/cinny.png
-      install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/cinny.png
-      install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/cinny.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications/"
-      cp -r "target/${rust.envVars.rustHostPlatform}/release/bundle/macos/Cinny.app" "$out/Applications/"
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/bin"
       ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      desktop-file-edit \
+        --set-comment "Yet another matrix client for desktop" \
+        --set-key="Categories" --set-value="Network;InstantMessaging;" \
+        $out/share/applications/cinny.desktop
     '';
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram "$out/bin/cinny" \
+      --inherit-argv0 \
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+  '';
 
   nativeBuildInputs = [
-    copyDesktopItems
     wrapGAppsHook3
     pkg-config
-    cargo-tauri
+    cargo-tauri_1.hook
+    desktop-file-utils
+    makeBinaryWrapper
   ];
 
   buildInputs =
     [
       openssl
-      dbus
-      glib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+      glib
       glib-networking
-      libayatana-appindicator
-      webkitgtk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-      darwin.apple_sdk.frameworks.WebKit
+      webkitgtk_4_0
     ];
-
-  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
-    (makeDesktopItem {
-      name = "cinny";
-      exec = "cinny";
-      icon = "cinny";
-      desktopName = "Cinny";
-      comment = meta.description;
-      categories = [
-        "Network"
-        "InstantMessaging"
-      ];
-    })
-  ];
 
   meta = {
     description = "Yet another matrix client for desktop";

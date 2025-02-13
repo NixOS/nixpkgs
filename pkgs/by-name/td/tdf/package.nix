@@ -10,24 +10,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "tdf";
-  version = "0-unstable-2024-05-29";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
-    rev = "017596a8b0745a6da7c3c75a5f55073b82202a5c";
-    hash = "sha256-H0xdDvWDSkvIy4vFWKiVFP03CogswIZMQ393BeEy2BQ=";
+    rev = "a2b728fae3c5b0addfa64e8d3e44eac6fd50f1d9";
+    hash = "sha256-0as/tKw0nKkZn+5q5PlKwK+LZK0xWXDAdiD3valVjBs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ratatui-0.26.3" = "sha256-lRQQJqt9UKZ2OzvrNzq/FqDvU6CgPPDAB2QDB7TR1V4=";
-      "ratatui-image-1.0.0" = "sha256-0lrFmXPljKKNIbLNhQsuCv7HhJOJ234HSfUPj4XSeXY=";
-      "vb64-0.1.2" = "sha256-VvObgaJhHNah3exVQInFa5mhHjzEg0MaFqQdnCE5Pp8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-krIPfi4SM4uCw7NLauudwh1tgAaB8enDWnMC5X16n48=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -48,8 +42,11 @@ rustPlatform.buildRustPackage {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      DieracDelta
+    ];
     mainProgram = "tdf";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

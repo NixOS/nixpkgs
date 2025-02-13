@@ -1,15 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
-  initScriptBuilder = pkgs.substituteAll {
+  initScriptBuilder = pkgs.replaceVarsWith {
     src = ./init-script-builder.sh;
     isExecutable = true;
-    inherit (pkgs) bash;
-    inherit (config.system.nixos) distroName;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    replacements = {
+      inherit (pkgs) bash;
+      inherit (config.system.nixos) distroName;
+      path = lib.makeBinPath [
+        pkgs.coreutils
+        pkgs.gnused
+        pkgs.gnugrep
+      ];
+    };
   };
 
 in
@@ -39,7 +50,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, exiv2
-, libxml2
-, gtk3
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, desktop-file-utils
-, wrapGAppsHook3
-, desktopToDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  exiv2,
+  libxml2,
+  gtk3,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  desktop-file-utils,
+  wrapGAppsHook3,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gpscorrelate";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "dfandrich";
     repo = "gpscorrelate";
     rev = version;
-    hash = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
+    hash = "sha256-H1kqOzL79/Y1kHVEQ5y9JRWTDCBMbtEPo75drm8+7Qo=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     exiv2
@@ -48,12 +49,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preCheck = ''
-    # https://github.com/dfandrich/gpscorrelate/issues/29
-    rm tests/data/test005.*
-  '';
-
-  installTargets = [ "install" "install-po" "install-desktop-file" ];
+  installTargets = [
+    "install"
+    "install-po"
+    "install-desktop-file"
+  ];
 
   meta = with lib; {
     description = "GPS photo correlation tool, to add EXIF geotags";

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Extension to emulate keypresses and to get the layout information from the X server";
     homepage = "https://launchpad.net/virtkey";
     license = licenses.gpl3;

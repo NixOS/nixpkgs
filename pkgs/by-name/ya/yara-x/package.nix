@@ -1,27 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, installShellFiles
-, testers
-, yara-x
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  testers,
+  yara-x,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "yara-x";
-  version = "0.8.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xCybcDRswxRHiPf0ultIahxSPqn0YonmR4Kah38wJuw=";
+    tag = "v${version}";
+    hash = "sha256-ZSJHvpRZO6Tbw7Ct4oD6QmuV4mJ4RGW5gnT6PTX+nC8=";
   };
 
-  cargoHash = "sha256-6CDzOxvktJc6AnFOm6OJp3cD2bZ0XCY5HLIoEmP59es=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pD4qyw+TTpmcoX1N3C65VelYszYifm9sFOsEkXEysvo=";
 
-  nativeBuildInputs = [ cmake installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
@@ -39,7 +42,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://virustotal.github.io/yara-x/";
     changelog = "https://github.com/VirusTotal/yara-x/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fab lesuisse ];
+    maintainers = with lib.maintainers; [
+      fab
+      lesuisse
+    ];
     mainProgram = "yr";
   };
 }

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   # On darwin: Too many open files
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ulimit -n 1024
   '';
 
@@ -83,11 +83,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "circus" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Process and socket manager";
     homepage = "https://github.com/circus-tent/circus";
     changelog = "https://github.com/circus-tent/circus/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

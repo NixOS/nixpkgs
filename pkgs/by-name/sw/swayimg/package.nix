@@ -1,38 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wayland
-, wayland-protocols
-, json_c
-, libxkbcommon
-, fontconfig
-, giflib
-, libheif
-, libjpeg
-, libwebp
-, libtiff
-, librsvg
-, libpng
-, libjxl
-, libexif
-, libavif
-, openexr_3
-, bash-completion
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  json_c,
+  libxkbcommon,
+  fontconfig,
+  giflib,
+  libheif,
+  libjpeg,
+  libwebp,
+  libtiff,
+  librsvg,
+  libpng,
+  libjxl,
+  libexif,
+  libavif,
+  libsixel,
+  openexr_3,
+  bash-completion,
+  testers,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.2";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Eqs8U2BpjcweDi4oGS9nWpoyoXeuiD+6jviPA3s9/YY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nPmVUJy5hlWk6Q+s6rRBEzlJvpDKLStKTRjLwj7iA/c=";
   };
 
   strictDeps = true;
@@ -41,7 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
 
   mesonFlags = [
     (lib.mesonOption "version" finalAttrs.version)
@@ -64,20 +73,28 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libexif
     libavif
+    libsixel
     openexr_3
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
     changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      Gliczy
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "swayimg";
   };
 })

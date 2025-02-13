@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-indices-managed-llama-cloud";
-  version = "0.3.1";
+  version = "0.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
     inherit version;
-    hash = "sha256-9ifxAtFZBfFWGFIrbsKJWM2G17mzebmXLa7YkQU0LR0=";
+    hash = "sha256-C0WXPLLclwISIAYBm/tVbcq7oxsL33mvx7N2yoFD3wM=";
   };
 
   build-system = [ poetry-core ];

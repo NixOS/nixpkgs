@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy";
-  version = "2.0.32";
+  version = "2.0.37";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -49,15 +49,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-B0T4GsTIis2ZZykRnNOFfhyfW4qU/waXeP0BS5+G1IM=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-KyYENF0c+Ki3k0Ba8v0quY86Jqi6EN3d0onHmzFnSOw=";
   };
 
   postPatch = ''
     sed -i '/tag_build = dev/d' setup.cfg
-
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=61.0,<69.3" "setuptools"
   '';
 
   nativeBuildInputs = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
@@ -67,7 +64,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = lib.fix (self: {
+  optional-dependencies = lib.fix (self: {
     asyncio = [ greenlet ];
     mypy = [ mypy ];
     mssql = [ pyodbc ];

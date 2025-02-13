@@ -1,6 +1,21 @@
-{ mkDerivation, array, base, bytestring, directory, fetchgit
-, filepath, lib, mtl, pooled-io, process, relude, tasty
-, tasty-discover, tasty-hspec, tasty-hunit, text
+{
+  mkDerivation,
+  array,
+  base,
+  bytestring,
+  directory,
+  fetchgit,
+  filepath,
+  lib,
+  mtl,
+  pooled-io,
+  process,
+  relude,
+  tasty,
+  tasty-discover,
+  tasty-hspec,
+  tasty-hunit,
+  text,
 }:
 mkDerivation {
   pname = "avh4-lib";
@@ -13,12 +28,31 @@ mkDerivation {
   };
   postUnpack = "sourceRoot+=/avh4-lib; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
-    array base bytestring directory filepath mtl pooled-io process
-    relude text
+    array
+    base
+    bytestring
+    directory
+    filepath
+    mtl
+    pooled-io
+    process
+    relude
+    text
   ];
   testHaskellDepends = [
-    array base bytestring directory filepath mtl pooled-io process
-    relude tasty tasty-hspec tasty-hunit text
+    array
+    base
+    bytestring
+    directory
+    filepath
+    mtl
+    pooled-io
+    process
+    relude
+    tasty
+    tasty-hspec
+    tasty-hunit
+    text
   ];
   testToolDepends = [ tasty-discover ];
   description = "Common code for haskell projects";

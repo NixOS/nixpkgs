@@ -18,7 +18,7 @@ in
         on your personal computer.
         This service is stateless and doesn't store any data on the server; all data is kept
         locally in your web browser.
-        See https://github.com/jakobhoeg/nextjs-ollama-llm-ui.
+        See <https://github.com/jakobhoeg/nextjs-ollama-llm-ui>.
 
         Required: You need the Ollama backend service running by having
         "services.nextjs-ollama-llm-ui.ollamaUrl" point to the correct url.
@@ -52,7 +52,7 @@ in
 
       ollamaUrl = lib.mkOption {
         type = lib.types.str;
-        default = "127.0.0.1:11434";
+        default = "http://127.0.0.1:11434";
         example = "https://ollama.example.org";
         description = ''
           The address (including host and port) under which we can access the Ollama backend server.
@@ -79,6 +79,7 @@ in
         serviceConfig = {
           ExecStart = "${lib.getExe nextjs-ollama-llm-ui}";
           DynamicUser = true;
+          CacheDirectory = "nextjs-ollama-llm-ui";
         };
       };
     };

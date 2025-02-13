@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tty-solitaire";
@@ -27,14 +33,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = "Klondike Solitaire in your ncurses terminal";
     license = licenses.mit;
     homepage = "https://github.com/mpereira/tty-solitaire";
     platforms = ncurses.meta.platforms;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     mainProgram = "ttysolitaire";
   };
 }

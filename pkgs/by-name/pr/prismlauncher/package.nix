@@ -31,23 +31,23 @@
 
   additionalLibs ? [ ],
   additionalPrograms ? [ ],
-  controllerSupport ? stdenv.isLinux,
-  gamemodeSupport ? stdenv.isLinux,
+  controllerSupport ? stdenv.hostPlatform.isLinux,
+  gamemodeSupport ? stdenv.hostPlatform.isLinux,
   jdks ? [
     jdk21
     jdk17
     jdk8
   ],
   msaClientID ? null,
-  textToSpeechSupport ? stdenv.isLinux,
+  textToSpeechSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 assert lib.assertMsg (
-  controllerSupport -> stdenv.isLinux
+  controllerSupport -> stdenv.hostPlatform.isLinux
 ) "controllerSupport only has an effect on Linux.";
 
 assert lib.assertMsg (
-  textToSpeechSupport -> stdenv.isLinux
+  textToSpeechSupport -> stdenv.hostPlatform.isLinux
 ) "textToSpeechSupport only has an effect on Linux.";
 
 let
@@ -67,7 +67,7 @@ symlinkJoin {
       kdePackages.qtsvg
     ]
     ++ lib.optional (
-      lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.isLinux
+      lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.hostPlatform.isLinux
     ) kdePackages.qtwayland;
 
   postBuild = ''
@@ -78,7 +78,7 @@ symlinkJoin {
     let
       runtimeLibs =
         [
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
           ## native versions
           glfw3-minecraft
           openal
@@ -114,7 +114,7 @@ symlinkJoin {
 
     in
     [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--set LD_LIBRARY_PATH ${addDriverRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"
     ];

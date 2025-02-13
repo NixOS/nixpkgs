@@ -1,37 +1,41 @@
-{ mkDerivation
-, extra-cmake-modules
-, kdoctools
-, libdbusmenu
-, pam
-, wayland
-, appstream
-, kdeclarative
-, kdelibs4support
-, kpeople
-, kconfig
-, krunner
-, kinit
-, kirigami-addons
-, kwayland
-, kwin
-, plasma-framework
-, telepathy
-, libphonenumber
-, protobuf
-, libqofono
-, modemmanager-qt
-, networkmanager-qt
-, plasma-workspace
-, maliit-framework
-, maliit-keyboard
-, qtfeedback
-, qttools
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kdoctools,
+  libdbusmenu,
+  pam,
+  wayland,
+  appstream,
+  kdeclarative,
+  kdelibs4support,
+  kpeople,
+  kconfig,
+  krunner,
+  kinit,
+  kirigami-addons,
+  kwayland,
+  kwin,
+  plasma-framework,
+  telepathy,
+  libphonenumber,
+  protobuf,
+  libqofono,
+  modemmanager-qt,
+  networkmanager-qt,
+  plasma-workspace,
+  maliit-framework,
+  maliit-keyboard,
+  qtfeedback,
+  qttools,
 }:
 
 mkDerivation {
   pname = "plasma-mobile";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
   buildInputs = [
     appstream
     libdbusmenu

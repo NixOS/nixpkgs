@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.66.0";
+  version = "0.76.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Rv45WP6KxsFY/eGgNja5JSgmVKQWrRbP6K4tz6CFpMs=";
+    tag = version;
+    hash = "sha256-ZPNMlaktdSElOfKf3SmI08RGRSpI5hK2khWoJybtJh4=";
   };
 
   postPatch = ''
@@ -72,10 +72,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
-    "test_quirks_v2"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ "test_periodic_scan_priority" ];
+  disabledTests =
+    [
+      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+      "test_quirks_v2"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      "test_periodic_scan_priority"
+    ];
 
   disabledTestPaths = [
     # Tests require network access

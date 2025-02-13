@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    hash = "sha256-VQhzVz7gQBGZ+DX+9R3ficp7wm97jRvcylnaZD+zyoE=";
+    hash = "sha256-ujteEICeV5rNEb0WV3nOP9KaiQTqN5aO9bV62Xw2GLo=";
   };
 
   configureFlags = [
@@ -33,8 +33,6 @@ buildPythonPackage rec {
     sphinx
     xapian
   ];
-
-  doCheck = true;
 
   checkPhase = ''
     ${python.interpreter} python${pythonSuffix}/pythontest.py

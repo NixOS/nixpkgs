@@ -5,7 +5,7 @@
          match cfg with
          | Dot_merlin ->
 -          let prog = "dot-merlin-reader" in
-+          let prog = "@dot_merlin_reader@" in
++          let prog = "@dot-merlin-reader@" in
            prog, [| prog |]
          | Dune ->
 -          let prog = "dune" in

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mBouamama";
     repo = "MyJWT";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jqBnxo7Omn5gLMCQ7SNbjo54nyFK7pn94796z2Qc9lg=";
   };
 
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     # Build failures
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

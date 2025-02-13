@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Commandline 6502 assembler compatible with Mac/65";
     license = licenses.gpl2Plus;
     changelog = "https://github.com/CycoPH/atasm/releases/tag/V${version}";
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

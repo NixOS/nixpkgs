@@ -1,43 +1,42 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, npmHooks
-, nodejs
-, python3
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
-, open-policy-agent
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
+  python3,
+  pkg-config,
+  sqlite,
+  zstd,
+  stdenv,
+  darwin,
+  open-policy-agent,
+  cctools,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-authentication-service";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QLtyYxV2yXHJtwWgGcyi7gRcKypYoy9Z8bkEuTopVXc=";
+    tag = "v${version}";
+    hash = "sha256-rFex6stw++xNrcCYnYn3N0HrUQd91DAw9QU0R2MUzyQ=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-       "sea-query-0.32.0-rc.1" = "sha256-Q/NFiIBu8L5rQj4jwcIo8ACmAhLBy4HSTcJv06UdK8E=";
-     };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-u3C6JmaPU4/pyg8Ko01Y33UkuqrVa2lV/jYdMUAF6ng=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
     src = "${src}/${npmRoot}";
-    hash = "sha256-EfDxbdjzF0yLQlueIYKmdpU4v9dx7g8bltU63mIWfo0=";
+    hash = "sha256-4tFE7za2bBOCtX0fSaLvvyD4UTGtvtJlgO30lHCv07Y=";
   };
 
   npmRoot = "frontend";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -45,16 +44,18 @@ rustPlatform.buildRustPackage rec {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
-  buildInputs = [
-    sqlite
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      sqlite
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreFoundation
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

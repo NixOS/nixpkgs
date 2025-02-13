@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RCD11KdzM66Mkydc51r6fG+q8bmKl5eZma58YoARwPo=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk; [ frameworks.SystemConfiguration ]
   );
 
@@ -28,9 +28,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=widgets::text_note::tests::test_created_at"
   ];
 
-  cargoHash = "sha256-8ciA1FoGdnU+GWRcYJc8zU2FpUgGwTZSZynvAi1luYo=";
-
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tway75ZAP2cGdpn79VpuRd0q/h+ovDvkih1LKitM/EU=";
 
   meta = with lib; {
     homepage = "https://github.com/akiomik/nostui";

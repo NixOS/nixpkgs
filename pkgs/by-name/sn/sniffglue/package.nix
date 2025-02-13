@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, libpcap
-, libseccomp
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  libpcap,
+  libseccomp,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,15 +19,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Pp/SJJQFpEU/4GKZQB8BjRGS4hqB850QbSb5WoG6Wh4=";
   };
 
-  cargoHash = "sha256-/MGrdo8cmodC3oVWk6y8C73gsLKROmNOI9aytPPzA8o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4aOp9z1xAZ4+GfvcP4rwiS35BfNBnftNhK/oJDixa8w=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libpcap
-  ] ++ lib.optionals stdenv.isLinux [
-    libseccomp
-  ];
+  buildInputs =
+    [
+      libpcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+    ];
 
   meta = with lib; {
     description = "Secure multithreaded packet sniffer";

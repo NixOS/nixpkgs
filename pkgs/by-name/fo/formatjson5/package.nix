@@ -5,6 +5,7 @@
   stdenv,
   darwin,
   nix-update-script,
+  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,9 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Lredw/Fez+2U2++ShZcKTFCv8Qpai9YUvqvpGjG5W0o=";
   };
 
-  cargoHash = "sha256-zPgaZPDyNVPmBXz6QwOYnmh/sbJ8aPST8znLMfIWejk=";
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/google/json5format/commit/32914546e7088b3d9173ae9a2f307effa87917bf.patch";
+      hash = "sha256-kAbRUL/FuhnxkC9Xo4J2bXt9nkMOLeJvgMmOoKnSxKc=";
+    })
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1CSt9dPVHdOqfQXio7/eXiDLWt+iOe6Qj+VtWblwSDE=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   cargoBuildFlags = [ "--example formatjson5" ];
 

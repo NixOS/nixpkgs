@@ -1,6 +1,7 @@
 {
   mkKdeDerivation,
   pkg-config,
+  shared-mime-info,
   qtwayland,
   libssh,
   libvncserver,
@@ -9,7 +10,11 @@
 mkKdeDerivation {
   pname = "krdc";
 
-  extraNativeBuildInputs = [ pkg-config ];
+  extraNativeBuildInputs = [
+    pkg-config
+    shared-mime-info
+  ];
+
   extraBuildInputs = [
     qtwayland
     libssh

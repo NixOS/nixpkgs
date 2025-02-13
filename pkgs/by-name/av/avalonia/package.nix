@@ -26,8 +26,8 @@ let
   dotnet-sdk =
     with dotnetCorePackages;
     combinePackages [
-      sdk_6_0
-      sdk_7_0_1xx
+      sdk_7_0_1xx-bin
+      runtime_6_0-bin
     ];
 
   npmDepsFile = ./npm-deps.nix;
@@ -37,9 +37,12 @@ stdenvNoCC.mkDerivation (
   finalAttrs:
   dotnetCorePackages.addNuGetDeps
     {
-      nugetDeps = ./deps.nix;
-      overrideFetchAttrs = old: {
+      nugetDeps = ./deps.json;
+      overrideFetchAttrs = old: rec {
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
+        buildInputs =
+          old.buildInputs
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
       };
     }
     rec {
@@ -84,7 +87,7 @@ stdenvNoCC.mkDerivation (
             --replace-fail '"libXi.so.6"' '"${lib.getLib libXi}/lib/libXi.so.6"' \
             --replace-fail '"libXcursor.so.1"' '"${lib.getLib libXcursor}/lib/libXcursor.so.1"'
 
-          # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-nix
+          # from RestoreAdditionalProjectSources, which isn't supported by nuget-to-json
           dotnet nuget add source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet8-transport/nuget/v3/index.json
 
           # Tricky way to run npmConfigHook multiple times (borrowed from pagefind)
@@ -159,7 +162,7 @@ stdenvNoCC.mkDerivation (
         nodejs
         dotnet-sdk
       ];
-      buildInputs = [ dotnet-sdk.packages ];
+      buildInputs = dotnet-sdk.packages;
 
       buildTarget = "Package";
 

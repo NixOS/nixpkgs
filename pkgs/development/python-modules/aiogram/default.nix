@@ -28,19 +28,21 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.13.0";
+  version = "3.17.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-P/W47IhVL7wvYI+v6OvnFJt79KPrgY6d1jdOk477MdM=";
+    tag = "v${version}";
+    hash = "sha256-47PWd1geTALgO7MDglHqaoMmZ+u1BnKSlj6Jxj7fkBQ=";
   };
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   dependencies = [
     aiofiles
@@ -89,11 +91,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Modern and fully asynchronous framework for Telegram Bot API";
     homepage = "https://github.com/aiogram/aiogram";
-    changelog = "https://github.com/aiogram/aiogram/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/aiogram/aiogram/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

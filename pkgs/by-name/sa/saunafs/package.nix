@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   cmake,
   asciidoc,
   jemalloc,
-  boost,
+  boost186,
   fmt,
   fuse3,
   spdlog,
@@ -16,18 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "4.5.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jimq+Dx3RoJmnUDcfCkgE6Hk7OvPH/fs1v/Nri8Xtz8=";
+    hash = "sha256-6WXSnItbydH3Lk04l0Iph14EKzL/Pl5vriWdhHxTF6I=";
   };
 
   patches = [
     ./sfstool.patch
-
   ];
 
   outputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
     yaml-cpp
     fuse3
-    boost
+    boost186
     jemalloc
     isa-l
     judy
@@ -60,7 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     rm $out/lib/*.a
+
+    ln -s $out/bin/sfsmount $out/bin/mount.saunafs
   '';
+
+  passthru.tests = nixosTests.saunafs;
 
   meta = with lib; {
     description = "Distributed POSIX file system";

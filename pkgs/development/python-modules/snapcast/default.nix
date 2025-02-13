@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gn+X0DZnox4mkJwDVgwNXae63iGbiqPIO15UV5pDwuY=";
   };
 

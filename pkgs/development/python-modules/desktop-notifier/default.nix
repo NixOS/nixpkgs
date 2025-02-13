@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "desktop-notifier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HynREkiPxv/1y1/ICVwqANIe9tAkIvdpDy4oXxQarec=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
       bidict
       packaging
     ]
-    ++ lib.optionals stdenv.isLinux [ dbus-fast ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus-fast ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   # no tests available, do the imports check instead

@@ -6,23 +6,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "harper";
-  version = "0.11.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
-    owner = "elijah-potter";
+    owner = "Automattic";
     repo = "harper";
     rev = "v${version}";
-    hash = "sha256-83Fg1oywYuvyc5aFeujH/g8Czi8r0wBUr1Bj6vwxNec=";
+    hash = "sha256-8JeF1HxsP+Y+C1g3YJ0B0+JHoRFkBjz4/T8rVr2KgGw=";
   };
 
-  cargoHash = "sha256-Bt2KZ+m7VJXw4FYWt+ioo1XjZHNzbg/8fo8xrfEd6lI=";
+  buildAndTestSubdir = "harper-ls";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uVjDFo5mJi4Xbq0Z+XOjy5VqXqkm0a+4xu+dVnjWXCU=";
 
   meta = {
     description = "Grammar Checker for Developers";
-    homepage = "https://github.com/elijah-potter/harper";
-    changelog = "https://github.com/elijah-potter/harper/releases/tag/v${version}";
+    homepage = "https://github.com/Automattic/harper";
+    changelog = "https://github.com/Automattic/harper/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pbsds ];
-    mainProgram = "harper-cli";
+    maintainers = with lib.maintainers; [
+      pbsds
+      sumnerevans
+    ];
+    mainProgram = "harper-ls";
   };
 }

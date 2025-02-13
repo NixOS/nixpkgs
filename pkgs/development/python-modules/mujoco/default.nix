@@ -37,7 +37,7 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3WF/QMHARPXff7yTM9MJTTyIYp1OPYYiTly0LeQKaos=";
+    hash = "sha256-a0ATRmtFV11J3T2HSNCZhfc0kAOu8yaHIW0rkCrHsTg=";
   };
 
   nativeBuildInputs = [ cmake ];

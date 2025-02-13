@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, gmp
-, ntl
-, cddlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  gmp,
+  ntl,
+  cddlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,7 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.7.6";
 
   src = fetchurl {
-    url = "https://github.com/latte-int/latte/releases/download/version_${lib.replaceStrings ["."] ["_"] finalAttrs.version}/latte-int-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/latte-int/latte/releases/download/version_${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }/latte-int-${finalAttrs.version}.tar.gz";
     hash = "sha256-AGwQ6+XVv9ybFZy6YmSkQyhh/nY84F/oIWJKt9P8IXA=";
   };
 

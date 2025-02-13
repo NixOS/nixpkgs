@@ -1,4 +1,13 @@
-{ mkDerivation, lib, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fftw,
+  libsndfile,
+  qtbase,
+  qtmultimedia,
+  qmake,
+}:
 
 let
 
@@ -10,7 +19,7 @@ let
       owner = "gillesdegottex";
     };
     meta = with lib; {
-     license = licenses.asl20;
+      license = licenses.asl20;
     };
   };
 
@@ -22,11 +31,12 @@ let
       owner = "gillesdegottex";
     };
     meta = with lib; {
-     license = licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
     };
   };
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "dfasma";
   version = "1.4.5";
 
@@ -37,7 +47,12 @@ in mkDerivation rec {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw libsndfile qtbase qtmultimedia ];
+  buildInputs = [
+    fftw
+    libsndfile
+    qtbase
+    qtmultimedia
+  ];
 
   nativeBuildInputs = [ qmake ];
 
@@ -59,7 +74,10 @@ in mkDerivation rec {
       amplitude, this software does not aim to be an audio editor.
     '';
     homepage = "https://gillesdegottex.gitlab.io/dfasma-website/";
-    license = [ licenses.gpl3Plus reaperFork.meta.license ];
+    license = [
+      licenses.gpl3Plus
+      reaperFork.meta.license
+    ];
     platforms = platforms.linux;
   };
 }

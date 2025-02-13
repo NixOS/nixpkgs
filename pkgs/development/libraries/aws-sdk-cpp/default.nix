@@ -27,13 +27,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.11.336";
+  # nixpkgs-update: no auto update
+  version = "1.11.448";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    hash = "sha256-hetXtXM8HG6V3rAuyf+w+DtlxEcpsyaroZsw0nIJoAw=";
+    hash = "sha256-K0UFs7vOeZeQIs3G5L4FfEWXDGTXT9ssr/vQwa1l2lw=";
   };
 
   postPatch = ''
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
     # TestRandomURLMultiThreaded fails
     rm tests/aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-  '' + lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.hostPlatform.isi686 ''
     # EPSILON is exceeded
     rm tests/aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
   '';
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl openssl zlib
-  ] ++ lib.optionals (stdenv.isDarwin &&
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];

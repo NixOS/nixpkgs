@@ -2,6 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   asn1crypto,
   bincopy,
   bitstring,
@@ -13,8 +19,10 @@
   cryptography,
   deepmerge,
   fastjsonschema,
+  filelock,
   hexdump,
   libusbsio,
+  libuuu,
   oscrypto,
   packaging,
   platformdirs,
@@ -23,30 +31,41 @@
   pyserial,
   requests,
   ruamel-yaml,
-  setuptools-scm,
   sly,
-  spsdk,
-  testers,
   typing-extensions,
+
+  # tests
   ipykernel,
   pytest-notebook,
   pytestCheckHook,
   voluptuous,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.2.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
     repo = "spsdk";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qFgG9jdF667EtMqXGGk/oxTEi+6J2s/3gKokP+JaFVw=";
+    tag = "v${version}";
+    hash = "sha256-Ua32c6hNjwfjsQIugiqtRL50AvOrPgqyKoG1Lb0NVqE=";
   };
 
-  build-system = [ setuptools-scm ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.1,<74" "setuptools"
+
+    substituteInPlace setup.py \
+      --replace-fail "setuptools>=72.1,<74" "setuptools"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonRelaxDeps = [
     "cryptography"
@@ -55,9 +74,11 @@ buildPythonPackage rec {
     "typing-extensions"
   ];
 
-  # Remove unneeded unfree package. pyocd-pemicro is only used when
-  # generating a pyinstaller package, which we don't do.
-  pythonRemoveDeps = [ "pyocd-pemicro" ];
+  pythonRemoveDeps = [
+    # Remove unneeded unfree package. pyocd-pemicro is only used when
+    # generating a pyinstaller package, which we don't do.
+    "pyocd-pemicro"
+  ];
 
   dependencies = [
     asn1crypto
@@ -71,8 +92,10 @@ buildPythonPackage rec {
     cryptography
     deepmerge
     fastjsonschema
+    filelock
     hexdump
     libusbsio
+    libuuu
     oscrypto
     packaging
     platformdirs
@@ -85,23 +108,32 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  pythonImportsCheck = [ "spsdk" ];
+
+  preInstallCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
   nativeCheckInputs = [
     ipykernel
     pytest-notebook
     pytestCheckHook
     voluptuous
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
+  disabledTests = [
+    # Missing rotk private key
+    "test_general_notebooks"
   ];
 
-  pythonImportsCheck = [ "spsdk" ];
-
-  passthru.tests.version = testers.testVersion { package = spsdk; };
-
-  meta = with lib; {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
+  meta = {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.tag}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       frogamic
       sbruder
     ];

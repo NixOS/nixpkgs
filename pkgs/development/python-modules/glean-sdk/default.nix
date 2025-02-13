@@ -13,20 +13,20 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "60.4.0";
+  version = "63.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "glean";
     rev = "v${version}";
-    hash = "sha256-C3wQdxPNBPQN6eUK6Vq0bA6Wpqb28e9BTBf7c/hTQxU=";
+    hash = "sha256-egn6RYQHY173fvTCTYrTJltn923UowCjBZg1DI+iHSk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-XqOCHnvM64kZNifU5Wt/bFAvyRVy28ozWSwlvm/sMk8=";
+    hash = "sha256-eLjPoSn0WqYGrMPqzVh/pzZvh3Ul+aZSYvuJspVM1cU=";
   };
 
   build-system = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "glean" ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = lib.licenses.mpl20;

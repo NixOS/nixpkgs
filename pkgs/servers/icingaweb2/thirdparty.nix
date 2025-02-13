@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, fetchFromGitHub, nixosTests }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-thirdparty";
@@ -23,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Icinga/icinga-php-thirdparty";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

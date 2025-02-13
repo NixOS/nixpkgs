@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
 
   # build-system
@@ -24,22 +24,23 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.3.5";
+  version = "1.3.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Mako";
-    inherit version;
-    hash = "sha256-SNvCBWjB0naiaYs22Wj6dhYb8ScZSQfqb8WU+oH5Q7w=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "mako";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-7KttExqHxv//q8ol7eOFIrgRHbQySQTvL7Rd9VooX0Y=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ markupsafe ];
+  dependencies = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     babel = [ babel ];
     lingua = [ lingua ];
   };
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests =
     lib.optionals isPyPy [

@@ -7,7 +7,7 @@
 , util-linux
 
   # patch for cygwin requires readline support
-, interactive ? stdenv.isCygwin
+, interactive ? stdenv.hostPlatform.isCygwin
 , readline
 , withDocs ? false
 , texinfo
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+    -DDEFAULT_LOADABLE_BUILTINS_PATH="${placeholder "out"}/lib/bash:."
   '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
@@ -79,8 +80,8 @@ stdenv.mkDerivation rec {
     "bash_cv_getcwd_malloc=yes"
     # This check cannot be performed when cross compiling. The "yes"
     # default is fine for static linking on Linux (weak symbols?) but
-    # not with OpenBSD, when it does clash with the regular `getenv`.
-    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && isOpenBSD) then "yes" else "no"}"
+    # not with BSDs, when it does clash with the regular `getenv`.
+    "bash_cv_getenv_redef=${if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"}"
   ] ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix"
     "--without-libiconv-prefix"

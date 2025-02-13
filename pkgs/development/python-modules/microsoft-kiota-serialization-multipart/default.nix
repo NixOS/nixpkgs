@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
   microsoft-kiota-abstractions,
   microsoft-kiota-serialization-json,
   pytest-asyncio,
@@ -13,19 +13,21 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-multipart";
-  version = "0.1.0";
+  version = "1.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-serialization-multipart-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OGX6vX02928F1uCP8bF/q1Z5aDrdj29iQNOITzF2LQI=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
   };
 
-  build-system = [ flit-core ];
+  sourceRoot = "source/packages/serialization/multipart/";
+
+  build-system = [ poetry-core ];
 
   dependencies = [ microsoft-kiota-abstractions ];
 
@@ -40,8 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multipart serialization implementation for Kiota clients in Python";
-    homepage = "https://github.com/microsoft/kiota-serialization-multipart-python";
-    changelog = "https://github.com/microsoft/kiota-serialization-multipart-python/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/serialization/multipart";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-serialization-multipart-${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

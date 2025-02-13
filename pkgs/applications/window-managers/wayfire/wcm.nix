@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, wayfire
-, wf-shell
-, wayland-scanner
-, wayland-protocols
-, gtk3
-, gtkmm3
-, libevdev
-, libxml2
-, libxkbcommon
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  wayfire,
+  wf-shell,
+  wayland-scanner,
+  wayland-protocols,
+  gtk3,
+  gtkmm3,
+  libevdev,
+  libxml2,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/WayfireWM/wcm";
     description = "Wayfire Config Manager";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ wucke13 rewine ];
+    maintainers = with lib.maintainers; [
+      wucke13
+      rewine
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wcm";
   };

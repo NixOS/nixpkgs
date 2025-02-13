@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, validatePkgConfig
-, cairo
-, curl
-, fontconfig
-, freetype
-, freexl
-, geos
-, giflib
-, libgeotiff
-, libjpeg
-, libpng
-, librttopo
-, libspatialite
-, libtiff
-, libwebp
-, libxml2
-, lz4
-, minizip
-, openjpeg
-, pixman
-, proj
-, sqlite
-, zstd
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  validatePkgConfig,
+  cairo,
+  curl,
+  fontconfig,
+  freetype,
+  freexl,
+  geos,
+  giflib,
+  libgeotiff,
+  libjpeg,
+  libpng,
+  librttopo,
+  libspatialite,
+  libtiff,
+  libwebp,
+  libxml2,
+  lz4,
+  minizip,
+  openjpeg,
+  pixman,
+  proj,
+  sqlite,
+  zstd,
+  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     proj
     sqlite
     zstd
-  ] ++ lib.optional stdenv.isDarwin ApplicationServices;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ApplicationServices;
 
   enableParallelBuilding = true;
 
@@ -83,7 +84,11 @@ stdenv.mkDerivation rec {
     description = "Advanced library supporting raster handling methods";
     homepage = "https://www.gaia-gis.it/fossil/librasterlite2";
     # They allow any of these
-    license = with licenses; [ gpl2Plus lgpl21Plus mpl11 ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+      mpl11
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
   };

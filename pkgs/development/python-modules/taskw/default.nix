@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
 
   # build-system
   setuptools,
 
   # native dependencies
   taskwarrior2,
+  distutils,
 
   # dependencies
   kitchen,
@@ -23,9 +23,6 @@ buildPythonPackage rec {
   pname = "taskw";
   version = "2.0.0";
   pyproject = true;
-
-  # ModuleNotFoundError: No module named 'distutils'
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -44,7 +41,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs = [ taskwarrior2 ];
+  buildInputs = [
+    taskwarrior2
+    distutils
+  ];
 
   dependencies = [
     kitchen

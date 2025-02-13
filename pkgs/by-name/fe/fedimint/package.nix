@@ -1,57 +1,45 @@
-{ lib
-, buildPackages
-, clang
-, fetchFromGitHub
-, libclang
-, libiconv
-, llvmPackages_12
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
-let
-  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
-  # Forcing it to clang 12 fixes the issue.
-  buildRustPackage =
-    if stdenv.isDarwin then
-      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
-    else
-      rustPlatform.buildRustPackage;
-in
-buildRustPackage rec {
+
+rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-ih1ZwH8uItplMJU2/XkQseFlYUsf8/TkX8lGyRl7/KU=";
+    hash = "sha256-0MM5xpxBam95vSepDvVtpt/997XyC8aOqDiyPykHRRc=";
   };
 
-  cargoHash = "sha256-scfgUFuS/b4EFfPuhl6uFlTZi4gyTqtEso2a5jhrxno=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mSj8B9Ma9Zoz5SYmVj2yW0ZK6dqaMgq+nNPPFG0aIrY=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
-    clang
-    libclang.lib
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
   ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin
@@ -79,7 +67,6 @@ buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 

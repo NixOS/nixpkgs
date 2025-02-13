@@ -25,10 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-sLGPVyUVh1MxAJz8933xGAxaI9+0L/D6wViy5ARLe44=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-DLMAL1pJwJ5xU9XzJXlrqfNGloK9VNGxnapnh34bRhI=";
+    hash = "sha256-Qch6g39iuTEdHHehaBrbiVX5PcnEwwzdJmWgkmBSdCU=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
       openssl
       pcsclite
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.Security
       libiconv
@@ -62,6 +62,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
     # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

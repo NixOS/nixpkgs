@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm
-, nodejs
-, makeWrapper
-, electron
-, vulkan-helper
-, gogdl
-, legendary-gl
-, nile
-, comet-gog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pnpm_9,
+  nodejs,
+  python3,
+  makeWrapper,
+  electron,
+  vulkan-helper,
+  gogdl,
+  legendary-gl,
+  nile,
+  comet-gog,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.15.1";
+  version = "2.15.2";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+OQRcBOf9Y34DD7FOp/3SO05mREG6or/HPiOkasHWPM=";
+    hash = "sha256-AndJqk1VAUdC4pOTRzyfhdxmzJMskGF6pUiqPs3fIy4=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-3PiB8CT7wxGmvRuQQ5FIAmBqBm9+R55ry+N/qUYWzuk=";
+    hash = "sha256-/7JIeQZt3QsKrjujSucRLiHfhfSllK7FeumNA4eHqSY=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
+    python3
     makeWrapper
   ];
 
@@ -39,21 +43,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-non-steam-shortcuts.patch
   ];
 
-  postPatch = ''
-    # We are not packaging this as an Electron application bundle, so Electron
-    # reports to the application that is is not "packaged", which causes Heroic
-    # to take some incorrect codepaths meant for development environments.
-    substituteInPlace src/**/*.ts --replace-quiet 'app.isPackaged' 'true'
-  '';
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   buildPhase = ''
     runHook preBuild
 
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
     pnpm --offline electron-vite build
-    # Remove dev dependencies.
-    pnpm --ignore-scripts prune --prod
-    # Clean up broken symlinks left behind by `pnpm prune`
-    find node_modules/.bin -xtype l -delete
+    pnpm --offline electron-builder \
+      --linux \
+      --dir \
+      -c.asarUnpack="**/*.node" \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -63,35 +71,40 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{applications,heroic}
-    cp -r . $out/share/heroic
-    rm -rf $out/share/heroic/{.devcontainer,.vscode,.husky,.idea,.github}
+    mkdir -p "$out/opt/heroic"
+    cp -r dist/linux-unpacked/resources "$out/opt/heroic"
 
-    chmod -R u+w "$out/share/heroic/public/bin" "$out/share/heroic/build/bin"
-    rm -rf "$out/share/heroic/public/bin" "$out/share/heroic/build/bin"
-    mkdir -p "$out/share/heroic/build/bin/x64/linux"
+    cp -r public "$out/opt/heroic/resources/app.asar.unpacked/build"
+    rm -rf "$out/opt/heroic/resources/app.asar.unpacked/build/bin"
+    mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
     ln -s \
       "${lib.getExe gogdl}" \
       "${lib.getExe legendary-gl}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \
-      "$out/share/heroic/build/bin/x64/linux/"
+      "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/share/heroic \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags $out/opt/heroic/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    substituteInPlace "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" \
+    install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
+    install -D "src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
+    substituteInPlace "$out/share/applications/com.heroicgameslauncher.hgl.desktop" \
+      --replace-fail "StartupWMClass=Heroic" "StartupWMClass=heroic" \
       --replace-fail "Exec=heroic-run" "Exec=heroic"
-    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
-    ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
-    ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
