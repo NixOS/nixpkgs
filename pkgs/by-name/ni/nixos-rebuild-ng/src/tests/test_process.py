@@ -1,5 +1,4 @@
-from typing import Any
-from unittest.mock import patch
+from unittest.mock import Mock, call, patch
 
 from pytest import MonkeyPatch
 
@@ -10,9 +9,9 @@ from .helpers import get_qualified_name
 
 
 @patch(get_qualified_name(p.subprocess.run), autospec=True)
-def test_run(mock_run: Any) -> None:
+def test_run(mock_run: Mock) -> None:
     p.run_wrapper(["test", "--with", "flags"], check=True)
-    mock_run.assert_called_with(
+    assert mock_run.call_args == call(
         ["test", "--with", "flags"],
         check=True,
         text=True,
@@ -28,7 +27,7 @@ def test_run(mock_run: Any) -> None:
             sudo=True,
             extra_env={"FOO": "bar"},
         )
-    mock_run.assert_called_with(
+    assert mock_run.call_args == call(
         ["sudo", "test", "--with", "flags"],
         check=False,
         text=True,
@@ -45,7 +44,7 @@ def test_run(mock_run: Any) -> None:
         check=True,
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
-    mock_run.assert_called_with(
+    assert mock_run.call_args == call(
         [
             "ssh",
             "--ssh",
@@ -71,7 +70,7 @@ def test_run(mock_run: Any) -> None:
         extra_env={"FOO": "bar"},
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
-    mock_run.assert_called_with(
+    assert mock_run.call_args == call(
         [
             "ssh",
             "--ssh",
@@ -106,7 +105,7 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
 
     # get_qualified_name doesn't work because getpass is aliased to another
     # function
-    with patch(f"{p.__name__}.getpass", return_value="password"):
+    with patch(f"{p.__name__}.getpass", autospec=True, return_value="password"):
         monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
         assert m.Remote.from_arg("user@localhost", True, True) == m.Remote(
             "user@localhost",
