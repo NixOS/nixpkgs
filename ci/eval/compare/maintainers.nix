@@ -24,8 +24,11 @@ let
     pkg:
     if (lib.attrsets.hasAttrByPath pkg.path pkgs) then
       (
-        if (builtins.tryEval (lib.attrsets.attrByPath pkg.path null pkgs)).success then
-          true
+        let
+          value = lib.attrsets.attrByPath pkg.path null pkgs;
+        in
+        if (builtins.tryEval value).success then
+          if value != null then true else builtins.trace "${pkg.name} exists but is null" false
         else
           builtins.trace "Failed to access ${pkg.name} even though it exists" false
       )

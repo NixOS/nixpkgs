@@ -34,7 +34,7 @@ in
             default = "sqlite:////var/lib/pinnwand/pinnwand.db";
             example = "sqlite:///:memory";
             description = ''
-              Database URI compatible with [SQLAlchemyhttps://docs.sqlalchemy.org/en/14/core/engines.html#database-urls].
+              Database URI compatible with [SQLAlchemy](https://docs.sqlalchemy.org/en/14/core/engines.html#database-urls).
 
               Additional packages may need to be introduced into the environment for certain databases.
             '';

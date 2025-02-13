@@ -467,6 +467,7 @@ mapAliases ({
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
+  pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
   py3to2 = throw "py3to2 is unmaintained and source is no longer available"; # added 2024-10-23
   py-radix = throw "py-radix has been removed, since it abandoned"; # added 2023-07-07

@@ -2031,6 +2031,12 @@
     githubId = 21687187;
     name = "Mirza Arnaut";
   };
+  asappia = {
+    email = "asappia@gmail.com";
+    github = "asappia";
+    githubId = 891399;
+    name = "Alessandro Sappia";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
@@ -4051,6 +4057,12 @@
     github = "CharlesHD";
     githubId = 6608071;
     name = "Charles Huyghues-Despointes";
+  };
+  charlieegan3 = {
+    email = "git@charlieegan3.com";
+    github = "charlieegan3";
+    githubId = 1774239;
+    name = "Charlie Egan";
   };
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
@@ -16986,7 +16998,7 @@
   nullcube = {
     email = "nullcub3@gmail.com";
     name = "NullCube";
-    github = "nullcub3";
+    github = "nullcubee";
     githubId = 51034487;
     matrix = "@nullcube:matrix.org";
   };
@@ -25256,7 +25268,7 @@
   };
   x123 = {
     name = "x123";
-    email = "nix@boxchop.city";
+    email = "nix@nixlink.net";
     github = "x123";
     githubId = 5481629;
   };
