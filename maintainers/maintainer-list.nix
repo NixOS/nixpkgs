@@ -17469,6 +17469,13 @@
     githubId = 7820716;
     name = "orthros";
   };
+  orzklv = {
+    email = "sakhib@orzklv.uz";
+    github = "orzklv";
+    githubId = 54666588;
+    name = "Sokhibjon Orzikulov";
+    keys = [ { fingerprint = "00D2 7BC6 8707 0683 FBB9  137C 3C35 D3AF 0DA1 D6A8"; } ];
+  };
   osbm = {
     email = "osmanfbayram@gmail.com";
     github = "osbm";
