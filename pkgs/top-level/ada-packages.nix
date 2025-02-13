@@ -28,6 +28,8 @@ makeScopeWithSplicing' {
 
     template-parser = self.callPackage ../development/ada-modules/template-parser { };
 
+    libspawn = self.callPackage ../development/ada-modules/libspawn { };
+
     gnatprove = self.callPackage ../development/ada-modules/gnatprove {
       ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
     };
