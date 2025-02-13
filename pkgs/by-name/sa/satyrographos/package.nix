@@ -2,25 +2,28 @@
   ocamlPackages,
   fetchFromGitHub,
   lib,
+  opam,
 }:
 
-let
+ocamlPackages.buildDunePackage rec {
   pname = "satyrographos";
   version = "0.0.2.13";
   src = fetchFromGitHub {
     owner = "na4zagin3";
     repo = "satyrographos";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-f9iJTr4nV7dFCMkI8+zv9qvYWRSw8H/xbbZm2LR9cB4=";
+    tag = "v${version}";
+    hash = "sha256-f9iJTr4nV7dFCMkI8+zv9qvYWRSw8H/xbbZm2LR9cB4=";
   };
-in
-ocamlPackages.buildDunePackage {
-  inherit pname version src;
 
   duneVersion = "3";
 
-  nativeBuildInputs = with ocamlPackages; [
-    menhir
+  nativeBuildInputs = [
+    opam
+    ocamlPackages.menhir
+  ];
+
+  propagatedBuildInputs = [
+    opam
   ];
 
   buildInputs = with ocamlPackages; [
@@ -40,7 +43,7 @@ ocamlPackages.buildDunePackage {
   ];
 
   meta = {
-    changelog = "https://github.com/na4zagin3/satyrographos/releases/tag/${src.rev}";
+    changelog = "https://github.com/na4zagin3/satyrographos/releases/tag/${src.tag}";
     description = "Package manager for SATySFi";
     homepage = "https://github.com/na4zagin3/satyrographos";
     maintainers = with lib.maintainers; [ momeemt ];
