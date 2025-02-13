@@ -8199,6 +8199,8 @@ self: super: with self; {
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
+  metaflow = callPackage ../development/python-modules/metaflow { };
+
   metakernel = callPackage ../development/python-modules/metakernel { };
 
   metar = callPackage ../development/python-modules/metar { };
@@ -9649,6 +9651,8 @@ self: super: with self; {
   od = callPackage ../development/python-modules/od { };
 
   odc-geo = callPackage ../development/python-modules/odc-geo { };
+
+  odc-stac = callPackage ../development/python-modules/odc-stac { };
 
   oddsprout = callPackage ../development/python-modules/oddsprout { };
 
