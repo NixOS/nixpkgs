@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage {
       wrapProgram $out/bin/devenv \
         --prefix PATH ":" "$out/bin:${cachix}/bin" \
         --set DEVENV_NIX ${devenv_nix} \
+        --set-default DO_NOT_TRACK 1 \
         ${setDefaultLocaleArchive}
 
       # Generate manpages
