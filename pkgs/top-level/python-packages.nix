@@ -6492,6 +6492,8 @@ self: super: with self; {
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
+  ipylab = callPackage ../development/python-modules/ipylab { };
+
   ipynbname = callPackage ../development/python-modules/ipynbname { };
 
   ipyniivue = callPackage ../development/python-modules/ipyniivue { };
