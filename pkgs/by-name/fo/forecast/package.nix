@@ -5,22 +5,16 @@
   fetchFromGitHub,
 
   # nativeBuildInputs
-  autoPatchelfHook,
+  libcosmicAppHook,
   just,
-  pkg-config,
-  wrapGAppsHook3,
 
   # buildInputs
-  libxkbcommon,
   openssl,
-  vulkan-loader,
-  wayland,
-  nix-update-script,
 
-  cosmic-icons,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "forecast";
   version = "0-unstable-2024-09-23";
 
@@ -49,37 +43,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
+    libcosmicAppHook
     just
-    pkg-config
-    wrapGAppsHook3
   ];
 
   dontUseJustBuild = true;
   dontUseJustCheck = true;
 
-  buildInputs = [
-    libxkbcommon
-    openssl
-    vulkan-loader
-    wayland
-  ];
-
-  env = {
-    # COSMIC applications now uses vergen for the About page
-    VERGEN_GIT_COMMIT_DATE = "1970-01-01";
-    VERGEN_GIT_SHA = src.rev;
-  };
-
-  runtimeDependencies = [
-    libxkbcommon
-    wayland
-  ];
-
-  postFixup = ''
-    wrapProgram $out/bin/cosmic-ext-forecast \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
-  '';
+  buildInputs = [ openssl ];
 
   justFlags = [
     "--set"
