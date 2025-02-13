@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-osd";
     description = "OSD for the COSMIC Desktop Environment";
     mainProgram = "cosmic-osd";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nyabinary ];
+    platforms = lib.platforms.linux;
   };
 }
