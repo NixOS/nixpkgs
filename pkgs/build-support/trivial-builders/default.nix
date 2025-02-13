@@ -466,6 +466,29 @@ rec {
     ...
 
 
+    To create a directory structure from a specific subdirectory of input `paths` instead of their full trees,
+    you can either append the subdirectory path to each input path, or use the `stripPrefix` argument to
+    remove the common prefix during linking.
+
+    Example:
+
+
+    # create symlinks of tmpfiles.d rules from multiple packages
+    symlinkJoin { name = "tmpfiles.d"; paths = [ pkgs.lvm2 pkgs.nix ]; stripPrefix = "/lib/tmpfiles.d"; }
+
+
+    This creates a derivation with a directory structure like the following:
+
+
+    /nix/store/m5s775yicb763hfa133jwml5hwmwzv14-tmpfiles.d
+    |-- lvm2.conf -> /nix/store/k6js0l5f0zpvrhay49579fj939j77p2w-lvm2-2.03.29/lib/tmpfiles.d/lvm2.conf
+    `-- nix-daemon.conf -> /nix/store/z4v2s3s3y79fmabhps5hakb3c5dwaj5a-nix-1.33.7/lib/tmpfiles.d/nix-daemon.conf
+
+
+    By default, packages that don't contain the specified subdirectory are silently skipped.
+    Set `failOnMissing = true` to make the build fail if any input package is missing the subdirectory
+    (this is the default behavior when not using stripPrefix).
+
     symlinkJoin and linkFarm are similar functions, but they output
     derivations with different structure.
 
@@ -495,9 +518,12 @@ rec {
     , failOnMissing ? stripPrefix == ""
     , ...
     }:
-    # Ensure no partial paths used, it will be confusing considering
-    # most of the time symlinkJoin is used with packages.
-    assert (stripPrefix == "" || (hasPrefix "/" stripPrefix) && stripPrefix != "/");
+    assert lib.assertMsg (stripPrefix != "" -> (hasPrefix "/" stripPrefix && stripPrefix != "/")) ''
+      stripPrefix must be either an empty string (disable stripping behavior), or relative path prefixed with /.
+
+      Ensure that the path starts with / and specifies path to the subdirectory.
+    '';
+
     let
       mapPaths = f: paths: map (path:
         if path == null then null
@@ -510,14 +536,12 @@ rec {
         paths = mapPaths (path: "${path}${stripPrefix}") paths;
         passAsFile = [ "paths" ];
       }; # pass the defaults
-      ignoreMissing = optionalString (!failOnMissing) "test -d $i && ";
-      ignoreError = optionalString (!failOnMissing) " || true";
     in
     runCommand name args
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${ignoreMissing}${lndir}/bin/lndir -silent $i $out${ignoreError}
+          ${optionalString (!failOnMissing) "if test -d $i; then "}${lndir}/bin/lndir -silent $i $out${optionalString (!failOnMissing) "; fi"}
         done
         ${postBuild}
       '';
