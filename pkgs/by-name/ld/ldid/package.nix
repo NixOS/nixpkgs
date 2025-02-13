@@ -7,13 +7,13 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldid";
   version = "2.1.5";
 
   src = fetchgit {
     url = "git://git.saurik.com/ldid.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RM5pU3mrgyvwNfWKNvCT3UYVGKtVhD7ifgp8fq9xXiM=";
   };
 
@@ -48,11 +48,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Link Identity Editor";
     homepage = "https://cydia.saurik.com/info/ldid/";
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
+    mainProgram = "ldid";
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})
