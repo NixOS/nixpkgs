@@ -105,6 +105,10 @@ buildPythonPackage rec {
       "test_grammar_aware_part_error"
       "test_grammar_aware_part_error[part2]"
       "test_grammar_aware_project_error[project0]"
+      # Temp fix - asserts fail against error messages which have changed
+      # slightly in a later revision of craft-platforms. No functional error.
+      "test_platform_invalid_arch"
+      "test_platform_invalid_build_arch"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
