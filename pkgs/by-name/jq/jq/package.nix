@@ -54,15 +54,6 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  # Darwin requires _REENTRANT be defined to use functions like `lgamma_r`.
-  # Otherwise, configure will detect that they’re in libm, but the build will fail
-  # with clang 16+ due to calls to undeclared functions.
-  # This is fixed upstream and can be removed once jq is updated (to 1.7 or an unstable release).
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    "-D_REENTRANT=1"
-    "-D_DARWIN_C_SOURCE=1"
-  ]);
-
   configureFlags =
     [
       "--bindir=\${bin}/bin"
@@ -72,7 +63,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
     # jq is linked to libjq:
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}"
+    # https://github.com/jqlang/jq/issues/3252
+    ++ lib.optional stdenv.hostPlatform.isOpenBSD "CFLAGS=-D_BSD_SOURCE=1";
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
