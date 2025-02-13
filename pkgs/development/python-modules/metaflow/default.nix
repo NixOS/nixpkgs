@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "metaflow";
-  version = "2.13.9";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "metaflow";
     tag = version;
-    hash = "sha256-f/cWZl59i1PRqNqLV5LtcZoDKdovdCKoQJNxzXKczgs=";
+    hash = "sha256-EyPA8GT1jskCWtsaBvwL8MW5B4mWw2tfXIKgvePeQ+E=";
   };
 
   build-system = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Open Source AI/ML Platform";
     homepage = "https://metaflow.org/";
-    changelog = "https://github.com/Netflix/metaflow/releases/tag/${version}";
+    changelog = "https://github.com/Netflix/metaflow/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kr7x ];
   };
