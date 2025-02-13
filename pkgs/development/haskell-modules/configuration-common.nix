@@ -318,8 +318,9 @@ self: super: {
   # Too strict bounds on bytestring < 0.12
   superbuffer = doJailbreak super.superbuffer;
 
-  # Needs older QuickCheck version
-  attoparsec-varword = dontCheck super.attoparsec-varword;
+  # Infinite recursion with test enabled.
+  # 2025-02-14: Too strict bounds on attoparsec < 0.14
+  attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
 
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = disableLibraryProfiling super.ghc-heap-view;

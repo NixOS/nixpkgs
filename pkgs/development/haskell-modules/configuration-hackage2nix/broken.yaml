@@ -295,7 +295,6 @@ broken-packages:
   - attoparsec-csv # failure in job https://hydra.nixos.org/build/233245402 at 2023-09-02
   - attoparsec-text # failure in job https://hydra.nixos.org/build/233227820 at 2023-09-02
   - attoparsec-trans # failure in job https://hydra.nixos.org/build/233203168 at 2023-09-02
-  - attoparsec-varword # failure in job https://hydra.nixos.org/build/233234240 at 2023-09-02
   - attosplit # failure in job https://hydra.nixos.org/build/233203118 at 2023-09-02
   - Attrac # failure in job https://hydra.nixos.org/build/234459267 at 2023-09-13
   - augeas # failure in job https://hydra.nixos.org/build/233228677 at 2023-09-02
