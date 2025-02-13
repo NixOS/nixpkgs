@@ -6,7 +6,6 @@
   file,
   nixosTests,
   nix-update-script,
-  ...
 }:
 
 beamPackages.mixRelease rec {
