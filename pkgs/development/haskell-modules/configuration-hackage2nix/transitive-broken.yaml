@@ -1374,6 +1374,8 @@ dont-distribute-packages:
  - fltkhs-themes
  - fluent-logger
  - fluent-logger-conduit
+ - fluid-idl-http-client
+ - fluid-idl-scotty
  - fmt-for-rio
  - foldable1
  - foldl-transduce-attoparsec

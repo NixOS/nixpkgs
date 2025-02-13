@@ -951,18 +951,6 @@ self: super: {
   # vector dependency < 0.12
   imagemagick = doJailbreak super.imagemagick;
 
-  # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
-  Elm = markBroken super.Elm;
-  elm-build-lib = markBroken super.elm-build-lib;
-  elm-compiler = markBroken super.elm-compiler;
-  elm-get = markBroken super.elm-get;
-  elm-make = markBroken super.elm-make;
-  elm-package = markBroken super.elm-package;
-  elm-reactor = markBroken super.elm-reactor;
-  elm-repl = markBroken super.elm-repl;
-  elm-server = markBroken super.elm-server;
-  elm-yesod = markBroken super.elm-yesod;
-
   # https://github.com/Euterpea/Euterpea2/issues/40
   Euterpea = doJailbreak super.Euterpea;
 
@@ -1057,9 +1045,6 @@ self: super: {
     };
   } super.djinn;
 
-  # We cannot build this package w/o the C library from <http://www.phash.org/>.
-  phash = markBroken super.phash;
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal (drv: {
@@ -1108,9 +1093,6 @@ self: super: {
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
-
-  # horribly outdated (X11 interface changed a lot)
-  sindre = markBroken super.sindre;
 
   # Test suite occasionally runs for 1+ days on Hydra.
   distributed-process-tests = dontCheck super.distributed-process-tests;
@@ -1192,10 +1174,6 @@ self: super: {
     # bring their own git at runtime.
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) super.sensei;
-
-  # Depends on broken fluid.
-  fluid-idl-http-client = markBroken super.fluid-idl-http-client;
-  fluid-idl-scotty = markBroken super.fluid-idl-scotty;
 
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
@@ -1410,9 +1388,6 @@ self: super: {
 
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
-
-  # https://github.com/elliottt/hsopenid/issues/15
-  openid = markBroken super.openid;
 
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;

@@ -1517,9 +1517,19 @@ broken-packages:
   - ekg-statsd # failure in job https://hydra.nixos.org/build/233200955 at 2023-09-02
   - elevator # failure in job https://hydra.nixos.org/build/233213794 at 2023-09-02
   - elision # failure in job https://hydra.nixos.org/build/233218969 at 2023-09-02
+  - Elm # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-build-lib # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-compiler # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   - elm-export-persistent # failure in job https://hydra.nixos.org/build/233248910 at 2023-09-02
-  - elminator # failure in job https://hydra.nixos.org/build/252729949 at 2024-03-16
+  - elm-get # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-make # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-package # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-reactor # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-repl # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elm-server # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   - elm-websocket # failure in job https://hydra.nixos.org/build/233192201 at 2023-09-02
+  - elm-yesod # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  - elminator # failure in job https://hydra.nixos.org/build/252729949 at 2024-03-16
   - elocrypt # failure in job https://hydra.nixos.org/build/233229627 at 2023-09-02
   - ema-generics # failure in job https://hydra.nixos.org/build/233200038 at 2023-09-02
   - emailaddress # failure in job https://hydra.nixos.org/build/233202700 at 2023-09-02
@@ -4275,6 +4285,7 @@ broken-packages:
   - opengles # failure in job https://hydra.nixos.org/build/233214966 at 2023-09-02
   - OpenGLRaw21 # failure in job https://hydra.nixos.org/build/233229407 at 2023-09-02
   - open-haddock # failure in job https://hydra.nixos.org/build/233205112 at 2023-09-02
+  - openid # https://github.com/elliottt/hsopenid/issues/15
   - openid-connect # failure in job https://hydra.nixos.org/build/233196765 at 2023-09-02
   - open-pandoc # failure in job https://hydra.nixos.org/build/233247973 at 2023-09-02
   - openpgp # failure in job https://hydra.nixos.org/build/233244438 at 2023-09-02
@@ -4526,6 +4537,7 @@ broken-packages:
   - pgvector # failure in job https://hydra.nixos.org/build/233202205 at 2023-09-02
   - phasechange # failure in job https://hydra.nixos.org/build/233254293 at 2023-09-02
   - phaser # failure in job https://hydra.nixos.org/build/233250604 at 2023-09-02
+  - phash # We cannot build this package w/o the C library from <http://www.phash.org/>.
   - phkdf # failure in job https://hydra.nixos.org/build/255669790 at 2024-04-16
   - phladiprelio-general-datatype # failure in job https://hydra.nixos.org/build/275139962 at 2024-10-21
   - phoityne # failure in job https://hydra.nixos.org/build/233195238 at 2023-09-02
@@ -5496,6 +5508,7 @@ broken-packages:
   - simplexmq # failure in job https://hydra.nixos.org/build/233223717 at 2023-09-02
   - simple-zipper # failure in job https://hydra.nixos.org/build/233210316 at 2023-09-02
   - simplistic-generics # failure in job https://hydra.nixos.org/build/233217412 at 2023-09-02
+  - sindre # horribly outdated (X11 interface changed a lot)
   - singlethongs # failure in job https://hydra.nixos.org/build/233202756 at 2023-09-02
   - singleton-dict # failure in job https://hydra.nixos.org/build/233245405 at 2023-09-02
   - singleton-typelits # failure in job https://hydra.nixos.org/build/233250877 at 2023-09-02
