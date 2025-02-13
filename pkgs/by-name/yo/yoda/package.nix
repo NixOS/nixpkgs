@@ -4,7 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   bash,
-  python,
+  python3,
   root,
   makeWrapper,
   zlib,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-sHvwgLH22fvdlh4oLjr4fzZ2WtBJMAlvr4Vxi9Xdf84=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     autoreconfHook
     bash
     cython
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      python
+      python3
     ]
-    ++ (with python.pkgs; [
+    ++ (with python3.pkgs; [
       numpy
       matplotlib
     ])
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     substituteInPlace pyext/yoda/plotting/script_generator.py \
-      --replace '/usr/bin/env python' '${python.interpreter}'
+      --replace '/usr/bin/env python' '${python3.interpreter}'
   '';
 
   postInstall = ''

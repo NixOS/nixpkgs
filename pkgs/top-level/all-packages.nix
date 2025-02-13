@@ -17422,9 +17422,6 @@ with pkgs;
     imagemagick = graphicsmagick-imagemagick-compat;
   };
 
-  yoda = callPackage ../development/libraries/physics/yoda {
-    python = python3;
-  };
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
