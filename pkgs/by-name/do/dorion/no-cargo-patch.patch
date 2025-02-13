@@ -1,0 +1,31 @@
+diff --git a/src-tauri/Cargo.lock b/src-tauri/Cargo.lock
+index 59f676d..b7090d4 100644
+--- a/src-tauri/Cargo.lock
++++ b/src-tauri/Cargo.lock
+@@ -4954,6 +4954,8 @@ dependencies = [
+ [[package]]
+ name = "tauri-plugin-shell"
+ version = "2.0.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0ad7880c5586b6b2104be451e3d7fc0f3800c84bda69e9ba81c828f87cb34267"
+ dependencies = [
+  "encoding_rs",
+  "log",
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index 62a508b..0bbe935 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -12,13 +12,6 @@ rust-version = "1.81"
+ strip = "debuginfo"
+ lto = true
+ 
+-# Patches
+-[package.metadata.patch]
+-crates = ["tauri-plugin-shell"]
+-
+-[patch.crates-io]
+-tauri-plugin-shell = { path="./target/patch/tauri-plugin-shell-2.0.2" }
+-
+ [build-dependencies]
+ tauri-build = { version = "2.0.0", features = [] }
+ 
