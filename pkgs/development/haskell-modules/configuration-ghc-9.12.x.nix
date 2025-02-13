@@ -76,11 +76,6 @@ with haskellLib;
 
   doctest = self.doctest_0_23_0;
 
-  constraints-extras = warnFromVersion "0.4.0.2" (doDistribute self.constraints-extras_0_4_0_2);
-  dependent-sum-template = warnFromVersion "0.2.0.2" (
-    doDistribute self.dependent-sum-template_0_2_0_2
-  );
-  haskell-src-meta = warnFromVersion "0.8.15" (doDistribute self.haskell-src-meta_0_8_15);
   htree = doDistribute self.htree_0_2_0_0;
   tagged = doDistribute self.tagged_0_8_9;
   time-compat = doDistribute (doJailbreak self.time-compat_1_9_8); # too strict lower bound on QuickCheck
