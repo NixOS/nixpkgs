@@ -47,6 +47,7 @@ let
       TemplateToolkit
       URI
       UnicodeLineBreak
+      UnicodeUTF8
       XMLLibXML
 
       ### Features
