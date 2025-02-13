@@ -5760,8 +5760,6 @@ with pkgs;
     llvmPackages = crystal.llvmPackages;
   };
 
-  scry = callPackage ../development/tools/scry { crystal = crystal_1_2; };
-
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client { };
 
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
