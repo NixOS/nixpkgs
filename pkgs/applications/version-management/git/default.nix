@@ -573,6 +573,7 @@ stdenv.mkDerivation (finalAttrs: {
       wmertens
       globin
       kashw2
+      me-and
     ];
     mainProgram = "git";
   };
