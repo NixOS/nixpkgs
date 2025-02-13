@@ -7,6 +7,7 @@ from typing import Any
 from unittest.mock import ANY, Mock, call, patch
 
 import pytest
+from pytest import MonkeyPatch
 
 import nixos_rebuild as nr
 
@@ -123,6 +124,96 @@ def test_parse_args() -> None:
         "--include",
         "include2",
     ]
+
+
+@patch.dict(nr.os.environ, {}, clear=True)
+@patch(get_qualified_name(nr.os.execve, nr.os), autospec=True)
+@patch(get_qualified_name(nr.nix.build), autospec=True)
+def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -> None:
+    monkeypatch.setattr(nr, "EXECUTABLE", "nixos-rebuild-ng")
+    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
+    args, _ = nr.parse_args(argv)
+    mock_build.return_value = Path("/path")
+
+    nr.reexec(argv, args, {"build": True}, {"flake": True})
+    assert mock_build.call_args_list == [
+        call(
+            "config.system.build.nixos-rebuild",
+            nr.models.BuildAttr(ANY, ANY),
+            {"build": True, "no_out_link": True},
+        )
+    ]
+    # do not exec if there is no new version
+    assert mock_execve.call_args_list == []
+
+    mock_build.return_value = Path("/path/new")
+
+    nr.reexec(argv, args, {}, {})
+    # exec in the new version successfully
+    assert mock_execve.call_args_list == [
+        call(
+            Path("/path/new/bin/nixos-rebuild-ng"),
+            ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"],
+            {"_NIXOS_REBUILD_REEXEC": "1"},
+        )
+    ]
+
+    mock_execve.reset_mock()
+    mock_execve.side_effect = [OSError("BOOM"), None]
+
+    nr.reexec(argv, args, {}, {})
+    # exec in the previous version if the new version fails
+    assert mock_execve.call_args == call(
+        Path("/path/bin/nixos-rebuild-ng"),
+        ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"],
+        {"_NIXOS_REBUILD_REEXEC": "1"},
+    )
+
+
+@patch.dict(nr.os.environ, {}, clear=True)
+@patch(get_qualified_name(nr.os.execve, nr.os), autospec=True)
+@patch(get_qualified_name(nr.nix.build_flake), autospec=True)
+def test_reexec_flake(
+    mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
+) -> None:
+    monkeypatch.setattr(nr, "EXECUTABLE", "nixos-rebuild-ng")
+    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
+    args, _ = nr.parse_args(argv)
+    mock_build.return_value = Path("/path")
+
+    nr.reexec(argv, args, {"build": True}, {"flake": True})
+    assert mock_build.call_args_list == [
+        call(
+            "config.system.build.nixos-rebuild",
+            nr.models.Flake(ANY, ANY),
+            {"flake": True, "no_link": True},
+        )
+    ]
+    # do not exec if there is no new version
+    assert mock_execve.call_args_list == []
+
+    mock_build.return_value = Path("/path/new")
+
+    nr.reexec(argv, args, {}, {})
+    # exec in the new version successfully
+    assert mock_execve.call_args_list == [
+        call(
+            Path("/path/new/bin/nixos-rebuild-ng"),
+            ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
+            {"_NIXOS_REBUILD_REEXEC": "1"},
+        )
+    ]
+
+    mock_execve.reset_mock()
+    mock_execve.side_effect = [OSError("BOOM"), None]
+
+    nr.reexec(argv, args, {}, {})
+    # exec in the previous version if the new version fails
+    assert mock_execve.call_args == call(
+        Path("/path/bin/nixos-rebuild-ng"),
+        ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
+        {"_NIXOS_REBUILD_REEXEC": "1"},
+    )
 
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
