@@ -111,7 +111,6 @@
 , "katex"
 , "keyoxide"
 , "lcov-result-merger"
-, "lerna"
 , "live-server"
 , "livedown"
 , "localtunnel"
