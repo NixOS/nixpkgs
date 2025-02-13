@@ -24,6 +24,8 @@ makeScopeWithSplicing' {
 
     libprettier-ada = self.callPackage ../development/ada-modules/libprettier-ada { };
 
+    libmarkdown = self.callPackage ../development/ada-modules/libmarkdown { };
+
     gnatprove = self.callPackage ../development/ada-modules/gnatprove {
       ocamlPackages = pkgs.ocaml-ng.ocamlPackages_4_14;
     };
