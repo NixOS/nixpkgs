@@ -4,7 +4,7 @@ import uuid
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
-from unittest.mock import ANY, call, patch
+from unittest.mock import ANY, Mock, call, patch
 
 import pytest
 from pytest import MonkeyPatch
@@ -218,7 +218,7 @@ def test_reexec_flake(
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     nixpkgs_path.mkdir()
     config_path = tmp_path / "test"
@@ -293,7 +293,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_nix_build_vm(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -342,7 +342,7 @@ def test_execute_nix_build_vm(mock_run: Any, tmp_path: Path) -> None:
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_nix_build_image_flake(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -411,7 +411,7 @@ def test_execute_nix_build_image_flake(mock_run: Any, tmp_path: Path) -> None:
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -487,9 +487,9 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
 @patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
 @patch(get_qualified_name(nr.nix.uuid4, nr.nix), autospec=True)
 def test_execute_nix_switch_build_target_host(
-    mock_uuid4: Any,
-    mock_cleanup_ssh: Any,
-    mock_run: Any,
+    mock_uuid4: Mock,
+    mock_cleanup_ssh: Mock,
+    mock_run: Mock,
     tmp_path: Path,
 ) -> None:
     config_path = tmp_path / "test"
@@ -682,8 +682,8 @@ def test_execute_nix_switch_build_target_host(
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
 def test_execute_nix_switch_flake_target_host(
-    mock_cleanup_ssh: Any,
-    mock_run: Any,
+    mock_cleanup_ssh: Mock,
+    mock_run: Mock,
     tmp_path: Path,
 ) -> None:
     config_path = tmp_path / "test"
@@ -771,8 +771,8 @@ def test_execute_nix_switch_flake_target_host(
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
 def test_execute_nix_switch_flake_build_host(
-    mock_cleanup_ssh: Any,
-    mock_run: Any,
+    mock_cleanup_ssh: Mock,
+    mock_run: Mock,
     tmp_path: Path,
 ) -> None:
     config_path = tmp_path / "test"
@@ -870,7 +870,7 @@ def test_execute_nix_switch_flake_build_host(
 
 
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     nixpkgs_path.touch()
 
@@ -940,7 +940,7 @@ def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_build(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
     mock_run.side_effect = [
@@ -969,7 +969,7 @@ def test_execute_build(mock_run: Any, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-def test_execute_test_flake(mock_run: Any, tmp_path: Path) -> None:
+def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -1014,9 +1014,9 @@ def test_execute_test_flake(mock_run: Any, tmp_path: Path) -> None:
 @patch(get_qualified_name(nr.nix.Path.exists, nr.nix), autospec=True, return_value=True)
 @patch(get_qualified_name(nr.nix.Path.mkdir, nr.nix), autospec=True)
 def test_execute_test_rollback(
-    mock_path_mkdir: Any,
-    mock_path_exists: Any,
-    mock_run: Any,
+    mock_path_mkdir: Mock,
+    mock_path_exists: Mock,
+    mock_run: Mock,
 ) -> None:
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix-env":
