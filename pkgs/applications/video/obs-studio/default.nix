@@ -1,62 +1,62 @@
-{ config
-, uthash
-, lib
-, stdenv
-, ninja
-, nv-codec-headers-12
-, fetchFromGitHub
-, fetchpatch
-, addDriverRunpath
-, cmake
-, fdk_aac
-, ffmpeg
-, jansson
-, libjack2
-, libxkbcommon
-, libpthreadstubs
-, libXdmcp
-, qtbase
-, qtsvg
-, speex
-, libv4l
-, x264
-, curl
-, wayland
-, xorg
-, pkg-config
-, libvlc
-, libGL
-, mbedtls
-, wrapGAppsHook3
-, scriptingSupport ? true
-, luajit
-, swig
-, python3
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
-, libpulseaudio
-, libcef
-, pciutils
-, pipewireSupport ? stdenv.hostPlatform.isLinux
-, withFdk ? true
-, pipewire
-, libdrm
-, librist
-, cjson
-, libva
-, srt
-, qtwayland
-, wrapQtAppsHook
-, nlohmann_json
-, websocketpp
-, asio
-, decklinkSupport ? false
-, blackmagic-desktop-video
-, libdatachannel
-, libvpl
-, qrcodegencpp
-, nix-update-script
+{
+  config,
+  uthash,
+  lib,
+  stdenv,
+  ninja,
+  nv-codec-headers-12,
+  fetchFromGitHub,
+  addDriverRunpath,
+  cmake,
+  fdk_aac,
+  ffmpeg,
+  jansson,
+  libjack2,
+  libxkbcommon,
+  libpthreadstubs,
+  libXdmcp,
+  qtbase,
+  qtsvg,
+  speex,
+  libv4l,
+  x264,
+  curl,
+  wayland,
+  xorg,
+  pkg-config,
+  libvlc,
+  libGL,
+  mbedtls,
+  wrapGAppsHook3,
+  scriptingSupport ? true,
+  luajit,
+  swig,
+  python3,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  libcef,
+  pciutils,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  withFdk ? true,
+  pipewire,
+  libdrm,
+  librist,
+  cjson,
+  libva,
+  srt,
+  qtwayland,
+  wrapQtAppsHook,
+  nlohmann_json,
+  websocketpp,
+  asio,
+  decklinkSupport ? false,
+  blackmagic-desktop-video,
+  libdatachannel,
+  libvpl,
+  qrcodegencpp,
+  nix-update-script,
 }:
 
 let
@@ -90,46 +90,52 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
-  ]
-  ++ optional scriptingSupport swig;
+  ] ++ optional scriptingSupport swig;
 
-  buildInputs = [
-    curl
-    ffmpeg
-    jansson
-    libcef
-    libjack2
-    libv4l
-    libxkbcommon
-    libpthreadstubs
-    libXdmcp
-    qtbase
-    qtsvg
-    speex
-    wayland
-    x264
-    libvlc
-    mbedtls
-    pciutils
-    librist
-    cjson
-    libva
-    srt
-    qtwayland
-    nlohmann_json
-    websocketpp
-    asio
-    libdatachannel
-    libvpl
-    qrcodegencpp
-    uthash
-    nv-codec-headers-12
-  ]
-  ++ optionals scriptingSupport [ luajit python3 ]
-  ++ optional alsaSupport alsa-lib
-  ++ optional pulseaudioSupport libpulseaudio
-  ++ optionals pipewireSupport [ pipewire libdrm ]
-  ++ optional withFdk fdk_aac;
+  buildInputs =
+    [
+      curl
+      ffmpeg
+      jansson
+      libcef
+      libjack2
+      libv4l
+      libxkbcommon
+      libpthreadstubs
+      libXdmcp
+      qtbase
+      qtsvg
+      speex
+      wayland
+      x264
+      libvlc
+      mbedtls
+      pciutils
+      librist
+      cjson
+      libva
+      srt
+      qtwayland
+      nlohmann_json
+      websocketpp
+      asio
+      libdatachannel
+      libvpl
+      qrcodegencpp
+      uthash
+      nv-codec-headers-12
+    ]
+    ++ optionals scriptingSupport [
+      luajit
+      python3
+    ]
+    ++ optional alsaSupport alsa-lib
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optionals pipewireSupport [
+      pipewire
+      libdrm
+    ]
+    ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -149,7 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "--preset" "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
+    "--preset"
+    "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
     "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
@@ -172,28 +179,32 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontWrapGApps = true;
-  preFixup = let
-    wrapperLibraries = [
-      xorg.libX11
-      libvlc
-      libGL
-    ] ++ optionals decklinkSupport [
-      blackmagic-desktop-video
-    ];
-  in ''
-    # Remove cef components before patchelf, otherwise it will fail
-    rm $out/lib/obs-plugins/libcef.so
-    rm $out/lib/obs-plugins/libEGL.so
-    rm $out/lib/obs-plugins/libGLESv2.so
-    rm $out/lib/obs-plugins/libvk_swiftshader.so
-    rm $out/lib/obs-plugins/libvulkan.so.1
-    rm $out/lib/obs-plugins/chrome-sandbox
+  preFixup =
+    let
+      wrapperLibraries =
+        [
+          xorg.libX11
+          libvlc
+          libGL
+        ]
+        ++ optionals decklinkSupport [
+          blackmagic-desktop-video
+        ];
+    in
+    ''
+      # Remove cef components before patchelf, otherwise it will fail
+      rm $out/lib/obs-plugins/libcef.so
+      rm $out/lib/obs-plugins/libEGL.so
+      rm $out/lib/obs-plugins/libGLESv2.so
+      rm $out/lib/obs-plugins/libvk_swiftshader.so
+      rm $out/lib/obs-plugins/libvulkan.so.1
+      rm $out/lib/obs-plugins/chrome-sandbox
 
-    qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
-      ''${gappsWrapperArgs[@]}
-    )
-  '';
+      qtWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
+        ''${gappsWrapperArgs[@]}
+      )
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addDriverRunpath $out/lib/lib*.so
@@ -214,9 +225,17 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 materus fpletz ];
+    maintainers = with maintainers; [
+      jb55
+      materus
+      fpletz
+    ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "obs";
   };
 })
