@@ -74,7 +74,10 @@ buildGoModule rec {
       lgpl3Only
       gpl3Only
     ];
-    maintainers = with maintainers; [ RaghavSood ];
+    maintainers = with maintainers; [
+      asymmetric
+      RaghavSood
+    ];
     mainProgram = "geth";
   };
 }
