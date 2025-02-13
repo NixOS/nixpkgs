@@ -104,12 +104,18 @@ python3.pkgs.buildPythonApplication rec {
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
-    "--no-cov"
-    # `disabledTests` swallows the parameters between square brackets
-    # https://github.com/tytso/e2fsprogs/issues/152
-    "-k 'not test_all_handlers[filesystem.extfs]'"
-  ];
+  pytestFlagsArray =
+    let
+      # `disabledTests` swallows the parameters between square brackets
+      disabled = [
+        # https://github.com/tytso/e2fsprogs/issues/152
+        "test_all_handlers[filesystem.extfs]"
+      ];
+    in
+    [
+      "--no-cov"
+      "-k 'not ${lib.concatStringsSep " and not " disabled}'"
+    ];
 
   passthru = {
     updateScript = gitUpdater { };
