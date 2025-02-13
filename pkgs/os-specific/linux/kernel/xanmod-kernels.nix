@@ -76,7 +76,6 @@ let
             moni
             lovesegfault
             atemu
-            shawn8901
             zzzsy
           ];
           description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
