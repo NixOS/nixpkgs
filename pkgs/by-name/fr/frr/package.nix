@@ -11,6 +11,9 @@
 , pkg-config
 , texinfo
 , buildPackages
+, grpc
+, protobuf
+, which
 
 # runtime
 , c-ares
@@ -44,6 +47,8 @@
 , irdpSupport ? true
 , routeReplacementSupport ? true
 , mgmtdSupport ? true
+# Experimental as of 10.1, reconsider if upstream changes defaults
+, grpcSupport ? false
 
 # routing daemon options
 , bgpdSupport ? true
@@ -94,6 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Without the std explicitly set, we may run into abseil-cpp
+  # compilation errors.
+  CXXFLAGS = "-std=gnu++23";
+
   nativeBuildInputs = [
     autoreconfHook
     bison
@@ -124,6 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
     net-snmp
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
+  ] ++ lib.optionals grpcSupport [
+    grpc
+    protobuf
+    which
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"
@@ -156,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.strings.enableFeature irdpSupport "irdp")
     (lib.strings.enableFeature routeReplacementSupport "rr-semantics")
     (lib.strings.enableFeature mgmtdSupport "mgmtd")
+    (lib.strings.enableFeature grpcSupport "grpc")
 
     # routing protocols
     (lib.strings.enableFeature bgpdSupport "bgpd")
