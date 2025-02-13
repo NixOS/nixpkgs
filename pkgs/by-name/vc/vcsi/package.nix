@@ -20,6 +20,10 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ python3Packages.poetry-core ];
 
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     numpy
     pillow
@@ -28,7 +32,11 @@ python3Packages.buildPythonApplication rec {
     parsedatetime
   ];
 
-  doCheck = false;
+  pythonRelaxDeps = [
+    "numpy"
+    "pillow"
+  ];
+
   pythonImportsCheck = [ "vcsi" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}" ];
