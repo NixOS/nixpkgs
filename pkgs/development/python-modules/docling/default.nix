@@ -138,6 +138,8 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
+    # requires network access
+    "test_page_range"
   ];
 
   meta = {
