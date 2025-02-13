@@ -89,6 +89,8 @@ python3Packages.buildPythonApplication rec {
         ps: with ps; [
           mypy
           pytest
+          # this is to help development (e.g.: better diffs) inside devShell
+          # only, do not use its helpers like `mocker`
           pytest-mock
           ruff
         ]
