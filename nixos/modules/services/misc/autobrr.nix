@@ -76,7 +76,7 @@ in
         LoadCredential = "sessionSecret:${cfg.secretFile}";
         StateDirectory = "autobrr";
         ExecStartPre = "${lib.getExe pkgs.bash} -c '${templaterCmd}'";
-        ExecStart = "${lib.getExe pkgs.autobrr} --config %S/autobrr";
+        ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
         Restart = "on-failure";
       };
     };
