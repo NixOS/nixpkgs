@@ -18491,4 +18491,8 @@ with pkgs;
   wings = callPackage ../by-name/wi/wings/package.nix {
     erlang = erlang_25;
   };
+
+  satyrographosInstallHook = callPackage ../development/satysfi-packages/satyrographosInstallHook/default.nix {};
+
+  satysfiPackages = callPackage ./satysfi-packages.nix { };
 }
