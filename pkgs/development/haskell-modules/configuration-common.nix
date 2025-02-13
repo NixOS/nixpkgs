@@ -388,38 +388,14 @@ self: super: {
     })
   ] super.gitit;
 
-  # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
-  # TODO: Confirm whether this can be removed once gtk is fixed on staging.
-  threadscope = overrideCabal (drv: {
-    prePatch = drv.prePatch or "" + ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
-    '';
-    editedCabalFile = null;
-    revision = null;
-  })
-  (appendPatches [
-    (fetchpatch {
-      name = "loosen-bounds-1.patch";
-      url = "https://github.com/haskell/ThreadScope/commit/8f9f21449adb3af07eed539dcaf267c9c9ee987b.patch";
-      sha256 = "sha256-egKM060QplSmUeDptHXoSom1vf5KBrvNcjb2Vk59N7A=";
-    })
-    (fetchpatch {
-      name = "loosen-bounds-2.patch";
-      url = "https://github.com/haskell/ThreadScope/commit/f366a9ee455eda16cd6a4dc26f0275e2cf2b5798.patch";
-      sha256 = "sha256-DaPTK5LRbZZS1KDIr5X/eXQasqtofrCteTbUQUZPu0Q=";
-    })
-    (fetchpatch {
-      name = "loosen-bounds-3.patch";
-      url = "https://github.com/haskell/ThreadScope/commit/12819abaa2322976004b7582e598db1cf952707a.patch";
-      sha256 = "sha256-r7MVw8wwKU4R5VmcypBzhOBfTlRCISoRJtwie3+2Vb0=";
-    })
+  # 2025-02-13: This part from https://github.com/haskell/ThreadScope/pull/130 seems to be unreleased:
+  threadscope = appendPatches [
     (fetchpatch {
       name = "import-monad.patch";
       url = "https://github.com/haskell/ThreadScope/commit/8846508e9769a8dfd82b3ff66259ba4d58255932.patch";
       sha256 = "sha256-wBqDJWmqvmU1sFuw/ZlxHOb8xPhZO2RBuyYFP9bJCVI=";
     })
-  ]
-    super.threadscope);
+  ] super.threadscope;
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
