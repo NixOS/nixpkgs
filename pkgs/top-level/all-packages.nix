@@ -5706,7 +5706,6 @@ with pkgs;
   };
 
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
-    crystal_1_7
     crystal_1_8
     crystal_1_9
     crystal_1_11

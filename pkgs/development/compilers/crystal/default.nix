@@ -15,7 +15,6 @@
 , libxml2
 , libyaml
 , libffi
-, llvmPackages_13
 , llvmPackages_15
 , llvmPackages_18
 , makeWrapper
@@ -262,13 +261,6 @@ rec {
       x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
       aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
     };
-  };
-
-  crystal_1_7 = generic {
-    version = "1.7.3";
-    sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_13;
   };
 
   crystal_1_8 = generic {
