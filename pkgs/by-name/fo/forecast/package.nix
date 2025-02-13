@@ -60,7 +60,10 @@ rustPlatform.buildRustPackage {
     description = "Weather app written in rust and libcosmic";
     homepage = "https://github.com/cosmic-utils/forecast";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-ext-forecast";
   };
