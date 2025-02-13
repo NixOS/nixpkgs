@@ -34,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mariinkys/oboete";
     changelog = "https://github.com/mariinkys/oboete/releases/tag/${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "oboete";
   };
