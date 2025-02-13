@@ -20,7 +20,6 @@
 , makeWrapper
 , openssl
 , pcre2
-, pcre
 , pkg-config
 , installShellFiles
 , readline
@@ -152,7 +151,7 @@ let
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm installShellFiles ];
       buildInputs = [
         boehmgc
-        (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
+        pcre2
         libevent
         libyaml
         zlib
