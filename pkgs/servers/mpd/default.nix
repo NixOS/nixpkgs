@@ -39,6 +39,7 @@
   soxr,
   # Outputs
   alsa-lib,
+  libao,
   libjack2,
   libpulseaudio,
   libshout,
@@ -109,6 +110,7 @@ let
     soxr = [ soxr ];
     # Output plugins
     alsa = [ alsa-lib ];
+    ao = [ libao ];
     jack = [ libjack2 ];
     pipewire = [ pipewire ];
     pulse = [ libpulseaudio ];
