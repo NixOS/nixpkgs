@@ -10,7 +10,6 @@
 , git
 , gmp
 , hostname
-, libatomic_ops
 , libevent
 , libiconv
 , libxml2
@@ -263,14 +262,6 @@ rec {
       x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
       aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
     };
-  };
-
-  crystal_1_2 = generic {
-    version = "1.2.2";
-    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_13;
-    extraBuildInputs = [ libatomic_ops ];
   };
 
   crystal_1_7 = generic {
