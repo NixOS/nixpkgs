@@ -134,8 +134,8 @@ rec {
       "sha256-nLO7lRp3s0m1s6CMcEhpTAXpqhC+fgdXuus0AZhXTts=";
 
   mypy-boto3-appsync =
-    buildMypyBoto3Package "appsync" "1.36.8"
-      "sha256-NSE8FKmNW1g3TTddFEJ22R80oEncfEAifk22xnCn2Bw=";
+    buildMypyBoto3Package "appsync" "1.36.18"
+      "sha256-HnvpzgTUZJvqpKFB5yhUm2k2Hfwag+tTOljDw2z4PRk=";
 
   mypy-boto3-arc-zonal-shift =
     buildMypyBoto3Package "arc-zonal-shift" "1.36.0"
