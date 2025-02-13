@@ -4074,6 +4074,10 @@ with pkgs;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
+  inherit (callPackage ../development/tools/lerna { })
+    lerna_6 lerna_8;
+  lerna = lerna_8;
+
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
