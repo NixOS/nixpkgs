@@ -262,13 +262,6 @@ rec {
     };
   };
 
-  crystal_1_8 = generic {
-    version = "1.8.2";
-    sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
-    binary = binaryCrystal_1_2;
-    llvmPackages = llvmPackages_15;
-  };
-
   crystal_1_9 = generic {
     version = "1.9.2";
     sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
