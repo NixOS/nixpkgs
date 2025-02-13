@@ -36,6 +36,7 @@
   alsa-lib,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
+  browserSupport ? false, # FIXME: broken
   libcef,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
@@ -97,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
       curl
       ffmpeg
       jansson
-      libcef
       libjack2
       libv4l
       libxkbcommon
@@ -135,10 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       libdrm
     ]
+    ++ optional browserSupport libcef
     ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
-  postUnpack = ''
+  postUnpack = lib.optionalString browserSupport ''
     mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
     for i in ${libcef}/share/cef/*; do
       ln -s $i cef/Release/
@@ -159,9 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
     "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
     "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
-    # Add support for browser source
-    "-DENABLE_BROWSER=ON"
-    "-DCEF_ROOT_DIR=../../cef"
     "-DENABLE_JACK=ON"
     "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
@@ -170,7 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
-  ];
+    (lib.cmakeBool "ENABLE_BROWSER" browserSupport)
+  ] ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
@@ -192,6 +191,12 @@ stdenv.mkDerivation (finalAttrs: {
         ];
     in
     ''
+      qtWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
+        ''${gappsWrapperArgs[@]}
+      )
+    ''
+    + lib.optionalString browserSupport ''
       # Remove cef components before patchelf, otherwise it will fail
       rm $out/lib/obs-plugins/libcef.so
       rm $out/lib/obs-plugins/libEGL.so
@@ -199,21 +204,20 @@ stdenv.mkDerivation (finalAttrs: {
       rm $out/lib/obs-plugins/libvk_swiftshader.so
       rm $out/lib/obs-plugins/libvulkan.so.1
       rm $out/lib/obs-plugins/chrome-sandbox
-
-      qtWrapperArgs+=(
-        --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
-        ''${gappsWrapperArgs[@]}
-      )
     '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    addDriverRunpath $out/lib/lib*.so
-    addDriverRunpath $out/lib/obs-plugins/*.so
+  postFixup = lib.concatStrings [
+    (lib.optionalString stdenv.hostPlatform.isLinux ''
+      addDriverRunpath $out/lib/lib*.so
+      addDriverRunpath $out/lib/obs-plugins/*.so
+    '')
 
-    # Link cef components again after patchelfing other libs
-    ln -s ${libcef}/lib/* $out/lib/obs-plugins/
-    ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
-  '';
+    (lib.optionalString browserSupport ''
+      # Link cef components again after patchelfing other libs
+      ln -s ${libcef}/lib/* $out/lib/obs-plugins/
+      ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
+    '')
+  ];
 
   passthru.updateScript = nix-update-script { };
 
