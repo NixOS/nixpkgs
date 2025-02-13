@@ -107,9 +107,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         runHook postInstall
       '';
 
-  autoPatchelfIgnoreMissingDeps = [
-    "libc.so.8"
-  ];
+  preFixup = ''
+    # most directories are for different architectures, only keep what we need
+    shopt -s extglob
+    pushd $out/opt/dbeaver/plugins/com.sun.jna_5.15.0.v20240915-2000/com/sun/jna/
+    rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
+    popd
+  '';
 
   passthru.updateScript = ./update.sh;
 
