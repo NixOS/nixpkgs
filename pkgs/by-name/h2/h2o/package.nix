@@ -13,6 +13,9 @@
   libuv,
   wslay,
   zlib,
+  withMruby ? false,
+  bison,
+  ruby,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,12 +36,18 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    makeWrapper
-    ninja
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      makeWrapper
+      ninja
+    ]
+    ++ lib.optionals withMruby [
+      bison
+      ruby
+    ];
+
   buildInputs = [
     brotli
     openssl
@@ -47,6 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     zlib
     wslay
+  ];
+
+  cmakeFlags = [
+    "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
   ];
 
   postInstall = ''
