@@ -242,16 +242,6 @@ let
     });
 in
 rec {
-  binaryCrystal_1_2 = genericBinary {
-    version = "1.2.2";
-    sha256s = {
-      x86_64-linux = "sha256-sW5nhihW/6Dkq95i3vJNWs2D1CtQhujhxVbgQCAas6E=";
-      aarch64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
-      x86_64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
-      aarch64-linux = "sha256-QgPKUDFyodqY1+b85AybSpbbr0RmfISdNpB08Wf34jo=";
-    };
-  };
-
   binaryCrystal_1_10 = genericBinary {
     version = "1.10.1";
     sha256s = {
