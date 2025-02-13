@@ -89,6 +89,7 @@ python3Packages.buildPythonApplication rec {
         ps: with ps; [
           mypy
           pytest
+          pytest-mock
           ruff
         ]
       );
