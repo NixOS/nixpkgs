@@ -10,9 +10,6 @@
   boost,
   fmt,
   buildPackages,
-  # Darwin inputs
-  AudioToolbox,
-  AudioUnit,
   # Inputs
   curl,
   libcdio,
@@ -221,11 +218,7 @@ let
           #    Run-time dependency GTest found: YES 1.10.0
           gtest
         ]
-        ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          AudioToolbox
-          AudioUnit
-        ];
+        ++ concatAttrVals features_ featureDependencies;
 
       nativeBuildInputs = [
         meson
