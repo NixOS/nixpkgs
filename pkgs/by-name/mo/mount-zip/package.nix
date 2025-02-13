@@ -8,6 +8,8 @@
   libzip,
   pandoc,
   pkg-config,
+  versionCheckHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,6 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = {
     description = "FUSE file system for ZIP archives";
