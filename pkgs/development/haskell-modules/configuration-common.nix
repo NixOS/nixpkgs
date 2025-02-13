@@ -301,10 +301,6 @@ self: super: {
   # successfully with recent versions of the compiler).
   bin-package-db = null;
 
-  # path-io bound is adjusted in 0.6.1 release
-  # https://github.com/tek/hix/commit/019426f6a3db256e4c96558ffe6fa2114e2f19a0
-  hix = doJailbreak super.hix;
-
   # waiting for release: https://github.com/jwiegley/c2hsc/issues/41
   c2hsc = appendPatch (fetchpatch {
     url = "https://github.com/jwiegley/c2hsc/commit/490ecab202e0de7fc995eedf744ad3cb408b53cc.patch";
@@ -597,9 +593,6 @@ self: super: {
 
   # 2024-05-18: Upstream tests against a different pandoc version
   pandoc-crossref = dontCheck super.pandoc-crossref;
-
-  # base bound
-  digit = doJailbreak super.digit;
 
   # 2022-01-29: Tests require package to be in ghc-db.
   aeson-schemas = dontCheck super.aeson-schemas;
@@ -910,9 +903,6 @@ self: super: {
   # https://github.com/nomeata/tasty-expected-failure/issues/21
   tasty-expected-failure = dontCheck super.tasty-expected-failure;
 
-  # Won't compile with recent versions of QuickCheck.
-  inilist = dontCheck super.inilist;
-
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
 
@@ -947,9 +937,6 @@ self: super: {
 
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
-
-  # vector dependency < 0.12
-  imagemagick = doJailbreak super.imagemagick;
 
   # https://github.com/Euterpea/Euterpea2/issues/40
   Euterpea = doJailbreak super.Euterpea;
@@ -1126,9 +1113,6 @@ self: super: {
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   }) super.hastache;
 
-  # Has a dependency on outdated versions of directory.
-  cautious-file = doJailbreak (dontCheck super.cautious-file);
-
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
   digestive-functors = doJailbreak super.digestive-functors;
@@ -1160,9 +1144,6 @@ self: super: {
     }
   ) z3 hz3;
 
-  # Tests try to invoke external process and process == 1.4
-  grakn = dontCheck (doJailbreak super.grakn);
-
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
@@ -1193,10 +1174,6 @@ self: super: {
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
 
-  # Needs tasty-quickcheck ==0.8.*, which we don't have.
-  gitHUD = dontCheck super.gitHUD;
-  githud = dontCheck super.githud;
-
   # Test suite fails due to trying to create directories
   path-io = dontCheck super.path-io;
 
@@ -1219,9 +1196,6 @@ self: super: {
   # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
   vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
-
-  # Work around overspecified constraint on github ==0.18.
-  github-backup = doJailbreak super.github-backup;
 
   # dontCheck: https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
@@ -1269,9 +1243,6 @@ self: super: {
 
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
-
-  # https://github.com/DanielG/cabal-helper/pull/123
-  cabal-helper = doJailbreak super.cabal-helper;
 
   # TODO(Profpatsch): factor out local nix store setup from
   # lib/tests/release.nix and use that for the tests of libnix
@@ -1415,10 +1386,6 @@ self: super: {
 
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
-
-  # the test suite has an overly tight restriction on doctest
-  # See https://github.com/ekmett/perhaps/pull/5
-  perhaps = doJailbreak super.perhaps;
 
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
@@ -1825,13 +1792,6 @@ self: super: {
   # compatible with Cabal 3. No upstream repository found so far
   readline = appendPatch ./patches/readline-fix-for-cabal-3.patch super.readline;
 
-  # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
-  pandoc-include-code = doJailbreak super.pandoc-include-code;
-
-  # 2023-07-08: Restrictive upper bounds on text: https://github.com/owickstrom/pandoc-emphasize-code/pull/14
-  # 2023-07-08: Missing test dependency: https://github.com/owickstrom/pandoc-emphasize-code/pull/13
-  pandoc-emphasize-code = dontCheck (doJailbreak super.pandoc-emphasize-code);
-
   # DerivingVia is not allowed in safe Haskell
   # https://github.com/strake/util.hs/issues/1
   util = appendConfigureFlags [
@@ -1892,18 +1852,9 @@ self: super: {
   #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
   hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
-  # Test suite has a too strict bound on base
-  # https://github.com/jswebtools/language-ecmascript/pull/88
-  # Test suite doesn't compile anymore
-  language-ecmascript = dontCheck (doJailbreak super.language-ecmascript);
-
   # Too strict bounds on containers
   # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
   language-ecmascript-analysis = doJailbreak super.language-ecmascript-analysis;
-
-  # Too strict bounds on optparse-applicative
-  # https://github.com/faylang/fay/pull/474
-  fay = doJailbreak super.fay;
 
   cli-git = addBuildTool pkgs.git super.cli-git;
 
@@ -2100,8 +2051,6 @@ self: super: {
     sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
   }) super.basic-cpuid;
 
-  # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
-  streamly-posix = doJailbreak super.streamly-posix;
   # 2025-02-11: Too strict bounds on bytestring
   streamly-bytestring = doJailbreak super.streamly-bytestring;
 
@@ -2226,10 +2175,6 @@ self: super: {
   # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
   tree-sitter = doJailbreak super.tree-sitter;
 
-  # 2022-08-07: Bounds are too restrictive: https://github.com/marcin-rzeznicki/libjwt-typed/issues/2
-  # Also, the tests fail.
-  libjwt-typed = dontCheck (doJailbreak super.libjwt-typed);
-
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
@@ -2291,9 +2236,6 @@ self: super: {
     x509-validation = self.crypton-x509-validation;
   }));
 
-  # 2022-02-25: Unmaintained and to strict upper bounds
-  paths = doJailbreak super.paths;
-
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
@@ -2302,9 +2244,6 @@ self: super: {
 
   # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
   system-fileio = dontCheck super.system-fileio;
-
-  # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
-  hasura-ekg-core = doJailbreak super.hasura-ekg-core;
 
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
@@ -2470,20 +2409,8 @@ self: super: {
     purenix
     ;
 
-  # We provide newer dependencies than upstream expects.
-  swarm = doJailbreak super.swarm;
-
-  # random <1.2
-  unfoldable = doJailbreak super.unfoldable;
-
   # containers <0.6, semigroupoids <5.3
   data-lens = doJailbreak super.data-lens;
-
-  # transformers <0.3
-  monads-fd = doJailbreak super.monads-fd;
-
-  # exceptions <0.9
-  eprocess = doJailbreak super.eprocess;
 
   # hashable <1.4, mmorph <1.2
   composite-aeson = doJailbreak super.composite-aeson;
@@ -2541,9 +2468,6 @@ self: super: {
   # Tests open file "data/test_vectors_aserti3-2d_run01.txt" but it doesn't exist
   haskoin-core = dontCheck super.haskoin-core;
 
-  # base <4.9, transformers <0.5
-  MonadCatchIO-transformers = doJailbreak super.MonadCatchIO-transformers;
-
   # unix-compat <0.5
   hxt-cache = doJailbreak super.hxt-cache;
 
@@ -2555,9 +2479,6 @@ self: super: {
 
   # base <4.14
   decimal-literals = doJailbreak super.decimal-literals;
-
-  # multiple bounds too strict
-  snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
 
   # Test failure https://gitlab.com/lysxia/ap-normalize/-/issues/2
   ap-normalize = dontCheck super.ap-normalize;
@@ -2590,9 +2511,6 @@ self: super: {
   # Test files missing from sdist
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
-
-  # multiple bounds too strict
-  co-log-polysemy-formatting = doJailbreak super.co-log-polysemy-formatting;
 
   # calls ghc in tests
   # https://github.com/brandonchinn178/tasty-autocollect/issues/54
