@@ -46,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
       This project is a fork of fuse-zip.
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ arti5an ];
+    maintainers = with maintainers; [
+      arti5an
+      progrm_jarvis
+    ];
     platforms = platforms.linux;
     mainProgram = "mount-zip";
   };
