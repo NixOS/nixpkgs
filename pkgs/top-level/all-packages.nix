@@ -6463,8 +6463,6 @@ with pkgs;
     jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  mint = callPackage ../development/compilers/mint { };
-
   mitscheme = callPackage ../development/compilers/mit-scheme {
     texinfo = texinfo6;
   };
