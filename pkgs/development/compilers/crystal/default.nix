@@ -178,9 +178,6 @@ let
 
       FLAGS = [
         "--single-module" # needed for deterministic builds
-      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.1") [
-        # ffi is only used by the interpreter and its spec are broken on < 1.6.1
-        "-Dwithout_ffi"
       ];
 
       # This makes sure we don't keep depending on the previous version of
