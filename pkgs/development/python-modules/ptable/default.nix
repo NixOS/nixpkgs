@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "ptable";
-  version = "unstable-2019-06-14";
+  version = "0-unstable-2019-06-14";
   pyproject = true;
 
   # https://github.com/kxxoling/PTable/issues/27

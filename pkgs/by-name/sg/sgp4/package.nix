@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "sgp4";
-  version = "unstable-2022-11-13";
+  version = "0-unstable-2022-11-13";
 
   src = fetchFromGitHub {
     owner = "dnwrnr";

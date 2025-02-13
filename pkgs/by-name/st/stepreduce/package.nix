@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stepreduce";
-  version = "unstable-2020-04-30";
+  version = "0-unstable-2020-04-30";
 
   src = fetchFromGitLab {
     owner = "sethhillbrand";

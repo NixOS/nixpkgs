@@ -14,7 +14,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = outbin;
-  version = "unstable-2020-12-08";
+  version = "0-unstable-2020-12-08";
 
   # From https://www.speedrun.com/celestep8/resources
   src = fetchzip {

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "powerline-fonts";
-  version = "unstable-2018-11-11";
+  version = "0-unstable-2018-11-11";
 
   src = fetchFromGitHub {
     owner = "powerline";

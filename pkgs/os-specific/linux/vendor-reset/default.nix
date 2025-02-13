@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vendor-reset";
-  version = "unstable-2024-04-16-${kernel.version}";
+  version = "0-unstable-2024-04-16-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "gnif";

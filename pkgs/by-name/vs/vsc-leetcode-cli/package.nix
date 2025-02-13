@@ -6,7 +6,7 @@
 
 buildNpmPackage {
   pname = "vsc-leetcode-cli";
-  version = "unstable-2021-04-11";
+  version = "0-unstable-2021-04-11";
 
   src = fetchFromGitHub {
     owner = "leetcode-tools";

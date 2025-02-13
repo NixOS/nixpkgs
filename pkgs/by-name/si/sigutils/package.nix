@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sigutils";
-  version = "unstable-2022-07-05";
+  version = "0-unstable-2022-07-05";
 
   src = fetchFromGitHub {
     owner = "BatchDrake";

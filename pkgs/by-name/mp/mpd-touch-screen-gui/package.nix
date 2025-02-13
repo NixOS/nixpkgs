@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpd-touch-screen-gui";
-  version = "unstable-2022-12-30";
+  version = "0-unstable-2022-12-30";
 
   src = fetchFromGitHub {
     owner = "muesli4";

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "falcon";
-  version = "unstable-2018-10-23";
+  version = "0-unstable-2018-10-23";
 
   src = fetchFromGitHub {
     owner = "falconpl";

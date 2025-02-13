@@ -12,7 +12,7 @@
 with python3Packages;
 buildPythonApplication {
   pname = "escrotum";
-  version = "unstable-2020-12-07";
+  version = "0-unstable-2020-12-07";
 
   src = fetchFromGitHub {
     owner = "Roger";

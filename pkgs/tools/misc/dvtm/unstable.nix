@@ -9,7 +9,7 @@ let
 in
 callPackage ./dvtm.nix {
   pname = "dvtm-unstable";
-  version = "unstable-2021-03-09";
+  version = "0-unstable-2021-03-09";
 
   src = fetchzip {
     urls = [

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "devmem2";
-  version = "unstable-2004-08-05";
+  version = "0-unstable-2004-08-05";
 
   src = fetchurl {
     urls = [

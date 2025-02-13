@@ -7,7 +7,7 @@
 }:
 let
   base = {
-    version = "unstable-2023-01-26";
+    version = "0-unstable-2023-01-26";
     dontBuild = true;
     meta = with lib; {
       description = "Data repository for seaborn examples";

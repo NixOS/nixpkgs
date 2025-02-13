@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "rdrview";
-  version = "unstable-2021-05-30";
+  version = "0-unstable-2021-05-30";
 
   src = fetchFromGitHub {
     owner = "eafer";

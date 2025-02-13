@@ -8,7 +8,7 @@
 }:
 
 mkDerivation rec {
-  version = "unstable-20-06-26";
+  version = "0-unstable-20-06-26";
   pname = "herqq";
 
   nativeBuildInputs = [ qmake ];

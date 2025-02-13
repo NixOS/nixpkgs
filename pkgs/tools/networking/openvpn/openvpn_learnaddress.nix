@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "openvpn-learnaddress";
-  version = "unstable-2013-10-21";
+  version = "0-unstable-2013-10-21";
 
   src = fetchgit {
     url = "https://gist.github.com/4058733.git";

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "glpaper";
-  version = "unstable-2022-05-15";
+  version = "0-unstable-2022-05-15";
 
   src = fetchFromSourcehut {
     owner = "~scoopta";

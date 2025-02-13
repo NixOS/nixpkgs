@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mmsd";
-  version = "unstable-2019-07-15";
+  version = "0-unstable-2019-07-15";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/network/ofono/mmsd.git/snapshot/mmsd-f4b8b32477a411180be1823fdc460b4f7e1e3c9c.tar.gz";

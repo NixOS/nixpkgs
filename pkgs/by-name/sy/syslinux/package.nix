@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "syslinux";
-  version = "unstable-2019-02-07";
+  version = "0-unstable-2019-02-07";
 
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html

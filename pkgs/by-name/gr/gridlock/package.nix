@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "gridlock";
-  version = "unstable-2023-08-29";
+  version = "0-unstable-2023-08-29";
 
   outputs = [
     "out"

@@ -155,7 +155,7 @@ in
 
   ender3v2tempfix = buildPlugin {
     pname = "ender3v2tempfix";
-    version = "unstable-2021-04-27";
+    version = "0-unstable-2021-04-27";
 
     src = fetchFromGitHub {
       owner = "SimplyPrint";

@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "skydns";
-  version = "unstable-2019-10-15";
+  version = "0-unstable-2019-10-15";
 
   src = fetchFromGitHub {
     owner = "skynetservices";

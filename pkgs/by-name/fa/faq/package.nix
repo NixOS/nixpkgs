@@ -9,7 +9,7 @@
 buildGoModule rec {
   pname = "faq";
   # Latest git release (0.0.7) presents vendor issues - using latest commit instead.
-  version = "unstable-2022-01-09";
+  version = "0-unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "jzelinskie";

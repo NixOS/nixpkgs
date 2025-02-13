@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "smuxi";
-  version = "unstable-2023-07-01";
+  version = "0-unstable-2023-07-01";
 
   runtimeLoaderEnvVariableName =
     if stdenv.hostPlatform.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";

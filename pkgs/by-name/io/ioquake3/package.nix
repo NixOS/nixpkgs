@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation {
   pname = "ioquake3";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2023-08-13";
 
   src = fetchFromGitHub {
     owner = "ioquake";

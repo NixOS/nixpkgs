@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
-  version = "unstable-2021-04-08";
+  version = "0-unstable-2021-04-08";
 
   src = fetchFromGitHub {
     owner = "rockchip-linux";

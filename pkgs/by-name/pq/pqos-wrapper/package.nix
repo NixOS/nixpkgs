@@ -6,7 +6,7 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "pqos-wrapper";
-  version = "unstable-2022-01-31";
+  version = "0-unstable-2022-01-31";
 
   src = fetchFromGitLab {
     group = "sosy-lab";

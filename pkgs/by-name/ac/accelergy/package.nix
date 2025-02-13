@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "accelergy";
-  version = "unstable-2022-05-03";
+  version = "0-unstable-2022-05-03";
 
   src = fetchFromGitHub {
     owner = "Accelergy-Project";

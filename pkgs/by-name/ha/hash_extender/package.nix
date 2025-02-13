@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "hash_extender";
-  version = "unstable-2020-03-24";
+  version = "0-unstable-2020-03-24";
 
   src = fetchFromGitHub {
     owner = "iagox86";

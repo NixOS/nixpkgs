@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenglrecorder";
-  version = "unstable-2020-08-13";
+  version = "0-unstable-2020-08-13";
 
   src = fetchFromGitHub {
     owner = "Benau";

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "numix-gtk-theme";
-  version = "unstable-2021-06-08";
+  version = "0-unstable-2021-06-08";
 
   src = fetchFromGitHub {
     repo = "numix-gtk-theme";

@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xidel";
-  version = "unstable-2022-11-01";
+  version = "0-unstable-2022-11-01";
 
   src = fetchFromGitHub {
     owner = "benibela";

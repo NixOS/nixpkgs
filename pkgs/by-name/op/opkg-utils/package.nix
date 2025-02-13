@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "opkg-utils";
-  version = "unstable-2014-10-30";
+  version = "0-unstable-2014-10-30";
 
   # No releases, only a git tree
   src = fetchgit {

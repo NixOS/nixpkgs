@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "apg";
-  version = "unstable-2015-01-29";
+  version = "0-unstable-2015-01-29";
 
   src = fetchFromGitHub {
     owner = "wilx";

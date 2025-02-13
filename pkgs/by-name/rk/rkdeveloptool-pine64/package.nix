@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
-  version = "unstable-2021-09-04";
+  version = "0-unstable-2021-09-04";
 
   src = fetchurl {
     url = "https://gitlab.com/pine64-org/quartz-bsp/rkdeveloptool/-/archive/${rev}/rkdeveloptool-${rev}.tar.gz";

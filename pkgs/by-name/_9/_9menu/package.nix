@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "9menu";
-  version = "unstable-2021-02-24";
+  version = "0-unstable-2021-02-24";
 
   src = fetchFromGitHub {
     owner = "arnoldrobbins";

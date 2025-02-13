@@ -9,7 +9,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "manga-cli";
-  version = "unstable-2022-04-11";
+  version = "0-unstable-2022-04-11";
 
   src = fetchFromGitHub {
     owner = "7USTIN";

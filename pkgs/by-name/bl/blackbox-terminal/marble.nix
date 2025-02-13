@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "marble";
-  version = "unstable-2023-05-11";
+  version = "0-unstable-2023-05-11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

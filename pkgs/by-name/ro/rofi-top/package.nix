@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-top";
-  version = "unstable-2017-10-16";
+  version = "0-unstable-2017-10-16";
 
   src = fetchFromGitHub {
     owner = "davatorium";

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "unstable-2024-02-26";
+  version = "0-unstable-2024-02-26";
 
   srcs = [
     (fetchFromGitHub {

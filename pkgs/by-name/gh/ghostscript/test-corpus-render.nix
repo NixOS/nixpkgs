@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "ghostscript-test-corpus-render";
-  version = "unstable-2023-05-19";
+  version = "0-unstable-2023-05-19";
 
   src = fetchgit {
     url = "git://git.ghostscript.com/tests.git";

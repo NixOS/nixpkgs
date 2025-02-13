@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "breath-theme";
-  version = "unstable-2022-12-22";
+  version = "0-unstable-2022-12-22";
 
   src = fetchFromGitLab {
     domain = "gitlab.manjaro.org";

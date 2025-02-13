@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "slimit";
-  version = "unstable-2018-08-08";
+  version = "0-unstable-2018-08-08";
   format = "setuptools";
 
   src = fetchFromGitHub {

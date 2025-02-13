@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "qdl";
-  version = "unstable-2024-06-10";
+  version = "0-unstable-2024-06-10";
 
   src = fetchFromGitHub {
     owner = "linux-msm";

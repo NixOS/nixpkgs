@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wemux";
-  version = "unstable-2021-04-16";
+  version = "0-unstable-2021-04-16";
 
   src = fetchFromGitHub {
     owner = "zolrath";

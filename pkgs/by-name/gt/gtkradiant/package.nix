@@ -183,7 +183,7 @@ in
 stdenv.mkDerivation rec {
   pname = "gtkradiant";
 
-  version = "unstable-2023-04-24";
+  version = "0-unstable-2023-04-24";
 
   src = fetchFromGitHub {
     owner = "TTimo";

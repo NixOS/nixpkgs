@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "brise";
-  version = "unstable-2017-09-16";
+  version = "0-unstable-2017-09-16";
 
   src = fetchFromGitHub {
     owner = "rime";

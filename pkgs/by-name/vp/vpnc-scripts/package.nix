@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "vpnc-scripts";
-  version = "unstable-2023-01-03";
+  version = "0-unstable-2023-01-03";
 
   src = fetchgit {
     url = "https://gitlab.com/openconnect/vpnc-scripts.git";

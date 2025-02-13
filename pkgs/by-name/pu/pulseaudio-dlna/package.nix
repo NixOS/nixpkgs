@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "pulseaudio-dlna";
-  version = "unstable-2021-11-09";
+  version = "0-unstable-2021-11-09";
 
   src = fetchFromGitHub {
     owner = "Cygn";

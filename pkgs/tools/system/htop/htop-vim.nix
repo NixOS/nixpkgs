@@ -6,7 +6,7 @@
 
 htop.overrideAttrs (oldAttrs: rec {
   pname = "htop-vim";
-  version = "unstable-2023-02-16";
+  version = "0-unstable-2023-02-16";
 
   src = fetchFromGitHub {
     owner = "KoffeinFlummi";

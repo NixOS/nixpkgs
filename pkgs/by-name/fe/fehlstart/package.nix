@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "fehlstart";
-  version = "unstable-2016-05-23";
+  version = "0-unstable-2016-05-23";
 
   src = fetchFromGitLab {
     owner = "fehlstart";

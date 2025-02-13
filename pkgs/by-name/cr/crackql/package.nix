@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "crackql";
-  version = "unstable-20230818";
+  version = "0-unstable-20230818";
   pyproject = true;
 
   src = fetchFromGitHub {

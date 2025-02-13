@@ -10,7 +10,7 @@
 
 mkDerivation rec {
   pname = "plasma-applet-virtual-desktop-bar";
-  version = "unstable-2021-02-20";
+  version = "0-unstable-2021-02-20";
 
   src = fetchFromGitHub {
     owner = "wsdfhjxc";

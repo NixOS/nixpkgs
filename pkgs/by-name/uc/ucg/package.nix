@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ucg";
-  version = "unstable-2022-09-03";
+  version = "0-unstable-2022-09-03";
 
   src = fetchFromGitHub {
     owner = "gvansickle";

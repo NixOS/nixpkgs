@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tdns-cli";
-  version = "unstable-2021-02-19";
+  version = "0-unstable-2021-02-19";
 
   src = fetchFromGitHub {
     owner = "rotty";

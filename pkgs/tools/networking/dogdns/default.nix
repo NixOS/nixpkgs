@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dogdns";
-  version = "unstable-2021-10-07";
+  version = "0-unstable-2021-10-07";
 
   src = fetchFromGitHub {
     owner = "ogham";

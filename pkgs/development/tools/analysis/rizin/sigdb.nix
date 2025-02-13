@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rizin-sigdb";
-  version = "unstable-2023-08-23";
+  version = "0-unstable-2023-08-23";
 
   src = fetchFromGitHub {
     owner = "rizinorg";

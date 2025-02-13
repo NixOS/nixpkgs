@@ -17,7 +17,7 @@
 
 buildDunePackage rec {
   pname = "bistro";
-  version = "unstable-2024-05-17";
+  version = "0-unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "pveber";

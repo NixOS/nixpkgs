@@ -14,7 +14,7 @@
 
 mkDerivation rec {
   pname = "tensor";
-  version = "unstable-2017-02-21";
+  version = "0-unstable-2017-02-21";
 
   src = fetchFromGitHub {
     owner = "davidar";

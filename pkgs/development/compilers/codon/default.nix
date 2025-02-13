@@ -26,7 +26,7 @@ let
 
   codon-llvm = stdenv.mkDerivation {
     pname = "codon-llvm";
-    version = "unstable-2022-09-23";
+    version = "0-unstable-2022-09-23";
 
     src = fetchFromGitHub {
       owner = "exaloop";

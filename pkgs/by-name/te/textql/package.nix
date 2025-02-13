@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "textql";
-  version = "unstable-2021-07-06";
+  version = "0-unstable-2021-07-06";
 
   src = fetchFromGitHub {
     owner = "dinedal";

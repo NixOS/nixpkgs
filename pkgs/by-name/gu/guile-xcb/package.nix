@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-xcb";
-  version = "unstable-2017-05-29";
+  version = "0-unstable-2017-05-29";
 
   src = fetchFromGitHub {
     owner = "mwitmer";

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "adslib";
-  version = "unstable-2020-08-28";
+  version = "0-unstable-2020-08-28";
 
   src = fetchFromGitHub {
     owner = "stlehmann";

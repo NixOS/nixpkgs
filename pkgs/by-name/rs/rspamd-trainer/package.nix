@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "rspamd-trainer";
-  version = "unstable-2023-11-27";
+  version = "0-unstable-2023-11-27";
   format = "pyproject";
 
   src = fetchFromGitLab {

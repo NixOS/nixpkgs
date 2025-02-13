@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "morty";
-  version = "unstable-2021-04-22";
+  version = "0-unstable-2021-04-22";
 
   src = fetchFromGitHub {
     owner = "asciimoo";

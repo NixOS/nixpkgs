@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "azmq";
-  version = "unstable-2023-03-23";
+  version = "0-unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "zeromq";

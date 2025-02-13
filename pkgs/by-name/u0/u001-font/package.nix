@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "u001";
-  version = "unstable-2016-08-01"; # date in the zip file, actual creation date unknown
+  version = "0-unstable-2016-08-01"; # date in the zip file, actual creation date unknown
 
   src = fetchzip {
     urls = [

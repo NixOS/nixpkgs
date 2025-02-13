@@ -5,7 +5,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wgautomesh";
-  version = "unstable-20240524";
+  version = "0-unstable-20240524";
 
   src = fetchFromGitea {
     domain = "git.deuxfleurs.fr";

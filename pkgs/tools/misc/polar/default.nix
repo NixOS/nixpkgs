@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   pname = "polar";
   # The package has no releases so let's use the latest commit
-  version = "unstable-2021-01-12";
+  version = "0-unstable-2021-01-12";
 
   src = fetchFromGitHub {
     owner = "cmaion";

@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "routersploit";
-  version = "unstable-2021-02-06";
+  version = "0-unstable-2021-02-06";
   format = "setuptools";
 
   src = fetchFromGitHub {

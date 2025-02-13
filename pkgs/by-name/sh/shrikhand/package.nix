@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "shrikhand";
-  version = "unstable-2016-03-03";
+  version = "0-unstable-2016-03-03";
 
   src = fetchurl {
     url = "https://github.com/jonpinhorn/shrikhand/raw/c11c9b0720fba977fad7cb4f339ebacdba1d1394/build/Shrikhand-Regular.ttf";

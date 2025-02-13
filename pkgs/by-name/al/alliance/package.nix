@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "alliance";
-  version = "unstable-2022-01-13";
+  version = "0-unstable-2022-01-13";
 
   src = fetchFromGitLab {
     domain = "gitlab.lip6.fr";

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cyber";
-  version = "unstable-2023-09-19";
+  version = "0-unstable-2023-09-19";
 
   src = fetchFromGitHub {
     owner = "fubark";

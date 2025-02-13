@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "dirt";
-  version = "unstable-2018-01-01";
+  version = "0-unstable-2018-01-01";
   src = fetchFromGitHub {
     repo = "Dirt";
     owner = "tidalcycles";

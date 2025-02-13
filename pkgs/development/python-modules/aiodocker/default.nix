@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "aiodocker";
   # unstable includes support for python 3.10+
-  version = "unstable-2022-01-20";
+  version = "0-unstable-2022-01-20";
   format = "setuptools";
 
   src = fetchFromGitHub {

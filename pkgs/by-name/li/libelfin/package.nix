@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libelfin";
-  version = "unstable-2018-08-25";
+  version = "0-unstable-2018-08-25";
 
   src = fetchFromGitHub {
     owner = "aclements";

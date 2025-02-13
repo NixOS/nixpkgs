@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "libunity";
-  version = "unstable-2021-02-01";
+  version = "0-unstable-2021-02-01";
 
   outputs = [
     "out"

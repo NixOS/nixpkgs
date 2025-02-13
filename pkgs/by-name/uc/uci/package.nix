@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "uci";
-  version = "unstable-2023-08-10";
+  version = "0-unstable-2023-08-10";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uci.git";

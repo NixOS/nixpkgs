@@ -7,7 +7,7 @@
 
 buildNpmPackage rec {
   pname = "zotero-translation-server";
-  version = "unstable-2023-07-13";
+  version = "0-unstable-2023-07-13";
 
   src = fetchFromGitHub {
     owner = "zotero";

@@ -8,7 +8,7 @@ with ocamlPackages;
 
 buildDunePackage rec {
   pname = "jackline";
-  version = "unstable-2024-10-21";
+  version = "0-unstable-2024-10-21";
 
   minimalOCamlVersion = "4.13";
 

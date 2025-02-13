@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nix-kernel";
-  version = "unstable-2020-04-26";
+  version = "0-unstable-2020-04-26";
   pyproject = true;
 
   disabled = !isPy3k;

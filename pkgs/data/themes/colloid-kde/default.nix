@@ -10,7 +10,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "colloid-kde";
-  version = "unstable-2023-07-04";
+  version = "0-unstable-2023-07-04";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";

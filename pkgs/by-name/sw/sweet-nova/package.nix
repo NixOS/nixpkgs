@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "sweet-nova";
-  version = "unstable-2023-09-30";
+  version = "0-unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "EliverLara";

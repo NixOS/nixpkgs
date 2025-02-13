@@ -7,7 +7,7 @@
 
 buildDunePackage rec {
   pname = "flex";
-  version = "unstable-2020-09-12";
+  version = "0-unstable-2020-09-12";
 
   src = fetchFromGitHub {
     owner = "jordwalke";

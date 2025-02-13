@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "moka-icon-theme";
-  version = "unstable-2019-05-29";
+  version = "0-unstable-2019-05-29";
 
   src = fetchFromGitHub {
     owner = "snwh";

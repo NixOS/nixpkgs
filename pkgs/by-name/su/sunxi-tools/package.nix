@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sunxi-tools";
-  version = "unstable-2021-08-29";
+  version = "0-unstable-2021-08-29";
 
   src = fetchFromGitHub {
     owner = "linux-sunxi";

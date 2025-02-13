@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "et-book";
-  version = "unstable-2015-10-05";
+  version = "0-unstable-2015-10-05";
 
   src = fetchFromGitHub {
     owner = "edwardtufte";

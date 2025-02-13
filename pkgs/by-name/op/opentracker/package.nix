@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "opentracker";
-  version = "unstable-2021-08-23";
+  version = "0-unstable-2021-08-23";
 
   src = fetchgit {
     url = "https://erdgeist.org/gitweb/opentracker";

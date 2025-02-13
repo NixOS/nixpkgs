@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "inotify";
-  version = "unstable-2020-08-27";
+  version = "0-unstable-2020-08-27";
   pyproject = true;
 
   src = fetchFromGitHub {

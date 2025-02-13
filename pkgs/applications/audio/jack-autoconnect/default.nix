@@ -11,7 +11,7 @@ mkDerivation rec {
   pname = "jack_autoconnect";
 
   # It does not have any versions (yet?)
-  version = "unstable-2021-02-01";
+  version = "0-unstable-2021-02-01";
 
   src = fetchFromGitHub {
     owner = "kripton";

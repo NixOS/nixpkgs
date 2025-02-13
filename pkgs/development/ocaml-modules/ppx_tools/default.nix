@@ -32,7 +32,7 @@ else
           sha256 = "061v1fl5z7z3ywi4ppryrlcywnvnqbsw83ppq72qmkc7ma4603jg";
         };
         "4.04" = {
-          version = "unstable-20161114";
+          version = "0-unstable-20161114";
           rev = "49c08e2e4ea8fef88692cd1dcc1b38a9133f17ac";
           sha256 = "0ywzfkf5brj33nwh49k9if8x8v433ral25f3nbklfc9vqr06zrfl";
         };

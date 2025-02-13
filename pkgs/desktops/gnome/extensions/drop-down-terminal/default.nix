@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
-  version = "unstable-2020-03-25";
+  version = "0-unstable-2020-03-25";
 
   src = fetchFromGitHub {
     owner = "zzrough";

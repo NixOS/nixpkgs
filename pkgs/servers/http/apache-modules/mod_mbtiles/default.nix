@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_mbtiles";
-  version = "unstable-2022-05-25";
+  version = "0-unstable-2022-05-25";
 
   src = fetchFromGitHub {
     owner = "systemed";

@@ -188,7 +188,7 @@ in
   });
 
   ljsyscall = prev.ljsyscall.overrideAttrs (oa: rec {
-    version = "unstable-20180515";
+    version = "0-unstable-20180515";
     # package hasn't seen any release for a long time
     src = fetchFromGitHub {
       owner = "justincormack";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "recastai";
   # use latest revision for the CMake build process and OpenMW
   # OpenMW use e75adf86f91eb3082220085e42dda62679f9a3ea
-  version = "unstable-2023-01-02";
+  version = "0-unstable-2023-01-02";
 
   src = fetchFromGitHub {
     owner = "recastnavigation";

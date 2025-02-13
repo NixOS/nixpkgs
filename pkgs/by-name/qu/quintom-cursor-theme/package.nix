@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "quintom-cursor-theme";
-  version = "unstable-2019-10-24";
+  version = "0-unstable-2019-10-24";
 
   src = fetchFromGitLab {
     owner = "Burning_Cube";

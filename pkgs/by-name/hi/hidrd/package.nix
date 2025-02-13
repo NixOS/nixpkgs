@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "hidrd";
-  version = "unstable-2019-06-03";
+  version = "0-unstable-2019-06-03";
 
   src = fetchFromGitHub {
     owner = "DIGImend";

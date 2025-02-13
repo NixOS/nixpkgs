@@ -15925,7 +15925,7 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd-simplicity = elementsd.overrideAttrs {
-    version = "unstable-2023-04-18";
+    version = "0-unstable-2023-04-18";
     src = fetchFromGitHub {
       owner = "ElementsProject";
       repo = "elements";

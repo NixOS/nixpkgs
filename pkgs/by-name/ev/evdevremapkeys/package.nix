@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "evdevremapkeys";
-  version = "unstable-2021-05-04";
+  version = "0-unstable-2021-05-04";
 
   src = fetchFromGitHub {
     owner = "philipl";

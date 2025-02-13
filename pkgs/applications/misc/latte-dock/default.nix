@@ -21,7 +21,7 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "unstable-2024-01-31";
+  version = "0-unstable-2024-01-31";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";

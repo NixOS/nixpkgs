@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "tremor";
-  version = "unstable-2018-03-16";
+  version = "0-unstable-2018-03-16";
 
   src = fetchFromGitLab {
     owner = "xiph";

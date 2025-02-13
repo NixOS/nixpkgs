@@ -24,7 +24,7 @@ let
 
   crfpp = stdenv.mkDerivation {
     pname = "mealie-crfpp";
-    version = "unstable-2024-02-12";
+    version = "0-unstable-2024-02-12";
     src = fetchFromGitHub {
       owner = "mealie-recipes";
       repo = "crfpp";

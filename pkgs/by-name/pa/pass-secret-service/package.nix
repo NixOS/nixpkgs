@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "unstable-2022-07-18";
+  version = "0-unstable-2022-07-18";
 
   src = fetchFromGitHub {
     owner = "mdellweg";

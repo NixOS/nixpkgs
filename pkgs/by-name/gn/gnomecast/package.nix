@@ -12,7 +12,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "gnomecast";
-  version = "unstable-2022-04-23";
+  version = "0-unstable-2022-04-23";
 
   src = fetchFromGitHub {
     owner = "keredson";

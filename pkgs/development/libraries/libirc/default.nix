@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libirc";
-  version = "unstable-2022-10-15";
+  version = "0-unstable-2022-10-15";
 
   src = fetchFromGitHub {
     owner = "grumpy-irc";

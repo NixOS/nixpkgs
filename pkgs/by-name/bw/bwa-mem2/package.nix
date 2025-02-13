@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bwa-mem2";
-  version = "unstable-2023-03-18";
+  version = "0-unstable-2023-03-18";
 
   src = fetchFromGitHub {
     owner = "bwa-mem2";

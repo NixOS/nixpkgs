@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "purple-xmpp-upload";
-  version = "unstable-2021-11-04";
+  version = "0-unstable-2021-11-04";
 
   src = fetchFromGitHub {
     owner = "Junker";

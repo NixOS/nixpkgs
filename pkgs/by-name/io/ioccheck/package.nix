@@ -37,7 +37,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "ioccheck";
-  version = "unstable-2021-09-29";
+  version = "0-unstable-2021-09-29";
   pyproject = true;
 
   src = fetchFromGitHub {

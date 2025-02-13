@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2024-06-21";
+  version = "0-unstable-2024-06-21";
 
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.

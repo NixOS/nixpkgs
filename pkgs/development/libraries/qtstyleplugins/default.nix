@@ -10,7 +10,7 @@
 
 mkDerivation {
   pname = "qtstyleplugins";
-  version = "unstable-2017-03-11";
+  version = "0-unstable-2017-03-11";
 
   src = fetchFromGitHub {
     owner = "qt";

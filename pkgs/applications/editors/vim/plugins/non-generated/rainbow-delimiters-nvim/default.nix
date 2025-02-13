@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "rainbow-delimiters.nvim";
-  version = "unstable-2025-01-12";
+  version = "0-unstable-2025-01-12";
 
   src = fetchFromGitLab {
     owner = "HiPhish";

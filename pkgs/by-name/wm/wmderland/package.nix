@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "wmderland";
-  version = "unstable-2020-07-17";
+  version = "0-unstable-2020-07-17";
 
   src = fetchFromGitHub {
     owner = "aesophor";

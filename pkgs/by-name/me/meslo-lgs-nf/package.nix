@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "meslo-lgs-nf";
-  version = "unstable-2023-04-03";
+  version = "0-unstable-2023-04-03";
 
   src = fetchFromGitHub {
     owner = "romkatv";

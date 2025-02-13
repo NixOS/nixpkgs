@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zi";
-  version = "unstable-2022-04-09";
+  version = "0-unstable-2022-04-09";
   src = fetchFromGitHub {
     owner = "z-shell";
     repo = pname;

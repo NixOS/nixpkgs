@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "re-Isearch";
-  version = "unstable-2022-03-24";
+  version = "0-unstable-2022-03-24";
 
   src = fetchFromGitHub {
     owner = pname;

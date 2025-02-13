@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "N3";
-  version = "unstable-2018-08-09";
+  version = "0-unstable-2018-08-09";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";

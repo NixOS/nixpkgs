@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "photon";
-  version = "unstable-2022-01-11";
+  version = "0-unstable-2022-01-11";
 
   src = fetchFromSourcehut {
     owner = "~ghost08";

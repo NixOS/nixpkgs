@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "pingus";
-  version = "unstable-0.7.6.0.20191104";
+  version = "0-unstable-0.7.6.0.20191104";
 
   nativeBuildInputs = [
     cmake

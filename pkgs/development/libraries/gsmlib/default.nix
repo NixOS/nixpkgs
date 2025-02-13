@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "gsmlib";
-  version = "unstable-2017-10-06";
+  version = "0-unstable-2017-10-06";
 
   src = fetchFromGitHub {
     owner = "x-logLT";

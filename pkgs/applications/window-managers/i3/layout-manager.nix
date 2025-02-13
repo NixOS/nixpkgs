@@ -28,7 +28,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "i3-layout-manager";
-  version = "unstable-2020-05-04";
+  version = "0-unstable-2020-05-04";
 
   src = fetchFromGitHub {
     owner = "klaxalk";

@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnghttp2_asio";
-  version = "unstable-2022-08-11";
+  version = "0-unstable-2022-08-11";
 
   outputs = [
     "out"

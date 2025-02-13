@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "xfs_undelete";
-  version = "unstable-2023-04-12";
+  version = "0-unstable-2023-04-12";
 
   src = fetchFromGitHub {
     repo = "xfs_undelete";

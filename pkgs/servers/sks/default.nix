@@ -19,7 +19,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sks";
-  version = "unstable-2021-02-04";
+  version = "0-unstable-2021-02-04";
 
   src = fetchFromGitHub {
     owner = "SKS-Keyserver";

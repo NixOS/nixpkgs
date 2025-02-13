@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "swaglyrics";
-  version = "unstable-2021-06-17";
+  version = "0-unstable-2021-06-17";
   format = "setuptools";
 
   src = fetchFromGitHub {

@@ -7,7 +7,7 @@
 
 {
   pname = "gerbil-poo";
-  version = "unstable-2023-11-29";
+  version = "0-unstable-2023-11-29";
   git-version = "0.2-5-gacf654e";
   softwareName = "Gerbil-POO";
   gerbil-package = "clan/poo";

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "iotools";
-  version = "unstable-2017-12-11";
+  version = "0-unstable-2017-12-11";
 
   src = fetchFromGitHub {
     owner = "adurbin";

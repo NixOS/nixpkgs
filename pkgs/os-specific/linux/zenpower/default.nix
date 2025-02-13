@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
-  version = "unstable-2022-11-04";
+  version = "0-unstable-2022-11-04";
 
   src = fetchFromGitea {
     domain = "git.exozy.me";

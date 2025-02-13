@@ -14,7 +14,7 @@ in
 
 stdenv.mkDerivation {
   pname = "fusee-launcher";
-  version = "unstable-2018-07-14";
+  version = "0-unstable-2018-07-14";
 
   src = fetchFromGitHub {
     owner = "Cease-and-DeSwitch";

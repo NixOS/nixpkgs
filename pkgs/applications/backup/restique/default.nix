@@ -11,7 +11,7 @@
 
 mkDerivation rec {
   pname = "restique";
-  version = "unstable-2022-11-29";
+  version = "0-unstable-2022-11-29";
 
   src = fetchFromGitea {
     domain = "git.srcbox.net";

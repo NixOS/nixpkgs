@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "abduco";
-  version = "unstable-2020-04-30";
+  version = "0-unstable-2020-04-30";
 
   src = fetchzip {
     urls = [

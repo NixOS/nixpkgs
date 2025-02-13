@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pam_pgsql";
-  version = "unstable-2020-05-05";
+  version = "0-unstable-2020-05-05";
 
   src = fetchFromGitHub {
     owner = "pam-pgsql";

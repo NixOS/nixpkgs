@@ -41,7 +41,7 @@ in
 
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "unstable-2024-07-07";
+  version = "0-unstable-2024-07-07";
 
   src = fetchFromGitHub {
     owner = "jrh13";

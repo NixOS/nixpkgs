@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-data";
-  version = "unstable-2024-03-28";
+  version = "0-unstable-2024-03-28";
   pyproject = true;
 
   disabled = pythonOlder "3.8";

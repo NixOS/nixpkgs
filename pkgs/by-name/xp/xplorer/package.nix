@@ -20,7 +20,7 @@
 let
 
   pname = "xplorer";
-  version = "unstable-2023-03-19";
+  version = "0-unstable-2023-03-19";
 
   src = fetchFromGitHub {
     owner = "kimlimjustin";

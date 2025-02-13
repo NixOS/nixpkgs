@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "molly-brown";
-  version = "unstable-2023-02-10";
+  version = "0-unstable-2023-02-10";
 
   src = fetchgit {
     url = "https://tildegit.org/solderpunk/molly-brown.git";

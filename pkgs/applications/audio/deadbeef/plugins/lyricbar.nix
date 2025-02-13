@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "deadbeef-lyricbar-plugin";
-  version = "unstable-2019-01-29";
+  version = "0-unstable-2019-01-29";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";

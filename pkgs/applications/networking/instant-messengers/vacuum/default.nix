@@ -18,7 +18,7 @@
 }:
 stdenv.mkDerivation {
   pname = "vacuum-im";
-  version = "unstable-2021-12-09";
+  version = "0-unstable-2021-12-09";
 
   src = fetchFromGitHub {
     owner = "Vacuum-IM";

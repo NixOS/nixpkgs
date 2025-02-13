@@ -36,7 +36,7 @@ let
   ratify = (
     stdenv.mkDerivation {
       pname = "ratify";
-      version = "unstable-2021-02-21";
+      version = "0-unstable-2021-02-21";
       src = fetchFromGitHub {
         owner = "ptomato";
         repo = "ratify";
@@ -63,7 +63,7 @@ let
   chimara = (
     stdenv.mkDerivation {
       pname = "chimara";
-      version = "unstable-2021-04-06";
+      version = "0-unstable-2021-04-06";
       src = fetchFromGitHub {
         owner = "chimara";
         repo = "Chimara";
@@ -101,7 +101,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "gnome-inform7";
-  version = "unstable-2021-04-06";
+  version = "0-unstable-2021-04-06";
   src = fetchFromGitHub {
     owner = "ptomato";
     repo = "gnome-inform7";

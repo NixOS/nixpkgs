@@ -92,7 +92,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "buck2";
-  version = "unstable-${version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
+  version = "0-unstable-${version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   srcs = [
     buck2-src
     rust-project-src

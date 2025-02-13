@@ -24,7 +24,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "play-with-mpv";
-  version = "unstable-2021-04-02";
+  version = "0-unstable-2021-04-02";
   format = "setuptools";
 
   src = fetchFromGitHub {

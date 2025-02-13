@@ -36,7 +36,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${lib.strings.toLower type}plug";
-  version = "unstable-2021-12-17";
+  version = "0-unstable-2021-12-17";
 
   src = fetchFromGitHub {
     owner = "jpcima";

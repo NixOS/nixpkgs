@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "opentrack-aruco";
-  version = "unstable-20190303";
+  version = "0-unstable-20190303";
 
   src = fetchFromGitHub {
     owner = "opentrack";

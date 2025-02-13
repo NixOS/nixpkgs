@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vite";
-  version = "unstable-2022-05-17";
+  version = "0-unstable-2022-05-17";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";

@@ -7,7 +7,7 @@
 
 mkDerivation {
   pname = "fffuu";
-  version = "unstable-2018-05-26";
+  version = "0-unstable-2018-05-26";
 
   src = fetchFromGitHub {
     owner = "diekmann";

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libevhtp";
-  version = "unstable-2021-04-28";
+  version = "0-unstable-2021-04-28";
 
   src = fetchFromGitHub {
     owner = "haiwen";

@@ -25,7 +25,7 @@ in
 {
   indradb-server = rustPlatform.buildRustPackage {
     pname = "indradb-server";
-    version = "unstable-2021-01-05";
+    version = "0-unstable-2021-01-05";
     inherit src meta;
 
     useFetchCargoVendor = true;
@@ -47,7 +47,7 @@ in
   };
   indradb-client = rustPlatform.buildRustPackage {
     pname = "indradb-client";
-    version = "unstable-2021-01-05";
+    version = "0-unstable-2021-01-05";
     inherit src meta;
 
     useFetchCargoVendor = true;

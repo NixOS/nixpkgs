@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "blinkstick";
-  version = "unstable-2023-05-04";
+  version = "0-unstable-2023-05-04";
   format = "setuptools";
 
   src = fetchFromGitHub {

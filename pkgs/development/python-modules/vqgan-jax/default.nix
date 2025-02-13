@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "vqgan-jax";
-  version = "unstable-2022-04-20";
+  version = "0-unstable-2022-04-20";
 
   src = fetchFromGitHub {
     owner = "patil-suraj";

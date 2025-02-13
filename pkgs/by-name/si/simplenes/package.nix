@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "simplenes";
-  version = "unstable-2019-03-13";
+  version = "0-unstable-2019-03-13";
 
   src = fetchFromGitHub {
     owner = "amhndu";

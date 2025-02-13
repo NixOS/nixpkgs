@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "olaris-server";
-  version = "unstable-2022-06-11";
+  version = "0-unstable-2022-06-11";
 
   src = fetchFromGitLab {
     owner = "olaris";

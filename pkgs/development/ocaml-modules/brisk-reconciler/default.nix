@@ -8,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "brisk-reconciler";
-  version = "unstable-2020-12-02";
+  version = "0-unstable-2020-12-02";
 
   duneVersion = "3";
 

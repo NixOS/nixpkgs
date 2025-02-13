@@ -11,7 +11,7 @@
 
 mkDerivation {
   pname = "twmn";
-  version = "unstable-2018-10-01";
+  version = "0-unstable-2018-10-01";
 
   src = fetchFromGitHub {
     owner = "sboli";

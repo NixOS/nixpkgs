@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "unixbench";
-  version = "unstable-2023-02-27";
+  version = "0-unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "kdlucas";

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "urxvt-perl";
-  version = "unstable-2015-01-16";
+  version = "0-unstable-2015-01-16";
 
   src = fetchFromGitHub {
     owner = "effigies";

@@ -2,7 +2,7 @@
 
 {
   pname = "smug-gerbil";
-  version = "unstable-2020-12-12";
+  version = "0-unstable-2020-12-12";
   git-version = "0.4.20";
   softwareName = "Smug-Gerbil";
   gerbil-package = "drewc/smug";

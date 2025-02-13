@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mvebu64boot";
-  version = "unstable-2022-10-20";
+  version = "0-unstable-2022-10-20";
 
   src = fetchFromGitHub {
     owner = "pali";

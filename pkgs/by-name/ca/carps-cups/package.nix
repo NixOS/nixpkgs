@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "carps-cups";
-  version = "unstable-2018-03-05";
+  version = "0-unstable-2018-03-05";
 
   src = fetchFromGitHub {
     owner = "ondrej-zary";

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ardopc";
-  version = "unstable-2021-08-28";
+  version = "0-unstable-2021-08-28";
 
   src = fetchFromGitHub {
     owner = "hamarituc";

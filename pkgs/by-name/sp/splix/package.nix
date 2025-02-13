@@ -13,7 +13,7 @@ let
 
   color-profiles = stdenv.mkDerivation {
     pname = "splix-color-profiles";
-    version = "unstable-2007-06-25";
+    version = "0-unstable-2007-06-25";
 
     src = fetchurl {
       url = "http://splix.ap2c.org/samsung_cms.tar.bz2";

@@ -10,7 +10,7 @@
 stdenv.mkDerivation rec {
   pname = "lguf-brightness";
 
-  version = "unstable-2018-02-11";
+  version = "0-unstable-2018-02-11";
 
   src = fetchFromGitHub {
     owner = "periklis";

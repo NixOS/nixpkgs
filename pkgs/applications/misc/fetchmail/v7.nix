@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "fetchmail";
-  version = "unstable-2022-05-26";
+  version = "0-unstable-2022-05-26";
 
   src = pkgs.fetchFromGitLab {
     owner = "fetchmail";

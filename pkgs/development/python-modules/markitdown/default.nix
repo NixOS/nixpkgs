@@ -25,7 +25,7 @@
 
 buildPythonPackage {
   pname = "markitdown";
-  version = "unstable-2024-12-18";
+  version = "0-unstable-2024-12-18";
   pyproject = true;
 
   src = fetchFromGitHub {

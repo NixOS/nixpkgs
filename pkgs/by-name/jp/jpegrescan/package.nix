@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "jpegrescan";
-  version = "unstable-2019-03-27";
+  version = "0-unstable-2019-03-27";
 
   dontBuild = true;
   dontConfigure = true;

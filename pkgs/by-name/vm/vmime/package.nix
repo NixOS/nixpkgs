@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   pname = "vmime";
   # XXX: using unstable rev for now to comply with the removal of
   # deprecated symbols in the latest release of gsasl
-  version = "unstable-2022-03-26";
+  version = "0-unstable-2022-03-26";
   src = fetchFromGitHub {
     owner = "kisli";
     repo = "vmime";

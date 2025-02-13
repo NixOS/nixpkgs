@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation {
   pname = "non";
-  version = "unstable-2021-01-28";
+  version = "0-unstable-2021-01-28";
   src = fetchFromGitHub {
     owner = "linuxaudio";
     repo = "non";

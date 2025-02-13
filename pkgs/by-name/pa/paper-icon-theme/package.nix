@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "paper-icon-theme";
-  version = "unstable-2020-03-12";
+  version = "0-unstable-2020-03-12";
 
   src = fetchFromGitHub {
     owner = "snwh";

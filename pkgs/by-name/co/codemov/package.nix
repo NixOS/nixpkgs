@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemov";
-  version = "unstable-2023-08-08";
+  version = "0-unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "sloganking";

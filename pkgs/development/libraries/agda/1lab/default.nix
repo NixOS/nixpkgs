@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "1lab";
-  version = "unstable-2024-08-05";
+  version = "0-unstable-2024-08-05";
 
   src = fetchFromGitHub {
     owner = "the1lab";

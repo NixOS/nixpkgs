@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "edlib";
-  version = "unstable-2021-08-20";
+  version = "0-unstable-2021-08-20";
 
   src = fetchFromGitHub {
     owner = "Martinsos";

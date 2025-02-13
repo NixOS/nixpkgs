@@ -16,7 +16,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2024-10-24";
+  version = "0-unstable-2024-10-24";
 
   src = fetchFromGitHub {
     owner = "jpochyla";

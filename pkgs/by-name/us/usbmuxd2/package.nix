@@ -39,7 +39,7 @@ let
 in
 clangStdenv.mkDerivation rec {
   pname = "usbmuxd2";
-  version = "unstable-2023-12-12";
+  version = "0-unstable-2023-12-12";
 
   src = fetchFromGitHub {
     owner = "tihmstar";

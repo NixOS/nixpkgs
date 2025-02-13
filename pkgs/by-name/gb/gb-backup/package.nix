@@ -8,7 +8,7 @@
 
 buildGoModule {
   pname = "gb-backup";
-  version = "unstable-2021-10-27";
+  version = "0-unstable-2021-10-27";
 
   src = fetchFromGitHub {
     owner = "leijurv";

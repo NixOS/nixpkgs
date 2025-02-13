@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cliscord";
-  version = "unstable-2022-10-07";
+  version = "0-unstable-2022-10-07";
 
   src = fetchFromGitHub {
     owner = "somebody1234";

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "odroid-xu3-bootloader";
-  version = "unstable-2015-12-04";
+  version = "0-unstable-2015-12-04";
 
   src = fetchFromGitHub {
     owner = "hardkernel";

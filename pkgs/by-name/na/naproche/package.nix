@@ -9,7 +9,7 @@
 with haskellPackages;
 mkDerivation {
   pname = "Naproche-SAD";
-  version = "unstable-2024-05-19";
+  version = "0-unstable-2024-05-19";
 
   src = fetchFromGitHub {
     owner = "naproche";

@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphite-kde-theme";
-  version = "unstable-2023-10-25";
+  version = "0-unstable-2023-10-25";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";

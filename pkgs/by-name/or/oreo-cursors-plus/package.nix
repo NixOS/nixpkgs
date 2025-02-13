@@ -13,7 +13,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "oreo-cursors-plus";
-  version = "unstable-2023-06-05";
+  version = "0-unstable-2023-06-05";
   src = fetchFromGitHub {
     owner = "Souravgoswami";
     repo = "oreo-cursors";

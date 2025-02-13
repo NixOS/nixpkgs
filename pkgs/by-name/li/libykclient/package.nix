@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "libykclient";
-  version = "unstable-2019-03-18";
+  version = "0-unstable-2019-03-18";
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubico-c-client";

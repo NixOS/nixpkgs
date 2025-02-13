@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation {
   pname = "orca-c";
-  version = "unstable-2021-02-13";
+  version = "0-unstable-2021-02-13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~rabbits/orca";

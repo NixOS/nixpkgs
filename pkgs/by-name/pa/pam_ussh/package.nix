@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "pam_ussh";
-  version = "unstable-20210615";
+  version = "0-unstable-20210615";
 
   src = fetchFromGitHub {
     owner = "uber";

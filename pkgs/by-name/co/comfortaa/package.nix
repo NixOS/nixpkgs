@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "comfortaa";
-  version = "unstable-2021-07-29";
+  version = "0-unstable-2021-07-29";
 
   src = fetchFromGitHub {
     owner = "googlefonts";

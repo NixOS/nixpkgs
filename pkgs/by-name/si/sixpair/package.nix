@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation {
   pname = "sixpair";
-  version = "unstable-2007-04-18";
+  version = "0-unstable-2007-04-18";
 
   src = fetchurl {
     url = "http://www.pabr.org/sixlinux/sixpair.c";
