@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "c2FmZQ";
-  version = "0.4.27";
+  version = "0.4.28";
 
   src = fetchFromGitHub {
     owner = "c2FmZQ";
     repo = "c2FmZQ";
     rev = "v${version}";
-    hash = "sha256-PGZN6+DJWMoBREqvqub9t1XxvtuhgFTFwerOu/v8xTI=";
+    hash = "sha256-R9CYgP444S9LinGT2fUnmOvaBHHv2thy1I2TQSPbnOs=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/c2FmZQ";
 
-  vendorHash = "sha256-zKELnKHwNlXnKsIPr51Ec0bBEOYVMWs/8oQU5zJ+z/s=";
+  vendorHash = "sha256-yv/PNzWvEAiKyXw9XVAty67vRgXJmi4eq+i352yKKck=";
 
   subPackages = [
     "c2FmZQ-client"

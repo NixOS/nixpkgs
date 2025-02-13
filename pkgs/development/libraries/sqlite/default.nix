@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
     # Can be removed with the next release.
     # Test: pkgsStatic.gnupg
     ./Libs.private.patch
+
+    # https://sqlite.org/forum/forumpost/00f3aab3d3be9690
+    # https://sqlite.org/src/info/d7c07581
+    # TODO: Remove in 3.49.0
+    ./3.48.0-fk-conflict-handling.patch
   ];
 
   outputs = [ "bin" "dev" "man" "doc" "out" ];
