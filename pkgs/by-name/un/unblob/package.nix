@@ -110,6 +110,13 @@ python3.pkgs.buildPythonApplication rec {
       disabled = [
         # https://github.com/tytso/e2fsprogs/issues/152
         "test_all_handlers[filesystem.extfs]"
+
+        # Should be dropped after upgrading to next version
+        # Needs https://github.com/onekey-sec/unblob/pull/1128/commits/c6af67f0c6f32fa01d7abbf495eb0293e9184438
+        # Unfortunately patches touching LFS stored assets cannot be applied
+        "test_all_handlers[filesystem.ubi.ubi]"
+        "test_all_handlers[archive.dlink.encrpted_img]"
+        "test_all_handlers[archive.dlink.shrs]"
       ];
     in
     [
