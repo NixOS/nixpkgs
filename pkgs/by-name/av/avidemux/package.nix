@@ -18,9 +18,6 @@
   makeWrapper,
   libXext,
   libGLU,
-  qttools,
-  qtbase,
-  wrapQtAppsHook,
   alsa-lib,
   withX265 ? true,
   x265,
@@ -43,12 +40,12 @@
   withVPX ? true,
   libvpx,
   withQT ? true,
+  libsForQt5,
   withCLI ? true,
   default ? "qt5",
   withPlugins ? true,
 }:
 
-assert withQT -> qttools != null && qtbase != null;
 assert default != "qt5" -> default == "cli";
 assert !withQT -> default != "qt5";
 
@@ -64,6 +61,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./dynamic_install_dir.patch
     ./bootstrap_logging.patch
+    # x265 API change in 4.1 breaks build
+    # See discussion in https://avidemux.org/smif/index.php/topic,19995.msg97494.html#msg97494
+    (fetchpatch {
+      name = "fix_build_with_x265_4_1.patch";
+      url = "https://github.com/mean00/avidemux2/commit/c16d32a67cdb012db093472ad3776713939a30d1.patch";
+      hash = "sha256-5QqocvYaY/phyvSX2lhTzeAi+z9Wgqs+ITR0cXReps4=";
+    })
   ];
 
   postPatch = ''
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
-  ] ++ lib.optional withQT wrapQtAppsHook;
+  ] ++ lib.optional withQT libsForQt5.wrapQtAppsHook;
   buildInputs =
     [
       zlib
@@ -108,10 +112,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPulse libpulseaudio
     ++ lib.optional withFAAD faad2
     ++ lib.optional withOpus libopus
-    ++ lib.optionals withQT [
-      qttools
-      qtbase
-    ]
+    ++ lib.optionals withQT (
+      with libsForQt5;
+      [
+        qttools
+        qtbase
+      ]
+    )
     ++ lib.optional withVPX libvpx;
 
   dontWrapQtApps = true;

@@ -546,7 +546,7 @@ let
 
       authentication_method = mkDefOpt (types.enum [ "OAuth" "ManagedIdentity" ]) "OAuth" ''
         The authentication method, either OAuth or ManagedIdentity.
-        See https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview
+        See <https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview>
       '';
 
       subscription_id = mkOption {
@@ -973,8 +973,8 @@ let
         )
       ) ''
       Optional label and field selectors to limit the discovery process to a subset of available resources.
-      See https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
-      and https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ to learn more about the possible
+      See <https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/>
+      and <https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/> to learn more about the possible
       filters that can be used. Endpoints role supports pod, service and endpoints selectors, other roles
       only support selectors matching the role itself (e.g. node role can only contain node selectors).
 
@@ -1210,7 +1210,7 @@ let
       type = types.str;
       description = ''
         Puppet Query Language (PQL) query. Only resources are supported.
-        https://puppet.com/docs/puppetdb/latest/api/query/v4/pql.html
+        <https://puppet.com/docs/puppetdb/latest/api/query/v4/pql.html>
       '';
     };
 
@@ -1238,12 +1238,12 @@ let
       access_key = mkOption {
         type = types.str;
         description = ''
-          Access key to use. https://console.scaleway.com/project/credentials
+          Access key to use. <https://console.scaleway.com/project/credentials>
         '';
       };
 
       secret_key = mkOpt types.str ''
-        Secret key to use when listing targets. https://console.scaleway.com/project/credentials
+        Secret key to use when listing targets. <https://console.scaleway.com/project/credentials>
         It is mutually exclusive with `secret_key_file`.
       '';
 
