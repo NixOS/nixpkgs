@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   python,
@@ -10,7 +11,6 @@
   pandas,
   imageio,
   snakeviz,
-  fn,
   pyopengl,
   seaborn,
   torch,
@@ -37,7 +37,6 @@ buildPythonPackage rec {
     pandas
     imageio
     snakeviz
-    fn
     pyopengl
     seaborn
   ];
@@ -49,6 +48,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "boxx" ];
+
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     xvfb-run ${python.interpreter} -m unittest
