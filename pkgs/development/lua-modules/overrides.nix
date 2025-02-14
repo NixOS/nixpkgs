@@ -517,9 +517,13 @@ in
     meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
-  lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
-    doCheck = false;
-  });
+  lush-nvim = prev.lush-nvim.overrideAttrs {
+    # Remove dangling symlink created during installation because we don't copy the source CREATE.md it links to
+    # Using a generic method because path changes depending on if building luaPackage or vimPlugin
+    postInstall = ''
+      find -L $out -type l -name "README.md" -print -delete
+    '';
+  };
 
   luuid = prev.luuid.overrideAttrs (oa: {
     externalDeps = [

@@ -4,19 +4,36 @@
   python3,
 }:
 
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Requires 'cyclonedx-python-lib = ">=6.0.0,<8.0.0"'
+      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
+        version = "7.6.2";
+        src = fetchFromGitHub {
+          owner = "CycloneDX";
+          repo = "cyclonedx-python-lib";
+          tag = "v${version}";
+          hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
+        };
+      });
+    };
+  };
+in
+with py.pkgs;
+
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.364";
+  version = "3.2.370";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = version;
-    hash = "sha256-ZmvIICAnC9RDizKl06aOD1LNEAo8WG7E1ZZB3Rero+c=";
+    hash = "sha256-IaE2Mg8Fk1Xb3ujPRHTY1N4ev75qM8Kj5o7IPtKuNsk=";
   };
-
-  patches = [ ./flake8-compat-5.x.patch ];
 
   pythonRelaxDeps = [
     "bc-detect-secrets"
@@ -45,9 +62,9 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
   ];
 
-  build-system = with python3.pkgs; [ setuptools-scm ];
+  build-system = with py.pkgs; [ setuptools-scm ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
@@ -90,7 +107,7 @@ python3.pkgs.buildPythonApplication rec {
     update-checker
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     aioresponses
     distutils
     mock
