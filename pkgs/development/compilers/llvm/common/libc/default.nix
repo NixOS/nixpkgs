@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString (!isFullBuild) ''
-    substituteAll ${./libc-shim.so} $out/lib/libc.so
+    substituteAll ${./libc-shim.tpl} $out/lib/libc.so
   '';
 
   libc = if (!isFullBuild) then stdenv.cc.libc else null;
