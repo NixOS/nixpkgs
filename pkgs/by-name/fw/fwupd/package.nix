@@ -1,59 +1,82 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
 {
-  pkgsBuildBuild,
-  stdenv,
   lib,
-  fetchFromGitHub,
-  gi-docgen,
-  writableTmpDirAsHomeHook,
-  pkg-config,
-  gobject-introspection,
-  gettext,
-  libgudev,
-  libdrm,
-  polkit,
-  libxmlb,
-  gusb,
-  sqlite,
-  libarchive,
-  libredirect,
-  curl,
-  libjcat,
-  elfutils,
-  valgrind,
-  meson,
-  mesonEmulatorHook,
-  libuuid,
-  ninja,
-  gnutls,
-  protobufc,
+  stdenv,
+
+  # runPythonCommand
+  runCommand,
   python3,
-  wrapGAppsNoGuiHook,
-  ensureNewerSourcesForZipFilesHook,
+
+  # test-firmware
+  fetchFromGitHub,
+  unstableGitUpdater,
+
+  # fwupd
+  pkg-config,
+  pkgsBuildBuild,
+
+  # propagatedBuildInputs
   json-glib,
-  bash-completion,
+
+  # nativeBuildInputs
+  ensureNewerSourcesForZipFilesHook,
+  gettext,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  protobufc,
   shared-mime-info,
   vala,
+  wrapGAppsNoGuiHook,
+  writableTmpDirAsHomeHook,
+  mesonEmulatorHook,
+
+  # buildInputs
+  bash-completion,
+  curl,
+  elfutils,
+  fwupd-efi,
+  gnutls,
+  gusb,
+  libarchive,
+  libcbor,
+  libdrm,
+  libgudev,
+  libjcat,
+  libmbim,
+  libqmi,
+  libuuid,
+  libxmlb,
+  modemmanager,
+  pango,
+  polkit,
+  sqlite,
+  tpm2-tss,
+  valgrind,
+  xz, # for liblzma
+  flashrom,
+
+  # mesonFlags
+  hwdata,
+
+  # env
   makeFontsConf,
   freefont_ttf,
-  pango,
-  tpm2-tss,
+
+  # preCheck
+  libredirect,
+
+  # preFixup
   bubblewrap,
   efibootmgr,
-  flashrom,
   tpm2-tools,
-  fwupd-efi,
+
+  # passthru
   nixosTests,
-  runCommand,
-  unstableGitUpdater,
-  modemmanager,
-  libqmi,
-  libmbim,
-  libcbor,
-  xz,
-  hwdata,
   nix-update-script,
+
   enableFlashrom ? false,
   enablePassim ? false,
 }:
@@ -159,6 +182,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./efi-app-path.patch
   ];
 
+  postPatch = ''
+    patchShebangs \
+      contrib/generate-version-script.py \
+      contrib/generate-man.py \
+      po/test-deps
+
+    # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
+    sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
+  '';
+
   strictDeps = true;
 
   depsBuildBuild = [
@@ -173,16 +206,16 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       ensureNewerSourcesForZipFilesHook # required for firmware zipping
+      gettext
+      gi-docgen
+      gobject-introspection
       meson
       ninja
       pkg-config
-      gettext
-      shared-mime-info
       protobufc # for protoc
-      wrapGAppsNoGuiHook
+      shared-mime-info
       vala
-      gobject-introspection
-      gi-docgen
+      wrapGAppsNoGuiHook
 
       # jcat-tool at buildtime requires a home directory
       writableTmpDirAsHomeHook
@@ -193,29 +226,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      gnutls
-      polkit
-      libxmlb
-      gusb
-      sqlite
-      libarchive
-      libdrm
+      bash-completion
       curl
       elfutils
+      fwupd-efi
+      gnutls
+      gusb
+      libarchive
+      libcbor
+      libdrm
       libgudev
       libjcat
-      libuuid
-      bash-completion
-      pango
-      tpm2-tss
-      fwupd-efi
-      protobufc
-      modemmanager
       libmbim
-      libcbor
       libqmi
-      xz # for liblzma
+      libuuid
+      libxmlb
+      modemmanager
+      pango
+      polkit
+      protobufc
+      sqlite
+      tpm2-tss
       valgrind
+      xz # for liblzma
     ]
     ++ lib.optionals haveFlashrom [
       flashrom
@@ -279,18 +312,6 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
   };
 
-  # Phase hooks
-
-  postPatch = ''
-    patchShebangs \
-      contrib/generate-version-script.py \
-      contrib/generate-man.py \
-      po/test-deps
-
-    # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
-    sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
-  '';
-
   preCheck = ''
     addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
 
@@ -307,8 +328,8 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       binPath = [
-        efibootmgr
         bubblewrap
+        efibootmgr
         tpm2-tools
       ];
     in
