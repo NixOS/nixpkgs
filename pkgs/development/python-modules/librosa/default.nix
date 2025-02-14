@@ -32,12 +32,13 @@
   pytestCheckHook,
   resampy,
   samplerate,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "librosa";
   version = "0.10.2.post1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
@@ -94,11 +95,8 @@ buildPythonPackage rec {
     pytestCheckHook
     resampy
     samplerate
+    writableTmpDirAsHomeHook
   ] ++ optional-dependencies.matplotlib;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [
@@ -137,5 +135,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    badPlatforms = [
+      # Several non-deterministic occurances of "Fatal Python error: Segmentation fault", both in
+      # numpy's and in this package's code.
+      "aarch64-linux"
+    ];
   };
 }
