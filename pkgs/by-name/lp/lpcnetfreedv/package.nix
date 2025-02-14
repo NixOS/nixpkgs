@@ -27,6 +27,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+  patches = [
+    # extracted from https://github.com/drowe67/LPCNet/pull/59
+    ./darwin.patch
+  ];
+
   postPatch = ''
     mkdir build
     ln -s ${data} build/lpcnet_${dataVersion}.tgz
