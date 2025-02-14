@@ -16,7 +16,7 @@
   libusb1,
 
   # nativeBuildInputs
-  boost,
+  boost186,
   flann,
   libpng,
   libtiff,
@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcl";
-  version = "1.13.0";
+  version = "1.15.0-rc1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    boost
+    boost186
     flann
     libpng
     libtiff
