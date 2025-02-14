@@ -119,30 +119,30 @@ let
         UUID4Tiny
         XMLSimple
         YAML
-        nix.perl-bindings
+        nix.libs.nix-perl-bindings
         git
       ];
   };
 
-  nix-eval-jobs' = nix-eval-jobs.overrideAttrs (_: {
-    version = "2.25.0-unstable-2025-02-13";
+  nix-eval-jobs' = (nix-eval-jobs.override { inherit nix; }).overrideAttrs (_: {
+    version = "2.25.0-unstable-2025-02-14";
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nix-eval-jobs";
-      rev = "6d4fd5a93d7bc953ffa4dcd6d53ad7056a71eff7";
-      hash = "sha256-1dZLPw+nlFQzzswfyTxW+8VF1AJ4ZvoYvLTjlHiz1SA=";
+      rev = "4b392b284877d203ae262e16af269f702df036bc";
+      hash = "sha256-3wIReAqdTALv39gkWXLMZQvHyBOc3yPkWT2ZsItxedY=";
     };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-02-12";
+  version = "0-unstable-2025-02-13";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "c6f98202cd1b091475ae51b6a093d00b4c8060d4";
-    hash = "sha256-CEDUtkA005PiLt1wSo3sgmxfxUBikQSE74ZudyWNxfE=";
+    rev = "51944a5fa5696cf78043ad2d08934a91fb89e986";
+    hash = "sha256-CuMPbq/TvIOeO3YDXbSN1lspXTTIa5pxwLOSkBqhZSA=";
   };
 
   outputs = [ "out" "doc" ];
