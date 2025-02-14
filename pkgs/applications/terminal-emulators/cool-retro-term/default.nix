@@ -5,6 +5,7 @@
   mkDerivation,
   qtbase,
   qmltermwidget,
+  qtquickcontrols,
   qtquickcontrols2,
   qtgraphicaleffects,
   qmake,
@@ -29,6 +30,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qmltermwidget
+    qtquickcontrols
     qtquickcontrols2
     qtgraphicaleffects
   ];
