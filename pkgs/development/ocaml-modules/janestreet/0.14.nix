@@ -977,6 +977,7 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
+    doCheck = false; # Does not build with GCC 14
   };
 
   shexp = janePackage {
