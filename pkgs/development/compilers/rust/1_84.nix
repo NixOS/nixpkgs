@@ -28,6 +28,7 @@
   llvm_19,
   wrapCCWith,
   overrideCC,
+  fetchpatch,
 }@args:
 let
   llvmSharedFor =
@@ -49,6 +50,16 @@ import ./default.nix
   {
     rustcVersion = "1.84.1";
     rustcSha256 = "Xi+11JYopUn3Zxssz5hVqzef1EKDGnwq8W4M3MMbs3U=";
+
+    rustcPatches = [
+      # Fix for including no_std targets by default, shipping in Rust 1.87
+      # https://github.com/rust-lang/rust/pull/137073
+      (fetchpatch {
+        name = "bootstrap-skip-nostd-docs";
+        url = "https://github.com/rust-lang/rust/commit/97962d7643300b91c102496ba3ab6d9279d2c536.patch";
+        hash = "sha256-DKl9PWqJP3mX4B1pFeRLQ8/sO6mx1JhbmVLTOOMLZI4=";
+      })
+    ];
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
@@ -135,5 +146,6 @@ import ./default.nix
       "wrapCCWith"
       "overrideCC"
       "pkgsHostTarget"
+      "fetchpatch"
     ]
   )
