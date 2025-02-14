@@ -71,8 +71,11 @@ while [ "$#" -gt 0 ]; do
         fi
         if [ -f "$1" ]; then
             buildFile="$1"
-        else
+        elif [ -f "$1/default.nix" ]; then
+            log "$0: warning: in future release, system.nix will be used when directory is given instead of default.nix"
             buildFile="${1%/}/default.nix"
+        else
+            buildFile="${1%/}/system.nix"
         fi
         requestedBuildMethods["by-attrset"]=1
         shift 1
@@ -448,14 +451,24 @@ findByAttrset() {
     # - From nixos-system in nix path
     # - From default.nix up from the current directory
     # - Hardcoded to /etc/nixos/default.nix
+    # - From system.nix in the current directory
+    # - Hardcoded to /etc/nixos/system.nix
     if resolvedBuildFile="$(runCmd nix-instantiate --find-file nixos-system 2>/dev/null)"; then
         buildFile=$resolvedBuildFile
         return 0
     elif resolvedBuildFile="$(findInParents "$PWD" default.nix)"; then
+        log "$0: warning: in future release, system.nix will be used instead of default.nix"
         buildFile=$resolvedBuildFile
         return 0
     elif [[ -f "/etc/nixos/default.nix" ]]; then
+        log "$0: warning: in future release, /etc/nixos/system.nix will be used instead of /etc/nixos/default.nix"
         buildFile="/etc/nixos/default.nix"
+        return 0
+    elif resolvedBuildFile="$(findInParents "$PWD" system.nix)"; then
+        buildFile=$resolvedBuildFile
+        return 0
+    elif [[ -f "/etc/nixos/system.nix" ]]; then
+        buildFile="/etc/nixos/system.nix"
         return 0
     fi
     return 1
@@ -501,7 +514,7 @@ elif [[ -n "${requestedBuildMethods["module"]}" && -z $NIXOS_CONFIG ]]; then
 fi
 
 if [[ -n "${requestedBuildMethods["by-attrset"]}" && -n $attr && -z $buildFile ]]; then
-    log "error: '--attr' cannot be used without '--file', a 'nixos-system' entry in 'NIX_PATH', or '/etc/nixos/default.nix' existing"
+    log "error: '--attr' cannot be used without '--file', a 'nixos-system' entry in 'NIX_PATH', or '/etc/nixos/system.nix' existing"
     exit 1
 fi
 
