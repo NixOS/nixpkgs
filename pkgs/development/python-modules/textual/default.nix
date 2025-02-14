@@ -1,22 +1,29 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  jinja2,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   markdown-it-py,
   platformdirs,
-  poetry-core,
+  rich,
+  typing-extensions,
+
+  # optional-dependencies
+  tree-sitter,
+  tree-sitter-languages,
+
+  # tests
+  jinja2,
   pytest-aiohttp,
   pytest-xdist,
   pytestCheckHook,
-  pythonAtLeast,
-  rich,
   syrupy,
   time-machine,
-  tree-sitter,
-  tree-sitter-languages,
-  typing-extensions,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -35,8 +42,8 @@ buildPythonPackage rec {
 
   dependencies =
     [
-      platformdirs
       markdown-it-py
+      platformdirs
       rich
       typing-extensions
     ]
@@ -63,7 +70,7 @@ buildPythonPackage rec {
     # Snapshot tests require syrupy<4
     "tests/snapshot_tests/test_snapshots.py"
 
-    # Flaky
+    # Flaky: https://github.com/Textualize/textual/issues/5511
     # RuntimeError: There is no current event loop in thread 'MainThread'.
     "tests/test_focus.py"
   ];
