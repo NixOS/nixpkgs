@@ -23416,6 +23416,12 @@
     github = "tie";
     githubId = 14792994;
   };
+  tiferrei = {
+    name = "Tiago Ferreira";
+    email = "me@tiferrei.com";
+    github = "tiferrei";
+    githubId = 8849915;
+  };
   tilcreator = {
     name = "TilCreator";
     email = "contact.nixos@tc-j.de";
