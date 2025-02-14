@@ -49,8 +49,7 @@ buildPythonPackage rec {
 
     patchShebangs --build packaging/cli-doc/build.py
 
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools >= 66.1.0, <= 75.6.0" setuptools
+    sed -E 's|"setuptools[0-9 <>=.,]+"|"setuptools"|g' -i pyproject.toml
   '';
 
   nativeBuildInputs = [

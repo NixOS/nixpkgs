@@ -7465,16 +7465,6 @@ with pkgs;
       inherit version;
       hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
     };
-
-    postPatch = ''
-      substituteInPlace lib/ansible/executor/task_executor.py \
-        --replace "[python," "["
-
-      patchShebangs --build packaging/cli-doc/build.py
-
-      substituteInPlace pyproject.toml \
-        --replace-fail "setuptools >= 66.1.0, <= 75.8.0" setuptools
-    '';
   }));
   ansible_2_16 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
     version = "2.16.8";
@@ -7482,13 +7472,6 @@ with pkgs;
       inherit version;
       hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
     };
-
-    postPatch = ''
-      substituteInPlace lib/ansible/executor/task_executor.py \
-        --replace "[python," "["
-
-      patchShebangs --build packaging/cli-doc/build.py
-    '';
   }));
 
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
