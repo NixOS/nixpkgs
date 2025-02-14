@@ -466,7 +466,7 @@ in
                 # Create initial databases
                 if ! test -e "${cfg.dataDir}/${database.name}"; then
                     echo "Creating initial database: ${database.name}"
-                    ( echo 'create database `${database.name}`;'
+                    ( echo 'CREATE DATABASE IF NOT EXISTS `${database.name}`;'
 
                       ${lib.optionalString (database.schema != null) ''
                         echo 'use `${database.name}`;'
