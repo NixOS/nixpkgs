@@ -39,6 +39,7 @@
   llvmPackages,
   meson,
   neovim-unwrapped,
+  nerd-fonts,
   nim1,
   nodePackages,
   nodejs,
@@ -2822,6 +2823,10 @@ in
 
   samodostal-image-nvim = super.samodostal-image-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  screenkey-nvim = super.screenkey-nvim.overrideAttrs {
+    dependencies = [ nerd-fonts.droid-sans-mono ];
   };
 
   scretch-nvim = super.scretch-nvim.overrideAttrs {
