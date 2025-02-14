@@ -33,19 +33,10 @@ if overlappingDeps:
 pyPrjPath = Path("pyproject.toml")
 pyProject = tomlkit.load(pyPrjPath.open())
 
-buildRequires = tomlkit.array()
-# buildRequires.trivia = pyProject['build-system']['requires'].trivia
-for orig in pyProject['build-system']['requires']:
-    req = Requirement(orig)  # Parse the PEP 508 dependency specifier
-    if req.name in removeDeps:
-        print(f"Removing '{req}'")
-    elif req.name in relaxDeps:
-        nreq = relaxDeps[req.name]
-        print(f"Rewriting '{req}' with version(s) '{nreq.specifier}'")
-        buildRequires.append(str(nreq))
-    else:
-        #print(f"Keeping '{orig}'")
-        buildRequires.append(orig)
+pyProject['build-system']['requires'] = [
+    str(relaxDeps[req.name]) if req.name in relaxDeps else orig
+    for req, orig in ((Requirement(orig), orig) for orig in pyProject['build-system']['requires'])
+    if req.name not in removeDeps
+]
 
-pyProject['build-system']['requires'] = buildRequires
 tomlkit.dump(pyProject, pyPrjPath.open("w"))
