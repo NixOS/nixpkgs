@@ -12,22 +12,15 @@ let
   trustedHostsFile = pkgs.writeText "TrustedHosts" (lib.concatStringsSep "\n" cfg.trustedHosts);
 
   mergedSettings =
-    if cfg.domainConfigs != { } then
-      (lib.optionalAttrs (cfg.trustedHosts != [ ]) {
-        InternalHosts = "refile:/etc/opendkim/TrustedHosts";
-        ExternalIgnoreList = "refile:/etc/opendkim/TrustedHosts";
-      })
-      // cfg.settings
-      // {
-        KeyTable = "refile:${cfg.keyPath}/KeyTable";
-        SigningTable = "refile:${cfg.keyPath}/SigningTable";
-      }
-    else
-      (lib.optionalAttrs (cfg.trustedHosts != [ ]) {
-        InternalHosts = "refile:/etc/opendkim/TrustedHosts";
-        ExternalIgnoreList = "refile:/etc/opendkim/TrustedHosts";
-      })
-      // cfg.settings;
+    (lib.optionalAttrs (cfg.trustedHosts != [ ]) {
+      InternalHosts = "refile:/etc/opendkim/TrustedHosts";
+      ExternalIgnoreList = "refile:/etc/opendkim/TrustedHosts";
+    })
+    // cfg.settings
+    // lib.optionalAttrs (cfg.domainConfigs != { }) {
+      KeyTable = "refile:${cfg.keyPath}/KeyTable";
+      SigningTable = "refile:${cfg.keyPath}/SigningTable";
+    };
 
   configFile = pkgs.writeText "opendkim.conf" (
     lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") mergedSettings)
@@ -160,6 +153,15 @@ in
           These hosts will be added to TrustedHosts file used by InternalHosts and ExternalIgnoreList.
         '';
       };
+
+      keySize = lib.mkOption {
+        type = lib.types.int;
+        default = 2048;
+        description = ''
+          Key size in bits for RSA key generation.
+          Common values are 1024, 2048, or 4096.
+        '';
+      };
     };
   };
 
@@ -206,11 +208,9 @@ in
               lib.mapAttrsToList (domain: conf: ''
                 mkdir -p "${cfg.keyPath}/${domain}"
                 if ! test -f ${domain}/${conf.selector}.private; then
-                  ${pkgs.opendkim}/bin/opendkim-genkey -s ${conf.selector} -d ${domain} -D "${cfg.keyPath}/${domain}"
+                  ${pkgs.opendkim}/bin/opendkim-genkey -b ${toString cfg.keySize} -s ${conf.selector} -d ${domain} -D "${cfg.keyPath}/${domain}"
                   echo "Generated OpenDKIM key for ${domain}! Please update your DNS settings:\n"
-                  echo "-------------------------------------------------------------"
                   cat ${domain}/${conf.selector}.txt
-                  echo "-------------------------------------------------------------"
                 fi
               '') cfg.domainConfigs
             )}
@@ -236,11 +236,9 @@ in
           ''
             cd "${cfg.keyPath}"
             if ! test -f ${cfg.selector}.private; then
-              ${pkgs.opendkim}/bin/opendkim-genkey -s ${cfg.selector} -d all-domains-generic-key
+              ${pkgs.opendkim}/bin/opendkim-genkey -b ${toString cfg.keySize} -s ${cfg.selector} -d all-domains-generic-key
               echo "Generated OpenDKIM key! Please update your DNS settings:\n"
-              echo "-------------------------------------------------------------"
               cat ${cfg.selector}.txt
-              echo "-------------------------------------------------------------"
             fi
           '';
 
