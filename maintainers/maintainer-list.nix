@@ -13942,6 +13942,11 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
+  lyranico = {
+    name = "lyranico";
+    github = "lyranico";
+    githubId = 196136652;
+  };
   m00wl = {
     name = "Moritz Lumme";
     email = "moritz.lumme@gmail.com";
