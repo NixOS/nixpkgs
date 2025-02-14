@@ -14,7 +14,7 @@
   mpiCheckPhaseHook,
 
   # Build options
-  petsc-optimized ? false,
+  petsc-optimized ? true,
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
   mpiSupport ? true,
@@ -22,7 +22,7 @@
   withFullDeps ? false, # full External libraries support
 
   # External libraries options
-  withHdf5 ? withFullDeps,
+  withHdf5 ? true,
   withMetis ? withFullDeps,
   withParmetis ? false, # parmetis is unfree and should be enabled manualy
   withPtscotch ? withFullDeps,

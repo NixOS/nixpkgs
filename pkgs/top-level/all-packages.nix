@@ -17072,14 +17072,6 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
-  ### SCIENCE/GEOLOGY
-  pflotran = callPackage ../by-name/pf/pflotran/package.nix {
-    petsc = petsc.override {
-      withHdf5 = true;
-      petsc-optimized = true;
-    };
-  };
-
   ### SCIENCE/LOGIC
 
   abella = callPackage ../applications/science/logic/abella {
