@@ -54,8 +54,8 @@ import ../make-test-python.nix (
   {
 
     name = "matrix-synapse";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      inherit (pkgs.matrix-synapse.meta) maintainers;
     };
 
     nodes = {
