@@ -90,5 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marius851000 ];
     platforms = with lib.platforms; linux;
+    # pcl/io/io.h: No such file or directory
+    broken = true;
   };
 })
