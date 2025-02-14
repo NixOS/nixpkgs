@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-g7YIUjLRWIw3ncm5yuR7s3QHzyYubnSZPGG6ctKnhNw=";
   };
 
+  patches = [
+    ./oob-read.patch
+  ];
+
   outputs = [
     "out"
     "lib"
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 
