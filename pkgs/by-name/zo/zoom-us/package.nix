@@ -40,6 +40,7 @@
   pulseaudioSupport ? true,
   libpulseaudio,
   pulseaudio,
+  callPackage,
 }:
 
 let
@@ -50,23 +51,23 @@ let
   # and often with different versions. We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.3.1.45300";
-  versions.x86_64-darwin = "6.3.1.45300";
-  versions.x86_64-linux = "6.2.11.5069";
+  versions.aarch64-darwin = "6.3.6.47101";
+  versions.x86_64-darwin = "6.3.6.47101";
+  versions.x86_64-linux = "6.3.6.6315";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-WPhqYof/XR6TDkuA4NK2a30ksdhN7NBfs4KCQwqKJ0g=";
+      hash = "sha256-tqDf3Z5RRf4aRvtINWdM3oppZXbDdtihhPBHu4QxzDM=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-BywBvJCcNXARHTkO/UJbOFRjuiXRkmFWmSuZsW9t1pk=";
+      hash = "sha256-BZkBx5eZ3c3p9JIz+ChyJrGM12HwyNToSuS86f9QnF0=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-k8T/lmfgAFxW1nwEyh61lagrlHP5geT2tA7e5j61+qw=";
+      hash = "sha256-QJR8SsMtyYBvd5G+mEjEEISkJJukCYeHErKrgs1uDQc=";
     };
   };
 
@@ -122,6 +123,7 @@ let
       coreutils
       glib.dev
       pciutils
+      pipewire
       procps
       util-linux
     ]
@@ -179,7 +181,7 @@ stdenv.mkDerivation {
       substituteInPlace $out/share/applications/Zoom.desktop \
           --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-      for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
+      for i in aomhost zopen ZoomLauncher ZoomWebviewHost; do
         if [ -f $out/opt/zoom/$i ]; then
           patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
         fi
@@ -187,8 +189,14 @@ stdenv.mkDerivation {
 
       # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
       # IPC breaks if the executable name does not end in 'zoom'
+      # zoom binary does not like being touched by patchelf
+      #   => we call it indirectly via the dynamic linker
+      # zoom binary inspects /proc/self/exe to find its data files
+      #   => we must place a copy (not symlink) of the linker in zoom's data dir
       mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
-      makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
+      cp "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/ld.so
+      makeWrapper $out/opt/zoom/ld.so $out/opt/zoom/zoom \
+        --add-flags $out/opt/zoom/.zoom \
         --prefix LD_LIBRARY_PATH ":" ${libs}
 
       rm $out/bin/zoom
@@ -220,6 +228,7 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.startwindow = callPackage ./test.nix { };
 
   meta = with lib; {
     homepage = "https://zoom.us/";

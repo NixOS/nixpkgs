@@ -1,15 +1,18 @@
 {
   lib,
   gccStdenv,
+  cudaPackages,
   fetchFromGitLab,
-  cudatoolkit,
   config,
   cudaSupport ? config.cudaSupport,
   pkg-config,
   versionCheckHook,
 }:
 
-gccStdenv.mkDerivation rec {
+let
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else gccStdenv;
+in
+stdenv.mkDerivation rec {
   pname = "truecrack";
   version = "3.6";
 
@@ -22,12 +25,14 @@ gccStdenv.mkDerivation rec {
 
   patches = [
     ./fix-empty-return.patch
+    ./remove-opencc-options.patch
+    ./set-cuda-archs.patch
   ];
 
   configureFlags = (
     if cudaSupport then
       [
-        "--with-cuda=${cudatoolkit}"
+        "--with-cuda=${cudaPackages.cudatoolkit}"
       ]
     else
       [
@@ -40,7 +45,8 @@ gccStdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals cudaSupport [
-    cudatoolkit
+    cudaPackages.cudatoolkit
+    cudaPackages.cuda_cudart
   ];
 
   env.NIX_CFLAGS_COMPILE = toString ([
@@ -61,7 +67,7 @@ gccStdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  doInstallCheck = true;
+  doInstallCheck = !cudaSupport;
 
   installCheckPhase = ''
     runHook preInstallCheck
@@ -88,7 +94,6 @@ gccStdenv.mkDerivation rec {
     description = "Brute-force password cracker for TrueCrypt volumes, optimized for Nvidia Cuda technology";
     mainProgram = "truecrack";
     homepage = "https://gitlab.com/kalilinux/packages/truecrack";
-    broken = cudaSupport;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
