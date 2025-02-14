@@ -57,6 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/previewqt.app $out/Applications
+    makeWrapper $out/{Applications/previewqt.app/Contents/MacOS,bin}/previewqt
+  '';
+
   meta = {
     homepage = "https://previewqt.org/";
     description = "Qt-based file previewer";
@@ -93,6 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "previewqt";
     maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
