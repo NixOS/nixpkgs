@@ -563,4 +563,6 @@ in
       ];
     };
   };
+
+  meta.maintainers = [ lib.maintainers._6543 ];
 }
