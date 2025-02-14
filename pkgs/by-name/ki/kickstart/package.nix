@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-J9sGXJbGbO9UgZfgqxqzbiJz9j6WMpq3qC2ys7OJnII=";
 
+  buildFeatures = [ "cli" ];
+
   checkFlags = [
     # remote access
     "--skip=generation::tests::can_generate_from_remote_repo_with_subdir"
