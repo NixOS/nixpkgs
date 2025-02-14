@@ -197,6 +197,10 @@ let
       runHook postInstall
     '';
 
+    passthru = {
+      inherit (vmr) icu;
+    };
+
     meta = vmr.meta // {
       mainProgram = "dotnet";
     };
@@ -223,6 +227,10 @@ let
 
       runHook postInstall
     '';
+
+    passthru = {
+      inherit (vmr) icu;
+    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";
