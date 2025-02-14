@@ -10283,7 +10283,7 @@ with pkgs;
 
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
-    buildPythonApplication click future six;
+    buildPythonApplication click;
   };
 
   prospector = callPackage ../development/tools/prospector { };
