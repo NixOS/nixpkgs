@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "inter";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchzip {
     url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
