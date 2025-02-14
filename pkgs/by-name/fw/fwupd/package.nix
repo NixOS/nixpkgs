@@ -6,6 +6,7 @@
   lib,
   fetchFromGitHub,
   gi-docgen,
+  writableTmpDirAsHomeHook,
   pkg-config,
   gobject-introspection,
   gettext,
@@ -182,6 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
       vala
       gobject-introspection
       gi-docgen
+
+      # jcat-tool at buildtime requires a home directory
+      writableTmpDirAsHomeHook
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       mesonEmulatorHook
@@ -285,11 +289,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
     sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
-  '';
-
-  preBuild = ''
-    # jcat-tool at buildtime requires a home directory
-    export HOME="$(mktemp -d)"
   '';
 
   preCheck = ''
