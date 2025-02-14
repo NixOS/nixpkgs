@@ -433,6 +433,25 @@ in
             done
           ''}
 
+          ${lib.optionalString isMariaDB ''
+            # If MariaDB is used in an Galera cluster, we have to check if the sync is done,
+            # or it will fail to init the database while joining, so we get in an broken non recoverable state
+            # so we wait until we have an synced state
+            if ${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW VARIABLES LIKE 'wsrep_on'" 2>/dev/null | ${lib.getExe' pkgs.gnugrep "grep"} -q 'ON'; then
+              echo "Galera cluster detected, waiting for node to be synced..."
+              while true; do
+                STATE=$(${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW STATUS LIKE 'wsrep_local_state_comment'" | ${lib.getExe' pkgs.gawk "awk"} '{print $2}')
+                if [ "$STATE" = "Synced" ]; then
+                  echo "Node is synced"
+                  break
+                else
+                  echo "Current state: $STATE - Waiting for 1 second..."
+                  sleep 1
+                fi
+              done
+            fi
+          ''}
+
           if [ -f ${cfg.dataDir}/mysql_init ]
           then
               # While MariaDB comes with a 'mysql' super user account since 10.4.x, MySQL does not
