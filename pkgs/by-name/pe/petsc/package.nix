@@ -31,7 +31,7 @@
   withP4est ? withFullDeps,
 
   # External libraries
-  hdf5,
+  hdf5-fortran-mpi,
   metis,
   parmetis,
   scotch,
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       blas
       lapack
     ]
-    ++ lib.optional withHdf5 hdf5
+    ++ lib.optional withHdf5 hdf5-fortran-mpi
     ++ lib.optional withP4est p4est
     ++ lib.optional withMetis metis
     ++ lib.optional withParmetis parmetis
@@ -147,8 +147,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withHdf5 [
       "--with-hdf5=1"
       "--with-hdf5-fortran-bindings=1"
-      "--with-hdf5-include=${lib.getDev hdf5}/include"
-      "--with-hdf5-lib=[-L${lib.getLib hdf5}/lib,-lhdf5]"
+      "--with-hdf5-include=${lib.getDev hdf5-fortran-mpi}/include"
+      "--with-hdf5-lib=[-L${lib.getLib hdf5-fortran-mpi}/lib,-lhdf5]"
     ]
     ++ lib.optionals petsc-optimized [
       "--with-debugging=0"
