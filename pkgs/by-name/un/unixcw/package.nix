@@ -6,6 +6,8 @@
   alsa-lib,
   pkg-config,
   qt5,
+  ncurses,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +21,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-use-of-dlopen.patch
+
+    # fix pkg-config searching for ncurses
+    # yoinked from gentoo (https://gitweb.gentoo.org/repo/gentoo.git/tree/media-radio/unixcw/files/unixcw-3.6-tinfo.patch), with modifications
+    ./unixcw-3.6-tinfo.patch
   ];
 
+  postPatch = ''
+    substituteInPlace src/cwcp/Makefile.am \
+      --replace-fail '-lcurses' '-lncurses'
+  '';
+
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
     qt5.wrapQtAppsHook
   ];
@@ -30,6 +42,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     alsa-lib
     qt5.qtbase
+    ncurses
   ];
 
   CFLAGS = "-lasound -lpulse-simple";
