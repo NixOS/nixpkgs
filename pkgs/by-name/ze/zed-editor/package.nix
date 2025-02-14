@@ -96,7 +96,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.172.11";
+  version = "0.173.8";
 
   outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-ozPARaFIPJZHsxB9e9c12nVuV/jGBRBXQJ1M+/luExY=";
+    hash = "sha256-xAmPfCRzgsH5305GTJj9000Jd8AQVyFzI3jVAcTGfYo=";
   };
 
   patches = [
@@ -124,7 +124,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3xpsTAj4jrttMZIbZCZc2Qf7g3Q4B6FBSUYEHf0u2+w=";
+  cargoHash = "sha256-4MIfIU4z/Ot6XczmnCXKhE+DiR4vSguStgZLImXQ6Cg=";
 
   nativeBuildInputs =
     [

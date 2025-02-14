@@ -7,6 +7,7 @@
   pythonOlder,
   setuptools,
   typing-extensions,
+  cached-property,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ typing-extensions ];
+  dependencies = [
+    typing-extensions
+    cached-property
+  ];
 
   nativeCheckInputs = [
     pydantic

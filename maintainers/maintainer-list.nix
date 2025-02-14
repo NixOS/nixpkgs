@@ -11418,6 +11418,12 @@
     github = "jordanisaacs";
     githubId = 19742638;
   };
+  jorikvanveen = {
+    email = "vanveenjorik@protonmail.com";
+    github = "jorikvanveen";
+    githubId = 33939820;
+    name = "Jorik van Veen";
+  };
   jorise = {
     email = "info@jorisengbers.nl";
     github = "JorisE";
