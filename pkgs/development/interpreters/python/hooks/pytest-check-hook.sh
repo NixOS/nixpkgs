@@ -44,5 +44,5 @@ EOF
 
 if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using pytestCheckPhase"
-    appendToVar preDistPhases pytestCheckPhase
+    installCheckPhase=pytestCheckPhase
 fi
