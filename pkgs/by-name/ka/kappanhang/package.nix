@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   pulseaudio,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -21,6 +22,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pulseaudio ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/nonoo/kappanhang";
