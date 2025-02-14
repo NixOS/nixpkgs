@@ -6578,7 +6578,6 @@ with pkgs;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
   rust_1_84 = callPackage ../development/compilers/rust/1_84.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_19 = llvmPackages_19.libllvm;
   };
   rust = rust_1_84;
