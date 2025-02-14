@@ -429,6 +429,14 @@ package-maintainers:
     - taffybar
     - arbtt
     - lentil
+  sellout:
+    - dualizer
+    - no-recursion
+    - yaya
+    - yaya-containers
+    - yaya-hedgehog
+    - yaya-quickcheck
+    - yaya-unsafe
   sheepforce:
     - mpi-hs
     - mpi-hs-store
