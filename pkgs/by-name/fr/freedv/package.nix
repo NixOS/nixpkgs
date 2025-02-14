@@ -18,6 +18,7 @@
   wxGTK32,
   sioclient,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,6 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/FreeDV.app $out/Applications
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid pre‐releases
+      "--version-regex"
+      ''^v(\d\.\d\.\d(\.\d)?)$''
+    ];
+  };
 
   meta = {
     homepage = "https://freedv.org/";
