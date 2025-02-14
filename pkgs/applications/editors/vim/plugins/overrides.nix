@@ -2041,6 +2041,15 @@ in
     nvimSkipModule = "neotest-jest-assertions";
   };
 
+  neotest-mocha = super.neotest-mocha.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      nvim-treesitter
+      plenary-nvim
+    ];
+  };
+
   neotest-minitest = super.neotest-minitest.overrideAttrs {
     dependencies = with self; [
       neotest

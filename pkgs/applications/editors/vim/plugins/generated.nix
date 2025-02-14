@@ -8888,6 +8888,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  neotest-mocha = buildVimPlugin {
+    pname = "neotest-mocha";
+    version = "2024-07-30";
+    src = fetchFromGitHub {
+      owner = "adrigzr";
+      repo = "neotest-mocha";
+      rev = "8239023d299a692784176f202f6a4a5e0a698ad2";
+      sha256 = "sha256-Fbe7xuu5Qy6GXKsvQbVcE5oG7dgKjghuX470V7sjmqA=";
+    };
+    meta.homepage = "https://github.com/adrigzr/neotest-mocha";
+    meta.hydraPlatforms = [ ];
+  };
+
   neotest-pest = buildVimPlugin {
     pname = "neotest-pest";
     version = "2024-02-16";
