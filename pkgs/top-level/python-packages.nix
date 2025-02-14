@@ -6492,6 +6492,8 @@ self: super: with self; {
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
+  ipylab = callPackage ../development/python-modules/ipylab { };
+
   ipynbname = callPackage ../development/python-modules/ipynbname { };
 
   ipyniivue = callPackage ../development/python-modules/ipyniivue { };
@@ -16243,9 +16245,13 @@ self: super: with self; {
 
   textual = callPackage ../development/python-modules/textual { };
 
+  textual-autocomplete = callPackage ../development/python-modules/textual-autocomplete { };
+
   textual-dev = callPackage ../development/python-modules/textual-dev { };
 
   textual-fastdatatable = callPackage ../development/python-modules/textual-fastdatatable { };
+
+  textual-serve = callPackage ../development/python-modules/textual-serve { };
 
   textual-slider = callPackage ../development/python-modules/textual-slider { };
 
