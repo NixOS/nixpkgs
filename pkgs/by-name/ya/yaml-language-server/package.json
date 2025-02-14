@@ -1,0 +1,108 @@
+{
+  "name": "yaml-language-server",
+  "description": "YAML language server",
+  "version": "1.15.0",
+  "author": "Gorkem Ercan (Red Hat)",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Joshua Pinkney",
+      "email": "joshpinkney@gmail.com"
+    },
+    {
+      "name": "Yevhen Vydolob",
+      "email": "yvydolob@redhat.com"
+    },
+    {
+      "name": "Google LLC"
+    }
+  ],
+  "bin": {
+    "yaml-language-server": "./bin/yaml-language-server"
+  },
+  "main": "./out/server/src/index.js",
+  "keywords": [
+    "yaml",
+    "LSP"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redhat-developer/yaml-language-server.git"
+  },
+  "optionalDependencies": {
+    "prettier": "2.8.7"
+  },
+  "dependencies": {
+    "ajv": "^8.11.0",
+    "lodash": "4.17.21",
+    "request-light": "^0.5.7",
+    "vscode-json-languageservice": "4.1.8",
+    "vscode-languageserver": "^7.0.0",
+    "vscode-languageserver-textdocument": "^1.0.1",
+    "vscode-languageserver-types": "^3.16.0",
+    "vscode-nls": "^5.0.0",
+    "vscode-uri": "^3.0.2",
+    "yaml": "2.2.2"
+  },
+  "devDependencies": {
+    "@microsoft/eslint-formatter-sarif": "3.0.0",
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "8.2.2",
+    "@types/node": "16.x",
+    "@types/prettier": "2.7.2",
+    "@types/sinon": "^9.0.5",
+    "@types/sinon-chai": "^3.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "chai": "^4.2.0",
+    "coveralls": "3.1.1",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "http-proxy-agent": "^5.0.0",
+    "https-proxy-agent": "^5.0.0",
+    "mocha": "9.2.2",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
+    "sinon": "^9.0.3",
+    "sinon-chai": "^3.5.0",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.8.3"
+  },
+  "scripts": {
+    "clean": "rimraf out/server && rimraf lib",
+    "compile": "tsc -p .",
+    "watch": "tsc --watch -p .",
+    "test": "mocha --require ts-node/register --timeout 5000 --ui bdd ./test/*.test.ts",
+    "coverage": "nyc mocha --require ts-node/register --timeout 5000 --require source-map-support/register --recursive --ui bdd ./test/*.test.ts",
+    "coveralls": "nyc --reporter=lcov --reporter=text mocha --timeout 5000 --require ts-node/register --require source-map-support/register --recursive --ui bdd ./test/*.test.ts",
+    "lint": "eslint --max-warnings 0 -c .eslintrc.js --ext .ts src test",
+    "lint-ci": "eslint --max-warnings 0 -c .eslintrc.js -f @microsoft/eslint-formatter-sarif -o eslint-result.sarif --ext .ts src test",
+    "prettier-fix": "yarn prettier --write .",
+    "build": "yarn clean && yarn lint && yarn compile && yarn build:libs",
+    "build:libs": "yarn compile:umd && yarn compile:esm",
+    "compile:umd": "tsc -p ./tsconfig.umd.json",
+    "compile:esm": "tsc -p ./tsconfig.esm.json",
+    "check-dependencies": "node ./scripts/check-dependencies.js",
+    "pull-remote": "git pull https://github.com/redhat-developer/yaml-language-server.git main"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "test/",
+      "out",
+      "lib",
+      "coverage/",
+      ".eslintrc.js",
+      "scripts"
+    ],
+    "all": true
+  }
+}

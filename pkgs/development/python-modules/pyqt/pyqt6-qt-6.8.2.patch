@@ -1,0 +1,12 @@
+diff -ru PyQt6-6.8.0.orig/sip/QtCore/qstringconverter_base.sip PyQt6-6.8.0/sip/QtCore/qstringconverter_base.sip
+--- PyQt6-6.8.0.orig/sip/QtCore/qstringconverter_base.sip       2025-01-31 12:23:09.006305233 +0100
++++ PyQt6-6.8.0/sip/QtCore/qstringconverter_base.sip    2025-01-31 12:28:34.695224379 +0100
+@@ -22,7 +22,7 @@
+ 
+ %If (Qt_6_4_0 -)
+ 
+-class QStringConverterBase
++class QStringConverterBase /NoDefaultCtors/
+ {
+ %TypeHeaderCode
+ #include <qstringconverter_base.h>
