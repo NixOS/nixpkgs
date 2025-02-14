@@ -4780,7 +4780,7 @@ with pkgs;
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
-  rtabmap = libsForQt5.callPackage ../applications/video/rtabmap/default.nix {
+  rtabmap = callPackage ../by-name/rt/rtabmap/package.nix {
     pcl = pcl.override { vtk = vtkWithQt5; };
   };
 
@@ -10217,10 +10217,6 @@ with pkgs;
   openwebrx = callPackage ../applications/radio/openwebrx {
     inherit (python3Packages)
     buildPythonPackage buildPythonApplication setuptools pycsdr pydigiham;
-  };
-
-  pcl = libsForQt5.callPackage ../development/libraries/pcl {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa AGL OpenGL;
   };
 
   pcre = callPackage ../development/libraries/pcre { };
