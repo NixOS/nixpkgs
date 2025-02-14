@@ -23767,7 +23767,10 @@
     githubId = 208010;
   };
   transgirl_lucy = {
+<<<<<<< HEAD
     name = "transgirl_lucy";
+=======
+>>>>>>> 89e292dc4 (maintainers: added transgirllucy to maintainers)
     email = "lucy@nix2twink.gay";
     github = "transgirllucy";
     githubId = 69870860;
