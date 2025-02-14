@@ -20,14 +20,14 @@
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";
   version = "1.9.9.2";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "freedv";
   };
-}
+})
