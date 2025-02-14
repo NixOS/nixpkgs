@@ -1494,6 +1494,8 @@ let
         # https://github.com/polymode/poly-R/issues/41
         poly-R = addPackageRequires super.poly-R [ self.ess ];
 
+        poly-gams = ignoreCompilationError super.poly-gams; # need gams in PATH during compilation
+
         # missing optional dependencies: direx e2wm yaol, yaol not on any ELPA
         pophint = ignoreCompilationError super.pophint;
 
