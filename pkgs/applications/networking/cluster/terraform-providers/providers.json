@@ -1092,6 +1092,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "sakuracloud": {
+    "hash": "sha256-KrzqIAK6ImUW22Iik97R4HARoXN4lG6AquitLjCqS/A=",
+    "homepage": "https://registry.terraform.io/providers/sacloud/sakuracloud",
+    "owner": "sacloud",
+    "repo": "terraform-provider-sakuracloud",
+    "rev": "v2.26.1",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-Ry791h5AuYP03nex9nM8X5Mk6PeL7hNDbFyVRvVPJNE="
+  },
   "scaleway": {
     "hash": "sha256-8aESalFQaA6Qwod4rDeUzrKe80rbHfVJZIKtLliKUME=",
     "homepage": "https://registry.terraform.io/providers/scaleway/scaleway",
