@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     description = "Opensource project that aims to create a Graphical UI to help manage Linux overlays";
     homepage = "https://github.com/benjamimgois/goverlay";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ RoGreat ];
     platforms = platforms.linux;
     mainProgram = "goverlay";
   };
