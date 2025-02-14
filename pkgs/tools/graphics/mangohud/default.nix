@@ -128,6 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
+
+    # Fix crash when starting hidden
+    # Upstream PR: https://github.com/flightlessmango/MangoHud/pull/1570
+    # FIXME: remove when merged
+    ./fix-crash.patch
   ];
 
   postPatch = ''
