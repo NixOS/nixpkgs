@@ -23767,6 +23767,7 @@
     githubId = 208010;
   };
   transgirl_lucy = {
+    name = "transgirl_lucy";
     email = "lucy@nix2twink.gay";
     github = "transgirllucy";
     githubId = 69870860;
