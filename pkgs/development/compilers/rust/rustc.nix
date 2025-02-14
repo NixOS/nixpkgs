@@ -157,23 +157,22 @@ stdenv.mkDerivation (finalAttrs: {
         concatStringsSep "," (
           [
             stdenv.targetPlatform.rust.rustcTargetSpec
-
-            # Other targets that don't need any extra dependencies to build.
           ]
+          # Other targets that don't need any extra dependencies to build.
           ++ optionals (!fastCross) [
             "wasm32-unknown-unknown"
-
-            # (build!=target): When cross-building a compiler we need to add
-            # the build platform as well so rustc can compile build.rs
-            # scripts.
+            "bpfel-unknown-none"
+            "bpfeb-unknown-none"
           ]
+          # (build!=target): When cross-building a compiler we need to add
+          # the build platform as well so rustc can compile build.rs
+          # scripts.
           ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
             stdenv.buildPlatform.rust.rustcTargetSpec
-
-            # (host!=target): When building a cross-targeting compiler we
-            # need to add the host platform as well so rustc can compile
-            # build.rs scripts.
           ]
+          # (host!=target): When building a cross-targeting compiler we
+          # need to add the host platform as well so rustc can compile
+          # build.rs scripts.
           ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
             stdenv.hostPlatform.rust.rustcTargetSpec
           ]
