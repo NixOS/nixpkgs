@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     qt6Packages.qtbase
   ];
 
-  NIX_LDFLAGS = "-lGLU -rpath ${lib.makeLibraryPath buildInputs}";
+  NIX_LDFLAGS = "-lGLU -lGL -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     runHook preBuild
