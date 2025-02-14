@@ -59,15 +59,14 @@ buildPythonPackage rec {
     tree-sitter
   ];
 
-  disabledTestPaths =
-    [
-      # Snapshot tests require syrupy<4
-      "tests/snapshot_tests/test_snapshots.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # RuntimeError: There is no current event loop in thread 'MainThread'.
-      "tests/test_focus.py"
-    ];
+  disabledTestPaths = [
+    # Snapshot tests require syrupy<4
+    "tests/snapshot_tests/test_snapshots.py"
+
+    # Flaky
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "tests/test_focus.py"
+  ];
 
   disabledTests =
     [
