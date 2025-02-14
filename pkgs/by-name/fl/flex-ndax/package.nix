@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   libpulseaudio,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -20,6 +21,8 @@ buildGoModule rec {
   buildInputs = [ libpulseaudio ];
 
   vendorHash = "sha256-05LWJm4MoJqjJaFrBZvutKlqSTGl4dSp433AfHHO6LU=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
