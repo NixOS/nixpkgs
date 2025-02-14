@@ -36,32 +36,32 @@
 # the installPath using the installer:
 # $ nix-env -iA conda
 # $ conda-shell
-# $ conda-install
+# $ install-conda
 #
 # Under normal usage, simply call `conda-shell` to activate the FHS env,
 # and then use conda commands as normal:
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "24.9.2";
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system}
-      or (throw "conda: ${stdenv.hostPlatform.system} is not supported");
+  version = "25.1.1";
+
   src =
     let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system}
+          or (throw "conda: ${stdenv.hostPlatform.system} is not supported");
       arch = selectSystem {
         x86_64-linux = "x86_64";
         aarch64-linux = "aarch64";
       };
-      hash = selectSystem {
-        x86_64-linux = "sha256-jZNrpgAwDgjso9h03uiMYcbzkwNZeytmuu5Ur097QSI=";
-        aarch64-linux = "sha256-hrjfdIFkbPh+d4c+l4mtt1abWCSNOqYp6y2jXm8uLu0=";
-      };
     in
     fetchurl {
       url = "https://repo.anaconda.com/miniconda/Miniconda3-py312_${version}-0-Linux-${arch}.sh";
-      inherit hash;
+      hash = selectSystem {
+        x86_64-linux = "sha256-gy3ielo1t5Y/DYNGarraPrE45RmFJV8ZDg3DUEJ6ndE=";
+        aarch64-linux = "sha256-rp0+qD35fnj9UcRS0Lx1AFoo1QTCLbbxAAgiKT+Ra1Q=";
+      };
     };
 
   conda = (
@@ -70,7 +70,7 @@ let
         zlib # libz.so.1
       ];
     in
-    runCommand "conda-install"
+    runCommand "install-conda"
       {
         nativeBuildInputs = [ makeWrapper ];
         buildInputs = [ zlib ];
@@ -89,16 +89,18 @@ let
 
         makeWrapper                            \
           $out/bin/miniconda-installer.sh      \
-          $out/bin/conda-install               \
+          $out/bin/install-conda               \
           --add-flags "-p ${installationPath}" \
           --add-flags "-b"                     \
           --prefix "LD_LIBRARY_PATH" : "${libPath}"
       ''
   );
 in
+
 buildFHSEnv {
   pname = "conda-shell";
   inherit version;
+
   targetPkgs =
     pkgs:
     (builtins.concatLists [
@@ -106,6 +108,7 @@ buildFHSEnv {
       condaDeps
       extraPkgs
     ]);
+
   profile = ''
     # Add conda to PATH
     export PATH=${installationPath}/bin:$PATH
@@ -119,7 +122,7 @@ buildFHSEnv {
     # Allows `conda activate` to work properly
     condaSh=${installationPath}/etc/profile.d/conda.sh
     if [ ! -f $condaSh ]; then
-      conda-install
+      install-conda
     fi
     source $condaSh
   '';
