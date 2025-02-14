@@ -116,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix references to gettext introduced by ./git-sh-i18n.patch
       substituteInPlace git-sh-i18n.sh \
           --subst-var-by gettext ${gettext}
-
+    ''
+    + lib.optionalString doInstallCheck ''
       # ensure we are using the correct shell when executing the test scripts
       patchShebangs t/*.sh
     ''
