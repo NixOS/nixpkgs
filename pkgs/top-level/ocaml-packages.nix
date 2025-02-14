@@ -38,6 +38,8 @@ let
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
+    arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
+
     arp = callPackage ../development/ocaml-modules/arp { };
 
     asai = callPackage ../development/ocaml-modules/asai { };
