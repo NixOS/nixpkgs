@@ -27,7 +27,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LcHloc4iHDgP6RCwFvJM6GfzTRd3RqYo0medjEhmj6M=";
   };
 

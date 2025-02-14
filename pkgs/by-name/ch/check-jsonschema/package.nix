@@ -16,7 +16,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Z/v/a0zENH8K1NHCZViLBbc8gma5rTMBm8hatHhu878=";
   };
 

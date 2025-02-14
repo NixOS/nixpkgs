@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = "asyncwhois";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y5JmAbrk9qJeNYejNcz5nI5bghaetUw1xkD8qgwOkao=";
   };
 

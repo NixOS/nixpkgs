@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xeol-io";
     repo = "xeol";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4fMH07XKMnpX54mS9pAuTBiHcP6nXj8vpuk3f/3ik+k=";
   };
 

@@ -31,7 +31,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WYy/6cWQg3Ayok/eAdnvlWAvdcuhy/sdlWOVvaYcPkc=";
   };
 

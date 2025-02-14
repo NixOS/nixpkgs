@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "smbclient-ng";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-T1OAiRL7AGMz12dFIPOESS77lVd62iaBt9vXCdzqJBQ=";
   };
 

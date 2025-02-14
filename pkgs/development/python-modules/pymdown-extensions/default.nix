@@ -51,7 +51,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1AuN2kp7L6w8RvKky3IoX4ht9uQL6o2nm6dTDo/INC0=";
   };
 

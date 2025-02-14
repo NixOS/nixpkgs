@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kha-white";
     repo = "manga-ocr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uSWnrHS59fNcF7ve3imMwwNJ+/dmplBAavbDoBkEgGc=";
   };
 

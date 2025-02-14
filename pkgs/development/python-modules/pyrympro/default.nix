@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "pyrympro";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mRvKLPgtBgmFDTHqra7GslxsgsJpQ2w/DE0Zgz5jujk=";
   };
 

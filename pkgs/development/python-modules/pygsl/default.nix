@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-85j57gzvomhBX/+Dif8IoMpNE9vJvyHPFHchKRF9OQM=";
   };
 

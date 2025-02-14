@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DeXmKswapXPYGTiJLq2yvCwJywCNl79XYHSau0VCCIY=";
   };
 

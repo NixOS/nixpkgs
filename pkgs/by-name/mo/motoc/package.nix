@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AmHTnCUTHoeLsOJrD35BooU9mZr5ctoCJmjW5CaTYBY=";
   };
 

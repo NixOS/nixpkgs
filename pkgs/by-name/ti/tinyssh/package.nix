@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "tinyssh";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wO0fGr+pU+Y5YCZMRGNOZ6pJeCUIc64TzmRAaQCnBxk=";
   };
 

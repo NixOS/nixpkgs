@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9VoJyQfT9rUXK1vkQrUPvWogVYTbDLhSq3JDu3gJwg8=";
   };
 

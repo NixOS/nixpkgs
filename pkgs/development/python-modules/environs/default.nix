@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "environs";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9BqIlA2HcUlBiyTB7zxaLO0CzBRkx5mKMMdhvdr2Uqg=";
   };
 

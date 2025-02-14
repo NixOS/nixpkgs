@@ -37,7 +37,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-527cHPFdFw/JajHe7Kkz7+zl4EfePaLx77I2OTjjxaA=";
   };
 

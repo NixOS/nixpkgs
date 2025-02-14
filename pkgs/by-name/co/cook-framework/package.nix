@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "glitchedgitz";
     repo = "cook";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DK0kbvM11t64nGkrzThZgSruHTCHAPP374YPWmoM50g=";
   };
 

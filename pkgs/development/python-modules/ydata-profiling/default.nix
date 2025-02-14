@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ydataai";
     repo = "ydata-profiling";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-G1qW6HcJi176nfxOBGBK2tLyY/Nnz9STYpZWluWvhP0=";
   };
 

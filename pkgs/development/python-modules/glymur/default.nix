@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quintusdias";
     repo = "glymur";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RzRZuSNvlUrB+J93a1ob7dDMacZB082JwVHQ9Fce2JA=";
   };
 

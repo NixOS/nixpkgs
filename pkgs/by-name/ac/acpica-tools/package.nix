@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
-    rev = "refs/tags/version-${version}";
+    tag = "version-${version}";
     hash = "sha256-RlhKBvydesUdBaFUHk3sSM6SRIZ7q5IqnibX+hps+Tc=";
   };
 

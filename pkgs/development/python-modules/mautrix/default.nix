@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g6y2u3ipSp5HoakHqd/ryPlyA+kR7zO6uY4AqfqbwiE=";
   };
 

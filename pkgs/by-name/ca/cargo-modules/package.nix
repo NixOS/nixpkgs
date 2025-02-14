@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "regexident";
     repo = "cargo-modules";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GrkAEblelLWIGYdOlbRWNBibNnb+/eA3e8aM5+L7Z7g=";
   };
 

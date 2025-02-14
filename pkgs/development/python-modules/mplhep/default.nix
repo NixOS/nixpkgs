@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "mplhep";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fcc/DG4irTvAOjCGAW7hW96z0yJNSvcpanfDGN9H9XI=";
   };
 

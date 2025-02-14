@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "simple64";
     repo = "simple64-netplay-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p9hHVf1LD95w280ScUkxHKmBJLJ9eiH3WEYV+kaALgQ=";
   };
 

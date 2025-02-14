@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-ollama==${version}";
+    tag = "langchain-ollama==${version}";
     hash = "sha256-NtlJqIevdaoOO4oDqKsL4OFbw8tHb3FjV9LrTytOGKE=";
   };
 

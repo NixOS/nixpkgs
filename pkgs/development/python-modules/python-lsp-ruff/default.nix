@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-ruff";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-czGA/gl7uoWG9UqYUaY9zER79IKfv7ClqgimgyNCAa4=";
   };
 

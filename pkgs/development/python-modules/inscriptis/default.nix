@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9KEkXcdZ7USXfyIXGDrp4p4kJTzF2q30fvOccxF1hBU=";
   };
 

@@ -899,11 +899,13 @@ in {
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
   scrutiny = handleTest ./scrutiny.nix {};
   sddm = handleTest ./sddm.nix {};
+  sdl3 = handleTest ./sdl3.nix { };
   seafile = handleTest ./seafile.nix {};
   searx = runTest ./searx.nix;
   seatd = handleTest ./seatd.nix {};
   send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
+  shadps4 = runTest ./shadps4.nix;
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
   sgt-puzzles = handleTest ./sgt-puzzles.nix {};

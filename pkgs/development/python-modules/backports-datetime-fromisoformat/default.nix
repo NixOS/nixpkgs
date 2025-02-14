@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "movermeyer";
     repo = "backports.datetime_fromisoformat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-v9Njic7zN2bv1lQgdbJNeZLF3VXcC9A4UoE/znLF0gM=";
   };
 

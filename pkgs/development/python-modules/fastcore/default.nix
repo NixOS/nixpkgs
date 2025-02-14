@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fastai";
     repo = "fastcore";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CJG/cKgqdUrJcYV5pgGjrnoXzRAj3xya7LwvchNGrPU=";
   };
 

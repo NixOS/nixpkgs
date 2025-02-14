@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "corenting";
     repo = "immutabledict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NpNS8HAacgXm3rFtyd5uFgSURNbDf+YVS1aFx51kwEA=";
   };
 

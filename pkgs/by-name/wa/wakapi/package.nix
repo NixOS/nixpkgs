@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "muety";
     repo = "wakapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6wlFgIof4uzQ3phd7paHZ6Sezp0Dfj8qFzsudFKfNdU=";
   };
 

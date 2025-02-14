@@ -1,16 +1,16 @@
 {
   lib,
-  fetchFromGitHub,
-  python3Packages,
   appstream,
   blueprint-compiler,
   desktop-file-utils,
-  glib,
+  fetchFromGitHub,
   gdm,
+  glib,
   libadwaita,
   meson,
   ninja,
   pkg-config,
+  python3Packages,
   wrapGAppsHook4,
   # gdm-settings needs to know where to look for themes
   # This should work for most systems, but can be overridden if not
@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gdm-settings";
-  version = "4.4";
+  version = "5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "gdm-settings";
     repo = "gdm-settings";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3Te8bhv2TkpJFz4llm1itRhzg9v64M7Drtrm4s9EyiQ=";
+    tag = "v${version}";
+    hash = "sha256-x7w6m0+uwkm95onR+ioQAoLlaPoUmLc0+NgawQIIa/Y=";
   };
 
   nativeBuildInputs = [

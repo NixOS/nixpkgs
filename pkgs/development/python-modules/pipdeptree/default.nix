@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wK3RaVq5PwDVAKotkDVEeAMImJxJVN1GceyoKBGBkOY=";
   };
 

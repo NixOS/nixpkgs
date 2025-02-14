@@ -28,7 +28,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "hassil";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FRP5iVE2KBiHVriWhnYxWFff0y4q2/gC9iO8ZzN3AbI=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "python-tuf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HiF/b6aOhDhhQqYx/bjMXHABxmAJY4vkLlTheiL8zEo=";
   };
 

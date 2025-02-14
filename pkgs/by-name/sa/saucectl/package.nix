@@ -13,7 +13,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "saucelabs";
     repo = "saucectl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-43X+GBm0pasSSwBB8Q2V8Vr2SjFInHaNMvUNVqD0/pI=";
   };
 

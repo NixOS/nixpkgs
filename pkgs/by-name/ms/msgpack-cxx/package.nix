@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
-    rev = "refs/tags/cpp-${finalAttrs.version}";
+    tag = "cpp-${finalAttrs.version}";
     hash = "sha256-m0Ki+9/nZo2b4BUT+gUtdxok5I7xQtcfnMkbG+OHsKs=";
   };
 

@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "television";
-  version = "0.8.5";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "television";
-    rev = "refs/tags/" + version;
-    hash = "sha256-LzO6LpKsox5U2IHYZXDDkUbPeZmAa/gBpG6nk78tIzQ=";
+    tag = version;
+    hash = "sha256-S0at9qiPaHtFSag/DjJxczcjuQwPIWQBqxrRwrWIPk0=";
   };
 
-  cargoHash = "sha256-I0muMgPfk72dnR4iufipjt+C7v6X/IMOdLCH12qHjA8=";
+  cargoHash = "sha256-eWy1MnduirMyPeOhNYelDV+4J4+9Qf9jSaW772p7t1k=";
 
   passthru = {
     tests.version = testers.testVersion {
@@ -28,15 +28,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "Television is a blazingly fast general purpose fuzzy finder";
-
+    description = "Blazingly fast general purpose fuzzy finder TUI";
     longDescription = ''
-      Television is a blazingly fast general purpose fuzzy finder TUI written
-      in Rust. It is inspired by the neovim telescope plugin and is designed
-      to be fast, efficient, simple to use and easily extensible. It is built
-      on top of tokio, ratatui and the nucleo matcher used by the helix editor.
+      Television is a fast and versatile fuzzy finder TUI.
+      It lets you quickly search through any kind of data source (files, git
+      repositories, environment variables, docker images, you name it) using a
+      fuzzy matching algorithm and is designed to be easily extensible.
     '';
-
     homepage = "https://github.com/alexpasmantier/television";
     changelog = "https://github.com/alexpasmantier/television/releases/tag/${version}";
     license = lib.licenses.mit;

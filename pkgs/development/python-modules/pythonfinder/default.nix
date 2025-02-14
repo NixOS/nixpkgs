@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = "pythonfinder";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
 

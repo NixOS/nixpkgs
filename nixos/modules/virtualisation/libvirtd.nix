@@ -510,6 +510,8 @@ in
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
+      requires = [ "libvirtd.service" ];
+      after = [ "libvirtd.service" ];
       path = with pkgs; [ coreutils gawk cfg.package ];
       restartIfChanged = false;
 
@@ -553,7 +555,10 @@ in
         paths = cfg.qemu.vhostUserPackages;
         pathsToLink = [ "/share/qemu/vhost-user" ];
       };
-    in [ "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user" ];
+    in [
+      "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user"
+      "L+ /var/lib/qemu/firmware - - - - ${cfg.qemu.package}/share/qemu/firmware"
+    ];
 
     security.polkit = {
       enable = true;

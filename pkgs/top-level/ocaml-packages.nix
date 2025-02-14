@@ -953,7 +953,9 @@ let
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
     lambdapi = callPackage ../development/ocaml-modules/lambdapi {
-      why3 = pkgs.why3.override { ocamlPackages = self; };
+      why3 = pkgs.why3.override { ocamlPackages = self;
+        version = "1.7.2"; coqPackages = pkgs.coqPackages_8_18;
+      };
     };
 
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
@@ -1648,6 +1650,8 @@ let
     readline = callPackage ../development/ocaml-modules/readline {
       readline = pkgs.readline;
     };
+
+    reanalyze = callPackage ../development/tools/ocaml/reanalyze { };
 
     reason = callPackage ../development/compilers/reason { };
 

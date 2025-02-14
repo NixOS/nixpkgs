@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnxmltools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/UKGo56riLnATcn7kA++QoFkkILVGYBwqRZZ+PYB1/0=";
   };
 

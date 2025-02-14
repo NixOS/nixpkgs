@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6J+/clldoMSTcZXM4N8THZ3fk2NE9VQ2XyDIzVej6OY=";
   };
 

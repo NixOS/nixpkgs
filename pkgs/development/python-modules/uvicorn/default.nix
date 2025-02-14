@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "uvicorn";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LTioJNDq1zsy/FO6lBgRW8Ow5qyxUD8NjNCj4nIrVDM=";
   };
 

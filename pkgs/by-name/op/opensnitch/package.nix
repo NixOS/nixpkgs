@@ -22,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pJPpkXRp7cby6Mvc7IzxH9u6MY4PcrRPkimTw3je6iI=";
   };
 

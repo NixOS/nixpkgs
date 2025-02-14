@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "ratatui";
     repo = "crates-tui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K3ttXoSS4GZyHnqS95op8kmbAi4/KjKa0P6Nzqqpjyw=";
   };
 

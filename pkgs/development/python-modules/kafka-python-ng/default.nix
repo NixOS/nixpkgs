@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wbarnha";
     repo = "kafka-python-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ELJvcj91MQ2RTjT1dwgnTGSSG5lP6B6/45dFgtNY2Cc=";
   };
 

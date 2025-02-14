@@ -20,19 +20,23 @@
   makeself,
   linuxHeaders,
   openssl,
+  virtualboxVersion,
+  virtualboxSubVersion,
+  virtualboxSha256,
 }:
 
 let
   buildType = "release";
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
-  version = "7.1.4";
+  version = "${virtualboxVersion}${virtualboxSubVersion}";
+
+  inherit virtualboxVersion virtualboxSubVersion;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.version}/VirtualBox-${finalAttrs.version}.tar.bz2";
-    sha256 = "872e7a42b41f8558abbf887f1bdc7aac932bb88b2764d07cbce270cab57e3b5e";
+    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}${finalAttrs.virtualboxSubVersion}.tar.bz2";
+    sha256 = virtualboxSha256;
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";

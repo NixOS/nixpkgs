@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qaG7krLu6D08izPwRwqzSpnGVQjTgNwoSky3jmSwOdM=";
   };
 

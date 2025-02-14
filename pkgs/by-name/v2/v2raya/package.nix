@@ -22,7 +22,7 @@ let
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yFN7mG5qS7BAuCSvSSZFFiyytd7XZ4kJvctc8cU72Oc=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };

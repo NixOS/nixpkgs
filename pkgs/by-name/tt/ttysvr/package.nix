@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cxreiff";
     repo = "ttysvr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qUwnx+hwd3PRzz1TlQzPAppj6aTZZpTG2e5cBaA3zZI=";
   };
   cargoHash = "sha256-kIE8+FUS3i8Ulkj35lO1iRmFx5x+r89THVuzNzAv6tE=";

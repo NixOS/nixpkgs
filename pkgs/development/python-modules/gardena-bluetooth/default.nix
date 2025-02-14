@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "gardena-bluetooth";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BV4chGkVp9H7gJQGKQZ0e4IiizMjCbDAU5MMf7hS9mE=";
   };
 

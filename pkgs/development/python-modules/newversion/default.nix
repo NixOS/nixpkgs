@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vemel";
     repo = "newversion";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-v9hfk2/hBkWtOobQdaYXNOZTTcEqnMV6JYqtjjoidOs=";
   };
 

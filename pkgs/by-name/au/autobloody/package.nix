@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "autobloody";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0MwhdT9GYLcrdZSqszx1DC9lyz8K61lJZZCzeFfWB0E=";
   };
 

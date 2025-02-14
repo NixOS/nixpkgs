@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "softlayer-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wDLMVonPUexoaZ60kRBILmr5l46yajzACozCp6uETGY=";
   };
 

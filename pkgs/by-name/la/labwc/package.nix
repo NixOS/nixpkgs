@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-TXxdjMkzZQoCqkZBqus5eCBEhA/nvxNNXaNHUTGFQDQ=";
   };
 

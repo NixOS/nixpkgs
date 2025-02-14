@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "C0D3D3V";
     repo = "Moodle-DL";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gf8s0+WhPQwLhS4eg3wzcDPvmhrNEgDx5yiBadpf4kI=";
   };
 

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "pace-rs";
     repo = "pace";
-    rev = "refs/tags/pace-rs-v${version}";
+    tag = "pace-rs-v${version}";
     hash = "sha256-gyyf4GGHIEdiAWvzKbaOApFikoh3RLWBCZUfJ0MjbIE=";
   };
 

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "errata-ai";
     repo = "vale-ls";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+2peLqj3/ny0hDwJVKEp2XS68VO50IvpCB2fvZoEdJo=";
   };
 

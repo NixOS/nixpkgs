@@ -35,16 +35,18 @@ else # Only set up Qt once.
     }
     envBuildHostHooks+=(qmakePathHook)
 
-    export QTTOOLSPATH=
-
-    declare -Ag qttoolsPathSeen=()
+    declare -g qttoolsPathSeen=
     qtToolsHook() {
-        # Skip this path if we have seen it before.
-        # MUST use 'if' because 'qttoolsPathSeen[$]' may be unset.
-        if [ -n "${qttoolsPathSeen[$1]-}" ]; then return; fi
-        qttoolsPathSeen[$1]=1
-        if [ -d "$1/libexec" ]; then
-            QTTOOLSPATH="${QTTOOLSPATH}${QTTOOLSPATH:+:}$1/libexec"
+        if [ -f "$1/libexec/qhelpgenerator" ]; then
+            if [[ -n "${qtToolsPathSeen:-}" && "${qttoolsPathSeen:-}" != "$1" ]]; then
+                echo >&2 "Error: detected mismatched Qt dependencies:"
+                echo >&2 "    $1"
+                echo >&2 "    $qttoolsPathSeen"
+                exit 1
+            fi
+
+            qttoolsPathSeen=$1
+            appendToVar cmakeFlags "-DQT_OPTIONAL_TOOLS_PATH=$1"
         fi
     }
     addEnvHooks "$hostOffset" qtToolsHook

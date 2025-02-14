@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xCLLWe15+YmU3SyWkclzHBojHi32nUJGe4xY3NZC05M=";
   };
 

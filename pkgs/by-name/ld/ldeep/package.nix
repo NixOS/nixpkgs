@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "franc-pentest";
     repo = "ldeep";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rFcl7Zf8Q6eugcEL79xpKIvXuhDdI6iEyAPDtqGX6xw=";
   };
 

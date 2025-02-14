@@ -13,7 +13,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hblOe6YMlfWBVvWD5MKEKvAB55jUx98OMeqFDdgVrmM=";
   };
 

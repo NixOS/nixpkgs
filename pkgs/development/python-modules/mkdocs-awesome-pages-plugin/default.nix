@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukasgeiter";
     repo = "mkdocs-awesome-pages-plugin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jDPoMAJ20n9bQu11CRNvKLQthRUh3+jR6t+fM3+vGzY=";
   };
 

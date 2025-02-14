@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "daveshanley";
     repo = "vacuum";
     # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-t/KbwyxInMvxsICdh0kix27+MKre480+I/KkbwxLg1M=";
   };
 

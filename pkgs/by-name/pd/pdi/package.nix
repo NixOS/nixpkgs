@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
-    rev = "refs/tags/${version}-gh";
+    tag = "${version}-gh";
     hash = "sha256-VTbXsUUJb/6zNyn4QXNHajgzzgjSwdW/d+bTSDcpRaE=";
   };
 

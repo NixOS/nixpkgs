@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = "yte";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Rm3EKxRZCdYErkyWK9+fF2W7C+v5/MXD/LkehmB6UNQ=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-modelcif";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sduhRLtuJ/0BNsqmrhCr0lSrLMaOfE+TCWN4zj62aCQ=";
   };
 

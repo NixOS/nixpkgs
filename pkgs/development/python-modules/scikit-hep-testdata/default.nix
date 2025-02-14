@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "scikit-hep-testdata";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-B0YmO48aGDRsQ56+q7/Z6xquCNjbAQ55fkY6auvwB90=";
   };
 

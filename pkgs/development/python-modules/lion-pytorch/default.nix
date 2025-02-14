@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "lion-pytorch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hOPTuXdTrTi/Thv3/5IYqkgH+5cFdzyK1Fshus8u5n0=";
   };
 

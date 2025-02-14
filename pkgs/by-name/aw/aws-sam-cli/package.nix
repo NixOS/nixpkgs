@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5/zXvO5xrNkhPCei4O/nMXA/e18VNrED2lpBbflaJLQ=";
   };
 

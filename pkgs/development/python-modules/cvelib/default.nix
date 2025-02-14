@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yDsnw7jw1NDs3dy5RUY4a+dWZzORyFG9kpR4WaJNbEE=";
   };
 

@@ -17,9 +17,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kislyuk";
     repo = "argcomplete";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-um8iFzEHExTRV1BAl86/XKLc7vmf2Ws1dB83agfvoec=";
   };
+
+  patches = [
+    # fixes issues with python3Packages.traitlets tests
+    # https://git.launchpad.net/ubuntu/+source/python-argcomplete/tree/debian/patches/python-3.13-compat.patch?h=ubuntu/plucky
+    # https://github.com/kislyuk/argcomplete/pull/513
+    ./python-3.13-compat.patch
+  ];
 
   build-system = [
     setuptools

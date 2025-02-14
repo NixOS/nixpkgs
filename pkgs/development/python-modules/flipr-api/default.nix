@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cnico";
     repo = "flipr-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/px8NuBwukAPMxdXvHdyfO/j/a9UatKbdrjDNuT0f4k=";
   };
 

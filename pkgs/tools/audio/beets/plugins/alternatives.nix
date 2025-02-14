@@ -32,13 +32,13 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aszlig
       lovesegfault
     ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

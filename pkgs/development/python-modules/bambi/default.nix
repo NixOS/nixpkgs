@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kxrNNbZfC96/XHb1I7aUHYZdFJvGR80ZI8ell/0FQXc=";
   };
 

@@ -256,6 +256,10 @@ in
 
   blink-cmp = callPackage ./blink-cmp { };
 
+  bufresize-nvim = super.bufresize-nvim.overrideAttrs {
+    meta.license = lib.licenses.mit;
+  };
+
   chadtree = super.chadtree.overrideAttrs {
     buildInputs = [
       python3

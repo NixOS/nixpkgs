@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1SuENREPkU9W5ldMIXDCALLMx0AiTs4dNYJYjrkaegc=";
   };
 

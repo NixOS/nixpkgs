@@ -48,6 +48,11 @@ python3Packages.buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/static" ];
 
+  disabledTests = [
+    # disable copyright year check of files
+    "current_year"
+  ];
+
   meta = {
     description = "Automatically build (and test) feature-rich configurations for BGP route servers";
     mainProgram = "arouteserver";

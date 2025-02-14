@@ -1,17 +1,17 @@
 {
-  fetchpatch,
+  lib,
+  src,
+  version,
   bashInteractive,
   diffPlugins,
-  glibcLocales,
   gobject-introspection,
   gst_all_1,
-  lib,
   python3Packages,
   sphinxHook,
   runtimeShell,
   writeScript,
 
-  # plugin deps
+  # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
   aacgain,
   essentia-extractor,
   ffmpeg,
@@ -21,8 +21,6 @@
   mp3gain,
   mp3val,
 
-  src,
-  version,
   extraPatches ? [ ],
   pluginOverrides ? { },
   disableAllPlugins ? false,
@@ -43,14 +41,7 @@ let
       builtin ? false,
       propagatedBuildInputs ? [ ],
       testPaths ? [
-        # NOTE: This conditional can be removed when beets-stable is updated and
-        # the default plugins test path is changed
-        (
-          if (lib.versions.majorMinor version) == "1.6" then
-            "test/test_${name}.py"
-          else
-            "test/plugins/test_${name}.py"
-        )
+        "test/plugins/test_${name}.py"
       ],
       wrapperBins ? [ ],
     }:
@@ -78,16 +69,22 @@ let
   builtinPlugins = lib.filterAttrs (_: p: p.builtin) allPlugins;
   enabledPlugins = lib.filterAttrs (_: p: p.enable) allPlugins;
   disabledPlugins = lib.filterAttrs (_: p: !p.enable) allPlugins;
+  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
 
   pluginWrapperBins = concatMap (p: p.wrapperBins) (attrValues enabledPlugins);
 in
 python3Packages.buildPythonApplication {
   pname = "beets";
   inherit src version;
+  pyproject = true;
 
   patches = extraPatches;
 
-  propagatedBuildInputs =
+  build-system = [
+    python3Packages.poetry-core
+  ];
+
+  dependencies =
     with python3Packages;
     [
       confuse
@@ -96,10 +93,8 @@ python3Packages.buildPythonApplication {
       mediafile
       munkres
       musicbrainzngs
-      mutagen
-      pygobject3
+      platformdirs
       pyyaml
-      reflink
       unidecode
       typing-extensions
     ]
@@ -152,8 +147,18 @@ python3Packages.buildPythonApplication {
     ]
     ++ pluginWrapperBins;
 
-  disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
-  inherit disabledTests;
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = disabledTestPaths ++ [
+    # touches network
+    "test/plugins/test_aura.py"
+  ];
+  disabledTests = disabledTests ++ [
+    # beets.ui.UserError: unknown command 'autobpm'
+    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
+    # AssertionError: assert 0 == 117
+    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+  ];
 
   # Perform extra "sanity checks", before running pytest tests.
   preCheck = ''
@@ -197,17 +202,18 @@ python3Packages.buildPythonApplication {
             ${beets}/bin/beet -c $out/config.yaml > /dev/null
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Music tagger and library organizer";
     homepage = "https://beets.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aszlig
       doronbehar
       lovesegfault
+      montchr
       pjones
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "beet";
   };
 }

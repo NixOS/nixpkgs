@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-76P4njY/Wb9l4LG+sZwiwQVrvfXCtAELju30GLi7kBE=";
   };
 

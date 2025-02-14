@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0cv2HaquIUQOb5CPkCxSYvXDzu3OV7WKIT80jI+pjpY=";
   };
 

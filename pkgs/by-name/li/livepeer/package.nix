@@ -18,7 +18,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "livepeer";
     repo = "go-livepeer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vJeYlMOJ0/C+IKVx5gqzb8LGwLP1ca9OreCUMryqWKs=";
   };
 

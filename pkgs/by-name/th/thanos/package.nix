@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "thanos-io";
     repo = "thanos";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zcc860kQkVP1DPyadBoalhcvwh5HF9CgQyjzWRdeXt0=";
   };
 

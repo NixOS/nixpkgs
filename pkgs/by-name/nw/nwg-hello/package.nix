@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WE6jtVZfsWJREZghU93v8EAq16MiERYnq3Y0g2caYPs=";
   };
 

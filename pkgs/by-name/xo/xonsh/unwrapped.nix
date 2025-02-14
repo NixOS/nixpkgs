@@ -2,25 +2,27 @@
   lib,
   coreutils,
   fetchFromGitHub,
-  git,
-  gitUpdater,
+  gitMinimal,
   glibcLocales,
+  nix-update-script,
   pythonPackages,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
 
   argset = {
     pname = "xonsh";
-    version = "0.18.4";
+    version = "0.19.1";
     pyproject = true;
 
     # PyPI package ships incomplete tests
     src = fetchFromGitHub {
       owner = "xonsh";
       repo = "xonsh";
-      rev = "refs/tags/${argset.version}";
-      hash = "sha256-L5UwmwwM42E3l+sIBwXgMf/q5r22cUoRbE2cqM09bZA=";
+      tag = argset.version;
+      hash = "sha256-20egNKlJjJO1wdy1anApz0ADBnaHPUSqhfrsPe3QQIs=";
     };
 
     nativeBuildInputs = with pythonPackages; [
@@ -39,8 +41,10 @@ let
 
     nativeCheckInputs =
       [
-        git
+        addBinToPathHook
+        gitMinimal
         glibcLocales
+        writableTmpDirAsHomeHook
       ]
       ++ (with pythonPackages; [
         pip
@@ -77,6 +81,9 @@ let
 
       # https://github.com/xonsh/xonsh/issues/5569
       "test_spec_decorator_alias_output_format"
+
+      # Broken test
+      "test_repath_backslash"
     ];
 
     disabledTestPaths = [
@@ -103,16 +110,11 @@ let
       patchShebangs .
     '';
 
-    preCheck = ''
-      export HOME=$TMPDIR
-      export PATH=$out/bin:$PATH
-    '';
-
     passthru = {
       shellPath = "/bin/xonsh";
       python = pythonPackages.python; # To the wrapper
       wrapper = throw "The top-level xonsh package is now wrapped. Use it directly.";
-      updateScript = gitUpdater { };
+      updateScript = nix-update-script { };
     };
 
     meta = {

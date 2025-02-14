@@ -80,7 +80,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NPH++kPPaSPR3jm6mfh+4aep6stj0I4bA24kFtaJSKU=";
   };
 

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L51RgXUlA9hnVt232qdLo6t0kqXl7b01jotUk1r8wO0=";
   };
 

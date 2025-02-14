@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CorantGmbH";
     repo = "aioairq";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ppjhGBAoA5iV+ZfUKkUCNJRYN82JtclRe36pbe85i5w=";
   };
 

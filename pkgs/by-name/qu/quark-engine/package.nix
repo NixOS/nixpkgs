@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "quark-engine";
     repo = "quark-engine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IfUXn1HqlEJ/5uuQxMr4qExle7tZfa8FBfDWKNZ/JRw=";
   };
 

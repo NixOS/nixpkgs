@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-${pname}";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xha3bGuDYt4gLcK3x62ym+zCAQVyZjlV1HyKh8kHe64=";
   };
 

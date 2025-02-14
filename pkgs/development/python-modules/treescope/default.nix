@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "treescope";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+Hm60O9tEXIiE0av1O0BsOdMln4e1s7ijb3WNiQ74jE=";
   };
 

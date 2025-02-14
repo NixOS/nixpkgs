@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ORB-HD";
     repo = "deface";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/mXWeL6OSgW4BMXtAZD/3UxQUGt7UE5ZvH8CXNCueJo=";
   };
 

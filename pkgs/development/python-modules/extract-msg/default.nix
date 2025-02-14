@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TeamMsgExtractor";
     repo = "msg-extractor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4jvzZkGa/xI5Sl9TBIm/BD3tGl+MZvwir6m/zrvA4tQ=";
   };
 

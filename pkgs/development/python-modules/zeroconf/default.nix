@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-q1Dk2lUiChjDFJeRCUqkPAIO1I+PsnvuLSx6UgXHPU4=";
   };
 

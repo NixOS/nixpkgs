@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nalgeon";
     repo = "sqlpkg-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qytqTaoslBcoIn84tSiLABwRcnY/FsyWYD3sugGEYB0=";
   };
 

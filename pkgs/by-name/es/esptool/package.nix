@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cNEg2a3j7Vql06GwVaE9y86UtMkNsUdJYM00OEUra2w=";
   };
 

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omnilib";
     repo = "ufmt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hXCOsetw5o3V9NCR0TOfYSFyfBnuOOZDMiUd/6ER9WU=";
   };
 

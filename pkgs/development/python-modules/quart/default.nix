@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A23+25bDzK2GlGNTCul6HbsjNujrnhpzTxdnV3Ig028=";
   };
 

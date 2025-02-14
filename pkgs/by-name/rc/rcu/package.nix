@@ -9,6 +9,7 @@
   desktopToDarwinBundle,
   libsForQt5,
   makeDesktopItem,
+  protobuf,
   python3Packages,
   system-config-printer,
 }:
@@ -43,11 +44,16 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace package_support/gnulinux/50-remarkable.rules \
       --replace-fail 'GROUP="yourgroup"' 'GROUP="users"'
+
+    # This must match the protobuf version imported at runtime, regenerate it
+    rm src/model/update_metadata_pb2.py
+    protoc --proto_path src/model src/model/update_metadata.proto --python_out=src/model
   '';
 
   nativeBuildInputs =
     [
       copyDesktopItems
+      protobuf
       libsForQt5.wrapQtAppsHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -66,7 +72,7 @@ python3Packages.buildPythonApplication rec {
     pdfminer-six
     pikepdf
     pillow
-    protobuf
+    python3Packages.protobuf # otherwise it picks up protobuf from function args
     pyside2
   ];
 

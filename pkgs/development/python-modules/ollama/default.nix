@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-27OJwPvHBxCdaiHk8EQ2s1OeBzgsrzp1MjgKHNgvz+A=";
   };
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
   };
 

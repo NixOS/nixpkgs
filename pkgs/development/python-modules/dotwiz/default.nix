@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dotwiz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ABmkwpJ40JceNJieW5bhg0gqWNrR6Wxj84nLCjKU11A=";
   };
 

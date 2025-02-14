@@ -55,6 +55,7 @@ in {
 
     systemd.packages = [ cfg.package ];
     systemd.sockets.cockpit.wantedBy = [ "multi-user.target" ];
+    systemd.sockets.cockpit.listenStreams = [ "" (toString cfg.port) ];
 
     systemd.tmpfiles.rules = [ # From $out/lib/tmpfiles.d/cockpit-tmpfiles.conf
       "C /run/cockpit/inactive.motd 0640 root root - ${cfg.package}/share/cockpit/motd/inactive.motd"

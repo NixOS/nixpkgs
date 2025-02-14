@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bramkragten";
     repo = "weather-card";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pod5cayaHP+4vgdBgBRMQ7szkyz9HLaKVJWQX36XdTY=";
   };
   dontBuild = true;

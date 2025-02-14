@@ -323,6 +323,16 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # Fix 32bit struct being used for 64bit syscall on 32bit platforms
+  # https://github.com/haskellari/lukko/issues/15
+  lukko = appendPatches [
+    (fetchpatch {
+      name = "lukko-ofd-locking-32bit.patch";
+      url = "https://github.com/haskellari/lukko/pull/32/commits/4e69ffad996c3771f50017b97375af249dd17c85.patch";
+      sha256 = "0n8vig48irjz0jckc20dzc23k16fl5hznrc0a81y02ms72msfwi1";
+    })
+  ] super.lukko;
+
   # Fixes compilation for basement on i686 for GHC >= 9.4
   # https://github.com/haskell-foundation/foundation/pull/573
   # Patch would not work for GHC >= 9.2 where it breaks compilation on x86_64
@@ -350,6 +360,11 @@ self: super: {
   # Depends on outdated deps hedgehog < 1.4, doctest < 0.12 for tests
   # As well as deepseq < 1.5 (so it forbids GHC 9.8)
   hw-fingertree = doJailbreak super.hw-fingertree;
+
+  # Test suite is slow and sometimes comes up with counter examples.
+  # Upstream is aware (https://github.com/isovector/nspace/issues/1),
+  # if it's a bug, at least doesn't seem to be nixpkgs-specific.
+  nspace = dontCheck super.nspace;
 
   # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
   threadscope = overrideCabal (drv: {

@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-uyYNs+fDV5BfQwfX9Wi3BwiKjSDQHAKRJ1+UvS/fHoE=";
   };

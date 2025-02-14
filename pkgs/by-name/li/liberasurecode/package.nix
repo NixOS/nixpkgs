@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "liberasurecode";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-KYXlRjUudWhFbhyv9V1fmqwBw3/vTBfusxafaNG+Q40=";
   };
 

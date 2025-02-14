@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "amit9838";
     repo = "mousam";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1gFuMh5Poypmgyk2bpi9v6iK7WkO5KHLs+WsoDpJPeg=";
   };
 

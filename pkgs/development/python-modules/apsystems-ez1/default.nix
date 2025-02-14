@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SonnenladenGmbH";
     repo = "APsystems-EZ1-API";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CG+QpdJfZt1S6IDDjabRjwuRflURFc1QYo39kf/p0Zw=";
   };
 

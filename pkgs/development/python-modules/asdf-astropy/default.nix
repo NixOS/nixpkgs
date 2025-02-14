@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "asdf-astropy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-dOd9QdBOu7QotRiHkXJoIqaHG6U9odTlRmy22/nvvuw=";
   };
 

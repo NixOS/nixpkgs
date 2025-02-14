@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alphagov";
     repo = "notifications-python-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qjiI+aTJLOz3XSTHKrpZrJ/wg1xP+V7ww0//xX3Kf1E=";
   };
 

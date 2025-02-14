@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3i9I2RRRxLgyfzegnqjO4g+ad1v4phx6xa8HpWP1cck=";
   };
 

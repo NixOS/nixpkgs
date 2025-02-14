@@ -31,7 +31,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-liyrMaqBgK7UZjWIKIgIFbskTGaWfyrK8L74DKmaDmY=";
   };
 

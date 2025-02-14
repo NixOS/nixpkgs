@@ -22,7 +22,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "deschler";
     repo = "django-modeltranslation";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-E3CaQx5SGOnxqjLFY0opcKZF4DMl2HKSUD0gOnA25RA=";
   };
 

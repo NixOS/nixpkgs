@@ -185,9 +185,11 @@ let
       # flags will remove unused sections from all shared libraries and binaries - including
       # those paths. This avoids a lot of circular dependency problems with different outputs,
       # and allows splitting them cleanly.
-      env.CFLAGS =
-        "-fdata-sections -ffunction-sections"
-        + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+      env = {
+        CFLAGS =
+          "-fdata-sections -ffunction-sections"
+          + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
+      } // lib.optionalAttrs pythonSupport { PYTHON = "${python3}/bin/python"; };
 
       configureFlags =
         [
@@ -299,10 +301,14 @@ let
           remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
         '';
 
-      postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
-        # initdb needs access to "locale" command from glibc.
-        wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
-      '';
+      postFixup =
+        lib.optionalString stdenv'.hostPlatform.isGnu ''
+          # initdb needs access to "locale" command from glibc.
+          wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
+        ''
+        + lib.optionalString pythonSupport ''
+          wrapProgram "$out/bin/postgres" --set PYTHONPATH "${python3}/${python3.sitePackages}"
+        '';
 
       doCheck = !stdenv'.hostPlatform.isDarwin;
       # autodetection doesn't seem to able to find this, but it's there.

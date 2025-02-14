@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HzLDUhiFegYPWAKt3YoiWiunNHcDEx9FvRXwxKd7wp0=";
   };
 

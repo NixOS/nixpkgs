@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiortm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rw86RzP8AI+zWchC9c01vdedc6r4gfF5A8DltWW5YRY=";
   };
 

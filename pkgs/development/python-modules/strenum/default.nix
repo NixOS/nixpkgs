@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "irgeek";
     repo = "StrEnum";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LrDLIWiV/zIbl7CwKh7DAy4LoLyY7+hfUu8nqduclnA=";
   };
 

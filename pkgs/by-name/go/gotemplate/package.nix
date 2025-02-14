@@ -11,7 +11,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7FJejArGpnmkAzbN+2BOcewLdlcsh8QblOOZjFu+uSA=";
   };
 

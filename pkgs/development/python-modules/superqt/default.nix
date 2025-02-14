@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "superqt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/VR9Lc1x+7J/3zyo/eBFBvGkPXzpTfPpNAvNhSzWio8=";
   };
 

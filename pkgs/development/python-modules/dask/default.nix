@@ -45,7 +45,7 @@ let
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-UB/LqgDRXnjJ/RjEke9eBDyVAy+Dtak7wYJB63xmDd4=";
     };
 

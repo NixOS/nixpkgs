@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "asb2m10";
     repo = "dexed";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-mXr1KGzA+DF2dEgAJE4lpnefPqO8pqfnKa43vyjSJgU=";
   };

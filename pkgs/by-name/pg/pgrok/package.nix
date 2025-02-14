@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm,
+  pnpm_9,
 }:
 
 let
@@ -28,10 +28,10 @@ buildGoModule {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     hash = "sha256-xObDEkNGMXcUqX9thAJoE45yzd7f15k2odDWv9X3RRE=";
   };

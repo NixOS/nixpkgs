@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tke2bE+djV1N70meMOytYmbPmYDN8fU+Da81Mf6nNAI=";
   };
 

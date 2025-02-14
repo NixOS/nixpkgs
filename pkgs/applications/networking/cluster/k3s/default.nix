@@ -13,15 +13,21 @@ let
 in
 {
   # 1_28 can be built with the same builder as 1_30
-  k3s_1_28 = common (
-    (import ./1_28/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "28"
-      ];
-    }
-  ) extraArgs;
+  k3s_1_28 =
+    (common (
+      (import ./1_28/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "28"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        meta.knownVulnerabilities = [
+          "k3s_1_28 has reached end-of-life on 2024-10-28. See https://www.suse.com/lifecycle#k3s"
+        ];
+      };
 
   # 1_29 can be built with the same builder as 1_30
   k3s_1_29 = common (

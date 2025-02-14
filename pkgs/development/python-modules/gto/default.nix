@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "gto";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fUi+/PW05EvgTnoEv1Im1BjZ07VzpZhyW0EjhLUqJGI=";
   };
 

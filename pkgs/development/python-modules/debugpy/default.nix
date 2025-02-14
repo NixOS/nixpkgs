@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zkNV+tFRAxTdl+lCPD4XYI1Oz0dVyX4GGuNdfzy2sJU=";
   };
 

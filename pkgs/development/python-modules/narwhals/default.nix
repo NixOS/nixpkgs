@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KUtmkDaHPaJ917/hVhJrt+x64JJYm06fyDfCV2nSa3s=";
   };
 

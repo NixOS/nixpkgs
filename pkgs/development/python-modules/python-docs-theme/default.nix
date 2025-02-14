@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JwuIV+hkBIst8EtC3Xmu/KYTV+SZvD4rb9wHimKLL94=";
   };
 

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6Uvp7hVFgHVavJO6Un5L793pOOOBtaT4+eywS3rRWUU=";
   };
 

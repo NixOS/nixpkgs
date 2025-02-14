@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-B9vh8OILmRZKKznBbEkkm3zlAwGwMGdiuc378msiywE=";
   };
 

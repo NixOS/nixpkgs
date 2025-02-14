@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7P/V83dGkfJJjZxZtiEwQXIY7CeBZ/fmvTdEjDirKj0=";
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "bring-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wPplw1yYJ5xR2CzhDXXjhMFJ7swGf2AARI4a1kE8MRw=";
   };
 

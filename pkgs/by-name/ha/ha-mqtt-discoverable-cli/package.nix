@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rGRsB5kAtzI5KP4tMiQqLJQZs7z5k657V8Di0OzB6F8=";
   };
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oAz/74dt/Wcm4FX/kvJ0v3vz5ugp0Muu0Tx+w10cVz4=";
   };
 

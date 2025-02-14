@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LriUPl9lrIDz5tzZIOxhj8C2q0LZr6AgJGRw/cWp4Fs=";
   };
 

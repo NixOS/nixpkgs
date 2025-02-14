@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = "pyradio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-k/MgvdR4ed9qMLx52AAK7Aq963/qkUyF+bam06yCZHc=";
   };
 

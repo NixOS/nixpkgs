@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-sucks";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MjlE5HdxChAgV/O7cD3foqkmKie7FgRRxvOcW+NAtfA=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cKAHNOZZtIdys0z36F0ORf6xXL/JkAgwZouvYYu/OTU=";
   };
 

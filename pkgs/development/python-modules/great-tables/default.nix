@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "great-tables";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+n8s8cmsQizEUuRGzFrOxhWL0C9OQO506msiHD58jGQ=";
   };
 

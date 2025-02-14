@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = "velbus-aio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4hMUh/0/srYIPed647Sh7H7DIp2oV7LN9srzLr0Qxps=";
     fetchSubmodules = true;
   };

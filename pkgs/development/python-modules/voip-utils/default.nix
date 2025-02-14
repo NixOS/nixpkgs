@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voip-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/DBBTL+t0VQJL43HgXGdhMHMKr8uBEkJ7Mf7Xp1mwhU=";
   };
 

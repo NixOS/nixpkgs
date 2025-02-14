@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wepy56LOhliU6t0ZRPviEbZtsWNqrtUnpUXsEdkRDqI=";
   };
 

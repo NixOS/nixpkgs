@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ccatterina";
     repo = "plasmusic-toolbar";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-geT3QfZi0jNHxRcsGavcj5fnlPms1QgMgM4nAf/d2UI=";
   };
 

@@ -11,17 +11,15 @@ import ./make-test-python.nix (
       {
         services.hound = {
           enable = true;
-          config = ''
-            {
-              "max-concurrent-indexers": 1,
-              "dbpath": "/var/lib/hound/data",
-              "repos": {
-                "nix": {
-                  "url": "file:///var/lib/hound/my-git"
-                }
-              }
-            }
-          '';
+          settings = {
+            "max-concurrent-indexers" = 1;
+            "dbpath" = "/var/lib/hound/data";
+            "repos" = {
+              "nix" = {
+                "url" = "file:///var/lib/hound/my-git";
+              };
+            };
+          };
         };
 
         systemd.services.houndseed = {

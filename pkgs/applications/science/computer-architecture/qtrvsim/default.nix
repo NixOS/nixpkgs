@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cvut";
     repo = "qtrvsim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-+EpPDA2+mBTdQjq6i9TN11yeXqvJA28JtmdNihM1a/U=";
   };
 

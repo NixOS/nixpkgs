@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protobuf-es";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-foPt++AZjBfqKepzi2mKXB7zbpCqjmPftN9wyk5Yk8g=";
 
     postFetch = ''

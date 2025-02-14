@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tchellomello";
     repo = "python-amcrest";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-v0jWEZo06vltEq//suGrvJ/AeeDxUG5CCFhbf03q34w=";
   };
 

@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "katana";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-upqsQQlrDRRcLMAe7nI86Sc2y3hNpELEeM5Im4XfLl8=";
   };
 

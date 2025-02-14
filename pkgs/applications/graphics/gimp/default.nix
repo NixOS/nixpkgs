@@ -45,7 +45,7 @@
   libheif,
   libxslt,
   libgudev,
-  openexr,
+  openexr_3,
   desktopToDarwinBundle,
   AppKit,
   Cocoa,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       poppler
       poppler_data
       libtiff
-      openexr
+      openexr_3
       libmng
       librsvg
       libwmf

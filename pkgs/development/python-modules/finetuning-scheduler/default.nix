@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uSFGZseSJv519LpaddO6yP6AsIMZutEA0Y7Yr+mEWTQ=";
   };
 

@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "zapzap-linux";
     repo = "zapzap";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RDkuYR74vjXnPgiqDCeY6y9yQNvAWAaQfWmfs7xic9E=";
   };
 

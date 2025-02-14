@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cms-DQM";
     repo = "dials-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/5XgNPtjJgJEOaqvq7Z7XCXh2n+DbZqFbqnZddxxFpc=";
   };
 
