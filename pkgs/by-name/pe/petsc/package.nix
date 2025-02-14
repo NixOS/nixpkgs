@@ -7,32 +7,38 @@
   replaceVars,
   python3,
   python3Packages,
-  withPetsc4py ? false,
   blas,
   lapack,
-  mpiSupport ? true,
+  zlib, # propagated by p4est but required by petsc
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  withP4est ? withFullDeps,
-  withHdf5 ? withFullDeps,
-  hdf5,
-  metis,
-  withMetis ? withFullDeps,
-  parmetis,
-  withParmetis ? false, # parmetis is unfree and should be enabled manualy
-  scotch,
-  withPtscotch ? withFullDeps,
-  scalapack,
-  withScalapack ? withFullDeps,
-  mumps_par,
-  withMumps ? withFullDeps,
-  pkg-config,
-  p4est,
-  zlib, # propagated by p4est but required by petsc
+
+  # Build options
   petsc-optimized ? false,
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
-  withFullDeps ? false
+  mpiSupport ? true,
+  withPetsc4py ? false, # petsc python binding
+  withFullDeps ? false, # full External libraries support
+
+  # External libraries options
+  withHdf5 ? withFullDeps,
+  withMetis ? withFullDeps,
+  withParmetis ? false, # parmetis is unfree and should be enabled manualy
+  withPtscotch ? withFullDeps,
+  withScalapack ? withFullDeps,
+  withMumps ? withFullDeps,
+  withP4est ? withFullDeps,
+
+  # External libraries
+  hdf5,
+  metis,
+  parmetis,
+  scotch,
+  scalapack,
+  mumps_par,
+  pkg-config,
+  p4est,
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
