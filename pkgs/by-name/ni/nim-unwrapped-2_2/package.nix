@@ -85,12 +85,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nim-unwrapped";
-  version = "2.2.0";
+  version = "2.2.2";
   strictDeps = true;
 
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zphChJyXYOSH7N0c2t98DyhEyvrmBUAcfHKuJXZEiTw=";
+    hash = "sha256-f8ybh6ycC6Wkif3Cbi2EgM6Wo8piIQDWJn75ITX9ih8=";
   };
 
   buildInputs = [

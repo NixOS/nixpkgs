@@ -3,6 +3,7 @@
   mkCoqDerivation,
   mathcomp-ssreflect,
   mathcomp-fingroup,
+  stdlib,
   lib,
   version ? null,
 }@args:
@@ -52,6 +53,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [
     mathcomp-ssreflect
     mathcomp-fingroup
+    stdlib
   ];
 
   meta = {

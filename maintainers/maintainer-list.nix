@@ -3065,6 +3065,12 @@
     githubId = 19915050;
     name = "binarycat";
   };
+  binarydigitz01 = {
+    email = "binarydigitz01@protonmail.com";
+    github = "binarydigitz01";
+    githubId = 47600778;
+    name = "Arnav Vijaywargiya";
+  };
   binary-eater = {
     email = "sergeantsagara@protonmail.com";
     github = "Binary-Eater";
