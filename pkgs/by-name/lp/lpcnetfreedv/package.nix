@@ -36,11 +36,11 @@ stdenv.mkDerivation {
     extraArgs = [ "--version=branch" ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://freedv.org/";
     description = "Experimental Neural Net speech coding for FreeDV";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mvs ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mvs ];
+    platforms = lib.platforms.all;
   };
 }
