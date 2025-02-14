@@ -12,16 +12,9 @@ relaxDeps = nixAttrs.get("pythonRelaxBuildDeps", {})
 if isinstance(relaxDeps, list):
     relaxDeps = { req.name: req for req in map(Requirement, relaxDeps) }
 else:
-    def requirementWithSpec(name, spec):
-        """Construct a Requirement with a given name and version specifier"""
-        r = Requirement(name)
-        r.specifier = SpecifierSet(spec)
-        return r
-
-    relaxDeps = {
-        name: requirementWithSpec(name, spec)
-        for name, spec in relexDeps.items()
-    }
+    # No support (yet?) for `pythonRelaxBuildDeps.foo = ">1, <2";`; see
+    #  https://github.com/NixOS/nixpkgs/pull/382125#discussion_r1956658253
+    raise ValueError(f"Expected a list for `pythonRelaxBuildDeps`, was '{type(relaxDeps)}'")
 
 overlappingDeps = removeDeps.intersection(relaxDeps)
 if overlappingDeps:
