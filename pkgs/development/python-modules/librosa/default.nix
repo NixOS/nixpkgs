@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
   fetchpatch2,
 
@@ -39,6 +40,8 @@ buildPythonPackage rec {
   pname = "librosa";
   version = "0.10.2.post1";
   pyproject = true;
+
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "librosa";
