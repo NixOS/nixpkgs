@@ -93,6 +93,7 @@ with haskellLib;
   #
   lucid = doJailbreak super.lucid; # base <4.21
   ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
+  http-api-data = doJailbreak super.http-api-data; # base < 4.21
   servant = doJailbreak super.servant; # base < 4.21
 
   # Test suite issues
