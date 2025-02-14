@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/lspies/previewqt/-/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl2Plus;
     mainProgram = "previewqt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
 })
