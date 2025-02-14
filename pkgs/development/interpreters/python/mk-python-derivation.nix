@@ -18,6 +18,7 @@
   pythonImportsCheckHook,
   pythonNamespacesHook,
   pythonOutputDistHook,
+  pythonRelaxBuildDepsHook,
   pythonRelaxDepsHook,
   pythonRemoveBinBytecodeHook,
   pythonRemoveTestsDirHook,
@@ -219,6 +220,9 @@ let
         else
           "setuptools";
 
+      relaxBuildDeps =
+        finalAttrs.pythonRelaxBuildDeps or [ ] != [ ] || finalAttrs.pythonRemoveBuildDeps or [ ] != [ ];
+
       withDistOutput = withDistOutput' format';
 
       validatePythonMatches =
@@ -302,6 +306,12 @@ let
         ]
         ++ optionals (attrs ? pythonRelaxDeps || attrs ? pythonRemoveDeps) [
           pythonRelaxDepsHook
+        ]
+        ++ optionals relaxBuildDeps [
+          (extendDerivation (
+            !finalAttrs.__structuredAttrs
+            -> throw "${getName finalAttrs}: pythonRelaxBuildDepsHook requires __structuredAttrs = true."
+          ) { } pythonRelaxBuildDepsHook)
         ]
         ++ optionals removeBinBytecode [
           pythonRemoveBinBytecodeHook
