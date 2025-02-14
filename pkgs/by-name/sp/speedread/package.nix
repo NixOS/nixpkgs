@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "speedread";
-  version = "unstable-2016-09-21";
+  version = "0-unstable-2016-09-21";
 
   src = fetchFromGitHub {
     owner = "pasky";

@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suwidgets";
-  version = "unstable-2022-04-03";
+  version = "0-unstable-2022-04-03";
 
   src = fetchFromGitHub {
     owner = "BatchDrake";

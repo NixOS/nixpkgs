@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "xss-lock";
-  version = "unstable-2018-05-31";
+  version = "0-unstable-2018-05-31";
 
   src = fetchFromGitHub {
     owner = "xdbob";

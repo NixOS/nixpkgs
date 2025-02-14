@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "vapoursynth-znedi3";
-  version = "unstable-2023-07-09";
+  version = "0-unstable-2023-07-09";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;

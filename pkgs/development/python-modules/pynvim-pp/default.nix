@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pynvim-pp";
-  version = "unstable-2024-07-31";
+  version = "0-unstable-2024-07-31";
   pyproject = true;
 
   src = fetchFromGitHub {

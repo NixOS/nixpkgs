@@ -9,7 +9,7 @@
 let
   buildFreshRssExtension = (callPackage ./freshrss-utils.nix { }).buildFreshRssExtension;
 
-  official_extensions_version = "unstable-2024-04-27";
+  official_extensions_version = "0-unstable-2024-04-27";
   official_extensions_src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "Extensions";
@@ -41,7 +41,7 @@ let
       demo = buildFreshRssExtension {
         FreshRssExtUniqueId = "Demo";
         pname = "demo";
-        version = "unstable-2023-12-22";
+        version = "0-unstable-2023-12-22";
         src = fetchFromGitHub {
           owner = "FreshRSS";
           repo = "xExtension-Demo";

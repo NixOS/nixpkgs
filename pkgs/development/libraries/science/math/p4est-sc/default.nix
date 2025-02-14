@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "p4est-sc${dbg}";
-  version = "unstable-2021-06-14";
+  version = "0-unstable-2021-06-14";
 
   # fetch an untagged snapshot of the prev3-develop branch
   src = fetchFromGitHub {

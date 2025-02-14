@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "9base";
-  version = "unstable-2019-09-11";
+  version = "0-unstable-2019-09-11";
 
   src = fetchgit {
     url = "https://git.suckless.org/9base";

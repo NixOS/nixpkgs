@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bicgl";
-  version = "unstable-2018-04-06";
+  version = "0-unstable-2018-04-06";
 
   owner = "BIC-MNI";
 

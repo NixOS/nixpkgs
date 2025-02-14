@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "ldapvi";
-  version = "unstable-2012-04-28";
+  version = "0-unstable-2012-04-28";
 
   # use latest git, it includes some important patches since 2007 release
   src = fetchgit {

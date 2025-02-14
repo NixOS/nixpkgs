@@ -12,7 +12,7 @@
 rustPlatform.buildRustPackage {
   pname = "cargo-bundle";
   # the latest stable release fails to build on darwin
-  version = "unstable-2023-08-18";
+  version = "0-unstable-2023-08-18";
 
   src = fetchFromGitHub {
     owner = "burtonageo";

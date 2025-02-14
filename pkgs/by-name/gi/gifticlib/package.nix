@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gifticlib";
-  version = "unstable-2020-07-07";
+  version = "0-unstable-2020-07-07";
 
   src = fetchFromGitHub {
     owner = "NIFTI-Imaging";

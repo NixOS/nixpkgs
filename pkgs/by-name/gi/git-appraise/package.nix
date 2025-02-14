@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "git-appraise";
-  version = "unstable-2022-04-13";
+  version = "0-unstable-2022-04-13";
 
   src = fetchFromGitHub {
     owner = "google";

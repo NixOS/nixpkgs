@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "wlr-protocols";
-  version = "unstable-2022-09-05";
+  version = "0-unstable-2022-09-05";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

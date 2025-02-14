@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mullvad-closest";
-  version = "unstable-2023-07-09";
+  version = "0-unstable-2023-07-09";
   format = "pyproject";
 
   src = fetchFromGitHub {

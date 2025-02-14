@@ -21,7 +21,7 @@
 stdenv.mkDerivation {
   pname = "XtreemFS";
   # using unstable release because stable (v1.5.1) has broken repl java plugin
-  version = "unstable-2015-06-17";
+  version = "0-unstable-2015-06-17";
 
   src = fetchFromGitHub {
     rev = "7ddcb081aa125b0cfb008dc98addd260b8353ab3";

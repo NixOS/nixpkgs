@@ -8,7 +8,7 @@
 
 {
   pname = "gerbil-mysql";
-  version = "unstable-2023-09-23";
+  version = "0-unstable-2023-09-23";
   git-version = "ecec94c";
   gerbil-package = "clan";
   gerbilInputs = [ ];

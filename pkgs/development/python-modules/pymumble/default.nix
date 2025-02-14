@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "pymumble";
-  version = "unstable-2024-10-20";
+  version = "0-unstable-2024-10-20";
   pyproject = true;
 
   disabled = pythonOlder "3.7";

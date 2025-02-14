@@ -6,7 +6,7 @@
 
 buildPythonPackage {
   pname = "pyfantom";
-  version = "unstable-2013-12-18";
+  version = "0-unstable-2013-12-18";
   format = "setuptools";
 
   src = fetchgit {

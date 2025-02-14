@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "spoof-mac";
-  version = "unstable-2018-01-27";
+  version = "0-unstable-2018-01-27";
 
   src = fetchFromGitHub {
     owner = "feross";

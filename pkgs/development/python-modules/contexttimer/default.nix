@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "contexttimer";
-  version = "unstable-2019-03-30";
+  version = "0-unstable-2019-03-30";
   format = "setuptools";
 
   disabled = pythonAtLeast "3.12";

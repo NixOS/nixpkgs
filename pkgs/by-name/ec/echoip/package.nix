@@ -8,7 +8,7 @@
 
 buildGoModule {
   pname = "echoip";
-  version = "unstable-2023-05-21";
+  version = "0-unstable-2023-05-21";
 
   src = fetchFromGitHub {
     owner = "mpolden";

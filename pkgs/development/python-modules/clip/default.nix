@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "clip";
-  version = "unstable-2022-11-17";
+  version = "0-unstable-2022-11-17";
   format = "setuptools";
 
   src = fetchFromGitHub {

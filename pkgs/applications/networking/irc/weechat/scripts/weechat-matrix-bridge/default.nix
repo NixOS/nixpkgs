@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "weechat-matrix-bridge";
-  version = "unstable-2018-11-19";
+  version = "0-unstable-2018-11-19";
   src = fetchFromGitHub {
     owner = "torhve";
     repo = "weechat-matrix-protocol-script";

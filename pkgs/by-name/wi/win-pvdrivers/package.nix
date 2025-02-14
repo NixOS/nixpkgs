@@ -46,7 +46,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "win-pvdrivers";
-  version = "unstable-2023-08-17";
+  version = "0-unstable-2023-08-17";
 
   srcs = map (
     { hash, url }:

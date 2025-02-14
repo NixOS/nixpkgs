@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "pretix-avgchart";
-  version = "unstable-2023-11-27";
+  version = "0-unstable-2023-11-27";
   pyproject = true;
 
   src = fetchFromGitHub {

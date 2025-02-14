@@ -19,7 +19,7 @@
 stdenv.mkDerivation rec {
   pname = "lzwolf";
   # Fix-Me: Remember to remove SDL2_mixer pin (at top-level) on next lzwolf upgrade.
-  version = "unstable-2022-12-26";
+  version = "0-unstable-2022-12-26";
 
   src = fetchFromBitbucket {
     owner = "linuxwolf6";

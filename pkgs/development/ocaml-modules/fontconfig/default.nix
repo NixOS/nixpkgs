@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "ocaml${ocaml.version}-fontconfig";
-  version = "unstable-2013-11-03";
+  version = "0-unstable-2013-11-03";
 
   src = fetchFromGitHub {
     owner = "flh";

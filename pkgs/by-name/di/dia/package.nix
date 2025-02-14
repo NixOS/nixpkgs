@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation {
   pname = "dia";
-  version = "unstable-2023-09-28";
+  version = "0-unstable-2023-09-28";
 
   src = fetchFromGitLab {
     owner = "GNOME";

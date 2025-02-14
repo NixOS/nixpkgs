@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "go-outline";
-  version = "unstable-2021-06-08";
+  version = "0-unstable-2021-06-08";
 
   src = fetchFromGitHub {
     owner = "ramya-rao-a";

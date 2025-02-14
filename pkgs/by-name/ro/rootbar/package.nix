@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rootbar";
-  version = "unstable-2020-11-13";
+  version = "0-unstable-2020-11-13";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/rootbar";

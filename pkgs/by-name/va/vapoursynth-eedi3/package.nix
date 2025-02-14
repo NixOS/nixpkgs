@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "vapoursynth-eedi3";
-  version = "unstable-2019-09-30";
+  version = "0-unstable-2019-09-30";
 
   src = fetchFromGitHub {
     owner = "HomeOfVapourSynthEvolution";

@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pomodoro";
-  version = "unstable-2021-06-18";
+  version = "0-unstable-2021-06-18";
 
   src = fetchFromGitHub {
     owner = "SanderJSA";

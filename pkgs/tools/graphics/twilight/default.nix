@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "twilight";
-  version = "unstable-2018-04-19";
+  version = "0-unstable-2018-04-19";
 
   src = fetchFromGitHub {
     owner = "tweakoz";

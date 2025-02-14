@@ -48,7 +48,7 @@ let
 
   compat-list = stdenv.mkDerivation {
     pname = "yuzu-compatibility-list";
-    version = "unstable-2024-02-26";
+    version = "0-unstable-2024-02-26";
 
     src = fetchFromGitHub {
       owner = "flathub";
@@ -83,7 +83,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "torzu";
-  version = "unstable-2024-12-15";
+  version = "0-unstable-2024-12-15";
 
   src = fetchgit {
     url = "https://notabug.org/litucks/torzu";

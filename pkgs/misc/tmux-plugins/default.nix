@@ -53,7 +53,7 @@ in rec {
 
   battery = mkTmuxPlugin {
     pluginName = "battery";
-    version = "unstable-2019-07-04";
+    version = "0-unstable-2019-07-04";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-battery";
@@ -64,7 +64,7 @@ in rec {
 
   better-mouse-mode = mkTmuxPlugin {
     pluginName = "better-mouse-mode";
-    version = "unstable-2021-08-02";
+    version = "0-unstable-2021-08-02";
     src = fetchFromGitHub {
       owner = "NHDaly";
       repo = "tmux-better-mouse-mode";
@@ -112,7 +112,7 @@ in rec {
 
   continuum = mkTmuxPlugin {
     pluginName = "continuum";
-    version = "unstable-2022-01-25";
+    version = "0-unstable-2022-01-25";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
@@ -164,7 +164,7 @@ in rec {
 
   copycat = mkTmuxPlugin {
     pluginName = "copycat";
-    version = "unstable-2020-01-09";
+    version = "0-unstable-2020-01-09";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-copycat";
@@ -175,7 +175,7 @@ in rec {
 
   cpu = mkTmuxPlugin {
     pluginName = "cpu";
-    version = "unstable-2023-01-06";
+    version = "0-unstable-2023-01-06";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
@@ -247,7 +247,7 @@ in rec {
 
   fpp = mkTmuxPlugin {
     pluginName = "fpp";
-    version = "unstable-2016-03-08";
+    version = "0-unstable-2016-03-08";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-fpp";
@@ -261,7 +261,7 @@ in rec {
 
   fuzzback = mkTmuxPlugin {
     pluginName = "fuzzback";
-    version = "unstable-2022-11-21";
+    version = "0-unstable-2022-11-21";
     src = fetchFromGitHub {
       owner = "roosta";
       repo = "tmux-fuzzback";
@@ -288,7 +288,7 @@ in rec {
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
-    version = "unstable-2024-04-14";
+    version = "0-unstable-2024-04-14";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-fzf-url";
@@ -306,7 +306,7 @@ in rec {
   gruvbox = mkTmuxPlugin {
     pluginName = "gruvbox";
     rtpFilePath = "gruvbox-tpm.tmux";
-    version = "unstable-2022-04-19";
+    version = "0-unstable-2022-04-19";
     src = fetchFromGitHub {
       owner = "egel";
       repo = "tmux-gruvbox";
@@ -339,7 +339,7 @@ in rec {
 
   logging = mkTmuxPlugin {
     pluginName = "logging";
-    version = "unstable-2019-04-19";
+    version = "0-unstable-2019-04-19";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-logging";
@@ -350,7 +350,7 @@ in rec {
 
   mode-indicator = mkTmuxPlugin rec {
     pluginName = "mode-indicator";
-    version = "unstable-2021-10-01";
+    version = "0-unstable-2021-10-01";
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "tmux-mode-indicator";
@@ -368,7 +368,7 @@ in rec {
 
   net-speed = mkTmuxPlugin {
     pluginName = "net-speed";
-    version = "unstable-2018-12-02";
+    version = "0-unstable-2018-12-02";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-net-speed";
@@ -404,7 +404,7 @@ in rec {
 
   maildir-counter = mkTmuxPlugin {
     pluginName = "maildir-counter";
-    version = "unstable-2016-11-25";
+    version = "0-unstable-2016-11-25";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-maildir-counter";
@@ -415,7 +415,7 @@ in rec {
 
   online-status = mkTmuxPlugin {
     pluginName = "online-status";
-    version = "unstable-2018-11-30";
+    version = "0-unstable-2018-11-30";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-online-status";
@@ -426,7 +426,7 @@ in rec {
 
   open = mkTmuxPlugin {
     pluginName = "open";
-    version = "unstable-2019-12-02";
+    version = "0-unstable-2019-12-02";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-open";
@@ -438,7 +438,7 @@ in rec {
   onedark-theme = mkTmuxPlugin {
     pluginName = "onedark-theme";
     rtpFilePath = "tmux-onedark-theme.tmux";
-    version = "unstable-2020-06-07";
+    version = "0-unstable-2020-06-07";
     src = fetchFromGitHub {
       owner = "odedlaz";
       repo = "tmux-onedark-theme";
@@ -449,7 +449,7 @@ in rec {
 
   pain-control = mkTmuxPlugin {
     pluginName = "pain-control";
-    version = "unstable-2020-02-18";
+    version = "0-unstable-2020-02-18";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-pain-control";
@@ -504,7 +504,7 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2024-05-12";
+    version = "0-unstable-2024-05-12";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
@@ -521,7 +521,7 @@ in rec {
 
   prefix-highlight = mkTmuxPlugin {
     pluginName = "prefix-highlight";
-    version = "unstable-2021-03-30";
+    version = "0-unstable-2021-03-30";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-prefix-highlight";
@@ -532,7 +532,7 @@ in rec {
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2022-05-01";
+    version = "0-unstable-2022-05-01";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
@@ -570,7 +570,7 @@ in rec {
 
   rose-pine = mkTmuxPlugin {
     pluginName = "rose-pine";
-    version = "unstable-2024-01-08";
+    version = "0-unstable-2024-01-08";
     rtpFilePath = "rose-pine.tmux";
     src = fetchFromGitHub {
       owner = "rose-pine";
@@ -587,7 +587,7 @@ in rec {
 
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
-    version = "unstable-2022-08-14";
+    version = "0-unstable-2022-08-14";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sensible";
@@ -636,7 +636,7 @@ in rec {
 
   sessionist = mkTmuxPlugin {
     pluginName = "sessionist";
-    version = "unstable-2017-12-03";
+    version = "0-unstable-2017-12-03";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sessionist";
@@ -647,7 +647,7 @@ in rec {
 
   sidebar = mkTmuxPlugin {
     pluginName = "sidebar";
-    version = "unstable-2018-11-30";
+    version = "0-unstable-2018-11-30";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sidebar";
@@ -658,7 +658,7 @@ in rec {
 
   sysstat = mkTmuxPlugin {
     pluginName = "sysstat";
-    version = "unstable-2017-12-12";
+    version = "0-unstable-2017-12-12";
     src = fetchFromGitHub {
       owner = "samoshkin";
       repo = "tmux-plugin-sysstat";
@@ -669,7 +669,7 @@ in rec {
 
   tilish = mkTmuxPlugin {
     pluginName = "tilish";
-    version = "unstable-2023-09-20";
+    version = "0-unstable-2023-09-20";
     src = fetchFromGitHub {
       owner = "jabirali";
       repo = "tmux-tilish";
@@ -707,7 +707,7 @@ in rec {
 
   tmux-colors-solarized = mkTmuxPlugin {
     pluginName = "tmuxcolors";
-    version = "unstable-2019-07-14";
+    version = "0-unstable-2019-07-14";
     src = fetchFromGitHub {
       owner = "seebi";
       repo = "tmux-colors-solarized";
@@ -739,7 +739,7 @@ in rec {
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2023-10-24";
+    version = "0-unstable-2023-10-24";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
@@ -820,7 +820,7 @@ in rec {
 
   urlview = mkTmuxPlugin {
     pluginName = "urlview";
-    version = "unstable-2016-01-06";
+    version = "0-unstable-2016-01-06";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-urlview";
@@ -834,7 +834,7 @@ in rec {
 
   vim-tmux-focus-events = mkTmuxPlugin {
     pluginName = "vim-tmux-focus-events";
-    version = "unstable-2020-10-05";
+    version = "0-unstable-2020-10-05";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "vim-tmux-focus-events";
@@ -854,7 +854,7 @@ in rec {
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2022-08-21";
+    version = "0-unstable-2022-08-21";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
@@ -866,7 +866,7 @@ in rec {
   weather = mkTmuxPlugin {
     pluginName = "weather";
     rtpFilePath = "tmux-weather.tmux";
-    version = "unstable-2020-02-08";
+    version = "0-unstable-2020-02-08";
     src = fetchFromGitHub {
       owner = "xamut";
       repo = "tmux-weather";
@@ -889,7 +889,7 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2023-07-19";
+    version = "0-unstable-2023-07-19";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";

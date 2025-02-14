@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "dwarf2json";
-  version = "unstable-2021-04-15";
+  version = "0-unstable-2021-04-15";
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";

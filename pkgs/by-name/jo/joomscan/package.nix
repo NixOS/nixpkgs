@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "joomscan";
-  version = "unstable-2021-06-08";
+  version = "0-unstable-2021-06-08";
 
   src = fetchFromGitHub {
     owner = "owasp";

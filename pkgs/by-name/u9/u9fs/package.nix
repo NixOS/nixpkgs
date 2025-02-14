@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "u9fs";
-  version = "unstable-2021-01-25";
+  version = "0-unstable-2021-01-25";
 
   src = fetchFromBitbucket {
     owner = "plan9-from-bell-labs";

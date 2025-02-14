@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-guppy";
-  version = "unstable-2023-10-04";
+  version = "0-unstable-2023-10-04";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";

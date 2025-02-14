@@ -10,7 +10,7 @@
 let
   pkg = callPackage ./build.nix (
     {
-      version = "unstable-2018-01-18";
+      version = "0-unstable-2018-01-18";
 
       rev = "c516e8e78d39dd2b339acadc4c175347171150bb";
       sha256 = "1p9lx78cayyn7qc2q66id2xfs76jyddnqv2x1ypsvixaxwcvqgdb";

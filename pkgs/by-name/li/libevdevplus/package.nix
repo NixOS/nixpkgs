@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libevdevplus";
-  version = "unstable-2021-04-02";
+  version = "0-unstable-2021-04-02";
 
   # adds missing cmake install directives
   # https://github.com/YukiWorkshop/libevdevPlus/pull/10

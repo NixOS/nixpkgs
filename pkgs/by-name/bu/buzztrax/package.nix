@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation {
   pname = "buzztrax";
-  version = "unstable-2022-01-26";
+  version = "0-unstable-2022-01-26";
 
   src = fetchFromGitHub {
     owner = "Buzztrax";

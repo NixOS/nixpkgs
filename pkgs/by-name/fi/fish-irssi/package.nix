@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fish-irssi";
-  version = "unstable-2021-04-16";
+  version = "0-unstable-2021-04-16";
 
   src = fetchFromGitHub {
     owner = "falsovsky";

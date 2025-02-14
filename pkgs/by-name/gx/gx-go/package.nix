@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "gx-go";
-  version = "unstable-2020-03-03";
+  version = "0-unstable-2020-03-03";
 
   src = fetchFromGitHub {
     owner = "whyrusleeping";

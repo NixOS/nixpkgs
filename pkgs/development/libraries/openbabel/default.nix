@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
-  version = "unstable-06-12-23";
+  version = "0-unstable-06-12-23";
 
   src = fetchFromGitHub {
     owner = "openbabel";

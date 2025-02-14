@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "inormalize";
-  version = "unstable-2014-10-21";
+  version = "0-unstable-2014-10-21";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";

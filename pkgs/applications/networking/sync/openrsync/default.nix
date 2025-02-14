@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "openrsync";
-  version = "unstable-2022-05-08";
+  version = "0-unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "kristapsdz";

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "OttoMatic";
-  version = "unstable-2023-11-13";
+  version = "0-unstable-2023-11-13";
 
   src = fetchFromGitHub {
     owner = "jorio";

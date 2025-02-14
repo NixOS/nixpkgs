@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "oobicpl";
-  version = "unstable-2020-08-12";
+  version = "0-unstable-2020-08-12";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";

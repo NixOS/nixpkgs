@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exifprobe";
-  version = "unstable-2018-06-19";
+  version = "0-unstable-2018-06-19";
 
   src = fetchFromGitHub {
     owner = "hfiguiere";

@@ -18,7 +18,7 @@
 let
   base = stdenv.mkDerivation rec {
     pname = "opensoldat-base";
-    version = "unstable-2021-09-05";
+    version = "0-unstable-2021-09-05";
 
     src = fetchFromGitHub {
       name = "base";
@@ -51,7 +51,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "opensoldat";
-  version = "unstable-2022-07-02";
+  version = "0-unstable-2022-07-02";
 
   src = fetchFromGitHub {
     name = "opensoldat";

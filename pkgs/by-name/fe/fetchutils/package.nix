@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "fetchutils";
-  version = "unstable-2021-03-16";
+  version = "0-unstable-2021-03-16";
 
   src = fetchFromGitHub {
     owner = "kiedtl";

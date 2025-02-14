@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "termbench-pro";
-  version = "unstable-2024-10-05";
+  version = "0-unstable-2024-10-05";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";

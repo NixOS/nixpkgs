@@ -12,7 +12,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "mswatch";
   # Stable release won't compile successfully
-  version = "unstable-2018-11-21";
+  version = "0-unstable-2018-11-21";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/mswatch/code/trunk";

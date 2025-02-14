@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "rencode";
-  version = "unstable-2021-08-10";
+  version = "0-unstable-2021-08-10";
 
   format = "setuptools";
 

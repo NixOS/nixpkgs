@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpm";
-  version = "unstable-2020-06-17";
+  version = "0-unstable-2020-06-17";
 
   src = fetchFromGitHub {
     owner = "telmich";

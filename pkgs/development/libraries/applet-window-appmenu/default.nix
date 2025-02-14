@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation {
   pname = "applet-window-appmenu";
-  version = "unstable-2022-06-27";
+  version = "0-unstable-2022-06-27";
 
   src = fetchFromGitHub {
     owner = "psifidotos";

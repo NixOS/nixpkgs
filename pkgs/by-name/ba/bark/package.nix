@@ -7,7 +7,7 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "bark";
-  version = "unstable-2023-08-22";
+  version = "0-unstable-2023-08-22";
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "bark";

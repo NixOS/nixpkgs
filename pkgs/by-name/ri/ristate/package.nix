@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ristate";
-  version = "unstable-2021-09-10";
+  version = "0-unstable-2021-09-10";
 
   src = fetchFromGitLab {
     owner = "snakedye";

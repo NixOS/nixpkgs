@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation {
-  version = "unstable-2018-06-03";
+  version = "0-unstable-2018-06-03";
   pname = "run-scaled";
 
   src = fetchFromGitHub {

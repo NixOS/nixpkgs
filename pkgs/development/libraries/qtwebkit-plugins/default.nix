@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "qtwebkit-plugins";
-  version = "unstable-2017-01-25";
+  version = "0-unstable-2017-01-25";
 
   src = fetchFromGitHub {
     owner = "QupZilla";

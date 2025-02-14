@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "i3-cycle-focus";
-  version = "unstable-2021-09-27";
+  version = "0-unstable-2021-09-27";
 
   src = fetchFromGitHub {
     owner = "TheDoctor314";

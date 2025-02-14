@@ -8,7 +8,7 @@
 
 {
   pname = "gerbil-libyaml";
-  version = "unstable-2023-09-23";
+  version = "0-unstable-2023-09-23";
   git-version = "398a197";
   gerbil-package = "clan";
   gerbilInputs = [ ];

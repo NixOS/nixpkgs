@@ -1080,7 +1080,7 @@ self: super: {
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = overrideSrc {
-    version = "unstable-2023-11-20";
+    version = "0-unstable-2023-11-20";
     src = pkgs.fetchFromGitHub {
       owner = "augustss";
       repo = "djinn";
@@ -1106,7 +1106,7 @@ self: super: {
     # The latest release on hackage is missing necessary patches for recent compilers
     # https://github.com/Philonous/d-bus/issues/24
     newer = overrideSrc {
-      version = "unstable-2021-01-08";
+      version = "0-unstable-2021-01-08";
       src = pkgs.fetchFromGitHub {
         owner = "Philonous";
         repo = "d-bus";
@@ -1607,7 +1607,7 @@ self: super: {
     [
       # Use latest main branch version of dhall-lsp-server.
       (assert super.dhall-lsp-server.version == "1.1.3"; overrideSrc {
-        version = "unstable-2024-02-19";
+        version = "0-unstable-2024-02-19";
         src = pkgs.fetchFromGitHub {
           owner = "dhall-lang";
           repo = "dhall-haskell";
@@ -2979,7 +2979,7 @@ self: super: {
 
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
-    version = "unstable-2023-12-02";
+    version = "0-unstable-2023-12-02";
     src = pkgs.fetchFromGitHub {
       owner = "haskell-to-elm";
       repo = "haskell-to-elm";

@@ -80,7 +80,7 @@ mixRelease rec {
         };
         icalendar = buildMix rec {
           name = "icalendar";
-          version = "unstable-2022-04-10";
+          version = "0-unstable-2022-04-10";
           src = fetchFromGitHub {
             owner = "tcitworld";
             repo = name;

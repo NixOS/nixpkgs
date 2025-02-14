@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "aefs";
-  version = "unstable-2015-05-06";
+  version = "0-unstable-2015-05-06";
 
   src = fetchFromGitHub {
     owner = "edolstra";

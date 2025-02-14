@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "go-autoconfig";
-  version = "unstable-2022-08-03";
+  version = "0-unstable-2022-08-03";
 
   src = fetchFromGitHub {
     owner = "L11R";

@@ -15,7 +15,7 @@ assert builtins.any (s: withStyle == s) [
 
 stdenv.mkDerivation {
   pname = "sleek-grub-theme";
-  version = "unstable-2024-08-11";
+  version = "0-unstable-2024-08-11";
 
   src = fetchFromGitHub ({
     owner = "sandesh236";

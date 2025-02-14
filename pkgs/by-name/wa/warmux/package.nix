@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation {
   pname = "warmux";
-  version = "unstable-2017-10-20";
+  version = "0-unstable-2017-10-20";
 
   src = fetchFromGitHub {
     owner = "fluxer";

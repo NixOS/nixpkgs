@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "clangd_extensions.nvim";
-  version = "unstable-2024-10-05";
+  version = "0-unstable-2024-10-05";
 
   src = fetchFromSourcehut {
     owner = "~p00f";

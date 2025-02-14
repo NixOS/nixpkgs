@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "openspin";
-  version = "unstable-2018-10-02";
+  version = "0-unstable-2018-10-02";
 
   src = fetchFromGitHub {
     owner = "parallaxinc";

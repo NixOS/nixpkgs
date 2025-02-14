@@ -26,7 +26,7 @@ in
 
 stdenv.mkDerivation {
   pname = "swift-corefoundation";
-  version = "unstable-2018-09-14";
+  version = "0-unstable-2018-09-14";
 
   src = fetchFromGitHub {
     owner = "apple";

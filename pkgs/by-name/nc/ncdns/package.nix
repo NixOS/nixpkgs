@@ -58,7 +58,7 @@ in
 
 buildGoModule {
   pname = "ncdns";
-  version = "unstable-2024-05-18";
+  version = "0-unstable-2024-05-18";
 
   src = fetchFromGitHub {
     owner = "namecoin";

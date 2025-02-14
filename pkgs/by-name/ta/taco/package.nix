@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taco";
-  version = "unstable-2022-08-02";
+  version = "0-unstable-2022-08-02";
 
   src = fetchFromGitHub {
     owner = "tensor-compiler";

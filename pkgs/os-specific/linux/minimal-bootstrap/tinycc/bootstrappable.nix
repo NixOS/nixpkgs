@@ -18,7 +18,7 @@
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes recompileLibc;
 
-  version = "unstable-2023-04-20";
+  version = "0-unstable-2023-04-20";
   rev = "80114c4da6b17fbaabb399cc29f427e368309bc8";
 
   tarball = fetchurl {

@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "synapse-bt";
-  version = "unstable-2023-02-16";
+  version = "0-unstable-2023-02-16";
 
   src = fetchFromGitHub {
     owner = "Luminarys";

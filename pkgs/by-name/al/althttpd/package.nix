@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "althttpd";
-  version = "unstable-2023-08-12";
+  version = "0-unstable-2023-08-12";
 
   src = fetchfossil {
     url = "https://sqlite.org/althttpd/";

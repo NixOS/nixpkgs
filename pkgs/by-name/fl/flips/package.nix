@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "flips";
-  version = "unstable-2023-03-15";
+  version = "0-unstable-2023-03-15";
 
   src = fetchFromGitHub {
     owner = "Alcaro";

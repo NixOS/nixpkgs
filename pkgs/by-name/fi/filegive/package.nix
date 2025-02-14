@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "filegive";
-  version = "unstable-2022-05-29";
+  version = "0-unstable-2022-05-29";
   rev = "5b28e7087a";
 
   src = fetchurl {

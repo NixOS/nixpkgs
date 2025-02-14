@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "snet";
-  version = "unstable-2021-11-26";
+  version = "0-unstable-2021-11-26";
 
   src = fetchFromGitHub {
     owner = "monsterxx03";

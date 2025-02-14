@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "byzanz";
-  version = "unstable-2016-03-12";
+  version = "0-unstable-2016-03-12";
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/Archive/byzanz";

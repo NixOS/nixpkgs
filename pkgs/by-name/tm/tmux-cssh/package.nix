@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "tmux-cssh";
-  version = "unstable-2015-10-15";
+  version = "0-unstable-2015-10-15";
 
   src = fetchFromGitHub {
     owner = "dennishafemann";

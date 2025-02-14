@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "moltengamepad";
-  version = "unstable-2016-05-04";
+  version = "0-unstable-2016-05-04";
 
   src = fetchFromGitHub {
     owner = "jgeumlek";

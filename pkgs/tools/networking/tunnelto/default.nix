@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tunnelto";
-  version = "unstable-2022-09-25";
+  version = "0-unstable-2022-09-25";
 
   src = fetchFromGitHub {
     owner = "agrinman";

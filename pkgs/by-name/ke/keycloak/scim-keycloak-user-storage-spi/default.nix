@@ -6,7 +6,7 @@
 
 maven.buildMavenPackage {
   pname = "scim-keycloak-user-storage-spi";
-  version = "unstable-2024-02-14";
+  version = "0-unstable-2024-02-14";
 
   src = fetchFromGitHub {
     owner = "justin-stephenson";

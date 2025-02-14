@@ -56,7 +56,7 @@ let
   });
   nanosvg-fltk = nanosvg.overrideAttrs (old: rec {
     pname = "nanosvg-fltk";
-    version = "unstable-2022-12-22";
+    version = "0-unstable-2022-12-22";
 
     src = fetchFromGitHub {
       owner = "fltk";

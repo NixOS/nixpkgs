@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "picoprobe-udev-rules";
-  version = "unstable-2023-01-31";
+  version = "0-unstable-2023-01-31";
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/probe-rs/webpage/1cba61acc6ecb5ff96f74641269844ad88ad8ad5/static/files/69-probe-rs.rules";

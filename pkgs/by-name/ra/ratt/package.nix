@@ -5,7 +5,7 @@
 }:
 buildGoModule rec {
   pname = "ratt";
-  version = "unstable-2023-02-12";
+  version = "0-unstable-2023-02-12";
 
   src = fetchFromSourcehut {
     owner = "~ghost08";

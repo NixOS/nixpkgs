@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "rumps";
-  version = "unstable-2025-02-02";
+  version = "0-unstable-2025-02-02";
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "git2cl";
-  version = "unstable-2008-08-27";
+  version = "0-unstable-2008-08-27";
 
   src = fetchgit {
     url = "git://repo.or.cz/git2cl.git";

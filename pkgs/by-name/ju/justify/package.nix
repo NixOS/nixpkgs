@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "justify";
-  version = "unstable-2022-03-19";
+  version = "0-unstable-2022-03-19";
 
   src = fetchFromGitea {
     domain = "tildegit.org";

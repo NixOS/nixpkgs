@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sstp-client";
-  version = "unstable-2023-03-25";
+  version = "0-unstable-2023-03-25";
 
   src = fetchFromGitLab {
     owner = "sstp-project";

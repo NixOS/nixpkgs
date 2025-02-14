@@ -29,7 +29,7 @@ let
 in
 mkDerivation rec {
   pname = "trojita";
-  version = "unstable-2022-08-22";
+  version = "0-unstable-2022-08-22";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";

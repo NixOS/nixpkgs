@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidsvn";
-  version = "unstable-2021-08-02";
+  version = "0-unstable-2021-08-02";
 
   src = fetchFromGitHub {
     owner = "RapidSVN";

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-auth-ldap";
-  version = "unstable-2022-11-30";
+  version = "0-unstable-2022-11-30";
 
   src = fetchFromGitHub {
     owner = "hydrian";

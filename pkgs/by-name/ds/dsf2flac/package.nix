@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dsf2flac";
-  version = "unstable-2021-07-31";
+  version = "0-unstable-2021-07-31";
 
   src = fetchFromGitHub {
     owner = "hank";

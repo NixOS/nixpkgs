@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "piglit";
-  version = "unstable-2020-10-23";
+  version = "0-unstable-2020-10-23";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

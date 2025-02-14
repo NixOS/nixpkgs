@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "quadprogpp";
-  version = "unstable-2023-01-20";
+  version = "0-unstable-2023-01-20";
 
   src = fetchFromGitHub {
     owner = "liuq";

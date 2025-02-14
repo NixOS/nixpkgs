@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "ydp-grand";
-  version = "unstable-2016-08-04";
+  version = "0-unstable-2016-08-04";
 
   src = fetchurl {
     url = "https://freepats.zenvoid.org/Piano/YDP-GrandPiano/YDP-GrandPiano-SF2-20160804.tar.bz2";

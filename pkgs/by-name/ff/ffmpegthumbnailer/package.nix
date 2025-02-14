@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
-  version = "unstable-2024-01-04";
+  version = "0-unstable-2024-01-04";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";

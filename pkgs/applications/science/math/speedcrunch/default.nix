@@ -10,7 +10,7 @@
 
 mkDerivation rec {
   pname = "speedcrunch";
-  version = "unstable-2021-10-09";
+  version = "0-unstable-2021-10-09";
 
   src = fetchFromBitbucket {
     owner = "heldercorreia";

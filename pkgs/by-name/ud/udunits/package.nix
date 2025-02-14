@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "udunits";
-  version = "unstable-2021-03-17";
+  version = "0-unstable-2021-03-17";
 
   src = fetchFromGitHub {
     owner = "Unidata";

@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "ebtks";
-  version = "unstable-2017-09-23";
+  version = "0-unstable-2017-09-23";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";

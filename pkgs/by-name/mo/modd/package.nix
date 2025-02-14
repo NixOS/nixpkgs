@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "modd";
-  version = "unstable-2021-12-15";
+  version = "0-unstable-2021-12-15";
 
   src = fetchFromGitHub {
     owner = "cortesi";

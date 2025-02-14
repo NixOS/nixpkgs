@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "selectdefaultapplication";
-  version = "unstable-2021-08-12";
+  version = "0-unstable-2021-08-12";
 
   src = fetchFromGitHub {
     owner = "sandsmark";

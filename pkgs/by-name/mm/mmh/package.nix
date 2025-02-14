@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mmh";
-  version = "unstable-2020-08-21";
+  version = "0-unstable-2020-08-21";
 
   src = fetchurl {
     url = "http://git.marmaro.de/?p=mmh;a=snapshot;h=${rev};sf=tgz";

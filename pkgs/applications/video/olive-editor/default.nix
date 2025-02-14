@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation {
   pname = "olive-editor";
-  version = "unstable-2023-06-12";
+  version = "0-unstable-2023-06-12";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;

@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "times-newer-roman";
-  version = "unstable-2018-09-11";
+  version = "0-unstable-2018-09-11";
 
   src = fetchzip {
     url = "https://web.archive.org/web/20210609022835/https://timesnewerroman.com/assets/TimesNewerRoman.zip";

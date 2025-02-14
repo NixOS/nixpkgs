@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "zgrab2";
-  version = "unstable-2023-03-23";
+  version = "0-unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "zmap";

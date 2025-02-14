@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "dwt1-shell-color-scripts";
-  version = "unstable-2023-03-27";
+  version = "0-unstable-2023-03-27";
 
   src = fetchFromGitLab {
     owner = "dwt1";

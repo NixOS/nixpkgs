@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "prosody-filer";
-  version = "unstable-2021-05-24";
+  version = "0-unstable-2021-05-24";
 
   src = fetchFromGitHub {
     owner = "ThomasLeister";

@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "idrac_exporter";
-  version = "unstable-2023-06-29";
+  version = "0-unstable-2023-06-29";
 
   src = fetchFromGitHub {
     owner = "mrlhansen";

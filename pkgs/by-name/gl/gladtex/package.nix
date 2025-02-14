@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "gladtex";
-  version = "unstable-2023-01-22";
+  version = "0-unstable-2023-01-22";
 
   src = fetchFromGitHub {
     owner = "humenda";

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation {
-  version = "unstable-2018-10-18";
+  version = "0-unstable-2018-10-18";
   pname = "ps2client";
 
   src = fetchFromGitHub {

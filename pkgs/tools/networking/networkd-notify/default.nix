@@ -11,7 +11,7 @@
 
 buildPythonApplication rec {
   pname = "networkd-notify";
-  version = "unstable-2022-11-29";
+  version = "0-unstable-2022-11-29";
   # There is no setup.py, just a single Python script.
   format = "other";
 

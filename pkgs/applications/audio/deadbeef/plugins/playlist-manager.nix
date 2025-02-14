@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "deadbeef-playlist-manager-plugin";
-  version = "unstable-2021-05-02";
+  version = "0-unstable-2021-05-02";
 
   src = fetchFromGitHub {
     owner = "kpcee";

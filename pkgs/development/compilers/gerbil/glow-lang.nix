@@ -2,7 +2,7 @@
 
 rec {
   pname = "glow-lang";
-  version = "unstable-2023-12-04";
+  version = "0-unstable-2023-12-04";
   git-version = "0.3.2-237-g08d849ad";
   softwareName = "Glow";
   gerbil-package = "mukn/glow";

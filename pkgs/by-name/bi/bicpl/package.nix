@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bicpl";
-  version = "unstable-2024-05-14";
+  version = "0-unstable-2024-05-14";
 
   # master is not actively maintained, using develop and develop-apple branches
   src = fetchFromGitHub {

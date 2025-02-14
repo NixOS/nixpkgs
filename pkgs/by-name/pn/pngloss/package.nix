@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pngloss";
-  version = "unstable-2020-11-25";
+  version = "0-unstable-2020-11-25";
 
   src = fetchFromGitHub {
     owner = "foobaz";

@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openbangla-keyboard";
-  version = "unstable-2023-07-21";
+  version = "0-unstable-2023-07-21";
 
   src = fetchFromGitHub {
     owner = "openbangla";

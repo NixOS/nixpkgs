@@ -8,7 +8,7 @@
 buildNimPackage (
   final: prev: {
     pname = "atlas";
-    version = "unstable-2023-09-22";
+    version = "0-unstable-2023-09-22";
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "atlas";

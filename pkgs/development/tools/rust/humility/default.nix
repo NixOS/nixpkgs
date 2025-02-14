@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "humility";
-  version = "unstable-2023-11-08";
+  version = "0-unstable-2023-11-08";
 
   nativeBuildInputs = [
     pkg-config

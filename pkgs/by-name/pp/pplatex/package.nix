@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pplatex";
-  version = "unstable-2023-04-18";
+  version = "0-unstable-2023-04-18";
 
   src = fetchFromGitHub {
     owner = "stefanhepp";

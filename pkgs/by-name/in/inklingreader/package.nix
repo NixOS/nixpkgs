@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "inklingreader";
-  version = "unstable-2017-09-07";
+  version = "0-unstable-2017-09-07";
 
   src = fetchFromGitHub {
     owner = "roelj";

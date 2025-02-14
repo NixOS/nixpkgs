@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "shellnoob";
-  version = "unstable-2022-03-16";
+  version = "0-unstable-2022-03-16";
 
   src = fetchFromGitHub {
     owner = "reyammer";

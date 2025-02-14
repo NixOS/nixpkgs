@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abc-verifier";
-  version = "unstable-2023-10-13";
+  version = "0-unstable-2023-10-13";
 
   src = fetchFromGitHub {
     owner = "yosyshq";

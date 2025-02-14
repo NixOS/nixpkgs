@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "move-mount-beneath";
-  version = "unstable-2023-11-26";
+  version = "0-unstable-2023-11-26";
 
   src = fetchFromGitHub {
     owner = "brauner";

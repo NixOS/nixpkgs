@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "bashblog";
-  version = "unstable-2022-03-26";
+  version = "0-unstable-2022-03-26";
 
   src = fetchFromGitHub {
     owner = "cfenollosa";

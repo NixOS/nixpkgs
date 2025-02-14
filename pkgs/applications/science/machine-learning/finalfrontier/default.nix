@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "finalfrontier";
-  version = "unstable-2022-01-06";
+  version = "0-unstable-2022-01-06";
 
   src = fetchFromGitHub {
     owner = "finalfusion";

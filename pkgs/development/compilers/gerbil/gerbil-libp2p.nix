@@ -2,7 +2,7 @@
 
 {
   pname = "gerbil-libp2p";
-  version = "unstable-2022-02-03";
+  version = "0-unstable-2022-02-03";
   git-version = "15b3246";
   softwareName = "Gerbil-libp2p";
   gerbil-package = "vyzo";

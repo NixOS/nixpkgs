@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "mba6x_bl";
-  version = "unstable-2017-12-30";
+  version = "0-unstable-2017-12-30";
 
   src = fetchFromGitHub {
     owner = "patjak";

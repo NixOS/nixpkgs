@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "elf-dissector";
-  version = "unstable-2023-12-24";
+  version = "0-unstable-2023-12-24";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";

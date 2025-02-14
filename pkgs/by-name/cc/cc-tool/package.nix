@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cc-tool";
-  version = "unstable-2020-05-19";
+  version = "0-unstable-2020-05-19";
 
   src = fetchFromGitHub {
     owner = "dashesy";

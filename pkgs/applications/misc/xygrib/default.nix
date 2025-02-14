@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2022-05-16";
+  version = "0-unstable-2022-05-16";
   pname = "xygrib";
 
   src = fetchFromGitHub {

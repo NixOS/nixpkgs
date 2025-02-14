@@ -26,7 +26,7 @@
 
 mkDerivation {
   pname = "gr-fosphor";
-  version = "unstable-2024-03-23";
+  version = "0-unstable-2024-03-23";
 
   # It is a gitea instance, but its archive service doesn't work very well so
   # we can't use it.

@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "testing-postgresql";
   # Version 1.3.0 isn't working so let's use the latest commit from GitHub
-  version = "unstable-2017-10-31";
+  version = "0-unstable-2017-10-31";
   pyproject = true;
 
   disabled = pythonOlder "3.7";

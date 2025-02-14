@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wlprop";
-  version = "unstable-2022-08-18";
+  version = "0-unstable-2022-08-18";
 
   src = fetchgit {
     url = "https://gist.github.com/f313386043395ff06570e02af2d9a8e0";

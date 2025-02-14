@@ -22,7 +22,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
   # qtpim has no official releases
   qtpim = {
-    version = "unstable-2020-11-02";
+    version = "0-unstable-2020-11-02";
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtpim";
@@ -57,7 +57,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 
   # qtsystems has no official releases
   qtsystems = {
-    version = "unstable-2019-01-03";
+    version = "0-unstable-2019-01-03";
     src = fetchFromGitHub {
       owner = "qt";
       repo = "qtsystems";

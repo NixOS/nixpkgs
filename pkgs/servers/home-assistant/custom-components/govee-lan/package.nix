@@ -12,7 +12,7 @@
 buildHomeAssistantComponent {
   owner = "wez";
   domain = "govee_lan";
-  version = "unstable-2023-06-10";
+  version = "0-unstable-2023-06-10";
 
   src = fetchFromGitHub {
     owner = "wez";

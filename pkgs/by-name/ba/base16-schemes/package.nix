@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "unstable-2024-11-12";
+  version = "0-unstable-2024-11-12";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";

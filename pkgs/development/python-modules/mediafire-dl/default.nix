@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "mediafire-dl";
-  version = "unstable-2023-09-07";
+  version = "0-unstable-2023-09-07";
 
   src = fetchFromGitHub {
     owner = "Juvenal-Yescas";

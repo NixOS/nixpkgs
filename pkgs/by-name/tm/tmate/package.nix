@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "tmate";
-  version = "unstable-2022-08-07";
+  version = "0-unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner = "tmate-io";

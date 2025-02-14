@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "pytikz-allefeld"; # "pytikz" on pypi is a different module
-  version = "unstable-2022-11-01";
+  version = "0-unstable-2022-11-01";
   pyproject = true;
 
   disabled = pythonOlder "3.5";

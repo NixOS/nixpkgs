@@ -9,7 +9,7 @@
 
 rec {
   pname = "gerbil-ethereum";
-  version = "unstable-2023-12-04";
+  version = "0-unstable-2023-12-04";
   git-version = "0.2-11-g124ec58";
   softwareName = "Gerbil-ethereum";
   gerbil-package = "clan/ethereum";

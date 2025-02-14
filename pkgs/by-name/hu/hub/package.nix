@@ -13,7 +13,7 @@
 
 buildGoModule rec {
   pname = "hub";
-  version = "unstable-2022-12-01";
+  version = "0-unstable-2022-12-01";
 
   src = fetchFromGitHub {
     owner = "github";

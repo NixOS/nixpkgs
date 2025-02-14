@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "openttd-grfcodec";
-  version = "unstable-2021-03-10";
+  version = "0-unstable-2021-03-10";
 
   src = fetchFromGitHub {
     owner = "OpenTTD";

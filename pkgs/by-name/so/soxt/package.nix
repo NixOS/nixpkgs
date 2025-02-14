@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "soxt";
-  version = "unstable-2019-06-14";
+  version = "0-unstable-2019-06-14";
 
   src = fetchhg {
     url = "https://bitbucket.org/Coin3D/soxt";

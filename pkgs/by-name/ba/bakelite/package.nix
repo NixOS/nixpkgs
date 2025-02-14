@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bakelite";
-  version = "unstable-2023-03-30";
+  version = "0-unstable-2023-03-30";
 
   src = fetchFromGitHub {
     owner = "richfelker";

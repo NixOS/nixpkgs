@@ -6,7 +6,7 @@
 }:
 {
   pname = "gerbil-persist";
-  version = "unstable-2023-11-29";
+  version = "0-unstable-2023-11-29";
   git-version = "0.2-6-g8a5e40d";
   softwareName = "Gerbil-persist";
   gerbil-package = "clan/persist";

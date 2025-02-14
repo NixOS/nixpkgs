@@ -9,7 +9,7 @@
 
 buildGoModule {
   pname = "go-neb";
-  version = "unstable-2021-07-21";
+  version = "0-unstable-2021-07-21";
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "go-neb";

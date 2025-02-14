@@ -16,7 +16,7 @@ args:
 stdenv.mkDerivation (
   args
   // {
-    version = "unstable-2021-12-11";
+    version = "0-unstable-2021-12-11";
 
     src = fetchFromGitHub {
       owner = "racket";

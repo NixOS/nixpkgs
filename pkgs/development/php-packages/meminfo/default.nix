@@ -5,7 +5,7 @@
 }:
 
 buildPecl rec {
-  version = "unstable-2022-03-25";
+  version = "0-unstable-2022-03-25";
   pname = "meminfo";
 
   src = fetchFromGitHub {

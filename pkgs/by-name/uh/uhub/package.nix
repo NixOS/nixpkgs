@@ -14,7 +14,7 @@ assert tlsSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "uhub";
-  version = "unstable-2019-12-13";
+  version = "0-unstable-2019-12-13";
 
   src = fetchFromGitHub {
     owner = "janvidar";

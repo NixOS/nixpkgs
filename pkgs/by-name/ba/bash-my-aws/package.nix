@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bash-my-aws";
-  version = "unstable-2020-01-11";
+  version = "0-unstable-2020-01-11";
 
   src = fetchFromGitHub {
     owner = "bash-my-aws";

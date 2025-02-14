@@ -8,7 +8,7 @@
 
 {
   pname = "gerbil-crypto";
-  version = "unstable-2023-11-29";
+  version = "0-unstable-2023-11-29";
   git-version = "0.1-1-g4197bfa";
   gerbil-package = "clan/crypto";
   gerbilInputs = with gerbilPackages; [

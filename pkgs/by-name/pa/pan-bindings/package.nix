@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "unstable-2024-03-03";
+  version = "0-unstable-2024-03-03";
   src = fetchFromGitHub {
     owner = "lschulz";
     repo = "pan-bindings";

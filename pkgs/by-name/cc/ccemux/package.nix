@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "unstable-2023-07-08";
+  version = "0-unstable-2023-07-08";
   rev = "989cfe52a0458b991e0a7d87edec81d3fef472ac";
 
   baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";

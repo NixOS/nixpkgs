@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zenmonitor";
-  version = "unstable-2024-05-21";
+  version = "0-unstable-2024-05-21";
 
   src = fetchFromGitea {
     domain = "git.exozy.me";

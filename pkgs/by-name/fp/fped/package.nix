@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation {
   pname = "fped";
-  version = "unstable-2017-05-11";
+  version = "0-unstable-2017-05-11";
 
   src = fetchgit {
     url = "git://projects.qi-hardware.com/fped.git";

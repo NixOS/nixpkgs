@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "bunch";
-  version = "unstable-2017-11-21";
+  version = "0-unstable-2017-11-21";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";

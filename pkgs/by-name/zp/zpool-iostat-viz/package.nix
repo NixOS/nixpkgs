@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zpool-iostat-viz";
-  version = "unstable-2021-11-13";
+  version = "0-unstable-2021-11-13";
   format = "other";
 
   src = fetchFromGitHub {

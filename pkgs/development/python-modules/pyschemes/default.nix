@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyschemes";
-  version = "unstable-2017-11-08";
+  version = "0-unstable-2017-11-08";
   format = "setuptools";
 
   src = fetchFromGitHub {

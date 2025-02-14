@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "i3lock-fancy";
-  version = "unstable-2023-04-28";
+  version = "0-unstable-2023-04-28";
 
   src = fetchFromGitHub {
     owner = "meskarune";

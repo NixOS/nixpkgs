@@ -25,7 +25,7 @@
 
 mkDerivation rec {
   pname = "qv2ray";
-  version = "unstable-2023-07-11";
+  version = "0-unstable-2023-07-11";
 
   src = fetchFromGitHub {
     owner = "Qv2ray";

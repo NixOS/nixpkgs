@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "docker-gc";
-  version = "unstable-2015-10-5";
+  version = "0-unstable-2015-10-5";
 
   src = fetchFromGitHub {
     owner = "spotify";

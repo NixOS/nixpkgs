@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "udebug";
-  version = "unstable-2023-12-06";
+  version = "0-unstable-2023-12-06";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/udebug.git";

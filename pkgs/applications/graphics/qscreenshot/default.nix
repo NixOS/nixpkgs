@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "qscreenshot";
-  version = "unstable-2021-10-18";
+  version = "0-unstable-2021-10-18";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/qscreenshot/code";

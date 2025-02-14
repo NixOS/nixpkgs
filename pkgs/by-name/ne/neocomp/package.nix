@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "neocomp";
-  version = "unstable-2021-04-06";
+  version = "0-unstable-2021-04-06";
 
   src = fetchFromGitHub {
     owner = "DelusionalLogic";

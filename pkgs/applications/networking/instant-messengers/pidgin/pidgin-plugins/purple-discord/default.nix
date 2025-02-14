@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "purple-discord";
-  version = "unstable-2021-10-17";
+  version = "0-unstable-2021-10-17";
 
   src = fetchFromGitHub {
     owner = "EionRobb";

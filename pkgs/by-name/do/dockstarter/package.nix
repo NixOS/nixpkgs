@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dockstarter";
-  version = "unstable-2022-10-26";
+  version = "0-unstable-2022-10-26";
 
   src = fetchFromGitHub {
     owner = "ghostwriters";

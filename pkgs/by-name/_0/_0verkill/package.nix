@@ -10,7 +10,7 @@
 
 gccStdenv.mkDerivation rec {
   pname = "0verkill";
-  version = "unstable-2011-01-13";
+  version = "0-unstable-2011-01-13";
 
   src = fetchFromGitHub {
     owner = "hackndev";

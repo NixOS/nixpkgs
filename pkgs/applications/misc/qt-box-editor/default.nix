@@ -11,7 +11,7 @@
 
 mkDerivation {
   pname = "qt-box-editor";
-  version = "unstable-2019-07-14";
+  version = "0-unstable-2019-07-14";
 
   src = fetchFromGitHub {
     owner = "zdenop";

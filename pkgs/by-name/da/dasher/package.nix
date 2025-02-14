@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation {
   pname = "dasher";
-  version = "unstable-2021-04-25";
+  version = "0-unstable-2021-04-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

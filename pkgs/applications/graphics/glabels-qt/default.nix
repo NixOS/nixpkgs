@@ -8,7 +8,7 @@
 
 mkDerivation {
   pname = "glabels-qt";
-  version = "unstable-2021-02-06";
+  version = "0-unstable-2021-02-06";
 
   src = fetchFromGitHub {
     owner = "jimevins";

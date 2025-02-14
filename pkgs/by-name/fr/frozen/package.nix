@@ -9,7 +9,7 @@
 stdenv.mkDerivation rec {
   pname = "frozen";
   # pin to a newer release if frozen releases again, see cesanta/frozen#72
-  version = "unstable-2021-02-23";
+  version = "0-unstable-2021-02-23";
 
   src = fetchFromGitHub {
     owner = "cesanta";

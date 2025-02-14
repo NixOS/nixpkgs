@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "surf-display";
-  version = "unstable-2022-10-07";
+  version = "0-unstable-2022-10-07";
 
   src = fetchgit {
     url = "https://code.it-zukunft-schule.de/cgit/surf-display";

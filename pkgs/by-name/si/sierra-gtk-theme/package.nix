@@ -33,7 +33,7 @@ lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVaria
   stdenv.mkDerivation
   {
     inherit pname;
-    version = "unstable-2021-05-24";
+    version = "0-unstable-2021-05-24";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";

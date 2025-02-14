@@ -68,7 +68,7 @@ let
   # So we need Carla unstable
   carla-unstable = carla.overrideAttrs (oldAttrs: {
     pname = "carla";
-    version = "unstable-2024-04-26";
+    version = "0-unstable-2024-04-26";
 
     src = fetchFromGitHub {
       owner = "falkTX";

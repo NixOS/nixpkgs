@@ -24,7 +24,7 @@ in
 
 stdenvNoCC.mkDerivation {
   pname = "elegant-sddm";
-  version = "unstable-2024-02-08";
+  version = "0-unstable-2024-02-08";
 
   src = fetchFromGitHub {
     owner = "surajmandalcell";

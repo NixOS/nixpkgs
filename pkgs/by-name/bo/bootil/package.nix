@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "bootil";
-  version = "unstable-2019-11-18";
+  version = "0-unstable-2019-11-18";
 
   src = fetchFromGitHub {
     owner = "garrynewman";

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "deco";
-  version = "unstable-2019-04-03";
+  version = "0-unstable-2019-04-03";
 
   src = fetchFromGitHub {
     owner = "ebzzry";

@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "wlrobs";
-  version = "unstable-2024-12-24";
+  version = "0-unstable-2024-12-24";
 
   src = fetchFromSourcehut {
     vc = "hg";

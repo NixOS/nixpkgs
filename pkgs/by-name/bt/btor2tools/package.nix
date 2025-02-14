@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "btor2tools";
-  version = "unstable-2024-08-07";
+  version = "0-unstable-2024-08-07";
 
   src = fetchFromGitHub {
     owner = "boolector";

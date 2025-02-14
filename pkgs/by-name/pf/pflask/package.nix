@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pflask";
-  version = "unstable-2018-01-23";
+  version = "0-unstable-2018-01-23";
 
   src = fetchFromGitHub {
     owner = "ghedo";

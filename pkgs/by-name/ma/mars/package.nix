@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "mars";
-  version = "unstable-17.10.2021";
+  version = "0-unstable-17.10.2021";
 
   src = fetchFromGitHub {
     owner = "thelaui";

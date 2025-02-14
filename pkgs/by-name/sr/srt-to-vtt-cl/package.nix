@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "srt-to-vtt-cl";
-  version = "unstable-2019-01-03";
+  version = "0-unstable-2019-01-03";
 
   src = fetchFromGitHub {
     owner = "nwoltman";

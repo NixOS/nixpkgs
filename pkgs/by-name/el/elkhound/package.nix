@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elkhound";
-  version = "unstable-2020-04-13";
+  version = "0-unstable-2020-04-13";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";

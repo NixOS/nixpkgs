@@ -13,7 +13,7 @@
 let
   deid-data = buildPythonPackage rec {
     pname = "deid-data";
-    version = "unstable-2022-12-06";
+    version = "0-unstable-2022-12-06";
     pyproject = true;
 
     disabled = pythonOlder "3.7";

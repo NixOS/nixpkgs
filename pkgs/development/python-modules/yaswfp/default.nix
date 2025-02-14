@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "yaswfp";
-  version = "unstable-20210331";
+  version = "0-unstable-20210331";
   format = "setuptools";
 
   src = fetchFromGitHub {

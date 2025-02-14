@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "meh";
-  version = "unstable-2018-10-22";
+  version = "0-unstable-2018-10-22";
 
   src = fetchFromGitHub {
     owner = "jhawthorn";

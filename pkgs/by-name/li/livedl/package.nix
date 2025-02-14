@@ -7,7 +7,7 @@
 
 buildGoModule rec {
   pname = "livedl";
-  version = "unstable-2021-05-16";
+  version = "0-unstable-2021-05-16";
 
   src = fetchFromGitHub {
     owner = "himananiito";

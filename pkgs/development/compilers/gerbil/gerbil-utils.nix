@@ -2,7 +2,7 @@
 
 {
   pname = "gerbil-utils";
-  version = "unstable-2023-12-06";
+  version = "0-unstable-2023-12-06";
   git-version = "0.4-13-g9398865";
   softwareName = "Gerbil-utils";
   gerbil-package = "clan";

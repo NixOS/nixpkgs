@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "systrayhelper";
-  version = "unstable-2021-05-20";
+  version = "0-unstable-2021-05-20";
   rev = "da47887f050cf0f22d9348cb4493df9ffda2a229";
 
   src = fetchFromGitHub {

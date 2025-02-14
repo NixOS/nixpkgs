@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elfx86exts";
-  version = "unstable-2023-04-20";
+  version = "0-unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "pkgw";

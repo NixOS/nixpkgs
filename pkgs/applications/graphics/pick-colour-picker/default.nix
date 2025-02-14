@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pick-colour-picker";
-  version = "unstable-2022-05-08";
+  version = "0-unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";

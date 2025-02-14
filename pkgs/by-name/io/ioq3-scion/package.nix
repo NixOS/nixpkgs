@@ -7,7 +7,7 @@
 }:
 ioquake3.overrideAttrs (old: {
   pname = "ioq3-scion";
-  version = "unstable-2024-03-03";
+  version = "0-unstable-2024-03-03";
   buildInputs = old.buildInputs ++ [
     pan-bindings
     libsodium

@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation {
   pname = "waylogout";
-  version = "unstable-2023-06-09";
+  version = "0-unstable-2023-06-09";
 
   src = fetchFromGitHub {
     owner = "loserMcloser";

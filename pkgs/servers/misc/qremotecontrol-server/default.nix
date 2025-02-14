@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "qremotecontrol-server";
-  version = "unstable-2014-11-05"; # basically 2.4.2 + qt5
+  version = "0-unstable-2014-11-05"; # basically 2.4.2 + qt5
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/qrc/gitcode";

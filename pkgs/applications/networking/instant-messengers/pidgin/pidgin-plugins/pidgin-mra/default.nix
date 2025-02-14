@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pidgin-mra";
-  version = "unstable-2014-07-08";
+  version = "0-unstable-2014-07-08";
 
   src = fetchFromGitHub {
     owner = "dreadatour";

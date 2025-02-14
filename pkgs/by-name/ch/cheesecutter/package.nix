@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cheesecutter";
-  version = "unstable-2021-02-27";
+  version = "0-unstable-2021-02-27";
 
   src = fetchFromGitHub {
     owner = "theyamo";

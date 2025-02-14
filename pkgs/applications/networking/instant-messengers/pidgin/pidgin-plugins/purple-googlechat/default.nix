@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "purple-googlechat";
-  version = "unstable-2021-10-18";
+  version = "0-unstable-2021-10-18";
 
   src = fetchFromGitHub {
     owner = "EionRobb";

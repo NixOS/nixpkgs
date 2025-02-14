@@ -9,7 +9,7 @@ pkgs.haskell.packages.ghc810.override {
       elmPkgs = rec {
         elmi-to-json = justStaticExecutables (
           overrideCabal (drv: {
-            version = "unstable-2021-07-19";
+            version = "0-unstable-2021-07-19";
             src = pkgs.fetchgit {
               url = "https://github.com/stoeffel/elmi-to-json";
               sha256 = "0vy678k15rzpsn0aly90fb01pxsbqkgf86pa86w0gd94lka8acwl";
@@ -32,7 +32,7 @@ pkgs.haskell.packages.ghc810.override {
 
         elm-instrument = justStaticExecutables (
           overrideCabal (drv: {
-            version = "unstable-2020-03-16";
+            version = "0-unstable-2020-03-16";
             src = pkgs.fetchgit {
               url = "https://github.com/zwilias/elm-instrument";
               sha256 = "167d7l2547zxdj7i60r6vazznd9ichwc0bqckh3vrh46glkz06jv";
