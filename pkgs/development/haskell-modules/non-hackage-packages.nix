@@ -42,11 +42,6 @@ self: super: {
 
   nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
 
-  # hasura graphql-engine is not released to hackage.
-  # https://github.com/hasura/graphql-engine/issues/7391
-  ci-info = self.callPackage ../misc/haskell/hasura/ci-info.nix {};
-  hasura-resource-pool = self.callPackage ../misc/haskell/hasura/pool.nix {};
-
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
