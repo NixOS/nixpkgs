@@ -44,7 +44,6 @@ stdenv.mkDerivation {
     description = "PDF TUI Managment System";
     homepage = "https://github.com/pingponghero12/pdftms";
     license = licenses.mit;
-    maintainers = with maintainers; [ pingponghero12 ];
     platforms = platforms.linux;
   };
 }
