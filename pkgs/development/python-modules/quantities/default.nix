@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-quantities";
     repo = "python-quantities";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N20xfzGtM0VnfkJtzMytNLySTkgVz2xf1nEJxlwBSCI=";
   };
 

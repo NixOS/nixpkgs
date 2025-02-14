@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   src = fetchFromGitHub {
     owner = "PhilipK";
     repo = "BoilR";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-bwCTsoZ/9TeO3wyEcOqxKePnj9glsDXWUBCLd3nVT80=";
   };
 

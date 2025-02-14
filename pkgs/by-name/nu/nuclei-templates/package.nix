@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "nuclei-templates";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oT2W5MuXYR2UENIAkH2Pb6f/m9gC2SfTjjvEq539PRU=";
   };
 

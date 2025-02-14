@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ti+3f6UGn/A9MdLJVUT9hnAiS8Ce6D8FrSryrGxMV6s=";
   };
 

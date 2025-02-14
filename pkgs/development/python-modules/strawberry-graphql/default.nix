@@ -52,7 +52,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m+KaUd0rl0RRZzVPI+ldwW77YGLq45egkV5vYYz4dW8=";
   };
 

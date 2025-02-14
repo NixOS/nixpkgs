@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "malwarefrank";
     repo = "dnfile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HzlMJ4utBHyLLhO+u0uiTfqtk8jX80pEyO75QvpJ3yg=";
     fetchSubmodules = true;
   };

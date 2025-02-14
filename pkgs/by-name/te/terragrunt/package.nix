@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-V/ETnIcSr47w/MhluZ4BWDPz4S3ka5H1p2OiOAMPAiY=";
   };
 

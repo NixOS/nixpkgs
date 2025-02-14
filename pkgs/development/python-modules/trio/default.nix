@@ -44,7 +44,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "trio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vlm6lEMKKfwmhbeefPjxm3vz1zFRUEGOCHXLcZKQcIo=";
   };
 

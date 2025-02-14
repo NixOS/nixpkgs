@@ -202,6 +202,11 @@ in {
     kernelPackages = pkgs.linuxPackages;
   };
 
+  series_2_3 = makeZfsTest {
+    zfsPackage = pkgs.zfs_2_3;
+    kernelPackages = pkgs.linuxPackages;
+  };
+
   unstable = makeZfsTest rec {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;

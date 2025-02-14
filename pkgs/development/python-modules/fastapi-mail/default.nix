@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = "fastapi-mail";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2iTZqZIxlt1GKhElasTcnys18UbNNDwHoZziHBOIGBo=";
   };
 

@@ -653,6 +653,9 @@ in {
           "zha"
           "zwave"
           "zwave_js"
+
+          # Custom components, maintained manually.
+          "amshan"
         ];
       in {
         ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";

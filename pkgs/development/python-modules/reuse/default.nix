@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oKtQBT8tuAk4S/Sygp4qxLk4ADWDTG0MbVaL5O2qsuA=";
   };
 

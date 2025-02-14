@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kbr";
     repo = "fritzconnection";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1LLfSEOKqUIhWIR/RQEG0Bp41d908hAKDlslJlWCHys=";
   };
 

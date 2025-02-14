@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eSfyoEu4qQv+R17wgTfATOE1uHkksNxo17btR6swuZo=";
   };
 

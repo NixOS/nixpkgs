@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmcv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NNF9sLJWV1q6uBE73LUW4UWwYm4TBMTBJjJkFArBmsc=";
   };
 

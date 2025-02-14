@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chamberlain2007";
     repo = "pyaprilaire";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+/yQO0JF2nkxaM71iNj6ODB8raM9s4qiLLi6/borcr4=";
   };
 

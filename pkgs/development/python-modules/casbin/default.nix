@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "casbin";
     repo = "pycasbin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JTAd7Nkreyfczomki05WHuuJCFWspvG8i6DAWaQI6fs=";
   };
 

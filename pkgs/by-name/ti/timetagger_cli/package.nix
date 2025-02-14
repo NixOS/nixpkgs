@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "timetagger_cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PEuSFDkBqDegZD0Nh8jRJ/zm/6vT2lq7/llbXBvojkc=";
   };
 

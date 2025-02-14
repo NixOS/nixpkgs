@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H46qoOEajPKRU/Lbd6r7r0vRjWSd7uGoA0deaDv6HSw=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dontinelli";
     repo = "fyta_cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sPbN6gMPtNzYTYQ5F8w59m5DKobx/TV6v5v8Q9u1rXQ=";
   };
 

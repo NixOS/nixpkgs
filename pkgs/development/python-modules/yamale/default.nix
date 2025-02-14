@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "23andMe";
     repo = "yamale";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iiiQAZ050FintRSV3l2zfikTNmphhJgrn+4tUHORiSk=";
   };
 

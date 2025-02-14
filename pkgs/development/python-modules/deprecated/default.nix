@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tantale";
     repo = "deprecated";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
   };
 

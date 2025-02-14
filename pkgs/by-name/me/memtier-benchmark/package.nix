@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "redislabs";
     repo = "memtier_benchmark";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-mYqbtyXVx21rMJmZubFuAVV3qEmk0G3H3fjL6WnUzzM=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gccxml";
     repo = "pygccxml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wHZy2BG3h+OMTvIAPtLlq1vsW5V/TqZdnzBJ9VipMiQ=";
   };
 

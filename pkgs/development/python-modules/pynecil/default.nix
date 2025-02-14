@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZltGA3O6DDOiOddKHMalqmOYrp3IbhAGN7wGfPBP2aA=";
   };
 

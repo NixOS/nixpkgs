@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "python-livereload";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-1at/KMgDTj0TTnq5Vjgklkyha3QUF8bFeKxQSrvx1oE=";
   };
 

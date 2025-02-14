@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y+WNXYqKkr8WQUNSmcWNRjF6yWkxD+l6++K1fiBOHek=";
   };
 

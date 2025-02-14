@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-p3pghGQwCBIvkFI6pYuzoGSwAwfaz4vKpteh8nhXOhE=";
   };
 

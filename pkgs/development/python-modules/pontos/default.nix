@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CgO88I2M8RGpYyJchXZtqxIBjNaULSqnDgfFCUQDFUw=";
   };
 

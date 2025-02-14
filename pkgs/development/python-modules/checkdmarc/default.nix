@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-skQqLWBEmfyiW2DsRRbj3Lfj52QZca0zKenFC7LltjM=";
   };
 

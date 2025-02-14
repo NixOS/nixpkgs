@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "curv3d";
     repo = "curv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m4p5uxRk6kEJUilmbQ1zJcQDRvRCV7pkxnqupZJxyjo=";
     fetchSubmodules = true;
   };

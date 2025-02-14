@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-AePYKdDyAtnVkL8/VeWmhJ3ATZnhyVZcU/QtVpCfTQE=";
   };

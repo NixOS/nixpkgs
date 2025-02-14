@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0bS2VzddRZcFGmHugR0yXHjHqz06tpL4+IhQ6ReaU4Y=";
   };
 

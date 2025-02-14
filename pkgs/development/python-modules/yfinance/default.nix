@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rZU7xMTVabXMOQYGJnZjkDcfegBzHNsx8VNPvKKWEIQ=";
   };
 

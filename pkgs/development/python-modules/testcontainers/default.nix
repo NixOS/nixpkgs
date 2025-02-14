@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
-    rev = "refs/tags/testcontainers-v${version}";
+    tag = "testcontainers-v${version}";
     hash = "sha256-cfvhTNUadx7zRmDPAv9Djsx+jWgBIAf9dMmwop/8oa0=";
   };
 

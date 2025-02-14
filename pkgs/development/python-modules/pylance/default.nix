@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CIIZbeRrraTqWronkspDpBVP/Z4JVoaiS5iBIXfsZGg=";
   };
 

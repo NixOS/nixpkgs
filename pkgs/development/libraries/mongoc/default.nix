@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cfet+A2i33iHbVRouPS4Ul8TmHolrcIMTRba6Olqfeg=";
   };
 

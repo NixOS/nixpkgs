@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8CthbR62TZ7MFC3OCwtbHtGwmlQeFLgBtkyRX1P5SYU=";
   };
 

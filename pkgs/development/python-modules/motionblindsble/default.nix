@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LennP";
     repo = "motionblindsble";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MBO8tiGTd5qF7zGp+RkkV8nJHP9TJvk3LdWsZqlsl50=";
   };
 

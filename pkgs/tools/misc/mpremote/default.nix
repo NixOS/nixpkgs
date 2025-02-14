@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nBz4m5YxD6MV5SyyzvJcwBTttV8uJGdcCUY6HYxZ4nY=";
   };
   sourceRoot = "${src.name}/tools/mpremote";

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UoqddgXrwaKtIE0cuAFkfrgmvLIDRpGjl5jBQvh9mdI=";
   };
 

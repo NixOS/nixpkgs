@@ -21,12 +21,12 @@ let
       ;
     jdk = jdk21;
     gradle = gradle_7;
-    version = "21.0.4.7.1";
+    version = "21.0.5.11.1";
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-21";
       rev = version;
-      sha256 = "sha256-EQqktd2Uz9PhkCaqvbuzmONcSiRppQ40tpLB3mqu2wo=";
+      hash = "sha256-Df2Pq2aPrTxD4FeqG12apE/USfQULmMGsDsgXrmCINc=";
     };
   };
 in

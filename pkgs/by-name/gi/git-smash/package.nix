@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "anthraxx";
     repo = "git-smash";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NyNYEF5g0O9xNhq+CoDPhQXZ+ISiY4DsShpjk5nP0N8=";
   };
 

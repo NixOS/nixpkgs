@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PRJmFXVjcvXVHITwp6ESSoizmJOSiLTl1mj67rNhSNw=";
   };
 

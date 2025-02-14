@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewwithanm";
     repo = "python-markdownify";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-EqQ4DKIGaMNivw9cWCSP/Mh+1YxyTaHGPYRjGxPFOnA=";
   };
 

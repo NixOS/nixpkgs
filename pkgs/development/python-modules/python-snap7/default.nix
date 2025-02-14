@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CqLG5/U2k7WdZL5LfcFAnV1Q8HcIU7l36gi51lgB39s=";
   };
 

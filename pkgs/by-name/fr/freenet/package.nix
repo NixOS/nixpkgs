@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "freenet";
     repo = "fred";
-    rev = "refs/tags/build${version}";
+    tag = "build${version}";
     hash = "sha256-pywNPekofF/QotNVF28McojqK7c1Zzucds5rWV0R7BQ=";
   };
 

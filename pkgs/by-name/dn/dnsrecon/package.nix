@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = "dnsrecon";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-h87sNorCKxUmXZAbF7FaOqruUCv84FepFwKMYrIl70M=";
   };
 

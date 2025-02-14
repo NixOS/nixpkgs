@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelcluster";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AUVl2aidjW7Uu//3HlAod7pxzj6Gs1Xd0uTt3NrrqAU=";
   };
 

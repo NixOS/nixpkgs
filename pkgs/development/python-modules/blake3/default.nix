@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "blake3-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Ju40ea8IQMOPg9BiN47BMmr/WU8HptbqqzVI+jNGpA8=";
   };
 

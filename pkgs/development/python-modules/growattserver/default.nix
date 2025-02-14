@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "indykoning";
     repo = "PyPi_GrowattServer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ATxXjIF5QRsdLuXZCOWMwvbBzawrhlYZ+wodITz36sE=";
   };
 

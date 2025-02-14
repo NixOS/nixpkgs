@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-pattern-library";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hrdJYVioY6y9D29DuKPMZjdWj92GcbHXANWiEHadimI=";
   };
 

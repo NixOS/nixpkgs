@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gqY26EoVUgpNQ83Egmnb/mBnLcB6MmFNs4W7ZsZziK0=";
   };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "libspnav";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qBewSOiwf5iaGKLGRWOQUoHkUADuH8Q1mJCLiWCXmuQ=";
   };
 

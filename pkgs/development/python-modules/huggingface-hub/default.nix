@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F2E8P0Hq3Ee+RXUEN4t2JtfBtK36aMsHQCnid9VWdLk=";
   };
 

@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-canvas-core";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Jp3vCQmRdkFADStVkbCFPiCBqpbI0a4JiJ8qs60rpqw=";
   };
 

@@ -15,7 +15,7 @@ import ./make-test-python.nix (
       {
         services.homepage-dashboard = {
           enable = true;
-          settings.title = "custom";
+          settings.title = "test title rodUsEagid"; # something random/unique
         };
       };
 
@@ -38,6 +38,12 @@ import ./make-test-python.nix (
       # Ensure /etc/homepage-dashboard is created and unmanaged conf location isn't.
       managed_conf.succeed("test -d /etc/homepage-dashboard")
       managed_conf.fail("test -f /var/lib/private/homepage-dashboard/settings.yaml")
+
+      # Ensure that we see the custom title *only in the managed config*
+      page = managed_conf.succeed("curl --fail http://localhost:8082/")
+      assert "test title rodUsEagid" in page, "Custom title not found"
+      page = unmanaged_conf.succeed("curl --fail http://localhost:8082/")
+      assert "test title rodUsEagid" not in page, "Custom title found where it shouldn't be"
     '';
   }
 )

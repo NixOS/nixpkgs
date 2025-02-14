@@ -4,6 +4,8 @@
   rustPlatform,
   fetchFromGitHub,
 
+  jq,
+  moreutils,
   fetchNpmDeps,
   npmHooks,
   nodejs,
@@ -18,25 +20,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gale";
-  version = "0.8.11";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-PXK64WD3vb3uVxBFNU+LiGOipUjIAKW9RLWr1o4RigU=";
+    tag = finalAttrs.version;
+    hash = "sha256-bpeRbsbC1x1AXSyEPs1pUqwMouHQqJ/OtXXlNOVYcEA=";
   };
+
+  postPatch = ''
+    jq '.bundle.createUpdaterArtifacts = false' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  '';
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-W0ryt3WH/3SireaOHa9i1vKpuokzIsDlD8R9Fnd0s4k=";
+    hash = "sha256-xKg/ABUdtylFpT3EisXVvyv38++KjucrZ+s3/fFjzmM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-zXZkjSYN6/qNwBh+xUgJPWQvduIUSMVSt/XGbocKTwg=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
+    hash = "sha256-xaqNps2AimGWKSwtnfkP3RkLgTNlkaAUtOgDWpB2yEg=";
   };
 
   cargoRoot = "src-tauri";
@@ -44,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   nativeBuildInputs = [
+    jq
+    moreutils
     npmHooks.npmConfigHook
     nodejs
     rustPlatform.cargoSetupHook

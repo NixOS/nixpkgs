@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "pydata-google-auth";
     owner = "pydata";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Wo+tXbzOuz/cW8GuWoSxLA/Lr2S9NMdePa8tIV39mbY=";
   };
 

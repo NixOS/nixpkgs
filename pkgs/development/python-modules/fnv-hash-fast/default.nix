@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kJQZnj1ja7cVZSDOuUI3rkNIvyH508wFKAvJ5XfwCNU=";
   };
 

@@ -4,7 +4,7 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm,
+  pnpm_9,
   python3,
   node-gyp,
   cacert,
@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3fGsghGzqLb9B0qrqPuJV2pypd3kJVUrYohMe9quqG4=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-n+A7SGfjzvB9NOt8kqi7DswKSjCTef5SJItWtFzNpwA=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpm_9.configHook
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)

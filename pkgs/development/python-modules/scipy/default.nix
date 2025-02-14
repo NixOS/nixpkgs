@@ -78,7 +78,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = srcHash;
     fetchSubmodules = true;
   };

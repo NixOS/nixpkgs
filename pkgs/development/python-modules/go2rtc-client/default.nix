@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-go2rtc-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oVPZtPRlm3CmTBfxXm66BOOZVQ39DsR+WmkoAdHp4eQ=";
   };
 

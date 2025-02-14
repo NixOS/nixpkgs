@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mchlnix";
     repo = "SMB3-Foundry";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-8cf7VhvC372Cqi94n2FSHcoCGblpZoZvBXcXq5jU6CY=";
   };
 

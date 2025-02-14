@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bZ6O4UOYUCwq11YmgRWepOIngYxYD/fNfM/VmcyUv9k=";
   };
 

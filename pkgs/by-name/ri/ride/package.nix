@@ -22,7 +22,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Dyalog";
     repo = "ride";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xR+HVC1JVrPkgPhIJZxdTVG52+QbanmD1c/uO5l84oc=";
   };
 

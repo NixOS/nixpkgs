@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vNuMGHFkatJS5KjxaOBwZ7JolIDAdYqGq3JNKSV2fKE=";
   };
 

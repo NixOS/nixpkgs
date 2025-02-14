@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenLightingProject";
     repo = "ola";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8w8ZT3D/+8Pxl9z2KTXeydVxE5xiPjxZevgmMFgrblU=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = "commix";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HX+gEL9nmq9R1GFw8xQaa7kBmW7R0IepitM08bIf3vY=";
   };
 

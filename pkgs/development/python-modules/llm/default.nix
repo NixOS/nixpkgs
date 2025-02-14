@@ -32,7 +32,7 @@ let
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-6OO0SIIxChM5HRJoUM4CYGbsINmc3i+iyL/oahLHhrY=";
     };
 

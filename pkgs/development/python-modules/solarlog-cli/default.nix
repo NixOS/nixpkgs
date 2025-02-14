@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dontinelli";
     repo = "solarlog_cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Oa2o4fuchW3ROtQFVhiWL6rhdUbzSFDegCkm8W7bCpE=";
   };
 

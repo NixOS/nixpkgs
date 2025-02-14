@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gPou5KGLFEFP29qSpRg+6sCiXOwfoF1gyhBVERYJ1LI=";
   };
 

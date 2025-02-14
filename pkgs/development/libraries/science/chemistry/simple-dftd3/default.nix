@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dftd3";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Yisqd31SHMBuhZ4+VwKlkSW+gjqLttcbKzKjGvez+xE=";
   };
 

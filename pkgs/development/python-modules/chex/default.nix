@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "chex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TPh7XLWHk0y/VLXxHLANUiDmfveHPeMLks9QKf16doo=";
   };
 

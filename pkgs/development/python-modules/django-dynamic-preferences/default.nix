@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agateblue";
     repo = "django-dynamic-preferences";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-S0PAlSrMOQ68mX548pZzARfau/lytXWC4S5uVO1rUmo=";
   };
 

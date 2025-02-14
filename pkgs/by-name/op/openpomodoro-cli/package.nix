@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "open-pomodoro";
     repo = "openpomodoro-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-h/o4yxrZ8ViHhN2JS0ZJMfvcJBPCsyZ9ZQw9OmKnOfY=";
   };
 

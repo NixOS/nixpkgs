@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MO/YMvvpsEarc8CjELByHUqR5xFtYqhkKkJrFy0PNvU=";
   };
 

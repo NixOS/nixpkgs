@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyWavelets";
     repo = "pywt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oWAF8YDvb0SdlRzSjG2BNEekBkvR3U6KQ+e2FoIs+tw=";
   };
 

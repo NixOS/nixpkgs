@@ -32,7 +32,7 @@ let
     src = fetchFromGitHub {
       owner = "google";
       repo = "jaxtyping";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-zkB8/+0PmBKDFhj9dd8QZ5Euglm+W3BBUM4dwFUYYW8=";
     };
 

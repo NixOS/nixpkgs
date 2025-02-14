@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jYcBvvx0Xfc/wDWSUROfQeRvn+tWvSS0ymKO1iuzg8w=";
   };
 

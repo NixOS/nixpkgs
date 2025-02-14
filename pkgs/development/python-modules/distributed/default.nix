@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pdVqPzz66CueGuha66RTykrLtEGx9i6aScR+NHIYWg0=";
   };
 

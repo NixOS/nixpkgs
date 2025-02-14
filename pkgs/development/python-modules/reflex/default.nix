@@ -55,7 +55,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JW1hebcoBMMEirJkJ5Cquh23p9Gv3RU5AxPbXUcwPK4=";
   };
 
@@ -145,7 +145,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
-    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "reflex";

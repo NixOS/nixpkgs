@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "aiozoneinfo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u7yQiy5xKK1A19cmpXjA4MMK4q7RvtuvwkUECnddzG8=";
   };
 

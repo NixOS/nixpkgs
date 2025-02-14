@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stravalib";
     repo = "stravalib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VEVy9BAAoLsBCwMNFpsCjhacFbsgNswYoJ5tTcOQccw=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6T3OnT6Row2dUmQ3xOu/00vcjD75+rfBSP7WyM4sQqA=";
   };
 

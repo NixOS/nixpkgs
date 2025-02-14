@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o0S4NtgQ/Rlpmkk8pTocmP0N+5F7BX8lUsczOKjujwk=";
   };
 

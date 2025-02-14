@@ -17,7 +17,7 @@ let
   src = fetchFromGitHub {
     owner = "SmilyOrg";
     repo = "photofield";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GYU0BR5X3s3SGmZEFMyK7m+zUa2i2E9krAbtk8dwPdg=";
   };
 

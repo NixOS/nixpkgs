@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mKeRix";
     repo = "xboxapi-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rX3lrXzUYqyRyI89fbCEEMevTdi5SBgSp8XxSanasII=";
   };
 

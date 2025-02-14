@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eblot";
     repo = "pyftdi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-InJJnbAPYlV071EkEWECJC79HLZ6SWo2VP7PqMgOGow=";
   };
 

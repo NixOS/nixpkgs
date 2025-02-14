@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "morecantile";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-l+fQQXOrhqRanB695nR4okfmPYP05NdrGOvgG+jK2uo=";
   };
 

@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HxwQ+mGtjnruppPAD01QUg3aca+k5vpj814BWM+3VfQ=";
   };
 

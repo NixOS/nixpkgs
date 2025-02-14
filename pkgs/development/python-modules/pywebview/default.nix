@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PNnsqb+gyeFfQwMFj7cYaiv54cZ+H5IF9+DS9RN/qB4=";
   };
 

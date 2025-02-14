@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wookayin";
     repo = "python-imgcat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LFXfCMWMdOjFYhXba9PCCIYnqR7gTRG63NAoC/nD2wk=";
   };
 

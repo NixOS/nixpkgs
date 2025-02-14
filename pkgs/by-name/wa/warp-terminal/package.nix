@@ -6,6 +6,7 @@
   autoPatchelfHook,
   undmg,
   zstd,
+  alsa-lib,
   curl,
   fontconfig,
   libglvnd,
@@ -48,6 +49,7 @@ let
     ];
 
     buildInputs = [
+      alsa-lib # libasound.so.2
       curl
       fontconfig
       (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "barrust";
     repo = "pyprobables";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-maikrZlBzhv35zPXmKqdJzAz6eZDmluLUvkOkaPTCDU=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2+iLUuGZV+6sdeLvRE6lORQYVKVn53n2NQaGamkxspU=";
   };
 

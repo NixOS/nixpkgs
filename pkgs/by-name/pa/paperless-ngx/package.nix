@@ -31,7 +31,7 @@ let
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AVfm5tC2+hTdEv0ildEj0El1M/sF7ftkEn3pUkG1O7Q=";
   };
 
@@ -52,7 +52,7 @@ let
         {
           inherit version;
           src = src.override {
-            rev = "refs/tags/${version}";
+            tag = version;
             hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
           };
 
@@ -74,7 +74,7 @@ let
         src = fetchFromGitHub {
           owner = "encode";
           repo = "uvicorn";
-          rev = "0.25.0";
+          tag = "0.25.0";
           hash = "sha256-ng98DTw49zyFjrPnEwfnPfONyjKKZYuLl0qduxSppYk=";
         };
       });

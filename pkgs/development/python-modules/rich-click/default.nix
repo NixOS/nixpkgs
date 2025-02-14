@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ewels";
     repo = "rich-click";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7Avg8HcN9q0EUOnkvuM0oIbwTUGAY2ksbX3SOVZtPOc=";
   };
 

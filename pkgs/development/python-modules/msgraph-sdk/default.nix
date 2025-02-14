@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RB5DxcddMmByWZ4XA/SaIVVxPXdqSRCUbTeWIR5YW2g=";
   };
 

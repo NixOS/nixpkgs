@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1L3AemXVqfgBDlRZorG7+8qt3f1Bm8L+Se+OwqEWwI4=";
   };
 

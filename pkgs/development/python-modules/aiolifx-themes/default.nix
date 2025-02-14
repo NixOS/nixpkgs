@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q3PAQbx3ch3Cq3634wxR1V3sLQom17V+oiJyjU2F7wY=";
   };
 

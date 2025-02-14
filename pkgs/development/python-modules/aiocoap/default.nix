@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = "aiocoap";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-a2qhMDFkRbMK4+xvPc140i0lPaWbTWeFlpvdLaNtOxA=";
   };
 

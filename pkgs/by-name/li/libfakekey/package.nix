@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.yoctoproject.org/libfakekey";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QNJlxZ9uNwNgFWm9qRJdPfusx7dXHZajjFH7wDhpgcs=";
   };
 

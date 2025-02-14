@@ -102,7 +102,7 @@ stdenv.mkDerivation (
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "refs/tags/v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-+qjjelYMB3MyjaESfCaGoeBURUzSVh/50uxUqStxIfY=";
     };
 

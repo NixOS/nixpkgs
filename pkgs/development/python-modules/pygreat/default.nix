@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "libgreat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yYp+2y4QIOykkrObWaXbZMMc2fsRn/+tGWqySA7V534=";
   };
 

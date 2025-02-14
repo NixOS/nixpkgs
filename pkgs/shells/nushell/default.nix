@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lbVvKpaG9HSm2W+NaVUuEOxTNUIf0iRATTVDKFPjqV4=";
   };
 

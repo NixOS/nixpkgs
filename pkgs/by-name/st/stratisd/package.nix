@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "refs/tags/stratisd-v${version}";
+    tag = "stratisd-v${version}";
     hash = "sha256-W8ssLTFU36t6iLrt9S9V8qcN7EP4IsL7VbhNPLpftio=";
   };
 

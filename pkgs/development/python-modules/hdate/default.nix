@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HmdXTvtNiIE2XPFhqs7WpcceEQU7F7RsLFp6/+63yDw=";
   };
 

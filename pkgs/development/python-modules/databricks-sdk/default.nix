@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CEv/+3E7KWV9LXzFPvDQIL1v8iFgbsS3/cTS/4obWas=";
   };
 

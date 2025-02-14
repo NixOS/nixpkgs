@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GMjeNX8C027F+Wl/HfluWap9pDOeQwlM9qOs0Sp5tTI=";
   };
 

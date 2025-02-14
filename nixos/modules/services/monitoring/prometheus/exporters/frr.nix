@@ -17,6 +17,22 @@ in
 {
   port = 9342;
   extraOpts = {
+    user = mkOption {
+      type = types.str;
+      default = "frr";
+      description = ''
+        User name under which the frr exporter shall be run.
+        The exporter talks to frr using a unix socket, which is owned by frr.
+      '';
+    };
+    group = mkOption {
+      type = types.str;
+      default = "frrtty";
+      description = ''
+        Group under which the frr exporter shall be run.
+        The exporter talks to frr using a unix socket, which is owned by frrtty group.
+      '';
+    };
     enabledCollectors = mkOption {
       type = types.listOf types.str;
       default = [ ];
@@ -38,6 +54,7 @@ in
     serviceConfig = {
       DynamicUser = false;
       RuntimeDirectory = "prometheus-frr-exporter";
+      RestrictAddressFamilies = [ "AF_UNIX" ];
       ExecStart = ''
         ${lib.getExe pkgs.prometheus-frr-exporter} \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \

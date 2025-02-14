@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PAEHJ92aspRYMqFR9upFmILcqAWCVnR9yiOoLys0GWA=";
   };
 

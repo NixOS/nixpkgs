@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gHW+5WWzk1H2O5B2sWdl6QcOeUbNvbdZZBD10SmE1GA=";
   };
 
-  cargoHash = "sha256-Go7+LZSze/IrNwEl+11Dm5O9RcREyPSkHPjlE9SPO70=";
+  # The `time` crate doesn't build on Rust 1.80+
+  # https://github.com/NixOS/nixpkgs/issues/332957
+  cargoPatches = [ ./time-crate.patch ];
+
+  cargoHash = "sha256-RGhcI0TiZWKkzXpiozGLIulQ6YpzWt6lRCPMTTLZDfE=";
 
   nativeBuildInputs = [ pkg-config ];
 

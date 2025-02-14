@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IOVPEK+9ogBZJYns2pTyJwHUBMN8JqG1THTJPvpCwdo=";
   };
 

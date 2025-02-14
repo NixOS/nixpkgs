@@ -421,18 +421,9 @@ let
         timeout = 14400; # 4 hours
       } // extraMeta;
     };
-in
-
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
-  inherit pname version;
-
-  enableParallelBuilding = true;
-
-  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
-  makeFlags = [
-    "O=$(buildRoot)"
+  commonMakeFlags = [
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
     "HOSTLD=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.targetPrefix}ld"
@@ -441,6 +432,26 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
     ++ extraMakeFlags;
+in
 
-  karch = stdenv.hostPlatform.linuxArch;
-} // (optionalAttrs (pos != null) { inherit pos; })))
+stdenv.mkDerivation (
+  builtins.foldl' lib.recursiveUpdate {} [
+    (drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile)
+    {
+      inherit pname version;
+
+      enableParallelBuilding = true;
+
+      hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
+
+      makeFlags = [
+        "O=$(buildRoot)"
+      ] ++ commonMakeFlags;
+
+      passthru = { inherit commonMakeFlags; };
+
+      karch = stdenv.hostPlatform.linuxArch;
+    }
+    (optionalAttrs (pos != null) { inherit pos; })
+  ]
+))

@@ -143,7 +143,8 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.stateDir;
-          ExecStart = ''${cfg.package}/bin/galene \
+          ExecStart = ''
+          ${cfg.package}/bin/galene \
           ${optionalString (cfg.insecure) "-insecure"} \
           -data ${cfg.dataDir} \
           -groups ${cfg.groupsDir} \

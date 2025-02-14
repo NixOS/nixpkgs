@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "app-model";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PvQ9l2sCi1NaF/SWApWqt6a5AHI5A+zmJRo8gR3ng6Y=";
   };
 

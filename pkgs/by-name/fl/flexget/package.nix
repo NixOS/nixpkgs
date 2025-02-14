@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/c6nJNIo6gqeANftbtuOatU+JGYXdMQgrPI0/EdH9LI=";
   };
 

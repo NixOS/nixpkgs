@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YOG9+ONf2OnkSZBL/Vb8Inebx4XDSGJb2fqypaWebhY=";
   };
 

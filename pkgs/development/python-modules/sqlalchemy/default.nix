@@ -49,7 +49,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-5nnMh8pEG6rXiy0nk9SKjIOY+htXNx9eHTEtNOkLrd8=";
   };
 

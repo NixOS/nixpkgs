@@ -18,18 +18,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "0.9.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     rev = "${version}";
-    hash = "sha256-XaQV3YwG15VLcgFJLGsRxCz4n50vAIYxXk09c0GKn5g=";
+    hash = "sha256-3dBjQ1fO1q8JCQFvvV8LWBCD8cKFkFmm8ufC/Xihmj4=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-l8HMkMMXiYlmaZx+tHE0CXZa2bZakSO/uvJ1lq44Ybk=";
+  cargoHash = "sha256-0gNbhB2u5SUY+UAumg2Mns4MY0bu3Hs1RsMSk8H2lIE=";
 
   frontend = buildNpmPackage {
     inherit version src;

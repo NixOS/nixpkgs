@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P9H21X/lZ8U/yfCL/rCuP9A1wnL7UuTcX7GlCuwo5ZQ=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-I0E6zkfQ6mx2svCaXEgKPhrrog3iLgXZ4E3CMMxPkIA=";
   };
 

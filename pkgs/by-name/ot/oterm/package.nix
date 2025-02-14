@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-kIuWDu7CpLLRyGPcCQYNaAiZ5F/WEatDmf2XbvLedsI=";
   };
 

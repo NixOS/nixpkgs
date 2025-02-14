@@ -33,7 +33,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yaqwsx";
     repo = "KiKit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r8LQcy3I6hmcrU/6HfPAYJd+cEZdhad6DUldC9HvXZU=";
   };
 

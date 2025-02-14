@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-semver";
     repo = "python-semver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-772PSUq1dqtn9aOol+Bo0S0OItBmoiCNP8q/YCBvKU4=";
   };
 

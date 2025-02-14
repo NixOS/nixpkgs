@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tarpas";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zbMX9r9lftdm9hzXMZRZZ/GEDViGk9QiYYUhO9ZcEAc=";
   };
 

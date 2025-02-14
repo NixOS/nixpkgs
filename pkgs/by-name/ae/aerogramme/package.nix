@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchgit {
     url = "https://git.deuxfleurs.fr/Deuxfleurs/aerogramme/";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ER+P/XGqNzTLwDLK5EBZq/Dl29ZZKl2FdxDb+oLEJ8Y=";
   };
 

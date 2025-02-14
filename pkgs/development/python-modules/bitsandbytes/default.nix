@@ -56,7 +56,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "TimDettmers";
     repo = "bitsandbytes";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yvxD5ymMK5p4Xg7Csx/90mPV3yxUC6QUuF/8BKO2p0k=";
   };
 

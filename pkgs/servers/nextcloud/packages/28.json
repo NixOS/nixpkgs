@@ -19,6 +19,16 @@
       "agpl"
     ]
   },
+  "collectives": {
+    "hash": "sha256-IAnJZuaj6KW6kF4daIKxvCEDCViWu30gogm8q2/ooQs=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v2.16.0/collectives-2.16.0.tar.gz",
+    "version": "2.16.0",
+    "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
+    "homepage": "https://github.com/nextcloud/collectives",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "contacts": {
     "hash": "sha256-zxmgMiizzXGfReRS9XJ+fb6tJRLH/Z5NvuLpspYARFI=",
     "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.3/contacts-v5.5.3.tar.gz",
@@ -53,7 +63,7 @@
     "hash": "sha256-63yeX5w8nOdZuzbICJ6hJCjIHzigBKJToTPoEVPm/EE=",
     "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.12.6/deck-v1.12.6.tar.gz",
     "version": "1.12.6",
-    "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
+    "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
       "agpl"
@@ -70,9 +80,9 @@
     ]
   },
   "files_mindmap": {
-    "hash": "sha256-USwTVkcEDzmaJMMaztf86yag5t7b79sQW8OOHEw0hec=",
-    "url": "https://github.com/ACTom/files_mindmap/releases/download/v0.0.31/files_mindmap-0.0.31.tar.gz",
-    "version": "0.0.31",
+    "hash": "sha256-vrOF0kdxpNW7ulD1SkOdz44e2uYXdZuDec/4sC5N4JA=",
+    "url": "https://github.com/ACTom/files_mindmap/releases/download/v0.0.32/files_mindmap-0.0.32.tar.gz",
+    "version": "0.0.32",
     "description": "This application enables Nextcloud users to open, save and edit mind map files in the web browser. If enabled, an entry in the New button at the top of the web browser the Mindmap file entry appears. When clicked, a new mindmap file opens in the browser and the file can be saved into the current Nextcloud directory.",
     "homepage": "https://github.com/ACTom/files_mindmap",
     "licenses": [
@@ -80,9 +90,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-NW57bhZiNqKfUhMvGN9Ncy21Y0GucC/CFCmHTf8kJ2I=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.4/forms-v4.3.4.tar.gz",
-    "version": "4.3.4",
+    "hash": "sha256-J2xGGZ4fEUwpWeEi3swdr9bwl4iBgltHGxo9Bi+Tdus=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.5/forms-v4.3.5.tar.gz",
+    "version": "4.3.5",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -130,9 +140,9 @@
     ]
   },
   "integration_paperless": {
-    "hash": "sha256-D8w2TA2Olab326REnHHG+fFWRmWrhejAEokXZYx5H6w=",
-    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.4/integration_paperless-v1.0.4.tar.gz",
-    "version": "1.0.4",
+    "hash": "sha256-UkpcmCK/LDWg0glKxlk2u4AiZIMJ6Nr/VvI3QBwpwFw=",
+    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.5/integration_paperless-v1.0.5.tar.gz",
+    "version": "1.0.5",
     "description": "Integration with the [Paperless](https://docs.paperless-ngx.com) Document Management System.\nIt adds a file action menu item that can be used to upload a file from your Nextcloud Files to Paperless.",
     "homepage": "",
     "licenses": [
@@ -140,9 +150,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-59ra95yAOnHG+a6sSK6dJmmZ7qqUqtanfrw1jjpTjQ0=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.17/mail-v3.7.17.tar.gz",
-    "version": "3.7.17",
+    "hash": "sha256-1Q4kIN1aX2S1mAPivuqTi6cPyUE0mrogQD5XCAwclOA=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.18/mail-v3.7.18.tar.gz",
+    "version": "3.7.18",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -170,10 +180,10 @@
     ]
   },
   "music": {
-    "hash": "sha256-yexffDYu0dv/i/V0Z+U1jD1+6X/JZuWZ4/mqWny5Nxs=",
-    "url": "https://github.com/owncloud/music/releases/download/v2.0.1/music_2.0.1_for_nextcloud.tar.gz",
-    "version": "2.0.1",
-    "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
+    "hash": "sha256-Fmb22HEVcfOBjpVgbuDvYIQKYII+L5xBHI/+BvNsUOw=",
+    "url": "https://github.com/owncloud/music/releases/download/v2.1.1/music_2.1.1_for_nextcloud.tar.gz",
+    "version": "2.1.1",
+    "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone\n- Widget for the Nextcloud Dashboard",
     "homepage": "https://github.com/owncloud/music",
     "licenses": [
       "agpl"
@@ -190,9 +200,9 @@
     ]
   },
   "notify_push": {
-    "hash": "sha256-5VjDDU8YpSDHSV45GKP+YDSd9bq1F3/qLppaLiBzjy4=",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.7.0/notify_push-v0.7.0.tar.gz",
-    "version": "0.7.0",
+    "hash": "sha256-4yCs4Q25PhYVICAIFlNiRTOFvL0JdmUwR5bNxp54GiA=",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v1.0.0/notify_push-v1.0.0.tar.gz",
+    "version": "1.0.0",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -210,9 +220,9 @@
     ]
   },
   "phonetrack": {
-    "hash": "sha256-zQt+3t86HZJVT/wiETHkPdTwV6Qy+iNkH3/THtTe1Xs=",
-    "url": "https://github.com/julien-nc/phonetrack/releases/download/v0.8.1/phonetrack-0.8.1.tar.gz",
-    "version": "0.8.1",
+    "hash": "sha256-fEJSGG4P+OC5f8PTATHurdUb0vnMaqMh6wwcVB+VcsA=",
+    "url": "https://github.com/julien-nc/phonetrack/releases/download/v0.8.2/phonetrack-0.8.2.tar.gz",
+    "version": "0.8.2",
     "description": "# PhoneTrack Nextcloud application\n\n📱 PhoneTrack is a Nextcloud application to track and store mobile device's locations.\n\n🗺 It receives information from mobile phone's logging apps and displays it dynamically on a map.\n\n🌍 Help us to translate this app on [PhoneTrack Crowdin project](https://crowdin.com/project/phonetrack).\n\n⚒ Check out other ways to help in the [contribution guidelines](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CONTRIBUTING.md).\n\nHow to use PhoneTrack :\n\n* Create a tracking session.\n* Give the logging link\\* to the mobile devices. Choose the [logging method](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#logging-methods) you prefer.\n* Watch the session's devices location in real time (or not) in PhoneTrack or share it with public pages.\n\n(\\*) Don't forget to set the device name in the link (rather than in the logging app settings). Replace \"yourname\" with the desired device name. Setting the device name in logging app settings only works with Owntracks, Traccar and OpenGTS.\n\nOn PhoneTrack main page, while watching a session, you can :\n\n* 📍 Display location history\n* ⛛ Filter points\n* ✎ Manually edit/add/delete points\n* ✎ Edit devices (rename, change colour/shape, move to another session)\n* ⛶ Define geofencing zones for devices\n* ⚇ Define proximity alerts for device pairs\n* 🖧 Share a session to other Nextcloud users or with a public link (read-only)\n* 🔗 Generate public share links with optional restrictions (filters, device name, last positions only, geofencing simplification)\n* 🖫 Import/export a session in GPX format (one file with one track per device or one file per device)\n* 🗠 Display sessions statistics\n* 🔒 [Reserve a device name](https://gitlab.com/eneiluj/phonetrack-oc/wikis/userdoc#device-name-reservation) to make sure only authorised user can log with this name\n* 🗓 Toggle session auto export and auto purge (daily/weekly/monthly)\n* ◔ Choose what to do when point number quota is reached (block logging or delete oldest point)\n\nPublic page and public filtered page work like main page except there is only one session displayed, everything is read-only and there is no need to be logged in.\n\nThis app is tested on Nextcloud 17 with Firefox 57+ and Chromium.\n\nThis app is compatible with theming colours and accessibility themes !\n\nThis app is under development.\n\n## Install\n\nSee the [AdminDoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc) for installation details.\n\nCheck [CHANGELOG](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/CHANGELOG.md#change-log) file to see what's new and what's coming in next release.\n\nCheck [AUTHORS](https://gitlab.com/eneiluj/phonetrack-oc/blob/master/AUTHORS.md#authors) file to see complete list of authors.\n\n## Known issues\n\n* PhoneTrack **now works** with Nextcloud group restriction activated. See [admindoc](https://gitlab.com/eneiluj/phonetrack-oc/wikis/admindoc#issue-with-phonetrack-restricted-to-some-groups-in-nextcloud).\n\nAny feedback will be appreciated.\n\n## Donation\n\nI develop this app during my free time.\n\n* [Donate with Paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=66PALMY8SF5JE) (you don't need a paypal account)\n* [Donate with Liberapay : ![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/eneiluj/donate)",
     "homepage": "https://github.com/julien-nc/phonetrack",
     "licenses": [
@@ -220,9 +230,9 @@
     ]
   },
   "polls": {
-    "hash": "sha256-l0oK9go7NVkTJCyC1sagWwZpa/R5ZQsXTOishNSpYuw=",
-    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.6/polls-v7.2.6.tar.gz",
-    "version": "7.2.6",
+    "hash": "sha256-AMsa0JNQXO/0g9m+Qr2tJbYrKmcQ1xxcgZzkk4x29IU=",
+    "url": "https://github.com/nextcloud-releases/polls/releases/download/v7.2.9/polls-v7.2.9.tar.gz",
+    "version": "7.2.9",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -270,9 +280,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-8Y6bBj9IiGkLbxyNUhVRpBuDqDU1ZCAbXxk9/Oi3yGM=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.13/spreed-v18.0.13.tar.gz",
-    "version": "18.0.13",
+    "hash": "sha256-glX4Dqb5TZ3ncxAzBKeLsLRwAL3rS4mIgOdk25xnJhM=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.14/spreed-v18.0.14.tar.gz",
+    "version": "18.0.14",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

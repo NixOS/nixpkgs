@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chdemko";
     repo = "pandoc-latex-environment";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iKzveVTScqF8dAGPx7JU66Z5oyoZ82t101z5xeiHYqw=";
   };
 

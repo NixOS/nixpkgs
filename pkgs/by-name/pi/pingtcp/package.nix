@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "LanetNetwork";
     repo = "pingtcp";
     sha256 = "1cv84n30y03s1b83apxxyn2jv5ss1pywsahrfrpkb6zcgzzrcqn8";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "imgw-pib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0ttGUsu00y/uuTXzPYkgh1QLMYOwPI/m8Qwk5Ty0Y3A=";
   };
 

@@ -8,7 +8,7 @@
   rubber,
   hevea,
   emacs,
-  version ? "1.7.2",
+  version ? "1.8.0",
   ideSupport ? true,
   wrapGAppsHook3,
 }:
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
     hash =
       {
+        "1.8.0" = "sha256-gDe4OI0AuoYmJSCg/SMRQYcgelX/SM28ClQfKhnw88E=";
         "1.7.2" = "sha256-VaSG/FiO2MDdSSFXGJJrIylQx0LPwtT8AF7TpPVZhCQ=";
         "1.6.0" = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
       }
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with ocamlPackages; [
     camlzip
     menhirLib
-    num
+    (if lib.versionAtLeast version "1.8.0" then zarith else num)
     re
     sexplib
   ];

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danzel";
     repo = "airtouch5py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8QMyp/Y60V64k1V8Hze5FsgpfHr8ZT1Xj/kQDP7CtjI=";
   };
 

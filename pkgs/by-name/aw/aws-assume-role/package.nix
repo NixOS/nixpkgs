@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "remind101";
     repo = "assume-role";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-7+9qi9lYzv1YCFhUyla+5Gqs5nBUiiazhFwiqHzMFd4=";
   };
 

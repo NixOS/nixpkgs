@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PTujR3ciLRvbpiqStNMx3W5fkUdW2dsGmCj/iFRTKJM=";
   };
 

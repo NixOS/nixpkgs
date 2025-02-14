@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "insanum";
     repo = "gcalcli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-X9sgnujHMbmrt7cpcBOvTycIKFz3G2QzNDt3me5GUrQ=";
   };
 

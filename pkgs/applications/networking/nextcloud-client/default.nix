@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DWjV4ip0+WBR/G2gf4gRZRv99a3XjlQKG/RC/T/J1go=";
   };
 

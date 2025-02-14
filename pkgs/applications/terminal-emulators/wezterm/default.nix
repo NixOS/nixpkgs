@@ -33,19 +33,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20240203-110809-5046fc22";
+  version = "0-unstable-2025-01-03";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = version;
+    rev = "8e9cf912e66f704f300fac6107206a75036de1e7";
     fetchSubmodules = true;
-    hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
+    hash = "sha256-JkAovAeoVrH2QlHzzcciraebfsSQPBQPsA3fUKEjRm8=";
   };
 
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-
     echo ${version} > .tag
 
     # tests are failing with: Unable to exchange encryption keys
@@ -59,12 +57,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "xcb-imdkit-0.3.0" = "sha256-fTpJ6uNhjmCWv7dZqVgYuS2Uic36XNYTbqlaly5QBjI=";
-    };
-  };
+  cargoHash = "sha256-UagPKPH/PRXk3EFe+rDbkSTSnHdi/Apz0Qek8YlNMxo=";
+  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     installShellFiles
@@ -135,6 +129,9 @@ rustPlatform.buildRustPackage rec {
       ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
     '';
 
+  # tests broken in x86_64-darwin
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
     headless = rustPlatform.buildRustPackage {
@@ -143,7 +140,8 @@ rustPlatform.buildRustPackage rec {
         version
         src
         postPatch
-        cargoLock
+        cargoHash
+        useFetchCargoVendor
         meta
         ;
 

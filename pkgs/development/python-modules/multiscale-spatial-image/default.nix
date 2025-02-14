@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oxxPXzItM7uXtyLoLyUHVf4YOoAYvI40kU7lVgp4gAg=";
   };
 

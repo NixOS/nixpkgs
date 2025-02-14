@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "vector";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lj6ZloBGZqHW0g7lCD7m9zvszJceB9TQ3r6B3Xuj5KE=";
   };
 

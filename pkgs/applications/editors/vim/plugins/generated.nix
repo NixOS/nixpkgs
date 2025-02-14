@@ -1398,6 +1398,18 @@ final: prev:
     meta.homepage = "https://github.com/kwkarlwang/bufjump.nvim/";
   };
 
+  bufresize-nvim = buildVimPlugin {
+    pname = "bufresize.nvim";
+    version = "2022-03-21";
+    src = fetchFromGitHub {
+      owner = "kwkarlwang";
+      repo = "bufresize.nvim";
+      rev = "3b19527ab936d6910484dcc20fb59bdb12322d8b";
+      sha256 = "1s0zmpwg7z76l3ca1p426mkh33cw94m18q7rfsvnz4h4xwlsafpa";
+    };
+    meta.homepage = "https://github.com/kwkarlwang/bufresize.nvim/";
+  };
+
   bullets-vim = buildVimPlugin {
     pname = "bullets.vim";
     version = "2024-08-04";
@@ -17168,6 +17180,17 @@ final: prev:
       sha256 = "0gblxnqdifln3sswg96dp18h4367hpqb0z72ydrvlz186471zgps";
     };
     meta.homepage = "https://github.com/dstein64/vim-startuptime/";
+  };
+
+  vim-stationeers-ic10-syntax = buildVimPlugin {
+    pname = "vim-stationeers-ic10-syntax";
+    version = "2025-01-08";
+    src = fetchgit {
+      url = "https://gitlab.com/LittleMorph/vim-ic10";
+      rev = "7c1f13b198cfe122fb52f6abfb8dc95d5ca51013";
+      sha256 = "0pxk1qq6niy9msm369w5xn2jcwpa8a30hpqk6hb1ag1v6244j3g1";
+    };
+    meta.homepage = "https://gitlab.com/LittleMorph/vim-ic10";
   };
 
   vim-strip-trailing-whitespace = buildVimPlugin {

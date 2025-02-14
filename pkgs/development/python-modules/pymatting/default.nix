@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymatting";
     repo = "pymatting";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wHCTqcBvVN/pTXH3iW57DPpMEsnehutRQB5NaugS6Zs=";
   };
 

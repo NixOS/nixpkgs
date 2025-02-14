@@ -305,7 +305,7 @@ in
               ${cfg.hostName} = {
                 root = cfg.dataDir;
                 locations = {
-                  "~ [^/]\.php(/|$)" = {
+                  "~ [^/]\\.php(/|$)" = {
                     extraConfig = ''
                       fastcgi_split_path_info ^(.+?\.php)(/.*)$;
                       if (!-f $document_root$fastcgi_script_name) {

@@ -11,7 +11,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flozz";
     repo = "rivalcfg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-zZQkfi84NE3mpGv7+Z6AnUXEj0y9SoBmbbtRiTDPS/8=";
   };
 

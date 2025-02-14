@@ -11,7 +11,7 @@ php.buildComposerProject2 (finalAttrs: {
   # Upstream no longer provides the composer.lock in their release artifact
   src = fetchgit {
     url = "https://github.com/maglnet/ComposerRequireChecker";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-xq8W5SXwtmJ3uu5g26/rxL02jqBuxvEEQpwazPdCE5Y=";
   };
 
