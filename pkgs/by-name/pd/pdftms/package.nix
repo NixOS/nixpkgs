@@ -5,10 +5,10 @@
   cmake,
   gnumake,
   gcc,
-  yaml-cpp
+  yaml-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pdftms";
   version = "1.0.0";
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "PDF TUI Managment System";
     homepage = "https://github.com/pingponghero12/pdftms";
     license = licenses.mit;
-    maintainers = [ maintainers.pingponghero12 ];
+    maintainers = with maintainers; [ pingponghero12 ];
     platforms = platforms.linux;
   };
 }
