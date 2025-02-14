@@ -18606,6 +18606,10 @@
     githubId = 1829032;
     name = "Paul Hendry";
   };
+  polybit = {
+    github: "poly2it";
+    githubId = 84731064;
+  };
   polygon = {
     email = "polygon@wh2.tu-dresden.de";
     name = "Polygon";
