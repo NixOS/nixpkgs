@@ -1,0 +1,13 @@
+diff --git a/npm-shrinkwrap.json b/npm-shrinkwrap.json
+index 380b24dc47..6be12bb94c 100644
+--- a/npm-shrinkwrap.json
++++ b/npm-shrinkwrap.json
+@@ -2444,7 +2444,7 @@
+       "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
+       "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
+       "dependencies": {
+-        "whatwg-url": "^5.0.0"
++        "whatwg-url": "^14.0.0"
+       },
+       "engines": {
+         "node": "4.x || >=6.0.0"
