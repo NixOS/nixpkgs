@@ -1,14 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   libpulseaudio,
   alsa-lib,
   pkg-config,
-  qtbase,
+  qt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "unixcw";
   version = "3.5.1";
 
@@ -21,12 +21,15 @@ mkDerivation rec {
     ./remove-use-of-dlopen.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     libpulseaudio
     alsa-lib
-    qtbase
+    qt5.qtbase
   ];
 
   CFLAGS = "-lasound -lpulse-simple";
