@@ -1150,6 +1150,8 @@ let
 
         fxrd-mode = ignoreCompilationError super.fxrd-mode; # elisp error
 
+        gams-ac = ignoreCompilationError super.gams-ac; # need gams in PATH during compilation
+
         # missing optional dependencies
         gap-mode = addPackageRequires super.gap-mode [
           self.company
