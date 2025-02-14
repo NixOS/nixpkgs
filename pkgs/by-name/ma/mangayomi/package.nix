@@ -104,6 +104,11 @@ flutter324.buildFlutterApplication {
     --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
 
+  passthru = {
+    inherit rustDep;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
     description = "Read manga and stream anime from a variety of sources including BitTorrent";
