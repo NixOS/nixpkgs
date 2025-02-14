@@ -107,6 +107,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Textualize/textual";
     changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ gepbird ];
   };
 }
