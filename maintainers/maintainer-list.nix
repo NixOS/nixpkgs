@@ -18607,7 +18607,7 @@
     name = "Paul Hendry";
   };
   polybit = {
-    github: "poly2it";
+    github = "poly2it";
     githubId = 84731064;
   };
   polygon = {
