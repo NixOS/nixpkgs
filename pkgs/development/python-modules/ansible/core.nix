@@ -49,7 +49,14 @@ buildPythonPackage rec {
 
     patchShebangs --build packaging/cli-doc/build.py
 
-    sed -E 's|"setuptools[0-9 <>=.,]+"|"setuptools"|g' -i pyproject.toml
+    SETUPTOOLS_PATTERN='"setuptools[0-9 <>=.,]+"'
+    PYPROJECT=$(cat pyproject.toml)
+    if [[ "$PYPROJECT" =~ $SETUPTOOLS_PATTERN ]]; then
+      echo "setuptools replace: ''${BASH_REMATCH[0]}"
+      echo "''${PYPROJECT//''${BASH_REMATCH[0]}/'"setuptools"'}" > pyproject.toml
+    else
+      exit 2
+    fi
   '';
 
   nativeBuildInputs = [
