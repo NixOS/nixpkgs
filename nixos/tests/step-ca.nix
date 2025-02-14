@@ -14,12 +14,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
       {
         caserver =
           { config, pkgs, ... }: {
+            environment.etc.password-file.source = "${test-certificates}/intermediate-password-file";
             services.step-ca = {
               enable = true;
               address = "[::]";
               port = 8443;
               openFirewall = true;
-              intermediatePasswordFile = "${test-certificates}/intermediate-password-file";
+              intermediatePasswordFile = "/etc/${config.environment.etc.password-file.target}";
               settings = {
                 dnsNames = [ "caserver" ];
                 root = "${test-certificates}/root_ca.crt";
