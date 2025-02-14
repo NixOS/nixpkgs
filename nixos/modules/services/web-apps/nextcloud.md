@@ -253,16 +253,12 @@ This is because
 * the Logreader application that allows reading logs in the admin panel is enabled
   by default and requires logs written to a file.
 
-The logreader application doesn't work, as it was the case before.
-So nothing actionable here by default. Alternatively you can
+If you want to view logs in the admin panel,
+set [](#opt-services.nextcloud.settings.log_type) to "file".
 
-* disable the logreader application to shut up the "info".
-
-  We can't really do that by default since whether apps are enabled/disabled is part
-  of the application's state and tracked inside the database.
-
-* set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
-  from the admin panel.
+If you prefer logs in the journal, disable the logreader application to shut up the
+"info". We can't really do that by default since whether apps are enabled/disabled
+is part of the application's state and tracked inside the database.
 
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
