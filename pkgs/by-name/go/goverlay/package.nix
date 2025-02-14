@@ -13,6 +13,7 @@
   libGLU,
   libnotify,
   libX11,
+  lsb-release,
   nix-update-script,
   polkit,
   procps,
@@ -46,7 +47,9 @@ stdenv.mkDerivation rec {
     substituteInPlace overlayunit.pas \
       --replace-fail '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png" \
       --replace-fail '/sbin/ip' "${lib.getExe' iproute2 "ip"}" \
-      --replace-fail '/bin/bash' "${lib.getExe' bash "bash"}"
+      --replace-fail '/bin/bash' "${lib.getExe' bash "bash"}" \
+      --replace-fail '/usr/lib/os-release' '/etc/os-release' \
+      --replace-fail 'lsb_release' "${lib.getExe' lsb-release "lsb_release"} 2> /dev/null"
   '';
 
   nativeBuildInputs = [
