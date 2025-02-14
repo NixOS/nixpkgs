@@ -9,16 +9,25 @@ let
   cfg = config.services.opendkim;
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
+  trustedHostsFile = pkgs.writeText "TrustedHosts" (lib.concatStringsSep "\n" cfg.trustedHosts);
 
   mergedSettings =
     if cfg.domainConfigs != { } then
-      cfg.settings
+      (lib.optionalAttrs (cfg.trustedHosts != [ ]) {
+        InternalHosts = "refile:/etc/opendkim/TrustedHosts";
+        ExternalIgnoreList = "refile:/etc/opendkim/TrustedHosts";
+      })
+      // cfg.settings
       // {
         KeyTable = "refile:${cfg.keyPath}/KeyTable";
         SigningTable = "refile:${cfg.keyPath}/SigningTable";
       }
     else
-      cfg.settings;
+      (lib.optionalAttrs (cfg.trustedHosts != [ ]) {
+        InternalHosts = "refile:/etc/opendkim/TrustedHosts";
+        ExternalIgnoreList = "refile:/etc/opendkim/TrustedHosts";
+      })
+      // cfg.settings;
 
   configFile = pkgs.writeText "opendkim.conf" (
     lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") mergedSettings)
@@ -135,6 +144,22 @@ in
         default = { };
         description = "Optional per-domain configurations for selectors";
       };
+
+      trustedHosts = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        example = [
+          "127.0.0.1"
+          "::1"
+          "localhost"
+          "192.168.1.0/24"
+          "*.example.com"
+        ];
+        description = ''
+          List of hosts that are considered trusted and allowed to send emails.
+          These hosts will be added to TrustedHosts file used by InternalHosts and ExternalIgnoreList.
+        '';
+      };
     };
   };
 
@@ -151,9 +176,14 @@ in
     };
 
     environment = {
-      etc = lib.mkIf (mergedSettings != { }) {
-        "opendkim/opendkim.conf".source = configFile;
-      };
+      etc = lib.mkMerge [
+        (lib.mkIf (mergedSettings != { }) {
+          "opendkim/opendkim.conf".source = configFile;
+        })
+        (lib.mkIf (cfg.trustedHosts != [ ]) {
+          "opendkim/TrustedHosts".source = trustedHostsFile;
+        })
+      ];
       systemPackages = [ pkgs.opendkim ];
     };
 
