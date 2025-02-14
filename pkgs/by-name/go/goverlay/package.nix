@@ -12,17 +12,15 @@
   libGL,
   libGLU,
   libnotify,
-  libqtpas,
   libX11,
   nix-update-script,
   polkit,
   procps,
-  qt6,
+  qt6Packages,
   systemd,
   util-linux,
   vulkan-tools,
   which,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,15 +52,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     fpc
     lazarus-qt6
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     libGL
     libGLU
-    libqtpas
+    qt6Packages.libqtpas
     libX11
-    qt6.qtbase
+    qt6Packages.qtbase
   ];
 
   NIX_LDFLAGS = "-lGLU -rpath ${lib.makeLibraryPath buildInputs}";
@@ -89,10 +87,6 @@ stdenv.mkDerivation rec {
         which
       ]
     }"
-
-    # Force xcb since libqt5pas doesn't support Wayland
-    # See https://github.com/benjamimgois/goverlay/issues/107
-    "--set QT_QPA_PLATFORM xcb"
   ];
 
   passthru.updateScript = nix-update-script { };
