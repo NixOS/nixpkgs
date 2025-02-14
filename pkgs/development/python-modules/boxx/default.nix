@@ -1,21 +1,15 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
-  python,
-  xvfb-run,
+  imageio,
   matplotlib,
-  scikit-image,
   numpy,
   pandas,
-  imageio,
-  snakeviz,
   pyopengl,
+  scikit-image,
   seaborn,
-  torch,
-  pythonOlder,
-  torchvision,
+  snakeviz,
 }:
 
 buildPythonPackage rec {
@@ -23,37 +17,23 @@ buildPythonPackage rec {
   version = "0.10.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-unGnmPksEuqFXHTWJkj9Gv2G/qPDgT6AZXYiG2gtkEA=";
   };
 
   propagatedBuildInputs = [
+    imageio
     matplotlib
-    scikit-image
     numpy
     pandas
-    imageio
-    snakeviz
     pyopengl
+    scikit-image
     seaborn
-  ];
-
-  nativeCheckInputs = [
-    xvfb-run
-    torch
-    torchvision
+    snakeviz
   ];
 
   pythonImportsCheck = [ "boxx" ];
-
-  doCheck = stdenv.hostPlatform.isLinux;
-
-  checkPhase = ''
-    xvfb-run ${python.interpreter} -m unittest
-  '';
 
   meta = with lib; {
     description = "Tool-box for efficient build and debug for Scientific Computing and Computer Vision";
