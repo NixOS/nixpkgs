@@ -8,8 +8,6 @@
   pcl,
   libusb1,
   eigen,
-  wrapQtAppsHook,
-  qtbase,
   g2o,
   ceres-solver,
   zed-open-capture,
@@ -17,6 +15,7 @@
   octomap,
   freenect,
   libdc1394,
+  libsForQt5,
   libGL,
   libGLU,
   vtkWithQt5,
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
   ];
   buildInputs = [
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
     freenect
     libdc1394
     # librealsense - missing includedir
-    qtbase
+    libsForQt5.qtbase
     libGL
     libGLU
     vtkWithQt5
