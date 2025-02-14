@@ -59,6 +59,15 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
+  # To propagate `cmakeFlags` inject `CMAKE_ARGS` into setuptools' invocation
+  # of cmake. Shell variables' expansions won't be performed, use `preConfigure`
+  # to prepare flags that rely on it
+  patchPhase = ''
+    substituteInPlace setup.py \
+      --replace-fail "cmake_args = [" \
+      "cmake_args = os.environ.get(\"CMAKE_ARGS\", \"\").split() + ["
+  '';
+
   postPatch =
     # Relax the pybind11 version
     ''
@@ -67,6 +76,15 @@ buildPythonPackage rec {
     '';
 
   dontUseCmakeConfigure = true;
+
+  preConfigure = ''
+    export CMAKE_ARGS=$cmakeFlags "''${cmakeFlagsArray[@]}"
+  '';
+
+  cmakeFlags = lib.optional stdenv.isDarwin [
+    "-DCMAKE_CXX_COMPILER_AR=${stdenv.cc}/bin/ar"
+    "-DCMAKE_CXX_COMPILER_RANLIB=${stdenv.cc}/bin/ranlib"
+  ];
 
   pythonImportsCheck = [ "ale_py" ];
 
@@ -87,6 +105,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    broken = stdenv.hostPlatform.isDarwin; # fails to link with missing library
   };
 }
