@@ -17,7 +17,7 @@ fetchurl {
     homepage = "https://netboot.xyz/";
     description = "Tool to boot OS installers and utilities over the network, to be run from a bootloader";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ pinpox ];
     platforms = platforms.linux;
   };
 }
