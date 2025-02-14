@@ -10368,6 +10368,8 @@ self: super: with self; {
 
   pgpy = callPackage ../development/python-modules/pgpy { };
 
+  pgpy-dtc = callPackage ../development/python-modules/pgpy-dtc { };
+
   pgsanity = callPackage ../development/python-modules/pgsanity { };
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
@@ -14768,6 +14770,8 @@ self: super: with self; {
   securityreporter = callPackage ../development/python-modules/securityreporter { };
 
   sectools = callPackage ../development/python-modules/sectools { };
+
+  sectxt = callPackage ../development/python-modules/sectxt { };
 
   seedir = callPackage ../development/python-modules/seedir { };
 
