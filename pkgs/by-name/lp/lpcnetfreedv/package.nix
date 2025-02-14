@@ -14,7 +14,7 @@ let
     sha256 = "sha256-UJRAkkdR/dh/+qVoPuPd3ZN69cgzuRBMzOZdUWFJJsg=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lpcnetfreedv";
   version = "unstable-2022-08-22";
 
