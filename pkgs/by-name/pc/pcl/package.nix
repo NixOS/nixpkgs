@@ -84,5 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = with lib.platforms; linux ++ darwin;
+    badPlatforms = [
+      # fatal error: 'omp.h' file not found
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 })
