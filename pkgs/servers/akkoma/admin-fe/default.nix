@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitea,
   fetchYarnDeps,
+  writableTmpDirAsHomeHook,
   fixup-yarn-lock,
   yarn,
   nodejs,
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     fixup-yarn-lock
+    writableTmpDirAsHomeHook
     yarn
     nodejs
     pkg-config
@@ -42,8 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePhase = ''
     runHook preConfigure
-
-    export HOME="$(mktemp -d)"
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
     fixup-yarn-lock yarn.lock
