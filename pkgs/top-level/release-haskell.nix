@@ -310,7 +310,6 @@ let
         happy
         haskell-ci
         haskell-language-server
-        hasura-graphql-engine
         hci
         hercules-ci-agent
         hinit
