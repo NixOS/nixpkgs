@@ -15,15 +15,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leetcode-cli";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Jc0akHj2DHbkF7sjslOwdeI1piW2gnhoalBz18lpQdQ=";
+    hash = "sha256-AYBBW9VtdvqqqiouhkS3diPcOdaQOs8Htkw9DTRX2t4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-rr/8rbgjGr1npkimJK8rpZcsRFP0ACx+a1x0ITI71G0=";
+  cargoHash = "sha256-o2RkhYsSQKwU+dsHQvlcxAVKUjOTqg424dqrM7JRoN8=";
 
   nativeBuildInputs = [
     pkg-config
