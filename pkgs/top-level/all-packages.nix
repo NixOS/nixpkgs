@@ -18289,10 +18289,6 @@ with pkgs;
     wlroots = wlroots_0_17;
   };
 
-  ldid = callPackage ../development/tools/ldid {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
-
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
   };
