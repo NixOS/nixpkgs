@@ -26072,6 +26072,12 @@
     github = "zmitchell";
     githubId = 10246891;
   };
+  ZMon3y = {
+    name = "Matt Szafir";
+    email = "mattszafir+nix@gmail.com";
+    github = "ZMon3y";
+    githubId = 9386488;
+  };
   znaniye = {
     email = "zn4niye@proton.me";
     github = "znaniye";
