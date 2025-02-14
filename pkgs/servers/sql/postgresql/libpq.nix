@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.2";
+  version = "17.3";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${finalAttrs.version}/postgresql-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-gu8nwK83UWldf2Ti2WNYMAX7tqDD32PQ5LQiEdcCEWQ=";
+    hash = "sha256-E8GLNb9nqXvWOZJfxYHbf9Kq5NNUjqw5/NuNp0rOK+o=";
   };
 
   __structuredAttrs = true;
