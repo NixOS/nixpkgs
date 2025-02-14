@@ -2961,8 +2961,6 @@ self: super: with self; {
 
   dask-awkward = callPackage ../development/python-modules/dask-awkward { };
 
-  dask-expr = callPackage ../development/python-modules/dask-expr { };
-
   dask-gateway = callPackage ../development/python-modules/dask-gateway { };
 
   dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server { };
@@ -8201,6 +8199,8 @@ self: super: with self; {
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
+  metaflow = callPackage ../development/python-modules/metaflow { };
+
   metakernel = callPackage ../development/python-modules/metakernel { };
 
   metar = callPackage ../development/python-modules/metar { };
@@ -9652,6 +9652,8 @@ self: super: with self; {
 
   odc-geo = callPackage ../development/python-modules/odc-geo { };
 
+  odc-stac = callPackage ../development/python-modules/odc-stac { };
+
   oddsprout = callPackage ../development/python-modules/oddsprout { };
 
   odfpy = callPackage ../development/python-modules/odfpy { };
@@ -9746,6 +9748,8 @@ self: super: with self; {
   open-clip-torch = callPackage ../development/python-modules/open-clip-torch { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
+
+  open-hypergraphs = callPackage ../development/python-modules/open-hypergraphs { };
 
   open-interpreter = callPackage ../development/python-modules/open-interpreter { };
 
