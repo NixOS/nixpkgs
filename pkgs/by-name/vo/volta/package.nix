@@ -1,11 +1,13 @@
 {
   lib,
-  rustPlatform,
-  libiconv,
   stdenv,
-  installShellFiles,
-  darwin,
+  rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  buildPackages,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "volta";
@@ -21,22 +23,35 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-xlqsubkaX2A6d5MIcGf9E0b11Gzneksgku0jvW+UdbE=";
 
-  buildInputs =
-    [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      libiconv
-    ];
+  buildInputs = [ installShellFiles ];
 
-  HOME = "$TMPDIR";
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd volta \
+        --bash <(${emulator} $out/bin/volta completions bash) \
+        --fish <(${emulator} $out/bin/volta completions fish) \
+        --zsh <(${emulator} $out/bin/volta completions zsh)
+    '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd volta \
-      --bash <($out/bin/volta completions bash) \
-      --fish <($out/bin/volta completions fish) \
-      --zsh <($out/bin/volta completions zsh)
-  '';
-  meta = with lib; {
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  # Tries to create /var/empty/.volta as $HOME is not writable
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Hassle-Free JavaScript Tool Manager";
     longDescription = ''
       With Volta, you can select a Node engine once and then stop worrying
@@ -50,7 +65,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://volta.sh/";
     changelog = "https://github.com/volta-cli/volta/blob/main/RELEASES.md";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fbrs ];
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ fbrs ];
+    mainProgram = "volta";
   };
 }
