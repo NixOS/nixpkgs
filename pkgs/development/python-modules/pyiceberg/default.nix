@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -49,7 +50,6 @@
   pytest-mock,
   pytest-timeout,
   requests-mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -185,61 +185,70 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  disabledTests = [
-    # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
-    "test_checking_if_a_file_exists"
-    "test_closing_a_file"
-    "test_fsspec_file_tell"
-    "test_fsspec_getting_length_of_file"
-    "test_fsspec_pickle_round_trip_s3"
-    "test_fsspec_raise_on_opening_file_not_found"
-    "test_fsspec_read_specified_bytes_for_file"
-    "test_fsspec_write_and_read_file"
-    "test_writing_avro_file"
+  disabledTests =
+    [
+      # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
+      "test_checking_if_a_file_exists"
+      "test_closing_a_file"
+      "test_fsspec_file_tell"
+      "test_fsspec_getting_length_of_file"
+      "test_fsspec_pickle_round_trip_s3"
+      "test_fsspec_raise_on_opening_file_not_found"
+      "test_fsspec_read_specified_bytes_for_file"
+      "test_fsspec_write_and_read_file"
+      "test_writing_avro_file"
 
-    # Require unpackaged gcsfs
-    "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
-    "test_fsspec_new_input_file_gcs"
-    "test_fsspec_new_output_file_gcs"
-    "test_fsspec_pickle_roundtrip_gcs"
+      # Require unpackaged gcsfs
+      "test_fsspec_converting_an_outputfile_to_an_inputfile_gcs"
+      "test_fsspec_new_input_file_gcs"
+      "test_fsspec_new_output_file_gcs"
+      "test_fsspec_pickle_roundtrip_gcs"
 
-    # Timeout (network access)
-    "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
-    "test_fsspec_new_abfss_output_file_adls"
-    "test_fsspec_new_input_file_adls"
-    "test_fsspec_pickle_round_trip_aldfs"
+      # Timeout (network access)
+      "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
+      "test_fsspec_new_abfss_output_file_adls"
+      "test_fsspec_new_input_file_adls"
+      "test_fsspec_pickle_round_trip_aldfs"
 
-    # TypeError: pyarrow.lib.large_list() takes no keyword argument
-    # From tests/io/test_pyarrow_stats.py:
-    "test_bounds"
-    "test_column_metrics_mode"
-    "test_column_sizes"
-    "test_metrics_mode_counts"
-    "test_metrics_mode_full"
-    "test_metrics_mode_non_default_trunc"
-    "test_metrics_mode_none"
-    "test_null_and_nan_counts"
-    "test_offsets"
-    "test_read_missing_statistics"
-    "test_record_count"
-    "test_value_counts"
-    "test_write_and_read_stats_schema"
-    # From tests/io/test_pyarrow.py:
-    "test_list_type_to_pyarrow"
-    "test_projection_add_column"
-    "test_projection_list_of_structs"
-    "test_read_list"
-    "test_schema_compatible_missing_nullable_field_nested"
-    "test_schema_compatible_nested"
-    "test_schema_mismatch_missing_required_field_nested"
-    "test_schema_to_pyarrow_schema_exclude_field_ids"
-    "test_schema_to_pyarrow_schema_include_field_ids"
-    # From tests/io/test_pyarrow_visitor.py
-    "test_round_schema_conversion_nested"
+      # TypeError: pyarrow.lib.large_list() takes no keyword argument
+      # From tests/io/test_pyarrow_stats.py:
+      "test_bounds"
+      "test_column_metrics_mode"
+      "test_column_sizes"
+      "test_metrics_mode_counts"
+      "test_metrics_mode_full"
+      "test_metrics_mode_non_default_trunc"
+      "test_metrics_mode_none"
+      "test_null_and_nan_counts"
+      "test_offsets"
+      "test_read_missing_statistics"
+      "test_record_count"
+      "test_value_counts"
+      "test_write_and_read_stats_schema"
+      # From tests/io/test_pyarrow.py:
+      "test_list_type_to_pyarrow"
+      "test_projection_add_column"
+      "test_projection_list_of_structs"
+      "test_read_list"
+      "test_schema_compatible_missing_nullable_field_nested"
+      "test_schema_compatible_nested"
+      "test_schema_mismatch_missing_required_field_nested"
+      "test_schema_to_pyarrow_schema_exclude_field_ids"
+      "test_schema_to_pyarrow_schema_include_field_ids"
+      # From tests/io/test_pyarrow_visitor.py
+      "test_round_schema_conversion_nested"
 
-    # Hangs forever (from tests/io/test_pyarrow.py)
-    "test_getting_length_of_file_gcs"
-  ];
+      # Hangs forever (from tests/io/test_pyarrow.py)
+      "test_getting_length_of_file_gcs"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
+      "test_converting_an_outputfile_to_an_inputfile_gcs"
+      "test_new_input_file_gcs"
+      "test_new_output_file_gc"
+    ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python library for programmatic access to Apache Iceberg";
