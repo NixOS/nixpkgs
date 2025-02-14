@@ -63,7 +63,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    awkward
     fastjet
+    numpy
+    vector
   ];
 
   buildInputs = [
@@ -73,9 +76,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    awkward
-    numpy
-    vector
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
