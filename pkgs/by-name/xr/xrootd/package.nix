@@ -68,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       davix
       curl
-      isa-l
       libkrb5
       libuuid
       libxcrypt
@@ -83,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       fuse
     ]
     ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+      isa-l # not available on Apple silicon
       systemd # only available on specific non-static Linux platforms
       voms # only available on Linux due to gsoap failing to build on Darwin
     ];
@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_SCITOKENS" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_VOMS" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ENABLE_XRDEC" (lib.meta.availableOn stdenv.hostPlatform isa-l)) # requires isa-l
   ];
 
   # TODO(@ShamrockLee): Enable the checks.
