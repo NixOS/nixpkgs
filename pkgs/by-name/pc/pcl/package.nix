@@ -1,34 +1,43 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  cmake,
-  qhull,
-  flann,
-  boost,
-  vtk,
-  eigen,
-  pkg-config,
-  libsForQt5,
-  libusb1,
-  libpcap,
-  libtiff,
-  libXt,
-  libpng,
   config,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
+  libsForQt5,
+  pkg-config,
+
+  # buildInputs
+  eigen,
+  libXt,
+  libpcap,
+  libusb1,
+
+  # nativeBuildInputs
+  boost,
+  flann,
+  libpng,
+  libtiff,
+  qhull,
+  vtk,
+
+  gitUpdater,
+
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcl";
   version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-JDiDAmdpwUR3Sff63ehyvetIFXAgGOrI+HEaZ5lURps=";
+    tag = "pcl-${finalAttrs.version}";
+    hash = "sha256-T/zvev1x4w87j6Zn9dpqwIQfmfg2MsHt2Xto8Z1vhuQ=";
   };
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
@@ -38,17 +47,17 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkg-config
     cmake
     libsForQt5.wrapQtAppsHook
+    pkg-config
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     eigen
-    libusb1
+    libXt
     libpcap
     libsForQt5.qtbase
-    libXt
+    libusb1
   ];
 
   propagatedBuildInputs = [
@@ -60,13 +69,20 @@ stdenv.mkDerivation rec {
     vtk
   ];
 
-  cmakeFlags = lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
+  cmakeFlags = lib.optionals cudaSupport [
+    (lib.cmakeBool "WITH_CUDA" true)
+  ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "pcl-"; };
+  };
 
   meta = {
     homepage = "https://pointclouds.org/";
     description = "Open project for 2D/3D image and point cloud processing";
+    changelog = "https://github.com/PointCloudLibrary/pcl/blob/pcl-${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
