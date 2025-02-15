@@ -10190,6 +10190,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
   };
 
+  openvr = callPackage ../development/libraries/openvr {};
+
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_6
     libressl_3_7
@@ -15578,6 +15580,8 @@ with pkgs;
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  vr-video-player = callPackage ../applications/video/vr-video-player { };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
   vscode-fhs = vscode.fhs;
