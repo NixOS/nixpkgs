@@ -8077,6 +8077,8 @@ with pkgs;
 
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
+  speakeasy-cli = callPackage ../by-name/sp/speakeasy-cli { };
+
   mopsa = ocamlPackages.mopsa.bin;
 
   haskell-ci =
