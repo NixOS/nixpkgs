@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  llvm_18,
+  llvm_19,
   curl,
   tzdata,
   lit,
@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.39.0";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZiG0ATsY6Asu2nus3Y404fvqIwtKYoHl1JRUDU5A6mo=";
+    hash = "sha256-LT85DlAebecPpBUgZP0ayKTVrTUqN6DMJVEWTatLOxY=";
     fetchSubmodules = true;
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       ldcBootstrap
       lit
       lit.python
-      llvm_18.dev
+      llvm_19.dev
       makeWrapper
       ninja
       unzip
