@@ -11156,6 +11156,7 @@ with self; {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-20.tar.gz";
       hash = "sha256-PlXMIJRl4GQBmiFaUvBf9RBAKX0CA5P+n7PeJ60CDjU=";
     };
+    nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
     nativeCheckInputs = [ TestRequires TestDeep pkgs.hexdump ];

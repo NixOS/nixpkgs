@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.5.10";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-zwVrDdCMapuHKmtlEUnCwxXCBU93C5uT9eqDk5Of2BE=";
+    hash = "sha256-+Hg4tyfmgfh3k/pUKMjs7IRahPV2/LRUDj1kt2g45Dw=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-G08r+2eelxV3ottsNEZ6xysu13AbzPNTwkwZdY1qadg=";
+    npmDepsHash = "sha256-pM8Ie3kkjVq9OJHKpGLQ1E/omd84B0N8lXAHKxUa8/4=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -89,8 +89,6 @@ python312.pkgs.buildPythonApplication rec {
       fake-useragent
       fastapi
       faster-whisper
-      flask
-      flask-cors
       fpdf2
       ftfy
       gcp-storage-emulator
@@ -140,6 +138,7 @@ python312.pkgs.buildPythonApplication rec {
       rapidocr-onnxruntime
       redis
       requests
+      restrictedpython
       sentence-transformers
       soundfile
       tiktoken
