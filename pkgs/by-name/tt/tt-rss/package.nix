@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit (nixosTests) tt-rss;
+    tests = { inherit (nixosTests) tt-rss; };
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
   meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     homepage = "https://tt-rss.org";
     maintainers = with maintainers; [
       gileri
