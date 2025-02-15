@@ -4,29 +4,28 @@
   buildPythonPackage,
   click,
   dawg-python,
-  docopt,
   pytestCheckHook,
   pymorphy3-dicts-ru,
-  pymorphy3-dicts-uk,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pymorphy3";
   version = "2.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "no-plagiarism";
-    repo = pname;
+    repo = "pymorphy3";
     tag = version;
     hash = "sha256-qYZm88wNOyZBb2Qhdpw83Oh679/dkWmrL/hQYsgEsaM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dawg-python
-    docopt
     pymorphy3-dicts-ru
-    pymorphy3-dicts-uk
   ];
 
   optional-dependencies.CLI = [ click ];
@@ -35,11 +34,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymorphy3" ];
 
-  meta = with lib; {
+  meta = {
     description = "Morphological analyzer/inflection engine for Russian and Ukrainian";
     mainProgram = "pymorphy";
     homepage = "https://github.com/no-plagiarism/pymorphy3";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jboy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jboy ];
   };
 }
