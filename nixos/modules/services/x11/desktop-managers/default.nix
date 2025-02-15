@@ -8,7 +8,7 @@ let
 
   # If desktop manager `d' isn't capable of setting a background and
   # the xserver is enabled, `feh' or `xsetroot' are used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
+  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable && cfg.wallpaper.enable;
 
 in
 
@@ -28,14 +28,21 @@ in
     services.xserver.desktopManager = {
 
       wallpaper = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            The file {file}`~/.background-image` is used as a background image.
+            The `mode` option specifies the placement of this image onto your desktop.
+            To disable this, set this option to `false`.
+          '';
+        };
+
         mode = mkOption {
           type = types.enum [ "center" "fill" "max" "scale" "tile" ];
           default = "scale";
           example = "fill";
           description = ''
-            The file {file}`~/.background-image` is used as a background image.
-            This option specifies the placement of this image onto your desktop.
-
             Possible values:
             `center`: Center the image on the background. If it is too small, it will be surrounded by a black border.
             `fill`: Like `scale`, but preserves aspect ratio by zooming the image until it fits. Either a horizontal or a vertical part of the image will be cut off.
