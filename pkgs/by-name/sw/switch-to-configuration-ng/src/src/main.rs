@@ -1158,7 +1158,7 @@ won't take effect until you reboot the system.
 
     let current_active_units = get_active_units(&systemd)?;
 
-    let template_unit_re = Regex::new(r"^(.*)@[^\.]*\.(.*)$")
+    let template_unit_re = Regex::new(r"^(.*)@.*\.(.*)$")
         .context("Invalid regex for matching systemd template units")?;
     let unit_name_re = Regex::new(r"^(.*)\.[[:lower:]]*$")
         .context("Invalid regex for matching systemd unit names")?;
