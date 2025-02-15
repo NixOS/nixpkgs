@@ -635,6 +635,14 @@ in {
                     '';
                   };
 
+                  encryptManagementFrames = mkOption {
+                    default = true;
+                    type = types.bool;
+                    description = mdDoc ''
+                      Encrypt management frames to protect against deauthentication and similar attacks.
+                    '';
+                  };
+
                   settings = mkOption {
                     default = {};
                     example = { multi_ap = true; };
@@ -921,11 +929,6 @@ in {
 
                     ignore_broadcast_ssid = bssCfg.ignoreBroadcastSsid;
 
-                    # IEEE 802.11i (authentication) related configuration
-                    # Encrypt management frames to protect against deauthentication and similar attacks
-                    ieee80211w = mkDefault 1;
-                    sae_require_mfp = mkDefault 1;
-
                     # Only allow WPA by default and disable insecure WEP
                     auth_algs = mkDefault 1;
                     # Always enable QoS, which is required for 802.11n and above
@@ -942,6 +945,9 @@ in {
                     );
                   } // optionalAttrs (bssCfg.bssid != null) {
                     bssid = bssCfg.bssid;
+                  } // optionalAttrs bssCfg.encryptManagementFrames {
+                    ieee80211w = mkDefault 1;
+                    sae_require_mfp = mkDefault 1;
                   } // optionalAttrs (bssCfg.macAllow != [] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow) {
                     accept_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.allow";
                   } // optionalAttrs (bssCfg.macDeny != [] || bssCfg.macDenyFile != null) {
