@@ -256,39 +256,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags =
     [
-      "-Ddocs=enabled"
+      (lib.mesonEnable "docs" true)
       # We are building the official releases.
-      "-Dsupported_build=enabled"
-      "-Dlaunchd=disabled"
-      "-Dsystemd_root_prefix=${placeholder "out"}"
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+      (lib.mesonEnable "supported_build" true)
+      (lib.mesonEnable "launchd" false)
+      (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
+      (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
       "--localstatedir=/var"
       "--sysconfdir=/etc"
-      "-Dsysconfdir_install=${placeholder "out"}/etc"
-      "-Defi_os_dir=nixos"
-      "-Dplugin_modem_manager=enabled"
-      "-Dvendor_metadata=true"
-      "-Dplugin_uefi_capsule_splash=false"
+      (lib.mesonOption "sysconfdir_install" "${placeholder "out"}/etc")
+      (lib.mesonOption "efi_os_dir" "nixos")
+      (lib.mesonEnable "plugin_modem_manager" true)
+      (lib.mesonBool "vendor_metadata" true)
+      (lib.mesonBool "plugin_uefi_capsule_splash" false)
       # TODO: what should this be?
-      "-Dvendor_ids_dir=${hwdata}/share/hwdata"
-      "-Dumockdev_tests=disabled"
+      (lib.mesonOption "vendor_ids_dir" "${hwdata}/share/hwdata")
+      (lib.mesonEnable "umockdev_tests" false)
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
     ]
     ++ lib.optionals (!enablePassim) [
-      "-Dpassim=disabled"
+      (lib.mesonEnable "passim" false)
     ]
     ++ lib.optionals (!haveDell) [
-      "-Dplugin_synaptics_mst=disabled"
+      (lib.mesonEnable "plugin_synaptics_mst" false)
     ]
     ++ lib.optionals (!haveRedfish) [
-      "-Dplugin_redfish=disabled"
+      (lib.mesonEnable "plugin_redfish" false)
     ]
     ++ lib.optionals (!haveFlashrom) [
-      "-Dplugin_flashrom=disabled"
+      (lib.mesonEnable "plugin_flashrom" false)
     ]
     ++ lib.optionals (!haveMSR) [
-      "-Dplugin_msr=disabled"
+      (lib.mesonEnable "plugin_msr" false)
     ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
