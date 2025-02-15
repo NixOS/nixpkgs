@@ -5366,6 +5366,8 @@ self: super: with self; {
 
   glymur = callPackage ../development/python-modules/glymur { };
 
+  gmplot = callPackage ../development/python-modules/gmplot { };
+
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
 
   gmpy = callPackage ../development/python-modules/gmpy { };
