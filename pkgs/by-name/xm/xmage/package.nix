@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmage";
-  version = "1.4.51-dev_2024-01-30_19-35";
+  version = "1.4.51-dev_2024-06-06_19-55";
 
   src = fetchurl {
     url = "http://xmage.today/files/mage-full_${finalAttrs.version}.zip";
-    sha256 = "sha256-ogi0hd2FoulTnc3gg5cpLwr4Jln71YA0WBBZFOT6apg=";
+    sha256 = "sha256-fYnVQBta7cJqZyPZ7r1PvLp1Kw6U0pqcmeB2e+lgA24=";
   };
 
   preferLocalBuild = true;
