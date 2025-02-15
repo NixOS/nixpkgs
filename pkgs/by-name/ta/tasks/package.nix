@@ -88,6 +88,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/cosmic-utils/tasks/releases/tag/${version}";
     description = "Simple task management application for the COSMIC desktop";
     homepage = "https://github.com/cosmic-utils/tasks";
     license = lib.licenses.gpl3Only;
