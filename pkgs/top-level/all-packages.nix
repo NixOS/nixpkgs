@@ -9939,7 +9939,7 @@ with pkgs;
     else if stdenv.hostPlatform.isDarwin then
       darwin.apple_sdk.frameworks.OpenGL
     else
-      libglvnd;
+      libglcapsule;
 
   # On macOS, we use the OpenGL framework. Packages that use libGLX on
   # macOS may need to depend on mesa_glu directly if this doesn’t work.
@@ -9950,11 +9950,7 @@ with pkgs;
       mesa_glu;
 
   # libglvnd does not work (yet?) on macOS.
-  libGLX =
-    if stdenv.hostPlatform.isDarwin then
-      mesa
-    else
-      libglvnd;
+  libGLX = libglcapsule;
 
   # On macOS, we use the GLUT framework. Packages that use libGLX on
   # macOS may need to depend on freeglut directly if this doesn’t work.
@@ -11049,6 +11045,8 @@ with pkgs;
     pkg = callPackage ../development/compilers/mkcl {};
     faslExt = "fas";
   };
+
+  mkCapsule = callPackage ../../pkgs/by-name/li/libcapsule/mkCapsule.nix { };
 
   # Steel Bank Common Lisp
   sbcl_2_4_6 = wrapLisp {
