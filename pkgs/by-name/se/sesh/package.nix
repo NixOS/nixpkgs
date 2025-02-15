@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-3wNp1meUoUFPa2CEgKjuWcu4I6sxta3FPFvCb9QMQhQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
 
   meta = {
     description = "Smart session manager for the terminal";
