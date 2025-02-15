@@ -4,6 +4,9 @@
   rustPlatform,
   fetchFromGitHub,
 
+  # buildInputs
+  rust-jemalloc-sys,
+
   # nativeBuildInputs
   cmake,
   installShellFiles,
@@ -28,6 +31,10 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-dop61TB9w2r+our4DiKzPvw9lI07cx9bT0Ujtvhko1E=";
+
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   nativeBuildInputs = [
     cmake
