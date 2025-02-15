@@ -134,21 +134,6 @@ with self; with elmLib; {
 
   elm-pages = import ./elm-pages { inherit nodePkgs pkgs lib makeWrapper; };
 
-  elm-land =
-    let
-      patched = patchNpmElm nodePkgs.elm-land;
-    in
-    patched.override (old: {
-      inherit ESBUILD_BINARY_PATH;
-      meta = with lib; nodePkgs."elm-land".meta // {
-        description = "Production-ready framework for building Elm applications";
-        homepage = "https://elm.land/";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.zupo ];
-      };
-    }
-    );
-
   elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ old.nodejs.pkgs.node-gyp-build ];
   });

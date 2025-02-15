@@ -303,6 +303,7 @@ in {
   eintopf = handleTest ./eintopf.nix {};
   ejabberd = handleTest ./xmpp/ejabberd.nix {};
   elk = handleTestOn ["x86_64-linux"] ./elk.nix {};
+  elm-land = runTest ./elm-land.nix;
   emacs-daemon = handleTest ./emacs-daemon.nix {};
   endlessh = handleTest ./endlessh.nix {};
   endlessh-go = handleTest ./endlessh-go.nix {};

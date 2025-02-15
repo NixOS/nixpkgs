@@ -47,6 +47,8 @@ lib.makeScope pkgs.newScope
 
       elm-json = callPackage ./packages/elm-json { };
 
+      elm-land = callPackage ./packages/elm-land { };
+
       elm-test-rs = callPackage ./packages/elm-test-rs { };
 
       elm-test = callPackage ./packages/elm-test { };
