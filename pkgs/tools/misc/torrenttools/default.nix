@@ -1,22 +1,23 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   bencode,
   catch2,
   cli11,
   cmake,
   ctre,
   expected-lite,
+  fetchFromGitHub,
   fmt,
   gsl-lite,
   howard-hinnant-date,
-  yaml-cpp,
+  lib,
   ninja,
   nlohmann_json,
   openssl,
   re2,
   sigslot,
+  stdenv,
+  tbb,
+  yaml-cpp,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,16 +56,16 @@ stdenv.mkDerivation rec {
   ];
   sourceRoot = "torrenttools";
 
-  patches = [
-    ./fmt-9.patch
-  ];
-
   postUnpack = ''
     cp -pr cliprogress torrenttools/external/cliprogress
     cp -pr dottorrent torrenttools/external/dottorrent
     cp -pr termcontrol torrenttools/external/termcontrol
     chmod -R u+w -- "$sourceRoot"
   '';
+
+  patches = [
+    ./fmt-9.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -80,19 +81,21 @@ stdenv.mkDerivation rec {
     fmt
     gsl-lite
     howard-hinnant-date
-    yaml-cpp
     nlohmann_json
     openssl
     re2
     sigslot
+    tbb
+    yaml-cpp
   ];
 
-  cmakeFlags = [
-    "-DTORRENTTOOLS_BUILD_TESTS:BOOL=ON"
-    "-DTORRENTTOOLS_TBB:BOOL=OFF" # Our TBB doesn't expose a CMake module.
-  ];
+  cmakeFlags = [ (lib.cmakeBool "TORRENTTOOLS_BUILD_TESTS" true) ];
 
   doCheck = true;
+
+  postInstall = ''
+    rm -rf $out/etc
+  '';
 
   meta = with lib; {
     description = "CLI tool for creating, inspecting and modifying BitTorrent metafiles";
