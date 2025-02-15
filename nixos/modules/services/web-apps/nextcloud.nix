@@ -90,7 +90,11 @@ let
     cd ${webroot}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
+      if [[ -e /run/wrappers/bin/sudo ]]; then
+        sudo='exec /run/wrappers/bin/sudo -u nextcloud'
+      else
+        sudo='${pkgs.util-linux}/bin/runuser -u nextcloud --'
+      fi
     fi
     $sudo ${pkgs.coreutils}/bin/env \
       NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
