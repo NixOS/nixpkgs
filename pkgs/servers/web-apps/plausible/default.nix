@@ -8,6 +8,7 @@
   runCommand,
   nixosTests,
   npm-lockfile-fix,
+  nix-update-script,
   brotli,
   tailwindcss_3,
   esbuild,
@@ -91,7 +92,9 @@ let
     };
   };
 
-  patchedMixFodDeps = runCommand mixFodDeps.name { } ''
+  patchedMixFodDeps = runCommand mixFodDeps.name {
+    inherit (mixFodDeps) hash;
+  } ''
     mkdir $out
     cp -r --no-preserve=mode ${mixFodDeps}/. $out
 
@@ -125,8 +128,21 @@ beamPackages.mixRelease rec {
     tests = {
       inherit (nixosTests) plausible;
     };
-    updateScript = ./update.sh;
-    inherit assets tracker;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "tracker"
+        "-s"
+        "assets"
+        "-s"
+        "mjmlNif"
+      ];
+    };
+    inherit
+      assets
+      tracker
+      mjmlNif
+      ;
   };
 
   env = {
