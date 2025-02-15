@@ -262,6 +262,11 @@ EOF
     done
 
     for crate in ${toString depCrates}; do
+      # If crate has already been linked, skip it!
+      if [[ -L $out/$(basename "$crate" | cut -c 34-) ]]; then
+        continue
+      fi
+
       # Link the crate directory, removing the output path hash from the destination.
       ln -s "$crate" $out/$(basename "$crate" | cut -c 34-)
 
