@@ -12,12 +12,12 @@
 }:
 let
   pname = "hiddify-app";
-  version = "2.5.7-unstable-2024-11-18";
+  version = "2.5.7-unstable-2025-01-06";
   src = fetchFromGitHub {
     owner = "hiddify";
     repo = "hiddify-app";
-    rev = "9d3de0ae2ea2687f189f75fa2a9196a035a0bb32";
-    hash = "sha256-P04A14lFfgvl0kkxMsNXNaHnwfJ3AWkhrfI7VMESGHc=";
+    rev = "e5a1e1d6661039afcdef68406f978f3b6ef56412";
+    hash = "sha256-OFT5sVFiE/8HytFis/s8FyM3lgKOAWj77zvhHkMaikk=";
     fetchSubmodules = true;
   };
   libcore = buildGoModule rec {
