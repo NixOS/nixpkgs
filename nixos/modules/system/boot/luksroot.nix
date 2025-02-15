@@ -152,6 +152,9 @@ let
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
     fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
   in ''
+    # Custom device activation commands
+    ${dev.activationCommands}
+
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
     wait_target "device" ${dev.device} || die "${dev.device} is unavailable"
@@ -868,6 +871,20 @@ in
             });
           };
 
+          activationCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              $${cryptsetup}/bin/integritysetup open /dev/sda integ-left
+              $${cryptsetup}/bin/integritysetup open /dev/sdb integ-right
+              $${systemd}/bin/udevadm trigger /dev/md126
+              $${systemd}/bin/udevadm settle
+            '';
+            description = ''
+              Commands that should be run to activate our LUKS device, before we wait for it to appear.
+            '';
+          };
+
           preOpenCommands = mkOption {
             type = types.lines;
             default = "";
@@ -925,6 +942,14 @@ in
       type = types.bool;
       description = ''
         Enables support for authenticating with a GPG encrypted password.
+      '';
+    };
+
+    boot.initrd.luks.withIntegritySetup = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Include the dm-integrity's integritysetup control binary into the initramfs.
       '';
     };
 
@@ -1023,6 +1048,9 @@ in
     in
     mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
+      ${optionalString luks.withIntegritySetup ''
+        copy_bin_and_libs ${pkgs.cryptsetup}/bin/integritysetup
+        ''}
       copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
       sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
