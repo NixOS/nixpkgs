@@ -11,7 +11,7 @@
 , configText ? ""
 }:
 let
-  version = "2406";
+  version = "";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -37,7 +37,7 @@ let
     inherit version;
     src = fetchurl {
       url = "https://download3.omnissa.com/software/CART25FQ2_LIN_2406_TARBALL/VMware-Horizon-Client-Linux-2406-8.13.0-9995429239.tar.gz";
-      sha256 = "d6bae5cea83c418bf3a9cb884a7d8351d8499f1858a1ac282fd79dc0c64e83f6";
+      sha256 = "1rrlzqg8QYvzqcuISn2DUdhJnxhYoawoL9edwMZOg/Y=";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
