@@ -393,8 +393,8 @@ in
         (e:
           "allow ${e}")
         cfg.allowedBridges;
-      systemPackages = with pkgs; [ libressl.nc iptables cfg.package cfg.qemu.package ];
-      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
+      systemPackages = with pkgs; [ libressl.nc config.networking.firewall.package cfg.package cfg.qemu.package ];
+      etc.ethertypes.source = "${config.networking.firewall.package}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];
