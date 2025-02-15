@@ -6,7 +6,6 @@
   django,
   django-tagging,
   fetchFromGitHub,
-  fetchpatch,
   gunicorn,
   mock,
   pyparsing,
@@ -22,32 +21,19 @@
 
 buildPythonPackage rec {
   pname = "graphite-web";
-  version = "1.1.10";
-  format = "setuptools";
+  version = "1.1.10-unstable-2024-10-21";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = pname;
-    rev = version;
-    hash = "sha256-2HgCBKwLfxJLKMopoIdsEW5k/j3kNAiifWDnJ98a7Qo=";
+    rev = "55adbb6fd80a3dcd089a2c4458c71af01f191c9b";
+    hash = "sha256-f2EmYtaUCehyQ0HdxceT/DonwsrIJMCWToGcUcdsEyI=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-1.patch";
-      url = "https://github.com/graphite-project/graphite-web/commit/9c626006eea36a9fd785e8f811359aebc9774970.patch";
-      hash = "sha256-JMmdhLqsaRhUG2FsH+yPNl+cR7O2YLfKFliL2GU0aAk=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-4730.CVE-2022-4729.CVE-2022-4728.part-2.patch";
-      url = "https://github.com/graphite-project/graphite-web/commit/2f178f490e10efc03cd1d27c72f64ecab224eb23.patch";
-      hash = "sha256-NL7K5uekf3NlLa58aFFRPJT9ktjqBeNlWC4Htd0fRQ0=";
-    })
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     cairocffi
     django
     django-tagging
@@ -62,10 +48,9 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Django>=1.8,<3.1" "Django" \
-      --replace "django-tagging==0.4.3" "django-tagging"
-  '';
+     substituteInPlace setup.py \
+       --replace-fail "Django>=3.2,<4" "Django"
+   '';
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures
   # carbon is installed as a regular Python module.
@@ -85,7 +70,7 @@ buildPythonPackage rec {
     rm -r graphite
     # redis not practical in test environment
     substituteInPlace tests/test_tags.py \
-      --replace test_redis_tagdb _dont_test_redis_tagdb
+      --replace-fail test_redis_tagdb _dont_test_redis_tagdb
 
     DJANGO_SETTINGS_MODULE=tests.settings ${python.interpreter} manage.py test
     popd
