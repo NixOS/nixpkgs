@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.12.2";
+  version = "4.12.4";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -45,7 +45,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-wn4HnOFhV02oq66LwBIOVzU+ehXemCuzOWcDASG/47c=";
+    hash = "sha256-rVIEUvgzx5MEHFxVXCLeprRYwNSQurNIOMhqvj1C7rQ=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-x1/b8LoXyGxCQiu7QB60XSpiufTk/y4492mOraFnRKY=";
+  mvnHash = "sha256-Hwr97IFw1UC3QXEC4V4gh58KO7GRbwrMiJEiIMiSvQY=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
