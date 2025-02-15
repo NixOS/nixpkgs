@@ -96,6 +96,8 @@ flutter324.buildFlutterApplication {
     install -Dm644 ./assets/images/icon.png $out/share/pixmaps/flclash.png
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
     homepage = "https://github.com/chen08209/FlClash";
