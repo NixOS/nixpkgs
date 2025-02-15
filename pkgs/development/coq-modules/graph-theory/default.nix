@@ -4,6 +4,7 @@
   coq,
   mathcomp,
   mathcomp-finmap,
+  mathcomp-algebra-tactics,
   fourcolor,
   hierarchy-builder,
   version ? null,
@@ -68,6 +69,7 @@ mkCoqDerivation {
     mathcomp.algebra
     mathcomp-finmap
     mathcomp.fingroup
+    mathcomp-algebra-tactics
     fourcolor
     hierarchy-builder
   ];
