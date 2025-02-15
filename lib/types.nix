@@ -577,7 +577,10 @@ rec {
       name = "pathInStore";
       description = "path in the Nix store";
       descriptionClass = "noun";
-      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+      # Note: `contentAddressed = true` derivations don't have a storeDir prefix:
+      # nix-repl> hello.outPath
+      #   "/1121rp0gvr1qya7hvy925g5kjwg66acz6sn1ra1hca09f1z5dsab"
+      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*|/[A-Za-z0-9]{52}.*" (toString x) != null;
       merge = mergeEqualOption;
     };
 
