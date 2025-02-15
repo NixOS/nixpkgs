@@ -1,4 +1,4 @@
-{ fetchgit, fetchurl, lib, writers, python3Packages, runCommand, cargo, jq }:
+{ lib, fetchgit, fetchCrate, writers, python3Packages, runCommand, cargo, jq }:
 
 {
   # Cargo lock file
@@ -93,21 +93,6 @@ let
       value = hash;
     }) outputHashes;
 
-  # We can't use the existing fetchCrate function, since it uses a
-  # recursive hash of the unpacked crate.
-  fetchCrate = pkg: downloadUrl:
-    let
-      checksum = pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
-    in
-    assert lib.assertMsg (checksum != null) ''
-      Package ${pkg.name} does not have a checksum.
-    '';
-    fetchurl {
-      name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-      url = "${downloadUrl}/${pkg.name}/${pkg.version}/download";
-      sha256 = checksum;
-    };
-
   registries = {
     "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
   } // extraRegistries;
@@ -126,7 +111,18 @@ let
       if (lib.hasPrefix "registry+" pkg.source || lib.hasPrefix "sparse+" pkg.source)
         && builtins.hasAttr registryIndexUrl registries then
       let
-        crateTarball = fetchCrate pkg registries.${registryIndexUrl};
+        checksum = pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
+        crateTarball =
+          assert lib.assertMsg (checksum != null) ''
+            Package ${pkg.name} does not have a checksum.
+          '';
+          fetchCrate {
+            pname = pkg.name;
+            inherit (pkg) version;
+            registryDl = registries.${registryIndexUrl};
+            sha256 = checksum;
+            unpack = false;
+          };
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         mkdir $out
         tar xf "${crateTarball}" -C $out --strip-components=1
