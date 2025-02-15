@@ -12,13 +12,13 @@
 }:
 maven.buildMavenPackage rec {
   pname = "polyglot";
-  version = "3.6";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "DraqueT";
     repo = "PolyGlot";
-    rev = "v${version}";
-    hash = "sha256-fAeYrj5x2kGGz+LPnlhR3j+0RSh4akPfN+ZyMMyrndE=";
+    tag = "v${version}";
+    hash = "sha256-jDW74Hk+6vzCUm84wwMn5XBGPVlsJ3mQrjtuqMZssz0=";
   };
 
   preBuild = ''
