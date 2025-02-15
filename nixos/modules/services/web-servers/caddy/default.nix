@@ -55,16 +55,14 @@ let
 
         nativeCaddy = lib.getExe pkgs.buildPackages.caddy;
 
-        Caddyfile-formatted =
-          pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; }
-            ''
-              mkdir -p $out
-              cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-              ${nativeCaddy} fmt --overwrite $out/Caddyfile
-              ${lib.optionalString cfg.validateConfigFile ''
-                ${nativeCaddy} adapt --adapter caddyfile --config $out/Caddyfile
-              ''}
-            '';
+        Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { } ''
+          mkdir -p $out
+          cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+          ${nativeCaddy} fmt --overwrite $out/Caddyfile
+          ${lib.optionalString cfg.validateConfigFile ''
+            ${nativeCaddy} adapt --adapter caddyfile --config $out/Caddyfile
+          ''}
+        '';
       in
       "${Caddyfile-formatted}/Caddyfile";
 
