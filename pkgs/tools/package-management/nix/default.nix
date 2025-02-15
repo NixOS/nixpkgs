@@ -11,6 +11,10 @@
 , runCommand
 , buildPackages
 , Security
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
 
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -220,6 +224,21 @@ in lib.makeExtensible (self: ({
     hash = "sha256-MZNpb4awWHXU+kGmH58VUB7M9l6UVo33riuQLTbMh4E=";
     self_attribute_name = "nix_2_25";
   };
+
+  nix_2_26 = (callPackage ./2_26/componentized.nix {
+    inherit libgit2-thin-packfile;
+  }).overrideAttrs (this: old: {
+    passthru = old.passthru or {} // {
+      tests =
+        old.passthru.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (old) version src;
+          nix = this.finalPackage;
+          self_attribute_name = "nix_2_26";
+        };
+    };
+  });
 
   git = common rec {
     version = "2.25.0";

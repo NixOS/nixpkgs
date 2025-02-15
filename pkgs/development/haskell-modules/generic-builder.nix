@@ -83,7 +83,9 @@ in
 , pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
 , benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
-, testTarget ? "", testFlags ? []
+, # testTarget is deprecated starting with 25.05. Use testTargets instead.
+  testTarget ? lib.concatStringsSep " " testTargets
+, testTargets ? [], testFlags ? []
 , broken ? false
 , preCompileBuildDriver ? null, postCompileBuildDriver ? null
 , preUnpack ? null, postUnpack ? null

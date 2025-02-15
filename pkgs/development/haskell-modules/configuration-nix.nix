@@ -75,7 +75,7 @@ self: super: builtins.intersectAttrs super {
       chmod +x "$out/bin/haskell-language-server"
       '';
     testToolDepends = [ self.cabal-install pkgs.git ];
-    testTarget = "func-test"; # wrapper test accesses internet
+    testTargets = [ "func-test" ]; # wrapper test accesses internet
     preCheck = ''
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
@@ -379,7 +379,7 @@ self: super: builtins.intersectAttrs super {
   digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
-  hjsonschema = overrideCabal (drv: { testTarget = "local"; }) super.hjsonschema;
+  hjsonschema = overrideCabal (drv: { testTargets = [ "local" ]; }) super.hjsonschema;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -741,7 +741,7 @@ self: super: builtins.intersectAttrs super {
 
   # Not running the "example" test because it requires a binary from lsps test
   # suite which is not part of the output of lsp.
-  lsp-test = overrideCabal (old: { testTarget = "tests func-test"; }) super.lsp-test;
+  lsp-test = overrideCabal (old: { testTargets = [ "tests" "func-test" ]; }) super.lsp-test;
 
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
@@ -1301,7 +1301,7 @@ self: super: builtins.intersectAttrs super {
       "-p" "!/oeis/"
     ];
     # disco-examples needs network access
-    testTarget = "disco-tests";
+    testTargets = [ "disco-tests" ];
   }) super.disco;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
