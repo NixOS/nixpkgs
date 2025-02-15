@@ -106,11 +106,16 @@ maven.buildMavenPackage rec {
 
   passthru = {
     # passthru for nix-update
-    inherit (frontend) npmDeps;
+    inherit frontend;
     tests = {
       inherit (nixosTests) dependency-track;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
