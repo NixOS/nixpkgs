@@ -146,11 +146,13 @@ in
     };
 
     boot.consoleLogLevel = mkOption {
-      type = types.int;
+      type = types.nullOr types.int;
       default = 4;
       description = ''
-        The kernel console `loglevel`. All Kernel Messages with a log level smaller
+        The kernel console `loglevel` parameter. All Kernel Messages with a log level smaller
         than this setting will be printed to the console.
+
+        Setting a value of 'null' will omit the `loglevel` parameter
       '';
     };
 
@@ -355,7 +357,7 @@ in
         # Implement consoleLogLevel both in early boot and using sysctl
         # (so you don't need to reboot to have changes take effect).
         boot.kernelParams =
-          [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
+          optionals (config.boot.consoleLogLevel != null) [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
           optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
         boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
