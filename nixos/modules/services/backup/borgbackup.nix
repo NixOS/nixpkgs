@@ -187,18 +187,22 @@ let
   };
 
   mkRepoService = name: cfg:
-    lib.nameValuePair "borgbackup-repo-${name}" {
-      description = "Create BorgBackup repository ${name} directory";
-      script = ''
-        mkdir -p ${lib.escapeShellArg cfg.path}
-        chown ${cfg.user}:${cfg.group} ${lib.escapeShellArg cfg.path}
-      '';
-      serviceConfig = {
-        # The service's only task is to ensure that the specified path exists
-        Type = "oneshot";
-      };
-      wantedBy = [ "multi-user.target" ];
-    };
+    lib.nameValuePair "borgbackup-repo-${name}" (
+      if cfg.createPath then
+        {
+          description = "Create BorgBackup repository ${name} directory";
+          script = ''
+            mkdir -p ${lib.escapeShellArg cfg.path}
+            chown ${cfg.user}:${cfg.group} ${lib.escapeShellArg cfg.path}
+          '';
+          serviceConfig = {
+            # The service's only task is to ensure that the specified path exists
+            Type = "oneshot";
+          };
+          wantedBy = [ "multi-user.target" ];
+        }
+      else { }
+    );
 
   mkAuthorizedKey = cfg: appendOnly: key:
     let
@@ -207,7 +211,8 @@ let
       restrictedArg = "--restrict-to-${if cfg.allowSubRepos then "path" else "repository"} .";
       appendOnlyArg = lib.optionalString appendOnly "--append-only";
       quotaArg = lib.optionalString (cfg.quota != null) "--storage-quota ${cfg.quota}";
-      serveCommand = "borg serve ${restrictedArg} ${appendOnlyArg} ${quotaArg}";
+      umaskArg = lib.optionalString (cfg.umask != null) "--umask=${cfg.umask}";
+      serveCommand = "borg serve ${restrictedArg} ${appendOnlyArg} ${quotaArg} ${umaskArg}";
     in
       ''command="${cdCommand} && ${serveCommand}",restrict ${key}'';
 
@@ -702,10 +707,18 @@ in {
           path = lib.mkOption {
             type = lib.types.path;
             description = ''
-              Where to store the backups. Note that the directory
-              is created automatically, with correct permissions.
+              Where to store the backups.
             '';
             default = "/var/lib/borgbackup";
+          };
+
+          createPath = lib.mkOption {
+            type = lib.types.bool;
+            description = ''
+              Create {option}`path` directory automatically, with correct
+              permissions.
+            '';
+            default = true;
           };
 
           user = lib.mkOption {
@@ -772,6 +785,19 @@ in {
             '';
             default = null;
             example = "100G";
+          };
+
+          umask = lib.mkOption {
+            type = with lib.types; nullOr str;
+            description = ''
+              umask value {command}`borg serve` should use when creating files.
+              Can be used to make the repository readable to members of the
+              {option}`group` which can be useful to give read only access to
+              the repository.
+              See also [Borg issue #4756](https://github.com/borgbackup/borg/issues/4756#issuecomment-1746754554).
+              '';
+            default = null;
+            example = "0027";
           };
 
         };
