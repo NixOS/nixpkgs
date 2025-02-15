@@ -9,7 +9,8 @@ let
   sha256 = "1i7zjn5cdv9h00fgjg46b8yrz4d3dqvfr25g3f13967ycy58m48h";
 in
 stdenv.mkDerivation {
-  name = "system76-acpi-module-${version}-${kernel.version}";
+  pname = "system76-acpi-module";
+  inherit version;
 
   passthru.moduleName = "system76_acpi";
 

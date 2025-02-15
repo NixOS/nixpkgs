@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, kernel, kernelModuleMakeFlags }:
 
 stdenv.mkDerivation rec {
-  name = "virtio_vmmci";
+  pname = "virtio_vmmci";
   version = "0.6.2";
 
   src = fetchFromGitHub {

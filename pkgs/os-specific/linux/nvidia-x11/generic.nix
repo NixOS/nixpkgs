@@ -142,7 +142,7 @@ let
   '';
 
   self = stdenv.mkDerivation {
-    name = "nvidia-${if useFabricmanager then "dc" else "x11"}-${version}${nameSuffix}";
+    pname = "nvidia-${if useFabricmanager then "dc" else "x11"}";
 
     builder = ./builder.sh;
 
