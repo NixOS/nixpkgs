@@ -53,20 +53,20 @@ let
           ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
         '';
 
+        nativeCaddy = pkgs.buildPackages.caddy;
+
         Caddyfile-formatted =
           pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; }
             ''
               mkdir -p $out
               cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-              caddy fmt --overwrite $out/Caddyfile
+              ${lib.getExe nativeCaddy} fmt --overwrite $out/Caddyfile
               ${lib.optionalString cfg.validateConfigFile ''
-                caddy adapt --adapter caddyfile --config $out/Caddyfile
+                ${lib.getExe nativeCaddy} adapt --adapter caddyfile --config $out/Caddyfile
               ''}
             '';
       in
-      "${
-        if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile
-      }/Caddyfile";
+      "${Caddyfile-formatted}/Caddyfile";
 
   etcConfigFile = "caddy/caddy_config";
 
