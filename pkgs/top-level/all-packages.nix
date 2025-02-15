@@ -3069,7 +3069,7 @@ with pkgs;
   dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
 
   inherit (import ../build-support/dlang/dub-support.nix { inherit callPackage; })
-    buildDubPackage dub-to-nix;
+     dub-to-nix importDubLock buildDubPackage dubSetupHook dubBuildHook dubCheckHook;
 
   duff = callPackage ../tools/filesystems/duff {
     autoreconfHook = buildPackages.autoreconfHook269;
