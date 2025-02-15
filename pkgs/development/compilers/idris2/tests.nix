@@ -84,7 +84,23 @@ let
 
         touch $out
       '';
+
+  inherit (import ./ipkg-parse.nix { inherit lib; })
+    parseIpkg
+    parseIpkgVersion
+    parseIpkgToOneLineFields
+    ;
 in
+assert (
+  import ./ipkg-parse-tests.nix {
+    inherit
+      lib
+      parseIpkgToOneLineFields
+      parseIpkgVersion
+      parseIpkg
+      ;
+  }
+);
 {
   # Simple hello world compiles, runs and outputs as expected
   helloWorld = testCompileAndRun {
