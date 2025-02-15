@@ -577,7 +577,7 @@ rec {
       name = "pathInStore";
       description = "path in the Nix store";
       descriptionClass = "noun";
-      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+      check = x: (isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null) || lib.isDerivation x;
       merge = mergeEqualOption;
     };
 
