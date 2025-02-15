@@ -1,0 +1,83 @@
+name: "Build packages"
+on:
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: "Comma-separated attributes to build"
+        type: string
+permissions:
+  issues: write
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Build package
+        run: |
+           nix build -L --impure --expr '{ packages }:
+             let
+               pkgs = import ./. {
+                 config = {
+                   allowUnfree = true;
+                   allowInsecurePredicate = x: true;
+                   allowAliases = false;
+                 };
+               };
+               lib = pkgs.lib;
+               packageList = lib.strings.splitString "," packages;
+               packageAttrs = map (package: lib.splitString "." package) packageList;
+               pkgsAndTests = map (packageAttr:
+                 let
+                   pkg = lib.attrByPath packageAttr null pkgs;
+                   tests = lib.attrByPath (packageAttr ++ ["tests"]) null pkgs;
+                   evalResult = builtins.tryEval "${pkg}";
+                 in if evalResult.success then [ pkg tests ] else []
+               ) packageAttrs;
+             in pkgsAndTests' --argstr packages '${{ inputs.packages }}'
+
+      - name: Post build status comment if part of a pull request
+        uses: actions/github-script@4020e461acd7a80762cdfff123a1fde368246fa4
+        if: always()
+        with:
+          github-token: ${{ secrets.PAT_FOR_COMMENTS }}
+          script: |
+            console.log(context);
+            console.log(context.payload.repository.owner);
+            const branch = context.payload.ref.replace('refs/heads/', '');
+            const owner = context.payload.repository.owner.login;
+            const repo = context.payload.repository.name;
+            const data = {
+              owner: "NixOS",
+              repo: "nixpkgs",
+              head: `${context.payload.repository.owner.login}:${branch}`
+            };
+            console.log(data);
+            const { data: pulls } = await github.rest.pulls.list(data);
+            console.log(pulls);
+            const pr = pulls.length > 0 ? pulls[0] : null;
+            if (pr) {
+              const status = context.conclusion;
+              const run_id = context.runId;
+              const build_url = `https://github.com/${owner}/${repo}/actions/runs/${run_id}`;
+              const packages = context.payload.inputs.packages;
+              const os = "${{ matrix.os }}";
+              const comment = `Build status: ${status}\nOS: ${os}\nPackages: ${packages}\n[Build logs](${build_url})`;
+              const issue_number = pr.number;
+              const res = await github.rest.issues.createComment({
+                owner: "NixOS",
+                repo: "nixpkgs",
+                issue_number: issue_number,
+                body: comment
+              });
+              console.log(res);
+            }
