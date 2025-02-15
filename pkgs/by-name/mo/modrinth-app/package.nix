@@ -34,7 +34,7 @@ symlinkJoin {
 
   nativeBuildInputs = [ wrapGAppsHook4 ];
 
-  buildInputs = [ glib-networking gsettings-desktop-schemas ];
+  buildInputs = [ glib-networking ];
 
   runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux (
     lib.makeLibraryPath [
