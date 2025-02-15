@@ -5605,6 +5605,9 @@ with pkgs;
 
   ### DEVELOPMENT / COMPILERS
 
+  temurin-bin-24ea = javaPackages.compiler.temurin-bin.jdk-24ea;
+  temurin-jre-bin-24ea = javaPackages.compiler.temurin-bin.jre-24ea;
+
   temurin-bin-23 = javaPackages.compiler.temurin-bin.jdk-23;
   temurin-jre-bin-23 = javaPackages.compiler.temurin-bin.jre-23;
 
