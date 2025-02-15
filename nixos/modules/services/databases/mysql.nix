@@ -440,7 +440,7 @@ in
             if ${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW VARIABLES LIKE 'wsrep_on'" 2>/dev/null | grep -q 'ON'; then
               echo "Galera cluster detected, waiting for node to be synced..."
               while true; do
-                STATE=$(${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW STATUS LIKE 'wsrep_local_state_comment'" | ${pkgs.gawk}/bin/awk '{print $2}')
+                STATE=$(${cfg.package}/bin/mysql -u ${superUser} -N -e "SHOW STATUS LIKE 'wsrep_local_state_comment'" | ${lib.getExe' pkgs.gawk "awk"} '{print $2}')
                 if [ "$STATE" = "Synced" ]; then
                   echo "Node is synced"
                   break
