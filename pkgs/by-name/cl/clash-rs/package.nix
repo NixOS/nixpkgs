@@ -7,18 +7,23 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clash-rs";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${version}";
-    hash = "sha256-PaXcMJuenUrcCBdU3CZEIk9U5tZxSAVVtm9ttAldVLM=";
+    hash = "sha256-c4XF0F2ifTvbXTMGiJc1EaGTlS/X5ilZTpXe01uHs4Y=";
   };
 
   useFetchCargoVendor = true;
+  cargoHash = "sha256-ZSwNlknpZ0zKj+sklmO14Ey5DPZ0Wk9xxMiXwIiuRd0=";
 
-  cargoHash = "sha256-ynGp1MU0l48mD+gfsyOFNo4jJDiDWgoPLc02WblPjt4=";
+  patches = [
+    # Fix error[E0658]: use of unstable library feature `prelude_2024`.
+    # See https://github.com/rust-lang/rust/issues/121042.
+    ./prelude.patch
+  ];
 
   env = {
     PROTOC = "${protobuf}/bin/protoc";
