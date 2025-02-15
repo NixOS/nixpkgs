@@ -49,6 +49,7 @@ let
     "jitsi"
     "json"
     "junos-czerwonk"
+    "kafka"
     "kea"
     "keylight"
     "klipper"
