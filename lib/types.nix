@@ -581,6 +581,18 @@ rec {
       merge = mergeEqualOption;
     };
 
+    flake = mkOptionType {
+      name = "flake";
+      descriptionClass = "noun";
+      check =
+        if builtins.compareVersions builtins.nixVersion "2.12.0" >= 0
+        then
+          x: x._type or null == "flake"
+        else
+          x: x?inputs && x?sourceInfo && x?outputs;
+      merge = mergeUniqueOption { message = "However, flakes can not be merged."; };
+    };
+
     listOf = elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
