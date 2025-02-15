@@ -1,0 +1,23 @@
+diff --git a/quartz/cli/constants.js b/quartz/cli/constants.js
+index f4a9ce5..e0f0252 100644
+--- a/quartz/cli/constants.js
++++ b/quartz/cli/constants.js
+@@ -11,5 +11,5 @@ export const cwd = process.cwd()
+ export const cacheDir = path.join(cwd, ".quartz-cache")
+ export const cacheFile = "./quartz/.quartz-cache/transpiled-build.mjs"
+ export const fp = "./quartz/build.ts"
+-export const { version } = JSON.parse(readFileSync("./package.json").toString())
++export const version = "4.4.0"
+ export const contentCacheFolder = path.join(cacheDir, "content-cache")
+diff --git a/quartz/components/Footer.tsx b/quartz/components/Footer.tsx
+index cff28cb..30f72f0 100644
+--- a/quartz/components/Footer.tsx
++++ b/quartz/components/Footer.tsx
+@@ -1,6 +1,6 @@
+ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
+ import style from "./styles/footer.scss"
+-import { version } from "../../package.json"
++import { version } from "../cli/constants.js
+ import { i18n } from "../i18n"
+ 
+ interface Options {
