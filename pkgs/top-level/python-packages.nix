@@ -2863,6 +2863,8 @@ self: super: with self; {
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
 
+  cvc5 = (toPythonModule (pkgs.cvc5.override { withPythonBindings = true; })).python;
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
