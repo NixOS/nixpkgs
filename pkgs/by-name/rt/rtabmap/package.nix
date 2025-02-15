@@ -2,46 +2,53 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pkg-config,
+
+  # nativeBuildInputs
   cmake,
+  libsForQt5,
+  pkg-config,
+  wrapGAppsHook3,
+
+  # buildInputs
   opencv,
   pcl,
+  liblapack,
+  xorg,
   libusb1,
   eigen,
-  wrapQtAppsHook,
-  qtbase,
   g2o,
   ceres-solver,
-  zed-open-capture,
-  hidapi,
   octomap,
   freenect,
   libdc1394,
   libGL,
   libGLU,
   vtkWithQt5,
-  wrapGAppsHook3,
-  liblapack,
-  xorg,
+  zed-open-capture,
+  hidapi,
+
+  # passthru
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
   version = "0.21.4.1";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
   };
 
   nativeBuildInputs = [
     cmake
+    libsForQt5.wrapQtAppsHook
     pkg-config
-    wrapQtAppsHook
     wrapGAppsHook3
   ];
+
   buildInputs = [
     ## Required
     opencv
@@ -61,7 +68,7 @@ stdenv.mkDerivation rec {
     freenect
     libdc1394
     # librealsense - missing includedir
-    qtbase
+    libsForQt5.qtbase
     libGL
     libGLU
     vtkWithQt5
@@ -72,11 +79,18 @@ stdenv.mkDerivation rec {
   # Disable warnings that are irrelevant to us as packagers
   cmakeFlags = [ "-Wno-dev" ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = gitUpdater { };
+  };
+
+  meta = {
     description = "Real-Time Appearance-Based 3D Mapping";
     homepage = "https://introlab.github.io/rtabmap/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ marius851000 ];
-    platforms = with platforms; linux;
+    changelog = "https://github.com/introlab/rtabmap/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ marius851000 ];
+    platforms = with lib.platforms; linux;
+    # pcl/io/io.h: No such file or directory
+    broken = true;
   };
-}
+})

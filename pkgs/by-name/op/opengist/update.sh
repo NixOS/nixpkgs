@@ -1,11 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash curl coreutils jq git prefetch-npm-deps moreutils common-updater-scripts common-updater-scripts
+#!nix-shell -i bash -p bash curl coreutils jq git prefetch-npm-deps moreutils common-updater-scripts
 
 # shellcheck shell=bash
 
 set -eou pipefail
+set -x
 
-NIXPKGS_DIR="$PWD"
+NIXPKGS_DIR="$(git rev-parse --show-toplevel)"
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 # Get latest release
@@ -27,7 +28,9 @@ fi
 
 echo "Updating opengist $oldVersion -> $latestVersion"
 
+pushd "$NIXPKGS_DIR" >/dev/null || exit 1
 update-source-version opengist "${latestVersion}"
+popd >/dev/null
 
 pushd "$SCRIPT_DIR" >/dev/null || exit 1
 
@@ -43,7 +46,7 @@ popd >/dev/null
 # nix-prefetch broken due to ninja finalAttrs.src.rev
 # nix-update with goModules broken for this package
 
-setKV () {
+setKV() {
     sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${SCRIPT_DIR}/package.nix"
 }
 
