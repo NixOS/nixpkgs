@@ -33,7 +33,8 @@ in
 , dontStrip ? outputsJS
 , version, revision ? null
 , sha256 ? null
-, src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
+, packageRepositoryUrl ? "mirror://hackage"
+, src ? fetchurl { url = "${packageRepositoryUrl}/${pname}-${version}.tar.gz"; inherit sha256; }
 , sourceRoot ? null
 , setSourceRoot ? null
 , buildDepends ? [], setupHaskellDepends ? [], libraryHaskellDepends ? [], executableHaskellDepends ? []
@@ -169,7 +170,7 @@ let
 
   binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
 
-  newCabalFileUrl = "mirror://hackage/${pname}-${version}/revision/${revision}.cabal";
+  newCabalFileUrl = "${packageRepositoryUrl}/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
     url = newCabalFileUrl;
     sha256 = editedCabalFile;
