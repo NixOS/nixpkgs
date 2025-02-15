@@ -28,7 +28,6 @@
   dconf,
   llvmPackages_15,
   overrideSDK,
-  overrideLibcxx,
   darwin,
 
   # options
@@ -332,7 +331,7 @@ let
         #   starting with clang 16. Patches are available upstream that can be backported.
         # Because the first error is non-trivial to fix and suppressing it risks future breakage,
         # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
-        stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
+        stdenv = if stdenv.cc.isClang then llvmPackages_15.stdenv else stdenv;
         inherit (srcs.qtwebengine) version;
         inherit (darwin) bootstrap_cmds;
         python = python3;
