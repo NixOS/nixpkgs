@@ -16,12 +16,12 @@
   jlinkSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.xz";
+    url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
     hash = "sha256-H5NLB27UnqziA2Vewkn8eGGmuOh/5K73MuR7bkhbYpM=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = "flashrom";
   };
-}
+})
