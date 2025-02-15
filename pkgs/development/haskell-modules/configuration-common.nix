@@ -2569,9 +2569,6 @@ self: super: {
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
 
-  # Bogus constraint on tls (<2.0)
-  pinboard-notes-backup = doJailbreak super.pinboard-notes-backup;
-
   # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
   # https://github.com/vincenthz/hs-gauge/pull/106
   gauge = appendPatch (pkgs.fetchpatch {
