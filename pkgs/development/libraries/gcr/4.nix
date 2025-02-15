@@ -18,6 +18,7 @@
   systemd,
   gobject-introspection,
   wrapGAppsHook4,
+  writeText,
   vala,
   gi-docgen,
   gnome,
@@ -25,7 +26,6 @@
   shared-mime-info,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gcr";
   version = "4.3.0";
@@ -80,11 +80,20 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # We are still using ssh-agent from gnome-keyring.
-    # https://github.com/NixOS/nixpkgs/issues/140824
-    "-Dssh_agent=false"
     "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
     (lib.mesonEnable "systemd" systemdSupport)
+    "--cross-file=${
+      writeText "cross-file.conf" (
+        ''
+          [binaries]
+          ssh-add = '${lib.getExe' openssh "ssh-add"}'
+          ssh-agent = '${lib.getExe' openssh "ssh-agent"}'
+        ''
+        + lib.optionalString systemdSupport ''
+          systemctl = '${lib.getExe' systemd "systemctl"}'
+        ''
+      )
+    }"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
@@ -111,8 +120,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
-    description = "GNOME crypto services (daemon and tools)";
     mainProgram = "gcr-viewer-gtk4";
+    description = "GNOME crypto services (daemon and tools)";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
     license = licenses.lgpl2Plus;
 

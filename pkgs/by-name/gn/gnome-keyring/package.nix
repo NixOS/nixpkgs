@@ -14,7 +14,6 @@
   libcap_ng,
   libselinux,
   p11-kit,
-  openssh,
   wrapGAppsHook3,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     glib
     libgcrypt
     pam
-    openssh
     libcap_ng
     libselinux
     gcr
@@ -64,13 +62,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
-    # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
-    # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
-    "--enable-ssh-agent"
     # cross compilation requires these paths to be explicitly declared:
     "LIBGCRYPT_CONFIG=${lib.getExe' (lib.getDev libgcrypt) "libgcrypt-config"}"
-    "SSH_ADD=${lib.getExe' openssh "ssh-add"}"
-    "SSH_AGENT=${lib.getExe' openssh "ssh-agent"}"
   ];
 
   # Tends to fail non-deterministically.
