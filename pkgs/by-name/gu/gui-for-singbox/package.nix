@@ -17,13 +17,13 @@
 
 let
   pname = "gui-for-singbox";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-5zd4CVWVR+E3E097Xjd/V6QFRV9Ye2UQvBalAQ9zqXc=";
+    hash = "sha256-3ZSQoSXa9ma+r6y/xQGPjDw3BryH/s3TEEN2KptN+f8=";
   };
 
   metaCommon = {
@@ -45,7 +45,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      hash = "sha256-dLI1YMzs9lLk9lJBkBgc6cpirM79khy0g5VaOVEzUAc=";
+      hash = "sha256-IljvA3vVD7RXULPWvKJPp4fi094SDDPs/AlxJKOk6OY=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
@@ -81,7 +81,7 @@ buildGoModule {
       --replace-fail '@basepath@' "$out"
   '';
 
-  vendorHash = "sha256-OrysyJF+lUMf+0vWmOZHjxUdE6fQCKArmpV4alXxtYs=";
+  vendorHash = "sha256-Ft3qkxCAkNIqTapqT4g8w0L8VV3z30GwWb17kGr03jw=";
 
   nativeBuildInputs = [
     wails
