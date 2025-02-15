@@ -58,15 +58,7 @@ let
     };
 
   in
-    menuBuilderGrub2
-    finalCfg
-    [
-      { class = "installer"; }
-      { class = "nomodeset"; params = "nomodeset"; }
-      { class = "copytoram"; params = "copytoram"; }
-      { class = "debug";     params = "debug"; }
-    ]
-  ;
+    menuBuilderGrub2 finalCfg config.isoImage.bootEntries;
 
   # Timeout in syslinux is in units of 1/10 of a second.
   # null means max timeout (35996, just under 1h in 1/10 seconds)
@@ -706,6 +698,20 @@ in
         This is useful for validating that graphics mode usage is not at the root cause of a problem with the iso image.
 
         If text mode is required off-handedly (e.g. for serial use) you can use the `T` key, after being prompted, to use text mode for the current boot.
+      '';
+    };
+
+    isoImage.bootEntries = mkOption {
+      default = [
+        { class = "installer"; }
+        { class = "nomodeset"; params = "nomodeset"; }
+        { class = "copytoram"; params = "copytoram"; }
+        { class = "debug";     params = "debug"; }
+      ];
+      example = [ { class = "toram"; params = "toram"; } ];
+      type = with types; listOf (attrsOf (uniq str));
+      description = lib.mdDoc ''
+        List of boot entries with params.
       '';
     };
 
