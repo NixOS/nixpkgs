@@ -8,7 +8,7 @@ let
   cfg = config.services.icecast;
   configFile = pkgs.writeText "icecast.xml" ''
     <icecast>
-      <hostname>${cfg.hostname}</hostname>
+      <hostname>${toString cfg.hostname}</hostname>
 
       <authentication>
         <admin-user>${cfg.admin.user}</admin-user>
