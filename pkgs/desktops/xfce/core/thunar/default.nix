@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ stdenv
+, mkXfceDerivation
 , lib
 , docbook_xsl
 , exo
@@ -14,23 +15,26 @@
 , pcre2
 , xfce4-panel
 , xfconf
-, gobject-introspection
 , makeWrapper
 , symlinkJoin
 , thunarPlugins ? []
+, withIntrospection ? false
+, buildPackages
+, gobject-introspection
 }:
 
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.20.1";
+  version = "4.20.2";
 
-  sha256 = "sha256-+Iz9tkP8foEtor1HFBB1/fyMXdLm3mXCoP9j9bug8po=";
+  sha256 = "sha256-tuINIJ5r1BXAUJxlmLiYe2z3AFGkXqbITJBskSx5D4s=";
 
   nativeBuildInputs = [
     docbook_xsl
-    gobject-introspection
     libxslt
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [

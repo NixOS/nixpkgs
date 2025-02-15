@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
 
-  cargoHash = "sha256-HtyCKQ0xDIXevgr4FAnVJcDI8G6vR9fLHFghe9+ADiU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EkTLL7thZ/bBpY7TwfEsPOjJxzQ3vpxDi+sYPNAK6og=";
 
   passthru.tests.version = testers.testVersion {
     package = tuxedo-rs;

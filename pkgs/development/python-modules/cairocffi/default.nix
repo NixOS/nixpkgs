@@ -5,7 +5,7 @@
   pythonOlder,
   fetchPypi,
   lib,
-  substituteAll,
+  replaceVars,
   pikepdf,
   pytestCheckHook,
   cairo,
@@ -32,8 +32,7 @@ buildPythonPackage rec {
 
   patches = [
     # OSError: dlopen() failed to load a library: gdk-pixbuf-2.0 / gdk-pixbuf-2.0-0
-    (substituteAll {
-      src = ./dlopen-paths.patch;
+    (replaceVars ./dlopen-paths.patch {
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
       cairo = cairo.out;
       glib = glib.out;

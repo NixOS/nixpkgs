@@ -1,0 +1,29 @@
+From 316457cf70dd105905d5d4925f43de280f08ab10 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sat, 11 Jan 2025 20:55:29 +0100
+Subject: [PATCH] tests/CMakeLists.txt: Drop hardcoded -no-pie linker flags
+
+---
+ tests/CMakeLists.txt | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 63beacb..5b0812c 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -32,7 +32,6 @@ add_dependencies("indicator-messages-service" "ayatana-indicator-messages-servic
+ # test-gactionmuxer
+ 
+ add_executable("test-gactionmuxer" test-gactionmuxer.cpp)
+-target_link_options("test-gactionmuxer" PRIVATE -no-pie)
+ target_include_directories("test-gactionmuxer" PUBLIC ${PROJECT_DEPS_INCLUDE_DIRS} "${CMAKE_SOURCE_DIR}/src")
+ target_link_libraries("test-gactionmuxer" "indicator-messages-service" ${PROJECT_DEPS_LIBRARIES} ${GTEST_LIBRARIES} ${GTEST_BOTH_LIBRARIES} ${GMOCK_LIBRARIES})
+ add_test("test-gactionmuxer" "test-gactionmuxer")
+@@ -59,7 +58,6 @@ add_custom_target("gschemas-compiled" ALL DEPENDS gschemas.compiled)
+ 
+ pkg_check_modules(DBUSTEST REQUIRED dbustest-1)
+ add_executable("indicator-test" indicator-test.cpp)
+-target_link_options("indicator-test" PRIVATE -no-pie)
+ target_include_directories("indicator-test" PUBLIC ${PROJECT_DEPS_INCLUDE_DIRS} ${DBUSTEST_INCLUDE_DIRS} "${CMAKE_SOURCE_DIR}/libmessaging-menu")
+ target_link_libraries("indicator-test" "messaging-menu" ${PROJECT_DEPS_LIBRARIES} ${DBUSTEST_LIBRARIES} ${GTEST_LIBRARIES} ${GTEST_BOTH_LIBRARIES} ${GMOCK_LIBRARIES})
+ target_compile_definitions(

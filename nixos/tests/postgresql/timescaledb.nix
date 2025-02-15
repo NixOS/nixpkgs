@@ -1,6 +1,7 @@
 {
   pkgs,
   makeTest,
+  genTests,
 }:
 
 let
@@ -91,11 +92,7 @@ in
 # Not run by default, because this requires allowUnfree.
 # To run these tests:
 #   NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.postgresql.timescaledb
-lib.dontRecurseIntoAttrs (
-  lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.timescaledb.meta.broken) pkgs.postgresqlVersions
-  )
-  // {
-    passthru.override = p: makeTestFor p;
-  }
-)
+lib.dontRecurseIntoAttrs (genTests {
+  inherit makeTestFor;
+  filter = _: p: !p.pkgs.timescaledb.meta.broken;
+})

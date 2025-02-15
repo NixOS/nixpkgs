@@ -16,7 +16,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "vmctl";
-  version = "v0.99-unstable-2024-05-14";
+  version = "0.99-unstable-2024-05-14";
 
   src = fetchFromGitHub {
     owner = "SamsungDS";

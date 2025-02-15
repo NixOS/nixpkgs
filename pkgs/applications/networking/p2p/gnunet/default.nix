@@ -3,7 +3,7 @@
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium
 
-, postgresqlSupport ? true, postgresql }:
+, postgresqlSupport ? true, libpq }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     adns curl gmp gnutls libextractor libgcrypt libgnurl libidn
     libmicrohttpd libunistring libxml2 ncurses gettext libsodium
     sqlite zlib libpulseaudio libopus libogg jansson
-  ] ++ lib.optional postgresqlSupport postgresql;
+  ] ++ lib.optional postgresqlSupport libpq;
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide

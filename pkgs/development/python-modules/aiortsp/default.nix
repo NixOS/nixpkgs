@@ -37,6 +37,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+  disabledTestPaths = [
+    # these tests get stuck, could be pytest-asyncio compat issue
+    "tests/test_connection.py"
+  ];
+
   pythonImportsCheck = [ "aiortsp" ];
 
   meta = with lib; {

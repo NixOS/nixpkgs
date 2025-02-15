@@ -1,5 +1,11 @@
 # This file contains a list of commits that are not likely what you
 # are looking for in a blame, such as mass reformatting or renaming.
+#
+# If a commit's line ends with `# !autorebase <command>`,
+# where <command> is an idempotent bash command that reapplies the changes from the commit,
+# the `maintainers/scripts/auto-rebase/run.sh` script can be used to rebase
+# across that commit while automatically resolving merge conflicts caused by the commit.
+#
 # You can set this file as a default ignore file for blame by running
 # the following command.
 #

@@ -17,7 +17,7 @@ let
   # Also don’t forget to run `nix-build -A lorri.tests`
   version = "1.7.1";
   sha256 = "sha256-dEdKMgE4Jd8CCvtGQDZNDCYOomZAV8aR7Cmtyn8RfTo=";
-  cargoHash = "sha256-+sKxKxc2DVHn54uQa8K+CKmm0A0ym9SXgtOcfRZ6R5E=";
+  cargoHash = "sha256-pRtc0cDVIBqbCbC1weFOhZP29rKAE1XdmM6HE5nJKRU=";
 
 in
 (rustPlatform.buildRustPackage rec {
@@ -37,6 +37,7 @@ in
     "doc"
   ];
 
+  useFetchCargoVendor = true;
   inherit cargoHash;
   doCheck = false;
 

@@ -95,6 +95,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # Fails in LXC containers where not all cores are enabled, where this setaffinity call will return EINVAL
+    sed -i "/fail_unless(pthread_setaffinity_np/d" src/tests/once-test.c
+  '';
+
   outputs = [
     "out"
     "dev"

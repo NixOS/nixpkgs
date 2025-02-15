@@ -13,6 +13,7 @@
   mock,
   oauth2client,
   pyasn1-modules,
+  pyjwt,
   pyopenssl,
   pytest-asyncio,
   pytest-localserver,
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.36.0";
+  version = "2.37.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -35,12 +36,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_auth";
     inherit version;
-    hash = "sha256-VF6WGPLfC8u33LxFpUZIWxISYkcWl1oepa6BSc52mrE=";
+    hash = "sha256-AFRiOr8fnINJLGPT9H538KVEyqPUCy2Y4JmmEcLdXQA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     pyasn1-modules
     rsa
@@ -58,6 +59,10 @@ buildPythonPackage rec {
     pyopenssl = [
       cryptography
       pyopenssl
+    ];
+    pyjwt = [
+      cryptography
+      pyjwt
     ];
     reauth = [ pyu2f ];
     requests = [ requests ];
@@ -80,9 +85,7 @@ buildPythonPackage rec {
       pytestCheckHook
       responses
     ]
-    ++ optional-dependencies.aiohttp
-    ++ optional-dependencies.enterprise_cert
-    ++ optional-dependencies.reauth;
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [
     "google.auth"
@@ -92,14 +95,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # cryptography 44 compat issue
     "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
-  ];
-
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # Disable tests using pyOpenSSL as it does not build on M1 Macs
-    "tests/transport/test__mtls_helper.py"
-    "tests/transport/test_requests.py"
-    "tests/transport/test_urllib3.py"
-    "tests/transport/test__custom_tls_signer.py"
   ];
 
   __darwinAllowLocalNetworking = true;

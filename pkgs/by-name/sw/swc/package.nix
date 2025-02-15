@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6n6zHMV87h1kmjzEmdE86/toHI99q2HO1EEGHUE9sg8=";
   };
 
-  cargoHash = "sha256-/Ku0W+L2mqVYDSkd2zRqM7UhHueXya4zjewp/xO/XlQ";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YuqoT5vGuUZfTenSgPPrC/7bTC0syiiiMYF/y0szG4Q=";
 
   meta = with lib; {
     description = "Rust-based platform for the Web";

@@ -170,7 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
               simple-agent \
               test-adapter \
               test-device \
-              test-thermometer \
               ; do
         ln -s ../test/$t $test/bin/bluez-$t
       done

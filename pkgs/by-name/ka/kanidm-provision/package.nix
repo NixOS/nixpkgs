@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pgPjkj0nMb5j3EvyJTTDpfmh0WigAcMzoleF5EOqBAM=";
   };
 
-  cargoHash = "sha256-tQ3uVsy5Dw4c4CbSeASv1TWkqxVYjl/Cjkr00OQEo9c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-kbctfPhEF1PdVLjE62GyLDzjOnZxH/kOWUS4x2vd/+8=";
 
   meta = with lib; {
     description = "A small utility to help with kanidm provisioning";

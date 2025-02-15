@@ -76,7 +76,7 @@ in
       ];
       description = ''
         Extra command line arguments for deCONZ, see
-        https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/deCONZ-command-line-parameters.
+        <https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/deCONZ-command-line-parameters>.
       '';
     };
   };

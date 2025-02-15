@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.32.2";
+  version = "2.32.4";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     rev = "v${version}";
-    hash = "sha256-i4wpM7Rc4pFUUzPFvoPxUlifIvk4GJzBhCLpUndFnjE=";
+    hash = "sha256-t2XW75PuoZAZ0Nw2CMnP73BwJSpt5BtzGJLAM5zqbrI=";
   };
 
   postPatch = ''

@@ -7,7 +7,7 @@
   pytestCheckHook,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   setuptools,
 }:
 
@@ -38,8 +38,7 @@ buildPythonPackage rec {
       url = "https://github.com/orion-labs/opuslib/commit/87a214fc98c1dcae38035e99fe8e279a160c4a52.patch";
       hash = "sha256-UoOafyTFvWLY7ErtBhkXTZSgbMZFrg5DGxjbhqEI7wo=";
     })
-    (substituteAll {
-      src = ./opuslib-paths.patch;
+    (replaceVars ./opuslib-paths.patch {
       opusLibPath = "${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

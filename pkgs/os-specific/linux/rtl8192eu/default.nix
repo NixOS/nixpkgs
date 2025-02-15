@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   bc,
 }:
 
@@ -25,7 +26,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
 
-  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 

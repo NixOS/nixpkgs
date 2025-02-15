@@ -2,17 +2,22 @@
   lib,
   mkCoqDerivation,
   coq,
+  rocqPackages,
   stdlib,
   version ? null,
 }:
 
-mkCoqDerivation {
+(mkCoqDerivation {
   pname = "bignums";
   owner = "coq";
   inherit version;
   defaultVersion =
     with lib.versions;
     lib.switch coq.coq-version [
+      {
+        case = range "9.0" "9.0";
+        out = "9.0.0+rocq${coq.coq-version}";
+      }
       {
         case = range "8.13" "8.20";
         out = "9.0.0+coq${coq.coq-version}";
@@ -23,6 +28,7 @@ mkCoqDerivation {
       }
     ] null;
 
+  release."9.0.0+rocq9.0".sha256 = "sha256-ctnwpyNVhryEUA5YEsAImrcJsNMhtBgDSOz+z5Z4R78=";
   release."9.0.0+coq8.20".sha256 = "sha256-pkvyDaMXRalc6Uu1eBTuiqTpRauRrzu946c6TavyTKY=";
   release."9.0.0+coq8.19".sha256 = "sha256-02uL+qWbUveHe67zKfc8w3U0iN3X2DKBsvP3pKpW8KQ=";
   release."9.0.0+coq8.18".sha256 = "sha256-vLeJ0GNKl4M84Uj2tAwlrxJOSR6VZoJQvdlDhxJRge8=";
@@ -53,4 +59,22 @@ mkCoqDerivation {
   meta = {
     license = lib.licenses.lgpl2;
   };
-}
+}).overrideAttrs
+  (
+    o:
+    # this is just a wrapper for rocPackages.bignums for Rocq >= 9.0
+    lib.optionalAttrs (coq.version != null && (coq.version == "dev"
+                       || lib.versions.isGe "9.0" coq.version)) {
+      configurePhase = ''
+        echo no configuration
+      '';
+      buildPhase = ''
+        echo building nothing
+      '';
+      installPhase = ''
+        echo installing nothing
+      '';
+      propagatedBuildInputs = o.propagatedBuildInputs
+        ++ [ rocqPackages.bignums ];
+    }
+  )

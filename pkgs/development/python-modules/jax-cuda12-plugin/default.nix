@@ -39,7 +39,7 @@ let
     "3.10-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp310";
-      hash = "sha256-nULpmc1k3VZ8FJ7Wj3k5K6iGRDZCGLtjbNzvoBl8kv4=";
+      hash = "sha256-D0Q6azcpjt+weW/NvR+GzoWksIS2vT8fUKT7/Wfe2Gs=";
     };
     "3.10-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
@@ -49,7 +49,7 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-cEZUOG8OYAoCgdquqViCqmekfttoOTthsbFzx+jKdKg=";
+      hash = "sha256-qYE1oCIwZLj1xoU+It3BpOOGIVLTf7aF8Nve/+DIASI=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
@@ -59,7 +59,7 @@ let
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-Ufas/3Ew63LrsCU039NYGg9eoGlx3lLX68Ia1Nh/5x4=";
+      hash = "sha256-QwWN/FZdjJ2mn0fNTkuVxJXxaG8onvRYTCtygD5vFgc=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
@@ -69,7 +69,7 @@ let
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-CSKKTCtEO3aozZqOwikGAInEzINuBiSWh1ptb9xm0x8=";
+      hash = "sha256-3zbEsXbi01qCqfOM13zDadJx5gBR43GgqO9FFD+PWLY=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";

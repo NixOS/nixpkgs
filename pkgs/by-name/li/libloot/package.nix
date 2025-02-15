@@ -150,7 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-qJ7gC4BkrXJiVcyA1BqlJSRzgc/7VmNBHtDq0ouJoTU=";
       };
 
-      cargoHash = "sha256-x4LFO6dD3bBKv6gTrNUAo7Rdw5cP67gn44QP6Iwbv0I=";
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-m3lyABr7tU0AeC6EZomBw1X722ezQg/cjSZh/ZhkiBw=";
 
       lang = "c++";
       header = "libloadorder.hpp";
@@ -167,7 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-ygjSyixg+9HFFNV/G+w+TxGFTrjlWxlDt8phpCE8xyQ=";
       };
 
-      cargoHash = "sha256-39iod83yVU5PyIjwv7pLLuMeNw9fHiM0tXDauyGrbx8=";
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-6sY2M7kjSYB3+6+zoMxPwdl+g7ARLHm9RdSODHQR8bE=";
 
       lang = "c++";
       header = "esplugin.hpp";
@@ -184,7 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-yXbe7ByYHvFpokRpV2pz2SX0986dpk5IpehwDUhoZKg=";
       };
 
-      cargoHash = "sha256-p+raWZkW16MrvfZhJigSPth8pZZ68twU1+0GL/Mo1Xw=";
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-d3JBpYI4XMkDnufvdyZkgtp7H4amMzM0dBEO6t9efGE=";
 
       lang = "c";
       header = "loot_condition_interpreter.h";

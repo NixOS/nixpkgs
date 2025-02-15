@@ -101,6 +101,15 @@ stdenv.mkDerivation rec {
       --replace-fail ldconfig true
   '';
 
+  # Recreate library symlinks which ldconfig would have created
+  postFixup = ''
+    for lib in libnvidia-container libnvidia-container-go; do
+      rm -f "$out/lib/$lib.so"
+      ln -s "$out/lib/$lib.so.${version}" "$out/lib/$lib.so.1"
+      ln -s "$out/lib/$lib.so.1" "$out/lib/$lib.so"
+    done
+  '';
+
   enableParallelBuilding = true;
 
   preBuild = ''

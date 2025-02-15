@@ -50,8 +50,9 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
     '';
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/xcodegen
     cp "$(swiftpmBinPath)/${finalAttrs.pname}" $out/bin/
+    cp -r SettingPresets $out/share/xcodegen/SettingPresets
   '';
 
   nativeInstallCheckInputs = [

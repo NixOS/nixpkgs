@@ -5,7 +5,7 @@
   fetchFromGitHub,
   replaceVars,
   cmake,
-  boost,
+  boost186,
   zlib,
   openssl,
   R,
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186
       zlib
       openssl
       R

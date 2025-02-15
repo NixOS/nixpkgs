@@ -43,6 +43,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ha_mqtt_discoverable" ];
 
   meta = with lib; {
+    # https://github.com/unixorn/ha-mqtt-discoverable/pull/310
+    broken = lib.versionAtLeast paho-mqtt.version "2";
     description = "Python module to create MQTT entities that are automatically discovered by Home Assistant";
     homepage = "https://github.com/unixorn/ha-mqtt-discoverable";
     changelog = "https://github.com/unixorn/ha-mqtt-discoverable/releases/tag/v${version}";

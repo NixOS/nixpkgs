@@ -260,6 +260,8 @@ filterAndCreateOverrides {
       ];
     };
 
+  cuda_sanitizer_api = _: _: { outputs = [ "out" ]; };
+
   nsight_compute =
     {
       lib,

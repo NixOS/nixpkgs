@@ -29,12 +29,12 @@ let
     }
     .${system} or throwSystem;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss";
   version = "3.4.17";
 
   src = fetchurl {
-    url = "https://github.com/tailwindlabs/tailwindcss/releases/download/v${version}/tailwindcss-${plat}";
+    url = "https://github.com/tailwindlabs/tailwindcss/releases/download/v${finalAttrs.version}/tailwindcss-${plat}";
     inherit hash;
   };
 
@@ -44,13 +44,15 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    cp ${src} $out/bin/tailwindcss
+    cp ${finalAttrs.src} $out/bin/tailwindcss
     chmod 755 $out/bin/tailwindcss
+    runHook postInstall
   '';
 
   passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
-    ${tailwindcss}/bin/tailwindcss --help > $out
+    ${lib.getExe finalAttrs.finalPackage} --help > $out
   '';
   passthru.updateScript = ./update.sh;
 
@@ -63,4 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tailwindcss";
     platforms = platforms.darwin ++ platforms.linux;
   };
-}
+})

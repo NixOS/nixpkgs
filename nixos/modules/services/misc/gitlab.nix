@@ -644,7 +644,7 @@ in {
         authentication = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = "Authentication type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
+          description = "Authentication type to use, see <http://api.rubyonrails.org/classes/ActionMailer/Base.html>";
         };
 
         enableStartTLSAuto = mkOption {
@@ -662,7 +662,7 @@ in {
         opensslVerifyMode = mkOption {
           type = types.str;
           default = "peer";
-          description = "How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
+          description = "How OpenSSL checks the certificate, see <http://api.rubyonrails.org/classes/ActionMailer/Base.html>";
         };
       };
 

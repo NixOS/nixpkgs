@@ -101,7 +101,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     mainProgram = "bsnes";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       stevebob
     ];
     platforms = lib.platforms.unix;

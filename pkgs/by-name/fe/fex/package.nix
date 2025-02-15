@@ -12,13 +12,13 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: rec {
   pname = "fex";
-  version = "2412";
+  version = "2501";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${version}";
-    hash = "sha256-VwcfxdRMjE/yoe5q0p3j4FdEMOJdtq17moxiGWO+CN0=";
+    hash = "sha256-9YOKLck4LIhTiAz+aCkOR3Eo1v02GK/YTQ98MuBSihI=";
     fetchSubmodules = true;
   };
 

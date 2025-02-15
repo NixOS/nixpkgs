@@ -17,11 +17,12 @@ nixos-rebuild - reconfigure a NixOS machine
 
 # SYNOPSIS
 
+; document here only non-deprecated flags
 _nixos-rebuild_ \[--verbose] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format LOG_FORMAT] [--keep-going] [--keep-failed] [--fallback] [--repair] [--option OPTION OPTION] [--builders BUILDERS]++
 	\[--include INCLUDE] [--quiet] [--print-build-logs] [--show-trace] [--accept-flake-config] [--refresh] [--impure] [--offline] [--no-net] [--recreate-lock-file]++
 	\[--no-update-lock-file] [--no-write-lock-file] [--no-registries] [--commit-lock-file] [--update-input UPDATE_INPUT] [--override-input OVERRIDE_INPUT OVERRIDE_INPUT]++
 	\[--no-build-output] [--use-substitutes] [--help] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader] [--profile-name PROFILE_NAME]++
-	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--fast]++
+	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--no-reexec]++
 	\[--image-variant VARIANT]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST]++
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-image,build-vm,build-vm-with-bootloader,list-generations}]
@@ -170,7 +171,7 @@ It must be one of the following:
 	Causes the boot loader to be (re)installed on the device specified by
 	the relevant configuration options.
 
-*--fast*
+*--no-reexec*
 	Normally, *nixos-rebuild* first finds and builds itself from the
 	_config.system.build.nixos-rebuild_ attribute from the current user
 	channel or flake and exec into it. This allows *nixos-rebuild* to run

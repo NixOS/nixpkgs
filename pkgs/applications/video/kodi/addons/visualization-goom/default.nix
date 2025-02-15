@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-goom";
   namespace = "visualization.goom";
-  version = "21.0.1";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-Cu0XRv2iU35bakbS5JkjSYAW5Enra1gt1I0sebcapx4=";
+    hash = "sha256-TGSYSrQLFrjbp+UMQ14f5sb8thePFZaSH7x/ckLIoqw=";
   };
 
   extraBuildInputs = [

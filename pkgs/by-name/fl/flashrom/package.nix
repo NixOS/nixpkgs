@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
+  NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin
+  ) "-Wno-gnu-folding-constant";
+
   meta = with lib; {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";

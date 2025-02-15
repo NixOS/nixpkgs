@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-spyRH3zzuuGZeQ8iFTa+hc/b4nYSiNIMOEWmc8+jJO0=";
   };
 
-  cargoHash = "sha256-ru6rqHqKXFMQUrYmxNHfobLRgx5ij7UvHzXwsaqciZU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mLWgMoP1Is2Tm1Ygwn9VR99GjTthAY30IGmKA29nR/w=";
 
   meta = with lib; {
     description = "Generate {bash,fish,zsh} completions from a single EBNF-like grammar";

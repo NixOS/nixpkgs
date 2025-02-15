@@ -3,6 +3,7 @@
   mkCoqDerivation,
   coq,
   mathcomp,
+  stdlib,
   version ? null,
 }:
 
@@ -24,7 +25,7 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (range "8.16" "8.20")
+            (range "8.16" "9.0")
             (isGe "2.0.0")
           ];
           out = "1.2.1";
@@ -46,7 +47,7 @@ mkCoqDerivation {
       ]
       null;
 
-  propagatedBuildInputs = [ mathcomp.ssreflect ];
+  propagatedBuildInputs = [ mathcomp.ssreflect stdlib ];
 
   meta = with lib; {
     description = "Regular Language Representations in Coq";

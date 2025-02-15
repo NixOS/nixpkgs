@@ -40,7 +40,7 @@ in
       default = { };
       description = ''
         Configuration to be written to the osqueryd JSON configuration file.
-        To understand the configuration format, refer to https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components.
+        To understand the configuration format, refer to <https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components>.
       '';
       example = {
         options.utc = false;
@@ -52,7 +52,7 @@ in
       default = { };
       description = ''
         Attribute set of flag names and values to be written to the osqueryd flagfile.
-        For more information, refer to https://osquery.readthedocs.io/en/stable/installation/cli-flags.
+        For more information, refer to <https://osquery.readthedocs.io/en/stable/installation/cli-flags>.
       '';
       example = {
         config_refresh = "10";

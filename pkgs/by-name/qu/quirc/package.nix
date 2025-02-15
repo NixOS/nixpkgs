@@ -23,8 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    # use correct pkg-config / ar / ranlib for cross
     # don't try to change ownership
     substituteInPlace Makefile \
+      --replace-fail "pkg-config " "${stdenv.cc.targetPrefix}pkg-config " \
+      --replace-fail "ar " "${stdenv.cc.targetPrefix}ar " \
+      --replace-fail "ranlib " "${stdenv.cc.targetPrefix}ranlib " \
       --replace-fail "-o root" "" \
       --replace-fail "-g root" ""
   '';

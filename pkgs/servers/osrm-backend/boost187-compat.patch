@@ -1,0 +1,14 @@
+diff --git a/include/server/server.hpp b/include/server/server.hpp
+index 34b8982e67a..02b0dda050d 100644
+--- a/include/server/server.hpp
++++ b/include/server/server.hpp
+@@ -53,8 +53,7 @@ class Server
+         const auto port_string = std::to_string(port);
+ 
+         boost::asio::ip::tcp::resolver resolver(io_context);
+-        boost::asio::ip::tcp::resolver::query query(address, port_string);
+-        boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(query);
++        boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve(address, port_string).begin();
+ 
+         acceptor.open(endpoint.protocol());
+ #ifdef SO_REUSEPORT

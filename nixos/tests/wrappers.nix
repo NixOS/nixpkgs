@@ -29,6 +29,14 @@ import ./make-test-python.nix (
         security.apparmor.enable = true;
 
         security.wrappers = {
+          disabled = {
+            enable = false;
+            owner = "root";
+            group = "root";
+            setuid = true;
+            source = "${busybox pkgs}/bin/busybox";
+            program = "disabled_busybox";
+          };
           suidRoot = {
             owner = "root";
             group = "root";
@@ -112,6 +120,9 @@ import ./make-test-python.nix (
       # actually makes the apparmor policy for ping, but there's no convenient
       # test for that one.
       machine.succeed("ping -c 1 127.0.0.1")
+
+      # Test that the disabled wrapper is not present.
+      machine.fail("test -e /run/wrappers/bin/disabled_busybox")
     '';
   }
 )

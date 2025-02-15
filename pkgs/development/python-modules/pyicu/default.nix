@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.13.1";
+  version = "2.14";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyICU";
     inherit version;
-    hash = "sha256-1JGQheqgfaErrejuch57v3reAVHKD4KUaibI9LmM3Os=";
+    hash = "sha256-rMfrkr1cVU7VdyScaXhFCk/toKpvAUcBUrOns4KgITI=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [

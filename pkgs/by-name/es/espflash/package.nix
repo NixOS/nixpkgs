@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  cargoHash = "sha256-04bBLTpsQNDP0ExvAOjwp3beOktC8rQqFtfEu6d+DWY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WEPSXgHR7wA2zWbc8ogVxDRtXcmR20R14Qwo2VqPLrQ=";
   checkFlags = [
     "--skip cli::monitor::external_processors"
   ];

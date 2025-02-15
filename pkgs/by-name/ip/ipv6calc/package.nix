@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2agZ/EqLbFdYh7qGDGX938TeCGZr1mUw4mQLy+O2+ug=";
+    sha256 = "sha256-ObJn7T7dGp6HjICWHWAbJjgHM08FrJx31AxIMmIexuQ=";
   };
 
   buildInputs = [

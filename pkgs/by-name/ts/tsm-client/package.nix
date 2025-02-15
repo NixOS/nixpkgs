@@ -131,22 +131,11 @@ let
       runHook postInstall
     '';
 
-    # fix relative symlinks after `/usr` was moved up one level,
-    # fix absolute symlinks pointing to `/opt`
+    # fix symlinks pointing to `..../opt/....`
     preFixup = ''
-      for link in $out/lib{,64}/* $out/bin/*
+      for link in $(find $out -type l -lname '*../opt*')
       do
-        target=$(readlink "$link")
-        if [ "$(cut -b -6 <<< "$target")" != "../../" ]
-        then
-          echo "cannot fix this symlink: $link -> $target"
-          exit 1
-        fi
-        ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
-      done
-      for link in $(find $out -type l -lname '/opt/*')
-      do
-        ln --symbolic --force --no-target-directory "$out$(readlink "$link")" "$link"
+        ln --symbolic --force --no-target-directory "$(readlink "$link" | sed 's|../opt|opt|')" "$link"
       done
     '';
   });

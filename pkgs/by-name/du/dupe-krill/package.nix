@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ze9OQHNtujzn2rY24bmFUkz5AYsjoMrwqm4jyQoF53Y=";
   };
 
-  cargoHash = "sha256-9/TSmw0XEnEURgrT6Oy3nqnNkmXUHLr0InlKyg4m9sQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OMXxMWMQIYXe41sxM+KQRMRicH61dIXUe51zdXn8ZYM=";
 
   meta = with lib; {
     description = "Fast file deduplicator";

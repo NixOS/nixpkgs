@@ -10,6 +10,7 @@
   procps,
   ruby,
   postgresql,
+  libpq,
   imlib2,
   jq,
   moreutils,
@@ -59,7 +60,7 @@ let
     ];
     gemConfig = defaultGemConfig // {
       pg = attrs: {
-        buildFlags = [ "--with-pg-config=${lib.getDev postgresql}/bin/pg_config" ];
+        buildInputs = [ libpq ];
       };
       rszr = attrs: {
         buildInputs = [

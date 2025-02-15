@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  bashInteractive,
   dbus,
   docbook2x,
   libapparmor,
@@ -14,6 +16,7 @@
   openssl,
   pkg-config,
   systemd,
+
   nix-update-script,
 }:
 
@@ -36,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    # some hooks use compgen
+    bashInteractive
     dbus
     libapparmor
     libcap
@@ -93,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(6.0.*)"
+        "v(6\\.0\\.*)"
       ];
     };
   };

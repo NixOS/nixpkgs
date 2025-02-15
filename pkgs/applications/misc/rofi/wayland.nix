@@ -10,14 +10,14 @@
 
 rofi-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "rofi-wayland-unwrapped";
-  version = "1.7.7+wayland1";
+  version = "1.7.8+wayland1";
 
   src = fetchFromGitHub {
     owner = "lbonn";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-wGBB7h2gZRQNmHV0NIbD0vvHtKZqnT5hd2gz5smKGoU=";
+    hash = "sha256-6hQfy0c73z1Oi2mGjuhKLZQIBpG1u06v40dmlc5fL/w=";
   };
 
   depsBuildBuild = oldAttrs.depsBuildBuild ++ [ pkg-config ];

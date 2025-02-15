@@ -17,14 +17,17 @@ let
 
   validateConfig =
     file:
-    pkgs.runCommand "validate-nats-conf"
-      {
-        nativeBuildInputs = [ pkgs.nats-server ];
-      }
-      ''
-        nats-server --config "${configFile}" -t
-        ln -s "${configFile}" "$out"
-      '';
+    pkgs.callPackage (
+      { runCommand, nats-server }:
+      runCommand "validate-nats-conf"
+        {
+          nativeBuildInputs = [ nats-server ];
+        }
+        ''
+          nats-server --config "${configFile}" -t
+          ln -s "${configFile}" "$out"
+        ''
+    ) { };
 in
 {
 

@@ -38,6 +38,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version=version_from_git()" "version='${version}'"
+
+    substituteInPlace rflinkproxy/__main__.py --replace-fail \
+      "with async_timeout.timeout(CONNECTION_TIMEOUT):" \
+      "async with async_timeout.timeout(CONNECTION_TIMEOUT):"
   '';
 
   pythonImportsCheck = [ "rflink.protocol" ];

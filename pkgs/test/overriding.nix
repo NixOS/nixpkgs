@@ -5,7 +5,7 @@
 }:
 
 let
-  tests = tests-stdenv // tests-go // tests-python;
+  tests = tests-stdenv // test-extendMkDerivation // tests-go // tests-python;
 
   tests-stdenv =
     let
@@ -60,6 +60,73 @@ let
           ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs {
             pname = "hello-no-final-attrs-overridden";
           }).pname == "hello-no-final-attrs-overridden";
+        expected = true;
+      };
+    };
+
+  test-extendMkDerivation =
+    let
+      mkLocalDerivation = lib.extendMkDerivation {
+        constructDrv = pkgs.stdenv.mkDerivation;
+        excludeDrvArgNames = [
+          "specialArg"
+        ];
+        extendDrvArgs =
+          finalAttrs:
+          {
+            preferLocalBuild ? true,
+            allowSubstitute ? false,
+            specialArg ? (_: false),
+            ...
+          }@args:
+          {
+            inherit preferLocalBuild allowSubstitute;
+            passthru = args.passthru or { } // {
+              greeting = if specialArg "Hi!" then "Hi!" else "Hello!";
+            };
+          };
+      };
+
+      helloLocalPlainAttrs = {
+        inherit (pkgs.hello) pname version src;
+        specialArg = throw "specialArg is broken.";
+      };
+
+      helloLocalPlain = mkLocalDerivation helloLocalPlainAttrs;
+
+      helloLocal = mkLocalDerivation (
+        finalAttrs:
+        helloLocalPlainAttrs
+        // {
+          passthru = pkgs.hello.passthru or { } // {
+            foo = "a";
+            bar = "${finalAttrs.passthru.foo}b";
+          };
+        }
+      );
+
+      hiLocal = mkLocalDerivation (
+        helloLocalPlainAttrs
+        // {
+          specialArg = s: lib.stringLength s == 3;
+        }
+      );
+    in
+    {
+      extendMkDerivation-helloLocal-imp-arguments = {
+        expr = helloLocal.preferLocalBuild;
+        expected = true;
+      };
+      extendMkDerivation-helloLocal-plain-equivalence = {
+        expr = helloLocal.drvPath == helloLocalPlain.drvPath;
+        expected = true;
+      };
+      extendMkDerivation-helloLocal-finalAttrs = {
+        expr = helloLocal.bar == "ab";
+        expected = true;
+      };
+      extendMkDerivation-helloLocal-specialArg = {
+        expr = hiLocal.greeting == "Hi!";
         expected = true;
       };
     };
@@ -194,6 +261,7 @@ let
         expected = true;
       };
     };
+
 in
 
 stdenvNoCC.mkDerivation {

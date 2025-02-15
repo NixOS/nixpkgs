@@ -5,13 +5,13 @@
 }:
 buildGhidraExtension rec {
   pname = "lightkeeper";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "WorksButNotTested";
     repo = "lightkeeper";
     rev = version;
-    hash = "sha256-4lj60OyVcam4JHyfIa+4auzITuEYqjz9wOQko/u+2dI=";
+    hash = "sha256-9BkI3sY/x0SwODwq646WBqU05wnfu/bU4lUfyRQV7UA=";
   };
   preConfigure = ''
     cd lightkeeper

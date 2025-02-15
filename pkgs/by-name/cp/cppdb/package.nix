@@ -5,7 +5,7 @@
   cmake,
   sqlite,
   libmysqlclient,
-  postgresql,
+  libpq,
   unixODBC,
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sqlite
     libmysqlclient
-    postgresql
+    libpq
     unixODBC
   ];
 

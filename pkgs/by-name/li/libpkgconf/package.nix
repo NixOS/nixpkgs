@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pkgconf";
     maintainers = with lib.maintainers; [
       zaninime
-      AndersonTorres
     ];
     platforms = lib.platforms.all;
   };

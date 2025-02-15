@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/museoa/unzoo/";
     description = "Manipulate archives of files in Zoo compressed form";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     mainProgram = "unzoo";
   };

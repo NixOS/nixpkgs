@@ -14,13 +14,13 @@ assert
 
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.70.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    hash = "sha256-7br0rxhVNH+lt+gWwFSuYCBmZMrejLatWJyVNcQ95NA=";
+    hash = "sha256-D1OTFc74I9CCGQzzMygbDhalpvFrTexz+JOGdU2rIR0=";
   };
 
   vendorHash = null;
@@ -59,7 +59,7 @@ buildGoModule rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
-      rm server/server_test.go
+      rm v1/server/server_test.go
     '';
 
   postInstall = ''

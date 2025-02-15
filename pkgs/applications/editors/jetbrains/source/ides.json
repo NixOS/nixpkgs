@@ -6,7 +6,7 @@
     "ideaHash": "sha256-QKFUg6C+ZVgPrgd6jwWSkBVMHAF30ja0Uqezy9syo5k=",
     "androidHash": "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=",
     "jpsHash": "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=",
-    "restarterHash": "sha256-rkx8DOaIxG0H2jz4sFsPzhcNyzN51HTI3hPEsp8yUY4=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
     "mvnDeps": "idea_maven_artefacts.json"
   },
   "pycharm-community": {
@@ -16,7 +16,7 @@
     "ideaHash": "sha256-QKFUg6C+ZVgPrgd6jwWSkBVMHAF30ja0Uqezy9syo5k=",
     "androidHash": "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=",
     "jpsHash": "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=",
-    "restarterHash": "sha256-B0eReRKfA9W7uwVHuY+3zZEAD5d+cOQpcbBLxn8AVYw=",
+    "restarterHash": "sha256-acCmC58URd6p9uKZrm0qWgdZkqu9yqCs23v8qgxV2Ag=",
     "mvnDeps": "pycharm_maven_artefacts.json"
   }
 }

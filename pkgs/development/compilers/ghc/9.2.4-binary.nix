@@ -193,12 +193,7 @@ let
       ) binDistUsed.archSpecificLibraries
     )).nixPackage;
 
-  # GHC has other native backends (like PowerPC), but here only the ones
-  # we ship bindists for matter.
-  useLLVM =
-    !(
-      stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin)
-    );
+  useLLVM = !(import ./common-have-ncg.nix { inherit lib stdenv version; });
 
   libPath = lib.makeLibraryPath (
     # Add arch-specific libraries.

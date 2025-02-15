@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5rzFz29Bpy2GR6bEt2DdCq9RtpdcY3SK/KnZrBrHUvk=";
   };
 
-  cargoHash = "sha256-RjYE2TBvHnBgiwJi/Ys+wAmJoMHJuimcD07FOqwkcis=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-as1rMyLqK0Z+UrO6B7Fzn2nNQM0xRrLoEPd2WlANxe8=";
 
   meta = {
     description = "Execute tasks relative to sunset, sunrise and other solar events";

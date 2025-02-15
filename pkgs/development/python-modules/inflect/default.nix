@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "7.4.0";
+  version = "7.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "inflect";
     tag = "v${version}";
-    hash = "sha256-3I5AdMuxwKtztnrF0lbvBIUxfqn0WlY2Pv6GYitFrA8=";
+    hash = "sha256-JQn0JySzXFnqz/dPc7BGLzd23Bh72S+/aI40gxAgx8k=";
   };
 
   build-system = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles";
     homepage = "https://github.com/jaraco/inflect";
-    changelog = "https://github.com/jaraco/inflect/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/jaraco/inflect/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = lib.teams.tts.members;
   };

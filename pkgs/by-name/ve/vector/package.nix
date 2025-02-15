@@ -20,11 +20,12 @@
   nixosTests,
   nix-update-script,
   darwin,
+  zlib,
 }:
 
 let
   pname = "vector";
-  version = "0.43.1";
+  version = "0.44.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -33,11 +34,11 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BFVRaHNd9LMJQnkHHfNtvGKkv8q7GjnT+FzNwSc8GZw=";
+    hash = "sha256-dYjZRTJ0/jb/GsADMy7CkTpFrevSAZz5IMj1mLm22Es=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1xxEu4/IxUe10Wngz1RUT6Iu982pueRteiOwg6BZ1/E=";
+  cargoHash = "sha256-easBpuypi9wCtfMaeMQg8EVlHhBBWUof3eDRkv0THPM=";
 
   nativeBuildInputs =
     [
@@ -62,6 +63,7 @@ rustPlatform.buildRustPackage {
       rust-jemalloc-sys
       libiconv
       coreutils
+      zlib
     ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.

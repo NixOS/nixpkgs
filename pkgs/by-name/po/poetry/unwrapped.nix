@@ -32,12 +32,11 @@
   httpretty,
   pytest-mock,
   pytest-xdist,
-  darwin,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-r4TK4CKDfCeCW+Y1vUoS4ppXmn5xEvI1ZBVUHqFJLKo=";
+    hash = "sha256-RpAoADxZmH9hQSEjufLBoKJsxIc74RnRxZB3RVNk/iE=";
   };
 
   patches = [
@@ -110,17 +109,13 @@ buildPythonPackage rec {
       --zsh <($out/bin/poetry completions zsh) \
   '';
 
-  nativeCheckInputs =
-    [
-      deepdiff
-      pytestCheckHook
-      httpretty
-      pytest-mock
-      pytest-xdist
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.ps
-    ];
+  nativeCheckInputs = [
+    deepdiff
+    pytestCheckHook
+    httpretty
+    pytest-mock
+    pytest-xdist
+  ];
 
   preCheck = (
     ''

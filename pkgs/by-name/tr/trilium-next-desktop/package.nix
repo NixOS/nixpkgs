@@ -6,7 +6,7 @@
   fetchzip,
   makeBinaryWrapper,
   # use specific electron since it has to load a compiled module
-  electron_31,
+  electron_34,
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
@@ -16,13 +16,13 @@
 
 let
   pname = "trilium-next-desktop";
-  version = "0.90.12";
+  version = "0.91.5";
 
   linuxSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-linux-x64.zip";
-  linuxSource.sha256 = "0ji28l60wyzhjbi6g5845dnm763bvg7535zfgzcmfgwjs6zr6nfq";
+  linuxSource.sha256 = "10icng86y0idp7sjm7gzbcldd3gzc4z882d99hq959xiqd5lkcfi";
 
   darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-x64.zip";
-  darwinSource.sha256 = "0jv80k7dk6gpyfj36iin6y7fk7qan4bya72f14jcgfla95wvk6ls";
+  darwinSource.sha256 = "0377d12a43q2dmwb8zm22354w7crydj5q8n0g7i60gcyqsqpph8w";
 
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
@@ -99,7 +99,7 @@ let
       asar pack $tmp/ $out/share/trilium/resources/app.asar
       rm -rf $tmp
 
-      makeWrapper ${lib.getExe electron_31} $out/bin/trilium \
+      makeWrapper ${lib.getExe electron_34} $out/bin/trilium \
         "''${gappsWrapperArgs[@]}" \
         --set-default ELECTRON_IS_DEV 0 \
         --add-flags $out/share/trilium/resources/app.asar

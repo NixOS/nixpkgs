@@ -1,0 +1,213 @@
+diff --git a/tests/test_builders/test_build_html_code.py b/tests/test_builders/test_build_html_code.py
+index d32c0b3e2..02684b22e 100644
+--- a/tests/test_builders/test_build_html_code.py
++++ b/tests/test_builders/test_build_html_code.py
+@@ -1,3 +1,6 @@
++from __future__ import annotations
++
++import pygments
+ import pytest
+ 
+ 
+@@ -32,11 +35,16 @@ def test_html_codeblock_linenos_style_inline(app):
+ 
+ @pytest.mark.sphinx('html', testroot='reST-code-role')
+ def test_html_code_role(app):
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = '<span class="w"> </span>'
++    else:
++        sp = ' '
++
+     app.build()
+     content = (app.outdir / 'index.html').read_text(encoding='utf8')
+ 
+     common_content = (
+-        '<span class="k">def</span> <span class="nf">foo</span>'
++        f'<span class="k">def</span>{sp}<span class="nf">foo</span>'
+         '<span class="p">(</span>'
+         '<span class="mi">1</span> '
+         '<span class="o">+</span> '
+diff --git a/tests/test_builders/test_build_latex.py b/tests/test_builders/test_build_latex.py
+index ea6dc7475..6ba2a375c 100644
+--- a/tests/test_builders/test_build_latex.py
++++ b/tests/test_builders/test_build_latex.py
+@@ -8,6 +8,7 @@ from pathlib import Path
+ from shutil import copyfile
+ from subprocess import CalledProcessError
+ 
++import pygments
+ import pytest
+ 
+ from sphinx.builders.latex import default_latex_documents
+@@ -2127,12 +2128,16 @@ def test_latex_container(app):
+ 
+ @pytest.mark.sphinx('latex', testroot='reST-code-role')
+ def test_latex_code_role(app):
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = r'\PYG{+w}{ }'
++    else:
++        sp = ' '
++
+     app.build()
+     content = (app.outdir / 'projectnamenotset.tex').read_text(encoding='utf8')
+ 
+     common_content = (
+-        r'\PYG{k}{def} '
+-        r'\PYG{n+nf}{foo}'
++        r'\PYG{k}{def}' + sp + r'\PYG{n+nf}{foo}'
+         r'\PYG{p}{(}'
+         r'\PYG{l+m+mi}{1} '
+         r'\PYG{o}{+} '
+diff --git a/tests/test_directives/test_directive_code.py b/tests/test_directives/test_directive_code.py
+index 65e16b805..2876dbc05 100644
+--- a/tests/test_directives/test_directive_code.py
++++ b/tests/test_directives/test_directive_code.py
+@@ -2,6 +2,7 @@
+ 
+ import os.path
+ 
++import pygments
+ import pytest
+ from docutils import nodes
+ 
+@@ -393,6 +394,11 @@ def test_literal_include_block_start_with_comment_or_brank(app):
+ 
+ @pytest.mark.sphinx('html', testroot='directive-code')
+ def test_literal_include_linenos(app):
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = '<span class="w"> </span>'
++    else:
++        sp = ' '
++
+     app.build(filenames=[app.srcdir / 'linenos.rst'])
+     html = (app.outdir / 'linenos.html').read_text(encoding='utf8')
+ 
+@@ -410,7 +416,7 @@ def test_literal_include_linenos(app):
+ 
+     # :lines: 5-9
+     assert (
+-        '<span class="linenos">5</span><span class="k">class</span> '
++        f'<span class="linenos">5</span><span class="k">class</span>{sp}'
+         '<span class="nc">Foo</span><span class="p">:</span>'
+     ) in html
+ 
+@@ -560,12 +566,17 @@ def test_code_block_highlighted(app):
+ 
+ @pytest.mark.sphinx('html', testroot='directive-code')
+ def test_linenothreshold(app):
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = '<span class="w"> </span>'
++    else:
++        sp = ' '
++
+     app.build(filenames=[app.srcdir / 'linenothreshold.rst'])
+     html = (app.outdir / 'linenothreshold.html').read_text(encoding='utf8')
+ 
+     # code-block using linenothreshold
+     assert (
+-        '<span class="linenos">1</span><span class="k">class</span> '
++        f'<span class="linenos">1</span><span class="k">class</span>{sp}'
+         '<span class="nc">Foo</span><span class="p">:</span>'
+     ) in html
+ 
+diff --git a/tests/test_extensions/test_ext_viewcode.py b/tests/test_extensions/test_ext_viewcode.py
+index eeef391c1..996db00fd 100644
+--- a/tests/test_extensions/test_ext_viewcode.py
++++ b/tests/test_extensions/test_ext_viewcode.py
+@@ -6,6 +6,7 @@ import re
+ import shutil
+ from typing import TYPE_CHECKING
+ 
++import pygments
+ import pytest
+ 
+ if TYPE_CHECKING:
+@@ -13,6 +14,11 @@ if TYPE_CHECKING:
+ 
+ 
+ def check_viewcode_output(app: SphinxTestApp) -> str:
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = '<span> </span>'
++    else:
++        sp = ' '
++
+     warnings = re.sub(r'\\+', '/', app.warning.getvalue())
+     assert re.findall(
+         r"index.rst:\d+: WARNING: Object named 'func1' not found in include "
+@@ -41,7 +47,7 @@ def check_viewcode_output(app: SphinxTestApp) -> str:
+         '<a class="viewcode-back" href="../../index.html#spam.Class1">[docs]</a>\n'
+     ) in result
+     assert '<span>@decorator</span>\n' in result
+-    assert '<span>class</span> <span>Class1</span><span>:</span>\n' in result
++    assert f'<span>class</span>{sp}<span>Class1</span><span>:</span>\n' in result
+     assert '<span>    </span><span>&quot;&quot;&quot;</span>\n' in result
+     assert '<span>    this is Class1</span>\n' in result
+     assert '<span>    &quot;&quot;&quot;</span>\n' in result
+diff --git a/tests/test_highlighting.py b/tests/test_highlighting.py
+index 430d569c0..2d08162aa 100644
+--- a/tests/test_highlighting.py
++++ b/tests/test_highlighting.py
+@@ -10,7 +10,8 @@ from pygments.token import Name, Text
+ 
+ from sphinx.highlighting import PygmentsBridge
+ 
+-if tuple(map(int, pygments.__version__.split('.')))[:2] < (2, 18):
++
++if tuple(map(int, pygments.__version__.split('.')[:2])) < (2, 18):
+     from pygments.formatter import Formatter
+ 
+     Formatter.__class_getitem__ = classmethod(lambda cls, name: cls)  # type: ignore[attr-defined]
+diff --git a/tests/test_intl/test_intl.py b/tests/test_intl/test_intl.py
+index 6f343e03d..9125612af 100644
+--- a/tests/test_intl/test_intl.py
++++ b/tests/test_intl/test_intl.py
+@@ -10,6 +10,7 @@ import shutil
+ import time
+ from io import StringIO
+ 
++import pygments
+ import pytest
+ from babel.messages import mofile, pofile
+ from babel.messages.catalog import Catalog
+@@ -1473,6 +1474,11 @@ def test_xml_strange_markup(app):
+ @pytest.mark.sphinx('html', testroot='intl')
+ @pytest.mark.test_params(shared_result='test_intl_basic')
+ def test_additional_targets_should_not_be_translated(app):
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = '<span class="w"> </span>'
++    else:
++        sp = ' '
++
+     app.build()
+     # [literalblock.txt]
+     result = (app.outdir / 'literalblock.html').read_text(encoding='utf8')
+@@ -1511,7 +1517,7 @@ def test_additional_targets_should_not_be_translated(app):
+     # doctest block should not be translated but be highlighted
+     expected_expr = (
+         """<span class="gp">&gt;&gt;&gt; </span>"""
+-        """<span class="kn">import</span> <span class="nn">sys</span>  """
++        f"""<span class="kn">import</span>{sp}<span class="nn">sys</span>  """
+         """<span class="c1"># sys importing</span>"""
+     )
+     assert_count(expected_expr, result, 1)
+@@ -1556,6 +1562,11 @@ def test_additional_targets_should_not_be_translated(app):
+     },
+ )
+ def test_additional_targets_should_be_translated(app):
++    if tuple(map(int, pygments.__version__.split('.')[:2])) >= (2, 19):
++        sp = '<span class="w"> </span>'
++    else:
++        sp = ' '
++
+     app.build()
+     # [literalblock.txt]
+     result = (app.outdir / 'literalblock.html').read_text(encoding='utf8')
+@@ -1605,7 +1616,7 @@ def test_additional_targets_should_be_translated(app):
+     # doctest block should not be translated but be highlighted
+     expected_expr = (
+         """<span class="gp">&gt;&gt;&gt; </span>"""
+-        """<span class="kn">import</span> <span class="nn">sys</span>  """
++        f"""<span class="kn">import</span>{sp}<span class="nn">sys</span>  """
+         """<span class="c1"># SYS IMPORTING</span>"""
+     )
+     assert_count(expected_expr, result, 1)

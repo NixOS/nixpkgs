@@ -41,6 +41,9 @@ buildPythonPackage rec {
     asttokens
     typing-extensions
   ];
+  pythonRelaxDeps = [
+    "asttokens"
+  ];
 
   nativeCheckInputs = [
     astor

@@ -3,17 +3,13 @@
 , fetchurl
 , pkg-config
 , gtk-doc
-, gobject-introspection
-, gjs
 , nixosTests
 , pkgsCross
 , curl
 , glib
-, systemd
 , xz
 , e2fsprogs
 , libsoup_2_4
-, glib-networking
 , wrapGAppsNoGuiHook
 , gpgme
 , which
@@ -33,10 +29,19 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , python3
-
-  # Optional ComposeFS support
+, buildPackages
 , withComposefs ? false
 , composefs
+, withGjs ? lib.meta.availableOn stdenv.hostPlatform gjs
+, gjs
+, withGlibNetworking ? lib.meta.availableOn stdenv.hostPlatform glib-networking
+, glib-networking
+, withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
 }:
 
 let
@@ -60,8 +65,8 @@ in stdenv.mkDerivation rec {
     automake
     libtool
     pkg-config
+    glib
     gtk-doc
-    gobject-introspection
     which
     makeWrapper
     bison
@@ -69,15 +74,15 @@ in stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_42
     wrapGAppsNoGuiHook
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
     curl
     glib
-    systemd
     e2fsprogs
     libsoup_2_4
-    glib-networking
     gpgme
     fuse3
     libselinux
@@ -90,9 +95,14 @@ in stdenv.mkDerivation rec {
 
     # for installed tests
     testPython
-    gjs
   ] ++ lib.optionals withComposefs [
     (lib.getDev composefs)
+  ] ++ lib.optionals withGjs [
+    gjs
+  ] ++ lib.optionals withGlibNetworking [
+    glib-networking
+  ] ++ lib.optionals withSystemd [
+    systemd
   ];
 
   enableParallelBuilding = true;
@@ -125,7 +135,7 @@ in stdenv.mkDerivation rec {
       (placeholder "out")
       gobject-introspection
     ];
-  in ''
+  in lib.optionalString withIntrospection ''
     for test in $installedTests/libexec/installed-tests/libostree/*.js; do
       wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
     done

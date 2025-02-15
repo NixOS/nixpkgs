@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     tag = "v${version}";
-    hash = "sha256-1gKL97oS06vgq4gpQSXeMfKzAtjAGQnB48W5BOiMBHA=";
+    hash = "sha256-x24TyJYy+z3v41DpJyOTYin/YvkqMHd/Rg4bTivk9M0=";
   };
 
   pythonRelaxDeps = [

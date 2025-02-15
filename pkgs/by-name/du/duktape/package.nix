@@ -21,19 +21,25 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
-  buildPhase = ''
-    make -f Makefile.sharedlibrary
-    make -f Makefile.cmdline
-  '';
+  buildPhase =
+    ''
+      make -f Makefile.cmdline
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      make -f Makefile.sharedlibrary
+    '';
 
-  installPhase = ''
-    install -d $out/bin
-    install -m755 duk $out/bin/
-    install -d $out/lib/pkgconfig
-    install -d $out/include
-    make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
-    substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
-  '';
+  installPhase =
+    ''
+      install -d $out/bin
+      install -m755 duk $out/bin/
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      install -d $out/lib/pkgconfig
+      install -d $out/include
+      make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
+      substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
+    '';
 
   enableParallelBuilding = true;
 

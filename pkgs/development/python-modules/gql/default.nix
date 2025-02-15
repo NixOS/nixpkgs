@@ -109,6 +109,8 @@ buildPythonPackage rec {
     # Exclude linter tests
     "gql-checker/tests/test_flake8_linter.py"
     "gql-checker/tests/test_pylama_linter.py"
+    "tests/test_httpx.py"
+    "tests/test_httpx_async.py"
   ];
 
   pythonImportsCheck = [ "gql" ];

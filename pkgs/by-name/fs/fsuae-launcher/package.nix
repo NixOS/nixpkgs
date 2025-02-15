@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fs-uae-launcher";
     maintainers = with lib.maintainers; [
       sander
-      AndersonTorres
     ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };

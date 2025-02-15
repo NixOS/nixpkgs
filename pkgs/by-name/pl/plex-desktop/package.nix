@@ -69,25 +69,25 @@ let
       hash = "sha512-3ofO4a8HDWeUfjsv+4A5bC0jlQwxIew1CnL39Oa0bjnqShwRQjMW1vSHOjsJ1AHMkbp3h5W/2tFRxPL2C/Heqg==";
     };
 
-    nativeBuildInputs = [ squashfsTools ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      makeShellWrapper
+      squashfsTools
+    ];
 
     buildInputs = [
       alsa-lib
-      autoPatchelfHook
       dbus
       elfutils
       expat
       glib
-      glibc
       libGL
       libapparmor
       libbsd
       libedit
       libffi_3_3
       libgcrypt
-      makeShellWrapper
       sqlite
-      squashfsTools
       stdenv.cc.cc
       tcp_wrappers
       udev
@@ -96,6 +96,8 @@ let
       xz
       zstd
     ];
+
+    strictDeps = true;
 
     unpackPhase = ''
       runHook preUnpack
@@ -116,6 +118,11 @@ let
       ln -s ${alsa-lib}/lib/libasound.so.2 $out/usr/lib/x86_64-linux-gnu/libasound.so.2
       rm $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
       ln -s ${alsa-lib}/lib/libasound.so.2.0.0 $out/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
+
+      ln -snf ${glib.dev}/bin/gio-querymodules $out/usr/bin/gio-querymodules
+      ln -snf ${glib.dev}/bin/glib-compile-schemas $out/usr/bin/glib-compile-schemas
+      rm $out/usr/share/doc/libglib2.0-bin/changelog.Debian.gz
+      rm $out/usr/share/doc/libxml2/NEWS.gz
 
       runHook postInstall
     '';

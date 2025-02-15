@@ -19,10 +19,10 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kozea";
     repo = "tinycss2";
-    tag = version;
+    tag = "v${version}";
     # for tests
     fetchSubmodules = true;
-    hash = "sha256-Exjxdm0VnnjHUKjquXsC/zDmwA7bELHdX1f55IGBjYk=";
+    hash = "sha256-GVymUobWAE0YS65lti9dXRIIGpx0YkwF/vSb3y7cpYY=";
   };
 
   build-system = [ flit-core ];

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "localstack";
-  version = "3.7.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     tag = "v${version}";
-    hash = "sha256-8xdP/qpmfqmXDt1gNhzkAGlBR6dJYznKr9+/Un6N7mA=";
+    hash = "sha256-BsmXhTJVvRKEubDQwehsrY2jRSfvDBSH5S35CNg8vrQ=";
   };
 
   build-system = [

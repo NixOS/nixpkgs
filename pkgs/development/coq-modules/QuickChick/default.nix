@@ -21,7 +21,7 @@ in
       [
         {
           cases = [
-            (lib.versions.range "8.15" "8.20")
+            (lib.versions.range "8.15" "9.0")
             lib.pred.true
           ];
           out = "2.0.4";

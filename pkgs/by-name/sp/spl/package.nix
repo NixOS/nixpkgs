@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cU6qSh4HM3os/A1w0+5TSZLkS2Y/C864qvmixkxPAh8=";
   };
 
-  cargoHash = "sha256-AWkyh3MRtnK+IzXu+h6jurNVMLDQVlBs2RsS2jn9lrA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ra3pNw3NJ9hSSxb1O7piMD+1cPeofTAYbdM9WRlwYKo=";
 
   meta = {
     description = "Simple, concise, concatenative scripting language";

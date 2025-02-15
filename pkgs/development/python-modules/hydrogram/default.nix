@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "hydrogram";
-  version = "0.1.4";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "hydrogram";
     repo = "hydrogram";
     tag = "v${version}";
-    hash = "sha256-kKzXR8ared2+mHBABxtX+glJ3PMuxA1Pek3DuUkTT40=";
+    hash = "sha256-QpweUDCypTxOOWL08gCUuMgbuE4130iNyxRpUNuSBac=";
   };
 
   build-system = [ hatchling ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Telegram MTProto API framework for fluid user and bot interactions";
     homepage = "https://github.com/hydrogram/hydrogram";
-    changelog = "https://github.com/hydrogram/hydrogram/releases/tag/v${version}";
+    changelog = "https://github.com/hydrogram/hydrogram/releases/tag/${src.tag}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ tholo ];
   };

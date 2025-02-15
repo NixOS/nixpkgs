@@ -8,8 +8,7 @@
   cmake,
   pkg-config,
   # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
-  # Pin Boost 1.86 due to use of boost::asio::io_service.
-  boost186,
+  boost,
   ncurses,
   enableCApi ? true,
   enablePythonApi ? true,
@@ -165,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     finalAttrs.pythonPath
     ++ [
-      boost186
+      boost
       libusb1
     ]
     ++ optionals (enableExamples) [

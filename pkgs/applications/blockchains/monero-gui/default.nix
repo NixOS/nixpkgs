@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeDesktopItem,
-  boost,
+  boost186,
   cmake,
   libgcrypt,
   libgpg-error,
@@ -30,7 +30,7 @@
   trezorSupport ? true,
   hidapi,
   libusb1,
-  protobuf_21,
+  protobuf,
   python3,
   udev,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186 # uses boost/asio/io_service.hpp
       libgcrypt
       libgpg-error
       libsodium
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals trezorSupport [
       hidapi
       libusb1
-      protobuf_21
+      protobuf
       python3
     ]
     ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [

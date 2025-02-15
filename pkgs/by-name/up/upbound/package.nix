@@ -9,7 +9,10 @@
 let
   inherit (stdenvNoCC.hostPlatform) system;
   sources =
-    if "${version-channel}" == "main" then import ./sources-main.nix else import ./sources-stable.nix;
+    if "${version-channel}" == "main" then
+      lib.importJSON ./sources-main.json
+    else
+      lib.importJSON ./sources-stable.json;
   arch = sources.archMap.${system};
 
 in
@@ -18,13 +21,13 @@ stdenvNoCC.mkDerivation {
   version = sources.version;
   srcs = [
     (fetchurl {
-      url = sources.fetchurlAttrSet.${system}.docker-credential-up.url;
-      sha256 = sources.fetchurlAttrSet.${system}.docker-credential-up.hash;
+      url = sources.fetchurlAttrSet.docker-credential-up.${system}.url;
+      sha256 = sources.fetchurlAttrSet.docker-credential-up.${system}.hash;
     })
 
     (fetchurl {
-      url = sources.fetchurlAttrSet.${system}.up.url;
-      sha256 = sources.fetchurlAttrSet.${system}.up.hash;
+      url = sources.fetchurlAttrSet.up.${system}.url;
+      sha256 = sources.fetchurlAttrSet.up.${system}.hash;
     })
   ];
 
@@ -50,6 +53,10 @@ stdenvNoCC.mkDerivation {
     installShellCompletion --bash --name up <(echo complete -C up up)
   '';
 
+  # FIXME: error when running `env -i up`:
+  # "up: error: $HOME is not defined"
+  doInstallCheck = false;
+  versionCheckProgram = "${placeholder "out"}/bin/up";
   versionCheckProgramArg = "version";
 
   nativeInstallCheckInputs = [
@@ -59,16 +66,13 @@ stdenvNoCC.mkDerivation {
   doCheck = false;
 
   passthru.updateScript = [
-    ./update.sh
+    ./update
     "${version-channel}"
   ];
 
-  passthru.tests = {
-    versionCheck = versionCheckHook;
-  };
-
   meta = {
     description = "CLI for interacting with Upbound Cloud, Upbound Enterprise, and Universal Crossplane (UXP)";
+    changelog = "https://docs.upbound.io/reference/cli/rel-notes/#whats-changed";
     homepage = "https://upbound.io";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [

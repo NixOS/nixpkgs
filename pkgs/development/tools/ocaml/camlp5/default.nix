@@ -21,13 +21,13 @@ else
     params =
       if lib.versionAtLeast ocaml.version "4.12" && !legacy then
         rec {
-          version = "8.03.00";
+          version = "8.03.01";
 
           src = fetchFromGitHub {
             owner = "camlp5";
             repo = "camlp5";
             rev = version;
-            hash = "sha256-hu/279gBvUc7Z4jM6EHiar6Wm4vjkGXl+7bxowj+vlM=";
+            hash = "sha256-GnNSCfnizazMT5kgib7u5PIb2kWsnqpL33RsPEK4JvM=";
           };
 
           nativeBuildInputs = [

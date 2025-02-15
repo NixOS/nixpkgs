@@ -5,7 +5,7 @@
   fetchFromGitea,
   cmake,
   python3,
-  boost,
+  boost186,
   libsodium,
   openssl,
   rapidjson,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186
       libsodium
       openssl
       rapidjson

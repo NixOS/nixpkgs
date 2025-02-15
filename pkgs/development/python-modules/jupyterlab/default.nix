@@ -6,29 +6,32 @@
   hatchling,
   async-lru,
   httpx,
-  packaging,
-  tornado,
+  importlib-metadata,
   ipykernel,
+  jinja2,
   jupyter-core,
   jupyter-lsp,
-  jupyterlab-server,
   jupyter-server,
+  jupyterlab-server,
   notebook-shim,
-  jinja2,
+  packaging,
+  setuptools,
   tomli,
+  tornado,
+  traitlets,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.2.5";
+  version = "4.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rn86G4y4i09VAJznn6fAb5nXDNY2Ae5KqRgV0FT0b3U=";
+    hash = "sha256-8LubCaBHZuNCPMzC/CMWmqL/7c34cT6eD7M8rAtoWdA=";
   };
 
   build-system = [
@@ -36,19 +39,24 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [
-    async-lru
-    httpx
-    packaging
-    tornado
-    ipykernel
-    jupyter-core
-    jupyter-lsp
-    jupyterlab-server
-    jupyter-server
-    notebook-shim
-    jinja2
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies =
+    [
+      async-lru
+      httpx
+      ipykernel
+      jinja2
+      jupyter-core
+      jupyter-lsp
+      jupyter-server
+      jupyterlab-server
+      notebook-shim
+      packaging
+      setuptools
+      tornado
+      traitlets
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   makeWrapperArgs = [
     "--set"

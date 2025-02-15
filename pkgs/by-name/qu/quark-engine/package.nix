@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "25.1.1";
+  version = "25.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quark-engine";
     repo = "quark-engine";
     tag = "v${version}";
-    hash = "sha256-+Qp0u4mayzBh55yXG2RspRRiW2cQtMA2vrqP7Zvnbl4=";
+    hash = "sha256-avQT6m6DjVham+IMkY2Gcjnb1K1L5PuOxvkqAeLNNhQ=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -35,7 +35,10 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
-  pythonRelaxDeps = [ "r2pipe" ];
+  pythonRelaxDeps = [
+    "r2pipe"
+    "androguard"
+  ];
 
   # Project has no tests
   doCheck = false;

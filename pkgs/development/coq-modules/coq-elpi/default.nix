@@ -21,12 +21,12 @@ default-elpi-version = if elpi-version != null then elpi-version else (
     { case = "8.18"; out = "1.18.1"; }
     { case = "8.19"; out = "1.18.1"; }
     { case = "8.20"; out = "1.19.2"; }
+    { case = "9.0"; out = "2.0.7"; }
   ] { }
 );
 elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
 propagatedBuildInputs_wo_elpi = [
   coq.ocamlPackages.findlib
-  stdlib
 ];
 derivation = mkCoqDerivation {
   pname = "elpi";
@@ -34,6 +34,7 @@ derivation = mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+    { case = "9.0"; out = "2.4.0"; }
     { case = "8.20"; out = "2.2.0"; }
     { case = "8.19"; out = "2.0.1"; }
     { case = "8.18"; out = "2.0.0"; }
@@ -45,6 +46,7 @@ derivation = mkCoqDerivation {
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."2.4.0".sha256 = "sha256-W2+vVGExLLux8e0nSZESSoMVvrLxhL6dmXkb+JuKiqc=";
   release."2.2.0".sha256 = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
   release."2.0.1".sha256 = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
   release."2.0.0".sha256 = "sha256-A/cH324M21k3SZ7+YWXtaYEbu6dZQq3K0cb1RMKjbsM=";
@@ -117,4 +119,12 @@ patched-derivation2 = patched-derivation1.overrideAttrs
         propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
       }
   );
-in patched-derivation2
+patched-derivation3 = patched-derivation2.overrideAttrs
+  (
+    o:
+    lib.optionalAttrs (o.version != null && o.version == "2.4.0")
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
+      }
+  );
+in patched-derivation3

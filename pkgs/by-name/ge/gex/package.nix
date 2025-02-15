@@ -40,7 +40,8 @@ rustPlatform.buildRustPackage rec {
     ./patch-libgit2.patch
   ];
 
-  cargoHash = "sha256-GEQ4Zv14Dzo9mt1YIDmXEBHLPD6G0/O1ggmUTnSYD+k=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";

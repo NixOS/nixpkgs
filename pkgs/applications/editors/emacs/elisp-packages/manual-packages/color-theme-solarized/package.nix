@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   melpaBuild,
-  unstableGitUpdater,
 }:
 
 melpaBuild {
@@ -19,12 +18,10 @@ melpaBuild {
   # https://github.com/NixOS/nixpkgs/issues/335408
   ignoreCompilationError = true;
 
-  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
   meta = {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

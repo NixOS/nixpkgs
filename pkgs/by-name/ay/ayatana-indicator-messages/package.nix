@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ] ++ lib.optionals withDocumentation [ "devdoc" ];
 
+  patches = [
+    # Remove when https://github.com/AyatanaIndicators/ayatana-indicator-messages/pull/39 merged & in release
+    ./fix-pie.patch
+  ];
+
   postPatch =
     ''
       # Uses pkg_get_variable, cannot substitute prefix with that

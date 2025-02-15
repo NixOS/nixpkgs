@@ -27,7 +27,7 @@
 , netcdf
 , pdal
 , pkg-config
-, postgresql
+, libpq
 , proj
 , python3Packages
 , readline
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     netcdf
     pdal
-    postgresql
+    libpq
     proj
     readline
     sqlite
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-openmp"
     "--with-pdal"
     "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-postgres-libs=${libpq}/lib/"
     "--with-proj-includes=${proj.dev}/include"
     "--with-proj-libs=${proj}/lib"
     "--with-proj-share=${proj}/share/proj"

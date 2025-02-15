@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://sawfish.tuxfamily.org";
     description = "GTK bindings for librep";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

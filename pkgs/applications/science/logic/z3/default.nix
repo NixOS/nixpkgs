@@ -150,7 +150,7 @@ let
   };
 
   # replace @dir@ in the path of the given list of patches
-  fixupPatches = dir: map (patch: replaceVars patch { dir = dir; });
+  fixupPatches = dir: map (patch: replaceVars patch { inherit dir; });
 in
 {
   z3_4_13 = common {

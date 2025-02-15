@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "deepface";
-  version = "0.0.92";
+  version = "0.0.93";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "serengil";
     repo = "deepface";
     tag = "v${version}";
-    hash = "sha256-Vjm8lfpGyJ7/1CUwIvxXxHqwmv0+iKewYV3vE08gpPQ=";
+    hash = "sha256-G/e0tvf4GbXPjqJCTMgWDe59701fxfrtAf+bioEn8io=";
   };
 
   postPatch = ''
@@ -73,7 +73,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lightweight Face Recognition and Facial Attribute Analysis (Age, Gender, Emotion and Race) Library for Python";
     homepage = "https://github.com/serengil/deepface";
-    changelog = "https://github.com/serengil/deepface/releases/tag/v${version}";
+    changelog = "https://github.com/serengil/deepface/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

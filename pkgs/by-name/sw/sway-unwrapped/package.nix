@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, fetchpatch, replaceVars, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
@@ -26,8 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./load-configuration-from-etc.patch
 
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit swaybg;
     })
 

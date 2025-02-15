@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3CL9NcwDsAs6fHUWA/ibkwqOW0Ur4glpHVZTrfLQUXs=";
   };
 
-  cargoHash = "sha256-hEJb1SOQ3daY2otroCds8zitoodSjRyRTyR7GwF8dgk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5cGnbIF2HrpYhoMvcLHRj3O5L2vP5O5nvtJ0hUf6yTY=";
 
   meta = {
     description = "Erlang code formatter";

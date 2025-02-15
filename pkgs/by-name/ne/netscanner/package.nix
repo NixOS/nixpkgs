@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-/8UhnJ4ZPaJ+CQPCeKr1uH0Iw6A4/DARiSukK6+ZZeY=";
   };
 
-  cargoHash = "sha256-u6Q9QPyOSMc356fkO4XVWUL0GGN1c2CoKhVvt1P30AU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i+btU1ovqPGzhXi8IPZonSAdlpcbMPrWSbL7COKou9M=";
 
   postFixup = ''
     wrapProgram $out/bin/netscanner \

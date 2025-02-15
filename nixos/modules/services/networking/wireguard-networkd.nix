@@ -189,6 +189,10 @@ in
             assertion = interface.interfaceNamespace == null;
             message = "networking.wireguard.interfaces.${name}.interfaceNamespace cannot be used with networkd.";
           }
+          {
+            assertion = interface.type == "wireguard";
+            message = "networking.wireguard.interfaces.${name}.type value must be \"wireguard\" when used with networkd.";
+          }
         ]
         ++ flip concatMap interface.ips (ip: [
           # IP assertions

@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-adapter";
   inherit version src;
 
-  cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7tGX8wt2bb1segoWbBEBwZbznOaAiAyh9i/JC5FKUBU=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ lldb ];
 

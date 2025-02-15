@@ -11,13 +11,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = version;
-    hash = "sha256-2Bo3qtpSSfNvqszlt9cCc9/rurDNDMySAaqLbvRmjjw=";
+    hash = "sha256-v7biDGgJoQO6cKRXG8xosCgd/mlOUEwHrqcgtL2R5L4=";
   };
 
   pyproject = true;

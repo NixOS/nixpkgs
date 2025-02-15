@@ -59,8 +59,8 @@ in
 
           You may want to turn it off to reduce the attack surface for DDoS reflection attacks.
 
-          See https://davelozier.com/glusterfs-and-rpcbind-portmap-ddos-reflection-attacks/
-          and https://bugzilla.redhat.com/show_bug.cgi?id=1426842 for details.
+          See <https://davelozier.com/glusterfs-and-rpcbind-portmap-ddos-reflection-attacks/>
+          and <https://bugzilla.redhat.com/show_bug.cgi?id=1426842> for details.
         '';
         default = true;
       };
@@ -123,7 +123,7 @@ in
           Enabling this will create a file {file}`/var/lib/glusterd/secure-access`.
           Disabling will delete this file again.
 
-          See also: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/SSL/
+          See also: <https://gluster.readthedocs.io/en/latest/Administrator%20Guide/SSL/>
         '';
         default = null;
         type = lib.types.nullOr (

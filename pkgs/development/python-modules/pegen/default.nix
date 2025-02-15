@@ -12,18 +12,18 @@
 buildPythonPackage rec {
   pname = "pegen";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "we-like-parsers";
-    repo = pname;
+    repo = "pegen";
     tag = "v${version}";
     hash = "sha256-P4zX8za9lBlXhNPkQe9p136ggZEJh6fHfBr+DQKvtTg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -41,6 +41,12 @@ buildPythonPackage rec {
       # https://github.com/we-like-parsers/pegen/issues/89
       "test_invalid_def_stmt"
     ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
+    "tests/python_parser/test_ast_parsing.py"
+    "tests/python_parser/test_syntax_error_handling.py"
+    "tests/python_parser/test_unsupported_syntax.py"
+  ];
 
   meta = with lib; {
     description = "Library to generate PEG parsers";

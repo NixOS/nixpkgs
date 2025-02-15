@@ -1,11 +1,10 @@
 {
   lib,
-  stdenvNoCC,
   buildNpmPackage,
   fetchFromGitHub,
   fetchpatch2,
   python3,
-  nodejs_20,
+  nodejs,
   node-gyp,
   runCommand,
   nixosTests,
@@ -27,7 +26,6 @@
   vips,
 }:
 let
-  nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON ./sources.json;
   inherit (sources) version;
@@ -117,8 +115,6 @@ let
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
-      # Rollup does not find the dependency otherwise
-      ln -s node_modules/@immich/sdk/node_modules/@oazapfts node_modules/
     '';
 
     installPhase = ''
@@ -127,21 +123,6 @@ let
       cp -r build $out
 
       runHook postInstall
-    '';
-  };
-
-  node-addon-api = stdenvNoCC.mkDerivation rec {
-    pname = "node-addon-api";
-    version = "8.0.0";
-    src = fetchFromGitHub {
-      owner = "nodejs";
-      repo = "node-addon-api";
-      tag = "v${version}";
-      hash = "sha256-k3v8lK7uaEJvcaj1sucTjFZ6+i5A6w/0Uj9rYlPhjCE=";
-    };
-    installPhase = ''
-      mkdir $out
-      cp -r *.c *.h *.gyp *.gypi index.js package-support.json package.json tools $out/
     '';
   };
 
@@ -181,19 +162,9 @@ buildNpmPackage' {
   # Required because vips tries to write to the cache dir
   makeCacheWritable = true;
 
+  env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+
   preBuild = ''
-    pushd node_modules/sharp
-
-    mkdir node_modules
-    ln -s ${node-addon-api} node_modules/node-addon-api
-
-    node install/check
-
-    rm -r node_modules
-
-    popd
-    rm -r node_modules/@img/sharp*
-
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm -r node_modules/exiftool-vendored.*
   '';
@@ -205,8 +176,7 @@ buildNpmPackage' {
     npm prune --omit=dev
 
     # remove build artifacts that bloat the closure
-    rm -r node_modules/bcrypt/{build-tmp-napi-v3,node_modules/node-addon-api,src,test}
-    rm -r node_modules/msgpackr-extract/build
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
 
     mkdir -p $out/build
     mv package.json package-lock.json node_modules dist resources $out/

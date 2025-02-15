@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Upstream hardcoded the check for the command `gdb-multiarch`;
-    # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
+    # Forcefully use the provided debugger as `gdb`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
   '';
 

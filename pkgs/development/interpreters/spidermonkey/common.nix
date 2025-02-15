@@ -14,20 +14,16 @@
   perl,
   pkg-config,
   python3,
-  python39,
   python311,
   rust-cbindgen,
   rustPlatform,
   rustc,
   which,
   zip,
-  autoconf213,
-  yasm,
   xcbuild,
 
   # runtime
-  icu,
-  icu67,
+  icu75,
   nspr,
   readline,
   zlib,
@@ -50,24 +46,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   patches =
-    lib.optionals (lib.versionOlder version "91") [
-      # Fix build failure on armv7l using Debian patch
-      # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
-      (fetchpatch {
-        url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
-        hash = "sha512-K8U3Qyo7g4si2r/8kJdXyRoTrDHAY48x/YJ7YL+YBwlpfNQcHxX+EZvhRzW8FHYW+f7kOnJu9QykhE8PhSQ9zQ==";
-      })
-
-      # Remove this when updating to 79 - The patches are already applied upstream
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1318905
-
-      # Combination of 3 changesets, modified to apply on 78:
-      # - https://hg.mozilla.org/mozilla-central/rev/06d7e1b6b7e7
-      # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
-      # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
-      ./add-riscv64-support.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "102" && lib.versionOlder version "128") [
+    lib.optionals (lib.versionAtLeast version "102" && lib.versionOlder version "128") [
       # use pkg-config at all systems
       ./always-check-for-pkg-config.patch
       ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
@@ -95,17 +74,9 @@ stdenv.mkDerivation (finalAttrs: rec {
       m4
       perl
       pkg-config
-      # 78 requires python up to 3.9
       # 91 does not build with python 3.12: ModuleNotFoundError: No module named 'six.moves'
       # 102 does not build with python 3.12: ModuleNotFoundError: No module named 'distutils'
-      (
-        if lib.versionOlder version "91" then
-          python39
-        else if lib.versionOlder version "115" then
-          python311
-        else
-          python3
-      )
+      (if lib.versionOlder version "115" then python311 else python3)
       rustc
       rustc.llvmPackages.llvm # for llvm-objdump
       which
@@ -115,17 +86,13 @@ stdenv.mkDerivation (finalAttrs: rec {
       rust-cbindgen
       rustPlatform.bindgenHook
     ]
-    ++ lib.optionals (lib.versionOlder version "91") [
-      autoconf213
-      yasm # to buid icu? seems weird
-    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
     ];
 
   buildInputs =
     [
-      (if lib.versionOlder version "91" then icu67 else icu)
+      icu75
       nspr
       readline
       zlib
@@ -174,12 +141,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   enableParallelBuilding = true;
 
-  # cc-rs insists on using -mabi=lp64 (soft-float) for riscv64,
-  # while we have a double-float toolchain
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    with stdenv.hostPlatform; isRiscV && is64bit && lib.versionOlder version "91"
-  ) "-mabi=lp64d";
-
   postPatch = lib.optionalString (lib.versionOlder version "102") ''
     # This patch is a manually applied fix of
     #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
@@ -193,9 +154,6 @@ stdenv.mkDerivation (finalAttrs: rec {
   preConfigure =
     lib.optionalString (lib.versionAtLeast version "128") ''
       export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
-    ''
-    + lib.optionalString (lib.versionOlder version "91") ''
-      export CXXFLAGS="-fpermissive"
     ''
     + ''
       export LIBXUL_DIST=$out
@@ -238,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
-    license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
+    license = licenses.mpl20;
     maintainers = with maintainers; [
       abbradar
       lostnet

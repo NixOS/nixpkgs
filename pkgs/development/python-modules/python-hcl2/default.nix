@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "python-hcl2";
-  version = "5.1.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amplify-education";
     repo = "python-hcl2";
     tag = "v${version}";
-    hash = "sha256-SS0v1H91aTkJtGo9sICOF+/umIq5e01BR0/xNvIXkUU=";
+    hash = "sha256-ZbUQZ0od37TqO/cwXnq9+yCVqExpR87s8GDDi9c3mAo=";
   };
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A parser for HCL2 written in Python using Lark";
     homepage = "https://github.com/amplify-education/python-hcl2";
-    changelog = "https://github.com/amplify-education/python-hcl2/releases/tag/v${version}";
+    changelog = "https://github.com/amplify-education/python-hcl2/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ shivaraj-bh ];
   };

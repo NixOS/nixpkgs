@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.10.3";
+  version = "2.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     tag = "v${version}";
-    hash = "sha256-/QxWgViqVmPnX/sO+qkvGl+WQX3OPXpS44CdP2HHOis=";
+    hash = "sha256-SEgBuhof1rqnKFI7O1aajkgp17EgaPNcfJzbh/j4ebg=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -102,7 +102,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
-    changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

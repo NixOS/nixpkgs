@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     hash = "sha256-WH/oCnkBcvoouBbkAcyawfAuNR3VsTl5+ZATLpi9d4w=";
   };
 
-  cargoHash = "sha256-H9HapuIyJJOSQIR9IvFZaQ+Nz9M0MH12JwbY8r2l+JY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fXNu0u+YdT5UaKReT4WuQINKz/zFnwXS1r+xEH6g9FU=";
 
   buildInputs = [
     elfutils

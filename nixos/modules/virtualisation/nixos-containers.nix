@@ -349,7 +349,7 @@ let
           Device node access modifier. Takes a combination
           `r` (read), `w` (write), and
           `m` (mknod). See the
-          `systemd.resource-control(5)` man page for more
+          {manpage}`systemd.resource-control(5)` man page for more
           information.'';
       };
     };
@@ -563,7 +563,7 @@ in
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
               description = ''
                 Grant additional capabilities to the container.  See the
-                capabilities(7) and systemd-nspawn(1) man pages for more
+                {manpage}`capabilities(7)` and {manpage}`systemd-nspawn(1)` man pages for more
                 information.
               '';
             };
@@ -644,7 +644,7 @@ in
                 shall run in. The specified path should refer to a (possibly bind-mounted) network
                 namespace file, as exposed by the kernel below /proc/<PID>/ns/net. This makes the
                 container enter the given network namespace. One of the typical use cases is to give
-                a network namespace under /run/netns created by ip-netns(8).
+                a network namespace under /run/netns created by {manpage}`ip-netns(8)`.
                 Note that this option cannot be used together with other network-related options,
                 such as --private-network or --network-interface=.
               '';
@@ -737,7 +737,7 @@ in
                 Mounts a set of tmpfs file systems into the container.
                 Multiple paths can be specified.
                 Valid items must conform to the --tmpfs argument
-                of systemd-nspawn. See systemd-nspawn(1) for details.
+                of systemd-nspawn. See {manpage}`systemd-nspawn(1)` for details.
               '';
             };
 
@@ -747,7 +747,7 @@ in
               example = [ "--drop-capability=CAP_SYS_CHROOT" ];
               description = ''
                 Extra flags passed to the systemd-nspawn command.
-                See systemd-nspawn(1) for details.
+                See {manpage}`systemd-nspawn(1)` for details.
               '';
             };
 

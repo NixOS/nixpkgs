@@ -13,13 +13,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2024-11-10";
+  version = "0-unstable-2025-02-02";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "47752427561f1c34debb16728a210d378f0ece36";
-    hash = "sha256-6KMC/NH/VWP5Eb+hA56hz0urel3jP6Y6cF2PX6xaTkk=";
+    rev = "ff8a897d1f4408ebbf4d45fa9049c06b3e1e3f4e";
+    hash = "sha256-hPYEJ4juK3ph7kbjbvv7PlU1D9pAkkhl+pwx8fZY53U=";
   };
 
   nativeBuildInputs = [

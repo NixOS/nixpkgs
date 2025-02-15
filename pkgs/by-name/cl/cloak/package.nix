@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Pd2aorsXdHB1bs609+S5s+WV5M1ql48yIKaoN8SEvsg=";
   };
 
-  cargoHash = "sha256-m11A5fcJzWoDZglrr2Es1V5ZJNepEkGeIRVhexJ7jws=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PAZOenugZrKYIP7zzxozerjkauwg7VN0mAlex0WPttQ=";
 
   meta = with lib; {
     homepage = "https://github.com/evansmurithi/cloak";

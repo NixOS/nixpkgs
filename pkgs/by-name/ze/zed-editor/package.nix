@@ -40,6 +40,7 @@
   libXext,
   livekit-libwebrtc,
   testers,
+  writableTmpDirAsHomeHook,
 
   withGLES ? false,
   buildRemoteServer ? true,
@@ -95,7 +96,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.169.2";
+  version = "0.173.10";
 
   outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
@@ -103,7 +104,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-IdJVWsHWMzE0AZxFy6jOmquc2jFeozNDdAhbB3fFMwk=";
+    hash = "sha256-6GVRJUBCXD9ohRcOATK/tzh7e7icyZzA/SuCAL9DauQ=";
   };
 
   patches = [
@@ -123,7 +124,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0zH5J3nvBpqD22nFzX98MBoTtNDpWS4NSSMcT1DB2SM=";
+  cargoHash = "sha256-xtziusGBsSni/ZtG+OzIkWxp3azg54G4r/5Wi9n9cyc=";
 
   nativeBuildInputs =
     [
@@ -207,9 +208,9 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   checkFlags =
     [
@@ -292,16 +293,6 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  # The darwin Applications directory is not stripped by default, see
-  # https://github.com/NixOS/nixpkgs/issues/367169
-  # This setting is not platform-guarded as it doesn't do any harm on Linux,
-  # where this directory simply does not exist.
-  stripDebugList = [
-    "bin"
-    "libexec"
-    "Applications"
-  ];
-
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
@@ -309,12 +300,16 @@ rustPlatform.buildRustPackage rec {
     };
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };
-    tests = {
-      remoteServerVersion = testers.testVersion {
-        package = zed-editor.remote_server;
-        command = "zed-remote-server-stable-${version} version";
+    tests =
+      {
+        remoteServerVersion = testers.testVersion {
+          package = zed-editor.remote_server;
+          command = "zed-remote-server-stable-${version} version";
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        withGles = zed-editor.override { withGLES = true; };
       };
-    };
   };
 
   meta = {

@@ -29,6 +29,7 @@
   gst_all_1,
   harfbuzz,
   hidapi,
+  kdePackages,
   # leapsdk
   # leapv2
   libGL,
@@ -75,13 +76,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-i/CG+zD64cwnu0z1BRkRn7Wm67KszE+wZ5geeAvrvMY=";
+    hash = "sha256-Ae25yLlkZ958gXr8nyWPv27leVLF5enljXAkCx+fDSk=";
   };
 
   monado = applyPatches {
@@ -89,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "aa2b0f9f1d638becd6bb9ca3c357ac2561a36b07";
-      hash = "sha256-yfHtkMvX/gyVG0UgpSB6KjSDdCym6Reb9LRb3OortaI=";
+      rev = "848a24aa106758fd6c7afcab6d95880c57dbe450";
+      hash = "sha256-+rax9/CG/3y8rLYwGqoWJa4FxH+Z3eREiwhuxDOUzLs=";
     };
 
     patches = [
@@ -107,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     # Let's make sure our monado source revision matches what is used by WiVRn upstream
     ourMonadoRev="${finalAttrs.monado.src.rev}"
-    theirMonadoRev=$(grep "GIT_TAG" ${finalAttrs.src.name}/CMakeLists.txt | awk '{print $2}')
+    theirMonadoRev=$(sed -n '/FetchContent_Declare(monado/,/)/p' ${finalAttrs.src.name}/CMakeLists.txt | grep "GIT_TAG" | awk '{print $2}')
     if [ ! "$theirMonadoRev" == "$ourMonadoRev" ]; then
       echo "Our Monado source revision doesn't match CMakeLists.txt." >&2
       echo "  theirs: $theirMonadoRev" >&2
@@ -150,6 +151,12 @@ stdenv.mkDerivation (finalAttrs: {
       gst_all_1.gstreamer
       harfbuzz
       hidapi
+      kdePackages.kcoreaddons
+      kdePackages.ki18n
+      kdePackages.kiconthemes
+      kdePackages.kirigami
+      kdePackages.qcoro
+      kdePackages.qqc2-desktop-style
       libbsd
       libdrm
       libGL
@@ -174,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
       orc
       pipewire
       qt6.qtbase
+      qt6.qtsvg
       qt6.qttools
       SDL2
       shaderc
@@ -191,23 +199,31 @@ stdenv.mkDerivation (finalAttrs: {
       cudaPackages.cudatoolkit
     ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
-    (lib.cmakeBool "WIVRN_USE_VAAPI" true)
-    (lib.cmakeBool "WIVRN_USE_VULKAN" true)
-    (lib.cmakeBool "WIVRN_USE_X264" true)
-    (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
-    (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
-    (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
-    (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
-    (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
-    (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
-    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-    (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
-    (lib.cmakeFeature "GIT_DESC" "${finalAttrs.version}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
+      (lib.cmakeBool "WIVRN_USE_VAAPI" true)
+      (lib.cmakeBool "WIVRN_USE_VULKAN_ENCODE" true)
+      (lib.cmakeBool "WIVRN_USE_X264" true)
+      (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
+      (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
+      (lib.cmakeBool "WIVRN_FEATURE_STEAMVR_LIGHTHOUSE" true)
+      (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
+      (lib.cmakeBool "WIVRN_BUILD_DASHBOARD" true)
+      (lib.cmakeBool "WIVRN_CHECK_CAPSYSNICE" false)
+      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+      (lib.cmakeFeature "WIVRN_OPENXR_MANIFEST_TYPE" "absolute")
+      (lib.cmakeFeature "GIT_DESC" "v${finalAttrs.version}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
+    ];
+
+  postFixup = ''
+    wrapProgram $out/bin/wivrn-dashboard \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -218,10 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "io.github.wivrn.wivrn";
       exec = "wivrn-dashboard";
       type = "Application";
-      categories = [
-        "Network"
-        "Game"
-      ];
+      categories = [ "Network" ];
     })
   ];
 

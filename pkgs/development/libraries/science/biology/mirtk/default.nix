@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   python3,
-  boost,
+  boost186,
   eigen,
   libGLU,
   fltk,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    boost186
     eigen
     fltk
     itk

@@ -7,21 +7,23 @@
 
 buildGo123Module rec {
   pname = "traefik";
-  version = "3.2.2";
+  version = "3.3.3";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-DTgpoJvk/rxzMAIBgKJPT70WW8W/aBhOEoyw3cK+JrM=";
+    hash = "sha256-R9fiCLqzrd9SS6LoQt3jOoEchRnPuhmJqIob8JhzqEU=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-+sL0GJhWMlFdNEsRdgRJ42aGedOfn76gg70wH6/a+qQ=";
+  vendorHash = "sha256-9WuhQjl+lWRZBvEP8qjBQUbEQC1SG9J+3xNpmIieOo8=";
 
   subPackages = [ "cmd/traefik" ];
 
+  env.CGO_ENABLED = 0;
+
   preBuild = ''
-    GOOS= GOARCH= CGO_ENABLED=0 go generate
+    GOOS= GOARCH= go generate
 
     CODENAME=$(grep -Po "CODENAME \?=\s\K.+$" Makefile)
 
@@ -42,7 +44,10 @@ buildGo123Module rec {
     description = "Modern reverse proxy";
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [
+      djds
+      vdemeester
+    ];
     mainProgram = "traefik";
   };
 }

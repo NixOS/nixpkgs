@@ -35,7 +35,7 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.27.0";
+  version = "0.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     tag = "v${version}";
-    hash = "sha256-VJVGMhoLISCtNh56E7ssKXBPh4/WvUbFyKUbnWvqd0s=";
+    hash = "sha256-ru5Q7YHpnA/hLwh2Og5Hp3z6XJCv/BHHW0S26N1oTJ0=";
   };
 
   build-system = [ setuptools ];
@@ -100,7 +100,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/python-trio/trio/blob/v${version}/docs/source/history.rst";
+    changelog = "https://github.com/python-trio/trio/blob/${src.tag}/docs/source/history.rst";
     description = "Async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [

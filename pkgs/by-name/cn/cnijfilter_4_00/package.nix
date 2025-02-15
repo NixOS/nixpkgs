@@ -1,5 +1,5 @@
 {
-  stdenv,
+  gcc13Stdenv,
   lib,
   fetchzip,
   autoconf,
@@ -21,6 +21,7 @@
 */
 
 let
+  stdenv = gcc13Stdenv;
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"

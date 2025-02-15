@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, lib, zsh, coreutils, inetutils, procps, txt2tags }:
 stdenv.mkDerivation rec {
   pname = "grml-zsh-config";
-  version = "0.19.11";
+  version = "0.19.12";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "sha256-plVyzuVFw7wxFlhfCCjZe2QqkytTgUvsxrIdB7nv66g=";
+    sha256 = "sha256-s8U5CypuCd7lJ3pPhpVgbFfw6s0tTQwtHo2hOhxOECw=";
   };
 
   strictDeps = true;

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-80yB89sKIuv7V68p0jEsi2hRdz+5CzE+4R0joRzO7Dk=";
   };
 
-  cargoHash = "sha256-BLEVPKO2YwcKuM/rUeMuyE38phOrbq0e8cjqh1qmJjM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HTwzmfpp9HKBKvjYXUqVDv9GUHl+2K3LMBSy1+GfmNU=";
 
   meta = with lib; {
     description = "Print a list of paths as a tree of paths";

@@ -12,7 +12,6 @@
   freetype,
   glib,
   glm,
-  glog,
   libapparmor,
   libdrm,
   libepoxy,
@@ -112,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     glib
     glm
-    glog
     libdrm
     libepoxy
     libevdev
@@ -159,7 +157,12 @@ stdenv.mkDerivation (finalAttrs: {
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
     # https://github.com/canonical/mir/pull/1947#issuecomment-811810872
     (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" true)
-    (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (lib.strings.concatStringsSep ";" [ ]))
+    (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (
+      lib.strings.concatStringsSep ";" [
+        # https://github.com/canonical/mir/issues/3716#issuecomment-2580698552
+        "UdevWrapperTest.UdevMonitorDoesNotTriggerBeforeEnabling"
+      ]
+    ))
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     (lib.cmakeBool "MIR_BUILD_PERFORMANCE_TESTS" false)
     (lib.cmakeBool "MIR_BUILD_PLATFORM_TEST_HARNESS" false)

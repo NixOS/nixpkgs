@@ -5,10 +5,10 @@
   fetchFromGitHub,
   fetchurl,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
-  postgresql,
+  libpq,
   setuptools,
 
   # propagates
@@ -29,24 +29,24 @@
   pproxy,
   pytest-randomly,
   pytestCheckHook,
+  postgresql,
   postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "psycopg";
-    repo = pname;
+    repo = "psycopg";
     tag = version;
-    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
+    hash = "sha256-gicntSAEK5VO67M2gAGR6wSwKQwgnbHxVUoPpaAbaDk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
-      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
+    (replaceVars ./ctypes.patch {
+      libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
   ];
@@ -74,13 +74,13 @@ let
     nativeBuildInputs = [
       cython
       # needed to find pg_config with strictDeps
-      postgresql
+      libpq
       setuptools
       tomli
     ];
 
     buildInputs = [
-      postgresql
+      libpq
     ];
 
     # tested in psycopg

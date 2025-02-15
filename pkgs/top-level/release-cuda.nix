@@ -158,6 +158,7 @@ let
         transformers = linux;
         ttstokenizer = linux;
         vidstab = linux;
+        vllm = linux;
       };
     }
     // (lib.genAttrs packageSets evalPackageSet);

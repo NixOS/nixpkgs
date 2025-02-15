@@ -17,17 +17,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.9.2";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = version;
-    hash = "sha256-DKDSjiN7Ve/1mHWXoYOIdJ67MRoJYDR59VuVmfwYJHs=";
+    hash = "sha256-xKlvj+8ox5UdkH3s9IOIMOVPCDQMLnGUKDOhKAZZgg4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eIiR7pvSOZdB1lTPLtdriO9lkufFY/gX5d2ku53g2vE=";
+  cargoHash = "sha256-m9U4OFefSumTT6heNz4qOdRBhsJvP3wcXeZcMVD+NqA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "Extremely fast Python linter";
+    description = "Extremely fast Python linter and code formatter";
     homepage = "https://github.com/astral-sh/ruff";
     changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
     license = lib.licenses.mit;

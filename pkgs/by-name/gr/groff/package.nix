@@ -22,7 +22,7 @@
   pkg-config,
   texinfo,
   bison,
-  bash,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       perl
-      bash
+      bashNonInteractive
     ]
     ++ lib.optionals enableGhostscript [
       ghostscript

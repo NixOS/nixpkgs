@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchurl,
+  autoreconfHook,
   gettext,
   pkg-config,
   icu,
@@ -22,6 +23,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-CDJAckfbeRzHDe+W5+JUvW7fBD3ISoCmLzzNbj3/0yk=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "icu76.patch";
+      url = "https://lore.kernel.org/linux-xfs/20250212081649.3502717-1-hi@alyssa.is/raw";
+      hash = "sha256-Z7BW0B+/5eHWXdHre++wRtdbU/P6XZqudYx6EK5msIU=";
+    })
+  ];
+
   outputs = [
     "bin"
     "dev"
@@ -31,6 +40,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
+    autoreconfHook
     gettext
     pkg-config
     libuuid # codegen tool uses libuuid
@@ -60,6 +70,12 @@ stdenv.mkDerivation rec {
     done
     patchShebangs ./install-sh
   '';
+
+  # The default --force would replace xfsprogs' custom install-sh.
+  autoreconfFlags = [
+    "--install"
+    "--verbose"
+  ];
 
   configureFlags = [
     "--disable-lib64"

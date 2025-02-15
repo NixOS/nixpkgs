@@ -1,8 +1,6 @@
 {
   lib,
-  stdenv,
   fetchPypi,
-  fetchurl,
   buildPythonPackage,
   pytestCheckHook,
   pkgs,
@@ -88,5 +86,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/scikit-hep/fastjet/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
+    # ImportError: fastjetcontribfragile.so.0: cannot open shared object file: No such file or directory
+    broken = true;
   };
 }

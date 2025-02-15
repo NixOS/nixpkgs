@@ -1,5 +1,5 @@
 {
-  stdenv,
+  gcc13Stdenv,
   lib,
   fetchzip,
   autoconf,
@@ -17,7 +17,7 @@
   file included in the tarball
 */
 
-stdenv.mkDerivation {
+gcc13Stdenv.mkDerivation {
   pname = "cnijfilter";
 
   /*

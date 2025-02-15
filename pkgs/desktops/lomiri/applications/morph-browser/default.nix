@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -30,30 +29,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "morph-browser";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/morph-browser";
-    rev = finalAttrs.version;
-    hash = "sha256-VxSADFTlaxQUDc81TzGkx54mjAUgY2L+suQC9zYGKo0=";
+    tag = finalAttrs.version;
+    hash = "sha256-CW+8HEGxeDDfqbBtNHDKTvsZkbu0tCmD6OEDW07KG2k=";
   };
 
   outputs = [
     "out"
     "doc"
-  ];
-
-  patches = [
-    # Remove when version > 1.1.1
-    (fetchpatch {
-      name = "0002-morph-browser-Call-i18n-bindtextdomain-with-buildtime-determined-locale-path.patch";
-      url = "https://gitlab.com/ubports/development/core/morph-browser/-/commit/3d9777fdc7d5b302a9f17679e4ea125e94468772.patch";
-      hash = "sha256-zx/pP72uNqAi8TZR4bKeONuqcJyK/vGtPglTA+5R5no=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/morph-browser/-/merge_requests/589 merged & in release
-    ./1001-morph-browser-tst_AddressBar-Replace-wait-and-compare-with-tryCompare.patch
   ];
 
   postPatch =

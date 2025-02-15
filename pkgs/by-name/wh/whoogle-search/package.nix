@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "whoogle-search";
-  version = "0.9.1";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "whoogle_search";
     inherit version;
-    hash = "sha256-4i/p18tu5q4yRBKQHRAyXaxYcPORbU9KyIzF2yW9VCk=";
+    hash = "sha256-4NFHz3l8kJ9QBbr5N55dhCgfoU83naC7avQZSzW6L8w=";
   };
 
   build-system = with python3Packages; [ setuptools ];

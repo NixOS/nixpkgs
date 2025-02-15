@@ -7,7 +7,6 @@
   autoPatchelfHook,
   cairo,
   cups,
-  curl,
   dbus,
   dpkg,
   expat,
@@ -66,12 +65,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/018b8d40/Feishu-linux_x64-7.28.10.deb";
-      sha256 = "sha256-rVi9bRHu1/nu153gAl6xF1IHt6uoABHXd8AN4JoCGo0=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/18b9e5d0/Feishu-linux_x64-7.32.11.deb";
+      sha256 = "sha256-gU+fNiUE2kCE3407vdjQqE7oLgR9vXynaBNuV3EZrqc=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/8ce25ba1/Feishu-linux_arm64-7.28.10.deb";
-      sha256 = "sha256-IsjGuyHvmDNjJYCBXR1NFShaVsWUYcF3OV5ihY9fJl0=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/8946d4de/Feishu-linux_arm64-7.32.11.deb";
+      sha256 = "sha256-gYIQysbII9Ud1a7eXqQRtOsBA2rI29+xnxntAumFUdk=";
     };
   };
 
@@ -87,7 +86,6 @@ let
     atk
     cairo
     cups
-    curl
     dbus
     expat
     fontconfig
@@ -135,7 +133,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.28.10";
+  version = "7.32.11";
   pname = "feishu";
 
   src =
@@ -154,7 +152,6 @@ stdenv.mkDerivation {
     # for autopatchelf
     alsa-lib
     cups
-    curl
     libXdamage
     libXtst
     libdrm
@@ -199,12 +196,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     ln -s $out/opt/bytedance/feishu/bytedance-feishu $out/bin/bytedance-feishu
-
-    # feishu comes with a bundled libcurl.so
-    # and has many dependencies that are hard to satisfy
-    # e.g. openldap version 2.4
-    # so replace it with our own libcurl.so
-    ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
 
   passthru = {

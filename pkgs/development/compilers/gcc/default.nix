@@ -391,5 +391,13 @@ pipe ((callFile ./common/builder.nix {}) ({
   (callPackage ./common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared libcCross; })
 ] ++ optionals atLeast11 [
   (callPackage ./common/checksum.nix { inherit langC langCC; })
-])
+]
+  # This symlink points to itself, and we disallow that now by noBrokenSymlinks (#370750)
+  # TODO: find how exactly this happens and solve it in a better way.
+  ++ optional langJit (pkg: pkg.overrideAttrs (attrs: {
+    postInstall = attrs.postInstall or "" + ''
+      rm "$out/lib/lib"
+    '';
+  }))
+)
 

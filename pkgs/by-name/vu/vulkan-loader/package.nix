@@ -18,25 +18,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-loader";
-  version = "1.3.296.0";
+  version = "1.4.304.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-6GHZUiYL3gDWN61SaLiD/3xXSoQb1rx6U5eu1cl8ZwM=";
+    hash = "sha256-qPknv8BvfJoewFfORXsFZlUnae36czHfOPXmtGccrOk=";
   };
 
-  patches =
-    [ ./fix-pkgconfig.patch ]
-    ++ lib.optionals stdenv.hostPlatform.is32bit [
-      # Backport patch to support 64-bit inodes on 32-bit systems
-      # FIXME: remove in next update
-      (fetchpatch {
-        url = "https://github.com/KhronosGroup/Vulkan-Loader/commit/ecd88b5c6b1e4c072c55c8652d76513d74c5ad4e.patch";
-        hash = "sha256-Ea+v+RfmVl8fRbkr2ETM3/7R4vp+jw7hvTq2hnw4V/0=";
-      })
-    ];
+  patches = [ ./fix-pkgconfig.patch ];
 
   nativeBuildInputs = [
     cmake

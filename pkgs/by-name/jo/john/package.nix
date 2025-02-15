@@ -19,7 +19,7 @@
   ocl-icd,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
-  substituteAll,
+  replaceVars,
   makeWrapper,
 }:
 
@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = lib.optionals withOpenCL [
-    (substituteAll {
-      src = ./opencl.patch;
+    (replaceVars ./opencl.patch {
       ocl_icd = ocl-icd;
     })
   ];

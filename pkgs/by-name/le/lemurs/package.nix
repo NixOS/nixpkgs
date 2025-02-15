@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
     ./0001-fix-static-lifetime-string.patch
   ];
 
-  cargoHash = "sha256-uuHPJe+1VsnLRGbHtgTMrib6Tk359cwTDVfvtHnDToo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FybaQ9xd5Unvo8gpSC8DzVKrXyVquHcJarzu0GaG8fw=";
 
   buildInputs = [
     linux-pam

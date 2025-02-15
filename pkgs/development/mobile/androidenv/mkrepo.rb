@@ -248,10 +248,17 @@ end
 def parse_package_xml doc
   licenses = get_licenses doc
   packages = {}
+  # check https://github.com/NixOS/nixpkgs/issues/373785
+  extras = {}
 
   doc.css('remotePackage').each do |package|
     name, _, version = package['path'].partition(';')
     next if version == 'latest'
+
+    is_extras = name == 'extras'
+    if is_extras
+      name = package['path'].tr(';', '-')
+    end
 
     type, revision, _ = package_revision(package)
     next unless revision
@@ -267,8 +274,14 @@ def parse_package_xml doc
     dependencies_xml = package.at_css('> dependencies')
     dependencies = to_json_collector dependencies_xml if dependencies_xml
 
-    target = (packages[name] ||= {})
-    target = (target[revision] ||= {})
+    if is_extras
+      target = extras
+      component = package['path']
+      target = (target[component] ||= {})
+    else
+      target = (packages[name] ||= {})
+      target = (target[revision] ||= {})
+    end
 
     target['name'] ||= name
     target['path'] ||= path
@@ -284,7 +297,7 @@ def parse_package_xml doc
     target['last-available-day'] = today
   end
 
-  [licenses, packages]
+  [licenses, packages, extras]
 end
 
 def parse_image_xml doc
@@ -431,9 +444,10 @@ result['addons'] = {}
 result['extras'] = {}
 
 opts[:packages].each do |filename|
-  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+  licenses, packages, extras = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['packages'], packages
+  merge result['extras'], extras
 end
 
 opts[:images].each do |filename|

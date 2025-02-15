@@ -10,14 +10,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.11.10";
+  version = "1.1.1";
   pname = "matplotlib-venn";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kNDPsnnF273339ciwOJRWjf1NelJvK0XRIO8d343LmU=";
+    hash = "sha256-2IW8AV9QkaS4qBOP8gp+0WbDO1w228BIn5Wly8dqKuU=";
   };
 
   build-system = [ setuptools ];

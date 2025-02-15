@@ -7,7 +7,8 @@ rustPlatform.buildRustPackage rec {
   pname = "moxide";
   version = "0.1.0";
 
-  cargoHash = "sha256-MqJ3lxnzvvmNXEMgx0su8vRDXAZbNtPuuphNzjeMN+w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xCiONML/3Rj6C4kPctwAFW5P+1IUZSNY966KWrXt2Fg=";
   src = fetchFromGitHub {
     owner = "dlurak";
     repo = "moxide";

@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation rec {
   name = "version-tester";
-  version = "v${criterion.version}";
+  inherit (criterion) version;
   src = ./test_dummy.c;
 
   dontUnpack = true;

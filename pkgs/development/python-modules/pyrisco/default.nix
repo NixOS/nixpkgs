@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyrisco";
-  version = "0.6.5";
+  version = "0.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "OnFreund";
     repo = "pyrisco";
     tag = "v${version}";
-    hash = "sha256-V+Wez9r/AoyNkR77yJTV3/9Kl0PHGw9kbQbzGauWEfc=";
+    hash = "sha256-iPtrpxssDEZTlxGtZ0xa1pfzN7wQu1gcQUl4zXPBhm8=";
   };
 
   build-system = [ setuptools ];

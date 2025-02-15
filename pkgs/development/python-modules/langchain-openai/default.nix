@@ -13,7 +13,7 @@
 
   # tests
   freezegun,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.2.5";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-Gm7MAOuG+kYQ3TRTRdQXJ+HcoUz+iL9j+pTXz+zAySg=";
+    hash = "sha256-WvHSeWdBuxbfMNmfoNMzEbhJ5rirQ4JwlWUa0Tgrlrg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio
@@ -83,6 +83,7 @@ buildPythonPackage rec {
     "test_chat_openai_get_num_tokens"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
+    "test_init_o1"
     "test_openai_get_num_tokens"
   ];
 
@@ -90,6 +91,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {

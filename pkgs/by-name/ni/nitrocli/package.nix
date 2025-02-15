@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-j1gvh/CmRhPTeesMIK5FtaqUW7c8hN3ub+kQ2NM3dNM=";
   };
 
-  cargoHash = "sha256-loCVYe4vdalo2AvoMo9th/V9xXulaq6HlPOw3idbqEw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lWFleq9uxoshPMx2mYULCyEar72ZjGfgf0HlRoYfG/M=";
 
   # tests require a connected Nitrokey device
   doCheck = false;

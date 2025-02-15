@@ -7,7 +7,6 @@
   makeDesktopItem,
   copyDesktopItems,
   nixosTests,
-  pkg-config,
   libayatana-appindicator,
   undmg,
   makeBinaryWrapper,
@@ -21,9 +20,9 @@ let
     inherit pname version;
 
     src = fetchFromGitHub {
-      owner = pname;
-      repo = pname;
-      rev = "v${version}";
+      owner = "localsend";
+      repo = "localsend";
+      tag = "v${version}";
       hash = "sha256-9nW1cynvRgX565ZupR+ogfDH9Qem+LQH4XZupVsrEWo=";
     };
 
@@ -36,8 +35,12 @@ let
       pasteboard = "sha256-lJA5OWoAHfxORqWMglKzhsL1IFr9YcdAQP/NVOLYB4o=";
     };
 
+    postPatch = ''
+      substituteInPlace lib/util/native/autostart_helper.dart \
+        --replace-fail 'Exec=''${Platform.resolvedExecutable}' "Exec=localsend_app"
+    '';
+
     nativeBuildInputs = [
-      pkg-config
       copyDesktopItems
     ];
 
@@ -52,18 +55,28 @@ let
     '';
 
     extraWrapProgramArgs = ''
-      --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
+      --prefix LD_LIBRARY_PATH : $out/app/localsend/lib
     '';
 
     desktopItems = [
       (makeDesktopItem {
         name = "LocalSend";
-        exec = "localsend_app";
+        exec = "localsend_app %U";
         icon = "localsend";
         desktopName = "LocalSend";
         startupWMClass = "localsend_app";
         genericName = "An open source cross-platform alternative to AirDrop";
-        categories = [ "Network" ];
+        categories = [
+          "GTK"
+          "FileTransfer"
+          "Utility"
+        ];
+        keywords = [
+          "Sharing"
+          "LAN"
+          "Files"
+        ];
+        startupNotify = true;
       })
     ];
 
@@ -93,12 +106,17 @@ let
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications
-      cp -r *.app $out/Applications
+      cp -r LocalSend.app $out/Applications
       makeBinaryWrapper $out/Applications/LocalSend.app/Contents/MacOS/LocalSend $out/bin/localsend
+
+      runHook postInstall
     '';
 
     meta = metaCommon // {
+      mainProgram = "localsend";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       platforms = [
         "x86_64-darwin"
@@ -111,7 +129,6 @@ let
     description = "Open source cross-platform alternative to AirDrop";
     homepage = "https://localsend.org/";
     license = lib.licenses.mit;
-    mainProgram = "localsend";
     maintainers = with lib.maintainers; [
       sikmir
       linsui

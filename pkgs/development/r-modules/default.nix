@@ -796,7 +796,7 @@ let
     shrinkTVP = [ pkgs.gsl ];
     sbrl = with pkgs; [ gsl gmp.dev ];
     surveyvoi = with pkgs; [ gmp.dev mpfr.dev ];
-    unigd = with pkgs; [ cairo.dev libpng.dev ];
+    unigd = with pkgs; [ cairo.dev libpng.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ expat xorg.libXdmcp ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
@@ -1044,10 +1044,10 @@ let
     });
 
     gifski = old.gifski.overrideAttrs (attrs: {
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-tVbuYzGdBzWVeQ26Imq6y5gA0R/CjuNCZtQgfd3/qwA=";
+        hash = "sha256-yz6M3qDQPfT0HJHyK2wgzgl5sBh7EmdJ5zW8SJkk+wY=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -1061,10 +1061,10 @@ let
 
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
-        hash = "sha256-AccuRY3lfTXzaMnaYieKCEJErKo5132oSXgILbFhePI=";
+        hash = "sha256-5TV7iCzaaFwROfJNO6pvSUbJBzV+wZlU5+ZK4AMT6X0=";
       };
 
       cargoRoot = "src/rust";

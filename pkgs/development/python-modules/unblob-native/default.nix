@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "unblob-native";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "unblob-native";
     tag = "v${version}";
-    hash = "sha256-jpaBxKuQNfU0I3kCs67mM5dzGURSSHvqymhk43P7xXk=";
+    hash = "sha256-11eMU7eplvZS1OS34fhbD8g1dOwOUCc8Xk1dEZI8dyU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-K2QTf4OlP4AH2JJiJ6r8PRkInSOQdIBQcSvY5tWr4mw=";
+    hash = "sha256-NjyxAZH4A46llIjEQO0X+IiwpS74RPY9wLujsDr7OxA=";
   };
 
   nativeBuildInputs = with rustPlatform; [

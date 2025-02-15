@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       jbcrail
-      AndersonTorres
       athre0z
     ];
     platforms = platforms.all;

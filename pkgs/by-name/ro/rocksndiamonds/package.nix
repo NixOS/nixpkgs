@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksndiamonds";
-  version = "4.4.0.0";
+  version = "4.4.0.3";
 
   src = fetchurl {
     url = "https://www.artsoft.org/RELEASES/linux/${pname}/${pname}-${version}-linux.tar.gz";
-    hash = "sha256-aKHHD/v+zqxCsOYp06nqB2TShlwCwE1JaU0adO4T4Cw=";
+    hash = "sha256-fFzN4UEI4b2yGyda5FJ+l/9D88wikYjugtx8/9IKptk=";
   };
 
   desktopItem = makeDesktopItem {
@@ -46,13 +46,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     appDir=$out/share/applications
     iconDir=$out/share/icons/hicolor/32x32/apps
     mkdir -p $out/bin $appDir $iconDir $dataDir
     cp rocksndiamonds $out/bin/
     ln -s ${desktopItem}/share/applications/* $appDir/
-    ln -s $dataDir/graphics/gfx_classic/RocksIcon32x32.png $iconDir/rocksndiamonds.png
+    ln -s $dataDir/graphics/gfx_classic/icons/icon.png $iconDir/rocksndiamonds.png
     cp -r conf docs graphics levels music sounds $dataDir
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

@@ -20,17 +20,16 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.27.1";
+  version = "4.28.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
-    # check if there is a newer tag with or without -python suffix
-    tag = "selenium-${version}-python";
-    hash = "sha256-XpTfZCERA2SmLOj6dcERVJ47K0gFhdXMTl9VCeE6eD8=";
+    tag = "selenium-${version}" + lib.optionalString (lib.versions.patch version != "0") "-python";
+    hash = "sha256-b5xwuZ4lcwLbGhJuEmHYrFXoaTW/M0ABdK3dvbpj8oM=";
   };
 
   patches = [ ./dont-build-the-selenium-manager.patch ];

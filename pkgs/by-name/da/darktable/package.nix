@@ -80,12 +80,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.0";
+  version = "5.0.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-6qE25uYku1MScoLiaq+gRBq8wYm1U3FGXh9aikk/o6E=";
+    hash = "sha256-SpGNCU67qYPvZ6EMxxXD1+jKc4AJkgqf9l0zQXtt2YQ=";
   };
 
   nativeBuildInputs = [
@@ -103,7 +103,6 @@ stdenv.mkDerivation rec {
     [
       SDL2
       adwaita-icon-theme
-      alsa-lib
       cairo
       curl
       exiv2
@@ -141,7 +140,6 @@ stdenv.mkDerivation rec {
       libwebp
       libxslt
       lua
-      util-linux
       openexr_3
       openjpeg
       osm-gps-map
@@ -151,6 +149,7 @@ stdenv.mkDerivation rec {
       sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
       colord
       colord-gtk
       libselinux
@@ -160,6 +159,7 @@ stdenv.mkDerivation rec {
       libxkbcommon
       libXtst
       ocl-icd
+      util-linux
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;

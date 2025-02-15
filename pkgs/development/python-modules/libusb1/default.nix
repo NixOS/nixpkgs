@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   setuptools,
   libusb1,
   pytestCheckHook,
@@ -22,8 +22,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
+    (replaceVars ./ctypes.patch {
       libusb = "${lib.getLib libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://repo.or.cz/glpng.git/blob_plain/HEAD:/glpng.htm";
     description = "PNG loader library for OpenGL";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

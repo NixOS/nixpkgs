@@ -32,7 +32,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  cargoHash = "sha256-n8GDe8OVmHYgBaSp9Zb7Z/F2orDAR6d82Tikrd0y6Ts=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3NGW1GEwksu9Al/qOg3rfnFcfSyICTgKlPW10Y8q80Y=";
 
   meta = with lib; {
     description = "CLI tool to losslessly compress JPEG and PNG images";

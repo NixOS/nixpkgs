@@ -21,7 +21,7 @@
 }:
 buildPythonPackage rec {
   pname = "luna-usb";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "greatscottgadgets";
     repo = "luna";
     tag = version;
-    hash = "sha256-T9V0rI6vcEpM3kN/duRni6v2plCU4B379Zx07dBGKjk=";
+    hash = "sha256-BKFfEkhgOH0lYfkAE94h27pb+T/uJxKFmMeVJI9I3qg=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/greatscottgadgets/luna/releases/tag/${version}";
+    changelog = "https://github.com/greatscottgadgets/luna/releases/tag/${src.tag}";
     description = "Amaranth HDL framework for monitoring, hacking, and developing USB devices";
     homepage = "https://github.com/greatscottgadgets/luna";
     license = lib.licenses.bsd3;

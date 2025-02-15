@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-b6rHyg1rHMihmJ1okH11uDvOsqNydfK/c1cAgP6Tvx0=";
   };
 
-  cargoHash = "sha256-LeTZkGhr1yTPG6OoukRB2+pcEAZKtjd9b60MLBi0Xl8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-POxCsGcM2P/fP/yEHuNFDz90H2qbKHgnuMowZS1hn7A=";
 
   postPatch = ''
     patchShebangs tests/test.sh

@@ -16,7 +16,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-8TQlqXhZ3rHmOAuxsBYa+7JD+SxMQY0NZgCyElStFag=";
   };
 
-  vendorHash = "sha256-PVaa0o8daoqXs8l3bF/Fsmtx3bdpO2uXTnR4tx8cUC4=";
+  vendorHash = "sha256-LESUhPjpj1KkFkB+JEOCGU9c6LuDQJB5Dtc/q5Bt3Og=";
 
   # Needed because of the unbound version constraint on phpdocumentor/json-path
   composerStrictValidation = false;

@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.01.06.00";
+  version = "2025.02.10.00";
 
   outputs = [
     "bin"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xgqVksPcm9CStAK32oNz7DT0CVzFb8ANohNxtyP0iT0=";
+    hash = "sha256-IsBydt1T33yedlaoyKl43fB7Dsuu4RPPiJuUtwZIUGg=";
   };
 
   patches = [

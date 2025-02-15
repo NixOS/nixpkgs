@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
   fetchpatch2,
 
@@ -27,16 +28,20 @@
   # tests
   ffmpeg-headless,
   packaging,
+  pytest-cov-stub,
   pytest-mpl,
   pytestCheckHook,
   resampy,
   samplerate,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "librosa";
   version = "0.10.2.post1";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "librosa";
@@ -45,8 +50,6 @@ buildPythonPackage rec {
     fetchSubmodules = true; # for test data
     hash = "sha256-0FbKVAFWmcFTW2dR27nif6hPZeIxFWYF1gTm4BEJZ/Q=";
   };
-
-  build-system = [ setuptools ];
 
   patches = [
     (fetchpatch2 {
@@ -64,10 +67,7 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov-report term-missing --cov librosa --cov-report=xml " ""
-  '';
+  build-system = [ setuptools ];
 
   dependencies = [
     audioread
@@ -93,15 +93,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ffmpeg-headless
     packaging
+    pytest-cov-stub
     pytest-mpl
     pytestCheckHook
     resampy
     samplerate
+    writableTmpDirAsHomeHook
   ] ++ optional-dependencies.matplotlib;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [
@@ -112,6 +110,8 @@ buildPythonPackage rec {
       "test_cite_released"
       "test_cite_badversion"
       "test_cite_unreleased"
+      # assert 22050 == np.int64(30720)
+      "test_stream"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # crashing the python interpreter
@@ -138,5 +138,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/librosa/librosa/releases/tag/${version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    badPlatforms = [
+      # Several non-deterministic occurances of "Fatal Python error: Segmentation fault", both in
+      # numpy's and in this package's code.
+      "aarch64-linux"
+    ];
   };
 }

@@ -40,7 +40,7 @@ in
           test2:CR:$1$rkpibm5J$Aq1.9VtYAn0JrqZ8M.1ME.
         ```
 
-        You can generate md5-crypted passwords via https://unix4lyfe.org/crypt/
+        You can generate md5-crypted passwords via <https://unix4lyfe.org/crypt/>
         Note that htpasswd tool generates incompatible md5-crypted passwords.
         Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/How-To-%28incomplete%29#USERS) for more information.
       '';

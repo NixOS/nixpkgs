@@ -8,7 +8,7 @@
   flex,
   makeWrapper,
   perl,
-  substituteAll,
+  replaceVars,
   cudd,
   nix-update-script,
   fetchpatch,
@@ -47,9 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./0001-Do-not-download-sources-in-cmake.patch;
-      inherit cudd;
+    (replaceVars ./0001-Do-not-download-sources-in-cmake.patch {
+      cudd = cudd.src;
     })
     ./0002-Do-not-download-sources-in-cmake.patch
     # Fixes build with libc++ >= 19 due to the removal of std::char_traits<unsigned>.

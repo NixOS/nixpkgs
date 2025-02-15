@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.158.0";
+  version = "2.159.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_api_python_client";
     inherit version;
-    hash = "sha256-tmZFl6mVXgSXemJ1LjP+RMs1xYDhkMHLCKBBiTFyvWc=";
+    hash = "sha256-VRl/Qw8lyQc5S0T6B4VF/++J0z/U3KUBt9ufDY4iS9Y=";
   };
 
   build-system = [ setuptools ];

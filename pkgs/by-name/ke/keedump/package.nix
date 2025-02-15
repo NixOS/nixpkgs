@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-V7wQZoUnISELuzjSUz+CJ77XJvlnGBK2n4U4pKlk+xI=";
   };
 
-  cargoHash = "sha256-b5jRWmyCvKCDn1fIXTtLCI1Ckr+Ttt7erDbZs4U2TcE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ogfLMkTzGwYADDfn05IOXiOSJzk5iN2GJ6kaT9L9sqM=";
 
   meta = with lib; {
     description = "PoC KeePass master password dumper";

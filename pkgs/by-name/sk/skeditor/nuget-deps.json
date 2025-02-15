@@ -201,18 +201,18 @@
   },
   {
     "pname": "FluentIcons.Avalonia",
-    "version": "1.1.266",
-    "hash": "sha256-Jb0PcacBWTVC1BhiqK9SJRbmeaQJcqY4wY4oHtKMpQo="
+    "version": "1.1.271",
+    "hash": "sha256-TCswtCSLAskSyxQcRglZsNN8y5ZJDJLCRPv6nWLkB3w="
   },
   {
     "pname": "FluentIcons.Avalonia.Fluent",
-    "version": "1.1.266",
-    "hash": "sha256-H/alh+K0X4fHSnbmYNczFCLEqiUkSuvyBsbwroJf8lA="
+    "version": "1.1.271",
+    "hash": "sha256-S+52KCyNhV/kLY6DJAQWrN+Wxi3xQ8ARWDCfak+y2tw="
   },
   {
     "pname": "FluentIcons.Common",
-    "version": "1.1.266",
-    "hash": "sha256-YcmvpwwXXrVue6gyc4R2FOs2RGQfS74gFB3PjnBV5A4="
+    "version": "1.1.271",
+    "hash": "sha256-A1SufiopAAHu92eRJVamq7zcff9Nd4z4qgJV9VeZVQY="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -371,8 +371,8 @@
   },
   {
     "pname": "SkFluentAvalonia",
-    "version": "2.1.1",
-    "hash": "sha256-gF4AL5Ru0pbLRn7UTSK7Lr+kDb+z/OgUbDgUrt3XKPk="
+    "version": "2.1.2",
+    "hash": "sha256-3TG3GCMk8VW1/j6DYJO1FVSx1FylXjLDozafxa2bM2A="
   },
   {
     "pname": "SkiaSharp",

@@ -30,7 +30,7 @@
   libkdcraw,
   lcms2,
   gsl,
-  openexr,
+  openexr_3,
   giflib,
   libjxl,
   mlt,
@@ -105,7 +105,7 @@ mkDerivation rec {
     fribidi
     lcms2
     gsl
-    openexr
+    openexr_3
     lager
     libaom
     libheif
@@ -132,9 +132,7 @@ mkDerivation rec {
     python3Packages.pyqt5
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [ "-I${ilmbase.dev}/include/OpenEXR" ] ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy"
-  );
+  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
 
   # Krita runs custom python scripts in CMake with custom PYTHONPATH which krita determined in their CMake script.
   # Patch the PYTHONPATH so python scripts can import sip successfully.

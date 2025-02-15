@@ -28,7 +28,7 @@ in
       description = ''
         Configuration for `xdg-desktop-portal-wlr`.
 
-        See `xdg-desktop-portal-wlr(5)` for supported
+        See {manpage}`xdg-desktop-portal-wlr(5)` for supported
         values.
       '';
 

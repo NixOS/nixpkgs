@@ -367,7 +367,14 @@ let
             if m._class == null || m._class == class
             then m
             else
-              throw "The module ${m._file or m.key} was imported into ${class} instead of ${m._class}."
+              throw ''
+                The module `${m._file or m.key}` (class: ${lib.strings.escapeNixString m._class}) cannot be imported into a module evaluation that expects class ${lib.strings.escapeNixString class}.
+
+                Help:
+                - Ensure that you are importing the correct module.
+                - Verify that the module's `_class`, ${lib.strings.escapeNixString m._class} matches the expected `class` ${lib.strings.escapeNixString class}.
+                - If you are using a custom class, make sure it is correctly defined and used consistently across your modules.
+              ''
         else
           m: m;
 

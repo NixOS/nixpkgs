@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.13";
+  version = "0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
     tag = "v${version}";
-    hash = "sha256-2qo5G/L2yh/6IXswkOyrCYnBNLDLx3EOpR53lnnpNOo=";
+    hash = "sha256-d5QKF/aDLzZ2/Pbm6VygsSYWab7Jqs/5zTeKHg6Zr74=";
   };
 
   __darwinAllowLocalNetworking = true;

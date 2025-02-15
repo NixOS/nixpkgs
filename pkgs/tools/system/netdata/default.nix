@@ -48,6 +48,7 @@
   withSsl ? true,
   withSystemdJournal ? (stdenv.hostPlatform.isLinux),
   zlib,
+  withNdsudo ? false,
 }:
 let
   stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
@@ -181,6 +182,12 @@ stdenv'.mkDerivation (finalAttrs: {
         rm -rf $out/share/netdata/web/index.html
         cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
       ''}
+      ${lib.optionalString withNdsudo ''
+        mv $out/libexec/netdata/plugins.d/ndsudo \
+          $out/libexec/netdata/plugins.d/ndsudo.org
+
+        ln -s /var/lib/netdata/ndsudo/ndsudo $out/libexec/netdata/plugins.d/ndsudo
+      ''}
     '';
 
   preConfigure = ''
@@ -270,7 +277,7 @@ stdenv'.mkDerivation (finalAttrs: {
           license = lib.licenses.gpl3Only;
         };
       }).goModules;
-    inherit withIpmi withNetworkViewer;
+    inherit withIpmi withNetworkViewer withNdsudo;
     tests.netdata = nixosTests.netdata;
   };
 
@@ -281,6 +288,8 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = [ licenses.gpl3Plus ] ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [
+      mkg20001
+    ];
   };
 })

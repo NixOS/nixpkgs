@@ -57,7 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DIYer22/bpycv";
     license = licenses.mit;
     maintainers = [ maintainers.lucasew ];
-    broken = stdenv.hostPlatform.isAarch64;
     inherit (blender.meta) platforms;
   };
 }

@@ -39,6 +39,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
 
     propagatedBuildInputs = [ hicolor-icon-theme ];
 
+    # FIXME: https://hydra.nixos.org/build/286997490/nixlog/5
+    dontCheckForBrokenSymlinks = true;
     dontDropIconThemeCache = true;
 
     # These fixup steps are slow and unnecessary.

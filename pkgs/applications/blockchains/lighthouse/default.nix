@@ -7,7 +7,7 @@
 , nix-update-script
 , openssl
 , pkg-config
-, postgresql
+, libpq
 , protobuf
 , rustPlatform
 , rust-jemalloc-sys
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeCheckInputs = [
-    postgresql
+    libpq
   ];
 
   passthru = {

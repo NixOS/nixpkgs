@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/DYKjhHjfXPWpU1RFmRUbartSxIBgVP59nbgwKMd0jg=";
   };
 
-  cargoHash = "sha256-Io51qbZOVcOKyMvo9/GTPXkGiJwjxcIPK3y7vAuTJOM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QVS+b/mH7hnzaZjnGg8rw6k11uOuKGFeiPoXyqwD8tk=";
 
   meta = with lib; {
     description = "Like watch -d but for JSON";

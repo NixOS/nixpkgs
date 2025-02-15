@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-zDVolVllWl0DM0AByglKhU8JQpkdcmyVGe1vYo+eamk=";
   };
 
-  cargoHash = "sha256-RyPomJJbI67izQMuKf6fBSbM6Ar9Wm4oHYqnOnP/b8U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3bjnAQLIO0hHjkRDym2oUzmiMd2gp5gN+iK8NxBC22Q=";
 
   meta = with lib; {
     description = "Cargo-subcommand to speed up Rust Docker builds using Docker layer caching";

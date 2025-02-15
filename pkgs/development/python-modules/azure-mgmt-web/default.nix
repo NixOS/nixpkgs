@@ -6,21 +6,25 @@
   fetchPypi,
   isodate,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "7.3.1";
-  format = "setuptools";
+  version = "8.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h7dxQ2vJmnqN9Z0K0YW5aHmgbc4UdkoGs/w9r6j8tWs=";
+    pname = "azure_mgmt_web";
+    inherit version;
+    hash = "sha256-yNnAQsCdt6rLICcKnv/tTU5lHjZa8y2AiXuE3HvzUJg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate

@@ -439,7 +439,7 @@ in
                 expires 7d;
               '';
             };
-            "^~ /media/(cachedfiles|invoices)" = {
+            "^~ (/media/(cachedfiles|invoices)|/static/(staticfiles.json|CACHE/manifest.json))" = {
               extraConfig = ''
                 deny all;
                 return 404;

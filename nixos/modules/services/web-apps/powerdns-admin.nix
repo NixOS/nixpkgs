@@ -42,14 +42,21 @@ in
       type = types.str;
       default = "";
       example = ''
+        import cachelib
+
         BIND_ADDRESS = '127.0.0.1'
         PORT = 8000
         SQLALCHEMY_DATABASE_URI = 'postgresql://powerdnsadmin@/powerdnsadmin?host=/run/postgresql'
+        SESSION_TYPE = 'cachelib'
+        SESSION_CACHELIB = cachelib.simple.SimpleCache()
       '';
       description = ''
         Configuration python file.
         See [the example configuration](https://github.com/ngoduykhanh/PowerDNS-Admin/blob/v${pkgs.powerdns-admin.version}/configs/development.py)
         for options.
+        Also see [Flask Session configuration](https://flask-session.readthedocs.io/en/latest/config.html#SESSION_TYPE)
+        as the version shipped with NixOS is more recent than the one PowerDNS-Admin expects
+        and it requires explicit configuration.
       '';
     };
 
@@ -85,7 +92,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.powerdns-admin}/bin/powerdns-admin --pid /run/powerdns-admin/pid ${escapeShellArgs cfg.extraArgs}";
         # Set environment variables only for starting flask database upgrade
-        ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py SESSION_TYPE= ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
+        ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         PIDFile = "/run/powerdns-admin/pid";

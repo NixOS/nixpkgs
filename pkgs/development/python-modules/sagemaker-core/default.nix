@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker-core";
-  version = "1.0.17";
+  version = "1.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-core";
     tag = "v${version}";
-    hash = "sha256-zRdY0LWIOMY6fBqLje6WFYci46WlcxliI8PFAipiIuw=";
+    hash = "sha256-y5nD5PnLx+c7fSkjDdqFMI9aBHIgrtqdkft00muFr6k=";
   };
 
   build-system = [

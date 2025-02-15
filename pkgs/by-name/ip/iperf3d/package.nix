@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/iperf3d --prefix PATH : ${iperf3}/bin
   '';
 
-  cargoHash = "sha256-3mJBn70sSoDL9GNxgEZqA8S4GrY+DjnYY9Cc5Xe1GFQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eijsPyoe3/+yR5kRmzk0dH62gTAFFURTVT8wN6Iy0HI=";
 
   meta = with lib; {
     description = "Iperf3 client and server wrapper for dynamic server ports";

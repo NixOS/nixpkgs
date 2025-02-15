@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "plyara";
-  version = "2.2.6";
+  version = "2.2.8";
   pyproject = true;
 
   disabled = pythonOlder "3.10"; # https://github.com/plyara/plyara: "Plyara requires Python 3.10+"
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-228fhwJTEV1kpIxbDzG+CgJOHJjWifl5SYteCY8Pd3Y=";
+    hash = "sha256-zmpb5r3BcveLsQ0uIgQJx2vUaz2p/0PlO76E0e7elwA=";
   };
 
   build-system = [

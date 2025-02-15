@@ -22,10 +22,6 @@ buildGoModule rec {
     "-w"
   ];
 
-  env = {
-    CGO_CFLAGS = "-Wno-undef-prefix";
-  };
-
   meta = with lib; {
     description = "Distributed port scanner";
     homepage = "https://github.com/nray-scanner/nray";

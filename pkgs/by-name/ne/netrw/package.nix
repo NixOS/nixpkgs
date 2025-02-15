@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
   version = "1.3.2";
 
   configureFlags = [
+    # This is to add "#include" directives for stdlib.h, stdio.h and string.h.
+    "ac_cv_header_stdc=yes"
+
     "--with-checksum=${checksumType}"
   ];
 

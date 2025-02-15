@@ -24,6 +24,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  debug ? false,
 }:
 gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
@@ -65,6 +66,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
+  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+
+  dontStrip = debug;
+
   dontWrapQtApps = true;
 
   postInstall = ''
@@ -91,10 +96,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyprland-share-picker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      khaneliman
-    ];
+    maintainers = lib.teams.hyprland.members;
     platforms = lib.platforms.linux;
   };
 })

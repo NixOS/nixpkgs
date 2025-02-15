@@ -3,14 +3,13 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   hatch-vcs,
   hatchling,
-  setuptools-scm,
 
   # dependencies
-  dask-expr,
   dask-glm,
   distributed,
   multipledispatch,
@@ -29,25 +28,23 @@
 
 buildPythonPackage rec {
   pname = "dask-ml";
-  version = "2024.4.4";
+  version = "2025.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-ml";
     tag = "v${version}";
-    hash = "sha256-ZiBpCk3b4Tk0Hwb4uapJLEx+Nb/qHFROCnkBTNGDzoU=";
+    hash = "sha256-DHxx0LFuJmGWYuG/WGHj+a5XHAEekBmlHUUb90rl2IY=";
   };
 
   build-system = [
     hatch-vcs
     hatchling
-    setuptools-scm
   ];
 
   dependencies =
     [
-      dask-expr
       dask-glm
       distributed
       multipledispatch
@@ -73,39 +70,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths =
-    [
-      # AttributeError: 'csr_matrix' object has no attribute 'A'
-      # Fixed in https://github.com/dask/dask-ml/pull/996
-      "tests/test_svd.py"
-
-      # Tests fail with dask>=0.11.2
-      # RuntimeError: Not enough arguments provided
-      # Reported in https://github.com/dask/dask-ml/issues/1003
-      "tests/model_selection/test_incremental.py"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # RuntimeError: Not enough arguments provided: missing keys
-      "tests/model_selection/test_hyperband.py"
-      "tests/model_selection/test_incremental.py"
-      "tests/model_selection/test_incremental_warns.py"
-      "tests/model_selection/test_successive_halving.py"
-    ];
+  disabledTestPaths = [
+    # AttributeError: module 'numpy' has no attribute 'product'
+    "tests/test_svd.py"
+  ];
 
   disabledTests = [
-    # Flaky: `Arrays are not almost equal to 3 decimals` (although values do actually match)
-    "test_whitening"
-
-    # Tests fail with dask>=0.11.2
-    # RuntimeError: Not enough arguments provided
-    # Reported in https://github.com/dask/dask-ml/issues/1003
-    "test_basic"
-    "test_hyperband_patience"
-    "test_same_random_state_same_params"
-    "test_search_patience_infeasible_tol"
-    "test_sha_max_iter_and_metadata"
-    "test_warns_decay_rate"
-    "test_warns_decay_rate_wanted"
+    # AssertionError: Regex pattern did not match.
+    "test_unknown_category_transform_array"
   ];
 
   __darwinAllowLocalNetworking = true;

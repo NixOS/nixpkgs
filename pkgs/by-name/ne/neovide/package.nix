@@ -35,7 +35,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     hash = "sha256-4fdC/wChsCICLd69ZjK7IaCH7gDmXvfKllCnRNsdqYI=";
   };
 
-  cargoHash = "sha256-CqnT9FEDzEMSais4dJg7zYVoSPNvIA09hmI0JE2YZIg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-k3eblWIlOaGJHUSgxxsU2aFR504M+8XTXP16kt2fXbY=";
 
   SKIA_SOURCE_DIR =
     let

@@ -31,12 +31,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.6.0";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-aoTJqEImmpgsol+TyDASuyHW6tuL7NIS8gusUJ/kxyk=";
+    hash = "sha256-noRVvCgGxgZLCL9d3Pqfn6jEq5U7uF1OugrVPuIDR00=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''

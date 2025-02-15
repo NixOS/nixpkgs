@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "webexteamssdk";
-  version = "1.6.1";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "CiscoDevNet";
     repo = "webexteamssdk";
     tag = "v${version}";
-    hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
+    hash = "sha256-E66LwqzNWYAxnB8y5t8JHH4oVVXvheO7tteHWqrRRt8=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
-    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
+    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

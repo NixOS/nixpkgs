@@ -56,6 +56,8 @@ makeScopeWithSplicing' {
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
+  libqglviewer = callPackage ../development/libraries/libqglviewer { };
+
   libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
   libquotient = callPackage ../development/libraries/libquotient { };

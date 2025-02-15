@@ -105,6 +105,9 @@ stdenv.mkDerivation {
     touch $HOME/.cabal/config
     cd lib/boot
 
+    export EM_CACHE="$HOME/.emscriptencache"
+    mkdir -p "$EM_CACHE"
+
     mkdir -p $out/bin
     mkdir -p $out/lib/${bootGhcjs.name}
     lndir ${bootGhcjs}/bin $out/bin

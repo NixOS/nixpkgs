@@ -53,7 +53,8 @@ rustPlatform.buildRustPackage {
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-HfPzoAai6wK5IqNQY7yFVXatMcia9z0I84QNmNzHRoc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Csh8M5BquAD2vUYIu0nNWSvznTZxno1WxvkEhBVN+9c=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -4,6 +4,8 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   numpy,
   paramiko,
   pytest-asyncio,
@@ -30,8 +32,8 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2024.3.0";
-  format = "setuptools";
+  version = "2024.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -39,21 +41,18 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     tag = version;
-    hash = "sha256-C+47BcIELZTEARXW8fAMHMjyKUWxU1tNKWGoPPtt/fQ=";
+    hash = "sha256-Vc0vBayPg6zZ4+pxJsHChSGg0kjA0Q16+Gk0bO0IEpI=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    paramiko
-    requests
-    smbprotocol
-    tqdm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
   optional-dependencies = {
-    entrypoints = [ ];
     abfs = [ adlfs ];
     adl = [ adlfs ];
+    arrow = [ pyarrow ];
     dask = [
       dask
       distributed
@@ -63,28 +62,49 @@ buildPythonPackage rec {
       requests
       dropbox
     ];
+    entrypoints = [ ];
+    full = [
+      adlfs
+      aiohttp
+      dask
+      distributed
+      dropbox
+      # dropboxdrivefs
+      fusepy
+      gcsfs
+      libarchive-c
+      ocifs
+      panel
+      paramiko
+      pyarrow
+      pygit2
+      requests
+      s3fs
+      smbprotocol
+      tqdm
+    ];
+    fuse = [ fusepy ];
     gcs = [ gcsfs ];
     git = [ pygit2 ];
     github = [ requests ];
     gs = [ gcsfs ];
+    gui = [ panel ];
     hdfs = [ pyarrow ];
-    arrow = [ pyarrow ];
     http = [
       aiohttp
       requests
     ];
-    sftp = [ paramiko ];
-    s3 = [ s3fs ];
+    libarchive = [ libarchive-c ];
     oci = [ ocifs ];
+    s3 = [ s3fs ];
+    sftp = [ paramiko ];
     smb = [ smbprotocol ];
     ssh = [ paramiko ];
-    fuse = [ fusepy ];
-    libarchive = [ libarchive-c ];
-    gui = [ panel ];
     tqdm = [ tqdm ];
   };
 
   nativeCheckInputs = [
+    aiohttp
     numpy
     pytest-asyncio
     pytest-mock
@@ -127,11 +147,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fsspec" ];
 
-  meta = with lib; {
+  meta = {
     description = "Specification that Python filesystems should adhere to";
     homepage = "https://github.com/fsspec/filesystem_spec";
     changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

@@ -64,6 +64,8 @@ buildDunePackage rec {
     hash = "sha256-T3bgPZpDO6plgebLJDBtBuR2eR/bN3o24UAUv1VwgtI=";
   };
 
+  patches = [ ./conduit.patch ];
+
   nativeBuildInputs = [
     makeWrapper
     which

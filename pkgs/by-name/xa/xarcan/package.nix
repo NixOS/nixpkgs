@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalPackages: {
     libxkbfile
     libxshmfence
     libgbm
-    mesa
+    mesa # uses dri_interface.h
     nettle
     openssl
     pixman
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalPackages: {
       allows running an X session as a window under Arcan.
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

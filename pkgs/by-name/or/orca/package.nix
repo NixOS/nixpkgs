@@ -12,7 +12,7 @@
   python3,
   gtk3,
   gnome,
-  substituteAll,
+  replaceVars,
   at-spi2-atk,
   at-spi2-core,
   dbus,
@@ -39,8 +39,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       cat = "${coreutils}/bin/cat";
       lsof = "${lsof}/bin/lsof";
       pgrep = "${procps}/bin/pgrep";

@@ -227,7 +227,7 @@ in
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       description = ''
-        File path containing environment variables for configuring the k3s service in the format of an EnvironmentFile. See systemd.exec(5).
+        File path containing environment variables for configuring the k3s service in the format of an EnvironmentFile. See {manpage}`systemd.exec(5)`.
       '';
       default = null;
     };

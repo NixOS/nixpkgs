@@ -16,22 +16,24 @@
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2024-12-27";
+  version = "0-unstable-2025-01-06";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "93033c2c382aaff01b1aba6f5db7652c35708bf3";
-    hash = "sha256-MEOIu1CI/VTvd2cixa57Tv1xtBMXiMdD37ZYjAlg5S4=";
+    rev = "30a933adb2bade2ceee08a9b36371cecf554d648";
+    hash = "sha256-EepSEN66GTdWfCSiR/p69pN5bvTEiUFOMErCxedrq+g=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Include chawan's man pages in mancha's search path
-    (replaceVars ./mancha-augment-path.diff {
-      out = placeholder "out";
-    })
-  ];
+  patches = [ ./mancha-augment-path.diff ];
+
+  # Include chawan's man pages in mancha's search path
+  postPatch = ''
+    # As we need the $out reference, we can't use `replaceVars` here.
+    substituteInPlace adapter/protocol/man.nim \
+      --replace-fail '@out@' "$out"
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"

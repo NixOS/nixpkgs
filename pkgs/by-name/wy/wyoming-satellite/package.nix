@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch2,
 }:
 
 let
@@ -21,22 +22,30 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "wyoming-satellite";
-  version = "1.2.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-satellite";
     tag = "v${version}";
-    hash = "sha256-KIWhWE9Qaxs72fJ1LRTkvk6QtpBJOFlmZv2od69O15g=";
+    hash = "sha256-sAtyyS60Fr6iFE3tTxEgAjhmX6O5WjWwb9rk+phzrtM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/rhasspy/wyoming-satellite/pull/285
+      url = "https://github.com/rhasspy/wyoming-satellite/commit/69465fd56011179cb92e7ce95da2e79fb06a83fb.patch";
+      hash = "sha256-njJ8kIVGOpYK6bDeGow3OSNHxKQ9NsUKAR3+lEUH3GE=";
+    })
+  ];
 
   build-system = with python.pkgs; [
     setuptools
   ];
 
   pythonRelaxDeps = [
-    "wyoming"
+    "pyring-buffer"
     "zeroconf"
   ];
 
@@ -46,14 +55,19 @@ python.pkgs.buildPythonApplication rec {
     zeroconf
   ];
 
-  optional-dependencies = {
+  optional-dependencies = lib.fix (self: {
+    all = self.silerovad ++ self.webrtc;
+    respeaker = with python3Packages; [
+      gpiozero
+      spidev
+    ];
     silerovad = with python3Packages; [
       pysilero-vad
     ];
     webrtc = with python3Packages; [
       webrtc-noise-gain
     ];
-  };
+  });
 
   pythonImportsCheck = [
     "wyoming_satellite"

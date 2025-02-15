@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nix-update-script,
   pkg-config,
   autoAddDriverRunpath,
@@ -40,27 +40,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.11.1";
+  version = "20.12.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
     tag = "v${version}";
     fetchSubmodules = true; #TODO devendor openvr
-    hash = "sha256-d4KldPii8W1HcfnMSD8Fn+IGO/a3r8747APPjRCnbe8=";
+    hash = "sha256-T7KyGZwnJ9t4Bh8KFy190IV3igWCG+yn+OW9a6mgmYI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "openxr-0.18.0" = "sha256-v8sY9PROrqzkpuq3laIn2hPaX+DY7Fbca6i/Xiacd1g=";
-      "settings-schema-0.2.0" = "sha256-luEdAKDTq76dMeo5kA+QDTHpRMFUg3n0qvyQ7DkId0k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DE88nMC6qpbPJsBpdyITv6igMgwy4g40VCgFQQuRRTA=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-finding-libs.patch;
+    (replaceVars ./fix-finding-libs.patch {
       ffmpeg = lib.getDev ffmpeg;
       x264 = lib.getDev x264;
     })
@@ -130,7 +124,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -Dm755 ${src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
-    install -Dm644 ${src}/resources/alvr.png $out/share/icons/hicolor/256x256/apps/alvr.png
+    install -Dm644 ${src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
 
     # Install SteamVR driver
     mkdir -p $out/{libexec,lib/alvr,share}

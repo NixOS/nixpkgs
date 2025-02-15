@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-7FKUP6ZCIGmP/WX6lUwrUT7QEVo/LGJz46ZmqPeRTW8=";
   };
 
-  cargoHash = "sha256-gckl2WHpuu7Gcubx/VEpHNW7jT76r9QHaAociQh+Zrc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vp6+rdF6YVzeuAkLFnnkQFlc3gxqZn9MDGLIbiMpIwE=";
 
   meta = with lib; {
     description = "Unofficial CLI for speed.cloudflare.com";

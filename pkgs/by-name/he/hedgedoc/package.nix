@@ -9,16 +9,17 @@
   nodejs,
   python3,
   nixosTests,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
-    rev = version;
-    hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
+    tag = version;
+    hash = "sha256-fqpIPKU8B+T65PL11ipu0xkkioJf4k/8tdl045djfNk=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -31,10 +32,10 @@ let
       gitMinimal # needed to download git dependencies
       nodejs # needed for npm to download git dependencies
       yarn
+      writableTmpDirAsHomeHook
     ];
 
     buildPhase = ''
-      export HOME=$(mktemp -d)
       yarn config set enableTelemetry 0
       yarn config set cacheFolder $out
       yarn config set --json supportedArchitectures.os '[ "linux" ]'
@@ -43,7 +44,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
+    outputHash = "sha256-cx/VNThgGJSd8sDqsb7Fe7l4Fb8kT/NSxOD+KTq2RNA=";
   };
 
 in

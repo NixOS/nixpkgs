@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
 }:
 buildGoModule rec {
   pname = "git-bug-migration";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Hid9OK91LNjLmDHam0ZlrVQopVOsqbZ+BH2rfQi5lS0=";
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   ldflags = [
     "-X main.GitExactTag=${version}"

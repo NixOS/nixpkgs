@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
   ];
 
   preFixup = ''

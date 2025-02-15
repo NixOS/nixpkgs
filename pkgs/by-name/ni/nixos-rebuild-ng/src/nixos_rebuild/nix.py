@@ -8,7 +8,7 @@ from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
-from typing import Final
+from typing import Final, Literal
 from uuid import uuid4
 
 from . import tmpdir
@@ -77,7 +77,7 @@ def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
-    build_flags: Args | None = None,
+    realise_flags: Args | None = None,
     instantiate_flags: Args | None = None,
     copy_flags: Args | None = None,
 ) -> Path:
@@ -112,7 +112,7 @@ def build_remote(
                 drv,
                 "--add-root",
                 remote_tmpdir / uuid4().hex,
-                *dict_to_flags(build_flags),
+                *dict_to_flags(realise_flags),
             ],
             remote=build_host,
             stdout=PIPE,
@@ -433,14 +433,14 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
         try:
             nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get nixos-version: %s", ex)
             nixos_version = "Unknown"
         try:
             kernel_version = next(
                 (generation_path / "kernel-modules/lib/modules").iterdir()
             ).name
-        except IOError as ex:
+        except OSError as ex:
             logger.debug("could not get kernel version: %s", ex)
             kernel_version = "Unknown"
         specialisations = [
@@ -451,7 +451,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
             ).stdout.strip()
-        except (CalledProcessError, IOError) as ex:
+        except (OSError, CalledProcessError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
@@ -554,7 +554,7 @@ def set_profile(
 
 def switch_to_configuration(
     path_to_config: Path,
-    action: Action,
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,
@@ -583,7 +583,7 @@ def switch_to_configuration(
     )
 
 
-def upgrade_channels(all: bool = False) -> None:
+def upgrade_channels(all_channels: bool = False) -> None:
     """Upgrade channels for classic Nix.
 
     It will either upgrade just the `nixos` channel (including any channel
@@ -591,7 +591,7 @@ def upgrade_channels(all: bool = False) -> None:
     """
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
         if channel_path.is_dir() and (
-            all
+            all_channels
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):

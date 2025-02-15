@@ -15,7 +15,7 @@
   darwin,
   icu,
   lndir,
-  substituteAll,
+  replaceVars,
   nugetPackageHook,
   xmlstarlet,
 }:
@@ -42,10 +42,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     [
       ./dotnet-setup-hook.sh
     ]
-    ++ lib.optional (type == "sdk") (substituteAll {
-      src = ./dotnet-sdk-setup-hook.sh;
-      inherit lndir xmlstarlet;
-    });
+    ++ lib.optional (type == "sdk") (
+      replaceVars ./dotnet-sdk-setup-hook.sh {
+        inherit lndir xmlstarlet;
+      }
+    );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
@@ -202,6 +203,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               usePackageSource = true;
               build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
               runtime = null;
+              run = checkConsoleOutput "$src/bin/test";
+            };
+
+            ready-to-run = mkConsoleTest {
+              name = "ready-to-run";
+              usePackageSource = true;
+              build = "dotnet publish --use-current-runtime -p:PublishReadyToRun=true -o $out/bin";
               run = checkConsoleOutput "$src/bin/test";
             };
           }

@@ -87,7 +87,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the [builder](applications/misc/adobe-reader/builder.sh) uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
+   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the `postFixup` phase uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
    Some notes:
 
@@ -337,7 +337,7 @@ In Nixpkgs, there are generally three different names associated with a package:
 
 - The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
-- The attribute name used for the package in the [`pkgs/by-name` structure](./pkgs/by-name/README.md) or in [`all-packages.nix`](./pkgs/top-level/all-packages.nix), and when passing it as a dependency in recipes.
+- The attribute name used for the package in the [`pkgs/by-name` structure](./by-name/README.md) or in [`all-packages.nix`](./top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
@@ -729,7 +729,7 @@ $ nix-build -A phoronix-test-suite.tests
 
 Here are examples of package tests:
 
-- [Jasmin compile test](development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
 - [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)

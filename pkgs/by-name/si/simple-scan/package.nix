@@ -64,6 +64,11 @@ stdenv.mkDerivation rec {
     patchShebangs data/meson_compile_gschema.py
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/icons/hicolor/scalable/actions/
+    install -m 444 ../data/icons/scalable/actions/* $out/share/icons/hicolor/scalable/actions/
+  '';
+
   doCheck = true;
 
   passthru = {

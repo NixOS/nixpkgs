@@ -55,7 +55,7 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://github.com/saber-notes/saber";
     mainProgram = "saber";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

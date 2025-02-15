@@ -206,6 +206,14 @@ self: super: {
   # Too strict lower bound on lens, drop with LTS 23
   provide = doJailbreak super.provide;
   # Too strict bounds on quickcheck-instances/tasty-qickcheck, drop with LTS 23
+
+  # make gtk build with pango >= 1.56: https://github.com/gtk2hs/gtk2hs/issues/337
+  pango = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/pull/336/commits/ca7f98bd3e9462deac3661244dc76004a36fc8c3.patch";
+    hash = "sha256-fsZIwh4MY3Jnr3Gv4vZKl/LwUsJ+H+7KJ8unARQBifE=";
+    stripLen = 1;
+  }) super.pango;
+
   lawful-conversions = doJailbreak super.lawful-conversions;
 
   # Out of date test data: https://github.com/ocharles/weeder/issues/176
@@ -513,22 +521,22 @@ self: super: {
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
-    version = "1.7.5";
+    version = "1.7.6";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7.5";
-      sha256 = "sha256-KxuGSoVUFnQLB2ZcYODW7AVPAh9JqRlD5BrfsC/Q4qs=";
+      rev = "v1.7.6";
+      hash = "sha256-8HFvG7fvIFbgtaYAY2628Tb89fA55nPm2jSiNs0/Cws=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;
   cachix = (overrideCabal (drv: {
-    version = "1.7.5";
+    version = "1.7.6";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7.5";
-      sha256 = "sha256-KxuGSoVUFnQLB2ZcYODW7AVPAh9JqRlD5BrfsC/Q4qs=";
+      rev = "v1.7.6";
+      hash = "sha256-8HFvG7fvIFbgtaYAY2628Tb89fA55nPm2jSiNs0/Cws=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
   }) (lib.pipe
@@ -2004,17 +2012,22 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/pull/349683
   pandoc-cli_3_6 = super.pandoc-cli_3_6.overrideScope (
     self: super: {
+      commonmark-extensions = self.commonmark-extensions_0_2_5_6;
+      commonmark-pandoc = self.commonmark-pandoc_0_2_2_3;
       doclayout = self.doclayout_0_5;
       hslua-module-doclayout = self.hslua-module-doclayout_1_2_0;
       lpeg = self.lpeg_1_1_0;
       pandoc = self.pandoc_3_6;
       pandoc-lua-engine = self.pandoc-lua-engine_0_4;
+      pandoc-lua-marshal = self.pandoc-lua-marshal_0_3_0;
       pandoc-server = self.pandoc-server_0_1_0_10;
+      skylighting = self.skylighting_0_14_5;
+      skylighting-core = self.skylighting-core_0_14_5;
       texmath = self.texmath_0_12_8_12;
       tls = self.tls_2_0_6;
       toml-parser = self.toml-parser_2_0_1_0;
       typst = self.typst_0_6_1;
-      typst-symbols = self.typst-symbols_0_1_6;
+      typst-symbols = self.typst-symbols_0_1_7;
     }
   );
 

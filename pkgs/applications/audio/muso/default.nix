@@ -35,7 +35,8 @@ rustPlatform.buildRustPackage rec {
     cp share/* $out/share/muso/
   '';
 
-  cargoHash = "sha256-+UVUejKCfjC6zdW315wmu7f3A5GmnoQ3rIk8SK6LIRI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L0ZQoz9J5Hxg98puk1RbKuybLboIoOsy5qqGnvEPi1U=";
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

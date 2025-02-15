@@ -75,6 +75,11 @@ buildPythonPackage rec {
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+
+    # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    "test_oprelcone_1_m1_k3_complex"
+    "test_oprelcone_1_m3_k1_complex"
+    "test_oprelcone_2"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];

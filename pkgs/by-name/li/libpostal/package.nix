@@ -34,6 +34,10 @@ in stdenv.mkDerivation rec {
     "--disable-data-download"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "--disable-sse2" ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  };
+
   postBuild = lib.optionalString withData ''
     mkdir -p $out/share/libpostal
     ln -s ${assets-language-classifier}/language_classifier $out/share/libpostal/language_classifier

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "stookwijzer";
-  version = "1.5.1";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fwestenberg";
     repo = "stookwijzer";
     tag = "v${version}";
-    hash = "sha256-zAlHB4ZAgbUBDBQbnoSXwB+iOKeWKtkwBbA4AAyNv00=";
+    hash = "sha256-ES9atB0KricNI5KWQC5Eoftwd/Le7Id3855977KuEy4=";
   };
 
   build-system = [ setuptools ];

@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
   # patches Cargo.lock to include a more up-to-date version of lexical-core
   cargoPatches = [ ./cargo-lock-update-lexical-core.patch ];
 
-  cargoHash = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i+v2PK07GHmTaLT0Bcpitd1g3Mrol28S2a2lBwBETb8=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

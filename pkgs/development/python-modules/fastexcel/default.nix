@@ -10,8 +10,6 @@
 
   # dependencies
   pyarrow,
-  pythonOlder,
-  typing-extensions,
 
   # optional-dependencies
   pandas,
@@ -46,13 +44,9 @@ buildPythonPackage rec {
     rustc
   ];
 
-  dependencies =
-    [
-      pyarrow
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      typing-extensions
-    ];
+  dependencies = [
+    pyarrow
+  ];
 
   optional-dependencies = {
     pandas = [

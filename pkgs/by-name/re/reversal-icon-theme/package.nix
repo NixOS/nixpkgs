@@ -60,6 +60,9 @@ lib.checkListOfEnum "${pname}: color variants"
     dontPatchELF = true;
     dontRewriteSymlinks = true;
 
+    # FIXME: https://github.com/yeyushengfan258/Reversal-icon-theme/issues/108
+    dontCheckForBrokenSymlinks = true;
+
     postPatch = ''
       patchShebangs install.sh
     '';

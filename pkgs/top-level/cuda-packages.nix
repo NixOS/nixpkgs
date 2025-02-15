@@ -79,6 +79,7 @@ let
     cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
     cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
 
+    cudnn-frontend = final.callPackage ../development/cuda-modules/cudnn-frontend/default.nix { };
     saxpy = final.callPackage ../development/cuda-modules/saxpy { };
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };

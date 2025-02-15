@@ -11,13 +11,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-pictureit";
   namespace = "visualization.pictureit";
-  version = "21.0.1";
+  version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-0soMNqff/aVANDFORL3mqUUpi2BWmauUtE4EBr3QwlI=";
+    hash = "sha256-jFRv/fYR/98jcP9GCRVYu2EQIdWQItzYrEoXW/RF+bA=";
   };
 
   extraBuildInputs = [

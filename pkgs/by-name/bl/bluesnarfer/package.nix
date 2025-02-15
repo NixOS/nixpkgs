@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+  ];
+
   installPhase = ''
     runHook preInstall
     install -Dm755 bluesnarfer $out/bin/bluesnarfer

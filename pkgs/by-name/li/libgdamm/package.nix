@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   glibmm,
-  libgda,
+  libgda5,
   libxml2,
   gnome,
   mysqlSupport ? false,
@@ -12,7 +12,7 @@
 }:
 
 let
-  gda = libgda.override {
+  gda = libgda5.override {
     inherit mysqlSupport postgresSupport;
   };
 in
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "C++ bindings for libgda";
     homepage = "https://www.gnome-db.org/";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    maintainers = [ maintainers.bot-wxt1221 ];
     platforms = platforms.linux;
   };
 }

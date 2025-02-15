@@ -18,17 +18,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.14";
+  version = "2025.1";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = version;
-    hash = "sha256-Tns0Jd5v+lizU7NMVqS/hoqjHhmqrc9VVawjoZvhk78=";
+    hash = "sha256-QBuZFlZf9ORXJU9CXi0a7IQcmTqHgOi4Eqd5pKWdU1g=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-K1xbJK7kJsDON+Nd8cUK+yZO2sAXAnA9bcYz7bTSbro=";
+  cargoHash = "sha256-+nNJPeQno6xTa42jBIaNWTzvoKWMSrfdCKBgMs1vPYU=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -118,7 +118,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab iivusly ];
+    maintainers = with maintainers; [ fab iivusly ivyfanchiang];
     mainProgram = "halloy";
   };
 }

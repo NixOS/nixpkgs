@@ -14,13 +14,13 @@
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.11.6";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    hash = "sha256-jHACiSTZHNHj61kN8zEjGb3NpkhRJrJ7Mp0pNmJXDXY=";
+    hash = "sha256-iTWkr7mruGda7CVz0L6puHeObnogXHfqjF9KAY+ExJg=";
   };
 
   offlineCache = fetchYarnDeps {

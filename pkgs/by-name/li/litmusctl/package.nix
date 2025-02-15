@@ -8,7 +8,7 @@
 
 buildGoModule rec {
   pname = "litmusctl";
-  version = "1.13.0";
+  version = "1.14.0";
 
   nativeBuildInputs = [
     installShellFiles
@@ -22,7 +22,7 @@ buildGoModule rec {
     owner = "litmuschaos";
     repo = "litmusctl";
     rev = "${version}";
-    hash = "sha256-lPdejdnBefhYgv52I7BOm1VTgqHSp8u1lgJJxK5GWSA=";
+    hash = "sha256-Saj5sx5YkcKsnMrnIzPcLok+mgEZSh9p8rnfQbJhAeU=";
   };
 
   vendorHash = "sha256-7FYOQ89aUFPX+5NCPYKg+YGCXstQ6j9DK4V2mCgklu0=";

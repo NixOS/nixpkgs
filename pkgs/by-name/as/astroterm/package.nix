@@ -9,17 +9,18 @@
   ncurses,
   argtable,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astroterm";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "da-luce";
     repo = "astroterm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CYKW/RAQ3a5238cojbpGfTenMQApfaZOHnQMrZ6LWzA=";
+    hash = "sha256-SQR5Q369LUtQum5a4f0/sy7GdPB8sBfn6mkAjxyTbg8=";
   };
 
   bsc5File = fetchurl {
@@ -31,11 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     xxd
-    versionCheckHook
   ];
   buildInputs = [
     argtable
     ncurses
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
 
   postPatch = ''
@@ -44,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Celestial viewer for the terminal, written in C";

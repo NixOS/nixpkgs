@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.18.0";
+  version = "3.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_bigquery_datatransfer";
     inherit version;
-    hash = "sha256-K4Hiiy7PotLAS0pmU1K/osLufp0tQypWy12BhICrwC0=";
+    hash = "sha256-qQ330hnnZyC4X+QvlrSF+Z/FGCsaETzP47CgzAHHS+0=";
   };
 
   build-system = [ setuptools ];

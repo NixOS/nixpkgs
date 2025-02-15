@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-protocols";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-protocols";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9OV4lOqrEJVLdOrpNN/9msNwAhI6FQTu4N7fufilG08=";
+    hash = "sha256-5v+bv75wJWvahyM2xcMTSNNxmV8a7hb01Eey5zYnBJw=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/hyprwm/hyprland-protocols";
     description = "Wayland protocol extensions for Hyprland";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = lib.teams.hyprland.members;
     platforms = lib.platforms.linux;
   };
 })

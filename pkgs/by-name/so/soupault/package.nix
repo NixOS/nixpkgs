@@ -3,6 +3,8 @@
   darwin,
   fetchzip,
   ocamlPackages,
+  ocaml,
+  removeReferencesTo,
   soupault,
   stdenv,
   testers,
@@ -22,9 +24,11 @@ ocamlPackages.buildDunePackage rec {
     hash = "sha256-UABbrNNcNaN9NgtAjCs4HUoNXMaK4QvCuWERuEnMG6I=";
   };
 
-  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    darwin.sigtool
-  ];
+  nativeBuildInputs =
+    [ removeReferencesTo ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      darwin.sigtool
+    ];
 
   buildInputs = with ocamlPackages; [
     base64
@@ -47,6 +51,10 @@ ocamlPackages.buildDunePackage rec {
     tsort
     yaml
   ];
+
+  postFixup = ''
+    find "$out" -type f -exec remove-references-to -t ${ocaml} '{}' +
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = soupault;

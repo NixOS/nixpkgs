@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     repo = "uap-python";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-byKtxmuYIsEYyuUmfnbLhfe7EKj0k7QGkK5HewiTiy4=";
+    hash = "sha256-l8EBQq5Hqw/Vx4zvWy2QQ1m7mrAiqYNK2x3yUmJj8Xw=";
   };
 
   build-system = [

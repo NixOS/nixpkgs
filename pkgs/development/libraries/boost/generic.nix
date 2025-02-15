@@ -222,6 +222,15 @@ stdenv.mkDerivation {
         extraPrefix = "libs/python/";
         hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
       })
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.87") [
+      # Fix operator<< for shared_ptr and intrusive_ptr
+      # https://github.com/boostorg/smart_ptr/issues/115
+      (fetchpatch {
+        url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
+        relative = "include";
+        hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
+      })
     ];
 
   meta = with lib; {
@@ -282,12 +291,26 @@ stdenv.mkDerivation {
     # b2 needs to be explicitly told how to find Python when cross-compiling
     + lib.optionalString enablePython ''
       cat << EOF >> user-config.jam
-      using python : : ${python.interpreter}
+      using python : : ${python.pythonOnBuildForHost.interpreter}
         : ${python}/include/python${python.pythonVersion}
         : ${python}/lib
         ;
       EOF
     '';
+
+  # Fix compilation to 32-bit ARM with clang in downstream packages
+  # https://github.com/ned14/outcome/pull/308
+  # https://github.com/boostorg/json/pull/1064
+  postPatch = lib.optionalString (lib.versionAtLeast version "1.87") ''
+    substituteInPlace \
+      boost/outcome/outcome_gdb.h \
+      boost/outcome/experimental/status-code/status_code.hpp \
+      boost/json/detail/gdb_printers.hpp \
+      boost/unordered/unordered_printers.hpp \
+      boost/interprocess/interprocess_printers.hpp \
+      libs/json/pretty_printers/generate-gdb-header.py \
+      --replace-fail ",@progbits,1" ",%progbits,1"
+  '';
 
   env = {
     NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";

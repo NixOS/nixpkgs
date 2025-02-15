@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Schema and validator for YAML";
     homepage = "https://github.com/23andMe/Yamale";
-    changelog = "https://github.com/23andMe/Yamale/releases/tag/${version}";
+    changelog = "https://github.com/23andMe/Yamale/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ rtburns-jpl ];
     mainProgram = "yamale";

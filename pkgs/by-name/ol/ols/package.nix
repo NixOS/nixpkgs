@@ -9,16 +9,18 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2024-12-28";
+  version = "0-unstable-2025-01-28";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "fded19fc8ede748d31b67686941fbe33a8f77214";
-    hash = "sha256-KuzYkCwcQ11vLaQ3Au+2sEADe4knWu/HAls7Qe0cr2A=";
+    rev = "a71caaac9f8ac113d81fc714a41c9b9e96d1fee7";
+    hash = "sha256-aUQKbZOrxDdUGORY2Rr2Drfxi0Q+dZZQSBCkJ+XQhcE=";
   };
 
   postPatch = ''
+    substituteInPlace build.sh \
+      --replace-fail "-microarch:native" ""
     patchShebangs build.sh odinfmt.sh
   '';
 
@@ -52,7 +54,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       astavie
-      znaniye
     ];
     mainProgram = "ols";
   };

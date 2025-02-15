@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       language but is also suitable for standalone scripts.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

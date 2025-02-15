@@ -35,10 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-OuokZvdaCTgZI1VoXInqs6YNLsVUohaat5IjYYvUeVE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-+sCBkCR2CxgG/NuWch8sZTCitKynZmF221mR16TbQKI=";
+    hash = "sha256-PrWcnhfhc3ZTVwTjzp7cIVlUYeXo164AO687rBI/IoY=";
   };
 
   cargoRoot = "native";

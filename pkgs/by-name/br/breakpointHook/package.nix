@@ -1,24 +1,19 @@
 {
   lib,
   stdenv,
+  buildPackages,
 
-  bash,
   bashInteractive,
-  coreutils,
   makeSetupHook,
-  procps,
-  util-linux,
-  writeShellScriptBin,
 }:
 
 let
-  attach = writeShellScriptBin "attach" ''
+  attach = buildPackages.writeShellScriptBin "attach" ''
     export PATH="${
       lib.makeBinPath [
-        bash
-        coreutils
-        procps # needed for pgrep
-        util-linux # needed for nsenter
+        buildPackages.bash
+        buildPackages.coreutils
+        buildPackages.util-linuxMinimal # needed for nsenter
       ]
     }"
     exec bash ${./attach.sh} "$@"

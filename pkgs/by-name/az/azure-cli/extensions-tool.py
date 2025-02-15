@@ -6,7 +6,9 @@ import datetime
 import json
 import logging
 import os
+import subprocess
 import sys
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
@@ -42,20 +44,20 @@ def _read_cached_index(path: Path) -> Tuple[datetime.datetime, Any]:
     return cache_date, data
 
 
-def _write_index_to_cache(data: Any, path: Path):
+def _write_index_to_cache(data: Any, path: Path) -> None:
     j = json.loads(data)
     j["cache_date"] = datetime.datetime.now().isoformat()
     with open(path, "w") as f:
         json.dump(j, f, indent=2)
 
 
-def _fetch_remote_index():
+def _fetch_remote_index() -> Any:
     r = Request(INDEX_URL)
     with urlopen(r) as resp:
         return resp.read()
 
 
-def get_extension_index(cache_dir: Path) -> Set[Ext]:
+def get_extension_index(cache_dir: Path) -> Any:
     index_file = cache_dir / "index.json"
     os.makedirs(cache_dir, exist_ok=True)
 
@@ -154,7 +156,7 @@ def _filter_invalid(o: Dict[str, Any]) -> bool:
 
 def _filter_compatible(o: Dict[str, Any], cli_version: Version) -> bool:
     minCliVersion = parse(o["metadata"]["azext.minCliCoreVersion"])
-    return cli_version >= minCliVersion
+    return bool(cli_version >= minCliVersion)
 
 
 def _transform_dict_to_obj(o: Dict[str, Any]) -> Ext:
@@ -211,6 +213,93 @@ def _filter_updated(e: Tuple[Ext, Ext]) -> bool:
     return prev != new
 
 
+@dataclass(frozen=True)
+class AttrPos:
+    file: str
+    line: int
+    column: int
+
+
+def nix_get_value(attr_path: str) -> Optional[str]:
+    try:
+        output = (
+            subprocess.run(
+                [
+                    "nix-instantiate",
+                    "--eval",
+                    "--strict",
+                    "--json",
+                    "-E",
+                    f"with import ./. {{ }}; {attr_path}",
+                ],
+                stdout=subprocess.PIPE,
+                text=True,
+                check=True,
+            )
+            .stdout.rstrip()
+            .strip('"')
+        )
+    except subprocess.CalledProcessError as e:
+        logger.error("failed to nix-instantiate: %s", e)
+        return None
+    return output
+
+
+def nix_unsafe_get_attr_pos(attr: str, attr_path: str) -> Optional[AttrPos]:
+    try:
+        output = subprocess.run(
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--json",
+                "-E",
+                f'with import ./. {{ }}; (builtins.unsafeGetAttrPos "{attr}" {attr_path})',
+            ],
+            stdout=subprocess.PIPE,
+            text=True,
+            check=True,
+        ).stdout.rstrip()
+    except subprocess.CalledProcessError as e:
+        logger.error("failed to unsafeGetAttrPos: %s", e)
+        return None
+    if output == "null":
+        logger.error("failed to unsafeGetAttrPos: nix-instantiate returned 'null'")
+        return None
+    pos = json.loads(output)
+    return AttrPos(pos["file"], pos["line"] - 1, pos["column"])
+
+
+def edit_file(file: str, rewrite: Callable[[str], str]) -> None:
+    with open(file, "r") as f:
+        lines = f.readlines()
+    lines = [rewrite(line) for line in lines]
+    with open(file, "w") as f:
+        f.writelines(lines)
+
+
+def edit_file_at_pos(pos: AttrPos, rewrite: Callable[[str], str]) -> None:
+    with open(pos.file, "r") as f:
+        lines = f.readlines()
+    lines[pos.line] = rewrite(lines[pos.line])
+    with open(pos.file, "w") as f:
+        f.writelines(lines)
+
+
+def read_value_at_pos(pos: AttrPos) -> str:
+    with open(pos.file, "r") as f:
+        lines = f.readlines()
+        return value_from_nix_line(lines[pos.line])
+
+
+def value_from_nix_line(line: str) -> str:
+    return line.split("=")[1].strip().strip(";").strip('"')
+
+
+def replace_value_in_nix_line(new: str) -> Callable[[str], str]:
+    return lambda line: line.replace(value_from_nix_line(line), new)
+
+
 def main() -> None:
     sh = logging.StreamHandler(sys.stderr)
     sh.setFormatter(
@@ -247,6 +336,7 @@ def main() -> None:
         help="whether to commit changes to git",
     )
     args = parser.parse_args()
+    cli_version = parse(args.cli_version)
 
     repo = git.Repo(Path(".").resolve(), search_parent_directories=True)
     # Workaround for https://github.com/gitpython-developers/GitPython/issues/1923
@@ -258,7 +348,57 @@ def main() -> None:
     assert index["formatVersion"] == "1"  # only support formatVersion 1
     extensions_remote = index["extensions"]
 
-    cli_version = parse(args.cli_version)
+    if args.extension:
+        logger.info(f"updating extension: {args.extension}")
+
+        ext = Optional[Ext]
+        for _ext_name, extension in extensions_remote.items():
+            extension = processExtension(
+                extension, cli_version, args.extension, requirements=True
+            )
+            if extension:
+                ext = extension
+                break
+        if not ext:
+            logger.error(f"Extension {args.extension} not found in index")
+            exit(1)
+
+        version_pos = nix_unsafe_get_attr_pos(
+            "version", f"azure-cli-extensions.{ext.pname}"
+        )
+        if not version_pos:
+            logger.error(
+                f"no position for attribute 'version' found on attribute path {ext.pname}"
+            )
+            exit(1)
+        version = read_value_at_pos(version_pos)
+        current_version = parse(version)
+
+        if ext.version == current_version:
+            logger.info(
+                f"no update needed for {ext.pname}, latest version is {ext.version}"
+            )
+            return
+        logger.info("updated extensions:")
+        logger.info(f"  {ext.pname} {current_version} -> {ext.version}")
+        edit_file_at_pos(version_pos, replace_value_in_nix_line(str(ext.version)))
+
+        current_hash = nix_get_value(f"azure-cli-extensions.{ext.pname}.src.outputHash")
+        if not current_hash:
+            logger.error(
+                f"no attribute 'src.outputHash' found on attribute path {ext.pname}"
+            )
+            exit(1)
+        edit_file(version_pos.file, lambda line: line.replace(current_hash, ext.hash))
+
+        if args.commit:
+            commit_msg = (
+                f"azure-cli-extensions.{ext.pname}: {current_version} -> {ext.version}"
+            )
+            _commit(repo, commit_msg, [Path(version_pos.file)], actor)
+        return
+
+    logger.info("updating generated extension set")
 
     extensions_remote_filtered = set()
     for _ext_name, extension in extensions_remote.items():

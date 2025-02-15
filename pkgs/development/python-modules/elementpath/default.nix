@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "elementpath";
     tag = "v${version}";
-    hash = "sha256-lFUrY3LOSc2OROkzotGSW9N3h9dJA4EnCvLNU41BPA0=";
+    hash = "sha256-vGIcJuY/RHmfsEngr1XRkA2Lls9hUl/6XTbUJVz5Ndk=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
     homepage = "https://github.com/sissaschool/elementpath";
-    changelog = "https://github.com/sissaschool/elementpath/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/sissaschool/elementpath/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = [ ];
   };

@@ -14,7 +14,7 @@ mkCoqDerivation rec {
   defaultVersion =
     with lib.versions;
     lib.switch coq.version [
-      { case = range "8.13" "8.20"; out = "5.2.0+20241009"; }
+      { case = range "8.13" "9.0"; out = "5.2.0+20241009"; }
       { case = range "8.10" "8.16"; out = "4.0.0"; }
     ] null;
   release."5.2.0+20241009".sha256 = "sha256-eg47YgnIonCq7XOUgh9uzoKsuFCvsOSTZhgFLNNcPD0=";

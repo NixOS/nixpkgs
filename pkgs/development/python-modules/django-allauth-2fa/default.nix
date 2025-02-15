@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth-2fa";
-  version = "0.11.1";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "valohai";
     repo = "django-allauth-2fa";
     tag = "v${version}";
-    hash = "sha256-bm2RwhvX2nfhYs74MM0iZl9U2gHgm0lLlh2tuRRcGso=";
+    hash = "sha256-hVPIqy3vpRXTYTGRXEE5wg0oPyhLlm37fM9wn7xRYys=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "django-allauth-2fa adds two-factor authentication to django-allauth";
     homepage = "https://github.com/valohai/django-allauth-2fa";
-    changelog = "https://github.com/valohai/django-allauth-2fa/releases/tag/v${version}";
+    changelog = "https://github.com/valohai/django-allauth-2fa/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ derdennisop ];
   };

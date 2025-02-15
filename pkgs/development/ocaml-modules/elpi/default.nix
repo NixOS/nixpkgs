@@ -3,6 +3,7 @@
 , ocaml
 , menhir, menhirLib
 , atdgen
+, atdgen-runtime
 , stdlib-shims
 , re, perl, ncurses
 , ppxlib, ppx_deriving
@@ -36,22 +37,22 @@ let fetched = coqPackages.metaFetch ({
       else "elpi-v${v}.tbz";
     location = { domain = "github.com"; owner = "LPCIC"; repo = "elpi"; };
   }) version;
-in
-buildDunePackage {
+in let inherit (fetched) version;
+in buildDunePackage {
   pname = "elpi";
-  inherit (fetched) version src;
+  inherit version;
+  inherit (fetched) src;
 
   patches = lib.optional (version == "1.16.5")
     ./atd_2_10.patch;
 
   minimalOCamlVersion = "4.07";
 
-  # atdgen is both a library and executable
   nativeBuildInputs = [ perl ]
   ++ [ (if lib.versionAtLeast version "1.15" || version == "dev" then menhir else camlp5) ]
   ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
   buildInputs = [ ncurses ]
-  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen;
+  ++ lib.optional (lib.versionAtLeast version "1.16" || version == "dev") atdgen-runtime;
 
   propagatedBuildInputs = [ re stdlib-shims ]
   ++ (if lib.versionAtLeast version "1.15" || version == "dev"
@@ -72,5 +73,7 @@ buildDunePackage {
 
   postPatch = ''
     substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
+  '' + lib.optionalString (lib.versionAtLeast version "1.16" || version == "dev") ''
+    substituteInPlace src/dune --replace-warn ' atdgen re' ' atdgen-runtime re'
   '';
 }

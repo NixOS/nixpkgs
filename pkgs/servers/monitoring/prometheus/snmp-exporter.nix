@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "snmp_exporter";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "snmp_exporter";
     rev = "v${version}";
-    sha256 = "sha256-6UTvzcN0BB4uLfyZxr8CkmlMAjggYRV/EmQPRD7ZqmY=";
+    sha256 = "sha256-/uNmY4xON9VFXEi4njAC5nD1RVWn+nUr1oQnt9w8pmQ=";
   };
 
-  vendorHash = "sha256-0WGiVM4HTgcVkCxfjW1c+z1wlf/ay5BXZXuGRPS4guc=";
+  vendorHash = "sha256-WSqkuRzeSctO+modNHBGBD3HvhrSXFlmsdfB/3lS5sw=";
 
   buildInputs = [ net-snmp ];
 

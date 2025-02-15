@@ -116,8 +116,8 @@ let
         enable = true;
       };
       metricProvider = {
-        services.bird2.enable = true;
-        services.bird2.config = ''
+        services.bird.enable = true;
+        services.bird.config = ''
           router id 127.0.0.1;
 
           protocol kernel MyObviousTestString {
@@ -1000,6 +1000,49 @@ let
             "curl -sSf http://localhost:9100/metrics | grep 'node_exporter_build_info{.\\+} 1'"
         )
       '';
+    };
+
+    node-cert = {
+      nodeName = "node_cert";
+      exporterConfig = {
+        enable = true;
+        paths = ["/run/certs"];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-node-cert-exporter.service")
+        wait_for_open_port(9141)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9141/metrics | grep 'ssl_certificate_expiry_seconds{.\\+path=\"/run/certs/node-cert\\.cert\".\\+}'"
+        )
+      '';
+
+      metricProvider = {
+        system.activationScripts.cert.text = ''
+          mkdir -p /run/certs
+          cd /run/certs
+
+          cat >ca.template <<EOF
+          organization = "prometheus-node-cert-exporter"
+          cn = "prometheus-node-cert-exporter"
+          expiration_days = 365
+          ca
+          cert_signing_key
+          crl_signing_key
+          EOF
+
+          ${pkgs.gnutls}/bin/certtool  \
+            --generate-privkey         \
+            --key-type rsa             \
+            --sec-param High           \
+            --outfile node-cert.key
+
+          ${pkgs.gnutls}/bin/certtool     \
+            --generate-self-signed        \
+            --load-privkey node-cert.key  \
+            --template ca.template        \
+            --outfile node-cert.cert
+        '';
+      };
     };
 
     pgbouncer = {

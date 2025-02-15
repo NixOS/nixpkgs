@@ -58,7 +58,6 @@ let
       mainProgram = "pyp";
       maintainers = with lib.maintainers; [
         rmcgibbo
-        AndersonTorres
       ];
     };
   };

@@ -44,6 +44,6 @@ pythonEnv.pkgs.buildPythonApplication {
     description = "Suite of command-line tools for converting to and working with CSV";
     changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

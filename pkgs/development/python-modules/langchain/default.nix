@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -12,7 +11,6 @@
 
   # dependencies
   aiohttp,
-  httpx-sse,
   langchain-core,
   langchain-text-splitters,
   langsmith,
@@ -21,7 +19,6 @@
   requests,
   sqlalchemy,
   tenacity,
-  async-timeout,
 
   # optional-dependencies
   numpy,
@@ -43,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.7";
+  version = "0.3.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${version}";
-    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
+    hash = "sha256-lANGoMABH1f9Tl/GgMMr7eTCji9q3uqD+Mwjr4nd2Dg=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -66,7 +63,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    httpx-sse
     langchain-core
     langchain-text-splitters
     langsmith
@@ -75,7 +71,7 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     tenacity
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   optional-dependencies = {
     numpy = [ numpy ];
@@ -140,6 +136,8 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = langchain-core.updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   meta = {
@@ -147,7 +145,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/langchain-ai/langchain";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
     mainProgram = "langchain-server";
   };
 }

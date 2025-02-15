@@ -10,7 +10,6 @@ buildDunePackage rec {
   inherit (atdgen-codec-runtime) version src;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     biniou

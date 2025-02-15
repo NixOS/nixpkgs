@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "niworkflows";
-  version = "1.10.2";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
     tag = version;
-    hash = "sha256-29ZxLuKrvgCIOMMCUpi0HHhlNlgqUrUrSCiikwecmKw=";
+    hash = "sha256-OWsfz5YDPy1qPpXomr4YiuCDf40Fy1pW8cNHPjHfqp4=";
   };
 
   pythonRelaxDeps = [ "traits" ];
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     description = "Common workflows for MRI (anatomical, functional, diffusion, etc.)";
     mainProgram = "niworkflows-boldref";
     homepage = "https://github.com/nipreps/niworkflows";
-    changelog = "https://github.com/nipreps/niworkflows/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/nipreps/niworkflows/blob/${src.tag}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

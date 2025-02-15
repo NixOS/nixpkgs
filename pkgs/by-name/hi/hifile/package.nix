@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "0.9.9.15";
+  version = "0.9.9.16";
   pname = "hifile";
 
   src = fetchurl {
     url = "https://www.hifile.app/files/HiFile-${version}.AppImage";
-    hash = "sha256-Q0clcmBLWt8qDzHYjRRbwyZBSWW//yBTbRcnRjrSlzM=";
+    hash = "sha256-/5ZAAq6yQQZ8NxlCeXp1jJ+fqewIGuBGD+KpjirfCjU=";
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -8,7 +8,7 @@
   libnotify,
   python3Packages,
   steam-run,
-  substituteAll,
+  replaceVars,
   unzip,
   webkitgtk_4_0,
   wrapGAppsHook3,
@@ -26,8 +26,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./inject-launcher-steam-run.diff;
+    (replaceVars ./inject-launcher-steam-run.diff {
       steamrun = lib.getExe steam-run;
     })
   ];

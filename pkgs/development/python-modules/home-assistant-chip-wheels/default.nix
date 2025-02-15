@@ -1,4 +1,5 @@
 {
+  aiohttp,
   appdirs,
   appnope,
   black,
@@ -70,14 +71,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2024.9.0";
+  version = "2024.11.4";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
-    rev = version;
+    tag = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-T0G6mxb/5wFOxPLL92Ay34oP+9Xvk9w0YV9VSzWJuzw=";
+    hash = "sha256-hWdTm/Ojdvz0s9qIXbOs3yll7XfAdoTZrg4dgu7ISns=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
@@ -172,6 +173,7 @@ stdenv.mkDerivation rec {
   env.PIP_FIND_LINKS =
     let
       dependencies = [
+        aiohttp
         appdirs
         appnope
         black
@@ -277,7 +279,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Python wheels for APIs and tools related to CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
-    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = lib.teams.home-assistant.members;
   };

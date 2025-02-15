@@ -43,10 +43,6 @@ buildPythonPackage rec {
 
   CMAKE_ARGS = [ "-DEXTERNAL_PYBIND11=ON" ];
 
-  preBuild = ''
-    export CMAKE_BUILD_PARALLEL_LEVEL="$NIX_BUILD_CORES"
-  '';
-
   nativeCheckInputs = [
     graphviz
     pytestCheckHook

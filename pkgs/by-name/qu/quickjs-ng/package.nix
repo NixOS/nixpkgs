@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Mighty JavaScript engine";
     license = lib.licenses.mit;
     mainProgram = "qjs";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -142,6 +142,7 @@ mapAliases ({
   cx_Freeze = cx-freeze; # added 2023-08-02
   cx_oracle = cx-oracle; # added 2024-01-03
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
+  dask-expr = throw "dask-expr was removed because its features are available in dask"; # added 2025-02-07
   dask-xgboost = throw "dask-xgboost was removed because its features are available in xgboost"; # added 2022-05-24
   dash-renderer = throw "dash-renderer has been removed since it is abandoned"; # added 2025-01-01
   dateutil = python-dateutil; # added 2021-07-03
@@ -328,9 +329,12 @@ mapAliases ({
   Kajiki = kajiki; # added 2023-02-19
   keepkey_agent = keepkey-agent; # added 2024-01-06
   Keras = keras; # added 2021-11-25
+  keras-applications = throw "keras-applications has been removed because it's abandoned since 2022"; # added 2025-01-12
+  keras-preprocessing = throw "keras-preprocessing has been removed because it's abandoned since 2024"; # added 2025-01-12
   keyring_24 = throw "keyring_24 has been removed, use keyring instead"; # added 2025-01-01
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  langchain-standard-tests = langchain-tests; # added 2025-01-22
   langchainplus-sdk = langsmith; # added 2023-08-01
   lazr_config = lazr-config; # added 2023-11-03
   lazr_delegates = lazr-delegates; # added 2023-11-03
@@ -349,6 +353,7 @@ mapAliases ({
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
   ludios_wpull = throw "ludios_wpull has been removed because it's unmaintained and broken"; # added 2023-11-12
+  luxor = throw "luxor has been removed because it is unmaintained and broken"; # added 2025-01-25
   lcov_cobertura = lcov-cobertura; # added 2024-01-07
   Mako = mako; # added 2023-02-19
   Markups = markups; # added 2022-02-14
@@ -433,6 +438,7 @@ mapAliases ({
   pdfx = throw "pdfx has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   pep257 = pydocstyle; # added 2022-04-12
   pillow-simd = throw "pillow-simd has been removed for lagging behind pillow upstream, which exposes it to various security issues."; # Added 2024-10-24
+  pipenv-poetry-migrate = throw "pipenv-poetry-migrate was promoted to a top-level attribute"; # added 2025-01-14
   pixelmatch = "pixelmatch has been removed as it was unmaintained"; # Added 2024-08-18
   pkutils = throw "pkutils was removed as it was unused and is not applicable to modern Python build tools"; # added 2024-07-28
   poetry = throw "poetry was promoted to a top-level attribute, use poetry-core to build Python packages"; # added 2023-01-09
@@ -462,6 +468,7 @@ mapAliases ({
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
+  pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
   py3to2 = throw "py3to2 is unmaintained and source is no longer available"; # added 2024-10-23
   py-radix = throw "py-radix has been removed, since it abandoned"; # added 2023-07-07
@@ -503,6 +510,7 @@ mapAliases ({
   pynose = throw "pynose was removed, because it violates the license of nose, by redistributing modified LGPL code under MIT.";
   python-ethtool = ethtool; # added 2024-07-23
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
+  pytrends = throw "pytrends has been removed, as it no longer works and is abandoned upstream"; # added 2025-02-02
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyqt5_sip = pyqt5-sip; # added 2024-01-07
   pyqt5_with_qtmultimedia = pyqt5-multimedia; # added 2024-01-07
@@ -652,6 +660,7 @@ mapAliases ({
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   smpp_pdu = smpp-pdu; # added 2024-03-05
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
+  sonarr = throw "sonarr has been deprecated and removed"; # added 2025-01-13
   solaredge = throw "solaredge was removed because Home Assistant switched to aiosolaredge"; # added 2024-07-15
   sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
   spacy_models = spacy-models; # added 2024-04-21
@@ -710,6 +719,7 @@ mapAliases ({
   twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-options = throw "twitter-common-options has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
+  types-enum34 = throw "types-enum34 is obselete since Python 3.4"; # added 2025-02-15
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05

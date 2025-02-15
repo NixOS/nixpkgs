@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 
 # build time
 , autoreconfHook
@@ -77,22 +76,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frr";
-  version = "10.1";
+  version = "10.2.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = finalAttrs.pname;
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-pmFdxL8QpyXvpX2YiSOZ+KIoNaj1OOH6/qnVAWZLE9s=";
+    hash = "sha256-TWqW6kI5dDl6IW2Ql6eeySDSyxp0fPgcJOOX1JxjAxs=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-44070.patch";
-      url = "https://github.com/FRRouting/frr/commit/fea4ed5043b4a523921f970a39a565d2c1ca381f.patch";
-      hash = "sha256-X9FjQeOvo92+mL1z3u5W0LBhhePDAyhFAqh8sAtNNm8=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

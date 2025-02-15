@@ -6,7 +6,7 @@
   libgit2,
   rust-jemalloc-sys,
   zlib,
-  git,
+  gitMinimal,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "biome";
@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-oK1tCPoTeUHvVdi+ym4J5xEj2NIi2zHQpNU1KUchQfY=";
   };
 
-  cargoHash = "sha256-4vITbsXfgNFoeWMHz7a9Rk7FrsEZRe75nHiyHSMujEQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lo4IAStdv1CW/cQYzRDLzDwsDqCwoo5xKen2Rti9kPU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags =

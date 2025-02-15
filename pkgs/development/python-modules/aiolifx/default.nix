@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M4if9eSRG7544OaVj3HXtvOWPm1mg8Nz5dh6nl0hx+4=";
+    hash = "sha256-4zLvrOHsQg8NhZlTSkAzNffN56H89JeYkKxwHNb3n+Y=";
   };
 
   build-system = [ setuptools ];

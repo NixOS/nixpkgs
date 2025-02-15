@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -47,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
       bash = "${bash}/bin/bash";

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qKdxnISussiyp1ylahS7qOdMfOGwJnlbWrgEHf/L2y0=";
   };
 
-  cargoHash = "sha256-IDFCzTAlC/ZYGwUSmmxyRmZy5belxvyfeWpTCPzJQ6o=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ppuc6Dx3Y4JJ8doEJPCbwnD1+dQSLRuPdWfab+3q2Ug=";
 
   meta = with lib; {
     description = "Count the number of lines of LLVM IR across all instantiations of a generic function";

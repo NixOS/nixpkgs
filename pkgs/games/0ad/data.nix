@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   inherit (zeroad-unwrapped) version;
 
   src = fetchurl {
-    url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-data.tar.xz";
-    sha256 = "sgDkhVj4goB5EOPGhlZ7ajliSNnUGAROz94JCwV3LX0=";
+    url = "http://releases.wildfiregames.com/0ad-${version}-unix-data.tar.xz";
+    hash = "sha256-PkiFWrjh74EnAzhGLIJwsBUhPxT14FSquSrXTV6lneo=";
   };
 
   installPhase = ''

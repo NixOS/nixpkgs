@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "nemosis";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UNSW-CEEM";
     repo = "NEMOSIS";
     tag = "v${version}";
-    hash = "sha256-7jIPBTvL7Y3945GEpa1/DQVdbPsSxVdYoOFTIaIgPag=";
+    hash = "sha256-vvDASzZvcDx36PnfbAvBi4mlIjBQJFVWv43V2LzGd9g=";
   };
 
   build-system = [ setuptools ];

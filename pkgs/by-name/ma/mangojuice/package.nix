@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
     tag = finalAttrs.version;
-    hash = "sha256-LSwn6PIAGX1FIofnmoM2eqnhZBa3gkhlOBUJtdR9gWE=";
+    hash = "sha256-nMLymCOkml5LIvZgvp1NNHyG06KVlmQBMU+N4A4/Xus=";
   };
 
   nativeBuildInputs = [
