@@ -10,20 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxing-cpp";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "zxing-cpp";
     repo = "zxing-cpp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-teFspdATn9M7Z1vSr/7PdJx/xAv+TVai8rIekxqpBZk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e3nSxjg8p+1DEUbZOh4C2zfnA6iGhNJMPiIe2oJEbRo=";
   };
-
-  # c++ 20 needed for char8_t or clang-19 build fails
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "CMAKE_CXX_STANDARD 17" "CMAKE_CXX_STANDARD 20"
-  '';
 
   nativeBuildInputs = [
     cmake
