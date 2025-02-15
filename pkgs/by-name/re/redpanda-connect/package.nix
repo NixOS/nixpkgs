@@ -19,12 +19,12 @@ buildGoModule rec {
   proxyVendor = true;
 
   subPackages = [
-    "cmd/redpanda-connect"
+    "cmd/redpanda-connect-community"
   ];
 
   vendorHash = "sha256-blBwp4XEuah+rCj0EuOyK4r/DXd5Hv5A7/Z2W5wPZdE=";
 
-  #  doCheck = false;
+  # doCheck = false;
 
   ldflags = [
     "-s"
@@ -34,12 +34,16 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+  postInstall = ''
+    ln -s $out/bin/redpanda-connect-community $out/bin/redpanda-connect
+  '';
+
   meta = {
     description = "Fancy stream processing made operationally mundane";
     mainProgram = "redpanda-connect";
     homepage = "https://www.redpanda.com/connect";
     changelog = "https://github.com/redpanda-data/connect/blob/v${version}/CHANGELOG.md";
-    license = lib.licenses.bsl11;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sagikazarmark ];
   };
 }
