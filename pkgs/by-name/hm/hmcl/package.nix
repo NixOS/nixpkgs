@@ -14,6 +14,7 @@
 , libglvnd
 , alsa-lib
 , wayland
+, vulkan-loader
 , libpulseaudio
 , gobject-introspection
 }:
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
           glib
           openal
           libglvnd
+          vulkan-loader
         ] ++ lib.optionals stdenv.hostPlatform.isLinux [
           xorg.libX11
           xorg.libXxf86vm
