@@ -19,13 +19,13 @@
 }:
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.7.1";
+  version = "7.8.3";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-u73LzCaGc3vdRs9sG9fdv1jrDubgZGkkxCnP55Bqdx8=";
+    hash = "sha256-m8N3yukv55OGFk2pmfz0irG+qxgf/jlfPGaWNAEMnlk=";
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
