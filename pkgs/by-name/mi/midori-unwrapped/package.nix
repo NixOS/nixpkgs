@@ -65,5 +65,7 @@ stdenv.mkDerivation rec {
       raskin
       ramkromberg
     ];
+    # https://github.com/NixOS/nixpkgs/issues/374354
+    broken = true;
   };
 }
