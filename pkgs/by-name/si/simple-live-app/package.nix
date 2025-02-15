@@ -2,21 +2,21 @@
   autoPatchelfHook,
   lib,
   fetchFromGitHub,
-  flutter324,
+  flutter327,
   mpv,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "simple-live-app";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
     tag = "v${version}";
-    hash = "sha256-0tEvPKYJnPDLvHv873JaRSuhkeXTTK4whnCuYpUK0yo=";
+    hash = "sha256-nnbGSqPyqoGNOjFx75soy+0liYv6pVwiLBGb7yV1AgI=";
   };
 
   sourceRoot = "${src.name}/simple_live_app";
