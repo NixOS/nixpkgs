@@ -55,6 +55,7 @@ let
     }
     // lib.optionalAttrs useQt6 {
       #### Core Apps
+      lomiri-weather-app = callPackage ./applications/lomiri-weather-app { };
       morph-browser = callPackage ./applications/morph-browser {
         # get_target_property() called with non-existent target "Qt6::qdoc".
         withDocumentation = !useQt6;
