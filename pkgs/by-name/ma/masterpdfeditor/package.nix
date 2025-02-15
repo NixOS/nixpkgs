@@ -11,12 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "masterpdfeditor";
-  version = "5.9.82";
+  version = "5.9.86";
 
-  src = fetchurl {
-    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
-    hash = "sha256-CbrhhQJ0iiXz8hUJEi+/xb2ZGbunuPuIIgmCRgJhNVU=";
-  };
+  src =
+    let
+      selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
+    in
+    fetchurl {
+      url = selectSystem {
+        x86_64-linux = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64-qt_include.tar.gz";
+        aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.arm64.tar.gz";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-QBwcsEz13+EdgkKJRdmdsb6f3dt3N6WR/EEACdWbYNo=";
+        aarch64-linux = "sha256-OTn5Z82fRMLQwVSLwoGAaj9c9SfEicyl8e1A1ICOUf0=";
+      };
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -60,7 +70,10 @@ stdenv.mkDerivation rec {
     homepage = "https://code-industry.net/free-pdf-editor/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [ cmcdragonkai ];
     mainProgram = "masterpdfeditor5";
   };
