@@ -20,6 +20,7 @@ let
     head
     id
     imap1
+    hasAttr
     isAttrs
     isBool
     isFunction
@@ -1300,15 +1301,69 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
+  /**
+
+    A modern version of `lib.modules.doRename` that is used using attrpath
+    declarations as defined in `lib.modules.associateWithAttrPath`.
+
+    # Inputs
+
+    `spec`
+
+    : An attrpath specification consumable by
+      `lib.attrsets.associateWithAttrPath`. It should contain either:
+      - "from" and "to" to perform a rename
+      - "original" and "alias" to create an alias
+      - "remove" to remove a module
+
+    `extra`
+
+    : An additional piece of data passed to the function depending on the function:
+
+      - rename: The release number of the first release where the rename should
+        be in effect
+      - alias: The date since which the alias exists
+      - remove: Instructions for the user on what to do about the removal
+
+    null can be passed if you do not wish to pass extra data.
+
+    Please see the documentation for `lib.mkRenamedOptionModuleWith`,
+    `lib.mkAliasOptionModule` and `lib.mkRemovedOptionModule` for more
+    information on the individual operations.
+
+  */
+  doRename2 = spec: extra:
+    let
+      attrPaths = lib.attrsets.associateWithAttrPath spec;
+      existsInSpec = op: hasAttr op attrPaths;
+      getPathForOp = op: attrPaths.${op};
+    in
+    if existsInSpec "to" || existsInSpec "from" then
+      assert (lib.assertMsg (existsInSpec "to" && existsInSpec "from") "You must provide doRename2 with `from` and `to` to perform a rename.");
+      if extra != null then
+        mkRenamedOptionModuleWith (getPathForOp "from") (getPathForOp "to") extra
+      else
+        mkRenamedOptionModule (getPathForOp "from") (getPathForOp "to")
+    else if existsInSpec "original" || existsInSpec "alias" then
+      assert (lib.assertMsg (existsInSpec "original" && existsInSpec "alias") "You must provide doRename2 with `original` and `from` to create an alias.");
+      mkAliasOptionModule (getPathForOp "original") (getPathForOp "alias")
+      # Psyche! `extra` isn't actually used for aliases. This makes the function
+      # implementation simpler and nudges callers to provide useful information
+      # at the call site.
+    else if existsInSpec "remove" then
+      mkRemovedOptionModule (getPathForOp "remove") (if extra != null then extra else "")
+    else
+      abort "doRename2 was called without a valid rename specification. (Check for typos!)";
+
   /*
     Return a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
    */
-  doRename = {
+  doRename = args@{
     # List of strings representing the attribute path of the old option.
-    from,
+    from ? null,
     # List of strings representing the attribute path of the new option.
-    to,
+    to ? null,
     # Boolean, whether the old option is to be included in documentation.
     visible,
     # Whether to warn when a value is defined for the old option.
@@ -1374,15 +1429,29 @@ let
   }:
     { config, options, ... }:
     let
-      fromOpt = getAttrFromPath from options;
-      toOf = attrByPath to
-        (abort "Renaming error: option `${showOption to}' does not exist.");
-      toType = let opt = attrByPath to {} options; in opt.type or (types.submodule {});
+      attrPaths = lib.attrsets.associateWithAttrPath spec;
+      existsInSpec = op: spec != { } && hasAttr op attrPaths;
+      getPathForOp =
+        op:
+        if existsInSpec op then
+          attrPaths.${op}
+        else if args.${op} != null then
+          args.${op}
+        else
+          abort "You must provide `doRename` with the `${op}` attribute path.";
+
+      pathTo = getPathForOp "to";
+      pathFrom = getPathForOp "from";
+
+      fromOpt = getAttrFromPath pathFrom options;
+      toOf = attrByPath pathTo
+        (abort "Renaming error: option `${showOption pathTo}' does not exist.");
+      toType = let opt = attrByPath pathTo {} options; in opt.type or (types.submodule {});
     in
     {
-      options = setAttrByPath from (mkOption {
+      options = setAttrByPath pathFrom (mkOption {
         inherit visible;
-        description = "Alias of {option}`${showOption to}`.";
+        description = "Alias of {option}`${showOption pathTo}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
@@ -1390,11 +1459,11 @@ let
       config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+            "The option `${showOption pathFrom}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption pathTo}'.";
         })
         (if withPriority
-          then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
-          else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+          then mkAliasAndWrapDefsWithPriority (setAttrByPath pathTo) fromOpt
+          else mkAliasAndWrapDefinitions (setAttrByPath pathTo) fromOpt)
       ]);
     };
 
