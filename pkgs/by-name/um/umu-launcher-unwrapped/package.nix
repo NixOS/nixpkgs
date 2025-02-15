@@ -7,6 +7,7 @@
   python3Packages,
   rustPlatform,
   scdoc,
+  writableTmpDirAsHomeHook,
   withTruststore ? true,
   withDeltaUpdates ? true,
 }:
@@ -25,6 +26,11 @@ python3Packages.buildPythonPackage rec {
     inherit src;
     hash = "sha256-nU4xZn9NPd7NgexiaNYLdo4BCbH98duZ07XYeUiceP0=";
   };
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    python3Packages.pytestCheckHook
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -64,6 +70,17 @@ python3Packages.buildPythonPackage rec {
     # Override RELEASEDIR to avoid running `git describe`
     "RELEASEDIR=${pname}-${version}"
     "SHELL_INTERPRETER=${lib.getExe bash}"
+  ];
+
+  disabledTests = [
+    # Broken? Asserts that $STEAM_RUNTIME_LIBRARY_PATH is non-empty
+    # Fails with AssertionError: '' is not true : Expected two elements in STEAM_RUNTIME_LIBRARY_PATHS
+    "test_game_drive_empty"
+    "test_game_drive_libpath_empty"
+
+    # Broken? Tests parse_args with no options (./umu_run.py)
+    # Fails with AssertionError: SystemExit not raised
+    "test_parse_args_noopts"
   ];
 
   meta = {
