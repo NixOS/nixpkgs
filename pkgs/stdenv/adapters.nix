@@ -164,6 +164,20 @@ rec {
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
   );
 
+  # Make compiler output object file in format that allows linker to
+  # only pick symbols it needs. By default, object file in static
+  # library is included fully if it provides at least one symbol
+  # required.
+  makeSplitObjects = stdenv: stdenv //
+    {
+      mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = (args.NIX_CFLAGS_COMPILE or "")
+          + " -ffunction-sections -fdata-sections ";
+         NIX_CFLAGS_LINK = (args.NIX_CFLAGS_LINK or "")
+           + " -Wl,--gc-sections ";
+      });
+    };
+
 
   /* Modify a stdenv so that all buildInputs are implicitly propagated to
      consuming derivations
