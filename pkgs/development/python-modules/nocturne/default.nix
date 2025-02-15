@@ -10,18 +10,18 @@
   pyvirtualdisplay,
   sfml,
   substituteAll,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nocturne";
-  version = "unstable-2022-10-15";
-  format = "setuptools";
+  version = "unstable-2024-06-19";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
-    rev = "ae0a4e361457caf6b7e397675cc86f46161405ed";
-    hash = "sha256-pFVbl4m7qX1mJgleNabRboS9klDDsbzUa4PYL5+Jupc=";
+    repo = "nocturne";
+    rev = "6d1e0f329f7acbed01c934842b269333540af6d2";
+    hash = "sha256-Ufhvc+IZUrn8i6Fmu6o81LPjY1Jo0vzsso+eLbI1F2s=";
   };
 
   # Simulate the git submodules but with nixpkgs dependencies
@@ -38,13 +38,16 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [ cmake ];
+
   dontUseCmakeConfigure = true;
 
   buildInputs = [ sfml ];
 
   # hydra-core and pyvirtualdisplay are not declared as dependences but they are requirements
-  propagatedBuildInputs = [
+  dependencies = [
     hydra-core
     pyvirtualdisplay
   ];
@@ -54,10 +57,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nocturne" ];
 
-  meta = with lib; {
+  meta = {
     description = "Data-driven, fast driving simulator for multi-agent coordination under partial observability";
     homepage = "https://github.com/facebookresearch/nocturne";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }
