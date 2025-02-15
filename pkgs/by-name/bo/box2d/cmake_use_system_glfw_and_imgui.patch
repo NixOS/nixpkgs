@@ -1,0 +1,44 @@
+diff --git a/samples/CMakeLists.txt b/samples/CMakeLists.txt
+index dd136f7..96c5db7 100644
+--- a/samples/CMakeLists.txt
++++ b/samples/CMakeLists.txt
+@@ -17,37 +17,11 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW Examples")
+ set(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW Tests")
+ set(GLFW_INSTALL OFF CACHE BOOL "GLFW Install")
+ 
+-FetchContent_Declare(
+-	glfw
+-	GIT_REPOSITORY https://github.com/glfw/glfw.git
+-	GIT_TAG master
+-	GIT_SHALLOW TRUE
+-	GIT_PROGRESS TRUE
+-)
+-FetchContent_MakeAvailable(glfw)
++find_package(glfw)
+ 
+ # imgui and glfw backend for GUI
+ # https://gist.github.com/jeffamstutz/992723dfabac4e3ffff265eb71a24cd9
+-FetchContent_Populate(imgui
+-  URL https://github.com/ocornut/imgui/archive/docking.zip
+-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/build/imgui
+-)
+-
+-set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/build/imgui)
+-
+-add_library(imgui STATIC
+-	${IMGUI_DIR}/imgui.cpp
+-	${IMGUI_DIR}/imgui_draw.cpp
+-	${IMGUI_DIR}/imgui_demo.cpp
+-	${IMGUI_DIR}/imgui_tables.cpp
+-	${IMGUI_DIR}/imgui_widgets.cpp
+-
+-	${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+-	${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+-)
+-target_link_libraries(imgui PUBLIC glfw glad)
+-target_include_directories(imgui PUBLIC ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+-target_compile_definitions(imgui PUBLIC IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
++find_package(imgui)
+ 
+ # jsmn for json
+ set(JSMN_DIR ${CMAKE_SOURCE_DIR}/extern/jsmn)
