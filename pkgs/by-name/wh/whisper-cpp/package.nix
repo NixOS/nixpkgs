@@ -43,8 +43,6 @@ let
     cmakeFeature
     optional
     optionals
-    optionalString
-    forEach
     ;
 
   darwinBuildInputs = [ apple-sdk_11 ];
