@@ -177,6 +177,19 @@ self: super: ({
       configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
     '' + (drv.preConfigure or "");
   }) super.OpenGLRaw;
+
+  posix-socket = overrideCabal (drv: {
+    # By default, the wrong uio.h is picked up which doesn't expose the UIO_MAXIOV constant.
+    # This links the correct internal file that contains this constant
+    # The upstream version contains code that doesn't compile but is hidden behind compiler
+    # directives that are always set on Linux but not on darwin. Removing the lines containing
+    # the invalid code actually makes it compile and work
+    postPatch = ''
+      substituteInPlace src/System/Posix/Socket.hsc --replace-fail '#include <sys/uio.h>' '#include "${pkgs.apple-sdk}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/Kernel.framework/Headers/sys/uio.h"'
+      sed -i 's|.*onException.*||g' src/System/Posix/Socket.hsc
+    '';
+  }) super.posix-socket;
+
   GLURaw = overrideCabal (drv: {
     librarySystemDepends = [];
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [
