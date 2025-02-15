@@ -282,6 +282,27 @@ in
         '';
       };
 
+      privilegedAdministrators = mkOption {
+        default = null;
+        type = types.nullOr (types.listOf types.str);
+        description = ''
+          List of AFS principals that are allowed to carry out privileged
+          administrative operations. If set to null, AFS servers will use the
+          contents of any pre-existing {file}`/etc/openafs/server/UserList`
+          file, instead (see {manpage}`UserList(5)`).
+
+          ::: {.warning}
+          Changing the value of this attribute to anything other than null
+          deletes any pre-existing content from
+          {file}`/etc/openafs/server/UserList` on server startup. Further
+          changes to the list of privileged administrators via the {command}`bos
+          adduser` and {command}`bos removeuser` commands will also be discarded
+          at the next startup.
+          :::
+        '';
+        example = [ "root.admin" ];
+      };
+
     };
 
   };
@@ -330,18 +351,33 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
-        unitConfig.ConditionPathExists = [
-          "|/etc/openafs/server/KeyFileExt"
-        ];
-        preStart = ''
-          mkdir -m 0755 -p /var/openafs
-          ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-          ${optionalString useBuCellServDB "cp ${buCellServDB}"}
-        '';
-        serviceConfig = {
-          ExecStart = "${openafsBin}/bin/bosserver -nofork";
-          ExecStop = "${openafsBin}/bin/bos shutdown localhost -wait -localauth";
-        };
+        unitConfig.ConditionPathExists = [ "|/etc/openafs/server/KeyFileExt" ];
+        preStart =
+          ''
+            mkdir -m 0755 -p /var/openafs
+            ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
+            ${optionalString useBuCellServDB "cp ${buCellServDB}"}
+          ''
+          + lib.optionalString (cfg.privilegedAdministrators != null) ''
+            rm -f /etc/openafs/server/UserList
+          '';
+        serviceConfig =
+          let
+            bosAddr =
+              if (cfg.advertisedAddresses != [ ]) then builtins.head cfg.advertisedAddresses else "localhost";
+          in
+          {
+            ExecStart = "${openafsBin}/bin/bosserver -nofork";
+            ExecStartPost = mkIf (cfg.privilegedAdministrators != null) (
+              pkgs.writeShellScript "openafs-admin-init" ''
+                for admin in ${lib.escapeShellArgs cfg.privilegedAdministrators}
+                do
+                  ${openafsBin}/bin/bos adduser ${bosAddr} "$admin" -localauth
+                done
+              ''
+            );
+            ExecStop = "${openafsBin}/bin/bos shutdown ${bosAddr} -wait -localauth";
+          };
       };
     };
   };
