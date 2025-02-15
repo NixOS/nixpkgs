@@ -1,30 +1,31 @@
-{ lib
-, jdk
-, maven
-, fetchFromGitHub
-, fetchpatch
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  jdk,
+  maven,
+  fetchFromGitHub,
+  fetchpatch,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  wrapGAppsHook3,
+  gtk3,
 }:
 
 let
   jdk' = jdk.override { enableJavaFX = true; };
 in
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "quark-goldleaf";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "XorTroll";
     repo = "Goldleaf";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gagIQGOiygJ0Onm0SrkbFWaovqWX2WJNx7LpSRheCLM=";
   };
 
-  sourceRoot = "${src.name}/Quark";
+  sourceRoot = "${finalAttrs.src.name}/Quark";
 
   patches = [
     ./fix-maven-plugin-versions.patch
@@ -81,19 +82,26 @@ maven.buildMavenPackage rec {
       exec = "quark-goldleaf";
       icon = "quark-goldleaf";
       desktopName = "Quark";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       terminal = false;
-      categories = [ "Utility" "FileTransfer" ];
-      keywords = [ "nintendo" "switch" "goldleaf" ];
+      categories = [
+        "Utility"
+        "FileTransfer"
+      ];
+      keywords = [
+        "nintendo"
+        "switch"
+        "goldleaf"
+      ];
     })
   ];
 
   meta = {
-    changelog = "https://github.com/XorTroll/Goldleaf/releases/tag/${src.rev}";
+    changelog = "https://github.com/XorTroll/Goldleaf/releases/tag/${finalAttrs.version}";
     description = "A GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
     homepage = "https://github.com/XorTroll/Goldleaf#quark-and-remote-browsing";
     longDescription = ''
-      ${meta.description}
+      ${finalAttrs.meta.description}
 
       For the program to work properly, you will have to install Nintendo Switch udev rules.
 
@@ -110,5 +118,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
-
+})
