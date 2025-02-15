@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "2.6.2";
+  version = "2.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mib1185";
     repo = "py-synologydsm-api";
     tag = "v${version}";
-    hash = "sha256-mkwHw10IzVWtuLGbpY/v7yCJgI6TBIJEo1XSB/NlZKs=";
+    hash = "sha256-BkkI2dhzf58vBoT6UhBsn6MyS7KvYo70C80ZLGOJG08=";
   };
 
   build-system = [ setuptools ];

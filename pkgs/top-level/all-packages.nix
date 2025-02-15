@@ -2529,7 +2529,7 @@ with pkgs;
   patool = with python3Packages; toPythonApplication patool;
 
   pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_32;
+    electron = electron_33;
   };
 
   pueue = darwin.apple_sdk_11_0.callPackage ../applications/misc/pueue {
@@ -4781,7 +4781,7 @@ with pkgs;
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
-  rtabmap = libsForQt5.callPackage ../applications/video/rtabmap/default.nix {
+  rtabmap = callPackage ../by-name/rt/rtabmap/package.nix {
     pcl = pcl.override { vtk = vtkWithQt5; };
   };
 
@@ -4927,7 +4927,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rustdesk-server = callPackage ../servers/rustdesk-server {
+  rustdesk-server = callPackage ../by-name/ru/rustdesk-server/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -10212,10 +10212,6 @@ with pkgs;
     buildPythonPackage buildPythonApplication setuptools pycsdr pydigiham;
   };
 
-  pcl = libsForQt5.callPackage ../development/libraries/pcl {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa AGL OpenGL;
-  };
-
   pcre = callPackage ../development/libraries/pcre { };
   pcre16 = res.pcre.override { variant = "pcre16"; };
   # pcre32 seems unused
@@ -10276,7 +10272,7 @@ with pkgs;
 
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
-    buildPythonApplication click future six;
+    buildPythonApplication click;
   };
 
   prospector = callPackage ../development/tools/prospector { };
@@ -18285,10 +18281,6 @@ with pkgs;
     wlroots = wlroots_0_17;
   };
 
-  ldid = callPackage ../development/tools/ldid {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
-
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
   };
@@ -18302,8 +18294,6 @@ with pkgs;
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
-
-  widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 
