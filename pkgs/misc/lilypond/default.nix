@@ -83,33 +83,36 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     bison
+    dblatex
     flex
+    fontforge
+    ghostscript
+    imagemagick
     makeWrapper
     pkg-config
+    python3
+    t1utils
+    tex
+    texi2html
+    texinfo
+    perl
+    rsync
   ];
 
   buildInputs = [
-    ghostscript
-    texinfo
-    imagemagick
-    texi2html
+    flex # FlexLexer.h
     guile
     dblatex
     tex
     zip
     netpbm
-    python3
     gettext
-    perl
     fontconfig
     freetype
     pango
-    fontforge
     help2man
     groff
-    t1utils
     boehmgc
-    rsync
   ];
 
   autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";
