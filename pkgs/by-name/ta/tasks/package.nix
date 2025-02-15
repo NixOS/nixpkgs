@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "edfloreshz";
+    owner = "cosmic-utils";
     repo = "tasks";
     tag = version;
     hash = "sha256-0bXzeKnJ5MIl7vCo+7kyXm3L6QrCdm5sPreca1SPi8U=";
@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Simple task management application for the COSMIC desktop";
-    homepage = "https://github.com/edfloreshz/tasks";
+    homepage = "https://github.com/cosmic-utils/tasks";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
