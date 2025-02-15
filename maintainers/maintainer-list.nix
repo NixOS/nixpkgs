@@ -4929,6 +4929,11 @@
     githubId = 6297001;
     name = "Jona Stubbe";
   };
+  csf3o = {
+    github = "csf3o";
+    githubId = 188068389;
+    name = "csf3o";
+  };
   csingley = {
     email = "csingley@gmail.com";
     github = "csingley";
