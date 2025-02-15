@@ -75,7 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
       free
     ]; # source + bundles libs + art
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    badPlatforms = [
+      { isDarwin = true; }
+    ];
     maintainers = with maintainers; [ iblech ];
     homepage = "https://www.nongnu.org/enigma/";
   };
