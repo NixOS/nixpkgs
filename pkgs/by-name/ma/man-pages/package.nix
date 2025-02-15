@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   directoryListingUpdater,
+  man,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,8 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-3aou2i6NKG++wiHRFfEtP/9dNsxQZs3+zI0koljVixk=";
   };
 
+  nativeInstallCheckInputs = [ man ];
+
   dontBuild = true;
   enableParallelInstalling = true;
+  doInstallCheck = true;
 
   makeFlags = [
     "-R"
@@ -31,6 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
     # of all source files. Cf.
     # nixpkgs/pkgs/build-support/setup-hooks/set-source-date-epoch-to-latest.sh
     export DISTDATE="$(date --utc --date="@$SOURCE_DATE_EPOCH")"
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Check for a few well‐known man pages
+    for page in ldd write printf null hosts random ld.so; do
+      man -M "$out/share/man" -P cat "$page" >/dev/null
+    done
+
+    runHook postInstallCheck
   '';
 
   passthru.updateScript = directoryListingUpdater {
