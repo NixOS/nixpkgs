@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "stress";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-1r0n/KE4RpO0txIViGxuc7G+I4Ds9AJYcuMx2/R97jg=";
   };
 
