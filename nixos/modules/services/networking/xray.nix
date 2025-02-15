@@ -19,13 +19,14 @@ with lib;
       package = mkPackageOption pkgs "xray" { };
 
       settingsFile = mkOption {
-        type = types.nullOr types.path;
+        type = with types; nullOr (either path (strMatching "^\\$\\{CREDENTIALS_DIRECTORY}/.+"));
         default = null;
         example = "/etc/xray/config.json";
         description = ''
-          The absolute path to the configuration file.
+          The absolute path to the configuration file or path via $\{CREDENTIALS_DIRECTORY}.
 
           Either `settingsFile` or `settings` must be specified.
+          To use $\{CREDENTIALS_DIRECTORY} you must set loadCredential option.
 
           See <https://www.v2fly.org/en_US/config/overview.html>.
         '';
@@ -50,6 +51,17 @@ with lib;
           Either `settingsFile` or `settings` must be specified.
 
           See <https://www.v2fly.org/en_US/config/overview.html>.
+        '';
+      };
+
+      loadCredential = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = ''
+          config.json:/etc/secrets/xray.json
+        '';
+        description = ''
+          Value to pass to xray service in LoadCredential
         '';
       };
     };
@@ -89,6 +101,7 @@ with lib;
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         NoNewPrivileges = true;
+        LoadCredential = mkIf (cfg.loadCredential != null) cfg.loadCredential;
       };
     };
   };
