@@ -62,12 +62,6 @@
   ...
 }@args:
 
-assert
-  cargoVendorDir == null && cargoDeps == null && cargoLock == null
-  ->
-    !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
-  -> throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set";
-
 let
 
   cargoDeps' =
@@ -77,6 +71,8 @@ let
       cargoDeps
     else if cargoLock != null then
       importCargoLock cargoLock
+    else if (args.cargoHash or null == null) && (args.cargoSha256 or null == null) then
+      throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
     else if useFetchCargoVendor then
       fetchCargoVendor (
         {
