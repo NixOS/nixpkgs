@@ -7,12 +7,13 @@
   buildGoModule,
   makeDesktopItem,
   copyDesktopItems,
-  wrapGAppsHook3,
   autoPatchelfHook,
 }:
+
 let
   pname = "flclash";
   version = "0.8.70";
+
   src =
     (fetchFromGitHub {
       owner = "chen08209";
@@ -26,10 +27,19 @@ let
         GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
         GIT_CONFIG_VALUE_0 = "git@github.com:";
       });
-  libclash = buildGoModule {
-    inherit pname version src;
 
-    modRoot = "./core";
+  metaCommon = {
+    description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
+    homepage = "https://github.com/chen08209/FlClash";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ];
+  };
+
+  libclash = buildGoModule {
+    inherit version src;
+    pname = "libclash";
+
+    modRoot = "core";
 
     vendorHash = "sha256-yam3DgY/dfwIRc7OvFltwX29x6xGlrrsK4Oj6oaGYRw=";
 
@@ -44,12 +54,7 @@ let
       runHook postBuild
     '';
 
-    meta = {
-      description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
-      homepage = "https://github.com/chen08209/FlClash";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ ];
-    };
+    meta = metaCommon;
   };
 in
 flutter324.buildFlutterApplication {
@@ -59,7 +64,6 @@ flutter324.buildFlutterApplication {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook3
     autoPatchelfHook
   ];
 
@@ -88,22 +92,21 @@ flutter324.buildFlutterApplication {
   ];
 
   preBuild = ''
-    mkdir -p ./libclash/linux/
-    cp ${libclash}/bin/FlClashCore ./libclash/linux/FlClashCore
+    mkdir -p libclash/linux
+    cp ${libclash}/bin/FlClashCore libclash/linux/FlClashCore
   '';
 
   postInstall = ''
-    install -Dm644 ./assets/images/icon.png $out/share/pixmaps/flclash.png
+    install -Dm644 assets/images/icon.png $out/share/pixmaps/flclash.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    inherit libclash;
+    updateScript = ./update.sh;
+  };
 
-  meta = {
-    description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
-    homepage = "https://github.com/chen08209/FlClash";
+  meta = metaCommon // {
     mainProgram = "FlClash";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }
