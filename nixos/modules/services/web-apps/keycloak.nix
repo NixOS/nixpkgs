@@ -512,7 +512,7 @@ in
           message = ''
             The option `services.keycloak.settings.hostname-url' has been removed.
             Set `services.keycloak.settings.hostname' instead.
-            See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            See [New Hostname options](https://www.keycloak.org/docs/latest/upgrading/#new-hostname-options) for details.
           '';
         }
         {
@@ -520,7 +520,7 @@ in
           message = ''
             The option `services.keycloak.settings.hostname-strict-backchannel' has been removed.
             Set `services.keycloak.settings.hostname-backchannel-dynamic' instead.
-            See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            See [New Hostname options](https://www.keycloak.org/docs/latest/upgrading/#new-hostname-options) for details.
           '';
         }
         {
