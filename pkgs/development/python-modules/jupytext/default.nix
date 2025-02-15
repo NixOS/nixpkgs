@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.16.6";
+  version = "1.16.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${version}";
-    hash = "sha256-MkFTIHXpe0rYBJsaXwFqDEao+wSL2tG4JtPx1CjHGoY=";
+    hash = "sha256-XGuXR58Coroeff+KGtCzyctuuGwtd6FVjfefs3oGywM=";
   };
 
   build-system = [
