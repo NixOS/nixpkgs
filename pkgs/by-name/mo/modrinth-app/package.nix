@@ -5,6 +5,8 @@
   alsa-lib,
   flite,
   glib-networking,
+  gsettings-desktop-schemas,
+  gtk3,
   jdk17,
   jdk21,
   jdk8,
@@ -22,8 +24,6 @@
   udev,
   wrapGAppsHook4,
   xorg,
-  gsettings-desktop-schemas,
-  gtk3,
 }:
 
 symlinkJoin {
