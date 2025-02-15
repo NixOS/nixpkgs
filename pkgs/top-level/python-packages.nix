@@ -4672,6 +4672,8 @@ self: super: with self; {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fitter = callPackage ../development/python-modules/fitter { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
