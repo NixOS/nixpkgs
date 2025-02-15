@@ -1,58 +1,35 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "boundary";
-  version = "0.18.0";
+  version = "0.18.1";
 
-  src =
-    let
-      inherit (stdenv.hostPlatform) system;
-      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
-      suffix = selectSystem {
-        x86_64-linux = "linux_amd64";
-        aarch64-linux = "linux_arm64";
-        x86_64-darwin = "darwin_amd64";
-        aarch64-darwin = "darwin_arm64";
-      };
-      hash = selectSystem {
-        x86_64-linux = "sha256-Wp1gPFQkOv+ZCEy0D2Tw9l6aCZekdpkXYcTZNheJHEg=";
-        aarch64-linux = "sha256-jBYu4m3L+j/coJ4D9cPA8mSBYiLiUyVKp98x6mdrrrk=";
-        x86_64-darwin = "sha256-OuiF1pgutt69ghlkLkEwkWMIFjvAsY7YUZERHNiToMs=";
-        aarch64-darwin = "sha256-sYKA02euri/K8FM8GoY7Y/WWLE2nBSoiNoxSdUPunWA=";
-      };
-    in
-    fetchzip {
-      url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
-      inherit hash;
-      stripRoot = false;
-    };
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "boundary";
+    rev = "v${version}";
+    hash = "sha256-BSGMF6Gea6KzzQi2xW/67ZkqMKfp44y5UZrF65eDePw=";
+  };
 
-  dontConfigure = true;
-  dontBuild = true;
+  vendorHash = "sha256-+o33bXrgth2gFn0a9pQWjmDTfHAHk8mZVsgo+ahHkUw=";
 
-  installPhase = ''
-    runHook preInstall
-    install -D boundary $out/bin/boundary
-    runHook postInstall
-  '';
+  subPackages = [ "cmd/boundary" ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/boundary --help
-    $out/bin/boundary version
-    runHook postInstallCheck
-  '';
+  tags = [ "boundary" ];
 
-  dontPatchELF = true;
-  dontPatchShebangs = true;
-  dontStrip = true;
-
-  passthru.updateScript = ./update.sh;
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/hashicorp/boundary/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/boundary/version.Version=${version}"
+    "-X github.com/hashicorp/boundary/version.VersionPrerelease="
+    "-X github.com/hashicorp/boundary/version.BuildDate=1970-01-01T00:00:00Z"
+  ];
 
   meta = with lib; {
     homepage = "https://boundaryproject.io/";
@@ -67,7 +44,6 @@ stdenv.mkDerivation rec {
       and resilient. It can run in clouds, on-prem, secure enclaves and more,
       and does not require an agent to be installed on every end host.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
     maintainers = with maintainers; [
       jk
