@@ -593,7 +593,7 @@ rec {
               (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
               elemType
               [{ inherit (def) file; value = def'; }]
-            ).optionalValue
+            )._optionalValueWithContext "listOf"
           ) def.value
         ) defs)));
       emptyValue = { value = []; };
