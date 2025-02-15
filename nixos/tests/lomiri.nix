@@ -448,9 +448,6 @@ in
               machine.send_key("ctrl-alt-t")
               wait_for_text(r"(${user}|machine)")
               machine.screenshot("terminal_opens")
-
-              # lomiri-terminal-app has a separate VM test to test its basic functionality
-
               machine.send_key("alt-f4")
 
           # We want the ability to launch applications
@@ -600,8 +597,6 @@ in
               machine.send_key("ctrl-alt-t")
               wait_for_text(r"(${user}|machine)")
               machine.screenshot("terminal_opens")
-
-              # lomiri-terminal-app has a separate VM test to test its basic functionality
 
               # for the LSS lomiri-content-hub test to work reliably, we need to kick off peer collecting
               machine.send_chars("lomiri-content-hub-test-importer\n")

@@ -26,11 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-zrcJSm7Ml+cv6nPH26NnFMXFtXe2Rw5FINyok3BtYkc=";
   };
 
-  # Patch out gui cli because it is not supported in this packaging and
-  # nixify path to the trafilatura binary in the test suite
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"trafilatura_gui=trafilatura.gui:main",' ""
+    # nixify path to the trafilatura binary in the test suite
     substituteInPlace tests/cli_tests.py \
       --replace-fail 'trafilatura_bin = "trafilatura"' \
                      'trafilatura_bin = "${placeholder "out"}/bin/trafilatura"'
@@ -57,6 +54,7 @@ buildPythonPackage rec {
     "test_download"
     "test_feeds_helpers"
     "test_fetch"
+    "test_input_type"
     "test_is_live_page"
     "test_meta_redirections"
     "test_probing"

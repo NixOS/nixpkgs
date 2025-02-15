@@ -6,6 +6,7 @@
   undmg,
   fetchurl,
   makeDesktopItem,
+  makeWrapper,
   copyDesktopItems,
   libarchive,
   imagemagick,
@@ -67,7 +68,7 @@ let
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   name = "ut1999";
   inherit version;
   sourceRoot = ".";
@@ -91,23 +92,32 @@ stdenv.mkDerivation {
       autoPatchelfHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeWrapper
       undmg
     ];
 
   installPhase =
     let
       outPrefix =
-        if stdenv.hostPlatform.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/UnrealTournament.app/Contents/MacOS"
+        else
+          "$out";
     in
     ''
       runHook preInstall
-      mkdir -p $out
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/bin
     ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      cp -r ./* $out
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      mkdir -p $out/Applications/
+      cp -r "UnrealTournament.app" $out/Applications/
+      makeWrapper $out/Applications/UnrealTournament.app/Contents/MacOS/UnrealTournament \
+        $out/bin/${finalAttrs.meta.mainProgram}
+    ''
     + ''
-      cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
       chmod -R 755 $out
       cd ${outPrefix}
       # NOTE: OldUnreal patch doesn't include these folders on linux but could in the future
@@ -181,4 +191,4 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };
-}
+})

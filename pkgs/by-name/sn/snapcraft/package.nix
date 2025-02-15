@@ -13,7 +13,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.5.1";
+  version = "8.6.1";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     tag = version;
-    hash = "sha256-7kIVWbVj5qse3JIdlCvRtVUfSa/rSjn4e8HJdVY3sOA=";
+    hash = "sha256-SbxsgvDptkUl8gHAIrJvnzIPOh0/R81n8cgJWBH7BXQ=";
   };
 
   patches = [
@@ -29,11 +29,6 @@ python3Packages.buildPythonApplication rec {
     # path for LXD must be adjusted so that it's at the correct location for LXD
     # on NixOS. This patch will likely never be accepted upstream.
     ./lxd-socket-path.patch
-    # In certain places, Snapcraft expects an /etc/os-release file to determine
-    # host info which doesn't exist in our test environment. This is a
-    # relatively naive patch which helps the test suite pass - without it *many*
-    # of the tests fail. This patch will likely never be accepted upstream.
-    ./os-platform.patch
     # Snapcraft will try to inject itself as a snap *from the host system* into
     # the build system. This patch short-circuits that logic and ensures that
     # Snapcraft is installed on the build system from the snap store - because
@@ -118,6 +113,7 @@ python3Packages.buildPythonApplication rec {
   build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
+    "craft-parts"
     "docutils"
     "jsonschema"
     "pygit2"

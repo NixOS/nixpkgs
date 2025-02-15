@@ -501,10 +501,16 @@ let
                 })
               ]
           ++
-            lib.optional (lib.versions.major metadata.release_version == "20")
-              # Fix OrcJIT
-              # PR: https://github.com/llvm/llvm-project/pull/125431
-              (metadata.getVersionFile "llvm/orcjit.patch");
+            lib.optional (lib.versionAtLeast metadata.release_version "20")
+              # Fix OrcJIT tests with page sizes > 16k
+              # PR: https://github.com/llvm/llvm-project/pull/127115
+              (
+                fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/415607e10b56d0e6c4661ff1ec5b9b46bf433cba.patch";
+                  stripLen = 1;
+                  hash = "sha256-vBbuduJB+NnNE9qtR93k64XKrwvc7w3vowjL/aT+iEA=";
+                }
+              );
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -1086,12 +1092,7 @@ let
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
           hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
           relative = "compiler-rt";
-        })
-        # Fixes baremetal
-        # PR: https://github.com/llvm/llvm-project/pull/125922
-        ++ lib.optional (lib.versionAtLeast metadata.release_version "20") (
-          metadata.getVersionFile "compiler-rt/libc-free.patch"
-        );
+        });
     in
     (
       {
@@ -1226,10 +1227,16 @@ let
       // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
         libc-overlay = callPackage ./libc {
           isFullBuild = false;
+          # Use clang due to "gnu::naked" not working on aarch64.
+          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+          stdenv = overrideCC stdenv buildLlvmTools.clang;
         };
 
         libc-full = callPackage ./libc {
           isFullBuild = true;
+          # Use clang due to "gnu::naked" not working on aarch64.
+          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+          stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;

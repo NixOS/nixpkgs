@@ -1,7 +1,9 @@
 { config, lib, pkgs, ... }:
 let
 
-  inherit (config.security) wrapperDir wrappers;
+  inherit (config.security) wrapperDir;
+
+  wrappers = lib.filterAttrs (name: value: value.enable) config.security.wrappers;
 
   parentWrapperDir = dirOf wrapperDir;
 
@@ -41,6 +43,11 @@ let
      // { description = "file mode string"; };
 
   wrapperType = lib.types.submodule ({ name, config, ... }: {
+    options.enable = lib.mkOption
+      { type = lib.types.bool;
+        default = true;
+        description = "Whether to enable the wrapper.";
+      };
     options.source = lib.mkOption
       { type = lib.types.path;
         description = "The absolute path to the program to be wrapped.";
@@ -203,9 +210,8 @@ in
       description = ''
         This option effectively allows adding setuid/setgid bits, capabilities,
         changing file ownership and permissions of a program without directly
-        modifying it. This works by creating a wrapper program under the
-        {option}`security.wrapperDir` directory, which is then added to
-        the shell `PATH`.
+        modifying it. This works by creating a wrapper program in a directory
+        (not configurable), which is then added to the shell `PATH`.
       '';
     };
 

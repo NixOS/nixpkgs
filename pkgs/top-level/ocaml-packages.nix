@@ -38,6 +38,8 @@ let
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
+    arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
+
     arp = callPackage ../development/ocaml-modules/arp { };
 
     asai = callPackage ../development/ocaml-modules/asai { };
@@ -360,6 +362,8 @@ let
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolmen_loop =  callPackage ../development/ocaml-modules/dolmen/loop.nix { };
+
+    dolmen_lsp =  callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
 
     dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
@@ -708,6 +712,10 @@ let
     httpun = callPackage ../development/ocaml-modules/httpun { };
 
     httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
+
+    httpun-lwt = callPackage ../development/ocaml-modules/httpun/lwt.nix { };
+
+    httpun-lwt-unix = callPackage ../development/ocaml-modules/httpun/lwt-unix.nix { };
 
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
 
@@ -1243,6 +1251,10 @@ let
     multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
 
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
+
+    multipart_form =  callPackage ../development/ocaml-modules/multipart_form { };
+
+    multipart_form-lwt =  callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 

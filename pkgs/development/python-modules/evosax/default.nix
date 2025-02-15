@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -17,20 +16,19 @@
   numpy,
   pyyaml,
 
-  # checks
+  # tests
   # brax, (unpackaged)
   # gymnax, (unpackaged)
   pytestCheckHook,
   torch,
   torchvision,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "evosax";
   version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RobertTLange";
@@ -54,16 +52,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evosax" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     # brax
     # gymnax
     pytestCheckHook
     torch
     torchvision
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -77,7 +72,7 @@ buildPythonPackage rec {
   meta = {
     description = "Evolution Strategies in JAX";
     homepage = "https://github.com/RobertTLange/evosax";
-    changelog = "https://github.com/RobertTLange/evosax/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/RobertTLange/evosax/releases/tag/v.${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

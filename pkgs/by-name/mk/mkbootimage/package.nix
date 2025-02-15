@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 mkbootimage -t $out/bin
+    install -Dm755 exbootimage -t $out/bin
 
     runHook postInstall
   '';

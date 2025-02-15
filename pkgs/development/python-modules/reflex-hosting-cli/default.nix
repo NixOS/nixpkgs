@@ -9,6 +9,7 @@
   platformdirs,
   pydantic,
   python-dateutil,
+  pyyaml,
   rich,
   tabulate,
   typer,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "reflex-hosting-cli";
-  version = "0.1.32";
+  version = "0.1.35";
   pyproject = true;
 
   # source is not published https://github.com/reflex-dev/reflex/issues/3762
   src = fetchPypi {
     pname = "reflex_hosting_cli";
     inherit version;
-    hash = "sha256-C45LSzDZJhv21yAmXxxCiyhAu2MIluYKGi+qCVkB7Vk=";
+    hash = "sha256-ml0Cl4uQAEVGShpVgfOtxiYNqqCeis+V/QUCTNqSauc=";
   };
 
   pythonRelaxDeps = [ "pipdeptree" ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     platformdirs
     pydantic
     python-dateutil
+    pyyaml
     rich
     tabulate
     typer

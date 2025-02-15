@@ -24,7 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   version = "6.13";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v6/squid-${finalAttrs.version}.tar.xz";
+    url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }/squid-${finalAttrs.version}.tar.xz";
     hash = "sha256-Iy4FZ5RszAEVZTw8GPAeg/LZzEnEPZ3q2LMZrws1rVI=";
   };
 

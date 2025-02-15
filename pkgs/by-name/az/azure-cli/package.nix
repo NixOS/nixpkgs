@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.68.0";
+  version = "2.69.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-WJkuLZUWNzbjAmOPilOK6jnjmax/3ct+ZVWQB3ho/BI=";
+    hash = "sha256-bn6x01fVfn/jNWAN3q2oI3CHt5h575lV9YZp0pgBUxg=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -175,7 +175,6 @@ py.pkgs.toPythonApplication (
         azure-mgmt-iothub
         azure-mgmt-iothubprovisioningservices
         azure-mgmt-keyvault
-        azure-mgmt-kusto
         azure-mgmt-loganalytics
         azure-mgmt-managedservices
         azure-mgmt-managementgroups
@@ -329,7 +328,6 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.iothub"
       "azure.mgmt.iothubprovisioningservices"
       "azure.mgmt.keyvault"
-      "azure.mgmt.kusto"
       "azure.mgmt.loganalytics"
       "azure.mgmt.managedservices"
       "azure.mgmt.managementgroups"

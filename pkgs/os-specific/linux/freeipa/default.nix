@@ -64,6 +64,7 @@ let
     jinja2
     augeas
     samba
+    ifaddr
   ];
 in
 stdenv.mkDerivation rec {

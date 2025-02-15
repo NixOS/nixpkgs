@@ -16,7 +16,7 @@
   # optional-dependencies
   pyarrow,
 
-  # checks
+  # tests
   dask-histogram,
   distributed,
   hist,
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.12.2";
+  version = "2025.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     tag = version;
-    hash = "sha256-pL1LDW/q78V/c3Bha38k40018MFO+i8X6htYNdcsy7s=";
+    hash = "sha256-hhAY2cPUOYnP86FGsLvxlMeoEwY+sTrjPMKyuZrO0/M=";
   };
 
   build-system = [
@@ -53,8 +53,8 @@ buildPythonPackage rec {
     io = [ pyarrow ];
   };
 
-  checkInputs = [
-    dask-histogram
+  nativeCheckInputs = [
+    # dask-histogram (circular dependency)
     distributed
     hist
     pandas
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
-    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
+    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };

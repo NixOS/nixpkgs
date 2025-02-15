@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pydrawise";
-  version = "2025.1.0";
+  version = "2025.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pydrawise";
     tag = version;
-    hash = "sha256-LF7y8d2OqEJIy+FTj8J/OOQkgkaqYNv5oD8jLUwEPlE=";
+    hash = "sha256-eyAhEIUUqDURzp/6/MX51W0efYCeY75M6LTaoNVwkw4=";
   };
 
   build-system = [

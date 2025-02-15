@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if isFullPackage then "vifm-full" else "vifm";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchurl {
     url = "https://github.com/vifm/vifm/releases/download/v${version}/vifm-${version}.tar.bz2";
-    hash = "sha256-DZKTdJp5QHat6Wfs3EfRQdheRQNwWUdlORvfGpvUUHU=";
+    hash = "sha256-JxTdTO9OU+eomAroRF6IJ5EE+BXUf0F/oLit/i89G+0=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Vi-like file manager${lib.optionalString isFullPackage "; Includes support for optional features"}";
+    mainProgram = "vifm";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;

@@ -5,14 +5,13 @@
   paho-mqtt,
   pandas,
   pycryptodome,
-  pythonOlder,
   requests,
   setuptools,
   xmltodict,
 }:
 
 buildPythonPackage rec {
-  pname = "pyezviz";
+  pname = "pyezvizapi";
   version = "1.0.0.9";
   pyproject = true;
 

@@ -4,6 +4,7 @@
   autoPatchelfHook,
   versionCheckHook,
   copyDesktopItems,
+  desktop-file-utils,
   dbus,
   dpkg,
   fetchurl,
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     versionCheckHook
     makeWrapper
     copyDesktopItems
+    desktop-file-utils
   ];
 
   buildInputs = [

@@ -30,6 +30,8 @@ stdenvNoCC.mkDerivation rec {
     gtk3
   ];
 
+  # FIXME: https://hydra.nixos.org/build/287344480/nixlog/5
+  dontCheckForBrokenSymlinks = true;
   dontDropIconThemeCache = true;
 
   installPhase = ''
