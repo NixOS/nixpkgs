@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  runCommand,
+  versionCheckHook,
   autoPatchelfHook,
   makeWrapper,
   tailwindcss_4,
@@ -59,18 +59,20 @@ stdenv.mkDerivation {
     }
   '';
 
-  passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
-    ${tailwindcss_4}/bin/tailwindcss --help > $out
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/tailwindcss";
+  versionCheckProgramArg = "--help";
+
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for the CSS framework with composable CSS classes, standalone v4 CLI";
     homepage = "https://tailwindcss.com/blog/tailwindcss-v4";
-    license = licenses.mit;
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    maintainers = [ maintainers.adamjhf ];
+    license = lib.licenses.mit;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = [ lib.maintainers.adamjhf ];
     mainProgram = "tailwindcss";
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }
