@@ -14,8 +14,9 @@
   brotli,
   lz4,
   zstd,
-  libusb1,
   pcre2,
+  fmt,
+  udev,
 }:
 
 let
@@ -24,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "35.0.1";
+  version = "35.0.2";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-ZUAwx/ltJdciTNaGH6wUoEPPHTmA9AKIzfviGflP+vk=";
+    hash = "sha256-0sMiIoAxXzbYv6XALXYytH42W/4ud+maNWT7ZXbwQJc=";
   };
 
   nativeBuildInputs = [
@@ -46,8 +47,9 @@ stdenv.mkDerivation rec {
     brotli
     lz4
     zstd
-    libusb1
     pcre2
+    fmt
+    udev
   ];
 
   propagatedBuildInputs = [ pythonEnv ];
@@ -55,6 +57,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
   '';
+
+  # android-tools uses libusb API that has not been released yet
+  # use newer bundled libusb until the new libusb release arrive
+  cmakeFlags = [
+    (lib.cmakeBool "ANDROID_TOOLS_LIBUSB_ENABLE_UDEV" true)
+    (lib.cmakeBool "ANDROID_TOOLS_USE_BUNDLED_LIBUSB" true)
+  ];
 
   meta = {
     description = "Android SDK platform tools";
