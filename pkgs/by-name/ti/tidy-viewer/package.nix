@@ -18,12 +18,6 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-k/8crmGkFOLcakL5roYrSBVoYyGMELh1Mu/X6SlUeds=";
 
-  # this test parses command line arguments
-  # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  checkFlags = [
-    "--skip=build_reader_can_create_reader_without_file_specified"
-  ];
-
   meta = with lib; {
     description = "Cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
     mainProgram = "tidy-viewer";

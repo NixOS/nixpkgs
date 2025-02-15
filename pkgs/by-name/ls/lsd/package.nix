@@ -22,6 +22,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-yOJKXfPtzaYF012YCyW3m+9ffag4En4ZfTaiVh/85dM=";
 
+  checkFlags = [
+    "--skip=git::tests::test_git_workflow"
+  ];
+
   nativeBuildInputs = [
     installShellFiles
     pandoc
@@ -36,9 +40,6 @@ rustPlatform.buildRustPackage rec {
       --fish $releaseDir/build/lsd-*/out/lsd.fish \
       --zsh $releaseDir/build/lsd-*/out/_lsd
   '';
-
-  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
 
   passthru.tests.version = testers.testVersion { package = lsd; };
 
