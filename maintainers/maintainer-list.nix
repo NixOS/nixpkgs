@@ -17031,6 +17031,12 @@
     githubId = 22592293;
     name = "Kartik Gokte";
   };
+  nulladmin1 = {
+    email = "shrey.deogade@protonmail.com";
+    name = "nulladmin1";
+    github = "nulladmin1";
+    githubId = 140198242;
+  };
   nullcube = {
     email = "nullcub3@gmail.com";
     name = "NullCube";
