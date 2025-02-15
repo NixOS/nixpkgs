@@ -13,6 +13,7 @@
   makeDesktopItem,
   copyDesktopItems,
   replaceVars,
+  nix-update-script,
 }:
 let
   pname = "gui-for-singbox";
@@ -126,6 +127,16 @@ buildGoModule {
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+  };
 
   meta = {
     description = "SingBox GUI program developed by vue3 + wails";
