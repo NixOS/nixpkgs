@@ -397,6 +397,54 @@ let
     };
   };
 
+  pubsubOpts = { ... }: {
+    options = {
+      domain = mkOption {
+        type = types.nullOr types.str;
+        description = lib.mdDoc "Domain name for the pubsub service.";
+      };
+
+      # https://prosody.im/doc/modules/mod_pubsub
+      admins = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "admin1@example.com" "admin2@example.com" ];
+        description = lib.mdDoc "List of administrators of the current pubsub host.";
+      };
+      defaultAdminAffiliation = mkOption {
+        type = types.str;
+        default = "owner";
+        description = lib.mdDoc "The default affiliation of admins to nodes.";
+      };
+      autocreateOnSubscribe = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to automatically create non-existent nodes when someone subscribes.";
+      };
+      autocreateOnPublish = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to automatically create non-existent nodes when someone publishes.";
+      };
+      maxItems = mkOption {
+        type = types.int;
+        default = 256;
+        description = lib.mdDoc "Limit on how many items nodes can be configured to store.";
+      };
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = lib.mdDoc "Additional virtual host specific configuration.";
+        example = ''
+          expose_publisher = true
+          pubsub_summary_templates = {
+              ["http://www.w3.org/2005/Atom"] = "{summary|or{{author/name|and{{author/name} posted }}{title}}}";
+          }
+        '';
+      };
+    };
+  };
+
   uploadHttpOpts = { ... }: {
     options = {
       domain = mkOption {
@@ -697,6 +745,16 @@ in
         description = "Multi User Chat (MUC) configuration";
       };
 
+      pubsub = mkOption {
+        description = lib.mdDoc "Configures pubsub service";
+        type = types.nullOr (types.submodule pubsubOpts);
+        default = null;
+        example = {
+          domain = "pubsub.my-xmpp-example-host.org";
+          maxItems = 10000;
+        };
+      };
+
       virtualHosts = mkOption {
 
         description = "Define the virtual hosts";
@@ -822,6 +880,7 @@ in
         ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
+        ${lib.optionalString (cfg.pubsub != null) "\"pubsub\";"}
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
@@ -873,6 +932,16 @@ in
             muc_room_default_language = ${toLua muc.roomDefaultLanguage}
             ${ muc.extraConfig }
         '') cfg.muc}
+
+      ${lib.optionalString (cfg.pubsub != null) ''
+        Component "${cfg.pubsub.domain}" "pubsub"
+            admins = ${toLua cfg.pubsub.admins}
+            default_admin_affiliation = ${toLua cfg.pubsub.defaultAdminAffiliation}
+            autocreate_on_subscribe = ${toLua cfg.pubsub.autocreateOnSubscribe}
+            autocreate_on_publish = ${toLua cfg.pubsub.autocreateOnPublish}
+            pubsub_max_items = ${toLua cfg.pubsub.maxItems}
+            ${cfg.pubsub.extraConfig}
+      ''}
 
       ${ lib.optionalString (cfg.uploadHttp != null) ''
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
