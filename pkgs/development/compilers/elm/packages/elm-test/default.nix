@@ -23,6 +23,13 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+  postInstall = ''
+    # clean up broken symlinks to build tool binaries
+    find $out/lib/node_modules/elm-test/node_modules/.bin \
+      -xtype l \
+      -delete
+  '';
+
   meta = {
     changelog = "https://github.com/rtfeldman/node-test-runner/blob/${src.rev}/CHANGELOG.md";
     description = "Runs elm-test suites from Node.js";
