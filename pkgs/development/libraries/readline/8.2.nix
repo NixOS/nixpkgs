@@ -35,38 +35,37 @@ stdenv.mkDerivation rec {
      in
        import ./readline-8.2-patches.nix patch);
 
-  patches = lib.optionals (curses-library.pname == "ncurses") [
-    ./link-against-ncurses.patch
-  ] ++ [
+  patches = upstreamPatches ++ [
     ./no-arch_only-8.2.patch
-  ]
-  ++ upstreamPatches
-  ++ lib.optionals stdenv.hostPlatform.isWindows [
     (fetchpatch {
       name = "0001-sigwinch.patch";
-      url = "https://github.com/msys2/MINGW-packages/raw/90e7536e3b9c3af55c336d929cfcc32468b2f135/mingw-w64-readline/0001-sigwinch.patch";
+      url = "https://github.com/msys2/MINGW-packages/raw/b81ea935fc1d885134d4ff5463f639f10e34a29e/mingw-w64-readline/0001-sigwinch.patch";
       stripLen = 1;
       hash = "sha256-sFK6EJrSNl0KLWqFv5zBXaQRuiQoYIZVoZfa8BZqfKA=";
     })
     (fetchpatch {
       name = "0002-event-hook.patch";
-      url = "https://github.com/msys2/MINGW-packages/raw/3476319d2751a676b911f3de9e1ec675081c03b8/mingw-w64-readline/0002-event-hook.patch";
+      url = "https://github.com/msys2/MINGW-packages/raw/b81ea935fc1d885134d4ff5463f639f10e34a29e/mingw-w64-readline/0002-event-hook.patch";
       stripLen = 1;
-      hash = "sha256-F8ytYuIjBtH83ZCJdf622qjwSw+wZEVyu53E/mPsoAo=";
+      hash = "sha256-zJo/7Id0mizyBCYFeGGoZj3r+qPOcdYZvjVz5nc+02k=";
     })
     (fetchpatch {
       name = "0003-fd_set.patch";
-      url = "https://github.com/msys2/MINGW-packages/raw/35830ab27e5ed35c2a8d486961ab607109f5af50/mingw-w64-readline/0003-fd_set.patch";
+      url = "https://github.com/msys2/MINGW-packages/raw/b81ea935fc1d885134d4ff5463f639f10e34a29e/mingw-w64-readline/0003-fd_set.patch";
       stripLen = 1;
       hash = "sha256-UiaXZRPjKecpSaflBMCphI2kqOlcz1JkymlCrtpMng4=";
     })
     (fetchpatch {
       name = "0004-locale.patch";
-      url = "https://github.com/msys2/MINGW-packages/raw/f768c4b74708bb397a77e3374cc1e9e6ef647f20/mingw-w64-readline/0004-locale.patch";
+      url = "https://github.com/msys2/MINGW-packages/raw/b81ea935fc1d885134d4ff5463f639f10e34a29e/mingw-w64-readline/0004-locale.patch";
       stripLen = 1;
       hash = "sha256-dk4343KP4EWXdRRCs8GRQlBgJFgu1rd79RfjwFD/nJc=";
     })
+  ] ++ lib.optionals (curses-library.pname == "ncurses") [
+    ./link-against-ncurses.patch
   ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Library for interactive line editing";
