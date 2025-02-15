@@ -57,7 +57,10 @@ rustPlatform.buildRustPackage rec {
     description = "Simple task management application for the COSMIC desktop";
     homepage = "https://github.com/cosmic-utils/tasks";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "tasks";
   };
