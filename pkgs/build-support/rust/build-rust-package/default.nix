@@ -18,6 +18,18 @@
   windows,
 }:
 
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+
+  excludeDrvArgNames = [
+    "depsExtraArgs"
+    "cargoUpdateHook"
+    "cargoDeps"
+    "cargoLock"
+  ];
+
+  extendDrvArgs =
+    finalAttrs:
 {
   name ? "${args.pname}-${args.version}",
 
@@ -116,15 +128,7 @@ let
   target = stdenv.hostPlatform.rust.rustcTargetSpec;
   targetIsJSON = lib.hasSuffix ".json" target;
 in
-
-stdenv.mkDerivation (
-  (removeAttrs args [
-    "depsExtraArgs"
-    "cargoUpdateHook"
-    "cargoDeps"
-    "cargoLock"
-  ])
-  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
+  lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
     RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
   }
   // {
@@ -192,5 +196,5 @@ stdenv.mkDerivation (
       # default to Rust's platforms
       platforms = lib.intersectLists meta.platforms or lib.platforms.all rustc.targetPlatforms;
     };
-  }
-)
+  };
+}
