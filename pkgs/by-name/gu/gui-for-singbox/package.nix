@@ -12,18 +12,26 @@
   autoPatchelfHook,
   makeDesktopItem,
   copyDesktopItems,
-  replaceVars,
   nix-update-script,
 }:
+
 let
   pname = "gui-for-singbox";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
     hash = "sha256-5zd4CVWVR+E3E097Xjd/V6QFRV9Ye2UQvBalAQ9zqXc=";
+  };
+
+  metaCommon = {
+    description = "SingBox GUI program developed by vue3 + wails";
+    homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -53,19 +61,15 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r ./dist $out
+      cp -r dist $out
 
       runHook postInstall
     '';
 
-    meta = {
-      description = "GUI program developed by vue3";
-      license = with lib.licenses; [ gpl3Plus ];
-      maintainers = with lib.maintainers; [ ];
-      platforms = lib.platforms.linux;
-    };
+    meta = metaCommon;
   });
 in
+
 buildGoModule {
   inherit pname version src;
 
@@ -91,6 +95,18 @@ buildGoModule {
     libsoup_3
   ];
 
+  preBuild = ''
+    cp -r ${frontend} frontend/dist
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.SingBox
+
+    runHook postBuild
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "gui-for-singbox";
@@ -107,22 +123,10 @@ buildGoModule {
     })
   ];
 
-  preBuild = ''
-    cp -r ${frontend} ./frontend/dist
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    wails build -m -s -trimpath -skipbindings -devtools -tags webkit2_40 -o GUI.for.SingBox
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm 0755 ./build/bin/GUI.for.SingBox $out/bin/GUI.for.SingBox
+    install -Dm 0755 build/bin/GUI.for.SingBox $out/bin/GUI.for.SingBox
     install -Dm 0644 build/appicon.png $out/share/pixmaps/gui-for-singbox.png
 
     runHook postInstall
@@ -138,12 +142,7 @@ buildGoModule {
     };
   };
 
-  meta = {
-    description = "SingBox GUI program developed by vue3 + wails";
-    homepage = "https://github.com/GUI-for-Cores/GUI.for.SingBox";
+  meta = metaCommon // {
     mainProgram = "GUI.for.SingBox";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
   };
 }
