@@ -1,0 +1,245 @@
+diff --git a/86BoxManager.Linux/LinuxEnv.cs b/86BoxManager.Linux/LinuxEnv.cs
+index a66404c..399da15 100644
+--- a/86BoxManager.Linux/LinuxEnv.cs
++++ b/86BoxManager.Linux/LinuxEnv.cs
+@@ -28,10 +28,7 @@ namespace _86BoxManager.Linux
+         {
+             var folders = new[]
+             {
+-                Path.Combine(UserProfile, "Portable", appName),
+-                Path.Combine("/opt", appName),
+-                "/usr/local/bin",
+-                "/usr/bin"
++                "@_86Box@/bin"
+             };
+             return folders;
+         }
+diff --git a/86BoxManager/Registry/Configs.cs b/86BoxManager/Registry/Configs.cs
+index 0632c9c..c301851 100644
+--- a/86BoxManager/Registry/Configs.cs
++++ b/86BoxManager/Registry/Configs.cs
+@@ -1,3 +1,4 @@
++using System;
+ using System.IO;
+ using System.Text;
+ using Newtonsoft.Json;
+@@ -18,11 +19,13 @@ namespace _86boxManager.Registry
+             {
+                 Formatting = Formatting.Indented
+             };
+-            var ass = typeof(Configs).Assembly;
+-            var loc = IOPath.GetFullPath(ass.Location);
+-            var dir = IOPath.GetDirectoryName(loc) ?? string.Empty;
+-            BoxConfigName = IOPath.Combine(dir, "86Box.json");
+-            VmxConfigName = IOPath.Combine(dir, "86BoxVMs.json");
++
++            var userConfigDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create);
++            var appConfigDir = IOPath.Combine(userConfigDir, "86BoxManager");
++            Directory.CreateDirectory(appConfigDir);
++
++            BoxConfigName = IOPath.Combine(appConfigDir, "86Box.json");
++            VmxConfigName = IOPath.Combine(appConfigDir, "86BoxVMs.json");
+         }
+ 
+         private static void WriteJson(string fileName, object obj)
+diff --git a/86BoxManager/Views/dlgSettings.axaml b/86BoxManager/Views/dlgSettings.axaml
+index 07fe076..d06907c 100644
+--- a/86BoxManager/Views/dlgSettings.axaml
++++ b/86BoxManager/Views/dlgSettings.axaml
+@@ -17,16 +17,6 @@
+ 					<Border BorderThickness="1" BorderBrush="Black" Margin="9">
+ 						<StackPanel Orientation="Vertical">
+ 							<TextBlock Text="Paths" FontWeight="Bold" Margin="5"/>
+-							<StackPanel Orientation="Horizontal" Margin="5" Spacing="5">
+-								<Label Margin="9" Content="86Box path:"/>
+-								<TextBox Width="360" Name="txtEXEdir" Margin="0,0,10,0" />
+-								<Button Click="btnBrowse1_Click" Name="btnBrowse1">Browse...</Button>
+-							</StackPanel>
+-							<StackPanel Orientation="Horizontal" Margin="5" Spacing="5">
+-								<Label Margin="9" Content="86Box version:"/>
+-								<Label Name="lbl86BoxVer1" Margin="9"
+-									   Content="&lt;status string goes here&gt;"/>
+-							</StackPanel>
+ 							<StackPanel Orientation="Horizontal" Margin="5,5,5,25" Spacing="5">
+ 								<Label Margin="9" Content="VM path:"/>
+ 								<TextBox Width="360" Name="txtCFGdir" Margin="0,0,10,0" />
+diff --git a/86BoxManager/Views/dlgSettings.axaml.cs b/86BoxManager/Views/dlgSettings.axaml.cs
+index 7ddd124..67c1811 100644
+--- a/86BoxManager/Views/dlgSettings.axaml.cs
++++ b/86BoxManager/Views/dlgSettings.axaml.cs
+@@ -23,7 +23,6 @@ namespace _86boxManager.Views
+         public dlgSettings()
+         {
+             InitializeComponent();
+-            txtEXEdir.OnTextChanged(txt_TextChanged);
+             txtCFGdir.OnTextChanged(txt_TextChanged);
+         }
+ 
+@@ -32,7 +31,6 @@ namespace _86boxManager.Views
+         private void dlgSettings_Load(object sender, EventArgs e)
+         {
+             LoadSettings();
+-            Get86BoxVersion();
+ 
+             var txt = CurrentApp.ProductVersion.Substring(0, CurrentApp.ProductVersion.Length - 2);
+             lblVersion1.Text = $"Version: {txt}";
+@@ -116,7 +114,6 @@ namespace _86boxManager.Views
+ 
+             var (cfgPath, exePath) = VMCenter.FindPaths();
+             txtCFGdir.Text = cfgPath;
+-            txtEXEdir.Text = exePath;
+             cbxMinimize.IsChecked = false;
+             cbxShowConsole.IsChecked = true;
+             cbxMinimizeTray.IsChecked = false;
+@@ -130,23 +127,6 @@ namespace _86boxManager.Views
+             settingsChanged = CheckForChanges();
+         }
+ 
+-        private async void btnBrowse1_Click(object sender, RoutedEventArgs e)
+-        {
+-            var initDir = Platforms.Env.MyComputer;
+-            var text = "Select a folder where 86Box program files and the roms folder are located";
+-
+-            var fileName = await Dialogs.SelectFolder(initDir, text, parent: this);
+-
+-            if (!string.IsNullOrWhiteSpace(fileName))
+-            {
+-                txtEXEdir.Text = fileName;
+-                if (!txtEXEdir.Text.EndsWith(IOPath.DirectorySeparatorChar)) //Just in case
+-                {
+-                    txtEXEdir.Text += IOPath.DirectorySeparatorChar;
+-                }
+-            }
+-        }
+-
+         private async void btnBrowse2_Click(object sender, RoutedEventArgs e)
+         {
+             var initDir = Platforms.Env.MyComputer;
+@@ -166,7 +146,7 @@ namespace _86boxManager.Views
+ 
+         private void txt_TextChanged(object sender, TextInputEventArgs e)
+         {
+-            if (string.IsNullOrWhiteSpace(txtEXEdir.Text) || string.IsNullOrWhiteSpace(txtCFGdir.Text))
++            if (string.IsNullOrWhiteSpace(txtCFGdir.Text))
+             {
+                 btnApply.IsEnabled = false;
+                 return;
+@@ -191,35 +171,6 @@ namespace _86boxManager.Views
+             btnBrowse3.IsEnabled = cbxLogging.IsActive();
+         }
+ 
+-        // Obtains the 86Box version from 86Box executable
+-        private void Get86BoxVersion()
+-        {
+-            try
+-            {
+-                var vi = Platforms.Manager.GetBoxVersion(txtEXEdir.Text);
+-                if (vi.FilePrivatePart >= 3541) //Officially supported builds
+-                {
+-                    var vText = $"{vi.FileMajorPart}.{vi.FileMinorPart}.{vi.FileBuildPart}.{vi.FilePrivatePart} - fully compatible";
+-                    lbl86BoxVer1.SetColorTxt(Brushes.ForestGreen, FontWeight.Bold, vText);
+-                }
+-                else if (vi.FilePrivatePart >= 3333 && vi.FilePrivatePart < 3541) //Should mostly work...
+-                {
+-                    var vText = $"{vi.FileMajorPart}.{vi.FileMinorPart}.{vi.FileBuildPart}.{vi.FilePrivatePart} - partially compatible";
+-                    lbl86BoxVer1.SetColorTxt(Brushes.Orange, FontWeight.Bold, vText);
+-                }
+-                else //Completely unsupported, since version info can't be obtained anyway
+-                {
+-                    var vText = "Unknown - may not be compatible";
+-                    lbl86BoxVer1.SetColorTxt(Brushes.Red, FontWeight.Bold, vText);
+-                }
+-            }
+-            catch
+-            {
+-                var vText = "86Box executable not found!";
+-                lbl86BoxVer1.SetColorTxt(Brushes.Gray, FontWeight.Bold, vText);
+-            }
+-        }
+-
+         // Save the settings to the registry
+         private bool SaveSettings()
+         {
+@@ -236,21 +187,6 @@ namespace _86boxManager.Views
+                 }
+             }
+ 
+-            var exeName = Platforms.Env.ExeNames.First();
+-            var boxExe = IOPath.Combine(txtEXEdir.Text, exeName);
+-            if (!File.Exists(boxExe))
+-            {
+-                var result = (ResponseType)Dialogs.ShowMessageBox(
+-                    "86Box executable could not be found in the directory you specified, so " +
+-                    "you won't be able to use any virtual machines. Are you sure you want " +
+-                    "to use this path?",
+-                    MessageType.Warning, ButtonsType.YesNo, "Warning");
+-                if (result == ResponseType.No)
+-                {
+-                    return false;
+-                }
+-            }
+-
+             try
+             {
+                 //Try to open the key first (in read-write mode) to see if it already exists
+@@ -265,7 +201,6 @@ namespace _86boxManager.Views
+                 }
+ 
+                 //Store the new values, close the key, changes are saved
+-                regkey.SetValue("EXEdir", txtEXEdir.Text, RegistryValueKind.String);
+                 regkey.SetValue("CFGdir", txtCFGdir.Text, RegistryValueKind.String);
+                 regkey.SetValue("MinimizeOnVMStart", cbxMinimize.IsActive(), RegistryValueKind.DWord);
+                 regkey.SetValue("ShowConsole", cbxShowConsole.IsActive(), RegistryValueKind.DWord);
+@@ -287,7 +222,6 @@ namespace _86boxManager.Views
+             }
+             finally
+             {
+-                Get86BoxVersion(); //Get the new exe version in any case
+             }
+             return true;
+         }
+@@ -314,7 +248,6 @@ namespace _86boxManager.Views
+ 
+                     var (cfgPath, exePath) = VMCenter.FindPaths();
+                     txtCFGdir.Text = cfgPath;
+-                    txtEXEdir.Text = exePath;
+                     cbxMinimize.IsChecked = false;
+                     cbxShowConsole.IsChecked = true;
+                     cbxMinimizeTray.IsChecked = false;
+@@ -329,7 +262,6 @@ namespace _86boxManager.Views
+                 }
+                 else
+                 {
+-                    txtEXEdir.Text = regkey.GetValue("EXEdir").ToString();
+                     txtCFGdir.Text = regkey.GetValue("CFGdir").ToString();
+                     txtLogPath.Text = regkey.GetValue("LogPath").ToString();
+                     cbxMinimize.IsChecked = Convert.ToBoolean(regkey.GetValue("MinimizeOnVMStart"));
+@@ -354,7 +286,6 @@ namespace _86boxManager.Views
+ 
+                 var (_, exePath) = VMCenter.FindPaths();
+                 txtCFGdir.Text = IOPath.Combine(Platforms.Env.MyDocuments, "86Box VMs");
+-                txtEXEdir.Text = exePath;
+                 cbxMinimize.IsChecked = false;
+                 cbxShowConsole.IsChecked = true;
+                 cbxMinimizeTray.IsChecked = false;
+@@ -375,7 +306,6 @@ namespace _86boxManager.Views
+             try
+             {
+                 btnApply.IsEnabled = (
+-                    txtEXEdir.Text != regkey.GetValue("EXEdir").ToString() ||
+                     txtCFGdir.Text != regkey.GetValue("CFGdir").ToString() ||
+                     txtLogPath.Text != regkey.GetValue("LogPath").ToString() ||
+                     cbxMinimize.IsActive() != Convert.ToBoolean(regkey.GetValue("MinimizeOnVMStart")) ||
+diff --git a/86BoxManager/Views/frmMain.axaml.cs b/86BoxManager/Views/frmMain.axaml.cs
+index 9dfd4d0..8f38c30 100644
+--- a/86BoxManager/Views/frmMain.axaml.cs
++++ b/86BoxManager/Views/frmMain.axaml.cs
+@@ -172,7 +172,7 @@ namespace _86boxManager.Views
+                 }
+                 else
+                 {
+-                    exepath = regkey.GetValue("EXEdir").ToString().CheckTrail();
++                    (cfgpath, exepath) = VMCenter.FindPaths();
+                     cfgpath = regkey.GetValue("CFGdir").ToString().CheckTrail();
+                     minimize = Convert.ToBoolean(regkey.GetValue("MinimizeOnVMStart"));
+                     showConsole = Convert.ToBoolean(regkey.GetValue("ShowConsole"));
