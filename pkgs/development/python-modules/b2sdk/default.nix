@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-QY2/uWCnIlOHo5wTLxu2Pvh2oNPWRcyDL5TpnZHob7I=";
+    hash = "sha256-xLz01ybULHBDPnM+uehlTBBu47XLJlixkdUMRlVBuEw=";
   };
 
   build-system = [ pdm-backend ];
