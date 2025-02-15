@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
     ]
     ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [ "EXES=feat_os_unix_musl" ]
     ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   # too many impure/platform-dependent tests
