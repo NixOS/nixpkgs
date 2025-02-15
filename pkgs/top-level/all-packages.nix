@@ -3572,6 +3572,86 @@ with pkgs;
 
   gyroflow = callPackage ../applications/video/gyroflow { };
 
+  inherit ({
+    ignition-cmake_0 = callPackage ../development/libraries/gz-cmake/0.nix { };
+    ignition-cmake_2 = callPackage ../development/libraries/gz-cmake/2.nix { };
+    gz-cmake_3 = callPackage ../development/libraries/gz-cmake/3.nix { };
+    gz-cmake_4 = callPackage ../development/libraries/gz-cmake/4.nix { };
+  })
+    ignition-cmake_0
+    ignition-cmake_2
+    gz-cmake_3
+    gz-cmake_4;
+
+  inherit ({
+    ignition-common_3 = callPackage ../development/libraries/gz-common/3.nix { };
+    ignition-common_4 = callPackage ../development/libraries/gz-common/4.nix { };
+    gz-common_5 = callPackage ../development/libraries/gz-common/5.nix { };
+    gz-common_6 = callPackage ../development/libraries/gz-common/6.nix { };
+  })
+    ignition-common_3
+    ignition-common_4
+    gz-common_5
+    gz-common_6;
+
+  inherit ({
+    ignition-fuel-tools_4 = callPackage ../development/libraries/gz-fuel-tools/4.nix { };
+    ignition-fuel-tools_7 = callPackage ../development/libraries/gz-fuel-tools/7.nix { };
+    gz-fuel-tools_8 = callPackage ../development/libraries/gz-fuel-tools/8.nix { };
+    gz-fuel-tools_9 = callPackage ../development/libraries/gz-fuel-tools/9.nix { };
+    gz-fuel-tools_10 = callPackage ../development/libraries/gz-fuel-tools/10.nix { };
+  })
+    ignition-fuel-tools_4
+    ignition-fuel-tools_7
+    gz-fuel-tools_8
+    gz-fuel-tools_9
+    gz-fuel-tools_10;
+
+  inherit ({
+    ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
+    gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
+    gz-utils_3 = callPackage ../development/libraries/gz-utils/3.nix { };
+  })
+    ignition-utils_1
+    gz-utils_2
+    gz-utils_3;
+
+  inherit ({
+    ignition-math_4 = callPackage ../development/libraries/gz-math/4.nix { };
+    ignition-math_6 = callPackage ../development/libraries/gz-math/6.nix { };
+    gz-math_7 = callPackage ../development/libraries/gz-math/7.nix { };
+    gz-math_8 = callPackage ../development/libraries/gz-math/8.nix { };
+  })
+    ignition-math_4
+    ignition-math_6
+    gz-math_7
+    gz-math_8;
+
+  inherit ({
+    ignition-msgs_5 = callPackage ../development/libraries/gz-msgs/5.nix { };
+    ignition-msgs_8 = callPackage ../development/libraries/gz-msgs/8.nix { };
+    gz-msgs_11 = callPackage ../development/libraries/gz-msgs/11.nix { };
+  })
+    ignition-msgs_5
+    ignition-msgs_8
+    gz-msgs_9
+    gz-msgs_10
+    gz-msgs_11;
+
+  inherit ({
+    ignition-transport_8 = callPackage ../development/libraries/gz-transport/8.nix { };
+    ignition-transport_11 = callPackage ../development/libraries/gz-transport/11.nix { };
+  })
+    ignition-transport_8
+    ignition-transport_11;
+
+  inherit ({
+    ignition-tools_1 = callPackage ../development/tools/gz-tools/1.nix { };
+    gz-tools_2 = callPackage ../development/tools/gz-tools/2.nix { };
+  })
+    ignition-tools_1
+    gz-tools_2;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
@@ -4953,6 +5033,13 @@ with pkgs;
   };
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
+
+  inherit ({
+    sdformat_13 = callPackage ../development/libraries/sdformat/13.nix { };
+    sdformat_9 = callPackage ../development/libraries/sdformat/9.nix { };
+  })
+    sdformat_13
+    sdformat_9;
 
   securefs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/securefs { };
 
