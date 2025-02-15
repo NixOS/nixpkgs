@@ -48,7 +48,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
       };
 
       main = { ... }: {
-        environment.systemPackages = with pkgs; [ btrfs-progs ];
+        environment.systemPackages = with pkgs; [
+          btrfs-progs
+          lz4
+        ];
         services.openssh = {
           enable = true;
           settings = {
@@ -57,7 +60,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
           };
         };
         services.btrbk = {
-          extraPackages = [ pkgs.lz4 ];
           sshAccess = [
             {
               key = publicKey;
