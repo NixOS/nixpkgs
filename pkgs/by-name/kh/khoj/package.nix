@@ -1,20 +1,26 @@
-{ lib
-, fetchFromGitHub
-, python3
-, postgresql
-, postgresqlTestHook
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  postgresql,
+  postgresqlTestHook,
 }:
 
+let
+  django_phonenumber_field = python3.pkgs.django-phonenumber-field.override {
+    django = python3.pkgs.django_5;
+  };
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "khoj";
-  version = "1.0.1";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "debanjum";
     repo = "khoj";
-    tag = version;
-    hash = "sha256-lvOeYTrvW5MfhuJ3lj9n9TRlvpRwVP2vFeaEeJdqIec=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2phYdEkhqRVFlYAeJLH1UlbaqP3Q1V0OM06BDUqbGa0=";
   };
 
   env = {
@@ -22,71 +28,104 @@ python3.pkgs.buildPythonApplication rec {
     postgresqlEnableTCP = 1;
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiohttp
-    anyio
-    authlib
-    beautifulsoup4
-    dateparser
-    defusedxml
-    django
-    fastapi
-    google-auth
-    # gpt4all
-    gunicorn
-    httpx
-    itsdangerous
-    jinja2
-    langchain
-    lxml
-    openai
-    openai-whisper
-    pgvector
-    pillow
-    psycopg2
-    pydantic
-    pymupdf
-    python-multipart
-    pyyaml
-    # rapidocr-onnxruntime
-    requests
-    rich
-    schedule
-    sentence-transformers
-    stripe
-    tenacity
-    tiktoken
-    torch
-    transformers
-    tzdata
-    uvicorn
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    "django-apscheduler"
+    "llama-cpp-python"
+    "pymupdf"
+    "sentence-transformers"
+    "psycopg2-binary"
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    freezegun
-    factory-boy
-    pytest-xdist
-    trio
-    psutil
-    pytest-django
-    pytestCheckHook
-  ] ++ [
-    (postgresql.withPackages (p: with p; [ pgvector ]))
-    postgresqlTestHook
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      beautifulsoup4
+      dateparser
+      defusedxml
+      fastapi
+      python-multipart
+      jinja2
+      openai
+      tiktoken
+      tenacity
+      magika
+      pillow
+      pydantic
+      pyyaml
+      rich
+      schedule
+      sentence-transformers
+      einops
+      transformers
+      torch
+      uvicorn
+      aiohttp
+      langchain
+      langchain-community
+      requests
+      # Tenacity is duplicated in the upstream pyproject.toml file
+      anyio
+      pymupdf
+      django_5
+      # django-unfold
+      authlib
+      # llama-cpp-python # not yet packaged
+      itsdangerous
+      httpx
+      pgvector
+      psycopg2
+      lxml
+      tzdata
+      rapidocr-onnxruntime
+      openai-whisper
+      django_phonenumber_field
+      phonenumbers
+      markdownify
+      markdown-it-py
+      websockets
+      psutil
+      huggingface-hub
+      apscheduler
+      pytz
+      cron-descriptor
+      django-apscheduler
+      anthropic
+      docx2txt
+      google-generativeai
+      pyjson5
+      resend
+      email-validator
+    ]
+    ++ python3.pkgs.pydantic.optional-dependencies.email;
+
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      freezegun
+      factory-boy
+      pytest-xdist
+      trio
+      psutil
+      pytest-django
+      pytestCheckHook
+    ]
+    ++ [
+      (postgresql.withPackages (p: with p; [ pgvector ]))
+      postgresqlTestHook
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "khoj"
-  ];
+  pythonImportsCheck = [ "khoj" ];
 
   disabledTests = [
     # Tests require network access
@@ -136,6 +175,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/debanjum/khoj/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ dit7ya ];
-    broken = true; # last successful build 2024-01-10
   };
 }
