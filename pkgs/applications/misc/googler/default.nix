@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, python, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, python, installShellFiles, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "googler";
-  version = "4.3.2";
+  version = "unstable-2024-01-05";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-PgWg396AQ15CAnfTXGDpSg1UXx7mNCtknEjJd/KV4MU=";
+    rev = "f55837974ae0566acd8125f59f5948be20e03b41";
+    sha256 = "sha256-kvN4i9faD82NL6e20tfIedjQsDburlLFYawQMZDmhCA=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/raffaelewylde/googler/commit/b974abc0903e7832b1d392cf26c46d04f6b36a63.patch";
+      sha256 = "sha256-Q2GUjADHu2hHUWdibPGf4kgj5z3G5RISXHP2DVRO32U=";
+    })
+  ];
 
   buildInputs = [ python ];
 
