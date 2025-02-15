@@ -6,6 +6,39 @@ with pkgs;
 # https://github.com/NixOS/nixpkgs/pull/16208
 
 rec {
+  bzip2 = (pkgs.bzip2.override {
+    stdenv = pkgs.emscriptenStdenv;
+  }).overrideDerivation
+    (old: {
+      outputs = [ "out" ];
+      doCheck = false;
+    });
+
+  freetype = (pkgs.freetype.override {
+    stdenv = pkgs.emscriptenStdenv;
+  }).overrideAttrs
+    (old: {
+      pname = "freetype";
+
+      propagatedBuildInputs = [ zlib bzip2 libpng ];
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
+
+      configurePhase = ''
+        HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+
+        emconfigure ./configure \
+          --prefix=$out \
+          --bindir=$dev/bin \
+          --enable-freetype-config \
+          --build=${stdenv.hostPlatform.system} \
+          --host=wasm32 \
+          PKG_CONFIG_PATH="${libpng.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
+      '';
+      doCheck = false;
+    });
+
   json_c = (pkgs.json_c.override {
     stdenv = pkgs.emscriptenStdenv;
   }).overrideAttrs
@@ -42,6 +75,26 @@ rec {
         fi
         echo "================= /testing json_c using node ================="
       '';
+    });
+
+  libpng = (pkgs.libpng.override {
+    stdenv = pkgs.emscriptenStdenv;
+  }).overrideDerivation
+    (old: {
+      propagatedBuildInputs = [ zlib ];
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
+
+      configurePhase = ''
+        HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+
+        export CPPFLAGS=`pkg-config --cflags zlib`
+        export LDFLAGS=`pkg-config --libs zlib`
+
+        emconfigure ./configure --prefix=$out --disable-shared --enable-static
+      '';
+      doCheck = false;
     });
 
   libxml2 = (pkgs.libxml2.override {
@@ -147,6 +200,12 @@ rec {
       env = (old.env or { }) // { NIX_CFLAGS_COMPILE = ""; };
       dontStrip = true;
       outputs = [ "out" ];
+      configurePhase = ''
+        HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
+        emconfigure ./configure --prefix=$out --static
+      '';
       buildPhase = ''
         emmake make
       '';
