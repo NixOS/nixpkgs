@@ -13,7 +13,7 @@ buildGoModule {
 
   modRoot = "wireguard-go-rs/libwg";
   proxyVendor = true;
-  vendorHash = "sha256-j1lopBV/b1qSZPtEUVFyW0auLtaWSE5ss1a0pprcqOk=";
+  vendorHash = "sha256-uzPtA9RBP5m8+18YBq+SEsgytDOWFCGPzucCzISSiLQ=";
 
   # XXX: hack to make the ar archive go to the correct place
   # This is necessary because passing `-o ...` to `ldflags` does not work
