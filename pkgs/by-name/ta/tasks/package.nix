@@ -13,22 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tasks";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "tasks";
     tag = version;
-    hash = "sha256-0bXzeKnJ5MIl7vCo+7kyXm3L6QrCdm5sPreca1SPi8U=";
+    hash = "sha256-OKXkAJ+TyMnTzvlUPwPU2MWgCTIN3cDiPcVPOzU4WEg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9H4xzjgFpUsY5d6IpFt744058tVvMK0YHYvbnMWxNm8=";
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-07-03";
-  env.VERGEN_GIT_SHA = "0e8c728c88a9cac1bac130eb083ca0fe58c7121d";
+  cargoHash = "sha256-3SbqKB9DI1Bl8u8rrAPCO/sPKMByYhQ3YT63K5BDVvE=";
 
   nativeBuildInputs = [
     libcosmicAppHook
