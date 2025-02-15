@@ -1,21 +1,13 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook3,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk3,
+  libcosmicAppHook,
+  just,
   libsecret,
-  libxkbcommon,
   openssl,
-  pango,
   sqlite,
-  vulkan-loader,
-  wayland,
   nix-update-script,
 }:
 
@@ -39,34 +31,27 @@ rustPlatform.buildRustPackage rec {
   env.VERGEN_GIT_SHA = "0e8c728c88a9cac1bac130eb083ca0fe58c7121d";
 
   nativeBuildInputs = [
-    pkg-config
-    wrapGAppsHook3
+    libcosmicAppHook
+    just
   ];
 
   buildInputs = [
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    gtk3
     libsecret
-    libxkbcommon
     openssl
-    pango
     sqlite
-    vulkan-loader
-    wayland
   ];
 
-  postFixup = ''
-    wrapProgram $out/bin/tasks \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libxkbcommon
-          wayland
-        ]
-      }"
-  '';
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "bin-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/tasks"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
