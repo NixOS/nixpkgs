@@ -10,7 +10,7 @@ in
 
 buildGoModule rec {
   pname = "chroma";
-  version = "2.8.0";
+  version = "2.15.0";
 
   # To update:
   # nix-prefetch-git --rev v${version} https://github.com/alecthomas/chroma.git > src.json
@@ -21,7 +21,7 @@ buildGoModule rec {
     inherit (srcInfo) sha256;
   };
 
-  vendorHash = "sha256-Bol5yMvNYuoVnSjEgf3h6X4CeUooy2Hpdy3SCaNXXOE=";
+  vendorHash = "sha256:14jg809xz647yv6sc8rnnksg2bpnn75panj8a2kdk2v87yrpq2zr";
 
   modRoot = "./cmd/chroma";
 
