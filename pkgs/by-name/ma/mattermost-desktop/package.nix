@@ -86,7 +86,9 @@ buildNpmPackage rec {
       # Invoking with `--version` insists on being able to write to a log file.
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+    };
   };
 
   meta = {

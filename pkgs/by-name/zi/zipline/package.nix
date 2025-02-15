@@ -29,13 +29,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "3.7.12";
+  version = "3.7.13";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i3IGcSxIhy8jmCMsDJGGszYoFsShBfbv7SjTQL1dDM0=";
+    hash = "sha256-3+gDOlTj47qvQ3CrInT1rgBhLpyT+QA65r6OnokreWM=";
   };
 
   patches = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       yarn install --immutable --mode skip-build
     '';
 
-    outputHash = "sha256-c7U/PMlulbjzWx0w4jstgfjeDYPkmfcXIRCDEQxhirA=";
+    outputHash = "sha256-niO+obo1JHAoWbLgjf1ttB6UqTCCjEuhiILvfT3O0q4=";
     outputHashMode = "recursive";
   };
 

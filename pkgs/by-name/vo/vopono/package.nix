@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qgsfTniikrdykFSFqZATp7ewPZm5z5p5FMztNKWzPIY=";
   };
 
-  cargoHash = "sha256-/z4qBBY/Htlv55vNKj2c1frWsUFTRweJh/G0T2jHLr4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hQfLj2wbCjI2O/6hh9IJk9ehakGrvF2IbY8aVAPPT0o=";
 
   meta = with lib; {
     description = "Run applications through VPN connections in network namespaces";

@@ -9,7 +9,7 @@
 
   # tests
   editables,
-  git,
+  gitMinimal,
   mercurial,
   pytestCheckHook,
   setuptools,
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     editables
-    git
+    gitMinimal
     mercurial
     pytestCheckHook
     setuptools

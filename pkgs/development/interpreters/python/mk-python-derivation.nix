@@ -106,7 +106,9 @@ let
     "format"
     "disabledTestPaths"
     "disabledTests"
+    "pytestFlags"
     "pytestFlagsArray"
+    "unittestFlags"
     "unittestFlagsArray"
     "outputs"
     "stdenv"
@@ -435,15 +437,19 @@ let
     }
     // optionalAttrs (attrs.doCheck or true) (
       optionalAttrs (disabledTestPaths != [ ]) {
-        disabledTestPaths = escapeShellArgs disabledTestPaths;
+        disabledTestPaths = disabledTestPaths;
       }
       // optionalAttrs (attrs ? disabledTests) {
-        # `escapeShellArgs` should be used as well as `disabledTestPaths`,
-        # but some packages rely on existing raw strings.
         disabledTests = attrs.disabledTests;
+      }
+      // optionalAttrs (attrs ? pytestFlags) {
+          pytestFlags = attrs.pytestFlags;
       }
       // optionalAttrs (attrs ? pytestFlagsArray) {
         pytestFlagsArray = attrs.pytestFlagsArray;
+      }
+      // optionalAttrs (attrs ? unittestFlags) {
+          unittestFlags = attrs.unittestFlags;
       }
       // optionalAttrs (attrs ? unittestFlagsArray) {
         unittestFlagsArray = attrs.unittestFlagsArray;

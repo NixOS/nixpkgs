@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   patches = [ (replaceVars ./Hardcode-perl.patch { inherit perl; }) ];
 
-  cargoHash = "sha256-6qXdZ1EtYdne0zs5usLXkZm2qYl1gwpTki0cvip+FkE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EQ6xB4He8cjJxg7tmJzqXmAITa5q9iq+ZokV0EyaUE0=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices

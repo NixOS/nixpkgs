@@ -10,6 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   requests-mock,
+  pytest-httpserver,
   requests,
   setuptools-scm,
   setuptools,
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "geoip2";
-  version = "4.8.0";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3ZzBgLfUFyQkDqSB1dU5FJ5lsjT2QoKyMbkXB5SprDU=";
+    hash = "sha256-muouq0s+YlL0dFZSiunDWxBMRSd2OcE/zhvofJL4Qlc=";
   };
 
   build-system = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     mocket
     requests-mock
     pytestCheckHook
+    pytest-httpserver
   ];
 
   pythonImportsCheck = [ "geoip2" ];

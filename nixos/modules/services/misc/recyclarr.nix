@@ -41,7 +41,7 @@ in
           }
         ];
       };
-      description = lib.mdDoc ''
+      description = ''
         Recyclarr YAML configuration as a Nix attribute set.
 
         For detailed configuration options and examples, see the
@@ -55,6 +55,7 @@ in
         systemd.services.recyclarr.serviceConfig.LoadCredential = [
           "radarr-api_key:''${config.sops.secrets.radarr-api_key.path}"
         ];
+        ```
       '';
     };
 

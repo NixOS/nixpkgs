@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };
 
-  cargoHash = "sha256-84m5dihmiEGrFCajqaMW05MQtBceLodBzqtjW+zh6kg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7cMd7pNWGV5DOSCLRW5fP3L1VnDTEsZZjhVz1AQLEXM=";
 
   buildFeatures = lib.optional withTTS "tts";
 

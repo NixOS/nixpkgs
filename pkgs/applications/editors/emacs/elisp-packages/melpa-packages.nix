@@ -977,14 +977,19 @@ let
 
         cssh = ignoreCompilationError super.cssh; # elisp error
 
-        dap-mode = super.dap-mode.overrideAttrs (old: {
-          # empty file causing native-compiler-error-empty-byte
-          preBuild =
-            ''
-              rm --verbose dapui.el
-            ''
-            + old.preBuild or "";
-        });
+        dap-mode = super.dap-mode.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # empty file causing native-compiler-error-empty-byte
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20250131.1624" then
+                ''
+                  rm --verbose dapui.el
+                ''
+                + previousAttrs.preBuild or ""
+              else
+                previousAttrs.preBuild or null;
+          }
+        );
 
         db-pg = ignoreCompilationError super.db-pg; # elisp error
 
@@ -1598,6 +1603,8 @@ let
         tommyh-theme = ignoreCompilationError super.tommyh-theme; # elisp error
 
         tramp-hdfs = ignoreCompilationError super.tramp-hdfs; # elisp error
+
+        twtxt = ignoreCompilationError super.twtxt; # needs to read ~/twtxt.txt
 
         universal-emotions-emoticons = ignoreCompilationError super.universal-emotions-emoticons; # elisp error
 

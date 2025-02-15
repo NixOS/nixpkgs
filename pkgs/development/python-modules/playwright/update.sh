@@ -46,7 +46,7 @@ update_browser() {
             suffix="mac"
         fi
     else
-        if [ "$name" = "ffmpeg" ]; then
+        if [ "$name" = "ffmpeg" ] || [ "$name" = "chromium-headless-shell" ]; then
             suffix="linux"
         elif [ "$name" = "firefox" ]; then
             stripRoot="true"
@@ -56,12 +56,17 @@ update_browser() {
         fi
     fi
     aarch64_suffix="$suffix-arm64"
+    if [ "$name" = "chromium-headless-shell" ]; then
+        buildname="chromium";
+    else
+        buildname="$name"
+    fi
 
-    revision="$(jq -r ".browsers.$name.revision" "$playwright_dir/browsers.json")"
+    revision="$(jq -r ".browsers[\"$buildname\"].revision" "$playwright_dir/browsers.json")"
     replace_sha "$playwright_dir/$name.nix" "x86_64-$platform" \
-        "$(prefetch_browser "https://playwright.azureedge.net/builds/$name/$revision/$name-$suffix.zip" $stripRoot)"
+        "$(prefetch_browser "https://playwright.azureedge.net/builds/$buildname/$revision/$name-$suffix.zip" $stripRoot)"
     replace_sha "$playwright_dir/$name.nix" "aarch64-$platform" \
-        "$(prefetch_browser "https://playwright.azureedge.net/builds/$name/$revision/$name-$aarch64_suffix.zip" $stripRoot)"
+        "$(prefetch_browser "https://playwright.azureedge.net/builds/$buildname/$revision/$name-$aarch64_suffix.zip" $stripRoot)"
 }
 
 curl -fsSl \
@@ -77,12 +82,13 @@ curl -fsSl \
     ' > "$playwright_dir/browsers.json"
 
 # We currently use Chromium from nixpkgs, so we don't need to download it here
-# Likewise, darwin can be ignored here atm as we are using an impure install anyway.
+update_browser "chromium-headless-shell" "linux"
 update_browser "firefox" "linux"
 update_browser "webkit" "linux"
 update_browser "ffmpeg" "linux"
 
 update_browser "chromium" "darwin"
+update_browser "chromium-headless-shell" "darwin"
 update_browser "firefox" "darwin"
 update_browser "webkit" "darwin"
 update_browser "ffmpeg" "darwin"

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   c-ares,
   cmake,
   crc32c,
@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-googleapis-path.patch;
+    (replaceVars ./hardcode-googleapis-path.patch {
       url = googleapis;
     })
   ];

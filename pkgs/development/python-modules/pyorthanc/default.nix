@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyorthanc";
-  version = "1.18.0";
+  version = "1.19.0";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "gacou54";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-ObZjTiEB4a7ForsugzKZDdIsTEWOX1zbv53ZJ4AllHE=";
+    hash = "sha256-6//kmkurtaXRGvnYnk/kU2j9F6V1Aui6IEdl+3DHGH0=";
   };
 
   build-system = [ poetry-core ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library that wraps the Orthanc REST API";
     homepage = "https://github.com/gacou54/pyorthanc";
-    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/v${version}";
+    changelog = "https://github.com/gacou54/pyorthanc/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

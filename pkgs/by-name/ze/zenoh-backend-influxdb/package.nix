@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zenoh-backend-influxdb";
-  version = "1.2.0";
+  version = "1.2.1"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-influxdb";
     tag = version;
-    hash = "sha256-npkQEr1tzY+CW9dDRe+JipXnWa5y38wv7J+kUMlcH54=";
+    hash = "sha256-Bdsu/1+lotvGyvKia8ZxRnD0o2Y2yoq5xmok4/hE0mI=";
   };
 
-  cargoHash = "sha256-AQNbiK7cn0R/DsW1RjKFX3hV3MBX9izPsljJU7yNDV0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YcDTwbaVRpl+xULArqSwjni9pWhgE8XGcY67xiDxFa4=";
 
   meta = {
     description = "Backend and Storages for zenoh using InfluxDB";

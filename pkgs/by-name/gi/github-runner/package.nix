@@ -6,7 +6,7 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fetchpatch,
-  git,
+  gitMinimal,
   glibc,
   glibcLocales,
   lib,
@@ -112,7 +112,7 @@ buildDotnetModule (finalAttrs: {
   nativeBuildInputs =
     [
       which
-      git
+      gitMinimal
       # needed for `uname`
       coreutils
     ]

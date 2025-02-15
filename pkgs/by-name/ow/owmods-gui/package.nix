@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-rTANG+yHE8YfWYUyELoKgj4El+1ZW6vI9NkgADD40pw=";
   };
 
-  cargoHash = "sha256-rFkh2G7kFuQI7nlZIwaqvt7x9bKLqmWU21YwZu2+wUA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Y57EGKl/wJnZ/eTlKL984GlxMWTq/ZUT5Rns/MEGOCE=";
 
   buildFeatures = [
     "tauri/custom-protocol"

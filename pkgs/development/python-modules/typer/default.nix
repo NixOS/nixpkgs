@@ -7,7 +7,6 @@
   fetchPypi,
   pdm-backend,
   procps,
-  pytest-sugar,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -18,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.12.5";
-  format = "pyproject";
+  version = "0.15.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9ZLwib7cyOwbl0El1khRApw7GvFF8ErKZNaUEPDJtyI=";
+    hash = "sha256-oFiMCn+mihl4oGmBhld3j4ar5v9epqv0cvlAoIv+Two=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     typing-extensions
     # Build includes the standard optional by default
@@ -47,7 +46,6 @@ buildPythonPackage rec {
   nativeCheckInputs =
     [
       coverage # execs coverage in tests
-      pytest-sugar
       pytest-xdist
       pytestCheckHook
     ]

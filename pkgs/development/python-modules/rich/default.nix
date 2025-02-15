@@ -58,6 +58,14 @@ buildPythonPackage rec {
     which
   ];
 
+  disabledTests = [
+    # pygments 2.19 regressions
+    # https://github.com/Textualize/rich/issues/3612
+    "test_inline_code"
+    "test_blank_lines"
+    "test_python_render_simple_indent_guides"
+  ];
+
   pythonImportsCheck = [ "rich" ];
 
   passthru.tests = {

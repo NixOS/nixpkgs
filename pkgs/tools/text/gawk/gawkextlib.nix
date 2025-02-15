@@ -20,7 +20,7 @@
   glibcLocales,
   mpfr,
   more,
-  postgresql,
+  libpq,
   hiredis,
   expat,
   tre,
@@ -182,7 +182,7 @@ let
     pgsql = buildExtension {
       inherit gawkextlib;
       name = "pgsql";
-      extraBuildInputs = [ postgresql ];
+      extraBuildInputs = [ libpq ];
     };
     redis = buildExtension {
       inherit gawkextlib;

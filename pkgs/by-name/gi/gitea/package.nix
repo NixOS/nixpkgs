@@ -20,7 +20,7 @@ let
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-xSJOEXDF/1Cc7ptNMLGE7RqqbxelI2XS/Mi9JZSWu/Y=";
+    npmDepsHash = "sha256-5i3aB1QgH5NK5yDZySFlraVGU+Kh6J4Y2zvFqJX5kJs=";
 
     # use webpack directly instead of 'make frontend' as the packages are already installed
     buildPhase = ''
@@ -35,18 +35,18 @@ let
 in
 buildGoModule rec {
   pname = "gitea";
-  version = "1.23.1";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
-    rev = "v${gitea.version}";
-    hash = "sha256-0/mzOKSRhXLhwmDnMHQCjkalP+4hkQR6kICsAj6+6zE=";
+    tag = "v${gitea.version}";
+    hash = "sha256-g7nrqSeMoAcfN8uexEKySZwY8SCosIpACtURRbUgb5c=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-qOntP6zBd21PjCAV5ZvksgwIV4zDTOYiVBBWkC6O7rk=";
+  vendorHash = "sha256-nkg9uHAUqPJWWap0cTmDokcl2L2hT/b9I1+rNnA8bD0=";
 
   outputs = [
     "out"

@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "dns-over-https";
-  version = "2.3.7";
+  version = "2.3.8";
 
   src = fetchFromGitHub {
     owner = "m13253";
     repo = "dns-over-https";
     tag = "v${version}";
-    hash = "sha256-3mg4kDlIqv+psQU/FxA9TksGVAYaOymEDpAhMBZuqKI=";
+    hash = "sha256-0tjqj67PWPRChspUQQeZqtW68IB2G8N2vhebMwHNbX4=";
   };
 
-  vendorHash = "sha256-Dun1HWjV44PTpnijWBpGXqmKxtUw+Qu8rqsyMhEpkb4=";
+  vendorHash = "sha256-cASJYEglq2IrnxjqOCiepjExX/FmakeMjxPOsjUDTWM=";
 
   ldflags = [
     "-w"

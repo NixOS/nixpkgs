@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NjXJCrLsX52M7CBg8wdgwlK3gaGiznfdRGz7BAbVVPk=";
   };
 
-  cargoHash = "sha256-vCV5b4ljlDgwsYvxrPFe9rsfJjHHBCcM3QoZ4t8ZdRw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1/bCyScvWQYeGZRitvksww4uvrzhifRBYcYPgGY2GRo=";
 
   meta = {
     description = "Command-line tool for managing Architectural Decision Records";

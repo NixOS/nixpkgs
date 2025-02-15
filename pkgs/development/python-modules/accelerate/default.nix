@@ -24,7 +24,7 @@
   addBinToPathHook,
   evaluate,
   parameterized,
-  pytest7CheckHook,
+  pytestCheckHook,
   transformers,
   config,
   cudatoolkit,
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     addBinToPathHook
     evaluate
     parameterized
-    pytest7CheckHook
+    pytestCheckHook
     transformers
     writableTmpDirAsHomeHook
   ];

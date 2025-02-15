@@ -195,7 +195,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.7.1";
+  version = "0.7.2";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
@@ -204,7 +204,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-CImXKMEv+jHqngvcr8W6fQLiCo1mqmcZ0Ho0bfAgfbg=";
+    hash = "sha256-j59DpNuO5TgGD6UVGzueSTumd7mDMB4l1QytV3rFIJE=";
   };
 
   patches = [
@@ -376,6 +376,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "vllm" ];
+
+  # updates the cutlass fetcher instead
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";

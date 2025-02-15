@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-JiOV9c23yOhaVW2NHgs8rjM8l9qt181Tigf5sCnPep8=";
   };
 
-  cargoHash = "sha256-Jqx77/PDWEJ+NPJN2R6n4w9nVPXQoHeuVfYKUB3i9Lg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7q0PiY3y/+436/hPQ8wq2ry+BfPAbJAbnlJCrwN52Mw=";
 
   meta = {
     description = "Awesome-like workspaces for Hyprland";

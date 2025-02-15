@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  git,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,10 +16,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-dImQLC7owPf2EB5COO5vjN3a6k7gJ88D2hMSUW2/wn4=";
   };
 
-  cargoHash = "sha256-7JQcY3HCG3UQ0Mfz/+ZZ0axGEpQoH410FT72tjHW7EE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gHwweWKRnRJRfVMxnIFkafbN9Sl+UTnnYRQF7QD3nCc=";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # tests require it to be in a git repository

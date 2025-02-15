@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoHash = "sha256-7ChHYcyzRPFkZ+zh9lBOHcOizDvJf2cp9ULoI7Ofmqk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/r/nRQ/7KyUmJK19F557AcxXEXa85E/CE6+YFU6DdR4=";
 
   postInstall = ''
     installManPage packaging/man/pazi.1

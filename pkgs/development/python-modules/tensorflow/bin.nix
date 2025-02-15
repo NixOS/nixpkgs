@@ -64,7 +64,7 @@ buildPythonPackage rec {
       cuda = lib.optionalString cudaSupport (if isCudaJetson then "_jetson" else "_gpu");
       key = "${platform}_${pyVerNoDot}${cuda}";
     in
-    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported configuration: ${key}"));
+    fetchurl (packages.${key} or (throw "tensorflow-bin: unsupported configuration: ${key}"));
 
   buildInputs = [ llvmPackages.openmp ];
 

@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2hTSFz6S+sncqXY8FRzvy5iUt3HeLi3q3Ze1u+cZV1Y=";
   };
 
-  cargoHash = "sha256-D7W9UB0NmGMvRiI58vaP95R+CRRSWqcwj/MJNwlyGxE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-aEXcAgsf65dTVdCUAeu2YeI43jRkjFJK4DSwos3LRao=";
 
   # Some tests fail because they need network access to install the `wasm32-unknown-unknown` target.
   # However, GitHub Actions ensures a proper build.

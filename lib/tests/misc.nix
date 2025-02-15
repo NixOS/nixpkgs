@@ -2612,4 +2612,45 @@ runTests {
     };
     expected = "c";
   };
+
+  testMergeTypesSimple =
+    let
+      mergedType = types.mergeTypes types.str types.str;
+    in
+  {
+    expr = mergedType.name;
+    expected = "str";
+  };
+
+  testMergeTypesFail =
+    let
+      mergedType = types.mergeTypes types.str types.int;
+    in
+  {
+    expr = types.isType "merge-error" mergedType;
+    expected = true;
+  };
+
+  testMergeTypesEnum =
+    let
+      enumAB = lib.types.enum ["A" "B"];
+      enumXY = lib.types.enum ["X" "Y"];
+      merged = lib.types.mergeTypes enumAB enumXY; # -> enum [ "A" "B" "X" "Y" ]
+    in
+  {
+    expr = {
+      checkA = merged.check "A";
+      checkB = merged.check "B";
+      checkX = merged.check "X";
+      checkY = merged.check "Y";
+      checkC = merged.check "C";
+    };
+    expected = {
+      checkA = true;
+      checkB = true;
+      checkX = true;
+      checkY = true;
+      checkC = false;
+    };
+  };
 }

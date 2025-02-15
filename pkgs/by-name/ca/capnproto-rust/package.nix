@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-iLjvKxVfkAVoM4AYgr31Ud1mk3MyMPReDXv1IbKEvcE=";
   };
 
-  cargoHash = "sha256-KNUXIKzTlbEW7WUwqVOXjN5/6BDGEbOjbKELo0KtWDc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-P8zbqKqAvnKvWuCk+kHg17gJ/JZ61uC+yv7x/GzUxkk=";
 
   postInstall = ''
     mkdir -p $out/include/capnp

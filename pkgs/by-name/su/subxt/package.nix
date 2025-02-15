@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ce6fxyKPWyuRAnS88laW+sFP8InZghlYNhg5ToD9t00=";
   };
 
-  cargoHash = "sha256-SW35Neh8mFgnPanhuTb260QOCSOAnQjx12Ts3qhQY3Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K4PUM7GoCSARETWtXUuKcTaQunfc7QU+c5pRLythIZU=";
 
   # Only build the command line client
   cargoBuildFlags = [ "--bin" "subxt" ];

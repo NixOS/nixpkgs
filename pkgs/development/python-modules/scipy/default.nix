@@ -34,7 +34,7 @@
 
   # tests
   hypothesis,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytest-xdist,
 
   # Reverse dependency
@@ -48,8 +48,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.14.1";
-  srcHash = "sha256-eYuUHr9wZMXvEsIhssGR35JnRBNGaOL/j1LNM5sHuYY=";
+  version = "1.15.1";
+  srcHash = "sha256-pQfOiK/i/Nz1mCGdDA7ivnzHxqee1WVD62CxxgetGLg=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -92,11 +92,6 @@ buildPythonPackage {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0" \
-  '';
-
   build-system =
     [
       cython
@@ -129,8 +124,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     hypothesis
-    # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
-    pytest7CheckHook
+    pytestCheckHook
     pytest-xdist
   ];
 
@@ -143,6 +137,7 @@ buildPythonPackage {
     "hyp2f1_test_case47"
     "hyp2f1_test_case3"
     "test_uint64_max"
+    "test_large_m4" # https://github.com/scipy/scipy/issues/22466
   ];
 
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);

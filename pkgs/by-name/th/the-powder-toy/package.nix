@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
-  version = "99.0.377";
+  version = "99.2.382";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
     tag = "v${version}";
-    hash = "sha256-U8qgA/YZ10Vy1uuPtOZ7sEIV3sC2mtmC8y7O9FUE62Y=";
+    hash = "sha256-qf5Bh7f4nNNhzh+3id7+lW/eKnZ4ZKgrJxR1EWurKy8=";
   };
 
   nativeBuildInputs = [

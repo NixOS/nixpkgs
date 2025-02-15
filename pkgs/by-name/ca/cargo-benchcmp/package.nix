@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-J8KFI0V/mOhUlYtVnFAQgPIpXL9/dLhOFxSly4bR00I=";
   };
 
-  cargoHash = "sha256-2V9ILHnDsUI+x3f5o+V7p8rPUKf33PAkpyTabCPdd0g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Dpn3MbU56zX4vibG0pw5LuQEwvC6Uqzse1GCRHWyAEw=";
 
   patches = [
     # patch the binary path so tests can find the binary when `--target` is present

@@ -29,7 +29,7 @@
   forceInstallAllHacks ? true,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   nixosTests,
-  substituteAll,
+  replaceVars,
   wrapperPrefix ? "/run/wrappers/bin",
 }:
 
@@ -83,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./xscreensaver-wrapper-prefix.patch;
+    (replaceVars ./xscreensaver-wrapper-prefix.patch {
       inherit wrapperPrefix;
     })
   ];
@@ -137,7 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       raskin
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
   };

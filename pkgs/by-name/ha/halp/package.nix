@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SeBponGeQWKjbiS4GL8YA7y92BqLL+ja6ZSKAI3CeRM=";
   };
 
-  cargoHash = "sha256-/mzbLsIc0PW5yx/m9eq3IWYM6i1MKvmOY+17/Bwjguk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q+vfc0EQtGU8YsY11oun/F0OPffsjvB336y3qnerIDY=";
 
   patches = [
     # patch tests to point to the correct target directory

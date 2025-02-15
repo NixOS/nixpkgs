@@ -7,7 +7,7 @@
   installShellFiles,
   makeWrapper,
   nodejs,
-  substituteAll,
+  replaceVars,
   v4l-utils,
   which,
 }:
@@ -46,8 +46,7 @@ buildNpmPackage rec {
         nodejs
         which
       ] ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
-      crc32Patch = substituteAll {
-        src = ./fix-musl-detection.patch;
+      crc32Patch = replaceVars ./fix-musl-detection.patch {
         isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";
       };
     in

@@ -20,6 +20,9 @@
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
   ],
+  "no-broken-symlinks.sh": [
+    "index.html#no-broken-symlinks.sh"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -82,6 +85,9 @@
     "index.html#titanium",
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"

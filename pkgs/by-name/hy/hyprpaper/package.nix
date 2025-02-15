@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   cairo,
+  bash,
   expat,
   file,
   fribidi,
@@ -41,6 +42,15 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pmkJCzjflvsOytiu2mgn2wfSeyL6mTfoi214T4A2OZQ=";
   };
 
+  prePatch = ''
+    substituteInPlace src/main.cpp \
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+  '';
+  postPatch = ''
+    substituteInPlace src/helpers/MiscFunctions.cpp \
+      --replace-fail '/bin/bash' '${bash}/bin/bash'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -50,6 +60,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    bash
     expat
     file
     fribidi
@@ -72,11 +83,6 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     hyprutils
     hyprgraphics
   ];
-
-  prePatch = ''
-    substituteInPlace src/main.cpp \
-      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
-  '';
 
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;

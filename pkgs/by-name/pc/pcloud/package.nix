@@ -114,6 +114,8 @@ stdenv.mkDerivation {
     EOF
 
     chmod +x bin/pcloud
+
+    ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png $out/app/pcloud.png
   '';
 
   meta = with lib; {

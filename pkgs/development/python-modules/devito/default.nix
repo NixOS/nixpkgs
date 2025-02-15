@@ -1,35 +1,38 @@
 {
   lib,
   stdenv,
-  anytree,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  anytree,
   cached-property,
   cgen,
   click,
   codepy,
   distributed,
-  fetchFromGitHub,
-  gcc,
   llvmPackages,
-  matplotlib,
   multidict,
   nbval,
   psutil,
   py-cpuinfo,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
   scipy,
   sympy,
+
+  # tests
+  gcc,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
   version = "4.8.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
@@ -42,6 +45,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements-testing.txt \
       --replace-fail 'pooch; python_version >= "3.8"' "pooch"
+
+    substituteInPlace tests/test_builtins.py \
+      --replace-fail "from scipy.misc import ascent" "from scipy.datasets import ascent"
   '';
 
   pythonRemoveDeps = [ "pip" ];
@@ -99,6 +105,10 @@ buildPythonPackage rec {
       "test_stability_mpi"
       "test_subdomainset_mpi"
       "test_subdomains_mpi"
+
+      # Download dataset from the internet
+      "test_gs_2d_float"
+      "test_gs_2d_int"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False

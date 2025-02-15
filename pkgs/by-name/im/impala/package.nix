@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NPNzvqnuYXrHCOLN0kZwtzPiKVdl6UFnb/S/XtG+sEY=";
   };
 
-  cargoHash = "sha256-3mRWXUWyMgeaGOFvZXUeZmlD607zCz8a2d3O+MzhhNo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TILQKCBq6oji9u78sfEzoqYhKmtah5Q5x0JOVMNqzTk=";
 
   meta = {
     description = "TUI for managing wifi";

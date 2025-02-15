@@ -58,9 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
       for prog in "$out/bin/"*; do
         wrapProgram "$prog" --prefix PATH ":" "$out/bin:${searchPath}"
       done
-      # Move emacs modules and documentation into the right place.
-      mkdir -p $out/share/emacs $out/share/doc
-      ln -s ../maxima/${finalAttrs.version}/emacs $out/share/emacs/site-lisp
+      # Move documentation into the right place.
+      mkdir -p $out/share/doc
       ln -s ../maxima/${finalAttrs.version}/doc $out/share/doc/maxima
     ''
     + (lib.optionalString (lisp-compiler.pname == "ecl") ''

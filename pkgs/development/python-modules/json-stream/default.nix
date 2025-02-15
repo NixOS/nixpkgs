@@ -2,8 +2,9 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   httpx,
+  iconv,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -18,15 +19,16 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "json_stream";
-    inherit version;
-    hash = "sha256-iURExowzEXSSZ2PiJPs0t+0/kHSdHBZa/Q9ZMCB1NMQ=";
+  src = fetchFromGitHub {
+    owner = "daggaz";
+    repo = "json-stream";
+    tag = "v${version}";
+    hash = "sha256-/GDEC/Poy84TGuXM34OW4+K/qMJELFfO+lNQ5M5VsdI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ json-stream-rs-tokenizer ];
+  dependencies = [ json-stream-rs-tokenizer ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
   optional-dependencies = {
     httpx = [ httpx ];

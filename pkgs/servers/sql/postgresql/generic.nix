@@ -299,6 +299,11 @@ let
           ./patches/paths-for-split-outputs.patch
           ./patches/paths-with-postgresql-suffix.patch
 
+          (fetchpatch {
+            url = "https://github.com/postgres/postgres/commit/8108674f0e5639baebcf03b54b7ccf9e9a8662a2.patch";
+            hash = "sha256-EQJkDR0eb7QWCjyMzXMn+Vbcwx3MMdC83oN7XSVJP0U=";
+          })
+
           (substituteAll {
             src = ./patches/locale-binary-path.patch;
             locale = "${
@@ -390,9 +395,15 @@ let
       # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
       # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
       doCheck = false;
-      # Tests just get stuck on macOS 14.x for v13 and v14
       doInstallCheck =
-        !(stdenv'.hostPlatform.isDarwin && olderThan "15") && !(stdenv'.hostPlatform.isStatic);
+        !(stdenv'.hostPlatform.isStatic)
+        &&
+          # Tests just get stuck on macOS 14.x for v13 and v14
+          !(stdenv'.hostPlatform.isDarwin && olderThan "15")
+        &&
+          # Likely due to rosetta emulation:
+          #   FATAL:  could not create shared memory segment: Cannot allocate memory
+          !(stdenv'.hostPlatform.isDarwin && stdenv'.hostPlatform.isx86_64);
       installCheckTarget = "check-world";
 
       passthru =

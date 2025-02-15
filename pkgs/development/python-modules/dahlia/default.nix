@@ -7,21 +7,21 @@
 
 buildPythonPackage rec {
   pname = "dahlia";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia-lib";
     repo = "dahlia";
     tag = version;
-    hash = "sha256-t8m/7TSzVvETvn3Jar29jCh55Ti+B0NA8Az/8GHwQAg=";
+    hash = "sha256-489wI0SoC6EU9lC2ISYsLOJUC8g+kLA7UpOrDiBCBmo=";
   };
 
   build-system = [ poetry-core ];
   pythonImportsCheck = [ "dahlia" ];
 
   meta = {
-    changelog = "https://github.com/dahlia-lib/dahlia/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dahlia-lib/dahlia/blob/${src.tag}/CHANGELOG.md";
     description = "Simple text formatting package, inspired by the game Minecraft";
     license = lib.licenses.mit;
     homepage = "https://github.com/dahlia-lib/dahlia";

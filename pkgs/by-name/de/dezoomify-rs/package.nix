@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
   };
 
-  cargoHash = "sha256-0T5zvd78l3ghop/KoIgXYoGssVV9F+ppJV2pWyLnwxo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-v5hlG/VnRyU4lR84IXal5GmrAyfxJTjmwzRKRcfaSIY=";
 
   checkFlags = [
     # Tests failing due to networking errors in Nix build environment

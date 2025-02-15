@@ -170,7 +170,8 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-wrMqeJxOj9Jp3luy6ir6UzNQClRglqP8pfoqWk+Ky+w=";
 
   buildInputs = [ installShellFiles ];
   nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];

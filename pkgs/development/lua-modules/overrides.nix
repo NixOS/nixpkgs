@@ -30,6 +30,7 @@
 , libmpack
 , libmysqlclient
 , libpsl
+, libpq
 , libuuid
 , libuv
 , libxcrypt
@@ -44,7 +45,6 @@
 , openssl
 , pcre
 , pkg-config
-, postgresql
 , readline
 , rustPlatform
 , sol2
@@ -361,7 +361,7 @@ in
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
-      (lib.getDev postgresql)
+      (lib.getDev libpq)
     ];
   });
 
@@ -517,9 +517,13 @@ in
     meta.broken = stdenv.hostPlatform.isDarwin;
   });
 
-  lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
-    doCheck = false;
-  });
+  lush-nvim = prev.lush-nvim.overrideAttrs {
+    # Remove dangling symlink created during installation because we don't copy the source CREATE.md it links to
+    # Using a generic method because path changes depending on if building luaPackage or vimPlugin
+    postInstall = ''
+      find -L $out -type l -name "README.md" -print -delete
+    '';
+  };
 
   luuid = prev.luuid.overrideAttrs (oa: {
     externalDeps = [
@@ -571,9 +575,6 @@ in
       final.nlua final.busted neovim-unwrapped
     ];
 
-    # stick to neovim's lua version else loading shared libraries fail
-    meta = oa.meta // { broken = !isLua51; };
-
     checkPhase = ''
       runHook preCheck
       export HOME=$(mktemp -d)
@@ -602,6 +603,19 @@ in
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
         --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
+    '';
+  });
+
+  nvim-nio = prev.nvim-nio.overrideAttrs (oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+
+    # upstream uses PlenaryBusted which is a pain to setup
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
+      runHook postCheck
     '';
   });
 

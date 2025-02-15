@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qtbase, libharu
-, pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
+, pango, fcgi, firebird, libmysqlclient, libpq, graphicsmagick, glew, openssl
 , pcre, harfbuzz, icu
 }:
 
@@ -20,7 +20,7 @@ let
       nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
         boost doxygen qtbase libharu
-        pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
+        pango fcgi firebird libmysqlclient libpq graphicsmagick glew
         openssl pcre harfbuzz icu
       ];
 

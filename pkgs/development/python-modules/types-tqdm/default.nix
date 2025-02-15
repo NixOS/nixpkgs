@@ -4,21 +4,25 @@
   pythonOlder,
   fetchPypi,
   setuptools,
+  types-requests,
 }:
 
 buildPythonPackage rec {
   pname = "types-tqdm";
-  version = "4.66.0.20240417";
+  version = "4.67.0.20241221";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ftzp71IuqNQOT1uNhN2KEWbu/BPO7np+FYvw8aFCGjE=";
+    pname = "types_tqdm";
+    inherit version;
+    hash = "sha256-5WBGYxBWkiOFq+ia6xivVhH0cerdeRigrX802EzUyMw=";
   };
 
   build-system = [ setuptools ];
+
+  dependencies = [ types-requests ];
 
   # This package does not have tests.
   doCheck = false;

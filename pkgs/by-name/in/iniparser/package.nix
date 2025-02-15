@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   symlinkJoin,
   cmake,
   doxygen,
@@ -24,9 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = lib.optionals finalAttrs.finalPackage.doCheck [
-    (substituteAll {
+    (replaceVars ./remove-fetchcontent-usage.patch {
       # Do not let cmake's fetchContent download unity
-      src = ./remove-fetchcontent-usage.patch;
       unitySrc = symlinkJoin {
         name = "unity-with-iniparser-config";
         paths = [

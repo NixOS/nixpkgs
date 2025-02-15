@@ -7,6 +7,7 @@
   curl,
   freexl,
   geos,
+  libpq,
   librasterlite2,
   librttopo,
   libspatialite,
@@ -16,7 +17,6 @@
   lz4,
   minizip,
   openjpeg,
-  postgresql,
   proj,
   sqlite,
   virtualpg,
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     curl
     freexl
     geos
+    libpq
     librasterlite2
     librttopo
     libspatialite
@@ -51,7 +52,6 @@ stdenv.mkDerivation rec {
     lz4
     minizip
     openjpeg
-    postgresql
     proj
     sqlite
     virtualpg

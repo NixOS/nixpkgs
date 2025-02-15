@@ -164,7 +164,7 @@ buildPythonPackage rec {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
     mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
-    changelog = "https://github.com/huggingface/diffusers/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

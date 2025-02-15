@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wf0JNWNliDGNvlbWoatPqDKmVaBzHeCKOvJWuE9PnpQ=";
   };
 
-  cargoHash = "sha256-6T4WcQkCMR8W67w0uhhN8W0FlLsrTUMa3/xRXDtW4Es=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OhrSK+bvdQP1bAcEbS2foHxY4BEYoJ9SQaE7Rj9od0Y=";
 
   preConfigure = ''
     substituteInPlace src/compiler.rs \

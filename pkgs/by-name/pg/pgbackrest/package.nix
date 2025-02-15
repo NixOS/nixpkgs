@@ -9,7 +9,7 @@
   libbacktrace,
   bzip2,
   lz4,
-  postgresql,
+  libpq,
   libxml2,
   libyaml,
   zlib,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libbacktrace
     bzip2
     lz4
-    postgresql
+    libpq
     libxml2
     libyaml
     zlib

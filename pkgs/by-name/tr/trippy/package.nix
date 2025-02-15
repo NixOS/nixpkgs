@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  cargoHash = "sha256-uZb8KrYFkxDOjM8PiUsEux+9UBcDM+mwTCtHIeKjmOU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+PaSLq++tKA6dy4CI1EYrEDdXi2TI9XHjvMLfwDp/HA=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/trip"

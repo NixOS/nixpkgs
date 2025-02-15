@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-RtEL4ZVtNSqQShgHpjd1O/wgsXJOvceV+NhIWqexVAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rLW5FS8xM7Z49AaLq0KzBCoRgAVxwTDCHQFdIaEyygA=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/troyeguo/koodo-reader/releases/tag/${finalAttrs.src.tag}";
     description = "Cross-platform ebook reader";
     longDescription = ''
       A modern ebook manager and reader with sync and backup capacities

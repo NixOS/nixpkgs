@@ -9,9 +9,13 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 let
   defaultConfig = ''
+    import cachelib
+
     BIND_ADDRESS = '127.0.0.1'
     PORT = 8000
     CAPTCHA_ENABLE = False
+    SESSION_TYPE = 'cachelib'
+    SESSION_CACHELIB = cachelib.simple.SimpleCache()
   '';
 
   makeAppTest =

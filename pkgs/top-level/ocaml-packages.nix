@@ -38,6 +38,8 @@ let
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
+    arg-complete = callPackage ../development/ocaml-modules/arg-complete { };
+
     arp = callPackage ../development/ocaml-modules/arp { };
 
     asai = callPackage ../development/ocaml-modules/asai { };
@@ -361,6 +363,8 @@ let
 
     dolmen_loop =  callPackage ../development/ocaml-modules/dolmen/loop.nix { };
 
+    dolmen_lsp =  callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
+
     dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -418,7 +422,7 @@ let
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     dune-release = callPackage ../development/tools/ocaml/dune-release {
-      inherit (pkgs) opam git mercurial coreutils gnutar bzip2;
+      inherit (pkgs) opam gitMinimal mercurial coreutils gnutar bzip2;
     };
 
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
@@ -708,6 +712,10 @@ let
     httpun = callPackage ../development/ocaml-modules/httpun { };
 
     httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
+
+    httpun-lwt = callPackage ../development/ocaml-modules/httpun/lwt.nix { };
+
+    httpun-lwt-unix = callPackage ../development/ocaml-modules/httpun/lwt-unix.nix { };
 
     httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
 
@@ -1244,6 +1252,10 @@ let
 
     multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
+    multipart_form =  callPackage ../development/ocaml-modules/multipart_form { };
+
+    multipart_form-lwt =  callPackage ../development/ocaml-modules/multipart_form/lwt.nix { };
+
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
@@ -1544,7 +1556,7 @@ let
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
-      inherit (pkgs) postgresql;
+      inherit (pkgs) libpq;
     };
 
     pp = callPackage ../development/ocaml-modules/pp { };

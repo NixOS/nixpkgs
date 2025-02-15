@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-nOqh8kXS5mx0AM4NvIcwvC0lAZRHsQwrxI0c+9PeroU=";
   };
 
-  cargoHash = "sha256-whGTGJQIjdg/tIm5sZsBs0sbwiRuFIfgYvizmL+sQCE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lelmkdbqKRjSkJIkF5TWJ6LyCTo2j11hZf9QxIPBoOo=";
 
   cargoPatches = [
     # fix build with rust 1.80 by updating time crate version

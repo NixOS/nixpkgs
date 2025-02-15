@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     hash = "sha256-AlXyCDjs5xFqM0TmaBGfzvYn/ZDWAgBzLV/mDPQHflI=";
   };
-  cargoHash = "sha256-rJrOCDtWdvrvvQxC49g1wkW9/CrAGkGJQUuPZ2a6+bw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-A9QhOFsjEXljsugakJ0s7XdAPF447JIFaQGfDGDVp1E=";
   checkFlags = [
     # this integration test depends on a running kubernetes cluster
     "--skip=k8s::tests::test_get_pod_list"

@@ -1,16 +1,21 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchPypi,
   setuptools,
   versioningit,
+  attrs,
   platformdirs,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pueblo";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   # This tarball doesn't include tests unfortuneatly, and the GitHub tarball
   # could have been an alternative, but versioningit fails to detect the
@@ -20,25 +25,27 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7uFLlApTR58KiV7yRydo37RsVE4QPvTbjgYNEG64mUo=";
+    hash = "sha256-IQ5NFn1EMh5oLgRlth7VWQmSyMx2/7cmC/U1VW1B4OE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioningit
   ];
 
-  propagatedBuildInputs = [
-    #  contextlib-chdir
-    #  importlib-metadata
+  dependencies = [
+    attrs
     platformdirs
+    tomli
   ];
+
+  doCheck = false; # no tests in sdist
 
   pythonImportsCheck = [ "pueblo" ];
 
   meta = with lib; {
-    description = "Pueblo - a Python toolbox library";
-    homepage = "https://pypi.org/project/pueblo/";
+    description = "Python toolbox library";
+    homepage = "https://github.com/pyveci/pueblo";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ doronbehar ];
   };

@@ -5,7 +5,7 @@
   nixosTests,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "davis";
   version = "5.0.2";
 
@@ -16,9 +16,10 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-Zl+6nrgspyg6P9gqYwah81Z6Mtni6nUlCp4gTjJWn9M=";
   };
 
-  vendorHash = "sha256-ZV5GNNtex+yKaMP5KaQkx5EaJRAJSwJjIZOCcXlnVW4=";
+  vendorHash = "sha256-pCWM1kgk30Au9i8TflrmZXw/PJmo3tdW565BXwncsZU=";
 
   postInstall = ''
+    chmod -R u+w $out/share
     # Only include the files needed for runtime in the derivation
     mv $out/share/php/${finalAttrs.pname}/{migrations,public,src,config,bin,templates,tests,translations,vendor,symfony.lock,composer.json,composer.lock} $out
     # Save the upstream .env file for reference, but rename it so it is not loaded

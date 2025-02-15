@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pcre2-py";
-  version = "0.4.0";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grtetrault";
     repo = "pcre2.py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NPpI3IWg58num0MZjlEam37Qz9D3dDMhFjfVXB8ugOg=";
+    tag = "v${version}";
+    hash = "sha256-W3oKluXC4orw1ThYM1Beeu8+6rNMr8FSCqep84SmXLE=";
     fetchSubmodules = false;
   };
 

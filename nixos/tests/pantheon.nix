@@ -60,8 +60,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
             machine.wait_until_succeeds(f"pgrep -f {i}")
         for i in ["gala", "io.elementary.wingpanel", "io.elementary.dock"]:
             machine.wait_for_window(i)
-        for i in ["io.elementary.files.xdg-desktop-portal.service"]:
-            machine.wait_for_unit(i, "${user.name}")
+        machine.wait_until_succeeds("pgrep -xf ${pkgs.pantheon.elementary-files}/libexec/io.elementary.files.xdg-desktop-portal")
 
     with subtest("Check if various environment variables are set"):
         cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf ${pkgs.pantheon.gala}/bin/gala)/environ"

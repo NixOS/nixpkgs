@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "x-transformers";
-  version = "1.32.2";
+  version = "1.44.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "x_transformers";
     inherit version;
-    hash = "sha256-NUIlJ+N2/6kz3rI0oc7bfYVWnMkZhvfljQ6zSwBPkWo=";
+    hash = "sha256-m6Vx/D4rTur4n/DqWEAjD7jK43wEgwhdrQi8+ndsN+E=";
   };
 
   postPatch = ''

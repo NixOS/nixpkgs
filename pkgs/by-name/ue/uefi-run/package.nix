@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tR547osqw18dCMHJLqJ8AQBelbv8yCl7rAqslu+vnDQ=";
   };
 
-  cargoHash = "sha256-s1Kbc3JHoYy0UJwNfSunIdQ3xHjlQaut/Cb0JSYyB9g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-c9aooU60zN58/m8q4G/f8VOjq7oXUTqxqSUMp47YOcA=";
 
   meta = with lib; {
     description = "Directly run UEFI applications in qemu";

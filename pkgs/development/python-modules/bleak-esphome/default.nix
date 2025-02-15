@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bleak-esphome";
-  version = "2.0.0";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
     tag = "v${version}";
-    hash = "sha256-rN2vpXiOaUjjN6yNZxeEgTpcz0K5soUqKKiDDOhcBtc=";
+    hash = "sha256-AZkSWBMyTl2NgqmhVG4sE/N1AQGd6x4CZVYMgRKxlOQ=";
   };
 
   build-system = [ poetry-core ];

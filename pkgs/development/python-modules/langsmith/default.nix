@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.4";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-mJS9Sdt4ESh9YRyjiUdVHC6R400SKhTeSdTjnbtY61I=";
+    hash = "sha256-V52sBGC4acQHfgsK5uCKQIWoeiaUnyEObVrt5TBRukU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -87,6 +87,7 @@ buildPythonPackage rec {
     # due to circular import
     "tests/integration_tests/test_client.py"
     "tests/integration_tests/test_prompts.py"
+    "tests/unit_tests/evaluation/test_runner.py"
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
     # Tests require a Langsmith API key
@@ -101,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

@@ -22,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
 
-  cargoHash = "sha256-K472Qrsi2FIEOxFMi5CDgau2ODU0P3VDQEz/cwzmKiM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-KQ4g4hWy8FZH4nLiB0874r8FCINXJboZ4C1dAAPA8Gc=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security

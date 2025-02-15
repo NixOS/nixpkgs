@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "formulaic";
-  version = "1.0.2";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "matthewwardrop";
     repo = "formulaic";
     tag = "v${version}";
-    hash = "sha256-1Ygu4o6RXXTnvve8XZi+QMhCjvUyMspYWTyUH3p6+dg=";
+    hash = "sha256-7vmnibL0PMZWL/unUQxN4GtLPSYKmGnhDNtE5GRDFHk=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "High-performance implementation of Wilkinson formulas";
     homepage = "https://matthewwardrop.github.io/formulaic/";
-    changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/v${version}";
+    changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ swflint ];
   };

@@ -20,7 +20,7 @@
   fetchFromGitHub,
   rustPlatform,
   llvmPackages_19,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -62,7 +62,8 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoHash = "sha256-kYKQ7ddgoSvarF0HG/yESu5cU87DUgYm9tDkem5a/gw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Sr56iu51WjVi8qCqSRjix/e6NNvRmqIvAOlgSArF48I=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests
@@ -70,7 +71,7 @@ rustPlatform.buildRustPackage {
   LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.

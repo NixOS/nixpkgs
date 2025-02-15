@@ -19,7 +19,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-tQW8z0Gtxh0cnMwm9oN3PyOQW7YFVXG2LDkljudMDp0=";
   };
 
-  cargoHash = "sha256-R4mY/jo8uP0aPQy2+u2vtjibRMNJrWvgbCH4kptrO4U=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2S2M5AoppPoHIgEGGsCxrztTGXVAZIBax4VRQMH+5CE=";
 
   # Pretty much all tests require internet access
   doCheck = false;

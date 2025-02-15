@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BWfgXg3DYdhSzO3qtkwDZ+BZGcIqm82G3ZryaetLYgM=";
   };
 
-  cargoHash = "sha256-xmm9vOcHsRXw5zAptuiSF7xnA81HsHiG8v+nN/T77Yk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lfArBtwaMeeofE1cBgXFJg2UOMcOhBGF4htJwzNthyc=";
 
   meta = with lib; {
     description = "Batch rename utility for developers";

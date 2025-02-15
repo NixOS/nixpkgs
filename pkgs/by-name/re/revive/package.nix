@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "revive";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8vUtnViEFXdzKzsJxKzO4zbmKgU952EEencR7drjwAo=";
+    hash = "sha256-MiD5b5cLUY+ORrHtyqynM/kdFKIHb/4CMWd6Dq+6TcY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -18,7 +18,7 @@ buildGoModule rec {
       rm -rf $out/.git
     '';
   };
-  vendorHash = "sha256-DDpoi/OHGBjb/vhDklvYebJU2pBUr7s36/czZVGaR1A=";
+  vendorHash = "sha256-KFLnc7PFKbZ8VOUOx0EnRLyMYQzZVFZphDhk2KNRiIc=";
 
   ldflags = [
     "-s"

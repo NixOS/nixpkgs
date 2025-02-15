@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-gEiKv1YbNNWexNfzUULbe0fT0ueJ9TJojhBHp31i6OY=";
   };
 
-  cargoHash = "sha256-eqzqIyQHHklxo3aojCvY06TUPSqChoz6yZ2zzpgRNqs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/FBEv1jDlYrx06Ia/lF3Vcjnl5nWg0aEQefY67kh9Bw=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;

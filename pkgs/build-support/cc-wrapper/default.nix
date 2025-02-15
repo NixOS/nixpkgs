@@ -172,6 +172,7 @@ let
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
         znver4         = versionAtLeast ccVersion "13.0";
+        znver5         = versionAtLeast ccVersion "14.0";
       }.${arch} or true
     else if isClang then
       { #Generic
@@ -193,6 +194,7 @@ let
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "12.0";
         znver4         = versionAtLeast ccVersion "16.0";
+        znver5         = versionAtLeast ccVersion "19.1";
       }.${arch} or true
     else
       false;
@@ -339,6 +341,10 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   dontConfigure = true;
   enableParallelBuilding = true;
+
+  # TODO(@connorbaker):
+  # This is a quick fix unblock builds broken by https://github.com/NixOS/nixpkgs/pull/370750.
+  dontCheckForBrokenSymlinks = true;
 
   unpackPhase = ''
     src=$PWD

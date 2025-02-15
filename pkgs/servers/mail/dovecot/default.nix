@@ -26,7 +26,7 @@
   withMySQL ? false,
   libmysqlclient,
   withPgSQL ? false,
-  postgresql,
+  libpq,
   withSQLite ? true,
   sqlite,
   withLua ? false,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       inotify-tools
     ]
     ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withPgSQL libpq
     ++ lib.optional withSQLite sqlite
     ++ lib.optional withLua lua5_3;
 

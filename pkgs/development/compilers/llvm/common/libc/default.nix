@@ -25,20 +25,8 @@ let
     cp -r ${monorepoSrc}/llvm "$out"
     cp -r ${monorepoSrc}/${pname} "$out"
   '');
-
-  stdenv' =
-    if stdenv.cc.isClang then
-      stdenv.override {
-        cc = stdenv.cc.override {
-          nixSupport = stdenv.cc.nixSupport // {
-            cc-cflags = lib.remove "-lunwind" stdenv.cc.nixSupport.cc-cflags;
-          };
-        };
-      }
-    else
-      stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version patches;
 
   src = src';
@@ -58,8 +46,8 @@ stdenv'.mkDerivation (finalAttrs: {
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
   postUnpack = lib.optionalString isFullBuild ''
-    patchShebangs $sourceRoot/../$pname/hdrgen/yaml_to_classes.py
-    chmod +x $sourceRoot/../$pname/hdrgen/yaml_to_classes.py
+    patchShebangs $sourceRoot/../$pname/utils/hdrgen/main.py
+    chmod +x $sourceRoot/../$pname/utils/hdrgen/main.py
   '';
 
   prePatch = ''
@@ -72,7 +60,7 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   postInstall = lib.optionalString (!isFullBuild) ''
-    substituteAll ${./libc-shim.so} $out/lib/libc.so
+    substituteAll ${./libc-shim.tpl} $out/lib/libc.so
   '';
 
   libc = if (!isFullBuild) then stdenv.cc.libc else null;

@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Xnu7rw8C+NiF6vkEixt/RchlUjkswzN3E+Py0M7Xtyo=";
   };
 
-  cargoHash = "sha256-haVkAH5TTj+usH1wE3fPxlRYIQVGfbvIxvte12ACV1g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4pWyQVrREDjk901ihpeDPjcApPt29Vc2zlJveA+36Jw=";
 
   meta = with lib; {
     description = "JSON Query Language CLI tool built with Rust";

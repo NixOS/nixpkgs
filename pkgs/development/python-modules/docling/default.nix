@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.17.0";
+  version = "2.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-OtUFQRNqyTGT1Z41tHziwM5hqbk+tg/97bxhtPVtmN0=";
+    hash = "sha256-6p6/UwbI4ZB6ro1O5ELg8fENEnpH4ycpCyOk7QPX7cY=";
   };
 
   build-system = [
@@ -91,6 +91,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pillow"
+    "typer"
   ];
 
   optional-dependencies = {
@@ -137,6 +138,8 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
+    # requires network access
+    "test_page_range"
   ];
 
   meta = {

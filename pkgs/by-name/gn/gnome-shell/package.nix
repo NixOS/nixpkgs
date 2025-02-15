@@ -1,7 +1,7 @@
 {
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   lib,
   stdenv,
   docutils,
@@ -83,8 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
       tecla = "${lib.getBin gnome-tecla}/bin/tecla";

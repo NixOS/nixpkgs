@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ljEuFsLOwydLbx1DprJdBTL3cjFkhmuwr34da8LzG88=";
   };
 
-  cargoHash = "sha256-PZTB53DbUlyACS2wWmgVUQVz6EXb02GUogO3ClY678I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SbWKDC2vfsOQfZERHdzQ3BE1ks9/a+5BJU4X3TPBxXw=";
 
   postPatch = ''
     # CLI tests will fail in the sandbox

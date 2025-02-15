@@ -14,7 +14,7 @@
 , gnatcoll-iconv
 , gnatcoll-readline
 , sqlite
-, postgresql
+, libpq
 }:
 
 let
@@ -29,7 +29,7 @@ let
     ];
     postgres = [
       gnatcoll-sql
-      postgresql
+      libpq
     ];
     sqlite = [
       gnatcoll-sql

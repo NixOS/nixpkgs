@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   openssl,
-  postgresql,
+  libpq,
   zstd,
   fetchpatch,
 }:
@@ -31,12 +31,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     openssl
-    postgresql
+    libpq
     zstd
   ];
   cmakeFlags = [
-    "-DPQ_LIBRARY=${postgresql.lib}/lib"
     "-DBUILD_COMPRESSION=ON"
+    "-DPOSTGRESQL_INCLUDE_DIR=${lib.getDev libpq}/include/postgresql/server"
+    "-DPOSTGRESQL_LIBRARY=${libpq}/lib"
+    "-DPOSTGRESQL_LIBPGPORT=${lib.getDev libpq}/lib"
   ];
 
   installPhase = ''

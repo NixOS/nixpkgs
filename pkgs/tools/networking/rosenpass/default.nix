@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fQIeKGyTkFWUV9M1o256G4U1Os5OlVsRZu+5olEkbD4=";
   };
 
-  cargoHash = "sha256-GyeJCIE60JuZa/NuixDc3gTj9WAOpSReIyVxQqM4tDQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vx6kSdDOXiIp2626yKVieDuS9DD5/wKyXutMiKMKn24=";
 
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate

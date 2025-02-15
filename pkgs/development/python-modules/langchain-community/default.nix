@@ -98,6 +98,8 @@ buildPythonPackage rec {
 
   passthru = {
     inherit (langchain-core) updateScript;
+    # updates the wrong fetcher rev attribute
+    skipBulkUpdate = true;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -123,6 +125,9 @@ buildPythonPackage rec {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

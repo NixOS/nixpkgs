@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RekP88qZ4VaH5JG190BbVrBHnoUr+UVWvFmdPeyY8Yw=";
   };
 
-  cargoHash = "sha256-mripE0oeMLn9svhKH/dcH7VKYHGyZKfrDcoBdL+QcDQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yIRw/WMdkuaZEzA0J1bvMzf+9JOLqc6S7lWJIfih4Gw=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

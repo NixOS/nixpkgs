@@ -14,7 +14,8 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     hash = "sha256-d7SmlAWIV4SngJhIvlud90ZUSF55FWIrzFpkfSXIy2Y=";
   };
-  cargoHash = "sha256-ztPbI+ncMNMKnIxUksxgz8GHQpLZ7SVWdC4QJWh18Wk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-O3Pey0XwZITePTiVHrG5EVZpIp96sRWjUf1vzZ/JnCw=";
 
   # TODO re-add theses tests once they get fixed in upstream
   checkFlags = [

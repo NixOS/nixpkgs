@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-Nr8OpinQ1Dmo6e8XpBYrtaRRhcX2s1TW/5nM1LxApGg=";
+    hash = "sha256-Qt2VQhbiNNORrGUR5LHeBb0q/EIqPNPz/adljj6xpS4=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,8 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  cargoHash = "sha256-E1iowktT7oK259WY6AopfvinQuRT1yMnORbJn9Ly+3E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7oawxv1s8BJsOxGuADKjf4XqJ/UT+zYOrPQCbQljArM=";
 
   passthru.updateScript = nix-update-script { };
 

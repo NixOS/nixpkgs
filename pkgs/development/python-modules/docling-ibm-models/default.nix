@@ -74,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-ibm-models/blob/${src.tag}/CHANGELOG.md";
     description = "Docling IBM models";
     homepage = "https://github.com/DS4SD/docling-ibm-models";
     license = lib.licenses.mit;

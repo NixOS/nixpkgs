@@ -770,7 +770,6 @@ with lib.maintainers;
       mguentner
       ralith
       dandellion
-      sumnerevans
       nickcao
       teutat3s
     ];
@@ -1159,7 +1158,10 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [ figsoda ];
+    members = [
+      figsoda
+      RossComputerGuy
+    ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;

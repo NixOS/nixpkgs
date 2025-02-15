@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [
     # Not available anymore in nixpkgs
-    "jupyter-contrib-nbextensions"
+    "jupyter_contrib_nbextensions"
   ];
 
   dependencies = [

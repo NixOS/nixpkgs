@@ -24,11 +24,11 @@
   mysqlSupport ? false,
   libmysqlclient ? null,
   postgresSupport ? false,
-  postgresql ? null,
+  libpq ? null,
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
-assert postgresSupport -> postgresql != null;
+assert postgresSupport -> libpq != null;
 
 stdenv.mkDerivation rec {
   pname = "libgda";
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
       libmysqlclient
     ]
     ++ lib.optionals postgresSupport [
-      postgresql
+      libpq
     ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";

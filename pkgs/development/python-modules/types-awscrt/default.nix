@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "types-awscrt";
-  version = "0.23.8";
+  version = "0.23.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "types_awscrt";
     inherit version;
-    hash = "sha256-IUE5Go9NNs8JhAbBnZBgs08TpVjCLUqtrCUKDFfRJxA=";
+    hash = "sha256-llZZJgWZtCFWQgS4lUZ2hBBKLAMRu6z9PCQjuLDT8+k=";
   };
 
   build-system = [ setuptools ];

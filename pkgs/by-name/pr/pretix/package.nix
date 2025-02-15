@@ -83,6 +83,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "django-phonenumber-field"
     "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
@@ -100,7 +101,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "vat-moss-forked" # we provide a patched vat-moss package
+    "vat_moss_forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''

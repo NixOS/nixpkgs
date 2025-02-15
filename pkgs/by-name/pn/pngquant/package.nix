@@ -25,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-mZpg6BRpsvEiMsS6ZJzVYg6wXHLb3Cf72sK1yzTF8y4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-W+/y79KkSVHqBybouUazGVfTQAuelXvn6EXtu+TW7j4=";
   cargoPatches = [
     # https://github.com/kornelski/pngquant/issues/347
     ./add-Cargo.lock.patch

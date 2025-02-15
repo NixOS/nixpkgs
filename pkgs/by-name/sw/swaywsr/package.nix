@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6hGEcJz+zGfwz1q+XKQYfyJJK7lr+kCgk2/uiq1xP0M=";
   };
 
-  cargoHash = "sha256-zoV2vy41fVsX8BtddURqQymMX4Zpso+GOBBqoVr3tYo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-u+aMwj+IxFY+fSAECkKr8dSPVw2q+FXZpgwwexu7BFU=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

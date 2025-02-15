@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KGPlNXkF16VdoOb3tg3nsQRdtgU83z7ibPy965bvvDk=";
   };
 
-  cargoHash = "sha256-Q46VKBrOsjqUeSruuK/Bur2L69JAGr3c+ianfPlfzi0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-r2dZ3io8YRWE1BJQ+gM5uwhz56RgvjHvgmARnHVsQCA=";
 
   meta = {
     description = "Quickly get ANSI escape sequences";

@@ -2565,14 +2565,14 @@ buildLuarocksPackage {
 lze = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lze";
-  version = "0.7.0-1";
+  version = "0.7.11-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lze-0.7.0-1.rockspec";
-    sha256 = "1qrrn96v13paw57vm783yvgzbfr3pj5j8qfi6qf0b72f27b8sxlh";
+    url    = "mirror://luarocks/lze-0.7.11-1.rockspec";
+    sha256 = "1nvnjncs5xz5gv4vsvwnsp6hcyvbzjrxvq0li9nr84hmb5sx7z1r";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lze/archive/v0.7.0.zip";
-    sha256 = "1r44fxgl4327l0czq6rp80hf6hy7vp3qfqcamx59hw5zgi5hymv1";
+    url    = "https://github.com/BirdeeHub/lze/archive/v0.7.11.zip";
+    sha256 = "0vv333vkymjdsm73ppw8fpn9kxhapbiiikcaxhjswvrxw8ap7dwg";
   };
 
   disabled = luaOlder "5.1";
@@ -2884,6 +2884,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+nvim-dbee = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nui-nvim }:
+buildLuarocksPackage {
+  pname = "nvim-dbee";
+  version = "0.1.9-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nvim-dbee-0.1.9-1.rockspec";
+    sha256 = "1lmzy6ivnwvhzclkfbcswj2mznrpc4i8s3ivdrc78rr86i49mvpg";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/kndndrj/nvim-dbee/archive/v0.1.9.zip";
+    sha256 = "10xplksglyd8af8q1cl2lxcpn52b766g87gva9fd3l66idxsds00";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nui-nvim ];
+
+  meta = {
+    homepage = "https://github.com/kndndrj/nvim-dbee";
+    description = "Interactive database client for neovim";
+    license.fullName = "GPL-3.0";
+  };
+}) {};
+
 nvim-nio = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "nvim-nio";
@@ -2903,6 +2926,28 @@ buildLuarocksPackage {
     homepage = "https://github.com/nvim-neotest/nvim-nio";
     description = "A library for asynchronous IO in Neovim";
     maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
+nvim-web-devicons = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "nvim-web-devicons";
+  version = "0.100-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nvim-web-devicons-0.100-1.rockspec";
+    sha256 = "0i87kr2q1s97q4kw85k36xhryigbv4bgy3ig56qg6z5jgkxgldza";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-tree/nvim-web-devicons/archive/v0.100.zip";
+    sha256 = "0d7gzk06f6z9wq496frbaavx90mcxvdhrswqd3pcayj2872i698d";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/nvim-tree/nvim-web-devicons";
+    description = "Nerd Font icons for neovim";
     license.fullName = "MIT";
   };
 }) {};

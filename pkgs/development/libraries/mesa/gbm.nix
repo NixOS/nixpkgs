@@ -17,14 +17,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mesa-libgbm";
-  version = "24.3.3";
+
+  # We don't use the versions from common.nix, because libgbm is a world rebuild,
+  # so the updates need to happen separately on staging.
+  version = "24.3.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "mesa";
     rev = "mesa-${version}";
-    hash = "sha256-OThJ/txyJ6p879jG5qOXX6mL27t7Uz/tbr620iRMeIc=";
+    hash = "sha256-1RUHbTgcCxdDrWjqB0EG4Ny/nwdjQHHpyPauiW/yogU=";
   };
 
   mesonAutoFeatures = "disabled";

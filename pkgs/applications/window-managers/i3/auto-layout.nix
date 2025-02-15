@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-gpVYVyh+2y4Tttvw1SuCf7mx/nxR330Ob2R4UmHZSJs=";
   };
 
-  cargoHash = "sha256-OxQ7S+Sqc3aRH53Bs53Y+EKOYFgboGOBsQ7KJgICcGo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oKpcYhD9QNW+8gFVybDEnz58cZ+2Bf4bwYuflXiJ1jc=";
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;

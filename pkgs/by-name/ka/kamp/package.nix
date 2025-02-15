@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JZe8z6OYJ+I0+dcq+sCoQPzlz6eB4z98jWj8MDXdODY=";
   };
 
-  cargoHash = "sha256-+NiDSg7FJrtcNm/V0kn2kNQMJqOamE7Yl0sK/FSUYgA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QGTa2emaz3Nzoe3UuvbKCoopOoKD29RSWPG5wvPe+RE=";
 
   postInstall = ''
     install scripts/* -Dt $out/bin

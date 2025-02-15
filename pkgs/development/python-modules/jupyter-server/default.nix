@@ -1,5 +1,6 @@
 {
   lib,
+  pythonOlder,
   stdenv,
   buildPythonPackage,
   fetchPypi,
@@ -34,13 +35,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.14.2";
+  version = "2.15.0";
   pyproject = true;
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ZglQIaqWOM7SdsJIsdgYYuTFDyktV1kgu+lg3hxWsSs=";
+    hash = "sha256-nURrhpe09zN6G3zcrEB3i6vdk7phS21oqxwMkY8cQIQ=";
   };
 
   build-system = [
@@ -71,6 +73,8 @@ buildPythonPackage rec {
 
   # https://github.com/NixOS/nixpkgs/issues/299427
   stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "favicon.ico" ];
+
+  pythonImportsCheck = [ "jupyter_server" ];
 
   nativeCheckInputs = [
     ipykernel

@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-KJ+2MdhBW0og6uj9eTUsoKcpenQj7tp3fZzgCNfdrqI=";
   };
 
-  cargoHash = "sha256-RN//dB53Jy6fGJeUHHM7jdJrPhnbfjKiJ5TFFOtcbFI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0D/jJsPjxDqD5xjqET+Y4iXAvNzOu1c3meaFkXVtSDw=";
 
   passthru = {
     tests.version = testers.testVersion { package = riffdiff; };

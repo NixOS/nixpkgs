@@ -28,7 +28,8 @@ rustPlatform.buildRustPackage {
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  cargoHash = "sha256-r6WuRiui/cx+6HUzWxdIrEDySXkM1cUN87+LItekAt0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-IW/2Xp52TlqYtvXZqSDv9/Uv9B/thM360ecbbWLXPNE=";
 
   preBuild = ''
     mkdir -p $out/share/

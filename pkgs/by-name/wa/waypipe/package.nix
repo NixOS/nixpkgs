@@ -31,9 +31,9 @@ llvmPackages.stdenv.mkDerivation rec {
     tag = "v${version}";
     hash = "sha256-MTh3it+sJxd+vOTi9fVOxvlqlkgJAK56wel3xX0IzJE=";
   };
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-15JmdpWXSyM0Hg3Babi4mKcnMhzx0fsWeFRROTQ/RLQ=";
+    hash = "sha256-M1PTlkmZu1+F14kAO5yH9Oa7/hJlYiG9ACncRaz30Q8=";
   };
 
   strictDeps = true;

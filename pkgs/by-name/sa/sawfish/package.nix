@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       extensibility or redefinition.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ZcGZK4GX78ls3nHb7SBKszmZXMAbCxS4osW3MLqgnHQ=";
   };
 
-  cargoHash = "sha256-LkLSPFCfQxBb5DJZ67I7xPxzIYqTzKccyLW0S65/MLU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Z3T4mupwUqOSP+iAmy7Ps1EZlyV9cDvnfXBZwH1NFaA=";
 
   meta = {
     description = "Prettified Linux syscall tracing tool (like strace)";

@@ -43,7 +43,7 @@ in
           };
         };
       };
-      description = "See https://www.freie-netze.org/wg-access-server/2-configuration/ for possible options";
+      description = "See <https://www.freie-netze.org/wg-access-server/2-configuration/> for possible options";
     };
 
     secretsFile = mkOption {

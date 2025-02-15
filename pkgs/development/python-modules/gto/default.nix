@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   entrypoints,
-  fastentrypoints,
   fetchFromGitHub,
   freezegun,
   funcy,
-  git,
+  gitMinimal,
   pydantic,
   pytest-cov-stub,
   pytest-mock,
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
     pytest-cov-stub
     pytest-mock
     pytest-test-utils
@@ -68,6 +68,9 @@ buildPythonPackage rec {
 
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
+
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   disabledTests = [

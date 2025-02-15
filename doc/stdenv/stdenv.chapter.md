@@ -1371,6 +1371,20 @@ This setup hook moves any systemd user units installed in the `lib/` subdirector
 
 This hook only runs when compiling for Linux.
 
+### `no-broken-symlinks.sh` {#no-broken-symlinks.sh}
+
+This setup hook checks for, reports, and (by default) fails builds when "broken" symlinks are found. A symlink is considered "broken" if it's dangling (the target doesn't exist) or reflexive (it refers to itself).
+
+This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
+
+::: {.note}
+The hook only considers symlinks with targets inside the Nix store.
+:::
+
+::: {.note}
+The check for reflexivity is direct and does not account for transitivity, so this hook will not prevent cycles in symlinks.
+:::
+
 ### `set-source-date-epoch-to-latest.sh` {#set-source-date-epoch-to-latest.sh}
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.

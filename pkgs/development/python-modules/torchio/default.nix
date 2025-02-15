@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.0";
+  version = "0.20.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fepegar";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-Soew23+Skpc2IpVBMuOnC5LBW0vFL/9LszLijkJgQoQ=";
+    hash = "sha256-I91KcrCwHkjY7oh5RFWfV93pRgd4iQVCBVTtd4TqXGo=";
   };
 
   propagatedBuildInputs = [

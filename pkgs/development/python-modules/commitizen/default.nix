@@ -3,7 +3,7 @@
   commitizen,
   fetchFromGitHub,
   buildPythonPackage,
-  git,
+  gitMinimal,
   pythonOlder,
   stdenv,
   installShellFiles,
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     argcomplete
     deprecated
-    git
+    gitMinimal
     py
     pytest-freezer
     pytest-mock

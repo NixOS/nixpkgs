@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.56";
+  version = "0.2.70";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = version;
-    hash = "sha256-X/IMNEmggu9bSJFUaTohbFYxGZBguf+eFb3ObmQGplk=";
+    tag = "${version}";
+    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
   };
 
   postgresqlTestSetupPost = ''
@@ -112,9 +112,14 @@ buildPythonPackage rec {
     # psycopg.errors.InsufficientPrivilege: permission denied to create database
     "tests/test_pregel_async.py"
     "tests/test_pregel.py"
+    "tests/test_large_cases.py"
+    "tests/test_large_cases_async.py"
   ];
 
-  passthru.updateScript = langgraph-sdk.updateScript;
+  passthru = {
+    inherit (langgraph-sdk) updateScript;
+    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  };
 
   meta = {
     description = "Build resilient language agents as graphs";

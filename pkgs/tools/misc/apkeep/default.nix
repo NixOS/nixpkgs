@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YjGfnYK22RIVa8D8CWnAxHGDqXENGAPIeQQ606Q3JW8=";
   };
 
-  cargoHash = "sha256-Fx/XNmml/5opekmH1qs/f3sD45KWfNZjdOxTuNJfZiw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-CwucGAwAvxePNQu5p1OWx9o9xsvpzX1abH6HyF43nEE=";
 
   prePatch = ''
     rm .cargo/config.toml

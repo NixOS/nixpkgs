@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
-  zope-testrunner,
   pytestCheckHook,
 }:
 
@@ -13,28 +11,25 @@ buildPythonPackage rec {
   version = "5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "zope.contenttype";
     inherit version;
     hash = "sha256-AAHvG2XKZQUZBW3OUwxY0LOWlXzPBQIyPIoVSdtk0xc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    zope-testrunner
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "zope.contenttype" ];
 
-  meta = with lib; {
+  pythonNamespaces = [ "zope" ];
+
+  meta = {
     homepage = "https://github.com/zopefoundation/zope.contenttype";
     description = "Utility module for content-type (MIME type) handling";
     changelog = "https://github.com/zopefoundation/zope.contenttype/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

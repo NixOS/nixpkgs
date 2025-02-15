@@ -6,20 +6,20 @@
 }:
 let
   pname = "navicat-premium";
-  version = "17.1.7";
+  version = "17.1.8";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://web.archive.org/web/20241217004300/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-        hash = "sha256-5dzZh06Ld8t4tgE3tWGPAaBuKcT9iSxi8KpSdO4Un64=";
+        url = "https://web.archive.org/web/20250208181645/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
+        hash = "sha256-dPZIgq0vuBF4K2U12EKdGnDpfS67Afxmw+G7eLyYdpg=";
       };
       aarch64-linux = fetchurl {
-        url = "https://web.archive.org/web/20241217005701/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
-        hash = "sha256-4NvjdNTo/WUlZIRAzA2D39NupqMjlCvjHSWk06spqRc=";
+        url = "https://web.archive.org/web/20250208182611/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
+        hash = "sha256-IDcL4uqhTd20UOX3Zt8lpeTj8FhcbT+7RtsEzcP5dGI=";
       };
     }
-    .${stdenv.hostPlatform.system};
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;

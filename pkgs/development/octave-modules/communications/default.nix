@@ -8,11 +8,11 @@
 
 buildOctavePackage rec {
   pname = "communications";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-psQuiBOI1mXXZaH4EesVO91r2ViCc0KrKxKM7Xw+gts=";
+    sha256 = "sha256-UXaoV45mdmA7n2cB8J3S+/8Nt7uhokyv2MVBm+FK5lw=";
   };
 
   buildInputs = [

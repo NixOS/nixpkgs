@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2916XMkNvHmnY1wYHPSsRdCcgBHi4Akv1+A6WNlg6J4=";
   };
 
-  cargoHash = "sha256-niLqpSwoaZStK9xnQCoDdqE/NVeWysiJn1Mdaj8Yl6Y=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Qx2y4m9qTBb/OZpgMLpGwrkU0M1smjnRwxxdD1r90UQ=";
 
   buildInputs = [
     rust-jemalloc-sys
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   env.OXC_VERSION = version;
 
-  cargoBuildFlags = [ "--bin=oxlint" ];
+  cargoBuildFlags = [ "--bin=oxlint" "--bin=oxc_language_server" ];
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {

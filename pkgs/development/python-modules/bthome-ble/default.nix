@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.11.0";
+  version = "3.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
     tag = "v${version}";
-    hash = "sha256-TlZyNGfHNKN+6tCKepLS+fbgfq3a1uzeCXl25khl6d8=";
+    hash = "sha256-1Kr+KKL8o1qsu/ncwclsokPcO1QHYadul/f+/Nnv6SQ=";
   };
 
   build-system = [ poetry-core ];

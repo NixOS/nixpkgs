@@ -14,7 +14,7 @@ type ImageVariants = dict[str, str]
 class NRError(Exception):
     "nixos-rebuild general error."
 
-    def __init__(self, message: str):
+    def __init__(self, message: str) -> None:
         self.message = message
 
     @override

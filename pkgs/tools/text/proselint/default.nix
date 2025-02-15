@@ -1,33 +1,36 @@
 {
   lib,
+  python3Packages,
   fetchurl,
   buildPythonApplication,
   click,
-  future,
-  six,
 }:
-
 buildPythonApplication rec {
   pname = "proselint";
-  version = "0.13.0";
+  version = "0.14.0";
 
   doCheck = false; # fails to pass because it tries to run in home directory
+  format = "pyproject";
 
   src = fetchurl {
     url = "mirror://pypi/p/proselint/${pname}-${version}.tar.gz";
-    sha256 = "7dd2b63cc2aa390877c4144fcd3c80706817e860b017f04882fbcd2ab0852a58";
+    sha256 = "YklkJyvqFHZ+XfJWHYfdMHZ5OMjLUvsjWFvDdYBoDoY=";
   };
 
-  propagatedBuildInputs = [
-    click
-    future
-    six
-  ];
+  nativeBuildInputs = [ python3Packages.poetry-core ];
+  propagatedBuildInputs = [ click ];
 
   meta = with lib; {
-    description = "Linter for prose";
+    description = "A linter for prose.";
     mainProgram = "proselint";
-    homepage = "http://proselint.com";
+
+    homepage = "https://github.com/amperser/proselint";
+    changelog = "https://github.com/amperser/proselint/blob/main/CHANGELOG.md#proselint${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }";
+
+    downloadPage = "https://pypi.org/project/proselint/${version}/#files";
+
     license = licenses.bsd3;
     maintainers = [ ];
   };

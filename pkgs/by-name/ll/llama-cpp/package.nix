@@ -144,7 +144,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       (cmakeBool "GGML_BLAS" blasSupport)
       (cmakeBool "GGML_CLBLAST" openclSupport)
       (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIPBLAS" rocmSupport)
+      (cmakeBool "GGML_HIP" rocmSupport)
       (cmakeBool "GGML_METAL" metalSupport)
       (cmakeBool "GGML_RPC" rpcSupport)
       (cmakeBool "GGML_VULKAN" vulkanSupport)

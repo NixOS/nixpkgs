@@ -40,6 +40,7 @@
   libXext,
   livekit-libwebrtc,
   testers,
+  writableTmpDirAsHomeHook,
 
   withGLES ? false,
   buildRemoteServer ? true,
@@ -95,7 +96,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.171.6";
+  version = "0.173.10";
 
   outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
@@ -103,7 +104,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-OQE/6bNGogcDpZOEUXq33E98/t1HKelTTX48X4wo2MI=";
+    hash = "sha256-6GVRJUBCXD9ohRcOATK/tzh7e7icyZzA/SuCAL9DauQ=";
   };
 
   patches = [
@@ -123,7 +124,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-lucQTqTc63a3HvqwWVosqxMzy4TgC+Mj77rFzVbwBR8=";
+  cargoHash = "sha256-xtziusGBsSni/ZtG+OzIkWxp3azg54G4r/5Wi9n9cyc=";
 
   nativeBuildInputs =
     [
@@ -207,9 +208,9 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   checkFlags =
     [

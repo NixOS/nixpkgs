@@ -29,16 +29,18 @@
   libsysprof-capture,
   lerc,
   doxygen,
+  writableTmpDirAsHomeHook,
 }:
+
 stdenv.mkDerivation rec {
   pname = "deskflow";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${version}";
-    hash = "sha256-FdpDaJ+pphy2+8prlKst0DjmdbcZOmNp+lKN5xdnvC8=";
+    hash = "sha256-Jj2BNqz4pIJ468pywJRKu6GjgGX31GZZtDLHgcvC3JE=";
   };
 
   postPatch = ''
@@ -95,11 +97,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   checkPhase = ''
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    export HOME=$(mktemp -d)
     ./bin/unittests
     ./bin/integtests
 

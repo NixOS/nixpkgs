@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-GJQzz9o0QKbnE8l1MEjdW36S/rJo2GoaK02Qnl9dtEA=";
   };
 
-  cargoHash = "sha256-OQpKy/TVsJV/AjqvvdqTnAnAc1+YhN83N1EyNfgF4qg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-J4u89zP3+AI4nSUJkQ4HNGmbwLnmCYUf4WVRBhPVAC4=";
 
   preConfigure = ''
     # de-vendor spade git submodule

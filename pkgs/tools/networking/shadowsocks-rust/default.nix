@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-
   cargoHash = "sha256-hdHCpER4qs8W6rMmwys2KhaGDiTWcnntAL3ZeTBgt84=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];

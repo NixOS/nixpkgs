@@ -21,6 +21,7 @@
   grass,
   gsl,
   hdf5,
+  libpq,
   libspatialindex,
   libspatialite,
   libzip,
@@ -28,7 +29,6 @@
   ninja,
   openssl,
   pdal,
-  postgresql,
   proj,
   protobuf,
   python3,
@@ -116,13 +116,13 @@ mkDerivation rec {
       geos
       gsl
       hdf5
+      libpq
       libspatialindex
       libspatialite
       libzip
       netcdf
       openssl
       pdal
-      postgresql
       proj
       protobuf
       qca-qt5

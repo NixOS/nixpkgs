@@ -127,7 +127,7 @@ pkgs.mkShell rec {
 
           packages=(
             "build-tools;35.0.0" "cmdline-tools;13.0" \
-            "patcher;v4" "platform-tools" "platforms;android-35"
+            "platform-tools" "platforms;android-35"
           )
 
           for package in "''${packages[@]}"; do

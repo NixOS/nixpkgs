@@ -29,10 +29,11 @@ let
       };
     };
     default = {};
-    type = attrsWith' "config-name" (attrsWith' "tmpfiles-type" (attrsWith' "path" (types.submodule ({ name, config, ... }: {
+    type = attrsWith' "config-name" (attrsWith' "path" (attrsWith' "tmpfiles-type" (types.submodule ({ name, config, ... }: {
       options.type = mkOption {
         type = types.str;
         default = name;
+        defaultText = "‹tmpfiles-type›";
         example = "d";
         description = ''
           The type of operation to perform on the file.

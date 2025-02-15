@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.40.2";
+  version = "0.43.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
+    hash = "sha256-ANOqJL/t/5QgsuDV2fWrbZ1CaOcq+/Wbs/pUJ4HVIY4=";
   };
 
   build-system = [ setuptools ];

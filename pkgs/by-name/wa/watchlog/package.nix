@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MVYIBHyCgMKtddlOzpdUxlI6Sqje7ddAyA+FbXSD/78=";
   };
 
-  cargoHash = "sha256-qbCv/DuBN4Z79hLg/cJMYeo5t3GUMOVCc/KymtAsVCg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qF5Mv3lT6j/lAyrIHiYgcx75EUy1iqnE5sD+gFM34V0=";
 
   meta = {
     description = "Easier monitoring of live logs";

@@ -39,7 +39,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/t-rec" --prefix PATH : "${binPath}"
   '';
 
-  cargoHash = "sha256-fjq4Bys7KnSu6kV74CZJ95oov4HXY59VltjcAuXGMPg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-f//1/mLciJ3EDfHkZtg1c2W8qtfUY2DF4x31qqDExMI=";
 
   meta = with lib; {
     description = "Blazingly fast terminal recorder that generates animated gif images for the web written in rust";
