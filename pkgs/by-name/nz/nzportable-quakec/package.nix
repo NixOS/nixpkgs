@@ -3,17 +3,17 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
-  nzportable,
+  fteqcc,
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-quakec";
-  version = "0-unstable-2024-10-12-12-03-59";
+  version = "0-unstable-2024-11-30-14-44-25";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
     repo = "quakec";
-    rev = "01e95c4dab91ce0e8b7387d2726d9ee307792ae7";
-    hash = "sha256-h4llx3tzeoI1aHLokM7NqkZJWuo6rcrmWfb0pDQL+zM=";
+    rev = "81f7179ebff93304ad762dfe73c12129d8975f96";
+    hash = "sha256-MOHmanCSvd9nvoHQcFDhrfE9ssbdxUXok3WQ0h90ev8=";
   };
 
   outputs = [
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
     colorama
     fastcrc
     pandas
-    nzportable.fteqw
+    fteqcc
   ];
 
   buildPhase = ''
@@ -39,6 +39,7 @@ stdenvNoCC.mkDerivation {
 
     fteqcc -srcfile progs/csqc.src
     fteqcc -O3 -DFTE -srcfile progs/ssqc.src
+    fteqcc -O3 -DFTE -srcfile progs/menu.src
     fteqcc -O3 -srcfile progs/ssqc.src
 
     runHook postBuild
