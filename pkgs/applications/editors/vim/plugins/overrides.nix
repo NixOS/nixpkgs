@@ -4004,6 +4004,7 @@ in
       "gitsigns-nvim"
       "image-nvim"
       "lsp-progress-nvim"
+      "lualine-nvim"
       "luasnip"
       "lush-nvim"
       "lz-n"

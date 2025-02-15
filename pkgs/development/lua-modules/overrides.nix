@@ -58,6 +58,7 @@
   zlib,
   zziplib,
   writableTmpDirAsHomeHook,
+  gitMinimal,
 }:
 
 final: prev:
@@ -492,6 +493,21 @@ in
         dep = openldap;
       }
     ];
+  });
+
+  lualine-nvim = prev.lualine-nvim.overrideAttrs (_: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+      gitMinimal
+    ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
+      runHook postCheck
+    '';
   });
 
   luaossl = prev.luaossl.overrideAttrs (_: {
