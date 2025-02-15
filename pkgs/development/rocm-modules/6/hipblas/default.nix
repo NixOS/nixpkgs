@@ -55,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/hipBLAS/commit/54220fdaebf0fb4fd0921ee9e418ace5b143ec8f.patch";
       hash = "sha256-MFEhv8Bkrd2zD0FFIDg9oJzO7ztdyMAF+R9oYA0rmwQ=";
     })
+    (fetchpatch {
+      name = "correct-hipblas-common-library-type.patch";
+      url = "https://github.com/ROCm/hipBLAS/commit/de9dcda7391766761f50258da5e7bfe9bc5caec8.patch";
+      hash = "sha256-5OSa2fkvOole0LAq+vT8KpT8433m4judsfr9Yeyvn4Q=";
+    })
   ];
 
   postPatch = ''
