@@ -1,0 +1,18 @@
+ACTION!="add", GOTO="libticables_end"
+
+# serial device (assume TI calculator)
+KERNEL=="ttyS[0-3]", ENV{ID_PDA}="1"
+# parallel device (assume TI calculator)
+SUBSYSTEM=="ppdev", ENV{ID_PDA}="1"
+# SilverLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="0451", ATTR{idProduct}=="e001", ENV{ID_PDA}="1"
+# TI-84+ DirectLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="0451", ATTR{idProduct}=="e003", ENV{ID_PDA}="1"
+# TI-89 Titanium DirectLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="0451", ATTR{idProduct}=="e004", ENV{ID_PDA}="1"
+# TI-84+ SE DirectLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="0451", ATTR{idProduct}=="e008", ENV{ID_PDA}="1"
+# TI-Nspire DirectLink
+SUBSYSTEM=="usb", ATTR{idVendor}=="0451", ATTR{idProduct}=="e012", ENV{ID_PDA}="1"
+
+LABEL="libticables_end"
