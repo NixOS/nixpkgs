@@ -30,7 +30,7 @@ in {
       settings = mkOption {
         type = types.attrsOf settingsFormat.type;
         example = lib.literalExpression ''
-          pkgs.stubby.passthru.settingsExample // {
+          (builtins.fromJSON (builtins.readFile pkgs.stubby.stubbyExampleJson)) // {
             upstream_recursive_servers = [{
               address_data = "158.64.1.29";
               tls_auth_name = "kaitain.restena.lu";
@@ -43,9 +43,8 @@ in {
         '';
         description = ''
           Content of the Stubby configuration file. All Stubby settings may be set or queried
-          here. The default settings are available at
-          `pkgs.stubby.passthru.settingsExample`. See
-          <https://dnsprivacy.org/wiki/display/DP/Configuring+Stubby>.
+          here. The default settings are available at `pkgs.stubby.stubbyExampleJson`.
+          See <https://dnsprivacy.org/wiki/display/DP/Configuring+Stubby>.
           A list of the public recursive servers can be found here:
           <https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Test+Servers>.
         '';

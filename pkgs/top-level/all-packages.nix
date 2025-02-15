@@ -8880,9 +8880,6 @@ with pkgs;
 
   geos_3_9 = callPackage ../development/libraries/geos/3.9.nix { };
 
-  inherit (callPackages ../development/libraries/getdns { })
-    getdns stubby;
-
   gettext = callPackage ../development/libraries/gettext { };
 
   gdal = callPackage ../development/libraries/gdal { };
