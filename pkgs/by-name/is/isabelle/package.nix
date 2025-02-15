@@ -79,6 +79,10 @@ in stdenv.mkDerivation (finalAttrs: rec {
   doCheck = stdenv.hostPlatform.system != "aarch64-linux";
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
+  # eprover comes with symlinks to its built artifacts, and so using the nixpkgs
+  # version instead of building it causes them to be broken.
+  dontCheckForBrokenSymlinks = true;
+
   postUnpack = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $sourceRoot ${dirname}
     sourceRoot=${dirname}
