@@ -23,12 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   DESTDIR = placeholder "out";
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic SSH server";
     homepage = "https://tinyssh.org";
     changelog = "https://github.com/janmojzis/tinyssh/releases/tag/${finalAttrs.version}";
-    license = licenses.cc0;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 })
