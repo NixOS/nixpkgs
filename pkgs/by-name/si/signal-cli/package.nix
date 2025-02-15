@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
-  version = "0.13.11";
+  version = "0.13.12";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}.tar.gz";
-    hash = "sha256-biK03oiGCNXxWQpYVloE2SDLMrOMWIV+1RGqps1kTvk=";
+    hash = "sha256-+raYCqYyOw6gxsl5FV9yOMQaCGx/vchVre+FMfzYLkI=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
