@@ -574,6 +574,11 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
+  adamjhf = {
+    github = "adamjhf";
+    githubId = 50264672;
+    name = "Adam Freeth";
+  };
   adamt = {
     email = "mail@adamtulinius.dk";
     github = "adamtulinius";
@@ -19211,6 +19216,13 @@
     github = "r3n3gad3p3arl";
     githubId = 20760527;
     name = "Madelyn";
+  };
+  r4v3n6101 = {
+    name = "r4v3n6101";
+    email = "raven6107@gmail.com";
+    github = "r4v3n6101";
+    githubId = 30029970;
+    keys = [ { fingerprint = "FA05 8A29 B45E 06C0 8FE9  4907 05D2 BE42 F3EC D7CC"; } ];
   };
   raboof = {
     email = "arnout@bzzt.net";
