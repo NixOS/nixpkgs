@@ -16,14 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bcQDKDpd7HFnmJAyqcO+BQMGV1pCHuS+OhFPJSOMInI=";
   };
 
-  preConfigure = ''
-    echo /bin       > conf-bin
-    echo /share/man > conf-man
-  '';
-
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
-  DESTDIR = placeholder "out";
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   passthru.updateScript = nix-update-script { };
 
