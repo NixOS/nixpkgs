@@ -1098,6 +1098,7 @@ mapAliases {
   pgadmin = pgadmin4;
   pharo-spur64 = pharo; # Added 2022-08-03
   picom-next = picom; # Added 2024-02-13
+  picoprobe-udev-rules = lib.warn "'picoprobe-udev-rules' has been renamed to 'probe-rs-udev-rules' to reflect that it includes all probe-rs-supported devices." probe-rs-udev-rules; # Added 2025-01-11
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
 
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25

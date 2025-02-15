@@ -19602,6 +19602,12 @@
     githubId = 337811;
     name = "Rehno Lindeque";
   };
+  reivilibre = {
+    email = "nixpkgs.contact@librepush.net";
+    github = "reivilibre";
+    githubId = 38398653;
+    name = "Olivier 'reivilibre'";
+  };
   relrod = {
     email = "ricky@elrod.me";
     github = "relrod";
