@@ -76,11 +76,11 @@ buildPythonPackage rec {
     htmlparser = [ lxml ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "New version checker for software";
     homepage = "https://github.com/lilydjwg/nvchecker";
     changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
