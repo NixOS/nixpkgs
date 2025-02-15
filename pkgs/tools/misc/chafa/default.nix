@@ -2,17 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installShellFiles,
   autoconf,
   automake,
   libtool,
   pkg-config,
   which,
+  libavif,
+  libjxl,
+  librsvg,
   libxslt,
   libxml2,
   docbook_xml_dtd_412,
   docbook_xsl,
   glib,
-  imagemagick,
   Foundation,
 }:
 
@@ -27,22 +30,30 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9RkN0yZnHf5cx6tsp3P6jsi0/xtplWxMm3hYCPjWj0M=";
   };
 
+  outputs = [
+    "bin"
+    "dev"
+    "man"
+    "out"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     pkg-config
     which
+    libavif
+    libjxl
+    librsvg
     libxslt
     libxml2
     docbook_xml_dtd_412
     docbook_xsl
+    installShellFiles
   ];
 
-  buildInputs = [
-    glib
-    imagemagick
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
+  buildInputs = [ glib ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   patches = [ ./xmlcatalog_patch.patch ];
 
@@ -56,8 +67,9 @@ stdenv.mkDerivation rec {
     "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
   ];
 
-  # https://github.com/NixOS/nixpkgs/pull/240893#issuecomment-1635347507
-  NIX_LDFLAGS = [ "-lwebp" ];
+  postInstall = ''
+    installShellCompletion --cmd chafa tools/completions/zsh-completion.zsh
+  '';
 
   meta = with lib; {
     description = "Terminal graphics for the 21st century";
