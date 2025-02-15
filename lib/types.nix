@@ -596,7 +596,7 @@ rec {
 
         check = x:
           let
-            isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+            isInStore = lib.path.hasStorePathPrefix (/. + x);
             isAbsolute = builtins.substring 0 1 (toString x) == "/";
           in
             isStringLike x && (inStore == null || inStore == isInStore) && (absolute == null || absolute == isAbsolute);
