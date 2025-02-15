@@ -1,0 +1,12 @@
+diff --git a/cufflinks/colors.py b/cufflinks/colors.py
+index 55c75fb..d0b5b78 100644
+--- a/cufflinks/colors.py
++++ b/cufflinks/colors.py
+@@ -37,6 +37,7 @@ def to_rgba(color, alpha):
+             to_rgba('#f03',0.7)
+             to_rgba('rgb(23,23,23)',.5)
+     """
++    alpha = float(alpha)
+     if type(color) == tuple:
+         color, alpha = color
+     color = color.lower()
