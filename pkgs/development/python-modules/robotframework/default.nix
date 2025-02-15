@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework";
-  version = "7.2";
+  version = "7.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "robotframework";
     tag = "v${version}";
-    hash = "sha256-G+mmSeTLr6h0e2YCJOpbYaRNZ5M6PXWBYXdn9xGitkM=";
+    hash = "sha256-Kl+XjGTTiEesVi7aZJMBQQklw83ROrpaWziq+8puZKg=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://github.com/robotframework/robotframework/blob/master/doc/releasenotes/rf-${version}.rst";
+    changelog = "https://github.com/robotframework/robotframework/blob/master/doc/releasenotes/rf-${src.tag}.rst";
     description = "Generic test automation framework";
     homepage = "https://robotframework.org/";
     license = lib.licenses.asl20;
