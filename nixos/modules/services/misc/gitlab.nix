@@ -184,6 +184,9 @@ let
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
+    # allow to use bundler version from nixpkgs
+    # rather than version listed in Gemfile.lock
+    BUNDLER_VERSION = pkgs.bundler.version;
   } // cfg.extraEnv;
 
   runtimeDeps = [ git ] ++ (with pkgs; [
