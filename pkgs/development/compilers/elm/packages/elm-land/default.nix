@@ -30,6 +30,14 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
+  passthru.tests = {
+    version = testers.testVersion {
+      version = "v${version}";
+    package = elm-land;
+    command = "elm-land --version";
+    };
+  };
+
   meta = {
     description = "A production-ready framework for building Elm applications.";
     mainProgram = "elm-land";
