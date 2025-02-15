@@ -312,6 +312,10 @@ stdenv.mkDerivation (finalAttrs: {
     PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
   };
 
+  nativeCheckInputs = [
+    polkit
+  ];
+
   preCheck = ''
     addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
 
