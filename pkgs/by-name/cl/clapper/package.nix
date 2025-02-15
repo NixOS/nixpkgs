@@ -20,17 +20,18 @@
   libmicrodns,
   gtuber,
   glib-networking,
+  libpeas2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Rafostar";
     repo = "clapper";
-    rev = finalAttrs.version;
-    hash = "sha256-IQJTnLB6FzYYPONOqBkvi89iF0U6fx/aWYvNOOJpBvc=";
+    tag = finalAttrs.version;
+    hash = "sha256-Yb2fWsdd8jhxkGWKanLn7CAuF4MjyQ27XTrO8ja3hfs=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libsoup_3
     libmicrodns
+    libpeas2
   ];
 
   postPatch = ''
