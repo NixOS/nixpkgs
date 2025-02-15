@@ -8,15 +8,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "flips";
-  version = "unstable-2023-03-15";
+  version = "196";
 
   src = fetchFromGitHub {
     owner = "Alcaro";
     repo = "Flips";
-    rev = "fdd5c6e34285beef5b9be759c9b91390df486c66";
-    hash = "sha256-uuHgpt7aWqiMTUILm5tAEGGeZrls3g/DdylYQgsfpTw=";
+    tag = "v${version}";
+    hash = "sha256-lQ88Iz607AcVzvN/jLGhOn7qiRe9pau9oQcLMt7JIT8=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,6 @@ stdenv.mkDerivation {
   ];
   patches = [ ./use-system-libdivsufsort.patch ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildPhase = ''
-    runHook preBuild
-    ./make.sh
-    runHook postBuild
-  '';
 
   meta = with lib; {
     description = "Patcher for IPS and BPS files";
