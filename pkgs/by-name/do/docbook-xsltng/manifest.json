@@ -1,0 +1,14 @@
+{
+  "version": "2.5.0",
+  "hash": "sha256-N63q0ZATIGti5JSzvlSAS0Y0vvG8Y3xOAA0N/5sLRd0=",
+  "dependencies": {
+    "xspec": {
+      "version": "2.2.4",
+      "hash": "sha256-cn6e9JdY9y/f6euL/6fdGJN0m4umuio/GecztDyUgD4="
+    },
+    "xsltExplorer": {
+      "version": "0.1.10",
+      "hash": "sha256-JJQUjRnuRsId7g30jg9Ivgy2Qk0vRnABkCnKUE2fqnY="
+    }
+  }
+}
