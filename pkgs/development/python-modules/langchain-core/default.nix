@@ -5,18 +5,16 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   jsonpatch,
   langsmith,
   packaging,
+  pydantic,
   pyyaml,
   tenacity,
   typing-extensions,
-
-  # optional-dependencies
-  pydantic,
 
   # tests
   freezegun,
@@ -37,19 +35,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.31";
+  version = "0.3.35";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-core==${version}";
-    hash = "sha256-u+Za7NtXVP0Mg6K65CuRLx8OrVpBXEe1ayP0uMUNJG4=";
+    hash = "sha256-bwNSeXQJsfbc4c8mSd0GtlVsQ/HRilNiyP6XLcEzL20=";
   };
 
   sourceRoot = "${src.name}/libs/core";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [ "tenacity" ];
 
@@ -57,14 +55,11 @@ buildPythonPackage rec {
     jsonpatch
     langsmith
     packaging
+    pydantic
     pyyaml
     tenacity
     typing-extensions
   ];
-
-  optional-dependencies = {
-    pydantic = [ pydantic ];
-  };
 
   pythonImportsCheck = [ "langchain_core" ];
 
