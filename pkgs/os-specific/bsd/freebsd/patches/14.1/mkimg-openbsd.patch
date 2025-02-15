@@ -1,12 +1,33 @@
+diff --git a/usr.bin/mkimg/bsd.c b/usr.bin/mkimg/bsd.c
+index 17933c01ac07..476f7769dca8 100644
+--- a/usr.bin/mkimg/bsd.c
++++ b/usr.bin/mkimg/bsd.c
+@@ -84,6 +84,7 @@ bsd_write(lba_t imgsz, void *bootcode)
+ 
+ 	d = (void *)(buf + secsz);
+ 	le32enc(&d->d_magic, BSD_MAGIC);
++	le32enc(&d->d_type, DTYPE_SCSI);
+ 	le32enc(&d->d_secsize, secsz);
+ 	le32enc(&d->d_nsectors, nsecs);
+ 	le32enc(&d->d_ntracks, nheads);
+@@ -101,7 +102,7 @@ bsd_write(lba_t imgsz, void *bootcode)
+ 		n = part->index + ((part->index >= BSD_PART_RAW) ? 1 : 0);
+ 		dp = &d->d_partitions[n];
+ 		le32enc(&dp->p_size, part->size);
+-		le32enc(&dp->p_offset, part->block);
++		le32enc(&dp->p_offset, part->block + relocation);
+ 		le32enc(&dp->p_fsize, 0);
+ 		dp->p_fstype = ALIAS_TYPE2INT(part->type);
+ 		dp->p_frag = 0;
 diff --git a/usr.bin/mkimg/gpt.c b/usr.bin/mkimg/gpt.c
-index ed3f008c394f..b4fb98682a4c 100644
+index ed3f008c394f..15cc1fb5539b 100644
 --- a/usr.bin/mkimg/gpt.c
 +++ b/usr.bin/mkimg/gpt.c
 @@ -50,6 +50,7 @@ static mkimg_uuid_t gpt_uuid_freebsd_zfs = GPT_ENT_TYPE_FREEBSD_ZFS;
  static mkimg_uuid_t gpt_uuid_mbr = GPT_ENT_TYPE_MBR;
  static mkimg_uuid_t gpt_uuid_ms_basic_data = GPT_ENT_TYPE_MS_BASIC_DATA;
  static mkimg_uuid_t gpt_uuid_prep_boot = GPT_ENT_TYPE_PREP_BOOT;
-+static mkimg_uuid_t gpt_uuid_openbsd_ufs = GPT_ENT_TYPE_OPENBSD_DATA;
++static mkimg_uuid_t gpt_uuid_openbsd_data = GPT_ENT_TYPE_OPENBSD_DATA;
  
  static struct mkimg_alias gpt_aliases[] = {
      {	ALIAS_EFI, ALIAS_PTR2TYPE(&gpt_uuid_efi) },
@@ -14,31 +35,83 @@ index ed3f008c394f..b4fb98682a4c 100644
      {	ALIAS_MBR, ALIAS_PTR2TYPE(&gpt_uuid_mbr) },
      {	ALIAS_NTFS, ALIAS_PTR2TYPE(&gpt_uuid_ms_basic_data) },
      {	ALIAS_PPCBOOT, ALIAS_PTR2TYPE(&gpt_uuid_prep_boot) },
-+    {	ALIAS_OPENBSD_UFS, ALIAS_PTR2TYPE(&gpt_uuid_openbsd_ufs) },
++    {	ALIAS_OPENBSD_DATA, ALIAS_PTR2TYPE(&gpt_uuid_openbsd_data) },
      {	ALIAS_NONE, 0 }		/* Keep last! */
  };
  
+diff --git a/usr.bin/mkimg/mkimg.c b/usr.bin/mkimg/mkimg.c
+index f3bb9cb05708..f4a24712f3b0 100644
+--- a/usr.bin/mkimg/mkimg.c
++++ b/usr.bin/mkimg/mkimg.c
+@@ -75,6 +75,8 @@ u_int secsz = 512;
+ u_int blksz = 0;
+ uint32_t active_partition = 0;
+ 
++int32_t relocation = 0;
++
+ static void
+ print_formats(int usage)
+ {
+@@ -157,6 +159,7 @@ usage(const char *why)
+ 	fprintf(stderr, "\t-o <file>\t-  file to write image into\n");
+ 	fprintf(stderr, "\t-p <partition>\n");
+ 	fprintf(stderr, "\t-s <scheme>\n");
++	fprintf(stderr, "\t-r <relocation>\n");
+ 	fprintf(stderr, "\t-v\t\t-  increase verbosity\n");
+ 	fprintf(stderr, "\t-y\t\t-  [developers] enable unit test\n");
+ 	fprintf(stderr, "\t-H <num>\t-  number of heads to simulate\n");
+@@ -562,7 +565,7 @@ main(int argc, char *argv[])
+ 
+ 	bcfd = -1;
+ 	outfd = 1;	/* Write to stdout by default */
+-	while ((c = getopt_long(argc, argv, "a:b:c:C:f:o:p:s:vyH:P:S:T:",
++	while ((c = getopt_long(argc, argv, "a:b:c:C:f:o:p:s:vyH:P:S:T:r:",
+ 	    longopts, NULL)) != -1) {
+ 		switch (c) {
+ 		case 'a':	/* ACTIVE PARTITION, if supported */
+@@ -644,6 +647,9 @@ main(int argc, char *argv[])
+ 			if (error)
+ 				errc(EX_DATAERR, error, "track size");
+ 			break;
++		case 'r':
++			relocation = atoi(optarg);
++			break;
+ 		case LONGOPT_FORMATS:
+ 			print_formats(0);
+ 			exit(EX_OK);
+diff --git a/usr.bin/mkimg/mkimg.h b/usr.bin/mkimg/mkimg.h
+index e85f77de0ec7..853f95dde6b9 100644
+--- a/usr.bin/mkimg/mkimg.h
++++ b/usr.bin/mkimg/mkimg.h
+@@ -58,6 +58,7 @@ extern u_int nsecs;
+ extern u_int secsz;	/* Logical block size. */
+ extern u_int blksz;	/* Physical block size. */
+ extern uint32_t active_partition;
++extern int32_t relocation;
+ 
+ static inline lba_t
+ round_block(lba_t n)
 diff --git a/usr.bin/mkimg/scheme.c b/usr.bin/mkimg/scheme.c
-index 85ed94013e8d..00a3432c5328 100644
+index 85ed94013e8d..a2cefd52c63a 100644
 --- a/usr.bin/mkimg/scheme.c
 +++ b/usr.bin/mkimg/scheme.c
 @@ -56,6 +56,7 @@ static struct {
  	{ "mbr", ALIAS_MBR },
  	{ "ntfs", ALIAS_NTFS },
  	{ "prepboot", ALIAS_PPCBOOT },
-+	{ "openbsd-ufs", ALIAS_OPENBSD_UFS },
++	{ "openbsd-data", ALIAS_OPENBSD_DATA },
  	{ NULL, ALIAS_NONE }		/* Keep last! */
  };
  
 diff --git a/usr.bin/mkimg/scheme.h b/usr.bin/mkimg/scheme.h
-index 52614255595f..0c44f8653af2 100644
+index 52614255595f..5f8424d459fd 100644
 --- a/usr.bin/mkimg/scheme.h
 +++ b/usr.bin/mkimg/scheme.h
 @@ -45,6 +45,7 @@ enum alias {
  	ALIAS_MBR,
  	ALIAS_NTFS,
  	ALIAS_PPCBOOT,
-+	ALIAS_OPENBSD_UFS,
++	ALIAS_OPENBSD_DATA,
  	/* end */
  	ALIAS_COUNT		/* Keep last! */
  };
