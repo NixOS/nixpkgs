@@ -151,7 +151,7 @@ self: super: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
     # vector-doctest seems to be broken when executed via ./Setup test
-    testTarget = lib.concatStringsSep " " [
+    testTargets = [
       "vector-tests-O0"
       "vector-tests-O2"
     ];
@@ -849,7 +849,7 @@ self: super: {
   CHXHtml = dontDistribute super.CHXHtml;
 
   # https://github.com/NixOS/nixpkgs/issues/6350
-  paypal-adaptive-hoops = overrideCabal (drv: { testTarget = "local"; }) super.paypal-adaptive-hoops;
+  paypal-adaptive-hoops = overrideCabal (drv: { testTargets = [ "local" ]; }) super.paypal-adaptive-hoops;
 
   # Avoid "QuickCheck >=2.3 && <2.10" dependency we cannot fulfill in lts-11.x.
   test-framework = dontCheck super.test-framework;
@@ -2629,7 +2629,7 @@ self: super: {
       rm Setup.hs
     '';
     # doctest suite uses doctest-parallel which still doesn't work in nixpkgs
-    testTarget = "tests";
+    testTargets = [ "tests" ];
   }) super.conduit-aeson;
 
   # Upper bounds are too strict:
@@ -2638,7 +2638,7 @@ self: super: {
 
   # Disabling doctests.
   regex-tdfa = overrideCabal {
-    testTarget = "regex-tdfa-unittest";
+    testTargets = [ "regex-tdfa-unittest" ];
   } super.regex-tdfa;
 
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
