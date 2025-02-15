@@ -18348,4 +18348,6 @@ with pkgs;
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
   };
+
+  openfoam-com_2412 = callPackage ./../by-name/op/openfoam-com/2412.nix { };
 }

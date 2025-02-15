@@ -8,6 +8,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "how-to-compile-and-use-openfoam-com-extensions": [
+    "index.html#how-to-compile-and-use-openfoam-com-extensions"
+  ],
   "neovim": [
     "index.html#neovim"
   ],
@@ -97,6 +100,9 @@
   ],
   "sec-nixpkgs-release-25.05-lib-deprecations": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
+  ],
+  "sec-openfoam-com": [
+    "index.html#sec-openfoam-com"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
