@@ -15134,6 +15134,10 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK llvmPackages.stdenv "11.0" else llvmPackages.stdenv;
   };
 
+  serious-sam-classic-vulkan = callPackage ../by-name/se/serious-sam-classic/package.nix {
+    pname = "serious-sam-classic-vulkan";
+  };
+
   super-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
   super-slicer-beta = super-slicer.beta;
