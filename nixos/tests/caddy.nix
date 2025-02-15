@@ -162,7 +162,7 @@ import ./make-test-python.nix (
             webserver.wait_for_open_port(80)
             webserver.succeed("curl http://localhost | grep caddy")
 
-        with subtest("invalid config fails build when validation is enforced"):
+        with subtest("invalid config fails to switch to, as validation was not enforced"):
             webserver.fail(
                 "${invalidConfigFail}/bin/switch-to-configuration test >&2"
             )
