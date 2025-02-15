@@ -7,6 +7,7 @@
   glibcLocales,
   versionCheckHook,
   withPostgresAdapter ? true,
+  withMySQLAdapter ? true,
   withBigQueryAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
@@ -50,6 +51,7 @@ python3Packages.buildPythonApplication rec {
       tomlkit
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
+    ++ lib.optionals withMySQLAdapter [ harlequin-mysql ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
 
   pythonImportsCheck = [
