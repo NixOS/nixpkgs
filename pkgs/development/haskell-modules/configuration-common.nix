@@ -1590,62 +1590,6 @@ self: super: {
   # https://github.com/strake/filtrable.hs/issues/6
   filtrable = doJailbreak super.filtrable;
 
-  # hasura packages need some extra care
-  graphql-engine = overrideCabal (drv: {
-    patches = [
-      # Compat with unordered-containers >= 0.2.15.0
-      (fetchpatch {
-        name = "hasura-graphql-engine-updated-deps.patch";
-        url = "https://github.com/hasura/graphql-engine/commit/d50aae87a58794bc1fc66c7a60acb0c34b5e70c7.patch";
-        stripLen = 1;
-        excludes = [ "cabal.project.freeze" ];
-        sha256 = "0lb5l9vfynr85i9xs53w4mpgczp04ncxz7846n3y91ri34fa87v3";
-      })
-      # Compat with hashable >= 1.3.4.0
-      (fetchpatch {
-        name = "hasura-graphql-engine-hashable-1.3.4.0.patch";
-        url = "https://github.com/hasura/graphql-engine/commit/e48b2287315fb09005ffd52c0a686dc321171ae2.patch";
-        sha256 = "1jppnanmsyl8npyf59s0d8bgjy7bq50vkh5zx4888jy6jqh27jb6";
-        stripLen = 1;
-      })
-      # Compat with unordered-containers >= 0.2.17.0
-      (fetchpatch {
-        name = "hasura-graphql-engine-unordered-containers-0.2.17.0.patch";
-        url = "https://github.com/hasura/graphql-engine/commit/3a1eb3128a2ded2da7c5fef089738890828cce03.patch";
-        sha256 = "0vz7s8m8mjvv728vm4q0dvvrirvydaw7xks30b5ddj9f6a72a2f1";
-        stripLen = 1;
-      })
-    ];
-    doHaddock = false;
-    version = "2.3.1";
-  }) (super.graphql-engine.override {
-    immortal = self.immortal_0_2_2_1;
-    resource-pool = self.hasura-resource-pool;
-    ekg-core = self.hasura-ekg-core;
-    ekg-json = self.hasura-ekg-json;
-  });
-  hasura-ekg-json = super.hasura-ekg-json.override {
-    ekg-core = self.hasura-ekg-core;
-  };
-  pg-client = lib.pipe
-    (super.pg-client.override {
-      resource-pool = self.hasura-resource-pool;
-      ekg-core = self.hasura-ekg-core;
-    }) [
-      (overrideCabal (drv: {
-        librarySystemDepends = with pkgs; [ postgresql krb5.dev openssl.dev ];
-        testToolDepends = drv.testToolDepends or [] ++ [
-          pkgs.postgresql pkgs.postgresqlTestHook
-        ];
-        preCheck = drv.preCheck or "" + ''
-          # empty string means use default connection
-          export DATABASE_URL=""
-        '';
-      }))
-      # https://github.com/NixOS/nixpkgs/issues/198495
-      (dontCheckIf (!pkgs.postgresql.doCheck))
-    ];
-
   hcoord = overrideCabal (drv: {
     # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
     patches = [
