@@ -54,9 +54,9 @@
 
 let
   version = {
-    corporate = "24.7.1.1195-1";
-    beta = "24.7.1.1124-1";
-    stable = "24.7.1.1120-1";
+    corporate = "24.10.4.817-1";
+    beta = "24.12.1.704-1";
+    stable = "24.12.1.712-1";
   }.${edition};
 
   hash = {
