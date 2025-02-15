@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
   version = "6.9.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/docs/man-pages/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     hash = "sha256-4jy6wp8RC6Vx8NqFI+edNzaRRm7X8qMTAXIYF9NFML0=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; unix;
     priority = 30; # if a package comes with its own man page, prefer it
   };
-}
+})
