@@ -1,19 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk,
-}:
+{ lib, stdenv, fetchurl, jdk, }:
 
 stdenv.mkDerivation rec {
   pname = "emem";
-  version = "0.2.50";
+  version = "0.2.51";
 
   inherit jdk;
 
   src = fetchurl {
-    url = "https://github.com/ebzzry/${pname}/releases/download/v${version}/${pname}.jar";
-    sha256 = "18x3s3jrph8k3pc75jgwkfqazygpsx93zjxx68zms58my17cybh1";
+    url =
+      "https://github.com/ebzzry/${pname}/releases/download/v${version}/${pname}.jar";
+    sha256 = "1kp19wplrjzq8w9lky5m8c72xmvrbrfx9sv0w2qhzya01faivsz5";
   };
 
   dontUnpack = true;
