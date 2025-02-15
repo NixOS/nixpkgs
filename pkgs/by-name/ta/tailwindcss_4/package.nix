@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   runCommand,
+  autoPatchelfHook,
+  makeWrapper,
   tailwindcss_4,
 }:
 let
@@ -38,13 +40,23 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  buildInputs = [ makeWrapper ];
+
   dontUnpack = true;
-  dontConfigure = true;
   dontBuild = true;
-  dontFixup = true;
+  dontStrip = true;
 
   installPhase = ''
-    install -D $src $out/bin/tailwindcss
+    mkdir -p $out/bin
+    install -m755 $src $out/bin/tailwindcss
+  '';
+
+  # libstdc++.so.6 for @parcel/watcher
+  postFixup = ''
+    wrapProgram $out/bin/tailwindcss --prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [ stdenv.cc.cc.lib ]
+    }
   '';
 
   passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
