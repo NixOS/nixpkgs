@@ -8,7 +8,7 @@
 buildHomeAssistantComponent rec {
   owner = "magico13";
   domain = "emporia_vue";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "magico13";
