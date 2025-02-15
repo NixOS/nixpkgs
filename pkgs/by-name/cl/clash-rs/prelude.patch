@@ -1,0 +1,22 @@
+diff --git a/clash_lib/src/app/dns/runtime.rs b/clash_lib/src/app/dns/runtime.rs
+index c80521c..c1e3e3a 100644
+--- a/clash_lib/src/app/dns/runtime.rs
++++ b/clash_lib/src/app/dns/runtime.rs
+@@ -41,7 +41,7 @@ impl RuntimeProvider for DnsRuntimeProvider {
+     ) -> std::pin::Pin<
+         Box<
+             dyn Send
+-                + std::prelude::rust_2024::Future<Output = std::io::Result<Self::Tcp>>,
++                + std::future::Future<Output = std::io::Result<Self::Tcp>>,
+         >,
+     > {
+         let iface = self.iface.clone();
+@@ -64,7 +64,7 @@ impl RuntimeProvider for DnsRuntimeProvider {
+     ) -> std::pin::Pin<
+         Box<
+             dyn Send
+-                + std::prelude::rust_2024::Future<Output = std::io::Result<Self::Udp>>,
++                + std::future::Future<Output = std::io::Result<Self::Udp>>,
+         >,
+     > {
+         let iface = self.iface.clone();
