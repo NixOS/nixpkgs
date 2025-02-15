@@ -10,6 +10,8 @@
     };
 
   testScript = ''
-    machine.succeeds("elm-land --version | grep '0.20.1'")
+    machine.succeeds("elm-land init foo")
+    machine.succeeds("cd foo && elm-land build")
+    machine.succeeds("cat foo/dist/index.html | grep '<title>Elm Land</title>'")
   '';
 }

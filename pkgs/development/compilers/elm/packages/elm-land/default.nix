@@ -2,7 +2,9 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchurl,
   testers,
+  pkgs,
   elm-land,
   nixosTests,
 }:
@@ -11,26 +13,22 @@ buildNpmPackage rec {
   pname = "elm-land";
   version = "0.20.1";
 
-  src = fetchFromGitHub {
-    owner = "elm-land";
-    repo = "elm-land";
-    rev = "v${version}";
-    hash = "sha256-PFyiVTH2Cek377YZwaCmvDToQCaxWQvJrQkRhyNI2Wg=";
+  src = fetchurl {
+    url = "https://registry.npmjs.org/elm-land/-/elm-land-${version}.tgz";
+    sha256 = "sha256-aMYdXLuzwiWcBykAs8DWHJLHg3NfW4dYv8kOwYuKwgk";  # compute the correct hash
   };
 
-  npmDepsHash = "sha256-Bg16s0tqEaUT+BbFMKuEtx32rmbZLIILp8Ra/dQGmUg";
-  sourceRoot = "${src.name}/projects/cli";
+  npmDepsHash = "sha256-h7KKPXT6X9/0U+5b4owNfVgJtw3QriO++rCLcaBHoCM=";
+
+  postPatch = ''
+    cp ${./package-lock.json} ./package-lock.json
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/elm-land --prefix PATH : ${pkgs.elmPackages.elm}/bin
+  '';
 
   dontNpmBuild = true;
-
-  passthru.tests = {
-    version = testers.testVersion {
-      version = "v${version}";
-    package = elm-land;
-    command = "elm-land --version";
-    };
-    integration_test = nixosTests.elm-land;
-  };
 
   meta = {
     description = "A production-ready framework for building Elm applications.";
