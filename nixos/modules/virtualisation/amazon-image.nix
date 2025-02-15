@@ -72,7 +72,7 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = ["network-online.target"];
-      path = [ pkgs.curl ];
+      path = with pkgs; [ curl file gzip mktemp ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
       serviceConfig.StandardOutput = "journal+console";
