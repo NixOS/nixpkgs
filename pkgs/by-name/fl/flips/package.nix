@@ -23,19 +23,22 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook3
   ];
+
   buildInputs = [
     gtk3
     libdivsufsort
   ];
+
   patches = [ ./use-system-libdivsufsort.patch ];
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Patcher for IPS and BPS files";
     homepage = "https://github.com/Alcaro/Flips";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "flips";
   };
 }
