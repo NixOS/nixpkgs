@@ -79,7 +79,8 @@ let base = {
       sha256 = "sha256-hddW/cozboGw693q4k5f4+x9ccQFWFytXPUaBVkFnL4=";
     };
 
-    buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];
+    nativeBuildInputs = base.nativeBuildInputs ++ [ unzip ];
+    buildInputs = base.buildInputs ++ [ zlib libtommath libtomcrypt ];
   });
 
   firebird = firebird_4;
