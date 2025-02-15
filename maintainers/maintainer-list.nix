@@ -9035,6 +9035,14 @@
     github = "hacker1024";
     githubId = 20849728;
   };
+  hackerncoder = {
+    name = "HackerNCoder";
+    email = "hackerncoder@encryptionin.space";
+    matrix = "@hackerncoder:encryptionin.space";
+    github = "hackerncoder";
+    githubId = 14183017;
+    keys = [ { fingerprint = "CFCE 26DD 847F 202D 0A06  508E 7A97 1A86 44ED A48C"; } ];
+  };
   hadilq = {
     name = "Hadi Lashkari Ghouchani";
     email = "hadilq.dev@gmail.com";
