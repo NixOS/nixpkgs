@@ -66,11 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
   versionCheckProgramArg = [ "--version" ];
-  # Only enable the version install check on darwin.
+
   # On Linux, this would fail as mongod relies on tcmalloc, which
   # requires access to `/sys/devices/system/cpu/possible`.
   # See https://github.com/NixOS/nixpkgs/issues/377016
-  doInstallCheck = stdenv.hostPlatform.isDarwin;
+
+  # This workaround allows us to run the version check on Linux 
+  # with MongoDB 8+ and the new tcmalloc. This will be set as an
+  # environment variable at build time.
+  MALLOC_CONF = "percpu_arena:disabled";
 
   passthru = {
 
