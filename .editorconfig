@@ -90,7 +90,7 @@ indent_style = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-[pkgs/development/compilers/elm/registry.dat]
+[registry.dat]
 end_of_line = unset
 insert_final_newline = unset
 
