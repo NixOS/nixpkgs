@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyssh";
-  version = "20241201";
+  version = "20250201";
 
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "tinyssh";
     tag = finalAttrs.version;
-    hash = "sha256-bcQDKDpd7HFnmJAyqcO+BQMGV1pCHuS+OhFPJSOMInI=";
+    hash = "sha256-HX531QjRrDG4dshqzR03naZptUYnoZLEdv/CGpKOaD0=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
