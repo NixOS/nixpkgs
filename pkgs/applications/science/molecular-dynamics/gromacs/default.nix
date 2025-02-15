@@ -45,8 +45,8 @@ let
       }
     else
       {
-        version = "2024.5";
-        hash = "sha256-/s8GsYbN25Qs+0LujaXz6yuZk+aswKLxjRSsCwFEJPM=";
+        version = "2025.0";
+        hash = "sha256-onrTWmRilbvsEpq+aE2dA9Hi4L12sNYl6QVXRqrvroI=";
       };
 
 in stdenv.mkDerivation rec {
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
     inherit (source) hash;
   };
 
-  patches = [ ./pkgconfig.patch ];
+  patches = [ (if enablePlumed then ./pkgconfig-2024.patch else ./pkgconfig-2025.patch) ];
 
   postPatch = lib.optionalString enablePlumed ''
     plumed patch -p -e gromacs-${source.version}
