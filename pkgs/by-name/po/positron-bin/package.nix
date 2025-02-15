@@ -21,7 +21,7 @@
 }:
 let
   pname = "positron-bin";
-  version = "2024.11.0-116";
+  version = "2025.02.0-79";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -30,13 +30,23 @@ stdenv.mkDerivation {
     if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
-        hash = "sha256-5Ym42InDgFLGdZk0LYV1H0eC5WzmsYToG1KLdiGgTto=";
+        hash = "sha256-eqThNxOLxxoysOaYQPwGFFG7tCESBDERxbYzwBoIbxI=";
       }
+    else if stdenv.hostPlatform.isLinux then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
+        fetchurl {
+          url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-x64.deb";
+          hash = "sha256-XJ5otDdqMGKitCl6oSECT8al6ZE/MEBrt/EE2wS/Ayg=";
+        }
+      else if stdenv.hostPlatform.system == "aarch64-linux" then
+        fetchurl {
+          url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}-arm64.deb";
+          hash = "sha256-JCNu87XJjNYaYmRwdjkZfsp0uAmHscGNocI48sPoXjU";
+        }
+      else
+        throw "Unsupported Linux platform: ${stdenv.hostPlatform.system}"
     else
-      fetchurl {
-        url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.deb";
-        hash = "sha256-pE25XVYFW8WwyQ7zmox2mmXy6ZCSaXk2gSnPimg7xtU=";
-      };
+      throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
   buildInputs =
     [ makeShellWrapper ]
@@ -74,6 +84,17 @@ stdenv.mkDerivation {
     (lib.getLib systemd)
   ];
 
+  unpackPhase =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        runHook preUnpack
+        # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+        dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
+        runHook postUnpack
+      ''
+    else
+      "";
+
   installPhase =
     if stdenv.hostPlatform.isDarwin then
       ''
@@ -99,8 +120,8 @@ stdenv.mkDerivation {
         install -m 444 -D usr/share/applications/positron.desktop "$out/share/applications/positron.desktop"
         substituteInPlace "$out/share/applications/positron.desktop" \
           --replace-fail \
-          "Icon=com.visualstudio.code.oss" \
-          "Icon=$out/share/pixmaps/com.visualstudio.code.oss.png" \
+          "Icon=co.posit.positron" \
+          "Icon=$out/share/pixmaps/co.posit.positron.png" \
           --replace-fail \
           "Exec=/usr/share/positron/positron %F" \
           "Exec=$out/share/positron/.positron-wrapped %F" \
@@ -128,6 +149,9 @@ stdenv.mkDerivation {
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] ++ platforms.darwin;
   };
 }
