@@ -513,6 +513,13 @@ _addRpathPrefix() {
     fi
 }
 
+# Return success if the specified file has executable file mode bit set.
+# Tested in pkgs/tests/stdenv-functions/default.nix
+isExecutable() {
+    local fn=$1
+    [[ -x $fn && ! -d $fn ]]
+}
+
 # Return success if the specified file is an ELF object.
 isELF() {
     local fn="$1"
@@ -990,6 +997,107 @@ nixWarnLog "final data dirs: $XDG_DATA_DIRS"
 unset _PATH
 unset _HOST_PATH
 unset _XDG_DATA_DIRS
+
+
+# Check PATH for duplicate programs. Output example (with NIX_DEBUG):
+#
+#   WARNING: final PATH contains 2 instances of foo executable
+#     foo ⇒
+#       /nix/store/.../foo
+#       /nix/store/.../foo
+#
+# Without NIX_DEBUG:
+#
+#   WARNING: final PATH contains 2 instances of foo executable (the first is /nix/store/.../foo)
+#
+# Tested in pkgs/tests/stdenv-functions/default.nix
+_checkDuplicateProgramsInUnixPATH() {
+    local -A executableCounters=()
+    local -A executablePaths=()
+    local -a executableDuplicates=()
+
+    local OLDIFS=$IFS
+    local IFS=:
+    local -a splitPath=($PATH)
+    IFS=$OLDIFS
+
+    local dir filePath fileName
+
+    # Reduce PATH elements (e.g. foo:bar:foo to foo:bar). Note that this does
+    # not handle some cases (it does not perform any lexical path processing).
+    local -a pathArray=()
+    local -A pathElements=()
+    for dir in "${splitPath[@]}"; do
+        if [[ -z $dir ]]; then
+            # PATH element "" means "."
+            dir=.
+        fi
+        if [[ -n ${pathElements[$dir]-} ]]; then
+            continue
+        fi
+        pathElements[$dir]=${#pathArray[@]}
+        pathArray+=("$dir")
+    done
+    unset pathElements splitPath
+
+    # Traverse PATH elements and record duplicate executables.
+    for dir in "${pathArray[@]}"; do
+        for filePath in "$dir"/*; do
+            if ! isExecutable "$filePath"; then
+                continue
+            fi
+            fileName=${filePath##*/}
+            ((executableCounters[$fileName] += 1))
+            if [[ -z ${executablePaths[$fileName]-} ]]; then
+                executablePaths[$fileName]=$filePath
+            fi
+            if ((executableCounters[$fileName] == 2)); then
+                # Bash globs expansions are guaranteed to be in alphabetical
+                # order. Use that instead of an undefined associative arrays
+                # order.
+                executableDuplicates+=("$fileName")
+            fi
+        done
+    done
+
+    # Clean up bookkeeping for non-duplicate executables.
+    for fileName in "${!executableCounters[@]}"; do
+        if ((${executableCounters[$fileName]} > 1)); then
+            continue
+        fi
+        unset 'executableCounters[$fileName]' 'executablePaths[$fileName]'
+    done
+
+    # Print a warning for each duplicate executable (and optionally all
+    # locations if NIX_DEBUG is non-zero).
+    for fileName in "${executableDuplicates[@]}"; do
+        printf 'WARNING: final PATH contains %d instances of %q executable' \
+            ${executableCounters[$fileName]} "$fileName"
+        if ((${NIX_DEBUG:-0} >= 1)); then
+            printf '\n  %q ⇒\n' "$fileName"
+            # We want to print all locations for this file name, but we can’t
+            # have map[string][]string in Bash without dirty workarounds. So
+            # perform a search again.
+            local -i count=${executableCounters[$fileName]}
+            for dir in "${pathArray[@]}"; do
+                filePath=$dir/$fileName
+                if ! isExecutable "$filePath"; then
+                    continue
+                fi
+                printf '    %q\n' "$filePath"
+                if ! ((count -= 1)); then
+                    break
+                fi
+            done
+        else
+            printf ' (the first is %q)\n' \
+                "${executablePaths[$fileName]}"
+        fi
+    done
+}
+if [[ -z ${dontCheckDuplicatePrograms-} && -n ${NIX_LOG_FD-} ]]; then
+    _checkDuplicateProgramsInUnixPATH >&"$NIX_LOG_FD"
+fi
 
 
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
