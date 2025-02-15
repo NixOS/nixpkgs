@@ -5,6 +5,11 @@
   flutter,
   pkg-config,
   webkitgtk_4_1,
+  runCommand,
+  yq,
+  jhentai,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
 flutter.buildFlutterApplication rec {
   pname = "jhentai";
@@ -57,6 +62,22 @@ flutter.buildFlutterApplication rec {
   extraWrapProgramArgs = ''
     --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (jhentai) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "jhentai.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Cross-platform manga app made for e-hentai & exhentai by Flutter";
