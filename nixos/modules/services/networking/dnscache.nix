@@ -7,7 +7,10 @@
 let
   cfg = config.services.dnscache;
 
-  dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
+  dnscache-root = pkgs.runCommand "dnscache-root" {
+    preferLocalBuild = true;
+    inherit (cfg) extraRootFiles;
+  } ''
     mkdir -p $out/{servers,ip}
 
     ${lib.concatMapStrings (ip: ''
@@ -29,6 +32,10 @@ let
     if [ ! -e $out/servers/@ ]; then
       # symlink does not work here, due chroot
       cp ${pkgs.djbdns}/etc/dnsroots.global $out/servers/@;
+    fi
+
+    if [ -n "$extraRootFiles" ] ; then
+       cp "$extraRootFiles"/* $out
     fi
   '';
 
@@ -74,6 +81,19 @@ in
             "@" = ["8.8.8.8" "8.8.4.4"];
             "example.com" = ["192.168.100.100"];
           }
+        '';
+
+      };
+
+      extraRootFiles = mkOption {
+        default = null;
+        type = types.nullOr types.pathInStore;
+        description = lib.mdDoc ''
+          Directory with additional files to copy into the server chroot.
+
+          Vanilla dnscahe does not recognize any files other than those managed by other
+          options of this service, but that option might be necessary if additional
+          patches were applied to the "djbdns" package via nixpkgs overlay.
         '';
       };
 
