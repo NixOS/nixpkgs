@@ -37,7 +37,7 @@ let
   ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "6.0.2";
+  version = "6.3.2";
 
   outputs = [
     "out"
@@ -49,7 +49,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-+CxaTmxRt/RicqQddqIEHs8vvAPCMKXkWg7kbZvnUsQ=";
+    hash = "sha256-6itfBrWVspobU47aiJAOQoxT8chwrq9scRn0or3bXto=";
   };
 
   nativeBuildInputs = [
