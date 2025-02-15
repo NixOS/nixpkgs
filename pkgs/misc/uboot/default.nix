@@ -108,9 +108,9 @@ let
     configurePhase = ''
       runHook preConfigure
 
-      make ${defconfig}
+      { echo "";cat $extraConfigPath; } >> ./configs/${defconfig}
 
-      cat $extraConfigPath >> .config
+      make ${defconfig}
 
       runHook postConfigure
     '';
