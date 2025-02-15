@@ -46,8 +46,8 @@ let
 in
 rec {
   mypy-boto3-accessanalyzer =
-    buildMypyBoto3Package "accessanalyzer" "1.36.0"
-      "sha256-n4KW1660NKsx+mhyctOZPf5xAy5GQTremzvJVVOI/EQ=";
+    buildMypyBoto3Package "accessanalyzer" "1.36.20"
+      "sha256-M6CU1lBlh55fzhbJZHILdAm8BV9XG9aBx13iEYDbbZ4=";
 
   mypy-boto3-account =
     buildMypyBoto3Package "account" "1.36.0"
