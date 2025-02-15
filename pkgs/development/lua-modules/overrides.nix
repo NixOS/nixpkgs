@@ -606,6 +606,19 @@ in
     '';
   });
 
+  nvim-nio = prev.nvim-nio.overrideAttrs (oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+
+    # upstream uses PlenaryBusted which is a pain to setup
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
+      runHook postCheck
+    '';
+  });
+
   plenary-nvim = prev.plenary-nvim.overrideAttrs (oa: {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \
