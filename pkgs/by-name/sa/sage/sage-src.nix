@@ -96,6 +96,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/compare/10.6.beta2...26f411e5939718d4439325ff669635e5a72d50e5.diff";
       hash = "sha256-Z4JwCuUDpqktAzNtVKRUbrJEh7TmCtFI7PJnOrcEbr4=";
     })
+
+    # https://github.com/sagemath/sage/pull/38962
+    (fetchpatch {
+      name = "eclib-update.patch";
+      url = "https://github.com/sagemath/sage/compare/10.5...8754c7052084043209c8332d3d1154c26c25ae91.diff";
+      hash = "sha256-OyCKpTwm5TrlIeK5BOoql5xjWWexaHUdpjdY2DKIdHY=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
