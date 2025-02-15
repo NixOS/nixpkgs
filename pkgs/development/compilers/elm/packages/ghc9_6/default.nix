@@ -47,5 +47,7 @@ pkgs.haskell.packages.ghc96.override {
       ansi-wl-pprint = overrideCabal (drv: {
         jailbreak = true;
       }) (self.callPackage ./ansi-wl-pprint { });
+
+      aeson = overrideCabal (drv: { doCheck = false; }) super.aeson;
     };
 }
