@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/GNOME/connections";
-    changelog = "https://gitlab.gnome.org/GNOME/connections/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-connections";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-connections/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Remote desktop client for the GNOME desktop environment";
     mainProgram = "gnome-connections";
     maintainers = teams.gnome.members;
