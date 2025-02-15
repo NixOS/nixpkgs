@@ -15990,6 +15990,8 @@ with pkgs;
     withGui = false;
   };
 
+  veroroute = libsForQt5.callPackage ../by-name/ve/veroroute/package.nix { };
+
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
     stdenv = llvmPackages.stdenv;
