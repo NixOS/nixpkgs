@@ -32,7 +32,9 @@ let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
   version = "0.0.28.post3";
 in
-buildPythonPackage {
+buildPythonPackage.override {
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+} {
   pname = "xformers";
   inherit version;
   pyproject = true;
@@ -63,8 +65,6 @@ buildPythonPackage {
   env = lib.attrsets.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
   };
-
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   buildInputs = lib.optionals cudaSupport (
     with cudaPackages;

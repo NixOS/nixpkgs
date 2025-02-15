@@ -38,23 +38,59 @@ let
         }
       else
         result
-    );
+    )
+    // lib.optionalAttrs (f ? override) {
+      override = lib.mirrorFunctionArgs f.override (fdrv: makeOverridablePythonPackage (f.override fdrv));
+    };
+
+  overrideStdenvCompat =
+    f:
+    lib.setFunctionArgs (
+      args:
+      if !(lib.isFunction args) && (args ? stdenv) then
+        let
+          pos = builtins.unsafeGetAttrPos "stdenv" args;
+          deprecate = lib.warn "${toString pos.file}:${toString pos.line}:${toString pos.column}: Passing argument stdenv into buildPython* is deprecated. Pass into buildPython*.override instead.";
+        in
+        f.override {
+          stdenv = args.stdenv // {
+            mkDerivation = fpArgs: (args.stdenv.mkDerivation fpArgs).overrideAttrs (previousAttrs: {
+              name = deprecate previousAttrs.name;
+            });
+          };
+        } args
+      else
+        f args
+    ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
+    // {
+      # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
+      # Users can therefore remedy the warning caused by upstream projects
+      # using `buildPythonPackageCustom.override { /* stdenv = ...; */ }`
+      # or `custom-package.override (previousAttrs: { buildPythonPackage = previousAttrs.buildPythonPackage.override { /* stdenv = ...; */ }; })`
+      inherit (f) override;
+    };
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
 
   buildPythonPackage = makeOverridablePythonPackage (
-    callPackage mkPythonDerivation {
-      inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
-      inherit toPythonModule; # Libraries provide modules
-    }
+    overrideStdenvCompat (
+      callPackage mkPythonDerivation {
+        inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
+        inherit toPythonModule; # Libraries provide modules
+        inherit (python) stdenv;
+      }
+    )
   );
 
   buildPythonApplication = makeOverridablePythonPackage (
-    callPackage mkPythonDerivation {
-      namePrefix = ""; # Python applications should not have any prefix
-      toPythonModule = x: x; # Application does not provide modules.
-    }
+    overrideStdenvCompat (
+      callPackage mkPythonDerivation {
+        namePrefix = ""; # Python applications should not have any prefix
+        toPythonModule = x: x; # Application does not provide modules.
+        inherit (python) stdenv;
+      }
+    )
   );
 
   # Check whether a derivation provides a Python module.
