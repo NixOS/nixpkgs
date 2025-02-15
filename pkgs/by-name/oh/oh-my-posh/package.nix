@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "24.11.4";
+  version = "24.18.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-hb5XgwBg9llX/PDX8A8hL5fJbG03nTjrvEd252k2Il0=";
+    hash = "sha256-mIDU7N2saEnMgAMMtbyBPLp8Y03bFwokt7qRqUHbCPs=";
   };
 
   vendorHash = "sha256-bOjIwBPxu/BfRaAcZTXf4xCGvVXnumb2++JZTx7ZG1s=";
