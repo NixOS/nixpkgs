@@ -5882,6 +5882,8 @@ self: super: with self; {
 
   haystack-ai = callPackage ../development/python-modules/haystack-ai { };
 
+  hcipy = callPackage ../development/python-modules/hcipy { };
+
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   hcs-utils = callPackage ../development/python-modules/hcs-utils { };
