@@ -1,7 +1,8 @@
 import ./generic.nix {
-  version = "14.15";
-  rev = "ref/tags/REL_14_15";
-  hash = "sha256-slb6UiJyIzDaNS782/ZDVztBw4B4qTY6OuEWI+HZ+Ds=";
+  version = "14.17";
+  # "Stamp 14.17"
+  rev = "e5cabe28006995d90cc9ebc613dad072c44c7f4a";
+  hash = "sha256-BvmfxHHTcxRkWZoawvHanQeAuqHnQIh77RQjxPo5fuI=";
   muslPatches = {
     disable-test-collate-icu-utf8 = {
       url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
