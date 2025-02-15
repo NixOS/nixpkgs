@@ -8,6 +8,11 @@
   libayatana-appindicator,
   copyDesktopItems,
   mpv,
+  runCommand,
+  _experimental-update-script-combinators,
+  harmony-music,
+  gitUpdater,
+  yq,
 }:
 flutter324.buildFlutterApplication rec {
   pname = "harmony-music";
@@ -69,6 +74,22 @@ flutter324.buildFlutterApplication rec {
       ]
     }"
   '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (harmony-music) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "harmony-music.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Cross platform App for streaming Music";
