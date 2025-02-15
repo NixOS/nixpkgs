@@ -123,6 +123,7 @@ stdenv.mkDerivation rec {
       azahi
       lassulus
       Gliczy
+      r4v3n6101
     ];
   };
 }
