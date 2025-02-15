@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zenoh";
-  version = "1.2.0";
+  version = "1.2.0"; # nixpkgs-update: no auto update
   pyproject = true;
 
   src = fetchFromGitHub {
