@@ -73,6 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
+  # https://reviews.llvm.org/D135402
+  NIX_LDFLAGS = lib.optional stdenv.cc.isClang "--undefined-version";
+
   stripDebugList = [ "bin" "lib" "modules" ];
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
