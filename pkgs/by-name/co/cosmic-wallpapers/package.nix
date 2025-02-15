@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   fetchpatch,
+  license-compliance-hook,
   nix-update-script,
 }:
 
@@ -27,6 +28,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  __structuredAttrs = true;
+  nativeBuildInputs = [ license-compliance-hook ];
+
+  includeLicenses = {
+    inherit (lib.licensesSpdx) "CC-BY-4.0";
+    ATTRIBUTION = "README.md";
+  };
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
