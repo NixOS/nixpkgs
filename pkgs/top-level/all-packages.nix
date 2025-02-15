@@ -6451,9 +6451,7 @@ with pkgs;
     llvm_20
     bolt_20;
 
-  lorri = callPackage ../tools/misc/lorri {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  lorri = callPackageWithExtraSet "darwin.apple_sdk.frameworks" ../tools/misc/lorri { };
 
   mercury = callPackage ../development/compilers/mercury {
     jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
