@@ -24,6 +24,7 @@
   # compression tools
 , zstd
 , xz
+, qemu-utils
 
   # arguments
 , name
@@ -89,11 +90,13 @@ let
   compressionPkg = {
     "zstd" = zstd;
     "xz" = xz;
+    "qcow2-compressed" = qemu-utils;
   }."${compression.algorithm}";
 
   compressionCommand = {
     "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
     "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "qcow2-compressed" = "mv -v $f ${imageFileBasename}.qcow2 && qemu-img convert -O qcow2 -c -m $NIX_BUILD_CORES ${imageFileBasename}.qcow2";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:
