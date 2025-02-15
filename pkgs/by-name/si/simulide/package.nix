@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchbzr,
+  fetchFromGitHub,
   libsForQt5,
-  versionNum ? "1.0.0",
+  versionNum ? "1.1.0",
 }:
 
 let
@@ -28,11 +29,21 @@ let
       };
     };
     "1.1.0" = rec {
-      release = "SR0";
-      rev = "1917";
+      release = "SR1";
+      rev = "2005";
       src = fetchbzr {
         url = "https://code.launchpad.net/~arcachofo/simulide/1.1.0";
-        sha256 = "sha256-qNBaGWl89Le9uC1VFK+xYhrLzIvOIWjkQbutnrAmZ2M=";
+        sha256 = "sha256-YVQduUjPQF5KxMlm730FZTShHP/7JEcAMIFn+mQITrQ=";
+        inherit rev;
+      };
+    };
+    "1.2.0" = rec {
+      release = "RC1";
+      rev = "da3a925491fab9fa2a8633d18e45f8e1b576c9d2";
+      src = fetchFromGitHub {
+        owner = "eeTools";
+        repo = "SimulIDE-dev";
+        hash = "sha256-6Gh0efBizDK1rUNkyU+/ysj7QwkAs3kTA1mQZYFb/pI=";
         inherit rev;
       };
     };
@@ -70,6 +81,7 @@ let
         cp simulide $out/bin/simulide
       '';
 
+  release' = lib.optionalString (lib.versionOlder versionNum "1.2.0") "-" + release;
 in
 
 stdenv.mkDerivation {
@@ -83,9 +95,9 @@ stdenv.mkDerivation {
       -e "s|^Icon=.*$|Icon=simulide|"
 
     # Note: older versions don't have REV_NO
-    sed -i SimulIDE.pro \
+    sed -i SimulIDE.pr* \
       -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
-      -e "s|^RELEASE = .*$|RELEASE = -${release}|" \
+      -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
       -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
       -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
 
