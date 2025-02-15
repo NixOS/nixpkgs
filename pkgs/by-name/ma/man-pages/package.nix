@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     # See 'man 5 manpath' for the lookup order.
     mkdir -p $out/bin
   '';
+
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://www.kernel.org/pub/linux/docs/man-pages/";
+  };
 
   meta = {
     description = "Linux development manual pages";
