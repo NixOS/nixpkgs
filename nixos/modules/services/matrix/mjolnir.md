@@ -37,10 +37,31 @@ you'll need to make the Mjolnir user a Matrix server admin.
 
 Now invite the Mjolnir user to the management room.
 
-It is recommended to use [Pantalaimon](https://github.com/matrix-org/pantalaimon),
-so your management room can be encrypted. This also applies if you are looking to moderate an encrypted room.
+It is recommended to enable encryption so your management room can be encrypted. This also applies
+if you are looking to moderate an encrypted room. This can be done by enabling
+[services.mjolnir.encryption](#opt-services.mjolnir.encryption.enable) and configuring a password
+in [services.mjolnir.passwordFile](#opt-services.mjolnir.passwordFile).
 
-To enable the Pantalaimon E2E Proxy for mjolnir, enable
+```nix
+{
+  services.mjolnir = {
+    enable = true;
+    homeserverUrl = "https://matrix.domain.tld";
+    passwordFile = "/run/secrets/mjolnir-password";
+    encryption = {
+      enable = true;
+      username = "mjolnir";
+    };
+    protectedRooms = [
+      "https://matrix.to/#/!xxx:domain.tld"
+    ];
+    managementRoom = "!yyy:domain.tld";
+  };
+}
+```
+
+Alternatively, using [Pantalaimon](https://github.com/matrix-org/pantalaimon) for encryption is
+still supported, but deprecated. To enable the Pantalaimon E2E Proxy for mjolnir, enable
 [services.mjolnir.pantalaimon](#opt-services.mjolnir.pantalaimon.enable). This will
 autoconfigure a new Pantalaimon instance, which will connect to the homeserver
 set in [services.mjolnir.homeserverUrl](#opt-services.mjolnir.homeserverUrl) and Mjolnir itself
@@ -51,10 +72,10 @@ will be configured to connect to the new Pantalaimon instance.
   services.mjolnir = {
     enable = true;
     homeserverUrl = "https://matrix.domain.tld";
+    passwordFile = "/run/secrets/mjolnir-password";
     pantalaimon = {
-       enable = true;
-       username = "mjolnir";
-       passwordFile = "/run/secrets/mjolnir-password";
+      enable = true;
+      username = "mjolnir";
     };
     protectedRooms = [
       "https://matrix.to/#/!xxx:domain.tld"
