@@ -19,6 +19,16 @@
 , libpaper ? null
 , coreutils
 , nixosTests
+, hostname
+, iconv
+
+# for passthru.tests
+, ghostscript
+, gtk3
+, gtklp
+, python3
+, samba
+, scribus
 }:
 
 stdenv.mkDerivation rec {
@@ -144,7 +154,25 @@ stdenv.mkDerivation rec {
       printing-service-notcp
       printing-socket-notcp
     ;
+    inherit
+      scribus
+      gtklp
+    ;
+    ghostscript = ghostscript.override { cupsSupport = true; };
+    gtk3 = gtk3.override { cupsSupport = true; };
+    pycups = python3.pkgs.pycups;
+    samba = samba.override { enablePrinting = true; };
   };
+
+  doCheck = !stdenv.isDarwin;  # some locale tests fail on darwin
+  nativeCheckInputs = [
+    hostname
+  ] ++ lib.optionals stdenv.isDarwin [
+    iconv
+  ];
+  preCheck = ''
+    export CUPS_TESTBASE=$(mktemp -d)
+  '';
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
