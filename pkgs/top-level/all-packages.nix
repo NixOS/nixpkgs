@@ -10029,6 +10029,8 @@ with pkgs;
     };
 
   ndi = callPackage ../development/libraries/ndi { };
+  
+  nemodex-usb-flasher = callPackage ../pkgs/nemodex-usb-flasher {};
 
   nettle = import ../development/libraries/nettle { inherit callPackage fetchurl; };
 
