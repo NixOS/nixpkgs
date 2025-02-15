@@ -11,13 +11,13 @@
 
 tcl.mkTclDerivation rec {
   pname = "scid";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "benini";
     repo = "scid";
     rev = "v${version}";
-    hash = "sha256-5WGZm7EwhZAMKJKxj/OOIFOJIgPBcc6/Bh4xVAlia4Y=";
+    hash = "sha256-xO5Jye2U1NpWT0Nrb+7dUW4QiJrFfxro1w8JZr8z4+8=";
   };
 
   postPatch = ''
