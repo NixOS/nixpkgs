@@ -2,8 +2,7 @@
   autoPatchelfHook,
   lib,
   fetchFromGitHub,
-  flutter,
-  pkg-config,
+  flutter324,
   webkitgtk_4_1,
   runCommand,
   yq,
@@ -11,7 +10,8 @@
   _experimental-update-script-combinators,
   gitUpdater,
 }:
-flutter.buildFlutterApplication rec {
+
+flutter324.buildFlutterApplication rec {
   pname = "jhentai";
   version = "8.0.5";
 
@@ -23,20 +23,6 @@ flutter.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  postUnpack = ''
-    substituteInPlace $sourceRoot/linux/my_application.cc \
-      --replace-fail "gtk_widget_realize(GTK_WIDGET(window))" "gtk_widget_show(GTK_WIDGET(window))"
-  '';
-
-  nativeBuildInputs = [
-    pkg-config
-    autoPatchelfHook
-  ];
-
-  buildInputs = [
-    webkitgtk_4_1
-  ];
 
   gitHashes = {
     desktop_webview_window = "sha256-QDlumlZ3pbmBRkMSJJVgz8HcCdANzV3cU142URvkY1w=";
@@ -50,17 +36,26 @@ flutter.buildFlutterApplication rec {
     photo_view = "sha256-k/+ncCzGkF4XmFpo3wmJOQbElSh2r+SlyeI3M9yDFtM=";
   };
 
+  postPatch = ''
+    substituteInPlace linux/my_application.cc \
+      --replace-fail "gtk_widget_realize" "gtk_widget_show"
+  '';
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [ webkitgtk_4_1 ];
+
   flutterBuildFlags = [
     "--target lib/src/main.dart"
   ];
 
   postInstall = ''
-    install -Dm644 ./linux/assets/top.jtmonster.jhentai.desktop $out/share/applications/top.jtmonster.jhentai.desktop
-    install -Dm644 ./assets/icon_512.png $out/share/icons/hicolor/512x512/apps/top.jtmonster.jhentai.png
+    install -Dm644 linux/assets/top.jtmonster.jhentai.desktop $out/share/applications/jhentai.desktop
+    install -Dm644 assets/icon/JHenTai_512.png $out/share/icons/hicolor/512x512/apps/top.jtmonster.jhentai.png
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
+    --prefix LD_LIBRARY_PATH : $out/app/jhentai/lib
   '';
 
   passthru = {
