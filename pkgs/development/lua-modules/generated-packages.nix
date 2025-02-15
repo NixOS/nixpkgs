@@ -2565,14 +2565,14 @@ buildLuarocksPackage {
 lze = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lze";
-  version = "0.7.5-1";
+  version = "0.7.11-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lze-0.7.5-1.rockspec";
-    sha256 = "1j5f2hs6pvlgpp9r42qlp6b1cbm4sagv373bf40xjgshzxhjf48j";
+    url    = "mirror://luarocks/lze-0.7.11-1.rockspec";
+    sha256 = "1nvnjncs5xz5gv4vsvwnsp6hcyvbzjrxvq0li9nr84hmb5sx7z1r";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/BirdeeHub/lze/archive/v0.7.5.zip";
-    sha256 = "1f1vmv2j3g1f54071yzgxk3np5zxsm9hmckimfs348x873bbr967";
+    url    = "https://github.com/BirdeeHub/lze/archive/v0.7.11.zip";
+    sha256 = "0vv333vkymjdsm73ppw8fpn9kxhapbiiikcaxhjswvrxw8ap7dwg";
   };
 
   disabled = luaOlder "5.1";
@@ -2881,6 +2881,29 @@ buildLuarocksPackage {
     homepage = "https://github.com/hrsh7th/nvim-cmp";
     description = "A completion plugin for neovim";
     license.fullName = "MIT";
+  };
+}) {};
+
+nvim-dbee = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nui-nvim }:
+buildLuarocksPackage {
+  pname = "nvim-dbee";
+  version = "0.1.9-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nvim-dbee-0.1.9-1.rockspec";
+    sha256 = "1lmzy6ivnwvhzclkfbcswj2mznrpc4i8s3ivdrc78rr86i49mvpg";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/kndndrj/nvim-dbee/archive/v0.1.9.zip";
+    sha256 = "10xplksglyd8af8q1cl2lxcpn52b766g87gva9fd3l66idxsds00";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nui-nvim ];
+
+  meta = {
+    homepage = "https://github.com/kndndrj/nvim-dbee";
+    description = "Interactive database client for neovim";
+    license.fullName = "GPL-3.0";
   };
 }) {};
 

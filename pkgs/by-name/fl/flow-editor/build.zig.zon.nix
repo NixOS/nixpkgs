@@ -97,19 +97,19 @@ linkFarm name [
     };
   }
   {
-    name = "1220a2c8f8db1b5265458ac967ea1f7cc0a8ddcd1d774df3b73d86c4f529aadbfb94";
+    name = "1220d0fb2bff7b453dbb39d1db3eb472b6680e2564f2b23b0e947671be47bbdd188f";
     path = fetchZigArtifact {
       name = "tracy";
-      url = "https://github.com/neurocyte/zig-tracy/archive/58999b786089e5319dd0707f6afbfca04c6340e7.tar.gz";
-      hash = "sha256-4q1UD2hRtp9mUPL5wIKzk8AhnAoVkl9xpaUN5sp4mWA=";
+      url = "https://github.com/neurocyte/zig-tracy/archive/e04e31c64498149a324491b8534758e6af43a5c2.tar.gz";
+      hash = "sha256-otvs9tKc8zMRFng0VJDn5iNf7lvbozjrtH0q8IFnP0w=";
     };
   }
   {
-    name = "12202aac930cebaf2b57f443cacc2483478580a72f1316b4f0a720ddd91246fce69d";
+    name = "122051b30656170b4628580e571d98b1fe45d7c0d581bc2d45e894c75c6376294ede";
     path = fetchZigArtifact {
       name = "tracy_src";
-      url = "https://github.com/wolfpld/tracy/archive/refs/tags/v0.10.tar.gz";
-      hash = "sha256-p2AX2Sjz8nJ1QPuVDt07c2yql7Etu05e3OZlQsvqZgA=";
+      url = "https://github.com/neurocyte/tracy/archive/0ff0a1b324f497cf313a445637b7df25aabefb47.tar.gz";
+      hash = "sha256-dzMilJsOSdjNyvhyDb1v5dPWcR5uvhnQmsBynAJH74I=";
     };
   }
   {
@@ -121,11 +121,11 @@ linkFarm name [
     };
   }
   {
-    name = "1220f6fdc977fff899aaf624afc8cf01e29a0e100dbb52860902a3bc256f4ddd687b";
+    name = "1220bbfd147f41fa49d2e5406096f3529c62e9335f4d2a89ae381e679a76ce398f1f";
     path = fetchZigArtifact {
       name = "thespian";
-      url = "https://github.com/neurocyte/thespian/archive/9df7beb192dd0db647e55fe44272b77ca687f6cd.tar.gz";
-      hash = "sha256-b8PPqmiURT9bOaa2ubz/v0J2WEyRmtL6iL4nBDkvgeQ=";
+      url = "https://github.com/neurocyte/thespian/archive/db3ad5f45e707a04eaa51aa657995abe43ce967a.tar.gz";
+      hash = "sha256-La5pv08xPAnkNxBHjpTmLpKxrcifRFWcqm8NYp92iRA=";
     };
   }
   {
@@ -137,11 +137,11 @@ linkFarm name [
     };
   }
   {
-    name = "1220b2109e0aadf85e4ac5e1cd084e321fe50f1e59cea690c022a7a8f7eb6021eadb";
+    name = "1220e4f3baf09dc23e48616f7dbf00bd45c3034faa2eddede7bb45ef4c23a19b962b";
     path = fetchZigArtifact {
       name = "themes";
-      url = "https://github.com/neurocyte/flow-themes/releases/download/master-0c2a187c604c63031225847a966b6ca279b2be91/flow-themes.tar.gz";
-      hash = "sha256-8zumZneeSPVrpw2wAQwKoEOXCLYqkKQFVXQ8oum08Hw=";
+      url = "https://github.com/neurocyte/flow-themes/releases/download/master-8b79cf6d79373c142393ec26a81b19f4701f4372/flow-themes.tar.gz";
+      hash = "sha256-xy0cTVc85U6JpI+oca2XKXE7GAs0EId21DeQCDa8+n0=";
     };
   }
   {
@@ -153,11 +153,11 @@ linkFarm name [
     };
   }
   {
-    name = "12202ee9842d28927674e552f1ea41e2c41e59f6b4b5d290de9b6fd626fd332ac627";
+    name = "12207e33747072d878fce61f587c133124dc95f4ae8aab7d2b3f467699586af07c77";
     path = fetchZigArtifact {
       name = "vaxis";
-      url = "https://github.com/neurocyte/libvaxis/archive/ffe35b4342bd2913efd46c35c0ccd15544ac87e6.tar.gz";
-      hash = "sha256-AQpYS1WnHLzcUMhD8BaCd+Dh+nqY5umL6KCBTuVlSQw=";
+      url = "https://github.com/neurocyte/libvaxis/archive/d899244bc0a3775b59c18e90eb41acee11675f96.tar.gz";
+      hash = "sha256-8bK0zM6rD/mqTaHDZKMgS3+qV1VviImM9jr9D0lkPdw=";
     };
   }
   {
@@ -185,11 +185,19 @@ linkFarm name [
     };
   }
   {
-    name = "12204c99c6093230023380068f386f7eb32ab83df9a8eb8b586ffe5aa44afa34ff0e";
+    name = "1220925614447b54ccc9894bbba8b202c6a8b750267890edab7732064867e46f3217";
+    path = fetchZigArtifact {
+      name = "win32";
+      url = "https://github.com/marlersoft/zigwin32/archive/259b6f353a48968d7e3171573db4fd898b046188.tar.gz";
+      hash = "sha256-N9Jp2vmq1+xPWByb+VZkbS2lm9FCrUW4UBAPhSP+dUw=";
+    };
+  }
+  {
+    name = "1220f9702ca6257f5464b31e576b1e92b0f441bf0e61733c4a2fbf95b7c0c55a3e22";
     path = fetchZigArtifact {
       name = "tree-sitter";
-      url = "https://github.com/neurocyte/tree-sitter/releases/download/master-aea6072c6178d5cd0c97fff33e130f632f355bc2/source.tar.gz";
-      hash = "sha256-eqJc3lx+tnbiqcD8R0u4+sH7wKOr4McYiZNUfPTNbRc=";
+      url = "https://github.com/neurocyte/tree-sitter/releases/download/master-69775ce3ba8a5e331bba9feb760d1ba31394eea7/source.tar.gz";
+      hash = "sha256-0ZLcPuhUV6Z3EsXfU7gXRrG/nRP9zuLRSL00Q5OGnus=";
     };
   }
 ]

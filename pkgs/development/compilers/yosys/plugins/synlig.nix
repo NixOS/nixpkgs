@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   plugin = "synlig";
 
   # The module has automatic regular releases, with date + short git hash
-  GIT_VERSION = "2024-11-29-10efd31";
+  GIT_VERSION = "2024-12-10-2d838ed";
 
   # Derive our package version from GIT_VERSION, remove hash, just keep date.
   version = builtins.concatStringsSep "-" (

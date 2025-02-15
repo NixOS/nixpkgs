@@ -75,13 +75,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-kABP10QX4r11UDUcd6Sukb+9+LRm/ba3iATz6DTOJYw=";
+    hash = "sha256-iEO4njjNByLkhXFLgZ8tO8M8RkwT+Lb0zyfedQDHcNc=";
   };
 
   patches = [
@@ -91,15 +91,6 @@ buildGoModule rec {
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
-
-    # backport of fix for https://github.com/containers/storage/issues/2184
-    # https://github.com/containers/storage/pull/2185
-    (fetchpatch2 {
-      url = "https://github.com/containers/storage/commit/99b0d2d423c8093807d8a1464437152cd04d7d95.diff?full_index=1";
-      hash = "sha256-aahYXnDf3qCOlb6MfVDqFKCcQG257r5sbh5qnL0T40I=";
-      stripLen = 1;
-      extraPrefix = "vendor/github.com/containers/storage/";
-    })
   ];
 
   vendorHash = null;

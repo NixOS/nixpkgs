@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   ];
 
   instruments = fetchurl {
-    url = "http://www.csee.umbc.edu/pub/midia/instruments.tar.gz";
+    url = "https://courses.cs.umbc.edu/pub/midia/instruments.tar.gz";
     sha256 = "0lsh9l8l5h46z0y8ybsjd4pf6c22n33jsjvapfv3rjlfnasnqw67";
   };
 
@@ -114,9 +114,10 @@ stdenv.mkDerivation rec {
     cp ${./timidity.cfg} $out/share/timidity/timidity.cfg
     substituteAllInPlace $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
+    # All but one of the symlinks in the instruments tarball have their permissions set to 0000.
+    # This causes problems on systems like Darwin that actually use symlink permissions.
+    chmod -Rh u+rwX $out/share/timidity/
   '';
-  # This fixup step is unnecessary and fails on Darwin
-  dontRewriteSymlinks = stdenv.hostPlatform.isDarwin;
 
   passthru.tests = nixosTests.timidity;
 

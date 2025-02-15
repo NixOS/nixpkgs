@@ -4,6 +4,7 @@
   cargoHash,
   patchDir,
   extraMeta ? { },
+  unsupported ? false,
 }:
 
 {
@@ -60,8 +61,18 @@ rustPlatform.buildRustPackage rec {
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile =
         {
-          admin_bind_path = "/run/kanidmd/sock";
           cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
+        }
+        // lib.optionalAttrs (lib.versionAtLeast version "1.5") {
+          client_config_path = "/etc/kanidm/config";
+          resolver_config_path = "/etc/kanidm/unixd";
+          resolver_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+          server_admin_bind_path = "/run/kanidmd/sock";
+          server_config_path = "/etc/kanidm/server.toml";
+          server_ui_pkg_path = "@htmx_ui_pkg_path@";
+        }
+        // lib.optionalAttrs (lib.versionOlder version "1.5") {
+          admin_bind_path = "/run/kanidmd/sock";
           default_config_path = "/etc/kanidm/server.toml";
           default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
           htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
@@ -159,6 +170,14 @@ rustPlatform.buildRustPackage rec {
       maintainers = with maintainers; [
         adamcstephens
         Flakebi
+      ];
+      knownVulnerabilities = lib.optionals unsupported [
+        ''
+          kanidm ${version} has reached EOL.
+
+          Please upgrade by verifying `kanidmd domain upgrade-check` and choosing the next version with `services.kanidm.package = pkgs.kanidm_1_x;`
+          See upgrade guide at https://kanidm.github.io/kanidm/master/server_updates.html
+        ''
       ];
     }
     // extraMeta;

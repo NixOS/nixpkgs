@@ -7,6 +7,8 @@
 , gtk-layer-shell
 , glib
 , libnotify
+, libX11
+, libXext
 , libxfce4ui
 , libxfce4util
 , libxklavier
@@ -24,9 +26,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-0fMuAucyxLr2VzQqAB0CL+HgkHNJctiVNZmUmTNzaPc=";
+  sha256 = "sha256-9BFO1cN0etDHJzkGHl5GKL2qzJTlpaP/qfvfz6KWaMI=";
 
   nativeBuildInputs = [
     wayland-scanner
@@ -39,6 +41,8 @@ mkXfceDerivation {
     gtk3
     gtk-layer-shell
     libnotify
+    libX11
+    libXext
     libxfce4ui
     libxfce4util
     libxklavier

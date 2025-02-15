@@ -46,13 +46,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     appDir=$out/share/applications
     iconDir=$out/share/icons/hicolor/32x32/apps
     mkdir -p $out/bin $appDir $iconDir $dataDir
     cp rocksndiamonds $out/bin/
     ln -s ${desktopItem}/share/applications/* $appDir/
-    ln -s $dataDir/graphics/gfx_classic/RocksIcon32x32.png $iconDir/rocksndiamonds.png
+    ln -s $dataDir/graphics/gfx_classic/icons/icon.png $iconDir/rocksndiamonds.png
     cp -r conf docs graphics levels music sounds $dataDir
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
-  version = "3.0.5";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = "389-ds-base";
     rev = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-OPtyeF1D46X6DslP3NewbjVgqPXngWUz943UsTqgWRo=";
+    hash = "sha256-FIx+ZW3K5KevU+wAiwPbDAQ6q7rPFEHFa+5eKqtgzpQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -97,8 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preBuild = ''
-    mkdir -p ./vendor
-    tar -xzf ${finalAttrs.cargoDeps} -C ./vendor --strip-components=1
+    ln -s ${finalAttrs.cargoDeps} ./vendor
   '';
 
   configureFlags =

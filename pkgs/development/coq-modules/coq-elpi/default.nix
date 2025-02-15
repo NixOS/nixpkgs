@@ -27,7 +27,6 @@ default-elpi-version = if elpi-version != null then elpi-version else (
 elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
 propagatedBuildInputs_wo_elpi = [
   coq.ocamlPackages.findlib
-  stdlib
 ];
 derivation = mkCoqDerivation {
   pname = "elpi";
@@ -120,4 +119,12 @@ patched-derivation2 = patched-derivation1.overrideAttrs
         propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.ppx_optcomp ];
       }
   );
-in patched-derivation2
+patched-derivation3 = patched-derivation2.overrideAttrs
+  (
+    o:
+    lib.optionalAttrs (o.version != null && o.version == "2.4.0")
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
+      }
+  );
+in patched-derivation3

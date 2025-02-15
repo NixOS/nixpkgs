@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "http://phrat.de/README";
     license = lib.licenses.isc;
     mainProgram = "yeahwm";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (libX11.meta) platforms;
   };
 })

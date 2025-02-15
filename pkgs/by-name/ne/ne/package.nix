@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ne";
-  version = "3.3.3";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "vigna";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lbXb/ZY0+vkOB8mXkHDaehXZMzrpx3A0jWnLpCjhMDE=";
+    sha256 = "sha256-n8PERQD9G4jmW4avQjbFofrSapyRoSbQ2k1LzVt0i1o=";
   };
 
   postPatch = ''

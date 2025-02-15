@@ -191,6 +191,10 @@ with self;
     version = "0.16.1";
     pname = "async_ssl";
     hash = "sha256-83YKxvVb/JwBnQG4R/R1Ztik9T/hO4cbiNTfFnErpG4=";
+    patches = fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-source-archives/d7f046579bfc7cfe77ce12f57fd11c206e7e9f30/patches/async_ssl/no-incompatible-pointer-types-0161.patch";
+      hash = "sha256-NcQX9eZ97kaQCOVAuYgR8NlFD3ZrGbT/2QqCjYf9Xnw=";
+    };
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
     propagatedBuildInputs = [

@@ -92,6 +92,8 @@ mapAliases ({
   BlinkStick = blinkstick; # added 2023-02-19
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
+  boxx = throw "boxx was removed as it is no longer used by any packages in nixpkgs."; # added 2025-02-08
+  bpycv = throw "bpycv was removed as it is incompatible with blender version 4 or later."; # added 2025-02-08
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
   bugz = throw "use pkgs.pybugz instead"; # added 2024-12-31
@@ -142,6 +144,7 @@ mapAliases ({
   cx_Freeze = cx-freeze; # added 2023-08-02
   cx_oracle = cx-oracle; # added 2024-01-03
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
+  dask-expr = throw "dask-expr was removed because its features are available in dask"; # added 2025-02-07
   dask-xgboost = throw "dask-xgboost was removed because its features are available in xgboost"; # added 2022-05-24
   dash-renderer = throw "dash-renderer has been removed since it is abandoned"; # added 2025-01-01
   dateutil = python-dateutil; # added 2021-07-03
@@ -238,6 +241,7 @@ mapAliases ({
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
   flufl_lock = flufl-lock; # added 2023-11-03
+  fn = throw "fn was removed as it is no longer used by any package in nixpkgs, it is not compatible with python 3.11 or newer and it was last updated in 2014."; # added 2025-02-08
   forbiddenfruit = throw "forbiddenfruit has been removed, because it was unmaintained and relied on the nose test framework"; # added 2024-07-08
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
@@ -467,6 +471,7 @@ mapAliases ({
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
+  pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
   py3to2 = throw "py3to2 is unmaintained and source is no longer available"; # added 2024-10-23
   py-radix = throw "py-radix has been removed, since it abandoned"; # added 2023-07-07
@@ -508,6 +513,7 @@ mapAliases ({
   pynose = throw "pynose was removed, because it violates the license of nose, by redistributing modified LGPL code under MIT.";
   python-ethtool = ethtool; # added 2024-07-23
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
+  pytrends = throw "pytrends has been removed, as it no longer works and is abandoned upstream"; # added 2025-02-02
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyqt5_sip = pyqt5-sip; # added 2024-01-07
   pyqt5_with_qtmultimedia = pyqt5-multimedia; # added 2024-01-07
@@ -657,6 +663,7 @@ mapAliases ({
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   smpp_pdu = smpp-pdu; # added 2024-03-05
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
+  sonarr = throw "sonarr has been deprecated and removed"; # added 2025-01-13
   solaredge = throw "solaredge was removed because Home Assistant switched to aiosolaredge"; # added 2024-07-15
   sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
   spacy_models = spacy-models; # added 2024-04-21
@@ -715,6 +722,7 @@ mapAliases ({
   twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-options = throw "twitter-common-options has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
+  types-enum34 = throw "types-enum34 is obselete since Python 3.4"; # added 2025-02-15
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
@@ -756,6 +764,7 @@ mapAliases ({
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_lockfile = zc-lockfile; # added 2024-01-06
+  zcs = throw "zcs was removed as it is no longer used by any packages in nixpkgs."; # added 2025-02-08
   zipstream = throw "zipstream has been removed, because it has been unmaintained for 6 years and there are no dependent packages"; # added 2024-05-26
   zipstream-new = throw "zipstream-new has been removed, because it  was packaged as a dependency for octoprint, which has switched to zipstream-ng since."; # added 2024-01-05
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26

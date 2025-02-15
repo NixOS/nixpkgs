@@ -772,7 +772,7 @@ class Machine:
             retry(tty_matches, timeout)
 
     def send_chars(self, chars: str, delay: float | None = 0.01) -> None:
-        """
+        r"""
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
         followed by the Enter key.
