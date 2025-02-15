@@ -70,21 +70,24 @@ let
     ++ optional cfg.enablePerl { name = "perl"; path = "${mod_perl}/modules/mod_perl.so"; }
     ++ cfg.extraModules;
 
-  loggingConf = (if cfg.logFormat != "none" then ''
-    ErrorLog ${cfg.logDir}/error.log
-
-    LogLevel notice
-
-    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-    LogFormat "%h %l %u %t \"%r\" %>s %b" common
-    LogFormat "%{Referer}i -> %U" referer
-    LogFormat "%{User-agent}i" agent
-
-    CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
-  '' else ''
-    ErrorLog /dev/null
-  '');
-
+  loggingConf = (
+    if
+      builtins.elem cfg.logFormat [
+        "combined"
+        "common"
+        "referer"
+        "agent"
+      ]
+    then
+      ''
+        CustomLog ${cfg.logDir}/access.log ${cfg.logFormat}
+      ''
+    else
+      ''
+        LogFormat "${cfg.logFormat}" custom
+        CustomLog ${cfg.logDir}/access.log custom
+      ''
+  );
 
   browserHacks = ''
     <IfModule mod_setenvif.c>
@@ -328,7 +331,17 @@ let
     </Files>
 
     ${mimeConf}
-    ${loggingConf}
+
+    ErrorLog ${if cfg.logFormat != "none" then "${cfg.logDir}/error.log" else "/dev/null"}
+    ${optionalString (cfg.logLevel != null) "LogLevel ${cfg.logLevel}"}
+
+    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+    LogFormat "%h %l %u %t \"%r\" %>s %b" common
+    LogFormat "%{Referer}i -> %U" referer
+    LogFormat "%{User-agent}i" agent
+
+    ${optionalString (cfg.logFormat != "none") loggingConf}
+
     ${browserHacks}
 
     Include ${pkg}/conf/extra/httpd-default.conf
@@ -457,12 +470,52 @@ in
       };
 
       logFormat = mkOption {
-        type = types.str;
+        type =
+          with types;
+          either (enum [
+            "combined"
+            "common"
+            "referer"
+            "agent"
+            "none"
+          ]) str;
         default = "common";
-        example = "combined";
+        example = "%{X-Forwarded-For}i %l %u %t \\\"%r\\\" %>s %b";
         description = ''
-          Log format for log files. Possible values are: combined, common, referer, agent, none.
+          Log format for log files. Possible values for predefined formats are: combined, common, referer, agent.
+          Alternatively, a format string can be specified.
+          Value `none` disables logging to files.
+
           See <https://httpd.apache.org/docs/2.4/logs.html> for more details.
+        '';
+      };
+
+      logLevel = mkOption {
+        type =
+          with types;
+          nullOr (enum [
+            "emerg"
+            "alert"
+            "crit"
+            "error"
+            "warn"
+            "notice"
+            "info"
+            "debug"
+            "trace1"
+            "trace2"
+            "trace3"
+            "trace4"
+            "trace5"
+            "trace6"
+            "trace7"
+            "trace8"
+          ]);
+        default = "notice";
+        example = "crit";
+        description = ''
+          Controls the verbosity of the ErrorLog.
+          See <https://httpd.apache.org/docs/2.4/mod/core.html#loglevel> for more details.
         '';
       };
 
