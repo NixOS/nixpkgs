@@ -118,7 +118,7 @@ let
       inherit lib;
       inherit (self) config;
       inherit (self) runtimeShell stdenv stdenvNoCC;
-      inherit (self.pkgsBuildHost) jq shellcheck-minimal;
+      inherit (self.pkgsBuildHost) jq shellcheck-minimal unixtools tmate;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
