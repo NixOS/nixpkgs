@@ -1226,6 +1226,7 @@
   ./services/networking/pppd.nix
   ./services/networking/pptpd.nix
   ./services/networking/privoxy.nix
+  ./services/networking/proftpd.nix
   ./services/networking/prosody.nix
   ./services/networking/quassel.nix
   ./services/networking/quicktun.nix
