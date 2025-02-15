@@ -13,13 +13,13 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "jhentai";
-  version = "8.0.5";
+  version = "8.0.6+277";
 
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
     tag = "v${version}";
-    hash = "sha256-LL1TyLF37NtwTRN9vhHBY+xHDg0E0ACt2ilacIKpduU=";
+    hash = "sha256-uS9jRgOKjByZazT6KCf9oOTeC6VPv7cIjtx5SNgIO7A=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -30,16 +30,15 @@ flutter324.buildFlutterApplication rec {
     flutter_draggable_gridview = "sha256-kntjeWEhRl4rdJBO8kt7GCaaLdPWy6b7zmBIjHyP7h8=";
     flutter_slidable = "sha256-nBPEZBvKV3D/eEa/cYb7jgbJ60rbh823yDJALLz1/8c=";
     flutter_socks_proxy = "sha256-a8XZTPTz521o7G7NsEXv2E/H7uVJcY4rcouIkdQC+jg=";
-    flutter_windowmanager = "sha256-+T2w1VLnrkzyvODGmWefa6aN1N+/i4itBgps2zouAas=";
-    j_downloader = "sha256-x5RG/SqbfOiRd51dL8H+phLIBrpVdOJiASWhbB5gCNQ=";
+    j_downloader = "sha256-Ct4TZvxKVWirEnSLs+pekDuf+b8tHFUZTdupBflGvJM=";
     like_button = "sha256-OVzfpIEnw88496H345NHn7nZ48+QDTaneBzN2UCdwk8=";
     photo_view = "sha256-k/+ncCzGkF4XmFpo3wmJOQbElSh2r+SlyeI3M9yDFtM=";
+    fluttertoast = "sha256-/2VJ1x7l5Idjwkm4Ennz8H/EC3j4/slRODj/82yO3iI=";
+    http_proxy = "sha256-GFb2xy8RSn6x/JGHRSa7Gl5TAsY+DHo8k3xxPqXGmfo=";
+    scrollable_positioned_list = "sha256-8WfyUpTs+Cfv2VzFECrW/DGoKOsu9KY6hf6sP81xuBg=";
+    system_network_proxy = "sha256-TAiFiIbO3v2awkaw8YYj7YnmuplnkSBclUVdGyHIRCs=";
+    zoom_view = "sha256-/JPvmLg8syn5IlKucj3R765kedCZ1LdzkreUIsvdwEg=";
   };
-
-  postPatch = ''
-    substituteInPlace linux/my_application.cc \
-      --replace-fail "gtk_widget_realize" "gtk_widget_show"
-  '';
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
