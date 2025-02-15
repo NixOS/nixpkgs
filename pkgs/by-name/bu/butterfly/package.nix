@@ -2,6 +2,11 @@
   lib,
   fetchFromGitHub,
   flutter327,
+  runCommand,
+  butterfly,
+  yq,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
 flutter327.buildFlutterApplication rec {
   pname = "butterfly";
@@ -37,7 +42,21 @@ flutter327.buildFlutterApplication rec {
     cp -r linux/debian/usr/share $out/share
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          buildInputs = [ yq ];
+          inherit (butterfly) src;
+        }
+        ''
+          cat $src/app/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "butterfly.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "Powerful, minimalistic, cross-platform, opensource note-taking app";
