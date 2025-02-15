@@ -1,14 +1,21 @@
+# shellcheck shell=bash
+
+# shellcheck source=../../../stdenv/generic/setup.sh
+source /dev/null
+# shellcheck source=../../../build-support/setup-hooks/multiple-outputs.sh
+source /dev/null
+
 addCMakeParams() {
     # NIXPKGS_CMAKE_PREFIX_PATH is like CMAKE_PREFIX_PATH except cmake
     # will not search it for programs
-    addToSearchPath NIXPKGS_CMAKE_PREFIX_PATH $1
+    addToSearchPath NIXPKGS_CMAKE_PREFIX_PATH "$1"
 }
 
 fixCmakeFiles() {
     # Replace occurences of /usr and /opt by /var/empty.
     echo "fixing cmake files..."
     find "$1" -type f \( -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
-        while read fn; do
+        while read -r fn; do
             sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
             mv "$fn.tmp" "$fn"
         done
@@ -18,26 +25,26 @@ cmakeConfigurePhase() {
     runHook preConfigure
 
     # default to CMake defaults if unset
-    : ${cmakeBuildDir:=build}
+    : "${cmakeBuildDir:=build}"
 
     export CTEST_OUTPUT_ON_FAILURE=1
-    if [ -n "${enableParallelChecking-1}" ]; then
+    if [[ -n "${enableParallelChecking-1}" ]]; then
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
     fi
 
-    if [ -z "${dontFixCmake-}" ]; then
+    if [[ -z "${dontFixCmake-}" ]]; then
         fixCmakeFiles .
     fi
 
-    if [ -z "${dontUseCmakeBuildDir-}" ]; then
+    if [[ -z "${dontUseCmakeBuildDir-}" ]]; then
         mkdir -p "$cmakeBuildDir"
-        cd "$cmakeBuildDir"
-        : ${cmakeDir:=..}
+        cd "$cmakeBuildDir" || return 1
+        : "${cmakeDir:=..}"
     else
-        : ${cmakeDir:=.}
+        : "${cmakeDir:=.}"
     fi
 
-    if [ -z "${dontAddPrefix-}" ]; then
+    if [[ -z "${dontAddPrefix-}" ]]; then
         prependToVar cmakeFlags "-DCMAKE_INSTALL_PREFIX=$prefix"
     fi
 
@@ -49,9 +56,9 @@ cmakeConfigurePhase() {
     # package being built.
     prependToVar cmakeFlags "-DCMAKE_CXX_COMPILER=$CXX"
     prependToVar cmakeFlags "-DCMAKE_C_COMPILER=$CC"
-    prependToVar cmakeFlags "-DCMAKE_AR=$(command -v $AR)"
-    prependToVar cmakeFlags "-DCMAKE_RANLIB=$(command -v $RANLIB)"
-    prependToVar cmakeFlags "-DCMAKE_STRIP=$(command -v $STRIP)"
+    prependToVar cmakeFlags "-DCMAKE_AR=$(command -v "$AR")"
+    prependToVar cmakeFlags "-DCMAKE_RANLIB=$(command -v "$RANLIB")"
+    prependToVar cmakeFlags "-DCMAKE_STRIP=$(command -v "$STRIP")"
 
     # on macOS we want to prefer Unix-style headers to Frameworks
     # because we usually do not package the framework
@@ -74,7 +81,8 @@ cmakeConfigurePhase() {
     if [[ -z "$shareDocName" ]]; then
         local cmakeLists="${cmakeDir}/CMakeLists.txt"
         if [[ -f "$cmakeLists" ]]; then
-            local shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
+            local shareDocName
+            shareDocName="$(grep --only-matching --perl-regexp --ignore-case '\bproject\s*\(\s*"?\K([^[:space:]")]+)' < "$cmakeLists" | head -n1)"
         fi
         # The argument sometimes contains garbage or variable interpolation.
         # When that is the case, let’s fall back to the derivation name.
@@ -82,6 +90,7 @@ cmakeConfigurePhase() {
             if [[ -n "${pname-}" ]]; then
                 shareDocName="$pname"
             else
+                # shellcheck disable=SC2001
                 shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
             fi
         fi
@@ -101,7 +110,7 @@ cmakeConfigurePhase() {
     prependToVar cmakeFlags "-DCMAKE_INSTALL_LOCALEDIR=${!outputLib}/share/locale"
 
     # Don’t build tests when doCheck = false
-    if [ -z "${doCheck-}" ]; then
+    if [[ -z "${doCheck-}" ]]; then
         prependToVar cmakeFlags "-DBUILD_TESTING=OFF"
     fi
 
@@ -115,7 +124,7 @@ cmakeConfigurePhase() {
     prependToVar cmakeFlags "-DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF"
     prependToVar cmakeFlags "-DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF"
 
-    if [ "${buildPhase-}" = ninjaBuildPhase ]; then
+    if [[ "${buildPhase-}" = ninjaBuildPhase ]]; then
         prependToVar cmakeFlags "-GNinja"
     fi
 
@@ -142,7 +151,7 @@ cmakeConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "${dontUseCmakeConfigure-}" -a -z "${configurePhase-}" ]; then
+if [[ -z "${dontUseCmakeConfigure-}" ]] && [[ -z "${configurePhase-}" ]]; then
     setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi
