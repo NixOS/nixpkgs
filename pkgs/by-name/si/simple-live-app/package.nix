@@ -53,6 +53,8 @@ flutter324.buildFlutterApplication rec {
     --prefix LD_LIBRARY_PATH : $out/app/simple-live-app/lib
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Simply Watch Live";
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
