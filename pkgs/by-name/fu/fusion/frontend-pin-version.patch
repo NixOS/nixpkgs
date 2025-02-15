@@ -1,0 +1,15 @@
+diff --git a/vite.config.ts b/vite.config.ts
+index 880b306..01f7a92 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -6,9 +6,7 @@ export default defineConfig({
+ 	plugins: [sveltekit()],
+ 	define: {
+ 		'import.meta.env.FUSION': JSON.stringify({
+-			version:
+-				execSync('git describe --tags --abbrev=0').toString().trimEnd() ||
+-				execSync('git rev-parse --short HEAD').toString().trimEnd()
++			version: process.env.version
+ 		})
+ 	},
+ 	server: {
