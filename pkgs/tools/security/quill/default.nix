@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     export IC_ICRC1_ARCHIVE_WASM_PATH=${ic}/rs/rosetta-api/icrc1/wasm/ic-icrc1-archive.wasm.gz
     export LEDGER_ARCHIVE_NODE_CANISTER_WASM_PATH=${ic}/rs/rosetta-api/icp_ledger/wasm/ledger-archive-node-canister.wasm
     cp ${ic}/rs/rosetta-api/icp_ledger/ledger.did /build/quill-${version}-vendor/ledger.did
-    export PROTOC=${buildPackages.protobuf}/bin/protoc
     export OPENSSL_DIR=${openssl.dev}
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
@@ -50,10 +49,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    protobuf
   ];
   buildInputs =
     [
+      protobuf
       openssl
       udev
     ]
