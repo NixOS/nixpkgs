@@ -11,12 +11,12 @@
 let
   bigpemu-unwrapped = stdenv.mkDerivation rec {
     pname = "BigPEmu";
-    version = "1.17";
+    version = "1.18";
     src = fetchurl {
       url = "https://www.richwhitehouse.com/jaguar/builds/BigPEmu_Linux64_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }.tar.gz";
-      hash = "sha256-R5f3LD5RcGwdwcZqXGaCSFDyHaJrQ1ghS3kqVvBd38A=";
+      hash = "sha256-fYzC1gYi6/6/Ouxd1reRXRGHshLwLFK4N/Md7GiiU9Y=";
     };
 
     installPhase = ''
