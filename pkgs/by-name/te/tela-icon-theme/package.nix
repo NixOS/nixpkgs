@@ -31,6 +31,8 @@ stdenvNoCC.mkDerivation rec {
   dontPatchELF = true;
   dontRewriteSymlinks = true;
 
+  dontCheckForBrokenSymlinks = true;
+
   installPhase = ''
     runHook preInstall
 
