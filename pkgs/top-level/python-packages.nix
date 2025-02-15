@@ -12894,6 +12894,8 @@ self: super: with self; {
 
   pysrt = callPackage ../development/python-modules/pysrt { };
 
+  pysrs = callPackage ../development/python-modules/pysrs { };
+
   pyssim = callPackage ../development/python-modules/pyssim { };
 
   pystache = callPackage ../development/python-modules/pystache { };
