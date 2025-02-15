@@ -81,6 +81,10 @@ mkDerivation {
     cat qflipper_common.pri
   '';
 
+  preConfigure = ''
+    export NIX_LDFLAGS_BEFORE="-rpath $out/lib/qFlipper/plugins"
+  '';
+
   postInstall = ''
     mkdir -p $out/bin
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
