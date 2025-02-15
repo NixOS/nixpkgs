@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   # FIXME: -dev depends on -doc
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [ "out" "dev" "man" "doc" "utils" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -94,6 +94,8 @@ stdenv.mkDerivation rec {
     mv $out/manual $doc/share/doc/httpd
     mkdir -p $dev/bin
     mv $out/bin/apxs $dev/bin/apxs
+    mkdir -p $utils/bin
+    cp $out/bin/{ab,checkgid,fcgistarter,htcacheclean,htdbm,htdigest,htpasswd,logresolve,rotatelogs} $utils/bin/
   '';
 
   passthru = {
