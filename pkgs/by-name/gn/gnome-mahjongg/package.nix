@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-mahjongg";
-  version = "47.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.major finalAttrs.version}/gnome-mahjongg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-qukK3xw1dBQ3xEOrx34c7WjCDxRS27vXg9y0AMouArA=";
+    hash = "sha256-Nd+SZBnzeCY4CjNGIHVjzYfH6ZoT3r4Ok6FAnYXMYVc=";
   };
 
   nativeBuildInputs = [
