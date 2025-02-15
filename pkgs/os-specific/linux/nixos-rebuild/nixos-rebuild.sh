@@ -7,6 +7,13 @@ set -e
 set -o pipefail
 shopt -s inherit_errexit
 
+setx() {
+    set -x
+    PS4='+ ${BASH_SOURCE[0]-$0}:$LINENO: '
+}
+# feel free to uncomment if you're working on tests etc
+setx
+
 export PATH=@path@:$PATH
 
 showSyntax() {
@@ -121,6 +128,10 @@ while [ "$#" -gt 0 ]; do
         copyFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
+        # at two verbosity levels or more we enable setx
+        # if [[ "${verboseScript:-false}" = true -o "$i" = -vv -o "$i" = -vvv -o "$i" = -vvvv -o "$i" = -vvvvv ]]; then
+        #     set  x
+        #  fi
         verboseScript="true"
         extraBuildFlags+=("$i")
         copyFlags+=("$i")
