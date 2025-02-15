@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wavpack";
-  version = "5.8.0";
+  version = "5.8.1";
 
   enableParallelBuilding = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "dbry";
     repo = "WavPack";
     rev = version;
-    hash = "sha256-JT4WOlga3jyHMznEJmgc6EQIAVBZdlazmQphJC1+r4s=";
+    hash = "sha256-V9jRIuDpZYIBohJRouGr2TI32BZMXSNVfavqPl56YO0=";
   };
 
   outputs = [

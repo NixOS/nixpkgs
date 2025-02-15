@@ -17579,8 +17579,6 @@ self: super: with self; {
 
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 
-  types-enum34 = callPackage ../development/python-modules/types-enum34 { };
-
   types-freezegun = callPackage ../development/python-modules/types-freezegun { };
 
   types-futures = callPackage ../development/python-modules/types-futures { };
