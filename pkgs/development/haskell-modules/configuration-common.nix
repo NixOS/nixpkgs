@@ -2295,6 +2295,22 @@ self: super: {
   doctest-parallel = dontCheck super.doctest-parallel;
   clash-prelude = dontCheck super.clash-prelude;
 
+  krank = appendPatches [
+    # Deal with removed exports in base
+    (pkgs.fetchpatch {
+      name = "krank-issue-97.patch";
+      url = "https://github.com/guibou/krank/commit/f6b676774537f8e2357115fd8cd3c93fb68e8a85.patch";
+      sha256 = "0d85q2x37yhjwp17wmqvblkna7p7vnl7rwdqr3kday46wvdgblgl";
+      excludes = [ ".envrc" ];
+    })
+    # Fix build of tests with http-client >=0.7.16
+    (pkgs.fetchpatch {
+      name = "krank-http-client-0.7.16.patch";
+      url = "https://github.com/guibou/krank/commit/50fd3d08526f3ed6add3352460d3d1ce9dc15f6d.patch";
+      sha256 = "0h15iir2v4pli2b72gv69amxs277xmmzw3wavrix74h9prbs4pms";
+    })
+  ] super.krank;
+
   hermes-json = overrideCabal (drv: {
     # 2025-02-11: Upper bounds on hedgehog < 1.5 too strict.
     jailbreak = true;
