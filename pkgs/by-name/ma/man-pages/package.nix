@@ -7,29 +7,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
-  version = "6.9.1";
+  version = "6.11";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-4jy6wp8RC6Vx8NqFI+edNzaRRm7X8qMTAXIYF9NFML0=";
+    url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
+    hash = "sha256-3aou2i6NKG++wiHRFfEtP/9dNsxQZs3+zI0koljVixk=";
   };
 
+  dontBuild = true;
+  enableParallelInstalling = true;
+
   makeFlags = [
+    "-R"
+    "VERSION=${finalAttrs.version}"
     "prefix=${placeholder "out"}"
   ];
 
-  dontBuild = true;
-
-  outputDocdev = "out";
-
-  enableParallelInstalling = true;
-
-  postInstall = ''
-    # The manpath executable looks up manpages from PATH. And this package won't
-    # appear in PATH unless it has a /bin folder. Without the change
-    # 'nix-shell -p man-pages' does not pull in the search paths.
-    # See 'man 5 manpath' for the lookup order.
-    mkdir -p $out/bin
+  preConfigure = ''
+    # If not provided externally, the makefile will attempt to determine the
+    # date and time of the release from the Git repository log, which is not
+    # available in the distributed tarball. We therefore supply it from
+    # $SOURCE_DATE_EPOCH, which is based on the most recent modification time
+    # of all source files. Cf.
+    # nixpkgs/pkgs/build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+    export DISTDATE="$(date --utc --date="@$SOURCE_DATE_EPOCH")"
   '';
 
   passthru.updateScript = directoryListingUpdater {
