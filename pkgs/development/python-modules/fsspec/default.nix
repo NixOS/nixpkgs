@@ -1,47 +1,51 @@
 {
   lib,
   stdenv,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
   hatch-vcs,
-  numpy,
-  paramiko,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  smbprotocol,
-  tqdm,
+
+  # optional-dependencies
   adlfs,
+  pyarrow,
   dask,
   distributed,
+  requests,
   dropbox,
+  aiohttp,
   fusepy,
   gcsfs,
   libarchive-c,
   ocifs,
   panel,
-  pyarrow,
+  paramiko,
   pygit2,
   s3fs,
+  smbprotocol,
+  tqdm,
+
+  # tests
+  numpy,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-vcr,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2024.12.0";
+  version = "2025.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
     tag = version;
-    hash = "sha256-Vc0vBayPg6zZ4+pxJsHChSGg0kjA0Q16+Gk0bO0IEpI=";
+    hash = "sha256-vJYnPbGbEMAe1p0EUBxSRZYtvBdJzjzDOesyTJsFJbU=";
   };
 
   build-system = [
@@ -110,11 +114,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-vcr
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -139,11 +140,6 @@ buildPythonPackage rec {
       # tries to access /home, ignores $HOME
       "test_directories"
     ];
-
-  disabledTestPaths = [
-    # JSON decoding issues
-    "fsspec/implementations/tests/test_dbfs.py"
-  ];
 
   pythonImportsCheck = [ "fsspec" ];
 
