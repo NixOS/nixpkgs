@@ -60,7 +60,7 @@ let
               cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
               caddy fmt --overwrite $out/Caddyfile
               ${lib.optionalString cfg.validateConfigFile ''
-                caddy validate --adapter caddyfile --config $out/Caddyfile
+                caddy adapt --adapter caddyfile --config $out/Caddyfile
               ''}
             '';
       in

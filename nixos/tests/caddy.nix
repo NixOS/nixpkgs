@@ -91,7 +91,6 @@ import ./make-test-python.nix (
           };
           specialisation.invalid-config-fail.configuration = {
             services.caddy = {
-              enforceConfigValidation = true;
               extraConfig = ''
                 not-a-real-directive {
                   this-should-fail
