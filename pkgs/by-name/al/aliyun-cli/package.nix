@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "aliyun-cli";
-  version = "3.0.211";
+  version = "3.0.252";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
     tag = "v${version}";
-    hash = "sha256-6msh6bGL++nXVzwwNW6fFZbkN40ieL+SpgRownIs9aE=";
+    hash = "sha256-BNoNO8HQQGkUTR2MfpolF+PRo7YgT0hUbi5n+zPst6c=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-wHdSDBxDArVbD5+EgGcIpQ+NLg5BKXo2v3WM4ni1efc=";
+  vendorHash = "sha256-xwhq1UJ73Xxmt3NkpQMCrcl9N0F833N3/V+O+w1SVrQ=";
 
   subPackages = [ "main" ];
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = ''
-    install -Dm755 $out/bin/main $out/bin/aliyun
+    mv $out/bin/main $out/bin/aliyun
   '';
 
   passthru.updateScript = nix-update-script { };
