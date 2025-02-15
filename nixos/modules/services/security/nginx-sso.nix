@@ -43,6 +43,15 @@ in {
         configuration. This file must be readable by `nginx-sso`.
       '';
     };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        File containing environment variables in systemd EnvironmentFile format.
+        <literal>COOKIE_AUTHENTICATION_KEY</literal> is a supported variable.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -63,6 +72,7 @@ in {
             --config ${configPath} \
             --frontend-dir ${lib.getBin cfg.package}/share/frontend
         '';
+        EnvironmentFile = cfg.environmentFile;
         Restart = "always";
         User = "nginx-sso";
         Group = "nginx-sso";
