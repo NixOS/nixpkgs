@@ -349,7 +349,7 @@ let
       pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
-      pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      inherit pkgsStatic;
 
       tests = packagePlatforms pkgs.tests;
 
@@ -370,5 +370,26 @@ let
       else mapTestOn packageJobs;
   in
     unionOfDisjoint nonPackageJobs mapTestOn-packages;
+
+  # for inclusion into `jobs`, a selection of "core" packages.
+  # Currently: interpreters and essential tools.
+  # Some of these may also be built through aliases such as pkgs.<name>Static
+  pkgsStatic = {
+    stdenv = [ "x86_64-linux" "aarch64-linux" ];
+    nix = [ "x86_64-linux" "aarch64-linux" ];
+
+    # interpreters
+    bash = [ "x86_64-linux" "aarch64-linux" ];
+    bashInteractive = [ "x86_64-linux" "aarch64-linux" ];
+    dhall = [ "x86_64-linux" "aarch64-linux" ];
+    lua = [ "x86_64-linux" "aarch64-linux" ];
+    perl = [ "x86_64-linux" "aarch64-linux" ];
+    python3Minimal = [ "x86_64-linux" "aarch64-linux" ];
+    # currently broken: ruby = [ "x86_64-linux" "aarch64-linux" ];
+
+    busybox = [ "x86_64-linux" "aarch64-linux" ];
+    nano = [ "x86_64-linux" "aarch64-linux" ];
+    vim = [ "x86_64-linux" "aarch64-linux" ];
+  };
 
 in jobs
