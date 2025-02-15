@@ -201,6 +201,7 @@ let
               jobs.pkgs-lib-tests
               jobs.stdenv.x86_64-linux
               jobs.cargo.x86_64-linux
+              jobs.curl.x86_64-linux.tests.withCheck
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
               jobs.nix.x86_64-linux
