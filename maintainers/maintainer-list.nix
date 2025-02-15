@@ -23075,6 +23075,11 @@
     github = "tfmoraes";
     githubId = 351108;
   };
+  tgi74 = {
+    github = "tgi74";
+    githubId = 1854712;
+    name = "tgi74";
+  };
   tgunnoe = {
     email = "t@gvno.net";
     github = "tgunnoe";
