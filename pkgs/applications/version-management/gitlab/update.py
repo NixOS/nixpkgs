@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging python3Packages.semver prefetch-yarn-deps git
 
 import click
 import click_log
@@ -13,6 +13,7 @@ from packaging.version import Version
 from typing import Iterable
 
 import requests
+import semver
 
 NIXPKGS_PATH = pathlib.Path(__file__).parent / "../../../../"
 GITLAB_DIR = pathlib.Path(__file__).parent
@@ -119,10 +120,32 @@ class GitLabRepo:
         )
 
 
-def _get_data_json():
-    data_file_path = pathlib.Path(__file__).parent / "data.json"
-    with open(data_file_path, "r") as f:
-        return json.load(f)
+class GitLabVersion:
+    def __init__(self, version: str):
+        self.version = semver.VersionInfo.parse(version)
+
+    def data_file_path(self):
+        """Version specific data file"""
+        return (pathlib.Path(__file__).parent / f"data-{self.major_minor()}.json").as_posix()
+
+    def rubyenv_dir(self):
+        """Version specific rubyEnv dir"""
+        return pathlib.Path(__file__).parent / f"rubyEnv-{self.major_minor()}"
+
+    def gitaly_dir(self):
+        """Version specific gitaly dir"""
+        return pathlib.Path(__file__).parent / f"gitaly-{self.major_minor()}"
+
+    def major_minor(self):
+        """
+        returns simplified major-minor version for use in data file name
+        """
+        return f"{self.version.major}-{self.version.minor}"
+
+    def get_data_json(self):
+        """loads data from version data.json file"""
+        with open(self.data_file_path(), "r") as f:
+            return json.load(f)
 
 
 def _call_nix_update(pkg, version):
@@ -142,31 +165,35 @@ def cli():
 @click.option("--rev", default="latest", help="The rev to use (vX.Y.Z-ee), or 'latest'")
 def update_data(rev: str):
     """Update data.json"""
-    logger.info("Updating data.json")
 
     repo = GitLabRepo()
     if rev == "latest":
         # filter out pre and rc releases
         rev = next(filter(lambda x: not ("rc" in x or x.endswith("pre")), repo.tags))
 
-    data_file_path = pathlib.Path(__file__).parent / "data.json"
+    version = GitLabVersion(version=repo.rev2version(rev))
+    logger.info(f"Updating data-{version.major_minor()}.json")
+
+    data_file_path = version.data_file_path()
 
     data = repo.get_data(rev)
 
-    with open(data_file_path.as_posix(), "w") as f:
+    with open(data_file_path, "w") as f:
         json.dump(data, f, indent=2)
         f.write("\n")
 
 
 @cli.command("update-rubyenv")
-def update_rubyenv():
+@click.option("--version", help="The version to use (major.minor)")
+def update_rubyenv(version: str):
     """Update rubyEnv"""
     logger.info("Updating gitlab")
     repo = GitLabRepo()
-    rubyenv_dir = pathlib.Path(__file__).parent / "rubyEnv"
+    version = GitLabVersion(version=version)
+    rubyenv_dir = version.rubyenv_dir()
 
     # load rev from data.json
-    data = _get_data_json()
+    data = version.get_data_json()
     rev = data["rev"]
     version = data["version"]
 
@@ -246,13 +273,14 @@ def update_rubyenv():
 
 
 @cli.command("update-gitaly")
-def update_gitaly():
+@click.option("--version", help="The version to use (major.minor)")
+def update_gitaly(version: str):
     """Update gitaly"""
     logger.info("Updating gitaly")
-    data = _get_data_json()
+    version = GitLabVersion(version=version)
+    data = version.get_data_json()
     gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
     repo = GitLabRepo(repo="gitaly")
-    gitaly_dir = pathlib.Path(__file__).parent / 'gitaly'
 
     makefile = repo.get_file("Makefile", f"v{gitaly_server_version}")
     makefile += "\nprint-%:;@echo $($*)\n"
@@ -264,10 +292,12 @@ def update_gitaly():
 
 
 @cli.command("update-gitlab-pages")
-def update_gitlab_pages():
+@click.option("--version", help="The version to use (major.minor)")
+def update_gitlab_pages(version: str):
     """Update gitlab-pages"""
     logger.info("Updating gitlab-pages")
-    data = _get_data_json()
+    version = GitLabVersion(version=version)
+    data = version.get_data_json()
     gitlab_pages_version = data["passthru"]["GITLAB_PAGES_VERSION"]
     _call_nix_update("gitlab-pages", gitlab_pages_version)
 
@@ -290,19 +320,23 @@ def get_container_registry_version() -> str:
 
 
 @cli.command("update-gitlab-shell")
-def update_gitlab_shell():
+@click.option("--version", help="The version to use (major.minor)")
+def update_gitlab_shell(version: str):
     """Update gitlab-shell"""
+    version = GitLabVersion(version=version)
     logger.info("Updating gitlab-shell")
-    data = _get_data_json()
+    data = version.get_data_json()
     gitlab_shell_version = data["passthru"]["GITLAB_SHELL_VERSION"]
     _call_nix_update("gitlab-shell", gitlab_shell_version)
 
 
 @cli.command("update-gitlab-workhorse")
-def update_gitlab_workhorse():
+@click.option("--version", help="The version to use (major.minor)")
+def update_gitlab_workhorse(version: str):
     """Update gitlab-workhorse"""
     logger.info("Updating gitlab-workhorse")
-    data = _get_data_json()
+    version = GitLabVersion(version=version)
+    data = version.get_data_json()
     gitlab_workhorse_version = data["passthru"]["GITLAB_WORKHORSE_VERSION"]
     _call_nix_update("gitlab-workhorse", gitlab_workhorse_version)
 
@@ -331,9 +365,11 @@ def update_gitlab_container_registry(rev: str, commit: bool):
 
 
 @cli.command('update-gitlab-elasticsearch-indexer')
-def update_gitlab_elasticsearch_indexer():
+@click.option("--version", help="The version to use (major.minor)")
+def update_gitlab_elasticsearch_indexer(version: str):
     """Update gitlab-elasticsearch-indexer"""
-    data = _get_data_json()
+    version = GitLabVersion(version=version)
+    data = version.get_data_json()
     gitlab_elasticsearch_indexer_version = data['passthru']['GITLAB_ELASTICSEARCH_INDEXER_VERSION']
     _call_nix_update('gitlab-elasticsearch-indexer', gitlab_elasticsearch_indexer_version)
 
@@ -346,6 +382,7 @@ def update_gitlab_elasticsearch_indexer():
 @click.pass_context
 def update_all(ctx, rev: str, commit: bool):
     """Update all gitlab components to the latest stable release"""
+    version = GitLabVersion
     old_data_json = _get_data_json()
     old_container_registry_version = get_container_registry_version()
 
