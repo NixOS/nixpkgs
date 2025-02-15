@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "edukai";
-  version = "4.0";
+  version = "5.0";
 
   src = fetchzip {
     name = "${pname}-${version}";
-    url = "http://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-4.0.zip";
-    sha256 = "10m9srvbazvg9gc43943dc89rjzcfc8mm4lx9gb5hnplrn22zrcn";
+    url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${version}.zip";
+    sha256 = "sha256-3+w9n6GJQg9+HfHYukC7tlm4GVs8vEOO23hrLw6qjTY=";
   };
 
   installPhase = ''
