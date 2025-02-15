@@ -27,6 +27,7 @@
   extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ], # e.g.: runc, gvisor, youki
   fuse-overlayfs,
   util-linux,
+  nftables,
   iptables,
   iproute2,
   catatonit,
@@ -47,6 +48,7 @@ let
       util-linux
       iptables
       iproute2
+      nftables
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       vfkit
