@@ -17,23 +17,23 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restate";
-  version = "1.1.6";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${version}";
-    hash = "sha256-uDNPIL9Ox5rwWVzqWe74elHPGy6lSvWR1S7HsY6ATjc=";
+    hash = "sha256-omkugB/8V97QoUYBgag5LdqkqfNsM6P4Az9yWJjoRxw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-z7VAKU4bi6pX2z4jCKWDfQt8FFLN7ugnW2LOy6IHz/w=";
+  cargoHash = "sha256-zAN/8a+UTPxUpzSTgqK5WVgYjen5yn0/XSTiJtBZPj0=";
 
   env = {
     PROTOC = lib.getExe protobuf;
     PROTOC_INCLUDE = "${protobuf}/include";
 
-    VERGEN_GIT_COMMIT_DATE = "2024-12-23";
+    VERGEN_GIT_COMMIT_DATE = "2025-02-15";
     VERGEN_GIT_SHA = "v${version}";
 
     # rustflags as defined in the upstream's .cargo/config.toml
@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
         targetFlags = rec {
           build = [
             "-C force-unwind-tables"
-            "-C debug-assertions"
             "--cfg uuid_unstable"
             "--cfg tokio_unstable"
           ];
