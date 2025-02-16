@@ -16,6 +16,7 @@
   reproc,
   spdlog,
   tl-expected,
+  simdjson,
 }:
 
 let
@@ -36,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "1.5.8";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
-    hash = "sha256-sxZDlMFoMLq2EAzwBVO++xvU1C30JoIoZXEX/sqkXS0=";
+    hash = "sha256-o5shAmsplJS2WZ4HhAt1U27KqUheVxZTkjlyxR7EYxI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -60,14 +61,23 @@ stdenv.mkDerivation rec {
     ghc_filesystem
     python3
     tl-expected
+    simdjson
   ];
 
   cmakeFlags = [
     "-DBUILD_LIBMAMBA=ON"
     "-DBUILD_SHARED=ON"
-    "-DBUILD_MICROMAMBA=ON"
+    "-DBUILD_MAMBA=ON"
     # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
   ];
+
+  postFixup = ''
+    # renaming doesn't work: "critical libmamba `mamba` binary not found."
+    # mv $out/bin/mamba $out/bin/micromamba
+
+    # this works but for some reason not with "nix run"
+    ln -s $out/bin/mamba $out/bin/micromamba
+  '';
 
   meta = with lib; {
     description = "Reimplementation of the conda package manager";
