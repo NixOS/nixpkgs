@@ -1,7 +1,7 @@
 /*
   This file provides the `tectonic-unwrapped` package. On the other hand,
   the `tectonic` package is defined in `../tectonic/package.nix`, by wrapping
-  - [`tectonic-unwrapped`](./default.nix) i.e. this package, and
+  - [`tectonic-unwrapped`](./package.nix) i.e. this package, and
   - [`biber-for-tectonic`](../../bi/biber-for-tectonic/package.nix),
     which provides a compatible version of `biber`.
 */
@@ -13,7 +13,7 @@
   rustPlatform,
   darwin,
   fontconfig,
-  harfbuzz,
+  harfbuzzFull,
   openssl,
   pkg-config,
   icu,
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     [
       icu
       fontconfig
-      harfbuzz
+      harfbuzzFull
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
