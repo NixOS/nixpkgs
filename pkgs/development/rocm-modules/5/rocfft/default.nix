@@ -1,5 +1,4 @@
 {
-  rocfft,
   lib,
   stdenv,
   fetchFromGitHub,
