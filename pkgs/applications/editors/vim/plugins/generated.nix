@@ -11020,20 +11020,6 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
-  oil-nvim = buildVimPlugin {
-    pname = "oil.nvim";
-    version = "2025-02-13";
-    src = fetchFromGitHub {
-      owner = "stevearc";
-      repo = "oil.nvim";
-      rev = "7cde5aab10f564408e9ac349d457d755422d58cd";
-      sha256 = "0x6vaapj5x7a4jhdc8mvzb701cfvziyb9ywj9sshsyfdhw9q8phs";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/stevearc/oil.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   ollama-nvim = buildVimPlugin {
     pname = "ollama.nvim";
     version = "2024-06-09";
