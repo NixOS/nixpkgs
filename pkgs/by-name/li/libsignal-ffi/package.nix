@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
-  env.NIX_LDFLAGS = "-lstdc++";
+  env.NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-a3Xb37gFs7GWk8/9cFdaC9tsYCv/MQGJ78r5YCQ0DOo=";
