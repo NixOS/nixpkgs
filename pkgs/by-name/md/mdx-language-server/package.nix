@@ -23,7 +23,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
-    description = "A language server for MDX.";
+    description = "Language server for MDX";
     homepage = "https://github.com/mdx-js/mdx-analyzer/tree/main/packages/language-server";
     changelog = "https://github.com/mdx-js/mdx-analyzer/blob/@mdx-js/language-server@${version}/packages/language-server/CHANGELOG.md";
     license = lib.licenses.mit;
