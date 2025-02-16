@@ -118,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-daemon"
     "--enable-install-daemon"
+    "--enable-appliance-format-auto"
     "--disable-appliance"
     "--with-distro=NixOS"
     "--with-readline"
