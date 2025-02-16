@@ -16,13 +16,13 @@
 }:
 let
   pname = "gui-for-singbox";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.SingBox";
     tag = "v${version}";
-    hash = "sha256-5zd4CVWVR+E3E097Xjd/V6QFRV9Ye2UQvBalAQ9zqXc=";
+    hash = "sha256-IDatiEEhZDK6WSvEGx1w+Kso4d3nRvERhnfFn/RIA2A=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
