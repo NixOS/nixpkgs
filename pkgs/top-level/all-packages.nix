@@ -2677,8 +2677,6 @@ with pkgs;
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
 
-  biber-for-tectonic = callPackage ../tools/typesetting/tectonic/biber.nix { };
-
   binlore = callPackage ../development/tools/analysis/binlore { };
 
   birdfont = callPackage ../tools/misc/birdfont { };
