@@ -59,8 +59,8 @@
   zstd,
   withAutoSideloading ? false,
   withDocbookDocs ? true,
-  withGtkDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  withMan ? true,
+  withGtkDoc ? withDocbookDocs && stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  withMan ? withDocbookDocs,
   withSELinuxModule ? false,
   withSystemd ? true,
 }:
@@ -75,9 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
       "out"
       "dev"
     ]
-    ++ lib.optionals (withDocbookDocs || withGtkDoc) [
-      "devdoc"
+    ++ lib.optionals withDocbookDocs [
       "doc"
+    ]
+    ++ lib.optionals withGtkDoc [
+      "devdoc"
     ]
     ++ lib.optional finalAttrs.doCheck "installedTests"
     ++ lib.optional withMan "man";
@@ -138,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs =
     [
       (python3.pythonOnBuildForHost.withPackages (p: [ p.pyparsing ]))
@@ -147,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       pkg-config
       validatePkgConfig
+      wayland-scanner
       wrapGAppsNoGuiHook
     ]
     ++ lib.optional withGtkDoc gtk-doc
@@ -158,33 +163,29 @@ stdenv.mkDerivation (finalAttrs: {
       xmlto
     ];
 
-  buildInputs =
-    [
-      appstream
-      curl
-      dconf
-      fuse3
-      gdk-pixbuf
-      glib-networking
-      gpgme
-      gsettings-desktop-schemas
-      json-glib
-      libarchive
-      libcap
-      librsvg # for flatpak-validate-icon
-      libseccomp
-      libxml2
-      malcontent
-      polkit
-      python3
-      wayland
-      wayland-protocols
-      wayland-scanner
-      xorg.libXau
-      zstd
-    ]
-    ++ lib.optional withGtkDoc gtk-doc
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [
+    appstream
+    curl
+    dconf
+    fuse3
+    gdk-pixbuf
+    glib-networking
+    gpgme
+    gsettings-desktop-schemas
+    json-glib
+    libarchive
+    libcap
+    librsvg # for flatpak-validate-icon
+    libseccomp
+    libxml2
+    malcontent
+    polkit
+    python3
+    wayland
+    wayland-protocols
+    xorg.libXau
+    zstd
+  ] ++ lib.optional withSystemd systemd;
 
   # Required by flatpak.pc
   propagatedBuildInputs = [
@@ -196,6 +197,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "auto_sideloading" withAutoSideloading)
     (lib.mesonBool "installed_tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "docbook_docs" withDocbookDocs)
+    (lib.mesonEnable "gtkdoc" withGtkDoc)
+    (lib.mesonEnable "man" withMan)
     (lib.mesonEnable "selinux_module" withSELinuxModule)
     (lib.mesonOption "dbus_config_dir" (placeholder "out" + "/share/dbus-1/system.d"))
     (lib.mesonOption "profile_dir" (placeholder "out" + "/etc/profile.d"))
