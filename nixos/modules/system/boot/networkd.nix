@@ -16,6 +16,7 @@ let
           "SpeedMeterIntervalSec"
           "ManageForeignRoutingPolicyRules"
           "ManageForeignRoutes"
+          "ManageForeignNextHops"
           "RouteTable"
           "IPv6PrivacyExtensions"
           "IPv4Forwarding"
@@ -26,6 +27,7 @@ let
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
+        (assertValueOneOf "ManageForeignNextHops" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv4Forwarding" boolValues)
         (assertValueOneOf "IPv6Forwarding" boolValues)
