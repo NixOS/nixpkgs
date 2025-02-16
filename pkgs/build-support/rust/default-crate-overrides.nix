@@ -29,6 +29,12 @@
 , libtool
 , linux-pam
 , llvmPackages
+, luajit
+, luau
+, lua5_1
+, lua5_2
+, lua5_3
+, lua5_4
 , nettle
 , openssl
 , pango
@@ -224,6 +230,32 @@
     buildInputs = [ webkitgtk_4_1 ];
   };
 
+  mlua-sys = attrs:
+    let hasLuajit = builtins.elem "luajit" attrs.features;
+        hasLuau = builtins.elem "luau" attrs.features;
+        hasLua51 = builtins.elem "lua51" attrs.features;
+        hasLua52 = builtins.elem "lua52" attrs.features;
+        hasLua53 = builtins.elem "lua53" attrs.features;
+        hasLua54 = builtins.elem "lua54" attrs.features;
+    in
+      {
+        # `crate2nix` may enable the "vendored" feature if not run
+        # with the proper Lua packages in the path. This is especially
+        # likely to happen on the first run, when we haven't generated
+        # the Cargo.nix to import these in the scope. Therefore, we
+        # choose to disable the feature by default, as it can still be
+        # overriden by consumers of these overrides.
+        features = lib.lists.filter (k: k != "vendored") attrs.features;
+        nativeBuildInputs = [ pkg-config ];
+        buildInputs =
+          lib.optional hasLuajit luajit ++
+          lib.optional hasLuau luau ++
+          lib.optional hasLua51 lua5_1 ++
+          lib.optional hasLua52 lua5_2 ++
+          lib.optional hasLua53 lua5_3 ++
+          lib.optional hasLua54 lua5_4;
+      };
+
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
@@ -263,6 +295,11 @@
 
   prost-wkt-types = attr: {
     nativeBuildInputs = [ protobuf ];
+  };
+
+  pyo3 = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    extraLinkFlags = [ "-L${python3}/lib" "-l${python3.libPrefix}" ];
   };
 
   rdkafka-sys = attr: {
