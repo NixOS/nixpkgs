@@ -9,6 +9,7 @@
   pythonOlder,
   syrupy,
   textual,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pytest_textual_snapshot" ];
+
+  postInstall = ''
+    cp -r resources $out/${python.sitePackages}/
+  '';
 
   meta = with lib; {
     description = "Snapshot testing for Textual applications";
