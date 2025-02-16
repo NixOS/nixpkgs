@@ -15943,6 +15943,8 @@ self: super: with self; {
     inherit (pkgs) symengine;
   };
 
+  symfc = callPackage ../development/python-modules/symfc { };
+
   sympy = callPackage ../development/python-modules/sympy { };
 
   symspellpy = callPackage ../development/python-modules/symspellpy { };
