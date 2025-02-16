@@ -10603,6 +10603,8 @@ with pkgs;
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
+  szurubooru = callPackage ../servers/web-apps/szurubooru { };
+
   tachyon = callPackage ../development/libraries/tachyon {
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
