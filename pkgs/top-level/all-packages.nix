@@ -10683,8 +10683,6 @@ with pkgs;
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
-  tectonic = callPackage ../tools/typesetting/tectonic/wrapper.nix { };
-
   tectonic-unwrapped = callPackage ../tools/typesetting/tectonic {
     harfbuzz = harfbuzzFull;
   };
