@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "2.3.0";
+  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
-    rev = "v${version}";
-    hash = "sha256-GN+uXyZCvDuFmQnXhn0mFans3bvvEw7Uq6V0OeCPEbE=";
+    tag = "v${version}";
+    hash = "sha256-txkHCQ/xTakPXXFki161jNOKwAH9p9z1hCNEEkbqQtM=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -54,6 +54,11 @@ pythonpkgs.buildPythonApplication rec {
   dontWrapPythonPrograms = true;
 
   pythonRelaxDeps = true;
+
+  patches = [
+      # compatiblity with openai 1.63.0
+      ./0000_openai_1.63.0.patch
+  ];
 
   dependencies = with pythonpkgs; [
     aiofiles
@@ -97,15 +102,6 @@ pythonpkgs.buildPythonApplication rec {
 
     substituteInPlace mealie/__init__.py \
       --replace-fail '__version__ = ' '__version__ = "v${version}" #'
-
-    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
-      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
-
-    substituteInPlace mealie/db/init_db.py \
-      --replace-fail 'PROJECT_DIR = ' "PROJECT_DIR = Path('$out') #"
-
-    substituteInPlace mealie/services/backups_v2/alchemy_exporter.py \
-      --replace-fail '"script_location", path.join(PROJECT_DIR, "alembic")' '"script_location", "${src}/alembic"'
   '';
 
   postInstall =
@@ -121,9 +117,6 @@ pythonpkgs.buildPythonApplication rec {
     ''
       mkdir -p $out/bin $out/libexec
       rm -f $out/bin/*
-
-      substitute ${src}/alembic.ini $out/alembic.ini \
-        --replace-fail 'script_location = alembic' 'script_location = ${src}/alembic'
 
       makeWrapper ${start_script} $out/bin/mealie \
         --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
