@@ -51,6 +51,14 @@
 , testers
 }:
 
+assert lib.assertMsg (builtins.any (x: x) [
+  stdenv.hostPlatform.isDarwin
+  stdenv.hostPlatform.isWindows
+  broadwaySupport
+  waylandSupport
+  x11Support
+]) "At least one backend must be enabled";
+
 let
 
   gtkCleanImmodulesCache = replaceVars ./hooks/clean-immodules-cache.sh {
@@ -116,13 +124,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
     tinysparql
+  ] ++ lib.optionals waylandSupport [
+    libxkbcommon
   ];
   #TODO: colord?
 
@@ -166,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.hostPlatform.isDarwin && !x11Support)}"
+    "-Dwayland_backend=${lib.boolToString waylandSupport}"
     "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 
