@@ -28,34 +28,29 @@ let
   # Make a package containing launchers with the correct envirenment, instead of
   # setting it with systemd services, so that the user can also use them without
   # troubles
-  launchers = pkgs.stdenv.mkDerivation {
-    pname = "${cfg.package.pname}-launchers";
-    inherit (cfg.package) version;
+  launchers =
+    pkgs.runCommand "${cfg.package.pname}-launchers-${cfg.package.version}"
+      {
+        src = cfg.package;
+        nativeBuildInputs = with pkgs; [ makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
 
-    src = cfg.package;
+        makeWrapper \
+          $src/bin/mobilizon \
+          $out/bin/mobilizon \
+          --run '. ${secretEnvFile}' \
+          --set MOBILIZON_CONFIG_PATH "${configFile}" \
+          --set-default RELEASE_TMP "/tmp"
 
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
-
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/bin
-
-      makeWrapper \
-        $src/bin/mobilizon \
-        $out/bin/mobilizon \
-        --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}" \
-        --set-default RELEASE_TMP "/tmp"
-
-      makeWrapper \
-        $src/bin/mobilizon_ctl \
-        $out/bin/mobilizon_ctl \
-        --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}" \
-        --set-default RELEASE_TMP "/tmp"
-    '';
-  };
+        makeWrapper \
+          $src/bin/mobilizon_ctl \
+          $out/bin/mobilizon_ctl \
+          --run '. ${secretEnvFile}' \
+          --set MOBILIZON_CONFIG_PATH "${configFile}" \
+          --set-default RELEASE_TMP "/tmp"
+      '';
 
   repoSettings = cfg.settings.":mobilizon"."Mobilizon.Storage.Repo";
   instanceSettings = cfg.settings.":mobilizon".":instance";
