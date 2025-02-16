@@ -1,0 +1,14 @@
+diff --git a/cert/verification.go b/cert/verification.go
+index 39f255c..97fa613 100644
+--- a/cert/verification.go
++++ b/cert/verification.go
+@@ -10,6 +10,9 @@ import (
+
+ // CertificateMatchesHostname checks if the Certificates hosts are the same as the given hosts
+ func CertificateMatchesHostname(hosts []string, cert *x509.Certificate) bool {
++	// kubernetes system certs (i.e. CN=system:kube-proxy)
++	if len(hosts) == 1 && len(cert.DNSNames)+len(cert.IPAddresses) == 0 { return true }
++
+ 	a := make([]string, len(hosts))
+ 	for idx := range hosts {
+ 		// normalize the IPs.

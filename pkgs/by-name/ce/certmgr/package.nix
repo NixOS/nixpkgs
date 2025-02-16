@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  patches = [ ./system-service-certs.patch ];
+
   ldflags = [ "-s" "-w" ];
 
   passthru.tests = { inherit (nixosTests) certmgr; };
