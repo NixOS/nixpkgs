@@ -15,7 +15,6 @@
   libxslt,
   docbook_xml_dtd_412,
   darwin,
-  buildPackages,
   nix-update-script,
   withApplePCSC ? stdenv.hostPlatform.isDarwin,
 }:
@@ -34,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    libxslt # xsltproc
   ];
   buildInputs =
     [
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
       openssl
       libassuan
       libXt
-      libxslt
       libiconv
       docbook_xml_dtd_412
     ]
@@ -68,9 +67,6 @@ stdenv.mkDerivation rec {
       else
         "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
     }"
-    (lib.optionalString (
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
   ];
 
   PCSC_CFLAGS = lib.concatStringsSep " " (
