@@ -703,6 +703,22 @@ in
     '';
   });
 
+  lzextras = prev.lzextras.overrideAttrs (oa: {
+    doCheck = lua.luaversion == "5.1";
+    checkInputs = [
+      final.lze
+    ];
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+    ];
+    checkPhase = ''
+      runHook preCheck
+      busted --lua=nlua
+      runHook postCheck
+    '';
+  });
+
   neotest = prev.neotest.overrideAttrs (oa: {
     doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
