@@ -18118,6 +18118,11 @@
     githubId = 939420;
     name = "Petros Angelatos";
   };
+  petrzjunior = {
+    github = "petrzjunior";
+    githubId = 7000918;
+    name = "Petr Zahradnik";
+  };
   petterstorvik = {
     email = "petterstorvik@gmail.com";
     github = "storvik";
