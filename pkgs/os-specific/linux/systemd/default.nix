@@ -889,10 +889,66 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests)
+        fsck-systemd-stage-1
+        hibernate-systemd-stage-1
         switchTest
+        systemd
+        systemd-analyze
+        systemd-binfmt
+        systemd-boot
+        systemd-bpf
+        systemd-confinement
+        systemd-coredump
+        systemd-cryptenroll
+        systemd-credentials-tpm2
+        systemd-escaping
+        systemd-initrd-bridge
+        systemd-initrd-btrfs-raid
+        systemd-initrd-luks-fido2
+        systemd-initrd-luks-keyfile
+        systemd-initrd-luks-empty-passphrase
+        systemd-initrd-luks-password
+        systemd-initrd-luks-tpm2
+        systemd-initrd-luks-unl0kr
+        systemd-initrd-modprobe
+        systemd-initrd-shutdown
+        systemd-initrd-simple
+        systemd-initrd-swraid
+        systemd-initrd-vconsole
+        systemd-initrd-networkd
+        systemd-initrd-networkd-ssh
+        systemd-initrd-networkd-openvpn
+        systemd-initrd-vlan
         systemd-journal
         systemd-journal-gateway
         systemd-journal-upload
+        systemd-lock-handler
+        systemd-machinectl
+        systemd-networkd
+        systemd-networkd-bridge
+        systemd-networkd-dhcpserver
+        systemd-networkd-dhcpserver-static-leases
+        systemd-networkd-ipv6-prefix-delegation
+        systemd-networkd-vrf
+        systemd-no-tainted
+        systemd-nspawn
+        systemd-nspawn-configfile
+        systemd-oomd
+        systemd-portabled
+        systemd-repart
+        systemd-resolved
+        systemd-shutdown
+        systemd-sysupdate
+        systemd-sysusers-mutable
+        systemd-sysusers-immutable
+        systemd-sysusers-password-option-override-ordering
+        systemd-timesyncd
+        systemd-timesyncd-nscd-dnssec
+        systemd-user-linger
+        systemd-user-tmpfiles-rules
+        systemd-misc
+        systemd-userdbd
+        systemd-homed
         ;
       cross =
         let
