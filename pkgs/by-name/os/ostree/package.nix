@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , pkg-config
 , gtk-doc
 , nixosTests
@@ -59,6 +60,13 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "static-pkg-config.patch";
+      url = "https://github.com/ostreedev/ostree/pull/3382.patch";
+      hash = "sha256-VCQLq4OqmojtB7WFHNNV82asgXPGq5tKoJun66eUntY=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
