@@ -1,8 +1,8 @@
 /*
   This file provides the `tectonic-unwrapped` package. On the other hand,
-  the `tectonic` package is defined in `./wrapper.nix`, by wrapping
-  - [`tectonic-unwrapped`](./default.nix) i.e. this package, and
-  - [`biber-for-tectonic`](./biber.nix),
+  the `tectonic` package is defined in `../tectonic/package.nix`, by wrapping
+  - [`tectonic-unwrapped`](./package.nix) i.e. this package, and
+  - [`biber-for-tectonic`](../../bi/biber-for-tectonic/package.nix),
     which provides a compatible version of `biber`.
 */
 
@@ -13,7 +13,7 @@
   rustPlatform,
   darwin,
   fontconfig,
-  harfbuzz,
+  harfbuzzFull,
   openssl,
   pkg-config,
   icu,
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     [
       icu
       fontconfig
-      harfbuzz
+      harfbuzzFull
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
@@ -86,13 +86,13 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "tectonic";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lluchs
       doronbehar
       bryango
