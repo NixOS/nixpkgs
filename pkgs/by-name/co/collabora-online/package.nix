@@ -63,7 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lokit-path=${libreoffice-collabora.src}/include"
   ];
 
-  patches = [ ./fix-file-server-regex.patch ];
+  patches = [
+    ./fix-file-server-regex.patch
+    # Work around missing includes in upstream
+    # https://github.com/CollaboraOnline/online/issues/11175
+    ./add-missing-poco-includes.patch
+  ];
 
   postPatch = ''
     cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json

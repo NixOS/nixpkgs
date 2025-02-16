@@ -1,0 +1,17 @@
+diff --git a/common/JsonUtil.hpp b/common/JsonUtil.hpp
+index 564812e0e6..b7eb8fe0b4 100644
+--- a/common/JsonUtil.hpp
++++ b/common/JsonUtil.hpp
+@@ -23,6 +23,7 @@
+ #include <Poco/Dynamic/Var.h>
+ #include <Poco/JSON/Object.h>
+ #include <Poco/JSON/Parser.h>
++#include <Poco/JSON/JSONException.h>
+
+ namespace JsonUtil
+ {
+@@ -248,4 +249,3 @@ inline std::string escapeJSONValue(std::string val)
+ } // end namespace JsonUtil
+
+ /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+-
