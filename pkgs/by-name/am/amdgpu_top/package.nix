@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
-    repo = pname;
+    repo = "amdgpu_top";
     rev = "v${version}";
     hash = "sha256-9PHMPyL2yg36vG+wax0Lb/LFT7CQWnBnZ+t38hr01PE=";
   };
