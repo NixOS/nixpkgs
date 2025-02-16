@@ -131,6 +131,13 @@ let
     ]
   );
 
+  # Fix read out of range on aarch64 16k pages builds
+  # https://github.com/NixOS/nixpkgs/pull/365364
+  # https://github.com/NixOS/nixpkgs/pull/380991
+  # Can likely be removed when v34.2.1 (or v32.3.0?) releases:
+  # https://github.com/electron/electron/pull/45571
+  needsAarch64PageSizeFix = lib.versionAtLeast version "34" && stdenv.hostPlatform.isAarch64;
+
   linux = finalAttrs: {
     buildInputs = [
       glib
@@ -152,6 +159,19 @@ let
       ln -s $out/libexec/electron/electron $out/bin
       chmod u-x $out/libexec/electron/*.so*
     '';
+
+    # We use null here to not cause unnecessary rebuilds.
+    dontWrapGApps = if needsAarch64PageSizeFix then true else null;
+    preFixup =
+      if needsAarch64PageSizeFix then
+        ''
+          wrapProgram "$out/libexec/electron/chrome_crashpad_handler" "''${gappsWrapperArgs[@]}"
+          wrapProgram "$out/libexec/electron/chrome-sandbox" "''${gappsWrapperArgs[@]}"
+          wrapProgram "$out/libexec/electron/electron" "''${gappsWrapperArgs[@]}" \
+            --add-flags "--js-flags=--no-decommit-pooled-pages"
+        ''
+      else
+        null;
 
     postFixup = ''
       patchelf \
