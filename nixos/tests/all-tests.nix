@@ -759,6 +759,7 @@ in
   lomiri-music-app = runTest ./lomiri-music-app.nix;
   lomiri-gallery-app = runTest ./lomiri-gallery-app.nix;
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
+  lomiri-weather-app = runTest ./lomiri-weather-app.nix;
   lorri = handleTest ./lorri/default.nix { };
   lxqt = handleTest ./lxqt.nix { };
   ly = handleTest ./ly.nix { };

@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   cmake,
   flatbuffers,
   gettext,
@@ -91,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-weather-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
