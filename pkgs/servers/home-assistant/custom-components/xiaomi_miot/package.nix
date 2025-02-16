@@ -28,7 +28,7 @@ buildHomeAssistantComponent rec {
 
   dontBuild = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9.]+)$" ]; };
 
   meta = {
     changelog = "https://github.com/al-one/hass-xiaomi-miot/releases/tag/v${version}";
