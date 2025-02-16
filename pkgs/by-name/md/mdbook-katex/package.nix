@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,14 +16,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-EoWsjuvvWeAI3OnVRJQT2hwoYq4BNqqvitH9LT0XGnA=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for mdbook, rendering LaTeX equations to HTML at build time";
     mainProgram = "mdbook-katex";
     homepage = "https://github.com/lzanini/${pname}";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lovesegfault
       matthiasbeyer
     ];
