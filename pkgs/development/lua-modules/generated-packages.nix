@@ -1946,6 +1946,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+lualine-nvim = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder, nvim-web-devicons }:
+buildLuarocksPackage {
+  pname = "lualine.nvim";
+  version = "scm-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lualine.nvim-scm-1.rockspec";
+    sha256 = "1mzsfiq4h95s0nbygwii2w8xs5rixdbha322bvx453k530s2kxxj";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "nvim-lualine";
+    repo = "lualine.nvim";
+    rev = "f4f791f67e70d378a754d02da068231d2352e5bc";
+    hash = "sha256-uAxe3UdNUVfdpQcKvGvQ/E2blGksvMPlTBfEOtgeVYo=";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nvim-web-devicons ];
+
+  meta = {
+    homepage = "https://github.com/nvim-lualine/lualine.nvim";
+    description = "A blazing fast and easy to configure neovim statusline plugin written in pure lua.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 lualogging = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luasocket }:
 buildLuarocksPackage {
   pname = "lualogging";

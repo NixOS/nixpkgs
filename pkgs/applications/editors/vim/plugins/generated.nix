@@ -7051,19 +7051,6 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
-  lualine-nvim = buildVimPlugin {
-    pname = "lualine.nvim";
-    version = "2025-02-08";
-    src = fetchFromGitHub {
-      owner = "nvim-lualine";
-      repo = "lualine.nvim";
-      rev = "f4f791f67e70d378a754d02da068231d2352e5bc";
-      sha256 = "12jm3vc3mi0p9kjw7g1cd6a9nkgws1mvq2h7lpfmflad8zfmw35q";
-    };
-    meta.homepage = "https://github.com/nvim-lualine/lualine.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   luasnip-latex-snippets-nvim = buildVimPlugin {
     pname = "luasnip-latex-snippets.nvim";
     version = "2024-11-25";
