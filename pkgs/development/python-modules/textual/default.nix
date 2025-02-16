@@ -92,6 +92,8 @@ buildPythonPackage rec {
       # https://github.com/Textualize/textual/issues/5327
       "test_cursor_page_up"
       "test_cursor_page_down"
+
+      "test_async_reactive_watch_callbacks_go_on_the_watcher"
     ];
 
   # Some tests in groups require state from previous tests
