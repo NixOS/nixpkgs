@@ -341,6 +341,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit aws-sdk-cpp boehmgc;
     tests = {
       misc = nixosTests.nix-misc.lix;
+      installer = nixosTests.installer.lix-simple;
     };
   };
 
