@@ -2,20 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   pyperclip,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
   textual,
+
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "textual-textarea";
   version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tconbeer";
@@ -41,8 +44,8 @@ buildPythonPackage rec {
   ] ++ textual.optional-dependencies.syntax;
 
   nativeCheckInputs = [
-    pytest-asyncio
     pytestCheckHook
+    pytest-asyncio
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
