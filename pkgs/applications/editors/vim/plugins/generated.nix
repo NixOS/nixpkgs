@@ -10864,19 +10864,6 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
-  nvim-web-devicons = buildVimPlugin {
-    pname = "nvim-web-devicons";
-    version = "2025-01-27";
-    src = fetchFromGitHub {
-      owner = "nvim-tree";
-      repo = "nvim-web-devicons";
-      rev = "1c9136332840edee0c593f2f4f89598c8ed97f5f";
-      sha256 = "10liz7hpdb5vavn45hpqn0c39s0cqdns8dygr1472b5fyxh5ld29";
-    };
-    meta.homepage = "https://github.com/nvim-tree/nvim-web-devicons/";
-    meta.hydraPlatforms = [ ];
-  };
-
   nvim-whichkey-setup-lua = buildVimPlugin {
     pname = "nvim-whichkey-setup.lua";
     version = "2021-04-16";

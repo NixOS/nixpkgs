@@ -4015,6 +4015,7 @@ in
       "nvim-cmp"
       "nvim-dbee"
       "nvim-nio"
+      "nvim-web-devicons"
       "orgmode"
       "papis-nvim"
       "rest-nvim"
