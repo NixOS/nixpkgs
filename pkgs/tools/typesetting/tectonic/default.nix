@@ -2,7 +2,7 @@
   This file provides the `tectonic-unwrapped` package. On the other hand,
   the `tectonic` package is defined in `../tectonic/package.nix`, by wrapping
   - [`tectonic-unwrapped`](./default.nix) i.e. this package, and
-  - [`biber-for-tectonic`](./biber.nix),
+  - [`biber-for-tectonic`](../../bi/biber-for-tectonic/package.nix),
     which provides a compatible version of `biber`.
 */
 
