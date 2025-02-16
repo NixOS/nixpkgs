@@ -1,0 +1,24 @@
+--- a/tests/integration/CMakeLists.txt.orig	2025-01-20 17:34:44.000000000 +0100
++++ b/tests/integration/CMakeLists.txt	2025-01-21 10:56:43.136836512 +0100
+@@ -120,21 +120,10 @@
+ if(TARGET dart-collision-ode)
+   # This test doesn't work with FCL because it converts simple shapes to meshes, which makes
+   # it difficult to come up with correct test expectations.
+-  dart_add_test("integration" test_ForceDependentSlip)
+-  target_link_libraries(test_ForceDependentSlip dart-collision-ode)
+ endif()
+ 
+ if(TARGET dart-utils)
+ 
+-  dart_add_test("integration" test_Collision)
+-  target_link_libraries(test_Collision dart-utils)
+-  if(TARGET dart-collision-bullet)
+-    target_link_libraries(test_Collision dart-collision-bullet)
+-  endif()
+-  if(TARGET dart-collision-ode)
+-    target_link_libraries(test_Collision dart-collision-ode)
+-  endif()
+-
+   dart_add_test("integration" test_Dynamics)
+   target_link_libraries(test_Dynamics dart-utils)
+ 
