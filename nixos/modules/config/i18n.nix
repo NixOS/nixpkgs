@@ -37,6 +37,16 @@
         '';
       };
 
+      extraLocales = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "nl_NL.UTF-8" ];
+        description = ''
+          Additional locales that the system should support, besides the one
+          configured with {option}`i18n.defaultLocale`.
+        '';
+      };
+
       extraLocaleSettings = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = {};
@@ -56,7 +66,9 @@
               "C.UTF-8"
               "en_US.UTF-8"
               config.i18n.defaultLocale
-            ] ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+            ]
+            ++ config.i18n.extraLocales
+            ++ (lib.attrValues (lib.filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
           ));
         defaultText = lib.literalExpression ''
           lib.unique
