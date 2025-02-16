@@ -20,6 +20,7 @@ in
     meta.maintainers = [ lib.maintainers.raitobezarius ];
     options.services.hebbot = {
       enable = mkEnableOption "hebbot";
+      package = lib.mkPackageOption pkgs "hebbot" {};
       botPasswordFile = mkOption {
         type = types.path;
         description = ''
@@ -61,7 +62,7 @@ in
 
         script = ''
           export BOT_PASSWORD="$(cat $CREDENTIALS_DIRECTORY/bot-password-file)"
-          ${lib.getExe pkgs.hebbot}
+          ${lib.getExe cfg.package}
         '';
 
         serviceConfig = {
