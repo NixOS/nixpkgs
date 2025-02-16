@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "incus-ui";
+  pname = "incus-ui-canonical";
   version = "0.14.6";
 
   src = fetchFromGitHub {
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   passthru.tests.default = nixosTests.incus.ui;
 
   meta = {
-    description = "Web user interface for Incus, based on LXD webui";
+    description = "Web user interface for Incus";
     homepage = "https://github.com/zabbly/incus-ui-canonical";
     license = lib.licenses.gpl3;
     maintainers = lib.teams.lxc.members;
