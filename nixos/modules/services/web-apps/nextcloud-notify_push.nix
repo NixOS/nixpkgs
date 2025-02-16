@@ -8,74 +8,99 @@
 
 let
   cfg = config.services.nextcloud.notify_push;
+  cfgD = config.services.nextcloud.notify_push.database;
   cfgN = config.services.nextcloud;
 in
 {
-  options.services.nextcloud.notify_push =
-    {
-      enable = lib.mkEnableOption "Notify push";
+  options.services.nextcloud.notify_push = {
+    enable = lib.mkEnableOption "Notify push";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nextcloud-notify_push;
-        defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
-        description = "Which package to use for notify_push";
-      };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.nextcloud-notify_push;
+      defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
+      description = "Which package to use for notify_push";
+    };
 
-      socketPath = lib.mkOption {
-        type = lib.types.str;
-        default = "/run/nextcloud-notify_push/sock";
-        description = "Socket path to use for notify_push";
-      };
+    socketPath = lib.mkOption {
+      type = lib.types.str;
+      default = "/run/nextcloud-notify_push/sock";
+      description = "Socket path to use for notify_push";
+    };
 
-      logLevel = lib.mkOption {
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
+        "error"
+        "warn"
+        "info"
+        "debug"
+        "trace"
+      ];
+      default = "error";
+      description = "Log level";
+    };
+
+    nextcloudUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
+      defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
+      description = "Configure the nextcloud URL notify_push tries to connect to.";
+    };
+
+    bendDomainToLocalhost = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
+
+        This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
+      '';
+    };
+
+    database = {
+      dbtype = lib.mkOption {
         type = lib.types.enum [
-          "error"
-          "warn"
-          "info"
-          "debug"
-          "trace"
+          "sqlite"
+          "pgsql"
+          "mysql"
         ];
-        default = "error";
-        description = "Log level";
+        default = cfgN.settings.dbtype;
+        description = "Database type.";
       };
-
-      nextcloudUrl = lib.mkOption {
-        type = lib.types.str;
-        default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
-        defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
-        description = "Configure the nextcloud URL notify_push tries to connect to.";
+      dbname = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = cfgN.settings.dbname;
+        description = "Database name.";
       };
-
-      bendDomainToLocalhost = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+      dbuser = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = cfgN.settings.dbuser;
+        description = "Database user.";
+      };
+      dbhost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = cfgN.settings.dbhost;
         description = ''
-          Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
-
-          This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
+          Database host (+port) or socket path. Defaults to the correct unix socket
+          instead if [](#opt-services.nextcloud.database.createLocally) is true and
+          [](#opt-services.nextcloud.settings.dbtype) is either `pgsql` or
+          `mysql`.
         '';
       };
-    }
-    // (lib.genAttrs
-      [
-        "dbtype"
-        "dbname"
-        "dbuser"
-        "dbpassFile"
-        "dbhost"
-        "dbport"
-        "dbtableprefix"
-      ]
-      (
-        opt:
-        options.services.nextcloud.config.${opt}
-        // {
-          default = config.services.nextcloud.config.${opt};
-          defaultText = lib.literalExpression "config.services.nextcloud.config.${opt}";
-        }
-      )
-    );
+      dbtableprefix = lib.mkOption {
+        type = lib.types.str;
+        default = cfgN.settings.dbtableprefix;
+        description = "Table prefix in Nextcloud database.";
+      };
+      dbpassFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          The full path to a file that contains the database password.
+        '';
+      };
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     systemd.services.nextcloud-notify_push = {
@@ -89,7 +114,7 @@ in
       environment = {
         NEXTCLOUD_URL = cfg.nextcloudUrl;
         SOCKET_PATH = cfg.socketPath;
-        DATABASE_PREFIX = cfg.dbtableprefix;
+        DATABASE_PREFIX = cfgD.dbtableprefix;
         LOG = cfg.logLevel;
       };
       postStart = ''
@@ -97,29 +122,29 @@ in
       '';
       script =
         let
-          dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
-          dbUser = lib.optionalString (cfg.dbuser != null) cfg.dbuser;
-          dbPass = lib.optionalString (cfg.dbpassFile != null) ":$DATABASE_PASSWORD";
-          dbHostHasPrefix = prefix: lib.hasPrefix prefix (toString cfg.dbhost);
+          dbType = if cfgD.dbtype == "pgsql" then "postgresql" else cfgD.dbtype;
+          dbUser = lib.optionalString (cfgD.dbuser != null) cfgD.dbuser;
+          dbPass = lib.optionalString (cfgD.dbpassFile != null) ":$DATABASE_PASSWORD";
+          dbHostHasPrefix = prefix: lib.hasPrefix prefix (toString cfgD.dbhost);
           isPostgresql = dbType == "postgresql";
           isMysql = dbType == "mysql";
           isSocket = (isPostgresql && dbHostHasPrefix "/") || (isMysql && dbHostHasPrefix "localhost:/");
-          dbHost = lib.optionalString (cfg.dbhost != null) (
-            if isSocket then lib.optionalString isMysql "@localhost" else "@${cfg.dbhost}"
+          dbHost = lib.optionalString (cfgD.dbhost != null) (
+            if isSocket then lib.optionalString isMysql "@localhost" else "@${cfgD.dbhost}"
           );
-          dbOpts = lib.optionalString (cfg.dbhost != null && isSocket) (
+          dbOpts = lib.optionalString (cfgD.dbhost != null && isSocket) (
             if isPostgresql then
-              "?host=${cfg.dbhost}"
+              "?host=${cfgD.dbhost}"
             else if isMysql then
-              "?socket=${lib.removePrefix "localhost:" cfg.dbhost}"
+              "?socket=${lib.removePrefix "localhost:" cfgD.dbhost}"
             else
               throw "unsupported dbtype"
           );
-          dbName = lib.optionalString (cfg.dbname != null) "/${cfg.dbname}";
+          dbName = lib.optionalString (cfgD.dbname != null) "/${cfgD.dbname}";
           dbUrl = "${dbType}://${dbUser}${dbPass}${dbHost}${dbName}${dbOpts}";
         in
         lib.optionalString (dbPass != "") ''
-          export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
+          export DATABASE_PASSWORD="$(<"${cfgD.dbpassFile}")"
         ''
         + ''
           export DATABASE_URL="${dbUrl}"
