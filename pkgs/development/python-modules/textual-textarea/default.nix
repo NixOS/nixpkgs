@@ -24,6 +24,15 @@ buildPythonPackage rec {
     hash = "sha256-aaeXgD6RMQ3tlK5H/2lk3ueTyA3yYjHrYL51w/1tvSI=";
   };
 
+  patches = [
+    # https://github.com/tconbeer/textual-textarea/issues/296
+    ./textual-2.0.0.diff
+  ];
+
+  pythonRelaxDeps = [
+    "textual"
+  ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -37,6 +46,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
+
+  disabledTestPaths = [
+    # https://github.com/tconbeer/textual-textarea/issues/296
+    "tests/functional_tests/test_textarea.py"
+  ];
 
   meta = {
     description = "A text area (multi-line input) with syntax highlighting for Textual";
