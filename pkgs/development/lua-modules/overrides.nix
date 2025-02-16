@@ -7,10 +7,8 @@
   # plenary utilities
   which,
   findutils,
-  clang,
   coreutils,
   curl,
-  cyrus_sasl,
   dbus,
   expat,
   fetchFromGitHub,
@@ -39,7 +37,6 @@
   luajitPackages,
   lua-language-server,
   mariadb,
-  magic-enum,
   mpfr,
   neovim-unwrapped,
   openldap,
@@ -48,13 +45,10 @@
   pkg-config,
   readline,
   rustPlatform,
-  sol2,
   sqlite,
-  tomlplusplus,
   tree-sitter,
   unbound,
   vimPlugins,
-  vimUtils,
   yajl,
   zip,
   unzip,
@@ -69,7 +63,6 @@ let
     luaAtLeast
     lua
     isLuaJIT
-    isLua51
     ;
 in
 {
