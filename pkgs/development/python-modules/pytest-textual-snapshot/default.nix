@@ -1,15 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  jinja2,
-  pytest,
-  rich,
+  python,
   pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  jinja2,
+  rich,
   syrupy,
   textual,
-  python,
+
+  # tests
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -50,11 +56,11 @@ buildPythonPackage rec {
     cp -r resources $out/${python.sitePackages}/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Snapshot testing for Textual applications";
     homepage = "https://github.com/Textualize/pytest-textual-snapshot";
     changelog = "https://github.com/Textualize/pytest-textual-snapshot/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
