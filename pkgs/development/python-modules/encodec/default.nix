@@ -6,8 +6,8 @@
   # dependencies
   einops,
   numpy,
-  torch-bin,
-  torchaudio-bin,
+  torch,
+  torchaudio,
 }:
 
 buildPythonPackage rec {
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     einops
     numpy
-    torch-bin
-    torchaudio-bin
+    torch
+    torchaudio
   ];
 
   pythonImportsCheck = [ "encodec" ];
