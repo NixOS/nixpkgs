@@ -34,7 +34,7 @@ let
     cmake = 'cmake'
   '';
 
-  crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  crossFlags = optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     "--cross-file=${crossFile}"
   ];
 

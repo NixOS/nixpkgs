@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (
     !stdenv.hostPlatform.isStatic
     && !stdenv.hostPlatform.isWindows
-    && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform == stdenv.hostPlatform)
+    && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform.equals stdenv.hostPlatform)
    ) python3;
 
   propagatedBuildInputs = [

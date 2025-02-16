@@ -14,7 +14,7 @@
 
 let
   majorVersion = "2.8";
-  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCross = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
 
 in
 stdenv.mkDerivation rec {

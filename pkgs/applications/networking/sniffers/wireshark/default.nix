@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ./patches/lookup-dumpcap-in-path.patch
   ];
 
-  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     buildPackages.stdenv.cc
   ];
 
@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
       "-DENABLE_APPLICATION_BUNDLE=${if isAppBundle then "ON" else "OFF"}"
       "-DLEMON_C_COMPILER=cc"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
       "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
     ];

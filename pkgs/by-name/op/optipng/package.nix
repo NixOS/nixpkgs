@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
       "--with-system-zlib"
       "--with-system-libpng"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       #"-prefix=$out"
     ];
 
   postInstall =
-    if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then
+    if stdenv.hostPlatform.notEquals stdenv.buildPlatform && stdenv.hostPlatform.isWindows then
       ''
         mv "$out"/bin/optipng{,.exe}
       ''

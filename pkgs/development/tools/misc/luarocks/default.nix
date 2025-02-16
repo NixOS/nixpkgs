@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
 
-  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  disallowedReferences = lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     lua.luaOnBuild
   ];
 

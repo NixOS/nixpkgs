@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     "--with-idl-compiler=${lib.getExe' buildPackages.gnome2.ORBit2 "orbit-idl-2"}"
     # https://github.com/void-linux/void-packages/blob/e5856e02aa6ef7e4f2725afbff2915f89d39024b/srcpkgs/ORBit2/template#L17-L35
     "ac_cv_alignof_CORBA_boolean=1"

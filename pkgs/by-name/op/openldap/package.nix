@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       "--enable-modules"
       "--enable-overlays"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "--with-yielding_select=yes"
       "ac_cv_func_memcmp_working=yes"
     ]

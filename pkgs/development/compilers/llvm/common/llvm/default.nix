@@ -29,7 +29,7 @@
 , doCheck ? !stdenv.hostPlatform.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
   && (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
   && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-  && (stdenv.hostPlatform == stdenv.buildPlatform)
+  && (stdenv.hostPlatform.equals stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? stdenv.hostPlatform.isLinux /* PFM only supports Linux */
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform) ncurses)
+  propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || stdenv.buildPlatform.equals stdenv.hostPlatform) ncurses)
     ++ [ zlib ];
 
   postPatch = optionalString stdenv.hostPlatform.isDarwin (''
@@ -387,7 +387,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+  ] ++ optionals ((stdenv.hostPlatform.notEquals stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     (
       let
@@ -437,7 +437,7 @@ stdenv.mkDerivation (finalAttrs: {
   + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
+  + optionalString (stdenv.buildPlatform.notEquals stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
     ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
   '' else ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native

@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon ];
     # compiles stuff for the build platform, difficult to do properly
-    broken = stdenv.hostPlatform != stdenv.buildPlatform;
+    broken = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
   };
 }

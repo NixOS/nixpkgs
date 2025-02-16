@@ -11,7 +11,7 @@
 }:
 let
   glibc =
-    if stdenv.hostPlatform != stdenv.buildPlatform then glibcCross
+    if stdenv.hostPlatform.notEquals stdenv.buildPlatform then glibcCross
     else assert stdenv.hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
 in
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  disallowedReferences = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.shellPackage;
+  disallowedReferences = lib.optional (stdenv.buildPlatform.notEquals stdenv.hostPlatform) stdenv.shellPackage;
 
   meta = with lib; {
     homepage = "https://github.com/shadow-maint/shadow";

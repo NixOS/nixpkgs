@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    ${lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
       sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';

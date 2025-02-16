@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "-Dprefix-dev=${placeholder "dev"}"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       # Docs are opt-out in native but opt-in in cross builds.
       "-Dwith-docs=true"
       "-Denable-gir=true"

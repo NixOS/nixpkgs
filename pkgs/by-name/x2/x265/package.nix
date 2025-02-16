@@ -30,7 +30,7 @@
 let
   mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
 
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation rec {

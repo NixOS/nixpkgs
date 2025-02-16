@@ -53,7 +53,7 @@ let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.hostPlatform.isFreeBSD && !stdenv.hostPlatform.isDarwin
-    && stdenv.buildPlatform == stdenv.hostPlatform;
+    && stdenv.buildPlatform.equals stdenv.hostPlatform;
 
   inherit (stdenv.hostPlatform) isDarwin;
 in

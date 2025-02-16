@@ -59,7 +59,7 @@ stdenv.mkDerivation {
       "--enable-multibyte"
       "--enable-nls"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) (
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) (
       [
         "vim_cv_toupper_broken=no"
         "--with-tlib=ncurses"

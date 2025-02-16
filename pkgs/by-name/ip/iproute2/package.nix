@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       # all build .so plugins:
       "TC_CONFIG_NO_XT=y"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
       "HOSTCC=$(CC_FOR_BUILD)"
     ];
 

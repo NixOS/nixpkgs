@@ -15,5 +15,5 @@ qtModule {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "bin" ];
+  ] ++ lib.optionals (stdenv.hostPlatform.equals stdenv.buildPlatform) [ "bin" ];
 }

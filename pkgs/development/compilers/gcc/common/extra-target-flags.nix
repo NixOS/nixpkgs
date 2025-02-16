@@ -19,7 +19,7 @@ in
     let
       mkFlags =
         dep: langD:
-        lib.optionals (targetPlatform != hostPlatform && dep != null && !langD) (
+        lib.optionals (targetPlatform.notEquals hostPlatform && dep != null && !langD) (
           [
             "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
           ]
@@ -35,7 +35,7 @@ in
     let
       mkFlags =
         dep:
-        lib.optionals (targetPlatform != hostPlatform && dep != null) (
+        lib.optionals (targetPlatform.notEquals hostPlatform && dep != null) (
           [
             "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}"
           ]

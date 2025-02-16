@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
       sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
     ''
     + ''

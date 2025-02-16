@@ -19,7 +19,7 @@
 }:
 
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.buildPlatform.notEquals stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "libaom";

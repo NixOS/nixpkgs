@@ -197,9 +197,7 @@ let
         "libpaper"
         "zlib"
       ]
-      ++ lib.optional (
-        stdenv.hostPlatform != stdenv.buildPlatform
-      ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
+      ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # move binaries to corresponding split outputs, based on content of texlive.tlpdb
     binToOutput = lib.listToAttrs (

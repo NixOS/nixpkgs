@@ -216,7 +216,7 @@ let
         ]
         # procmail's funky build system is currently broken in cross-build.
         # xdg-screensaver will gracefully degrade if it's not available.
-        ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) procmail;
+        ++ lib.optional (stdenv.hostPlatform.equals stdenv.buildPlatform) procmail;
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
       fake.external =
@@ -228,7 +228,7 @@ let
           "xscreensaver-command" # Xscreensaver
           "xset" # generic-ish X
         ]
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "lockfile"; # procmail
+        ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "lockfile"; # procmail
       keep = {
         "$MV" = true;
         "$XPROP" = true;

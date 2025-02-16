@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+  ] ++ lib.optional (stdenv.hostPlatform.notEquals stdenv.buildPlatform) file;
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   # https://bugs.astron.com/view.php?id=382

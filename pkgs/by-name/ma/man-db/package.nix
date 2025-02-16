@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  disallowedReferences = lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
     buildPackages.groff
   ];
 

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "check";
 
-  installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  installFlags = lib.optionals (stdenv.buildPlatform.notEquals stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"
   ];
 

@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_XXHASH=1"
       "USE_SYSTEM_ZLIB=1"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.equals stdenv.buildPlatform) [
       "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
     ];
 

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       "CFLAGS=-DENABLE_NLS"
     ]
     # Can't run these tests while cross-compiling
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (stdenv.hostPlatform.notEquals stdenv.buildPlatform) [
       "glib_cv_stack_grows=no"
       "glib_cv_uscore=no"
       "ac_cv_func_posix_getpwuid_r=yes"

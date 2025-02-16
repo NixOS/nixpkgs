@@ -41,7 +41,7 @@ let
     optionalString
     versionOlder
     ;
-  crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuildTools = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
 in
 
 stdenv.mkDerivation {

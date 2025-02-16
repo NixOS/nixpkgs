@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
         -j $NIX_BUILD_CORES \
         ${lib.optionalString enableFIPS "--enable-fips"} \
         ${lib.optionalString stdenv.hostPlatform.isDarwin "--clang"} \
-        ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
+        ${lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) "--disable-tests"}
 
       runHook postBuild
     '';
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
 
   postFixup =
     let
-      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+      isCross = stdenv.hostPlatform.notEquals stdenv.buildPlatform;
       nss = if isCross then buildPackages.nss.tools else "$out";
     in
     (lib.optionalString enableFIPS (

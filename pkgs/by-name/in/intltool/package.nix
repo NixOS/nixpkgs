@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       XMLParser
     ]);
 
-  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.notEquals stdenv.buildPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done

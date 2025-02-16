@@ -45,7 +45,7 @@ let
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 
-  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+  isCross = stdenv.buildPlatform.notEquals stdenv.targetPlatform;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";

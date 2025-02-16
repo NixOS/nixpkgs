@@ -15,7 +15,7 @@
   libtool,
   pythonBindings ? true,
   tclBindings ? true,
-  perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform,
+  perlBindings ? stdenv.buildPlatform.equals stdenv.hostPlatform,
   buildPackages,
 }:
 let

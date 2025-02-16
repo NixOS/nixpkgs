@@ -44,7 +44,7 @@ let
     optionals
     optionalString
     ;
-  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+  isCross = (stdenv.hostPlatform.notEquals stdenv.buildPlatform);
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");

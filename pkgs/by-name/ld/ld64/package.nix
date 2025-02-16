@@ -22,9 +22,7 @@
 
 let
   # The targetPrefix is prepended to binary names to allow multiple binutils on the PATH to be usable.
-  targetPrefix = lib.optionalString (
-    stdenv.targetPlatform != stdenv.hostPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (stdenv.targetPlatform.notEquals stdenv.hostPlatform) "${stdenv.targetPlatform.config}-";
 
   # ld64 needs CrashReporterClient.h, which is hard to find, but WebKit2 has it.
   # Fetch it directly because the Darwin stdenv bootstrap can’t depend on fetchgit.

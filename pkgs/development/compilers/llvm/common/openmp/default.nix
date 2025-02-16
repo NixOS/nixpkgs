@@ -52,7 +52,7 @@ stdenv.mkDerivation (rec {
   ];
 
   buildInputs = [
-    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    (if stdenv.buildPlatform.equals stdenv.hostPlatform then llvm else targetLlvm)
   ];
 
   cmakeFlags = lib.optionals (lib.versions.major release_version == "13") [

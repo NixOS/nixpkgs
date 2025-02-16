@@ -7,7 +7,7 @@
   crossOverlays ? [ ],
 }:
 
-assert crossSystem == localSystem;
+assert crossSystem.equals localSystem;
 
 let
   bootStages = import ../. {
@@ -29,8 +29,8 @@ bootStages
   (vanillaPackages: {
     inherit config overlays;
     stdenv =
-      assert vanillaPackages.stdenv.hostPlatform == localSystem;
-      assert vanillaPackages.stdenv.targetPlatform == localSystem;
+      assert vanillaPackages.stdenv.hostPlatform.equals localSystem;
+      assert vanillaPackages.stdenv.targetPlatform.equals localSystem;
       config.replaceStdenv { pkgs = vanillaPackages; };
   })
 
