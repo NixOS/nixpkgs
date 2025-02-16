@@ -10,14 +10,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.15.0";
+  version = "1.15.0-unstable-2025-02-24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
-    tag = "v${version}";
-    hash = "sha256-SgkJm+vtIid8RR1Qy98PkpvIQX4LxyAPlS+4UlYlZws=";
+    #tag = "v${version}";
+    rev = "460f914b0539d6a9b9e8de348909c5f69acf5ead";
+    hash = "sha256-l2P36bd13TeOAQOVlik525+ZqRpWXkbM8IQCHh4NB/s=";
   };
 
   build-system = with python3Packages; [
