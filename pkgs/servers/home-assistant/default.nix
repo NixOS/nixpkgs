@@ -405,6 +405,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "aiozoneinfo"
     "attrs"
     "bcrypt"
     "ciso8601"
