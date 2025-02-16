@@ -14,6 +14,9 @@
   withGoolm ? false,
 }:
 
+let
+  cppStdLib = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
+in
 buildGoModule rec {
   pname = "mautrix-signal";
   version = "0.8.0";
@@ -36,7 +39,7 @@ buildGoModule rec {
 
   tags = lib.optional withGoolm "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
+  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
 
   vendorHash = "sha256-nulCcnnQD3cgk4ntWeUwY/+izTxhJCLV0XJRx1h8emY=";
 
@@ -48,7 +51,7 @@ buildGoModule rec {
     ''
     + (lib.optionalString (!withGoolm) ''
       # When using libolm, the tests need explicit linking to libstdc++
-      export CGO_LDFLAGS="-lstdc++"
+      export CGO_LDFLAGS="${cppStdLib}"
     '');
 
   postCheck = ''
