@@ -3,7 +3,6 @@
   fetchurl,
   stdenv,
   runCommand,
-  tailwindcss,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -30,7 +29,7 @@ let
     .${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "tailwindcss";
+  pname = "tailwindcss_3";
   version = "3.4.17";
 
   src = fetchurl {

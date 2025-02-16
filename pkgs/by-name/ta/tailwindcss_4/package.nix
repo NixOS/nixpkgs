@@ -5,7 +5,6 @@
   versionCheckHook,
   autoPatchelfHook,
   makeWrapper,
-  tailwindcss_4,
 }:
 let
   version = "4.0.6";
