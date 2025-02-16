@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  CoreServices,
   graphviz,
 }:
 
@@ -23,17 +21,15 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-A1pFifxshWynwA88iLTMOm21NKCH8fHl5nFiV4wEG8A=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-
   nativeCheckInputs = [ graphviz ];
 
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for mdbook, rendering Graphviz graphs to HTML at build time";
     mainProgram = "mdbook-graphviz";
     homepage = "https://github.com/dylanowen/mdbook-graphviz";
     changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${version}";
-    license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       lovesegfault
       matthiasbeyer
     ];
