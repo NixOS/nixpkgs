@@ -3,6 +3,7 @@
   lib,
   autoPatchelfHook,
   copyDesktopItems,
+  desktop-file-utils,
   dbus,
   dpkg,
   fetchurl,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
     copyDesktopItems
+    desktop-file-utils
   ];
 
   buildInputs = [

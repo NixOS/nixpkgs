@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxedo-drivers-${kernel.version}";
-  version = "4.11.3";
+  version = "4.12.1";
 
   src = fetchFromGitLab {
     group = "tuxedocomputers";
     owner = "development/packages";
     repo = "tuxedo-drivers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ylHREVzQY9U/YHmVYQ4qO+A8tUcWXOTspS4g9qn314o=";
+    hash = "sha256-ZsfPs8VvvgguyNLSVi6n5hs0OzNwiK3bkooQ267mKtA=";
   };
 
   buildInputs = [ pahole ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
     description = "Keyboard and hardware I/O driver for TUXEDO Computers laptops";
     homepage = "https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       Drivers for several platform devices for TUXEDO notebooks:
       - Driver for Fn-keys
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       blanky0230
       keksgesicht
       xaverdh
+      XBagon
     ];
     platforms = lib.platforms.linux;
   };
