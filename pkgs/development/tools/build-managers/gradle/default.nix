@@ -259,7 +259,8 @@ rec {
         gradle = gradle-unwrapped.override args;
       in
       symlinkJoin {
-        name = "gradle-${gradle.version}";
+        pname = "gradle";
+        inherit (gradle) version;
 
         paths = [
           (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
