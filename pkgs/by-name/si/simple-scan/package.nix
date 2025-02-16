@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -34,6 +35,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
   };
 
+  patches = [
+    # simple-scan: Use RDNN app ID
+    # https://gitlab.gnome.org/GNOME/simple-scan/-/issues/390
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/simple-scan/-/commit/c09a6def153e52494072a36233c7e7b3307b67bf.patch";
+      hash = "sha256-deyssrsVwPAfT5ru6c0LFwR2pEFnZ0v8wMqoi96tw8s=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -62,11 +72,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs data/meson_compile_gschema.py
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/icons/hicolor/scalable/actions/
-    install -m 444 ../data/icons/scalable/actions/* $out/share/icons/hicolor/scalable/actions/
   '';
 
   doCheck = true;
