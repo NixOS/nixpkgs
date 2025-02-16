@@ -59,7 +59,11 @@ let
 
       install -D -t "$out/include/os" \
         '${Libc}/os/assumes.h' \
+        '${Libc}/os/variant_private.h' \
         '${xnu}/libkern/os/base_private.h'
+      substituteInPlace "$out/include/os/variant_private.h" \
+        --replace-fail ', bridgeos(4.0)' "" \
+        --replace-fail ', bridgeos' ""
       touch "$out/include/os/feature_private.h"
 
       install -D -t "$out/include/sys" \
