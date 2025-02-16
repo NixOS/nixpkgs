@@ -1,80 +1,25 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  bzip2,
-  cli11,
-  cmake,
-  curl,
-  ghc_filesystem,
-  libarchive,
-  libsolv,
-  yaml-cpp,
-  nlohmann_json,
-  python3,
-  reproc,
-  spdlog,
-  tl-expected,
+  mamba-cpp,
 }:
 
-let
-  libsolv' = libsolv.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DENABLE_CONDA=true"
-    ];
-
-    patches = [
-      # Apply the same patch as in the "official" boa-forge build:
-      # https://github.com/mamba-org/boa-forge/tree/master/libsolv
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/20530f80e2e15012078d058803b6e2c75ed54224/libsolv/conda_variant_priorization.patch";
-        sha256 = "1iic0yx7h8s662hi2jqx68w5kpyrab4fr017vxd4wyxb6wyk35dd";
-      })
-    ];
-  });
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "micromamba";
-  version = "1.5.8";
+  version = mamba-cpp.version;
 
-  src = fetchFromGitHub {
-    owner = "mamba-org";
-    repo = "mamba";
-    rev = "micromamba-" + version;
-    hash = "sha256-sxZDlMFoMLq2EAzwBVO++xvU1C30JoIoZXEX/sqkXS0=";
-  };
+  dontUnpack = true;
+  dontBuild = true;
+  dontConfigure = true;
 
-  nativeBuildInputs = [ cmake ];
+  installPhase = ''
+    mkdir -p $out/bin
+    ln -s ${mamba-cpp}/bin/mamba $out/bin/micromamba
+  '';
 
-  buildInputs = [
-    bzip2
-    cli11
-    nlohmann_json
-    curl
-    libarchive
-    yaml-cpp
-    libsolv'
-    reproc
-    spdlog
-    ghc_filesystem
-    python3
-    tl-expected
-  ];
-
-  cmakeFlags = [
-    "-DBUILD_LIBMAMBA=ON"
-    "-DBUILD_SHARED=ON"
-    "-DBUILD_MICROMAMBA=ON"
-    # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
-  ];
-
-  meta = {
-    description = "Reimplementation of the conda package manager";
-    homepage = "https://github.com/mamba-org/mamba";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
+  meta = mamba-cpp.meta // {
     maintainers = with lib.maintainers; [ mausch ];
     mainProgram = "micromamba";
   };
+
 }
