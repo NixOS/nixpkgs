@@ -92,6 +92,8 @@ mapAliases ({
   BlinkStick = blinkstick; # added 2023-02-19
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # added 2020-11-29
   boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
+  boxx = throw "boxx was removed as it is no longer used by any packages in nixpkgs."; # added 2025-02-08
+  bpycv = throw "bpycv was removed as it is incompatible with blender version 4 or later."; # added 2025-02-08
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
   bugz = throw "use pkgs.pybugz instead"; # added 2024-12-31
@@ -239,6 +241,7 @@ mapAliases ({
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
   flufl_lock = flufl-lock; # added 2023-11-03
+  fn = throw "fn was removed as it is no longer used by any package in nixpkgs, it is not compatible with python 3.11 or newer and it was last updated in 2014."; # added 2025-02-08
   forbiddenfruit = throw "forbiddenfruit has been removed, because it was unmaintained and relied on the nose test framework"; # added 2024-07-08
   FormEncode = formencode; # added 2023-02-19
   foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
@@ -719,6 +722,7 @@ mapAliases ({
   twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-options = throw "twitter-common-options has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
+  types-enum34 = throw "types-enum34 is obselete since Python 3.4"; # added 2025-02-15
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
@@ -760,6 +764,7 @@ mapAliases ({
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_lockfile = zc-lockfile; # added 2024-01-06
+  zcs = throw "zcs was removed as it is no longer used by any packages in nixpkgs."; # added 2025-02-08
   zipstream = throw "zipstream has been removed, because it has been unmaintained for 6 years and there are no dependent packages"; # added 2024-05-26
   zipstream-new = throw "zipstream-new has been removed, because it  was packaged as a dependency for octoprint, which has switched to zipstream-ng since."; # added 2024-01-05
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26

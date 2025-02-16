@@ -1876,11 +1876,7 @@ self: super: with self; {
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
-  boxx = callPackage ../development/python-modules/boxx { };
-
   bpemb = callPackage ../development/python-modules/bpemb { };
-
-  bpycv = callPackage ../development/python-modules/bpycv {};
 
   bpylist2 = callPackage ../development/python-modules/bpylist2 { };
 
@@ -4897,8 +4893,6 @@ self: super: with self; {
   flyingsquid = callPackage ../development/python-modules/flyingsquid { };
 
   flynt = callPackage ../development/python-modules/flynt { };
-
-  fn = callPackage ../development/python-modules/fn { };
 
   fnv-hash-fast = callPackage ../development/python-modules/fnv-hash-fast { };
 
@@ -17579,8 +17573,6 @@ self: super: with self; {
 
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 
-  types-enum34 = callPackage ../development/python-modules/types-enum34 { };
-
   types-freezegun = callPackage ../development/python-modules/types-freezegun { };
 
   types-futures = callPackage ../development/python-modules/types-futures { };
@@ -18688,8 +18680,6 @@ self: super: with self; {
   zcbor = callPackage ../development/python-modules/zcbor { };
 
   zconfig = callPackage ../development/python-modules/zconfig { };
-
-  zcs = callPackage ../development/python-modules/zcs { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
