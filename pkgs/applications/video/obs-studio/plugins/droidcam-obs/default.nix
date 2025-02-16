@@ -10,22 +10,22 @@
   libplist,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam-obs";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "dev47apps";
     repo = "droidcam-obs-plugin";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-YtfWwgBhyQYx6QfrKld7p6qUf8BEV/kkQX4QcdHuaYU=";
   };
 
   postPatch = ''
     substituteInPlace ./linux/linux.mk \
-      --replace "-limobiledevice" "-limobiledevice-1.0" \
-      --replace "-I/usr/include/obs" "-I${obs-studio}/include/obs" \
-      --replace "-I/usr/include/ffmpeg" "-I${ffmpeg}/include"
+      --replace-fail "-limobiledevice" "-limobiledevice-1.0" \
+      --replace-fail "-I/usr/include/obs" "-I${obs-studio}/include/obs" \
+      --replace-fail "-I/usr/include/ffmpeg" "-I${ffmpeg}/include"
   '';
 
   preBuild = ''
@@ -61,12 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DroidCam OBS";
     homepage = "https://github.com/dev47apps/droidcam-obs-plugin";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ulrikstrid ];
-    platforms = platforms.linux;
-    broken = true;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ulrikstrid ];
+    platforms = lib.platforms.linux;
   };
-}
+})
