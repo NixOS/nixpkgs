@@ -1607,6 +1607,8 @@ self: super: with self; {
 
   beartype = callPackage ../development/python-modules/beartype { };
 
+  beatprints = callPackage ../development/python-modules/beatprints { };
+
   beaupy = callPackage ../development/python-modules/beaupy { };
 
   beautiful-date = callPackage ../development/python-modules/beautiful-date { };
@@ -12133,6 +12135,8 @@ self: super: with self; {
   pyld = callPackage ../development/python-modules/pyld { };
 
   pyleri = callPackage ../development/python-modules/pyleri { };
+
+  pylette = callPackage ../development/python-modules/pylette { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 
