@@ -1,0 +1,16 @@
+diff --git a/sickgear.py b/sickgear.py
+index c37e2b01..d69704a3 100755
+--- a/sickgear.py
++++ b/sickgear.py
+@@ -41,10 +41,7 @@ versions = [((3, 8, 0), (3, 8, 16)),
+             ((3, 10, 0), (3, 11, 3))]  # inclusive version ranges
+ if not any(list(map(lambda v: v[0] <= sys.version_info[:3] <= v[1], versions))) and not int(os.environ.get('PYT', 0)):
+     major, minor, micro = sys.version_info[:3]
+-    print('Python %s.%s.%s detected.' % (major, minor, micro))
+-    print('Sorry, SickGear requires a Python version %s' % ', '.join(map(
+-        lambda r: '%s - %s' % tuple(map(lambda v: str(v).replace(',', '.')[1:-1], r)), versions)))
+-    sys.exit(1)
++    pass
+ 
+ sys.path.insert(1, os.path.abspath(os.path.join(os.path.dirname(__file__), 'lib')))
+ is_win = 'win' == sys.platform[0:3]

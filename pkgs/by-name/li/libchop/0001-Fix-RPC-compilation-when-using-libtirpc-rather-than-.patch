@@ -1,0 +1,41 @@
+From 86fd3be1d31d2e7c09603aa3a8966537ac01bb07 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Tue, 11 Aug 2020 20:30:16 +0200
+Subject: [PATCH] Fix RPC compilation when using libtirpc rather than glibc
+
+---
+ src/block-server.c        | 3 +++
+ utils/chop-block-server.c | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/src/block-server.c b/src/block-server.c
+index 3f97417..29b299e 100644
+--- a/src/block-server.c
++++ b/src/block-server.c
+@@ -18,6 +18,9 @@
+ 
+ /* Server-side stubs.  */
+ 
++#include <rpc/types.h>
++#include <rpc/xdr.h>
++#include <rpc/auth.h>
+ #include <rpc/svc.h>
+ #include <chop/block-server.h>
+ 
+diff --git a/utils/chop-block-server.c b/utils/chop-block-server.c
+index a2076c0..9462f5d 100644
+--- a/utils/chop-block-server.c
++++ b/utils/chop-block-server.c
+@@ -19,6 +19,9 @@
+    store, e.g. a GDBM block store, and serves it remotely.  A lot of code is
+    borrowed from `chop-archiver.c'.  */
+ 
++#include <rpc/types.h>
++#include <rpc/xdr.h>
++#include <rpc/auth.h>
+ #include <chop/chop-config.h>
+ 
+ #include <alloca.h>
+-- 
+2.25.4
+

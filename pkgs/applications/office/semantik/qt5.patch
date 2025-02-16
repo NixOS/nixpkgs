@@ -1,0 +1,79 @@
+diff --color -ur a/wscript b/wscript
+--- a/wscript	2020-08-17 19:49:43.389864343 +0200
++++ b/wscript	2020-08-18 00:22:51.172556519 +0200
+@@ -149,6 +149,26 @@
+ 	if not conf.env.QT_LRELEASE: conf.fatal('Semantik requires the program lrelease (from the Qt linguist package? - compilation only)')
+ 	conf.find_program('python3', var='PYTHON')
+ 	conf.load('python')
++	conf.env.HAVE_QT5SVG = 1
++	conf.env.DEFINES_QT5SVG = [ 'QT_SVG_LIB' ]
++	conf.env.INCLUDES_QT5SVG = [ '@Qt5Svg_dev@/include/QtSvg' ]
++	conf.env.LIBPATH_QT5SVG = '@Qt5Svg@/lib'
++	conf.env.LIB_QT5SVG = [ 'Qt5Svg', 'Qt5Core', 'Qt5Gui', 'Qt5Widgets' ]
++	conf.env.HAVE_QT5WEBENGINEWIDGETS = 1
++	conf.env.DEFINES_QT5WEBENGINEWIDGETS = [ 'QT_WEBENGINEWIDGETS_LIB' ]
++	conf.env.INCLUDES_QT5WEBENGINEWIDGETS = [ '@Qt5WebEngine_dev@/include/QtWebEngineWidgets' ]
++	conf.env.LIBPATH_QT5WEBENGINEWIDGETS = '@Qt5WebEngine@/lib'
++	conf.env.LIB_QT5WEBENGINEWIDGETS = [
++		'Qt5WebEngineWidgets',
++		'Qt5Core',
++		'Qt5Gui',
++		'Qt5WebEngineCore',
++		'Qt5Widgets',
++		'Qt5Network',
++		'Qt5Quick',
++		'Qt5PrintSupport'
++	]
++	print("conf.env.LIB_QT5SVG : ",conf.env)
+ 	if not conf.env.LIB_QT5SVG: conf.fatal('Could not find Qt5Svg - Semantik requires Qt >= 5')
+ 	if not conf.env.LIB_QT5WEBENGINEWIDGETS: conf.fatal('Could not find Qt5WebEngineWidgets - check `pkg-config --libs Qt5WebEngineWidgets`')
+ 	if not conf.env.LIB_QT5DBUS: conf.fatal('Install Qt Dbus')
+@@ -186,7 +206,11 @@
+ 		raise ValueError('Could not find QT_HOST_DATA')
+ 
+ 	specpath = conf.cmd_and_log(conf.env.QMAKE + ['-query', 'QMAKE_SPEC'], quiet=0, stdout=True)
++	path = "@Qt5Base_dev@"
++	print("\n\n[log] specpath = ",specpath,"\n")
++	print("\n\n[log] path = ",path,"\n")
+ 	specpath = os.path.join(path, 'mkspecs', specpath.strip())
++	print("\n\n[log] specpath = ",specpath,"\n")
+ 	if not os.path.exists(specpath):
+ 		raise ValueError('No spec path, cannot build')
+ 
+@@ -196,17 +220,29 @@
+ 
+ 	conf.env.append_value('INCLUDES_KDECORE', specpath)
+ 
+-	libs = ['KF5KIOCore', 'KF5Auth', 'KF5KIOWidgets',
+-		'KF5IconThemes', 'KF5ConfigWidgets', 'KF5XmlGui',
+-		'KF5CoreAddons', 'KF5ConfigGui', 'KF5ConfigCore',
+-		'KF5WidgetsAddons', 'KF5I18n', 'KF5SonnetUi', 'KF5AuthCore']
++	libs = {
++            'KF5KIOCore': '@KF5KIOCore_dev@',
++            'KF5Auth': '@KF5Auth_dev@',
++            'KF5KIOWidgets': '@KF5KIOCore_dev@',
++            'KF5IconThemes': '@KF5IconThemes_dev@',
++            'KF5ConfigWidgets': '@KF5ConfigWidgets_dev@',
++            'KF5XmlGui': '@KF5XmlGui_dev@',
++            'KF5CoreAddons': '@KF5CoreAddons_dev@',
++            'KF5ConfigGui': '@KF5Config_dev@',
++            'KF5ConfigCore': '@KF5Config_dev@',
++            'KF5WidgetsAddons': '@KF5WidgetsAddons_dev@',
++            'KF5I18n': '@KF5I18n_dev@',
++            'KF5SonnetUi': '@KF5SonnetUi_dev@',
++            'KF5AuthCore': '@KF5Auth_dev@',
++        }
+ 
+-	for lib in libs:
++	for lib,mkspec_path in libs.items():
++		print("[log] mkspec : ", mkspec_path)
+ 		name = lib[3:]
+ 		if not name.startswith('K') and name != 'SonnetUi':
+ 			name = 'K' + name
+-
+-		p = '%s/qt_%s.pri' % (path, name)
++		p = '%s/qt_%s.pri' % (mkspec_path+"/mkspecs/modules", name)
++		print("[log] path :",path,", name : ",name)
+ 		try:
+ 			code = Utils.readf(p)
+ 		except EnvironmentError:

@@ -1,0 +1,13 @@
+diff --git a/daemon/meson.build b/daemon/meson.build
+index 72a16890..718944e1 100644
+--- a/daemon/meson.build
++++ b/daemon/meson.build
+@@ -256,7 +256,7 @@ if enable_sftp
+     '-DDEFAULT_BACKEND_TYPE=sftp',
+     '-DBACKEND_TYPES="sftp", G_VFS_TYPE_BACKEND_SFTP,',
+     '-DMAX_JOB_THREADS=1',
+-    '-DSSH_PROGRAM="ssh"',
++    '-DSSH_PROGRAM="@ssh_program@"',
+   ]
+
+   programs += {'gvfsd-sftp': {'sources': sources, 'dependencies': deps, 'c_args': cflags}}
