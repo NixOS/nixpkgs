@@ -2,7 +2,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , lib
 , replaceVars
   # Dependencies
@@ -50,8 +49,6 @@ let
   binaryUrl = version: rel:
     if arch == archs.aarch64-linux then
       "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
-    else if arch == archs.x86_64-darwin && lib.versionOlder version "1.2.0" then
-      "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-darwin-x86_64.tar.gz"
     else
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
@@ -98,16 +95,7 @@ let
           (replaceVars ./tzdata.patch {
             inherit tzdata;
           })
-        ]
-        ++ lib.optionals (lib.versionOlder version "1.2.0") [
-        # add support for DWARF5 debuginfo, fixes builds on recent compilers
-        # the PR is 8 commits from 2019, so just fetch the whole thing
-        # and hope it doesn't change
-        (fetchpatch {
-          url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
-          sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
-        })
-      ];
+        ];
 
       outputs = [ "out" "lib" "bin" ];
 
@@ -145,10 +133,6 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
-        # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
-        substituteInPlace spec/compiler/loader/unix_spec.cr \
-          --replace 'it "parses file paths"' 'pending "parses file paths"'
       '' + lib.optionalString (stdenv.cc.isClang && (stdenv.cc.libcxx != null)) ''
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
@@ -187,9 +171,6 @@ let
 
       FLAGS = [
         "--single-module" # needed for deterministic builds
-      ] ++ lib.optionals (lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.6.1") [
-        # ffi is only used by the interpreter and its spec are broken on < 1.6.1
-        "-Dwithout_ffi"
       ];
 
       # This makes sure we don't keep depending on the previous version of
