@@ -182,15 +182,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./efi-app-path.patch
   ];
 
-  postPatch = ''
-    patchShebangs \
-      contrib/generate-version-script.py \
-      contrib/generate-man.py \
-      po/test-deps
-
+  postPatch =
+    ''
+      patchShebangs \
+        contrib/generate-version-script.py \
+        contrib/generate-man.py \
+        po/test-deps
+    ''
     # in nixos test tries to chmod 0777 $out/share/installed-tests/fwupd/tests/redfish.conf
-    sed -i "s/get_option('tests')/false/" plugins/redfish/meson.build
-  '';
+    + ''
+      substituteInPlace plugins/redfish/meson.build \
+        --replace-fail "get_option('tests')" "false"
+    '';
 
   strictDeps = true;
 
