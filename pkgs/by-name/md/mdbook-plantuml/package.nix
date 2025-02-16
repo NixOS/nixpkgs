@@ -2,11 +2,9 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  stdenv,
   rustPlatform,
   pkg-config,
   openssl,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "sytsereitsma";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-26epwn6j/ZeMAphiFsrLjS0KIewvElr7V3p/EDr4Uqk=";
   };
 
@@ -34,14 +32,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
     mainProgram = "mdbook-plantuml";
     homepage = "https://github.com/sytsereitsma/mdbook-plantuml";
-    license = [ licenses.mit ];
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jcouyang
       matthiasbeyer
     ];
