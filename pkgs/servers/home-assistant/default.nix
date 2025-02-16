@@ -108,6 +108,16 @@ let
         };
       });
 
+      av = super.av.overridePythonAttrs (rec {
+        version = "13.1.0";
+        src = fetchFromGitHub {
+          owner = "PyAV-Org";
+          repo = "PyAV";
+          tag = "v${version}";
+          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
+        };
+      });
+
       eq3btsmart = super.eq3btsmart.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.1";
         src = fetchFromGitHub {
