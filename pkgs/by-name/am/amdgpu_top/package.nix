@@ -41,7 +41,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -D ./assets/${pname}.desktop -t $out/share/applications/
+    install -D ./assets/amdgpu_top.desktop -t $out/share/applications/
+    install -D ./assets/amdgpu_top-tui.desktop -t $out/share/applications/
   '';
 
   postFixup = ''
