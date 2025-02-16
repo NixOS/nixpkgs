@@ -9721,6 +9721,8 @@ with pkgs;
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
+  szurubooru = callPackage ../servers/web-apps/szurubooru { };
+
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
