@@ -69,9 +69,8 @@ let
           # Uses numpy 2.x, while the rest of the dependencies still uses
           # numpy 1.x. Remove once all spaCy packages are updated for
           # numpy 2.x.
-          cat meta.json
           substituteInPlace meta.json \
-          --replace-fail "spacy-pkuseg>=1.0.0,<2.0.0" "spacy-pkuseg"
+            --replace-fail "spacy-pkuseg>=1.0.0,<2.0.0" "spacy-pkuseg"
         '';
 
       nativeBuildInputs = [ setuptools ] ++ lib.optionals requires-protobuf [ protobuf ];
