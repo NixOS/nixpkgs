@@ -13,9 +13,11 @@
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   fetchurl,
+  fetchpatch,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
-  rocmPackages_5,
+  rocmPackages_5 ? null,
+  rocmPackages,
   lapack,
   lib,
   libpthreadstubs,
@@ -46,8 +48,8 @@ let
 
   inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
 
-  # move to newer ROCm version once supported
-  rocmPackages = rocmPackages_5;
+  effectiveRocmPackages =
+    if strings.versionOlder version "2.8.0" then rocmPackages_5 else rocmPackages;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -57,7 +59,7 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) effectiveRocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -127,6 +129,11 @@ stdenv.mkDerivation {
           "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
     '';
 
+  # need to define ROCM_PATH for ./tools/get-rocm-version.sh script to work properly
+  preConfigure = lib.optionalString rocmSupport ''
+    export ROCM_PATH="${effectiveRocmPackages.rocm-core}"
+  '';
+
   nativeBuildInputs =
     [
       autoPatchelfHook
@@ -163,12 +170,16 @@ stdenv.mkDerivation {
         cuda_cccl # <nv/target>
       ]
     )
-    ++ lists.optionals rocmSupport [
-      rocmPackages.clr
-      rocmPackages.hipblas
-      rocmPackages.hipsparse
-      rocmPackages.llvm.openmp
-    ];
+    ++ lists.optionals rocmSupport (
+      with effectiveRocmPackages;
+      [
+        clr
+        hipblas
+        hipsparse
+        llvm.openmp
+        rocm-core
+      ]
+    );
 
   cmakeFlags =
     [
@@ -189,8 +200,8 @@ stdenv.mkDerivation {
       (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
     ]
     ++ lists.optionals rocmSupport [
-      (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+      (strings.cmakeFeature "CMAKE_C_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
+      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${effectiveRocmPackages.clr}/bin/hipcc")
     ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
@@ -244,6 +255,7 @@ stdenv.mkDerivation {
       (cudaSupport && !static)
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
-      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null);
+      || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
+      || (cudaSupport && strings.versionOlder version "2.8.0" && rocmPackages_5 == null);
   };
 }
