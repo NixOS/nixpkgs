@@ -30,26 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/rundeck/rundeck.war
 
     mkdir -p $out/bin
-    # Main rundeck executable
     makeWrapper ${lib.getExe jdk17} $out/bin/rundeck \
-      --set RDECK_BASE "/var/lib/rundeck" \
-      --add-flags "-Xmx4g" \
-      --add-flags "-Drdeck.base=/var/lib/rundeck" \
-      --add-flags "-Drundeck.config.location=/etc/rundeck" \
       --add-flags "-jar $out/share/rundeck/rundeck.war" \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          which
-          coreutils
-          openssh
-        ]
-      }
-
-    # Installation helper script
-    makeWrapper ${lib.getExe jdk17} $out/bin/rundeck-install \
-      --set RDECK_BASE "/var/lib/rundeck" \
-      --add-flags "-jar $out/share/rundeck/rundeck.war" \
-      --add-flags "--installonly" \
       --prefix PATH : ${
         lib.makeBinPath [
           which
@@ -74,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.liberodark ];
+    mainProgram = "rundeck";
   };
 })
