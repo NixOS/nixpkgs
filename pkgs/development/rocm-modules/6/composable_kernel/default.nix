@@ -155,10 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall =
-    ''
-      zstd --rm $out/lib/libdevice_*_operations.a
-    ''
-    + lib.optionalString buildTests ''
+    lib.optionalString buildTests ''
       mkdir -p $test/bin
       mv $out/bin/test_* $test/bin
     ''
