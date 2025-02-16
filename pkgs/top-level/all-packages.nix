@@ -8256,10 +8256,6 @@ with pkgs;
     (if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else haskell.lib.compose.justStaticExecutables)
     haskellPackages.shake;
 
-  inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_17
-    shards;
-
   shellcheck = callPackage ../development/tools/shellcheck {
     inherit (__splicedPackages.haskellPackages) ShellCheck;
   };
