@@ -125,6 +125,7 @@ nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.
 nvim-dbee,,,,,,perchun
 nvim-nio,,,,,,mrcjkb
 nvim-web-devicons,,,,,,
+oil.nvim,,,,,,
 orgmode,,,,,,
 papis-nvim,,,,,,GaetanLepage
 pathlib.nvim,,,,,,

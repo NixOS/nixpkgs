@@ -4018,6 +4018,7 @@ in
       "nvim-dbee"
       "nvim-nio"
       "nvim-web-devicons"
+      "oil-nvim"
       "orgmode"
       "papis-nvim"
       "rest-nvim"
