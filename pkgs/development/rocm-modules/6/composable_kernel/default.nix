@@ -19,17 +19,25 @@
   # FIXME: This arch list needs to grow, had build issues and will need to test
   # but testing is very slow
   gpuTargets ? (
-    clr.localGpuTargets or [
-      "gfx900"
-      "gfx906"
-      "gfx908"
-      "gfx90a"
-      "gfx942"
-      "gfx1030"
-      "gfx1100"
-      "gfx1101"
-      "gfx1102"
-    ]
+    lib.unique (
+      (clr.localGpuTargets or [
+        "gfx900"
+        "gfx906"
+        "gfx908"
+        "gfx90a"
+        "gfx942"
+        "gfx1030"
+        "gfx1100"
+        "gfx1101"
+        "gfx1102"
+      ]) ++ [
+        # MIOpen requires device_mha_operations in its find_package call,
+        # but device_mha_operations is only built if the gpu targets contain any
+        # one of gfx90a, gfx94*, and gfx95*
+        # https://github.com/ROCm/composable_kernel/blob/a9894ecbe3e8c6a889a927a5ec7acf92a2468521/library/src/tensor_operation_instance/gpu/CMakeLists.txt#L310
+        "gfx90a"
+      ]
+    )
   ),
 }:
 
