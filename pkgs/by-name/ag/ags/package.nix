@@ -7,7 +7,6 @@
   dart-sass,
   symlinkJoin,
   fetchFromGitHub,
-  fetchpatch2,
   gjs,
   glib,
   gobject-introspection,
@@ -22,22 +21,14 @@
 }:
 buildGoModule rec {
   pname = "ags";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Aylur";
     repo = "ags";
     tag = "v${version}";
-    hash = "sha256-snHhAgcH8hACWZFaAqHr5uXH412UrAuA603OK02MxN8=";
+    hash = "sha256-GLyNtU9A2VN22jNRHZ2OXuFfTJLh8uEVVt+ftsKUX0c=";
   };
-
-  patches = [
-    # refactor for better nix support
-    (fetchpatch2 {
-      url = "https://github.com/Aylur/ags/commit/17df94c576d0023185770f901186db427f2ec0a2.diff?full_index=1";
-      hash = "sha256-tcoifkYmXjV+ZbeAFRHuk8cVmxWMrS64syvQMGGKAVA=";
-    })
-  ];
 
   vendorHash = "sha256-Pw6UNT5YkDVz4HcH7b5LfOg+K3ohrBGPGB9wYGAQ9F4=";
   proxyVendor = true;
