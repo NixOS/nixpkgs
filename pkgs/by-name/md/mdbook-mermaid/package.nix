@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,17 +18,13 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-yb4EWSl/mQp5q9fmYUq6UEdsknqfUx//BZ8IK/BVs7g=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Preprocessor for mdbook to add mermaid.js support";
     mainProgram = "mdbook-mermaid";
     homepage = "https://github.com/badboy/mdbook-mermaid";
     changelog = "https://github.com/badboy/mdbook-mermaid/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       xrelkd
       matthiasbeyer
     ];
