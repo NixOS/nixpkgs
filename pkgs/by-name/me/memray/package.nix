@@ -58,6 +58,15 @@ python3Packages.buildPythonApplication rec {
     # Import issue
     "test_header_allocator"
     "test_hybrid_stack_of_allocations_inside_ceval"
+
+    # Snapshot tests are failing with textual 2.0.0
+    # https://github.com/bloomberg/memray/issues/713
+    "TestTUILooks"
+    "test_tui_basic"
+    "test_tui_pause"
+    "test_tui_gradient"
+    "test_merge_threads"
+    "test_unmerge_threads"
   ];
 
   disabledTestPaths = [
