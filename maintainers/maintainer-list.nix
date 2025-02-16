@@ -9055,6 +9055,12 @@
     githubId = 1498782;
     name = "Jesse Haber-Kucharsky";
   };
+  hakutaku = {
+    email = "nix@hakutaku.org";
+    github = "1235467";
+    githubId = 30495555;
+    name = "Xin Xu";
+  };
   hamburger1984 = {
     email = "hamburger1984@gmail.com";
     github = "hamburger1984";
