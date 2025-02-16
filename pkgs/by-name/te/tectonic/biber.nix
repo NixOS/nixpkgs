@@ -1,5 +1,5 @@
 /*
-  This package, `biber-for-tectonic`, provides a compatible version of `biber`
+  This package, `tectonic.biber`, provides a compatible version of `biber`
   as an optional runtime dependency of `tectonic`.
 
   The development of tectonic is slowing down recently, such that its `biber`

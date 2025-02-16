@@ -2683,7 +2683,7 @@ with pkgs;
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
 
-  biber-for-tectonic = callPackage ../by-name/te/tectonic/biber.nix { };
+  biber-for-tectonic = tectonic.biber;
 
   binlore = callPackage ../development/tools/analysis/binlore { };
 
@@ -10691,9 +10691,7 @@ with pkgs;
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
-  tectonic-unwrapped = callPackage ../by-name/te/tectonic/unwrapped.nix {
-    harfbuzz = harfbuzzFull;
-  };
+  tectonic-unwrapped = tectonic.unwrapped;
 
   termbench-pro = callPackage ../by-name/te/termbench-pro/package.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;

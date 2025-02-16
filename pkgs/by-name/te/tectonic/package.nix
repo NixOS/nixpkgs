@@ -2,21 +2,19 @@
   lib,
   symlinkJoin,
   tectonic,
-  tectonic-unwrapped,
-  biber-for-tectonic,
   makeBinaryWrapper,
   callPackage,
 }:
 
 symlinkJoin {
-  name = "${tectonic-unwrapped.pname}-wrapped-${tectonic-unwrapped.version}";
-  paths = [ tectonic-unwrapped ];
+  name = "${tectonic.unwrapped.pname}-wrapped-${tectonic.unwrapped.version}";
+  paths = [ tectonic.unwrapped ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   passthru = {
-    unwrapped = tectonic-unwrapped;
-    biber = biber-for-tectonic;
+    unwrapped = callPackage ./unwrapped.nix { };
+    biber = callPackage ./biber.nix { };
     tests = callPackage ./tests.nix { };
 
     # The version locked tectonic web bundle, redirected from:
@@ -38,7 +36,7 @@ symlinkJoin {
     #
     # Upstream is updating it's online TeX bundle slower then
     # https://github.com/plk/biber. That's why we match here the `bundleURL`
-    # version with that of `biber-for-tectonic`. See also upstream discussion:
+    # version with that of `tectonic.biber`. See also upstream discussion:
     #
     # https://github.com/tectonic-typesetting/tectonic/discussions/1122
     #
@@ -46,14 +44,14 @@ symlinkJoin {
     # TeX bundle won't be updated and hence the biblatex distributed there
     # won't require a higher version of biber.
     + ''
-      makeWrapper ${lib.getBin tectonic-unwrapped}/bin/tectonic $out/bin/tectonic \
-        --prefix PATH : "${lib.getBin biber-for-tectonic}/bin" \
+      makeWrapper ${lib.getBin tectonic.unwrapped}/bin/tectonic $out/bin/tectonic \
+        --prefix PATH : "${lib.getBin tectonic.biber}/bin" \
         --add-flags "--web-bundle ${tectonic.passthru.bundleUrl}" \
         --inherit-argv0 ## make sure binary name e.g. `nextonic` is passed along
       ln -s $out/bin/tectonic $out/bin/nextonic
     '';
 
-  meta = tectonic-unwrapped.meta // {
+  meta = tectonic.unwrapped.meta // {
     description = "Tectonic TeX/LaTeX engine, wrapped with a compatible biber";
     maintainers = with lib.maintainers; [
       doronbehar
