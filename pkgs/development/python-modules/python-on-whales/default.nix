@@ -34,6 +34,12 @@ buildPythonPackage rec {
     typer
   ];
 
+  # pythonRuntimeDepsCheck evaluates the more complex expression to 1.10.16 (!) and fails
+  configurePhase = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "pydantic>=2,<3,!=2.0.*" "pydantic>=2.10.0,<3"
+  '';
+
   doCheck = false; # majority of tests require Docker and/or network access
 
   pythonImportsCheck = [ "python_on_whales" ];
