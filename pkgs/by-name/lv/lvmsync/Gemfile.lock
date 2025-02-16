@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    git-version-bump (0.15.1)
+    lvmsync (3.3.2)
+      git-version-bump (~> 0.10)
+      treetop
+    polyglot (0.3.5)
+    treetop (1.6.9)
+      polyglot (~> 0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  lvmsync
+
+BUNDLED WITH
+   2.1.4
