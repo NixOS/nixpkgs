@@ -48,7 +48,7 @@ python.pkgs.buildPythonApplication rec {
     ./cache.lock.patch
   ];
 
-  build-system = [ gettext ] ++ (with python.pkgs; [ setuptools ]);
+  build-system = with python.pkgs; [ setuptools ];
 
   nativeBuildInputs = [ gettext ];
 
