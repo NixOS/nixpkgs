@@ -1,0 +1,12 @@
+--- a/qmake/generators/makefile.cpp
++++ b/qmake/generators/makefile.cpp
+@@ -3412,8 +3412,7 @@ MakefileGenerator::writePkgConfigFile()
+       << varGlue("QMAKE_PKGCONFIG_CFLAGS", "", " ", " ")
+         //      << varGlue("DEFINES","-D"," -D"," ")
+          ;
+-    if (!project->values("QMAKE_DEFAULT_INCDIRS").contains(includeDir))
+-        t << "-I${includedir}";
++    t << "-I${includedir}";
+     if (target_mode == TARG_MAC_MODE && project->isActiveConfig("lib_bundle")
+         && libDir != QLatin1String("/Library/Frameworks")) {
+             t << " -F${libdir}";

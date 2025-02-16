@@ -1,0 +1,18 @@
+--- a/meson.build
++++ b/meson.build
+@@ -103,11 +103,11 @@
+   spice_server_deps += dependency(dep)
+ endforeach
+ 
+-if host_machine.system() != 'windows'
++if (host_machine.system() != 'windows' and host_machine.system() != 'darwin')
+   foreach dep : ['rt', 'm']
+     spice_server_deps += compiler.find_library(dep)
+   endforeach
+-else
++elif host_machine.system() == 'windows'
+   foreach dep : ['ws2_32', 'shlwapi']
+     spice_server_deps += compiler.find_library(dep)
+   endforeach
+
+Diff finished.  Sun Oct 16 06:09:35 2022

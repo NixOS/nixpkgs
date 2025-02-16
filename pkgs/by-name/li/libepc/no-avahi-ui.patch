@@ -1,0 +1,36 @@
+diff --git a/Makefile.am b/Makefile.am
+index acf0d25..13022d1 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -32,8 +32,6 @@ noinst_PROGRAMS = \
+ 	examples/lookup-resource \
+ 	examples/service-browser \
+ 	examples/simple-publisher \
+-	examples/consumer-ui \
+-	examples/publisher-ui \
+ 	examples/server-credentials \
+ 	$(TESTS)
+ TESTS = \
+@@ -155,10 +153,6 @@ examples_service_browser_LDADD			= $(example_epc_libs)
+ examples_simple_publisher_CFLAGS		= $(example_epc_cflags)
+ examples_simple_publisher_LDADD			= $(example_epc_libs)
+ 
+-examples_consumer_ui_CFLAGS			= $(example_epc_ui_cflags) $(AVAHI_UI_CFLAGS)
+-examples_consumer_ui_LDADD			= $(example_epc_ui_libs) $(AVAHI_UI_LIBS)
+-examples_publisher_ui_CFLAGS			= $(example_epc_ui_cflags) $(AVAHI_UI_CFLAGS) -rdynamic
+-examples_publisher_ui_LDADD			= $(example_epc_ui_libs) $(AVAHI_UI_LIBS)
+ examples_server_credentials_CFLAGS		= $(example_epc_ui_cflags)
+ examples_server_credentials_LDADD		= $(example_epc_ui_libs)
+ 
+diff --git a/configure.ac b/configure.ac
+index d68bf94..89bd471 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -53,7 +53,6 @@ PKG_CHECK_EXISTS([$GIO_REQUIREMENT],
+                   GIO=$GIO_REQUIREMENT],
+                  [AC_MSG_RESULT([no])])
+ 
+-PKG_CHECK_MODULES(AVAHI_UI,  [avahi-ui-gtk3     >= 0.6])
+ PKG_CHECK_MODULES(LIBEPC,    [avahi-client >= 0.6
+                               avahi-glib   >= 0.6
+                               glib-2.0     >= 2.36

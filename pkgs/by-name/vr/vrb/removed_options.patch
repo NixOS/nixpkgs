@@ -1,0 +1,13 @@
+--- a/configure	2010-10-05 16:32:59.000000000 +0200
++++ b/configure	2010-10-05 16:33:08.000000000 +0200
+@@ -341,8 +341,8 @@
+     pgm_warn=( "${pgm_warn[@]}" -Winline )
+ fi
+ 
+-lib_feat=( -fomit-frame-pointer -funsigned-char -funsigned-bitfields -fgnu-linker -frerun-loop-opt -finline -finline-functions -fmove-all-movables )
+-pgm_feat=( -fomit-frame-pointer -funsigned-char -funsigned-bitfields -fgnu-linker -frerun-loop-opt -finline -finline-functions -fmove-all-movables )
++lib_feat=( -fomit-frame-pointer -funsigned-char -funsigned-bitfields -frerun-loop-opt -finline -finline-functions )
++pgm_feat=( -fomit-frame-pointer -funsigned-char -funsigned-bitfields -frerun-loop-opt -finline -finline-functions )
+ 
+ lib_cp_opt=( -pipe )
+ pgm_cp_opt=( -pipe )
