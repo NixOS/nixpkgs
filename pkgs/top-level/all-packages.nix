@@ -11261,9 +11261,6 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-loki = callPackage ../servers/monitoring/loki { };
-  promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
-
   hasura-graphql-engine = haskell.lib.compose.justStaticExecutables haskell.packages.ghc810.graphql-engine;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
