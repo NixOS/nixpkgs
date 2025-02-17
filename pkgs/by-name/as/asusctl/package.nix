@@ -14,20 +14,21 @@
   seatd,
   wayland,
   glibc,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.1.4";
+  version = "6.1.7";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-t5wjfazKadpYEc29LJmnh3Zdc53wQQY2DYpj3ijZ534=";
+    hash = "sha256-8VVnqHDZJYgnluqgBKfpuqVvdwpTwxZud8NtQCx2Q2E=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-1IwGjdx2BM6kA17mgYg5+pAr6UOiIuP6//05tcjmJBM=";
+  cargoHash = "sha256-H1KJjnpR0xH1wp4DPFBKEm8Za66sovsfcGluWkRADJI=";
 
   postPatch = ''
     files="
@@ -92,6 +93,8 @@ rustPlatform.buildRustPackage rec {
     patchelf $out/bin/rog-control-center \
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
