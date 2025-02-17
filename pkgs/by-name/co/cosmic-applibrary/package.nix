@@ -3,11 +3,8 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
+  libcosmicAppHook,
   just,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-applibrary";
@@ -25,12 +22,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
@@ -46,11 +38,6 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-app-library \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
   meta = {
