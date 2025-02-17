@@ -1,0 +1,12 @@
+--- a/src/3rdparty/chromium/build/mac/find_sdk.py
++++ b/src/3rdparty/chromium/build/mac/find_sdk.py
+@@ -90,8 +90,7 @@
+     print(sdk_path)
+ 
+   if options.print_bin_path:
+-    bin_path = 'Toolchains/XcodeDefault.xctoolchain/usr/bin/'
+-    print(os.path.join(dev_dir, bin_path))
++    print()
+ 
+   if options.print_sdk_build:
+     system_version_plist = os.path.join(sdk_path,
