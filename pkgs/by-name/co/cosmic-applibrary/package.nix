@@ -9,13 +9,13 @@
   libxkbcommon,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-applibrary";
   version = "0-unstable-2024-02-09";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-applibrary";
     rev = "e214e9867876c96b24568d8a45aaca2936269d9b";
     hash = "sha256-fZxDRktiHHmj7X3e5VyJJMO081auOpSMSsBnJdhhtR8=";
   };
