@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    hash = "sha256-hMTndwIXTqf3cxKZdnn38SFvZLEb48k1Lvm5/hW7U8k=";
+    hash = "sha256-WriVcYt3fkObR2U4J6a4KGGc2HgyyFyFpdrwxBD+AHA=";
   };
 
   nativeBuildInputs = [ cmake ];
