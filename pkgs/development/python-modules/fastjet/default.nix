@@ -63,7 +63,10 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    awkward
     fastjet
+    numpy
+    vector
   ];
 
   buildInputs = [
@@ -73,9 +76,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    awkward
-    numpy
-    vector
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -86,7 +86,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/scikit-hep/fastjet/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
-    # ImportError: fastjetcontribfragile.so.0: cannot open shared object file: No such file or directory
-    broken = true;
   };
 }

@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" --replace-quiet "ranlib " "${stdenv.cc.targetPrefix}ranlib "
     done
     patchShebangs --build ./utils/check.sh ./utils/install-sh
+    substituteInPlace configure \
+      --replace-warn "-Wl,-soname,fastjetcontribfragile.so.0" "-Wl,-soname,libfastjetcontribfragile.so"
   '';
 
   # Written in shell manually, does not support autoconf-style
