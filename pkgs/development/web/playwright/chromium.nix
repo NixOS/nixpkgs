@@ -8,15 +8,23 @@
   suffix,
   system,
   throwSystem,
+  lib,
   ...
 }:
 let
+  chromiumVersion = (lib.importJSON ./browsers.json).browsers.chromium.browserVersion;
+  chromium' = chromium.override {
+    upstream-info =
+      (lib.importJSON ./chromium/info.json)
+      ."playwright-driver.passthru.components.chromium.passthru.chromium";
+  };
   chromium-linux =
     runCommand "playwright-chromium"
       {
         nativeBuildInputs = [
           makeWrapper
         ];
+        passthru.chromium = chromium';
       }
       ''
         mkdir -p $out/chrome-linux
@@ -25,7 +33,7 @@ let
         # https://github.com/NixOS/nixpkgs/issues/136207#issuecomment-908637738
         # We add --disable-gpu to be able to run in gpu-less environments such
         # as headless nixos test vms.
-        makeWrapper ${chromium}/bin/chromium $out/chrome-linux/chrome \
+        makeWrapper ${chromium'}/bin/chromium $out/chrome-linux/chrome \
           --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
           --set-default FONTCONFIG_FILE ${fontconfig_file}
       '';
