@@ -19,12 +19,14 @@ let
     settingsFile
     extraConfigFile
   ];
+  finalConfigFile =
+    if (cfg.environmentFile != null) then "/var/lib/peering-manager/configuration.py" else configFile;
 
   pkg =
     (pkgs.peering-manager.overrideAttrs (old: {
       postInstall =
         ''
-          ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
+          ln -s ${finalConfigFile} $out/opt/peering-manager/peering_manager/configuration.py
         ''
         + lib.optionalString cfg.enableLdap ''
           ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
@@ -50,6 +52,32 @@ in
 
         This module requires a reverse proxy that serves `/static` separately.
         See this [example](https://github.com/peering-manager/contrib/blob/main/nginx.conf) on how to configure this.
+      '';
+    };
+
+    environmentFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      example = "/run/secrets/peering-manager.env";
+      description = ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
+
+        Secrets may be passed to the service without adding them to the world-readable
+        Nix store, by specifying placeholder variables as the option value in Nix and
+        setting these variables accordingly in the environment file.
+
+        ```
+          # snippet of peering-manager-related config
+          services.peering-manager.settings.SOCIAL_AUTH_OIDC_SECRET = "$PM_OIDC_SECRET";
+        ```
+
+        ```
+          # content of the environment file
+          PM_OIDC_SECRET=topsecret
+        ```
+
+        Note that this file needs to be available on the host on which
+        `peering-manager` is running.
       '';
     };
 
@@ -251,9 +279,22 @@ in
         };
       in
       {
+        peering-manager-config = lib.mkIf (cfg.environmentFile != null) (
+          lib.recursiveUpdate defaults {
+            description = "Peering Manager config file setup";
+            wantedBy = [ "peering-manager.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              EnvironmentFile = [ cfg.environmentFile ];
+              ExecStart = "${lib.getExe pkgs.envsubst} -i ${configFile} -o ${finalConfigFile}";
+            };
+          }
+        );
+
         peering-manager-migration = lib.recursiveUpdate defaults {
           description = "Peering Manager migrations";
           wantedBy = [ "peering-manager.target" ];
+          after = lib.mkIf (cfg.environmentFile != null) [ "peering-manager-config.service" ];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${pkg}/bin/peering-manager migrate";
@@ -263,7 +304,9 @@ in
         peering-manager = lib.recursiveUpdate defaults {
           description = "Peering Manager WSGI Service";
           wantedBy = [ "peering-manager.target" ];
-          after = [ "peering-manager-migration.service" ];
+          after = [
+            "peering-manager-migration.service"
+          ] ++ lib.optionals (cfg.environmentFile != null) [ "peering-manager-config.service" ];
 
           preStart = ''
             ${pkg}/bin/peering-manager remove_stale_contenttypes --no-input
