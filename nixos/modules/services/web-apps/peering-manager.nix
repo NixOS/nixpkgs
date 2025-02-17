@@ -28,9 +28,6 @@ let
         ''
         + lib.optionalString cfg.enableLdap ''
           ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
-        ''
-        + lib.optionalString cfg.enableOidc ''
-          ln -s ${cfg.oidcConfigPath} $out/opt/peering-manager/peering_manager/oidc_config.py
         '';
     })).override
       {
@@ -156,25 +153,22 @@ in
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';
     };
-
-    enableOidc = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable OIDC-Authentication for Peering Manager.
-
-        This requires a configuration file being pass through `oidcConfigPath`.
-      '';
-    };
-
-    oidcConfigPath = mkOption {
-      type = types.path;
-      description = ''
-        Path to the Configuration-File for OIDC-Authentication, will be loaded as `oidc_config.py`.
-        See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6b-oidc/#configuration) for possible options.
-      '';
-    };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "peering-manager" "enableOidc" ] ''
+      The enableOidc option has been removed, since peering-manager has OIDC support builtin since version >= 1.9.0.
+
+      Make sure to update your OIDC configuration according to the documentation:
+      https://peering-manager.readthedocs.io/en/v1.9.3/administration/authentication/oidc/
+    '')
+    (lib.mkRemovedOptionModule [ "services" "peering-manager" "oidcConfigPath" ] ''
+      The oidcConfigPath option has been removed, since peering-manager has OIDC support builtin since version >= 1.9.0.
+
+      The new config settings for OIDC are explained in the documentation:
+      https://peering-manager.readthedocs.io/en/v1.9.3/administration/authentication/oidc/
+    '')
+  ];
 
   config = lib.mkIf cfg.enable {
     services.peering-manager = {
@@ -210,18 +204,7 @@ in
             PEERINGDB_API_KEY = file.readline()
         '';
 
-      plugins = (
-        ps:
-        (lib.optionals cfg.enableLdap [ ps.django-auth-ldap ])
-        ++ (lib.optionals cfg.enableOidc (
-          with ps;
-          [
-            mozilla-django-oidc
-            pyopenssl
-            josepy
-          ]
-        ))
-      );
+      plugins = (ps: (lib.optionals cfg.enableLdap [ ps.django-auth-ldap ]));
     };
 
     system.build.peeringManagerPkg = pkg;
