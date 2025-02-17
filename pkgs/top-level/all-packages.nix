@@ -11762,6 +11762,8 @@ with pkgs;
 
   showoff = callPackage ../servers/http/showoff { };
 
+  stalwart-mail-webadmin = stalwart-mail.webadmin;
+
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
 
   inherit (callPackages ../servers/monitoring/sensu-go { })
