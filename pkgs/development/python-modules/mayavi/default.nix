@@ -4,7 +4,7 @@
   buildPythonPackage,
   envisage,
   fetchPypi,
-  numpy,
+  numpy_1,
   packaging,
   pyface,
   pygments,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     apptools
     envisage
-    numpy
+    numpy_1
     packaging
     pyface
     pygments
