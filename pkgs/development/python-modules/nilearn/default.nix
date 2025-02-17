@@ -73,5 +73,6 @@ buildPythonPackage rec {
     homepage = "https://nilearn.github.io";
     changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
