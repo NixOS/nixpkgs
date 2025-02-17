@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pycontribs";
-    repo = pname;
+    repo = "jira";
     tag = version;
     hash = "sha256-P3dbrBKpHvLNIA+JBeSXEQl4QVZ0FdKkNIU8oPHWw6k=";
   };
