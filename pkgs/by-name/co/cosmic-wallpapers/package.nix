@@ -50,7 +50,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # round_moons_nasa.jpg: https://www.planetary.org/space-images/the-solar-systems-round-moons
       publicDomain
     ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = with lib.maintainers; [
+      pandapip1
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.unix;
   };
 })
