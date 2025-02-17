@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A fast command-line tool for JSON Schema validation";
+    description = "Fast command-line tool for JSON Schema validation";
     homepage = "https://github.com/Stranger6667/jsonschema";
     changelog = "https://github.com/Stranger6667/jsonschema/releases/tag/rust-v${version}";
     license = lib.licenses.mit;
