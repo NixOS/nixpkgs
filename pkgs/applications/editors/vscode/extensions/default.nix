@@ -3422,22 +3422,7 @@ let
         };
       };
 
-      ms-pyright.pyright = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "pyright";
-          publisher = "ms-pyright";
-          version = "1.1.300";
-          hash = "sha256-GzRJeV4qfgM2kBv6U3MH7lMWl3CL6LWPI/9GaVWZL+o=";
-        };
-        meta = {
-          description = "VS Code static type checking for Python";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-pyright.pyright";
-          homepage = "https://github.com/Microsoft/pyright#readme";
-          changelog = "https://marketplace.visualstudio.com/items/ms-pyright.pyright/changelog";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ratsclub ];
-        };
-      };
+      ms-pyright.pyright = callPackage ./ms-pyright.pyright { };
 
       ms-python.black-formatter = buildVscodeMarketplaceExtension {
         mktplcRef = {
