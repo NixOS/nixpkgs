@@ -23,13 +23,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2023-06-05";
+    version = "2025-02-15";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "sha256-qiHmA/K4hdXVSFzergGhgssKR+kXp3X0cqtX1X5ayM4=";
+      hash = "sha256-Eh4TWoFfArFmpM/9tkrf2sChQ0zzOZJE9pElchu8DCM=";
     };
 
     nativeBuildInputs = [
@@ -39,8 +39,6 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
 
     propagatedBuildInputs = [ hicolor-icon-theme ];
 
-    # FIXME: https://hydra.nixos.org/build/286997490/nixlog/5
-    dontCheckForBrokenSymlinks = true;
     dontDropIconThemeCache = true;
 
     # These fixup steps are slow and unnecessary.

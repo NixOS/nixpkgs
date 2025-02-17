@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "supergfxctl";
-  version = "5.2.4";
+  version = "5.2.7";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "supergfxctl";
     rev = version;
-    hash = "sha256-ie5JPHBvypUtPStwA/aO4GeQ/qbHTzUJF3T4QuW6JNc=";
+    hash = "sha256-d3jN4i4oHRFDgr5f6y42gahrCfXBPB61T72x6IeiskM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Ef4lxuN7s5X/9I7VSub5DZVjQG8DhdMr/7CRtd2x9rs=";
+  cargoHash = "sha256-BM/fcXWyEWjAkqOdj2MItOzKknNUe9HMns30H1n5/xo=";
 
   postPatch = ''
     substituteInPlace data/supergfxd.service --replace /usr/bin/supergfxd $out/bin/supergfxd
