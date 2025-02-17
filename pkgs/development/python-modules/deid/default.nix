@@ -39,18 +39,16 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
-  version = "0.3.25";
+  version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   # Pypi version has no tests
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = pname;
     # the github repo does not contain Pypi version tags:
-    rev = "830966d52846c6b721fabb4cc1c75f39eabd55cc";
-    hash = "sha256-+slwnQSeRHpoCsvZ24Gq7rOBpQL37a6Iqrj4Mqj6PCo=";
+    rev = "14d1e4eb70f2c9fda43fca411794be9d8a5a8516";
+    hash = "sha256-YsLWHIO6whcBQriMYb0tDD9s/RrxlfeKGORF1UCOilI=";
   };
 
   build-system = [ setuptools ];
@@ -71,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "Best-effort anonymization for medical images";
     mainProgram = "deid";
-    changelog = "https://github.com/pydicom/deid/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pydicom/deid/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pydicom.github.io/deid";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
