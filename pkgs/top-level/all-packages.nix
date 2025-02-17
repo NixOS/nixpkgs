@@ -10888,8 +10888,8 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_23;
-  buildGoModule = buildGo123Module;
+  go = go_1_24;
+  buildGoModule = buildGo124Module;
 
   go_1_22 = callPackage ../development/compilers/go/1.22.nix { };
   buildGo122Module = callPackage ../build-support/go/module.nix {
