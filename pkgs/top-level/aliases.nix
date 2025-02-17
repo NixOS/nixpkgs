@@ -701,6 +701,7 @@ mapAliases {
   libgme = game-music-emu; # Added 2022-07-20
   libgnome-keyring3 = libgnome-keyring; # Added 2024-06-22
   libgpgerror = throw "'libgpgerror' has been renamed to/replaced by 'libgpg-error'"; # Converted to throw 2024-10-17
+  libguestfs-appliance = throw "'libguestfs-appliance' has been renamed to 'libguestfs-appliance-fedora-bin'; also consider using 'libguestfs-appliance-debian' instead";
   libheimdal = heimdal; # Added 2022-11-18
   libiconv-darwin = darwin.libiconv;
   libixp_hg = libixp;
