@@ -14,7 +14,7 @@ let
 in
 crystal.buildCrystalPackage rec {
   pname = "kakoune.cr";
-  version = "unstable-2021-11-12";
+  version = "0-unstable-2021-11-12";
 
   src = fetchFromGitHub {
     owner = "alexherbo2";
@@ -47,14 +47,16 @@ crystal.buildCrystalPackage rec {
     $out/bin/kcr --help
   '';
 
-  meta = with lib; {
+  dontCheckForBrokenSymlinks = true;
+
+  meta = {
     homepage = "https://github.com/alexherbo2/kakoune.cr";
     description = "Command-line tool for Kakoune";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       philiptaron
       malte-v
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

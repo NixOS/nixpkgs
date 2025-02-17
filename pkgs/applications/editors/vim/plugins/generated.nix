@@ -7051,19 +7051,6 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
-  lualine-nvim = buildVimPlugin {
-    pname = "lualine.nvim";
-    version = "2025-02-08";
-    src = fetchFromGitHub {
-      owner = "nvim-lualine";
-      repo = "lualine.nvim";
-      rev = "f4f791f67e70d378a754d02da068231d2352e5bc";
-      sha256 = "12jm3vc3mi0p9kjw7g1cd6a9nkgws1mvq2h7lpfmflad8zfmw35q";
-    };
-    meta.homepage = "https://github.com/nvim-lualine/lualine.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
   luasnip-latex-snippets-nvim = buildVimPlugin {
     pname = "luasnip-latex-snippets.nvim";
     version = "2024-11-25";
@@ -11017,20 +11004,6 @@ final: prev:
       sha256 = "01ymvhlych3ymqmf1afmyzr653fx0nviimzg2gwjc4g8h0vk2c5d";
     };
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  oil-nvim = buildVimPlugin {
-    pname = "oil.nvim";
-    version = "2025-02-13";
-    src = fetchFromGitHub {
-      owner = "stevearc";
-      repo = "oil.nvim";
-      rev = "7cde5aab10f564408e9ac349d457d755422d58cd";
-      sha256 = "0x6vaapj5x7a4jhdc8mvzb701cfvziyb9ywj9sshsyfdhw9q8phs";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/stevearc/oil.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
