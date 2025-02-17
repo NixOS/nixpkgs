@@ -398,6 +398,10 @@ checkConfigError 'infinite recursion encountered' config.nonLazyResult ./lazy-at
 checkConfigOutput '^"mergedName.<id>.nested"$' config.result ./name-merge-attrsWith-1.nix
 checkConfigError 'The option .mergedName. in .*\.nix. is already declared in .*\.nix' config.mergedName ./name-merge-attrsWith-2.nix
 
+# Test the attrsOf functor.wrapped warning
+# shellcheck disable=2016
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `type.functor.wrapped` attribute of the option `mergedLazyLazy` is accessed, use `type.nestedTypes.elemType` instead.' options.mergedLazyLazy.type.functor.wrapped ./lazy-attrsWith.nix
+
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
   config.value ./declare-int-unsigned-value.nix ./define-value-list.nix ./define-value-int-positive.nix
