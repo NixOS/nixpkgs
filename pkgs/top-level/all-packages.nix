@@ -355,7 +355,7 @@ with pkgs;
   };
 
   vcpkg-tool = callPackage ../by-name/vc/vcpkg-tool/package.nix {
-    fmt = fmt_10;
+    fmt = fmt_11;
   };
 
   r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
@@ -1080,8 +1080,6 @@ with pkgs;
   supermin = callPackage ../tools/virtualization/supermin {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
-
-  tailwindcss = callPackage ../development/tools/tailwindcss { };
 
   ufolint = with python3Packages; toPythonApplication ufolint;
 
@@ -6950,7 +6948,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_27 erlang_26 erlang_25
+    erlang erlang_28 erlang_27 erlang_26 erlang_25
     elixir elixir_1_18 elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14
     elixir-ls;
 
@@ -6968,10 +6966,14 @@ with pkgs;
   beam25Packages = recurseIntoAttrs beam.packages.erlang_25;
   beam26Packages = recurseIntoAttrs beam.packages.erlang_26;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27;
+  # 28 is pre-release
+  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28;
 
   beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25;
   beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27;
+  # 28 is pre-release
+  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28;
 
   erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
@@ -16004,8 +16006,6 @@ with pkgs;
   ### GAMES/DOOM-PORTS
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
-
-  doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
 
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 

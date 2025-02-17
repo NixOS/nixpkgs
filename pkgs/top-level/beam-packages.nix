@@ -31,6 +31,14 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
+    erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
+      wxGTK = wxGTK32;
+      parallelBuild = true;
+      # ex_doc failing to build with erlang 28
+      inherit (beam_nodocs.packages.erlang_27) ex_doc;
+      inherit ex_docSupport wxSupport systemdSupport;
+    };
+
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
@@ -76,6 +84,7 @@ in
   # appropriate Erlang/OTP version.
   packages = {
     erlang = self.packages.${self.latestVersion};
+    erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
