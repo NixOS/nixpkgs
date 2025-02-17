@@ -1,24 +1,35 @@
 {
   autoconf-archive,
   autoreconfHook,
+  buildEnv,
   clangStdenv,
   cmocka,
+  dbus,
+  expect,
   fetchFromGitHub,
-  glibc,
+  gnutls,
+  iproute2,
   lib,
   libyaml,
   makeWrapper,
   opensc,
+  openssh,
   openssl,
+  nss,
+  p11-kit,
   patchelf,
   pkg-config,
   python3,
   stdenv,
   sqlite,
+  swtpm,
   tpm2-abrmd,
+  tpm2-openssl,
   tpm2-pkcs11, # for passthru abrmd tests
   tpm2-tools,
   tpm2-tss,
+  which,
+  xxd,
   abrmdSupport ? false,
   fapiSupport ? true,
   enableFuzzing ? false,
@@ -38,25 +49,37 @@ chosenStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-W74ckrpK7ypny1L3Gn7nNbOVh8zbHavIk/TX3b8XbI8=";
   };
 
-  # The preConfigure phase doesn't seem to be working here
-  # ./bootstrap MUST be executed as the first step, before all
-  # of the autoreconfHook stuff
+  # Disable Java‐based tests because of missing dependencies
+  patches = [ ./disable-java-integration.patch ];
+
   postPatch = ''
-    echo "$version" > VERSION
+    echo ${lib.escapeShellArg finalAttrs.version} >VERSION
 
     # Don't run git in the bootstrap
     substituteInPlace bootstrap --replace-warn "git" "# git"
 
-    # Don't run tests with dbus
-    substituteInPlace Makefile.am --replace-fail "dbus-run-session" "env"
+    # Provide configuration file for D-Bus
+    substituteInPlace Makefile.am --replace-fail \
+      "dbus-run-session" \
+      "dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf"
 
-    patchShebangs test
+    # Disable failing tests
+    sed -E -i '/\<test\/integration\/(pkcs-crypt\.int|pkcs11-tool\.sh)\>/d' \
+      Makefile-integration.am
 
+    patchShebangs test tools
+
+    # The preConfigure phase doesn't seem to be working here
+    # ./bootstrap MUST be executed as the first step, before all
+    # of the autoreconfHook stuff
     ./bootstrap
   '';
 
   configureFlags =
-    lib.singleton (lib.enableFeature finalAttrs.doCheck "unit")
+    [
+      (lib.enableFeature finalAttrs.doCheck "unit")
+      (lib.enableFeature finalAttrs.doCheck "integration")
+    ]
     ++ lib.optionals enableFuzzing [
       "--enable-fuzzing"
       "--disable-hardening"
@@ -72,15 +95,20 @@ chosenStdenv.mkDerivation (finalAttrs: {
     patchelf
     pkg-config
     (python3.withPackages (
-      ps: with ps; [
+      ps:
+      with ps;
+      [
         packaging
         pyyaml
+        python-pkcs11
         cryptography
         pyasn1-modules
         tpm2-pytss
       ]
+      ++ cryptography.optional-dependencies.ssh
     ))
   ];
+
   buildInputs = [
     libyaml
     opensc
@@ -89,8 +117,28 @@ chosenStdenv.mkDerivation (finalAttrs: {
     tpm2-tools
     tpm2-tss
   ];
+
+  nativeCheckInputs = [
+    dbus
+    expect
+    gnutls
+    iproute2
+    nss.tools
+    opensc
+    openssh
+    openssl
+    p11-kit
+    sqlite
+    swtpm
+    tpm2-abrmd
+    tpm2-tools
+    which
+    xxd
+  ];
+
   checkInputs = [
     cmocka
+    tpm2-abrmd
   ];
 
   enableParallelBuilding = true;
@@ -106,27 +154,42 @@ chosenStdenv.mkDerivation (finalAttrs: {
   dontStrip = true;
   dontPatchELF = true;
 
-  # To be able to use the userspace resource manager, the RUNPATH must
-  # explicitly include the tpm2-abrmd shared libraries.
-  preFixup =
+  preConfigure =
     let
-      rpath = lib.makeLibraryPath (
-        (lib.optional abrmdSupport tpm2-abrmd)
-        ++ [
-          glibc
-          libyaml
+      ldflags = [
+        "-Wl,--push-state,--no-as-needed"
+        "-ltss2-tcti-device"
+        "-ltss2-tcti-tabrmd"
+        "-Wl,--pop-state"
+      ];
+    in
+    lib.optionalString abrmdSupport ''
+      configureFlagsArray+=(EXTRA_LDFLAGS=${lib.escapeShellArg ldflags})
+    '';
+
+  preCheck =
+    let
+      openssl-modules = buildEnv {
+        name = "openssl-modules";
+        pathsToLink = [ "/lib/ossl-modules" ];
+        paths = map lib.getLib [
           openssl
-          sqlite
-          tpm2-tss
-        ]
-      );
+          tpm2-openssl
+        ];
+      };
     in
     ''
-      patchelf \
-        --set-rpath ${rpath} \
-        ${lib.optionalString abrmdSupport "--add-needed ${lib.makeLibraryPath [ tpm2-abrmd ]}/libtss2-tcti-tabrmd.so"} \
-        --add-needed ${lib.makeLibraryPath [ tpm2-tss ]}/libtss2-tcti-device.so \
-        $out/lib/libtpm2_pkcs11.so.0.0.0
+      # Enable tests to load TCTI modules
+      export LD_LIBRARY_PATH+=":${
+        lib.makeLibraryPath [
+          swtpm
+          tpm2-tools
+          tpm2-abrmd
+        ]
+      }"
+
+      # Enable tests to load TPM2 OpenSSL module
+      export OPENSSL_MODULES="${openssl-modules}/lib/ossl-modules"
     '';
 
   postInstall = ''
