@@ -87,6 +87,7 @@ let
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       itree-io = callPackage ../development/coq-modules/itree-io { };
+      jasmin = callPackage ../development/coq-modules/jasmin {};
       json = callPackage ../development/coq-modules/json {};
       lemma-overloading = callPackage ../development/coq-modules/lemma-overloading {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
