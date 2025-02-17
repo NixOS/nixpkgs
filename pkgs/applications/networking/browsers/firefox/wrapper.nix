@@ -320,18 +320,20 @@ let
           ln -sfT "$target" "$out/$l"
         done
 
+        cd "$out"
+
       '' + lib.optionalString isDarwin ''
         # These files have to be copied and not symlinked, otherwise tabs crash.
         # Maybe related to how omni.ja file is mmapped into memory. See:
         # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
-        for path in "" "browser"; do
-          omniPath="${appPath}/Contents/Resources/$path/"
-          rm "$out/$omniPath/omni.ja"
-          cp "${browser}/$omniPath/omni.ja" "$out/$omniPath/"
+        cd "${appPath}"
+        for file in $(find . -type l -name "omni.ja"); do
+          rm "$file"
+          cp "${browser}/${appPath}/$file" "$file"
         done
+        cd ..
 
       '' + ''
-        cd "$out"
 
         # create the wrapper
 
