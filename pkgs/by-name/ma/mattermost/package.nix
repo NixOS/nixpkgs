@@ -246,20 +246,21 @@ buildMattermost rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ryantm
       numinit
       kranzes
       mgdelacroix
       fsagbuya
     ];
+    platforms = lib.platforms.linux;
     mainProgram = "mattermost";
   };
 }
