@@ -11,6 +11,7 @@
   lxml,
   pillow,
   pycryptodomex,
+  pyjwt,
   pyyaml,
   qrcode,
   qrcode-terminal,
@@ -22,20 +23,20 @@
 }:
 buildPythonPackage rec {
   pname = "bilibili-api-python";
-  version = "16.3.0";
+  version = "17.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bilibili_api_python";
     inherit version;
-    hash = "sha256-mwhyFc3b1qA7W76gaBcAup+Wca6gQAdRwZJaZXOHqCw=";
+    hash = "sha256-pZrn78/uIlivT+OSlNyrbO6vuxBgeigfdZ9AScOM1Ak=";
   };
 
-  postPatch = ''
-    # The upstream uses requirements.txt, which overly strict version constraints.
-    substituteInPlace requirements.txt \
-      --replace-fail "~=" ">="
-  '';
+  # The upstream uses requirements.txt, which overly strict version constraints.
+  pythonRelaxDeps = [
+    "beautifulsoup4"
+    "lxml"
+  ];
 
   build-system = [
     setuptools-scm
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     tqdm
     yarl
     pycryptodomex
+    pyjwt
     qrcode-terminal
   ];
 
