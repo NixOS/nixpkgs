@@ -6178,6 +6178,11 @@ with pkgs;
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
+  gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
+    vlc =
+      vlc.overrideAttrs (old: { buildInputs = old.buildInputs ++ [ x264 ]; });
+  };
+
   gwe = callPackage ../tools/misc/gwe {
     nvidia_x11 = linuxPackages.nvidia_x11;
   };
