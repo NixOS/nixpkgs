@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   immich,
   python3,
   nixosTests,
@@ -78,6 +77,13 @@ python.pkgs.buildPythonApplication rec {
         -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\"
         --log-config-json $out/share/immich/log_conf.json"
   '';
+
+  disabledTests = [
+    # Fails when onnxruntime has cudaSupport=true https://github.com/NixOS/nixpkgs/issues/352113
+    # when running a version that fails this test I see no issues using immich with cuda
+    # https://github.com/immich-app/immich/blob/2c88ce8559160a020d72aec753f8c4dc0128ef1c/machine-learning/app/test_main.py#L241
+    "test_sets_default_sess_options"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) immich;
