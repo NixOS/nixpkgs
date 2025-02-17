@@ -17,7 +17,6 @@
   mkYarnModules,
   python3,
   # Misc dependencies
-  arrow-cpp,
   coc-clangd,
   coc-css,
   coc-diagnostic,
@@ -27,7 +26,6 @@
   dasht,
   deno,
   direnv,
-  duckdb,
   fzf,
   gawk,
   himalaya,
@@ -1101,10 +1099,6 @@ in
     };
   };
 
-  feline-nvim = super.feline-nvim.overrideAttrs {
-    nvimSkipModule = "minimal_init";
-  };
-
   flash-nvim = super.flash-nvim.overrideAttrs {
     # Docs require lazyvim
     # dependencies = with self; [ lazy-nvim ];
@@ -1345,20 +1339,21 @@ in
     ];
   };
 
+  helpview-nvim = super.helpview-nvim.overrideAttrs {
+    nvimSkipModule = "definitions.__vimdoc";
+  };
+
   hex-nvim = super.hex-nvim.overrideAttrs {
     runtimeDeps = [ xxd ];
   };
 
   himalaya-vim = super.himalaya-vim.overrideAttrs {
     buildInputs = [ himalaya ];
-    src = fetchFromSourcehut {
-      owner = "~soywod";
-      repo = "himalaya-vim";
-      rev = "v${himalaya.version}";
-      sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
-    };
     # vim plugin with optional telescope lua module
-    nvimSkipModule = "himalaya.folder.pickers.telescope";
+    nvimSkipModule = [
+      "himalaya.folder.pickers.fzflua"
+      "himalaya.folder.pickers.telescope"
+    ];
   };
 
   hover-nvim = super.hover-nvim.overrideAttrs {
@@ -1464,6 +1459,7 @@ in
       "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
+      "lazyvim.plugins.extras.coding.neogen"
       "lazyvim.plugins.extras.editor.fzf"
       "lazyvim.plugins.extras.editor.snacks_picker"
       "lazyvim.plugins.extras.editor.telescope"
@@ -2869,18 +2865,22 @@ in
       "snacks.debug"
       "snacks.dim"
       "snacks.git"
+      "snacks.image.image"
+      "snacks.image.init"
+      "snacks.image.placement"
       "snacks.indent"
       "snacks.input"
       "snacks.lazygit"
       "snacks.notifier"
+      "snacks.picker.actions"
+      "snacks.picker.config.highlights"
+      "snacks.picker.core.list"
       "snacks.scratch"
       "snacks.scroll"
       "snacks.terminal"
       "snacks.win"
       "snacks.words"
       "snacks.zen"
-      "snacks.picker.config.highlights"
-      "snacks.picker.actions"
       # Optional trouble integration
       "trouble.sources.profiler"
       # TODO: Plugin requires libsqlite available, create a test for it
@@ -3913,6 +3913,7 @@ in
     nvimSkipModule = [
       "zk.pickers.fzf_lua"
       "zk.pickers.minipick"
+      "zk.pickers.snacks_picker"
       "zk.pickers.telescope"
     ];
   };
@@ -4003,10 +4004,12 @@ in
       "gitsigns-nvim"
       "image-nvim"
       "lsp-progress-nvim"
+      "lualine-nvim"
       "luasnip"
       "lush-nvim"
       "lz-n"
       "lze"
+      "lzextras"
       "lzn-auto-require"
       "middleclass"
       "neorg"
@@ -4016,6 +4019,7 @@ in
       "nvim-dbee"
       "nvim-nio"
       "nvim-web-devicons"
+      "oil-nvim"
       "orgmode"
       "papis-nvim"
       "rest-nvim"

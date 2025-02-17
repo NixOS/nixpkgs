@@ -67,13 +67,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.10.3";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-qFjR1Z2GZsNpgjlbHw+o+dLCBLZQ9D9c93FFqFGM8T4=";
+    hash = "sha256-Bbpwfnz8xPyNLZ+UtcYw4arpzGEh3znqncExl4DlByA=";
   };
 
   postPatch =
@@ -86,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       substituteInPlace "libfreerdp/freerdp.pc.in" \
         --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+
+      substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
+        --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
     ''
     + lib.optionalString (pcsclite != null) ''
       substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \

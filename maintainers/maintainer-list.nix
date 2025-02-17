@@ -574,6 +574,11 @@
     githubId = 2071575;
     name = "Adam C. Stephens";
   };
+  adamjhf = {
+    github = "adamjhf";
+    githubId = 50264672;
+    name = "Adam Freeth";
+  };
   adamt = {
     email = "mail@adamtulinius.dk";
     github = "adamtulinius";
@@ -1515,6 +1520,12 @@
     github = "andrewchambers";
     githubId = 962885;
     name = "Andrew Chambers";
+  };
+  andrewgazelka = {
+    email = "andrew@gazelka.com";
+    github = "andrewgazelka";
+    githubId = 7644264;
+    name = "Andrew Gazelka";
   };
   andrewrk = {
     email = "superjoe30@gmail.com";
@@ -17500,6 +17511,13 @@
     githubId = 7820716;
     name = "orthros";
   };
+  orzklv = {
+    email = "sakhib@orzklv.uz";
+    github = "orzklv";
+    githubId = 54666588;
+    name = "Sokhibjon Orzikulov";
+    keys = [ { fingerprint = "00D2 7BC6 8707 0683 FBB9  137C 3C35 D3AF 0DA1 D6A8"; } ];
+  };
   osbm = {
     email = "osmanfbayram@gmail.com";
     github = "osbm";
@@ -19620,6 +19638,13 @@
     github = "remexre";
     githubId = 4196789;
     name = "Nathan Ringo";
+  };
+  remyvv = {
+    name = "Remy van Velthuijsen";
+    email = "remy@remysplace.de";
+    github = "remyvv";
+    githubId = 2862815;
+    keys = [ { fingerprint = "1A76 F3A3 F843 2D5F D7E5  D07B 6FD8 F273 5BEB D1FC"; } ];
   };
   renatoGarcia = {
     email = "fgarcia.renato@gmail.com";
@@ -23105,6 +23130,12 @@
     github = "thanegill";
     githubId = 1141680;
     name = "Thane Gill";
+  };
+  ThaoTranLePhuong = {
+    email = "thaotran.lp@gmail.com";
+    github = "Thao-Tran";
+    githubId = 7060816;
+    name = "Thao-Tran Le-Phuong";
   };
   thblt = {
     name = "Thibault Polge";
