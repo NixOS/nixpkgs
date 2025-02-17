@@ -28,16 +28,11 @@ buildNpmPackage rec {
 
   postPatch =
     let
-      esbuildPrefix = lib.concatStringsSep " " (
-        [
-          "esbuild"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # Workaround for 'No loader is configured for ".node" files: node_modules/fsevents/fsevents.node'
-          # esbuild issue is https://github.com/evanw/esbuild/issues/1051
-          "--external:fsevents"
-        ]
-      );
+      esbuildPrefix =
+        "esbuild"
+        # Workaround for 'No loader is configured for ".node" files: node_modules/fsevents/fsevents.node'
+        # esbuild issue is https://github.com/evanw/esbuild/issues/1051
+        + lib.optionalString stdenv.hostPlatform.isDarwin " --external:fsevents";
     in
     ''
       substituteInPlace package.json \
