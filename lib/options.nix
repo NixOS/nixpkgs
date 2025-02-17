@@ -426,18 +426,29 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}'. Definition values:${showDefs defs}";
 
-  /*
+  /**
     Require a single definition.
 
     WARNING: Does not perform nested checks, as this does not run the merge function!
   */
   mergeOneOption = mergeUniqueOption { message = ""; };
 
-  /*
+  /**
     Require a single definition.
 
     NOTE: When the type is not checked completely by check, pass a merge function for further checking (of sub-attributes, etc).
-   */
+
+
+    # Inputs
+
+    `loc`
+
+    : 2\. Function argument
+
+    `defs`
+
+    : 3\. Function argument
+  */
   mergeUniqueOption = args@{
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
@@ -452,7 +463,20 @@ rec {
         assert length defs > 1;
         throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
-  /* "Merge" option definitions by checking that they all have the same value. */
+  /**
+    "Merge" option definitions by checking that they all have the same value.
+
+
+    # Inputs
+
+    `loc`
+
+    : 1\. Function argument
+
+    `defs`
+
+    : 2\. Function argument
+  */
   mergeEqualOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     # Return early if we only have one element
@@ -465,23 +489,47 @@ rec {
       else
         first) (head defs) (tail defs)).value;
 
-  /* Extracts values of all "value" keys of the given list.
+  /**
+    Extracts values of all "value" keys of the given list.
 
-     Type: getValues :: [ { value :: a; } ] -> [a]
+    # Type
 
-     Example:
-       getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
-       getValues [ ]                               // => [ ]
+    ```
+    getValues :: [ { value :: a; } ] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `getValues` usage example
+
+    ```nix
+    getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
+    getValues [ ]                               // => [ ]
+    ```
+
+    :::
   */
   getValues = map (x: x.value);
 
-  /* Extracts values of all "file" keys of the given list
+  /**
+    Extracts values of all "file" keys of the given list
 
-     Type: getFiles :: [ { file :: a; } ] -> [a]
+    # Type
 
-     Example:
-       getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
-       getFiles [ ]                                         // => [ ]
+    ```
+    getFiles :: [ { file :: a; } ] -> [a]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `getFiles` usage example
+
+    ```nix
+    getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
+    getFiles [ ]                                         // => [ ]
+    ```
+
+    :::
   */
   getFiles = map (x: x.file);
 
@@ -530,16 +578,24 @@ rec {
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 
-  /* This function recursively removes all derivation attributes from
-     `x` except for the `name` attribute.
+  /**
+    This function recursively removes all derivation attributes from
+    `x` except for the `name` attribute.
 
-     This is to make the generation of `options.xml` much more
-     efficient: the XML representation of derivations is very large
-     (on the order of megabytes) and is not actually used by the
-     manual generator.
+    This is to make the generation of `options.xml` much more
+    efficient: the XML representation of derivations is very large
+    (on the order of megabytes) and is not actually used by the
+    manual generator.
 
-     This function was made obsolete by renderOptionValue and is kept for
-     compatibility with out-of-tree code.
+    This function was made obsolete by renderOptionValue and is kept for
+    compatibility with out-of-tree code.
+
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
   */
   scrubOptionValue = x:
     if isDerivation x then
@@ -549,8 +605,16 @@ rec {
     else x;
 
 
-  /* Ensures that the given option value (default or example) is a `_type`d string
-     by rendering Nix values to `literalExpression`s.
+  /**
+    Ensures that the given option value (default or example) is a `_type`d string
+    by rendering Nix values to `literalExpression`s.
+
+
+    # Inputs
+
+    `v`
+
+    : 1\. Function argument
   */
   renderOptionValue = v:
     if v ? _type && v ? text then v
@@ -560,10 +624,18 @@ rec {
     } v);
 
 
-  /* For use in the `defaultText` and `example` option attributes. Causes the
-     given string to be rendered verbatim in the documentation as Nix code. This
-     is necessary for complex values, e.g. functions, or values that depend on
-     other values or packages.
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given string to be rendered verbatim in the documentation as Nix code. This
+    is necessary for complex values, e.g. functions, or values that depend on
+    other values or packages.
+
+
+    # Inputs
+
+    `text`
+
+    : 1\. Function argument
   */
   literalExpression = text:
     if ! isString text then throw "literalExpression expects a string."
@@ -571,9 +643,17 @@ rec {
 
   literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
-  /* For use in the `defaultText` and `example` option attributes. Causes the
-     given MD text to be inserted verbatim in the documentation, for when
-     a `literalExpression` would be too hard to read.
+  /**
+    For use in the `defaultText` and `example` option attributes. Causes the
+    given MD text to be inserted verbatim in the documentation, for when
+    a `literalExpression` would be too hard to read.
+
+
+    # Inputs
+
+    `text`
+
+    : 1\. Function argument
   */
   literalMD = text:
     if ! isString text then throw "literalMD expects a string."
@@ -581,18 +661,34 @@ rec {
 
   # Helper functions.
 
-  /* Convert an option, described as a list of the option parts to a
-     human-readable version.
+  /**
+    Convert an option, described as a list of the option parts to a
+    human-readable version.
 
-     Example:
-       (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
-       (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
-       (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.\"2bwm\".enable"
 
-     Placeholders will not be quoted as they are not actual values:
-       (showOption ["foo" "*" "bar"]) == "foo.*.bar"
-       (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
-       (showOption ["foo" "<myPlaceholder>" "bar"]) == "foo.<myPlaceholder>.bar"
+    # Inputs
+
+    `parts`
+
+    : 1\. Function argument
+
+
+    # Examples
+    :::{.example}
+    ## `showOption` usage example
+
+    ```nix
+    (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
+      (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
+      (showOption ["windowManager" "2bwm" "enable"]) == "windowManager.\"2bwm\".enable"
+
+    Placeholders will not be quoted as they are not actual values:
+      (showOption ["foo" "*" "bar"]) == "foo.*.bar"
+      (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+      (showOption ["foo" "<myPlaceholder>" "bar"]) == "foo.<myPlaceholder>.bar"
+    ```
+
+    :::
   */
   showOption = parts: let
     # If the part is a named placeholder of the form "<...>" don't escape it.
