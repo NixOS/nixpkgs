@@ -1,4 +1,4 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
 # Based on ../elixir-ls/default.nix
 
 let
@@ -40,6 +40,8 @@ mixRelease {
     cp -v ex_doc $out/bin
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/elixir-lang/ex_doc";
