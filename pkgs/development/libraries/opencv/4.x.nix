@@ -104,7 +104,7 @@ let
   inherit (lib.strings) cmakeBool cmakeFeature cmakeOptionType concatStrings concatStringsSep optionalString;
   inherit (lib.trivial) flip;
 
-  version = "4.9.0";
+  version = "4.11.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -115,21 +115,21 @@ let
     owner = "opencv";
     repo = "opencv";
     rev = version;
-    hash = "sha256-3qqu4xlRyMbPKHHTIT+iRRGtpFlcv0NU8GNZpgjdi6k=";
+    hash = "sha256-oiU4CwoMfuUbpDtujJVTShMCzc5GsnIaprC4DzkSzEM=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     rev = version;
-    hash = "sha256-K74Ghk4uDqj4OWEzDxT2R3ERi+jkAWZszzezRenfuZ8=";
+    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     rev = version;
-    hash = "sha256-pActKi7aN5EOZq2Fpf5mALnZq71c037/R3Q6wJ4uCfQ=";
+    hash = "sha256-EqlGlemztYlk03MX1LAviArWT+OA3/qL3jfgHYC+SP8=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -210,10 +210,10 @@ let
   ade = rec {
     src = fetchurl {
       url = "https://github.com/opencv/ade/archive/${name}";
-      hash = "sha256-WG/GudVpkO10kOJhoKXFMj672kggvyRYCIpezal3wcE=";
+      hash = "sha256-O+Yshk3N2Lkl6S9qWxWnoDmBngSms88IiCfwjPLMB78=";
     };
-    name = "v0.1.2d.zip";
-    md5 = "dbb095a8bf3008e91edbbf45d8d34885";
+    name = "v0.1.2e.zip";
+    md5 = "962ce79e0b95591f226431f7b5f152cd";
     dst = ".cache/ade";
   };
 
