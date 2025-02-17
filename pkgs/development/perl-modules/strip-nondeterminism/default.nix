@@ -8,6 +8,7 @@
   ArchiveCpio,
   SubOverride,
   shortenPerlShebang,
+  gitUpdater,
 }:
 
 buildPerlPackage rec {
@@ -63,6 +64,10 @@ buildPerlPackage rec {
   # running shortenPerlShebang in postBuild results in non-functioning binary 'exec format error'
   doCheck = !stdenv.hostPlatform.isDarwin;
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     description = "Perl module for stripping bits of non-deterministic information";
