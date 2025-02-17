@@ -5,6 +5,7 @@
   rustPlatform,
   libcosmicAppHook,
   just,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-applibrary";
@@ -39,6 +40,15 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version"
+      "unstable"
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
