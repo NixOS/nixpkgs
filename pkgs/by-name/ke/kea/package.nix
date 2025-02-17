@@ -11,7 +11,7 @@
   # runtime
   withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
   withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
-  boost,
+  boost186,
   libmysqlclient,
   log4cplus,
   openssl,
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   sphinxRoot = "doc/sphinx";
 
   buildInputs = [
-    boost
+    boost186  # does not build with 1.87 yet, see https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2523
     libmysqlclient
     log4cplus
     openssl

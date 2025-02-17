@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-synologydsm-api";
-  version = "2.5.3";
+  version = "2.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,13 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-synologydsm-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3DpgJqL8pSiAK/t/Qe2CxntQStTqDumkivhnPKHVlnE=";
+    tag = "v${version}";
+    hash = "sha256-BkkI2dhzf58vBoT6UhBsn6MyS7KvYo70C80ZLGOJG08=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiofiles
+    aiohttp
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

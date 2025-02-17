@@ -54,10 +54,6 @@ rustPlatform.buildRustPackage {
   # versionCheckProgramArg = [ "--version" ];
   # doInstallCheck = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd earbuds \
       --bash <($out/bin/earbuds --generate bash) \

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   zig_0_13,
-  apple-sdk_11,
   callPackage,
 }:
 
@@ -31,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     zig.hook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   postInstall = ''
     installManPage man/linuxwave.1

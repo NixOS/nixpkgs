@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "textual-universal-directorytree";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hUig0aJWSS0FsgRIrs74/uVaQgH6tczJWO5rj6TVOvQ=";
   };
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Textual plugin for a DirectoryTree compatible with remote filesystems";
     homepage = "https://github.com/juftin/textual-universal-directorytree";
-    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/juftin/textual-universal-directorytree/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

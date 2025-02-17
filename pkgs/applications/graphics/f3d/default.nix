@@ -21,15 +21,15 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "2.5.1";
+  version = "3.0.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-S3eigdW6rkDRSm4uCCTFHx5fhJGNVWpAAAKboougr08=";
+    tag = "v${version}";
+    hash = "sha256-mnDmo5qzdnElhvZwBmHL3xC2o8iLuvYyfZXHoaAUG08=";
   };
 
   nativeBuildInputs = [

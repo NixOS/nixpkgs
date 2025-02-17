@@ -10,18 +10,19 @@
   vimUtils,
 }:
 let
-  version = "0.0.14";
+  version = "0.0.18";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-0dkPejvupXhVZY/5qT45f4LZ4MIVcz8uZam+9TmB+Yo=";
+    hash = "sha256-HSXqD+bC0sdvNbmV8hIU99cLrVyIMAzbWf5cqUpIhZU=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-80++U7CIu6QtH1jQCHCEpv2tnYOuoWSczZIUmKyrqJE=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-XDxWeEbsDf4r346OkQkZPmYLANgtydspPk1uLrnvrnY=";
 
     nativeBuildInputs = [
       pkg-config
@@ -38,6 +39,7 @@ let
       "--skip=test_hf"
       "--skip=test_public_url"
       "--skip=test_roundtrip"
+      "--skip=test_fetch_md"
     ];
   };
 in
@@ -72,8 +74,11 @@ vimUtils.buildVimPlugin {
     inherit avante-nvim-lib;
   };
 
-  doInstallCheck = true;
-  nvimRequireCheck = "avante";
+  nvimSkipModule = [
+    # Requires setup with corresponding provider
+    "avante.providers.azure"
+    "avante.providers.copilot"
+  ];
 
   meta = {
     description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";

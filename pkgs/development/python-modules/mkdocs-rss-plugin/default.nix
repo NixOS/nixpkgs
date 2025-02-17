@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.16.0";
+  version = "1.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6FTOJQqK9lKYt6cVpKvMcNUrhSwX26032Vr4JyZ6sI8=";
+    tag = version;
+    hash = "sha256-Qa8EgjucJaxvKivE45kXSUgTx5RnLEpYCNZJRTO2E1Q=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "MkDocs plugin to generate a RSS feeds for created and updated pages, using git log and YAML frontmatter";
     homepage = "https://github.com/Guts/mkdocs-rss-plugin";
-    changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "teepark";
     repo = "python-lzf";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-n5E75kRqe0dDbyFicoyLBAVi/SuoUU7qJka3viipQk8=";
   };
 

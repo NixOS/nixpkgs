@@ -45,6 +45,11 @@ in
         default = 14;
       };
     };
+    allowClientIds = lib.mkOption {
+      description = "Client IDs to allow (can be repeated; if not specified, all clients are allowed)";
+      type = types.listOf types.str;
+      default = [ ];
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -77,7 +82,8 @@ in
             --port ${builtins.toString cfg.port} \
             --data-dir ${cfg.dataDir} \
             --snapshot-versions ${builtins.toString cfg.snapshot.versions} \
-            --snapshot-days ${builtins.toString cfg.snapshot.days}
+            --snapshot-days ${builtins.toString cfg.snapshot.days} \
+            ${lib.concatMapStringsSep " " (id: "--allow-client-id ${id}") cfg.allowClientIds}
         '';
       };
     };

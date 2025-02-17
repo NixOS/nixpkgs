@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-gravity";
-  version = "0-unstable-2024-08-21";
+  version = "0-unstable-2024-12-29";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "gravity";
-    rev = "96787ed3139717ea6061f6e259e9fed3e483274a";
-    hash = "sha256-R87u7CX2n7iOOEEB3cHae2doqCn/skChHgeU+RNsHVk=";
+    rev = "eca5e835cd3abee69984ce6312610644801457a9";
+    hash = "sha256-upw0MjGccSI1B10wabKPMGrEo7ATfg4a7Hzaucbf99w=";
   };
 
   cargoLock = {

@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jPD+7bFU6k1+NRKRHwynEmZ0G6ZwnF8AZVuTqk5DjEY=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nkgilley";
     repo = "python-lakeside";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Y5g78trkwOF3jsbgTv0uVkvfB1HZN+w1T6xIorxGAhg=";
   };
 

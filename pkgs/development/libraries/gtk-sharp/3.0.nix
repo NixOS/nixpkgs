@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   patches = [
     # Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling against newer versions of mono.
     # @see https://github.com/mono/gtk-sharp/pull/266

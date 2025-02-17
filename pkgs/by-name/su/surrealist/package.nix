@@ -1,21 +1,23 @@
 {
   buildGoModule,
   cairo,
-  cargo,
   cargo-tauri,
+  cargo,
   esbuild,
   fetchFromGitHub,
   gdk-pixbuf,
   glib-networking,
   gobject-introspection,
+  jq,
   lib,
   libsoup_3,
   makeBinaryWrapper,
+  moreutils,
   nodejs,
   openssl,
   pango,
   pkg-config,
-  pnpm,
+  pnpm_9,
   rustc,
   rustPlatform,
   stdenv,
@@ -48,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "3.0.8";
+  version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-46CXldjhWc7H6wdKfMK2IlmBqfe0QHi/J1uFhbV42HY=";
+    hash = "sha256-p+Tyu65A+vykqafu1RCRKYFXb435Uyu9WxUoEqjI8d8=";
   };
 
   # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
@@ -67,26 +69,28 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Cargo.patch
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) patches src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-HmdEcjgxPyRsQqhU0P/C3KVgwZsSvfHjyzj0OHKe5jY";
+    hash = "sha256-qrPIcWpdrvTmaFcfKAfz+n8a6lp6IcIMq9ZCHaa7AHQ=";
     patchFlags = [ "-p2" ];
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uBDbBfWC9HxxzY1x4+rNo87D5C1zZa2beFLa5NkLs80=";
+    hash = "sha256-JwOY6Z8UjbrodSQ3csnT+puftbQUDF3NIK7o6rSpl2o=";
   };
 
   nativeBuildInputs = [
     cargo
     cargo-tauri.hook
     gobject-introspection
+    jq
     makeBinaryWrapper
+    moreutils
     nodejs
-    pnpm.configHook
     pkg-config
+    pnpm_9.configHook
     rustc
     rustPlatform.cargoSetupHook
   ];
@@ -107,6 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  # Deactivate the upstream update mechanism
+  postPatch = ''
+    jq '
+      .bundle.createUpdaterArtifacts = false |
+      .plugins.updater = {"active": false, "pubkey": "", "endpoints": []}
+    ' \
+    src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+  '';
 
   postFixup = ''
     wrapProgram "$out/bin/surrealist" \

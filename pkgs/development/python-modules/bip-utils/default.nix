@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ebellocchia";
     repo = "bip_utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3G37n/mfI+3JVIkmJWzbB1qPPTE6NJJlFZWdE0fIIWA=";
   };
 

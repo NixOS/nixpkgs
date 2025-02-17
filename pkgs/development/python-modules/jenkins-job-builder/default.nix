@@ -11,28 +11,21 @@
   stevedore,
   pytestCheckHook,
   setuptools,
-  fetchpatch,
   testtools,
   pytest-mock,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "jenkins-job-builder";
-  version = "6.4.1";
+  version = "6.4.2";
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Re7rNAcm0cpSx1tmSzTjfDlW7y236lzFKFjVw0uUTmw=";
+    hash = "sha256-G+DVRd6o3GwTdFNnJkotIidrxexJZSdgCGXTA4KnJJA=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://opendev.org/jjb/jenkins-job-builder/commit/7bf0dacd80d6da7b8562db05f9187140e42947c8.patch";
-      hash = "sha256-2z7axGgVV5Z7A11JiQhlrjjXDKYe+X6NrJEuXd986Do=";
-    })
-  ];
 
   postPatch = ''
     export HOME=$(mktemp -d)
@@ -53,6 +46,8 @@ buildPythonPackage rec {
     testtools
     pytest-mock
   ];
+
+  passthru.tests = { inherit (nixosTests) jenkins; };
 
   meta = {
     description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";

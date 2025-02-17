@@ -35,6 +35,10 @@ in {
 
   ### Packages
 
+  bladeRF = callPackage ../development/gnuradio-modules/bladeRF/default.nix { };
+
+  lora_sdr = callPackage ../development/gnuradio-modules/lora_sdr/default.nix { };
+
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 
   fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };

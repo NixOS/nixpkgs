@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-vxiWYUAEk54F1M0WrrMTHZ4DNJxxT/GaXetd5LjE808=";
   };
 

@@ -2,30 +2,33 @@
   buildPythonPackage,
   colorama,
   fetchPypi,
-  isPy27,
   lib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "log_symbols";
+  pname = "log-symbols";
   version = "0.0.14";
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0mh5d0igw33libfmbsr1ri1p1y644p36nwaa2w6kzrd8w5pvq2yg";
+    pname = "log_symbols";
+    inherit version;
+    hash = "sha256-zwu8b+Go5T8NF0pxa8YlxPhwQ8wh61XdinQM/iJoBVY=";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  build-system = [ setuptools ];
+
+  dependencies = [ colorama ];
 
   # Tests are not included in the PyPI distribution and the git repo does not have tagged releases
   doCheck = false;
   pythonImportsCheck = [ "log_symbols" ];
 
-  meta = with lib; {
+  meta = {
     description = "Colored Symbols for Various Log Levels";
     homepage = "https://github.com/manrajgrover/py-log-symbols";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urbas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urbas ];
   };
 }

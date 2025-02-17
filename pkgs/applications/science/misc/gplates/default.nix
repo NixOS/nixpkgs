@@ -7,7 +7,7 @@
   doxygen,
   graphviz,
   boost,
-  cgal_5,
+  cgal,
   gdal,
   glew,
   gmp,
@@ -32,7 +32,7 @@ let
     enablePython = true;
     inherit python;
   };
-  cgal = cgal_5.override {
+  cgal' = cgal.override {
     boost = boost';
   };
 in
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost'
-    cgal
+    cgal'
     gdal
     glew
     gmp

@@ -83,7 +83,9 @@ stdenv.mkDerivation (
 
     passthru = {
       inherit core libretroCore;
-      updateScript = unstableGitUpdater { };
+      # libretro repos sometimes has a fake tag like "Current", ignore
+      # it by setting hardcodeZeroVersion
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     } // (args.passthru or { });
 
     meta =

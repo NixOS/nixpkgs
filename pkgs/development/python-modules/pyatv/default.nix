@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
   };
 

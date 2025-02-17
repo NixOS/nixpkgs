@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./update-cargo-lock-version.patch ];
 
-  cargoHash = "sha256-QNMdqoxxY8ao2O44hJxZNgLrPwzu9+ieweTPc7pfFY4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ETbWV5OjRzQuq/rVyu22YRFjeQcuNA1REyzg46s3q5A=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =

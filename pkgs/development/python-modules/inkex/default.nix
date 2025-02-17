@@ -23,8 +23,7 @@
 buildPythonPackage {
   pname = "inkex";
   inherit (inkscape) version;
-
-  format = "pyproject";
+  pyproject = true;
 
   inherit (inkscape) src;
 
@@ -38,16 +37,19 @@ buildPythonPackage {
     })
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cssselect
     lxml
     numpy
+    pillow
     pygobject3
+    pyparsing
     pyserial
+    scour
     tinycss2
   ];
 
@@ -60,10 +62,6 @@ buildPythonPackage {
 
   checkInputs = [
     gtk3
-    packaging
-    pillow
-    pyparsing
-    scour
   ];
 
   disabledTests =

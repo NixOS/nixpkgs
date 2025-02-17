@@ -1,6 +1,6 @@
 {
   runCommand,
-  git,
+  gitMinimal,
   coccinelle,
   python3,
 }:
@@ -60,7 +60,7 @@ runCommand "hardcode-gsettings.patch"
   {
     inherit src patches;
     nativeBuildInputs = [
-      git
+      gitMinimal
       coccinelle
       python3 # For patch script
     ];

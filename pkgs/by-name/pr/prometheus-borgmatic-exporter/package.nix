@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "maxim-mityutko";
     repo = "borgmatic-exporter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZZdCuIavJrIHO/ayMnirNRYyqovKQaW5jTRRrSOhofQ=";
   };
 

@@ -18,7 +18,7 @@
   xarray,
   xarray-einstats,
 
-  # checks
+  # tests
   bokeh,
   cloudpickle,
   emcee,
@@ -33,6 +33,7 @@
   #, pystan (not packaged)
   pytestCheckHook,
   torchvision,
+  writableTmpDirAsHomeHook,
   zarr,
 }:
 
@@ -44,7 +45,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6toqOGwk8YbatfiDCTEG4r0z3zZAA8zcNVZJqqssYrY=";
   };
 
@@ -79,14 +80,18 @@ buildPythonPackage rec {
     # pystan (not packaged)
     pytestCheckHook
     torchvision
+    writableTmpDirAsHomeHook
     zarr
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  pytestFlagsArray = [
+    "arviz/tests/base_tests/"
 
-  pytestFlagsArray = [ "arviz/tests/base_tests/" ];
+    # AttributeError: module 'zarr.storage' has no attribute 'DirectoryStore'
+    # https://github.com/arviz-devs/arviz/issues/2357
+    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
+    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
+  ];
 
   disabledTests = [
     # Tests require network access
@@ -94,6 +99,7 @@ buildPythonPackage rec {
     "test_plot_separation"
     "test_plot_trace_legend"
     "test_cov"
+
     # countourpy is not available at the moment
     "test_plot_kde"
     "test_plot_kde_2d"

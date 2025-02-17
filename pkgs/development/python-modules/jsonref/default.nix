@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gazpachoking";
     repo = "jsonref";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tOhabmqCkktJUZjCrzjOjUGgA/X6EVz0KqehyLtigfc=";
   };
 

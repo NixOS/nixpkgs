@@ -361,7 +361,7 @@ in
               sendfile off;
             '';
           };
-          "~ \.php$" = {
+          "~ \\.php$" = {
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi_params ;
               fastcgi_param SCRIPT_FILENAME $request_filename;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "pyfwup";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Kyc3f8beTg0W1+U7SvZuNPN1pdsco9rBUfoEtR7AI44=";
   };
 

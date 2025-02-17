@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui-highcharts";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r4X4faU7Nlq/FDbIYbTpvnC1w14XskpsNGtkEXtGrFo=";
   };
 

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       changes made to a collection of files, and all committed at the
       same time (using a single "cvs commit" command).
     '';
-    homepage = "http://www.cobite.com/cvsps/";
+    homepage = "https://sourceforge.net/projects/cvsps/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     mainProgram = "cvsps";

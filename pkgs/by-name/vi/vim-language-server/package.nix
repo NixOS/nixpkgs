@@ -36,12 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     export NODE_OPTIONS=--openssl-legacy-provider
   '';
+  # Needed ever since noBrokenSymlinks was introduced
+  postInstall = ''
+    rm $out/lib/node_modules/vim-language-server/node_modules/.bin/node-which
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "VImScript language server, LSP for vim script";
     homepage = "https://github.com/iamcco/vim-language-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "vim-language-server";
   };
 })

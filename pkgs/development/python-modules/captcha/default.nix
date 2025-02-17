@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "captcha";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5d5gts+BXS5OKVziR9cLczsD2QMXZ/n31sPEq+gPlxk=";
   };
 

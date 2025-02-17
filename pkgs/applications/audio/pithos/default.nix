@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
 

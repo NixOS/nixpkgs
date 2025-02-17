@@ -24,10 +24,10 @@ mkCoqDerivation {
       [
         {
           cases = [
-            (range "8.16" "8.20")
+            (range "8.16" "9.0")
             (isGe "2.0")
           ];
-          out = "1.2.3";
+          out = "1.2.4";
         }
         {
           cases = [
@@ -57,6 +57,7 @@ mkCoqDerivation {
   release."1.1.1".sha256 = "sha256-5wItMeeTRoJlRBH3zBNc2VUZn6pkDde60YAvXTx+J3U=";
   release."1.2.2".sha256 = "sha256-EU9RJGV3BvnmsX+mGH+6+MDXiGHgDI7aP5sIYiMUXTs=";
   release."1.2.3".sha256 = "sha256-6uc1VEfDv+fExEfBR2c0/Q/KjrkX0TbEMCLgeYcpkls=";
+  release."1.2.4".sha256 = "sha256-BRxt0LGPz2u3kJRjcderaZqCfs8M8qKAAwNSWmIck7Q=";
 
   propagatedBuildInputs = [
     mathcomp-algebra

@@ -23,7 +23,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "reno";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-le9JtE0XODlYhTFsrjxFXG/Weshr+FyN4M4S3BMBLUE=";
   };
 

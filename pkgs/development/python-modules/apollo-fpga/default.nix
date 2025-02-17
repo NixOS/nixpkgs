@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "apollo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EDI+bRDePEbkxfQKuDgRsJtlAE0jqcIoQHjpgW0jIoY=";
   };
 

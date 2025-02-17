@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.5.0";
+  version = "2.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -48,8 +48,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oT191QVpvE5xszgBFt3o4A2hU50zmzPUywmAQuKZ5OE=";
+    tag = "v${version}";
+    hash = "sha256-PrY+jNA+OYtFzyuRzUckZZntsQg/eovkEfPPO1PX/18=";
   };
 
   postPatch = ''
@@ -116,7 +116,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/v${version}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

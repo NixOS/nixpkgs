@@ -141,8 +141,8 @@
   },
   {
     "pname": "Sandreas.AudioMetadata",
-    "version": "0.2.5",
-    "hash": "sha256-4FrW1QV4okSEswTpgj/dhFurR/2AHyTgqDgMBjRproI="
+    "version": "0.2.7",
+    "hash": "sha256-GYD+nAURuU99/3JH/4QTthhzAVsau/qpcvih4eiJxtk="
   },
   {
     "pname": "Sandreas.Files",
@@ -241,7 +241,7 @@
   },
   {
     "pname": "z440.atl.core",
-    "version": "6.9.0",
-    "hash": "sha256-lme55hhVwZ9Y/wVmekA0gVIsw3RUoyYuL9gMEHXuWMU="
+    "version": "6.11.0",
+    "hash": "sha256-V1r1ftZ/Ud0pw/qwnqpJodRaGi9FyG3uIy3ykJUvxjg="
   }
 ]

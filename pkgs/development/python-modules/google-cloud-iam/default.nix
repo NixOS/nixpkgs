@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
-  version = "2.15.2";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_iam";
     inherit version;
-    hash = "sha256-CbE12Wuiz2+Ap+2AEUNuidJYjouyPNYUXEdjAvSHGoI=";
+    hash = "sha256-S3xPplk70yYY/h29veTP/g1/Tnx4UelPUjTYobovHr8=";
   };
 
   build-system = [ setuptools ];

@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ bsd3 ];
     mainProgram = "wio";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 })

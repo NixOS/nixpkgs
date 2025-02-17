@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6rClGDo8KhBbOg/Rw0nVISVtOAACf5cwSafNInlBGCw=";
   };
 
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/v${version}";
     homepage = "https://github.com/AdaCore/e3-core/";
     description = "Core framework for developing portable automated build systems";
     license = licenses.gpl3Only;

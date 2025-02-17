@@ -26,7 +26,7 @@ buildFHSEnv {
       curl
       gawk
       zenity
-      plasma5Packages.kdialog
+      kdePackages.kdialog
       mangohud
       nettools
       opencl-headers

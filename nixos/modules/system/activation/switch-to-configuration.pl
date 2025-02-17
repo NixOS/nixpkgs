@@ -103,7 +103,7 @@ if (($ENV{"NIXOS_NO_CHECK"} // "") ne "1") {
     chomp(my $pre_switch_checks = <<'EOFCHECKS');
 @preSwitchCheck@
 EOFCHECKS
-    system("$pre_switch_checks $out") == 0 or exit 1;
+    system("$pre_switch_checks $out $action") == 0 or exit 1;
     if ($action eq "check") {
         exit 0;
     }
@@ -542,6 +542,13 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
                             }
                         }
                     }
+                }
+
+                if (parse_systemd_bool(\%new_unit_info, "Service", "X-NotSocketActivated", 0)) {
+                    # If the unit explicitly opts out of socket
+                    # activation, restart it as if it weren't (but do
+                    # restart its sockets, that's fine):
+                    $socket_activated = 0;
                 }
 
                 # If the unit is not socket-activated, record

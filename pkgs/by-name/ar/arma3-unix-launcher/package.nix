@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arma3-unix-launcher";
-  version = "413";
+  version = "413-unstable-2025-02-10";
 
   src = fetchFromGitHub {
     owner = "muttleyxd";
     repo = "arma3-unix-launcher";
-    rev = "2ea62d961522f1542d4c8e669ef5fe856916f9ec";
-    hash = "sha256-uym93mYmVj9UxT8RbwdRUyIPrQX7nZTNWUUVjxCQmVU=";
+    rev = "7d4bcb166da3bb64ef10af421619d0b00136ebd5";
+    hash = "sha256-so7fjxESUAkQfO4hO5aQTzU5lHpeJlOOfEGp0Pb89sQ=";
   };
 
   patches = [

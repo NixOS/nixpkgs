@@ -18,7 +18,7 @@ buildGoModule.override
     src = fetchFromGitHub {
       owner = "goccy";
       repo = "bigquery-emulator";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-iAVbxbm1G7FIWTB5g6Ff8h2dZjZssONA2MOCGuvK180=";
     };
 

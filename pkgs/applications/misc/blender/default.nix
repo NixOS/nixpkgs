@@ -88,6 +88,8 @@
 }:
 
 let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+
   embreeSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openImageDenoiseSupport =
@@ -110,7 +112,7 @@ let
   };
 in
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
   version = "4.3.2";
 

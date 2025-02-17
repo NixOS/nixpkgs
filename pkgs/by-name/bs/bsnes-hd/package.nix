@@ -2,9 +2,7 @@
   lib,
   SDL2,
   alsa-lib,
-  apple-sdk_11,
   fetchFromGitHub,
-  fetchpatch,
   gtk3,
   gtksourceview3,
   libX11,
@@ -69,8 +67,7 @@ stdenv.mkDerivation {
       alsa-lib
       openal
       libpulseaudio
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+    ];
 
   makeFlags =
     [
@@ -104,7 +101,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     mainProgram = "bsnes";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       stevebob
     ];
     platforms = lib.platforms.unix;

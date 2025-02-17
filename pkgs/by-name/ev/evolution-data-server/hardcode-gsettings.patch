@@ -1,5 +1,5 @@
 diff --git a/src/addressbook/libebook/e-book-client.c b/src/addressbook/libebook/e-book-client.c
-index 5e65ec8..8ca28c6 100644
+index 5e65ec8..2cae29d 100644
 --- a/src/addressbook/libebook/e-book-client.c
 +++ b/src/addressbook/libebook/e-book-client.c
 @@ -1924,7 +1924,18 @@ e_book_client_get_self (ESourceRegistry *registry,
@@ -42,23 +42,25 @@ index 5e65ec8..8ca28c6 100644
  	g_settings_set_string (
  		settings, SELF_UID_KEY,
  		e_contact_get_const (contact, E_CONTACT_UID));
-@@ -2028,8 +2050,18 @@ e_book_client_is_self (EContact *contact)
+@@ -2028,8 +2050,20 @@ e_book_client_is_self (EContact *contact)
  	 * unfortunately the API doesn't allow that.
  	 */
  	g_mutex_lock (&mutex);
 -	if (!settings)
 -		settings = g_settings_new (SELF_UID_PATH_ID);
 +	if (!settings) {
-+		g_autoptr(GSettingsSchemaSource) schema_source;
-+		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
-+									    g_settings_schema_source_get_default(),
-+									    TRUE,
-+									    NULL);
-+		schema = g_settings_schema_source_lookup(schema_source,
-+							 SELF_UID_PATH_ID,
-+							 FALSE);
-+		settings = g_settings_new_full(schema, NULL, NULL);
++		{
++			g_autoptr(GSettingsSchemaSource) schema_source;
++			g_autoptr(GSettingsSchema) schema;
++			schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++										    g_settings_schema_source_get_default(),
++										    TRUE,
++										    NULL);
++			schema = g_settings_schema_source_lookup(schema_source,
++								 SELF_UID_PATH_ID,
++								 FALSE);
++			settings = g_settings_new_full(schema, NULL, NULL);
++		}
 +	}
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_mutex_unlock (&mutex);

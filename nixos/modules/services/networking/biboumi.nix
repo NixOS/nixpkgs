@@ -22,9 +22,12 @@ in
     services.biboumi = {
       enable = lib.mkEnableOption "the Biboumi XMPP gateway to IRC";
 
+      package = lib.mkPackageOption pkgs "biboumi" { };
+
       settings = lib.mkOption {
         description = ''
-          See [biboumi 8.5](https://lab.louiz.org/louiz/biboumi/blob/8.5/doc/biboumi.1.rst)
+          See [biboumi 9.0](https://doc.biboumi.louiz.org/9.0/admin.html#configuration)
+
           for documentation.
         '';
         default = { };
@@ -61,10 +64,13 @@ in
             '';
           };
           options.db_name = lib.mkOption {
-            type = with lib.types; either path str;
+            type = with lib.types; nullOr (either path str);
             default = "${stateDir}/biboumi.sqlite";
             description = ''
               The name of the database to use.
+
+              Set it to null and use [credentialsFile](#opt-services.biboumi.credentialsFile)
+              if you do not want this connection string to go into the Nix store.
             '';
             example = "postgresql://user:secret@localhost";
           };
@@ -118,7 +124,7 @@ in
           };
           options.policy_directory = lib.mkOption {
             type = lib.types.path;
-            default = "${pkgs.biboumi}/etc/biboumi";
+            default = "${cfg.package}/etc/biboumi";
             defaultText = lib.literalExpression ''"''${pkgs.biboumi}/etc/biboumi"'';
             description = ''
               A directory that should contain the policy files,
@@ -208,7 +214,7 @@ in
             ''
           )
         ];
-        ExecStart = "${pkgs.biboumi}/bin/biboumi /run/biboumi/biboumi.cfg";
+        ExecStart = "${lib.getExe cfg.package} /run/biboumi/biboumi.cfg";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         # Firewalls needing opening for output connections can still do that
         # selectively for biboumi with:

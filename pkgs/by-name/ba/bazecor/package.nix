@@ -6,12 +6,12 @@
 }:
 let
   pname = "bazecor";
-  version = "1.6.1";
+  version = "1.6.4";
   src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-Qf9FqHgTSCD2rYp8PC/gYHyiYcfFTJJmG4oRK/bch8Y=";
+      hash = "sha256-S0fJNkDDZAssum7wDDxHkzH9WZcGSEX05nl3S/DOH14=";
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370

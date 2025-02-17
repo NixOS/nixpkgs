@@ -4,7 +4,7 @@
   buildPackages,
   fetchFromGitHub,
   nix-update-script,
-  substituteAll,
+  replaceVars,
   plymouth,
   pam,
   pkg-config,
@@ -85,8 +85,7 @@ stdenv.mkDerivation rec {
     # Hardcode plymouth to fix transitions.
     # For some reason it can't find `plymouth`
     # even when it's in PATH in environment.systemPackages.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
   ];

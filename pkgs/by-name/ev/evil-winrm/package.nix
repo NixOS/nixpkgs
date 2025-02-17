@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Hackplayers";
     repo = "evil-winrm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8Lyo7BgypzrHMEcbYlxo/XWwOtBqs2tczYnc3+XEbeA=";
   };
 

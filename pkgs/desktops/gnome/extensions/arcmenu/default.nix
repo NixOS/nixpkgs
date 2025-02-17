@@ -4,7 +4,7 @@
   fetchFromGitLab,
   glib,
   gettext,
-  substituteAll,
+  replaceVars,
   gnome-menus,
 }:
 
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix_gmenu.patch;
+    (replaceVars ./fix_gmenu.patch {
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
   ];

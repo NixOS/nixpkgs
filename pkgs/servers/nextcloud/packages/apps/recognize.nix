@@ -3,6 +3,8 @@
   fetchurl,
   lib,
   nodejs,
+  node-pre-gyp,
+  node-gyp,
   python3,
   util-linux,
   ffmpeg,
@@ -36,7 +38,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  pname = "nextcloud-app-recognise";
+  pname = "nextcloud-app-recognize";
   version = currentVersionInfo.version;
 
   srcs =
@@ -80,11 +82,11 @@ stdenv.mkDerivation rec {
     # Replace all occurences of node (and check that we actually remved them all)
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
-      --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${nodejs}/bin/node'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${nodejs}/bin/node'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${nodejs}/bin/node'" \
-      --replace-quiet "\$this->config->getAppValue('node_binary', '""')" "'${nodejs}/bin/node'" \
-      --replace-quiet "\$this->config->getAppValue('node_binary')" "'${nodejs}/bin/node'"
+      --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${lib.getExe nodejs}'" \
+      --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${lib.getExe nodejs}'" \
+      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${lib.getExe nodejs}'" \
+      --replace-quiet "\$this->config->getAppValue('node_binary', '""')" "'${lib.getExe nodejs}'" \
+      --replace-quiet "\$this->config->getAppValue('node_binary')" "'${lib.getExe nodejs}'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
 
@@ -92,13 +94,13 @@ stdenv.mkDerivation rec {
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
 
-    ln -s ${ffmpeg}/bin/ffmpeg recognize/node_modules/ffmpeg-static/ffmpeg
+    ln -s ${lib.getExe ffmpeg} recognize/node_modules/ffmpeg-static/ffmpeg
   '';
 
   nativeBuildInputs = lib.optionals useLibTensorflow [
     nodejs
-    nodejs.pkgs.node-pre-gyp
-    nodejs.pkgs.node-gyp
+    node-pre-gyp
+    node-gyp
     python3
     util-linux
   ];
@@ -107,7 +109,7 @@ stdenv.mkDerivation rec {
     cd recognize
 
     # Install tfjs dependency
-    export CPPFLAGS="-I${nodejs}/include/node -Ideps/include"
+    export CPPFLAGS="-I${lib.getDev nodejs}/include/node -Ideps/include"
     cd node_modules/@tensorflow/tfjs-node
     node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
     cd -
@@ -133,5 +135,7 @@ stdenv.mkDerivation rec {
       This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.
     '';
     homepage = "https://apps.nextcloud.com/apps/recognize";
+    description = "Smart media tagging for Nextcloud: recognizes faces, objects, landscapes, music genres";
+    changelog = "https://github.com/nextcloud/recognize/blob/v${version}/CHANGELOG.md";
   };
 }

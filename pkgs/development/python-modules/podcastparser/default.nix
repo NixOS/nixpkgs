@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "podcastparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-P9wVyxTO0nz/DfuBhCE+VjhH1uYx4jBd30Ca26yBzbo=";
   };
 

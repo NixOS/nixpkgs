@@ -36,14 +36,14 @@ buildPythonPackage rec {
 
   # call `cargo build --release` in bindings/python and copy the
   # resulting lock file
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     postPatch = ''
       cd bindings/python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
     name = "${pname}-${version}";
-    hash = "sha256-FvkVwd681EhEHRJ8ip97moEkRE3VcuIPbi+F1SjXz8E=";
+    hash = "sha256-IQDICT/etlwnVqAo7es9PqwOqna48QdVYrHJq/aRsJo=";
   };
 
   nativeBuildInputs = [

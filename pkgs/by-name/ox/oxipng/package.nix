@@ -1,22 +1,28 @@
 {
   lib,
   stdenv,
-  fetchCrate,
+  fetchFromGitHub,
   rustPlatform,
+  qemu,
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "9.1.3";
+  version = "9.1.4";
   pname = "oxipng";
 
-  src = fetchCrate {
-    inherit version pname;
-    hash = "sha256-kzN4YNsFqv/KUxpHao++oqc90Us6VllyFYkpdVUigD0=";
+  # do not use fetchCrate (only repository includes tests)
+  src = fetchFromGitHub {
+    owner = "shssoichiro";
+    repo = "oxipng";
+    tag = "v${version}";
+    hash = "sha256-cwujBgvGdNvD8vKp3+jNxcxkw/+M2FooNgsw+RejyrM=";
   };
 
-  cargoHash = "sha256-4PCLtBJliK3uteL8EVKLBVR2YZW1gwQOiSLQok+rqug=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Z0otTCFwtGuSC1XBM3jcgGDFPZuMzQikZaYCnR+S6Us=";
 
-  doCheck = !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
+  # See https://github.com/shssoichiro/oxipng/blob/14b8b0e93a/.cargo/config.toml#L5
+  nativeCheckInputs = [ qemu ];
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";

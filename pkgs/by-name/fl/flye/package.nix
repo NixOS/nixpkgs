@@ -8,6 +8,7 @@
   libdeflate,
   bash,
   coreutils,
+  addBinToPathHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fenderglass";
     repo = "flye";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-448PTdGueQVHFIDS5zMy+XKZCtEb0SqP8bspPLHMJn0=";
   };
 
@@ -54,11 +55,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "flye" ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  nativeCheckInputs = [
+    addBinToPathHook
+    python3Packages.pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "De novo assembler for single molecule sequencing reads using repeat graphs";

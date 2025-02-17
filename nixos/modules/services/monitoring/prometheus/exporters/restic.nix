@@ -54,7 +54,7 @@ in
       default = null;
       description = ''
         File containing the credentials to access the repository, in the
-        format of an EnvironmentFile as described by systemd.exec(5)
+        format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
       '';
     };
 
@@ -140,6 +140,7 @@ in
         ${concatStringsSep " \\\n  " cfg.extraFlags}
     '';
     serviceConfig = {
+      CacheDirectory = "restic-exporter";
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
       LoadCredential = [
         "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
@@ -156,6 +157,7 @@ in
         LISTEN_ADDRESS = cfg.listenAddress;
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
+        RESTIC_CACHE_DIR = "$CACHE_DIRECTORY";
       }
       // (mapAttrs' (
         name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)

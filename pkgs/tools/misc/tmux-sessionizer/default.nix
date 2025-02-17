@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-4xwpenoAVGKdVO3eSS4BhaEcwpNPGA5Ozie53focDlA=";
   };
 
-  cargoHash = "sha256-ajeCB1w/JHMT5e7mSwsh++lzLNfp0qfutONStpJpFDo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NFM9tZQIR9Rw9uSlqxhbNnmwe3xqK+dv/qyJBHfEmi4=";
 
   passthru.tests.version = testers.testVersion {
     package = tmux-sessionizer;

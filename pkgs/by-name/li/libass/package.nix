@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, yasm
 , freetype, fribidi, harfbuzz
 , fontconfigSupport ? true, fontconfig ? null # fontconfig support
-, rasterizerSupport ? false # Internal rasterizer
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
 , libiconv
 , darwin
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (lib.enableFeature fontconfigSupport "fontconfig")
-    (lib.enableFeature rasterizerSupport "rasterizer")
     (lib.enableFeature largeTilesSupport "large-tiles")
   ];
 

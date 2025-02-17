@@ -47,6 +47,18 @@
   "ch-installation": [
     "index.html#ch-installation"
   ],
+  "sec-mattermost": [
+    "index.html#sec-mattermost"
+  ],
+  "sec-mattermost-derivation": [
+    "index.html#sec-mattermost-derivation"
+  ],
+  "sec-mattermost-plugins": [
+    "index.html#sec-mattermost-plugins"
+  ],
+  "sec-mattermost-plugins-build": [
+    "index.html#sec-mattermost-plugins-build"
+  ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
   ],
@@ -824,6 +836,12 @@
   "module-services-netbird-multiple-connections": [
     "index.html#module-services-netbird-multiple-connections"
   ],
+  "module-services-netbird-firewall": [
+    "index.html#module-services-netbird-firewall"
+  ],
+  "module-services-netbird-customization": [
+    "index.html#module-services-netbird-customization"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],
@@ -874,6 +892,12 @@
   ],
   "module-services-networking-dnsmasq-references": [
     "index.html#module-services-networking-dnsmasq-references"
+  ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
   ],
   "module-services-samba": [
     "index.html#module-services-samba"
@@ -1886,11 +1910,29 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
-  "sec-release-25.05-lib": [
-    "release-notes.html#sec-release-25.05-lib"
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
   ],
-  "sec-release-25.05-lib-breaking": [
-    "release-notes.html#sec-release-25.05-lib-breaking"
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.05-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-deprecations"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

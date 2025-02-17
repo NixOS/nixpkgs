@@ -16,17 +16,16 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PTujR3ciLRvbpiqStNMx3W5fkUdW2dsGmCj/iFRTKJM=";
   };
 
-  cargoHash = "sha256-bH9u38gvH6QEySQ3XFXEHBiSqKKtB+kjcZRLjx4Z6XM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RO4wY7FMwczZeR4GOxA3mwfBJZKPToOJJKGZb48yHJA=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
   postPatch = ''
     substituteInPlace src/main.rs \

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zhijian-liu";
     repo = "torchprofile";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6vxZHQwBjKpy288wcANdJ9gmvIOZloLv+iN76TtqYAI=";
   };
 

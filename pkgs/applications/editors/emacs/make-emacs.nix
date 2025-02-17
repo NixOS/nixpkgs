@@ -32,6 +32,7 @@
   jansson,
   libXaw,
   libXcursor,
+  libXft,
   libXi,
   libXpm,
   libgccjit,
@@ -69,6 +70,7 @@
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
+  withCairo ? withX,
   withCsrc ? true,
   withDbus ? stdenv.hostPlatform.isLinux,
   withGTK3 ? withPgtk && !noGui,
@@ -333,7 +335,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withX [
       Xaw3d
-      cairo
       giflib
       libXaw
       libXpm
@@ -341,6 +342,12 @@ mkDerivation (finalAttrs: {
       libpng
       librsvg
       libtiff
+    ]
+    ++ lib.optionals withCairo [
+      cairo
+    ]
+    ++ lib.optionals (withX && !withCairo) [
+      libXft
     ]
     ++ lib.optionals withXinput2 [
       libXi
@@ -396,8 +403,8 @@ mkDerivation (finalAttrs: {
       else if withX then
         [
           (lib.withFeatureAs true "x-toolkit" toolkit)
-          (lib.withFeature true "cairo")
-          (lib.withFeature true "xft")
+          (lib.withFeature withCairo "cairo")
+          (lib.withFeature (!withCairo) "xft")
         ]
       else if withPgtk then
         [

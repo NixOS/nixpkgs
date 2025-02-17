@@ -13,6 +13,7 @@
   libmicrohttpd,
   gnutls,
   libtasn1,
+  libxml2,
   p11-kit,
   vim,
   which,
@@ -24,13 +25,13 @@ with lib.strings;
 
 let
 
-  version = "2.74.6";
+  version = "2.77.3";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    hash = "sha256-0r7DjTrsNKZ5ZmWoA+Y9OXyJFUiUFZiPQb1skXXWYTw=";
+    hash = "sha256-C2EOd85idiSKKnWYcfoUFMuCQHB36d3CkrYVNNYmotw=";
     fetchSubmodules = true;
   };
 
@@ -73,17 +74,30 @@ let
         libtasn1
         p11-kit
         ncurses_static
+        libxml2
       ];
 
       passthru = { inherit wrap wrapWithBuildEnv faust2ApplBase; };
 
       preConfigure = ''
+        # include llvm-config in path
+        export PATH="${lib.getDev llvm_18}/bin:$PATH"
         cd build
-        sed -i 's@LIBNCURSES_PATH ?= .*@LIBNCURSES_PATH ?= ${ncurses_static}/lib/libncurses.a@'  Make.llvm.static
         substituteInPlace Make.llvm.static \
           --replace 'mkdir -p $@ && cd $@ && ar -x ../../$<' 'mkdir -p $@ && cd $@ && ar -x ../source/build/lib/libfaust.a && cd ../source/build/'
         substituteInPlace Make.llvm.static \
-          --replace 'rm -rf $(TMP)' ' '
+          --replace 'rm -rf $(TMP)' ' ' \
+          --replace-fail "ar" "${stdenv.cc.targetPrefix}ar"
+        sed -i 's@LIBNCURSES_PATH ?= .*@LIBNCURSES_PATH ?= ${ncurses_static}/lib/libncurses.a@'  Make.llvm.static
+        cd ..
+        shopt -s globstar
+        for f in **/Makefile **/Makefile.library **/CMakeLists.txt build/Make.llvm.static embedded/faustjava/faust2engine architecture/autodiff/autodiff.sh source/tools/faust2appls/* **/llvm.cmake tools/benchmark/faust2object; do
+          echo $f "llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+          substituteInPlace $f \
+            --replace-quiet "llvm-config" "llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+        done
+        shopt -u globstar
+        cd build
       '';
 
       cmakeFlags = [

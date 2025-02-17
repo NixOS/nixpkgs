@@ -7,7 +7,7 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.5.1";
+  version = "0.5.2";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     tag = version;
-    hash = "sha256-y1xCycWUxrLwmnk6tlyag0uN0oo6DRQFeIIBw555VjY=";
+    hash = "sha256-53sKuaZJcH/i2C4oeKcvxRs3OmkvR3USw6nnPh+i+Eo=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -51,5 +51,10 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "whisper-ctranslate2";
+    badPlatforms = [
+      # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+      #   what():  /build/source/include/onnxruntime/core/common/logging/logging.h:320 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
+      "aarch64-linux"
+    ];
   };
 }

@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
   };
 
@@ -33,6 +33,10 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-data-download"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "--disable-sse2" ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+  };
 
   postBuild = lib.optionalString withData ''
     mkdir -p $out/share/libpostal

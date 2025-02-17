@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiosolaredge";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1C74U5HWDTJum1XES21t1uIJwm0YW3l041mwvqY/dA4=";
   };
 

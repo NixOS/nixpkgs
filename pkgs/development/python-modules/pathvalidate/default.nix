@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pathvalidate";
-  version = "3.2.1";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9dB7HiN0GHBAYSofzSvLKRn42xgN8lTJWBu5C/kDN30=";
+    hash = "sha256-WbW5J44wOC1tITSXYjBD6+Y/EOKQVb5EGanATHIXOcs=";
   };
 
   build-system = [ setuptools-scm ];

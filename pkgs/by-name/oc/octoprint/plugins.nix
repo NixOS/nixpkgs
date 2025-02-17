@@ -11,7 +11,7 @@ let
   buildPlugin = args: self.buildPythonPackage (args // {
     pname = "octoprint-plugin-${args.pname}";
     inherit (args) version;
-    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ super.octoprint ];
+    propagatedBuildInputs = (args.propagatedBuildInputs or [ ]) ++ [ self.octoprint ];
     # none of the following have tests
     doCheck = false;
   });

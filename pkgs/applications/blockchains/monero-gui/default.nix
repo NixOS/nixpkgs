@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeDesktopItem,
-  boost,
+  boost186,
   cmake,
   libgcrypt,
   libgpg-error,
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186 # uses boost/asio/io_service.hpp
       libgcrypt
       libgpg-error
       libsodium

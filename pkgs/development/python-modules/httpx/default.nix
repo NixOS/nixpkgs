@@ -20,7 +20,6 @@
   python,
   pythonOlder,
   rich,
-  sniffio,
   socksio,
   pytestCheckHook,
   pytest-asyncio,
@@ -32,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.27.2";
-  format = "pyproject";
+  version = "0.28.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
+    tag = version;
+    hash = "sha256-tB8uZm0kPRnmeOvsDdrkrHcMVIYfGanB4l/xHsTKpgE=";
   };
 
   build-system = [
@@ -49,12 +48,11 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     certifi
     httpcore
     idna
-    sniffio
   ];
 
   optional-dependencies = {

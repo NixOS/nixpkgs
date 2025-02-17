@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.munge;
@@ -20,11 +17,11 @@ in
   options = {
 
     services.munge = {
-      enable = mkEnableOption "munge service";
+      enable = lib.mkEnableOption "munge service";
 
-      password = mkOption {
+      password = lib.mkOption {
         default = "/etc/munge/munge.key";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           The path to a daemon's secret key.
         '';
@@ -36,7 +33,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.munge ];
 

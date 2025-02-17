@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "route-graph";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
   };
 

@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "mill1000";
   domain = "midea_ac";
-  version = "2024.10.4";
+  version = "2025.1.1";
 
   src = fetchFromGitHub {
     owner = "mill1000";
     repo = "midea-ac-py";
-    rev = version;
-    hash = "sha256-P/s8HMP9xQWI+bgy6JHe4pAx+jItpK6BCWIyKsfTjmg=";
+    tag = version;
+    hash = "sha256-dQcSXV7UlcSNjad5IkqoBXyJO3GRKzgPGpydnWHYxxE=";
   };
 
   dependencies = [ msmart-ng ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi";
-    rev = "refs/tags/${lib.versions.patch version}";
+    tag = lib.versions.patch version;
     hash = "sha256-CN4o0VfHdoUteI2wyJ2hFJ9UsQ2wWUzcvrLMbR/l36M=";
   };
 

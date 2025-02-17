@@ -13,7 +13,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Nitrux";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
   };
 

@@ -3,44 +3,20 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
-  fetchpatch,
   gitstatus,
   bash,
 }:
 
-let
-  # match gitstatus version with given `gitstatus_version`:
-  # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
-  gitstatus' = gitstatus.overrideAttrs (oldAtttrs: rec {
-    version = "1.5.4";
-
-    src = fetchFromGitHub {
-      owner = "romkatv";
-      repo = "gitstatus";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-mVfB3HWjvk4X8bmLEC/U8SKBRytTh/gjjuReqzN5qTk=";
-    };
-
-    patches = (oldAtttrs.patches or [ ]) ++ [
-      # remove when bumped to 1.5.5
-      (fetchpatch {
-        url = "https://github.com/romkatv/gitstatus/commit/62177e89b2b04baf242cd1526cc2661041dda0fb.patch";
-        sha256 = "sha256-DSRYRV89MLR/Eh4MFsXpDKH1xJiAWyJgSqmfjDTXhtU=";
-        name = "drop-Werror.patch";
-      })
-    ];
-
-  });
-in
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.20.0";
+  version = "1.20.14";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ES5vJXHjAKw/VHjWs8Au/3R+/aotSbY7PWnWAMzCR8E=";
+    # upstream doesn't seem to use tags anymore
+    rev = "5e26473457d819fe148f7fff32db1082dae72012";
+    hash = "sha256-/+FEkgBR6EOTaCAc15vYGWNih2QZkN27ae6LMXlXZU4=";
   };
 
   strictDeps = true;
@@ -48,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (replaceVars ./gitstatusd.patch {
-      gitstatusdPath = "${gitstatus'}/bin/gitstatusd";
+      gitstatusdPath = "${gitstatus}/bin/gitstatusd";
     })
   ];
 

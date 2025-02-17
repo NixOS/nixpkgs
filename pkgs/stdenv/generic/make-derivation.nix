@@ -400,7 +400,7 @@ else let
         );
     }) // {
       builder = attrs.realBuilder or stdenv.shell;
-      args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+      args = attrs.args or ["-e" ./source-stdenv.sh (attrs.builder or ./default-builder.sh)];
       inherit stdenv;
 
       # The `system` attribute of a derivation has special meaning to Nix.
@@ -644,15 +644,26 @@ extendDerivation
              printf "%s" "$(< "''${!pathVar}")" >> $out
          done
        '' ];
-
-       # inputDerivation produces the inputs; not the outputs, so any
-       # restrictions on what used to be the outputs don't serve a purpose
-       # anymore.
-       allowedReferences = null;
-       allowedRequisites = null;
-       disallowedReferences = [ ];
-       disallowedRequisites = [ ];
-     });
+     }
+     // (
+       let
+         sharedOutputChecks = {
+           # inputDerivation produces the inputs; not the outputs, so any
+           # restrictions on what used to be the outputs don't serve a purpose
+           # anymore.
+           allowedReferences = null;
+           allowedRequisites = null;
+           disallowedReferences = [ ];
+           disallowedRequisites = [ ];
+         };
+       in
+       if __structuredAttrs then
+         {
+           outputChecks.out = sharedOutputChecks;
+         }
+       else
+         sharedOutputChecks
+     ));
 
      inherit passthru overrideAttrs;
      inherit meta;

@@ -25,12 +25,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-TcT+siZMJlOYRtiQV+RAPPfM47wewfsz7WiPFaxCUkc=";
+    hash = "sha256-p3MTxuLR/mkVrL+hwW2R13/eVHWWulZPRh9OsuHq9kU=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -97,7 +97,7 @@ buildDotnetModule (finalAttrs: {
       size=''${i}x''${i}
       dir=$out/share/icons/hicolor/$size/apps
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
@@ -134,6 +134,9 @@ buildDotnetModule (finalAttrs: {
     [
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+
+      # Fails in ofborg with VerifyException tests/Games/NexusMods.Games.StardewValley.Tests
+      "NexusMods.Games.StardewValley.Tests.StardewValleyInstallersTests.CanInstallMod"
 
       # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
       "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"

@@ -15,18 +15,39 @@
   nixosTests,
 }:
 
-buildGoModule rec {
-  pname = "evcc";
-  version = "0.131.12";
+let
+  version = "0.133.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
-    rev = version;
-    hash = "sha256-wctSgB5NRuS1+g+MEiHDS4oyFVNdwP2WFJF5kj9nFig=";
+    tag = version;
+    hash = "sha256-10xgw6zL49Hk7OH5c6lqeTsIhdkSOyRZCJjSkQox0XI=";
   };
 
-  vendorHash = "sha256-xravbTVzmS7loLKtzuT3Yw7FkEnDFLw+GrwnAVV36Yw=";
+  vendorHash = "sha256-aBTs6S7b+1JS9MNKWMpuUZ6AXb9ylfXnuAV7q9WnE9w=";
+
+  commonMeta = with lib; {
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+  };
+
+  decorate = buildGoModule {
+    pname = "evcc-decorate";
+    inherit version src vendorHash;
+
+    subPackages = "cmd/decorate";
+
+    meta = commonMeta // {
+      description = "EVCC decorate helper";
+      homepage = "https://github.com/evcc-io/evcc/tree/master/cmd/decorate";
+    };
+  };
+in
+
+buildGoModule rec {
+  pname = "evcc";
+  inherit version src vendorHash;
 
   npmDeps = fetchNpmDeps {
     inherit src;
@@ -40,6 +61,7 @@ buildGoModule rec {
 
   overrideModAttrs = _: {
     nativeBuildInputs = [
+      decorate
       enumer
       go
       git
@@ -59,7 +81,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X github.com/evcc-io/evcc/server.Version=${version}"
-    "-X github.com/evcc-io/evcc/server.Commit=${src.rev}"
+    "-X github.com/evcc-io/evcc/server.Commit=${src.tag}"
     "-s"
     "-w"
   ];
@@ -82,17 +104,16 @@ buildGoModule rec {
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
+    inherit decorate;
     tests = {
       inherit (nixosTests) evcc;
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = commonMeta // {
     description = "EV Charge Controller";
     homepage = "https://evcc.io";
     changelog = "https://github.com/evcc-io/evcc/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
   };
 }

@@ -5,7 +5,7 @@
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "virtiofs" "crc32c_generic" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "virtiofs" "crc32c_generic" ]
 }:
 
 let
@@ -237,10 +237,9 @@ rec {
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     ${coreutils}/bin/mkdir xchg
     export > xchg/saved-env
-    PATH=${coreutils}/bin
 
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
-      cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
+      ${coreutils}/bin/cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
       source "$NIX_ATTRS_SH_FILE"
     fi
     source $stdenv/setup
@@ -258,15 +257,17 @@ rec {
     # Write the command to start the VM to a file so that the user can
     # debug inside the VM if the build fails (when Nix is called with
     # the -K option to preserve the temporary build directory).
-    cat > ./run-vm <<EOF
+    ${coreutils}/bin/cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --shared-dir "${storeDir}" &
-    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --shared-dir xchg &
+    # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
+    # Since we are running in a sandbox already, the difference between seccomp and none is minimal
+    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
+    ${pkgs.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
     ${qemuCommand}
     EOF
 
-    chmod +x ./run-vm
+    ${coreutils}/bin/chmod +x ./run-vm
     source ./run-vm
 
     if ! test -e xchg/in-vm-exit; then
@@ -274,7 +275,7 @@ rec {
       exit 1
     fi
 
-    exitCode="$(cat xchg/in-vm-exit)"
+    exitCode="$(${coreutils}/bin/cat xchg/in-vm-exit)"
     if [ "$exitCode" != "0" ]; then
       exit "$exitCode"
     fi
@@ -726,7 +727,7 @@ rec {
     {name, packagesLists, urlPrefix, packages}:
 
     runCommand "${name}.nix"
-      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg pkgs.nixfmt-rfc-style ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in
@@ -744,6 +745,7 @@ rec {
 
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
+      nixfmt $out
     '';
 
 

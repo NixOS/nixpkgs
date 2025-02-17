@@ -42,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.11.0";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vmk7oW9foXkZdt3XOLJDbPldX2TruJOgd8mmi5tGqNw=";
+    hash = "sha256-azJFXuoV+9qs5MJQTkc1+ZiJb6UKwEa0Ow0p31CkHqI=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-4PrOrI2cykkuzob+DMeAu/GF5OMCho40G3BjCwVW/tE=";
+    npmDepsHash = "sha256-oo9fo3MjwKYA8gueJ5otIPawORaVNj/Js3y8ZuCZ4qQ=";
 
     dontBuild = true;
 
@@ -83,6 +83,7 @@ python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "django-phonenumber-field"
     "dnspython"
+    "drf_ujson2"
     "importlib-metadata"
     "kombu"
     "markdown"
@@ -96,10 +97,11 @@ python.pkgs.buildPythonApplication rec {
     "requests"
     "sentry-sdk"
     "ua-parser"
+    "webauthn"
   ];
 
   pythonRemoveDeps = [
-    "vat-moss-forked" # we provide a patched vat-moss package
+    "vat_moss_forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -265,8 +267,9 @@ python.pkgs.buildPythonApplication rec {
       python
       ;
     plugins = lib.recurseIntoAttrs (
-      python.pkgs.callPackage ./plugins {
+      lib.packagesFromDirectoryRecursive {
         inherit (python.pkgs) callPackage;
+        directory = ./plugins;
       }
     );
     tests = {

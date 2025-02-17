@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qwlroots";
-  version = "0.3.0-wlroots0.17-0.18";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "qwlroots";
     rev = finalAttrs.version;
-    hash = "sha256-ObXegiJ4LT8bTUxNVJ9wBKN5oILWPDYTsuCy+OCsh3k=";
+    hash = "sha256-RVIxyAC346gXy05hyT/AtConzO1ZE8lbiCg2Diin6bA=";
   };
 
   nativeBuildInputs = [

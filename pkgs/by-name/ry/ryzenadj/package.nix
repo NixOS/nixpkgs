@@ -17,9 +17,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pciutils
     cmake
   ];
+
+  buildInputs = [
+    pciutils
+  ];
+
+  strictDeps = true;
 
   installPhase = ''
     install -D libryzenadj.so $out/lib/libryzenadj.so

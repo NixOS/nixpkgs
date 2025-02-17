@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pyschlage";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ftoBchKK3I0kzw70MPaAlo/M2YLUx8OFwMNkJQ3itbo=";
   };
 

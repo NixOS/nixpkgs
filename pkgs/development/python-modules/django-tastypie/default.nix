@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-tastypie";
     repo = "django-tastypie";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-StXWqwGVILXtK53fa2vSNXSIf7UGfdn7iJyOIzdnth4=";
   };
 

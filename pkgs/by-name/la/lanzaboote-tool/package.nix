@@ -20,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/rust/tool";
-  cargoHash = "sha256-g4WzqfH6DZVUuNb0jV3MFdm3h7zy2bQ6d3agrXesWgc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HnTsu46P3HRYo2d1DeaP6hqn+pVW3J4IM+CneckSFoM=";
 
   env.TEST_SYSTEMD = systemd;
   doCheck = lib.meta.availableOn stdenv.hostPlatform systemd;

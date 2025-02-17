@@ -204,7 +204,7 @@ let
       homeMode = mkOption {
         type = types.strMatching "[0-7]{1,5}";
         default = "700";
-        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
+        description = "The user's home directory mode in numeric format. See {manpage}`chmod(1)`. The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
       cryptHomeLuks = mkOption {
@@ -941,8 +941,17 @@ in {
             Please check the value of option `users.users."${user.name}".hashedPassword`.'';
           }
           {
+            assertion = user.isNormalUser && user.uid != null -> user.uid >= 1000;
+            message = ''
+              A user cannot have a users.users.${user.name}.uid set below 1000 and set users.users.${user.name}.isNormalUser.
+              Either users.users.${user.name}.isSystemUser must be set to true instead of users.users.${user.name}.isNormalUser
+              or users.users.${user.name}.uid must be changed to 1000 or above.
+            '';
+          }
+          {
             assertion = let
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
+              # we do an extra check on isNormalUser here, to not trigger this assertion when isNormalUser is set and uid to < 1000
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000 && !user.isNormalUser);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.

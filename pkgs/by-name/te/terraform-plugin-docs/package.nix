@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i5J0dBXqfm5YvELU8q5jLTtfgo8r1u/x/VW55TPmJLQ=";
   };
 

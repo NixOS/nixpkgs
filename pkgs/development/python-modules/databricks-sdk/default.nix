@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.38.0";
+  version = "0.43.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g00NRo0FSHujN2mCLZCc1hKGsBFiN7ztEneUMziuQpk=";
+    tag = "v${version}";
+    hash = "sha256-UdGkHstRelFxlJ5zIm5PeFM7p0JQCPWD2zVS2XOlVq4=";
   };
 
   build-system = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Databricks SDK for Python";
     homepage = "https://github.com/databricks/databricks-sdk-py";
-    changelog = "https://github.com/databricks/databricks-sdk-py/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/databricks/databricks-sdk-py/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

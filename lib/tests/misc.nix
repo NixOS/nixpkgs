@@ -854,6 +854,30 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+  testDrop = let inherit (lib) drop; in testAllTrue [
+    # list index -1 is out of bounds
+    # ([ 1 2 3 ] == (drop (-1) [  1 2 3 ]))
+    (drop 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (drop 1 [ 1 2 3 ] == [ 2 3 ])
+    (drop 2 [ 1 2 3 ] == [ 3 ])
+    (drop 3 [ 1 2 3 ] == [ ])
+    (drop 4 [ 1 2 3 ] == [ ])
+    (drop 0 [ ] == [ ])
+    (drop 1 [ ] == [ ])
+  ];
+
+  testDropEnd = let inherit (lib) dropEnd; in testAllTrue [
+    (dropEnd 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd 1 [ 1 2 3 ] == [ 1 2 ])
+    (dropEnd 2 [ 1 2 3 ] == [ 1 ])
+    (dropEnd 3 [ 1 2 3 ] == [ ])
+    (dropEnd 4 [ 1 2 3 ] == [ ])
+    (dropEnd 0 [ ] == [ ])
+    (dropEnd 1 [ ] == [ ])
+    (dropEnd (-1) [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd (-1) [ ] == [ ])
+  ];
+
   testListHasPrefixExample1 = {
     expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
     expected = true;
@@ -2587,5 +2611,46 @@ runTests {
       directory = ./packages-from-directory/c;
     };
     expected = "c";
+  };
+
+  testMergeTypesSimple =
+    let
+      mergedType = types.mergeTypes types.str types.str;
+    in
+  {
+    expr = mergedType.name;
+    expected = "str";
+  };
+
+  testMergeTypesFail =
+    let
+      mergedType = types.mergeTypes types.str types.int;
+    in
+  {
+    expr = types.isType "merge-error" mergedType;
+    expected = true;
+  };
+
+  testMergeTypesEnum =
+    let
+      enumAB = lib.types.enum ["A" "B"];
+      enumXY = lib.types.enum ["X" "Y"];
+      merged = lib.types.mergeTypes enumAB enumXY; # -> enum [ "A" "B" "X" "Y" ]
+    in
+  {
+    expr = {
+      checkA = merged.check "A";
+      checkB = merged.check "B";
+      checkX = merged.check "X";
+      checkY = merged.check "Y";
+      checkC = merged.check "C";
+    };
+    expected = {
+      checkA = true;
+      checkB = true;
+      checkX = true;
+      checkY = true;
+      checkC = false;
+    };
   };
 }

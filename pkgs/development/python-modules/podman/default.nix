@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YER+qTC5+eF3PWtDBPq2WNOm5RzqXy30+1JdPzwyfrk=";
   };
 

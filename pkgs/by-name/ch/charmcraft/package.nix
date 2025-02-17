@@ -8,15 +8,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.2.2";
+  version = "3.4.3";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "charmcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2MI2cbAohfTgbilxZcFvmxt/iVjR6zJ2o0gequB//hg=";
+    tag = version;
+    hash = "sha256-TCr6iZHUIJ/dZhj8pWsCYKAfqv9LXD3fGP432UQh/Lo=";
   };
 
   postPatch = ''
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
     humanize
     jinja2
     jsonschema
+    pip
     pydantic
     python-dateutil
     pyyaml
@@ -51,11 +52,14 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "urllib3"
     "craft-application"
+    "pip"
+    "pydantic"
   ];
 
   nativeCheckInputs =
     with python3Packages;
     [
+      freezegun
       hypothesis
       pyfakefs
       pytest-check
@@ -77,6 +81,8 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Relies upon the `charm` tool being installed
     "test_validate_missing_charm"
+    "test_read_charm_from_yaml_file_self_contained_success[full-bases.yaml]"
+    "test_read_charm_from_yaml_file_self_contained_success[full-platforms.yaml]"
   ];
 
   passthru.updateScript = nix-update-script { };

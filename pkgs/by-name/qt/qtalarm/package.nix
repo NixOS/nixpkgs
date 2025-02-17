@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CountMurphy";
     repo = "QTalarm";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-87w5YFQ9olLnCfPF04jOnIMn1NtE2M2n5WZX4e69UGU=";
   };
 

@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nomino";
-  version = "1.3.7";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "yaa110";
     repo = pname;
     rev = version;
-    hash = "sha256-rePNcO8vssCR7YfdDCV+YT1hqGKBeMCwWpGmBnKtl9w=";
+    hash = "sha256-BWfgXg3DYdhSzO3qtkwDZ+BZGcIqm82G3ZryaetLYgM=";
   };
 
-  cargoHash = "sha256-C+fcN3byvPFtgX/DYexNZryoirOAhSx0hhOYR2gdW3s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-lfArBtwaMeeofE1cBgXFJg2UOMcOhBGF4htJwzNthyc=";
 
   meta = with lib; {
     description = "Batch rename utility for developers";

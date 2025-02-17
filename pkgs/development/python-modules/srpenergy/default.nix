@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lamoreauxlab";
     repo = "srpenergy-api-client-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bdBF5y9hRj4rceUD5qjHOM9TIaHGElJ36YjWCJgCzX8=";
   };
 

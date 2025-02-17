@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "24.4.0";
+  version = "25.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = "refs/tags/${version}";
-    hash = "sha256-z3ecgsep/BQJ+Fv78rV4XiFU4+1aaUEfNEtIqy44KV4=";
+    tag = version;
+    hash = "sha256-zhIiDy+Wnt03WDc4BwQpSfiZorDf8BHiORCw8TotgJU=";
   };
 
   build-system = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Painless structural logging";
     homepage = "https://github.com/hynek/structlog";
-    changelog = "https://github.com/hynek/structlog/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/hynek/structlog/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

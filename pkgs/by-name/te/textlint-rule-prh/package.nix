@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "textlint-rule";
     repo = "textlint-rule-prh";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K2WkHh7sLnhObM2ThvdXVbZymLInjSB6XTshxALotKU=";
   };
 

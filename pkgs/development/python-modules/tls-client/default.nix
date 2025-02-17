@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FlorianREGAZ";
     repo = "Python-Tls-Client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0eH9fA/oQzrgXcQilUdg4AaTqezj1Q9hP9olhZEDeBc=";
   };
 

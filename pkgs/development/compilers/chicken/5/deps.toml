@@ -86,9 +86,9 @@ version = "4.0.0"
 [amb]
 dependencies = ["srfi-1"]
 license = "bsd"
-sha256 = "0n2wbxb23fai27hgk86jf9lnnrg0dvh989ysjkscdf9my96j448s"
+sha256 = "01vi2vnw8af8vf7kl0n9smgxsx16h9dml3w6wgwrln2p0qq70bp6"
 synopsis = "The non-deterministic backtracking ambivalence operator"
-version = "3.0.10"
+version = "3.0.11"
 
 [amqp]
 dependencies = ["bitstring", "mailbox", "srfi-18", "uri-generic"]
@@ -114,9 +114,9 @@ version = "0.6"
 [apropos]
 dependencies = ["utf8", "srfi-1", "symbol-utils", "check-errors"]
 license = "bsd"
-sha256 = "1w0kyycm8j30fd7iv9zs852rx5jpsmv2xs0lplpcjhmv2a3dlmv1"
+sha256 = "1k3n7j34rr7rwb66ba8iygzcpa6jy1ghfhxkfgyrq7rjrimjk1i0"
 synopsis = "CHICKEN apropos"
-version = "3.11.1"
+version = "3.11.2"
 
 [arcadedb]
 dependencies = ["medea"]
@@ -154,11 +154,11 @@ synopsis = "Automatically compile Scheme scripts on demand"
 version = "1.1.0"
 
 [awful-main]
-dependencies = ["awful", "spiffy", "define-options"]
+dependencies = ["awful", "spiffy"]
 license = "bsd"
-sha256 = "1zpnk3xjkn2pdfw953ximq6i0d3v3mak8ydl6a3nb2zz1daq7044"
+sha256 = "0bxigis5r6pi6p1kbjijvhj0fbyhw1bapbd2yz5rpqx1gy063cyq"
 synopsis = "Turn awful web applications into static executables"
-version = "0.1.0"
+version = "0.3.1"
 
 [awful-path-matchers]
 dependencies = []
@@ -265,6 +265,13 @@ sha256 = "08qc2vsbc42c8108z50v2izkiwn5gd5hk7mjf8gbwy28p92gqh2x"
 synopsis = "a uniform interface to lists and lazy-lists"
 version = "0.4.1"
 
+[binary-heap]
+dependencies = ["srfi-1", "datatype", "matchable"]
+license = "gpl-3"
+sha256 = "0qdpvpigg46wgb3qbg0k83r1rchjlzzpgc9zk4i8wwwl59isigsb"
+synopsis = "Binary heap."
+version = "2.2"
+
 [binary-search]
 dependencies = []
 license = "bsd"
@@ -315,11 +322,11 @@ synopsis = "Blob Utilities"
 version = "2.0.4"
 
 [bloom-filter]
-dependencies = ["iset", "message-digest-primitive", "message-digest-type", "message-digest-utils", "check-errors"]
+dependencies = ["iset", "message-digest-primitive", "message-digest-type", "message-digest-utils", "check-errors", "record-variants"]
 license = "bsd"
-sha256 = "1ljak0xscrywyl1sbv8yx9qkw1r2m94gyw3ag73p3z8m618valy3"
+sha256 = "1ck8sg7gfp6n3ih7zx37q8kidika679dfmxi4iazq4dv6k9mn8s6"
 synopsis = "Bloom Filter"
-version = "2.3.4"
+version = "2.4.0"
 
 [blosc]
 dependencies = ["srfi-13", "compile-file"]
@@ -338,9 +345,9 @@ version = "2.13.20191214-0"
 [box]
 dependencies = []
 license = "bsd"
-sha256 = "131k73q72v658mkxhj34988kwh8yxjq00gf4sn3f1y837n6kp9yd"
+sha256 = "08bhc1w5m48f6034821xkvsrh1p8qzvr6rg35mlv4c013alvwiq0"
 synopsis = "Boxing"
-version = "3.6.0"
+version = "3.8.1"
 
 [breadcrumbs]
 dependencies = ["srfi-1"]
@@ -429,9 +436,9 @@ version = "0.4"
 [check-errors]
 dependencies = []
 license = "bsd"
-sha256 = "1xgchkpcmk7cwvbr87xmmwnw7z9ah8r8p6hv7kdkpjy66bas0yhj"
+sha256 = "02ny48dl9i5m7jb6nma95gwsyhjhwnz9mmjx4n42yq9hrdi69rfv"
 synopsis = "Argument checks & errors"
-version = "3.8.2"
+version = "3.8.3"
 
 [checks]
 dependencies = ["simple-exceptions"]
@@ -604,9 +611,9 @@ version = "1.0"
 [condition-utils]
 dependencies = ["srfi-1", "srfi-69", "check-errors"]
 license = "bsd"
-sha256 = "1g3vi4pn3z66qldbw4h5731xvi2hd37l887czzbj2a2pbwv4rfp3"
+sha256 = "09y01vdwi54acwg0nq1vdf10w9w1a0mdmp1fc2vaxh69zfjzxaiq"
 synopsis = "SRFI 12 Condition Utilities"
-version = "2.3.1"
+version = "2.4.1"
 
 [continuations]
 dependencies = []
@@ -618,9 +625,9 @@ version = "1.2"
 [coops-utils]
 dependencies = ["srfi-1", "srfi-13", "check-errors", "coops"]
 license = "bsd"
-sha256 = "0jvikvzxy4mz8x9pg0m89pidjmfjxm2g66lz3j84ip4ip8s28nwf"
+sha256 = "0ln7jp12slbh9vnvqkiqm90lq82477lywjwz22l8xq81rrbv7q6i"
 synopsis = "coops utilities"
-version = "2.2.4"
+version = "2.3.0"
 
 [coops]
 dependencies = ["matchable", "miscmacros", "record-variants", "srfi-1"]
@@ -653,9 +660,9 @@ version = "1.4"
 [csm]
 dependencies = ["matchable", "srfi-1", "srfi-13", "srfi-14", "miscmacros"]
 license = "bsd"
-sha256 = "1bvawrbslsfzxlhal5abyss0nj0jddqbs5ran58nygfc1myn3vfs"
+sha256 = "02y11q6lgsk4w7qdsz4af3y7lcxk3cl1hy8dycsqfaai6kvjndjg"
 synopsis = "a build system"
-version = "0.5"
+version = "0.7"
 
 [cst]
 dependencies = ["brev-separate", "srfi-1", "define-options", "match-generics"]
@@ -674,9 +681,9 @@ version = "6.1"
 [daemon]
 dependencies = []
 license = "unlicense"
-sha256 = "1kqryy1jq9qz0y3c58qlwr8mvgdn2jyr7a6anqb32dipp9ylqkim"
+sha256 = "0gg8ibn08di3964a5ax4x0caw7qj5vy6wqig5pcx07g3578svad9"
 synopsis = "Create daemon processes"
-version = "0.0.1"
+version = "0.0.2"
 
 [dataframe]
 dependencies = ["srfi-1", "srfi-25", "srfi-69", "srfi-127", "utf8", "vector-lib", "yasos", "rb-tree", "fmt", "statistics"]
@@ -744,9 +751,9 @@ version = "2.0"
 [directory-utils]
 dependencies = ["srfi-1", "utf8", "miscmacros", "stack", "check-errors"]
 license = "bsd"
-sha256 = "17306fd9brbifvc3ahzfwcam9px2fs1674m8wzbyr6hzh9bhw62z"
+sha256 = "052n5yqhf2mbwk0pp9jv8ymbdlpqx2sq401q7sbc6bzz206w6s8v"
 synopsis = "directory-utils"
-version = "2.4.1"
+version = "2.4.3"
 
 [disjoint-set]
 dependencies = []
@@ -828,9 +835,9 @@ version = "1.1.0"
 [egg-tarballs]
 dependencies = ["simple-sha1", "srfi-1", "srfi-13"]
 license = "bsd"
-sha256 = "0sribz131y1q9x86zfgwjqpjhmz62f2jn41cv8d5s1q4bfpv4xkw"
+sha256 = "16scw7055cclbhkcsjj0crwgirx5jihda18lirh60zf5a56khhpb"
 synopsis = "Creates tarballs for eggs in henrietta cache"
-version = "0.10.0"
+version = "1.0.1"
 
 [elliptic-curves]
 dependencies = ["srfi-1", "srfi-99", "matchable", "modular-arithmetic"]
@@ -910,11 +917,11 @@ synopsis = "Binding to libexif, reading EXIF meta data from digital camera image
 version = "1.2"
 
 [expand-full]
-dependencies = ["srfi-1"]
+dependencies = ["srfi-1", "test-utils"]
 license = "bsd"
-sha256 = "072c5xvmsgkbz5wj4ihj0y4k5fvx9lsz5vjydvzmhnmwd613cg46"
+sha256 = "1cy595kqrgd1y9xlvcg5wrp74vdh8wx602p8nc1xadx4jxy5dn4q"
 synopsis = "Full macro expansion"
-version = "2.1.3"
+version = "2.2.0"
 
 [expat]
 dependencies = ["bind", "silex"]
@@ -933,9 +940,9 @@ version = "2020.01.26"
 [ezxdisp]
 dependencies = ["bind"]
 license = "lgpl-2"
-sha256 = "0aqa7z8gir1kz6s8azj508hav80ymrp2adwpxa44hw6bbalgfdh8"
+sha256 = "1ydqxfpp6p57y64amg743ydxyjhixq12slidsn92aibjvbhzh0ws"
 synopsis = "A simple 2D and 3D graphics library for X11"
-version = "3.0"
+version = "3.1"
 
 [fancypants]
 dependencies = ["srfi-1", "srfi-13"]
@@ -954,9 +961,9 @@ version = "0.7"
 [fcp]
 dependencies = ["srfi-1", "srfi-18", "srfi-69", "base64", "regex", "matchable"]
 license = "bsd"
-sha256 = "0kbqghyf1qjmhs6vx6pkzq3m0y4yv2wan69sxpry8h0dj2lmw5jb"
+sha256 = "0n44fshsbcngx45kd52mdw6dbimjpayg5xcgil6bki6x30i9y0q9"
 synopsis = "Very basic interface to freenet FCP"
-version = "v0.4"
+version = "v0.8"
 
 [feature-test]
 dependencies = []
@@ -1017,9 +1024,9 @@ version = "3.2.3"
 [fp-utils]
 dependencies = ["fx-utils"]
 license = "bsd"
-sha256 = "02k8ayj30gh36cz0p2xirjnvbb845ng43yxb2b7x8ih39jyps9py"
+sha256 = "0n6imxvs2fmrw1ypy9qfba86z49m0d7nbwdrw2iwprnnjl57kki2"
 synopsis = "fp utilities"
-version = "4.2.0"
+version = "4.2.1"
 
 [freetype]
 dependencies = ["srfi-1", "srfi-13", "foreigners", "matchable"]
@@ -1045,9 +1052,9 @@ version = "0.1.1"
 [fx-utils]
 dependencies = []
 license = "bsd"
-sha256 = "0kbk7cm5ss00582nvgfq25zcgf07z417c5jf0flva4csm37rb6hf"
+sha256 = "00bwgn4b3ygwxvil7p7rvjgxb7j7vhyk9ds7i94vzpari2pk4vz4"
 synopsis = "fx utilities"
-version = "4.0.3"
+version = "4.0.4"
 
 [gemini-client]
 dependencies = ["openssl", "r7rs", "uri-generic"]
@@ -1085,11 +1092,11 @@ synopsis = "Chicken bindings to genann - a simple neural network library in ANSI
 version = "0.2.2"
 
 [generalized-arrays]
-dependencies = ["r7rs", "srfi-48", "srfi-128", "srfi-133", "srfi-143", "srfi-160", "check-errors", "transducers"]
+dependencies = ["r7rs", "srfi-48", "srfi-128", "srfi-133", "srfi-143", "srfi-160", "srfi-253", "transducers"]
 license = "bsd-3"
-sha256 = "0zimlx33nn4val556sbwzgcsrpavz02dmk78hbv2xrjasraq36zn"
+sha256 = "17krc7ig1f4wvw41493bpxircxcqlic0y3sj89m7wy9b0qzsd3wf"
 synopsis = "Provides generalized arrays, intervals, and storage classes for CHICKEN Scheme."
-version = "2.0.2"
+version = "2.1.0"
 
 [generics]
 dependencies = ["simple-cells"]
@@ -1101,9 +1108,9 @@ version = "2.0.3"
 [geo-utils]
 dependencies = ["srfi-1", "vector-lib", "mathh", "check-errors", "symbol-utils"]
 license = "bsd"
-sha256 = "0n0fsfna4amxqkfcrqmr7b468xqhs2m7pmqyxs0zllmpf9wn0hd7"
+sha256 = "0ga63mcc9rybq7qv72akkkq72n58bnh9js417hjfwczadgbb4bwl"
 synopsis = "Geographic Utilities"
-version = "1.2.2"
+version = "1.2.3"
 
 [getopt-long]
 dependencies = ["srfi-1", "srfi-13", "srfi-14", "matchable"]
@@ -1115,9 +1122,9 @@ version = "1.21"
 [getopt-utils]
 dependencies = ["utf8", "srfi-1", "getopt-long"]
 license = "bsd"
-sha256 = "1992zcps7gghhc9l7sfkglmf2rqgwvw6jz39k7q9mbs690chq1l1"
+sha256 = "07q0c0d8lvsxly4bwifhwmm1cizz9nx5r8p9zbkb9vi6xfd5xfi3"
 synopsis = "Utilities for getopt-long"
-version = "1.2.0"
+version = "1.2.1"
 
 [git]
 dependencies = ["srfi-69", "foreigners", "module-declarations", "srfi-1"]
@@ -1164,9 +1171,9 @@ version = "0.12.2"
 [gmi]
 dependencies = []
 license = "unlicense"
-sha256 = "08c89r4cz4nh66crkfsxwdj1lxjmbxr2lls92ncnqlxd0mnmplq0"
+sha256 = "0n1in7indi9cp7mx0inbpgz7ipjq3lwzgqrk6hz3zj2nixx0k1fj"
 synopsis = "Gemtext reader and writer"
-version = "0.0.7"
+version = "0.0.8"
 
 [gnuplot-pipe]
 dependencies = ["srfi-1", "srfi-13"]
@@ -1479,9 +1486,9 @@ version = "0.4.5a"
 [json-utils]
 dependencies = ["utf8", "srfi-1", "srfi-69", "vector-lib", "miscmacros", "moremacros"]
 license = "bsd"
-sha256 = "1m67ri4b2awnmsmva1613cnsp94v0w73qxw4myyhglrnkam4xlcc"
+sha256 = "1p7j8fa83zppx50ydcxp74rzpbii96zg50mls30cl4lkircwhwzq"
 synopsis = "JSON Utilities"
-version = "1.1.1"
+version = "1.1.3"
 
 [json]
 dependencies = ["packrat", "srfi-1", "srfi-69"]
@@ -1521,9 +1528,9 @@ version = "0.3"
 [lay]
 dependencies = []
 license = "bsd"
-sha256 = "0ak7bgs79xz5yiywv159s471zqmhawwfipfn9ccll8nw1anp8gdw"
+sha256 = "0vrc6apz17pr9fld927g562xbbsv9hkgxdwb0r5ybc8n7jyk9mll"
 synopsis = "Lay eggs efficiently"
-version = "0.2.3"
+version = "0.3.1"
 
 [lazy-ffi]
 dependencies = ["bind", "srfi-1", "srfi-69"]
@@ -1556,9 +1563,9 @@ version = "1.2"
 [levenshtein]
 dependencies = ["srfi-1", "srfi-13", "srfi-63", "srfi-69", "vector-lib", "utf8", "miscmacros", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "1vgxdnas0sw47f8c68ki8fi7j6m9q5x96qnddwslwijjdhg7gdrm"
+sha256 = "07i97va0ajg1zhbnpc5lyp8qdpa7rhg579y0xhvpp370sa6qrchf"
 synopsis = "Levenshtein edit distance"
-version = "2.4.3"
+version = "2.4.4"
 
 [lexgen]
 dependencies = ["srfi-1", "utf8", "srfi-127"]
@@ -1584,9 +1591,9 @@ version = "1.2.1"
 [list-utils]
 dependencies = ["utf8", "srfi-1", "check-errors"]
 license = "bsd"
-sha256 = "1llnf0qrssw4vpwvp17ir7558q0d1xyyb14zydcrnb9nhbzly5jr"
+sha256 = "09a7rignm474ifysryvl79ls6vj5is7ghb84w5i3dc3lavzm3947"
 synopsis = "list-utils"
-version = "2.6.0"
+version = "2.7.2"
 
 [live-define]
 dependencies = ["matchable"]
@@ -1626,9 +1633,9 @@ version = "1.0.6"
 [locale]
 dependencies = ["srfi-1", "utf8", "check-errors"]
 license = "bsd"
-sha256 = "1f6wkaf89b74wxlhdxd4clmgavirvw3ld2igwqwi3rh1w95ln7x4"
+sha256 = "0ccp4r0qpy65rv2llvsjm0l2y8xyac702gj761516ppps4cysw6s"
 synopsis = "Provides locale operations"
-version = "0.9.4"
+version = "0.9.5"
 
 [locals]
 dependencies = []
@@ -1652,11 +1659,11 @@ synopsis = "A pure Chicken Markdown parser"
 version = "3"
 
 [lsp-server]
-dependencies = ["apropos", "chicken-doc", "json-rpc", "nrepl", "r7rs", "srfi-1", "srfi-18", "srfi-69", "srfi-130", "srfi-133", "srfi-180", "uri-generic", "utf8"]
+dependencies = ["apropos", "chicken-doc", "json-rpc", "nrepl", "r7rs", "srfi-1", "srfi-18", "srfi-69", "srfi-133", "srfi-180", "uri-generic", "utf8"]
 license = "mit"
-sha256 = "09fak8d29qmxynh4361prhfg971j74mha6pw311a6kmz88h9zp0h"
+sha256 = "0lphdbydn7ly77i5j0ik3hb5605xyr205w94m38x1b8jfs5av8nx"
 synopsis = "LSP Server for CHICKEN."
-version = "0.4.4"
+version = "0.4.7"
 
 [macaw]
 dependencies = []
@@ -1682,9 +1689,9 @@ version = "0.1.0"
 [mailbox]
 dependencies = ["srfi-1", "srfi-18"]
 license = "bsd"
-sha256 = "1g1fxkydd8wkqpvfv4md2ilk5vf4276ks5153da7mph2i6hbzr4a"
+sha256 = "1306hqcq8g9pr8kq50czzgnwcxna70ljs7m8baqcyzzajsxjvwy8"
 synopsis = "Thread-safe queues with timeout"
-version = "3.3.10"
+version = "3.3.11"
 
 [make-tests]
 dependencies = ["brev-separate", "srfi-1", "uri-common"]
@@ -1729,11 +1736,11 @@ synopsis = "Hygienic MATCH replacement"
 version = "1.2"
 
 [math-utils]
-dependencies = ["memoize", "miscmacros"]
+dependencies = ["memoize", "miscmacros", "srfi-1", "vector-lib"]
 license = "public-domain"
-sha256 = "1sl46zqv9al83blyzrl39k22arxq57i7j0qayri3qq9xwpgdhrf2"
+sha256 = "087ynv9fgzpzhx4k8kbv7qsh1j0izv0pv5cx20c20i20fhh7d5bi"
 synopsis = "Miscellaneous math utilities"
-version = "1.5.0"
+version = "1.7.0"
 
 [math]
 dependencies = ["srfi-1", "r6rs-bytevectors", "miscmacros", "srfi-133", "srfi-42"]
@@ -1745,9 +1752,9 @@ version = "0.3.4"
 [mathh]
 dependencies = []
 license = "public-domain"
-sha256 = "1mf9aqjwp068a93fmkm29f5mawc15nizm8wwvfra1af7y4f434al"
+sha256 = "1dh0clclb8bh7jl0xk806cz4gc41nzyav9zk4lpiw8pliagwal4m"
 synopsis = "ISO C math functions and constants"
-version = "4.7.0"
+version = "4.7.1"
 
 [matrico]
 dependencies = []
@@ -1759,9 +1766,9 @@ version = "0.6rel"
 [md5]
 dependencies = ["message-digest-primitive"]
 license = "public-domain"
-sha256 = "1crpkb0vzg26rk1w9xmswmx53bsira02hkixjspmfrrssdkvh5gv"
+sha256 = "04ax8sid739ls1n2yh3sk1a2y3wsk7g8g76hcaggpfkh2kqs0p2w"
 synopsis = "Computes MD5 (RFC1321) checksums"
-version = "4.1.3"
+version = "4.1.4"
 
 [mdh]
 dependencies = []
@@ -1801,23 +1808,23 @@ version = "0.4"
 [message-digest-primitive]
 dependencies = ["check-errors"]
 license = "bsd"
-sha256 = "1yc7b5zkwrqz4pc6y9fz4qgj8cgvmnfb30ad6slb5rl1vb6g5gjg"
+sha256 = "16n1mxwlybx999v89l2g4yh3fpq69gqax4dpzpdywb60islagc22"
 synopsis = "Message Digest Primitive"
-version = "4.3.8"
+version = "4.3.9"
 
 [message-digest-type]
 dependencies = ["blob-utils", "string-utils", "message-digest-primitive", "check-errors"]
 license = "bsd"
-sha256 = "15cp3km0lv4s28yq0ynabqmd902325692xyq2hmsv0n68j5jckdz"
+sha256 = "0fc8vqbyxsmzx96mjaaawx74pfsi7sfshqv2lmf6krkp6vji27nm"
 synopsis = "Message Digest Type"
-version = "4.3.6"
+version = "4.3.7"
 
 [message-digest-utils]
 dependencies = ["blob-utils", "string-utils", "memory-mapped-files", "message-digest-primitive", "message-digest-type", "check-errors"]
 license = "bsd"
-sha256 = "04pxzqnirv04hcjik1v2mz59vvfgxfanfsgwy6q0ai17as2kaajr"
+sha256 = "1c1jqvsm6l2kbf6mbav19fcm167ihyip3ins10c9pbkacizfi94x"
 synopsis = "Message Digest Support"
-version = "4.3.7"
+version = "4.3.9"
 
 [message-digest]
 dependencies = ["message-digest-primitive", "message-digest-type", "message-digest-utils"]
@@ -1836,16 +1843,16 @@ version = "0.7"
 [micro-benchmark]
 dependencies = ["micro-stats", "srfi-1"]
 license = "gplv3"
-sha256 = "022fkwr1wm1im40rgk3g5dz8n4rvlw1zdmskqsh9idv31gbfi456"
+sha256 = "10s05fxw8bsvxbnm312i3pfnzc117l3ds8zpji9ry01ps1spy74q"
 synopsis = "Easily create micro-benchmarks"
-version = "0.0.20"
+version = "0.0.21"
 
 [micro-stats]
 dependencies = ["srfi-1", "sequences", "sequences-utils"]
 license = "gplv3"
-sha256 = "1y4lh2g8fvfi3wz9k0x00nq0n0w80rfrc69pmxhjrbg1w0arl83h"
+sha256 = "0w881dyhr5p3imp1fqfy3ycsr1azhk9h6rvqqrhqi85xj0hjf17n"
 synopsis = "Easily create micro-stats"
-version = "0.1.2"
+version = "0.2.1"
 
 [mini-kanren]
 dependencies = ["srfi-1"]
@@ -1892,9 +1899,9 @@ version = "0.3.1"
 [monad]
 dependencies = ["srfi-1"]
 license = "bsd"
-sha256 = "1xd24plxnwi9yssmw2in008biv2xf4iwwln6xswx781ankppqpg9"
+sha256 = "0728kk31h3c1gd7palgp4pmhjjrjdgyrplb2166jmmd1d5n1ajkf"
 synopsis = "Monads"
-version = "5.0"
+version = "5.1"
 
 [monocypher]
 dependencies = []
@@ -2165,16 +2172,16 @@ version = "1.4"
 [posix-utils]
 dependencies = ["srfi-1", "utf8", "check-errors"]
 license = "bsd"
-sha256 = "0l9yd1cqlj3wpddnky38lqiisq2m88gjyc053xmazsdbakg6622h"
+sha256 = "1am7j86pp6ym4xbg663g02hjcmq3alwmhcak0g6yrh96w1dk643c"
 synopsis = "posix-utils"
-version = "2.1.1"
+version = "2.1.2"
 
 [postgresql]
 dependencies = ["sql-null", "srfi-1", "srfi-13", "srfi-69"]
 license = "bsd"
-sha256 = "0hhbq2bc0jzya430n67d26y86q9y11nci3shpjcwlycvq9k1vx8j"
+sha256 = "1bp1xik3d264r191lr71rjrpfqw5cjd03kqnld2xdng734c3vn5z"
 synopsis = "Bindings for PostgreSQL's C-api"
-version = "4.1.5"
+version = "4.1.6"
 
 [poule]
 dependencies = ["datatype", "mailbox", "matchable", "srfi-1", "srfi-18", "typed-records"]
@@ -2184,11 +2191,11 @@ synopsis = "Manage pools of worker processes"
 version = "0.1.1"
 
 [prefixes]
-dependencies = ["tree-walkers"]
+dependencies = []
 license = "bsd"
-sha256 = "09xy34vz2w9ngi9z2yahv3fw5xiiy4xpdmf33zfvj46k7w5dahpn"
+sha256 = "1gf9n3irfflrhjhhwfjdaav02yl0a3j1bqrs82xwcib4rbs1r9xr"
 synopsis = "prefixing in er-macro-transformers made easy"
-version = "1.0"
+version = "2.0"
 
 [premodules]
 dependencies = ["simple-tests"]
@@ -2214,9 +2221,9 @@ version = "3.0.1"
 [procedure-decoration]
 dependencies = ["check-errors"]
 license = "bsd"
-sha256 = "0sid5fcw9pvf8n1zq5i757pzdr4hgx5w55qgrabsxpq5pgxj6gbs"
+sha256 = "1f3967abpik69k89rr2bv28xdnq9ps7z9hyf7xmsqs2frf7iy534"
 synopsis = "Procedure Decoration API"
-version = "3.0.0"
+version = "3.0.1"
 
 [prometheus]
 dependencies = ["srfi-1"]
@@ -2396,9 +2403,9 @@ version = "2.0"
 [remote-mailbox]
 dependencies = ["tcp-server", "s11n", "mailbox", "srfi-18", "synch", "miscmacros", "moremacros", "llrb-tree", "condition-utils", "check-errors"]
 license = "bsd"
-sha256 = "1jm9ybxji5i06vdrh39biiwyhk8cyxxhh4gnbxa66xv7h5n5dmhn"
+sha256 = "12fzidia913gncl9xpjyp6ri8d5fij17gkmxv0pr9fh13icx6h54"
 synopsis = "Remote Mailbox"
-version = "1.0.7"
+version = "1.0.8"
 
 [rest-bind]
 dependencies = ["intarweb", "uri-common"]
@@ -2417,9 +2424,9 @@ version = "0.1.3"
 [ripemd]
 dependencies = ["message-digest-primitive"]
 license = "bsd"
-sha256 = "18d0f37a13nsknay6vw27xvr1k0s4p4ss2dc29fhx89hsv5ycjsq"
+sha256 = "1x5kkfazbrxqyar5ll5jrba25bnp9l6r4nrbkrfgfdp1ngf58c3j"
 synopsis = "RIPE Message Digest"
-version = "2.1.2"
+version = "2.1.3"
 
 [rlimit]
 dependencies = ["srfi-13"]
@@ -2466,16 +2473,16 @@ version = "0.7"
 [s9fes-char-graphics]
 dependencies = ["srfi-1", "utf8", "format"]
 license = "public-domain"
-sha256 = "1ysz8vrx7zwfv4drx955ca28avmdfilafd9a20sl67y5vwb47i8m"
+sha256 = "0wlrz5c4v12jj014c20l35vcvqc9iplnpfxifca1agm68xhdda9v"
 synopsis = "Scheme 9 from Empty Space Char Graphics"
-version = "1.4.2"
+version = "1.4.3"
 
 [salmonella-diff]
 dependencies = ["salmonella", "salmonella-html-report", "srfi-1", "srfi-13", "sxml-transforms"]
 license = "bsd"
-sha256 = "1w5qzsmx2i9cpjd2d9kkfhw6627xg19x5w6jck9gba6vgcf2s6ca"
+sha256 = "1ghz1ary4qm0bqzl7sa781bwqq2sqxlnim6q7x51q6wna5g7kyph"
 synopsis = "A tool to diff salmonella log files"
-version = "1.1.0"
+version = "1.1.1"
 
 [salmonella-feeds]
 dependencies = ["atom", "rfc3339", "salmonella", "salmonella-diff", "srfi-1"]
@@ -2487,16 +2494,16 @@ version = "0.1.1"
 [salmonella-html-report]
 dependencies = ["salmonella", "srfi-1", "srfi-13", "sxml-transforms"]
 license = "bsd"
-sha256 = "107n7sgzk91s25ih3k40y649fnv9n37xnf7igkkn5c642hjmfr6d"
+sha256 = "1xrx2avw3y16bhdj91pyb1dkkn2hqykb1vmqpgjjsj3lnpxm4ksl"
 synopsis = "A tool to generate HTML ouput out of salmonella log files"
-version = "1.7.1"
+version = "1.7.2"
 
 [salmonella]
 dependencies = []
 license = "bsd"
-sha256 = "1r60dlr1qcjlirbwqpn23aphczlkhrhskgqmw51973w46ww839nf"
+sha256 = "1hafbvhcscksjwf3s9ch7f2szk24i653zhnnlpcmx9dra6kzp8hj"
 synopsis = "A tool for testing eggs"
-version = "3.1.1"
+version = "3.2.0"
 
 [salt]
 dependencies = ["datatype", "matchable", "make", "mathh", "lalr", "datatype", "unitconv", "fmt"]
@@ -2599,9 +2606,9 @@ version = "0.4.1"
 [semantic-version]
 dependencies = ["utf8", "srfi-1", "vector-lib", "srfi-69", "srfi-128", "record-variants"]
 license = "bsd"
-sha256 = "0aig2n1q08rqbvwl74ly4x05gzy7hc47n5dqgbn4zjg5539d77qd"
+sha256 = "0xwy5jimqqq7h3sfvvhhs5kb29a9x57k4jcbmkrmsxizb3fqdl18"
 synopsis = "Semantic Version Utilities"
-version = "0.0.17"
+version = "0.0.18"
 
 [sendfile]
 dependencies = ["memory-mapped-files"]
@@ -2613,9 +2620,9 @@ version = "2.0"
 [sequences-utils]
 dependencies = ["srfi-1", "srfi-69", "sequences"]
 license = "bsd"
-sha256 = "1r3wbvi502wm82zn78a2kw2dv1ya0msphhx42gb9wllxdhzz0d6l"
+sha256 = "0j3z8fz1zrlpadphfrkikpsnd74r8q8i4lxlnp4srlq4iwlb7b45"
 synopsis = "(More) Generic sequence operators"
-version = "0.5.1"
+version = "0.5.2"
 
 [sequences]
 dependencies = ["fast-generic", "srfi-42"]
@@ -2631,6 +2638,13 @@ sha256 = "1k3k9mkildbi9i8vgj26rj5nidrm0zif8pqf9zm5ahwn4kcp9drx"
 synopsis = "Utilities to help testing servers"
 version = "0.6"
 
+[sexp-diff]
+dependencies = ["srfi-1"]
+license = "lgpl"
+sha256 = "195x444hdh2xh37x9j2d9gayvhmiif0wz7wfyhz8zwspl3xzaq1h"
+synopsis = "S-Expression diff algorithm"
+version = "0.4.0"
+
 [sexpc]
 dependencies = ["brev-separate", "fmt", "tree"]
 license = "bsd-1-clause"
@@ -2641,16 +2655,16 @@ version = "1.4"
 [sha1]
 dependencies = ["message-digest-primitive"]
 license = "public-domain"
-sha256 = "0p48vv59lr1ydrn529fkpd7ybny9h4hggaav0b7zwyvpkhyd565q"
+sha256 = "099gc515653gwmgnvbw7fjkd6sbmhabqvdd1rkh8h9jmkfi9y8ih"
 synopsis = "Computes SHA1 (FIPS-180-1) checksums"
-version = "4.1.7"
+version = "4.1.8"
 
 [sha2]
 dependencies = ["message-digest-primitive"]
 license = "bsd"
-sha256 = "054bjn8wqqxn142cryp0jm18axr237lq9w6gip6hw37y66wpc6h6"
+sha256 = "0ngcn62r6f4mdxvbighypg1gm1yz1gkg5mlfrc2x84y9fy5kms1l"
 synopsis = "Computes 256-, 385- and 512-bit SHA2 checksums"
-version = "4.2.5"
+version = "4.2.6"
 
 [shell]
 dependencies = []
@@ -2716,11 +2730,11 @@ synopsis = "Some simple looping macros"
 version = "2.0"
 
 [simple-md5]
-dependencies = ["memory-mapped-files", "srfi-13"]
+dependencies = ["memory-mapped-files"]
 license = "public-domain"
-sha256 = "1aq7iqbh1jb3j61nylsrzf7rcmf204v1jl2l559q0jdycij6yn5z"
+sha256 = "1z234wzfppqc06ygknd0a3sa60fmnmwzdavlxgiwbigy1al04ln1"
 synopsis = "Computes MD5 (RFC1321) checksums"
-version = "0.1.1"
+version = "0.1.2"
 
 [simple-sequences]
 dependencies = []
@@ -2774,9 +2788,9 @@ version = "1.1.4"
 [slib-charplot]
 dependencies = ["slib-arraymap", "srfi-63", "slib-compat"]
 license = "artistic"
-sha256 = "04hyggnbxdjk0vq0x59gi98ybvkq2y3c8llb8zh9bzz045yj7n90"
+sha256 = "0dbcbarn1gcw5pimjlr9nmhllsyfvbc9n5hnl29d5mfyiv0ifqnn"
 synopsis = "The SLIB character plotting library"
-version = "1.2.3"
+version = "1.2.4"
 
 [slib-compat]
 dependencies = ["srfi-1"]
@@ -2837,9 +2851,9 @@ version = "0.3.3"
 [sparse-vectors]
 dependencies = ["srfi-1", "record-variants"]
 license = "bsd"
-sha256 = "1vvwkjkw3drlmy0pmihg2l5c3s8wbvp0d60934idgyb7vvbdy0rz"
+sha256 = "1xx3abj1f8qwdh0xsgjh9p0j7990nw3vjxw0482d1lidp52xi5n0"
 synopsis = "Arbitrarily large vectors"
-version = "1.1.1"
+version = "1.1.2"
 
 [spiffy-cgi-handlers]
 dependencies = ["spiffy", "intarweb", "uri-common", "socket", "records", "srfi-1", "srfi-18", "srfi-13", "miscmacros"]
@@ -3152,9 +3166,9 @@ version = "0.1"
 [srfi-174]
 dependencies = ["r7rs", "srfi-19"]
 license = "mit"
-sha256 = "0kl9x7q1wcy7jzjkajmqpf748aqfjysh0ygdvnbvg5bxzdfs4gh9"
+sha256 = "15x3qgws2ybwnhy4cr3b0q1rw2sxqmbafprn403wd3hks7ijm3xp"
 synopsis = "srfi-174"
-version = "1.0.2"
+version = "1.0.3"
 
 [srfi-178]
 dependencies = ["srfi-151", "srfi-160", "srfi-141"]
@@ -3194,9 +3208,9 @@ version = "1.0.3"
 [srfi-19]
 dependencies = ["srfi-1", "utf8", "srfi-18", "srfi-29", "miscmacros", "locale", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "10bnm3gsc3rdafw239pwr6f8c95ma4a11k3cjjjscr8gvxl1kywp"
+sha256 = "0wi2d1966ggig5mv7jzqs5nb87bqc4f176zdphcqghchd7vhhbbj"
 synopsis = "Time Data Types and Procedures"
-version = "4.9.9"
+version = "4.10.2"
 
 [srfi-193]
 dependencies = []
@@ -3282,19 +3296,26 @@ sha256 = "0vf6f0f6jm4frpz995kxjzydg3p7vjn58shmv6s2p34hmfsjcm04"
 synopsis = "Multidimensional arrays"
 version = "1.3"
 
+[srfi-253]
+dependencies = ["r7rs"]
+license = "mit"
+sha256 = "1b7lrsv5fhl9s3swz0abfx3y2wqrk07n3fwhymg9cz3908cjqms3"
+synopsis = "SRFI 253: Data (Type-)Checking"
+version = "0.1.0"
+
 [srfi-27]
 dependencies = ["srfi-1", "vector-lib", "timed-resource", "miscmacros", "check-errors"]
 license = "bsd"
-sha256 = "11hb0hxhm74yjg7d95nj1wxjpi3hgkns7zy64as3xl3jbq3wlh60"
+sha256 = "1bybfg0hv0a1gxb7mdq0q88zdnsmz9fdm27mnnhkhhmy9wh7y49x"
 synopsis = "Sources of Random Bits"
-version = "4.2.3"
+version = "4.2.4"
 
 [srfi-29]
 dependencies = ["srfi-1", "srfi-69", "utf8", "locale", "posix-utils", "condition-utils", "check-errors"]
 license = "bsd"
-sha256 = "1jyjwkz6jz9da3n32cgja2dvwrsl9lckknxjb1ial0359ibqnc3h"
+sha256 = "1f7qc26k8wpr8vgf5vqw54bir9a6aiwn6qx2mssqvlypj4zvffwv"
 synopsis = "Localization"
-version = "3.0.11"
+version = "3.1.0"
 
 [srfi-34]
 dependencies = []
@@ -3348,9 +3369,9 @@ version = "1.76"
 [srfi-45]
 dependencies = ["record-variants", "check-errors"]
 license = "bsd"
-sha256 = "0sygx2pd8d2j8q9n9xz4hdlbnn7amm7za4ibpk0wssyf02r6y5a3"
+sha256 = "0axnndb3lkh5ayiqkxhwg9v6zq1zkb59gsdgwg4b2ysx92mnn449"
 synopsis = "SRFI-45: Primitives for Expressing Iterative Lazy Algorithms"
-version = "4.0.7"
+version = "4.0.8"
 
 [srfi-47]
 dependencies = []
@@ -3481,9 +3502,9 @@ version = "0.3"
 [stack]
 dependencies = ["record-variants", "check-errors"]
 license = "bsd"
-sha256 = "00hh6kagnj7xsrg8i4wig1jp8y5v5g2887zgnfvqd5ibxr232g54"
+sha256 = "0zfjymxjkmhdv9484g5cyip4dh5h61qqrf9gl92i54j6wsy6c4va"
 synopsis = "Provides LIFO queue (stack) operations"
-version = "3.2.0"
+version = "3.2.1"
 
 [stalin]
 dependencies = []
@@ -3544,9 +3565,9 @@ version = "1.1"
 [string-utils]
 dependencies = ["utf8", "srfi-1", "srfi-13", "srfi-69", "miscmacros", "check-errors"]
 license = "bsd"
-sha256 = "1ilzdvbmmm7jnq4m3nrbxhj9x2b4d772748m9fjxzl9bqqik1a54"
+sha256 = "1dns5xcm348qkcry2x2d6mqd0k7xjfi2k4qm3vhnww8qkqaxrn09"
 synopsis = "String Utilities"
-version = "2.7.4"
+version = "2.7.5"
 
 [strse]
 dependencies = ["matchable", "srfi-13", "miscmacros"]
@@ -3628,9 +3649,9 @@ version = "1.0"
 [symbol-utils]
 dependencies = ["utf8"]
 license = "bsd"
-sha256 = "1514yvgpknkiwjksnkcshqxz6c7sb5ab182lfwrrha3ch2islq3h"
+sha256 = "0sw95b9487i9sr27zxnl3f6f07wrrpzx3g75q32yk2v79q898kd8"
 synopsis = "Symbol Utilities"
-version = "2.6.0"
+version = "2.6.1"
 
 [synch]
 dependencies = ["srfi-18", "check-errors"]
@@ -3656,9 +3677,9 @@ version = "0.1"
 [system]
 dependencies = ["coops", "shell", "compile-file", "srfi-1"]
 license = "bsd"
-sha256 = "18sp0r0qsq8aw3ff9f4cv5a3n6p7yh5jlwf0s22x8bswi4377a76"
+sha256 = "0zb94ylxqvdq3r84p33zydziziy4jfpc00zn8fv2jf3dhx0azlrk"
 synopsis = "load and compile groups of files"
-version = "0.8"
+version = "0.9"
 
 [tabular]
 dependencies = ["srfi-1", "srfi-127", "utf8", "matchable"]
@@ -3712,9 +3733,9 @@ version = "1.0.4"
 [test-utils]
 dependencies = ["test"]
 license = "bsd"
-sha256 = "0nd309zshnwsackk7vzxj9496g58j2ch65h0lghsjpx2ns9l2s14"
+sha256 = "1pc4q9m64im81l6diay0hy8zwrry4pw56vwgalvs204frfjfg41l"
 synopsis = "Test Utilities (for test egg)"
-version = "1.1.0"
+version = "1.2.1"
 
 [test]
 dependencies = []
@@ -3733,23 +3754,23 @@ version = "0.1"
 [thread-utils]
 dependencies = ["queues", "srfi-1", "srfi-18", "miscmacros", "moremacros", "record-variants", "check-errors", "synch"]
 license = "bsd"
-sha256 = "0avr7r6caacmbr3gbb8rp23ddi0g74yz2jc2w2bbhxrqr01vqj0l"
+sha256 = "0fmdns17m8phk2k9b4kipvywpg0jmcnbkmz9jaipzfsx9a853ax3"
 synopsis = "Thread Utilities"
-version = "2.2.8"
+version = "2.2.9"
 
 [tiger-hash]
 dependencies = ["message-digest-primitive"]
 license = "bsd"
-sha256 = "0hcmp58byk2wg0nbmb5zh2zc7z670dhva21qjpix6l8hqgrf0151"
+sha256 = "06b02im6b9q66vvcnq0w007qvczylbrk8cc71a93ka20k1l2nbvr"
 synopsis = "Tiger/192 Message Digest"
-version = "4.1.2"
+version = "4.1.3"
 
 [timed-resource]
 dependencies = ["record-variants", "check-errors", "thread-utils", "srfi-1", "srfi-18", "synch", "miscmacros"]
 license = "bsd"
-sha256 = "1jycpy7vxl8d3acnjyz531nqyhgy4n8baqjzd5af1kxy69qvmzgs"
+sha256 = "1awlgd42zwi7gpvddqdz7fmdmv5m9pznwc871vqsz2ax8xapp8mz"
 synopsis = "Resource w/ Timeout"
-version = "2.4.2"
+version = "2.4.3"
 
 [tiny-prolog]
 dependencies = ["srfi-69"]
@@ -3787,11 +3808,11 @@ synopsis = "tracing and breakpoints"
 version = "2.0"
 
 [transducers]
-dependencies = ["r7rs", "srfi-1", "srfi-128", "srfi-133", "srfi-143", "srfi-146", "srfi-160", "check-errors"]
+dependencies = ["r7rs", "srfi-1", "srfi-128", "srfi-133", "srfi-143", "srfi-146", "srfi-160", "srfi-253"]
 license = "mit"
-sha256 = "194clggnwmv7g0v4y5q8brr4aac3rs4ddzigxbls0pmdr925chlb"
+sha256 = "1ncbx703w0iwpsh2d302zlw6brajjdjravcp7y4cf3zk6rd3xfrd"
 synopsis = "Transducers for working with foldable data types."
-version = "0.5.5"
+version = "0.7.0"
 
 [transmission]
 dependencies = ["http-client", "intarweb", "medea", "r7rs", "srfi-1", "srfi-189", "uri-common"]
@@ -3929,9 +3950,9 @@ version = "3.6.3"
 [uuid-lib]
 dependencies = ["record-variants"]
 license = "bsd"
-sha256 = "16b03b6d29mjn8bcil0ln0vq85dxxvzlxrpnpblf68n7l9ix8qnc"
+sha256 = "06kx6j06h4qm1b4iw39bdr8llskyx5zpyzs0x86jib1vc16q6rkf"
 synopsis = "OSF DCE 1.1 UUID"
-version = "0.0.15"
+version = "0.0.16"
 
 [uuid]
 dependencies = []
@@ -4006,9 +4027,9 @@ version = "1.29"
 [xlib]
 dependencies = ["matchable", "srfi-13"]
 license = "unknown"
-sha256 = "17r7w5w7fwmhr5n37zq0yhg4s8pm8505lzal4mq7i2m6y591xfc0"
+sha256 = "04csxgqknw9zww1b71c2j2a8x5h1xxvkwi94ihyznb4qb3vzla4f"
 synopsis = "Xlib bindings"
-version = "1.3"
+version = "1.4"
 
 [xml-rpc]
 dependencies = ["base64", "http-client", "intarweb", "ssax", "sxpath", "srfi-1", "srfi-13", "srfi-18", "srfi-69"]

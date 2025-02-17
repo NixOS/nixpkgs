@@ -2,23 +2,26 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
-buildGoModule {
+buildGoModule rec {
   pname = "jjui";
-  version = "0-unstable-2024-12-10";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
-    rev = "525c8042a51710cdaefa91176af68a22ad0045bd";
-    hash = "sha256-WSlcJFLOe5UVvWubSPP391+AxepEa5M6GpmZnjYMjww=";
+    tag = "v${version}";
+    hash = "sha256-PAquHh3VVAhc4Tw1XkyKmwFbpLVkDRCMT+FGtqiydCA=";
   };
 
-  vendorHash = "sha256-kg5b3tzwyAhn00GwdUDf4OdYZvCJZHgkgpzHFWy5SxI=";
+  vendorHash = "sha256-MxTwe0S2wvkIy8VJl1p8utTX98zfcwpNgCdnpFAMxO0=";
 
   postFixup = ''
     mv $out/bin/cmd $out/bin/jjui
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A TUI for Jujutsu VCS";

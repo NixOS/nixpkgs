@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitea
-, libGL
-, libX11
-, libevdev
-, libinput
-, libxkbcommon
-, pixman
-, pkg-config
-, scdoc
-, udev
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots_0_18
-, xwayland
-, zig_0_13
-, withManpages ? true
-, xwaylandSupport ? true
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitea,
+  libGL,
+  libX11,
+  libevdev,
+  libinput,
+  libxkbcommon,
+  pixman,
+  pkg-config,
+  scdoc,
+  udev,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots_0_18,
+  xwayland,
+  zig_0_13,
+  withManpages ? true,
+  xwaylandSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.6";
+  version = "0.3.7";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-bLUotGbKHlMxNn8kC613cFp41qTXoxtwo0O4mZQLl7w=";
+    hash = "sha256-4ac0LGQtLldHyXJ2GIRMHV+VZfUrRFdBYLiAHX5lWcw=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -43,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
     xwayland
     zig_0_13.hook
-  ]
-  ++ lib.optional withManpages scdoc;
+  ] ++ lib.optional withManpages scdoc;
 
   buildInputs = [
     libGL
@@ -60,10 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ] ++ lib.optional withManpages "-Dman-pages" ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags =
+    [
+      "--system"
+      "${finalAttrs.deps}"
+    ]
+    ++ lib.optional withManpages "-Dman-pages"
+    ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
@@ -71,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.nu;
+    updateScript = ./update.sh;
   };
 
   meta = {

@@ -728,7 +728,7 @@ buildPythonPackage rec {
     (fetchDebianPatch {
       inherit pname version;
       debianRevision = "5";
-      name = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
+      patch = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
       hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
     })
   ];

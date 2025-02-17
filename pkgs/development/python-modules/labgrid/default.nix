@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rW9peT4zoPzVR6Kl/E8G4qBig/x/lvxpCtvNtwIIL+U=";
   };
 

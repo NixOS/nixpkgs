@@ -69,4 +69,8 @@ mkDerivation {
     kxmlgui
     plasma-framework
   ];
+
+  # Incompatible with our current version of fwupd:
+  # error: 'fwupd_release_get_uri' was not declared in this scope
+  meta.broken = true;
 }

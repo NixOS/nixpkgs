@@ -11,7 +11,7 @@ discover_modules() {
 
     while IFS= read -r lua_file; do
         # Ignore certain infra directories
-        if [[ "$lua_file" =~ debug/|scripts?/|tests?/|spec/ || "$lua_file" =~ .*\meta.lua ]]; then
+        if [[ "$lua_file" =~ (^|/)(debug|script|scripts|test|tests|spec)(/|$) || "$lua_file" =~ .*\meta.lua ]]; then
             continue
         # Ignore optional telescope and lualine modules
         elif [[ "$lua_file" =~ ^lua/telescope/_extensions/(.+)\.lua || "$lua_file" =~ ^lua/lualine/(.+)\.lua ]]; then
@@ -51,7 +51,8 @@ run_require_checks() {
 
     export HOME="$TMPDIR"
     local deps="${dependencies[*]}"
-    local checks="${nativeBuildInputs[*]}"
+    local nativeCheckInputs="${nativeBuildInputs[*]}"
+    local checkInputs="${buildInputs[*]}"
     set +e
     for name in "${nvimRequireCheck[@]}"; do
         local skip=false
@@ -67,7 +68,8 @@ run_require_checks() {
             echo "Attempting to require module: $name"
             if @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
                 --cmd "set rtp+=$out,${deps// /,}" \
-                --cmd "set rtp+=$out,${checks// /,}" \
+                --cmd "set rtp+=$out,${nativeCheckInputs// /,}" \
+                --cmd "set rtp+=$out,${checkInputs// /,}" \
                 --cmd "lua require('$name')"; then
                 check_passed=true
                 successful_modules+=("$name")
@@ -105,6 +107,7 @@ print_summary() {
         for module in "${failed_modules[@]}"; do
             echo -e "  ${RED}- $module${NC}"
         done
+        echo -e "\n${RED}Checkout https://nixos.org/manual/nixpkgs/unstable/#testing-neovim-plugins-neovim-require-check${NC}"
     fi
     echo "======================================================"
 

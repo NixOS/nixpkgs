@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "fahrplan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2QVaA2zqqFuxjkKbDXo+SNzkrDCxXiSYMUOftQ++wO4=";
   };
 

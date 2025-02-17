@@ -15,6 +15,7 @@
   gtksourceview5,
   wrapGAppsHook4,
   desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     gtksourceview5
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Swiss knife of text processing";

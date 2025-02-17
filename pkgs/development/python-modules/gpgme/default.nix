@@ -1,4 +1,5 @@
 {
+  autoreconfHook,
   buildPythonPackage,
   gpgme,
   lib,
@@ -17,7 +18,8 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace lang/python/setup.py.in \
-      --replace-fail "gpgme_h = '''" "gpgme_h = '${lib.getDev gpgme}/include/gpgme.h'"
+      --replace-fail "gpgme_h = '''" "gpgme_h = '${lib.getDev gpgme}/include/gpgme.h'" \
+      --replace-fail "@VERSION@" "${gpgme.version}"
   '';
 
   configureFlags = gpgme.configureFlags ++ [
@@ -35,6 +37,7 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   nativeBuildInputs = [
+    autoreconfHook
     swig
   ];
 

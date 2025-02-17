@@ -353,6 +353,7 @@ let
     Biostrings = [ pkgs.zlib ];
     CellBarcode = [ pkgs.zlib ];
     cld3 = [ pkgs.protobuf ];
+    cpp11qpdf = with pkgs; [ zlib.dev libjpeg ];
     bnpmr = [ pkgs.gsl ];
     caviarpd = [ pkgs.cargo ];
     cairoDevice = [ pkgs.gtk2.dev ];
@@ -370,6 +371,7 @@ let
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
+    fastpng = [ pkgs.zlib.dev ];
     fcl = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
@@ -494,7 +496,7 @@ let
     clustermq = [ pkgs.zeromq ];
     SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
     salso = [ pkgs.cargo ];
-    ymd = [ pkgs.cargo ];
+    ymd = with pkgs; [ cargo rustc ];
     arcpbf = [ pkgs.cargo ];
     sdcTable = with pkgs; [ gmp glpk ];
     seewave = with pkgs; [ fftw.dev libsndfile.dev ];
@@ -604,6 +606,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    adbcpostgresql = with pkgs; [ readline.dev zlib.dev openssl.dev libkrb5.dev openpam ];
     asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
@@ -793,7 +796,7 @@ let
     shrinkTVP = [ pkgs.gsl ];
     sbrl = with pkgs; [ gsl gmp.dev ];
     surveyvoi = with pkgs; [ gmp.dev mpfr.dev ];
-    unigd = with pkgs; [ cairo.dev libpng.dev ];
+    unigd = with pkgs; [ cairo.dev libpng.dev ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ expat xorg.libXdmcp ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
@@ -904,6 +907,7 @@ let
     "margaret"
     "MSnID"
     "OmnipathR"
+    "orthGS"
     "precommit"
     "protGear"
     "PCRA"
@@ -1040,10 +1044,10 @@ let
     });
 
     gifski = old.gifski.overrideAttrs (attrs: {
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-e6nuiQU22GiO2I+bu0muyICGrdkCLSZUDHDz2mM2hz0=";
+        hash = "sha256-yz6M3qDQPfT0HJHyK2wgzgl5sBh7EmdJ5zW8SJkk+wY=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -1057,10 +1061,10 @@ let
 
     timeless = old.timeless.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
-      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
         src = attrs.src;
         sourceRoot = "timeless/src/rust";
-        hash = "sha256-AccuRY3lfTXzaMnaYieKCEJErKo5132oSXgILbFhePI=";
+        hash = "sha256-5TV7iCzaaFwROfJNO6pvSUbJBzV+wZlU5+ZK4AMT6X0=";
       };
 
       cargoRoot = "src/rust";
@@ -1150,7 +1154,19 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    arcgisutils = old.arcgisutils.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    arcgisgeocode = old.arcgisgeocode.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
    gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    pingr = old.pingr.overrideAttrs (_: {
       postPatch = "patchShebangs configure";
     });
 
@@ -1160,6 +1176,14 @@ let
 
    surtvep = old.surtvep.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
+    });
+
+   rtiktoken = old.rtiktoken.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
@@ -1189,7 +1213,7 @@ let
     });
 
     b64 = old.b64.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      nativeBuildInputs = with pkgs; [ cargo rustc ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
@@ -1592,6 +1616,12 @@ let
       '';
     });
 
+    BiocParallel = old.BiocParallel.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=missing-template-arg-list-after-template-kw";
+      };
+    });
+
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
@@ -1822,6 +1852,7 @@ let
 
     rhdf5= old.rhdf5.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5.patch ];
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
     });
 
     rmarkdown = old.rmarkdown.overrideAttrs (_: {

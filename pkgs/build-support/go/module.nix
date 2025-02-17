@@ -117,7 +117,7 @@ in
 
       export GIT_SSL_CAINFO=$NIX_SSL_CERT_FILE
       ${if finalAttrs.proxyVendor then ''
-        mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+        mkdir -p "$GOPATH/pkg/mod/cache/download"
         go mod download
       '' else ''
         if (( "''${NIX_DEBUG:-0}" >= 1 )); then
@@ -135,8 +135,8 @@ in
       runHook preInstall
 
       ${if finalAttrs.proxyVendor then ''
-        rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-        cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+        rm -rf "$GOPATH/pkg/mod/cache/download/sumdb"
+        cp -r --reflink=auto "$GOPATH/pkg/mod/cache/download" $out
       '' else ''
         cp -r --reflink=auto vendor $out
       ''}
@@ -237,8 +237,8 @@ in
         local cmd="$1" dir="$2"
 
         declare -a flags
-        flags+=(''${tags:+-tags=''${tags// /,}})
-        flags+=(''${ldflags:+-ldflags="$ldflags"})
+        flags+=(''${tags:+-tags=$(concatStringsSep "," tags)})
+        flags+=(''${ldflags:+-ldflags="''${ldflags[*]}"})
         flags+=("-p" "$NIX_BUILD_CORES")
         if (( "''${NIX_DEBUG:-0}" >= 1 )); then
           flags+=(-x)
@@ -282,7 +282,7 @@ in
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
-        dir=$GOPATH/bin/${go.GOOS}_${go.GOARCH}
+        dir=$GOPATH/bin/''${GOOS}_''${GOARCH}
         if [[ -n "$(shopt -s nullglob; echo $dir/*)" ]]; then
           mv $dir/* $dir/..
         fi

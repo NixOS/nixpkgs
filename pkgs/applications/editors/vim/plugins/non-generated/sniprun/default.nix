@@ -1,9 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
+
+  # sniprun-bin
   rustPlatform,
-  vimUtils,
   makeWrapper,
   bashInteractive,
   coreutils,
@@ -11,20 +11,26 @@
   gnugrep,
   gnused,
   procps,
+
+  # sniprun
+  vimUtils,
+  substituteAll,
+  nix-update-script,
 }:
 let
-  version = "1.3.16";
+  version = "1.3.17";
   src = fetchFromGitHub {
     owner = "michaelb";
     repo = "sniprun";
     tag = "v${version}";
-    hash = "sha256-2rVeBUkdLXUiHkd8slyiLTYQBKwgMQvIi/uyCToVBYA=";
+    hash = "sha256-o8U3GXg61dfEzQxrs9zCgRDWonhr628aSPd/l+HxS70=";
   };
   sniprun-bin = rustPlatform.buildRustPackage {
     pname = "sniprun-bin";
     inherit version src;
 
-    cargoHash = "sha256-eZcWS+DWec0V9G6hBnZRUNcb3uZeSiBhn4Ed9KodFV8=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-HLPTt0JCmCM4SRmP8o435ilM1yxoxpAnf8hg3+8C54I=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -43,21 +49,22 @@ let
     '';
 
     doCheck = false;
+
+    meta.mainProgram = "sniprun";
   };
 in
 vimUtils.buildVimPlugin {
   pname = "sniprun";
   inherit version src;
 
-  patches = [ ./fix-paths.patch ];
-
-  postPatch = ''
-    substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
-  '';
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      sniprun = lib.getExe sniprun-bin;
+    })
+  ];
 
   propagatedBuildInputs = [ sniprun-bin ];
-
-  nvimRequireCheck = "sniprun";
 
   passthru = {
     updateScript = nix-update-script {
@@ -70,7 +77,7 @@ vimUtils.buildVimPlugin {
 
   meta = {
     homepage = "https://github.com/michaelb/sniprun/";
-    changelog = "https://github.com/michaelb/sniprun/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/michaelb/sniprun/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ GaetanLepage ];
     license = lib.licenses.mit;
   };

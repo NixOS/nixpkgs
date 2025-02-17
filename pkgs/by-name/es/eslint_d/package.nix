@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "eslint_d";
-  version = "14.2.2";
+  version = "14.3.0";
 
   src = fetchFromGitHub {
     owner = "mantoni";
     repo = "eslint_d.js";
     rev = "v${version}";
-    hash = "sha256-7VsbGudZlfrjU+x3a9OWxu9qDCiDUq8xez85qNj08xY=";
+    hash = "sha256-Mu3dSgRIC2L9IImKixJfaUsltlajY0cYdXOSikNQuPo=";
   };
 
-  npmDepsHash = "sha256-u8kmHQ7UfCR446d+HbkGlK76Aki+KrOtBO6/a/VXoTg=";
+  npmDepsHash = "sha256-nZ9q+Xmd8JLs+xYEO1TVbDEmQl2UwR9D9OWqVChNHhw=";
 
   dontNpmBuild = true;
 

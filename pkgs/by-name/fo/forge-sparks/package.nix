@@ -13,6 +13,7 @@
   libsoup_3,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   stdenv,
   wrapGAppsHook4,
@@ -58,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libsoup_3
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/rafaelmardojai/forge-sparks/releases/tag/${finalAttrs.version}";

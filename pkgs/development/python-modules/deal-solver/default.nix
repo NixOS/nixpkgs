@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "life4";
     repo = "deal-solver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 

@@ -5,16 +5,17 @@
 
 buildGoModule rec {
   pname = "gocover-cobertura";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "boumenot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nbwqfObU1tod5gWa9UbhmS6CpLLilvFyvNJ6XjeR8Qc=";
+    sha256 = "sha256-Cxv1iuCYHSI0BFR1OLbeDIQfVLlMDxlTgU7ljpXWHjU=";
   };
 
-  vendorHash = null;
+  deleteVendor = true;
+  vendorHash = "sha256-b1fUikmBnc+q0KsRhK9p4VJjVnt6XFjmX9AE48TAxXg=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -23,6 +24,6 @@ buildGoModule rec {
     description = "This is a simple helper tool for generating XML output in Cobertura format for CIs like Jenkins and others from go tool cover output";
     mainProgram = "gocover-cobertura";
     license = licenses.mit;
-    maintainers = with maintainers; [ hmajid2301 ];
+    maintainers = with maintainers; [ gabyx hmajid2301 ];
   };
 }

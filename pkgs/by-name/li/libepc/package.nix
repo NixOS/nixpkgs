@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Easy Publish and Consume Library";
     homepage = "https://gitlab.gnome.org/Archive/libepc";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    maintainers = [ maintainers.bot-wxt1221 ];
     platforms = platforms.linux;
   };
 })

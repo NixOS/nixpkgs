@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, Security
-, cmake
-, pkg-config
-, asio
-, nettle
-, gnutls
-, msgpack-cxx
-, readline
-, libargon2
-, jsoncpp
-, restinio
-, http-parser
-, openssl
-, fmt
-, enableProxyServerAndClient ? false
-, enablePushNotifications ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Security,
+  cmake,
+  pkg-config,
+  asio,
+  nettle,
+  gnutls,
+  msgpack-cxx,
+  readline,
+  libargon2,
+  jsoncpp,
+  restinio,
+  llhttp,
+  openssl,
+  fmt,
+  enableProxyServerAndClient ? false,
+  enablePushNotifications ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "opendht";
-  version = "3.2.0";
+  version = "3.2.0-unstable-2025-01-05";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    rev = "v${version}";
-    hash = "sha256-s172Sj1EvV7Lmnmd+xyKmYF2cDEa8Bot10ovggEsOFg=";
+    rev = "5237f0a3b3eb8965f294de706ad73596569ae1dd";
+    hash = "sha256-qErVKyZQR/asJ8qr0sRDaXZ8jUV7RaSLnJka5baWa7Q=";
   };
 
   nativeBuildInputs = [
@@ -35,29 +36,34 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    asio
-    fmt
-    nettle
-    gnutls
-    msgpack-cxx
-    readline
-    libargon2
-  ] ++ lib.optionals enableProxyServerAndClient [
-    jsoncpp
-    restinio
-    http-parser
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      asio
+      fmt
+      nettle
+      gnutls
+      msgpack-cxx
+      readline
+      libargon2
+    ]
+    ++ lib.optionals enableProxyServerAndClient [
+      jsoncpp
+      restinio
+      llhttp
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
-  cmakeFlags = lib.optionals enableProxyServerAndClient [
-    "-DOPENDHT_PROXY_SERVER=ON"
-    "-DOPENDHT_PROXY_CLIENT=ON"
-  ] ++ lib.optionals enablePushNotifications [
-    "-DOPENDHT_PUSH_NOTIFICATIONS=ON"
-  ];
+  cmakeFlags =
+    lib.optionals enableProxyServerAndClient [
+      "-DOPENDHT_PROXY_SERVER=ON"
+      "-DOPENDHT_PROXY_CLIENT=ON"
+    ]
+    ++ lib.optionals enablePushNotifications [
+      "-DOPENDHT_PUSH_NOTIFICATIONS=ON"
+    ];
 
   # https://github.com/savoirfairelinux/opendht/issues/612
   postPatch = ''
@@ -66,13 +72,22 @@ stdenv.mkDerivation rec {
       --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   meta = with lib; {
     description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ taeer olynch thoughtpolice ];
+    maintainers = with maintainers; [
+      taeer
+      olynch
+      thoughtpolice
+    ];
     platforms = platforms.unix;
   };
 }

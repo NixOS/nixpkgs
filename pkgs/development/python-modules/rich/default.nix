@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zaop9zR+Sz9lMQjQP1ddJSid5jEmf0tQYuTeLuWNGA8=";
   };
 
@@ -56,6 +56,14 @@ buildPythonPackage rec {
     attrs
     pytestCheckHook
     which
+  ];
+
+  disabledTests = [
+    # pygments 2.19 regressions
+    # https://github.com/Textualize/rich/issues/3612
+    "test_inline_code"
+    "test_blank_lines"
+    "test_python_render_simple_indent_guides"
   ];
 
   pythonImportsCheck = [ "rich" ];

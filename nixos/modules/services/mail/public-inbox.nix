@@ -81,13 +81,10 @@ let
             "${config.i18n.glibcLocales}"
           ]
           ++ mapAttrsToList (name: inbox: inbox.description) cfg.inboxes
-          ++
-            # Without confinement the whole Nix store
-            # is made available to the service
-            optionals (!config.systemd.services."public-inbox-${srv}".confinement.enable) [
-              "${pkgs.dash}/bin/dash:/bin/sh"
-              builtins.storeDir
-            ];
+          ++ filter (x: x != null) [
+            cfg.${proto}.cert or null
+            cfg.${proto}.key or null
+          ];
         # The following options are only for optimizing:
         # systemd-analyze security public-inbox-'*'
         AmbientCapabilities = "";
@@ -104,7 +101,7 @@ let
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectProc = "invisible";
-        #ProtectSystem = "strict";
+        ProtectSystem = "strict";
         RemoveIPC = true;
         RestrictAddressFamilies =
           [ "AF_UNIX" ]
@@ -126,28 +123,9 @@ let
           # Not removing @timer because git upload-pack needs it.
         ];
         SystemCallArchitectures = "native";
-
-        # The following options are redundant when confinement is enabled
-        RootDirectory = "/var/empty";
-        TemporaryFileSystem = "/";
-        PrivateMounts = true;
-        MountAPIVFS = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProtectControlGroups = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
       };
       confinement = {
-        # Until we agree upon doing it directly here in NixOS
-        # https://github.com/NixOS/nixpkgs/pull/104457#issuecomment-1115768447
-        # let the user choose to enable the confinement with:
-        # systemd.services.public-inbox-httpd.confinement.enable = true;
-        # systemd.services.public-inbox-imapd.confinement.enable = true;
-        # systemd.services.public-inbox-init.confinement.enable = true;
-        # systemd.services.public-inbox-nntpd.confinement.enable = true;
-        #enable = true;
+        enable = true;
         mode = "full-apivfs";
         # Inline::C needs a /bin/sh, and dash is enough
         binSh = "${pkgs.dash}/bin/dash";

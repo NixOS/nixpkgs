@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , appstream-glib
+, autoAddDriverRunpath
 , cargo
 , desktop-file-utils
 , meson
@@ -25,18 +26,19 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nokyan";
     repo = "resources";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-SHawaH09+mDovFiznZ+ZkUgUbv5tQGcXBgUGrdetOcA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "resources-${finalAttrs.version}";
-    hash = "sha256-tUD+gx9nQiGWKKRPcR7OHbPvU2j1dQjYck7FF9vYqSQ=";
+    hash = "sha256-zqCqbQAUAIhjntX4gcV1aoJwjozZFlF7Sr49w7uIgaI=";
   };
 
   nativeBuildInputs = [
     appstream-glib
+    autoAddDriverRunpath
     desktop-file-utils
     meson
     ninja

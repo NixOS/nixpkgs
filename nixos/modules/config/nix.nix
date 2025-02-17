@@ -27,7 +27,6 @@ let
     literalExpression
     mapAttrsToList
     mkAfter
-    mkDefault
     mkIf
     mkOption
     mkRenamedOptionModuleWith
@@ -316,15 +315,25 @@ in
 
             system-features = mkOption {
               type = types.listOf types.str;
-              example = [ "kvm" "big-parallel" "gccarch-skylake" ];
+              default =
+                [
+                  "nixos-test"
+                  "benchmark"
+                  "big-parallel"
+                  "kvm"
+                ]
+                ++ optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
+                  # a builder can run code for `gcc.arch` and inferior architectures
+                  [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ]
+                  ++ map (x: "gccarch-${x}") (
+                    systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [ ]
+                  )
+                );
+              defaultText = literalExpression ''[ "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-<arch>" ]'';
               description = ''
                 The set of features supported by the machine. Derivations
                 can express dependencies on system features through the
                 `requiredSystemFeatures` attribute.
-
-                By default, pseudo-features `nixos-test`, `benchmark`,
-                and `big-parallel` used in Nixpkgs are set, `kvm`
-                is also included if it is available.
               '';
             };
 
@@ -350,7 +359,6 @@ in
             use-sandbox = true;
             show-trace = true;
 
-            system-features = [ "big-parallel" "kvm" "recursive-nix" ];
             sandbox-paths = [ "/bin/sh=''${pkgs.busybox-sandbox-shell.out}/bin/busybox" ];
           }
         '';
@@ -377,14 +385,6 @@ in
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
       trusted-users = [ "root" ];
       substituters = mkAfter [ "https://cache.nixos.org/" ];
-      system-features = mkDefault (
-        [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-        optionals (pkgs.stdenv.hostPlatform ? gcc.arch) (
-          # a builder can run code for `gcc.arch` and inferior architectures
-          [ "gccarch-${pkgs.stdenv.hostPlatform.gcc.arch}" ] ++
-          map (x: "gccarch-${x}") (systems.architectures.inferiors.${pkgs.stdenv.hostPlatform.gcc.arch} or [])
-        )
-      );
     };
   };
 }

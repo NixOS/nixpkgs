@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "loqusion";
     repo = "hyprshade";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MlbNE9n//Qb6OJc3DMkOpnPtoodfV8JlG/I5rOfWMtQ=";
   };
 

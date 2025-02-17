@@ -25,7 +25,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoHash = "sha256-kHIOsSR7ZxBzp4dtm2hbi8ddtlQ86x5EASk5HFmnhFo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1nuYdaQ6p0tnd7a7/H8wVtzOCGr0pCTcsT+Q0X9/DGc=";
 
   # tests fail with `--release`
   # https://github.com/yarrow/zet/pull/7

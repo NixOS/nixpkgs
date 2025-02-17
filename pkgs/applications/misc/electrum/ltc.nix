@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
+    hash = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
   };
 
   postUnpack = ''
@@ -85,6 +85,7 @@ python3.pkgs.buildPythonApplication {
       ckcc-protocol
       keepkey
       trezor
+      distutils
     ]
     ++ lib.optionals enableQt [
       pyqt5
@@ -109,6 +110,9 @@ python3.pkgs.buildPythonApplication {
     # copy the patched `/run_electrum` over `/electrum/electrum`
     # so the aiorpcx compatibility patch is used
     cp run_electrum electrum_ltc/electrum-ltc
+
+    # refresh stale generated code, per electrum_ltc/paymentrequest.py line 40
+    protoc --proto_path=electrum_ltc/ --python_out=electrum_ltc/ electrum_ltc/paymentrequest.proto
   '';
 
   preBuild =

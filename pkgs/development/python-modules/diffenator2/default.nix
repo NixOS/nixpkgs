@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   poetry-core,
   poetry-dynamic-versioning,
@@ -33,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "diffenator2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Iu6ZA8s6XnOYSOwlt8WTmYW6oUTvcm4vLhYvVATOlBA=";
   };
 
@@ -43,6 +42,7 @@ buildPythonPackage rec {
     "protobuf"
     "python-bidi"
     "youseedee"
+    "unicodedata2"
   ];
 
   build-system = [

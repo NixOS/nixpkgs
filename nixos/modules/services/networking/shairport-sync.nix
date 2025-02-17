@@ -84,7 +84,7 @@ in
         createHome = true;
         home = "/var/lib/shairport-sync";
         group = cfg.group;
-        extraGroups = [ "audio" ] ++ optional (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) "pulse";
+        extraGroups = [ "audio" ] ++ optional (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) "pulse";
       };
       groups.${cfg.group} = {};
     };

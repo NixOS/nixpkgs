@@ -5,6 +5,7 @@
 # this file.
 
 { lib
+, config
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
@@ -27,7 +28,6 @@ makeScopeWithSplicing' {
     inherit (self) callPackage;
     noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
   in (noExtraAttrs qt6) // {
-  inherit stdenv;
 
   # LIBRARIES
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
@@ -54,7 +54,12 @@ makeScopeWithSplicing' {
 
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+
+  libiodata = callPackage ../development/libraries/libiodata { };
+
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+
+  libqglviewer = callPackage ../development/libraries/libqglviewer { };
 
   libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
@@ -98,7 +103,7 @@ makeScopeWithSplicing' {
   qtspell = callPackage ../development/libraries/qtspell { };
 
   qwlroots = callPackage ../development/libraries/qwlroots {
-    wlroots = pkgs.wlroots_0_17;
+    wlroots = pkgs.wlroots_0_18;
   };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -111,6 +116,8 @@ makeScopeWithSplicing' {
     suffix = "qt6";
   };
 
+  sailfish-access-control-plugin = callPackage ../development/libraries/sailfish-access-control-plugin { };
+
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
   sddm = kdePackages.callPackage ../applications/display-managers/sddm {};
@@ -119,10 +126,15 @@ makeScopeWithSplicing' {
 
   signond = callPackage ../development/libraries/signond {};
 
+  timed = callPackage ../applications/system/timed { };
+
   waylib = callPackage ../development/libraries/waylib { };
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
   xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
+} // lib.optionalAttrs config.allowAliases {
+  # when removing, don't forget to remove a workaround in `pkgs/kde/default.nix`
+  stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }

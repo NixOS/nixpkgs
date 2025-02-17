@@ -18,12 +18,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";
-  version = "4.0beta14";
+  version = "4.0beta16";
 
   src = fetchurl {
     name = "WinBox_Linux-${finalAttrs.version}.zip";
     url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/WinBox_Linux.zip";
-    hash = "sha256-QfjF36OMP8fH6R2jIOOWFtheySYGiqtjA7Q4nV3EdZU=";
+    hash = "sha256-RZpsKew3BaId6+tcwUV6fniUpCH4wIP9ab6P5oE7OAk=";
   };
 
   sourceRoot = ".";

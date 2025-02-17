@@ -99,7 +99,7 @@ in
         default = { };
         description = ''
           General configuration for NFS daemons and tools.
-          See nfs.conf(5) and related man pages for details.
+          See {manpage}`nfs.conf(5)` and related man pages for details.
         '';
         example = lib.literalExpression ''
           {

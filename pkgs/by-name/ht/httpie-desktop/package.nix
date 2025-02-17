@@ -7,18 +7,18 @@
 
 appimageTools.wrapType2 rec {
   pname = "httpie-desktop";
-  version = "2024.1.2";
+  version = "2025.1.0";
 
   src =
     if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}-arm64.AppImage";
-        hash = "sha256-RhIyLakCkMUcXvu0sgl5MtV4YXXkqqH1UUS7bptUzww=";
+        hash = "sha256-YadVCoBNFFco4773COyJOGHtbFKW1zMzi5kazWqIGbY=";
       }
     else
       fetchurl {
         url = "https://github.com/httpie/desktop/releases/download/v${version}/HTTPie-${version}.AppImage";
-        hash = "sha256-OOP1l7J2BgO3nOPSipxfwfN/lOUsl80UzYMBosyBHrM=";
+        hash = "sha256-8Ecamw+rmY3iun8ytMsJW3gGHLNcyuZ7VkOiNfiDEyk=";
       };
 
   extraInstallCommands =
@@ -34,11 +34,11 @@ appimageTools.wrapType2 rec {
         --replace-fail 'Exec=AppRun' 'Exec=httpie-desktop'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform API testing client for humans. Painlessly test REST, GraphQL, and HTTP APIs";
     homepage = "https://github.com/httpie/desktop";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ luftmensch-luftmensch ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "httpie-desktop";
     platforms = [
       "x86_64-linux"

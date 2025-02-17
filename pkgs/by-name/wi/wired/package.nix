@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Toqozz";
     repo = "wired-notify";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-AWIV/+vVwDZECZ4lFMSFyuyUKJc/gb72PiBJv6lbhnc=";
   };
 
-  cargoHash = "sha256-gIDMD1jT6Wj5FCgbPURF0aayFBOq2mrZE1GZWQ3iYAA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xE6r8l3d9WAXf4DsGbhEiaeMPs02kXY2dG9dk0/7flQ=";
 
   strictDeps = true;
 

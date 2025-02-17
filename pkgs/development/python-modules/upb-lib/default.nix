@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "upb-lib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GnNzKU4mqBu2pUOju+4+HMLsTupd8s+nAAieixkBCDk=";
   };
 

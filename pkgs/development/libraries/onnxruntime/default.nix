@@ -218,11 +218,7 @@ effectiveStdenv.mkDerivation rec {
   ];
 
   env = lib.optionalAttrs effectiveStdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=deprecated-declarations"
-      "-Wno-error=deprecated-pragma"
-      "-Wno-error=unused-but-set-variable"
-    ];
+    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
   # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox
@@ -233,6 +229,11 @@ effectiveStdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+
+    # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
+    substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
+      "GetRuntimePath() const { return PathString(); }" \
+      "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
   '' + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
     # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc

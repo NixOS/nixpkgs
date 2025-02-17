@@ -32,6 +32,10 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
+      enable = mkEnableOption "the filesystem mount" // {
+        default = true;
+      };
+
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
@@ -64,7 +68,10 @@ let
       options = mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
-        description = "Options used to mount the file system.";
+        description = ''
+          Options used to mount the file system.
+          See {manpage}`mount(8)` for common options.
+        '';
         type = types.nonEmptyListOf nonEmptyStr;
       };
 
@@ -234,6 +241,7 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (`mountPoint = "/"`).  Each
@@ -280,6 +288,7 @@ in
     boot.specialFileSystems = mkOption {
       default = {};
       type = types.attrsOf (types.submodule coreFileSystemOpts);
+      apply = lib.filterAttrs (_: fs: fs.enable);
       internal = true;
       description = ''
         Special filesystems that are mounted very early during boot.
@@ -291,7 +300,7 @@ in
       example = "32m";
       type = types.str;
       description = ''
-        Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /dev tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -301,7 +310,7 @@ in
       example = "256m";
       type = types.str;
       description = ''
-        Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /dev/shm tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };
@@ -311,7 +320,7 @@ in
       example = "256m";
       type = types.str;
       description = ''
-        Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+        Size limit for the /run tmpfs. Look at {manpage}`mount(8)`, tmpfs size option,
         for the accepted syntax.
       '';
     };

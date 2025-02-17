@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-6gSJJ3ptqpYydjg+xf5Pz3iTk0D+bkC6N79OeiKxPHY=";
   };
 
-  cargoHash = "sha256-MRoEFP7VXBNBe6/e3ezPnzhKACwqTApGH9c0T4ycvg4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-U2LBesQNOa/E/NkVeLulb8JUtGsHgMne0MgY0RT9lqI=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
@@ -73,5 +74,6 @@ rustPlatform.buildRustPackage rec {
       protoben
       ma27
     ];
+    mainProgram = "evcxr";
   };
 }

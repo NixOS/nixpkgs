@@ -25,7 +25,7 @@ toPythonModule (
     src = fetchFromGitHub {
       owner = "esa";
       repo = "pygmo2";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-279KNnP11f5ob2senIVmbnlmhRp2p3RoZLsQRE6yJ5Q=";
     };
 

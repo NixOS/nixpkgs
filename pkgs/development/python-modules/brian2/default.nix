@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "brian2";
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
 
   # https://github.com/python/cpython/issues/117692
@@ -27,14 +27,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mp1xo6ooYm21s6FYcegQdsHmVgH81usV9IfIM0GM7lc=";
+    hash = "sha256-1JSE58y1T0YLuFMgVv2qf7bZoLddeyoyxF2dzgsbuUg=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/brian-team/brian2/commit/8ed663cafde42cbe2e0171cb19d2217e01676d20.patch";
-      hash = "sha256-+s5SJdJmsnee3sWhaj/jwf8RXkfMrLp0aTWF52jLdqU=";
-    })
     ./0001-remove-invalidxyz.patch # invalidxyz are reported as error so I remove it
   ];
 

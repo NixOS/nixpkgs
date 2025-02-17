@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-87zBAoBLWQPccGS37XyQ8H0GhL01k8GQFgcLL6IwbcM=";
     fetchSubmodules = true;
   };

@@ -11,7 +11,7 @@
   coreutils,
   util-linux,
   gnugrep,
-  gnupg1,
+  gnupg,
   gnutar,
   gnused,
   gzip,
@@ -32,25 +32,26 @@ let
     dpkg
     gawk
     gnugrep
-    gnupg1
+    gnupg
     gnused
     gnutar
     gzip
     perl
+    util-linux
     wget
     xz
   ];
 in
 stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.138";
+  version = "1.0.140_bpo12+1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "debootstrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-2NUFt39isGThOqlg1LNOFxYJOPm93jDCvIztJoE5Vts=";
+    hash = "sha256-4vINaMRo6IrZ6e2/DAJ06ODy2BWm4COR1JDSY52upUc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

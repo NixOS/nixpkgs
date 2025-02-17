@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "deepfence";
     repo = "SecretScanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-lTUZLuEiC9xpHYWn3uv4ZtbvHX6ETsjxacjd/O0kU8I=";
   };

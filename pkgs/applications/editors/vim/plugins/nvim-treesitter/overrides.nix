@@ -157,5 +157,4 @@ in
       license = licenses.asl20;
       maintainers = with maintainers; [ figsoda ];
     };
-  nvimRequireCheck = "nvim-treesitter";
 }

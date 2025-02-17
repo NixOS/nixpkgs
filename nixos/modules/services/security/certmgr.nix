@@ -4,15 +4,12 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.certmgr;
 
-  specs = mapAttrsToList (n: v: rec {
+  specs = lib.mapAttrsToList (n: v: rec {
     name = n + ".json";
-    path = if isAttrs v then pkgs.writeText name (builtins.toJSON v) else v;
+    path = if lib.isAttrs v then pkgs.writeText name (builtins.toJSON v) else v;
   }) cfg.specs;
 
   allSpecs = pkgs.linkFarm "certmgr.d" specs;
@@ -29,59 +26,59 @@ let
   );
 
   specPaths = map dirOf (
-    concatMap (
+    lib.concatMap (
       spec:
-      if isAttrs spec then
-        collect isString (filterAttrsRecursive (n: v: isAttrs v || n == "path") spec)
+      if lib.isAttrs spec then
+        lib.collect lib.isString (lib.filterAttrsRecursive (n: v: lib.isAttrs v || n == "path") spec)
       else
         [ spec ]
-    ) (attrValues cfg.specs)
+    ) (lib.attrValues cfg.specs)
   );
 
   preStart = ''
-    ${concatStringsSep " \\\n" ([ "mkdir -p" ] ++ map escapeShellArg specPaths)}
+    ${lib.concatStringsSep " \\\n" ([ "mkdir -p" ] ++ map lib.escapeShellArg specPaths)}
     ${cfg.package}/bin/certmgr -f ${certmgrYaml} check
   '';
 in
 {
   options.services.certmgr = {
-    enable = mkEnableOption "certmgr";
+    enable = lib.mkEnableOption "certmgr";
 
-    package = mkPackageOption pkgs "certmgr" { };
+    package = lib.mkPackageOption pkgs "certmgr" { };
 
-    defaultRemote = mkOption {
-      type = types.str;
+    defaultRemote = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1:8888";
       description = "The default CA host:port to use.";
     };
 
-    validMin = mkOption {
+    validMin = lib.mkOption {
       default = "72h";
-      type = types.str;
+      type = lib.types.str;
       description = "The interval before a certificate expires to start attempting to renew it.";
     };
 
-    renewInterval = mkOption {
+    renewInterval = lib.mkOption {
       default = "30m";
-      type = types.str;
+      type = lib.types.str;
       description = "How often to check certificate expirations and how often to update the cert_next_expires metric.";
     };
 
-    metricsAddress = mkOption {
+    metricsAddress = lib.mkOption {
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
       description = "The address for the Prometheus HTTP endpoint.";
     };
 
-    metricsPort = mkOption {
+    metricsPort = lib.mkOption {
       default = 9488;
-      type = types.ints.u16;
+      type = lib.types.ints.u16;
       description = "The port for the Prometheus HTTP endpoint.";
     };
 
-    specs = mkOption {
+    specs = lib.mkOption {
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           exampleCert =
           let
@@ -119,21 +116,21 @@ in
         }
       '';
       type =
-        with types;
+        with lib.types;
         attrsOf (
           either path (submodule {
             options = {
-              service = mkOption {
+              service = lib.mkOption {
                 type = nullOr str;
                 default = null;
-                description = "The service on which to perform \<action\> after fetching.";
+                description = "The service on which to perform \\<action\\> after fetching.";
               };
 
-              action = mkOption {
+              action = lib.mkOption {
                 type = addCheck str (
                   x:
                   cfg.svcManager == "command"
-                  || elem x [
+                  || lib.elem x [
                     "restart"
                     "reload"
                     "nop"
@@ -144,22 +141,22 @@ in
               };
 
               # These ought all to be specified according to certmgr spec def.
-              authority = mkOption {
+              authority = lib.mkOption {
                 type = attrs;
                 description = "certmgr spec authority object.";
               };
 
-              certificate = mkOption {
+              certificate = lib.mkOption {
                 type = nullOr attrs;
                 description = "certmgr spec certificate object.";
               };
 
-              private_key = mkOption {
+              private_key = lib.mkOption {
                 type = nullOr attrs;
                 description = "certmgr spec private_key object.";
               };
 
-              request = mkOption {
+              request = lib.mkOption {
                 type = nullOr attrs;
                 description = "certmgr spec request object.";
               };
@@ -173,9 +170,9 @@ in
       '';
     };
 
-    svcManager = mkOption {
+    svcManager = lib.mkOption {
       default = "systemd";
-      type = types.enum [
+      type = lib.types.enum [
         "circus"
         "command"
         "dummy"
@@ -193,7 +190,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.specs != { };
@@ -201,10 +198,10 @@ in
       }
       {
         assertion =
-          !any (hasAttrByPath [
+          !lib.any (lib.hasAttrByPath [
             "authority"
             "auth_key"
-          ]) (attrValues cfg.specs);
+          ]) (lib.attrValues cfg.specs);
         message = ''
           Inline services.certmgr.specs are added to the Nix store rendering them world readable.
           Specify paths as specs, if you want to use include auth_key - or use the auth_key_file option."
@@ -214,7 +211,7 @@ in
 
     systemd.services.certmgr = {
       description = "certmgr";
-      path = mkIf (cfg.svcManager == "command") [ pkgs.bash ];
+      path = lib.mkIf (cfg.svcManager == "command") [ pkgs.bash ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];

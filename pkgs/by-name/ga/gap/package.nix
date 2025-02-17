@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/192548#discussion_r992824942
     rm -r "$out/share/gap/pkg"
     cp -ar pkg tst "$out/share/gap"
+    cp -a etc/Makefile.gappkg "$out/share/gap/etc"
   '';
 
   preFixup = ''

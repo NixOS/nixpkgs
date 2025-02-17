@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   aioquic,
   buildPythonPackage,
@@ -56,15 +55,16 @@ buildPythonPackage rec {
 
   checkInputs = [ cacert ] ++ optional-dependencies.DNSSEC;
 
-  # don't run live tests
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NO_INTERNET = 1;
-  };
-
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
   ];
+
+  # disable network on all builds (including darwin)
+  # see https://github.com/NixOS/nixpkgs/issues/356803
+  preCheck = ''
+    export NO_INTERNET=1
+  '';
 
   pythonImportsCheck = [ "dns" ];
 

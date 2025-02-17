@@ -10,6 +10,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -23,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fizzyizzy05";
     repo = "binary";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0pVQMPwy/XXJl2fHQ/gIi+e/cJY87CA9G+GPkdYFQBc=";
   };
 
@@ -55,6 +56,10 @@ python3Packages.buildPythonApplication rec {
   postInstallCheck = ''
     mesonCheckPhase
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Small and simple app to convert numbers to a different base";

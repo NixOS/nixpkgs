@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kvesteri";
     repo = "sqlalchemy-utils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jC8onlCiuzpMlJ3EzpzCnQ128xpkLzrZEuGWQv7pvVE=";
   };
 

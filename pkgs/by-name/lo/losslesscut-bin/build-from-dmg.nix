@@ -10,17 +10,15 @@
   metaCommon ? { },
 }:
 
-let
-  pname = "losslesscut";
+stdenvNoCC.mkDerivation {
+  inherit pname version;
+
   src = fetchurl {
     url = "https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-mac-${
       if isAarch64 then "arm64" else "x64"
     }.dmg";
     inherit hash;
   };
-in
-stdenvNoCC.mkDerivation {
-  inherit pname version src;
 
   nativeBuildInputs = [ _7zz ];
 

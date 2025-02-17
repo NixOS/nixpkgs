@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tiehuis/2048-cli";
     description = "Game 2048 for your Linux terminal";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "2048";
   };

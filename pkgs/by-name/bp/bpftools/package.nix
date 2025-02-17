@@ -2,6 +2,7 @@
   lib,
   stdenv,
   linuxHeaders,
+  buildPackages,
   libopcodes,
   libopcodes_2_38,
   libbfd,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     ./include-asm-types-for-ppc64le.patch
   ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     python3
     bison

@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-ipp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-B3x6WkTSTGlZWMAK2BTA2EVVz+IvB3QL+arZGBAkZsE=";
   };
 

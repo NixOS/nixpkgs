@@ -16,7 +16,7 @@ rm -f package-lock.json package.json
 wget "$url/package.json"
 npm i --package-lock-only
 npm_hash=$(prefetch-npm-deps package-lock.json)
-sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' default.nix
+sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 rm -f package.json
 
 popd

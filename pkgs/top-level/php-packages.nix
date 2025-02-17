@@ -20,6 +20,7 @@
   libffi,
   libiconv,
   libkrb5,
+  libpq,
   libsodium,
   libxml2,
   libxslt,
@@ -33,7 +34,6 @@
   overrideSDK,
   pam,
   pcre2,
-  postgresql,
   bison,
   re2c,
   readline,
@@ -43,7 +43,6 @@
   uwimap,
   valgrind,
   zlib,
-  fetchpatch,
 }:
 
 lib.makeScope pkgs.newScope (
@@ -292,6 +291,8 @@ lib.makeScope pkgs.newScope (
           inherit (pkgs) darwin;
         };
 
+        decimal = callPackage ../development/php-packages/decimal { };
+
         ds = callPackage ../development/php-packages/ds { };
 
         event = callPackage ../development/php-packages/event { };
@@ -351,7 +352,6 @@ lib.makeScope pkgs.newScope (
           configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
 
           internalDeps = [ php.extensions.pdo ];
-
           postPatch = ''
             sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
           '';
@@ -543,6 +543,7 @@ lib.makeScope pkgs.newScope (
                   zlib
                   openssl
                 ];
+                configureFlags = [ "--with-mysqlnd-ssl" ];
                 # The configure script doesn't correctly add library link
                 # flags, so we add them to the variable used by the Makefile
                 # when linking.
@@ -635,7 +636,8 @@ lib.makeScope pkgs.newScope (
               {
                 name = "pdo_pgsql";
                 internalDeps = [ php.extensions.pdo ];
-                configureFlags = [ "--with-pdo-pgsql=${lib.getDev postgresql}" ];
+                buildInputs = [ libpq ];
+                configureFlags = [ "--with-pdo-pgsql=${lib.getDev libpq}" ];
                 doCheck = false;
               }
               {
@@ -647,8 +649,11 @@ lib.makeScope pkgs.newScope (
               }
               {
                 name = "pgsql";
-                buildInputs = [ pcre2 ];
-                configureFlags = [ "--with-pgsql=${lib.getDev postgresql}" ];
+                buildInputs = [
+                  pcre2
+                  libpq
+                ];
+                configureFlags = [ "--with-pgsql=${lib.getDev libpq}" ];
                 doCheck = false;
               }
               {

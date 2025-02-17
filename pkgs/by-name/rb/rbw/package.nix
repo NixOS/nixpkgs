@@ -6,9 +6,7 @@
   openssl,
   pkg-config,
   installShellFiles,
-  darwin,
   bash,
-  apple-sdk_11,
   # rbw-fzf
   withFzf ? false,
   fzf,
@@ -26,26 +24,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.12.1";
+  version = "1.13.2";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    hash = "sha256-+1kalFyhk2UL+iVzuFLDsSSTudrd4QpXw+3O4J+KsLc=";
+    hash = "sha256-ebLbdIF+BybK7ssNtZacGWmAEwdNZh8b94QYgvcwzmM=";
   };
 
-  cargoHash = "sha256-cKbbsDb449WANGT+x8APhzs+hf5SR3RBsCBWDNceRMA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xDb4shDHCbd0yuTSAt80i1aqyuhpkfd/fYF98CfXdcM=";
 
   nativeBuildInputs = [
     installShellFiles
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    [ bash ] # for git-credential-rbw
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11 # Needs _NSPasteboardTypeFileURL, can be removed once x86_64-darwin defaults to a higher SDK
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.AppKit
-    ];
+  buildInputs = [ bash ]; # for git-credential-rbw
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"

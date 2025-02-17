@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "pack";
-  version = "0.36.1";
+  version = "0.36.4";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = "pack";
     rev = "v${version}";
-    hash = "sha256-pszPntjdEU6zUwA+NawGI3EWjk0fMOFoBr9NPTOSwig=";
+    hash = "sha256-6cWmBNlmPnNszmv6zaHlyd8GqncMtttKOMfQxxJGJ18=";
   };
 
-  vendorHash = "sha256-4c7tWZ+7L0C0zPjOg/9gJlTXuGacV3uxzxs/TF+7vOo=";
+  vendorHash = "sha256-9fO/jwTpVvCdHIy1GrE2YZr7jN7Oyw64EbS2w08VOVI=";
 
   subPackages = [ "cmd/pack" ];
 

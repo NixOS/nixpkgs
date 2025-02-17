@@ -8,6 +8,7 @@
 let
   inherit (python3Packages)
     buildPythonApplication
+    setuptools
     gitpython
     manim
     opencv4
@@ -35,7 +36,7 @@ buildPythonApplication {
 
   patches = [ ./tests.patch ];
 
-  build-system = [ ];
+  build-system = [ setuptools ];
 
   pythonRemoveDeps = [ "opencv-python-headless" ];
 

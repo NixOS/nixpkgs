@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.3.1";
+  version = "3.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vHg5faXx7ILiI3tpQ38yxF96DzS7EZCSRHfIW9QbI9Q=";
+    tag = "v${version}";
+    hash = "sha256-4GnSd1kkUbOMhUwIi8ac3dMNFAzhr7tj0RKNdZElMsw=";
   };
 
   build-system = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pika
       python-dateutil
       pytz # https://github.com/Kozea/Radicale/issues/816
+      ldap3
     ]
     ++ passlib.optional-dependencies.bcrypt;
 

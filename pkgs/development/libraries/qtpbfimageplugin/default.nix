@@ -4,40 +4,34 @@
   fetchFromGitHub,
   qmake,
   qtbase,
-  protobuf,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "3.2";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
-    rev = version;
-    sha256 = "sha256-RbGVjwVIwO6Rj/hbNEowtZLqJdtkTfnq5YdnEYnbkTM=";
+    tag = version;
+    hash = "sha256-17mQ7aTpZhmsoAHhnueHSRTvCIHRcpWwZHZM+YUdeps=";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+  ];
+
   buildInputs = [
     qtbase
-    protobuf
   ];
 
   dontWrapQtApps = true;
 
-  postPatch =
-    ''
-      # Fix plugin dir
-      substituteInPlace pbfplugin.pro \
-        --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Fix darwin build
-      substituteInPlace pbfplugin.pro \
-        --replace '$$PROTOBUF/include' '${protobuf}/include' \
-        --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
-    '';
+  postPatch = ''
+    # Fix plugin dir
+    substituteInPlace pbfplugin.pro \
+      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+  '';
 
   meta = with lib; {
     description = "Qt image plugin for displaying Mapbox vector tiles";

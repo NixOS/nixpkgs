@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "malduck";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Btx0HxiZWrb0TDpBokQGtBE2EDK0htONe/DwqlPgAd4=";
   };
 

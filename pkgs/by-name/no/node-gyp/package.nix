@@ -12,7 +12,7 @@
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "node-gyp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uC75nDZPSDLsRIXyFs1hwhRMcECQB8iycNe9wtZjJ/E=";
   };
 

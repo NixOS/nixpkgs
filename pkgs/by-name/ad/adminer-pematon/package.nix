@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminer-pematon";
-  version = "4.12";
+  version = "4.13";
 
   src = fetchFromGitHub {
     owner = "pematon";
     repo = "adminer";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-ExCHEsZ+VFmrom3632/1OOjb3zbZgiaZJDapBkBGUnQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7kSQl4Ch9S+680FZBsO6ynsyF1GCkT8BPpBONmeJF9U=";
   };
 
   nativeBuildInputs = [

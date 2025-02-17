@@ -4,21 +4,21 @@
   version,
   stdenv,
   nodejs,
-  pnpm,
+  pnpm_9,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   inherit version src meta;
   pname = "overlayed-webui";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) src pname version;
     hash = "sha256-+yyxoodcDfqJ2pkosd6sMk77/71RDsGthedo1Oigwto=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   buildPhase = ''

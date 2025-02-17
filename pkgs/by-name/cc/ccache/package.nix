@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   binutils,
   asciidoctor,
   cmake,
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     # `git archive` replaces `$Format:%H %D$` in cmake/CcacheVersion.cmake
     # we need to replace it with something reproducible
     # see https://github.com/NixOS/nixpkgs/pull/316524
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Darwin.
     # Additionally, when cross compiling, the correct target prefix
     # needs to be set.
-    (substituteAll {
-      src = ./fix-objdump-path.patch;
+    (replaceVars ./fix-objdump-path.patch {
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];

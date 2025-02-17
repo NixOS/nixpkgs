@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "uplc";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xK2k0XLybWqyP5Qa2Oby8YBgiiswR++yVK7NPgpdSa0=";
   };
 

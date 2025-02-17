@@ -38,7 +38,7 @@ in
 
           See the upstream documentation:
 
-          https://gethomepage.dev/latest/installation/docker/#using-environment-secrets
+          <https://gethomepage.dev/installation/docker/#using-environment-secrets>
         '';
         default = "";
       };
@@ -48,7 +48,7 @@ in
         description = ''
           Custom CSS for styling Homepage.
 
-          See https://gethomepage.dev/latest/configs/custom-css-js/.
+          See <https://gethomepage.dev/configs/custom-css-js/>.
         '';
         default = "";
       };
@@ -58,7 +58,7 @@ in
         description = ''
           Custom Javascript for Homepage.
 
-          See https://gethomepage.dev/latest/configs/custom-css-js/.
+          See <https://gethomepage.dev/configs/custom-css-js/>.
         '';
         default = "";
       };
@@ -68,7 +68,7 @@ in
         description = ''
           Homepage bookmarks configuration.
 
-          See https://gethomepage.dev/latest/configs/bookmarks/.
+          See <https://gethomepage.dev/configs/bookmarks/>.
         '';
         # Defaults: https://github.com/gethomepage/homepage/blob/main/src/skeleton/bookmarks.yaml
         example = [
@@ -105,7 +105,7 @@ in
         description = ''
           Homepage services configuration.
 
-          See https://gethomepage.dev/latest/configs/services/.
+          See <https://gethomepage.dev/configs/services/>.
         '';
         # Defaults: https://github.com/gethomepage/homepage/blob/main/src/skeleton/services.yaml
         example = [
@@ -138,7 +138,7 @@ in
         description = ''
           Homepage widgets configuration.
 
-          See https://gethomepage.dev/latest/configs/service-widgets/.
+          See <https://gethomepage.dev/widgets/>.
         '';
         # Defaults: https://github.com/gethomepage/homepage/blob/main/src/skeleton/widgets.yaml
         example = [
@@ -164,7 +164,7 @@ in
         description = ''
           Homepage kubernetes configuration.
 
-          See https://gethomepage.dev/latest/configs/kubernetes/.
+          See <https://gethomepage.dev/configs/kubernetes/>.
         '';
         default = { };
       };
@@ -174,7 +174,7 @@ in
         description = ''
           Homepage docker configuration.
 
-          See https://gethomepage.dev/latest/configs/docker/.
+          See <https://gethomepage.dev/configs/docker/>.
         '';
         default = { };
       };
@@ -184,7 +184,7 @@ in
         description = ''
           Homepage settings.
 
-          See https://gethomepage.dev/latest/configs/settings/.
+          See <https://gethomepage.dev/configs/settings/>.
         '';
         # Defaults: https://github.com/gethomepage/homepage/blob/main/src/skeleton/settings.yaml
         default = { };
@@ -240,7 +240,7 @@ in
 
         environment = {
           HOMEPAGE_CONFIG_DIR = configDir;
-          HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
+          NIXPKGS_HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
           PORT = toString cfg.listenPort;
           LOG_TARGETS = lib.mkIf managedConfig "stdout";
         };
@@ -254,6 +254,14 @@ in
           ExecStart = lib.getExe cfg.package;
           Restart = "on-failure";
         };
+
+        preStart = ''
+          # Related:
+          # * https://github.com/NixOS/nixpkgs/issues/346016 ("homepage-dashboard: cache dir is not cleared upon version upgrade")
+          # * https://github.com/gethomepage/homepage/discussions/4560 ("homepage NixOS package does not clear cache on upgrade leaving broken state")
+          # * https://github.com/vercel/next.js/discussions/58864 ("Feature Request: Allow configuration of cache dir")
+          rm -rf "$NIXPKGS_HOMEPAGE_CACHE_DIR"/*
+        '';
       };
 
       networking.firewall = lib.mkIf cfg.openFirewall {

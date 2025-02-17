@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EGB1cOR1pVCXGjRj1NLj4Mk3kIy8luRqk3gGJqVNs7U=";
   };
 

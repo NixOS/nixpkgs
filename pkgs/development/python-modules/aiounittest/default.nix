@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kwarunek";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
   };
 

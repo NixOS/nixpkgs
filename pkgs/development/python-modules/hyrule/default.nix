@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hyrule";
-    rev = "refs/tags/${version}";
-    hash = "sha256-w1Q2w/P1bDt/F1+zTkUFi5PxycXXE3p0qadfBcyWElg=";
+    tag = version;
+    hash = "sha256-FJ7iu+ohbe4nhADka2OC+JHAmwZkkJgFVLyHD0Fms1E=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utility library for the Hy programming language";
     homepage = "https://github.com/hylang/hyrule";
-    changelog = "https://github.com/hylang/hylure/releases/tag/${version}";
+    changelog = "https://github.com/hylang/hyrule/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

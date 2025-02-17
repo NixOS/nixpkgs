@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-N3TumAwHcHDuVyY4t6FPNOO28D7xX5jheCTodfn71/Q=";
   };
 
-  cargoHash = "sha256-k34psGOs6G+B/msmLSDHLNxnjO1yyE4OY6aQU8bt+is=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-NqbsDi47AhYw4hNcoWfXNUnc7WjC1en7mbyCJvhYdR4=";
 
   # include_hidden test tries to use `chflags` on darwin
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [

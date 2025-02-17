@@ -10,11 +10,12 @@
   procps,
   ruby,
   postgresql,
+  libpq,
   imlib2,
   jq,
   moreutils,
   nodejs,
-  pnpm,
+  pnpm_9,
   cacert,
   redis,
   dataDir ? "/var/lib/zammad",
@@ -22,7 +23,7 @@
 
 let
   pname = "zammad";
-  version = "6.4.0";
+  version = "6.4.1";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -59,7 +60,7 @@ let
     ];
     gemConfig = defaultGemConfig // {
       pg = attrs: {
-        buildFlags = [ "--with-pg-config=${lib.getDev postgresql}/bin/pg_config" ];
+        buildInputs = [ libpq ];
       };
       rszr = attrs: {
         buildInputs = [
@@ -94,7 +95,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     redis
     postgresql
-    pnpm.configHook
+    pnpm_9.configHook
     nodejs
     procps
     cacert
@@ -102,7 +103,7 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
     hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";

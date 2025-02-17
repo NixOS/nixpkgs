@@ -119,7 +119,7 @@ flutter324.buildFlutterApplication rec {
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
     mainProgram = "simple_live_app";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -15,9 +15,7 @@ buildPostgresqlExtension (finalAttrs: {
 
   inherit (pg-dump-anon) version src;
 
-  nativeBuildInputs = [ postgresql ] ++ lib.optional jitSupport llvm;
-
-  strictDeps = true;
+  nativeBuildInputs = lib.optional jitSupport llvm;
 
   # Needs to be after postInstall, where removeNestedNixStore runs
   preFixup = ''

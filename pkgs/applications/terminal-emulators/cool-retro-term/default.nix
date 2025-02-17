@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Swordfish90";
     repo = "cool-retro-term";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PewHLVmo+RTBHIQ/y2FBkgXsIvujYd7u56JdFC10B4c=";
   };
 

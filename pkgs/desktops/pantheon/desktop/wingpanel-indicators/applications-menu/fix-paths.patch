@@ -1,42 +1,40 @@
 diff --git a/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala b/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala
-index 542e7aa..228c6d7 100644
+index 84454146..fb082fe4 100644
 --- a/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala
 +++ b/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala
-@@ -83,7 +83,7 @@ namespace Synapse {
-                 Pid pid;
-                 int read_fd, write_fd;
-                 /* Must include math library to get non-integer results and to access standard math functions */
--                string[] argv = {"bc", "-l"};
-+                string[] argv = {"@bc@", "-l"};
+@@ -73,7 +73,7 @@ namespace Synapse {
+             Pid pid;
+             int read_fd, write_fd;
+             /* Must include math library to get non-integer results and to access standard math functions */
+-            string[] argv = {"bc", "-l"};
++            string[] argv = {"@bc@", "-l"};
  
-                 Process.spawn_async_with_pipes (
-                     null, argv, null,
+             Process.spawn_async_with_pipes (
+                 null, argv, null,
 diff --git a/src/synapse-plugins/calculator-plugin/calculator-plugin.vala b/src/synapse-plugins/calculator-plugin/calculator-plugin.vala
-index d14f1de..35c8621 100644
+index 089b8278..0e532bfc 100644
 --- a/src/synapse-plugins/calculator-plugin/calculator-plugin.vala
 +++ b/src/synapse-plugins/calculator-plugin/calculator-plugin.vala
-@@ -49,9 +49,7 @@ namespace Synapse {
-                 _("Calculator"),
-                 _("Calculate basic expressions."),
+@@ -47,8 +47,7 @@ namespace Synapse {
+             DataSink.PluginRegistry.get_default ().register_plugin (
+                 typeof (CalculatorPlugin),
                  "accessories-calculator",
 -                register_plugin,
--                Environment.find_program_in_path ("bc") != null,
--                _("bc is not installed")
+-                Environment.find_program_in_path ("bc") != null
 +                register_plugin
              );
          }
  
 diff --git a/src/synapse-plugins/converter-plugin/converter-plugin.vala b/src/synapse-plugins/converter-plugin/converter-plugin.vala
-index 8d230cc..ed31927 100644
+index 34391e6a..a5bfc71e 100644
 --- a/src/synapse-plugins/converter-plugin/converter-plugin.vala
 +++ b/src/synapse-plugins/converter-plugin/converter-plugin.vala
-@@ -46,9 +46,7 @@ namespace Synapse {
-                 _("Converter"),
-                 _("Convert between units."),
+@@ -44,8 +44,7 @@ namespace Synapse {
+             DataSink.PluginRegistry.get_default ().register_plugin (
+                 typeof (ConverterPlugin),
                  "accessories-converter",
 -                register_plugin,
--                Environment.find_program_in_path ("bc") != null,
--                _("bc is not installed")
+-                Environment.find_program_in_path ("bc") != null
 +                register_plugin
              );
          }

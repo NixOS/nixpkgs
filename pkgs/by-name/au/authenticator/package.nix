@@ -21,6 +21,7 @@
 , wayland
 , zbar
 , glycin-loaders
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -35,10 +36,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-g4+ntBuAEH9sj61CiS5t95nMfCgaWJTgiwRXtwrUTs0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-XNAC1eA+11gAvMRu95huRM+YHdsrg5Sqpzb6F3Rgu5U=";
+    hash = "sha256-fG0xABK/qzoACFEYhMeDF6Qbucx0FCPpuTuInDFHnu8=";
   };
 
   preFixup = ''
@@ -79,6 +80,10 @@ stdenv.mkDerivation rec {
     wayland
     zbar
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Two-factor authentication code generator for GNOME";

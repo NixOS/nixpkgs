@@ -17,9 +17,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mhthies";
     repo = "pulsectl-asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lHVLrkFdNM8Y4t6TcXYnX8sQ4COrW3vV2sTDWeI4xZU=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg --replace-fail "pulsectl >=23.5.0,<=24.11.0" "pulsectl >=23.5.0"
+  '';
 
   build-system = [ setuptools ];
 

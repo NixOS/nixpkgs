@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "manifold3d";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-02bZAPA4mnWzS9NYVcSW0JE7BidrwzNKBO2nl7BxiiE=";
+    tag = "v${version}";
+    hash = "sha256-wbeWxAeKyqjEPemc2e5n357gwq83pQlASOvMd0ZCE7g=";
   };
 
   dontUseCmakeConfigure = true;
@@ -64,6 +64,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/elalish/manifold";
     changelog = "https://github.com/elalish/manifold/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      pca006132
+    ];
   };
 }

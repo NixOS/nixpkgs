@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "enthought";
     repo = "okonomiyaki";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JQZhw0H4iSdxoyS6ODICJz1vAZsOISQitX7wTgSS1xc=";
   };
 

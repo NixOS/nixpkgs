@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "onecache";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-go/3HntSLzzTmHS9CxGPHT6mwXl+6LuWFmkGygGIjqU=";
   };
 

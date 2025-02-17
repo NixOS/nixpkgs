@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "adw-gtk3";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S/H6JGXwEgiqmcH1W+ZyHYOkk0gQtKG9Q3BiI2IjnEM=";
   };
 

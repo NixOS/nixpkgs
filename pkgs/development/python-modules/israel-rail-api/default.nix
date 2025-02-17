@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sh0oki";
     repo = "israel-rail-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OiWK3gi7dQ7SF4fvusKtSFzdhrsvePlscX0EYQ/hlYk=";
   };
 

@@ -44,7 +44,8 @@ PKG_PREFERENCES = {
     "ha-av": "av",
     "numpy": "numpy",
     "ollama-hass": "ollama",
-    "paho-mqtt": "paho-mqtt_1",
+    "paho-mqtt": "paho-mqtt",
+    "pyhive-integration": "pyhiveapi", # https://github.com/home-assistant/core/pull/135482
     "pysuezV2": "pysuez",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
@@ -113,9 +114,6 @@ def parse_components(version: str = "master"):
             specific_integrations=None,
             action="generate",
             requirements=False,
-            core_integrations_path=pathlib.Path(
-                os.path.join(core_path, "homeassistant/components")
-            ),
         )
         integrations = Integration.load_dir(config.core_integrations_path, config)
         for domain in sorted(integrations):

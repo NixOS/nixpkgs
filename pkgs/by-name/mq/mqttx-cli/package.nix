@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "MQTTX";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IPIiSav6MPJmzetBgVw9fLGPjJ+JKS3oWMEfCJmEY84=";
   };
 

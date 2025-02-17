@@ -54,15 +54,6 @@ final: prev: {
     '';
   };
 
-  graphql-language-service-cli = prev.graphql-language-service-cli.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/graphql-lsp" \
-        --prefix NODE_PATH : ${final.graphql}/lib/node_modules
-    '';
-  };
-
-
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
       export npm_config_zmq_external=true
@@ -256,27 +247,6 @@ final: prev: {
 
   rush = prev."@microsoft/rush".override {
     name = "rush";
-  };
-
-  tailwindcss = prev.tailwindcss.override {
-    plugins = [ ];
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      nodePath=""
-      for p in "$out" "${final.postcss}" $plugins; do
-        nodePath="$nodePath''${nodePath:+:}$p/lib/node_modules"
-      done
-      wrapProgram "$out/bin/tailwind" \
-        --prefix NODE_PATH : "$nodePath"
-      wrapProgram "$out/bin/tailwindcss" \
-        --prefix NODE_PATH : "$nodePath"
-      unset nodePath
-    '';
-    passthru.tests = {
-      simple-execution = callPackage ./package-tests/tailwindcss.nix {
-        inherit (final) tailwindcss;
-      };
-    };
   };
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {

@@ -27,8 +27,8 @@ buildDotnetModule rec {
   # Fixes application reporting 0.0.0.0 as its version.
   MINVERVERSIONOVERRIDE = version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0-bin;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0-bin;
 
   nativeBuildInputs = [ git glibcLocales bintools ];
 

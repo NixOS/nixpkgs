@@ -5,9 +5,41 @@
  */
 let
 
-  inherit (import ./fixed-points.nix { inherit lib; }) makeExtensible;
+  # A copy of `lib.makeExtensible'` in order to document `extend`.
+  # It has been leading to some trouble, so we have to document it specially.
+  makeExtensible' =
+    rattrs:
+    let self = rattrs self // {
+          /**
+            Patch the Nixpkgs library
 
-  lib = makeExtensible (self: let
+            A function that applies patches onto the nixpkgs library.
+            Usage is discouraged for most scenarios.
+
+            :::{.note}
+            The name `extends` is a bit misleading, as it doesn't actually extend the library, but rather patches it.
+            It is merely a consequence of being implemented by `makeExtensible`.
+            :::
+
+            # Inputs
+
+            - An "extension function" `f` that returns attributes that will be updated in the returned Nixpkgs library.
+
+            # Output
+
+            A patched Nixpkgs library.
+
+            :::{.warning}
+            This functionality is intended as an escape hatch for when the provided version of the Nixpkgs library has a flaw.
+
+            If you were to use it to add new functionality, you will run into compatibility and interoperability issues.
+            :::
+          */
+          extend = f: lib.makeExtensible (lib.extends f rattrs);
+        };
+    in self;
+
+  lib = makeExtensible' (self: let
     callLibs = file: import file { lib = self; };
   in {
 
@@ -94,8 +126,9 @@ let
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
-      reverseList listDfs toposort sort sortOn naturalSort compareLists take
-      drop sublist last init crossLists unique allUnique intersectLists
+      reverseList listDfs toposort sort sortOn naturalSort compareLists
+      take drop dropEnd sublist last init
+      crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
@@ -120,7 +153,8 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope makeScopeWithSplicing makeScopeWithSplicing';
+      makeScope makeScopeWithSplicing makeScopeWithSplicing'
+      extendMkDerivation;
     inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio

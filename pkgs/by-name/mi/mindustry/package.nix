@@ -283,6 +283,8 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.all;
     # TODO alsa-lib is linux-only, figure out what dependencies are required on Darwin
-    broken = enableClient && stdenv.hostPlatform.isDarwin;
+    broken =
+      enableClient
+      && (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64));
   };
 }

@@ -5,6 +5,7 @@
   glib,
   gnome,
   libexif,
+  libheif,
   libjxl,
   librsvg,
   libxfce4ui,
@@ -16,10 +17,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.13.2";
+  version = "0.13.3";
   odd-unstable = false;
 
-  sha256 = "sha256-FKgNKQ2l4FGvEvmppf+RTxMXU6TfsZVFBVii4zr4ASc=";
+  sha256 = "sha256-cJMHRN4Wl6Fm0yoVqe0h30ZUlE1+Hw1uEDBHfHXBbC0=";
 
   buildInputs = [
     glib
@@ -30,14 +31,13 @@ mkXfceDerivation {
     xfconf
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   postInstall = ''
-    # Pull in JXL and WebP support for ristretto.
+    # Pull in HEIF, JXL and WebP support for ristretto.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
+          libheif.out
           libjxl
           librsvg
           webp-pixbuf-loader

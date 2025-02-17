@@ -342,7 +342,7 @@ in
             index = "index.html index.htm index.php";
             tryFiles = "$uri $uri/ =404";
           };
-          locations."~ \.php$".extraConfig = ''
+          locations."~ \\.php$".extraConfig = ''
             fastcgi_pass  unix:${fpm.socket};
             fastcgi_index index.php;
           '';

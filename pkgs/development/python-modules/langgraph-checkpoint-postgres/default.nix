@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.8";
+  version = "2.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-yHLkFUp+q/XOt9Y9Dog2Tgs/K2CU7Bfkkucdr9vAKSg=";
+    hash = "sha256-Vz2ZoikEZuMvt3j9tvBIcXCwWSrCV8MI7x9PIHodl8Y=";
   };
 
   postgresqlTestSetupPost = ''
@@ -85,12 +85,15 @@ buildPythonPackage rec {
 
   passthru = {
     updateScript = langgraph-sdk.updateScript;
+
+    # multiple tags confuse the bulk updater
+    skipBulkUpdate = true;
   };
 
   meta = {
     description = "Library with a Postgres implementation of LangGraph checkpoint saver";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint-postgres";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpointpostgres==${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       drupol

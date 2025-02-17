@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "BishopFox";
     repo = "cloudfox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YLZSrBAEf0SXECAdnF2CQAlEd15DJ1Iv+x+RebM5tw4=";
   };
 

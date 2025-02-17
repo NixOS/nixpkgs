@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "magiclen";
     repo = "markdown2html-converter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C35TCmcskhK3sHbkUp3kEaTA4P7Ls5Rn6ahUbzy7KXY=";
   };
 

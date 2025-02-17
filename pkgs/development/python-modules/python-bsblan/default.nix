@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-b+/Cy8F2xUsYOr8PGQxkdXD07pAECNmbeWbuysSAT2I=";
   };
 
@@ -39,6 +39,8 @@ buildPythonPackage rec {
   env.PACKAGE_VERSION = version;
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   dependencies = [
     aiohttp

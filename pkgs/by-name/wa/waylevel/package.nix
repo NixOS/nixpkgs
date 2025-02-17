@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-T2gqiRcKrKsvwGNnWrxR1Ga/VX4AyllYn1H25aIKt5s=";
   };
 
-  cargoHash = "sha256-gw5m1/btJ5zZP04C7BCnHqEOUBoeu0whK8W7xA+xSQo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-W1xWVH8vKA6hItXRg4VxxvcJRUtURrUAlQFaZV4geY4=";
 
   postFixup = ''
     patchelf --set-rpath ${lib.makeLibraryPath [ wayland ]} $out/bin/waylevel

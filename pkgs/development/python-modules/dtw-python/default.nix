@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q2TffroAGS6DeU5hUE/M2Luuxa5VfU+wxbGdfhcioSA=";
   };
 

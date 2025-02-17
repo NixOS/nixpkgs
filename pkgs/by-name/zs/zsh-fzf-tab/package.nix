@@ -4,6 +4,7 @@
   fetchFromGitHub,
   zsh,
   ncurses,
+  autoconf,
   nix-update-script,
 }:
 
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  nativeBuildInputs = [ autoconf ];
   buildInputs = [ ncurses ];
 
   # https://github.com/Aloxaf/fzf-tab/issues/337
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
 
     pushd zsh-${zsh.version}
 
+    # Apply patches from zsh
+    ${lib.concatStringsSep "\n" (map (patch: "patch -p1 -i ${patch}") zsh.patches)}
 
     if [[ ! -f ./configure ]]; then
       ./Util/preconfig
@@ -93,7 +97,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Aloxaf/fzf-tab";
     description = "Replace zsh's default completion selection menu with fzf!";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vonfry ];
+    maintainers = with lib.maintainers; [ diredocks ];
     platforms = lib.platforms.unix;
   };
 }

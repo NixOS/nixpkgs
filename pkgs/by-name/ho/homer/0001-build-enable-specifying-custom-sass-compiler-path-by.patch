@@ -1,0 +1,184 @@
+From d4d4a299de39685e59f256c81d8e60ce6efd8b23 Mon Sep 17 00:00:00 2001
+From: Christoph Heiss <christoph@c8h4.io>
+Date: Wed, 1 Jan 2025 18:02:40 +0100
+Subject: [PATCH] build: enable specifying custom sass compiler path by env-var
+
+Signed-off-by: Felix Buehler <account@buehler.rocks>
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ package.json                |  7 ++++++-
+ patches/sass-embedded.patch | 15 +++++++++++++++
+ pnpm-lock.yaml              | 35 ++++++++++++++++++++---------------
+ 3 files changed, 41 insertions(+), 16 deletions(-)
+ create mode 100644 patches/sass-embedded.patch
+
+diff --git a/package.json b/package.json
+index b66e6ff..94aaa86 100644
+--- a/package.json
++++ b/package.json
+@@ -28,5 +28,10 @@
+     "vite-plugin-pwa": "^0.21.0"
+   },
+   "license": "Apache-2.0",
+-  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
++  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387",
++  "pnpm": {
++    "patchedDependencies": {
++      "sass-embedded": "patches/sass-embedded.patch"
++    }
++  }
+ }
+diff --git a/patches/sass-embedded.patch b/patches/sass-embedded.patch
+new file mode 100644
+index 0000000..f941a8e
+--- /dev/null
++++ b/patches/sass-embedded.patch
+@@ -0,0 +1,15 @@
++diff --git a/dist/lib/src/compiler-path.js b/dist/lib/src/compiler-path.js
++index ae33aa3028e1a120d9e84b043bb19a71f1083b96..7a49d16a54982312ad638632d6750d7bec670f02 100644
++--- a/dist/lib/src/compiler-path.js
+++++ b/dist/lib/src/compiler-path.js
++@@ -24,6 +24,10 @@ function isLinuxMusl(path) {
++ }
++ /** The full command for the embedded compiler executable. */
++ exports.compilerCommand = (() => {
+++    const binPath = process.env.SASS_EMBEDDED_BIN_PATH;
+++    if (binPath) {
+++        return [binPath];
+++    }
++     const platform = process.platform === 'linux' && isLinuxMusl(process.execPath)
++         ? 'linux-musl'
++         : process.platform;
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index ecc1e3c..a7164d0 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -4,6 +4,11 @@ settings:
+   autoInstallPeers: true
+   excludeLinksFromLockfile: false
+ 
++patchedDependencies:
++  sass-embedded:
++    hash: 6wjvcsryx2tfkpottp4wf5nbzi
++    path: patches/sass-embedded.patch
++
+ importers:
+ 
+   .:
+@@ -26,7 +31,7 @@ importers:
+     devDependencies:
+       '@vitejs/plugin-vue':
+         specifier: ^5.2.0
+-        version: 5.2.0(vite@5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0))(vue@3.5.13)
++        version: 5.2.0(vite@5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0))(vue@3.5.13)
+       '@vue/eslint-config-prettier':
+         specifier: ^10.0.0
+         version: 10.0.0(eslint@9.15.0)(prettier@3.3.3)
+@@ -44,13 +49,13 @@ importers:
+         version: 3.3.3
+       sass-embedded:
+         specifier: ^1.81.0
+-        version: 1.81.0
++        version: 1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi)
+       vite:
+         specifier: ^5.4.11
+-        version: 5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0)
++        version: 5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0)
+       vite-plugin-pwa:
+         specifier: ^0.21.0
+-        version: 0.21.0(vite@5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0))(workbox-build@7.1.0)(workbox-window@7.1.0)
++        version: 0.21.0(vite@5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0))(workbox-build@7.1.0)(workbox-window@7.1.0)
+ 
+ packages:
+ 
+@@ -2548,7 +2553,7 @@ snapshots:
+   '@babel/code-frame@7.25.7':
+     dependencies:
+       '@babel/highlight': 7.25.7
+-      picocolors: 1.1.0
++      picocolors: 1.1.1
+ 
+   '@babel/compat-data@7.25.8': {}
+ 
+@@ -2715,7 +2720,7 @@ snapshots:
+       '@babel/helper-validator-identifier': 7.25.7
+       chalk: 2.4.2
+       js-tokens: 4.0.0
+-      picocolors: 1.1.0
++      picocolors: 1.1.1
+ 
+   '@babel/parser@7.25.8':
+     dependencies:
+@@ -3521,9 +3526,9 @@ snapshots:
+ 
+   '@types/trusted-types@2.0.7': {}
+ 
+-  '@vitejs/plugin-vue@5.2.0(vite@5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0))(vue@3.5.13)':
++  '@vitejs/plugin-vue@5.2.0(vite@5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0))(vue@3.5.13)':
+     dependencies:
+-      vite: 5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0)
++      vite: 5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0)
+       vue: 3.5.13
+ 
+   '@vue/compiler-core@3.5.13':
+@@ -4702,7 +4707,7 @@ snapshots:
+   sass-embedded-win32-x64@1.81.0:
+     optional: true
+ 
+-  sass-embedded@1.81.0:
++  sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi):
+     dependencies:
+       '@bufbuild/protobuf': 2.2.0
+       buffer-builder: 0.2.0
+@@ -4879,7 +4884,7 @@ snapshots:
+   terser@5.35.0:
+     dependencies:
+       '@jridgewell/source-map': 0.3.6
+-      acorn: 8.13.0
++      acorn: 8.14.0
+       commander: 2.20.3
+       source-map-support: 0.5.21
+ 
+@@ -4975,7 +4980,7 @@ snapshots:
+     dependencies:
+       browserslist: 4.24.0
+       escalade: 3.2.0
+-      picocolors: 1.1.0
++      picocolors: 1.1.1
+ 
+   uri-js@4.4.1:
+     dependencies:
+@@ -4987,18 +4992,18 @@ snapshots:
+ 
+   varint@6.0.0: {}
+ 
+-  vite-plugin-pwa@0.21.0(vite@5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0))(workbox-build@7.1.0)(workbox-window@7.1.0):
++  vite-plugin-pwa@0.21.0(vite@5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0))(workbox-build@7.1.0)(workbox-window@7.1.0):
+     dependencies:
+       debug: 4.3.7
+       pretty-bytes: 6.1.1
+       tinyglobby: 0.2.10
+-      vite: 5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0)
++      vite: 5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0)
+       workbox-build: 7.1.0
+       workbox-window: 7.1.0
+     transitivePeerDependencies:
+       - supports-color
+ 
+-  vite@5.4.11(sass-embedded@1.81.0)(sass@1.79.5)(terser@5.35.0):
++  vite@5.4.11(sass-embedded@1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi))(sass@1.79.5)(terser@5.35.0):
+     dependencies:
+       esbuild: 0.21.5
+       postcss: 8.4.47
+@@ -5006,7 +5011,7 @@ snapshots:
+     optionalDependencies:
+       fsevents: 2.3.3
+       sass: 1.79.5
+-      sass-embedded: 1.81.0
++      sass-embedded: 1.81.0(patch_hash=6wjvcsryx2tfkpottp4wf5nbzi)
+       terser: 5.35.0
+ 
+   vue-eslint-parser@9.4.3(eslint@9.15.0):
+-- 
+2.47.0
+

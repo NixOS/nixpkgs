@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kronenthaler";
     repo = "openstep-parser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-gvfzBLLaal0Vad3C4m4wIKwJpmlhewsK4A5yeN8l6qU=";
   };
 

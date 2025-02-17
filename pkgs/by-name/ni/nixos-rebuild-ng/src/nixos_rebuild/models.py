@@ -8,11 +8,13 @@ from typing import Any, Callable, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
+type ImageVariants = dict[str, str]
+
 
 class NRError(Exception):
     "nixos-rebuild general error."
 
-    def __init__(self, message: str):
+    def __init__(self, message: str) -> None:
         self.message = message
 
     @override
@@ -30,6 +32,7 @@ class Action(Enum):
     DRY_BUILD = "dry-build"
     DRY_RUN = "dry-run"
     DRY_ACTIVATE = "dry-activate"
+    BUILD_IMAGE = "build-image"
     BUILD_VM = "build-vm"
     BUILD_VM_WITH_BOOTLOADER = "build-vm-with-bootloader"
     LIST_GENERATIONS = "list-generations"
@@ -49,13 +52,32 @@ class BuildAttr:
     attr: str | None
 
     def to_attr(self, *attrs: str) -> str:
-        return f"{self.attr + '.' if self.attr else ''}{".".join(attrs)}"
+        return f"{self.attr + '.' if self.attr else ''}{'.'.join(attrs)}"
 
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
         if not (attr or file):
             return cls("<nixpkgs/nixos>", None)
         return cls(Path(file or "default.nix"), attr)
+
+
+def discover_git(location: Path) -> str | None:
+    current = location.resolve()
+    previous = None
+
+    while current.is_dir() and current != previous:
+        dotgit = current / ".git"
+        if dotgit.is_dir():
+            return str(current)
+        elif dotgit.is_file():  # this is a worktree
+            with dotgit.open() as f:
+                dotgit_content = f.read().strip()
+                if dotgit_content.startswith("gitdir: "):
+                    return dotgit_content.split("gitdir: ")[1]
+        previous = current
+        current = current.parent
+
+    return None
 
 
 @dataclass(frozen=True)
@@ -65,7 +87,7 @@ class Flake:
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
     def to_attr(self, *attrs: str) -> str:
-        return f"{self}.{".".join(attrs)}"
+        return f"{self}.{'.'.join(attrs)}"
 
     @override
     def __str__(self) -> str:
@@ -80,12 +102,16 @@ class Flake:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or "default"}"
-        path = m.group("path")
-        if ":" in path:
-            return cls(path, nixos_attr)
+        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or 'default'}"
+        path_str = m.group("path")
+        if ":" in path_str:
+            return cls(path_str, nixos_attr)
         else:
-            return cls(Path(path), nixos_attr)
+            path = Path(path_str)
+            git_repo = discover_git(path)
+            if git_repo is not None:
+                return cls(f"git+file://{git_repo}", nixos_attr)
+            return cls(path, nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:

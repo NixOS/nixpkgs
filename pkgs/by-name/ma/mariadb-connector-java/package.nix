@@ -12,7 +12,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-D9xm/qVD2nA7qkdadGoG3bUIZckVBDgY74J89AHSKyA=";
   };
 

@@ -11,11 +11,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tun2proxy";
     repo = "tun2proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LY7vVD85GVFqARYOBDeb4fS6rL2PwPXYXIAJtwm2goo=";
   };
 
-  cargoHash = "sha256-o/zQjWR9qNs0XVL/dcRiMHgj+8Xvl6vVl/Yw5iLhroI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jlU6zR1W4rRNiU2mMEUzlqK3WqwRd0YncpN01EnzStw=";
 
   cargoPatches = [
     ./Cargo.lock.patch

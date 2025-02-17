@@ -22,7 +22,8 @@ let
 
     sourceRoot = "${src.name}/generator";
 
-    cargoHash = "sha256-6n37n8oHIHrz3S1+40nuD0Ud3l0iNgXig1ZwrgsnYTI=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-tg4BO4tPzHhJTowL7RiAuBo4i440FehpGmnz9stTxfI=";
 
     nativeBuildInputs = [
       pkg-config
@@ -50,9 +51,6 @@ vimUtils.buildVimPlugin {
       rm -r $out/lua/*.so
       cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
     '';
-
-  doInstallCheck = true;
-  nvimRequireCheck = "codesnap";
 
   passthru = {
     updateScript = nix-update-script {

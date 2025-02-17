@@ -12,11 +12,12 @@ rustPlatform.buildRustPackage rec {
     owner = "google";
     repo = "mdbook-i18n-helpers";
     # TODO fix once upstream uses semver for tags again
-    rev = "refs/tags/mdbook-i18n-helpers-${version}";
+    tag = "mdbook-i18n-helpers-${version}";
     hash = "sha256-FdguzuYpMl6i1dvoPNE1Bk+GTmeTrqLUY/sVRsbETtU=";
   };
 
-  cargoHash = "sha256-sPRylKXTSkVkhDvpAvHuYIr9TSi1ustIs1HTwEIbk/w=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZBGMfJA2diPvvoIXPosUs4ngXU9/GMGa4GAlKIjwm8s=";
 
   meta = with lib; {
     description = "Helpers for a mdbook i18n workflow based on Gettext";

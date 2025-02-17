@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "steven-murray";
     repo = "hankel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/5PvbH8zz2siLS1YJYRSrl/Cpi0WToBu1TJhlek8VEE=";
   };
 

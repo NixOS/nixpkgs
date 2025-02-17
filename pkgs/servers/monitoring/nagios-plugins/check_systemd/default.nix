@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Josef-Friedrich";
     repo = "check_systemd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1e1WtWRTmOxozuOP2ndfsozuiy9LCT/Lsvb+yKH+8eY=";
   };
 

@@ -11,9 +11,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-volumed-pulse";
-  version = "0.2.4";
+  version = "0.2.5";
 
-  sha256 = "sha256-NDIJRjKV5aoM2sLhZ6WmoynOc4yz55KpuiTJDMLMA5Y=";
+  sha256 = "sha256-A7PM4zHL4hkhsZjYEPuEiujP1ofP7V/QVqDNgGoGIm8=";
 
   buildInputs = [
     gtk3

@@ -13,7 +13,7 @@ let
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-T6ci7+xbzpOrNr8hpDCwk5qe01L2Ho5V1oM7Hhd8bgg=";
   };
   npmRoot = "Rnwood.Smtp4dev/ClientApp";

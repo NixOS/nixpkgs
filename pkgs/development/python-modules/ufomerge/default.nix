@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufomerge";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-D+BhKCKWgprQn+eXFgwnSN/06+JF5CiUS0VAS1Kvedw=";
   };
 

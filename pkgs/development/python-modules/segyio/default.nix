@@ -17,6 +17,10 @@ buildPythonPackage rec {
   patches = [
     # https://github.com/equinor/segyio/pull/570
     ./add_missing_cstdint.patch
+    # https://github.com/equinor/segyio/pull/576/
+    ./fix-setuptools.patch
+    ./explicitly-cast.patch
+    ./numpy-2.patch
   ];
 
   postPatch = ''
@@ -32,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "equinor";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+N2JvHBxpdbysn4noY/9LZ4npoQ9143iFEzaxoafnms=";
   };
 
@@ -49,10 +53,10 @@ buildPythonPackage rec {
     numpy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast Python library for SEGY files";
     homepage = "https://github.com/equinor/segyio";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

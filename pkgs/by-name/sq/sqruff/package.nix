@@ -15,11 +15,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vlre3D1ydDqFdysf5no2rW2V2U/BimhCeV1vWZ2JPSM=";
   };
 
-  cargoHash = "sha256-WqkHZcA4FBm8zubAnDrJGH+fgLVIxsNNm3B+mdj5Sxw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sFKq7CxQ7yoPqDQOR9Nr111RCiSA6bK50QvhHkaU5Go=";
 
   buildInputs = [
     rust-jemalloc-sys

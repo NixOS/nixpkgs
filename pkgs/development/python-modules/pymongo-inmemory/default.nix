@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kaizendorks";
     repo = "pymongo_inmemory";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FDHHf9x62EqNcHjDF2vH8w8WG/15efEe+fDqGiiOe4A=";
   };
 

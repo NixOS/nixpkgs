@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-j88ZnJ0V8h/fthOWwV6B0ZbzUz7THykqrI2QpOkDT4I=";
   };
 
-  cargoHash = "sha256-H41wpG5LhjJ7BtFrol0JbjTpssOPUgumgapOiZJi2lc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fXdWwGkdMhZA9u/xbvRIV6m88q6SQDahU12ZjQZFu3Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/swsnr/git-gone";
     changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [
+      cafkafk
+      matthiasbeyer
+    ];
     mainProgram = "git-gone";
   };
 }

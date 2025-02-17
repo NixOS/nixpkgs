@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm,
+  pnpm_9,
   nodejs,
   electron_32,
   makeWrapper,
@@ -12,25 +12,25 @@
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
-  version = "1.0.5";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     rev = "v${version}";
-    hash = "sha256-9CicqDZDetxElD36OLizyVNxkqz3rQOjAtUNTGWVwss=";
+    hash = "sha256-VjEvW5vM6ByZUzQw21iH347M1KmED+zRrRiS2glyJ1w=";
   };
 
   nativeBuildInputs = [
-    pnpm.configHook
+    pnpm_9.configHook
     nodejs
     makeWrapper
     copyDesktopItems
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-5GE/I2xLmu2Wu9mjzZMk1YZvtS5PgpwgXnxuY+4nimQ=";
+    hash = "sha256-cgoFvCCjfR9HP1mJZJ0n/GELATO2lm0tDexSQE8fJGw=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";

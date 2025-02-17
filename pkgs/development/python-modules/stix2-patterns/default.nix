@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oasis-open";
     repo = "cti-pattern-validator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lFgnvI5a7U7/Qj4Pqjr3mx4TNDnC2/Ru7tVG7VggR7Y=";
   };
 

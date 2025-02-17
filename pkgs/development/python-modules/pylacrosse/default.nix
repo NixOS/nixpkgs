@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-lacrosse";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jrkehoPLYbutDfxMBO/vlx4nMylTNs/gtvoBTFHFsDw=";
   };
 

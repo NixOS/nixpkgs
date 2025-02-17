@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
   };
 
-  cargoHash = "sha256-eJne4OmV4xHxntTb8HE+2ghX1hZLE3WQ3QqsjVm9E4M=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+ltcTuLksNwe7KIt8apYNZkMoA2w4EObG5dhJliRb6Y=";
 
   postInstall = ''
     ln -s $out/bin/colp $out/bin/colorpanes

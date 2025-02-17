@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     mainProgram = "iostat";
-    homepage = "http://sebastien.godard.pagesperso-orange.fr/";
+    homepage = "https://sysstat.github.io/";
     description = "Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;

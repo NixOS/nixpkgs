@@ -59,6 +59,7 @@
   pytestCheckHook,
   pytorch-lightning,
   sentence-transformers,
+  shap,
   starlette,
   statsmodels,
   tensorflow,
@@ -70,20 +71,16 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.18.0";
+  version = "2.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-etfgdSf3pbcKtCOk9MOgcR+Tzg4cmLbdadAOtQqN4PM=";
+    tag = "v${version}";
+    hash = "sha256-672lKzYkWpUuUB2hiVtOqMhQltzRMGhoff2ZimLWJC8=";
   };
 
-  # Remove currently broken dependency `shap`, a model explainability package.
-  # This seems quite unprincipled especially with tests not being enabled,
-  # but not mlflow has a 'skinny' install option which does not require `shap`.
-  pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
     "gunicorn"
     "importlib-metadata"
@@ -117,10 +114,12 @@ buildPythonPackage rec {
     pandas
     protobuf
     pyarrow
+    pydantic
     pyyaml
     requests
     scikit-learn
     scipy
+    shap
     sqlalchemy
     sqlparse
   ];

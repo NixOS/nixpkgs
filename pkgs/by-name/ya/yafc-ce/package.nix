@@ -12,13 +12,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "yafc-ce";
-  version = "2.3.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "shpaass";
     repo = "yafc-ce";
     rev = finalAttrs.version;
-    hash = "sha256-t/st/s0zJRNP1Cbjo4aw02jKvuHkMh3jGmiMziMrez8=";
+    hash = "sha256-pBnAUrDnOabQq7D1YJ41aJq9MSPIHQ6K8ix5TLwkrZ0=";
   };
 
   projectFile = [ "Yafc/Yafc.csproj" ];

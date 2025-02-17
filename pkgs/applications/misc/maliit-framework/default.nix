@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchpatch,
 
+  qtbase,
+
   at-spi2-atk,
   at-spi2-core,
   libepoxy,
@@ -31,7 +33,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
 
@@ -68,7 +70,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/$qtPluginPrefix"
+    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
   meta = with lib; {

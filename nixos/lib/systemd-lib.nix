@@ -579,6 +579,9 @@ in rec {
       '' else "")
        + optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
          X-StopIfChanged=false
+      ''
+       + optionalString (def ? notSocketActivated && def.notSocketActivated) ''
+         X-NotSocketActivated=true
       '' + attrsToSection def.serviceConfig);
     };
 

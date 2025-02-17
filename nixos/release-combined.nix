@@ -99,7 +99,7 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
-        (onSystems [ "x86_64-linux" ] "nixos.tests.gitlab") # we lack energy to really debug aarch64 here
+        (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
@@ -167,6 +167,7 @@ rec {
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems [ "x86_64-linux" ] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
+        (onFullSupported "nixos.tests.initrd-network-ssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
         (onFullSupported "nixos.tests.php.httpd")

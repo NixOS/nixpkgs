@@ -16,11 +16,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CN1LcLX7ag+in9sosT2NYVKfhDLGv2m3zHOk2T4MFYc=";
   };
 
-  cargoHash = "sha256-RdBnW8HKSgjVnyafycGFTSTc5j1A9WRDvUuZu8upRWY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nYWvk2v+4IAk/y7fg+Z/nMH+Ml+J5k5ER8uudCQOMB8=";
 
   nativeBuildInputs = [
     cmake

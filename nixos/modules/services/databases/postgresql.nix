@@ -733,10 +733,12 @@ in
           ] ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
           UMask = if groupAccessAvailable then "0027" else "0077";
         }
-        (mkIf (cfg.dataDir != "/var/lib/postgresql") {
+        (mkIf (cfg.dataDir != "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+          # The user provides their own data directory
           ReadWritePaths = [ cfg.dataDir ];
         })
         (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+          # Provision the default data directory
           StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
           StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
         })

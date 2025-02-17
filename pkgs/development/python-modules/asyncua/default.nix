@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XXjzYDOEBdA4uk0VCzscHrPCY2Lgin0JBAVDdxmSOio=";
     fetchSubmodules = true;
   };

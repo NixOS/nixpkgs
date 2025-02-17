@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "grpc-client-cli";
-  version = "1.21.1";
+  version = "1.21.3";
 
   src = fetchFromGitHub {
     owner = "vadimi";
     repo = "grpc-client-cli";
     rev = "v${version}";
-    sha256 = "sha256-fz0O/tBWTxtVbjSND0b2O+xic27zXMNhIkyF3G+Jra4=";
+    sha256 = "sha256-c+mwQJczF8BG3NnpZpBZNGzGQxs8/ptApvESQhiUpfA=";
   };
 
-  vendorHash = "sha256-M/x6Dinnja43ggcx8LD/gdIZnbdo5wJqxub2JnudSqs=";
+  vendorHash = "sha256-1SRp5NmE+NbRtUZ3s4yL6CJUMs+dlm6oN00gKV9QY0U=";
 
   meta = with lib; {
     description = "generic gRPC command line client";

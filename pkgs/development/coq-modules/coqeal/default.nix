@@ -10,7 +10,8 @@
   version ? null,
 }:
 
-(mkCoqDerivation {
+let
+derivation = mkCoqDerivation {
 
   pname = "CoqEAL";
 
@@ -20,6 +21,13 @@
     lib.switch
       [ coq.version mathcomp.version ]
       [
+        {
+          cases = [
+            (range "8.16" "8.20")
+            (isGe "2.1.0")
+          ];
+          out = "2.0.3";
+        }
         {
           cases = [
             (range "8.16" "8.20")
@@ -79,6 +87,7 @@
       ]
       null;
 
+  release."2.0.3".sha256 = "sha256-5lDq7IWlEW0EkNzYPu+dA6KOvRgy53W/alikpDr/Kd0=";
   release."2.0.1".sha256 = "sha256-d/IQ4IdS2tpyPewcGobj2S6m2HU+iXQmlvR+ITNIcjI=";
   release."2.0.0".sha256 = "sha256-SG/KVnRJz2P+ZxkWVp1dDOnc/JVgigoexKfRUh1Y0GM";
   release."1.1.3".sha256 = "sha256-xhqWpg86xbU1GbDtXXInNCTArjjPnWZctWiiasq1ScU=";
@@ -92,7 +101,6 @@
   propagatedBuildInputs = [
     mathcomp.algebra
     bignums
-    paramcoq
     multinomials
   ];
 
@@ -100,9 +108,17 @@
     description = "CoqEAL - The Coq Effective Algebra Library";
     license = lib.licenses.mit;
   };
-}).overrideAttrs
+};
+patched-derivation1 = derivation.overrideAttrs
   (o: {
     propagatedBuildInputs =
       o.propagatedBuildInputs
       ++ lib.optional (lib.versions.isGe "1.1" o.version || o.version == "dev") mathcomp-real-closed;
-  })
+  });
+patched-derivation = patched-derivation1.overrideAttrs
+  (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versions.isLe "2.0.3" o.version && o.version != "dev") paramcoq;
+  });
+in patched-derivation

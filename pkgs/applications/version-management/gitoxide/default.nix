@@ -5,7 +5,6 @@
   cmake,
   pkg-config,
   stdenv,
-  apple-sdk_11,
   curl,
   openssl,
   buildPackages,
@@ -28,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xv4xGkrArJ/LTVLs2SYhvxhfNG6sjVm5nZWsi4s34iM=";
   };
 
-  cargoHash = "sha256-36ue3f67Btw0/AM5lTaByrJLKU5r1FJA3sFRJ1IbXXc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SRJkI61Z8revRWoschkUAJwcJfKB/U03+YfwEcnEIm8=";
 
   nativeBuildInputs = [
     cmake
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [ curl ] ++ (if stdenv.hostPlatform.isDarwin then [ apple-sdk_11 ] else [ openssl ]);
+  buildInputs = [ curl ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preFixup = lib.optionalString canRunCmd ''
     installShellCompletion --cmd gix \

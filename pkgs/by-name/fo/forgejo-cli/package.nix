@@ -7,8 +7,6 @@
   oniguruma,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 let
   version = "0.2.0";
@@ -25,27 +23,21 @@ rustPlatform.buildRustPackage {
     hash = "sha256-rHyPncAARIPakkv2/CD1/aF2G5AS9bb3T2x8QCQWl5o=";
   };
 
-  cargoHash = "sha256-kIOEUDJg7/08L9c/qt7NrT8U+xN3Ya5PBWPWmWj0Yx8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PkKinAZrZ+v1/eygiPis4F7EJnmjYfeQFPKfGpza0yA=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      oniguruma
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    libgit2
+    oniguruma
+    openssl
+    zlib
+  ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    BUILD_TYPE = "nixpkgs";
   };
 
   meta = {

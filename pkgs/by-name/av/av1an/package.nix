@@ -1,19 +1,21 @@
 {
   lib,
-  symlinkJoin,
-  makeBinaryWrapper,
+  av1an,
   av1an-unwrapped,
   ffmpeg,
-  python3,
   libaom,
-  svt-av1,
-  rav1e,
+  libvmaf,
   libvpx,
+  makeBinaryWrapper,
+  mkvtoolnix-cli,
+  python3,
+  rav1e,
+  svt-av1,
+  symlinkJoin,
+  testers,
+  vapoursynth,
   x264,
   x265,
-  libvmaf,
-  vapoursynth,
-  mkvtoolnix-cli,
   withAom ? true, # AV1 reference encoder
   withSvtav1 ? false, # AV1 encoder/decoder (focused on speed and correctness)
   withRav1e ? false, # AV1 encoder (focused on speed and safety)
@@ -27,15 +29,16 @@
 # av1an requires at least one encoder
 assert lib.assertMsg (lib.elem true [
   withAom
-  withSvtav1
   withRav1e
+  withSvtav1
   withVpx
   withX264
   withX265
 ]) "At least one encoder is required!";
 
 symlinkJoin {
-  name = "av1an-${av1an-unwrapped.version}";
+  pname = "av1an";
+  inherit (av1an-unwrapped) version;
 
   paths = [ av1an-unwrapped ];
 
@@ -49,13 +52,13 @@ symlinkJoin {
           (ffmpeg.override { inherit withVmaf; })
         ]
         ++ lib.optional withAom libaom
-        ++ lib.optional withSvtav1 svt-av1
+        ++ lib.optional withMkvtoolnix mkvtoolnix-cli
         ++ lib.optional withRav1e rav1e
+        ++ lib.optional withSvtav1 svt-av1
+        ++ lib.optional withVmaf libvmaf
         ++ lib.optional withVpx libvpx
         ++ lib.optional withX264 x264
-        ++ lib.optional withX265 x265
-        ++ lib.optional withVmaf libvmaf
-        ++ lib.optional withMkvtoolnix mkvtoolnix-cli;
+        ++ lib.optional withX265 x265;
     in
     ''
       wrapProgram $out/bin/av1an \
@@ -65,11 +68,10 @@ symlinkJoin {
     '';
 
   passthru = {
-    # TODO: uncomment when upstream actually bumps CARGO_PKG_VERSION
-    #tests.version = testers.testVersion {
-    #  package = av1an;
-    #  inherit (av1an-unwrapped) version;
-    #};
+    tests.version = testers.testVersion {
+      package = av1an;
+      inherit (av1an-unwrapped) version;
+    };
   };
 
   meta = {
@@ -81,6 +83,7 @@ symlinkJoin {
       license
       maintainers
       mainProgram
+      broken
       ;
   };
 }

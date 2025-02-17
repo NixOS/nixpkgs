@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.2.12";
+  version = "7.2.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8CthbR62TZ7MFC3OCwtbHtGwmlQeFLgBtkyRX1P5SYU=";
+    tag = version;
+    hash = "sha256-vJ+V8O2fJxG1XpFDwQCmaIT8VTo5pEKduDndg6rzf0s=";
   };
 
   postPatch = ''
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";
     homepage = "https://github.com/minio/minio-py";
-    changelog = "https://github.com/minio/minio-py/releases/tag/${version}";
+    changelog = "https://github.com/minio/minio-py/releases/tag/${src.tag}";
     maintainers = with maintainers; [ peterromfeldhk ];
     license = licenses.asl20;
   };

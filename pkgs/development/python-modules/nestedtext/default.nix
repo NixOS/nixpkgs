@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "nestedtext";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lNqSmEmzuRGdXs/4mwKSh7yDGHnAykpIDIR+abbLCns=";
   };
 

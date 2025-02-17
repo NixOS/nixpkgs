@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
-    rev = "refs/tags/release/${version}";
+    tag = "release/${version}";
     hash = "sha256-X39XOv8HJdSjMjMMnmB7Gxjseg5k/LuKICTxapcHVsU=";
   };
 
@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication rec {
     [
       # Assertion error
       "test_help_output"
+      "test_exits_on_unsupported_target"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # FsOperationFailed

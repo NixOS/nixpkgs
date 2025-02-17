@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "gios";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-J+LCu7wMuc3dYghvkKq58GcBAa76X5IPUWe7qCQwjjI=";
   };
 

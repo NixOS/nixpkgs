@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   fetchFromGitHub,
 
   ## wandb-core
@@ -11,7 +10,6 @@
 
   ## gpu-stats
   rustPlatform,
-  darwin,
 
   ## wandb
   buildPythonPackage,
@@ -73,28 +71,31 @@
   tenacity,
   torch,
   tqdm,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.18.5";
+  version = "0.19.6";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nx50baneYSSIWPAIOkUk4cGCNpWAhv7IwFDQJ4vUMiw=";
+    tag = "v${version}";
+    hash = "sha256-snyr0IlE4otk1ctWUrJEFAmHYsXe+k6qULCaO3aW0e4=";
   };
 
-  gpu-stats = rustPlatform.buildRustPackage rec {
+  gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.2.0";
+    version = "0.3.0";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    cargoHash = "sha256-4udGG4I2Hr8r84c4WX6QGG/+bcHK4csXqwddvIiKmkw=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-KrwZh8OoVwImfYDmvT2Je2MYyiTZVQYngwvVC+7fTzI=";
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.IOKit
+    checkFlags = [
+      # fails in sandbox
+      "--skip=gpu_amd::tests::test_gpu_amd_new"
     ];
 
     nativeInstallCheckInputs = [
@@ -106,9 +107,6 @@ let
 
     meta = {
       mainProgram = "gpu_stats";
-      # ld: library not found for -lIOReport
-      # TODO: succeeds on https://github.com/NixOS/nixpkgs/pull/348827, so try again once it lands on master
-      broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     };
   };
 
@@ -179,8 +177,6 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
-
   dependencies =
     [
       click
@@ -240,15 +236,16 @@ buildPythonPackage rec {
     tenacity
     torch
     tqdm
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # test_matplotlib_image_with_multiple_axes may take >60s
+  pytestFlagsArray = [
+    "--timeout=1024"
+  ];
 
   disabledTestPaths = [
     # Require docker access
-    "tests/release_tests/test_launch"
     "tests/system_tests"
   ];
 
@@ -299,8 +296,33 @@ buildPythonPackage rec {
       # Error in the moviepy package:
       # TypeError: must be real number, not NoneType
       "test_video_numpy_mp4"
+
+      # AssertionError: assert not _IS_INTERNAL_PROCESS
+      "test_disabled_can_pickle"
+      "test_disabled_context_manager"
+      "test_mode_disabled"
+
+      # AssertionError: "one of name or plugin needs to be specified"
+      "test_opener_works_across_filesystem_boundaries"
+      "test_md5_file_hashes_on_mounted_filesystem"
+
+      # AttributeError: 'bytes' object has no attribute 'read'
+      "test_rewinds_on_failure"
+      "test_smoke"
+      "test_handles_multiple_calls"
+
+      # wandb.sdk.launch.errors.LaunchError: Found invalid name for agent MagicMock
+      "test_monitor_preempted"
+      "test_monitor_failed"
+      "test_monitor_running"
+      "test_monitor_job_deleted"
+
+      # Timeout >1024.0s
+      "test_log_media_prefixed_with_multiple_slashes"
+      "test_log_media_saves_to_run_directory"
+      "test_log_media_with_path_traversal"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # AssertionError: assert not copy2_mock.called
       "test_copy_or_overwrite_changed_no_copy"
 

@@ -5,17 +5,19 @@
   fetchFromGitHub,
   buildPackages,
   installShellFiles,
+  versionCheckHook,
   makeWrapper,
   enableCmount ? true,
   fuse,
   fuse3,
   macfuse-stubs,
   librclone,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.68.2";
+  version = "1.69.1";
 
   outputs = [
     "out"
@@ -26,10 +28,10 @@ buildGoModule rec {
     owner = "rclone";
     repo = "rclone";
     tag = "v${version}";
-    hash = "sha256-3Al58jg+pYP46VbpIRbYBhMOG6m7OQaC0pxKawX12E8=";
+    hash = "sha256-TNknN4Wr+SWuYWRQmfH7Xjih5WdoSC+ky70Zru1ODsw=";
   };
 
-  vendorHash = "sha256-PCj/f/oeLEAC/yFmR5dSyoLb45Z1fPLAASBaM251+Mc=";
+  vendorHash = "sha256-ms8mHUd6AxYW/OHwwad/34rx082xDK1lh6FIvFshIHM=";
 
   subPackages = [ "." ];
 
@@ -83,8 +85,18 @@ buildGoModule rec {
             --suffix PATH : "${lib.makeBinPath [ fuse3 ]}"
         '';
 
-  passthru.tests = {
-    inherit librclone;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "version" ];
+
+  passthru = {
+    tests = {
+      inherit librclone;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

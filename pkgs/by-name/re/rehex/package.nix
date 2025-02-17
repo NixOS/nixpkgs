@@ -14,7 +14,6 @@
   lua53Packages,
   perlPackages,
   gtk3,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,8 +49,7 @@ stdenv.mkDerivation rec {
       perl
       TemplateToolkit
     ])
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"

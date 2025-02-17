@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysuezv2";
-  version = "1.3.5";
+  version = "2.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jb101010-2";
     repo = "pySuez";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BG5nX2S+WV0Bdwm/cvm+mGO1RUd+F312tZ4jws6A/d8=";
+    tag = version;
+    hash = "sha256-D/XsJL393fDIKMB1Wyzods5hLsdU3Qgq8T5aTJ3SLrM=";
   };
 
   build-system = [ hatchling ];

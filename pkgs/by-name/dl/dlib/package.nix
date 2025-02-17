@@ -25,7 +25,7 @@
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-BpE7ZrtiiaDqwy1G4IHOQBJMr6sAadFbRxsdObs1SIY=";
   };
 

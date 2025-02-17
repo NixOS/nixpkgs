@@ -5,14 +5,14 @@
   patches ? [ ],
 }:
 let
-  version = "4.3.2";
+  version = "4.3.3";
 in
 (applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
     rev = "v${version}";
-    hash = "sha256-A1sSUBtlztKFsZ3TY/c9CXFV8LhttRW2JmSU0QSVOIg=";
+    hash = "sha256-6FyLhRy+/uW+RYt+IRHpkTABjKGTQYjR/4GSPN+GlGY=";
   };
   patches = patches ++ [ ];
 })

@@ -89,6 +89,8 @@ let
       "link=${link}"
       "-sEXPAT_INCLUDE=${expat.dev}/include"
       "-sEXPAT_LIBPATH=${expat.out}/lib"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "1.85") [
       (
         # The stacktrace from exception feature causes memory leaks when built
         # with libc++. For all other standard library implementations, i.e.
@@ -99,9 +101,8 @@ let
         else
           "define=BOOST_STACKTRACE_LIBCXX_RUNTIME_MAY_CAUSE_MEMORY_LEAK"
       )
-
-      # TODO: make this unconditional
     ]
+    # TODO: make this unconditional
     ++
       lib.optionals
         (
@@ -212,7 +213,7 @@ stdenv.mkDerivation {
       })
     ]
     ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86") [
+    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
       # Backport fix for NumPy 2 support.
       (fetchpatch {
         name = "boost-numpy-2-compatibility.patch";
@@ -281,12 +282,26 @@ stdenv.mkDerivation {
     # b2 needs to be explicitly told how to find Python when cross-compiling
     + lib.optionalString enablePython ''
       cat << EOF >> user-config.jam
-      using python : : ${python.interpreter}
+      using python : : ${python.pythonOnBuildForHost.interpreter}
         : ${python}/include/python${python.pythonVersion}
         : ${python}/lib
         ;
       EOF
     '';
+
+  # Fix compilation to 32-bit ARM with clang in downstream packages
+  # https://github.com/ned14/outcome/pull/308
+  # https://github.com/boostorg/json/pull/1064
+  postPatch = lib.optionalString (lib.versionAtLeast version "1.87") ''
+    substituteInPlace \
+      boost/outcome/outcome_gdb.h \
+      boost/outcome/experimental/status-code/status_code.hpp \
+      boost/json/detail/gdb_printers.hpp \
+      boost/unordered/unordered_printers.hpp \
+      boost/interprocess/interprocess_printers.hpp \
+      libs/json/pretty_printers/generate-gdb-header.py \
+      --replace-fail ",@progbits,1" ",%progbits,1"
+  '';
 
   env = {
     NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";

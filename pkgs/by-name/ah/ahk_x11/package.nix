@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  crystal,
+  crystal_1_11,
   copyDesktopItems,
   linkFarm,
   fetchgit,
@@ -22,7 +22,7 @@
 # NOTICE: AHK_X11 from this package does not support compiling scripts into portable executables.
 let
   pname = "ahk_x11";
-  version = "1.0.4";
+  version = "1.0.4-unstable-2025-01-30"; # 1.0.4 cannot build on Crystal 1.12 or below.
 
   inherit (xorg)
     libXinerama
@@ -31,6 +31,9 @@ let
     libXi
     ;
 
+  # See upstream README. Crystal 1.11 or below is needed to work around phil294/AHK_X11#89.
+  crystal = crystal_1_11;
+
 in
 crystal.buildCrystalPackage {
   inherit pname version;
@@ -38,8 +41,8 @@ crystal.buildCrystalPackage {
   src = fetchFromGitHub {
     owner = "phil294";
     repo = "AHK_X11";
-    rev = version;
-    hash = "sha256-Kxe0tLbER1XFnnfUUIiy9CgCgz2qK21AIk4DfHymKlI=";
+    rev = "66eb5208d95f4239822053c7d35f32bc62d57573"; # tag = version;
+    hash = "sha256-KzD5ExYPRYgsYO+/hlnoQpBJwokjaK5lYL2kobI2XQ0=";
     fetchSubmodules = true;
   };
 

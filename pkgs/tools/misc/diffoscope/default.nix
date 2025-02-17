@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  aapt,
   abootimg,
   acl,
   apksigcopier,
@@ -54,6 +55,7 @@
   openssh,
   openssl,
   pdftk,
+  perl,
   pgpdump,
   poppler_utils,
   procyon,
@@ -63,6 +65,7 @@
   sng,
   sqlite,
   squashfsTools,
+  systemdUkify,
   tcpdump,
   ubootTools,
   unzip,
@@ -91,7 +94,7 @@ let
         {
           inherit version;
           src = src.override {
-            rev = version;
+            tag = version;
             hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
           };
         }
@@ -103,11 +106,11 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "284";
+  version = "288";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-e30JIFoRxPc3+EVCLoaUbHSZd1EjHMpZ/2k6uYg9tPg=";
+    hash = "sha256-HeJfqjmuduVc/C0kfaAsiQuoKrrwlW69lkfYDz1uFlg=";
   };
 
   outputs = [
@@ -118,11 +121,11 @@ python.pkgs.buildPythonApplication rec {
   patches = [ ./ignore_links.patch ];
 
   postPatch = ''
-    # Upstream doesn't provide a PKG-INFO file
-    sed -i setup.py -e "/'rpm-python',/d"
-
     # When generating manpage, use the installed version
-    substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
+    substituteInPlace doc/Makefile --replace-fail "../bin" "$out/bin"
+
+    substituteInPlace diffoscope/comparators/apk.py \
+      --replace-fail "from androguard.core.bytecodes import apk" "from androguard.core import apk"
   '';
 
   nativeBuildInputs = [
@@ -136,7 +139,6 @@ python.pkgs.buildPythonApplication rec {
   #
   # Still missing these tools:
   # Android-specific tools:
-  # aapt2
   # dexdump
   # Darwin-specific tools:
   # lipo
@@ -204,6 +206,7 @@ python.pkgs.buildPythonApplication rec {
     ])
     ++ lib.optionals enableBloat (
       [
+        aapt
         abootimg
         apksigcopier
         apksigner
@@ -228,10 +231,12 @@ python.pkgs.buildPythonApplication rec {
         odt2txt
         openssh
         pdftk
+        perl
         poppler_utils
         procyon
         qemu
         R
+        systemdUkify
         tcpdump
         ubootTools
         wabt
@@ -240,6 +245,7 @@ python.pkgs.buildPythonApplication rec {
       ]
       ++ (with python.pkgs; [
         androguard
+        black
         guestfs
         h5py
         pdfminer-six

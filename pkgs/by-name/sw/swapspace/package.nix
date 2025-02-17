@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swapspace";
   version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "Tookmund";
     repo = "Swapspace";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-KrPdmF1H7WFI78ZJlLqDyfxbs7fymSUQpXL+7XjN9bI=";
   };
 
@@ -45,21 +45,24 @@ stdenv.mkDerivation rec {
     install --mode=444 -D 'swapspace.service' "$out/etc/systemd/system/swapspace.service"
   '';
 
-  # Nothing in swapspace --help or swapspace’s man page mentions
-  # anything about swapspace executing its arguments.
-  passthru.binlore.out = binlore.synthesize swapspace ''
-    execer cannot bin/swapspace
-  '';
-  passthru.tests = {
-    inherit (nixosTests) swapspace;
+  passthru = {
+    # Nothing in swapspace --help or swapspace’s man page mentions
+    # anything about swapspace executing its arguments.
+    binlore.out = binlore.synthesize swapspace ''
+      execer cannot bin/swapspace
+    '';
+    tests = {
+      inherit (nixosTests) swapspace;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic swap manager for Linux";
     homepage = "https://github.com/Tookmund/Swapspace";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    changelog = "https://github.com/Tookmund/Swapspace/releases/tag/v${finalAttrs.version}";
     mainProgram = "swapspace";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

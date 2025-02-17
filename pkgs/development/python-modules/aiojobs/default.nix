@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiojobs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FNc71YyAjtR+hd0UOqFAy6XW0PwHSlM76C3ecPM5vsU=";
   };
 

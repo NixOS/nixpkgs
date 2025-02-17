@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-H5Dl1incS5+lmZaLZXMCOqEIGTcTr4A5J3r3ngpDGtY=";
   };
 

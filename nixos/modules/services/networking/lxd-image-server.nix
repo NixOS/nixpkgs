@@ -105,19 +105,19 @@ in
             };
 
             # Serve json files with content type header application/json
-            "~ \.json$" = {
+            "~ \\.json$" = {
               extraConfig = ''
                 add_header Content-Type application/json;
               '';
             };
 
-            "~ \.tar.xz$" = {
+            "~ \\.tar.xz$" = {
               extraConfig = ''
                 add_header Content-Type application/octet-stream;
               '';
             };
 
-            "~ \.tar.gz$" = {
+            "~ \\.tar.gz$" = {
               extraConfig = ''
                 add_header Content-Type application/octet-stream;
               '';

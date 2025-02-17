@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "idoavrah";
     repo = "terraform-tui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xOlPuPVwfVT7jfBJPqZ5FbOs80HE0k2ZqcA+Jcxh9p4=";
   };
 

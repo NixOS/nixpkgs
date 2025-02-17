@@ -15,9 +15,9 @@
   zlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pysam";
-  version = "0.22.1";
+  version = "0.22.1-unstable-2024-10-30";
   pyproject = true;
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pysam-developers";
     repo = "pysam";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1sivEf8xN4SJPtJiAcBZG1bbgy66yWXzQis1mPeU+sA=";
+    rev = "0eae5be21ac3ab3ac7aa770a3931e2977e37b909";
+    hash = "sha256-i8glYSpuCRNhNtK4i6eUrerz8daiMfY/YgDwgSuELbc=";
   };
 
   nativeBuildInputs = [
@@ -75,12 +75,12 @@ buildPythonPackage rec {
     "pysam.libcvcf"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for reading, manipulating and writing genome data sets";
     downloadPage = "https://github.com/pysam-developers/pysam";
-    homepage = "https://pysam.readthedocs.io/";
-    maintainers = with maintainers; [ unode ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    homepage = "https://pysam.readthedocs.io";
+    maintainers = with lib.maintainers; [ unode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

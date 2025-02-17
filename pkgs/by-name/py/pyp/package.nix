@@ -15,7 +15,7 @@ let
     src = fetchFromGitHub {
       owner = "hauntsaninja";
       repo = "pyp";
-      rev = "refs/tags/v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-hnEgqWOIVj2ugOhd2aS9IulfkVnrlkhwOtrgH4qQqO8=";
     };
 
@@ -58,7 +58,6 @@ let
       mainProgram = "pyp";
       maintainers = with lib.maintainers; [
         rmcgibbo
-        AndersonTorres
       ];
     };
   };

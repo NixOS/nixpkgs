@@ -9,7 +9,7 @@
   bison,
   boost,
   cairo,
-  cgal_5,
+  cgal,
   clipper2,
   double-conversion,
   eigen,
@@ -44,12 +44,12 @@
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-12-21";
+  version = "2025-02-07";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "30cbdf6c7214be7cc00b4cca2cef8396e1d69498";
-    hash = "sha256-wpw4JStAWNcHU6PoHGcIKAeVjtlTJsS4ZFMkTpj6xRk=";
+    rev = "1308a7d476facb466bf9fae1e77666c35c8e3c8f";
+    hash = "sha256-+0cQ5mgRzOPfP6nl/rfC/hnw3V7yvGJCyLU8hOmlGOc=";
     # Unfortunately, we can't selectively fetch submodules. It would be good
     # to see that we don't accidentally depend on it.
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
@@ -83,7 +83,7 @@ clangStdenv.mkDerivation rec {
       mimalloc
       boost
       cairo
-      cgal_5
+      cgal
       double-conversion
       eigen
       fontconfig

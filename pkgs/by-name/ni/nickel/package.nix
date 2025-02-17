@@ -13,11 +13,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oOcVbAWNj0iVC3128QF4lKYfZbasqegwIfzv7qD8fDs=";
   };
 
-  cargoHash = "sha256-y5ZV6aLXzFZg41ZHGSSL6t+BN30EBHKzXuT6478hQUY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q0qcnpZkOr3AhdOO8p7einogeSDafh277eT7/yU2+YQ=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"

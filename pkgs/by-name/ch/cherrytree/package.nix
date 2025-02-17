@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JiSGoEVGotaPqEKFHjTagi+sZPgdX+tKI0FIHRmJKHE=";
   };
 

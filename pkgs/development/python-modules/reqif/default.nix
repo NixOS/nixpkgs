@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cQhis7jrcly3cw2LRv7hpPBFAB0Uag69czf+wJvbh/Q=";
   };
 

@@ -38,16 +38,21 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "2.4.0";
+  version = "3.1.0";
   format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-dWyC8uTVUb06liNcJaG4oK9wqIDmwAl6i6cg4XRRRdQ=";
+    tag = version;
+    hash = "sha256-mt/GUIRJHB2/Rritc+uNkolZzguYy2G/NKnSKNxKsLk=";
   };
+
+  patches = [
+    # https://github.com/wummel/patool/pull/173
+    ./fix-rar-detection.patch
+  ];
 
   postPatch = ''
     substituteInPlace patoolib/util.py \
@@ -61,6 +66,10 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
+    "test_7z"
+    "test_7z_file"
+    "test_7za_file"
+    "test_p7azip"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
   meta = with lib; {

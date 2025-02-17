@@ -75,7 +75,7 @@
 , withKvazaar ? withFullDeps # HEVC encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLc3 ? withFullDeps && lib.versionAtLeast version "7.1" # LC3 de/encoding
-, withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1" # LCEVC decoding
+, withLcevcdec ? false && lib.versionAtLeast version "7.1" # LCEVC decoding # FIXME currently makes ffmpeg crash in any operation on non-AVX CPUs
 , withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
@@ -333,7 +333,7 @@
 , xeve
 , xvidcore
 , xz
-, zeromq4
+, zeromq
 , zimg
 , zlib
 , zvbi
@@ -707,8 +707,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-cross-compile"
     "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ optionals stdenv.cc.isClang [
-    "--cc=clang"
-    "--cxx=clang++"
+    "--cc=${stdenv.cc.targetPrefix}clang"
+    "--cxx=${stdenv.cc.targetPrefix}clang++"
   ] ++ optionals withMetal [
     "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
     "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
@@ -835,7 +835,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withXvid [ xvidcore ]
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
-  ++ optionals withZmq [ zeromq4 ]
+  ++ optionals withZmq [ zeromq ]
   ++ optionals withZvbi [ zvbi ]
   ;
 

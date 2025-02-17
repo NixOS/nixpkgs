@@ -15,6 +15,7 @@
   coreutils,
   clucene_core_2,
   icu,
+  libexttextcat,
   openldap,
   libsodium,
   libstemmer,
@@ -25,7 +26,7 @@
   withMySQL ? false,
   libmysqlclient,
   withPgSQL ? false,
-  postgresql,
+  libpq,
   withSQLite ? true,
   sqlite,
   withLua ? false,
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
       lz4
       clucene_core_2
       icu
+      libexttextcat
       openldap
       libsodium
       libstemmer
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
       inotify-tools
     ]
     ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withPgSQL postgresql
+    ++ lib.optional withPgSQL libpq
     ++ lib.optional withSQLite sqlite
     ++ lib.optional withLua lua5_3;
 
@@ -131,6 +133,7 @@ stdenv.mkDerivation rec {
       "--with-ldap"
       "--with-lucene"
       "--with-icu"
+      "--with-textcat"
     ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "i_cv_epoll_works=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"

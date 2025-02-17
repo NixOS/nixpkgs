@@ -4,8 +4,6 @@
   fetchurl,
   fetchFromGitHub,
   apple-sdk,
-  apple-sdk_11,
-  darwinMinVersionHook,
 }:
 
 let
@@ -63,13 +61,6 @@ stdenv.mkDerivation rec {
     "CXX=${stdenv.cc.targetPrefix}c++"
   ];
   buildFlags = [ "build" ];
-
-  buildInputs =
-    lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "11")
-      [
-        apple-sdk_11
-        (darwinMinVersionHook "10.15")
-      ];
 
   enableParallelBuilding = true;
 

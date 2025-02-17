@@ -5,34 +5,38 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "3.0.2";
+  version = "3.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "mistune";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OoTiqJ7hsFP1Yx+7xW3rL+Yc/O2lCMdhBBbaZucyZXM=";
+    tag = "v${version}";
+    hash = "sha256-gXCFBe58Ij6CiwTddsI4tkPsGBR2z9D8dnxlvTXGSMw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  dependencies = lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mistune" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/lepture/mistune/blob/${src.rev}/docs/changes.rst";
+  meta = {
+    changelog = "https://github.com/lepture/mistune/blob/${src.tag}/docs/changes.rst";
     description = "Sane Markdown parser with useful plugins and renderers";
     homepage = "https://github.com/lepture/mistune";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

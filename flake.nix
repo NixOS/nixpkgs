@@ -24,6 +24,8 @@
 
         - `lib.nixos` for other NixOS-provided functionality, such as [`runTest`](https://nixos.org/manual/nixos/unstable/#sec-call-nixos-test-outside-nixos)
       */
+      # DON'T USE lib.extend TO ADD NEW FUNCTIONALITY.
+      # THIS WAS A MISTAKE. See the warning in lib/default.nix.
       lib = lib.extend (final: prev: {
 
         /**
@@ -85,10 +87,6 @@
           self.legacyPackages.${system}.stdenv.hostPlatform.isLinux
           # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
           && !self.legacyPackages.${system}.targetPlatform.isPower64
-          # Exclude armv6l-linux due to "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
-          && system != "armv6l-linux"
-          # Exclude riscv64-linux due to "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"
-          && system != "riscv64-linux"
         )
       {
         # Test that ensures that the nixosSystem function can accept a lib argument

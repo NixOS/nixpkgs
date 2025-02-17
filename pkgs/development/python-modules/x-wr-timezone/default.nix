@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-F/bNETgscbhEkpG/D1eSJaBNdpi0+xEYuNL4RURGST0=";
   };
 

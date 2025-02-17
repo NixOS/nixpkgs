@@ -6,6 +6,7 @@
   openssl,
   pkg-config,
   Security,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
-  cargoHash = "sha256-XOtPtOEKZMJzNeBZBT3Mc/KOjMOcz71byIv/ftcRP48=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Xci9168KqJf+mhx3k0d+nH6Ov5tqNtB6nxiL9BwVYjU=";
 
   cargoPatches = [
     ./Cargo.lock.patch
@@ -30,6 +32,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       openssl
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security

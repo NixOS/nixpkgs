@@ -7,7 +7,7 @@
   pkg-config,
   installShellFiles,
   readline,
-  postgresql,
+  libpq,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gnugrep
+    libpq
     ncurses
     readline
-    postgresql
   ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

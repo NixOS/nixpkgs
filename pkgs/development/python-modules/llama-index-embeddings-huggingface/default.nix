@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-huggingface";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_huggingface";
     inherit version;
-    hash = "sha256-zo+LMLKc/4VAGrohGChftj+4FHpWtlbuIPfoUQyghaI=";
+    hash = "sha256-3vFjm6uFEeOsAoRSAQSwxtzpvAU7Tc44wSe9Yrwo9/w=";
   };
 
   build-system = [ poetry-core ];

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "28.0.0";
+  version = "28.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_network";
     inherit version;
-    hash = "sha256-QDVtNI70g4Mk8ZpBzYA0C0+N1KwvChiky9XMle8pdPM=";
+    hash = "sha256-jIS/+17HXG4CROWOzwfADV/EIdYWsMs2nG/lha8zz4c=";
   };
 
   build-system = [ setuptools ];

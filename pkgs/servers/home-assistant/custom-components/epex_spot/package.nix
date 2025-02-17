@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "epex_spot";
-  version = "2.3.9";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "ha_epex_spot";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PY3udPgvsaXdDRh4+NQmVlqhERswcMpaJTq5azaUFf4=";
+    tag = version;
+    hash = "sha256-UaPgf0861TaSgawjJCyNjs8hRE5L5vWnyoXENrzCfb4=";
   };
 
   dependencies = [

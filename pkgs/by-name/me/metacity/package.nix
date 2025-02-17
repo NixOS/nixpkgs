@@ -13,7 +13,7 @@
   libstartup_notification,
   libxml2,
   pkg-config,
-  substituteAll,
+  replaceVars,
   wrapGAppsHook3,
   zenity,
 }:
@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit zenity;
     })
   ];

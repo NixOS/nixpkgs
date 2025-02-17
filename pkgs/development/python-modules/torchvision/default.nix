@@ -37,7 +37,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BXvi4LoO2LZtNSE8lvFzcN4H2nN2fRg5/s7KRci7rMM=";
   };
 

@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "efmt";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "sile";
     repo = "efmt";
     rev = version;
-    hash = "sha256-3CL9NcwDsAs6fHUWA/ibkwqOW0Ur4glpHVZTrfLQUXs=";
+    hash = "sha256-TvDIw9BNeqvsq13Ov9pBREj4d9FWtwfu7mzACc+qlZ4=";
   };
 
-  cargoHash = "sha256-hEJb1SOQ3daY2otroCds8zitoodSjRyRTyR7GwF8dgk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-U9W9GIU4Ofqy2BW4onJSUPhyiFfTspj06Gzj6NeTwcI=";
 
   meta = {
     description = "Erlang code formatter";

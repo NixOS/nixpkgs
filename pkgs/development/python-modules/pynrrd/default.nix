@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pynrrd";
-  version = "1.1.1";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mhe";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-B/G46/9Xf1LRu02p0X4/UeW1RYotSXKXRO9VZDPhkNU=";
+    tag = "v${version}";
+    hash = "sha256-qu3s3XswJCUchqYfYMuqIzI4sfeXrttvXSEW9/GSENA=";
   };
 
   build-system = [ setuptools ];

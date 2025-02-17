@@ -9,7 +9,7 @@ from typing import assert_never
 
 from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
-from .models import Action, BuildAttr, Flake, NRError, Profile
+from .models import Action, BuildAttr, Flake, ImageVariants, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
 
@@ -18,7 +18,7 @@ logger.setLevel(logging.INFO)
 
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
-    common_flags = argparse.ArgumentParser(add_help=False)
+    common_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     common_flags.add_argument(
         "--verbose",
         "-v",
@@ -27,6 +27,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         default=0,
         help="Enable verbose logging (includes nix)",
     )
+    common_flags.add_argument("--quiet", action="count", default=0)
     common_flags.add_argument("--max-jobs", "-j")
     common_flags.add_argument("--cores")
     common_flags.add_argument("--log-format")
@@ -34,16 +35,15 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_flags.add_argument("--keep-failed", "-K", action="store_true")
     common_flags.add_argument("--fallback", action="store_true")
     common_flags.add_argument("--repair", action="store_true")
-    common_flags.add_argument("--option", nargs=2)
+    common_flags.add_argument("--option", nargs=2, action="append")
 
-    common_build_flags = argparse.ArgumentParser(add_help=False)
+    common_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     common_build_flags.add_argument("--builders")
-    common_build_flags.add_argument("--include", "-I")
-    common_build_flags.add_argument("--quiet", action="store_true")
+    common_build_flags.add_argument("--include", "-I", action="append")
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
-    flake_common_flags = argparse.ArgumentParser(add_help=False)
+    flake_common_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     flake_common_flags.add_argument("--accept-flake-config", action="store_true")
     flake_common_flags.add_argument("--refresh", action="store_true")
     flake_common_flags.add_argument("--impure", action="store_true")
@@ -54,13 +54,13 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
     flake_common_flags.add_argument("--no-registries", action="store_true")
     flake_common_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_common_flags.add_argument("--update-input")
-    flake_common_flags.add_argument("--override-input", nargs=2)
+    flake_common_flags.add_argument("--update-input", action="append")
+    flake_common_flags.add_argument("--override-input", nargs=2, action="append")
 
-    classic_build_flags = argparse.ArgumentParser(add_help=False)
+    classic_build_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
 
-    copy_flags = argparse.ArgumentParser(add_help=False)
+    copy_flags = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
     copy_flags.add_argument(
         "--use-substitutes",
         "--substitute-on-destination",
@@ -167,15 +167,25 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument("--no-ssh-tty", action="store_true", help="Deprecated")
     main_parser.add_argument(
+        "--no-reexec",
+        action="store_true",
+        help="Do not update nixos-rebuild in-place (also known as re-exec) before build",
+    )
+    main_parser.add_argument(
         "--fast",
         action="store_true",
-        help="Skip possibly expensive operations",
+        help="Deprecated, use '--no-reexec' instead",
     )
     main_parser.add_argument("--build-host", help="Specifies host to perform the build")
     main_parser.add_argument(
         "--target-host", help="Specifies host to activate the configuration"
     )
     main_parser.add_argument("--no-build-nix", action="store_true", help="Deprecated")
+    main_parser.add_argument(
+        "--image-variant",
+        help="Selects an image variant to build from the "
+        + "config.system.build.images attribute of the given configuration",
+    )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -218,23 +228,23 @@ def parse_args(
     if args.ask_sudo_password:
         args.sudo = True
 
-    # TODO: use deprecated=True in Python >=3.13
     if args.install_grub:
-        parser_warn("--install-grub deprecated, use --install-bootloader instead")
+        parser_warn("--install-grub is deprecated, use --install-bootloader instead")
         args.install_bootloader = True
 
-    # TODO: use deprecated=True in Python >=3.13
     if args.use_remote_sudo:
-        parser_warn("--use-remote-sudo deprecated, use --sudo instead")
+        parser_warn("--use-remote-sudo is deprecated, use --sudo instead")
         args.sudo = True
 
-    # TODO: use deprecated=True in Python >=3.13
-    if args.no_ssh_tty:
-        parser_warn("--no-ssh-tty deprecated, SSH's TTY is never used anymore")
+    if args.fast:
+        parser_warn("--fast is deprecated, use --no-reexec instead")
+        args.no_reexec = True
 
-    # TODO: use deprecated=True in Python >=3.13
+    if args.no_ssh_tty:
+        parser_warn("--no-ssh-tty is deprecated, SSH's TTY is never used anymore")
+
     if args.no_build_nix:
-        parser_warn("--no-build-nix deprecated, we do not build nix anymore")
+        parser_warn("--no-build-nix is deprecated, we do not build nix anymore")
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
@@ -285,8 +295,7 @@ def reexec(
             )
     except CalledProcessError:
         logger.warning(
-            "could not build a newer version of nixos-rebuild, "
-            + "using current version"
+            "could not build a newer version of nixos-rebuild, using current version"
         )
 
     if drv:
@@ -347,7 +356,7 @@ def execute(argv: list[str]) -> None:
     if (
         WITH_REEXEC
         and can_run
-        and not args.fast
+        and not args.no_reexec
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")
     ):
         reexec(argv, args, build_flags, flake_build_flags)
@@ -372,6 +381,7 @@ def execute(argv: list[str]) -> None:
             | Action.BUILD
             | Action.DRY_BUILD
             | Action.DRY_ACTIVATE
+            | Action.BUILD_IMAGE
             | Action.BUILD_VM
             | Action.BUILD_VM_WITH_BOOTLOADER
         ):
@@ -379,11 +389,31 @@ def execute(argv: list[str]) -> None:
 
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
-            build_flags |= {"no_out_link": no_link, "dry_run": dry_run}
-            flake_build_flags |= {"no_link": no_link, "dry_run": dry_run}
             rollback = bool(args.rollback)
 
+            def validate_image_variant(variants: ImageVariants) -> None:
+                if args.image_variant not in variants:
+                    raise NRError(
+                        "please specify one of the following "
+                        + "supported image variants via --image-variant:\n"
+                        + "\n".join(f"- {v}" for v in variants.keys())
+                    )
+
             match action:
+                case Action.BUILD_IMAGE if flake:
+                    variants = nix.get_build_image_variants_flake(
+                        flake,
+                        eval_flags=flake_common_flags,
+                    )
+                    validate_image_variant(variants)
+                    attr = f"config.system.build.images.{args.image_variant}"
+                case Action.BUILD_IMAGE:
+                    variants = nix.get_build_image_variants(
+                        build_attr,
+                        instantiate_flags=common_flags,
+                    )
+                    validate_image_variant(variants)
+                    attr = f"config.system.build.images.{args.image_variant}"
                 case Action.BUILD_VM:
                     attr = "config.system.build.vm"
                 case Action.BUILD_VM_WITH_BOOTLOADER:
@@ -412,29 +442,32 @@ def execute(argv: list[str]) -> None:
                         flake,
                         build_host,
                         eval_flags=flake_common_flags,
-                        flake_build_flags=flake_build_flags,
+                        flake_build_flags=flake_build_flags
+                        | {"no_link": no_link, "dry_run": dry_run},
                         copy_flags=copy_flags,
                     )
                 case (_, False, None, Flake(_)):
                     path_to_config = nix.build_flake(
                         attr,
                         flake,
-                        flake_build_flags=flake_build_flags,
+                        flake_build_flags=flake_build_flags
+                        | {"no_link": no_link, "dry_run": dry_run},
                     )
                 case (_, False, Remote(_), None):
                     path_to_config = nix.build_remote(
                         attr,
                         build_attr,
                         build_host,
-                        instantiate_flags=common_flags,
+                        realise_flags=common_flags,
+                        instantiate_flags=build_flags,
                         copy_flags=copy_flags,
-                        build_flags=build_flags,
                     )
                 case (_, False, None, None):
                     path_to_config = nix.build(
                         attr,
                         build_attr,
-                        build_flags=build_flags,
+                        build_flags=build_flags
+                        | {"no_out_link": no_link, "dry_run": dry_run},
                     )
                 case never:
                     # should never happen, but mypy is not smart enough to
@@ -460,25 +493,40 @@ def execute(argv: list[str]) -> None:
                         sudo=args.sudo,
                     )
 
-            if action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE):
-                nix.switch_to_configuration(
-                    path_to_config,
-                    action,
-                    target_host=target_host,
-                    sudo=args.sudo,
-                    specialisation=args.specialisation,
-                    install_bootloader=args.install_bootloader,
-                )
-            elif action in (Action.BUILD_VM, Action.BUILD_VM_WITH_BOOTLOADER):
-                # If you get `not-found`, please open an issue
-                vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
-                print(
-                    f"Done. The virtual machine can be started by running '{vm_path}'"
-                )
+            # Print only the result to stdout to make it easier to script
+            def print_result(msg: str, result: str | Path) -> None:
+                print(msg, end=" ", file=sys.stderr, flush=True)
+                print(result, flush=True)
+
+            match action:
+                case Action.SWITCH | Action.BOOT | Action.TEST | Action.DRY_ACTIVATE:
+                    nix.switch_to_configuration(
+                        path_to_config,
+                        action,
+                        target_host=target_host,
+                        sudo=args.sudo,
+                        specialisation=args.specialisation,
+                        install_bootloader=args.install_bootloader,
+                    )
+                    print_result("Done. The new configuration is", path_to_config)
+                case Action.BUILD:
+                    print_result("Done. The new configuration is", path_to_config)
+                case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
+                    # If you get `not-found`, please open an issue
+                    vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
+                    print_result(
+                        "Done. The virtual machine can be started by running", vm_path
+                    )
+                case Action.BUILD_IMAGE:
+                    disk_path = path_to_config / variants[args.image_variant]
+                    print_result("Done. The disk image can be found in", disk_path)
+
         case Action.EDIT:
             nix.edit(flake, flake_build_flags)
+
         case Action.DRY_RUN:
-            assert False, "DRY_RUN should be a DRY_BUILD alias"
+            raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
+
         case Action.LIST_GENERATIONS:
             generations = nix.list_generations(profile)
             if args.json:
@@ -494,11 +542,13 @@ def execute(argv: list[str]) -> None:
                     "current": "Current",
                 }
                 print(tabulate(generations, headers=headers))
+
         case Action.REPL:
             if flake:
                 nix.repl_flake("toplevel", flake, flake_build_flags)
             else:
                 nix.repl("system", build_attr, build_flags)
+
         case _:
             assert_never(action)
 

@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "11.0.0";
+  version = "11.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vWNqzA2ZfJcWexXw790RgyYtP8WDtahoQIX16otCRnk=";
+    tag = version;
+    hash = "sha256-9tcukZIJMheVNBfpppjUcuhvRal7J59iQWgBqkEgJDk=";
   };
 
   build-system = [ setuptools ];

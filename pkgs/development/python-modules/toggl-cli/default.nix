@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AuHau";
     repo = "toggl-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RYOnlZxg3TZQO5JpmWlnUdL2hNFu4bjkdGU4c2ysqpA=";
   };
 

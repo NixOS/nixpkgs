@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dwolfhub";
     repo = "zxcvbn-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-etcST7pxlpOH5Q9KtOPGf1vmnkyjEp6Cd5QCmBjW9Hc=";
   };
 

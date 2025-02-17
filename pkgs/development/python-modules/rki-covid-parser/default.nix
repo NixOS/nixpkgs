@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebino";
     repo = "rki-covid-parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e0MJjE4zgBPL+vt9EkgsdGrgqUyKK/1S9ZFxy56PUjc=";
   };
 

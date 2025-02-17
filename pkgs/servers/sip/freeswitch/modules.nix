@@ -8,7 +8,7 @@
 , curl
 , ffmpeg
 , libmysqlclient
-, postgresql
+, libpq
 , spandsp3
 , sofia_sip
 , libks
@@ -114,7 +114,7 @@ in
 
   databases = {
     mariadb = mk "databases/mod_mariadb" [ libmysqlclient ];
-    pgsql = mk "databases/mod_pgsql" [ postgresql ];
+    pgsql = mk "databases/mod_pgsql" [ libpq ];
   };
 
   dialplans = {

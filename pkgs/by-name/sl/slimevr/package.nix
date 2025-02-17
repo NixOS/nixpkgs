@@ -34,7 +34,8 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "gui/src-tauri";
 
-  cargoHash = "sha256-jvt5x2Jr185XVSFjob4cusP/zYJklJ/eqZe47qUg58s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-93aOM6iJguTdC5RAUDuoSr05ar+iKilmddgKBOG2fDE=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";

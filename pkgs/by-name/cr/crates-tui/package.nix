@@ -17,11 +17,12 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "ratatui";
     repo = "crates-tui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yAMVl+3DP9NCjHc9X0qOd6zlJvaY3kcvnVBSS8JHtgU=";
   };
 
-  cargoHash = "sha256-d79NgOGdxkg6zRpnBlievmPEVWIkY8gYLWdTMpGSPqo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/w3M5I9IOO2e37dnL8iE3LY5z1N07RkD3mMGJrswVMI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

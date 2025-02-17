@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-z22+cDlFQtLMLFh5+7Nt9LsGFyBPi3HeZhYb0LK86Oc=";
   };
 

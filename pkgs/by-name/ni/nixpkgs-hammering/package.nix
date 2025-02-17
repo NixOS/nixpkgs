@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "unstable-2024-03-25";
+  version = "0-unstable-2024-12-22";
 
   src = fetchFromGitHub {
     owner = "jtojnar";
     repo = "nixpkgs-hammering";
-    rev = "6851ecea8c6da45870b7c06d6495cba3fb2d7c7c";
-    hash = "sha256-kr3zMr7aWt4W/+Jcol5Ctiq0KjXSxViPhGtyqvX9dqE=";
+    rev = "56e8d636b3e7188dae2832fc405db2e388be634b";
+    hash = "sha256-hr+BHAmWT/FCLI5zNEHgtKdBbIYgmAydrErRu9RfuuM=";
   };
 
   meta = with lib; {
@@ -30,7 +30,8 @@ let
     pname = "nixpkgs-hammering-rust-checks";
     inherit version src meta;
     sourceRoot = "${src.name}/rust-checks";
-    cargoHash = "sha256-QrtAalZClNc0ZN6iNqN9rFRQ7w68lEZPV5e25uXYToA=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-cE1fzdxGa0WG2WCPs8UFnE2vzaKfU7r6LS+9HLCVJ1U=";
   };
 in
 

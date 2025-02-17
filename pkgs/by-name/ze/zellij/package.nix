@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xdWfaXWmqFJuquE7n3moUjGuFqKB90OE6lqPuC3onOg=";
   };
 
@@ -30,7 +30,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail ', "vendored_curl"' ""
   '';
 
-  cargoHash = "sha256-38hTOsa1a5vpR1i8GK1aq1b8qaJoCE74ewbUOnun+Qs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nfk+4vf9toPwWcAgNtK9uy263g+j/Km1v8SJexlHhNg=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
@@ -89,6 +90,7 @@ rustPlatform.buildRustPackage rec {
       _0x4A6F
       abbe
       pyrox0
+      matthiasbeyer
     ];
     mainProgram = "zellij";
   };

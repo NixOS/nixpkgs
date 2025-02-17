@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-freeze-filter";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-freeze-filter";
     rev = finalAttrs.version;
-    hash = "sha256-CaHBTfdk8VFjmiclG61elj35glQafgz5B4ENo+7J35o=";
+    hash = "sha256-fVrfGqwce4oFYdWGElXMsXHO1AzQ/mhfBmZL1mPdT3I=";
     fetchSubmodules = true;
   };
 

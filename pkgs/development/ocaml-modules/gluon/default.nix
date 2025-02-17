@@ -2,6 +2,7 @@
   lib,
   buildDunePackage,
   fetchurl,
+  fetchpatch,
   bytestring,
   config,
   libc,
@@ -18,6 +19,11 @@ buildDunePackage rec {
   src = fetchurl {
     url = "https://github.com/riot-ml/gluon/releases/download/${version}/gluon-${version}.tbz";
     hash = "sha256-YWJCPokY1A7TGqCGoxJl14oKDVeMNybEEB7KiK92WSo=";
+  };
+
+  patches = fetchpatch {
+    url = "https://github.com/riot-ml/gluon/commit/b29c34d04ea05d7721a229c35132320e796ed4b2.patch";
+    hash = "sha256-XuzyoteQAgEs93WrgHTWT1I+hIJAiGiJ4XAiLtnEYtw=";
   };
 
   buildInputs = [

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "six-ddc";
     repo = "plow";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-q9k5GzhYPOP8p8VKrqpoHc3B9Qak+4DtZAZZuFlkED0=";
   };
 

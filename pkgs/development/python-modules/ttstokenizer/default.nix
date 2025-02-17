@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "ttstokenizer";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HtDXDKlZ3jpwIgb5DvaqurEkRe8TRJ2xqKl2IKElnKU=";
+    hash = "sha256-akXiscw57CMp2JDdJq7wqeBeML41yLyFh7fTZwEBlVA=";
   };
 
   propagatedBuildInputs = [

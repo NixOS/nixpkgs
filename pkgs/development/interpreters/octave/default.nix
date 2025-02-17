@@ -98,19 +98,22 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "9.3.0";
+  version = "9.4.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-gJ+jmnrMhIFb9NxNLX5rIoznWgfzskE/MxOqjgqqMoc=";
+    sha256 = "sha256-2pSBIFv6cXZgt9ShZzLYstWKrc6rSZPUEkKo4oSOpsE=";
   };
+
+  postPatch = ''
+    patchShebangs --build build-aux/*.pl
+  '';
 
   buildInputs =
     [
       readline
       ncurses
-      perl
       flex
       qhull
       graphicsmagick
@@ -157,6 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   nativeBuildInputs =
     [
+      perl
       pkg-config
       gfortran
       texinfo
@@ -183,7 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-lapack=lapack"
       (if use64BitIdx then "--enable-64" else "--disable-64")
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-link-all-dependencies" ]
     ++ lib.optionals enableReadline [ "--enable-readline" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
     ++ lib.optionals enableQt [ "--with-qt=5" ];

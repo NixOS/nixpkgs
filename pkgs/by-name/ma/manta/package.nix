@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     PYTHONPATH=$out/lib/python/pyflow:$PYTHONPATH python -c 'import pyflowTaskWrapper; import pyflow'
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+
   meta = with lib; {
     description = "Structural variant caller";
     license = licenses.gpl3;

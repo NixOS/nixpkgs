@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PUwyYOg1dymlnnTr6TnxS42ISmbS00YfOdkL+5MbYFI=";
   };
 

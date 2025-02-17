@@ -108,9 +108,9 @@ let
 
 in {
   antlr4_13 = (mkAntlr {
-    version = "4.13.0";
-    sourceSha256 = "sha256-s1yAdScMYg1wFpYNsBAtpifIhQsnSAgJg7JjPDx+htc=";
-    jarSha256 = "sha256-vG9KvA0iWidXASbFFAJWnwAKje2jSHtw52QoQOVw5KY=";
+    version = "4.13.2";
+    sourceSha256 = "sha256-DxxRL+FQFA+x0RudIXtLhewseU50aScHKSCDX7DE9bY=";
+    jarSha256 = "sha256-6uLfoRmmQydERnKv9j6ew1ogGA3FuAkLemq4USXfTXY=";
     extraCppCmakeFlags = [
       # Generate CMake config files, which are not installed by default.
       "-DANTLR4_INSTALL=ON"

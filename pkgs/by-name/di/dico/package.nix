@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dico";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rB+Y4jPQ+srKrBBZ87gThKVZLib9TDCCrtAD9l4lLFo=";
+    sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 
   hardeningDisable = [ "format" ];

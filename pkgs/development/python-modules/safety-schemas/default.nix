@@ -23,6 +23,10 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
+
   dependencies = [
     dparse
     packaging

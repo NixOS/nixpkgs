@@ -980,7 +980,8 @@ rec {
 
             mkdir $out
             ${if enableFakechroot then ''
-              proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -c '
+              proot -r $PWD/old_out ${bind-paths} --pwd=/ fakeroot bash -e -c '
+                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                 source $stdenv/setup
                 eval "$fakeRootCommands"
                 tar \
@@ -994,7 +995,8 @@ rec {
                   -cf $out/layer.tar .
               '
             '' else ''
-              fakeroot bash -c '
+              fakeroot bash -e -c '
+                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                 source $stdenv/setup
                 cd old_out
                 eval "$fakeRootCommands"

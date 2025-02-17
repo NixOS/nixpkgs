@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "snovvcrash";
     repo = "DivideAndScan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WZmWpcBqxsNH96nVWwoepFhsvdxZpYKmAjNd7ghIJMA=";
   };
 

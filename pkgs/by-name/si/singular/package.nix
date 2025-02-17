@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gmp,
   bison,
   perl,
@@ -47,6 +48,15 @@ stdenv.mkDerivation rec {
     # not included in the tarball downloaded by fetchzip.
     forceFetchGit = true;
   };
+
+  patches = [
+    (fetchpatch {
+      # removes dead code with invalid member reference in gfanlib
+      name = "clang-19.patch";
+      url = "https://github.com/Singular/Singular/commit/d3f73432d73ac0dd041af83cb35301498e9b57d9.patch";
+      hash = "sha256-1KOk+yrTvHWY4aSK9QcByHIwKwe71QIYTMx8zo7XNos=";
+    })
+  ];
 
   configureFlags =
     [
@@ -173,6 +183,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "CAS for polynomial computations";

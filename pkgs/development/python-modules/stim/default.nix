@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Tx+4FfkMShzTP1QEQVwHEz3FZ5pz3uXK2mlJFLNlTas=";
   };
 

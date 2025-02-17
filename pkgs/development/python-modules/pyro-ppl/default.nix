@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "pyro";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
   };
 

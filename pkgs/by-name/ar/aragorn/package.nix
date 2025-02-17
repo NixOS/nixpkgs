@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Detects tRNA, mtRNA, and tmRNA genes in nucleotide sequences";
     mainProgram = "aragorn";
-    homepage = "http://www.ansikte.se/ARAGORN/";
+    homepage = "https://www.trna.se/ARAGORN/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;

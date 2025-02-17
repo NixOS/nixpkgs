@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Exa-Networks";
     repo = "exabgp";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PrdCAmefKCBmbBFp04KiQGSsZZ4KNFk/ZtMedh9oow4=";
   };
 

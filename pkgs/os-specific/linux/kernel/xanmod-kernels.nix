@@ -14,12 +14,12 @@ let
   # kernel config in the xanmod version commit
   variants = {
     lts = {
-      version = "6.6.67";
-      hash = "sha256-ePZAs+TWroyDSKx+ubZeNRr/lA8zuqp3m0Cs5yE18JE=";
+      version = "6.12.13";
+      hash = "sha256-1AlkY+7lkOnjvA+h3eP3RHPrV1upydDHhZVPY5ty58A=";
     };
     main = {
-      version = "6.12.6";
-      hash = "sha256-Pao4tS3SjllOkRrH+k/+9JqLIEOrNqJTFlHZ4cp2OF8=";
+      version = "6.12.13";
+      hash = "sha256-1AlkY+7lkOnjvA+h3eP3RHPrV1upydDHhZVPY5ty58A=";
     };
   };
 
@@ -76,7 +76,6 @@ let
             moni
             lovesegfault
             atemu
-            shawn8901
             zzzsy
             eljamm
           ];

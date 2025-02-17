@@ -4,20 +4,17 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  google-auth,
+  requests-oauthlib,
   click,
   mock,
   pytestCheckHook,
-  google-auth,
-  requests-oauthlib,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "google_auth_oauthlib";
@@ -53,12 +50,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google_auth_oauthlib" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     changelog = "https://github.com/googleapis/google-auth-library-python-oauthlib/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ terlar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ terlar ];
     mainProgram = "google-oauthlib-tool";
   };
 }

@@ -1,23 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   regex,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "re_assert";
+  pname = "re-assert";
   version = "1.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5172dfbd2047a15dff2347735dea7e495479cc7e58841199a4a4973256b20464";
+  src = fetchFromGitHub {
+    owner = "asottile";
+    repo = "re-assert";
+    tag = "v${version}";
+    hash = "sha256-UTXFTD3QOKIzjq05J9Ontv5h9aClOwlPYKFXfDnBWuc=";
   };
 
-  # No tests in archive
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ regex ];
+  dependencies = [ regex ];
+
+  pythonImportsCheck = [ "re_assert" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Show where your regex match assertion failed";

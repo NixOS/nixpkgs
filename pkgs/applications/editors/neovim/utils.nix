@@ -171,7 +171,7 @@ let
       withPython3 ? true,
       withNodeJs ? false,
       withRuby ? true,
-      # perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
+      # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
       withPerl ? false,
 
       # so that we can pass the full neovim config while ignoring it
@@ -272,7 +272,7 @@ let
     ));
 
   /*
-    Fork of vimUtils.packDir that additionnally generates a propagated-build-inputs-file that
+    Fork of vimUtils.packDir that additionally generates a propagated-build-inputs-file that
     can be used by the lua hooks to generate a proper LUA_PATH
 
     Generates a packpath folder as expected by vim
@@ -286,14 +286,14 @@ let
       rawPackDir = vimUtils.packDir packages;
 
     in
-    rawPackDir.override ({
+    rawPackDir.override {
       postBuild = ''
         mkdir $out/nix-support
         for i in $(find -L $out -name propagated-build-inputs ); do
           cat "$i" >> $out/nix-support/propagated-build-inputs
         done
       '';
-    });
+    };
 
 in
 {

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "iterfzf";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-DvEFCHK+1TA/TTXG//hvXXbRclBkelonA3QsB4h7eRM=";
   };
 

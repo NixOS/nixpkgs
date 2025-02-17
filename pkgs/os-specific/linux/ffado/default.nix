@@ -12,7 +12,7 @@
   libraw1394,
   libxmlxx3,
   pkg-config,
-  python311,
+  python3,
   scons,
   which,
   withMixer ? false,
@@ -20,16 +20,19 @@
 }:
 
 let
-  python =
-    if withMixer then
-      python311.withPackages (
-        pkgs: with pkgs; [
-          pyqt5
-          dbus-python
-        ]
-      )
-    else
-      python311;
+  python = python3.withPackages (
+    pkgs:
+    with pkgs;
+    (
+      [
+        distutils
+      ]
+      ++ lib.optionals withMixer [
+        pyqt5
+        dbus-python
+      ]
+    )
+  );
 in
 stdenv.mkDerivation rec {
   pname = "ffado";
@@ -67,10 +70,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [
-      (scons.override {
-        # SConstruct script depends on distutils removed in Python 3.12
-        python3Packages = python311.pythonOnBuildForHost.pkgs;
-      })
+      scons
       pkg-config
       which
     ]

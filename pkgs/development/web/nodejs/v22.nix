@@ -8,8 +8,8 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.11.0";
-  sha256 = "bbf0297761d53aefda9d7855c57c7d2c272b83a7b5bad4fea9cb29006d8e1d35";
+  version = "22.13.1";
+  sha256 = "cfce282119390f7e0c2220410924428e90dadcb2df1744c0c4a0e7baae387cc2";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -19,25 +19,21 @@ buildNodejs {
     ./use-correct-env-in-tests.patch
     ./bin-sh-node-run-v22.patch
 
-    # Fix for https://github.com/NixOS/nixpkgs/issues/355919
     # FIXME: remove after a minor point release
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/a094a8166cd772f89e92b5deef168e5e599fa815.patch?full_index=1";
-      hash = "sha256-5FZfozYWRa1ZI/f+e+xpdn974Jg2DbiHbua13XUQP5E=";
+      url = "https://github.com/nodejs/node/commit/49acdc8748fe9fe83bc1b444e24c456dff00ecc5.patch?full_index=1";
+      hash = "sha256-iK7bj4KswTeQ9I3jJ22ZPTsvCU8xeGGXEOo43dxg3Mk=";
     })
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
-      hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
+      url = "https://github.com/nodejs/node/commit/d0ff34f4b690ad49c86b6df8fd424f39d183e1a6.patch?full_index=1";
+      hash = "sha256-ezcCrg7UwK091pqYxXJn4ay9smQwsrYeMO/NBE7VaM8=";
     })
-    # Patch to use the shared version of SQLite instead of the one vendored upstream:
+    # test-icu-env is failing on ICU 74.2
+    # FIXME: remove once https://github.com/nodejs/node/pull/56661 is included in a next release
     (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/32f7d5ad1cf79e7e731e1bb7ac967f4f2a3194cf.patch?full_index=1";
-      hash = "sha256-dyUr3caGfetrXgfAl+CLE1LKKetDZCpPwMg4EM98rqI=";
-    })
-    # fixes test failure, remove when included in release
-    (fetchpatch2 {
-      url = "https://github.com/nodejs/node/commit/b6fe731c55eb4cb9d14042a23e5002ed39b7c8b7.patch?full_index=1";
-      hash = "sha256-KoKsQBFKUji0GeEPTR8ixBflCiHBhPqd2cPVPuKyua8=";
+      url = "https://github.com/nodejs/node/commit/a364ec1d1cbbd5a6d20ee54d4f8648dd7592ebcd.patch?full_index=1";
+      hash = "sha256-EL1NgCBzz5O1spwHgocLm5mkORAiqGFst0N6pc3JvFg=";
+      revert = true;
     })
   ];
 }

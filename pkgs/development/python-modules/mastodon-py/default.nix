@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
   };
 

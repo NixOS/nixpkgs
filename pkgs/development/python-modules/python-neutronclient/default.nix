@@ -35,19 +35,13 @@
 
 buildPythonPackage rec {
   pname = "python-neutronclient";
-  version = "11.3.1";
+  version = "11.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U82ZI/Q6OwdypA41YfdGVa3IA4+QJhqz3gW2IR0S7cs=";
+    hash = "sha256-h0Ehk2Lkv5wuQ/LmyuTUmR7Y+d+QY/Q0CKC2WLA9YuI=";
   };
-
-  patches = [
-    # fix wheel metadata to support python 3.12
-    # based on https://github.com/openstack/python-neutronclient/commit/f882f1ddb60bcd77096eb8a74e9e86d10723e8be
-    ./python-3.12.diff
-  ];
 
   build-system = [
     setuptools

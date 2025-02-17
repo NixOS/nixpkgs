@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     tag = version;
-    hash = "sha256-C2JAlCgH5OCMAZr/Rvi0H7xAwesnkVCJ3kZyyVYaLg4=";
+    hash = "sha256-yqHqtH4NhNL+JsqN/QXWPlW/28I4kaFvjwxx819zZkw=";
   };
 
   build-system = [
@@ -43,6 +43,11 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals withAutocomplete [
       python3Packages.argcomplete
     ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
 
   makeWrapperArgs =
     let
@@ -70,13 +75,8 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  nativeCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
-
   meta = {
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${src.tag}";
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = lib.licenses.mit;

@@ -4,23 +4,32 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      # https://github.com/unixorn/ha-mqtt-discoverable/pull/310
+      paho-mqtt = self.paho-mqtt_1;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "ha-mqtt-discoverable-cli";
-  version = "0.16.2";
+  version = "0.16.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable-cli";
     tag = "v${version}";
-    hash = "sha256-RyAgwLMdeLZj+U7Ddp1t/Qy5K/U++3WssVHfzSQ7YoY=";
+    hash = "sha256-VjHsiF4HxGscG1pysxegPyM+Y18CWW06D3WezD+BLss=";
   };
 
   pythonRelaxDeps = [ "ha-mqtt-discoverable" ];
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python.pkgs; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [ ha-mqtt-discoverable ];
+  dependencies = with python.pkgs; [ ha-mqtt-discoverable ];
 
   # Project has no real tests
   doCheck = false;

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   cacert,
   cargo-tauri,
   desktop-file-utils,
@@ -48,10 +47,7 @@ rustPlatform.buildRustPackage rec {
     pnpm.configHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
-    ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_1;
 
   # Tests fail on other, unrelated packages in the monorepo
   cargoTestFlags = [

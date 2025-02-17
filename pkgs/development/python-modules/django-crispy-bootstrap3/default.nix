@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "crispy-bootstrap3";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-w5CGWf14Wa8hndpk5r4hlz6gGykvRL+1AhA5Pz5Ejtk=";
   };
 

@@ -43,7 +43,7 @@ let
 in
 lib.recurseIntoAttrs (
   lib.concatMapAttrs (n: p: { ${n} = makeTestFor p; }) (
-    lib.filterAttrs (_: p: !p.pkgs.tsja.meta.broken) pkgs.postgresqlVersions
+    lib.filterAttrs (_: p: p ? pkgs && !p.pkgs.tsja.meta.broken) pkgs.postgresqlVersions
   )
   // {
     passthru.override = p: makeTestFor p;

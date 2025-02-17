@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       a simple session manager and a system tray.
     '';
     license = licenses.lgpl2Only;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

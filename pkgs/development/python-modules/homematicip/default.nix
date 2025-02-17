@@ -10,7 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0_21,
   requests,
   setuptools,
   setuptools-scm,
@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.1.5";
+  version = "1.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rplzHb1F37Nii8C0zqeJCDgQQ8l/+ZmjQr2Lf6ssBLU=";
+    tag = version;
+    hash = "sha256-zhpGsmzJrtWgHlVdzIrFGQAt4EBWSWCTLIKyuuhDlPA=";
   };
 
   build-system = [
@@ -48,8 +48,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp-wsgi
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override {
+      pytest-asyncio = pytest-asyncio_0_21;
+    })
+    pytest-asyncio_0_21
     pytest7CheckHook
   ];
 

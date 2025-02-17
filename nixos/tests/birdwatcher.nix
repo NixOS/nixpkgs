@@ -17,7 +17,7 @@ makeTest {
   nodes = {
     host1 = {
       environment.systemPackages = with pkgs; [ jq ];
-      services.bird2 = {
+      services.bird = {
         enable = true;
         config = ''
           log syslog all;
@@ -71,7 +71,7 @@ makeTest {
           filter_fields = []
           [bird]
           listen = "0.0.0.0:29184"
-          config = "/etc/bird/bird2.conf"
+          config = "/etc/bird/bird.conf"
           birdc  = "${pkgs.bird}/bin/birdc"
           ttl = 5 # time to live (in minutes) for caching of cli output
           [parser]
@@ -89,7 +89,7 @@ makeTest {
   testScript = ''
     start_all()
 
-    host1.wait_for_unit("bird2.service")
+    host1.wait_for_unit("bird.service")
     host1.wait_for_unit("birdwatcher.service")
     host1.wait_for_open_port(29184)
     host1.succeed("curl http://[::]:29184/status | jq -r .status.message | grep 'Daemon is up and running'")

@@ -6,13 +6,12 @@
   cargo,
   coursier,
   dotnet-sdk,
-  git,
+  gitMinimal,
   glibcLocales,
   go,
   nodejs,
   perl,
   cabal-install,
-  testers,
   pre-commit,
 }:
 
@@ -27,7 +26,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
   };
 
@@ -50,7 +49,7 @@ buildPythonApplication rec {
     cargo
     coursier
     dotnet-sdk
-    git
+    gitMinimal
     glibcLocales
     go
     libiconv # For rust tests on Darwin
@@ -177,7 +176,7 @@ buildPythonApplication rec {
   ];
 
   passthru.tests = callPackage ./tests.nix {
-    inherit git pre-commit;
+    inherit gitMinimal pre-commit;
   };
 
   meta = with lib; {

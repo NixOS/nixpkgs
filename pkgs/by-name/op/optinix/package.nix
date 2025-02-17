@@ -6,18 +6,23 @@
 }:
 buildGoModule rec {
   pname = "optinix";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitLab {
     owner = "hmajid2301";
     repo = "optinix";
     rev = "v${version}";
-    hash = "sha256-Y+TCMKLLBcpGgbQbwt/F9PhcDoG9B156hHM9teD+vFA=";
+    hash = "sha256-OuzLTygfJj1ILT0lAcBC28vU5YLuq0ErZHsLHoQNWBA=";
   };
 
-  vendorHash = "sha256-kwAmp3pP2oEETztJ28fW1H6cMp0mCBiunVy41I8aeEk=";
+  vendorHash = "sha256-gnxG4VqdZbGQyXc1dl3pU7yr3BbZPH17OLAB3dffcrk=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  preBuild = ''
+    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
+      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
 
   postInstall = ''
     installShellCompletion --cmd optinix \
@@ -31,6 +36,7 @@ buildGoModule rec {
     homepage = "https://gitlab.com/hmajid2301/optinix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hmajid2301 ];
+    changelog = "https://gitlab.com/hmajid2301/optinix/-/releases/v${version}";
     mainProgram = "optinix";
   };
 }

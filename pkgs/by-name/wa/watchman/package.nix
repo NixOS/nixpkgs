@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -26,8 +25,6 @@
   fbthrift,
   fb303,
   cpptoml,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   gtest,
 
@@ -38,14 +35,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2024.11.18.00";
+  version = "2025.01.06.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-deOSeExhwn8wrtP2Y0BDaHdmaeiUaDBok6W7N1rH/24=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W37+xs+Fj2yL9KzR9CugfgbFl+g3f+2Dx+xL9MpQEQ4=";
   };
+
+  patches = [
+    ./glog-0.7.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -58,25 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      pcre2
-      openssl
-      gflags
-      glog
-      libevent
-      edencommon
-      folly
-      fizz
-      wangle
-      fbthrift
-      fb303
-      cpptoml
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    pcre2
+    openssl
+    gflags
+    glog
+    libevent
+    edencommon
+    folly
+    fizz
+    wangle
+    fbthrift
+    fb303
+    cpptoml
+  ];
 
   checkInputs = [
     gtest
@@ -117,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       emily
       techknowlogick
     ];
+    mainProgram = "watchman";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };

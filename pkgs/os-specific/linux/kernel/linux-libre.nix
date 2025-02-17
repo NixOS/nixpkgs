@@ -5,8 +5,8 @@
   linux,
   scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "19683";
-    sha256 = "1xp4vslbvvwys2pmms3y9phxwc7gnar3zvbwbgbp9vgjq0bsadjw";
+    rev = "19712";
+    sha256 = "0km2iaicrz17ahklcjcmbjq87bfrcjj0ynsyi7jnwp0l9n95i8jc";
   },
   ...
 }@args:

@@ -21,13 +21,13 @@
 
 let
   pname = "cie-middleware-linux";
-  version = "1.5.2";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = pname;
     rev = version;
-    sha256 = "sha256-M3Xwg3G2ZZhPRV7uhFVXQPyvuuY4zI5Z+D/Dt26KVM0=";
+    sha256 = "sha256-2P/1hQTmeQ6qE7RgAeLOZTszcLcIpa2XX1S2ahXRHcc=";
   };
 
   gradle = gradle_8;

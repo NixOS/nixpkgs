@@ -9,20 +9,19 @@
   replaceVars,
 }:
 let
-  version = "0.8.2";
+  version = "0.12.2";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-b+7be0ShxFhkUfQo0QTnYaaEE62HQKF5g+xCuTrPRXE=";
+    hash = "sha256-oPh0mIqSxbpzmUzk3lP7OwcqKfP8syP0NAPKysTet98=";
   };
-  libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-t84hokb2loZ6FPPt4eN8HzgNQJrQUdiG5//ZbmlasWY=";
+    cargoHash = "sha256-W7CdF70BMXKMCcooR6adw2wwHJ3WznZ+o8KRyHWMeeI=";
 
     nativeBuildInputs = [ git ];
 
@@ -35,10 +34,14 @@ in
 vimUtils.buildVimPlugin {
   pname = "blink.cmp";
   inherit version src;
-  preInstall = ''
-    mkdir -p target/release
-    ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
-  '';
+  preInstall =
+    let
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      mkdir -p target/release
+      ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
+    '';
 
   patches = [
     (replaceVars ./force-version.patch { inherit (src) tag; })
@@ -56,11 +59,15 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
+    changelog = "https://github.com/Saghen/blink.cmp/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       balssh
       redxtech
     ];
   };
-  doInstallCheck = true;
-  nvimRequireCheck = "blink-cmp";
+
+  nvimSkipModule = [
+    # Module for reproducing issues
+    "repro"
+  ];
 }

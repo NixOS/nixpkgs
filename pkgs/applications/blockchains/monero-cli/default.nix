@@ -5,7 +5,7 @@
   fetchpatch2,
   cmake,
   pkg-config,
-  boost,
+  boost186,
   libsodium,
   miniupnpc,
   openssl,
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost
+      boost186 # uses boost/asio/io_service.hpp
       libsodium
       miniupnpc
       openssl

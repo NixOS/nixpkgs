@@ -4,16 +4,17 @@
   dpkg,
   fetchurl,
   nixosTests,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "unifi-controller";
-  version = "8.6.9";
+  version = "9.0.114";
 
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${version}/unifi_sysvinit_all.deb";
-    hash = "sha256-004ZJEoj23FyFEBznqrpPzQ9E6DYpD7gBxa3ewSunIo=";
+    hash = "sha256-3xumIIzr+tx60kPhPfSs2Kz2iJ39Kt5934Vca/MpUu4=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -27,6 +28,18 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  postInstall =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      ''
+        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/x86_64/libubnt_sdnotify_jni.so"
+      ''
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      ''
+        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/aarch64/libubnt_sdnotify_jni.so"
+      ''
+    else
+      null;
 
   passthru.tests = {
     unifi = nixosTests.unifi;

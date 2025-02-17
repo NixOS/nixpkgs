@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "buildkite-cli";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-4gg0x0Brw1BQLVZ9S3WRXnvOiwvuedj47OBhfSiRMyQ=";
+    sha256 = "sha256-UKpvqjHnkDv6HDpDmXe3ZoFSMGmPE/KLc7TuJKjNJXw=";
   };
 
-  vendorHash = "sha256-xSueBahhzD6sIFyRwvsu5ACgC9kHthDqGJ4qdNTZfPU=";
+  vendorHash = "sha256-FV35NCwntmIWakcNH9nu1MTwZArERCc8hN57PmunkX4=";
 
   doCheck = false;
 

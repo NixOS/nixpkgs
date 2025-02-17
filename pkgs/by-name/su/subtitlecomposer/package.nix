@@ -3,7 +3,7 @@
   fetchFromGitLab,
   cmake,
   extra-cmake-modules,
-  ffmpeg,
+  ffmpeg_6,
   openal,
   stdenv,
   libsForQt5,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     [
-      ffmpeg
+      ffmpeg_6
       openal
     ]
     ++ (with libsForQt5; [

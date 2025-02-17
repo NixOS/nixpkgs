@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Calysto";
     repo = "calysto_scheme";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gTBXdjm6Ry6DpjO9tP+acYxM+DQDh4dZQF+pyXrUCiI=";
   };
 

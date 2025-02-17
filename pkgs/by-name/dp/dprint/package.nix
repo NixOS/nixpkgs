@@ -6,12 +6,13 @@
   installShellFiles,
   testers,
   nix-update-script,
+  deno,
   dprint,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.48.0";
+  version = "0.49.0";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -19,14 +20,21 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dprint";
     repo = "dprint";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Zem37oHku90c7PDV8ep/7FN128eGRUvfIvRsaXa7X9g=";
+    tag = version;
+    hash = "sha256-IhxtHOf4IY95B7UQPSOyLj4LqvcD2I9RxEu8B+OjtCE=";
   };
 
-  cargoHash = "sha256-vlG+0cQMUev8iEgut9l1bCDpS85bRWsNWZyJJXcgSlw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OdtUzlvbezeNk06AB6mzR3Rybh08asJJ3roNX0WOg54=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    # Used in unsafe_ignore_cert test
+    # https://github.com/dprint/dprint/blob/00e8f5e9895147b20fe70a0e4e5437bd54d928e8/crates/dprint/src/utils/url.rs#L527
+    deno
   ];
 
   checkFlags = [

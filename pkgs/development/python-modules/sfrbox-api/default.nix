@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "sfrbox-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ec3UOserFijBK6goyM6AMOekfLgjBq8l/9sMKYnj240=";
   };
 

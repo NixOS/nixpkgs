@@ -21,7 +21,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  cargoHash = "sha256-8XYEZQfoizVmOuh0hymzMj2UDiXNkSeHqBAWOqaMY84=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YfSxjlpUyRwpSoKmHOZrULGIIWTQ14JJwbsNB807WYQ=";
 
   postFixup = ''
     # Serpl needs ripgrep to function properly.

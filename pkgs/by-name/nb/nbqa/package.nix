@@ -21,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "nbQA-dev";
       repo = "nbQA";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-qVNJ8f8vUlTCi5DbvG70orcSnulH60UcI5iABtXYUog=";
     };
 

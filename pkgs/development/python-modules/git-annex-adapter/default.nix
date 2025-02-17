@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alpernebbi";
     repo = "git-annex-adapter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vb0vxnwAs0/yOjpyyoGWvX6Tu+cuziGNdnXbdzXexhg=";
   };
 

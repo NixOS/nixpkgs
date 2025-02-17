@@ -81,9 +81,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Companion app for the BitBox02 hardware wallet";
     homepage = "https://bitbox.swiss/app/";
+    downloadPage = "https://github.com/BitBoxSwiss/bitbox-wallet-app";
+    changelog = "https://github.com/BitBoxSwiss/bitbox-wallet-app/blob/master/CHANGELOG.md#${
+      builtins.replaceStrings [ "." ] [ "" ] version
+    }";
     license = lib.licenses.asl20;
-    mainProgram = "bitbox";
     maintainers = [ lib.maintainers.tensor5 ];
+    mainProgram = "bitbox";
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     platforms = [ "x86_64-linux" ];
   };
 }

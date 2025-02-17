@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lagg";
     repo = "steamodd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ySAyCOI1ISuBQ/5+UHSQVji76ZDRGjdVwlBAY9tnSmE=";
   };
 

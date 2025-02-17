@@ -1,56 +1,70 @@
 {
-  pnpm,
+  pnpm_9,
   nodejs,
   stdenv,
   clang,
   buildGoModule,
   fetchFromGitHub,
   lib,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
 let
   pname = "daed";
-  version = "0.8.0";
+  version = "0.9.0";
+
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "daed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-h1j91XIumuzuJnMxgkCjhuXYPLXoDuFFsfmDwmzlTEI=";
+    tag = "v${version}";
+    hash = "sha256-5olEPaS/6ag69KUwBG8qXpyr1B2qrLK+vf13ZljHH+c=";
     fetchSubmodules = true;
   };
 
   web = stdenv.mkDerivation {
     inherit pname version src;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit pname version src;
-      hash = "sha256-vqkiZzd5WOeJem0zUyMsJd6/aHHAjlsIQMkNf+SUvHY=";
+      hash = "sha256-+yLpSbDzr1OV/bmUUg6drOvK1ok3cBd+RRV7Qrrlp+Q=";
     };
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
     buildPhase = ''
       runHook preBuild
+
       pnpm build
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out
-      cp -R dist/* $out/
+
+      cp -R dist $out
+
       runHook postInstall
     '';
   };
 in
+
 buildGoModule rec {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    web
+    ;
+
   sourceRoot = "${src.name}/wing";
 
-  vendorHash = "sha256-TBR3MmpTdwIwyekU+nrHhzsN31E30+Rqd3FoBL3dl4U=";
+  vendorHash = "sha256-qB2qcJ82mFcVvjlYp/N9sqzwPotTROgymSX5NfEQMuY=";
+
   proxyVendor = true;
 
   nativeBuildInputs = [ clang ];
@@ -80,6 +94,15 @@ buildGoModule rec {
 
     runHook postBuild
   '';
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "daed.web";
+    })
+    (nix-update-script {
+      extraArgs = [ "--version=skip" ];
+    })
+  ];
 
   meta = {
     description = "Modern dashboard with dae";

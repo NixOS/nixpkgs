@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fralau";
     repo = "mkdocs-mermaid2-plugin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9vYLkGUnL+rnmZntcgFzOvXQdf6angb9DRsmrBjnPUY=";
   };
 

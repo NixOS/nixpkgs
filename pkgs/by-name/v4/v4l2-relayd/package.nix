@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.launchpad.net/v4l2-relayd";
-    rev = "refs/tags/upstream/${version}";
+    tag = "upstream/${version}";
     hash = "sha256-oU6naDFZ0PQVHZ3brANfMULDqYMYxeJN+MCUCvN/DpU=";
   };
 

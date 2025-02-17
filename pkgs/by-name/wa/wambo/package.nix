@@ -13,7 +13,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-3EwNC78DhSXbVFSg6q+66yge4S1m5icJ5nOhoy9qsRI=";
   };
 
-  cargoHash = "sha256-sg7J6hQGEevGAMD7DocW1UtgyO36rrEb7kKhQTRKPZ4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rFUZGP9pH5J3iXGTyjdtDjS+wiWo5pD3X9eUtIivp2c=";
 
   meta = {
     description = "All-in-one tool to convert decimal/bin/oct/hex and interpret bits as integers";

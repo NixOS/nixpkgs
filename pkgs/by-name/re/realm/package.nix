@@ -10,16 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "realm";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
     rev = "v${version}";
-    hash = "sha256-G3scFSOxbmR3Q2fkRdg115WN/GCYpys/8Y4JC4YMGdY=";
+    hash = "sha256-vkLGfSDRYqvoqyVM/CWGJjpvXXPisEZxUSjLZGjNzno=";
   };
 
-  cargoHash = "sha256-EvXafTujqTdQwfK4NXgT7lGKGnrpyP9ouplD6DmJUKU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Oe64l16uYdU6NvTl7XrEm6dAtRFngI9yHC4fe4hpTNA=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security

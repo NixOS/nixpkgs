@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "oralb-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e6L8HXpqOAHnEktIJ1N1atC5QXno669W3c/S7cISa48=";
   };
 

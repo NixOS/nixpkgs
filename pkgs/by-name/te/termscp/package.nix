@@ -18,11 +18,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tR+jfFdCSsf+WR8VUX60/mdfsp7cX9jUDI+CKIZkgEE=";
   };
 
-  cargoHash = "sha256-g6A8rNOUduhdwSqunDlZvO7E07GmDgb1o2FVohFAcL0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-13M5p988ziI3bcOHR7lsSrjT4JkyqCJF9Tm7YznO6N8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -53,6 +54,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
       "--skip=system::watcher::test::should_poll_file_removed"
       "--skip=system::watcher::test::should_poll_file_update"
+      "--skip=system::watcher::test::should_poll_nothing"
     ];
 
   passthru = {

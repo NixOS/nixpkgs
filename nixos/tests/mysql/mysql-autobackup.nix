@@ -20,19 +20,23 @@ let
       meta.maintainers = [ lib.maintainers.aanderse ];
 
       nodes.machine = {
-        services.mysql = {
-          inherit package;
-          enable = true;
-          initialDatabases = [
-            {
-              name = "testdb";
-              schema = ./testdb.sql;
-            }
-          ];
-        };
+        services = {
+          mysql = {
+            inherit package;
+            enable = true;
+            initialDatabases = [
+              {
+                name = "testdb";
+                schema = ./testdb.sql;
+              }
+            ];
+          };
 
-        services.automysqlbackup.enable = true;
-        automysqlbackup.settings.mysql_dump_port = "";
+          automysqlbackup = {
+            enable = true;
+            settings.mysql_dump_port = "";
+          };
+        };
       };
 
       testScript = ''

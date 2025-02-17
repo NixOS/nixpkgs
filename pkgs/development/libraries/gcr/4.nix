@@ -26,9 +26,9 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcr";
-  version = "4.3.0";
+  version = "4.3.1";
 
   outputs = [
     "out"
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-w+6HKOQ2SwOX9DX6IPkvkBqxOdKyZPTgWdZ7PA9DzTY=";
+    url = "mirror://gnome/sources/gcr/${lib.versions.majorMinor finalAttrs.version}/gcr-${finalAttrs.version}.tar.xz";
+    hash = "sha256-svBw//GEDu9wVGoovoAjVCfBFqrcWTtbaMzIab46oJ0=";
   };
 
   strictDeps = true;
@@ -103,7 +103,8 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gcr_4";
-      packageName = pname;
+      packageName = "gcr";
+      versionPolicy = "ninety-micro-unstable";
     };
   };
 
@@ -124,4 +125,4 @@ stdenv.mkDerivation rec {
       (G)object oriented way.
     '';
   };
-}
+})

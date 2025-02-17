@@ -52,10 +52,6 @@ stdenv.mkDerivation rec {
     xdg-utils
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-    export MACOSX_DEPLOYMENT_TARGET=11.0
-  '';
-
   enableParallelBuilding = true;
 
   meta = with lib; {

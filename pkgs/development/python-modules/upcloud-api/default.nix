@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-python-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RDGRue9hejNPKIP61GtJHMG5rG3CKvJdsYxVrp6I5W0=";
   };
 

@@ -16,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-UV5m8DmFtkCU/DoBJNBCdvhU/jYtU5+WnnhKwxZNl9g=";
   };
 
-  cargoHash = "sha256-Bug25xK3YYQ3YjrUXlgWaVUPn87V3N/8XikqwYL/sUg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rOqjB/ZakXhuKgN3auEOGzV+9bDX30TTZWD8nt3b+pE=";
 
   buildInputs = [ libevdev ];
 

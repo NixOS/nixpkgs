@@ -1,32 +1,34 @@
 {
-  lib,
-  stdenv,
+  btrfs-progs,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  btrfs-progs,
-  testers,
-  werf,
+  lib,
+  stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "2.12.1";
+  version = "2.24.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-EVFNUOvczsgU0t2hOfl4e5bFH4ByxmRsIk2idI+uquQ=";
+    hash = "sha256-IU9gVEG4MsUkdX4aJYKtd11WQLODU1IYAUyiuK+la40=";
   };
 
-  vendorHash = "sha256-eJT3ROX/cAslWMNUdlFU6eQE8o2GlAFKrBaT//Pde1o=";
+  vendorHash = "sha256-1HK90RqVvpuzkhbsLh0R6/CcdO/RrXRuOr3MBN0dcLU=";
 
   proxyVendor = true;
 
   subPackages = [ "cmd/werf" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
@@ -64,13 +66,13 @@ buildGoModule rec {
 
   preCheck =
     ''
-      # Test all targets.
+      # Test all packages.
       unset subPackages
 
-      # Remove tests that require external services.
+      # Remove tests that require external services, usually a Docker daemon.
       rm -rf \
         integration/suites \
-        pkg/true_git/*test.go \
+        pkg/true_git/*_test.go \
         test/e2e
     ''
     + lib.optionalString (env.CGO_ENABLED == 0) ''
@@ -78,28 +80,30 @@ buildGoModule rec {
       export USER=nixbld
     '';
 
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "version";
+
   postInstall = ''
-    installShellCompletion --cmd werf \
-      --bash <($out/bin/werf completion --shell=bash) \
-      --zsh <($out/bin/werf completion --shell=zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion \
+        --cmd werf \
+        --$shell <($out/bin/werf completion --shell=$shell)
+    done
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = werf;
-    command = "werf version";
-    version = src.rev;
-  };
-
-  meta = with lib; {
+  meta = {
     description = "GitOps delivery tool";
-    mainProgram = "werf";
     longDescription = ''
-      The CLI tool gluing Git, Docker, Helm & Kubernetes with any CI system to
-      implement CI/CD and Giterminism.
+      werf is a CNCF Sandbox CLI tool to implement full-cycle CI/CD to
+      Kubernetes easily. werf integrates into your CI system and leverages
+      familiar and reliable technologies, such as Git, Dockerfile, Helm, and
+      Buildah.
     '';
     homepage = "https://werf.io";
     changelog = "https://github.com/werf/werf/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ azahi ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.azahi ];
+    mainProgram = "werf";
   };
 }

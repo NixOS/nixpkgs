@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apragacz";
     repo = "django-rest-registration";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-EaS1qN7GpfPPeSLwwQdVWSRO2dv0DG5LD7vnXckz4Bg=";
   };
 

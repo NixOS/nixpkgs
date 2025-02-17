@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch2,
   glib,
   meson,
   ninja,
@@ -29,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.21.4";
+  version = "0.21.6";
 
   outputs = [
     "out"
@@ -37,17 +36,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Fj0I14O+bUq5qXnOtaT+y8HZZg08NBaMWBMBzVORKyA=";
+    url = "mirror://gnome/sources/libsecret/${lib.versions.majorMinor version}/libsecret-${version}.tar.xz";
+    hash = "sha256-dHuMF1vhCMiA0637nDU36mblIOStLcz13OWAA67soJA=";
   };
-
-  patches = [
-    # https://gitlab.gnome.org/GNOME/libsecret/-/merge_requests/141
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/libsecret/-/commit/208989323211c756dff690115e5cbde5ef7491ce.patch";
-      hash = "sha256-DtRbqyyoMttEYf6B16m9O72Yjurv6rpbnqH7AlrAU4k=";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -90,6 +81,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonOption "bashcompdir" "share/bash-completion/completions")
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && withIntrospection;
@@ -97,6 +89,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./tool/test-*.sh
+
+    # dbus-run-session defaults to FHS path
+    substituteInPlace meson.build --replace-fail \
+      "exe_wrapper: dbus_run_session," \
+      "exe_wrapper: [dbus_run_session, '--config-file=${dbus}/share/dbus-1/session.conf'],"
   '';
 
   preCheck = ''
@@ -112,9 +109,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs --timeout-multiplier 0
+    meson test --print-errorlogs --timeout-multiplier 0
 
     runHook postCheck
   '';
@@ -131,7 +126,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libsecret";
       # Does not seem to use the odd-unstable policy: https://gitlab.gnome.org/GNOME/libsecret/issues/30
       versionPolicy = "none";
     };

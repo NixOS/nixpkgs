@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZbTCbbASs7+ChmgcDePXSbiHOst6/eCkq9SiKgYhFyM=";
   };
 

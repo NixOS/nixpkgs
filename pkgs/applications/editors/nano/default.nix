@@ -7,9 +7,8 @@
   texinfo,
   writeScript,
   common-updater-scripts,
-  git,
+  gitMinimal,
   nix,
-  nixfmt-classic,
   coreutils,
   gnused,
   callPackage,
@@ -74,8 +73,7 @@ stdenv.mkDerivation rec {
       PATH=${
         lib.makeBinPath [
           common-updater-scripts
-          git
-          nixfmt-classic
+          gitMinimal
           nix
           coreutils
           gnused
@@ -87,9 +85,6 @@ stdenv.mkDerivation rec {
 
       if [ ! "$oldVersion" = "$latestTag" ]; then
         update-source-version ${pname} "$latestTag" --version-key=version --print-changes
-        nixpkgs="$(git rev-parse --show-toplevel)"
-        default_nix="$nixpkgs/pkgs/applications/editors/nano/default.nix"
-        nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"
       fi

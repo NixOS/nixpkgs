@@ -3,13 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch,
+
+  # dependencies
   einops,
   emoji,
   flax,
   ftfy,
   jax,
   jaxlib,
+  orbax-checkpoint,
   pillow,
+  pydantic,
   transformers,
   unidecode,
   wandb,
@@ -18,7 +22,7 @@
 buildPythonPackage rec {
   pname = "dalle-mini";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -34,14 +38,26 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "transformers"
+    "jax"
+    "flax"
+  ];
+
+  pythonRemoveDeps = [
+    "orbax"
+  ];
+
+  dependencies = [
     einops
     emoji
     flax
     ftfy
     jax
     jaxlib
+    orbax-checkpoint
     pillow
+    pydantic
     transformers
     unidecode
     wandb
@@ -51,10 +67,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dalle_mini" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate images from a text prompt";
     homepage = "https://github.com/borisdayma/dalle-mini";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

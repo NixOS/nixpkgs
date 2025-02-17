@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
   };
 
-  cargoHash = "sha256-Pl+a+ZpxaguRloH8R7x4FmYpTwTUwFrYy7AS/5K3L+8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4CY2A6mPTfGhqUh+nNg6eaTIVwA9ZtgH5jHQDGHnK4c=";
 
   meta = {
     description = "Subprocess caching utility";

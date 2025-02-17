@@ -9,16 +9,17 @@
 
 buildPostgresqlExtension rec {
   pname = "pgsql-http";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "pramsey";
     repo = "pgsql-http";
     rev = "v${version}";
-    hash = "sha256-C8eqi0q1dnshUAZjIsZFwa5FTYc7vmATF3vv2CReWPM=";
+    hash = "sha256-Ij8BaNj2SOwDfjgLxrpLFvvPCzSahXyyckRPGmcqKtE=";
   };
 
   buildInputs = [ curl ];
+  nativeBuildInputs = [ curl ];
 
   meta = with lib; {
     description = "HTTP client for PostgreSQL, retrieve a web page from inside the database";

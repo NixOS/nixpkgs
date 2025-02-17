@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update nixfmt-classic curl jq
+#!nix-shell -i bash -p nix-update curl jq
 
 set -eu -o pipefail
 
@@ -392,5 +392,3 @@ for package in "${packages[@]}"; do
   }' ${source_file}
 
 done
-
-nixfmt ${source_file}

@@ -12,6 +12,12 @@
 
 let
   system = stdenv.hostPlatform.system;
+  registry = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "bazel-central-registry";
+    rev = "6ca6e91cb9fa2d224f61b8a4a2a7fd6b1211e388";
+    hash = "sha256-LRD8sGbISp2LXjpg4cpbUHG2a1JbKLA7z3vSvqqXMGo=";
+  };
 in
 buildBazelPackage rec {
   pname = "verible";
@@ -19,8 +25,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2024-10-16";
-  GIT_VERSION = "v0.0-3836-g86ee9bab";
+  GIT_DATE = "2025-01-02";
+  GIT_VERSION = "v0.0-3894-g0a842c85";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -31,16 +37,23 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo = "verible";
     rev = "${GIT_VERSION}";
-    hash = "sha256-hV02x0b/taBqa6kyy3gvm3lomJrXBeelAbxrkC0s6EU=";
+    hash = "sha256-FWeEIWvrjE8ESGFUWDPtd9gLkhMDtgkw6WbXViDxQQA=";
   };
 
   bazel = bazel_6;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
+    "--registry"
+    "file://${registry}"
   ];
 
   fetchAttrs = {
-    hash = "sha256-bKASgc5KftCWtMvJkGA4nweBAtgdnyC9uXIJxPjKYS0=";
+    hash =
+      {
+        aarch64-linux = "sha256-HPpRxYhS6CIhinhHNvnPij4+cJxqf073nGpNG1ItPmo=";
+        x86_64-linux = "sha256-gM4hsuHMF4V1PgykjQ0yO652luoRJvNdB2xF6P8uxRc=";
+      }
+      .${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
@@ -51,15 +64,16 @@ buildBazelPackage rec {
   ];
 
   postPatch = ''
-    patchShebangs\
+    patchShebangs \
+      .github/bin/simple-install.sh \
       bazel/build-version.py \
       bazel/sh_test_with_runfiles_lib.sh \
-      common/lsp/dummy-ls_test.sh \
-      common/tools/patch_tool_test.sh \
-      common/tools/verible-transform-interactive.sh \
-      common/tools/verible-transform-interactive-test.sh \
+      verible/common/lsp/dummy-ls_test.sh \
+      verible/common/tools/patch_tool_test.sh \
+      verible/common/tools/verible-transform-interactive.sh \
+      verible/common/tools/verible-transform-interactive-test.sh \
       kythe-browse.sh \
-      verilog/tools
+      verible/verilog/tools
   '';
 
   removeRulesCC = false;
@@ -73,19 +87,7 @@ buildBazelPackage rec {
   buildAttrs = {
     installPhase = ''
       mkdir -p "$out/bin"
-
-      install bazel-bin/common/tools/verible-patch-tool "$out/bin"
-
-      V_TOOLS_DIR=bazel-bin/verilog/tools
-      install $V_TOOLS_DIR/diff/verible-verilog-diff "$out/bin"
-      install $V_TOOLS_DIR/formatter/verible-verilog-format "$out/bin"
-      install $V_TOOLS_DIR/kythe/verible-verilog-kythe-extractor "$out/bin"
-      install $V_TOOLS_DIR/lint/verible-verilog-lint "$out/bin"
-      install $V_TOOLS_DIR/ls/verible-verilog-ls "$out/bin"
-      install $V_TOOLS_DIR/obfuscator/verible-verilog-obfuscate "$out/bin"
-      install $V_TOOLS_DIR/preprocessor/verible-verilog-preprocessor "$out/bin"
-      install $V_TOOLS_DIR/project/verible-verilog-project "$out/bin"
-      install $V_TOOLS_DIR/syntax/verible-verilog-syntax "$out/bin"
+      .github/bin/simple-install.sh "$out/bin"
     '';
   };
 

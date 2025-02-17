@@ -36,7 +36,8 @@ rustPlatform.buildRustPackage rec {
   '';
   doCheck = false; # there are no tests to run
 
-  cargoHash = "sha256-J2uQoqStBl+qItaXWi17H/IailZ7P4YzhLNs17BY92Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-N0vje5ZU7B++f71BJKwkEfpbInpermH241f6oP1/fQE=";
 
   meta = {
     description = "Automate starting binary exploit challenges";

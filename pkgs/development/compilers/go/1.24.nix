@@ -5,7 +5,6 @@
   tzdata,
   substituteAll,
   iana-etc,
-  apple-sdk_11,
   xcbuild,
   mailcap,
   buildPackages,
@@ -50,11 +49,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.24rc1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-r9iiP9Jg8qJG0XQEmgdrigW7C62T8SIHaNIZuL33U50=";
+    hash = "sha256-0UEgYUrLKdEryrcr1onyV+tL6eC2+IqPt+Qaxl+FVuU=";
   };
 
   strictDeps = true;
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    apple-sdk_11
     xcbuild
   ];
 
@@ -94,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
-    ./go_no_vendor_checks-1.22.patch
+    ./go_no_vendor_checks-1.23.patch
   ];
 
   GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;

@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
     "MANPATH=$(out)/share/man"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-implicit-function-declaration"
+    "-Wno-endif-labels"
+    "-Wno-implicit-int"
+  ];
+
   installTargets = [
     "install"
     "install.man"

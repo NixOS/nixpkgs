@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
   enableStatic ? stdenv.hostPlatform.isStatic,
   writeScript,
   testers,
@@ -36,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isOpenBSD [
+    autoreconfHook
+  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure

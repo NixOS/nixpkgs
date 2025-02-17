@@ -85,8 +85,7 @@ let
             url = "https://gn.googlesource.com/gn";
             inherit (upstream-info.deps.gn) rev hash;
           };
-        }
-        // lib.optionalAttrs (chromiumVersionAtLeast "127") {
+
           # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
           # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
           hardeningDisable = [ "format" ];

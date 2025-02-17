@@ -77,7 +77,6 @@ let
 
     swiftpm = callPackage ./swiftpm {
       inherit (darwin) DarwinTools;
-      inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
       swift = swiftNoSwiftDriver;
     };
 

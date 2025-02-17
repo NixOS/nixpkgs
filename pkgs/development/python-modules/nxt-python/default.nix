@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nxt-python";
-  version = "3.3.0";
+  version = "3.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "schodet";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-v65KEP5DuJsZAifd1Rh46x9lSAgBZgyo+e8PKSDKnhw=";
+    tag = version;
+    hash = "sha256-ffJ7VhXT5I7i5JYfnjFBaud0CxoVBFWx6kRdAz+Ry00=";
   };
 
   build-system = [ poetry-core ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
     homepage = "https://github.com/schodet/nxt-python";
-    changelog = "https://github.com/schodet/nxt-python/releases/tag/${version}";
+    changelog = "https://github.com/schodet/nxt-python/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ibizaman ];
   };

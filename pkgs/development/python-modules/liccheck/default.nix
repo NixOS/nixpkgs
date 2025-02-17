@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dhatim";
     repo = "python-license-check";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2WJw5TVMjOr+GX4YV0nssOtQeYvDHBLnlWquJQWPL9I=";
   };
 

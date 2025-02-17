@@ -403,7 +403,7 @@ in
               }
             '';
           };
-          "~* /api/.*\.(jpg|jpeg|png|webp|gif)$" = {
+          "~* /api/.*\\.(jpg|jpeg|png|webp|gif)$" = {
             proxyPass = "http://frigate-api";
             recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
@@ -477,6 +477,10 @@ in
           };
         };
         extraConfig = ''
+          # Frigate wants to connect on 127.0.0.1:5000 for unauthenticated requests
+          # https://github.com/NixOS/nixpkgs/issues/370349
+          listen 127.0.0.1:5000;
+
           # vod settings
           vod_base_url "";
           vod_segments_base_url "";

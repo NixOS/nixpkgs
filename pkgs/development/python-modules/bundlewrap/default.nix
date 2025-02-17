@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e9gpWLOiTUZYIybLIfcR5x/NzhJSBFsU0I8LzY9sI5k=";
   };
 

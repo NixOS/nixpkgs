@@ -38,9 +38,9 @@
   libtiff,
   libwebp,
   libxkbcommon,
-  luajit,
+  lua,
   lz4,
-  libgbm,
+  mesa,
   mint-x-icons,
   openjpeg,
   openssl,
@@ -59,11 +59,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-PfuZ+8wmjAvHl+L4PoxQPvneZihPQLOBu1l6CBhcAPQ=";
+    sha256 = "sha256-8JpD1rSGG+BswOKEnFMpZBPU5SyOMfUvyV6epfHFmjY=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    libgbm
+    mesa # actually uses eglmesaext
     openssl
     systemd
     udev
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     libspectre
     libwebp
     libxkbcommon
-    luajit
+    lua
     mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler

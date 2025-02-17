@@ -181,7 +181,7 @@ in
               defaultText = literalExpression "if cfg.package == pkgs.transmission_3 then 18 else \"022\"";
               description = ''
                 Sets transmission's file mode creation mask.
-                See the umask(2) manpage for more information.
+                See the {manpage}`umask(2)` manpage for more information.
                 Users who want their saved torrents to be world-writable
                 may want to set this value to 0/`"000"`.
 

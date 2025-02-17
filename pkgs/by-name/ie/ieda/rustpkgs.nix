@@ -8,7 +8,8 @@ in
     version = "0.1.3";
     src = rootSrc;
     sourceRoot = "${src.name}/src/operation/iIR/source/iir-rust/iir";
-    cargoHash = "sha256-ka91IsmBGBYts4U9X4uZDUMeS9adPn3MKl2BY4ZKDCY=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-xyNaUTPvU21yOdkQq8vdnHCyLzcpDAFAje0R/gDqliU=";
 
     doCheck = false;
 
@@ -19,7 +20,8 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/liberty/lib-rust/liberty-parser";
-    cargoHash = "sha256-7yUD8M3efisuVoH3/R+Pk2CP4mizSinrqeuy3uqkq2c=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-nRIOuSz5ImENvKeMAnthmBo+2/Jy5xbM66xkcfVCTMI=";
 
     doCheck = false;
 
@@ -30,7 +32,8 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/sdf/sdf_parse";
-    cargoHash = "sha256-6uzufy3S21vHJYgx9sItxQyccG0g/Zz1r2xHsYoQPRM=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-PORA/9DDIax4lOn/pzmi7Y8mCCBUphMTzbBsb64sDl0=";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
   };
@@ -39,7 +42,8 @@ in
     version = "0.2.4";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/spef/spef-parser";
-    cargoHash = "sha256-KTd3HVKV8hRCXf56FPksYGVJNDdlmMMIcSEk1MMGLsw=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-Qr/oXTqn2gaxyAyLsRjaXNniNzIYVzPGefXTdkULmYk=";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
   };
@@ -48,7 +52,8 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/vcd/vcd_parser";
-    cargoHash = "sha256-1y1nPNfx23MyIJUV+E6mMuDOhdob0BDGuQwOl0Le/lE=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-xcfVzDrnW4w3fU7qo6xzSQeIH8sEbEyzPF92F5tDcAk=";
 
     doCheck = false;
 
@@ -59,7 +64,8 @@ in
     version = "0.1.0";
     src = rootSrc;
     sourceRoot = "${src.name}/src/database/manager/parser/verilog/verilog-rust/verilog-parser";
-    cargoHash = "sha256-Z/LXQzQ0m1lQdIPaWQ5rs2EAu/mbyi2JvrjGYVmKONs=";
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-ooxY8Q8bfD+klBGfpTDD3YyWptEOGGHDoyamhjlSNTM=";
 
     doCheck = false;
 

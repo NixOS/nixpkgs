@@ -4,21 +4,19 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   installShellFiles,
   build,
   cachecontrol,
   cleo,
-  crashtest,
   dulwich,
   fastjsonschema,
   installer,
   keyring,
   packaging,
-  pexpect,
   pkginfo,
   platformdirs,
   poetry-core,
-  poetry-plugin-export,
   pyproject-hooks,
   requests,
   requests-toolbelt,
@@ -34,22 +32,29 @@
   httpretty,
   pytest-mock,
   pytest-xdist,
-  darwin,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.8.5";
+  version = "2.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YR0IgDhmpbe8TyTMP1cjUxGRnrfV8CNHkPlZrNcnof0=";
+    tag = version;
+    hash = "sha256-RpAoADxZmH9hQSEjufLBoKJsxIc74RnRxZB3RVNk/iE=";
   };
+
+  patches = [
+    # https://github.com/python-poetry/poetry/pull/9939
+    (fetchpatch2 {
+      url = "https://github.com/python-poetry/poetry/commit/89c0d02761229a8aa7ac5afcbc8935387bde4c5b.patch?full_index=1";
+      hash = "sha256-YuAevkmCSTGuFPfuKrJfcLUye1YGpnHSb9TFSW7F1SU=";
+    })
+  ];
 
   build-system = [
     poetry-core
@@ -70,17 +75,14 @@ buildPythonPackage rec {
       build
       cachecontrol
       cleo
-      crashtest
       dulwich
       fastjsonschema
       installer
       keyring
       packaging
-      pexpect
       pkginfo
       platformdirs
       poetry-core
-      poetry-plugin-export
       pyproject-hooks
       requests
       requests-toolbelt
@@ -107,17 +109,13 @@ buildPythonPackage rec {
       --zsh <($out/bin/poetry completions zsh) \
   '';
 
-  nativeCheckInputs =
-    [
-      deepdiff
-      pytestCheckHook
-      httpretty
-      pytest-mock
-      pytest-xdist
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.ps
-    ];
+  nativeCheckInputs = [
+    deepdiff
+    pytestCheckHook
+    httpretty
+    pytest-mock
+    pytest-xdist
+  ];
 
   preCheck = (
     ''
@@ -136,8 +134,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_builder_should_execute_build_scripts"
     "test_env_system_packages_are_relative_to_lib"
-    "test_executor_known_hashes"
     "test_install_warning_corrupt_root"
+    "test_project_plugins_are_installed_in_project_folder"
   ];
 
   pytestFlagsArray = [

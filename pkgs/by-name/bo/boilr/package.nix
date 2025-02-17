@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   src = fetchFromGitHub {
     owner = "PhilipK";
     repo = "BoilR";
-    rev = "refs/tags/v.${version}";
+    tag = "v.${version}";
     hash = "sha256-bwCTsoZ/9TeO3wyEcOqxKePnj9glsDXWUBCLd3nVT80=";
   };
 
@@ -47,7 +47,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     ./0001-update-time.patch
   ];
 
-  cargoHash = "sha256-09vPP+kNrmk0nN3Bdn9T7QjvuZvJeqQ56lCQIFb+Zrs=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5FvlyJgYtqgJyxlfXWe9oBBkwIY+c8Fp/rHuNLJ1j7s=";
 
   nativeBuildInputs = [ perl ];
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ziv1234";
     repo = "python-dynalite-devices";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i88aIsRNsToSceQdwfspJg+Y5MO5zC4O6EkyhrYR27g=";
   };
 

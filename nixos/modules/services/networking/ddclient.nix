@@ -123,7 +123,7 @@ in
         default = "dyndns2";
         type = str;
         description = ''
-          Protocol to use with dynamic DNS provider (see https://ddclient.net/protocols.html ).
+          Protocol to use with dynamic DNS provider (see <https://ddclient.net/protocols.html> ).
         '';
       };
 

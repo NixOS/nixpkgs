@@ -7,19 +7,17 @@
   rustPlatform,
   cargo,
   rustc,
-  # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-xF0tqJ//BacdfyCYvCuhg7bEjQh/RadBrRDfSVGdGXE=",
   qcoro,
 }:
 mkKdeDerivation rec {
   pname = "angelfish";
   inherit (sources.${pname}) version;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     # include version in the name so we invalidate the FOD
     name = "${pname}-${version}";
     src = sources.${pname};
-    hash = cargoHash;
+    hash = "sha256-5TMHytHLIjdzY6O1+V9do/JCfxFfBkYD+bd+FNLlrMk=";
   };
 
   extraNativeBuildInputs = [

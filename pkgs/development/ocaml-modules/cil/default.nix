@@ -39,7 +39,7 @@ else
     prefixKey = "-prefix=";
 
     meta = with lib; {
-      homepage = "http://kerneis.github.io/cil/";
+      homepage = "https://sourceforge.net/projects/cil/";
       description = "Front-end for the C programming language that facilitates program analysis and transformation";
       license = licenses.bsd3;
       maintainers = [ maintainers.vbgl ];

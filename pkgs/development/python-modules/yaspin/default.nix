@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pavdmyt";
     repo = "yaspin";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4IWaAPqzGri7V8X2gL607F5GlWfIFDlBBpDwSe4sz9I=";
   };
 

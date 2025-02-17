@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-VnOqQ1dKgNZSHTzJrD7stoCzNGrSkYxcLDJAsrJUsEQ=";
   };
 
-  cargoHash = "sha256-M8sZzgSEMIB6pPVaE+tC18MCbwYaYpHOnhrEvm9JTso=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8QbXZtf5kry0/QDrnUVQCtqK4/6EMliOI4Z410QR2Ec=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
@@ -37,6 +38,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       figsoda
       jk
+      matthiasbeyer
     ];
   };
 }

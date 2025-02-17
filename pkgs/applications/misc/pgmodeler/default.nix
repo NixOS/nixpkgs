@@ -9,20 +9,20 @@
   qmake,
   qtwayland,
   qtsvg,
-  postgresql,
+  libpq,
   cups,
   libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-VbAGdMeuIQLzcHwYoPbkC0UjzxXgW4BGlYfz32oHmms=";
+    sha256 = "sha256-ZoWCXCRaFQMf/RbcgXZQiF4+TDogdMOtccxOTk1c7Jw=";
   };
 
   nativeBuildInputs = [
@@ -37,17 +37,16 @@ stdenv.mkDerivation rec {
       "CONFIG+=release"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "PGSQL_INC=${lib.getDev postgresql}/include"
-      "PGSQL_LIB=${lib.getLib postgresql}/lib/libpq.dylib"
+      "PGSQL_INC=${lib.getDev libpq}/include"
+      "PGSQL_LIB=${lib.getLib libpq}/lib/libpq.dylib"
       "XML_INC=${libxml2.dev}/include/libxml2"
       "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
       "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
     ];
 
-  # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
   buildInputs =
     [
-      postgresql
+      libpq
       qtsvg
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dipy";
     repo = "dipy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6cpxuk2PL43kjQ+6UGiUHUXC7pC9OlW9kZvGOdEXyzw=";
   };
 

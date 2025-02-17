@@ -5,20 +5,20 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
   buildNpmPackage,
   nodejs_20,
+  nix-update-script,
 }:
 let
   pname = "rqbit";
 
-  version = "7.0.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-Lt3HxK8fB1Xn2422wGkJ90muJjZ7r9ZHngGD/2tkaMM=";
+    hash = "sha256-Meztr/UxLgnbd3YwkSW0vy+D2N4mFg2v+T4nBnYiQBI=";
   };
 
   rqbit-webui = buildNpmPackage {
@@ -30,7 +30,7 @@ let
 
     sourceRoot = "${src.name}/crates/librqbit/webui";
 
-    npmDepsHash = "sha256-VYPZXZx9rKLKZm5+d2wSVkoPLCQCffaeZVSi7mKRH/M=";
+    npmDepsHash = "sha256-vib8jpf7Jn1qv0m/dWJ4TbisByczNbtEd8hIM5ll2Q8=";
 
     installPhase = ''
       runHook preInstall
@@ -45,15 +45,12 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-esDUzzVm5J8fKftBfk5StJzN1YzLa1p0t7BsoxzrowI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FGcws80cX0I74bVaSV6OLntPFPNanGAFm6CVHDAGbOU=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist
@@ -67,6 +64,15 @@ rustPlatform.buildRustPackage {
   '';
 
   doCheck = false;
+
+  passthru.webui = rqbit-webui;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "webui"
+    ];
+  };
 
   meta = with lib; {
     description = "Bittorrent client in Rust";

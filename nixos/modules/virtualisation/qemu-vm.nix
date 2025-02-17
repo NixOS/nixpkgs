@@ -1314,6 +1314,7 @@ in
               {
                 device = "tmpfs";
                 fsType = "tmpfs";
+                options = [ "mode=755" ];
               }
             else
               {

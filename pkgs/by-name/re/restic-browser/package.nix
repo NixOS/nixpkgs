@@ -16,26 +16,22 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restic-browser";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "emuell";
     repo = "restic-browser";
     rev = "v${version}";
-    hash = "sha256-KE9pa4P6WyzNo3CxPKgREb6EEkUEQSuhihn938XN45A=";
+    hash = "sha256-magf19hA5PVAZafRcQXFaAD50qGofztpiluVc2aCeOk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-window-state-0.1.1" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-5wSxa8jgto+v+tJHbenc2nvGlLaOBYyRrCqFyCPnncc=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-npm-deps-${version}";
     inherit src;
-    hash = "sha256-OhJQ+rhtsEkwrPu+V6ITkXSJT6RJ8pYFATo0VfJaijc=";
+    hash = "sha256-U82hVPfVd12vBeDT3PHexwmc9OitkuxTugYRe4Z/3eo=";
   };
 
   nativeBuildInputs =

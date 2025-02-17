@@ -7,7 +7,7 @@
 
 let
   pname = "certificate-ripper";
-  version = "2.3.0";
+  version = "2.4.0";
 
   jar = maven.buildMavenPackage {
     pname = "${pname}-jar";
@@ -16,8 +16,8 @@ let
     src = fetchFromGitHub {
       owner = "Hakky54";
       repo = "certificate-ripper";
-      rev = version;
-      hash = "sha256-q/UhKLFAre3YUH2W7e+SH4kRM0GIZAUyNJFDm02eL+8=";
+      tag = version;
+      hash = "sha256-2EXALTGeGkHne335B1R42VrA5vMCMkFF5FBatAfO9Tc=";
     };
 
     patches = [
@@ -25,12 +25,22 @@ let
       ./fix-test-temp-dir-path.patch
     ];
 
-    mvnHash = "sha256-/iy7DXBAyq8TIpvrd2WAQh+9OApfxCWo1NoGwbzbq7s=";
+    mvnHash = "sha256-Nv/V2+QPSPMxkDcUh6gJrI6aSi+9O+brxpOZg/JPGxI=";
 
-    mvnParameters = lib.escapeShellArgs [
-      "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z" # make timestamp deterministic
-      "-Dtest=!PemExportCommandShould#resolveRootCaOnlyWhenEnabled" # disable test using network
-    ];
+    mvnParameters =
+      let
+        disabledTests = [
+          "PemExportCommandShould#resolveRootCaOnlyWhenEnabled" # uses network
+          "DerExportCommandShould#processSystemTrustedCertificates"
+          "JksExportCommandShould#processSystemTrustedCertificates"
+          "PemExportCommandShould#processSystemTrustedCertificates"
+          "Pkcs12ExportCommandShould#processSystemTrustedCertificates"
+        ];
+      in
+      lib.escapeShellArgs [
+        "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z" # make timestamp deterministic
+        "-Dtest=${lib.concatMapStringsSep "," (t: "!" + t) disabledTests}"
+      ];
 
     installPhase = ''
       install -Dm644 target/crip.jar $out
@@ -47,13 +57,12 @@ buildGraalvmNativeImage {
   # Copied from pom.xml
   extraNativeImageBuildArgs = [
     "--no-fallback"
-    "-H:ReflectionConfigurationResources=graalvm_config.json"
     "-H:EnableURLProtocols=https"
     "-H:EnableURLProtocols=http"
   ];
 
   meta = {
-    changelog = "https://github.com/Hakky54/certificate-ripper/releases/tag/${version}";
+    changelog = "https://github.com/Hakky54/certificate-ripper/releases/tag/${jar.src.tag}";
     description = "CLI tool to extract server certificates";
     homepage = "https://github.com/Hakky54/certificate-ripper";
     license = lib.licenses.asl20;

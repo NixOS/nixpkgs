@@ -43,7 +43,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = false;
   };
 
-  cargoHash = "sha256-VbdV4dftCxxKLJr9TEuCe9tvSGbc62AUwlDZdaNRNhw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YgVsWiINzEsmUMAi6ttEtXutwNDJA2viXnV5rGdSSxU=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [

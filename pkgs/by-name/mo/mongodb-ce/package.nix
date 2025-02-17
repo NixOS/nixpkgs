@@ -5,13 +5,13 @@
   autoPatchelfHook,
   curl,
   openssl,
-  testers,
-  mongodb-ce,
+  versionCheckHook,
   writeShellApplication,
   jq,
   nix-update,
   gitMinimal,
   pup,
+  nixosTests,
 }:
 
 let
@@ -63,6 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
+  versionCheckProgramArg = [ "--version" ];
+  # Only enable the version install check on darwin.
+  # On Linux, this would fail as mongod relies on tcmalloc, which
+  # requires access to `/sys/devices/system/cpu/possible`.
+  # See https://github.com/NixOS/nixpkgs/issues/377016
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
+
   passthru = {
 
     updateScript =
@@ -102,9 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
         command = lib.getExe script;
       };
 
-    tests.version = testers.testVersion {
-      package = mongodb-ce;
-      command = "mongod --version";
+    tests = {
+      inherit (nixosTests) mongodb-ce;
     };
   };
 

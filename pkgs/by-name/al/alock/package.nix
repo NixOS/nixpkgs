@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "alock";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 

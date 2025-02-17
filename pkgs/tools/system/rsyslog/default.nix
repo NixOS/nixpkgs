@@ -18,7 +18,7 @@
   withMysql ? true,
   libmysqlclient,
   withPostgres ? true,
-  postgresql,
+  libpq,
   withDbi ? true,
   libdbi,
   withNetSnmp ? true,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withKrb5 libkrb5
     ++ lib.optional withJemalloc jemalloc
-    ++ lib.optional withPostgres postgresql
+    ++ lib.optional withPostgres libpq
     ++ lib.optional withDbi libdbi
     ++ lib.optional withNetSnmp net-snmp
     ++ lib.optional withUuid libuuid

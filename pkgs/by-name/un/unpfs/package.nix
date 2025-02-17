@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/example/unpfs";
 
-  cargoHash = "sha256-v8hbxKuxux0oYglEIK5dM9q0oBQzjyYDP1JB1cYR/T0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jRe1lgzfhzBUsS6wwwlqxxomap2TIDOyF3YBv20GJ14=";
 
   RUSTC_BOOTSTRAP = 1;
 

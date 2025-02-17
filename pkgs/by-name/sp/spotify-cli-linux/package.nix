@@ -1,12 +1,14 @@
-{ lib, python3Packages, fetchPypi, dbus }:
+{ lib, python3Packages, fetchFromGitHub, dbus }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YW9HLcy50d44TRUEEkWAd92Gr2sTpRiu/w/bhF+LdBM=";
+  src = fetchFromGitHub {
+    owner = "pwittchen";
+    repo = "spotify-cli-linux";
+    tag = "v${version}";
+    hash = "sha256-Ko/as7wiBHawmyag9jFZqpPUZhb3p1+oYcl+26XyBZk=";
   };
 
   preBuild = ''

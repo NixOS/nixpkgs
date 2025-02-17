@@ -11,6 +11,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   rustPlatform,
   rustc,
@@ -29,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AwecOA8HWGimhQyCEG3Z3hhwa9RVWssykUXsdvqqs9U=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     name = "switcheroo-${finalAttrs.version}";
-    hash = "sha256-fpI4ue30DhkeWAolyeots+LkaRyaIPhYmIqRmx08i2s=";
+    hash = "sha256-Ose1gx6vwKZCdtMDkyM9Y+f6wt7VDKTI3Wc7kep1428=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://gitlab.com/adhami3310/Switcheroo/-/releases/v${finalAttrs.version}";

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dubhater";
     repo = "vapoursynth-nnedi3";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jd/PCXhbCZGMsoXjekbeqMSRVBJAy4INdpkTbZFjVO0=";
   };
 

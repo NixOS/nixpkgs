@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-veBccNxqhqBYKUC5pdjZ1IOWUYUqiNK5pJq1L+8UCxA=";
   };
 

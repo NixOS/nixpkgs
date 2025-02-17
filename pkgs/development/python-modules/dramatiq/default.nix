@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NeUGhG+H6r+JGd2qnJxRUbQ61G7n+3tsuDugTin3iJ4=";
   };
 

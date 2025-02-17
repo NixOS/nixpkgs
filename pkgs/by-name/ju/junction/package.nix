@@ -14,6 +14,7 @@
   gtk4,
   libadwaita,
   libportal-gtk4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,6 +63,10 @@ stdenv.mkDerivation rec {
     # autoPatchShebangs does not like "/usr/bin/env -S <environment-setting> gjs -m"
     sed -i "1s|.*|#!/usr/bin/gjs -m|" $out/bin/re.sonny.Junction
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     mainProgram = "re.sonny.Junction";

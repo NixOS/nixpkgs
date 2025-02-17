@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JessicaTegner";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9fpits8O/50maM/e1lVVqBoTwUmcI+/IAYhVX1Pt6ZE=";
   };
 

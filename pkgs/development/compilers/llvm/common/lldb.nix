@@ -54,9 +54,10 @@ stdenv.mkDerivation (rec {
   src = src';
   inherit patches;
 
-  # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
-  # the `lib` output because that would create a cycle between it and the `out` output.
-  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "lib" ];
+  # There is no `lib` output because some of the files in `$out/lib` depend on files in `$out/bin`.
+  # For example, `$out/lib/python3.12/site-packages/lldb/lldb-argdumper` is a symlink to `$out/bin/lldb-argdumper`.
+  # Also, LLDB expects to find the path to `bin` relative to `lib` on Darwin.
+  outputs = [ "out" "dev" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
@@ -127,20 +128,20 @@ stdenv.mkDerivation (rec {
 
   # TODO: cleanup with mass-rebuild
   installCheckPhase = ''
-    if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+    if [ ! -e ''${!outputLib}/${python3.sitePackages}/lldb/_lldb*.so ] ; then
         echo "ERROR: python files not installed where expected!";
         return 1;
     fi
   '' # Something lua is built on older versions but this file doesn't exist.
   + lib.optionalString (lib.versionAtLeast release_version "14") ''
-    if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+    if [ ! -e "''${!outputLib}/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
         echo "ERROR: lua files not installed where expected!";
         return 1;
     fi
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : ''${!outputLib}/${python3.sitePackages}/
 
     # Editor support
     # vscode:

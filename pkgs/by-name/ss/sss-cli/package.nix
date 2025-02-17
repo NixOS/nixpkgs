@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-cargo-lock.patch ];
 
-  cargoHash = "sha256-nKb0J9ym3ZYC80KemwQwT5vVtQUngYD4/091hAIYAiU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yutjlaqLf8R8KmdeKF+CHz/s/b6T+GB9bOl2liMBmMQ=";
 
   meta = with lib; {
     homepage = "https://github.com/dsprenkels/sss-cli";

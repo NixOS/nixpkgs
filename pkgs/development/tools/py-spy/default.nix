@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, darwin
 , fetchFromGitHub
 , libunwind
 , python3
@@ -18,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-T96F8xgB9HRwuvDLXi6+lfi8za/iNn1NAbG4AIpE0V0=";
   };
 
-  cargoHash = "sha256-SkHlXvhmw7swjZDdat0z0o5ATDJ1qSE/iwiwywsFOyw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-velwX7lcNQvwg3VAUTbgsOPLlA5fAcPiPvczrBBsMvs=";
 
   buildFeatures = [ "unwind" ];
 
@@ -28,11 +28,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     python3
-  ];
-
-  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Pull a header that contains a definition of proc_pid_rusage().
-    darwin.apple_sdk_11_0.Libsystem
   ];
 
   env.NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";

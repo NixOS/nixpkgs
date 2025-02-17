@@ -72,7 +72,7 @@ let
     src = fetchFromGitHub {
       owner = "pandas-dev";
       repo = "pandas";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
 

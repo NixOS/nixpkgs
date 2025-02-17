@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "redbeat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lAEbhRTp0jYrCgHaTvPrl+lW1NRezmmTqAnUmLdpVwY=";
   };
 

@@ -29,7 +29,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-cargo-lock.patch ];
 
-  cargoHash = "sha256-8J92WtMmCTnghPqSmNYhG3IVdmpHsHEH7Fkod0UYKJU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FhY4Yf7e0Kk/a1ngPUQcd6R6MDpoyt/2WJhcCeTjKJE=";
 
   # Tests require network access
   doCheck = false;

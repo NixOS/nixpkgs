@@ -54,9 +54,6 @@
 
   depsExtraArgs ? { },
 
-  # Toggles whether a custom sysroot is created when the target is a .json file.
-  __internal_dontAddSysroot ? false,
-
   # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
   # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
   # case for `rustfmt`/etc from the `rust-sources).
@@ -125,20 +122,7 @@ let
 
   target = stdenv.hostPlatform.rust.rustcTargetSpec;
   targetIsJSON = lib.hasSuffix ".json" target;
-  useSysroot = targetIsJSON && !__internal_dontAddSysroot;
-
-  sysroot = callPackage ./sysroot { } {
-    inherit target;
-    shortTarget = stdenv.hostPlatform.rust.cargoShortTarget;
-    RUSTFLAGS = args.RUSTFLAGS or "";
-    originalCargoToml = src + /Cargo.toml; # profile info is later extracted
-  };
-
 in
-
-# Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
-# See https://os.phil-opp.com/testing/ for more information.
-assert useSysroot -> !(args.doCheck or true);
 
 stdenv.mkDerivation (
   (removeAttrs args [
@@ -147,14 +131,8 @@ stdenv.mkDerivation (
     "cargoDeps"
     "cargoLock"
   ])
-  // lib.optionalAttrs useSysroot {
-    RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
-  }
   // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
-    RUSTFLAGS =
-      "-C split-debuginfo=packed "
-      + lib.optionalString useSysroot "--sysroot ${sysroot} "
-      + (args.RUSTFLAGS or "");
+    RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
   }
   // {
     cargoDeps = cargoDeps';

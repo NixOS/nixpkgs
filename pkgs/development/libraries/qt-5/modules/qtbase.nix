@@ -53,7 +53,7 @@
 
   # optional dependencies
   cups ? null,
-  postgresql ? null,
+  libpq ? null,
   withGtk3 ? false,
   dconf,
   gtk3,
@@ -162,7 +162,7 @@ stdenv.mkDerivation (
         ++ lib.optional developerBuild gdb
         ++ lib.optional (cups != null) cups
         ++ lib.optional (mysqlSupport) libmysqlclient
-        ++ lib.optional (postgresql != null) postgresql;
+        ++ lib.optional (libpq != null) libpq;
 
       nativeBuildInputs =
         [
@@ -360,7 +360,7 @@ stdenv.mkDerivation (
       # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
       # if dependency paths contain the string "pq", which can occur in the hash.
       # To prevent these failures, we need to override PostgreSQL detection.
-      PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
+      PSQL_LIBS = lib.optionalString (libpq != null) "-L${libpq}/lib -lpq";
 
     }
     // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
@@ -453,7 +453,7 @@ stdenv.mkDerivation (
           "${openssl.dev}/include"
           "-system-sqlite"
           ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
-          ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
+          ''-${if libpq != null then "plugin" else "no"}-sql-psql''
           "-system-libpng"
 
           "-make libs"

@@ -427,7 +427,7 @@ in
               ]);
             default = null;
             description = ''
-              Authentication type to use, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
+              Authentication type to use, see <https://api.rubyonrails.org/classes/ActionMailer/Base.html>
             '';
           };
 
@@ -443,7 +443,7 @@ in
             type = lib.types.str;
             default = "peer";
             description = ''
-              How OpenSSL checks the certificate, see https://api.rubyonrails.org/classes/ActionMailer/Base.html
+              How OpenSSL checks the certificate, see <https://api.rubyonrails.org/classes/ActionMailer/Base.html>
             '';
           };
 
@@ -925,7 +925,7 @@ in
             };
             "~ ^/uploads/short-url/" = proxy { };
             "~ ^/secure-media-uploads/" = proxy { };
-            "~* (fonts|assets|plugins|uploads)/.*\.(eot|ttf|woff|woff2|ico|otf)$".extraConfig =
+            "~* (fonts|assets|plugins|uploads)/.*\\.(eot|ttf|woff|woff2|ico|otf)$".extraConfig =
               cache_1y
               + ''
                 add_header Access-Control-Allow-Origin *;

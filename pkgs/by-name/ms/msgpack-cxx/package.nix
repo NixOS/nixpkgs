@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msgpack-cxx";
-  version = "6.1.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
-    rev = "refs/tags/cpp-${finalAttrs.version}";
-    hash = "sha256-m0Ki+9/nZo2b4BUT+gUtdxok5I7xQtcfnMkbG+OHsKs=";
+    tag = "cpp-${finalAttrs.version}";
+    hash = "sha256-kg4mpNiigfZ59ZeL8LXEHwtkLU8Po+vgRcUcgTJd+h4=";
   };
 
   strictDeps = true;
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DMSGPACK_BUILD_DOCS=OFF" # docs are not installed even if built
+    "-DMSGPACK_CXX20=ON"
   ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DMSGPACK_BUILD_TESTS=ON";
 
   checkInputs = [

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "configparser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6B1I/kS60opMDpCzy2tnlnV65Qo500G0zPHP1I5TDWA=";
   };
 
