@@ -23,6 +23,7 @@
 browser:
 
 let
+  isDarwin = stdenv.hostPlatform.isDarwin;
   wrapper =
     { applicationName ? browser.binaryName or (lib.getName browser) # Note: this is actually *binary* name and is different from browser.passthru.applicationName, which is *app* name!
     , pname ? applicationName
@@ -81,7 +82,7 @@ let
       gtk_modules = [ libcanberra-gtk3 ];
 
       # Darwin does not rename bundled binaries
-      launcherName = "${applicationName}${lib.optionalString (!stdenv.hostPlatform.isDarwin) nameSuffix}";
+      launcherName = "${applicationName}${lib.optionalString (!isDarwin) nameSuffix}";
 
       #########################
       #                       #
@@ -278,18 +279,18 @@ let
         ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
       ]) allNativeMessagingHosts);
 
-      buildCommand = lib.optionalString stdenv.hostPlatform.isDarwin ''
-        appPath="Applications/${browser.passthru.applicationName}.app"
-        executablePrefix="$appPath/Contents/MacOS"
-      '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        executablePrefix=bin
-      '' + ''
-        executablePath="$executablePrefix/${applicationName}"
-
-        sourceBinary="${browser}/$executablePath"
-        if [ ! -x "$sourceBinary" ]
+      buildCommand = let
+        appPath = "Applications/${browser.passthru.applicationName}.app";
+        executablePrefix = if isDarwin then "${appPath}/Contents/MacOS" else "bin";
+        executablePath="${executablePrefix}/${applicationName}";
+        finalBinaryPath = "${executablePath}" + lib.optionalString (!isDarwin) "${nameSuffix}";
+        sourceBinary="${browser}/${executablePath}";
+        libDir = if isDarwin then "${appPath}/Contents/Resources" else "lib/${libName}";
+        prefsDir = if isDarwin then "${libDir}/browser/defaults/preferences" else "${libDir}/defaults/pref";
+      in ''
+        if [ ! -x "${sourceBinary}" ]
         then
-            echo "cannot find executable file \`$sourceBinary'"
+            echo "cannot find executable file \`${sourceBinary}'"
             exit 1
         fi
 
@@ -319,22 +320,23 @@ let
           ln -sfT "$target" "$out/$l"
         done
 
-      '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      '' + lib.optionalString isDarwin ''
         # These files have to be copied and not symlinked, otherwise tabs crash.
         # Maybe related to how omni.ja file is mmapped into memory. See:
         # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
         for path in "" "browser"; do
-          omniPath="$appPath/Contents/Resources/$path/"
+          omniPath="${appPath}/Contents/Resources/$path/"
           rm "$out/$omniPath/omni.ja"
           cp "${browser}/$omniPath/omni.ja" "$out/$omniPath/"
         done
+
       '' + ''
         cd "$out"
 
         # create the wrapper
 
-        executablePrefix="$out/$executablePrefix"
-        executablePath="$out/$executablePath"
+        executablePrefix="$out/${executablePrefix}"
+        executablePath="$out/${executablePath}"
         oldWrapperArgs=()
 
         if [[ -L $executablePath ]]; then
@@ -366,19 +368,14 @@ let
         appendToVar makeWrapperArgs --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
         concatTo makeWrapperArgs oldWrapperArgs
 
-      '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        finalBinaryPath="$executablePath"
-      '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        finalBinaryPath="''${executablePath}${nameSuffix}"
-      '' + ''
-        makeWrapper "$oldExe" "$finalBinaryPath" "''${makeWrapperArgs[@]}"
+        makeWrapper "$oldExe" "$out/${finalBinaryPath}" "''${makeWrapperArgs[@]}"
 
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
         #                           #
         #############################
-      '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      '' + lib.optionalString (!isDarwin) ''
         if [ -e "${browser}/share/icons" ]; then
             mkdir -p "$out/share"
             ln -s "${browser}/share/icons" "$out/share/icons"
@@ -413,12 +410,8 @@ let
         #                       #
         #########################
         # user customization
+        libDir="$out/${libDir}"
 
-      '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        libDir="$out/lib/${libName}"
-      '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        libDir="$out/$appPath/Contents/Resources"
-      '' + ''
         # creating policies.json
         mkdir -p "$libDir/distribution"
 
@@ -433,11 +426,7 @@ let
         done
 
         # preparing for autoconfig
-      '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        prefsDir="$libDir/defaults/pref"
-      '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        prefsDir="$libDir/browser/defaults/preferences"
-      '' + ''
+        prefsDir="$out/${prefsDir}"
         mkdir -p "$prefsDir"
 
         echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
