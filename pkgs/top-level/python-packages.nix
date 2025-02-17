@@ -4981,6 +4981,8 @@ self: super: with self; {
 
   flask-admin = callPackage ../development/python-modules/flask-admin { };
 
+  flask-alembic = callPackage ../development/python-modules/flask-alembic { };
+
   flask-allowed-hosts = callPackage ../development/python-modules/flask-allowed-hosts { };
 
   flask-api = callPackage ../development/python-modules/flask-api { };
