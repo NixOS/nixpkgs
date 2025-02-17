@@ -25,6 +25,8 @@ mkAppleDerivation (finalAttrs: {
   patches = [
     # Clang 18 requires that no non-private symbols by defined after cfi_startproc. Apply the upstream libffi fix.
     ./patches/llvm-18-compatibility.patch
+    # Fix a memory leak when using the trampoline dylib. See https://github.com/libffi/libffi/pull/621#discussion_r955298301.
+    ./patches/fix-tramponline-memory-leak.patch
   ];
 
   # Make sure libffi is using the trampolines dylib in this package not the system one.
@@ -46,7 +48,6 @@ mkAppleDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
-    "--enable-pax_emutramp"
   ];
 
   # Make sure aarch64-darwin is using the trampoline dylib.
@@ -55,7 +56,8 @@ mkAppleDerivation (finalAttrs: {
   '';
 
   postBuild = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    $CC src/aarch64/trampoline.S -dynamiclib -o libffi-trampolines.dylib \
+    $CC -Os -Wl,-allowable_client,! -Wl,-not_for_dyld_shared_cache -Wl,-no_compact_unwind \
+      src/aarch64/trampoline.S -dynamiclib -o libffi-trampolines.dylib \
       -Iinclude -Iaarch64-apple-darwin -Iaarch64-apple-darwin/include \
       -install_name "$out/lib/libffi-trampoline.dylib" -Wl,-compatibility_version,1 -Wl,-current_version,1
   '';
@@ -64,6 +66,9 @@ mkAppleDerivation (finalAttrs: {
     # The Darwin SDK puts the headers in `include/ffi`. Add a symlink for compatibility.
     ''
       ln -s "$dev/include" "$dev/include/ffi"
+      # Make sure Apple’s header with availability annotations is installed in place of the generated one.
+      # Use `macCatalyst` instead of `iosmac` to avoid errors due to invalid availability annotations.
+      substitute darwin/include/ffi.h "$dev/include/ffi.h" --replace-fail iosmac macCatalyst
     ''
     # Install the trampoline dylib since it is build manually.
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
