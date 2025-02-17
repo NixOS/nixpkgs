@@ -1627,7 +1627,7 @@ with pkgs;
 
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo123Module;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
   };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
