@@ -2352,6 +2352,12 @@
     githubId = 97070581;
     name = "averagebit";
   };
+  averdow = {
+    email = "aaron@verdow.com";
+    github = "AaronVerDow";
+    githubId = 2530548;
+    name = "Aaron VerDow";
+  };
   averelld = {
     email = "averell+nixos@rxd4.com";
     github = "averelld";
