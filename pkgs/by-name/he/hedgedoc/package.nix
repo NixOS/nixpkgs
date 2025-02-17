@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.10.0";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
-    rev = version;
-    hash = "sha256-cRIpcoD9WzLYxKYpkvhRxUmeyJR5z2QyqApzWvQND+s=";
+    tag = version;
+    hash = "sha256-WDLcBnqhoKt6E41CzumOZg/5qvKFccN6gwirLTcwWYo=";
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -43,7 +43,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
+    outputHash = "sha256-u/t2uvQ9oJnfjkSoPGjGsESWIsQHWvj9GP08aD6RkJk=";
   };
 
 in
