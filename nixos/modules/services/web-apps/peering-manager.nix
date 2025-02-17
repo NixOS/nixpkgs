@@ -369,7 +369,7 @@ in
           after = [ "peering-manager.service" ];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkg}/bin/peering-manager poll_bgp_sessions --all";
+            ExecStart = "${pkg}/bin/peering-manager poll_bgp_sessions";
           };
         };
       };
