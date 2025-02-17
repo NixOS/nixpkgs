@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Port of Shen running on Steel Bank Common Lisp";
     changelog = "https://shenlanguage.org/download.html#kernel";
     platforms = sbcl.meta.platforms;
-    maintainers = with lib.maintainers; [ bsima ];
+    maintainers = with lib.maintainers; [ hakujin ];
     license = lib.licenses.bsd3;
     mainProgram = "shen-sbcl";
   };
