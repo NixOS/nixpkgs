@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
       libgpiod
     ];
 
+  postInstall = ''
+    cd "$src"
+    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
+  '';
+
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
