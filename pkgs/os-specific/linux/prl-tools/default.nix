@@ -20,6 +20,7 @@
   netcat,
   timetrap,
   util-linux,
+  wayland,
 }:
 
 let
@@ -29,6 +30,7 @@ let
   libPath = lib.concatStringsSep ":" [
     "${glib.out}/lib"
     "${xorg.libXrandr}/lib"
+    "${wayland.out}/lib"
   ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
