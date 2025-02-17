@@ -12,12 +12,12 @@
 let
   tantivy-go = callPackage ../tantivy-go { };
   pname = "anytype-heart";
-  version = "0.38.9";
+  version = "0.39.10";
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${version}";
-    hash = "sha256-0MRtzPSUxbCBJQLJbHsdEpf6GEFoS4ud1S6j9GZWzAE=";
+    hash = "sha256-w7l/J3UwLiyM1vFhIW2WEdCxxXER+x9xMPH+LfyCQWM=";
   };
 
   arch =
@@ -33,7 +33,7 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-8QN7SipgkoJ9yRCl1Hv8ZIkeEwbWcFS6QiumXIIN1Bg=";
+  vendorHash = "sha256-fbZ1DiRcD9dnS8e7BMrKPYApqZmQbaH6DsSSO1knDmo=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [

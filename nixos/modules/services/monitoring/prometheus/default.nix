@@ -718,8 +718,8 @@ let
         '';
       };
 
-      type = mkDefOpt (types.enum [ "SRV" "A" "AAAA" ]) "SRV" ''
-        The type of DNS query to perform. One of SRV, A, or AAAA.
+      type = mkDefOpt (types.enum [ "SRV" "A" "AAAA" "MX" "NS" ]) "SRV" ''
+        The type of DNS query to perform.
       '';
 
       port = mkOpt types.port ''
