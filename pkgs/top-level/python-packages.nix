@@ -7695,6 +7695,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
+
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
