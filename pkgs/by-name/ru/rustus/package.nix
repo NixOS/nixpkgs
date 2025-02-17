@@ -11,20 +11,20 @@
 
 let
   pname = "rustus";
-  version = "1.0.0";
+  version = "1.1.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "s3rius";
-    repo = pname;
-    rev = "a7ebbc3f4c367b0c71b49972b1f6ebbeb08634b8";
-    hash = "sha256-S3hq6G78HRQVLJuuwfC6U7NQXMSdllrC/ZolVPZRTsA=";
+    repo = "rustus";
+    tag = version;
+    hash = "sha256-TEZGZWaO86BxmgK3bNTstSAKhXnDk9zTKL3RZz457A8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PxXv9El81z6r1KJAMaF+pzB74tY3e2dxXzPPKakSeZ0=";
+  cargoHash = "sha256-qK8c/iEy7R544cMfBY2NMDAHq6RaJIS/mp9Ij6fO3Tg=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
