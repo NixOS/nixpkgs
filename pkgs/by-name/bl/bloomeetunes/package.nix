@@ -10,13 +10,13 @@
 
 flutter324.buildFlutterApplication rec {
   pname = "bloomeetunes";
-  version = "2.10.14";
+  version = "2.10.15";
 
   src = fetchFromGitHub {
     owner = "HemantKArya";
     repo = "BloomeeTunes";
-    tag = "v${version}+161";
-    hash = "sha256-Cj4NfWEIEYTNAdb6CunA7ExTebK89OlHvZx9n853eHI=";
+    tag = "v${version}+162";
+    hash = "sha256-o26HB2eFXXiovg+X5hNIRRStJBGNEFTF9Um/8AKlKww=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
