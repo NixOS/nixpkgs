@@ -5,11 +5,56 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  jq,
   gnupg,
   gopass,
   apple-sdk_14,
 }:
 
+let
+
+  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.15/internal/jsonapi/manifest/manifest_path_linux.go
+  manifestPaths = {
+    firefox = "$out/lib/mozilla/native-messaging-hosts/com.justwatch.gopass.json";
+    chrome = "$out/etc/opt/chrome/native-messaging-hosts/com.justwatch.gopass.json";
+    chromium = "$out/etc/chromium/native-messaging-hosts/com.justwatch.gopass.json";
+    brave = "$out/etc/opt/chrome/native-messaging-hosts/com.justwatch.gopass.json";
+    vivaldi = "$out/etc/opt/vivaldi/native-messaging-hosts/com.justwatch.gopass.json";
+    iridium = "$out/etc/iridium-browser/native-messaging-hosts/com.justwatch.gopass.json";
+    slimjet = "$out/etc/opt/slimjet/native-messaging-hosts/com.justwatch.gopass.json";
+  };
+
+  createNativeMessagingManifest =
+    {
+      browser,
+      manifestPath ? manifestPaths.${browser},
+      gopass_jsonapi ? "$out/bin/gopass-jsonapi",
+      script ? "$out/lib/gopass/browsers-jsonapi-wrapper.sh",
+    }:
+    ''
+      # The options after `--print=false` are of no effect, but if missing
+      # `gopass-jsonapi configure` will ask for them. (`--libpath` and `--global`
+      # are overriden by `--manifest-path`. `--libpath` is only used to
+      # compute Firefox's global manifest path. See
+      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.15/setup_others.go#L33-L46)
+      #
+      # `gopass-jsonapi configure` ask for confirmation before writing any files,
+      # `echo y` gives it.
+      # Prepend $PATH so we can run gopass-jsonapi before wrapProgram in postFixup.
+      echo y | PATH="${gopass.wrapperPath}:$PATH" ${gopass_jsonapi} configure \
+        --browser ${browser} \
+        --path "$(dirname ${script})" \
+        --manifest-path ${manifestPath} \
+        --print=false \
+        --global \
+        --libpath /var/empty
+      # Remove gopass_wrapper.sh and use custom script.
+      rm "$(dirname ${script})"/gopass_wrapper.sh
+      ${jq}/bin/jq --arg script ${script} '.path = $script' ${manifestPath} > ${manifestPath}.tmp
+      mv ${manifestPath}.tmp ${manifestPath}
+    '';
+
+in
 buildGoModule rec {
   pname = "gopass-jsonapi";
   version = "1.15.15";
@@ -42,50 +87,28 @@ buildGoModule rec {
     "-X main.commit=${src.rev}"
   ];
 
-  postFixup = ''
-    wrapProgram $out/bin/gopass-jsonapi \
-      --prefix PATH : "${gopass.wrapperPath}"
-
+  postInstall = ''
     # Generate native messaging manifests for Chrome and Firefox.
-    # It would be nicer to not do that in the fixupPhase but `gopass-jsonapi configure`
-    # is run which relies on on the wrapped `gopass-jsonapi`.
     export HOME=$(mktemp -d)
     ${gnupg}/bin/gpg --batch --passphrase "" --quick-generate-key "user <user@localhost>"
     ${gopass}/bin/gopass setup --name "user" --email "user@localhost"
+    ${lib.concatMapStrings (browser: createNativeMessagingManifest { inherit browser; }) [
+      "firefox"
+      "chrome"
+      "chromium"
+      "brave"
+      "vivaldi"
+      "iridium"
+      "slimjet"
+    ]}
+    substitute ${./browsers-jsonapi-wrapper.sh} $out/lib/gopass/browsers-jsonapi-wrapper.sh \
+      --replace-fail "@OUT@" "$out"
+    chmod +x $out/lib/gopass/browsers-jsonapi-wrapper.sh
+  '';
 
-    # The options after `--print=false` are of no effect, but if missing
-    # `gopass-jsonapi configure` will ask for them. (`--global` is used to compute
-    # the manifest path, but it is overridden by `--manifest-path` and `--libpath`
-    # seems to only be used to compute Firefox' global manifest path, see
-    # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.14/setup_others.go#L33-L46)
-    #
-    # Manifest paths were taken from
-    # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.14/internal/jsonapi/manifest/manifest_path_linux.go
-    #
-    # Both calls will write `$out/lib/gopass_wrapper.sh` but they are identical.
-    # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.14/internal/jsonapi/manifest/wrapper.go#L14-L36
-    #
-    # `gopass-jsonapi configure` ask for confirmation before writing any files,
-    # `echo y` gives it.
-    echo y | "$out"/bin/gopass-jsonapi configure \
-      --browser chrome \
-      --path "$out"/lib \
-      --manifest-path "$out"/etc/chromium/native-messaging-hosts/com.justwatch.gopass.json \
-      --print=false \
-      --global \
-      --libpath "$out"/lib
-    echo y | "$out"/bin/gopass-jsonapi configure \
-      --browser firefox \
-      --path "$out"/lib \
-      --manifest-path "$out"/lib/mozilla/native-messaging-hosts/com.justwatch.gopass.json \
-      --print=false \
-      --global \
-      --libpath "$out"/lib
-    # Set $PATH for the wrapper script manually. gopass-jsonapi's own `$PATH`
-    # is already provided by `wrapProgram` above.
-    sed -e '/^export PATH=/d' -i "$out"/lib/gopass_wrapper.sh
-    wrapProgram "$out"/lib/gopass_wrapper.sh \
-      --prefix PATH : ${lib.makeBinPath [ "\"$out\"" gnupg ]}
+  postFixup = ''
+    wrapProgram $out/bin/gopass-jsonapi \
+      --prefix PATH : "${gopass.wrapperPath}"
   '';
 
   meta = {
