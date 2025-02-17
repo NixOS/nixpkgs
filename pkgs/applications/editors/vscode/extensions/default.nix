@@ -3422,112 +3422,21 @@ let
         };
       };
 
-      ms-pyright.pyright = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "pyright";
-          publisher = "ms-pyright";
-          version = "1.1.300";
-          hash = "sha256-GzRJeV4qfgM2kBv6U3MH7lMWl3CL6LWPI/9GaVWZL+o=";
-        };
-        meta = {
-          description = "VS Code static type checking for Python";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-pyright.pyright";
-          homepage = "https://github.com/Microsoft/pyright#readme";
-          changelog = "https://marketplace.visualstudio.com/items/ms-pyright.pyright/changelog";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ratsclub ];
-        };
-      };
+      ms-pyright.pyright = callPackage ./ms-pyright.pyright { };
 
-      ms-python.black-formatter = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "black-formatter";
-          publisher = "ms-python";
-          version = "2024.2.0";
-          hash = "sha256-qIO+YqTXjwgznzUlnPSts1R2BM6iN8B9vESkelGPgZM=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.black-formatter/changelog";
-          description = "Formatter extension for Visual Studio Code using black";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter";
-          homepage = "https://github.com/microsoft/vscode-black-formatter";
-          license = lib.licenses.mit;
-          maintainers = with lib.maintainers; [
-            amadejkastelic
-            sikmir
-          ];
-        };
-      };
+      ms-python.black-formatter = callPackage ./ms-python.black-formatter { };
 
-      ms-python.flake8 = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "flake8";
-          publisher = "ms-python";
-          version = "2023.10.0";
-          hash = "sha256-4Vjw8yJPrxLg0hcoTw8AEBEcmQ9sEUNqFaHLxICks0E=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.flake8/changelog";
-          description = "Python linting support for VS Code using Flake8";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.flake8";
-          homepage = "https://github.com/microsoft/vscode-flake8";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.amadejkastelic ];
-        };
-      };
+      ms-python.flake8 = callPackage ./ms-python.flake8 { };
 
-      ms-python.isort = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "isort";
-          publisher = "ms-python";
-          version = "2023.10.1";
-          hash = "sha256-NRsS+mp0pIhGZiqxAMXNZ7SwLno9Q8pj+RS1WB92HzU=";
-        };
-        meta = with lib; {
-          description = "Import sorting extension for Visual Studio Code using isort";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.isort";
-          homepage = "https://github.com/microsoft/vscode-isort";
-          license = licenses.mit;
-          maintainers = with maintainers; [ sikmir ];
-        };
-      };
+      ms-python.isort = callPackage ./ms-python.isort { };
 
-      ms-python.pylint = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "pylint";
-          publisher = "ms-python";
-          version = "2023.10.1";
-          hash = "sha256-1tI5u33c5CHFQxkJZ/OxW3ZA5qPr4RoCIf6dqIMPykQ=";
-        };
-        meta = {
-          changelog = "https://marketplace.visualstudio.com/items/ms-python.pylint/changelog";
-          description = "Python linting support for VS Code using Pylint";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.pylint";
-          homepage = "https://github.com/microsoft/vscode-pylint";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.amadejkastelic ];
-        };
-      };
+      ms-python.pylint = callPackage ./ms-python.pylint { };
 
       ms-python.mypy-type-checker = callPackage ./ms-python.mypy-type-checker { };
 
       ms-python.python = callPackage ./ms-python.python { };
 
-      ms-python.debugpy = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "debugpy";
-          publisher = "ms-python";
-          version = "2024.6.0";
-          hash = "sha256-VlPe65ViBur5P6L7iRKdGnmbNlSCwYrdZAezStx8Bz8=";
-        };
-        meta = {
-          description = "Python debugger (debugpy) extension for VS Code";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.debugpy";
-          homepage = "https://github.com/Microsoft/vscode-python-debugger";
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.carlthome ];
-        };
-      };
+      ms-python.debugpy = callPackage ./ms-python.debugpy { };
 
       ms-python.vscode-pylance = callPackage ./ms-python.vscode-pylance { };
 

@@ -268,6 +268,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim" ];
 
   meta = {
+    # https://github.com/ManimCommunity/manim/pull/4037
+    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to

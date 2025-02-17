@@ -31,24 +31,15 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.11";
+  version = "4.8.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${version}";
-    hash = "sha256-c8/b2dRwfH4naSVRaRon6/mBDva7RSDmi/TJUJp26g0=";
+    hash = "sha256-Eqyq96mVB5ZhPaLASesWhzjjHcXz/tAIOPP//8yGoBM=";
   };
-
-  # packaging.metadata.InvalidMetadata: 'python_version_3.8_' is invalid for 'provides-extra'
-  postPatch = ''
-    substituteInPlace requirements-testing.txt \
-      --replace-fail 'pooch; python_version >= "3.8"' "pooch"
-
-    substituteInPlace tests/test_builtins.py \
-      --replace-fail "from scipy.misc import ascent" "from scipy.datasets import ascent"
-  '';
 
   pythonRemoveDeps = [ "pip" ];
 
@@ -125,6 +116,10 @@ buildPythonPackage rec {
       # Numerical tests
       "test_lm_fb"
       "test_lm_ds"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Numerical error
+      "test_pow_precision"
     ];
 
   disabledTestPaths =
