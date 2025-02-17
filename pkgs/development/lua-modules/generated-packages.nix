@@ -1946,6 +1946,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+lualine-nvim = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder, nvim-web-devicons }:
+buildLuarocksPackage {
+  pname = "lualine.nvim";
+  version = "scm-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lualine.nvim-scm-1.rockspec";
+    sha256 = "1mzsfiq4h95s0nbygwii2w8xs5rixdbha322bvx453k530s2kxxj";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "nvim-lualine";
+    repo = "lualine.nvim";
+    rev = "f4f791f67e70d378a754d02da068231d2352e5bc";
+    hash = "sha256-uAxe3UdNUVfdpQcKvGvQ/E2blGksvMPlTBfEOtgeVYo=";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nvim-web-devicons ];
+
+  meta = {
+    homepage = "https://github.com/nvim-lualine/lualine.nvim";
+    description = "A blazing fast and easy to configure neovim statusline plugin written in pure lua.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 lualogging = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luasocket }:
 buildLuarocksPackage {
   pname = "lualogging";
@@ -2973,6 +2998,29 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://github.com/nvim-tree/nvim-web-devicons";
     description = "Nerd Font icons for neovim";
+    license.fullName = "MIT";
+  };
+}) {};
+
+oil-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-web-devicons }:
+buildLuarocksPackage {
+  pname = "oil.nvim";
+  version = "2.15.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/oil.nvim-2.15.0-1.rockspec";
+    sha256 = "0xkych23rn6jpj4hbam1j7ca1gwb9z3lzfm7id3dvcqj8aysv77j";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/stevearc/oil.nvim/archive/v2.15.0.zip";
+    sha256 = "0rrv7wg0nwfj5fd6byxs4np1p18xxdzyv11ba6vqqh3s6z0qwawc";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ nvim-web-devicons ];
+
+  meta = {
+    homepage = "https://github.com/stevearc/oil.nvim";
+    description = "Neovim file explorer: edit your filesystem like a buffer";
     license.fullName = "MIT";
   };
 }) {};

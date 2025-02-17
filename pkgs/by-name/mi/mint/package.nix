@@ -2,18 +2,19 @@
   lib,
   fetchFromGitHub,
   crystal,
+  libxml2,
   openssl,
 }:
 
 crystal.buildCrystalPackage rec {
-  version = "0.19.0";
   pname = "mint";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
     rev = version;
-    hash = "sha256-s/ehv8Z71nWnxpajO7eR4MxoHppqkdleFluv+e5Vv6I=";
+    hash = "sha256-82Oi9UJ530rZNGa6XxC1hNvRfZQx3fTZxhfSQeZmz54=";
   };
 
   format = "shards";
@@ -23,18 +24,22 @@ crystal.buildCrystalPackage rec {
   # with mint's shard.lock file in the current directory
   shardsFile = ./shards.nix;
 
+  nativeBuildInputs = [
+    libxml2 # xmllint
+  ];
+
   buildInputs = [ openssl ];
 
-  preConfigure = ''
-    export HOME=$(mktemp -d)
+  preCheck = ''
+    substituteInPlace spec/spec_helper.cr \
+      --replace-fail "clear_env: true" "clear_env: false"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Refreshing language for the front-end web";
     mainProgram = "mint";
     homepage = "https://www.mint-lang.com/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ manveru ];
-    broken = lib.versionOlder crystal.version "1.0";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ manveru ];
   };
 }
