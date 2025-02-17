@@ -48,13 +48,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "6.3.3";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${version}";
-    hash = "sha256-kPZcCJtnoqE1g0fAuM98IhuDy1E9QBDkFNWrWIpFIDA=";
+    hash = "sha256-DoUSzqb8lrU+s5R95rxCN/5A8sgb11edAhv0T6YACRo=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
