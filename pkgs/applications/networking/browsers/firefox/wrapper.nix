@@ -323,14 +323,22 @@ let
         cd "$out"
 
       '' + lib.optionalString isDarwin ''
+        cd "${appPath}"
+
         # These files have to be copied and not symlinked, otherwise tabs crash.
         # Maybe related to how omni.ja file is mmapped into memory. See:
         # https://github.com/mozilla/gecko-dev/blob/b1662b447f306e6554647914090d4b73ac8e1664/modules/libjar/nsZipArchive.cpp#L204
-        cd "${appPath}"
         for file in $(find . -type l -name "omni.ja"); do
           rm "$file"
           cp "${browser}/${appPath}/$file" "$file"
         done
+
+        # Copy any embedded .app directories; plugin-container fails to start otherwise.
+        for dir in $(find . -type d -name '*.app'); do
+          rm -r "$dir"
+          cp -r "${browser}/${appPath}/$dir" "$dir"
+        done
+
         cd ..
 
       '' + ''
