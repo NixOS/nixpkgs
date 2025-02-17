@@ -3820,8 +3820,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
-  kakoune-cr = callPackage ../tools/misc/kakoune-cr { crystal = crystal_1_2; };
-
   kbs2 = callPackage ../tools/security/kbs2 {
     inherit (darwin.apple_sdk.frameworks) AppKit SystemConfiguration;
   };
@@ -6420,8 +6418,6 @@ with pkgs;
   mercury = callPackage ../development/compilers/mercury {
     jdk_headless = openjdk8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-
-  mint = callPackage ../development/compilers/mint { crystal = crystal_1_9; };
 
   mitscheme = callPackage ../development/compilers/mit-scheme {
     texinfo = texinfo6;

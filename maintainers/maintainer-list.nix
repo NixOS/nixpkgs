@@ -1521,6 +1521,12 @@
     githubId = 962885;
     name = "Andrew Chambers";
   };
+  andrewgazelka = {
+    email = "andrew@gazelka.com";
+    github = "andrewgazelka";
+    githubId = 7644264;
+    name = "Andrew Gazelka";
+  };
   andrewrk = {
     email = "superjoe30@gmail.com";
     github = "andrewrk";
@@ -23124,6 +23130,12 @@
     github = "thanegill";
     githubId = 1141680;
     name = "Thane Gill";
+  };
+  ThaoTranLePhuong = {
+    email = "thaotran.lp@gmail.com";
+    github = "Thao-Tran";
+    githubId = 7060816;
+    name = "Thao-Tran Le-Phuong";
   };
   thblt = {
     name = "Thibault Polge";

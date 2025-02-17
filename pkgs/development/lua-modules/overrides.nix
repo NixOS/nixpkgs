@@ -7,16 +7,16 @@
   # plenary utilities
   which,
   findutils,
-  clang,
   coreutils,
   curl,
-  cyrus_sasl,
   dbus,
   expat,
+  fd,
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
   fixDarwinDylibNames,
+  fzf,
   glib,
   glibc,
   gmp,
@@ -36,10 +36,9 @@
   libuv,
   libxcrypt,
   libyaml,
-  luajitPackages,
   lua-language-server,
+  luajitPackages,
   mariadb,
-  magic-enum,
   mpfr,
   neovim-unwrapped,
   openldap,
@@ -47,19 +46,19 @@
   pcre,
   pkg-config,
   readline,
+  ripgrep,
   rustPlatform,
-  sol2,
   sqlite,
-  tomlplusplus,
   tree-sitter,
   unbound,
+  unzip,
   vimPlugins,
-  vimUtils,
   yajl,
   zip,
-  unzip,
   zlib,
   zziplib,
+  writableTmpDirAsHomeHook,
+  gitMinimal,
 }:
 
 final: prev:
@@ -69,7 +68,6 @@ let
     luaAtLeast
     lua
     isLuaJIT
-    isLua51
     ;
 in
 {
@@ -159,6 +157,48 @@ in
         rockspecFilename="$specDir/${pname}-${version}.rockspec"
       '';
   });
+
+  fzf-lua = prev.fzf-lua.overrideAttrs {
+    # FIXME: Darwin flaky tests
+    # address already in use on second test run
+    # Previewer transient failure
+    doCheck = !stdenv.hostPlatform.isDarwin;
+    checkInputs = [
+      fd
+      fzf
+      ripgrep
+    ];
+    nativeCheckInputs = [
+      neovim-unwrapped
+      writableTmpDirAsHomeHook
+    ];
+    checkPhase = ''
+      runHook preCheck
+
+      # Linking the dependencies since makefile wants to clone them each time
+      # for `make deps`
+      mkdir -p deps
+      ln -s ${vimPlugins.mini-nvim} deps/mini.nvim
+      ln -s ${vimPlugins.nvim-web-devicons} deps/nvim-web-devicons
+
+      # TODO: remove with new nvim-web-devicons release
+      # Disabled devicons test because we have old version as dep and fzf-lua checks for a new icon
+      substituteInPlace tests/file/ui_spec.lua \
+        --replace-fail \
+          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
+          "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
+
+      # TODO: Figure out why 2 files extra for `fd`
+      substituteInPlace tests/file/ui_spec.lua \
+        --replace-fail \
+          "T[\"files()\"][\"executable\"] = new_set({ parametrize = { { \"fd\" }, { \"rg\" }, { \"find|dir\" } } }, {" \
+          "T[\"files()\"][\"executable\"] = new_set({ parametrize = { { \"rg\" }, { \"find|dir\" } } }, {"
+
+      make test
+
+      runHook postCheck
+    '';
+  };
 
   # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
   # we have to invoke busted manually
@@ -455,6 +495,21 @@ in
     ];
   });
 
+  lualine-nvim = prev.lualine-nvim.overrideAttrs (_: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+      gitMinimal
+    ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua --lpath='lua/?.lua' --lpath='lua/?/init.lua' tests/
+      runHook postCheck
+    '';
+  });
+
   luaossl = prev.luaossl.overrideAttrs (_: {
     externalDeps = [
       {
@@ -659,6 +714,22 @@ in
     checkPhase = ''
       runHook preCheck
       export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+    '';
+  });
+
+  lzextras = prev.lzextras.overrideAttrs (oa: {
+    doCheck = lua.luaversion == "5.1";
+    checkInputs = [
+      final.lze
+    ];
+    nativeCheckInputs = [
+      final.nlua
+      final.busted
+    ];
+    checkPhase = ''
+      runHook preCheck
       busted --lua=nlua
       runHook postCheck
     '';

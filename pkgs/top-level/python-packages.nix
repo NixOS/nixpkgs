@@ -2839,8 +2839,6 @@ self: super: with self; {
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
-  cufflinks = callPackage ../development/python-modules/cufflinks { };
-
   cupy = callPackage ../development/python-modules/cupy {
     cudaPackages = pkgs.cudaPackages.overrideScope (cu-fi: _: {
       # CuDNN 9 is not supported:
@@ -3929,6 +3927,8 @@ self: super: with self; {
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
+
+  drf-standardized-errors = callPackage ../development/python-modules/drf-standardized-errors { };
 
   drf-ujson2 = callPackage ../development/python-modules/drf-ujson2 { };
 
@@ -6796,6 +6796,8 @@ self: super: with self; {
   jsonpath-rw = callPackage ../development/python-modules/jsonpath-rw { };
 
   jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
+
+  jsonpath-python = callPackage ../development/python-modules/jsonpath-python { };
 
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
@@ -15779,6 +15781,10 @@ self: super: with self; {
 
   stop-words = callPackage ../development/python-modules/stop-words { };
 
+  stp = toPythonModule (pkgs.stp.override {
+    python3 = self.python;
+  });
+
   stransi = callPackage ../development/python-modules/stransi { };
 
   strategies = callPackage ../development/python-modules/strategies { };
@@ -15942,6 +15948,8 @@ self: super: with self; {
   symengine = callPackage ../development/python-modules/symengine {
     inherit (pkgs) symengine;
   };
+
+  symfc = callPackage ../development/python-modules/symfc { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
