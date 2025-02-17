@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  tailwindcss,
+  tailwindcss_3,
   oniguruma,
   stdenv,
   darwin,
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    tailwindcss
+    tailwindcss_3
   ];
 
   buildInputs =
