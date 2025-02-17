@@ -47,6 +47,11 @@ assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libguestfs";
+
+  # It is advisable to keep the `libguestfs` and `libguestfs-appliance-debian`
+  # packages in sync to prevent issues like https://github.com/NixOS/nixpkgs/issues/280881.
+  # In particular, this package should be updated only after the update in
+  # question lands in Debian testing (see `libguestfs-appliance-debian` package).
   version = "1.54.1";
 
   src = fetchurl {
@@ -195,7 +200,5 @@ stdenv.mkDerivation (finalAttrs: {
       lukts30
     ];
     platforms = lib.platforms.linux;
-    # this is to avoid "output size exceeded"
-    hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else lib.platforms.linux;
   };
 })
