@@ -11,7 +11,7 @@ let
   in
     pkgs.writeShellScriptBin "steam-gamescope" ''
       ${builtins.concatStringsSep "\n" exports}
-      gamescope --steam ${builtins.toString cfg.gamescopeSession.args} -- steam -tenfoot -pipewire-dmabuf
+      gamescope --steam ${builtins.toString cfg.gamescopeSession.args} -- steam -tenfoot -pipewire-dmabuf ${builtins.toString cfg.gamescopeSession.steam.args}
     '';
 
   gamescopeSessionFile =
@@ -151,6 +151,16 @@ in {
             description = ''
               Arguments to be passed to GameScope for the session.
             '';
+          };
+
+          steam = {
+            args = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = ''
+                Arguments to be passed to Steam for the GameScope session.
+              '';
+            };
           };
 
           env = lib.mkOption {
