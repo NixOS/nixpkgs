@@ -566,20 +566,47 @@ rec {
       })
       (x: (x._type or null) == "pkgs");
 
-    path = mkOptionType {
-      name = "path";
-      descriptionClass = "noun";
-      check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
-      merge = mergeEqualOption;
+    path = pathWith {
+      absolute = true;
     };
 
-    pathInStore = mkOptionType {
-      name = "pathInStore";
-      description = "path in the Nix store";
-      descriptionClass = "noun";
-      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
-      merge = mergeEqualOption;
+    pathInStore = pathWith {
+      inStore = true;
     };
+
+    pathWith = {
+      inStore ? null,
+      absolute ? null,
+    }:
+      throwIf (inStore != null && absolute != null && inStore && !absolute) "In pathWith, inStore means the path must be absolute" mkOptionType {
+        name = "pathWith";
+        description = (
+          (if absolute == null then "" else (if absolute then "absolute " else "relative ")) +
+          "path" +
+          (if inStore == null then "" else (if inStore then " in the Nix store" else " not in the Nix store"))
+        );
+        descriptionClass = "noun";
+
+        merge = mergeEqualOption;
+        functor = defaultFunctor "pathWith" // {
+          type = pathWith;
+          payload = {inherit inStore absolute; };
+          binOp = lhs: rhs: if lhs == rhs then lhs else null;
+        };
+
+        check = x:
+          let
+            isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+            isAbsolute = builtins.substring 0 1 (toString x) == "/";
+            isExpectedType = (
+              if inStore == null || inStore then
+                isStringLike x
+              else
+                isString x # Do not allow a true path, which could be copied to the store later on.
+            );
+          in
+            isExpectedType && (inStore == null || inStore == isInStore) && (absolute == null || absolute == isAbsolute);
+          };
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
