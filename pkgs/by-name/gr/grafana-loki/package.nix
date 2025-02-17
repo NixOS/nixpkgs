@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   systemd,
   testers,
@@ -42,12 +43,16 @@ buildGoModule rec {
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) loki;
-    version = testers.testVersion {
-      command = "loki --version";
-      package = grafana-loki;
+  passthru = {
+    tests = {
+      inherit (nixosTests) loki;
+      version = testers.testVersion {
+        command = "loki --version";
+        package = grafana-loki;
+      };
     };
+
+    updateScript = nix-update-script { };
   };
 
   ldflags =
