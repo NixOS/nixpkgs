@@ -10,6 +10,7 @@
   pydicom,
   pylibjpeg,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
   setuptools,
   typing-extensions,
 }:
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # broken on aarch64-linux
+      pylibjpeg-openjpeg
     ];
   };
 
