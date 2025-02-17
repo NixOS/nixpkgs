@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
-    rev = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
     sha256 = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
   };
 
