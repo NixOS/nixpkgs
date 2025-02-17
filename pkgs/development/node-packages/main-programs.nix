@@ -28,8 +28,6 @@
   fauna-shell = "fauna";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
-  graphql-cli = "graphql";
-  graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   localtunnel = "lt";

@@ -234,9 +234,11 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ connorbaker ];
 
-    # Cf. https://bitbucket.org/icl/magma/src/fcfe5aa61c1a4c664b36a73ebabbdbab82765e9f/CMakeLists.txt#lines-20
+    # Cf. https://github.com/icl-utk-edu/magma/blob/v2.9.0/CMakeLists.txt#L24-L31
     broken =
-      !(cudaSupport || rocmSupport) # At least one back-end enabled
+      # dynamic CUDA support is broken https://github.com/NixOS/nixpkgs/issues/239237
+      (cudaSupport && !static)
+      || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
       || (cudaSupport && cudaOlder "9.0")
       || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null);

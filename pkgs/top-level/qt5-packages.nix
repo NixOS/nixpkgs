@@ -151,6 +151,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
+  libiodata = callPackage ../development/libraries/libiodata { };
+
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../development/libraries/libopenshot {
@@ -269,6 +271,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
 
+  sailfish-access-control-plugin = callPackage ../development/libraries/sailfish-access-control-plugin { };
+
   sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
 
   soqt = callPackage ../development/libraries/soqt { };
@@ -284,6 +288,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   signond = callPackage ../development/libraries/signond {};
 
   soundkonverter = callPackage ../applications/audio/soundkonverter {};
+
+  timed = callPackage ../applications/system/timed { };
 
   xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
 
