@@ -21,6 +21,7 @@
     hash = "sha256-gsIeoxSfbHHSdpPn6xAB/t5w3cLtpu6MjTuf5xsI6wI=";
   };
 
+	useFetchCargoVendor = true;
   cargoHash = "sha256-OXcQsDCiT3seMQhyKEKfC8pcd4MXwbql5+ZDGGkhPMI=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
