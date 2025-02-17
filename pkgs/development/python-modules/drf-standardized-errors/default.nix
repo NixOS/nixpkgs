@@ -28,8 +28,8 @@ buildPythonPackage rec {
   patches = [
     # fix test_openapi_utils test
     (fetchpatch {
-      url = "https://github.com/ghazi-git/drf-standardized-errors/pull/96/commits/4a2b1be3c97cd6db50543e6ff0303c0df0731d8a.patch";
-      hash = "sha256-8+zVzBX7yDGfpsyvj61auqV+zdG6mIyj2LtR3D8l4jc=";
+      url = "https://github.com/ghazi-git/drf-standardized-errors/commit/dbc37d4228bdefa858ab299517097d6e52a0b698.patch";
+      hash = "sha256-CZTBmhAFKODGLiN2aQNKMaR8VyKs0H55Tzu4Rh6X9R8=";
     })
   ];
 
