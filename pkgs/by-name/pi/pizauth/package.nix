@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,6 +26,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd pizauth \
       --bash share/bash/completion.bash
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line OAuth2 authentication daemon";
