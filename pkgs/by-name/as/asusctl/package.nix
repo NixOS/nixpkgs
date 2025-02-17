@@ -14,7 +14,6 @@
   seatd,
   wayland,
   glibc,
-  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
@@ -93,8 +92,6 @@ rustPlatform.buildRustPackage rec {
     patchelf $out/bin/rog-control-center \
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
