@@ -299,6 +299,15 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+    # fix failing tests with openssl >= 3.4
+    # https://github.com/python/cpython/pull/127361
+  ] ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
+    ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
+    (fetchpatch {
+      url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
+      sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
+    })
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
