@@ -1244,6 +1244,8 @@ let
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
+    nice_parser = callPackage ../development/ocaml-modules/nice_parser { };
+
     ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
