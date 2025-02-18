@@ -29,14 +29,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-10";
+  version = "0-unstable-2025-02-13";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "52c1ca749552af4d8a2f18ec10fe8f14b6622519";
+    rev = "ee0c04e735fb94cb5119681f704fb7fa6731e713";
     fetchSubmodules = true;
-    hash = "sha256-4dIu0WczmjfCfYe2/fZybMWfgYd4XezIHUUPVb3ou28=";
+    hash = "sha256-0jqnSzzfg8ecBaayJI8oP9X0FyijFFT3LA6GKfpAFwI=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
   '';
 
-  cargoHash = "sha256-2PJBd3nouxK0iIDOKIS9rrXbbts6zTYdrzxxokSiNwo=";
+  cargoHash = "sha256-WyQYmRNlabJaCTJm7Cn9nkXfOGAcOHwhoD9vmEggrDw=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [
@@ -66,13 +66,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [
       fontconfig
+      openssl
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libX11
       libxcb
       libxkbcommon
-      openssl
       wayland
       xcbutil
       xcbutilimage
