@@ -2827,6 +2827,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  colorful-menu-nvim = buildVimPlugin {
+    pname = "colorful-menu.nvim";
+    version = "2025-02-17";
+    src = fetchFromGitHub {
+      owner = "xzbdmw";
+      repo = "colorful-menu.nvim";
+      rev = "e1b4095e3726156e65d009f06ad1076b0d75dd3e";
+      sha256 = "0d23l2l92n7wp0am0raap7vsjxqzgv3dc60rcwpbix138fxxas96";
+    };
+    meta.homepage = "https://github.com/xzbdmw/colorful-menu.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   colorizer = buildVimPlugin {
     pname = "colorizer";
     version = "2022-01-03";

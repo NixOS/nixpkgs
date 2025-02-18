@@ -24,7 +24,6 @@
   # tests
   psutil,
   pytestCheckHook,
-  torch,
 }:
 
 buildPythonPackage rec {
@@ -69,7 +68,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
-    torch
   ];
 
   disabledTests = [
