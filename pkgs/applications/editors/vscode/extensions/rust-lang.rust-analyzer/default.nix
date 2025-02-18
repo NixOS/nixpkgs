@@ -22,20 +22,20 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2024-07-08";
+  releaseTag = "2025-02-17";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    hash = "sha256-STmaV9Zu74QtkGGrbr9uMhskwagfCjJqOAYapXabiuk=";
+    hash = "sha256-i76MMFSkCr4kDwurK8CACwZq7qEgVEgIzkOr2kiuAKk=";
   };
 
   vsix = buildNpmPackage {
     inherit pname releaseTag;
     version = lib.trim (lib.readFile ./version.txt);
     src = "${src}/editors/code";
-    npmDepsHash = "sha256-EtkgnNOAKDQP7BDHI667SPu73tYrz1Hq6TmeeObXnf4=";
+    npmDepsHash = "sha256-0frOGphtzO6z8neSEYfjyRYrM6zEO3wId/TACblZkxM=";
     buildInputs = [
       pkgsBuildBuild.libsecret
     ];
