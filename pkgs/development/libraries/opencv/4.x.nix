@@ -141,7 +141,7 @@ let
       owner = "opencv";
       repo = "opencv_3rdparty";
       rev = "7f55c0c26be418d494615afca15218566775c725";
-      hash = "";
+      hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
     } + "/ippicv";
     files = let name = platform: "ippicv_2021.10.0_${platform}_20230919_general.tgz"; in
       if effectiveStdenv.hostPlatform.system == "x86_64-linux" then
@@ -556,7 +556,10 @@ effectiveStdenv.mkDerivation {
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }
-    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) { inherit qimgv; }
+    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
+      inherit qimgv;
+      withIpp = opencv4.override { enableIpp = true; };
+    }
     // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
     // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
       opencv4-tests = callPackage ./tests.nix {

@@ -3,6 +3,7 @@
   mkCoqDerivation,
   which,
   coq,
+  rocqPackages,
   stdlib,
   version ? null,
   elpi-version ? null,
@@ -34,7 +35,7 @@ derivation = mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
-    { case = "9.0"; out = "2.4.0"; }
+    { case = "9.0"; out = "2.5.0"; }
     { case = "8.20"; out = "2.2.0"; }
     { case = "8.19"; out = "2.0.1"; }
     { case = "8.18"; out = "2.0.0"; }
@@ -46,6 +47,7 @@ derivation = mkCoqDerivation {
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."2.5.0".sha256 = "sha256-Z5xjO83X/ZoTQlWnVupGXPH3HuJefr57Kv128I0dltg=";
   release."2.4.0".sha256 = "sha256-W2+vVGExLLux8e0nSZESSoMVvrLxhL6dmXkb+JuKiqc=";
   release."2.2.0".sha256 = "sha256-rADEoqTXM7/TyYkUKsmCFfj6fjpWdnZEOK++5oLfC/I=";
   release."2.0.1".sha256 = "sha256-cuoPsEJ+JRLVc9Golt2rJj4P7lKltTrrmQijjoViooc=";
@@ -127,4 +129,23 @@ patched-derivation3 = patched-derivation2.overrideAttrs
         propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
       }
   );
-in patched-derivation3
+patched-derivation4 = patched-derivation3.overrideAttrs
+  (
+    o:
+    # this is just a wrapper for rocPackages.bignums for Rocq >= 9.0
+    lib.optionalAttrs (coq.version != null && (coq.version == "dev"
+                       || lib.versions.isGe "9.0" coq.version)) {
+      configurePhase = ''
+        echo no configuration
+      '';
+      buildPhase = ''
+        echo building nothing
+      '';
+      installPhase = ''
+        echo installing nothing
+      '';
+      propagatedBuildInputs = o.propagatedBuildInputs
+        ++ [ rocqPackages.rocq-elpi ];
+    }
+  );
+in patched-derivation4
