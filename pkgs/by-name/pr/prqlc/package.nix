@@ -6,8 +6,6 @@
   openssl,
   sqlite,
   zlib,
-  stdenv,
-  darwin,
   python3,
 }:
 
@@ -30,17 +28,11 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+    zlib
+  ];
 
   env = {
     PYO3_PYTHON = "${python3}/bin/python3";
