@@ -46,7 +46,7 @@
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCdio ? withFullDeps && withGPL # Audio CD grabbing
 , withCelt ? withHeadlessDeps # CELT decoder
-, withChromaprint ? withFullDeps # Audio fingerprinting
+, withChromaprint ? withSmallDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
 , withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withHeadlessDeps
@@ -95,7 +95,7 @@
 , withOpenjpeg ? withHeadlessDeps # JPEG 2000 de/encoder
 , withOpenmpt ? withHeadlessDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
-, withPlacebo ? withFullDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
+, withPlacebo ? withSmallDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.hostPlatform.isLinux # Pulseaudio input support
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
@@ -112,7 +112,7 @@
 , withSpeex ? withHeadlessDeps # Speex de/encoder
 , withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
 , withSsh ? withHeadlessDeps # SFTP protocol
-, withSvg ? withFullDeps # SVG protocol
+, withSvg ? withSmallDeps # SVG protocol
 , withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isMinGW # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
