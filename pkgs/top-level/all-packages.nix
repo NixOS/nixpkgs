@@ -4175,10 +4175,6 @@ with pkgs;
   matrix-synapse-unwrapped = callPackage ../servers/matrix-synapse/default.nix { };
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
-  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {
-    matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
-    nodejs = nodejs_18;
-
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
   maubot = with python3Packages; toPythonApplication maubot;
