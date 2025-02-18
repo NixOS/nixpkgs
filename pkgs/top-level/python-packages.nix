@@ -1082,6 +1082,8 @@ self: super: with self; {
 
   autoslot = callPackage ../development/python-modules/autoslot { };
 
+  autotiktokenizer = callPackage ../development/python-modules/autotiktokenizer { };
+
   avahi = toPythonModule (pkgs.avahi.override {
     inherit python;
     withPython = true;
@@ -2301,6 +2303,8 @@ self: super: with self; {
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   chispa = callPackage ../development/python-modules/chispa { };
+
+  chonkie = callPackage ../development/python-modules/chonkie { };
 
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
@@ -8476,6 +8480,8 @@ self: super: with self; {
   model-bakery = callPackage ../development/python-modules/model-bakery { };
 
   model-checker = callPackage ../development/python-modules/model-checker { };
+
+  model2vec = callPackage ../development/python-modules/model2vec { };
 
   modelcif = callPackage ../development/python-modules/modelcif { };
 
