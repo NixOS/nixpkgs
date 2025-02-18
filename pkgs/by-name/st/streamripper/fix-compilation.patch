@@ -1,0 +1,12 @@
+diff --git a/lib/argv.c b/lib/argv.c
+index 42b260b..efcd8c6 100644
+--- a/lib/argv.c
++++ b/lib/argv.c
+@@ -70,6 +70,7 @@ extern char *malloc ();		/* Standard memory allocater */
+ extern char *realloc ();	/* Standard memory reallocator */
+ extern void free ();		/* Free malloc'd memory */
+ extern char *strdup ();		/* Duplicate a string */
++extern char *strcpy ();		/* Copy a string */
+ #endif
+ 
+ #endif	/* ANSI_PROTOTYPES */
