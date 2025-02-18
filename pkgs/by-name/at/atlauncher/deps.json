@@ -3,12 +3,12 @@
  "!version": 1,
  "https://jitpack.io/com": {
   "github/ATLauncher/gradle-macappbundle#build/d22f8cdb94": {
-   "jar": "sha256-rBqYi12MUWdwuNbFSlYO0tREzcDpfXI3VRPVV/DRZ+c=",
-   "module": "sha256-JlSHpEtQuOO3/qIdidXBZ21IjieA7PE2b0ui7aimdxc=",
-   "pom": "sha256-ySbX7ZLlXt7l+JcGEqV/peu6T+h7oJp6s/d95XQdIVo="
+   "jar": "sha256-XGbB0YmVOlFzeMMuiQBUfrVV0jGTBH85Wm21cf8dyYY=",
+   "module": "sha256-25APuhfYsPYE1BvjyEeUVgYe6rltpVQWO8uez/tYlyg=",
+   "pom": "sha256-8MUNJG8NS3abzf9rXbna7Hb7AEnJ40BUWpWDuVH2u8E="
   },
   "github/ATLauncher/gradle-macappbundle#edu.sc.seis.macAppBundle.gradle.plugin/d22f8cdb94": {
-   "pom": "sha256-9LZJTFfyVUyMXTgn2ifGyXEPLfPJ6tmlY8qSWEO0YmU="
+   "pom": "sha256-h6uFT6m8D6PFne5X8OXRaB273/LKX4wD7WVsivFDEOM="
   },
   "github/MCRcortex#nekodetector/Version-1.1-pre": {
    "jar": "sha256-5K2d2tmaNRavJFLe9oIv1RxNUoSUsWbZla7B0Z+4f9U=",
