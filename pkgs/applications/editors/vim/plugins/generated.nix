@@ -5057,6 +5057,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  github-nvim-theme = buildVimPlugin {
+    pname = "github-nvim-theme";
+    version = "2024-12-31";
+    src = fetchFromGitHub {
+      owner = "projekt0n";
+      repo = "github-nvim-theme";
+      rev = "c106c9472154d6b2c74b74565616b877ae8ed31d";
+      sha256 = "1w7lz4bgfm8hq1mir4hcr8ik585d4l4w7bjl8yl3g3zklj8223pw";
+    };
+    meta.homepage = "https://github.com/projekt0n/github-nvim-theme/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gitignore-nvim = buildVimPlugin {
     pname = "gitignore.nvim";
     version = "2024-03-25";
