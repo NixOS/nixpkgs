@@ -771,6 +771,7 @@ mapAliases {
   matrique = throw "'matrique' has been renamed to/replaced by 'spectral'"; # Converted to throw 2024-10-17
   matrix-sliding-sync = throw "matrix-sliding-sync has been removed as matrix-synapse 114.0 and later covers its functionality"; # Added 2024-10-20
   matrix-synapse-tools = recurseIntoAttrs {
+    rust-synapse-state-compress = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-state-compress;
     synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm;
   }; # Added 2025-02-20
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
