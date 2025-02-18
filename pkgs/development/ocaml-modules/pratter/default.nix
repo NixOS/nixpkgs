@@ -9,7 +9,7 @@
 }:
 
 buildDunePackage rec {
-  version = "2.0.0";
+  version = "4.0.0";
   pname = "pratter";
 
   minimalOCamlVersion = "4.08";
@@ -19,7 +19,7 @@ buildDunePackage rec {
     owner = "gabrielhdt";
     repo = "pratter";
     rev = version;
-    hash = "sha256-QEq8Zt2pfsRT04Zd+ugGKcHdzkqYcDDUg/iAFMMDdEE=";
+    hash = "sha256-VxtMoBBGnum3sgKgZ87wmWPKWrPYGArDAJ53PDzvLgM=";
   };
 
   propagatedBuildInputs = [ camlp-streams ];
