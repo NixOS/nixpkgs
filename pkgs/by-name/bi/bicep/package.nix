@@ -5,6 +5,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   mono,
+  jq,
 }:
 
 buildDotnetModule rec {
@@ -20,6 +21,9 @@ buildDotnetModule rec {
 
   postPatch = ''
     substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
+    # Upstream uses rollForward = disable, which pins to an *exact* .NET SDK version.
+    jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
+    mv global.json.tmp global.json
   '';
 
   projectFile = [
@@ -32,6 +36,8 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0_4xx-bin;
 
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
+  nativeBuildInputs = [ jq ];
 
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
 
