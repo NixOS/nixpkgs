@@ -5,7 +5,6 @@
   cairo,
   pango,
   pkg-config,
-  stdenv,
 }:
 
 buildNpmPackage {
@@ -41,6 +40,5 @@ buildNpmPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ venikx ];
     mainProgram = "excalidraw_export";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
