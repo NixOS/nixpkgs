@@ -1,5 +1,6 @@
 {
   fetchgit,
+  fetchpatch,
   lib,
   libftdi1,
   libgpiod,
@@ -23,6 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
   };
+
+  patches = [
+    # fixes compiler warnings on Darwin
+    (fetchpatch {
+      url = "https://review.sourcearcade.org/changes/flashprog~309/revisions/2/patch?download";
+      hash = "sha256-eiEenR8+CHCJcNx9YY09I7gxRGUQWmaQlmXtykvXyMU=";
+      decode = "base64 -d";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
