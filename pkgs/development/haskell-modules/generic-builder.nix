@@ -164,7 +164,7 @@ let
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version, or ghcjs, in which case its the ghc used to build ghcjs.
-  setupGhc = buildHaskellPackages.ghc;
+  setupGhc = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ghc else buildHaskellPackages.ghc;
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
