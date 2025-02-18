@@ -30,20 +30,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [
-      python3
-    ]
+    [ python3 ]
     ++ (with python3.pkgs; [
       numpy
       matplotlib
     ])
-    ++ lib.optionals withRootSupport [
-      root
-    ];
+    ++ lib.optionals withRootSupport [ root ];
 
-  propagatedBuildInputs = [
-    zlib
-  ];
+  propagatedBuildInputs = [ zlib ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DWITH_OSX";
 
   strictDeps = true;
 
