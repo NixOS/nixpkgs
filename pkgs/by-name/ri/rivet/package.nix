@@ -5,10 +5,10 @@
   fastjet,
   fastjet-contrib,
   ghostscript,
+  graphicsmagick-imagemagick-compat,
   hdf5,
   hepmc3,
   highfive,
-  imagemagick,
   less,
   pkg-config,
   python3,
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
+    graphicsmagick-imagemagick-compat
     hepmc3
     highfive
-    imagemagick
     python3
     latex
     python3.pkgs.yoda
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       --replace-fail '"ps2pdf"' '"${ghostscript}/bin/ps2pdf"' \
       --replace-fail '"ps2eps"' '"${ghostscript}/bin/ps2eps"' \
       --replace-fail '"kpsewhich"' '"'$latex'/bin/kpsewhich"' \
-      --replace-fail '"convert"' '"${imagemagick.out}/bin/convert"'
+      --replace-fail '"convert"' '"${graphicsmagick-imagemagick-compat.out}/bin/convert"'
     substituteInPlace bin/rivet \
       --replace-fail '"less"' '"${less}/bin/less"'
     substituteInPlace bin/rivet-mkhtml-tex \
@@ -109,11 +109,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     homepage = "https://rivet.hepforge.org";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }
