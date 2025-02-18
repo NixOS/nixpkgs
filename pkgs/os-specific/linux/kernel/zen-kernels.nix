@@ -140,6 +140,7 @@ let
           maintainers = with lib.maintainers; [
             thiagokokada
             jerrysm64
+            axertheaxe
           ];
           description =
             "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads."
