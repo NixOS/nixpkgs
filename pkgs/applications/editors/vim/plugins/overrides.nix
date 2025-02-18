@@ -739,6 +739,14 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  colorful-menu-nvim = super.colorful-menu-nvim.overrideAttrs {
+    # Local bug reproduction modules
+    nvimSkipModule = [
+      "repro_blink"
+      "repro_cmp"
+    ];
+  };
+
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf

@@ -500,7 +500,7 @@ let
                 })
               ]
           ++
-            lib.optional (lib.versionAtLeast metadata.release_version "20")
+            lib.optional (lib.versions.major metadata.release_version == "20")
               # Fix OrcJIT tests with page sizes > 16k
               # PR: https://github.com/llvm/llvm-project/pull/127115
               (
