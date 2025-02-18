@@ -455,7 +455,6 @@ in
               add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
-
         };
       };
 
