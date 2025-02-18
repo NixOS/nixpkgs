@@ -34,19 +34,22 @@
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-(buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "input-remapper";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-rwlVGF/cWSv6Bsvhrs6nMDQ8avYT80aasrhWyQv55/A=";
   };
 
   postPatch =
     ''
+      # set revision for --version output
+      echo "COMMIT_HASH = '${finalAttrs.src.rev}'" > inputremapper/commit_hash.py
+
       # fix FHS paths
       substituteInPlace inputremapper/configs/data.py \
         --replace "/usr/share"  "$out/usr/share"
@@ -158,19 +161,4 @@ in
     maintainers = with maintainers; [ LunNova ];
     mainProgram = "input-remapper-gtk";
   };
-}).overrideAttrs
-  (
-    final: prev: {
-      # Set in an override as buildPythonApplication doesn't yet support
-      # the `final:` arg yet from #119942 'overlay style overridable recursive attributes'
-      # this ensures the rev matches the input src's rev after overriding
-      # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
-      # discussion
-      postPatch =
-        prev.postPatch or ""
-        + ''
-          # set revision for --version output
-          echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
-        '';
-    }
-  )
+})

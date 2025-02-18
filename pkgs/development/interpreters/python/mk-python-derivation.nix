@@ -4,6 +4,8 @@
   lib,
   config,
   python,
+  # Allow passing in a custom stdenv to buildPython*.override
+  stdenv,
   wrapPython,
   unzip,
   ensureNewerSourcesForZipFilesHook,
@@ -93,7 +95,12 @@ let
     "wheel"
   ];
 
-  cleanAttrs = lib.flip removeAttrs [
+in
+
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+
+  excludeDrvArgNames = [
     "disabled"
     "checkPhase"
     "checkInputs"
@@ -117,100 +124,93 @@ let
     "build-system"
   ];
 
-in
-
-{
-  name ? "${attrs.pname}-${attrs.version}",
-
-  # Build-time dependencies for the package
-  nativeBuildInputs ? [ ],
-
-  # Run-time dependencies for the package
-  buildInputs ? [ ],
-
-  # Dependencies needed for running the checkPhase.
-  # These are added to buildInputs when doCheck = true.
-  checkInputs ? [ ],
-  nativeCheckInputs ? [ ],
-
-  # propagate build dependencies so in case we have A -> B -> C,
-  # C can import package A propagated by B
-  propagatedBuildInputs ? [ ],
-
-  # Python module dependencies.
-  # These are named after PEP-621.
-  dependencies ? [ ],
-  optional-dependencies ? { },
-
-  # Python PEP-517 build systems.
-  build-system ? [ ],
-
-  # DEPRECATED: use propagatedBuildInputs
-  pythonPath ? [ ],
-
-  # Enabled to detect some (native)BuildInputs mistakes
-  strictDeps ? true,
-
-  outputs ? [ "out" ],
-
-  # used to disable derivation, useful for specific python versions
-  disabled ? false,
-
-  # Raise an error if two packages are installed with the same name
-  # TODO: For cross we probably need a different PYTHONPATH, or not
-  # add the runtime deps until after buildPhase.
-  catchConflicts ? (python.stdenv.hostPlatform == python.stdenv.buildPlatform),
-
-  # Additional arguments to pass to the makeWrapper function, which wraps
-  # generated binaries.
-  makeWrapperArgs ? [ ],
-
-  # Skip wrapping of python programs altogether
-  dontWrapPythonPrograms ? false,
-
-  # Don't use Pip to install a wheel
-  # Note this is actually a variable for the pipInstallPhase in pip's setupHook.
-  # It's included here to prevent an infinite recursion.
-  dontUsePipInstall ? false,
-
-  # Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
-  permitUserSite ? false,
-
-  # Remove bytecode from bin folder.
-  # When a Python script has the extension `.py`, bytecode is generated
-  # Typically, executables in bin have no extension, so no bytecode is generated.
-  # However, some packages do provide executables with extensions, and thus bytecode is generated.
-  removeBinBytecode ? true,
-
-  # pyproject = true <-> format = "pyproject"
-  # pyproject = false <-> format = "other"
-  # https://github.com/NixOS/nixpkgs/issues/253154
-  pyproject ? null,
-
-  # Several package formats are supported.
-  # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
-  # "wheel" : Install from a pre-compiled wheel.
-  # "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
-  # "egg": Install a package from an egg.
-  # "other" : Provide your own buildPhase and installPhase.
-  format ? null,
-
-  meta ? { },
-
-  doCheck ? true,
-
-  disabledTestPaths ? [ ],
-
-  # Allow passing in a custom stdenv to buildPython*
-  stdenv ? python.stdenv,
-
-  ...
-}@attrs:
-
-let
-  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = stdenv.mkDerivation (
+  extendDrvArgs =
     finalAttrs:
+    {
+      name ? "${attrs.pname}-${attrs.version}",
+
+      # Build-time dependencies for the package
+      nativeBuildInputs ? [ ],
+
+      # Run-time dependencies for the package
+      buildInputs ? [ ],
+
+      # Dependencies needed for running the checkPhase.
+      # These are added to buildInputs when doCheck = true.
+      checkInputs ? [ ],
+      nativeCheckInputs ? [ ],
+
+      # propagate build dependencies so in case we have A -> B -> C,
+      # C can import package A propagated by B
+      propagatedBuildInputs ? [ ],
+
+      # Python module dependencies.
+      # These are named after PEP-621.
+      dependencies ? [ ],
+      optional-dependencies ? { },
+
+      # Python PEP-517 build systems.
+      build-system ? [ ],
+
+      # DEPRECATED: use propagatedBuildInputs
+      pythonPath ? [ ],
+
+      # Enabled to detect some (native)BuildInputs mistakes
+      strictDeps ? true,
+
+      outputs ? [ "out" ],
+
+      # used to disable derivation, useful for specific python versions
+      disabled ? false,
+
+      # Raise an error if two packages are installed with the same name
+      # TODO: For cross we probably need a different PYTHONPATH, or not
+      # add the runtime deps until after buildPhase.
+      catchConflicts ? (python.stdenv.hostPlatform == python.stdenv.buildPlatform),
+
+      # Additional arguments to pass to the makeWrapper function, which wraps
+      # generated binaries.
+      makeWrapperArgs ? [ ],
+
+      # Skip wrapping of python programs altogether
+      dontWrapPythonPrograms ? false,
+
+      # Don't use Pip to install a wheel
+      # Note this is actually a variable for the pipInstallPhase in pip's setupHook.
+      # It's included here to prevent an infinite recursion.
+      dontUsePipInstall ? false,
+
+      # Skip setting the PYTHONNOUSERSITE environment variable in wrapped programs
+      permitUserSite ? false,
+
+      # Remove bytecode from bin folder.
+      # When a Python script has the extension `.py`, bytecode is generated
+      # Typically, executables in bin have no extension, so no bytecode is generated.
+      # However, some packages do provide executables with extensions, and thus bytecode is generated.
+      removeBinBytecode ? true,
+
+      # pyproject = true <-> format = "pyproject"
+      # pyproject = false <-> format = "other"
+      # https://github.com/NixOS/nixpkgs/issues/253154
+      pyproject ? null,
+
+      # Several package formats are supported.
+      # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
+      # "wheel" : Install from a pre-compiled wheel.
+      # "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
+      # "egg": Install a package from an egg.
+      # "other" : Provide your own buildPhase and installPhase.
+      format ? null,
+
+      meta ? { },
+
+      doCheck ? true,
+
+      disabledTestPaths ? [ ],
+
+      ...
+    }@attrs:
+
     let
       format' =
         assert (pyproject != null) -> (format == null);
@@ -277,8 +277,7 @@ let
       isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
     in
-    (cleanAttrs attrs)
-    // {
+    {
 
       name = namePrefix + name;
 
@@ -443,28 +442,23 @@ let
         disabledTests = attrs.disabledTests;
       }
       // optionalAttrs (attrs ? pytestFlags) {
-          pytestFlags = attrs.pytestFlags;
+        pytestFlags = attrs.pytestFlags;
       }
       // optionalAttrs (attrs ? pytestFlagsArray) {
         pytestFlagsArray = attrs.pytestFlagsArray;
       }
       // optionalAttrs (attrs ? unittestFlags) {
-          unittestFlags = attrs.unittestFlags;
+        unittestFlags = attrs.unittestFlags;
       }
       // optionalAttrs (attrs ? unittestFlagsArray) {
         unittestFlagsArray = attrs.unittestFlagsArray;
       }
-    )
-  );
+    );
 
-  # This derivation transformation function must be independent to `attrs`
-  # for fixed-point arguments support in the future.
   transformDrv =
     drv:
     extendDerivation (
       drv.disabled
       -> throw "${lib.removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
     ) { } (toPythonModule drv);
-
-in
-transformDrv self
+}
