@@ -3,16 +3,20 @@
 {
   autoPatchelfHook,
   callPackage,
+  cargo,
   config,
   fetchurl,
   jdk,
   jq,
   lib,
+  libcxxStdenv,
   llvmPackages,
-  llvmPackages_14,
+  llvmPackages_19,
+  makeRustPlatform,
   moreutils,
   protobuf,
   python3Packages,
+  rustc,
   stdenv,
   vscode-utils,
   zlib,
@@ -5119,7 +5123,17 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb { llvmPackages = llvmPackages_14; };
+      vadimcn.vscode-lldb = callPackage ./vadimcn.vscode-lldb {
+        llvmPackages = llvmPackages_19;
+        # The adapter is meant to be compiled with clang++,
+        # based on the provided CMake toolchain files.
+        # <https://github.com/vadimcn/codelldb/tree/master/cmake>
+        rustPlatform = makeRustPlatform {
+          stdenv = libcxxStdenv;
+          inherit cargo rustc;
+        };
+        stdenv = libcxxStdenv;
+      };
 
       valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
         mktplcRef = {
