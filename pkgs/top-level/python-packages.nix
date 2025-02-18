@@ -4275,6 +4275,8 @@ self: super: with self; {
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
+  esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
+
   esprima = callPackage ../development/python-modules/esprima { };
 
   escapism = callPackage ../development/python-modules/escapism { };
@@ -18630,7 +18632,7 @@ self: super: with self; {
 
   yfinance = callPackage ../development/python-modules/yfinance { };
 
-  yoda = toPythonModule (pkgs.yoda.override { inherit python; });
+  yoda = toPythonModule (pkgs.yoda.override { python3 = python; });
 
   yolink-api = callPackage ../development/python-modules/yolink-api { };
 
