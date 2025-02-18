@@ -11,6 +11,7 @@
   pyqt5,
   pythonOlder,
   pythonAtLeast,
+  stdenv,
   traitsui,
   vtk,
   wrapQtAppsHook,
@@ -59,5 +60,8 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];
     mainProgram = "mayavi2";
+    # Fails during stripping with:
+    # The file was not recognized as a valid object file
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
