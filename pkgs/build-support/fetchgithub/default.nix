@@ -31,6 +31,9 @@ let
   } // lib.optionalAttrs (position != null) {
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
+  } // lib.optionalAttrs (tag != null) {
+    # GitHub exposes tag/release descriptions suitable for referencing
+    changelog = meta.changelog or "${baseUrl}/releases/tag/${tag}/CHANGELOG.md";
   };
   passthruAttrs = removeAttrs args [ "owner" "repo" "tag" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
