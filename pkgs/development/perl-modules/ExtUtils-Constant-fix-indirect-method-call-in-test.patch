@@ -1,0 +1,31 @@
+https://rt.cpan.org/Public/Bug/Display.html?id=132995
+
+From 94b5fc74c3d7ed835e83bac40632962af32f5b30 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dagfinn=20Ilmari=20Manns=C3=A5ker?= <ilmari@ilmari.org>
+Date: Mon, 13 Jul 2020 22:08:45 +0100
+Subject: [PATCH] Fix indirect method call in ExtUtils::Constant test
+
+It puts both "use $];" and "bootstrap $package \$VERSION;" in the
+generated test module, which is going to break if we ever remove
+`indirect` from the current feature bundle.
+
+Fix by making the method call direct instead.
+---
+ t/Constant.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/t/Constant.t b/t/Constant.t
+index d6b45668da..526a32c779 100644
+--- a/t/Constant.t
++++ b/t/Constant.t
+@@ -435,7 +435,7 @@ EOT
+   print FH ");\n";
+   # Print the AUTOLOAD subroutine ExtUtils::Constant generated for us
+   print FH autoload ($package, $]);
+-  print FH "bootstrap $package \$VERSION;\n1;\n__END__\n";
++  print FH "$package->bootstrap(\$VERSION);\n1;\n__END__\n";
+   close FH or die "close $pm: $!\n";
+ 
+   ################ test.pl
+-- 
+2.26.2

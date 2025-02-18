@@ -1,0 +1,15 @@
+--- a/hier.c	2016-04-19 21:22:21.992192405 -0400
++++ b/hier.c	2016-04-19 21:22:33.160229778 -0400
+@@ -2,9 +2,9 @@
+ 
+ void hier()
+ {
+-  c("/","etc","dnsroots.global",-1,-1,0644);
++  c(auto_home,"etc","dnsroots.global",-1,-1,0644);
+ 
+-  h(auto_home,-1,-1,02755);
+-  d(auto_home,"bin",-1,-1,02755);
++  h(auto_home,-1,-1,0755);
++  d(auto_home,"bin",-1,-1,0755);
+ 
+   c(auto_home,"bin","dnscache-conf",-1,-1,0755);

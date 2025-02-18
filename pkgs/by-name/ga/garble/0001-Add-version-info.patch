@@ -1,0 +1,38 @@
+From e46a41faac008ede4acbeb18db5b3076eb206de5 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Sun, 3 Nov 2024 15:11:49 +0800
+Subject: [PATCH] Add version info
+
+---
+ main.go                    | 1 +
+ testdata/script/help.txtar | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/main.go b/main.go
+index 0de5a2f..1c830b1 100644
+--- a/main.go
++++ b/main.go
+@@ -362,6 +362,7 @@ func mainErr(args []string) error {
+ 		// manually construct something like a pseudo-version.
+ 		// TODO: remove when this code is dead, hopefully in Go 1.22.
+ 		if mod.Version == "(devel)" {
++			mod.Version = "@version@"
+ 			var vcsTime time.Time
+ 			var vcsRevision string
+ 			for _, setting := range info.Settings {
+diff --git a/testdata/script/help.txtar b/testdata/script/help.txtar
+index 8f25260..859f492 100644
+--- a/testdata/script/help.txtar
++++ b/testdata/script/help.txtar
+@@ -91,7 +91,7 @@ stderr 'directory not found'
+ # and to be able to use static VCS info, use an environment variable.
+ # First, test without the information, and then with it.
+ exec garble version
+-stdout -count=1 'mvdan.cc/garble \(devel\)'
++stdout -count=1 'mvdan.cc/garble @version@'
+ stdout -count=1 'Build settings'
+ stdout -count=3 '-compiler|GOOS|GOARCH'
+ ! stdout 'vcs'
+-- 
+2.46.1
+

@@ -1,0 +1,14 @@
+diff --git a/libasyncns.c b/libasyncns.c
+index 99a73de..85709b0 100644
+--- a/libasyncns.c
++++ b/libasyncns.c
+@@ -134,9 +134,8 @@ PyMODINIT_FUNC initlibasyncns(void)
+ 	ADDNSCONST(ns_t_mailb);
+ 	ADDNSCONST(ns_t_maila);
+ 	ADDNSCONST(ns_t_any);
+-	ADDNSCONST(ns_t_zxfr);
+ 	ADDNSCONST(ns_t_max);
+ 	
+ 	ADDNSCONST(ns_c_invalid);
+ 	ADDNSCONST(ns_c_in);
+ 	ADDNSCONST(ns_c_2);

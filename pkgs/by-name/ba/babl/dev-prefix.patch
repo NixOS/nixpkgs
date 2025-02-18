@@ -1,0 +1,29 @@
+diff --git a/meson.build b/meson.build
+index 2350a1f..56f015d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -551,7 +551,7 @@ pkgconfig.generate(
+   variables: [
+     'datadir=${prefix}/share',
+     'pluginsdir=${libdir}/@0@'.format(lib_name),
+-    'girdir=${datadir}/gir-1.0',
++    'girdir=@0@/share/gir-1.0'.format(get_option('prefix-dev')),
+     'typelibdir=${libdir}/girepository-1.0',
+   ],
+   uninstalled_variables: [
+diff --git a/meson_options.txt b/meson_options.txt
+index f9d558c..3cac593 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -9,6 +9,11 @@ option('enable-gir',
+   choices: ['auto', 'true', 'false'],
+   description: 'gobject introspection .gir generation'
+ )
++option('prefix-dev',
++  type: 'string',
++  value: '',
++  description: 'Like prefix but for dev output of the package'
++)
+ option('enable-vapi',
+   type: 'boolean',
+   value: 'true', 

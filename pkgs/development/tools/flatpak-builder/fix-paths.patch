@@ -1,0 +1,151 @@
+diff --git a/src/builder-context.c b/src/builder-context.c
+index dde12790..3a379297 100644
+--- a/src/builder-context.c
++++ b/src/builder-context.c
+@@ -256,7 +256,7 @@ builder_context_init (BuilderContext *self)
+   g_autofree char *path = NULL;
+ 
+   self->rofiles_file_lock = init;
+-  path = g_find_program_in_path ("rofiles-fuse");
++  path = g_find_program_in_path ("@rofilesfuse@");
+   self->have_rofiles = path != NULL;
+ }
+ 
+@@ -800,7 +800,7 @@ builder_context_enable_rofiles (BuilderContext *self,
+   g_autoptr(GFile) rofiles_base = NULL;
+   g_autoptr(GFile) rofiles_dir = NULL;
+   g_autofree char *tmpdir_name = NULL;
+-  char *argv[] = { "rofiles-fuse",
++  char *argv[] = { "@rofilesfuse@",
+                    "-o",
+                    "kernel_cache,entry_timeout=60,attr_timeout=60,splice_write,splice_move",
+                    (char *)flatpak_file_get_path_cached (self->app_dir),
+diff --git a/src/builder-git.c b/src/builder-git.c
+index ef517adb..6ab095f0 100644
+--- a/src/builder-git.c
++++ b/src/builder-git.c
+@@ -44,7 +44,7 @@ git (GFile   *dir,
+   va_list ap;
+ 
+   va_start (ap, error);
+-  res = flatpak_spawn (dir, output, flags, error, "git", ap);
++  res = flatpak_spawn (dir, output, flags, error, "@git@", ap);
+   va_end (ap);
+ 
+   return res;
+@@ -58,7 +58,7 @@ cp (GError **error,
+   va_list ap;
+ 
+   va_start (ap, error);
+-  res = flatpak_spawn (NULL, NULL, 0, error, "cp", ap);
++  res = flatpak_spawn (NULL, NULL, 0, error, "@cp@", ap);
+   va_end (ap);
+ 
+   return res;
+diff --git a/src/builder-source-archive.c b/src/builder-source-archive.c
+index ed66d5b..9ca9486 100644
+--- a/src/builder-source-archive.c
++++ b/src/builder-source-archive.c
+@@ -484,7 +484,7 @@ tar (GFile   *dir,
+   va_list ap;
+
+   va_start (ap, error);
+-  res = flatpak_spawn (dir, NULL, 0, error, "tar", ap);
++  res = flatpak_spawn (dir, NULL, 0, error, "@tar@", ap);
+   va_end (ap);
+
+   return res;
+@@ -496,7 +496,7 @@ unzip (GFile       *dir,
+        GError     **error)
+ {
+   gboolean res;
+-  const char *argv[] = { "unzip", "-q", zip_path, NULL };
++  const char *argv[] = { "@unzip@", "-q", zip_path, NULL };
+
+   res = flatpak_spawnv (dir, NULL, 0, error, argv, NULL);
+
+@@ -522,7 +522,7 @@ unrpm (GFile   *dir,
+        GError **error)
+ {
+   gboolean res;
+-  const gchar *argv[] = { "sh", "-c", "rpm2cpio \"$1\" | cpio -i -d",
++  const gchar *argv[] = { "sh", "-c", "@rpm2cpio@ \"$1\" | @cpio@ -i -d",
+       "sh", /* shell's $0 */
+       rpm_path, /* shell's $1 */
+       NULL };
+@@ -677,7 +677,7 @@ git (GFile   *dir,
+   va_list ap;
+
+   va_start (ap, error);
+-  res = flatpak_spawn (dir, NULL, 0, error, "git", ap);
++  res = flatpak_spawn (dir, NULL, 0, error, "@git@", ap);
+   va_end (ap);
+
+   return res;
+diff --git a/src/builder-source-bzr.c b/src/builder-source-bzr.c
+index ceeec94a..8abe6f53 100644
+--- a/src/builder-source-bzr.c
++++ b/src/builder-source-bzr.c
+@@ -124,7 +124,7 @@ bzr (GFile   *dir,
+   gboolean res;
+   va_list ap;
+ 
+-  brz = g_find_program_in_path ("brz");
++  brz = g_find_program_in_path ("@brz@");
+ 
+   va_start (ap, error);
+   res = flatpak_spawn (dir, output, 0, error, brz ? brz : "bzr", ap);
+diff --git a/src/builder-source-patch.c b/src/builder-source-patch.c
+index 8721e1e4..d7f4d840 100644
+--- a/src/builder-source-patch.c
++++ b/src/builder-source-patch.c
+@@ -247,15 +247,15 @@ patch (GFile      *dir,
+ 
+   args = g_ptr_array_new ();
+   if (use_git) {
+-    g_ptr_array_add (args, "git");
++    g_ptr_array_add (args, "@git@");
+     g_ptr_array_add (args, "apply");
+     g_ptr_array_add (args, "-v");
+   } else if (use_git_am) {
+-    g_ptr_array_add (args, "git");
++    g_ptr_array_add (args, "@git@");
+     g_ptr_array_add (args, "am");
+     g_ptr_array_add (args, "--keep-cr");
+   } else {
+-    g_ptr_array_add (args, "patch");
++    g_ptr_array_add (args, "@patch@");
+   }
+   for (i = 0; extra_options != NULL && extra_options[i] != NULL; i++)
+     g_ptr_array_add (args, (gchar *) extra_options[i]);
+diff --git a/src/builder-utils.c b/src/builder-utils.c
+index f1c06db5..2e3347c5 100644
+--- a/src/builder-utils.c
++++ b/src/builder-utils.c
+@@ -149,7 +149,7 @@ strip (GError **error,
+   va_list ap;
+ 
+   va_start (ap, error);
+-  res = flatpak_spawn (NULL, NULL, 0, error, "strip", ap);
++  res = flatpak_spawn (NULL, NULL, 0, error, "@strip@", ap);
+   va_end (ap);
+ 
+   return res;
+@@ -163,7 +163,7 @@ eu_strip (GError **error,
+   va_list ap;
+ 
+   va_start (ap, error);
+-  res = flatpak_spawn (NULL, NULL, 0, error, "eu-strip", ap);
++  res = flatpak_spawn (NULL, NULL, 0, error, "@eustrip@", ap);
+   va_end (ap);
+ 
+   return res;
+@@ -177,7 +177,7 @@ eu_elfcompress (GError **error,
+   va_list ap;
+ 
+   va_start (ap, error);
+-  res = flatpak_spawn (NULL, NULL, 0, error, "eu-elfcompress", ap);
++  res = flatpak_spawn (NULL, NULL, 0, error, "@euelfcompress@", ap);
+   va_end (ap);
+ 
+   return res;
