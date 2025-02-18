@@ -1,1 +1,1 @@
-{ tailwindcss_4 }: tailwindcss_4
+{ tailwindcss_3 }: tailwindcss_3
