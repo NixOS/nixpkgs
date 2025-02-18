@@ -1,12 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
-in {
-  meta.maintainers = with maintainers; [ mbaillie mfrw ];
+in
+{
+  meta.maintainers = with maintainers; [
+    mbaillie
+    mfrw
+  ];
 
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";
@@ -35,7 +44,7 @@ in {
       description = "Whether to disable the Taildrop feature for sending files between nodes.";
     };
 
-    package = lib.mkPackageOption pkgs "tailscale" {};
+    package = lib.mkPackageOption pkgs "tailscale" { };
 
     openFirewall = mkOption {
       default = false;
@@ -44,7 +53,12 @@ in {
     };
 
     useRoutingFeatures = mkOption {
-      type = types.enum [ "none" "client" "server" "both" ];
+      type = types.enum [
+        "none"
+        "client"
+        "server"
+        "both"
+      ];
       default = "none";
       example = "server";
       description = ''
@@ -99,100 +113,149 @@ in {
         Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
       '';
       type = types.listOf types.str;
-      default = [];
-      example = ["--ssh"];
+      default = [ ];
+      example = [ "--ssh" ];
     };
 
     extraSetFlags = mkOption {
       description = "Extra flags to pass to {command}`tailscale set`.";
       type = types.listOf types.str;
-      default = [];
-      example = ["--advertise-exit-node"];
+      default = [ ];
+      example = [ "--advertise-exit-node" ];
     };
 
     extraDaemonFlags = mkOption {
       description = "Extra flags to pass to {command}`tailscaled`.";
       type = types.listOf types.str;
-      default = [];
-      example = ["--no-logs-no-support"];
+      default = [ ];
+      example = [ "--no-logs-no-support" ];
+    };
+
+    drives = mkOption {
+      description = "Shares to create via Taildrive feature";
+      default = { };
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            path = mkOption {
+              description = "Directory to share";
+              type = types.path;
+              example = /home/user;
+            };
+            user = mkOption {
+              description = "The user to create the share as";
+              type = types.nullOr types.str;
+              default = null;
+            };
+          };
+        }
+      );
     };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
-    systemd.services.tailscaled = {
-      after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [
-        (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
-        pkgs.procps     # for collecting running services (opt-in feature)
-        pkgs.getent     # for `getent` to look up user shells
-        pkgs.kmod       # required to pass tailscale's v6nat check
-      ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
-      serviceConfig.Environment = [
-        "PORT=${toString cfg.port}"
-        ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
-      ] ++ (lib.optionals (cfg.permitCertUid != null) [
-        "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-      ]) ++ (lib.optionals (cfg.disableTaildrop) [
-        "TS_DISABLE_TAILDROP=true"
-      ]);
-      # Restart tailscaled with a single `systemctl restart` at the
-      # end of activation, rather than a `stop` followed by a later
-      # `start`. Activation over Tailscale can hang for tens of
-      # seconds in the stop+start setup, if the activation script has
-      # a significant delay between the stop and start phases
-      # (e.g. script blocked on another unit with a slow shutdown).
-      #
-      # Tailscale is aware of the correctness tradeoff involved, and
-      # already makes its upstream systemd unit robust against unit
-      # version mismatches on restart for compatibility with other
-      # linux distros.
-      stopIfChanged = false;
-    };
+    systemd.services =
+      {
+        tailscaled = {
+          after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
+          wantedBy = [ "multi-user.target" ];
+          path = [
+            (builtins.dirOf config.security.wrapperDir) # for `su` to use taildrive with correct access rights
+            pkgs.procps # for collecting running services (opt-in feature)
+            pkgs.getent # for `getent` to look up user shells
+            pkgs.kmod # required to pass tailscale's v6nat check
+          ] ++ lib.optional config.networking.resolvconf.enable config.networking.resolvconf.package;
+          serviceConfig.Environment =
+            [
+              "PORT=${toString cfg.port}"
+              ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName} ${lib.concatStringsSep " " cfg.extraDaemonFlags}"''
+            ]
+            ++ (lib.optionals (cfg.permitCertUid != null) [
+              "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
+            ])
+            ++ (lib.optionals (cfg.disableTaildrop) [
+              "TS_DISABLE_TAILDROP=true"
+            ]);
+          # Restart tailscaled with a single `systemctl restart` at the
+          # end of activation, rather than a `stop` followed by a later
+          # `start`. Activation over Tailscale can hang for tens of
+          # seconds in the stop+start setup, if the activation script has
+          # a significant delay between the stop and start phases
+          # (e.g. script blocked on another unit with a slow shutdown).
+          #
+          # Tailscale is aware of the correctness tradeoff involved, and
+          # already makes its upstream systemd unit robust against unit
+          # version mismatches on restart for compatibility with other
+          # linux distros.
+          stopIfChanged = false;
+        };
 
-    systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
-      after = ["tailscaled.service"];
-      wants = ["tailscaled.service"];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-      };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
-      script = let
-        statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
-        paramToString = v:
-          if (builtins.isBool v) then (lib.boolToString v)
-          else (toString v);
-        params = lib.pipe cfg.authKeyParameters [
-          (lib.filterAttrs (_: v: v != null))
-          (lib.mapAttrsToList (k: v: "${k}=${paramToString v}"))
-          (builtins.concatStringsSep "&")
-          (params: if params != "" then "?${params}" else "")
-        ];
-      in ''
-        while [[ "$(${statusCommand})" == "NoState" ]]; do
-          sleep 0.5
-        done
-        status=$(${statusCommand})
-        if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-          ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
-        fi
-      '';
-    };
+        tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
+          after = [ "tailscaled.service" ];
+          wants = [ "tailscaled.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+          };
+          # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+          script =
+            let
+              statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
+              paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
+              params = lib.pipe cfg.authKeyParameters [
+                (lib.filterAttrs (_: v: v != null))
+                (lib.mapAttrsToList (k: v: "${k}=${paramToString v}"))
+                (builtins.concatStringsSep "&")
+                (params: if params != "" then "?${params}" else "")
+              ];
+            in
+            ''
+              while [[ "$(${statusCommand})" == "NoState" ]]; do
+                sleep 0.5
+              done
+              status=$(${statusCommand})
+              if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
+                ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+              fi
+            '';
+        };
 
-    systemd.services.tailscaled-set = mkIf (cfg.extraSetFlags != []) {
-      after = ["tailscaled.service"];
-      wants = ["tailscaled.service"];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-      };
-      script = ''
-        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
-      '';
-    };
+        tailscaled-set = mkIf (cfg.extraSetFlags != [ ]) {
+          after = [ "tailscaled.service" ];
+          wants = [ "tailscaled.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+          };
+          script = ''
+            ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
+          '';
+        };
+      }
+      // (lib.attrsets.mapAttrs' (
+        n: v:
+        lib.attrsets.nameValuePair "taildrive-${n}" {
+          after = [ "tailscaled.service" ];
+          wants = [ "tailscaled.service" ];
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig =
+            {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = ''
+                ${lib.getExe cfg.package} drive share ${escapeShellArg n} ${escapeShellArg v.path}
+              '';
+              ExecPostStop = ''
+                ${lib.getExe cfg.package} drive unshare ${escapeShellArg n}
+              '';
+            }
+            // lib.optionalAttrs (v.user != null) {
+              User = v.user;
+            };
+        }
+      ) cfg.drives);
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
       "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
@@ -201,7 +264,9 @@ in {
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    networking.firewall.checkReversePath = mkIf (cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both") "loose";
+    networking.firewall.checkReversePath = mkIf (
+      cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
+    ) "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 
