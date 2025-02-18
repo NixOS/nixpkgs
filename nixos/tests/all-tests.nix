@@ -404,6 +404,7 @@ in {
   gollum = handleTest ./gollum.nix {};
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
+  gopro-tool = handleTest ./gopro-tool.nix {};
   goss = handleTest ./goss.nix {};
   gotenberg = handleTest ./gotenberg.nix {};
   gotify-server = handleTest ./gotify-server.nix {};

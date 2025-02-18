@@ -135,6 +135,7 @@ mapAliases {
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
+  inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
   less-plugin-clean-css = pkgs.lessc.plugins.clean-css; # added 2024-06-15
   inherit (pkgs) lv_font_conv; # added 2024-06-28
