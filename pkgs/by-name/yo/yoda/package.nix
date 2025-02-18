@@ -4,7 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   bash,
-  python,
+  python3,
   root,
   makeWrapper,
   zlib,
@@ -13,16 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     owner = "hepcedar";
     repo = pname;
     rev = "yoda-${version}";
-    hash = "sha256-sHvwgLH22fvdlh4oLjr4fzZ2WtBJMAlvr4Vxi9Xdf84=";
+    hash = "sha256-No2Lr4nmYNfFnJVpg7xYjd35g12CbQtpW9QMjM3owko=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     autoreconfHook
     bash
     cython
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      python
+      python3
     ]
-    ++ (with python.pkgs; [
+    ++ (with python3.pkgs; [
       numpy
       matplotlib
     ])
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     substituteInPlace pyext/yoda/plotting/script_generator.py \
-      --replace '/usr/bin/env python' '${python.interpreter}'
+      --replace '/usr/bin/env python' '${python3.interpreter}'
   '';
 
   postInstall = ''
@@ -70,12 +70,12 @@ stdenv.mkDerivation rec {
 
   installCheckTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     homepage = "https://yoda.hepforge.org";
     changelog = "https://gitlab.com/hepcedar/yoda/-/blob/yoda-${version}/ChangeLog";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }
