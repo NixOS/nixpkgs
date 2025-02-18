@@ -63,6 +63,7 @@
   withMan ? withDocbookDocs,
   withSELinuxModule ? false,
   withSystemd ? true,
+  pkgsMusl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -239,6 +240,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
       version = testers.testVersion { package = finalAttrs.finalPackage; };
+
+      musl = pkgsMusl.flatpak;
     };
 
     updateScript = nix-update-script { };

@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index 4a509e7..8bcaa97 100644
+--- a/meson.build
++++ b/meson.build
+@@ -104,7 +104,6 @@ elif cc.has_header_symbol('paths.h', '_PATH_WTMPX')
+   config_h.set('PATH_WTMP', '_PATH_WTMPX')
+ else
+   path_wtmp = '/var/log/utx.log'
+-  assert(run_command('test', '-e', path_wtmp, check: false).returncode() == 0, 'Do not know which filename to watch for wtmp changes')
+   config_h.set_quoted('PATH_WTMP', path_wtmp)
+ endif
+ 
