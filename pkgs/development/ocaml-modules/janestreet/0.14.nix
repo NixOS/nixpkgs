@@ -910,6 +910,7 @@ with self;
     ];
     patches = ./sexp.patch;
     meta.description = "S-expression swiss knife";
+    meta.broken = true; # Does not build with GCC 14
   };
 
   sexp_diff_kernel = janePackage {
