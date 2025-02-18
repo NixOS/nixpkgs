@@ -10,7 +10,9 @@
 , curl
 , jq
 , common-updater-scripts
+, cctools
 , darwin
+, rcodesign
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -43,8 +45,9 @@ stdenvNoCC.mkDerivation rec {
   postPhases = [ "postPatchelf"];
   postPatchelf =
     lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      wrapProgram $out/bin/bun \
-        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ darwin.ICU ]}
+      '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' $out/bin/bun \
+        -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
+      '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/bin/bun
     ''
     # We currently cannot generate completions for x86_64-darwin because bun requires avx support to run, which is:
     # 1. Not currently supported by the version of Rosetta on our aarch64 builders
