@@ -14,8 +14,6 @@
 }:
 
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-
   # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
   # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
   # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
@@ -71,7 +69,7 @@ in
   buildFlags ? [ ],
   haddockFlags ? [ ],
   description ? null,
-  doCheck ? !isCross,
+  doCheck ? stdenv.buildPlatform == stdenv.hostPlatform, # TODO: Turn this into canExecute
   doBenchmark ? false,
   doHoogle ? true,
   doHaddockQuickjump ? doHoogle,
@@ -232,7 +230,8 @@ let
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version, or ghcjs, in which case its the ghc used to build ghcjs.
-  setupGhc = buildHaskellPackages.ghc;
+  setupGhc =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ghc else buildHaskellPackages.ghc;
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
@@ -360,7 +359,7 @@ let
     ++ optionals isGhcjs [
       "--ghcjs"
     ]
-    ++ optionals isCross (
+    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) (
       [
         "--configure-option=--host=${stdenv.hostPlatform.config}"
       ]
@@ -969,6 +968,9 @@ lib.fix (
             withHoogle ? false,
           }:
           let
+            # Needs to match the condition for setupGhc.
+            isCross = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
             name = "ghc-shell-for-${drv.name}";
 
             withPackages = if withHoogle then ghcWithHoogle else ghcWithPackages;

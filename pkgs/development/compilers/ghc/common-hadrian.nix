@@ -335,7 +335,9 @@ let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (
+    targetPlatform.config != hostPlatform.config
+  ) "${targetPlatform.config}-";
 
   hadrianSettings =
     # -fexternal-dynamic-refs apparently (because it's not clear from the
