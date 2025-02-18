@@ -54,7 +54,6 @@ lib.makeOverridable (
     source = srcOnly (
       pkg.overrideAttrs (old: {
         mitmCache = "";
-        gradleInitScript = ./init-deps.gradle;
 
         stdenv = old.stdenv or stdenvNoCC;
       })
