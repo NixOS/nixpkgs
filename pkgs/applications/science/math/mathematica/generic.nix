@@ -49,6 +49,7 @@
   zlib,
   # options
   cudaSupport,
+  rsync,
 }:
 
 let
@@ -82,6 +83,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    rsync
   ] ++ lib.optional cudaSupport addDriverRunpath;
 
   buildInputs =
@@ -200,6 +202,17 @@ stdenv.mkDerivation {
     # NOTE: some files placed under HOME may be useful
     XDG_DATA_HOME="$out/share" HOME="$TMPDIR/home" vernierLink=y \
       ./$INSTALLER -execdir="$out/bin" -targetdir="$out/libexec/Mathematica" -auto -verbose -createdir=y
+
+    DOC_INSTALLER_BUNDLE_DIR="$TMPDIR/Unix/.bundle/Unix/Installer"
+    if [ -d "$DOC_INSTALLER_BUNDLE_DIR" ]; then
+      # newer installer, bundles Documentation installer separately
+      cd "$DOC_INSTALLER_BUNDLE_DIR"
+      DOCTMP=$(mktemp -d -p "$TMPDIR")
+      patchShebangs ./MathInstaller
+      sed -i 's/`hostname`/""/' ./MathInstaller
+      HOME="$TMPDIR/home" ./MathInstaller -targetdir="$DOCTMP" -auto -verbose
+      rsync -a "$DOCTMP/Documentation/English" "$out/libexec/Mathematica/Documentation/"
+    fi
 
     # Check if Installer produced any errors
     errLog="$out/libexec/Mathematica/InstallErrors"
