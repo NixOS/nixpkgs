@@ -12,17 +12,16 @@
   libGL,
   libGLU,
   libnotify,
-  libqtpas,
   libX11,
+  lsb-release,
   nix-update-script,
   polkit,
   procps,
-  qt6,
+  qt6Packages,
   systemd,
   util-linux,
   vulkan-tools,
   which,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,24 +47,26 @@ stdenv.mkDerivation rec {
     substituteInPlace overlayunit.pas \
       --replace-fail '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png" \
       --replace-fail '/sbin/ip' "${lib.getExe' iproute2 "ip"}" \
-      --replace-fail '/bin/bash' "${lib.getExe' bash "bash"}"
+      --replace-fail '/bin/bash' "${lib.getExe' bash "bash"}" \
+      --replace-fail '/usr/lib/os-release' '/etc/os-release' \
+      --replace-fail 'lsb_release' "${lib.getExe' lsb-release "lsb_release"} 2> /dev/null"
   '';
 
   nativeBuildInputs = [
     fpc
     lazarus-qt6
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
     libGL
     libGLU
-    libqtpas
+    qt6Packages.libqtpas
     libX11
-    qt6.qtbase
+    qt6Packages.qtbase
   ];
 
-  NIX_LDFLAGS = "-lGLU -rpath ${lib.makeLibraryPath buildInputs}";
+  NIX_LDFLAGS = "-lGLU -lGL -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
     runHook preBuild
@@ -89,10 +90,6 @@ stdenv.mkDerivation rec {
         which
       ]
     }"
-
-    # Force xcb since libqt5pas doesn't support Wayland
-    # See https://github.com/benjamimgois/goverlay/issues/107
-    "--set QT_QPA_PLATFORM xcb"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -101,7 +98,7 @@ stdenv.mkDerivation rec {
     description = "Opensource project that aims to create a Graphical UI to help manage Linux overlays";
     homepage = "https://github.com/benjamimgois/goverlay";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ RoGreat ];
     platforms = platforms.linux;
     mainProgram = "goverlay";
   };

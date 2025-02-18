@@ -1,33 +1,54 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   libpulseaudio,
   alsa-lib,
   pkg-config,
-  qtbase,
+  qt5,
+  ncurses,
+  autoreconfHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "unixcw";
   version = "3.5.1";
+
   src = fetchurl {
     url = "mirror://sourceforge/unixcw/unixcw_${version}.orig.tar.gz";
-    sha256 = "5f3aacd8a26e16e6eff437c7ae1e9b389956fb137eeb3de24670ce05de479e7a";
+    hash = "sha256-Xzqs2KJuFubv9DfHrh6bOJlW+xN+6z3iRnDOBd5Hnno=";
   };
+
   patches = [
     ./remove-use-of-dlopen.patch
+
+    # fix pkg-config searching for ncurses
+    # yoinked from gentoo (https://gitweb.gentoo.org/repo/gentoo.git/tree/media-radio/unixcw/files/unixcw-3.6-tinfo.patch), with modifications
+    ./unixcw-3.6-tinfo.patch
   ];
-  nativeBuildInputs = [ pkg-config ];
+
+  postPatch = ''
+    substituteInPlace src/cwcp/Makefile.am \
+      --replace-fail '-lcurses' '-lncurses'
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
+
   buildInputs = [
     libpulseaudio
     alsa-lib
-    qtbase
+    qt5.qtbase
+    ncurses
   ];
+
   CFLAGS = "-lasound -lpulse-simple";
 
-  meta = with lib; {
-    description = "sound characters as Morse code on the soundcard or console speaker";
+  meta = {
+    description = "Sound characters as Morse code on the soundcard or console speaker";
     longDescription = ''
       unixcw is a project providing libcw library and a set of programs
       using the library: cw, cwgen, cwcp and xcwcp.
@@ -44,8 +65,8 @@ mkDerivation rec {
       cw reports any errors in  embedded  commands
     '';
     homepage = "https://unixcw.sourceforge.net";
-    maintainers = [ maintainers.mafo ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.mafo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }
