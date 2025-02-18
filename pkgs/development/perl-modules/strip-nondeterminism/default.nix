@@ -8,11 +8,12 @@
   ArchiveCpio,
   SubOverride,
   shortenPerlShebang,
+  gitUpdater,
 }:
 
 buildPerlPackage rec {
   pname = "strip-nondeterminism";
-  version = "1.13.1";
+  version = "1.14.1";
 
   outputs = [
     "out"
@@ -24,7 +25,7 @@ buildPerlPackage rec {
     repo = "strip-nondeterminism";
     domain = "salsa.debian.org";
     rev = version;
-    sha256 = "czx9UhdgTsQSfDNo1mMOXCM/3/nuNe+cPZeyy2xdnKs=";
+    sha256 = "C/812td9BX1YRqFpD9QYgBfzE+biZeAKgxoNcxpb6UU=";
   };
 
   strictDeps = true;
@@ -63,6 +64,10 @@ buildPerlPackage rec {
   # running shortenPerlShebang in postBuild results in non-functioning binary 'exec format error'
   doCheck = !stdenv.hostPlatform.isDarwin;
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = with lib; {
     description = "Perl module for stripping bits of non-deterministic information";

@@ -1110,6 +1110,16 @@ in
       ];
   });
 
+  orgmode = prev.orgmode.overrideAttrs (oa: {
+    # Patch in tree-sitter-orgmode dependency
+    postPatch = ''
+      substituteInPlace lua/orgmode/config/init.lua \
+        --replace-fail \
+          "pcall(vim.treesitter.language.add, 'org')" \
+          "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
+    '';
+  });
+
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (oa: {
     propagatedBuildInputs =
       let
