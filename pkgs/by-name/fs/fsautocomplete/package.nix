@@ -4,16 +4,18 @@
   fetchFromGitHub,
   dotnetCorePackages,
   testers,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
   version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+IkoXj7l6a/iPigIVy334XiwQFm/pD63FWpV2r0x84c=";
   };
 
@@ -34,7 +36,13 @@ buildDotnetModule (finalAttrs: rec {
 
   useDotnetFromEnv = true;
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      finalAttrs.passthru.fetch-deps
+    ];
+  };
 
   meta = with lib; {
     description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
