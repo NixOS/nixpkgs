@@ -4,6 +4,8 @@
   thunar,
   exo,
   libxfce4util,
+  gtk3,
+  glib,
   subversion,
   apr,
   aprutil,
@@ -22,6 +24,8 @@ mkXfceDerivation {
       thunar
       exo
       libxfce4util
+      gtk3
+      glib
     ]
     ++ lib.optionals withSubversion [
       apr
