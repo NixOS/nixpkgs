@@ -227,9 +227,12 @@ in
 
                 forward_zones_recurse = mkOption {
                   type = types.listOf forwardZone;
-                  example = {
-                    eth = "[::1]:5353";
-                  };
+                  example = [
+                    {
+                      zone = "example1.com";
+                      forwarders = [ "[::1]:5300" ];
+                    }
+                  ];
                   default = { };
                   description = ''
                     DNS zones to be forwarded to other recursive servers.
