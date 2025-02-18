@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kashw2
       cafkafk
+      govanify
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
