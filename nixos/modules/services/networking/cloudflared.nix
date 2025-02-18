@@ -144,20 +144,36 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "cloudflared"
+        "user"
+      ]
+      ''
+        Cloudflared now uses a dynamic user, and this option no longer has any effect.
+
+        If the user is still necessary, please define it manually using users.users.cloudflared.
+      ''
+    )
+
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "cloudflared"
+        "group"
+      ]
+      ''
+        Cloudflared now uses a dynamic user, and this option no longer has any effect.
+
+        If the group is still necessary, please define it manually using users.groups.cloudflared.
+      ''
+    )
+  ];
+
   options.services.cloudflared = {
     enable = lib.mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
-
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared";
-      description = "User account under which Cloudflared runs.";
-    };
-
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "cloudflared";
-      description = "Group under which cloudflared runs.";
-    };
 
     package = lib.mkPackageOption pkgs "cloudflared" { };
 
@@ -323,7 +339,7 @@ in
 
         mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
       in
-      lib.nameValuePair "cloudflared-tunnel-${name}" ({
+      lib.nameValuePair "cloudflared-tunnel-${name}" {
         after = [
           "network.target"
           "network-online.target"
@@ -334,24 +350,12 @@ in
         ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
+          DynamicUser = true;
         };
-      })
+      }
     ) config.services.cloudflared.tunnels;
-
-    users.users = lib.mkIf (cfg.user == "cloudflared") {
-      cloudflared = {
-        group = cfg.group;
-        isSystemUser = true;
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == "cloudflared") {
-      cloudflared = { };
-    };
   };
 
   meta.maintainers = with lib.maintainers; [
