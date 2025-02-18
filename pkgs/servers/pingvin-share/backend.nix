@@ -31,7 +31,7 @@ buildNpmPackage {
     prisma
   ];
 
-  npmDepsHash = "sha256-04SWe/Ww9ZKfJZsME11+UT2VglwiWF9FpEoFFQXygxk=";
+  npmDepsHash = "sha256-X/208utkpbWrn5S+y4HmpbzjQO+WmaXRaDRp8zOMCKM=";
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 
