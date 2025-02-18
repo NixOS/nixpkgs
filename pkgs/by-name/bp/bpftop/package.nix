@@ -10,7 +10,7 @@
 }:
 let
   pname = "bpftop";
-  version = "0.5.2";
+  version = "0.6.0";
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   inherit pname version;
@@ -18,11 +18,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     owner = "Netflix";
     repo = "bpftop";
     tag = "v${version}";
-    hash = "sha256-WH/oCnkBcvoouBbkAcyawfAuNR3VsTl5+ZATLpi9d4w=";
+    hash = "sha256-oilSWF3dCbJIPtkxwj76qReh5Rp8ZRiH2nVriK6d3fk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-fXNu0u+YdT5UaKReT4WuQINKz/zFnwXS1r+xEH6g9FU=";
+  cargoHash = "sha256-k5cRj66OSXsCXUPWrBYrOFq8aohaB/afd8IGj0QqvuE=";
 
   buildInputs = [
     elfutils
