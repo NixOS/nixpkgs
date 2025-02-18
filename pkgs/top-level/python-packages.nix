@@ -4275,6 +4275,8 @@ self: super: with self; {
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
+  esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
+
   esprima = callPackage ../development/python-modules/esprima { };
 
   escapism = callPackage ../development/python-modules/escapism { };
