@@ -8,8 +8,8 @@
   libimobiledevice,
   libusbmuxd,
   libplist,
+  pkg-config,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam-obs";
   version = "2.3.4";
@@ -34,13 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
   ];
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  # Flag reference in regard to:
+  # https://github.com/dev47apps/droidcam-obs-plugin/blob/master/linux/linux.mk
   makeFlags = [
     "ALLOW_STATIC=no"
     "JPEG_DIR=${lib.getDev libjpeg}"
     "JPEG_LIB=${lib.getLib libjpeg}/lib"
-    "IMOBILEDEV_DIR=${libimobiledevice}"
+    "IMOBILEDEV_DIR=${lib.getDev libimobiledevice}"
+    "IMOBILEDEV_DIR=${lib.getLib libimobiledevice}"
     "LIBOBS_INCLUDES=${obs-studio}/include/obs"
     "FFMPEG_INCLUDES=${lib.getLib ffmpeg}"
+    "LIBUSBMUXD=libusbmuxd-2.0"
+    "LIBIMOBILEDEV=libimobiledevice-1.0"
   ];
 
   installPhase = ''
