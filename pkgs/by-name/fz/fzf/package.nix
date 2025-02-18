@@ -4,7 +4,12 @@
 , runtimeShell
 , installShellFiles
 , bc
+, bash
+, coreutils
+, gawk
+, gnused
 , ncurses
+, tmux
 , testers
 , fzf
 }:
@@ -28,7 +33,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ bash ncurses ];
 
   ldflags = [
     "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
@@ -43,9 +48,22 @@ buildGoModule rec {
         exit 1
     fi
 
-    # fzf-tmux depends on bc
+    sed -i \
+      -e "s/fzf-tmux/FZF-TMUX/g" \
+      -e "s/ (requires tmux 3.2 or above)//" \
+      -e "s|fzf=.*|fzf=$out/bin/fzf|" \
+      -e "/fzf executable not found/d" \
+      bin/fzf-tmux
     substituteInPlace bin/fzf-tmux \
-      --replace-fail "bc" "${lib.getExe bc}"
+      --replace-fail awk ${lib.getExe gawk} \
+      --replace-fail bc ${lib.getExe bc} \
+      --replace-fail cat ${lib.getExe' coreutils "cat"} \
+      --replace-fail "cut " "${lib.getExe' coreutils "cut"} " \
+      --replace-fail mkfifo ${lib.getExe' coreutils "mkfifo"} \
+      --replace-fail "sed " "${lib.getExe gnused} " \
+      --replace-fail "tmux " "${lib.getExe tmux} " \
+      --replace-fail tput ${lib.getExe' ncurses "tput"}
+    sed -i "s/FZF-TMUX/fzf-tmux/g" bin/fzf-tmux
   '';
 
   postInstall = ''
