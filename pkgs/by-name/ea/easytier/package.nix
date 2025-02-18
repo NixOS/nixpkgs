@@ -24,7 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-U2ZK9GlfTjXsA7Fjd288YDlqSZNl3vHryLG1FE/GH5c=";
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
