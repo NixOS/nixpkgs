@@ -116,6 +116,7 @@ lib.makeOverridable (
         record \
         --reject '\.(md5|sha(1|256|512:?):?)$' \
         --forget-redirects-from '.*' \
+        --forget '.pks/lookup$' \
         --record-text '/maven-metadata\.xml$' >/dev/null 2>/dev/null &
       MITM_CACHE_PID="$!"
       # wait for mitm-cache to fully start

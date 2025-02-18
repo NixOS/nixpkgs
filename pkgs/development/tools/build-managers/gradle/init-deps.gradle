@@ -2,8 +2,7 @@ gradle.projectsLoaded {
   rootProject.allprojects {
     task nixDownloadDeps {
       doLast {
-        configurations.findAll{it.canBeResolved}.each{it.resolve()}
-        buildscript.configurations.findAll{it.canBeResolved}.each{it.resolve()}
+        throw new RuntimeException("nixDownloadDeps is deprecated. Please use `--write-dependency-metadata sha256` instead, or if the project you're building has dependency verification turned on use `--write-dependency-metadata pgp,sha56`.")
       }
     }
   }

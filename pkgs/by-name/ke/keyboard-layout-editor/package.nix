@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
-    gradle nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
-    gradle nixDownloadDeps -Dos.name='mac os x' -Dos.arch=amd64
-    gradle nixDownloadDeps -Dos.name='mac os x' -Dos.arch=aarch64
+    gradle --write-verification-metadata sha256 -Dos.family=linux -Dos.arch=amd64
+    gradle --write-verification-metadata sha256 -Dos.family=linux -Dos.arch=aarch64
+    gradle --write-verification-metadata sha256 -Dos.name='mac os x' -Dos.arch=amd64
+    gradle --write-verification-metadata sha256 -Dos.name='mac os x' -Dos.arch=aarch64
   '';
 
   mitmCache = gradle_8.fetchDeps {
