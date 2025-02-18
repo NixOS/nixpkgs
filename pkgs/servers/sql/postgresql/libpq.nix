@@ -1,7 +1,7 @@
 {
   # utils
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   lib,
 
   # runtime dependencies
@@ -31,9 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
   version = "17.2";
 
-  src = fetchurl {
-    url = "mirror://postgresql/source/v${finalAttrs.version}/postgresql-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-gu8nwK83UWldf2Ti2WNYMAX7tqDD32PQ5LQiEdcCEWQ=";
+  src = fetchFromGitHub {
+    owner = "postgres";
+    repo = "postgres";
+    # rev, not tag, on purpose: see generic.nix.
+    rev = "ref/tags/REL_17_2";
+    hash = "sha256-P7IwvMcOI6vW14PiB2R0NEzAEPeaKg0zaUKTw2GJ5DA=";
   };
 
   __structuredAttrs = true;
