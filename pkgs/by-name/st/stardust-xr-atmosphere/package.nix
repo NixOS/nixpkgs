@@ -2,8 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  testers,
-  stardust-xr-atmosphere,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -26,15 +25,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  passthru = {
-    tests.versionTest = testers.testVersion {
-      package = stardust-xr-atmosphere;
-      command = "atmosphere --version";
-      version = "stardust-xr-atmosphere 0.4.0";
-    };
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
   };
 
   meta = {
