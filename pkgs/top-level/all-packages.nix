@@ -17364,10 +17364,6 @@ with pkgs;
     hepmc = hepmc2;
   };
 
-  rivet = callPackage ../development/libraries/physics/rivet {
-    imagemagick = graphicsmagick-imagemagick-compat;
-  };
-
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
