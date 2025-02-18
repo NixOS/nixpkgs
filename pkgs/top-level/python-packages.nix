@@ -1464,7 +1464,7 @@ self: super: with self; {
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
-  pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
+  pulumi-aws = pkgs.pulumiPackages.pulumi-aws.sdks.python;
 
   pulumi-aws-native = pkgs.pulumiPackages.pulumi-aws-native.sdks.python;
 
