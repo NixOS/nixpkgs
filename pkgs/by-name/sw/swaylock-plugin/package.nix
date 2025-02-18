@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation {
   pname = "swaylock-plugin";
-  version = "unstable-2025-01-28";
+  version = "1.8.0";
   src = fetchFromGitHub {
     owner = "mstoeckl";
     repo = "swaylock-plugin";
