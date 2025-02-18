@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   # Tests require python3
   doCheck = false;
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -61,7 +61,8 @@ rustPlatform.buildRustPackage rec {
         --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
         --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
-    '';
+    ''
+  );
 
   nativeInstallCheckInputs = [
     versionCheckHook
