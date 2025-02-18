@@ -9,8 +9,11 @@ mkKdeDerivation {
 
   extraBuildInputs = [
     qtdeclarative
-    qtsvg
     qttools
   ];
+  extraPropagatedBuildInputs = [
+    qtsvg
+  ];
+
   meta.mainProgram = "kiconfinder6";
 }
