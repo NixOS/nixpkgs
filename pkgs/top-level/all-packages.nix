@@ -7541,7 +7541,7 @@ with pkgs;
 
   bazel = bazel_6;
 
-  bazel_5 = callPackage ../development/tools/build-managers/bazel/bazel_5 {
+  bazel_5 = callPackage ../by-name/ba/bazel_5/package.nix {
     inherit (darwin) sigtool;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
@@ -7551,7 +7551,7 @@ with pkgs;
     bazel_self = bazel_5;
   };
 
-  bazel_6 = callPackage ../development/tools/build-managers/bazel/bazel_6 {
+  bazel_6 = callPackage ../by-name/ba/bazel_6/package.nix {
     inherit (darwin) sigtool;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
@@ -7561,7 +7561,7 @@ with pkgs;
     bazel_self = bazel_6;
   };
 
-  bazel_7 = callPackage ../development/tools/build-managers/bazel/bazel_7 {
+  bazel_7 = callPackage ../by-name/ba/bazel_7/package.nix {
     inherit (darwin) sigtool;
     buildJdk = jdk21_headless;
     runJdk = jdk21_headless;
