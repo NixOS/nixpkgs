@@ -10,6 +10,8 @@
 
   droidcam-obs = callPackage ./droidcam-obs { };
 
+  distroav = qt6Packages.callPackage ./distroav { };
+
   input-overlay = qt6Packages.callPackage ./input-overlay.nix { };
 
   looking-glass-obs = callPackage ./looking-glass-obs.nix { };
