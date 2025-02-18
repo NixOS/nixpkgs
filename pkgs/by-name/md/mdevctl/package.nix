@@ -15,6 +15,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4K4NW3DOTtzZJ7Gg0mnRPr88YeqEjTtKX+C4P8i923E=";
   };
 
+  # https://github.com/mdevctl/mdevctl/issues/111
+  patches = [
+    ./script-dir.patch
+  ];
+
   useFetchCargoVendor = true;
   cargoHash = "sha256-xfrW7WiKBM9Hz49he/42z9gBrwZ3sKGH/u105hcyln0=";
 
