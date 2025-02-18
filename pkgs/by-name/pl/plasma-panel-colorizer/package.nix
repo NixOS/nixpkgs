@@ -6,7 +6,6 @@
   kdePackages,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasma-panel-colorizer";
   version = "2.4.1";
@@ -23,10 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.extra-cmake-modules
   ];
 
-  buildInputs = [
-    kdePackages.plasma-desktop
-  ];
+  buildInputs = [ kdePackages.plasma-desktop ];
 
+  dontWrapQtApps = true;
   strictDeps = true;
 
   cmakeFlags = [
@@ -35,16 +33,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "Qt6_DIR" "${kdePackages.qtbase}/lib/cmake/Qt6")
   ];
 
-  dontWrapQtApps = true;
+  postInstall = ''
+    chmod 755 $out/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/tools/list_presets.sh
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/luisbocanegra/plasma-panel-colorizer/blob/main/CHANGELOG.md";
     description = "Fully-featured widget to bring Latte-Dock and WM status bar customization features to the default KDE Plasma panel";
     homepage = "https://github.com/luisbocanegra/plasma-panel-colorizer";
-    changelog = "https://github.com/luisbocanegra/plasma-panel-colorizer/blob/main/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     inherit (kdePackages.kwindowsystem.meta) platforms;
   };
 })
