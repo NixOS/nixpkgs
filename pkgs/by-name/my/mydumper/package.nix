@@ -102,7 +102,14 @@ stdenv.mkDerivation rec {
     cp -r $src/docs/images ./docs
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # even patch numbers are pre-releases
+    # see https://github.com/mydumper/mydumper/tree/afe0eb9317f1e9cdde45f7b0e463029912c6c981?tab=readme-ov-file#versioning
+    extraArgs = [
+      "--version-regex"
+      "v(\\d+\\.\\d+\\.\\d*[13579]-\\d+)"
+    ];
+  };
 
   # mydumper --version is checked in `versionCheckHook`
   passthru.tests = testers.testVersion {
