@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       moveToOutput "lib/*.a" $static
       so=${stdenv.hostPlatform.extensions.sharedLibrary}
-      ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
+      ln -s libperconaserverclient$so $out/lib/libmysqlclient_r$so
 
       wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
         lib.makeBinPath [
