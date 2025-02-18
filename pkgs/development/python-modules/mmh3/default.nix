@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "mmh3";
-  version = "5.0.1";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "hajimes";
     repo = "mmh3";
     tag = "v${version}";
-    hash = "sha256-no3wbBxEz1UPiN25HvZGAUV1QxZydJB0Hb2Ib9ZrAUY=";
+    hash = "sha256-56LrJuoBvhGgw+w4GIQ0XEQtf5oR87el+gZxgBYkyx0=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
     homepage = "https://github.com/hajimes/mmh3";
-    changelog = "https://github.com/hajimes/mmh3/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hajimes/mmh3/blob/${src.tag}/CHANGELOG.md";
     license = licenses.cc0;
     maintainers = [ ];
   };
