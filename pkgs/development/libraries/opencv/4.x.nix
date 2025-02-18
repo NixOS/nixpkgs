@@ -555,9 +555,11 @@ effectiveStdenv.mkDerivation {
 
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
+    }
+    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
+      inherit qimgv;
       withIpp = opencv4.override { enableIpp = true; };
     }
-    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) { inherit qimgv; }
     // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
     // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
       opencv4-tests = callPackage ./tests.nix {
