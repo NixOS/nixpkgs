@@ -6368,6 +6368,8 @@ self: super: with self; {
 
   infinity = callPackage ../development/python-modules/infinity { };
 
+  inflate64 = callPackage ../development/python-modules/inflate64 { };
+
   inflect = callPackage ../development/python-modules/inflect { };
 
   inflection = callPackage ../development/python-modules/inflection { };
@@ -8670,6 +8672,8 @@ self: super: with self; {
 
   multitasking = callPackage ../development/python-modules/multitasking { };
 
+  multivolumefile = callPackage ../development/python-modules/multivolumefile { };
+
   munch = callPackage ../development/python-modules/munch { };
 
   mung = callPackage ../development/python-modules/mung { };
@@ -10485,6 +10489,8 @@ self: super: with self; {
 
   pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
 
+  pyppmd = callPackage ../development/python-modules/pyppmd { };
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
@@ -11464,6 +11470,8 @@ self: super: with self; {
 
   py4j = callPackage ../development/python-modules/py4j { };
 
+  py7zr = callPackage ../development/python-modules/py7zr { };
+
   pyacaia-async = callPackage ../development/python-modules/pyacaia-async { };
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
@@ -11547,6 +11555,8 @@ self: super: with self; {
   pybalboa = callPackage ../development/python-modules/pybalboa { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
+
+  pybcj = callPackage ../development/python-modules/pybcj { };
 
   pybids = callPackage ../development/python-modules/pybids { };
 
@@ -13821,6 +13831,8 @@ self: super: with self; {
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
+
+  pyzstd = callPackage ../development/python-modules/pyzstd { };
 
   pyzx = callPackage ../development/python-modules/pyzx { };
 
@@ -16314,6 +16326,8 @@ self: super: with self; {
 
   test-tube = callPackage ../development/python-modules/test-tube { };
 
+  text2digits = callPackage ../development/python-modules/text2digits { };
+
   textdistance = callPackage ../development/python-modules/textdistance { };
 
   textacy = callPackage ../development/python-modules/textacy { };
@@ -17832,6 +17846,8 @@ self: super: with self; {
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
+  unrar2-cffi = callPackage ../development/python-modules/unrar2-cffi { };
+
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
@@ -18383,6 +18399,8 @@ self: super: with self; {
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
+
+  wordninja = callPackage ../development/python-modules/wordninja { };
 
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 
