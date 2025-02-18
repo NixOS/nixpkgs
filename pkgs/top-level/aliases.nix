@@ -1162,6 +1162,7 @@ mapAliases {
   protobuf3_24 = protobuf_24;
   protobuf3_23 = protobuf_23;
   protobuf3_21 = protobuf_21;
+  protoc-gen-connect-es = throw "'protoc-gen-connect-es' has been removed because it is deprecated upstream. Functionality has been integrated into 'protoc-gen-es' v2."; # Added 2025-02-18
   protonup = protonup-ng; # Added 2022-11-06
   protonvpn-gui_legacy = throw "protonvpn-gui_legacy source code was removed from upstream. Use protonvpn-gui instead."; # Added 2024-10-12
   proxmark3-rrg = proxmark3; # Added 2023-07-25
