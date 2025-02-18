@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frog-protocols";
-  version = "0.01-unstable-2024-09-25";
+  version = "0.01";
 
   src = fetchFromGitHub {
     owner = "misyltoad";
