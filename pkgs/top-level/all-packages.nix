@@ -3476,10 +3476,6 @@ with pkgs;
 
   gdown = with python3Packages; toPythonApplication gdown;
 
-  goverlay = qt6Packages.callPackage ../tools/graphics/goverlay {
-    inherit (qt6Packages) libqtpas wrapQtAppsHook;
-  };
-
   gpt4all-cuda = gpt4all.override {
     cudaSupport = true;
   };
@@ -17368,9 +17364,6 @@ with pkgs;
     imagemagick = graphicsmagick-imagemagick-compat;
   };
 
-  yoda = callPackage ../development/libraries/physics/yoda {
-    python = python3;
-  };
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
@@ -17924,8 +17917,6 @@ with pkgs;
   };
 
   unityhub = callPackage ../development/tools/unityhub { };
-
-  unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 

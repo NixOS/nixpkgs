@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clinfo";
-  version = "3.0.23.01.25";
+  version = "3.0.25.02.14";
 
   src = fetchFromGitHub {
     owner = "Oblomov";
     repo = "clinfo";
     rev = version;
-    sha256 = "sha256-1jZP4SnLIHh3vQJLBp+j/eQ1c8XBGFR2hjYxflhpWAU=";
+    sha256 = "sha256-UkkrRpmY5vZtTeEqPNYfxAGaJDoTSrNUG9N1Bknozow=";
   };
 
   buildInputs =
