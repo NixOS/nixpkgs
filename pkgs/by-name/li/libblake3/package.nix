@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
+
   meta = {
     description = "Official C implementation of BLAKE3";
     homepage = "https://github.com/BLAKE3-team/BLAKE3/tree/master/c";
