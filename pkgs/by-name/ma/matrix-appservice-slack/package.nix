@@ -3,13 +3,15 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeWrapper,
-  matrix-sdk-crypto-nodejs,
+  matrix-sdk-crypto-nodejs-0_1_0-beta_3,
   mkYarnPackage,
-  nodejs,
+  nodejs_18,
 }:
 
 let
   data = lib.importJSON ./pin.json;
+  matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
+  nodejs = nodejs_18;
 in
 mkYarnPackage rec {
   inherit nodejs;
