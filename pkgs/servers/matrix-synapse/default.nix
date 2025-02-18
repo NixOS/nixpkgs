@@ -14,7 +14,6 @@
 
 let
   plugins = python3.pkgs.callPackage ./plugins { };
-  tools = callPackage ./tools { };
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
