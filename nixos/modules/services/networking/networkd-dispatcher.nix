@@ -58,6 +58,7 @@ in
                     "degraded"
                     "configuring"
                     "configured"
+                    "enslaved"
                   ]
                 );
                 default = null;
