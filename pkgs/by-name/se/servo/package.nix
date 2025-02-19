@@ -59,17 +59,17 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-01-14";
+  version = "0-unstable-2025-02-19";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "f5ef8aaed32e6a6da3faca3a710e73cd35c31059";
-    hash = "sha256-LaAg07Lp/oWNsrtqM6UrqmPAm/ajmPJPZb5O7q9eLO8=";
+    rev = "5ff588429f3912c08d7f744a9cccfeae392592cd";
+    hash = "sha256-URX/jc6zr7BCENYmwO4h7SWLp/+wsVJNyyoCcXpvVEs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a5Dv/AiPs/fnKcboBej9H7BiRKCIjm0GaQ2ICiH9SpQ=";
+  cargoHash = "sha256-bwg1FipNkdAI+1V2PhppP31nOCUPl7vKBrroFjlvq2Y=";
 
   postPatch = ''
     # Remap absolute path between modules to include SEMVER
