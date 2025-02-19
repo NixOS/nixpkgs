@@ -31,7 +31,6 @@ buildPythonApplication rec {
   ];
 
   format = "setuptools";
-  dontUseSetuptoolsCheck = true;
 
   installPhase = ''
     install -D -m 0755 SL1_to_Photon.py $out/bin/${pname}
