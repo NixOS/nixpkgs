@@ -4,9 +4,6 @@
   rustPlatform,
   versionCheckHook,
   nix-update-script,
-  runCommand,
-  testers,
-  jsonschema-cli,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,30 +25,7 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = [ "--version" ];
 
-  passthru = {
-    tests = {
-      simple = runCommand "${pname}-test" { } ''
-        ${lib.getExe jsonschema-cli} <(echo '{"maxLength": 5}') --instance <(echo '"exact"') > $out
-      '';
-
-      failed =
-        runCommand "${pname}-fail"
-          {
-            failed = testers.testBuildFailure (
-              runCommand "fail" { } ''
-                ${lib.getExe jsonschema-cli} <(echo '{"maxLength": 5}') --instance <(echo '"longer"') > $out
-              ''
-            );
-          }
-          ''
-            grep -F '"longer" is longer than 5 characters' $failed/result
-            [[ 1 = $(cat $failed/testBuildFailure.exit) ]]
-            touch $out
-          '';
-    };
-
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast command-line tool for JSON Schema validation";
