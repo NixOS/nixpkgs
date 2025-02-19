@@ -5542,9 +5542,12 @@ with pkgs;
   });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = bash;
-  bashFHS = callPackage ../shells/bash/5.nix {
-    forFHSEnv = true;
-  };
+  inherit
+  ({
+    bashFHS = callPackage ../shells/bash/5.nix {
+      forFHSEnv = true;
+    };
+  }) bashFHS;
   bashInteractiveFHS = bashFHS;
 
   carapace = callPackage ../shells/carapace {
