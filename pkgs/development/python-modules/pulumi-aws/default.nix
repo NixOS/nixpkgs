@@ -1,30 +1,31 @@
 {
   lib,
+  pulumiPackages,
   buildPythonPackage,
-  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
   parver,
   pulumi,
-  pythonOlder,
   semver,
-  setuptools,
+  typing-extensions,
 }:
+let
+  inherit (pulumiPackages) pulumi-aws;
+  src = pulumi-aws.sdk;
+  sourceRoot = "${src.name}-sdk/python";
+in
+buildPythonPackage {
+  inherit (pulumi-aws) pname version;
+  inherit src sourceRoot;
 
-buildPythonPackage rec {
-  pname = "pulumi-aws";
-  # Version is independant of pulumi's.
-  version = "6.66.3";
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchFromGitHub {
-    owner = "pulumi";
-    repo = "pulumi-aws";
-    tag = "v${version}";
-    hash = "sha256-BPL4B0KwXQld+/aPTJKhsFMPEbJByccTj+Zs70b8O6A=";
-  };
-
-  sourceRoot = "${src.name}/sdk/python";
+  disabled = pythonOlder "3.9";
 
   build-system = [ setuptools ];
 
@@ -32,18 +33,16 @@ buildPythonPackage rec {
     parver
     pulumi
     semver
-  ];
-
-  # Checks require cloud resources
-  doCheck = false;
+  ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
 
   pythonImportsCheck = [ "pulumi_aws" ];
 
-  meta = with lib; {
-    description = "Pulumi python amazon web services provider";
+  meta = {
+    description = "Pulumi package for creating and managing Amazon Web Services (AWS) cloud resources";
     homepage = "https://github.com/pulumi/pulumi-aws";
-    changelog = "https://github.com/pulumi/pulumi-aws/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      tie
+    ];
   };
 }
