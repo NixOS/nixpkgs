@@ -124,8 +124,11 @@ class JunitXMLLogger(AbstractLogger):
 
 
 class CompositeLogger(AbstractLogger):
-    def __init__(self, logger_list: list[AbstractLogger]) -> None:
+    def __init__(
+        self, logger_list: list[AbstractLogger], *, exit_on_error: bool
+    ) -> None:
         self.logger_list = logger_list
+        self.exit_on_error = exit_on_error
 
     def add_logger(self, logger: AbstractLogger) -> None:
         self.logger_list.append(logger)
@@ -159,7 +162,8 @@ class CompositeLogger(AbstractLogger):
     def error(self, *args, **kwargs) -> None:  # type: ignore
         for logger in self.logger_list:
             logger.error(*args, **kwargs)
-        sys.exit(1)
+        if self.exit_on_error:
+            sys.exit(1)
 
     def print_serial_logs(self, enable: bool) -> None:
         for logger in self.logger_list:

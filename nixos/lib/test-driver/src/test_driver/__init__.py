@@ -113,7 +113,7 @@ def main() -> None:
     args = arg_parser.parse_args()
 
     output_directory = args.output_directory.resolve()
-    logger = CompositeLogger([TerminalLogger()])
+    logger = CompositeLogger([TerminalLogger()], exit_on_error=not args.interactive)
 
     if "LOGFILE" in os.environ.keys():
         logger.add_logger(XMLLogger(os.environ["LOGFILE"]))
@@ -154,7 +154,7 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "", Path(), CompositeLogger([]))
+    d = Driver([], [], "", Path(), CompositeLogger([], exit_on_error=True))
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))
