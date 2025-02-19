@@ -30,6 +30,9 @@ in
         Some of these options are known to affect system stability. If you
         experience any stability issues when using this module, try disabling
         it. If you report an issue and use this module, always mention that you do.
+
+        Note the hardening features controlled by this option are crafted on a best-effort
+        basis. Review the module to understand its security implications
       '';
     };
   };
