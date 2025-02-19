@@ -22,10 +22,7 @@ let
     ;
 in
 {
-  options.profiles.hardened = mkEnableOption "hardened" // {
-    default = true;
-    example = false;
-  };
+  options.profiles.hardened = mkEnableOption "hardened";
   config = mkIf config.profiles.hardened {
     meta = {
       maintainers = [
