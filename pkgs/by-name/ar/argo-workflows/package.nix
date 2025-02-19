@@ -33,7 +33,7 @@ let
   };
 in
 buildGoModule rec {
-  pname = "argo";
+  pname = "argo-workflows";
   version = "3.6.3";
 
   src = fetchFromGitHub {
