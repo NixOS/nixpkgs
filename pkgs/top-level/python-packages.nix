@@ -12326,6 +12326,8 @@ self: super: with self; {
 
   pulumi-random = callPackage ../development/python-modules/pulumi-random { };
 
+  pulumi-yandex-unofficial = callPackage ../development/python-modules/pulumi-yandex-unofficial { };
+
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
   pure-eval = callPackage ../development/python-modules/pure-eval { };
