@@ -28,8 +28,6 @@ let
       # but nixpkgs needs `char16_t` for compatibility with packages that expect upstream ICU with `char16_t`.
       # According to `unicode/umachine.h`, these types are bit-compatible but distinct in C++.
       ./patches/define-uchar-as-char16_t.patch
-      # Enable the C++ API by default to match the upstream ICU packaging in nixpkgs
-      ./patches/enable-cxx-api-by-default.patch
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
       ./patches/suppress-icu-check-crash.patch
     ];
