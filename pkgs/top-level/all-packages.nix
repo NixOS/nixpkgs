@@ -232,9 +232,7 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
-  apko = callPackage ../development/tools/apko {
-    buildGoModule = buildGo123Module;
-  };
+  apko = callPackage ../development/tools/apko { };
 
   basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
     tbb = tbb_2021_11;
