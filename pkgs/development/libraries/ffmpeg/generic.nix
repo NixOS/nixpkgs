@@ -476,7 +476,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Fix https://github.com/NixOS/nixpkgs/issues/383210
       (fetchpatch {
         url = "https://github.com/FFmpeg/FFmpeg/commit/099f88b8641dfc299f3896d17d9addc5b9ae7799.patch";
-        hash = "sha256-T9wmV1r0IOnV35pii6JkMkHMs3d4v1Ap1/Hd8FPi/pE=";
+        hash = "sha256-OzRWpkxmY9UlnBR0w3hL4wykVVc0HJfw5Sefh3uJAsg=";
       })
     ];
 
