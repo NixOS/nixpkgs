@@ -4,6 +4,7 @@ let
     # utils
     {
       stdenv,
+      fetchFromGitHub,
       fetchpatch,
       fetchurl,
       lib,
@@ -13,6 +14,7 @@ let
       # source specification
       hash,
       muslPatches ? { },
+      rev,
       version,
 
       # runtime dependencies
@@ -130,9 +132,12 @@ let
       inherit version;
       pname = pname + lib.optionalString jitSupport "-jit";
 
-      src = fetchurl {
-        url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-        inherit hash;
+      src = fetchFromGitHub {
+        owner = "postgres";
+        repo = "postgres";
+        # rev, not tag, on purpose: allows updating when new versions
+        # are "stamped" a few days before release (tag).
+        inherit hash rev;
       };
 
       __structuredAttrs = true;
@@ -215,22 +220,20 @@ let
 
       nativeBuildInputs =
         [
+          bison
+          docbook-xsl-nons
+          docbook_xml_dtd_45
+          flex
           libxml2
+          libxslt
           makeWrapper
+          perl
           pkg-config
           removeReferencesTo
         ]
         ++ lib.optionals jitSupport [
           llvmPackages.llvm.dev
           nukeReferences
-        ]
-        ++ lib.optionals (atLeast "17") [
-          bison
-          flex
-          perl
-          docbook_xml_dtd_45
-          docbook-xsl-nons
-          libxslt
         ];
 
       enableParallelBuilding = true;
@@ -298,11 +301,6 @@ let
           ./patches/less-is-more.patch
           ./patches/paths-for-split-outputs.patch
           ./patches/paths-with-postgresql-suffix.patch
-
-          (fetchpatch {
-            url = "https://github.com/postgres/postgres/commit/8108674f0e5639baebcf03b54b7ccf9e9a8662a2.patch";
-            hash = "sha256-EQJkDR0eb7QWCjyMzXMn+Vbcwx3MMdC83oN7XSVJP0U=";
-          })
 
           (replaceVars ./patches/locale-binary-path.patch {
             locale = "${
