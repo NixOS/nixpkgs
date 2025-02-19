@@ -61,8 +61,8 @@ let
         ] ++ (overrides.buildInputs or [ ]);
 
         cmakeFlags = [
-          "-D g15=OFF"
-          "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
+          (lib.cmakeBool "g15" false)
+          (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # protobuf >22 requires C++ 17
         ] ++ (overrides.configureFlags or [ ]);
 
         preConfigure = ''
