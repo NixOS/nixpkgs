@@ -54,7 +54,7 @@ EOF
     false
   fi
   echo 'initializing postgresql'
-  initdb -U postgres
+  initdb --username=postgres --auth=trust --no-sync --no-instructions
 
   echo "$postgresqlExtraSettings" >>"$PGDATA/postgresql.conf"
 
@@ -79,5 +79,5 @@ EOF
 
 postgresqlStop() {
   echo 'stopping postgresql'
-  pg_ctl stop
+  pg_ctl stop --mode=immediate
 }
