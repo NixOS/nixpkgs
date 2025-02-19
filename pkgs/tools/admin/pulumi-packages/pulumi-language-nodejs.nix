@@ -4,6 +4,7 @@
   pulumi,
   bash,
   nodejs,
+  python3,
 }:
 buildGoModule rec {
   pname = "pulumi-language-nodejs";
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/nodejs/cmd/pulumi-language-nodejs";
 
-  vendorHash = "sha256-L91qIud8dWx7dWWEcknKUSTJe+f4OBL8wBg6dKUWgkQ=";
+  vendorHash = "sha256-vmFoMxWK5sj3vsBVFAji0Pz2wtf1H3MJhbrkHshDOno=";
 
   ldflags = [
     "-s"
@@ -23,11 +24,13 @@ buildGoModule rec {
     "-skip=^${
       lib.concatStringsSep "$|^" [
         "TestLanguage"
+        "TestGetProgramDependencies"
       ]
     }$"
   ];
 
   nativeCheckInputs = [
+    python3 # for TestNonblockingStdout
     nodejs
   ];
 

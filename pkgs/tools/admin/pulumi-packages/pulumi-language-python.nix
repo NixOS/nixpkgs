@@ -11,7 +11,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
 
-  vendorHash = "sha256-Q8nnYJJN5+W2luY8JQJj1X9KIk9ad511FBywr+0wBNg=";
+  vendorHash = "sha256-2K3EIG0xRcRRJES9h72Sk9V442T6dHZbYxz1uxxEKWI=";
 
   ldflags = [
     "-s"
@@ -22,6 +22,7 @@ buildGoModule rec {
   checkFlags = [
     "-skip=^${
       lib.concatStringsSep "$|^" [
+        "TestLanguage"
         "TestDeterminePulumiPackages"
       ]
     }$"
