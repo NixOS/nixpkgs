@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitea,
-  buildGo123Module,
+  buildGoModule,
   testers,
   gitea-actions-runner,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "gitea-actions-runner";
   version = "0.2.11";
 
