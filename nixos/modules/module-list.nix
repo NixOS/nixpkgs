@@ -145,7 +145,6 @@
   ./misc/passthru.nix
   ./misc/version.nix
   ./misc/wordlist.nix
-  ./profiles/hardened.nix
   ./programs/_1password-gui.nix
   ./programs/_1password.nix
   ./programs/adb.nix
