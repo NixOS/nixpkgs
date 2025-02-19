@@ -10,7 +10,6 @@
   callPackage,
   testers,
   pulumi,
-  pulumiPackages,
 }:
 buildGoModule rec {
   pname = "pulumi";
@@ -116,7 +115,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    pkgs = pulumiPackages;
+    pkgs = callPackage ./plugins.nix { };
     withPackages = callPackage ./with-packages.nix { };
     tests = {
       version = testers.testVersion {
