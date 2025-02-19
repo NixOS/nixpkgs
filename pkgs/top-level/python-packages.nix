@@ -12805,6 +12805,8 @@ self: super: with self; {
 
   pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
 
+  pysigma-backend-loki = callPackage ../development/python-modules/pysigma-backend-loki { };
+
   pysigma-pipeline-crowdstrike = callPackage ../development/python-modules/pysigma-pipeline-crowdstrike { };
 
   pysigma-pipeline-sysmon = callPackage ../development/python-modules/pysigma-pipeline-sysmon { };
