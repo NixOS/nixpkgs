@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs autogen.sh
+
+    substituteInPlace contrib/60-libjaylink.rules \
+      --replace-fail 'GROUP="plugdev"' 'GROUP="jlink"'
   '';
 
   postInstall = ''
