@@ -1,0 +1,12 @@
+{
+  "url": "https://github.com/zee-editor/tree-sitter-ron",
+  "rev": "7762d709a0f7c1f9e269d0125a2e8a7a69006146",
+  "date": "2022-05-08T21:52:45+01:00",
+  "path": "/nix/store/cnvcp3gkbcl20k9m8ph6nsryxwc6sr7i-tree-sitter-ron",
+  "sha256": "1y4hfvmiyllcdbn1n8h422fx3gdw5lwzxgfzb5rjnpwfaw9lk18f",
+  "hash": "sha256-DoVJE1eOXytzWd+9/jktvL3RnRAEIhvsaoxSH+t2kPg=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}
