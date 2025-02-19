@@ -1,13 +1,13 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitLab,
   installShellFiles,
   stdenv,
   nix-update-script,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "glab";
   version = "1.53.0";
 
