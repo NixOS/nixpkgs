@@ -106,11 +106,11 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "dbx" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for advanced Databricks jobs management";
     homepage = "https://github.com/databrickslabs/dbx";
     changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
-    license = licenses.databricks-dbx;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.databricks-dbx;
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
   };
 }
