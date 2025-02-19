@@ -38,7 +38,10 @@ buildGoModule rec {
     description = "Tool for searching options in Nix";
     homepage = "https://gitlab.com/hmajid2301/optinix";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hmajid2301 ];
+    maintainers = with lib.maintainers; [
+      hmajid2301
+      brianmcgillion
+    ];
     changelog = "https://gitlab.com/hmajid2301/optinix/-/releases/v${version}";
     mainProgram = "optinix";
   };
