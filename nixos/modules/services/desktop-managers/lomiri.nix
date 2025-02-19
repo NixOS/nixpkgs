@@ -155,6 +155,7 @@ in
           ++ (
             with pkgs.lomiri;
             [ lomiri-telephony-service ]
+            ++ lib.optionals config.services.geoclue2.enable [ lomiri-indicator-location ]
             ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
           );
       };
