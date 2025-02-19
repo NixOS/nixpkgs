@@ -1622,7 +1622,6 @@ with pkgs;
   };
 
   authelia = callPackage ../servers/authelia {
-    buildGoModule = buildGo123Module;
     pnpm = pnpm_10;
   };
 
