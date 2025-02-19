@@ -607,7 +607,7 @@ in {
   misc = handleTest ./misc.nix {};
   misskey = handleTest ./misskey.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
-  mobilizon = handleTest ./mobilizon.nix {};
+  mobilizon = runTest ./mobilizon.nix;
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
   mollysocket = handleTest ./mollysocket.nix { };
