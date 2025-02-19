@@ -352,4 +352,6 @@ lib.recurseIntoAttrs {
         touch -- "$out"
       '';
   };
+
+  testEqualArrayOrMap = lib.recurseIntoAttrs (pkgs.callPackages ../testEqualArrayOrMap/tests.nix { });
 }
