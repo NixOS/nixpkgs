@@ -5529,9 +5529,7 @@ with pkgs;
     forFHSEnv = true;
   };
 
-  carapace = callPackage ../shells/carapace {
-    buildGoModule = buildGo123Module;
-  };
+  carapace = callPackage ../shells/carapace { };
 
   fish = callPackage ../shells/fish { };
 
