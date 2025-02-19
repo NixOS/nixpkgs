@@ -232,8 +232,6 @@ let
                 setup.py
             '';
 
-          dontUseSetuptoolsCheck = true;
-
           preCheck = ''
             export HOME=$(mktemp -d)
             rm pytest.ini
