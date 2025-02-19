@@ -1,11 +1,11 @@
 {
   lib,
   stdenv,
-  buildGo123Module,
+  buildGoModule,
   tailscale,
 }:
 
-buildGo123Module {
+buildGoModule {
   pname = "tailscale-nginx-auth";
   inherit (tailscale) version src vendorHash;
 
