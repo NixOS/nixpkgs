@@ -64,14 +64,6 @@ mkMesonLibrary (finalAttrs: {
     nlohmann_json
   ];
 
-  preConfigure =
-    # "Inline" .version so it's not a symlink, and includes the suffix.
-    # Do the meson utils, without modification.
-    ''
-      chmod u+w ./.version
-      echo ${version} > ../../.version
-    '';
-
   mesonFlags = [
     (lib.mesonEnable "markdown" enableMarkdown)
     (lib.mesonOption "readline-flavor" readlineFlavor)
