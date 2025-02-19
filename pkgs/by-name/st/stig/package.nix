@@ -11,6 +11,7 @@ python3Packages.buildPythonApplication rec {
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
   version = "0.12.10a0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rndusr";
@@ -19,7 +20,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-lSFI4/DxWl17KFgLXZ7c5nW/e5IUGN7s8Gm6wTM5ZWg=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     urwid
     urwidtrees
     aiohttp
