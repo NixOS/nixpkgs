@@ -588,7 +588,7 @@ in {
     defconfig = "rock64-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
-    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
   };
 
   # A special build with much lower memory frequency (666 vs 1600 MT/s) which
@@ -605,7 +605,7 @@ in {
     defconfig = "rock64-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31="${armTrustedFirmwareRK3328}/bl31.elf";
-    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
   };
 
   ubootRockPiE = buildUBoot {
