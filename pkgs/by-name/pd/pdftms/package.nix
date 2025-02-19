@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "pingponghero12";
     repo = "pdftms";
-    rev = "main";
+    rev = "c06fb29e9bd8d7cdd441c9d8e4ff05af0c0ed229";
     sha256 = "sha256-ig7L0/DOcTpKiODbWGfYMmLjlXgb4Am5sPQzf/Eo1hY=";
   };
 
