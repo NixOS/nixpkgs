@@ -7,6 +7,7 @@
 
 let
   cfg = config.services.desktopManager.lomiri;
+  hasLocationProvider = config.services.geoclue2.enable || config.services.gpsd.enable;
 in
 {
   options.services.desktopManager.lomiri = {
@@ -81,36 +82,40 @@ in
             libayatana-common
             ubports-click
           ])
-          ++ (with pkgs.lomiri; [
-            hfd-service
-            libusermetrics
-            lomiri
-            lomiri-calculator-app
-            lomiri-calendar-app
-            lomiri-camera-app
-            lomiri-clock-app
-            lomiri-content-hub
-            lomiri-docviewer-app
-            lomiri-download-manager
-            lomiri-filemanager-app
-            lomiri-gallery-app
-            lomiri-history-service
-            lomiri-mediaplayer-app
-            lomiri-music-app
-            lomiri-polkit-agent
-            lomiri-schemas # exposes some required dbus interfaces
-            lomiri-session # wrappers to properly launch the session
-            lomiri-sounds
-            lomiri-system-settings
-            lomiri-telephony-service
-            lomiri-terminal-app
-            lomiri-thumbnailer
-            lomiri-url-dispatcher
-            mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            morph-browser
-            qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
-            teleports
-          ]);
+          ++ (
+            with pkgs.lomiri;
+            [
+              hfd-service
+              libusermetrics
+              lomiri
+              lomiri-calculator-app
+              lomiri-calendar-app
+              lomiri-camera-app
+              lomiri-clock-app
+              lomiri-content-hub
+              lomiri-docviewer-app
+              lomiri-download-manager
+              lomiri-filemanager-app
+              lomiri-gallery-app
+              lomiri-history-service
+              lomiri-mediaplayer-app
+              lomiri-music-app
+              lomiri-polkit-agent
+              lomiri-schemas # exposes some required dbus interfaces
+              lomiri-session # wrappers to properly launch the session
+              lomiri-sounds
+              lomiri-system-settings
+              lomiri-telephony-service
+              lomiri-terminal-app
+              lomiri-thumbnailer
+              lomiri-url-dispatcher
+              mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
+              morph-browser
+              qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
+              teleports
+            ]
+            ++ lib.optionals hasLocationProvider [ lomiri-location-service ]
+          );
       };
 
       hardware = {
@@ -119,16 +124,26 @@ in
 
       networking.networkmanager.enable = lib.mkDefault true;
 
-      systemd.packages = with pkgs.lomiri; [
-        hfd-service
-        lomiri-download-manager
-      ];
+      systemd.packages =
+        with pkgs.lomiri;
+        [
+          hfd-service
+          lomiri-download-manager
+        ]
+        ++ lib.optionals hasLocationProvider [
+          lomiri-location-service
+        ];
 
-      services.dbus.packages = with pkgs.lomiri; [
-        hfd-service
-        libusermetrics
-        lomiri-download-manager
-      ];
+      services.dbus.packages =
+        with pkgs.lomiri;
+        [
+          hfd-service
+          libusermetrics
+          lomiri-download-manager
+        ]
+        ++ lib.optionals hasLocationProvider [
+          lomiri-location-service
+        ];
 
       # Copy-pasted basic stuff
       hardware.graphics.enable = lib.mkDefault true;
@@ -155,7 +170,7 @@ in
           ++ (
             with pkgs.lomiri;
             [ lomiri-telephony-service ]
-            ++ lib.optionals config.services.geoclue2.enable [ lomiri-indicator-location ]
+            ++ lib.optionals hasLocationProvider [ lomiri-indicator-location ]
             ++ lib.optionals config.networking.networkmanager.enable [ lomiri-indicator-network ]
           );
       };
@@ -247,6 +262,11 @@ in
               Restart = "on-failure";
               ExecStart = "${lib.getExe pkgs.lomiri.mediascanner2}";
             };
+          };
+        }
+        // lib.optionalAttrs hasLocationProvider {
+          "lomiri-location-service-trust-stored" = {
+            wantedBy = [ "graphical-session.target" ];
           };
         };
 
