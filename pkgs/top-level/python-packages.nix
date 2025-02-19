@@ -1460,7 +1460,7 @@ self: super: with self; {
 
   pueblo = callPackage ../development/python-modules/pueblo { };
 
-  pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
+  pulumi = callPackage ../development/python-modules/pulumi { };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
