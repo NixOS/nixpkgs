@@ -15,5 +15,10 @@ makeScopeWithSplicing' {
     lib.packagesFromDirectoryRecursive {
       inherit (self) callPackage;
       directory = ./plugins;
+    }
+    // lib.optionalAttrs config.allowAliases {
+      pulumi-language-go = lib.warnOnInstantiate "pulumi-language-go has been renamed to pulumi-go" self.pulumi-go;
+      pulumi-language-nodejs = lib.warnOnInstantiate "pulumi-language-nodejs has been renamed to pulumi-nodejs" self.pulumi-nodejs;
+      pulumi-language-python = lib.warnOnInstantiate "pulumi-language-python has been renamed to pulumi-python" self.pulumi-python;
     };
 }

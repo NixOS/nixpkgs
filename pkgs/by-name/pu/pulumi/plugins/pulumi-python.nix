@@ -6,7 +6,7 @@
   python3,
 }:
 buildGoModule rec {
-  pname = "pulumi-language-python";
+  pname = "pulumi-python";
   inherit (pulumi) version src;
 
   sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
