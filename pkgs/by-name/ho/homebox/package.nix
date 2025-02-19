@@ -1,10 +1,10 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   pnpm_9,
   nodejs,
-  go_1_23,
+  go,
   git,
   cacert,
   nixosTests,
@@ -19,7 +19,7 @@ let
     hash = "sha256-XzO/aJcLGu+ZHt9fDUhUzBbUS9VpChFVOH0cgvYK6kc=";
   };
 in
-buildGo123Module {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = "sha256-Zo/yI1mNeN0O9gZsHux6aOzBlv72h17s7QNO+MaG2/g=";
@@ -28,7 +28,7 @@ buildGo123Module {
   # Since we do pnpm thing in those it fails if we don't explicitely remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      go_1_23
+      go
       git
       cacert
     ];
