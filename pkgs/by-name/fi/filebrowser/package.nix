@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
   lib,
@@ -35,7 +35,7 @@ let
     '';
   };
 in
-buildGo123Module {
+buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
