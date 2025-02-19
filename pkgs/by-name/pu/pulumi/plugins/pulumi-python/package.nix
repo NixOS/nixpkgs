@@ -49,6 +49,8 @@ buildGoModule {
       ../../dist/pulumi-analyzer-policy-python
   '';
 
+  passthru.tests.smokeTest = callPackage ./smoke-test/default.nix { };
+
   meta = {
     homepage = "https://www.pulumi.com/docs/iac/languages-sdks/python/";
     description = "Language host for Pulumi programs written in Python";
