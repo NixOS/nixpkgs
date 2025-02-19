@@ -9,7 +9,7 @@
   testers,
 }:
 let
-  version = "0.2.2";
+  version = "0.2.3";
 
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
@@ -21,7 +21,7 @@ buildGoModule {
     owner = "ente-io";
     repo = "ente";
     tag = "cli-v${version}";
-    hash = "sha256-ynbljYl73XwCnt3RUNmOYdrN8FX3sJ+3qDhWa8m2YJs=";
+    hash = "sha256-qKMFoNtD5gH0Y+asD0LR5d3mxGpr2qVWXIUzJTSezeI=";
     sparseCheckout = [ "cli" ];
   };
 
