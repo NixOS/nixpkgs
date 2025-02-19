@@ -10,19 +10,19 @@
   vimUtils,
 }:
 let
-  version = "0.0.18";
+  version = "0.0.19";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-HSXqD+bC0sdvNbmV8hIU99cLrVyIMAzbWf5cqUpIhZU=";
+    hash = "sha256-/WvkMsyhaYa3TLOg6QBVz1dvHO4vr1PdeSF7zVIOUcY=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-XDxWeEbsDf4r346OkQkZPmYLANgtydspPk1uLrnvrnY=";
+    cargoHash = "sha256-XDxWeEbsDf4r346OkQkZPmYLANgtydspPk1uLrnvrnY";
 
     nativeBuildInputs = [
       pkg-config
