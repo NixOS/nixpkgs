@@ -14572,9 +14572,7 @@ with pkgs;
     electron = electron_33;
   };
 
-  okms-cli = callPackage ../by-name/ok/okms-cli/package.nix {
-    buildGoModule = buildGo123Module;
-  };
+  okms-cli = callPackage ../by-name/ok/okms-cli/package.nix { };
 
   omegat = callPackage ../applications/misc/omegat.nix { };
 
