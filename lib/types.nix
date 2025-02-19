@@ -579,7 +579,7 @@ rec {
       absolute ? null,
     }:
       throwIf (inStore != null && absolute != null && inStore && !absolute) "In pathWith, inStore means the path must be absolute" mkOptionType {
-        name = "pathWith";
+        name = "path";
         description = (
           (if absolute == null then "" else (if absolute then "absolute " else "relative ")) +
           "path" +
@@ -588,7 +588,7 @@ rec {
         descriptionClass = "noun";
 
         merge = mergeEqualOption;
-        functor = defaultFunctor "pathWith" // {
+        functor = defaultFunctor "path" // {
           type = pathWith;
           payload = {inherit inStore absolute; };
           binOp = lhs: rhs: if lhs == rhs then lhs else null;
