@@ -51,10 +51,6 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    export LANG="en_US.UTF-8"
-  '';
-
   disabledTests =
     [
       # https://github.com/pyca/pyopenssl/issues/692
