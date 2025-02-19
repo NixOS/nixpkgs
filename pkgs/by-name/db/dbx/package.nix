@@ -112,5 +112,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.databricks-dbx;
     maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    broken = lib.versionAtLeast python.version "3.12"; # Depends on python.impl which was removed in 3.12
   };
 }
