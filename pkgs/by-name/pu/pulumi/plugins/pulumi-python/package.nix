@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  callPackage,
   pulumi,
   bash,
   python3,
@@ -44,6 +45,8 @@ buildGoModule rec {
       ../../dist/pulumi-resource-pulumi-python \
       ../../dist/pulumi-analyzer-policy-python
   '';
+
+  passthru.tests.smokeTest = callPackage ./smoke-test/default.nix { };
 
   meta = {
     homepage = "https://www.pulumi.com/docs/iac/languages-sdks/python/";
