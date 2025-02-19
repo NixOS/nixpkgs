@@ -12391,6 +12391,8 @@ with pkgs;
     ubootNanoPCT6
     ubootNovena
     ubootOdroidC2
+    ubootOdroidN2
+    ubootOdroidN2Plus
     ubootOdroidXU3
     ubootOlimexA64Olinuxino
     ubootOlimexA64Teres1
