@@ -9,9 +9,7 @@
   jq,
   git,
   pkg-config,
-  yarn,
-  python3,
-  esbuild,
+  runCommand,
   nodejs,
   node-gyp,
   libsecret,
@@ -21,16 +19,13 @@
   cctools,
   nixosTests,
 }:
-
 let
-  system = stdenv.hostPlatform.system;
 
-  yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [
-    "frozen-lockfile"
-    "non-interactive"
-    "no-progress"
-  ];
+  version = "1.96.4";
+  hash = "sha256-TUM2R3TT4xZ1BTsZaBRbq2E8/uPazKryEoyBenMJwzE=";
+  nodeModulesHash = "sha256-Zdk8obKjQnLkPyQ17F44YQ1LkK4YHgbhXeom5Vf5M8g=";
+
+  system = stdenv.hostPlatform.system;
 
   vsBuildTarget =
     {
@@ -41,74 +36,70 @@ let
     }
     .${system} or (throw "Unsupported system ${system}");
 
-  esbuild' = esbuild.override {
-    buildGoModule =
-      args:
-      buildGoModule (
-        args
-        // rec {
-          version = "0.17.14";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      );
-  };
-
-  # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path: version: ''
-    mkdir -p ${path}/node_modules/esbuild/bin
-    jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
-  '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.88.1";
+
+  inherit nodejs version;
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
-    rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-Yc16L13Z8AmsGoSFbvy+4+KBdHxvqLMwZLeU2/dAQVU=";
+    rev = "openvscode-server-v${version}";
+    inherit hash;
   };
 
-  yarnCache = stdenv.mkDerivation {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
-    inherit (finalAttrs) src;
-    nativeBuildInputs = [
-      cacert
-      yarn'
-      git
-    ];
-    buildPhase = ''
-      export HOME=$PWD
+  ## fetchNpmDeps doesn't correctly process git dependencies
+  ## presumably because of https://github.com/npm/cli/issues/5170
+  ## therefore, we're fetching all the node_module folders into
+  ## a single FOD, and unpack it in configurePhase
+  nodeModules =
+    runCommand "openvscode-server-node-modules"
+      {
+        inherit (finalAttrs) src nativeBuildInputs;
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = nodeModulesHash;
+      }
+      ''
+        runPhase unpackPhase
+        export HOME=$TMPDIR/home
+        npm config set progress false
+        npm config set cafile ${cacert}/etc/ssl/certs/ca-bundle.crt
+        for p in $(find -name package.json -exec dirname {} \;)
+        do (
+          set -x
+          cd $p
+          if [ -e node_modules ]
+          then
+            echo >&2 "File exists $p/node_modules"
+            exit 0
+          fi
+          mkdir node_modules
+          if [ -e package-lock.json ]
+          then npm ci --ignore-scripts --log-level=verbose
+          else npm i --ignore-scripts --log-level=verbose
+          fi
+          mkdir -p $out/$p
+          cp -r node_modules $out/$p/
+        )
+        done
+      '';
 
-      yarn config set yarn-offline-mirror $out
-      find "$PWD" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --frozen-lockfile --ignore-scripts --ignore-platform \
-          --ignore-engines --no-progress --non-interactive
-    '';
+  npm_config_nodedir = nodejs;
+  npm_config_node_gyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
 
-    installPhase = ''
-      echo yarnCache
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-89c6GYLT2RzHqwxBKegYqB6g5rEJ6/nH53cnfV7b0Ts=";
-  };
+  NODE_OPTIONS = "--openssl-legacy-provider";
+  NODE_ENV = "production";
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  NIX_NODEJS_BUILDNPMPACKAGE = "1";
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
     nodejs
-    yarn'
-    python3
+    nodejs.python
+    nodejs.pkgs.lerna
     pkg-config
     makeWrapper
     git
@@ -127,113 +118,86 @@ stdenv.mkDerivation (finalAttrs: {
       cctools
     ];
 
-  patches = [
-    # Patch out remote download of nodejs from build script
-    ./remove-node-download.patch
-  ];
-
-  # Disable NAPI_EXPERIMENTAL to allow to build with Node.js≥18.20.0.
-  env.NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
-
-  postPatch = ''
-    export HOME=$PWD
-
-    # remove all built-in extensions, as these are 3rd party extensions that
-    # get downloaded from vscode marketplace
-    jq --slurp '.[0] * .[1]' "product.json" <(
-      cat << EOF
-    {
-      "builtInExtensions": []
-    }
-    EOF
-    ) | sponge product.json
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    # set default yarn opts
-    ${lib.concatMapStrings (option: ''
-      yarn --offline config set ${option}
-    '') defaultYarnOpts}
-
-    # set offline mirror to yarn cache we created in previous steps
-    yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
-
-    # set nodedir to prevent node-gyp from downloading headers
-    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-
-    # use updated node-gyp. fixes the following error on Darwin:
-    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
-    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
-
-    runHook postConfigure
-  '';
-
-  buildPhase =
+  # remove all built-in extensions, as these are 3rd party extensions that
+  # get downloaded from vscode marketplace
+  postPatch =
     ''
-      runHook preBuild
+      jq --slurp '.[0] * .[1]' "product.json" <(
+        cat << EOF
+      {
+        "builtInExtensions": []
+      }
+      EOF
+      ) | sponge product.json
+      echo "Updated product.json"
+    ''
+    ## build/lib/node.ts picks up nodejs version from remote/.npmrc
+    ## and prefetches it into .build/node/v{version}/{target}/node
+    ## so we pre-seed it here
+    + ''
+      sed -i 's/target=.*/target="${nodejs.version}"/' remote/.npmrc
+      mkdir -p .build/node/v${nodejs.version}/${vsBuildTarget}
+      ln -s ${nodejs}/bin/node .build/node/v${nodejs.version}/${vsBuildTarget}/node
+    '';
 
-      # install dependencies
-      yarn --offline --ignore-scripts
-
-      # run yarn install everywhere, skipping postinstall so we can patch esbuild
-      find . -path "*node_modules" -prune -o \
-        -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
-          xargs -I {} yarn --cwd {} \
-            --frozen-lockfile --offline --ignore-scripts --ignore-engines
-
-      ${patchEsbuild "./build" "0.12.6"}
-      ${patchEsbuild "./extensions" "0.11.23"}
-
-      # patch shebangs of node_modules to allow binary packages to build
-      patchShebangs ./remote/node_modules
-
-      # put ripgrep binary into bin so postinstall does not try to download it
+  configurePhase =
+    ''
+      export HOME=$TMPDIR/home
+      mkdir -p $HOME
+    ''
+    ## unpack all of the prefetched node_modules folders
+    + ''
+      for p in $(find -name package.json -exec dirname {} \;)
+      do (
+        cd $p
+        if [ -e node_modules ]
+        then
+          echo >&2 "File exists $p/node_modules"
+          exit 0
+        fi
+        cp -r $nodeModules/$p/node_modules .
+        chmod -R 700 node_modules
+      )
+      patchShebangs $p/node_modules
+      done
+    ''
+    ## put ripgrep binary into bin so postinstall does not try to download it
+    + ''
       find -path "*@vscode/ripgrep" -type d \
         -execdir mkdir -p {}/bin \; \
         -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-      # (see issue #101229)
-      pushd ./remote/node_modules/@parcel/watcher
-      mkdir -p ./build/Release
-      mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
-      jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
-      popd
-    ''
+    ## pre-seed node-gyp
     + ''
-      export NODE_OPTIONS=--openssl-legacy-provider
-
-      # rebuild binaries, we use npm here, as yarn does not provide an alternative
-      # that would not attempt to try to reinstall everything and break our
-      # patching attempts
+      mkdir -p $HOME/.node-gyp/${nodejs.version}
+      echo 11 > $HOME/.node-gyp/${nodejs.version}/installVersion
+      ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    ''
+    ## rebuild native binaries
+    + ''
+      echo >&2 "Rebuilding from source in ./remote"
       npm --prefix ./remote rebuild --build-from-source
-
-      # run postinstall scripts after patching
-      find . -path "*node_modules" -prune -o \
-        -path "./*/*" -name "yarn.lock" -printf "%h\n" | \
-          xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
-
-      # build and minify
-      yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
-
-      runHook postBuild
+    ''
+    ## run postinstall scripts
+    + ''
+      find -name package.json -type f -exec sh -c '
+        if jq -e ".scripts.postinstall" {} >-
+        then
+          echo >&2 "Running postinstall script in $(dirname {})"
+          npm --offline --prefix=$(dirname {}) run postinstall
+        fi
+        exit 0
+      ' \;
     '';
 
-  installPhase = ''
-    runHook preInstall
+  buildPhase = ''
+    npm run gulp vscode-reh-web-${vsBuildTarget}-min
+  '';
 
+  installPhase = ''
     mkdir -p $out
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
-    ln -s ${nodejs}/bin/node $out
-
-    runHook postInstall
+    ln -sf ${nodejs}/bin/node $out
   '';
 
   passthru.tests = {
