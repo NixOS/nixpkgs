@@ -19,28 +19,26 @@
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  # TODO: this is temporarily not true for Cinny Desktop v4.3.1
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${version}";
-    hash = "sha256-lVBKzajxsQ33zC6NhRLMbWK81GxCbIQPtSR61yJHUL4=";
+    hash = "sha256-GwLfeQG19s35sEfeZmWa+PkJtAcSUHcbe05KnJ+jttY=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a2IyJ5a11cxgHpb2WRDxVF+aoL8kNnjBNwaQpgT3goo=";
+  cargoHash = "sha256-cX6nVNdSpy1Kbccuiv0XG+MysCjrLem42osTvhn2aMA=";
 
   postPatch =
     let
       cinny' =
-        # TODO: temporarily disabled for Cinny Desktop v4.3.1 (cinny-unwrapped is still at 4.3.0)
-        # assert lib.assertMsg (
-        #   cinny.version == version
-        # ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+        assert lib.assertMsg (
+          cinny.version == version
+        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;
