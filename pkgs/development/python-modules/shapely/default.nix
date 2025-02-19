@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   buildInputs = [ geos ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
