@@ -12322,7 +12322,7 @@ self: super: with self; {
 
   pulumi-command = callPackage ../development/python-modules/pulumi-command { };
 
-  pulumi-hcloud = pkgs.pulumiPackages.pulumi-hcloud.sdks.python;
+  pulumi-hcloud = callPackage ../development/python-modules/pulumi-hcloud { };
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
