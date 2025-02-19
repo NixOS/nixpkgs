@@ -4,8 +4,6 @@
   cargo,
   copyDesktopItems,
   electron_34,
-  esbuild,
-  buildGoModule,
   fetchFromGitHub,
   gnome-keyring,
   jq,
