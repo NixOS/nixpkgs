@@ -1,5 +1,5 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   envoy,
@@ -17,7 +17,7 @@ let
     mapAttrsToList
     ;
 in
-buildGo123Module rec {
+buildGoModule rec {
   pname = "pomerium";
   version = "0.28.0";
   src = fetchFromGitHub {
