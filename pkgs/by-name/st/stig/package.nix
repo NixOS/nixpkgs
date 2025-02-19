@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  python310Packages,
+  python3Packages,
   testers,
   stig,
 }:
 
-python310Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
@@ -19,7 +19,7 @@ python310Packages.buildPythonApplication rec {
     sha256 = "sha256-lSFI4/DxWl17KFgLXZ7c5nW/e5IUGN7s8Gm6wTM5ZWg=";
   };
 
-  propagatedBuildInputs = with python310Packages; [
+  propagatedBuildInputs = with python3Packages; [
     urwid
     urwidtrees
     aiohttp
@@ -30,7 +30,7 @@ python310Packages.buildPythonApplication rec {
     setproctitle
   ];
 
-  nativeCheckInputs = with python310Packages; [
+  nativeCheckInputs = with python3Packages; [
     asynctest
     pytestCheckHook
   ];
