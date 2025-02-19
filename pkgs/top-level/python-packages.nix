@@ -6062,6 +6062,8 @@ self: super: with self; {
 
   htmldate = callPackage ../development/python-modules/htmldate { };
 
+  htmlgen = callPackage ../development/python-modules/htmlgen { };
+
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
