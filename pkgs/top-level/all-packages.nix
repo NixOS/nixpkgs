@@ -300,9 +300,7 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  deck = callPackage ../by-name/de/deck/package.nix {
-    buildGoModule = buildGo123Module;
-  };
+  deck = callPackage ../by-name/de/deck/package.nix { };
 
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
