@@ -12290,10 +12290,25 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
-  inherit (callPackages ../servers/web-apps/matomo {})
-    matomo
+
+  inherit
+    ({
+      # To allow automatic backports of Matomo 5 PRs, the path must match what we
+      # have on `master`.
+      # We still want to provide the contents of this package as `matomo_5` in 24.11
+      # to not introduce a breaking change while preserving `matomo` as the EOL
+      # Matomo 4.x.
+      matomo_5 = callPackage ../by-name/ma/matomo/package.nix { };
+      # Matomo 4 reached EOL and will be replaced by matomo_5 in NixOS 25.05
+      matomo = matomo_5.overrideAttrs (old: {
+        version = "4.16.1";
+        src = old.src.override {
+          hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
+        };
+      });
+    })
     matomo_5
-    matomo-beta;
+    matomo;
 
   inherit (callPackages ../servers/unifi { })
     unifi8;
