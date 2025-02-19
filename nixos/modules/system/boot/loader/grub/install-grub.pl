@@ -3,7 +3,7 @@ use warnings;
 use Class::Struct;
 use XML::LibXML;
 use File::Basename;
-use File::Path qw(make_path);
+use File::Path qw(make_path rmtree);
 use File::stat;
 use File::Copy;
 use File::Copy::Recursive qw(rcopy pathrm);
