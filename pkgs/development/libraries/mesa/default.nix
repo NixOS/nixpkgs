@@ -138,9 +138,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-    # cherry-picked from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
-    # safe to remove for versions > 24.3.2
-    ./cross_clc.patch
   ];
 
   postPatch = ''
@@ -206,14 +203,13 @@ in stdenv.mkDerivation {
     (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
 
     # Enable Intel RT stuff when available
-    (lib.mesonBool "install-intel-clc" true)
-    (lib.mesonBool "install-mesa-clc" true)
     (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
+
+    # Required for OpenCL
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
     # Clover, old OpenCL frontend
     (lib.mesonOption "gallium-opencl" "icd")
-    (lib.mesonBool "opencl-spirv" true)
 
     # Rusticl, new OpenCL frontend
     (lib.mesonBool "gallium-rusticl" true)
@@ -221,12 +217,18 @@ in stdenv.mkDerivation {
     # meson auto_features enables this, but we do not want it
     (lib.mesonEnable "android-libbacktrace" false)
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+
+    # Build and install extra tools for cross
+    (lib.mesonBool "install-mesa-clc" true)
+    (lib.mesonBool "install-precomp-compiler" true)
+
+    # Disable valgrind on targets where it's not available
     (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals enablePatentEncumberedCodecs [
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
-    (lib.mesonOption "intel-clc" "system")
     (lib.mesonOption "mesa-clc" "system")
+    (lib.mesonOption "precomp-compiler" "system")
   ];
 
   strictDeps = true;
@@ -308,6 +310,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     # Move driver-related bits to $drivers
+    moveToOutput "lib/gallium-pipe" $drivers
     moveToOutput "lib/gbm" $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
     moveToOutput "lib/libgallium*" $drivers
@@ -339,7 +342,7 @@ in stdenv.mkDerivation {
 
     moveToOutput bin/intel_clc $driversdev
     moveToOutput bin/mesa_clc $driversdev
-    moveToOutput lib/gallium-pipe $opencl
+    moveToOutput bin/vtn_bindgen $driversdev
     moveToOutput "lib/lib*OpenCL*" $opencl
     moveToOutput "lib/libOSMesa*" $osmesa
     moveToOutput bin/spirv2dxil $spirv2dxil
@@ -392,7 +395,7 @@ in stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-UPIPE_SEARCH_DIR"
-    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+    "-DPIPE_SEARCH_DIR=\"${placeholder "drivers"}/lib/gallium-pipe\""
   ]);
 
   passthru = {
