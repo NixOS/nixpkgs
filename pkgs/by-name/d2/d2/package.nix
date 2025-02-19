@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   git,
@@ -8,7 +8,7 @@
   d2,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "d2";
   version = "0.6.9";
 
