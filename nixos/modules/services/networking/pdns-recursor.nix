@@ -26,6 +26,16 @@ let
 
   settingsFormat = pkgs.formats.yaml { };
 
+  forwardZoneMkChange =
+    field: config:
+    let
+      value = getAttrFromPath [ "services" "pdns-recursor" field ] config;
+    in
+    mapAttrsToList (zone: uri: {
+      inherit zone;
+      forwarders = [ uri ];
+    }) value;
+
   forwardZone = types.submodule {
     options = {
       zone = mkOption {
@@ -428,7 +438,7 @@ in
         "export_etc_hosts"
       ]
     )
-    (mkRenamedOptionModule
+    (mkChangedOptionModule
       [ "services" "pdns-recursor" "forwardZones" ]
       [
         "services"
@@ -437,8 +447,9 @@ in
         "recursor"
         "forward_zones"
       ]
+      (forwardZoneMkChange "forwardZones")
     )
-    (mkRenamedOptionModule
+    (mkChangedOptionModule
       [
         "services"
         "pdns-recursor"
@@ -451,6 +462,7 @@ in
         "recursor"
         "forward_zones_recurse"
       ]
+      (forwardZoneMkChange "forwardZonesRecurse")
     )
     (mkRenamedOptionModule
       [ "services" "pdns-recursor" "serveRFC1918" ]
