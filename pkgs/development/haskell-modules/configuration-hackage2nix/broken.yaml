@@ -3661,8 +3661,6 @@ broken-packages:
   - MIP # failure in job https://hydra.nixos.org/build/233199688 at 2023-09-02
   - mirror-tweet # failure in job https://hydra.nixos.org/build/233216951 at 2023-09-02
   - mismi-p # failure in job https://hydra.nixos.org/build/233257227 at 2023-09-02
-  - miso-action-logger # failure in job https://hydra.nixos.org/build/233229061 at 2023-09-02
-  - miso-examples # failure in job https://hydra.nixos.org/build/233237380 at 2023-09-02
   - mit-3qvpPyAi6mH # failure in job https://hydra.nixos.org/build/233229967 at 2023-09-02
   - mix-arrows # failure in job https://hydra.nixos.org/build/233257720 at 2023-09-02
   - mixpanel-client # failure in job https://hydra.nixos.org/build/233220132 at 2023-09-02
