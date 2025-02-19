@@ -3612,9 +3612,7 @@ with pkgs;
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
-  headscale = callPackage ../servers/headscale {
-    buildGoModule = buildGo123Module;
-  };
+  headscale = callPackage ../servers/headscale { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
