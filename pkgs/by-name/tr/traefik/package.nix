@@ -1,11 +1,11 @@
 {
   lib,
   fetchzip,
-  buildGo123Module,
+  buildGoModule,
   nixosTests,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "traefik";
   version = "3.3.3";
 
