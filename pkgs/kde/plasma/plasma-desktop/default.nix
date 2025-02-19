@@ -43,11 +43,6 @@ mkKdeDerivation {
     (replaceVars ./wallpaper-paths.patch {
       wallpapers = "${lib.getBin breeze}/share/wallpapers";
     })
-
-    # Fix build failure due to C++ template nonsense
-    # Submitted upstream: https://invent.kde.org/plasma/plasma-desktop/-/merge_requests/2833
-    # FIXME: remove when merged
-    ./fix-build.patch
   ];
 
   extraNativeBuildInputs = [ pkg-config ];

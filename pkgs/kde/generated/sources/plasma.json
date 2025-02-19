@@ -195,9 +195,9 @@
     "hash": "sha256-kaSXmq4aChMZSLCz+JcIvREGsH59sPwdU708omjaYSc="
   },
   "plasma-desktop": {
-    "version": "6.3.1",
-    "url": "mirror://kde/stable/plasma/6.3.1/plasma-desktop-6.3.1.tar.xz",
-    "hash": "sha256-EZydNhJ0NnBIMghky6/8YSUwy6TqYtbf1QTz7+WyVKQ="
+    "version": "6.3.1.1",
+    "url": "mirror://kde/stable/plasma/6.3.1/plasma-desktop-6.3.1.1.tar.xz",
+    "hash": "sha256-zgKHR9MeF2vem/RoA7LaVKy8Beu8/52cWFzALpsmrP0="
   },
   "plasma-dialer": {
     "version": "6.3.1",
