@@ -66,8 +66,8 @@ rec {
       "sha256-i04sOKNlMSATWWF3LXzvxrVf0H4oM542RBNZd4Zt6tc=";
 
   mypy-boto3-amplify =
-    buildMypyBoto3Package "amplify" "1.36.0"
-      "sha256-mtmY1VpEEo3Nrcbjs7lO0YLsGxAEZ7gRn8MhJEUWQiU=";
+    buildMypyBoto3Package "amplify" "1.36.22"
+      "sha256-8PT6vH55v0HTFzpXq9zLOzgEZP1+FwA1fDpE4yTzEjY=";
 
   mypy-boto3-amplifybackend =
     buildMypyBoto3Package "amplifybackend" "1.36.0"
@@ -166,8 +166,8 @@ rec {
       "sha256-mvC8pHHoNIK8xgiwGuoRcYsr1UkP57ZwQtuvRfYazk8=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.36.3"
-      "sha256-LGhvJhNkuXjvJ99QYgrFSzbaUZRh0ROui5JvL7OYTeo=";
+    buildMypyBoto3Package "batch" "1.36.23"
+      "sha256-FBjHqVc9cjhDd3JiHeBPTO9xvYq5musA/X1DiwYuzfw=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.36.0"
@@ -414,8 +414,8 @@ rec {
       "sha256-si7pjgKzxg++SfVdOsIQP37rXG84IZM0ltcwc2+wn3I=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.36.21"
-      "sha256-N6MW2zZyoAHYkhe6bwPa4VK/tlzfFPZaPEYAjBcH180=";
+    buildMypyBoto3Package "dms" "1.36.22"
+      "sha256-Pc4KEedGm6ASBM0nBnOrnyTgv46rQ3D+hRsdP2x/xvs=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.36.0"
@@ -502,8 +502,8 @@ rec {
       "sha256-j61F+3E2FfQ7hpsnT9M/7maaL/uKNNlRhm8cKH5RoAo=";
 
   mypy-boto3-emr-containers =
-    buildMypyBoto3Package "emr-containers" "1.36.0"
-      "sha256-2YTbWlv98Ldoj7w/MDcKNH40V88NjSYN+CwnZugufE4=";
+    buildMypyBoto3Package "emr-containers" "1.36.23"
+      "sha256-fLHB86UPQH/q6nItMngOxiXZyC34n+giryXQcuypPQw=";
 
   mypy-boto3-emr-serverless =
     buildMypyBoto3Package "emr-serverless" "1.36.3"
@@ -866,8 +866,8 @@ rec {
       "sha256-Zs7r18i4H2k2XnqvRN/d+b5W+0bjfNonNL1EI1rK7aw=";
 
   mypy-boto3-medialive =
-    buildMypyBoto3Package "medialive" "1.36.19"
-      "sha256-546c5x+TddUlNzw5Wqruap7O8zvAXlgvszHo/psBRuo=";
+    buildMypyBoto3Package "medialive" "1.36.23"
+      "sha256-BoQr6Zei1WNmBGt6/AIp2OHCzX7VicNnn16jfpWWPVU=";
 
   mypy-boto3-mediapackage =
     buildMypyBoto3Package "mediapackage" "1.36.0"
