@@ -1476,6 +1476,8 @@ self: super: with self; {
 
   pulumi-random = callPackage ../development/python-modules/pulumi-random { };
 
+  pulumi-tls = callPackage ../development/python-modules/pulumi-tls { };
+
   pulumi-yandex-unofficial = callPackage ../development/python-modules/pulumi-yandex-unofficial { };
 
   backcall = callPackage ../development/python-modules/backcall { };
