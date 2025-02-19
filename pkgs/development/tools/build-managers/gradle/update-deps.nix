@@ -142,6 +142,9 @@ lib.makeOverridable (
         NIX_BUILD_SHELL=${runtimeShell} nix-shell --pure --run ${gradleScript} ${nixShellKeep} ${sourceDrvPath}
       fi${lib.optionalString silent " >&2"}
       kill -s SIGINT "$MITM_CACHE_PID"
+      # Remove entries for requests Gradle made to keyservers in order to look up signing keys
+      jq 'with_entries(select(.key | endswith("pks/lookup") | not))' "$MITM_CACHE_DIR/out.json" > "$MITM_CACHE_DIR/tmp.json"
+      mv "$MITM_CACHE_DIR/tmp.json" "$MITM_CACHE_DIR/out.json"
       for i in {0..20}; do
         # check for valid json
         if jq -e 1 "$MITM_CACHE_DIR/out.json" >/dev/null 2>/dev/null; then
