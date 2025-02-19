@@ -17,6 +17,7 @@
   toml11,
   jemalloc,
   doctest,
+  zlib,
 }@args:
 
 let
@@ -24,8 +25,8 @@ let
 in
 {
   foundationdb73 = cmakeBuild {
-    version = "7.3.42";
-    hash = "sha256-jQcm+HLai5da2pZZ7iLdN6fpQZxf5+/kkfv9OSXQ57c=";
+    version = "7.3.58";
+    hash = "sha256-hutz65sm3D08lxc2XgfQf6+b+IAV1I27lxBAE7V5ORo=";
     boost = boost186;
     ssl = openssl;
 
