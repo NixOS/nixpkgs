@@ -315,9 +315,9 @@
     "hash": "sha256-vy5JcIKk5bYpa4NZKYkNI9qbobPbSU+GEjfWlvbEmb8="
   },
   "spectacle": {
-    "version": "6.3.1",
-    "url": "mirror://kde/stable/plasma/6.3.1/spectacle-6.3.1.tar.xz",
-    "hash": "sha256-DzZLBd/MDGPB62luWTGPg6nIPUFi9WVrT6X+KdrMgU4="
+    "version": "6.3.1.2",
+    "url": "mirror://kde/stable/plasma/6.3.1/spectacle-6.3.1.2.tar.xz",
+    "hash": "sha256-g35ejQ745SL01qN9pInk+G2DZJkfz3lsWP0FJvgc+go="
   },
   "systemsettings": {
     "version": "6.3.1",
