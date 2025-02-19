@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  glibcLocales,
   pytest,
 }:
 
@@ -17,13 +16,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    glibcLocales
     pytest
   ];
 
   # JPLTest uses assets not distributed in package
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest --pyargs ephem.tests -k "not JPLTest"
+    pytest --pyargs ephem.tests -k "not JPLTest"
   '';
 
   pythonImportsCheck = [ "ephem" ];
