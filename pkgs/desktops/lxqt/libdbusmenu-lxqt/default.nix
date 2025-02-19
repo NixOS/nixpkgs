@@ -5,7 +5,7 @@
   cmake,
   qtbase,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

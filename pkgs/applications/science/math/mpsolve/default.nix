@@ -4,7 +4,7 @@
 , autoreconfHook
 , bison
 , flex
-, gitUpdater
+, nix-update-script
 , gmp
 , gtk3
 , pkg-config
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://numpi.dm.unipi.it/scientific-computing-libraries/mpsolve/";

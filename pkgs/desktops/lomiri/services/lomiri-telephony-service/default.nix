@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   runCommand,
   ayatana-indicator-messages,
@@ -207,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
       lomiri-indicator-telephony-service = [ "lomiri" ];
     };
     tests.vm = nixosTests.ayatana-indicators;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

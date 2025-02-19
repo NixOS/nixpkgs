@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , shared-mime-info
-, gitUpdater
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     shared-mime-info
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Source code editing widget for GTK";

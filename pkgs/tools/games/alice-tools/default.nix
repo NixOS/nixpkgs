@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  gitUpdater,
+  nix-update-script,
   testers,
   fetchFromGitHub,
   meson,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command =

@@ -7,7 +7,7 @@
   libxml2,
   gdk-pixbuf,
   gtk-engine-murrine,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modern flat theme with a combination of light and dark elements (GNOME, Unity, Xfce and Openbox)";

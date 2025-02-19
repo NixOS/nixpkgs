@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   gnome-themes-extra,
   gtk-engine-murrine,
   jdupes,
@@ -98,7 +98,7 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = {
       description = "Fluent design gtk theme";

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   cmake,
   gettext,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests.vm = nixosTests.ayatana-indicators;
   };
 

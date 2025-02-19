@@ -8,7 +8,7 @@
   fetchFromGitLab,
   sudo,
   python3Packages,
-  gitUpdater,
+  nix-update-script,
   util-linux,
   versionCheckHook,
 }:
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
     }"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";

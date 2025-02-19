@@ -6,7 +6,7 @@
   ninja,
   wrapGAppsHook3,
   pkg-config,
-  gitUpdater,
+  nix-update-script,
   appstream-glib,
   json-glib,
   desktop-file-utils,
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://pwmt.org/projects/zathura";

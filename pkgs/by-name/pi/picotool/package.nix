@@ -8,7 +8,7 @@
   pico-sdk,
   mbedtls_2,
   versionCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

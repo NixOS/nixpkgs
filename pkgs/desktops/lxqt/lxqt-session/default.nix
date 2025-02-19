@@ -19,7 +19,7 @@
   qtxdg-tools,
   wrapQtAppsHook,
   xdg-user-dirs,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     xdg-user-dirs
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-session";

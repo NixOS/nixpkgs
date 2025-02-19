@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  gitUpdater,
+  nix-update-script,
   kwindowsystem,
   libXScrnSaver,
   libqtxdg,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Core utility library for all LXQt components";

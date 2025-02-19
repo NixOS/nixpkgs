@@ -3,7 +3,7 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   testers,
   # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/5
   boost186,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -7,7 +7,7 @@
   alcotest,
   bigstringaf,
   ppx_let,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildDunePackage rec {
@@ -31,7 +31,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ bigstringaf ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/inhabitedtype/angstrom";

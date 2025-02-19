@@ -8,7 +8,7 @@
   dbus,
   fdk_aac,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   glib,
   libbsd,
   ncurses,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs true "dbusconfdir" "${placeholder "out"}/share/dbus-1/system.d")
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Arkq/bluez-alsa";

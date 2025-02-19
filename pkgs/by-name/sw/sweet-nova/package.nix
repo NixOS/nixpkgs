@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   lib,
   stdenvNoCC,
 }:
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Dark and colorful, blurry theme for the KDE Plasma desktop";

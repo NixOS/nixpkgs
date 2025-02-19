@@ -3,7 +3,7 @@
   substituteAll,
   mkDerivation,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   mobile-broadband-provider-info,
   qmake,
   qtbase,
@@ -49,7 +49,7 @@ mkDerivation rec {
     qtdeclarative
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library for accessing the ofono daemon, and declarative plugin for it";

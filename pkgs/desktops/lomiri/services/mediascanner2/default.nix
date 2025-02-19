@@ -3,7 +3,7 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   testers,
   # dbus-cpp not compatible with Boost 1.87
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

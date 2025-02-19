@@ -2,7 +2,7 @@
   lib,
   buildLua,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   python3,
 }:
 
@@ -16,7 +16,7 @@ buildLua rec {
     rev = version;
     sha256 = "sha256-nflavx25skLj9kitneL6Uz3zI2DyMMhQC595npofzbQ=";
   };
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ python3 ];
   postPatch = "patchShebangs concat_files.py";

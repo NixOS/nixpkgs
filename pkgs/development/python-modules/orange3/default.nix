@@ -49,7 +49,7 @@
   makeDesktopItem,
 
   # passthru
-  gitUpdater,
+  nix-update-script,
   python,
   pytest-qt,
   pytestCheckHook,
@@ -171,7 +171,7 @@ let
     '';
 
     passthru = {
-      updateScript = gitUpdater { };
+      updateScript = nix-update-script { };
       tests.unittests = stdenv.mkDerivation {
         name = "${self.name}-tests";
         inherit (self) src;

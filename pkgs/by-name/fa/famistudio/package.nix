@@ -14,7 +14,7 @@
   portaudio,
   rtmidi,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
 }:
 
 let
@@ -153,7 +153,7 @@ buildDotnetModule (finalAttrs: {
   '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (gitUpdater { }).command
+    (nix-update-script { }).command
     (finalAttrs.passthru.fetch-deps)
   ];
 

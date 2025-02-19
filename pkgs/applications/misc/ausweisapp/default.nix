@@ -12,7 +12,7 @@
   qttools,
   qtwayland,
   qtwebsockets,
-  gitUpdater,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "QT_QPA_PLATFORM=offscreen ${finalAttrs.meta.mainProgram} --version";
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

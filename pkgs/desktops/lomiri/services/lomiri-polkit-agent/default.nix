@@ -3,7 +3,7 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   cmake,
   cmake-extras,
   dbus,
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallelism breaks dbus during tests
   enableParallelChecking = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Policy kit agent for the Lomiri desktop";

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   makeBinaryWrapper,
   pkg-config,
   asciidoc,
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/dracutdevs/dracut/wiki";

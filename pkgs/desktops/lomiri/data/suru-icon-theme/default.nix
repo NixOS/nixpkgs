@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   gtk3,
   hicolor-icon-theme,
   ubuntu-themes,
@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontDropIconThemeCache = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Suru Icon Theme for Lomiri Operating Environment";

@@ -28,7 +28,7 @@
   hidapi,
 
   # passthru
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-Wno-dev" ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

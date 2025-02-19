@@ -1,6 +1,6 @@
 {
   lib,
-  gitUpdater,
+  nix-update-script,
   fetchFromGitHub,
   buildPythonApplication,
   pythonOlder,
@@ -39,5 +39,5 @@ buildPythonApplication rec {
     mainProgram = "legendary";
   };
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 }

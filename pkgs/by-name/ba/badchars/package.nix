@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   python3,
 }:
 
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   # no tests are available and it can't be imported (it's only a script, not a module)
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "HEX badchar generator for different programming languages";

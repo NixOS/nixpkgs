@@ -6,7 +6,7 @@
   makeWrapper,
   unzip,
   mono,
-  gitUpdater,
+  nix-update-script,
 }:
 
 let
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "ArduPilot ground station";

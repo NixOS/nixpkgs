@@ -3,7 +3,7 @@
   fetchpatch,
   python3,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   makeWrapper,
   e2fsprogs,
   jefferson,
@@ -113,7 +113,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     # helpful to easily add these to a nix-shell environment
     inherit runtimeDeps;
   };

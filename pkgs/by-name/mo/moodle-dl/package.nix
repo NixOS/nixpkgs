@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, gitUpdater }:
+{ lib, python3Packages, fetchFromGitHub, nix-update-script }:
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
   # upstream has no tests
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/C0D3D3V/Moodle-Downloader-2";

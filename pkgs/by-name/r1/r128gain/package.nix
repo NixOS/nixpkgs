@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   replaceVars,
   ffmpeg,
   python3Packages,
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   # sandbox to be disabled.
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";

@@ -4,7 +4,7 @@
   pkg-config,
   stdenv,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ethercat";
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-kernel=no"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "IgH EtherCAT Master for Linux";

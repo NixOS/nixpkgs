@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   pkg-config,
   glib,
   mpv-unwrapped,
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-vZIO6ILatIWa9nJYOp4AMKwvaZLahqYWRLMDOizyBI0=";
   };
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ pkg-config ];
 

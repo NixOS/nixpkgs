@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   pkg-config,
   itstool,
   gtk3,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ "-Dtheme_kde=false" ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

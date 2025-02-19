@@ -11,7 +11,7 @@
   gobject-introspection,
   gtk-doc,
   docbook-xsl-nons,
-  gitUpdater,
+  nix-update-script,
   dbus,
   xvfb-run,
 }:
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";

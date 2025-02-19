@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  gitUpdater,
+  nix-update-script,
   fetchFromGitHub,
   nixosTests,
   accountsservice,
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     tests.vm = nixosTests.ayatana-indicators;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

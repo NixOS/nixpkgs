@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  gitUpdater,
+  nix-update-script,
   pytestCheckHook,
   libcst,
   pyyaml,
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utility for translation of strings and f-strings in Python files";

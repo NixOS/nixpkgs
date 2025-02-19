@@ -7,7 +7,7 @@
   qtsvg,
   lxqt-build-tools,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
   version ? "4.1.0",
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/libqtxdg";

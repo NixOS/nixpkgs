@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   makeWrapper,
   pkg-config,
   file,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Alpine Linux build tools";

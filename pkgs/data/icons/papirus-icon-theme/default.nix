@@ -9,7 +9,7 @@
   papirus-folders,
   color ? null,
   withElementary ? false,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Pixel perfect icon theme for Linux";

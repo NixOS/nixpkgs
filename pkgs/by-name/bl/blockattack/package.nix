@@ -8,7 +8,7 @@
   cmake,
   fetchFromGitHub,
   gettext,
-  gitUpdater,
+  nix-update-script,
   ninja,
   physfs,
   pkg-config,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

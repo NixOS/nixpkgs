@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -64,7 +64,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Flat colorful design icon theme";

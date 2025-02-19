@@ -7,7 +7,7 @@
   qttools,
   lxqt-build-tools,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
   version ? "2.1.0",
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

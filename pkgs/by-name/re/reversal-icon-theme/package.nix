@@ -7,7 +7,7 @@
   adwaita-icon-theme,
   hicolor-icon-theme,
   numix-icon-theme-circle,
-  gitUpdater,
+  nix-update-script,
   allColorVariants ? false,
   colorVariants ? [ ],
 }:
@@ -83,7 +83,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Colorful Design Rectangle icon theme";

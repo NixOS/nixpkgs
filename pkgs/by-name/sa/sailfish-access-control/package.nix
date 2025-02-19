@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   testers,
   glib,
   libsForQt5,
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests = {
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;

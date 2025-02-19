@@ -13,7 +13,7 @@
   makeWrapper,
   testers,
   tang,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
         version = "tangd ${version}";
       };
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

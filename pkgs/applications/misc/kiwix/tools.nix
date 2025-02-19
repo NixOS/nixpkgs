@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   icu,
   libkiwix,
   meson,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libkiwix
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Command line Kiwix tools: kiwix-serve, kiwix-manage, ..";

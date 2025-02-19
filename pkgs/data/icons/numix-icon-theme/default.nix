@@ -7,7 +7,7 @@
   breeze-icons,
   gnome-icon-theme,
   hicolor-icon-theme,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Numix icon theme";

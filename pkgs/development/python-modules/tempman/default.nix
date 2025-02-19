@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # Disabling tests, they rely on dependencies that are outdated and not supported
   doCheck = false;
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScripts = nix-update-script { };
 
   meta = {
     description = "Create and clean up temporary directories";

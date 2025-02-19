@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchpatch2,
   freetype,
-  gitUpdater,
+  nix-update-script,
   libglvnd,
   libxkbcommon,
   meson,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/milgra/sov";

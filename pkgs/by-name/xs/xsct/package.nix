@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   libX11,
   libXrandr,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Set color temperature of screen";

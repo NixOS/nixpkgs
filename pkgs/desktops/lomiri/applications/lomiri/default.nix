@@ -4,7 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   fetchpatch2,
-  gitUpdater,
+  nix-update-script,
   linkFarm,
   replaceVars,
   nixosTests,
@@ -274,7 +274,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     etcLayoutsFile = "lomiri/keymaps";
     tests = nixosTests.lomiri;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     greeter = linkFarm "lomiri-greeter" [
       {
         path = "${finalAttrs.finalPackage}/share/lightdm/greeters/lomiri-greeter.desktop";

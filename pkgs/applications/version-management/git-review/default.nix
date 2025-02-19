@@ -5,7 +5,7 @@
   pbr,
   requests,
   setuptools,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "git_review" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool to submit code to Gerrit";

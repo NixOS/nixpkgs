@@ -6,7 +6,7 @@
   duktape,
   fetchFromGitHub,
   gi-docgen,
-  gitUpdater,
+  nix-update-script,
   glib,
   gobject-introspection,
   gsettings-desktop-schemas,
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript =
       let
-        updateSource = gitUpdater { };
+        updateSource = nix-update-script { };
         updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "libproxy.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
       in
       _experimental-update-script-combinators.sequence [

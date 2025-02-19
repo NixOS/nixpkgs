@@ -8,7 +8,7 @@
   python3Packages,
   txt2tags,
   wrapGAppsHook3,
-  gitUpdater,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Command line tool that generates XDG menus for several window managers";

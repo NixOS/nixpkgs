@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   bash,
   cmake,
@@ -80,7 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # "lomiri-touch"
     ];
     tests.lomiri = nixosTests.lomiri;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   # Test require network access
   doCheck = false;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Key and secret workflow (validation, invalidation, etc.) tool";

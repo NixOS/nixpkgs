@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   cmake,
   python3,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "C++ Performance Portability Programming EcoSystem";

@@ -23,7 +23,7 @@
   wrapQtAppsHook,
   xf86inputlibinput,
   xkeyboard_config,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
                 '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-config";

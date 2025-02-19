@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   cmake,
   glew,
   liblockfile,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   # dlopens its own libraries, relies on rpath not having its prefix stripped
   dontPatchELF = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     mainProgram = "xr_3da";

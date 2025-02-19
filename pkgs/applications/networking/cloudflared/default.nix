@@ -3,7 +3,7 @@
 , buildGoModule
 , fetchFromGitHub
 , callPackage
-, gitUpdater
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -73,7 +73,7 @@ buildGoModule rec {
 
   passthru = {
     tests.simple = callPackage ./tests.nix { inherit version; };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

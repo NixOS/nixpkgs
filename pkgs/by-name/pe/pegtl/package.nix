@@ -1,7 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   lib,
   ninja,
   stdenv,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/taocpp/pegtl";

@@ -6,7 +6,7 @@
   gtk-engine-murrine,
   gtk_engines,
   librsvg,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";

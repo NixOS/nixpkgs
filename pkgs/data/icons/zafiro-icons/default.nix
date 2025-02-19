@@ -9,7 +9,7 @@
   numix-icon-theme-circle,
   hicolor-icon-theme,
   jdupes,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Icon pack flat with light colors";

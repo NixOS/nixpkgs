@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   cmake,
   dbus,
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     tests.vm = nixosTests.ayatana-indicators;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

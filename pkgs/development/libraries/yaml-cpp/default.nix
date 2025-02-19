@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   cmake,
   static ? stdenv.hostPlatform.isStatic,
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "YAML parser and emitter for C++";

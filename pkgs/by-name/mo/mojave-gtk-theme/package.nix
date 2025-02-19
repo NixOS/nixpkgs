@@ -17,7 +17,7 @@
   opacityVariants ? [ ], # default to all
   themeVariants ? [ ], # default to MacOS blue
   wallpapers ? false,
-  gitUpdater,
+  nix-update-script,
 }:
 
 let
@@ -164,7 +164,7 @@ lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] butt
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = {
       description = "Mac OSX Mojave like theme for GTK based desktop environments";

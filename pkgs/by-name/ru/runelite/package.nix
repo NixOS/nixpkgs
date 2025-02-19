@@ -7,7 +7,7 @@
   jdk17,
   jre,
   xorg,
-  gitUpdater,
+  nix-update-script,
   libGL,
 }:
 
@@ -59,7 +59,7 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/RuneLite.jar"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source Old School RuneScape client";

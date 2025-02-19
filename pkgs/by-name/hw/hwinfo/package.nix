@@ -13,7 +13,7 @@
   writeText,
   runCommand,
   validatePkgConfig,
-  gitUpdater,
+  nix-update-script,
   buildPackages,
   perlPackages,
 }:
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       };
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

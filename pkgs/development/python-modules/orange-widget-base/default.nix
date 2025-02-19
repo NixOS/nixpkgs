@@ -1,6 +1,6 @@
 {
   lib,
-  gitUpdater,
+  nix-update-script,
   stdenv,
   buildPythonPackage,
   setuptools,
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     "orangewidget/tests/test_widget.py"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";
