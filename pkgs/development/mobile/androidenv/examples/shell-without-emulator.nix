@@ -29,7 +29,7 @@ let
     versions = {
       cmdLineToolsVersion = "13.0";
       platformTools = "35.0.2";
-      buildTools = "35.0.0";
+      buildTools = "35.0.1";
     };
     platforms = [ "35" ];
   };

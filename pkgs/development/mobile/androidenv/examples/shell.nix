@@ -27,7 +27,7 @@ let
     versions = {
       cmdLineToolsVersion = "13.0";
       platformTools = "35.0.2";
-      buildTools = "35.0.0";
+      buildTools = "35.0.1";
       ndk = [
         "27.0.12077973"
       ];
