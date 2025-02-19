@@ -79,6 +79,7 @@
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/libftdi.nix
+  ./hardware/libjaylink.nix
   ./hardware/logitech.nix
   ./hardware/mcelog.nix
   ./hardware/network/ath-user-regd.nix
