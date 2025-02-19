@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     cp -vt "$out/etc/john" ../run/*.conf
     cp -vt "$out/share/john" ../run/*.chr ../run/password.lst
     cp -vt "$out/share/john/rules" ../run/rules/*.rule
-    cp -vrt "$out/share/doc/john" ../doc/*
+    cp -vLrt "$out/share/doc/john" ../doc/*
     cp -vt "$out/${perlPackages.perl.libPrefix}" ../run/lib/*
   '';
 
