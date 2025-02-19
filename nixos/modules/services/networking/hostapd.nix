@@ -8,6 +8,7 @@
 let
   inherit
     (lib)
+    any
     attrNames
     attrValues
     concatLists
@@ -781,7 +782,8 @@ in {
                         that any client can use.
 
                         An optional key identifier can be added by prefixing the line with `keyid=<keyid_string>`
-                        An optional VLAN ID can be specified by prefixing the line with `vlanid=<VLAN ID>`.
+                        An optional VLAN ID can be specified by prefixing the line with `vlanid=<VLAN ID>`,
+                        this requires you to also set `settings.dynamic_vlan = 1`.
                         An optional WPS tag can be added by prefixing the line with `wps=<0/1>` (default: 0).
                         Any matching entry with that tag will be used when generating a PSK for a WPS Enrollee
                         instead of generating a new random per-Enrollee PSK.
@@ -931,6 +933,11 @@ in {
                     # Always enable QoS, which is required for 802.11n and above
                     wmm_enabled = mkDefault true;
                     ap_isolate = bssCfg.apIsolate;
+
+                    # Enable dynamic_vlan which is required when using the |vlanid= selector in sae_passwords.
+                    # Not doing so does NOT result in any error but instead silently fails without any logs tracing back to this.
+                    # Authentication of clients just fails with a misleading message "bad password" as soon as at least two |vlanid= selectors are present.
+                    dynamic_vlan = mkIf (any (entry: entry.vlanid != null) bssCfg.authentication.saePasswords) 1;
 
                     sae_password = flip map bssCfg.authentication.saePasswords (
                       entry:
