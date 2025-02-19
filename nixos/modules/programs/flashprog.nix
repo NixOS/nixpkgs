@@ -21,4 +21,6 @@ in
     services.udev.packages = [ cfg.package ];
     environment.systemPackages = [ cfg.package ];
   };
+
+  meta.maintainers = with lib.maintainers; [ felixsinger ];
 }
