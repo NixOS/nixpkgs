@@ -156,8 +156,8 @@
   },
   {
     "pname": "Grpc.Tools",
-    "version": "2.69.0",
-    "hash": "sha256-3nye4UcU2J7tnruKhoacD0S+fPN6d0A34K1yxlYrfxI="
+    "version": "2.68.1",
+    "hash": "sha256-sbJWCrzK2UAcHdWw/wRY+hmwcqoTc02+fYsFHG6tiFY="
   },
   {
     "pname": "Humanizer.Core",
