@@ -329,7 +329,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # E.g. Mesa uses the build-id as a cache key (see #93946):
-  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) "-Wl,--build-id=sha1";
+  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.hostPlatform.isDarwin && !stdenv.buildPlatform.isDarwin) "-Wl,--build-id=sha1";
 
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
