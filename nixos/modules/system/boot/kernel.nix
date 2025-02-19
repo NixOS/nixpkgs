@@ -223,6 +223,11 @@ in
       '';
     };
 
+    boot.initrd.allowMissingModules = mkEnableOption ''
+      not including modules from `kernelModules` /
+      `availableKernelModules` in initrd when the kernel doesn't have
+      them'';
+
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
