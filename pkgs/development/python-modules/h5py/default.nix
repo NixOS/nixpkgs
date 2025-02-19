@@ -41,6 +41,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "numpy >=2.0.0, <3" "numpy"
     substituteInPlace setup.py \
+      --replace-fail "mpi4py ==3.1.4" "mpi4py" \
       --replace-fail "mpi4py ==4.0.1" "mpi4py" \
       --replace-fail "mpi4py ==3.1.6" "mpi4py"
   '';
