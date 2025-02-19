@@ -26,7 +26,7 @@ let
       {
         otherSplices = generateSplicesForMkScope "nixComponents";
         f = import ./packaging/components.nix {
-          inherit lib officialRelease src;
+          inherit lib officialRelease pkgs src stdenv;
         };
       };
 
@@ -43,9 +43,8 @@ let
         f = import ./dependencies.nix {
           inherit pkgs;
           inherit stdenv;
-          inherit src;
           inherit libgit2-thin-packfile;
         };
       };
 in
-nixComponents.nix-everything
+(nixComponents.overrideSource src).nix-everything

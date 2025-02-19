@@ -162,6 +162,29 @@ let
     }
     pkg;
 
+  # (meson based packaging)
+  # Add passthru tests to the package, and re-expose package set overriding
+  # functions. This will not incorporate the tests into the package set.
+  # TODO (roberth): add package-set level overriding to the "everything" package.
+  addTests = selfAttributeName: pkg:
+    let
+      tests =
+        pkg.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (pkg) version src;
+          nix = pkg;
+          self_attribute_name = selfAttributeName;
+        };
+    in
+    # preserve old pkg, including overrideSource, etc
+    pkg // {
+      tests = pkg.tests or {} // tests;
+      passthru = pkg.passthru or {} // {
+        tests = lib.warn "nix.passthru.tests is deprecated. Use nix.tests instead." pkg.passthru.tests or {} // tests;
+      };
+    };
+
 in lib.makeExtensible (self: ({
   nix_2_3 = ((common {
     version = "2.3.18";
@@ -225,19 +248,8 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_25";
   };
 
-  nix_2_26 = (callPackage ./2_26/componentized.nix {
+  nix_2_26 = addTests "nix_2_26" (callPackage ./2_26/componentized.nix {
     inherit libgit2-thin-packfile;
-  }).overrideAttrs (this: old: {
-    passthru = old.passthru or {} // {
-      tests =
-        old.passthru.tests or {}
-        // import ./tests.nix {
-          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
-          inherit (old) version src;
-          nix = this.finalPackage;
-          self_attribute_name = "nix_2_26";
-        };
-    };
   });
 
   git = common rec {
