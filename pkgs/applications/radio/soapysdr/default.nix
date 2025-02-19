@@ -17,6 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
+  # Don't forget to change passthru.abiVersion
   version = "0.8.2-pre";
 
   src = fetchFromGitHub {
@@ -66,7 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    searchPath = "lib/SoapySDR/modules${lib.versions.majorMinor finalAttrs.version}";
+    # SOAPY_SDR_ABI_VERSION defined in include/SoapySDR/Version.h
+    abiVersion = "0.8-3";
+    searchPath = "lib/SoapySDR/modules${finalAttrs.passthru.abiVersion}";
   };
 
   meta = with lib; {
