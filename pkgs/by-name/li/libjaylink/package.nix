@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace contrib/60-libjaylink.rules \
       --replace-fail 'GROUP="plugdev"' 'GROUP="jlink"'
+
+    substituteInPlace contrib/60-libjaylink.rules \
+      --replace-fail 'MODE="660"' 'MODE="664"'
   '';
 
   postInstall = ''
