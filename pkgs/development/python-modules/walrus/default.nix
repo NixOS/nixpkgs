@@ -5,6 +5,7 @@
   pkgs,
   pythonOlder,
   redis,
+  redisTestHook,
   setuptools,
   unittestCheckHook,
 }:
@@ -27,16 +28,10 @@ buildPythonPackage rec {
 
   dependencies = [ redis ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+    redisTestHook
+  ];
 
   pythonImportsCheck = [ "walrus" ];
 

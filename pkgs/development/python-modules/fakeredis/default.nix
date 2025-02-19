@@ -13,6 +13,7 @@
   pythonOlder,
   redis,
   redis-server,
+  redisTestHook,
   sortedcontainers,
 }:
 
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+    redisTestHook
   ];
 
   pythonImportsCheck = [ "fakeredis" ];
@@ -57,12 +59,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-m 'not slow'" ];
 
   preCheck = ''
-    ${lib.getExe' redis-server "redis-server"} --port 6390 &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
+    redisTestPort=6390
   '';
 
   meta = with lib; {
