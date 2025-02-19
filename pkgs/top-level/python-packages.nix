@@ -1468,6 +1468,8 @@ self: super: with self; {
 
   pulumi-azure-native = callPackage ../development/python-modules/pulumi-azure-native { };
 
+  pulumi-cloudflare = callPackage ../development/python-modules/pulumi-cloudflare { };
+
   pulumi-command = callPackage ../development/python-modules/pulumi-command { };
 
   pulumi-hcloud = callPackage ../development/python-modules/pulumi-hcloud { };
