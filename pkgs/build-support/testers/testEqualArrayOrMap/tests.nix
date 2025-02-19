@@ -2,14 +2,10 @@
 # `testers.testBuildFailure`. This is due to the fact that `testers.testBuildFailure` modifies the derivation such that
 # it produces an output containing the exit code, logs, and other things. Since `testers.runCommand` expects the empty
 # derivation, it produces a hash mismatch.
-{
-  lib,
-  runCommand,
-  testers,
-}:
+{ lib, testers }:
 let
   inherit (lib.attrsets) recurseIntoAttrs;
-  inherit (testers) testEqualArrayOrMap testBuildFailure;
+  inherit (testers) testBuildFailure' testEqualArrayOrMap;
   concatValuesArrayToActualArray = ''
     nixLog "appending all values in valuesArray to actualArray"
     for value in "''${valuesArray[@]}"; do
@@ -101,37 +97,18 @@ recurseIntoAttrs {
       # doing nothing
     '';
   };
-  array-missing-value =
-    let
+  array-missing-value = testBuildFailure' {
+    drv = testEqualArrayOrMap {
       name = "testEqualArrayOrMap-array-missing-value";
-      failure = testEqualArrayOrMap {
-        name = "${name}-failure";
-        valuesArray = [ "apple" ];
-        expectedArray = [ ];
-        script = concatValuesArrayToActualArray;
-      };
-    in
-    runCommand name
-      {
-        failed = testBuildFailure failure;
-        passthru = {
-          inherit failure;
-        };
-      }
-      ''
-        nixLog "Checking for exit code 1"
-        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        nixLog "Checking for first error message"
-        grep -F \
-          "ERROR: assertEqualArray: arrays differ in length: expectedArray has length 0 but actualArray has length 1" \
-          "$failed/testBuildFailure.log"
-        nixLog "Checking for second error message"
-        grep -F \
-          "ERROR: assertEqualArray: arrays differ at index 0: expectedArray has no such index but actualArray has value 'apple'" \
-          "$failed/testBuildFailure.log"
-        nixLog "Test passed"
-        touch $out
-      '';
+      valuesArray = [ "apple" ];
+      expectedArray = [ ];
+      script = concatValuesArrayToActualArray;
+    };
+    expectedBuilderLogEntries = [
+      "ERROR: assertEqualArray: arrays differ in length: expectedArray has length 0 but actualArray has length 1"
+      "ERROR: assertEqualArray: arrays differ at index 0: expectedArray has no such index but actualArray has value 'apple'"
+    ];
+  };
   map-insert = testEqualArrayOrMap {
     name = "testEqualArrayOrMap-map-insert";
     valuesMap = {
@@ -168,115 +145,58 @@ recurseIntoAttrs {
       unset 'actualMap[bee]'
     '';
   };
-  map-missing-key =
-    let
+  map-missing-key = testBuildFailure' {
+    drv = testEqualArrayOrMap {
       name = "testEqualArrayOrMap-map-missing-key";
-      failure = testEqualArrayOrMap {
-        name = "${name}-failure";
-        valuesMap = {
-          bee = "1";
-          cat = "2";
-          dog = "3";
-        };
-        expectedMap = {
-          apple = "0";
-          bee = "1";
-          cat = "2";
-          dog = "3";
-        };
-        script = concatValuesMapToActualMap;
+      valuesMap = {
+        bee = "1";
+        cat = "2";
+        dog = "3";
       };
-    in
-    runCommand name
-      {
-        failed = testBuildFailure failure;
-        passthru = {
-          inherit failure;
-        };
-      }
-      ''
-        nixLog "Checking for exit code 1"
-        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        nixLog "Checking for first error message"
-        grep -F \
-          "ERROR: assertEqualMap: maps differ in length: expectedMap has length 4 but actualMap has length 3" \
-          "$failed/testBuildFailure.log"
-        nixLog "Checking for second error message"
-        grep -F \
-          "ERROR: assertEqualMap: maps differ at key 'apple': expectedMap has value '0' but actualMap has no such key" \
-          "$failed/testBuildFailure.log"
-        nixLog "Test passed"
-        touch $out
-      '';
-  map-missing-key-with-empty =
-    let
-      name = "map-missing-key-with-empty";
-      failure = testEqualArrayOrMap {
-        name = "${name}-failure";
-        valuesArray = [ ];
-        expectedMap.apple = 1;
-        script = "";
+      expectedMap = {
+        apple = "0";
+        bee = "1";
+        cat = "2";
+        dog = "3";
       };
-    in
-    runCommand name
-      {
-        failed = testBuildFailure failure;
-        passthru = {
-          inherit failure;
-        };
-      }
-      ''
-        nixLog "Checking for exit code 1"
-        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        nixLog "Checking for first error message"
-        grep -F \
-          "ERROR: assertEqualMap: maps differ in length: expectedMap has length 1 but actualMap has length 0" \
-          "$failed/testBuildFailure.log"
-        nixLog "Checking for second error message"
-        grep -F \
-          "ERROR: assertEqualMap: maps differ at key 'apple': expectedMap has value '1' but actualMap has no such key" \
-          "$failed/testBuildFailure.log"
-        nixLog "Test passed"
-        touch $out
-      '';
-  map-extra-key =
-    let
+      script = concatValuesMapToActualMap;
+    };
+    expectedBuilderLogEntries = [
+      "ERROR: assertEqualMap: maps differ in length: expectedMap has length 4 but actualMap has length 3"
+      "ERROR: assertEqualMap: maps differ at key 'apple': expectedMap has value '0' but actualMap has no such key"
+    ];
+  };
+  map-missing-key-with-empty = testBuildFailure' {
+    drv = testEqualArrayOrMap {
+      name = "testEqualArrayOrMap-map-missing-key-with-empty";
+      valuesArray = [ ];
+      expectedMap.apple = 1;
+      script = "";
+    };
+    expectedBuilderLogEntries = [
+      "ERROR: assertEqualMap: maps differ in length: expectedMap has length 1 but actualMap has length 0"
+      "ERROR: assertEqualMap: maps differ at key 'apple': expectedMap has value '1' but actualMap has no such key"
+    ];
+  };
+  map-extra-key = testBuildFailure' {
+    drv = testEqualArrayOrMap {
       name = "testEqualArrayOrMap-map-extra-key";
-      failure = testEqualArrayOrMap {
-        name = "${name}-failure";
-        valuesMap = {
-          apple = "0";
-          bee = "1";
-          cat = "2";
-          dog = "3";
-        };
-        expectedMap = {
-          apple = "0";
-          bee = "1";
-          dog = "3";
-        };
-        script = concatValuesMapToActualMap;
+      valuesMap = {
+        apple = "0";
+        bee = "1";
+        cat = "2";
+        dog = "3";
       };
-    in
-    runCommand
-      {
-        failed = testBuildFailure failure;
-        passthru = {
-          inherit failure;
-        };
-      }
-      ''
-        nixLog "Checking for exit code 1"
-        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        nixLog "Checking for first error message"
-        grep -F \
-          "ERROR: assertEqualMap: maps differ in length: expectedMap has length 3 but actualMap has length 4" \
-          "$failed/testBuildFailure.log"
-        nixLog "Checking for second error message"
-        grep -F \
-          "ERROR: assertEqualMap: maps differ at key 'cat': expectedMap has no such key but actualMap has value '2'" \
-          "$failed/testBuildFailure.log"
-        nixLog "Test passed"
-        touch $out
-      '';
+      expectedMap = {
+        apple = "0";
+        bee = "1";
+        dog = "3";
+      };
+      script = concatValuesMapToActualMap;
+    };
+    expectedBuilderLogEntries = [
+      "ERROR: assertEqualMap: maps differ in length: expectedMap has length 3 but actualMap has length 4"
+      "ERROR: assertEqualMap: maps differ at key 'cat': expectedMap has no such key but actualMap has value '2'"
+    ];
+  };
 }
