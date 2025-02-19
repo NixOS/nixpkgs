@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -25,6 +26,7 @@
   psutil,
   pytestCheckHook,
   torch,
+  runTorchTests ? lib.meta.availableOn stdenv.hostPlatform torch,
 }:
 
 buildPythonPackage rec {
@@ -69,8 +71,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pytestCheckHook
-    torch
-  ];
+  ] ++ lib.optionals runTorchTests [ torch ];
 
   disabledTests = [
     # RuntimeError: Error while getting the slice

@@ -460,7 +460,15 @@ let
       stdenv = pkgs.gcc13Stdenv;
     };
 
-    eliom = callPackage ../development/ocaml-modules/eliom { };
+    eliom = let
+      js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+      js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+    in callPackage ../development/ocaml-modules/eliom rec {
+      js_of_ocaml-ppx = self.js_of_ocaml-ppx.override { inherit js_of_ocaml; };
+      js_of_ocaml-ppx_deriving_json = self.js_of_ocaml-ppx_deriving_json.override { inherit js_of_ocaml; };
+      js_of_ocaml-lwt = self.js_of_ocaml-lwt.override { inherit js_of_ocaml js_of_ocaml-ppx; };
+      js_of_ocaml-tyxml = self.js_of_ocaml-tyxml.override { inherit js_of_ocaml js_of_ocaml-ppx; };
+    };
 
     elpi = callPackage ../development/ocaml-modules/elpi (
       let ppxlib_0_15 = if lib.versionAtLeast ppxlib.version "0.15"
@@ -1269,6 +1277,8 @@ let
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
+    nice_parser = callPackage ../development/ocaml-modules/nice_parser { };
+
     ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
@@ -1423,7 +1433,12 @@ let
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
-    ocsigen-toolkit = callPackage ../development/ocaml-modules/ocsigen-toolkit { };
+    ocsigen-toolkit = let
+      js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
+      js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
+    in callPackage ../development/ocaml-modules/ocsigen-toolkit {
+      js_of_ocaml-ppx_deriving_json = self.js_of_ocaml-ppx_deriving_json.override { inherit js_of_ocaml; };
+    };
 
     ocsipersist = callPackage ../development/ocaml-modules/ocsipersist {};
 

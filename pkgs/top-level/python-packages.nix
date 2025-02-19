@@ -51,6 +51,8 @@ self: super: with self; {
 
   acquire = callPackage ../development/python-modules/acquire { };
 
+  acres = callPackage ../development/python-modules/acres { };
+
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   acunetix = callPackage ../development/python-modules/acunetix { };
@@ -2839,8 +2841,6 @@ self: super: with self; {
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
-  cufflinks = callPackage ../development/python-modules/cufflinks { };
-
   cupy = callPackage ../development/python-modules/cupy {
     cudaPackages = pkgs.cudaPackages.overrideScope (cu-fi: _: {
       # CuDNN 9 is not supported:
@@ -3930,6 +3930,8 @@ self: super: with self; {
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
 
+  drf-standardized-errors = callPackage ../development/python-modules/drf-standardized-errors { };
+
   drf-ujson2 = callPackage ../development/python-modules/drf-ujson2 { };
 
   drf-writable-nested = callPackage ../development/python-modules/drf-writable-nested { };
@@ -4272,6 +4274,8 @@ self: super: with self; {
   esper = callPackage ../development/python-modules/esper { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
+
+  esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
 
   esprima = callPackage ../development/python-modules/esprima { };
 
@@ -6797,6 +6801,8 @@ self: super: with self; {
 
   jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
 
+  jsonpath-python = callPackage ../development/python-modules/jsonpath-python { };
+
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
   jsonpointer = callPackage ../development/python-modules/jsonpointer { };
@@ -7693,6 +7699,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
+
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
@@ -8062,7 +8070,9 @@ self: super: with self; {
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
     inherit buildPythonPackage pythonOlder pythonAtLeast;
-    inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
+    # when next release contains numpy2 support unpin
+    # https://github.com/enthought/mayavi/pull/1315
+    inherit (self) pyface pygments numpy_1 packaging vtk traitsui envisage apptools pyqt5;
   };
 
   mayim = callPackage ../development/python-modules/mayim { };
@@ -8320,6 +8330,10 @@ self: super: with self; {
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
+
+  miss-hit = callPackage ../development/python-modules/miss-hit { };
+
+  miss-hit-core = callPackage ../development/python-modules/miss-hit-core { };
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
@@ -10339,6 +10353,13 @@ self: super: with self; {
   pescea = callPackage ../development/python-modules/pescea { };
 
   pesq = callPackage ../development/python-modules/pesq { };
+
+  petsc4py = toPythonModule (pkgs.petsc.override {
+    python3 = python;
+    python3Packages = self;
+    withPetsc4py = true;
+    withFullDeps = true;
+  });
 
   pex = callPackage ../development/python-modules/pex { };
 
@@ -18611,7 +18632,7 @@ self: super: with self; {
 
   yfinance = callPackage ../development/python-modules/yfinance { };
 
-  yoda = toPythonModule (pkgs.yoda.override { inherit python; });
+  yoda = toPythonModule (pkgs.yoda.override { python3 = python; });
 
   yolink-api = callPackage ../development/python-modules/yolink-api { };
 

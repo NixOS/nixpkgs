@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "files-to-prompt";
-  version = "0.4";
+  version = "0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "files-to-prompt";
     tag = version;
-    hash = "sha256-gl3j0ok/hlFfIF3HhhzYrUZuNlAtU7y+Ej29sQv9tP4=";
+    hash = "sha256-nO4I9qgG83OnWw6/FWSqx0Du5d3s5dLBjtMQLstWPEY";
   };
 
   build-system = with python3Packages; [

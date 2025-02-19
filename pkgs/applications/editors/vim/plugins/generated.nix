@@ -2827,6 +2827,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  colorful-menu-nvim = buildVimPlugin {
+    pname = "colorful-menu.nvim";
+    version = "2025-02-17";
+    src = fetchFromGitHub {
+      owner = "xzbdmw";
+      repo = "colorful-menu.nvim";
+      rev = "e1b4095e3726156e65d009f06ad1076b0d75dd3e";
+      sha256 = "0d23l2l92n7wp0am0raap7vsjxqzgv3dc60rcwpbix138fxxas96";
+    };
+    meta.homepage = "https://github.com/xzbdmw/colorful-menu.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   colorizer = buildVimPlugin {
     pname = "colorizer";
     version = "2022-01-03";
@@ -4483,6 +4496,19 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  faust-nvim = buildVimPlugin {
+    pname = "faust-nvim";
+    version = "2022-06-01";
+    src = fetchFromGitHub {
+      owner = "madskjeldgaard";
+      repo = "faust-nvim";
+      rev = "d6e8b1658233df74ac8dc1dc84a3f7568dc00586";
+      sha256 = "0zf8zfc6baxd93w5iyhldcda5izb5ldrxb0wkcxqkp95azsc871w";
+    };
+    meta.homepage = "https://github.com/madskjeldgaard/faust-nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   fcitx-vim = buildVimPlugin {
     pname = "fcitx.vim";
     version = "2024-04-21";
@@ -5041,6 +5067,19 @@ final: prev:
       sha256 = "0mspffvg2z5lx4ck96d2pnf1azy3s1zq720n6abnxzajadmnh47r";
     };
     meta.homepage = "https://github.com/ThePrimeagen/git-worktree.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  github-nvim-theme = buildVimPlugin {
+    pname = "github-nvim-theme";
+    version = "2024-12-31";
+    src = fetchFromGitHub {
+      owner = "projekt0n";
+      repo = "github-nvim-theme";
+      rev = "c106c9472154d6b2c74b74565616b877ae8ed31d";
+      sha256 = "1w7lz4bgfm8hq1mir4hcr8ik585d4l4w7bjl8yl3g3zklj8223pw";
+    };
+    meta.homepage = "https://github.com/projekt0n/github-nvim-theme/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -7048,19 +7087,6 @@ final: prev:
       sha256 = "1gz5nxpfky0xr53l0z67viknzbxdr3k7pp5bp1n3rka3s74jswzh";
     };
     meta.homepage = "https://github.com/arkav/lualine-lsp-progress/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  lualine-nvim = buildVimPlugin {
-    pname = "lualine.nvim";
-    version = "2025-02-08";
-    src = fetchFromGitHub {
-      owner = "nvim-lualine";
-      repo = "lualine.nvim";
-      rev = "f4f791f67e70d378a754d02da068231d2352e5bc";
-      sha256 = "12jm3vc3mi0p9kjw7g1cd6a9nkgws1mvq2h7lpfmflad8zfmw35q";
-    };
-    meta.homepage = "https://github.com/nvim-lualine/lualine.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -11017,20 +11043,6 @@ final: prev:
       sha256 = "01ymvhlych3ymqmf1afmyzr653fx0nviimzg2gwjc4g8h0vk2c5d";
     };
     meta.homepage = "https://github.com/pwntester/octo.nvim/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  oil-nvim = buildVimPlugin {
-    pname = "oil.nvim";
-    version = "2025-02-13";
-    src = fetchFromGitHub {
-      owner = "stevearc";
-      repo = "oil.nvim";
-      rev = "7cde5aab10f564408e9ac349d457d755422d58cd";
-      sha256 = "0x6vaapj5x7a4jhdc8mvzb701cfvziyb9ywj9sshsyfdhw9q8phs";
-      fetchSubmodules = true;
-    };
-    meta.homepage = "https://github.com/stevearc/oil.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

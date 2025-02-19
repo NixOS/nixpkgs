@@ -629,6 +629,11 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
         })
       ];
 
+      postPatch = lib.optionalString (pythonAtLeast "3.9" && pythonOlder "3.11") ''
+        substituteInPlace Doc/tools/extensions/pyspecific.py \
+          --replace-fail "from sphinx.util import status_iterator" "from sphinx.util.display import status_iterator"
+      '';
+
       dontConfigure = true;
 
       dontBuild = true;
