@@ -1,0 +1,45 @@
+Pulumi plugins have schema cache in the parent directory of the plugin
+executable. Without this patch, Pulumi would always attempt to request
+schema from the plugin and write it to that path (and successfully fail
+becasue Nix store is read-only), without ever reading it back if the
+version is not set (that is the case for ambient plugins, i.e. plugins
+found in PATH).
+
+Conveniently, pulumi-yaml has pulumi package submodule, so we fetch
+submodules and apply a patch there.
+
+See also https://github.com/pulumi/pulumi/pull/18618
+
+--- a/go.mod
++++ b/go.mod
+@@ -2,6 +2,8 @@ module github.com/pulumi/pulumi-yaml
+ 
+ go 1.21
+ 
++replace github.com/pulumi/pulumi/pkg/v3 => ./pulumi/pkg
++
+ require (
+ 	github.com/blang/semver v3.5.1+incompatible
+ 	github.com/ettle/strcase v0.1.1
+--- a/pulumi/pkg/codegen/schema/loader.go
++++ b/pulumi/pkg/codegen/schema/loader.go
+@@ -305,7 +305,9 @@ func (l *pluginLoader) loadSchemaBytes(
+ 		version = pluginInfo.Version
+ 	}
+ 
+-	if pluginInfo.SchemaPath != "" && version != nil && descriptor.Parameterization == nil {
++	canCache := pluginInfo.SchemaPath != "" && version != nil && descriptor.Parameterization == nil
++
++	if canCache {
+ 		schemaBytes, ok := l.loadCachedSchemaBytes(descriptor.Name, pluginInfo.SchemaPath, pluginInfo.SchemaTime)
+ 		if ok {
+ 			return schemaBytes, nil, nil
+@@ -317,7 +319,7 @@ func (l *pluginLoader) loadSchemaBytes(
+ 		return nil, nil, fmt.Errorf("Error loading schema from plugin: %w", err)
+ 	}
+ 
+-	if pluginInfo.SchemaPath != "" {
++	if canCache {
+ 		err = atomic.WriteFile(pluginInfo.SchemaPath, bytes.NewReader(schemaBytes))
+ 		if err != nil {
+ 			return nil, nil, fmt.Errorf("Error writing schema from plugin to cache: %w", err)
