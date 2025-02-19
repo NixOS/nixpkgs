@@ -34,6 +34,72 @@
     ] ++ orig.args or ["-e" ../../stdenv/generic/source-stdenv.sh (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
+  # or doc/build-helpers/testers.chapter.md
+  testBuildFailure' =
+    let
+      mkBuildCommand =
+        script:
+        ''
+          if [[ -n ''${expectedBuilderExitCode:-} ]]; then
+            nixLog "checking original builder exit code"
+            builderExitCode=$(<"$failed/testBuildFailure.exit")
+            if ((expectedBuilderExitCode == builderExitCode)); then
+              nixLog "original builder exit code matches expected value of $expectedBuilderExitCode"
+            else
+              nixErrorLog "original builder produced exit code $builderExitCode but was expected to produce $expectedBuilderExitCode"
+              exit 1
+            fi
+            unset builderExitCode
+          fi
+
+          if ((''${#expectedBuilderLogEntries[@]})); then
+            nixLog "checking original builder log"
+            builderLogEntries="$(<"$failed/testBuildFailure.log")"
+            shouldExit=0
+            for expectedBuilderLogEntry in "''${expectedBuilderLogEntries[@]}"; do
+              if [[ ''${builderLogEntries} == *"$expectedBuilderLogEntry"* ]]; then
+                nixLog "original builder log contains ''${expectedBuilderLogEntry@Q}"
+              else
+                nixErrorLog "original builder log does not contain ''${expectedBuilderLogEntry@Q}"
+                shouldExit=1
+              fi
+            done
+            unset builderLogEntries
+            ((shouldExit)) && exit 1
+            unset shouldExit
+          fi
+        ''
+        + lib.optionalString (script != "") ''
+          nixLog "running additional checks from user-provided script"
+          ${script}
+        ''
+        + ''
+          touch "$out"
+        '';
+      final =
+        {
+          drv,
+          name ? null,
+          expectedBuilderExitCode ? 1, # NOTE: Should be an integer.
+          expectedBuilderLogEntries ? [ ], # NOTE: Should be an array of string-coercible values. TODO: Only checks for inclusion, not order!
+          script ? "", # Succeed by default if checks pass.
+        }:
+        (runCommand name {
+          __structuredAttrs = true;
+          strictDeps = true;
+          failed = testers.testBuildFailure drv;
+          inherit expectedBuilderExitCode expectedBuilderLogEntries;
+        } (mkBuildCommand script)).overrideAttrs
+          (
+            finalAttrs: _: {
+              # Fix name so the default value uses whatever failed ends up as.
+              name = if name != null then name else "testBuildFailure-${finalAttrs.failed.name}";
+            }
+          );
+    in
+    lib.makeOverridable final;
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
   # or doc/build-helpers/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
