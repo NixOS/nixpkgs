@@ -132,9 +132,9 @@ patched-derivation3 = patched-derivation2.overrideAttrs
 patched-derivation4 = patched-derivation3.overrideAttrs
   (
     o:
-    # this is just a wrapper for rocPackages.bignums for Rocq >= 9.0
-    lib.optionalAttrs (coq.version != null && (coq.version == "dev"
-                       || lib.versions.isGe "9.0" coq.version)) {
+    # this is just a wrapper for rocPackages.rocq-elpi for Rocq >= 9.0
+    if coq.version != null && (coq.version == "dev"
+                               || lib.versions.isGe "9.0" coq.version) then {
       configurePhase = ''
         echo no configuration
       '';
@@ -146,6 +146,19 @@ patched-derivation4 = patched-derivation3.overrideAttrs
       '';
       propagatedBuildInputs = o.propagatedBuildInputs
         ++ [ rocqPackages.rocq-elpi ];
+    } else lib.optionalAttrs (o.version != null && (o.version == "dev"
+                              || lib.versions.isGe "2.5.0" o.version)) {
+      configurePhase = ''
+        make dune-files || true
+      '';
+      buildPhase = ''
+        dune build -p rocq-elpi @install ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+      '';
+      installPhase = ''
+        dune install --root . rocq-elpi --prefix=$out --libdir $OCAMLFIND_DESTDIR
+        mkdir $out/lib/coq/
+        mv $OCAMLFIND_DESTDIR/coq $out/lib/coq/${coq.coq-version}
+      '';
     }
   );
 in patched-derivation4
