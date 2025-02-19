@@ -139,7 +139,7 @@ in
     systemd.slices.isolate = {
       description = "Isolate Sandbox Slice";
     };
-
-    meta.maintainers = with maintainers; [ virchau13 ];
   };
+
+  meta.maintainers = with maintainers; [ virchau13 ];
 }

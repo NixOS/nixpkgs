@@ -325,8 +325,7 @@ in
         inherit (cfg) name version imageFileBasename compression split seed sectorSize finalPartitions;
         inherit fileSystems definitionsDirectory mkfsEnv;
       };
-
-    meta.maintainers = with lib.maintainers; [ nikstur willibutz ];
-
   };
+
+  meta.maintainers = with lib.maintainers; [ nikstur willibutz ];
 }

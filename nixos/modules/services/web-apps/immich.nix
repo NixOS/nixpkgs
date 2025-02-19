@@ -389,7 +389,6 @@ in
       };
     };
     users.groups = mkIf (cfg.group == "immich") { immich = { }; };
-
-    meta.maintainers = with lib.maintainers; [ jvanbruegge ];
   };
+  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
 }
