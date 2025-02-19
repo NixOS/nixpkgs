@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.11.11";
+  version = "3.11.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-a4h8oFJxo1TSuhIjdUC0wqJSsepmzq6vjn5mwjw4bIw=";
+    hash = "sha256-GveluMxw100ZllDF+MT4QkZVD9q7UWHwF7IBK85J/j0=";
   };
 
   patches = [
@@ -144,7 +144,7 @@ buildPythonPackage rec {
     '';
 
   meta = with lib; {
-    changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/aiohttp/blob/${src.tag}/CHANGES.rst";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
