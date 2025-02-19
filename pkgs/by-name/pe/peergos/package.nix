@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "peergos";
-  version = "0.22.0";
+  version = "1.0.0";
   src = fetchurl {
     url = "https://github.com/Peergos/web-ui/releases/download/v${version}/Peergos.jar";
-    hash = "sha256-JjJBHL2wdAt+V9wAujvBIdAw/OAe89sHsYsv+cXEjTY=";
+    hash = "sha256-e0kf9U4nDDf+f+Cv9pHFmtTV9FjIvISRlq2Ox3xODVs=";
   };
 
   dontUnpack = true;
