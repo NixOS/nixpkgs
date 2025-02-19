@@ -1,0 +1,12 @@
+--- a/package/contents/ui/DBusServiceModel.qml
++++ b/package/contents/ui/DBusServiceModel.qml
+@@ -14,7 +14,7 @@ Item {
+     property string toolsDir: Qt.resolvedUrl("./tools").toString().substring(7) + "/"
+     property string serviceUtil: toolsDir+"service.py"
+     property string pythonExecutable: plasmoid.configuration.pythonExecutable
+-    property string serviceCmd: pythonExecutable + " '" + serviceUtil + "' " + Plasmoid.containment.id + " " + Plasmoid.id
++    property string serviceCmd: serviceUtil + " " + Plasmoid.containment.id + " " + Plasmoid.id
+
+     readonly property string service: Plasmoid.metaData.pluginId + ".c" + Plasmoid.containment.id + ".w" + Plasmoid.id
+     readonly property string path: "/preset"
+
