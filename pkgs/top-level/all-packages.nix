@@ -5362,9 +5362,7 @@ with pkgs;
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
 
-  vuls = callPackage ../by-name/vu/vuls/package.nix {
-    buildGoModule = buildGo123Module;
-  };
+  vuls = callPackage ../by-name/vu/vuls/package.nix { };
 
   xdp-tools = callPackage ../tools/networking/xdp-tools { };
 
