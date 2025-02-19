@@ -31,12 +31,12 @@ buildPythonPackage rec {
     hash = "sha256-hP77qhNTE89cuz9Z8vWlWYo2En0SV4uoHaBnxQDNEvI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asdf
     asdf-coordinates-schemas
     asdf-standard
