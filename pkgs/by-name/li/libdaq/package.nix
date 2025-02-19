@@ -5,6 +5,7 @@
   autoreconfHook,
   pkg-config,
   libpcap,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Data AcQuisition library (libDAQ), for snort packet I/O";
     homepage = "https://www.snort.org";
@@ -53,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       aycanirican
       brianmcgillion
     ];
+    changelog = "https://github.com/snort3/libdaq/releases/tag/v${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2;
     outputsToInstall = [
       "lib"

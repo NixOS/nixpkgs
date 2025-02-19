@@ -13,7 +13,7 @@
   libuv,
   wslay,
   zlib,
-  withMruby ? false,
+  withMruby ? true,
   bison,
   ruby,
 }:
