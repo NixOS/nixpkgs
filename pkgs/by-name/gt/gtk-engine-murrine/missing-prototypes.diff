@@ -1,0 +1,33 @@
+diff --git a/src/murrine_rc_style.h b/src/murrine_rc_style.h
+index 8e3d7a8..2823e7a 100644
+--- a/src/murrine_rc_style.h
++++ b/src/murrine_rc_style.h
+@@ -154,5 +154,6 @@ struct _MurrineRcStyleClass
+ };
+ 
+ GType murrine_rc_style_get_type	(void);
++void murrine_rc_style_register_types (GTypeModule *module);
+ 
+ #endif /* MURRINE_RC_STYLE_H */
+diff --git a/src/murrine_style.h b/src/murrine_style.h
+index 33ae51c..1646e6d 100644
+--- a/src/murrine_style.h
++++ b/src/murrine_style.h
+@@ -102,5 +102,6 @@ struct _MurrineStyleClass
+ };
+ 
+ GType murrine_style_get_type (void);
++void murrine_style_register_types (GTypeModule *module);
+ 
+ #endif /* MURRINE_STYLE_H */
+diff --git a/src/support.h b/src/support.h
+index e141067..4bf824e 100644
+--- a/src/support.h
++++ b/src/support.h
+@@ -149,4 +149,6 @@ G_GNUC_INTERNAL void murrine_get_notebook_tab_position (GtkWidget *widget,
+                                                         gboolean  *start,
+                                                         gboolean  *end);
+ 
++gboolean murrine_widget_is_ltr (GtkWidget *widget);
++gboolean murrine_object_is_a (const GObject * object, const gchar * type_name);
+ #endif /* SUPPORT_H */

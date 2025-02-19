@@ -1,0 +1,48 @@
+diff --git a/src/cpp/session/CMakeLists.txt b/src/cpp/session/CMakeLists.txt
+index 0202e84..596b9f8 100644
+--- a/src/cpp/session/CMakeLists.txt
++++ b/src/cpp/session/CMakeLists.txt
+@@ -59,11 +59,7 @@ endif()
+ 
+ 
+ # install pandoc
+-# - by default, we use quarto + quarto's bundled pandoc
+-# - if quarto is not enabled, use pandoc fallback
+-if(QUARTO_ENABLED)
+-   set(RSTUDIO_DEPENDENCIES_PANDOC_DIR "${RSTUDIO_DEPENDENCIES_QUARTO_DIR}/bin/tools")
+-elseif(EXISTS "${RSTUDIO_TOOLS_ROOT}/pandoc/${PANDOC_VERSION}")
++if(EXISTS "${RSTUDIO_TOOLS_ROOT}/pandoc/${PANDOC_VERSION}")
+    set(RSTUDIO_DEPENDENCIES_PANDOC_DIR "${RSTUDIO_TOOLS_ROOT}/pandoc/${PANDOC_VERSION}")
+ else()
+    set(RSTUDIO_DEPENDENCIES_PANDOC_DIR "${RSTUDIO_DEPENDENCIES_DIR}/pandoc/${PANDOC_VERSION}")
+@@ -733,11 +729,10 @@ if(NOT RSTUDIO_SESSION_WIN32 AND NOT RSESSION_ALTERNATE_BUILD)
+                PATTERN ".gitignore"
+                EXCLUDE)
+       endif()
+-   else()
+-      install(DIRECTORY "${RSTUDIO_DEPENDENCIES_PANDOC_DIR}/"
+-              DESTINATION "${RSTUDIO_INSTALL_BIN}/pandoc"
+-              USE_SOURCE_PERMISSIONS)
+    endif()
++   install(DIRECTORY "${RSTUDIO_DEPENDENCIES_PANDOC_DIR}/"
++           DESTINATION "${RSTUDIO_INSTALL_BIN}/pandoc"
++           USE_SOURCE_PERMISSIONS)
+ 
+    # install embedded packages
+    foreach(PKG ${RSTUDIO_EMBEDDED_PACKAGES})
+diff --git a/src/cpp/session/include/session/SessionConstants.hpp b/src/cpp/session/include/session/SessionConstants.hpp
+index e6aef22..57491ec 100644
+--- a/src/cpp/session/include/session/SessionConstants.hpp
++++ b/src/cpp/session/include/session/SessionConstants.hpp
+@@ -147,11 +147,7 @@
+ #define kSessionTmpDirEnvVar       "RS_SESSION_TMP_DIR"
+ #define kSessionTmpDir             "rstudio-rsession"
+ 
+-#ifdef QUARTO_ENABLED
+-# define kDefaultPandocPath        "bin/quarto/bin/tools"
+-#else
+ # define kDefaultPandocPath        "bin/pandoc"
+-#endif
+ 
+ #define kDefaultNodePath           "bin/node"
+ #define kDefaultQuartoPath         "bin/quarto"
