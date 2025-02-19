@@ -1680,7 +1680,8 @@
   "sec-profile-graphical": [
     "index.html#sec-profile-graphical"
   ],
-  "sec-profile-hardened": [
+  "sec-release-26.05-incompatibilities-profiles-hardened-removed": [
+    "release-notes.html#sec-release-26.05-incompatibilities-profiles-hardened-removed",
     "index.html#sec-profile-hardened"
   ],
   "sec-profile-headless": [
