@@ -12316,7 +12316,7 @@ self: super: with self; {
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
 
-  pulumi-aws-native = pkgs.pulumiPackages.pulumi-aws-native.sdks.python;
+  pulumi-aws-native = callPackage ../development/python-modules/pulumi-aws-native { };
 
   pulumi-azure-native = pkgs.pulumiPackages.pulumi-azure-native.sdks.python;
 
