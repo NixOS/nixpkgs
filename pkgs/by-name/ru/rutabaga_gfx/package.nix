@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./link-cxx.patch
   ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.useLLVM {
+  env = lib.optionalAttrs (stdenv.hostPlatform.cxxlib == "libcxx" && !stdenv.hostPlatform.isDarwin) {
     USE_CLANG = true;
   };
 
