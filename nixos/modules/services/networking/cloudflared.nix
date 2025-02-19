@@ -177,6 +177,16 @@ in
 
     package = lib.mkPackageOption pkgs "cloudflared" { };
 
+    certificateFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      description = ''
+        Default cert.pem file to be used for all tunnels.
+
+        See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem).
+      '';
+      default = null;
+    };
+
     tunnels = lib.mkOption {
       description = ''
         Cloudflare tunnels.
@@ -207,6 +217,16 @@ in
                     See [Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/).
                   '';
                 };
+              };
+
+              certificateFile = lib.mkOption {
+                type = with lib.types; nullOr path;
+                description = ''
+                  Cert.pem file.
+
+                  See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem).
+                '';
+                default = null;
               };
 
               default = lib.mkOption {
@@ -338,6 +358,7 @@ in
         };
 
         mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+        certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
       in
       lib.nameValuePair "cloudflared-tunnel-${name}" {
         after = [
@@ -352,12 +373,16 @@ in
         serviceConfig = {
           RuntimeDirectory = "cloudflared-tunnel-${name}";
           RuntimeDirectoryMode = "0400";
-          LoadCredential = "credentials.json:${tunnel.credentialsFile}";
+          LoadCredential = [
+            "credentials.json:${tunnel.credentialsFile}"
+          ] ++ (lib.optional (certFile != null) "cert.pem:certFile");
 
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
+
+        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
       }
     ) config.services.cloudflared.tunnels;
   };
