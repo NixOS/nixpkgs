@@ -7,8 +7,7 @@
   git,
   # passthru
   nix-update-script,
-  runCommand,
-  makeWrapper,
+  callPackage,
   testers,
   pulumi,
   pulumiPackages,
@@ -122,18 +121,7 @@ buildGoModule rec {
 
   passthru = {
     pkgs = pulumiPackages;
-    withPackages =
-      f:
-      runCommand "${pulumi.name}-with-packages"
-        {
-          nativeBuildInputs = [ makeWrapper ];
-        }
-        ''
-          mkdir -p $out/bin
-          makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-            --suffix PATH : ${lib.makeBinPath (f pulumiPackages)} \
-            --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
-        '';
+    withPackages = callPackage ./with-packages.nix { };
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
