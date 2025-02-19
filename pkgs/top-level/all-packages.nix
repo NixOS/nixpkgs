@@ -17884,9 +17884,7 @@ with pkgs;
 
   touchosc = callPackage ../applications/audio/touchosc { };
 
-  trufflehog = callPackage ../tools/security/trufflehog {
-    buildGoModule = buildGo123Module;
-  };
+  trufflehog = callPackage ../tools/security/trufflehog { };
 
   unityhub = callPackage ../development/tools/unityhub { };
 
