@@ -12,19 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     tag = "v${version}";
-    hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
+    hash = "sha256-3YLdHwDgQDQyW4R3BpZAEL49BBpgigev/5lbnhDIFgI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-dphMJ1KkZARSntvyEayAtlYw8lL39K7Iw0X4n8nz3z8=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ey5pFGLgj17+RZGjpLOeN7Weh29jJyvuRrJ8wsIlC58=";
 
   nativeBuildInputs = [
     installShellFiles
