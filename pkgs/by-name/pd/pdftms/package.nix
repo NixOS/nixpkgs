@@ -36,8 +36,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp build/pdftms $out/bin/
+    install -Dm755 build/pdftms -t $out/bin
   '';
 
   meta = with lib; {
