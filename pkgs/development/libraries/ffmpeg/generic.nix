@@ -472,6 +472,11 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
         hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
       })
+      # Fix https://github.com/NixOS/nixpkgs/issues/383210
+      (fetchpatch2 {
+        url = "https://github.com/FFmpeg/FFmpeg/commit/099f88b8641dfc299f3896d17d9addc5b9ae7799.patch";
+        hash = "sha256-T9wmV1r0IOnV35pii6JkMkHMs3d4v1Ap1/Hd8FPi/pE=";
+      })
     ];
 
   configurePlatforms = [];
