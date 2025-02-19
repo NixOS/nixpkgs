@@ -12487,9 +12487,7 @@ with pkgs;
 
   cacert = callPackage ../data/misc/cacert { };
 
-  cnspec = callPackage ../tools/security/cnspec {
-    buildGoModule = buildGo123Module;
-  };
+  cnspec = callPackage ../tools/security/cnspec { };
 
   colloid-kde = libsForQt5.callPackage ../data/themes/colloid-kde { };
 
