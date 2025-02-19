@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, buildGo123Module }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "webdav";
   version = "5.7.3";
 
