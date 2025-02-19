@@ -5704,10 +5704,6 @@ with pkgs;
   };
 
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
-    crystal_1_2
-    crystal_1_7
-    crystal_1_8
-    crystal_1_9
     crystal_1_11
     crystal_1_12
     crystal_1_14
@@ -7468,9 +7464,9 @@ with pkgs;
   antlr = antlr4;
 
   inherit (callPackages ../servers/apache-kafka { })
-    apacheKafka_3_6
     apacheKafka_3_7
-    apacheKafka_3_8;
+    apacheKafka_3_8
+    apacheKafka_3_9;
 
   apacheKafka = apacheKafka_3_8;
 
@@ -8210,10 +8206,6 @@ with pkgs;
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else haskell.lib.compose.justStaticExecutables)
     haskellPackages.shake;
-
-  inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_17
-    shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {
     inherit (__splicedPackages.haskellPackages) ShellCheck;
