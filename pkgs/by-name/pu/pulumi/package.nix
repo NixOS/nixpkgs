@@ -123,6 +123,7 @@ buildGoModule rec {
     withPackages = callPackage ./with-packages.nix { };
     updateScript = nix-update-script { };
     tests = {
+      withPackagesTest = callPackage ./with-packages-test.nix { };
       version = testers.testVersion {
         package = pulumi;
         version = "v${version}";
