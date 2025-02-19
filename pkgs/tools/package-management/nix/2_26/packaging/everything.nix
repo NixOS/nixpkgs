@@ -39,6 +39,8 @@
 
   testers,
   runCommand,
+
+  patchedSrc ? null,
 }:
 
 let
@@ -68,52 +70,50 @@ let
           ;
       };
 
-  dev =
-    nixAttrs:
-    stdenv.mkDerivation (finalAttrs: {
-      name = "nix-${nix-cli.version}-dev";
-      pname = "nix";
-      version = nix-cli.version;
-      dontUnpack = true;
-      dontBuild = true;
-      libs = map lib.getDev (lib.attrValues libs);
-      installPhase = ''
-        mkdir -p $out/nix-support
-        echo $libs >> $out/nix-support/propagated-build-inputs
-        echo ${nixAttrs.finalPackage} >> $out/nix-support/propagated-build-inputs
-      '';
-      passthru = {
-        tests = {
-          # TODO: is this supposed to work for a dev output?
-          # pkg-config = testers.hasPkgConfigModules {
-          #   package = finalAttrs.finalPackage;
-          # };
+  dev = stdenv.mkDerivation (finalAttrs: {
+    name = "nix-${nix-cli.version}-dev";
+    pname = "nix";
+    version = nix-cli.version;
+    dontUnpack = true;
+    dontBuild = true;
+    libs = map lib.getDev (lib.attrValues libs);
+    nix = nix-cli;
+    installPhase = ''
+      mkdir -p $out/nix-support
+      echo $libs >> $out/nix-support/propagated-build-inputs
+      echo $nix >> $out/nix-support/propagated-build-inputs
+    '';
+    passthru = {
+      tests = {
+        pkg-config = testers.hasPkgConfigModules {
+          package = finalAttrs.finalPackage;
         };
-
-        # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
-        # because they rely on `drvPath`.
-        dev = finalAttrs.finalPackage.out;
-        out = nixAttrs.finalPackage.out;
-
-        libs = throw "`nix.dev.libs` is not meant to be used; use `nix.libs` instead.";
       };
-      meta = {
-        pkgConfigModules = [
-          "nix-cmd"
-          "nix-expr"
-          "nix-expr-c"
-          "nix-fetchers"
-          "nix-flake"
-          "nix-flake-c"
-          "nix-main"
-          "nix-main-c"
-          "nix-store"
-          "nix-store-c"
-          "nix-util"
-          "nix-util-c"
-        ];
-      };
-    });
+
+      # If we were to fully emulate output selection here, we'd confuse the Nix CLIs,
+      # because they rely on `drvPath`.
+      dev = finalAttrs.finalPackage.out;
+
+      libs = throw "`nix.dev.libs` is not meant to be used; use `nix.libs` instead.";
+    };
+    meta = {
+      mainProgram = "nix";
+      pkgConfigModules = [
+        "nix-cmd"
+        "nix-expr"
+        "nix-expr-c"
+        "nix-fetchers"
+        "nix-flake"
+        "nix-flake-c"
+        "nix-main"
+        "nix-main-c"
+        "nix-store"
+        "nix-store-c"
+        "nix-util"
+        "nix-util-c"
+      ];
+    };
+  });
   devdoc = buildEnv {
     name = "nix-${nix-cli.version}-devdoc";
     paths = [
@@ -122,87 +122,141 @@ let
     ];
   };
 
+  /**
+    Produce a set of derivation outputs that implement the multiple outputs interface.
+
+    The multiple outputs interface was originally designed for derivations with
+    multiple outputs, but it can also be used for packages which do not correspond
+    1:1 to a single derivation and whose outputs come from distinct derivations.
+  */
+  makeOutputs =
+    {
+      outputs,
+      defaultOutput ? "out",
+      extraAttrs ? outputName: value: { },
+    }:
+
+    let
+      prepOutput =
+        outputName: value:
+        {
+          _type = "package";
+          /**
+            For compatibility. The outputs of this package may not actually be implemented using a single derivation.
+          */
+          type = "derivation";
+          outputName = outputName;
+          outPath = value.outPath or value;
+        }
+        // extraAttrs outputName value;
+
+      outputAttrs = lib.mapAttrs (
+        outputName: value: { outputSpecified = true; } // prepOutput outputName value // commonAttrs
+      ) outputs;
+
+      # This is without `outputSpecified`, but otherwise matches the `outputAttrs` above.
+      defaultOutputValue = prepOutput defaultOutput outputs.${defaultOutput} // commonAttrs;
+
+      commonAttrs = {
+        outputs = builtins.attrNames outputs;
+      } // outputAttrs;
+
+    in
+    defaultOutputValue;
+
 in
-(buildEnv {
-  name = "nix-${nix-cli.version}";
-  paths = [
-    nix-cli
-    nix-manual.man
-  ];
 
-  meta.mainProgram = "nix";
-}).overrideAttrs
-  (
-    finalAttrs: prevAttrs: {
-      doCheck = true;
-      doInstallCheck = true;
-
-      checkInputs =
-        [
-          # Make sure the unit tests have passed
-          nix-util-tests.tests.run
-          nix-store-tests.tests.run
-          nix-expr-tests.tests.run
-          nix-fetchers-tests.tests.run
-          nix-flake-tests.tests.run
-
-          # Make sure the functional tests have passed
-          nix-functional-tests
-        ]
-        ++ lib.optionals
-          (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-          [
-            # Perl currently fails in static build
-            # TODO: Split out tests into a separate derivation?
-            nix-perl-bindings
-          ];
-      passthru = prevAttrs.passthru // {
-        inherit (nix-cli) version;
-
-        /**
-          These are the libraries that are part of the Nix project. They are used
-          by the Nix CLI and other tools.
-
-          If you need to use these libraries in your project, we recommend to use
-          the `-c` C API libraries exclusively, if possible.
-
-          We also recommend that you build the complete package to ensure that the unit tests pass.
-          You could do this in CI, or by passing it in an unused environment variable. e.g in a `mkDerivation` call:
-
-          ```nix
-            buildInputs = [ nix.libs.nix-util-c nix.libs.nix-store-c ];
-            # Make sure the nix libs we use are ok
-            unusedInputsForTests = [ nix ];
-            disallowedReferences = nix.all;
-          ```
-        */
-        inherit libs;
-
-        tests = prevAttrs.passthru.tests or { } // {
-          pkg-config = testers.hasPkgConfigModules {
-            package = finalAttrs.finalPackage;
-          };
-        };
-
-        /**
-          A derivation referencing the `dev` outputs of the Nix libraries.
-        */
-        dev = dev finalAttrs;
-        inherit devdoc;
-        doc = nix-manual;
-        outputs = [
-          "out"
-          "dev"
-          "devdoc"
-          "doc"
+makeOutputs {
+  extraAttrs = outputName: drv: {
+    meta = drv.meta // {
+      description = "The Nix package manager";
+      pkgConfigModules = dev.meta.pkgConfigModules;
+      outputsToInstall = [
+        # man is symlinked
+        "out"
+      ];
+    };
+    internals = drv;
+    name = "nix";
+    overrideAttrs =
+      _:
+      throw "The nix package does not support overrideAttrs, because it has been split into multiple derivations. Instead, you may call attributes such as overrideSource, appendPatches or overrideAllMesonComponents.";
+    inherit (nix-cli) version;
+    # Should not be required
+    inherit (drv) drvPath;
+    tests = drv.tests or {};
+    src = patchedSrc;
+  };
+  outputs = {
+    inherit dev devdoc;
+    doc = nix-manual;
+    out =
+      (buildEnv {
+        name = "nix-${nix-cli.version}";
+        paths = [
+          nix-cli
+          nix-manual.man
         ];
-        all = lib.attrValues (
-          lib.genAttrs finalAttrs.passthru.outputs (outName: finalAttrs.finalPackage.${outName})
+        meta.mainProgram = "nix";
+      }).overrideAttrs
+        (
+          finalAttrs: prevAttrs: {
+            doCheck = true;
+            doInstallCheck = true;
+
+            checkInputs =
+              [
+                # Make sure the unit tests have passed
+                nix-util-tests.tests.run
+                nix-store-tests.tests.run
+                nix-expr-tests.tests.run
+                nix-fetchers-tests.tests.run
+                nix-flake-tests.tests.run
+
+                # Make sure the functional tests have passed
+                nix-functional-tests
+
+                # dev bundle is ok
+                # (checkInputs must be empty paths??)
+                (runCommand "check-pkg-config" { checked = dev.tests.pkg-config; } "mkdir $out")
+              ]
+              ++ lib.optionals
+                (!stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+                [
+                  # Perl currently fails in static build
+                  # TODO: Split out tests into a separate derivation?
+                  nix-perl-bindings
+                ];
+            passthru = prevAttrs.passthru // {
+              inherit (nix-cli) version;
+
+              /**
+                These are the libraries that are part of the Nix project. They are used
+                by the Nix CLI and other tools.
+
+                If you need to use these libraries in your project, we recommend to use
+                the `-c` C API libraries exclusively, if possible.
+
+                We also recommend that you build the complete package to ensure that the unit tests pass.
+                You could do this in CI, or by passing it in an unused environment variable. e.g in a `mkDerivation` call:
+
+                ```nix
+                  buildInputs = [ nix.libs.nix-util-c nix.libs.nix-store-c ];
+                  # Make sure the nix libs we use are ok
+                  unusedInputsForTests = [ nix ];
+                  disallowedReferences = nix.all;
+                ```
+              */
+              inherit libs;
+
+              tests = prevAttrs.passthru.tests or { } // {
+                # TODO: create a proper fixpoint and:
+                pkg-config = testers.hasPkgConfigModules {
+                  package = finalAttrs.finalPackage;
+                };
+              };
+            };
+          }
         );
-      };
-      meta = prevAttrs.meta // {
-        description = "The Nix package manager";
-        pkgConfigModules = (dev finalAttrs).meta.pkgConfigModules;
-      };
-    }
-  )
+  };
+}
