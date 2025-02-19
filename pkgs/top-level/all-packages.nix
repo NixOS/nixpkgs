@@ -4340,9 +4340,7 @@ with pkgs;
 
   nlopt = callPackage ../development/libraries/nlopt { octave = null; };
 
-  notation = callPackage ../by-name/no/notation/package.nix {
-    buildGoModule = buildGo123Module;
-  };
+  notation = callPackage ../by-name/no/notation/package.nix { };
 
   nsjail = callPackage ../tools/security/nsjail {
     protobuf = protobuf_21;
