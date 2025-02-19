@@ -35,8 +35,6 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   preCheck = ''
     export LC_ALL=C
   '';
