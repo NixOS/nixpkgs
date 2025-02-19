@@ -30,34 +30,17 @@ python3Packages.buildPythonApplication rec {
     setproctitle
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    asynctest
-    pytestCheckHook
-  ];
-
-  preCheck = ''
-    export LC_ALL=C
-  '';
-
-  disabledTestPaths = [
-    # Almost all tests fail in this file, it is reported upstream in:
-    # https://github.com/rndusr/stig/issues/214 , and upstream fails to
-    # reproduce the issue unfortunately.
-    "tests/client_test/aiotransmission_test/api_settings_test.py"
-  ];
-  disabledTests = [
-    # Another failure with similar circumstances to the above
-    "test_candidates_are_sorted_case_insensitively"
-  ];
+  # According to the upstream author,
+  # stig no longer has working tests
+  # since asynctest (former test dependency) got abandoned.
+  # See https://github.com/rndusr/stig/issues/206#issuecomment-2669636320
+  doCheck = false;
 
   passthru.tests = testers.testVersion {
     package = stig;
     command = "stig -v";
     version = "stig version ${version}";
   };
-
-  # https://github.com/rndusr/stig/issues/214#issuecomment-1995651219
-  dontUsePytestCheck = true;
 
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
