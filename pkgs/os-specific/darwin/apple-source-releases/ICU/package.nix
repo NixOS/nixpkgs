@@ -5,7 +5,6 @@
   fixDarwinDylibNames,
   mkAppleDerivation,
   python3,
-  stdenv, # Necessary for compatibility with python3Packages.tensorflow, which tries to override the stdenv
   testers,
 }:
 
