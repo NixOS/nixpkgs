@@ -1906,9 +1906,7 @@ with pkgs;
 
   asmrepl = callPackage ../development/interpreters/asmrepl { };
 
-  atlas = callPackage ../by-name/at/atlas/package.nix {
-    buildGoModule = buildGo123Module;
-  };
+  atlas = callPackage ../by-name/at/atlas/package.nix { };
 
   avahi = callPackage ../development/libraries/avahi { };
 
