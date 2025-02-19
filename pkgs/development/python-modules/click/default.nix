@@ -5,6 +5,8 @@
   fetchFromGitHub,
   importlib-metadata,
   pytestCheckHook,
+  flit-core,
+  colorama,
 
   # large-rebuild downstream dependencies and applications
   flask,
@@ -16,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.7";
-  format = "setuptools";
+  version = "8.1.8";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -25,10 +27,12 @@ buildPythonPackage rec {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-8YqIKRyw5MegnRwAO7YTCZateEFQFTH2PHpE8gTPTow=";
+    hash = "sha256-pAAqf8jZbDfVZUoltwIFpov/1ys6HSYMyw3WV2qcE/M=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  build-system = [ flit-core ];
+
+  propagatedBuildInputs = [ colorama ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -46,6 +50,10 @@ buildPythonPackage rec {
       typer
       ;
   };
+
+  pythonImportsCheck = [
+    "click"
+  ];
 
   meta = with lib; {
     homepage = "https://click.palletsprojects.com/";
