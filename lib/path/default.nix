@@ -165,7 +165,7 @@ in
 # No rec! Add dependencies on this file at the top.
 {
 
-  /*
+  /**
     Append a subpath string to a path.
 
     Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
@@ -178,34 +178,55 @@ in
 
           append p s == append p (subpath.normalise s)
 
-    Type:
-      append :: Path -> String -> Path
 
-    Example:
-      append /foo "bar/baz"
-      => /foo/bar/baz
+    # Inputs
 
-      # subpaths don't need to be normalised
-      append /foo "./bar//baz/./"
-      => /foo/bar/baz
+    `path`
 
-      # can append to root directory
-      append /. "foo/bar"
-      => /foo/bar
+    : The absolute path to append to
 
-      # first argument needs to be a path value type
-      append "/foo" "bar"
-      => <error>
+    `subpath`
 
-      # second argument needs to be a valid subpath string
-      append /foo /bar
-      => <error>
-      append /foo ""
-      => <error>
-      append /foo "/bar"
-      => <error>
-      append /foo "../bar"
-      => <error>
+    : The subpath string to append
+
+    # Type
+
+    ```
+    append :: Path -> String -> Path
+    ```
+
+    # Examples
+    :::{.example}
+    ## `append` usage example
+
+    ```nix
+    append /foo "bar/baz"
+    => /foo/bar/baz
+
+    # subpaths don't need to be normalised
+    append /foo "./bar//baz/./"
+    => /foo/bar/baz
+
+    # can append to root directory
+    append /. "foo/bar"
+    => /foo/bar
+
+    # first argument needs to be a path value type
+    append "/foo" "bar"
+    => <error>
+
+    # second argument needs to be a valid subpath string
+    append /foo /bar
+    => <error>
+    append /foo ""
+    => <error>
+    append /foo "/bar"
+    => <error>
+    append /foo "../bar"
+    => <error>
+    ```
+
+    :::
   */
   append =
     # The absolute path to append to
@@ -219,7 +240,7 @@ in
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
 
-  /*
+  /**
     Whether the first path is a component-wise prefix of the second path.
 
     Laws:
@@ -228,18 +249,35 @@ in
 
     - `hasPrefix` is a [non-strict partial order](https://en.wikipedia.org/wiki/Partially_ordered_set#Non-strict_partial_order) over the set of all path values.
 
-    Type:
-      hasPrefix :: Path -> Path -> Bool
 
-    Example:
-      hasPrefix /foo /foo/bar
-      => true
-      hasPrefix /foo /foo
-      => true
-      hasPrefix /foo/bar /foo
-      => false
-      hasPrefix /. /foo
-      => true
+    # Inputs
+
+    `path1`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    hasPrefix :: Path -> Path -> Bool
+    ```
+
+    # Examples
+    :::{.example}
+    ## `hasPrefix` usage example
+
+    ```nix
+    hasPrefix /foo /foo/bar
+    => true
+    hasPrefix /foo /foo
+    => true
+    hasPrefix /foo/bar /foo
+    => false
+    hasPrefix /. /foo
+    => true
+    ```
+
+    :::
   */
   hasPrefix =
     path1:
@@ -261,7 +299,7 @@ in
     take (length path1Deconstructed.components) path2Deconstructed.components
     == path1Deconstructed.components;
 
-  /*
+  /**
     Remove the first path as a component-wise prefix from the second path.
     The result is a [normalised subpath string](#function-library-lib.path.subpath.normalise).
 
@@ -271,18 +309,35 @@ in
 
           removePrefix p (append p s) == subpath.normalise s
 
-    Type:
-      removePrefix :: Path -> Path -> String
 
-    Example:
-      removePrefix /foo /foo/bar/baz
-      => "./bar/baz"
-      removePrefix /foo /foo
-      => "./."
-      removePrefix /foo/bar /foo
-      => <error>
-      removePrefix /. /foo
-      => "./foo"
+    # Inputs
+
+    `path1`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    removePrefix :: Path -> Path -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `removePrefix` usage example
+
+    ```nix
+    removePrefix /foo /foo/bar/baz
+    => "./bar/baz"
+    removePrefix /foo /foo
+    => "./."
+    removePrefix /foo/bar /foo
+    => <error>
+    removePrefix /. /foo
+    => "./foo"
+    ```
+
+    :::
   */
   removePrefix =
     path1:
@@ -310,7 +365,7 @@ in
           second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
     joinRelPath components;
 
-  /*
+  /**
     Split the filesystem root from a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path).
     The result is an attribute set with these attributes:
     - `root`: The filesystem root of the path, meaning that this directory has no parent directory.
@@ -328,22 +383,39 @@ in
 
           dirOf (splitRoot p).root == (splitRoot p).root
 
-    Type:
-      splitRoot :: Path -> { root :: Path, subpath :: String }
 
-    Example:
-      splitRoot /foo/bar
-      => { root = /.; subpath = "./foo/bar"; }
+    # Inputs
 
-      splitRoot /.
-      => { root = /.; subpath = "./."; }
+    `path`
 
-      # Nix neutralises `..` path components for all path values automatically
-      splitRoot /foo/../bar
-      => { root = /.; subpath = "./bar"; }
+    : The path to split the root off of
 
-      splitRoot "/foo/bar"
-      => <error>
+    # Type
+
+    ```
+    splitRoot :: Path -> { root :: Path, subpath :: String }
+    ```
+
+    # Examples
+    :::{.example}
+    ## `splitRoot` usage example
+
+    ```nix
+    splitRoot /foo/bar
+    => { root = /.; subpath = "./foo/bar"; }
+
+    splitRoot /.
+    => { root = /.; subpath = "./."; }
+
+    # Nix neutralises `..` path components for all path values automatically
+    splitRoot /foo/../bar
+    => { root = /.; subpath = "./bar"; }
+
+    splitRoot "/foo/bar"
+    => <error>
+    ```
+
+    :::
   */
   splitRoot =
     # The path to split the root off of
@@ -358,7 +430,7 @@ in
       subpath = joinRelPath deconstructed.components;
     };
 
-  /*
+  /**
     Whether a [path](https://nixos.org/manual/nix/stable/language/values.html#type-path)
     has a [store path](https://nixos.org/manual/nix/stable/store/store-path.html#store-path)
     as a prefix.
@@ -371,33 +443,50 @@ in
     which occur when Nix files in the store use relative path expressions.
     :::
 
-    Type:
-      hasStorePathPrefix :: Path -> Bool
 
-    Example:
-      # Subpaths of derivation outputs have a store path as a prefix
-      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz
-      => true
+    # Inputs
 
-      # The store directory itself is not a store path
-      hasStorePathPrefix /nix/store
-      => false
+    `path`
 
-      # Derivation outputs are store paths themselves
-      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo
-      => true
+    : 1\. Function argument
 
-      # Paths outside the Nix store don't have a store path prefix
-      hasStorePathPrefix /home/user
-      => false
+    # Type
 
-      # Not all paths under the Nix store are store paths
-      hasStorePathPrefix /nix/store/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq
-      => false
+    ```
+    hasStorePathPrefix :: Path -> Bool
+    ```
 
-      # Store derivations are also store paths themselves
-      hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv
-      => true
+    # Examples
+    :::{.example}
+    ## `hasStorePathPrefix` usage example
+
+    ```nix
+    # Subpaths of derivation outputs have a store path as a prefix
+    hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo/bar/baz
+    => true
+
+    # The store directory itself is not a store path
+    hasStorePathPrefix /nix/store
+    => false
+
+    # Derivation outputs are store paths themselves
+    hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo
+    => true
+
+    # Paths outside the Nix store don't have a store path prefix
+    hasStorePathPrefix /home/user
+    => false
+
+    # Not all paths under the Nix store are store paths
+    hasStorePathPrefix /nix/store/.links/10gg8k3rmbw8p7gszarbk7qyd9jwxhcfq9i6s5i0qikx8alkk4hq
+    => false
+
+    # Store derivations are also store paths themselves
+    hasStorePathPrefix /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-foo.drv
+    => true
+    ```
+
+    :::
   */
   hasStorePathPrefix =
     path:
@@ -414,7 +503,7 @@ in
       "lib.path.hasStorePathPrefix: Argument has a filesystem root (${toString deconstructed.root}) that's not /, which is currently not supported.";
     componentsHaveStorePathPrefix deconstructed.components;
 
-  /*
+  /**
     Whether a value is a valid subpath string.
 
     A subpath string points to a specific file or directory within an absolute base directory.
@@ -428,39 +517,56 @@ in
 
     - The string doesn't contain any `..` path components.
 
-    Type:
-      subpath.isValid :: String -> Bool
 
-    Example:
-      # Not a string
-      subpath.isValid null
-      => false
+    # Inputs
 
-      # Empty string
-      subpath.isValid ""
-      => false
+    `value`
 
-      # Absolute path
-      subpath.isValid "/foo"
-      => false
+    : The value to check
 
-      # Contains a `..` path component
-      subpath.isValid "../foo"
-      => false
+    # Type
 
-      # Valid subpath
-      subpath.isValid "foo/bar"
-      => true
+    ```
+    subpath.isValid :: String -> Bool
+    ```
 
-      # Doesn't need to be normalised
-      subpath.isValid "./foo//bar/"
-      => true
+    # Examples
+    :::{.example}
+    ## `subpath.isValid` usage example
+
+    ```nix
+    # Not a string
+    subpath.isValid null
+    => false
+
+    # Empty string
+    subpath.isValid ""
+    => false
+
+    # Absolute path
+    subpath.isValid "/foo"
+    => false
+
+    # Contains a `..` path component
+    subpath.isValid "../foo"
+    => false
+
+    # Valid subpath
+    subpath.isValid "foo/bar"
+    => true
+
+    # Doesn't need to be normalised
+    subpath.isValid "./foo//bar/"
+    => true
+    ```
+
+    :::
   */
   subpath.isValid =
     # The value to check
     value: subpathInvalidReason value == null;
 
-  /*
+  /**
     Join subpath strings together using `/`, returning a normalised subpath string.
 
     Like `concatStringsSep "/"` but safer, specifically:
@@ -492,30 +598,47 @@ in
 
           ps != [] -> subpath.join ps == subpath.normalise (concatStringsSep "/" ps)
 
-    Type:
-      subpath.join :: [ String ] -> String
 
-    Example:
-      subpath.join [ "foo" "bar/baz" ]
-      => "./foo/bar/baz"
+    # Inputs
 
-      # normalise the result
-      subpath.join [ "./foo" "." "bar//./baz/" ]
-      => "./foo/bar/baz"
+    `subpaths`
 
-      # passing an empty list results in the current directory
-      subpath.join [ ]
-      => "./."
+    : The list of subpaths to join together
 
-      # elements must be valid subpath strings
-      subpath.join [ /foo ]
-      => <error>
-      subpath.join [ "" ]
-      => <error>
-      subpath.join [ "/foo" ]
-      => <error>
-      subpath.join [ "../foo" ]
-      => <error>
+    # Type
+
+    ```
+    subpath.join :: [ String ] -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `subpath.join` usage example
+
+    ```nix
+    subpath.join [ "foo" "bar/baz" ]
+    => "./foo/bar/baz"
+
+    # normalise the result
+    subpath.join [ "./foo" "." "bar//./baz/" ]
+    => "./foo/bar/baz"
+
+    # passing an empty list results in the current directory
+    subpath.join [ ]
+    => "./."
+
+    # elements must be valid subpath strings
+    subpath.join [ /foo ]
+    => <error>
+    subpath.join [ "" ]
+    => <error>
+    subpath.join [ "/foo" ]
+    => <error>
+    subpath.join [ "../foo" ]
+    => <error>
+    ```
+
+    :::
   */
   subpath.join =
     # The list of subpaths to join together
@@ -537,7 +660,7 @@ in
                 ${subpathInvalidReason path}''
       ) 0 subpaths;
 
-  /*
+  /**
     Split [a subpath](#function-library-lib.path.subpath.isValid) into its path component strings.
     Throw an error if the subpath isn't valid.
     Note that the returned path components are also [valid subpath strings](#function-library-lib.path.subpath.isValid), though they are intentionally not [normalised](#function-library-lib.path.subpath.normalise).
@@ -548,18 +671,35 @@ in
 
           subpath.join (subpath.components s) == subpath.normalise s
 
-    Type:
-      subpath.components :: String -> [ String ]
 
-    Example:
-      subpath.components "."
-      => [ ]
+    # Inputs
 
-      subpath.components "./foo//bar/./baz/"
-      => [ "foo" "bar" "baz" ]
+    `subpath`
 
-      subpath.components "/foo"
-      => <error>
+    : The subpath string to split into components
+
+    # Type
+
+    ```
+    subpath.components :: String -> [ String ]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `subpath.components` usage example
+
+    ```nix
+    subpath.components "."
+    => [ ]
+
+    subpath.components "./foo//bar/./baz/"
+    => [ "foo" "bar" "baz" ]
+
+    subpath.components "/foo"
+    => <error>
+    ```
+
+    :::
   */
   subpath.components =
     # The subpath string to split into components
@@ -569,7 +709,7 @@ in
           ${subpathInvalidReason subpath}'';
     splitRelPath subpath;
 
-  /*
+  /**
     Normalise a subpath. Throw an error if the subpath isn't [valid](#function-library-lib.path.subpath.isValid).
 
     - Limit repeating `/` to a single one.
@@ -602,45 +742,62 @@ in
 
           builtins.tryEval (subpath.normalise p)).success == subpath.isValid p
 
-    Type:
-      subpath.normalise :: String -> String
 
-    Example:
-      # limit repeating `/` to a single one
-      subpath.normalise "foo//bar"
-      => "./foo/bar"
+    # Inputs
 
-      # remove redundant `.` components
-      subpath.normalise "foo/./bar"
-      => "./foo/bar"
+    `subpath`
 
-      # add leading `./`
-      subpath.normalise "foo/bar"
-      => "./foo/bar"
+    : The subpath string to normalise
 
-      # remove trailing `/`
-      subpath.normalise "foo/bar/"
-      => "./foo/bar"
+    # Type
 
-      # remove trailing `/.`
-      subpath.normalise "foo/bar/."
-      => "./foo/bar"
+    ```
+    subpath.normalise :: String -> String
+    ```
 
-      # Return the current directory as `./.`
-      subpath.normalise "."
-      => "./."
+    # Examples
+    :::{.example}
+    ## `subpath.normalise` usage example
 
-      # error on `..` path components
-      subpath.normalise "foo/../bar"
-      => <error>
+    ```nix
+    # limit repeating `/` to a single one
+    subpath.normalise "foo//bar"
+    => "./foo/bar"
 
-      # error on empty string
-      subpath.normalise ""
-      => <error>
+    # remove redundant `.` components
+    subpath.normalise "foo/./bar"
+    => "./foo/bar"
 
-      # error on absolute path
-      subpath.normalise "/foo"
-      => <error>
+    # add leading `./`
+    subpath.normalise "foo/bar"
+    => "./foo/bar"
+
+    # remove trailing `/`
+    subpath.normalise "foo/bar/"
+    => "./foo/bar"
+
+    # remove trailing `/.`
+    subpath.normalise "foo/bar/."
+    => "./foo/bar"
+
+    # Return the current directory as `./.`
+    subpath.normalise "."
+    => "./."
+
+    # error on `..` path components
+    subpath.normalise "foo/../bar"
+    => <error>
+
+    # error on empty string
+    subpath.normalise ""
+    => <error>
+
+    # error on absolute path
+    subpath.normalise "/foo"
+    => <error>
+    ```
+
+    :::
   */
   subpath.normalise =
     # The subpath string to normalise
