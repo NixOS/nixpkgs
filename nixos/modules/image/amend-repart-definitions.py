@@ -46,7 +46,7 @@ def add_closure_to_definition(
         return
 
     copy_files_lines: list[str] = []
-    with open(closure, "r") as f:
+    with open(f"{closure}/store-paths", "r") as f:
         for line in f:
             if not isinstance(line, str):
                 continue
@@ -56,6 +56,13 @@ def add_closure_to_definition(
             target = f":/{target}" if strip_nix_store_prefix else ""
 
             copy_files_lines.append(f"CopyFiles={source}{target}\n")
+
+    if strip_nix_store_prefix:
+        copy_files_lines.append(f"CopyFiles={closure}/registration:/.registration\n")
+    else:
+        copy_files_lines.append(
+            f"CopyFiles={closure}/registration:/nix/store/.registration\n"
+        )
 
     with open(definition, "a") as f:
         f.writelines(copy_files_lines)
