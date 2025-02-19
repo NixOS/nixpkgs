@@ -69,6 +69,11 @@
     fi
   '';
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
+  # or doc/build-helpers/testers.chapter.md
+  # NOTE: Must be `import`-ed rather than `callPackage`-d to preserve the `override` attribute.
+  testEqualArrayOrMap = import ./testEqualArrayOrMap/tester.nix { inherit lib runCommand; };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
   # or doc/build-helpers/testers.chapter.md
   testVersion =
