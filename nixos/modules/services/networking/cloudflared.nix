@@ -209,6 +209,15 @@ in
                 };
               };
 
+              certificateFile = lib.mkOption {
+                type = with lib.types; nullOr path;
+                description = ''
+                  Cert.pem file.
+
+                  See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem).
+                '';
+              };
+
               default = lib.mkOption {
                 type = lib.types.str;
                 description = ''
@@ -352,12 +361,17 @@ in
         serviceConfig = {
           RuntimeDirectory = "cloudflared-tunnel-${name}";
           RuntimeDirectoryMode = "0400";
-          LoadCredential = "credentials.json:${cfg.credentialsFile}";
+          LoadCredential = lib.mkMerge [
+            "credentials.json:${cfg.credentialsFile}"
+            (lib.mkIf (cfg.certificateFile != null) "cert.pem:${cfg.certificateFile}")
+          ];
 
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
+
+        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (cfg.certificateFile != null) ''%d/cert.pem'';
       }
     ) config.services.cloudflared.tunnels;
   };
