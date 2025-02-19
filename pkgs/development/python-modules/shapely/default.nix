@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
 
@@ -18,12 +18,13 @@ buildPythonPackage rec {
   pname = "shapely";
   version = "2.0.7";
   pyproject = true;
-
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KP4pl6q5qdwCbcajVdBOhYQVRrKl0jLtlT4zIauVjuU=";
+  src = fetchFromGitHub {
+    owner = "shapely";
+    repo = "shapely";
+    tag = version;
+    hash = "sha256-oq08nDeCdS6ARISai/hKM74v+ezSxO2PpSzas/ZFVaw=";
   };
 
   nativeBuildInputs = [
