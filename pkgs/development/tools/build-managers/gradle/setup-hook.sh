@@ -54,7 +54,11 @@ gradleUpdateScript() {
     runHook preBuild
     runHook preGradleUpdate
 
-    gradle ${enableParallelUpdating:+--parallel} ${gradleUpdateTask:---write-verification-metadata pgp,sha256}
+    local verificationFlags=sha256
+    if [ -f gradle/verification-metadata.xml ]; then
+        verificationFlags="pgp,sha256"
+    fi
+    gradle ${enableParallelUpdating:+--parallel} ${gradleUpdateTask:---write-verification-metadata $verificationFlags}
 
     runHook postGradleUpdate
 }
