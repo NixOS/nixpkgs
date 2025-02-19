@@ -13,6 +13,9 @@
   pulumi,
   pulumiPackages,
 }:
+let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
 buildGoModule rec {
   pname = "pulumi";
   version = "3.150.0";
@@ -30,7 +33,13 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/pkg";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    # Implies cross-compilation so we use pulumi from previous stage.
+    # Otherwise, we use "$out/bin/pulumi" (see postInstall).
+    ++ lib.optional (!canExecute) pulumi;
 
   nativeCheckInputs = [ git ];
 
@@ -102,11 +111,13 @@ buildGoModule rec {
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;
 
+  pulumiExe = if canExecute then "${placeholder "out"}/bin/pulumi" else "pulumi";
+
   postInstall = ''
-    installShellCompletion --cmd pulumi \
-      --bash <($out/bin/pulumi gen-completion bash) \
-      --fish <($out/bin/pulumi gen-completion fish) \
-      --zsh  <($out/bin/pulumi gen-completion zsh)
+    for shell in bash fish zsh; do
+      "$pulumiExe" gen-completion $shell >pulumi.$shell
+      installShellCompletion pulumi.$shell
+    done
   '';
 
   passthru = {
