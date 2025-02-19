@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = [ ./no-const.patch ];
+
   postPatch = ''
     substituteInPlace olm.pc.in \
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
