@@ -12,6 +12,8 @@ postgresqlStart() {
   # Server variables:
   #  - only PGDATA: https://www.postgresql.org/docs/current/creating-cluster.html
 
+  export PGSSLMODE=${PGSSLMODE:-disable}
+
   if [[ "${PGDATA:-}" == "" ]]; then
     PGDATA="$NIX_BUILD_TOP/postgresql"
   fi
