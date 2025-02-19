@@ -1,6 +1,7 @@
 {
   lib,
   src,
+  baseVersion,
   officialRelease,
 }:
 
@@ -8,8 +9,6 @@ scope:
 
 let
   inherit (scope) callPackage;
-
-  baseVersion = lib.fileContents ../.version;
 
   versionSuffix = lib.optionalString (!officialRelease) "pre";
 

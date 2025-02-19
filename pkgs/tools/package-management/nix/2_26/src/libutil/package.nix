@@ -11,6 +11,9 @@
   nlohmann_json,
   openssl,
 
+  # for 2.27+
+  libblake3,
+
   # Configuration Options
 
   version,
@@ -44,7 +47,8 @@ mkMesonLibrary (finalAttrs: {
     brotli
     libsodium
     openssl
-  ] ++ lib.optional stdenv.hostPlatform.isx86_64 libcpuid;
+  ] ++ (lib.optional stdenv.hostPlatform.isx86_64 libcpuid)
+  ++ (lib.optional (lib.versionAtLeast version "2.27") libblake3);
 
   propagatedBuildInputs = [
     boost

@@ -97,6 +97,19 @@ let
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
       };
 
+  common_2_26 = args: ((callPackage ./2_26/componentized.nix args).overrideAttrs (this: old: {
+    passthru = old.passthru or {} // {
+      tests =
+        old.passthru.tests or {}
+        // import ./tests.nix {
+          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
+          inherit (old) version src;
+          nix = this.finalPackage;
+          self_attribute_name = "nix_2_26";
+        };
+    };
+  }));
+
   # https://github.com/NixOS/nix/pull/7585
   patch-monitorfdhup = fetchpatch2 {
     name = "nix-7585-monitor-fd-hup.patch";
@@ -164,29 +177,26 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_25";
   };
 
-  nix_2_26 = (callPackage ./2_26/componentized.nix { }).overrideAttrs (this: old: {
-    passthru = old.passthru or {} // {
-      tests =
-        old.passthru.tests or {}
-        // import ./tests.nix {
-          inherit runCommand lib stdenv pkgs pkgsi686Linux pkgsStatic nixosTests;
-          inherit (old) version src;
-          nix = this.finalPackage;
-          self_attribute_name = "nix_2_26";
-        };
-    };
-  });
-
-  git = common rec {
-    version = "2.25.0";
-    suffix = "pre20241101_${lib.substring 0 8 src.rev}";
+  nix_2_26 = common_2_26 {
+    baseVersion = "2.26.1";
+    officialRelease = true;
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
-      hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
+      rev = "36bd92736faaf81c6af3dff8f560963eb4e76b14";
+      hash = "sha256-1T7WRNfUMsiiNB77BuHElzjavguL8oJx+wBtfMcobq8=";
     };
-    self_attribute_name = "git";
+  };
+
+  git = common_2_26 {
+    baseVersion = "2.27.0";
+    officialRelease = false;
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "e5fdb4b164958202a9913f163f9f9242f03120c1";
+      hash = "sha256-oBC57hHNaLYPpzoatU6gM77nHFLLOlBXHh2xUqdLh+Y=";
+    };
   };
 
   latest = self.nix_2_25;
