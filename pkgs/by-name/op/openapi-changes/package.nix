@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   git,
   makeWrapper,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "openapi-changes";
   version = "0.0.68";
 
