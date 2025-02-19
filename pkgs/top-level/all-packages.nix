@@ -2304,8 +2304,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  grype = callPackage ../by-name/gr/grype/package.nix { };
-
   hiksink = callPackage ../tools/misc/hiksink {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
