@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "pdftms";
-  version = "1.0.0";
+  version = "0-unstable-2025-02-14";
 
   src = fetchFromGitHub {
     owner = "pingponghero12";
