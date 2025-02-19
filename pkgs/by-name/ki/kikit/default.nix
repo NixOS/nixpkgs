@@ -25,7 +25,7 @@ let
 in
 buildPythonApplication rec {
   pname = "kikit";
-  version = "1.6.0";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     owner = "yaqwsx";
     repo = "KiKit";
     tag = "v${version}";
-    hash = "sha256-r8LQcy3I6hmcrU/6HfPAYJd+cEZdhad6DUldC9HvXZU=";
+    hash = "sha256-b4I+RvxjCAcHam/uhvUQZrnET9QWeBlhobLeXkMcdRA=";
   };
 
   propagatedBuildInputs = [
@@ -82,7 +82,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Automation for KiCAD boards";
     homepage = "https://github.com/yaqwsx/KiKit/";
-    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/v${version}";
+    changelog = "https://github.com/yaqwsx/KiKit/releases/tag/${src.tag}";
     maintainers = with maintainers; [
       jfly
       matusf
