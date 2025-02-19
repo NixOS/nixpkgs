@@ -18,6 +18,10 @@ buildDotnetModule rec {
     hash = "sha256-5XrFIgblr2WIMBPoVwRZ6X2dokbXw+nS8J7WzhHEzpU=";
   };
 
+  patches = [
+    ./0001-Revert-Bump-Grpc.Tools-from-2.68.1-to-2.69.0-16097.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
   '';
