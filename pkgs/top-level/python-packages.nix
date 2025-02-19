@@ -1472,7 +1472,7 @@ self: super: with self; {
 
   pulumi-hcloud = callPackage ../development/python-modules/pulumi-hcloud { };
 
-  pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
+  pulumi-random = callPackage ../development/python-modules/pulumi-random { };
 
   backcall = callPackage ../development/python-modules/backcall { };
 
