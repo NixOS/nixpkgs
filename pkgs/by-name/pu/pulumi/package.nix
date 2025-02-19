@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   git,
+  buildPackages,
   # passthru
   runCommand,
   makeWrapper,
@@ -101,11 +102,18 @@ buildGoModule rec {
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;
 
+  # Use pulumi from the previous stage if we can’t execute compiled binary.
+  pulumiExe =
+    if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+      "${placeholder "out"}/bin/pulumi"
+    else
+      "${buildPackages.pulumi}/bin/pulumi";
+
   postInstall = ''
-    installShellCompletion --cmd pulumi \
-      --bash <($out/bin/pulumi gen-completion bash) \
-      --fish <($out/bin/pulumi gen-completion fish) \
-      --zsh  <($out/bin/pulumi gen-completion zsh)
+    for shell in bash fish zsh; do
+      "$pulumiExe" gen-completion $shell >pulumi.$shell
+      installShellCompletion pulumi.$shell
+    done
   '';
 
   passthru = {
