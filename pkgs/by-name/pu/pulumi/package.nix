@@ -123,6 +123,10 @@ buildGoModule rec {
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
+      pulumiTestHookShellcheck = testers.shellcheck {
+        name = "pulumi-test-hook-shellcheck";
+        src = ./extra/pulumi-test-hook.sh;
+      };
     };
   };
 

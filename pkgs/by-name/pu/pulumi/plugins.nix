@@ -10,6 +10,7 @@ makeScopeWithSplicing' {
   extra = self: {
     mkPulumiPackage = self.callPackage ./extra/mk-pulumi-package.nix { };
     testResourceSchema = self.callPackage ./extra/test-resource-schema.nix { };
+    pulumiTestHook = ./extra/pulumi-test-hook.sh;
   };
   f =
     self:
