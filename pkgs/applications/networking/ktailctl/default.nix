@@ -1,10 +1,10 @@
 {
-  buildGo123Module,
+  buildGoModule,
   cmake,
   extra-cmake-modules,
   fetchFromGitHub,
   git,
-  go_1_23,
+  go,
   kconfig,
   kcoreaddons,
   kdbusaddons,
@@ -36,7 +36,7 @@ let
   };
 
   goDeps =
-    (buildGo123Module {
+    (buildGoModule {
       pname = "ktailctl-go-wrapper";
       inherit src version;
       modRoot = "src/wrapper";
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     git
-    go_1_23
+    go
     wrapQtAppsHook
   ];
 
