@@ -189,7 +189,7 @@ in
               inherit originRequest;
 
               credentialsFile = lib.mkOption {
-                type = lib.types.str;
+                type = lib.types.path;
                 description = ''
                   Credential file.
 
@@ -319,7 +319,7 @@ in
 
         fullConfig = filterConfig {
           tunnel = name;
-          "credentials-file" = tunnel.credentialsFile;
+          credentials-file = "/run/credentials/cloudflared-tunnel-${name}/credentials.json";
           warp-routing = filterConfig tunnel.warp-routing;
           originRequest = filterConfig tunnel.originRequest;
           ingress =
@@ -350,6 +350,10 @@ in
         ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
+          RuntimeDirectory = "cloudflared-tunnel-${name}";
+          RuntimeDirectoryMode = "0400";
+          LoadCredential = "credentials.json:${cfg.credentialsFile}";
+
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
