@@ -84,6 +84,7 @@ let
   nspawnExtraVethArgs = (name: cfg: "--network-veth-extra=${name}");
 
   startScript = cfg:
+    # bash
     ''
       # Declare root explicitly to avoid shellcheck warnings, it comes from the env
       declare root
@@ -118,7 +119,7 @@ let
       NIX_BIND_OPT=""
       if [ -n "$PRIVATE_USERS" ]; then
         extraFlags+=("--private-users=$PRIVATE_USERS")
-        if [ "$PRIVATE_USERS" = "pick" ] || ( [ "$PRIVATE_USERS" != "identity" ] && [ "$PRIVATE_USERS" -gt 0 ] ); then
+        if [ "$PRIVATE_USERS" = "pick" ] || { [ "$PRIVATE_USERS" != "identity" ] && [ "$PRIVATE_USERS" -gt 0 ]; }; then
           # when user namespacing is enabled, we use `idmap` mount option
           # so that bind mounts under /nix get proper owner (and not nobody/nogroup).
           NIX_BIND_OPT=":idmap"
