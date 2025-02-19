@@ -4611,9 +4611,7 @@ with pkgs;
 
   pipecontrol = libsForQt5.callPackage ../applications/audio/pipecontrol { };
 
-  pulumiPackages = recurseIntoAttrs (
-    callPackage ../tools/admin/pulumi-packages { }
-  );
+  pulumiPackages = recurseIntoAttrs pulumi.pkgs;
 
   pulumi-bin = callPackage ../tools/admin/pulumi-bin { };
 

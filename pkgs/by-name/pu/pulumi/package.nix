@@ -10,7 +10,6 @@
   callPackage,
   testers,
   pulumi,
-  pulumiPackages,
 }:
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -120,7 +119,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    pkgs = pulumiPackages;
+    pkgs = callPackage ./plugins.nix { };
     withPackages = callPackage ./with-packages.nix { };
     updateScript = nix-update-script { };
     tests = {
