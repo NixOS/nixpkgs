@@ -20,7 +20,7 @@
 }:
 let
   inherit (pkgs.pulumi) pname version src;
-  inherit (pulumiPackages) pulumi-language-python;
+  inherit (pulumiPackages) pulumi-python;
   sourceRoot = "${src.name}/sdk/python";
 in
 buildPythonPackage {

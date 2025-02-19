@@ -15,5 +15,12 @@ makeScopeWithSplicing' {
     lib.packagesFromDirectoryRecursive {
       inherit (self) callPackage;
       directory = ./plugins;
+    }
+    // lib.optionalAttrs config.allowAliases {
+      # TODO: perhaps use lib.warnOnInstantiate?
+      pulumi-language-go = self.pulumi-go;
+      pulumi-language-nodejs = self.pulumi-nodejs;
+      pulumi-language-python = self.pulumi-python;
     };
+
 }

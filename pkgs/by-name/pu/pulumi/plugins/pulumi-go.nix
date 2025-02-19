@@ -7,7 +7,7 @@ let
   inherit (pulumi) version src;
 in
 buildGoModule {
-  pname = "pulumi-language-go";
+  pname = "pulumi-go";
   inherit version src;
 
   sourceRoot = "${src.name}/sdk/go/pulumi-language-go";
