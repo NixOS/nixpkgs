@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "VN_SDK_FFMPEG_LIBS_PACKAGE" "")
     (lib.cmakeBool "VN_SDK_UNIT_TESTS" false)
     (lib.cmakeBool "VN_SDK_SAMPLE_SOURCE" false)
+    (lib.cmakeBool "VN_CORE_AVX2" stdenv.hostPlatform.avx2Support)
   ];
 
   passthru = {
