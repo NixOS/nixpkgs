@@ -61,13 +61,13 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/technitium-dns-server ${stateDir}";
+        ExecStart =
+          "${cfg.package}/bin/technitium-dns-server "
+          + (if lib.versionAtLeast config.system.stateVersion "25.11" then "$STATE_DIRECTORY" else stateDir);
 
         DynamicUser = true;
 
         StateDirectory = "technitium-dns-server";
-        WorkingDirectory = stateDir;
-        BindPaths = stateDir;
 
         Restart = "always";
         RestartSec = 10;
@@ -96,6 +96,10 @@ in
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+      }
+      // lib.optionalAttrs (lib.versionOlder config.system.stateVersion "25.11") {
+        WorkingDirectory = stateDir;
+        BindPaths = stateDir;
       };
     };
 
