@@ -10,17 +10,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "libetebase";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "libetebase";
     rev = "v${version}";
-    hash = "sha256-cXuOKfyMdk+YzDi0G8i44dyBRf4Ez5+AlCKG43BTSSU=";
+    hash = "sha256-sqvfzXHqVeiw+VKWPtCYv0USNpbfBE7ILUiqXZtLmgI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XPXjWhJlWW5ukZ8uN72fxW5r0gyS405puXiBtXUpqsM=";
+  cargoHash = "sha256-z3ho6hTWC6aaWTpG9huhymx2og6xQq+/r+kgiJygC9w=";
 
   nativeBuildInputs = [ pkg-config ];
 
