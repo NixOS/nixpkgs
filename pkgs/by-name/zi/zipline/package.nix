@@ -8,6 +8,7 @@
   prisma-engines,
   ffmpeg,
   openssl,
+  vips,
   versionCheckHook,
   nix-update-script,
   nixosTests,
@@ -40,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     hash = "sha256-rDm3LFFB65SdSfqABMZelhfx4Cq6u0EV3xdDp9lBR54=";
   };
+
+  buildInputs = [ vips ];
 
   nativeBuildInputs = [
     pnpm_9.configHook
@@ -82,6 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkBin ziplinectl ctl
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    find $out -name libvips-cpp.so.42 -print0 | while read -d $'\0' libvips; do
+      echo replacing libvips at $libvips
+      rm $libvips
+      ln -s ${lib.getLib vips}/lib/libvips-cpp.so.42 $libvips
+    done
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
