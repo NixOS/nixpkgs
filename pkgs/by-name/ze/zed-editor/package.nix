@@ -41,6 +41,7 @@
   livekit-libwebrtc,
   testers,
   writableTmpDirAsHomeHook,
+  clang,
 
   withGLES ? false,
   buildRemoteServer ? true,
@@ -96,7 +97,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.174.5";
+  version = "0.174.6";
 
   outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
@@ -104,7 +105,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-zy0YiCPvLK8jRYldxuPaUfN2/VSPKgqCBu3ZQxZ/mT4=";
+    hash = "sha256-X/xGOJBKXRiCfcAyZ0Tiedk9WCnjwA8Ra4TMPf/sYbU=";
   };
 
   patches = [
@@ -124,10 +125,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-qxLowOIQ0j4ilzCdfiMQQIMfeQHvl5J8GyNJLeJ1GE4=";
+  cargoHash = "sha256-EXlV+QFaIErre7Bi06e7V8VKo5SuLdqJQDvQujmBP8o=";
 
   nativeBuildInputs =
     [
+      clang
       cmake
       copyDesktopItems
       curl
