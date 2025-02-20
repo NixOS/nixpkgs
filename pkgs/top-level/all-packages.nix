@@ -11467,8 +11467,6 @@ with pkgs;
     tbb = tbb_2021_11;
   };
 
-  pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
-
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
