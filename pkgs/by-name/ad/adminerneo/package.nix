@@ -58,6 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    indexPHP = ./index.php;
   };
 
   meta = {
