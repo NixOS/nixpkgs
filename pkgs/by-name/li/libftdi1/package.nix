@@ -74,11 +74,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace packages/99-libftdi.rules \
       --replace-fail 'GROUP="plugdev"' 'GROUP="ftdi"'
+
+    substituteInPlace packages/99-libftdi.rules \
+      --replace-fail 'GROUP="ftdi"' 'GROUP="ftdi", TAG+="uaccess"'
   '';
 
   postInstall =
     ''
-      install -Dm644 ../packages/99-libftdi.rules "$out/etc/udev/rules.d/99-libftdi.rules"
+      install -Dm644 ../packages/99-libftdi.rules "$out/etc/udev/rules.d/60-libftdi.rules"
     ''
     + optionalString docSupport ''
       cp -r doc/man "$out/share/"
