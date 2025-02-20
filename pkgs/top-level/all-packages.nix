@@ -2207,7 +2207,6 @@ with pkgs;
   easycrypt = callPackage ../applications/science/logic/easycrypt {
     why3 = pkgs.why3.override {
       ideSupport = false;
-      version = "1.7.2";
       coqPackages = { coq = null; flocq = null; };
     };
   };
