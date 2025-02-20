@@ -4,12 +4,10 @@
   nix,
   lib,
   replaceVarsWith,
-  nuget-to-nix,
-  nixfmt-rfc-style,
-  nuget-to-json,
   cacert,
   fetchNupkg,
   callPackage,
+  buildPackages,
 }:
 
 {
@@ -88,11 +86,11 @@ attrs
             src = ./fetch-deps.sh;
             isExecutable = true;
             replacements = {
-              binPath = lib.makeBinPath [
+              binPath = lib.makeBinPath (with buildPackages; [
                 nuget-to-nix
                 nixfmt-rfc-style
                 nuget-to-json
-              ];
+              ]);
             };
           };
 
@@ -108,7 +106,7 @@ attrs
               ''$(mktemp -t "${finalAttrs.pname or finalPackage.name}-deps-XXXXXX.nix")'';
 
         in
-        writeShellScript "${finalPackage.name}-fetch-deps" ''
+        buildPackages.writeShellScript "${finalPackage.name}-fetch-deps" ''
           set -euo pipefail
 
           echo 'fetching dependencies for' ${lib.escapeShellArg finalPackage.name} >&2
@@ -129,7 +127,7 @@ attrs
 
           cd "$TMPDIR"
 
-          NIX_BUILD_SHELL=${lib.escapeShellArg runtimeShell} ${nix}/bin/nix-shell \
+          NIX_BUILD_SHELL=${lib.escapeShellArg buildPackages.runtimeShell} ${buildPackages.nix}/bin/nix-shell \
             --pure --keep NUGET_HTTP_CACHE_PATH --run 'source '${lib.escapeShellArg innerScript}' '"''${depsFile@Q}" "${drv}"
         '';
     };

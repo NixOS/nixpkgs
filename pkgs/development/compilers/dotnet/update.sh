@@ -17,7 +17,7 @@ release_files () {
     local release="$1"
     local expr="$2"
 
-    jq -r '[('"$expr"').files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
+    jq -r '[('"$expr"').files[] | select(.name | (endswith(".tar.gz") or endswith(".zip")))]' <<< "$release"
 }
 
 release_platform_attr () {
@@ -133,6 +133,25 @@ aspnetcore_target_packages () {
     local rid=$2
     local pkgs=(
         "Microsoft.AspNetCore.App.Runtime.$rid"
+    )
+
+    generate_package_list "$version" '      ' "${pkgs[@]}"
+}
+
+windowsdesktop_packages () {
+    local version=$1
+    local pkgs=(
+        Microsoft.WindowsDesktop.App.Ref
+    )
+
+    generate_package_list "$version" '    ' "${pkgs[@]}"
+}
+
+windowsdesktop_target_packages () {
+    local version=$1
+    local rid=$2
+    local pkgs=(
+        "Microsoft.WindowsDesktop.App.Runtime.$rid"
     )
 
     generate_package_list "$version" '      ' "${pkgs[@]}"
@@ -265,11 +284,12 @@ update() {
     fi
     local major_minor_underscore=${major_minor/./_}
 
-    local release_content aspnetcore_version runtime_version
+    local release_content aspnetcore_version windowsdesktop_version runtime_version
     local -a sdk_versions
 
     release_content=$(release "$content" "$major_minor_patch")
     aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
+    windowsdesktop_version=$(jq -r '."windowsdesktop".version' <<< "$release_content")
     runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
 
     if [[ -n $sdk ]]; then
@@ -284,43 +304,51 @@ update() {
         local -a versions
         IFS= readarray -d '' versions < <(
             nix-instantiate --eval --json -E "{ output }: with (import output {
-                buildAspNetCore = { ... }: {};
+                buildAspNetCore = { version, ... }: { inherit version; };
+                buildWindowsDesktop = { version, ... }: { inherit version; };
                 buildNetSdk = { version, ... }: { inherit version; };
                 buildNetRuntime = { version, ... }: { inherit version; };
                 fetchNupkg = { ... }: {};
             }); (x: builtins.deepSeq x x) [
+                release_${major_minor_underscore}
                 runtime_${major_minor_underscore}.version
+                aspnetcore_${major_minor_underscore}.version
+                windowsdesktop_${major_minor_underscore}.version
                 sdk_${major_minor_underscore}.version
             ]" --argstr output "$output" | jq --raw-output0 .[])
-        if [[ "${versions[0]}" == "$major_minor_patch" && "${versions[1]}" == "${sdk_versions[0]}" ]]; then
+        # TODO we should check all SDK feature bands here, not just the latest
+        if [[ "${versions[0]}" == "$major_minor_patch" && "${versions[1]}" == "$runtime_version" && "${versions[2]}" == "$aspnetcore_version" && "${versions[3]}" == "$windowsdesktop_version" && "${versions[4]}" == "${sdk_versions[0]}" ]]; then
             echo "Nothing to update."
             return
         fi
     fi
 
-    local aspnetcore_files runtime_files
+    local aspnetcore_files windowsdesktop_files runtime_files
     aspnetcore_files="$(release_files "$release_content" .\"aspnetcore-runtime\")"
+    windowsdesktop_files="$(release_files "$release_content" .\"windowsdesktop\")"
     runtime_files="$(release_files "$release_content" .runtime)"
 
     local channel_version support_phase
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
 
-    local aspnetcore_sources runtime_sources
+    local aspnetcore_sources windowsdesktop_sources runtime_sources
     aspnetcore_sources="$(platform_sources "$aspnetcore_files")"
+    windowsdesktop_sources="$(platform_sources "$windowsdesktop_files")"
     runtime_sources="$(platform_sources "$runtime_files")"
 
     result=$(mktemp -t dotnet-XXXXXX.nix)
     trap "rm -f $result" TERM INT EXIT
 
     (
-        echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk, fetchNupkg }:
+        echo "{ buildAspNetCore, buildWindowsDesktop, buildNetRuntime, buildNetSdk, fetchNupkg }:
 
 # v$channel_version ($support_phase)
 
 let
   commonPackages = ["
         aspnetcore_packages "${aspnetcore_version}"
+        windowsdesktop_packages "${windowsdesktop_version}"
         netcore_packages "${runtime_version}"
         echo "  ];
 
@@ -336,6 +364,9 @@ let
         for rid in "${rids[@]}"; do
             echo "    $rid = ["
             aspnetcore_target_packages "${aspnetcore_version}" "$rid"
+            if [[ "$rid" = win-* ]]; then
+                windowsdesktop_target_packages "${windowsdesktop_version}" "$rid"
+            fi
             netcore_target_packages "${runtime_version}" "$rid"
             echo "    ];"
         done
@@ -347,6 +378,11 @@ in rec {
   aspnetcore_$major_minor_underscore = buildAspNetCore {
     version = \"${aspnetcore_version}\";
     $aspnetcore_sources
+  };
+
+  windowsdesktop_$major_minor_underscore = buildWindowsDesktop {
+    version = \"${windowsdesktop_version}\";
+    $windowsdesktop_sources
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
@@ -376,6 +412,7 @@ in rec {
     inherit commonPackages hostPackages targetPackages;
     runtime = runtime_$major_minor_underscore;
     aspnetcore = aspnetcore_$major_minor_underscore;
+    windowsdesktop = windowsdesktop_$major_minor_underscore;
   };"
         done
 

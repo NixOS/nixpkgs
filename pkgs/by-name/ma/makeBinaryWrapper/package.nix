@@ -1,11 +1,24 @@
 {
+  stdenv,
   targetPackages,
   lib,
   makeSetupHook,
   dieHook,
   writeShellScript,
   tests,
-  cc ? targetPackages.stdenv.cc,
+  cc ?
+    if (stdenv.targetPlatform.isMinGW) then
+      targetPackages.stdenv.cc.override (old: {
+        cc = old.cc.override {
+          threadsCross = {
+            # Disable threading on mingw so we don't have to ship mcfgthreads
+            model = "single";
+            package = null;
+          };
+        };
+      })
+    else
+      targetPackages.stdenv.cc,
   sanitizers ? [ ],
 }:
 

@@ -14,7 +14,7 @@
   swiftPackages,
   darwin,
   icu,
-  lndir,
+  buildPackages,
   substituteAll,
   nugetPackageHook,
   xmlstarlet,
@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "${unwrapped.meta.description or "dotnet"} (wrapper)";
-    mainProgram = "dotnet";
     inherit (unwrapped.meta)
       homepage
       license
       maintainers
+      mainProgram
       platforms
       ;
   };
@@ -44,7 +44,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional (type == "sdk") (substituteAll {
       src = ./dotnet-sdk-setup-hook.sh;
-      inherit lndir xmlstarlet;
+      inherit (buildPackages) xmlstarlet;
+      inherit (buildPackages.xorg) lndir;
     });
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
