@@ -15481,6 +15481,12 @@
     githubId = 33522919;
     name = "Marshall Arruda";
   };
+  mart-mihkel = {
+    email = "mart.mihkel.aun@gmail.com";
+    github = "mart-mihkel";
+    githubId = 73405010;
+    name = "Mart-Mihkel Aun";
+  };
   martijnvermaat = {
     email = "martijn@vermaat.name";
     github = "martijnvermaat";

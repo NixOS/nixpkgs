@@ -7476,6 +7476,8 @@ self: super: with self; {
 
   jupyterlab-server = callPackage ../development/python-modules/jupyterlab-server { };
 
+  jupyterlab-vim = callPackage ../development/python-modules/jupyterlab-vim { };
+
   jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
 
   jupytext = callPackage ../development/python-modules/jupytext { };
