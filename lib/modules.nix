@@ -413,7 +413,10 @@ let
           };
         in parentFile: parentKey: initialModules: args: collectResults (imap1 (n: x:
           let
-            module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
+            module =
+              builtins.addErrorContext
+                "while loading imports of module `${parentFile}`"
+                (checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x));
             collectedImports = collectStructuredModules module._file module.key module.imports args;
           in {
             key = module.key;
@@ -536,6 +539,30 @@ let
 
   applyModuleArgs = key: f: args@{ config, ... }:
     let
+      # Should we add this context to the selection of `_module.args` too?
+      # Triggering at that point seems much less common, and accomodating that
+      # scenario complicates the already long error message. That said, I wonder
+      # if `config` isn't already strict in `_module` defs and decls...
+      # Let's keep it simple for now.
+      config' =
+        name:
+          builtins.addErrorContext
+            ''
+              *risky* while evaluating the module fixpoint, `config`
+
+              Note that the module structure and `imports` fundamentally can not depend on the module fixpoint!
+              An argument `${name}` was not provided externally through .specialArgs., so we try to load it from the module fixpoint...
+              If the following message is "infinite recursion", this was the cause, and possible solutions include:
+              - Perhaps ${name /* unquoted for simplicity */} was misspelled.
+              - Make sure that the module was loaded into the right context.
+              - Provide the argument externally through `specialArgs`.
+              - Structure the module such that the top level attribute set and special attributes like `config`, `imports` and `config._module.args` do not refer to `${name}`.
+                (Except perhaps in a deeper structure, like a more deeply nested attribute, or a `mkIf` condition.)${
+                  # Remove after 25.11.
+                  optionalString (! lib.oldestSupportedReleaseIsAtLeast 2505) "\n\nThe above explanation is new. If it is inaccurate or out of place, please report a minimal example in a Nixpkgs issue and ping the Module System maintainers." }
+            ''
+            config;
+
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
       # config._module.args option, the strictness used on the attribute
@@ -551,7 +578,7 @@ let
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = mapAttrs (name: _:
         addErrorContext (context name)
-          (args.${name} or config._module.args.${name})
+          (args.${name} or (config' name)._module.args.${name})
       ) (functionArgs f);
 
       # Note: we append in the opposite order such that we can add an error
