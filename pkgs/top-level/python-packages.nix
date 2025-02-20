@@ -16099,6 +16099,8 @@ self: super: with self; {
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 
+  tcxfile = callPackage ../development/python-modules/tcxfile { };
+
   tcxparser = callPackage ../development/python-modules/tcxparser { };
 
   tcxreader = callPackage ../development/python-modules/tcxreader { };
