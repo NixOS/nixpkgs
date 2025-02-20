@@ -1,7 +1,7 @@
 {deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs}:
 
 deployAndroidPackage {
-  inherit package os;
+  inherit package;
   nativeBuildInputs = lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs = lib.optionals (os == "linux") [ pkgs.glibc (lib.getLib pkgs.stdenv.cc.cc) pkgs.zlib pkgs.ncurses5 ];
 
