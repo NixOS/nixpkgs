@@ -48,7 +48,16 @@ stdenv.mkDerivation rec {
     ]
     # AArch64 has configurable page size up to 64k. The default configuration
     # for jemalloc only supports 4k page sizes.
-    ++ lib.optional stdenv.hostPlatform.isAarch64 "--with-lg-page=16"
+    ++ lib.optional stdenv.hostPlatform.isAarch64 "--with-lg-page=${
+      {
+        "4" = "12";
+        "8" = "13";
+        "16" = "14";
+        "32" = "15";
+        "64" = "16";
+      }
+      ."${builtins.toString (stdenv.hostPlatform.pageSize.min / 1024)}"
+    }"
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
     ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--with-lg-vaddr=48";
