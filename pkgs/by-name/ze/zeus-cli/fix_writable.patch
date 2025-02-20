@@ -1,0 +1,42 @@
+diff --git a/fix_writable.patch b/fix_writable.patch
+new file mode 100644
+index 0000000..e69de29
+diff --git a/private-modules/zeppos-app-utils/dist/modules/create/local-app.js b/private-modules/zeppos-app-utils/dist/modules/create/local-app.js
+index 52685cf..8c49eba 100644
+--- a/private-modules/zeppos-app-utils/dist/modules/create/local-app.js
++++ b/private-modules/zeppos-app-utils/dist/modules/create/local-app.js
+@@ -58,12 +58,26 @@ var fs_1 = __importDefault(require("fs"));
+ var fs_extra_1 = __importDefault(require("fs-extra"));
+ var index_1 = require("../../index");
+ var TemplateCopyType = index_1.config.TemplateCopyType, getDeviceConf = index_1.config.getDeviceConf;
++var NIX_ensureWritable = function (dest) {
++    if (!fs_extra_1["default"].existsSync(dest))
++        return;
++    var stat = fs_extra_1["default"].statSync(dest);
++    var newMode = stat.mode | 0o200; // Add write permission for owner
++    fs_extra_1["default"].chmodSync(dest, newMode);
++    if (stat.isDirectory()) {
++        var files = fs_extra_1["default"].readdirSync(dest);
++        files.forEach(function (file) {
++            NIX_ensureWritable((0, path_1.resolve)(dest, file));
++        });
++    }
++};
+ var createLocalApp = function (args) { return __awaiter(void 0, void 0, void 0, function () {
+     var workDir, templateInfo, withAppSide, withSettings, buildTargets, appType, shapeOfPlatform, deviceTargets, appJsonPath, appJson, appID, defaultTarget, targets, shapes, needDelShapeConfig, defaultAssetsPath_1;
+     return __generator(this, function (_a) {
+         workDir = args.workDir, templateInfo = args.templateInfo, withAppSide = args.withAppSide, withSettings = args.withSettings, buildTargets = args.buildTargets, appType = args.appType, shapeOfPlatform = args.shapeOfPlatform;
+         deviceTargets = getDeviceConf().deviceTargets;
+         fs_extra_1["default"].copySync(templateInfo.path, workDir);
++        NIX_ensureWritable(workDir);
+         if (fs_extra_1["default"].existsSync((0, path_1.resolve)(workDir, "./_package.json"))) {
+             fs_1["default"].renameSync((0, path_1.resolve)(workDir, "./_package.json"), (0, path_1.resolve)(workDir, "./package.json"));
+         }
+@@ -116,6 +130,7 @@ var createLocalApp = function (args) { return __awaiter(void 0, void 0, void 0,
+                 var pkgName = "".concat(screen.width, "x").concat(screen.height, "-").concat(lodash_1["default"].kebabCase(lodash_1["default"].toLower(deviceName)));
+                 lodash_1["default"].set(targets, pkgName, __assign(__assign({}, defaultTarget), { platforms: platforms, designWidth: screen.width }));
+                 fs_extra_1["default"].copySync(defaultAssetsPath_1, (0, path_1.resolve)(workDir, "./assets/".concat(pkgName)));
++                NIX_ensureWritable((0, path_1.resolve)(workDir, "./assets/".concat(pkgName)));
+             });
+             fs_extra_1["default"].removeSync(defaultAssetsPath_1);
+             lodash_1["default"].set(appJson, 'targets', targets);
