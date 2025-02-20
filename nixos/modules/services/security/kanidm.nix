@@ -182,6 +182,12 @@ let
         fi
       '';
 
+  finalJson =
+    if cfg.provision.extraJsonFile != null then
+      "<(${lib.getExe pkgs.jq} -s '.[0] * .[1]' ${provisionStateJson} ${cfg.provision.extraJsonFile})"
+    else
+      provisionStateJson;
+
   postStartScript = pkgs.writeShellScript "post-start" ''
     set -euo pipefail
 
@@ -207,7 +213,7 @@ let
         ${optionalString (!cfg.provision.autoRemove) "--no-auto-remove"} \
         ${optionalString cfg.provision.acceptInvalidCerts "--accept-invalid-certs"} \
         --url "${cfg.provision.instanceUrl}" \
-        --state ${provisionStateJson}
+        --state ${finalJson}
   '';
 
   serverPort =
@@ -429,6 +435,19 @@ in
         '';
         type = types.bool;
         default = true;
+      };
+
+      extraJsonFile = mkOption {
+        description = ''
+          A JSON file for provisioning persons, groups & systems.
+          Options set in this file take precedence over values set using the other options.
+          In the case of duplicates, `jq` will remove all but the last one
+          when merging this file with the options.
+          The accepted JSON schema can be found at <https://github.com/oddlama/kanidm-provision#json-schema>.
+          Note: theoretically `jq` cannot merge nested types, but this does not pose an issue as kanidm-provision's JSON scheme does not use nested types.
+        '';
+        type = types.nullOr types.path;
+        default = null;
       };
 
       groups = mkOption {
