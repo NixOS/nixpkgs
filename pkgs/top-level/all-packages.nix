@@ -14965,6 +14965,10 @@ with pkgs;
     backend = "wayland";
   };
 
+  rofi-network-manager-wayland = callPackage ../by-name/ro/rofi-network-manager/package.nix {
+    backend = "wayland";
+  };
+
   rstudio = callPackage ../applications/editors/rstudio {
     jdk = jdk8;
   };
