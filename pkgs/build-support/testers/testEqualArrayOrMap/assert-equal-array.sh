@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 
+# Tests if an array is declared.
+isDeclaredArray() {
+  # shellcheck disable=SC2034
+  local -nr arrayRef="$1" && [[ ${!arrayRef@a} =~ a ]]
+}
+
 # Asserts that two arrays are equal, printing out differences if they are not.
 # Does not short circuit on the first difference.
 assertEqualArray() {
@@ -12,13 +18,13 @@ assertEqualArray() {
   local -nr expectedArrayRef="$1"
   local -nr actualArrayRef="$2"
 
-  if [[ ! ${expectedArrayRef@a} =~ a ]]; then
-    nixErrorLog "first arugment expectedArrayRef must be an array reference"
+  if ! isDeclaredArray expectedArrayRef; then
+    nixErrorLog "first arugment expectedArrayRef must be an array reference to a declared array"
     exit 1
   fi
 
-  if [[ ! ${actualArrayRef@a} =~ a ]]; then
-    nixErrorLog "second arugment actualArrayRef must be an array reference"
+  if ! isDeclaredArray actualArrayRef; then
+    nixErrorLog "second arugment actualArrayRef must be an array reference to a declared array"
     exit 1
   fi
 
