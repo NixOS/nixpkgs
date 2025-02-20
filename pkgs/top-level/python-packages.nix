@@ -4668,6 +4668,8 @@ self: super: with self; {
 
   firebase-admin = callPackage ../development/python-modules/firebase-admin { };
 
+  firecrawl-py = callPackage ../development/python-modules/firecrawl-py { };
+
   fireflyalgorithm = callPackage ../development/python-modules/fireflyalgorithm { };
 
   firetv = callPackage ../development/python-modules/firetv { };
