@@ -26,13 +26,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "goose-cli";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${version}";
-    hash = "sha256-9iTMT8n1bnHIYLAOknK3ts73CWkP9ztHeMAwi/btzjk=";
+    hash = "sha256-/PCEszhRPxXSvvlNX8EVQTqLJwGF5N3ry+XuykiGV5U=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

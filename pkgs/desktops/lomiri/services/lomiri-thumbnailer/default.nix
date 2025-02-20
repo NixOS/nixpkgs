@@ -176,7 +176,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       # gallery app delegates to thumbnailer, tests various formats
-      vm = nixosTests.lomiri-gallery-app;
+      gallery-app = nixosTests.lomiri-gallery-app;
+
+      # music app relies on thumbnailer to extract embedded cover art
+      music-app = nixosTests.lomiri-music-app;
+
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater { };

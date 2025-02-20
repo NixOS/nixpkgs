@@ -43,9 +43,9 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Razor.ExternalAccess.RoslynWorkspace",
-    "version": "9.0.0-preview.24555.12",
-    "hash": "sha256-SMOU22F2xZkFM6KRRETeRR79BuVccALMGH+zcgyqq4M=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.aspnetcore.razor.externalaccess.roslynworkspace/9.0.0-preview.24555.12/microsoft.aspnetcore.razor.externalaccess.roslynworkspace.9.0.0-preview.24555.12.nupkg"
+    "version": "9.0.0-preview.25064.4",
+    "hash": "sha256-w6gQZ702lMi2lI/9hIKbeaxW4K42YlDkDnGiD5+cgFo=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/d1622942-d16f-48e5-bc83-96f4539e7601/nuget/v3/flat2/microsoft.aspnetcore.razor.externalaccess.roslynworkspace/9.0.0-preview.25064.4/microsoft.aspnetcore.razor.externalaccess.roslynworkspace.9.0.0-preview.25064.4.nupkg"
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
@@ -193,9 +193,9 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "9.0.0-beta.24572.2",
-    "hash": "sha256-dTYFN1KH3grxcf/On6GLW5WdFliq91Y37DeWDCwiryM=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.24572.2/microsoft.dotnet.arcade.sdk.9.0.0-beta.24572.2.nupkg"
+    "version": "9.0.0-beta.25065.2",
+    "hash": "sha256-8LCKwRGoa0plL1IzZzPR8prayboN7gulS4EC6HWL+5E=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/9.0.0-beta.25065.2/microsoft.dotnet.arcade.sdk.9.0.0-beta.25065.2.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",

@@ -57,7 +57,7 @@
 
 buildPythonPackage rec {
   pname = "dvc";
-  version = "3.59.0";
+  version = "3.59.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc";
     tag = version;
-    hash = "sha256-kjaYn0DJAKETtVDcBs43OTif0TwKsAaKs4jnLODNQz8=";
+    hash = "sha256-WmOWqG2qPi1eP3khj+ryQZBNED1S1+WDHdkuhF2o7Lg=";
   };
 
   pythonRelaxDeps = [
@@ -150,7 +150,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
-    changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
+    changelog = "https://github.com/iterative/dvc/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       cmcdragonkai

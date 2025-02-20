@@ -566,20 +566,47 @@ rec {
       })
       (x: (x._type or null) == "pkgs");
 
-    path = mkOptionType {
-      name = "path";
-      descriptionClass = "noun";
-      check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
-      merge = mergeEqualOption;
+    path = pathWith {
+      absolute = true;
     };
 
-    pathInStore = mkOptionType {
-      name = "pathInStore";
-      description = "path in the Nix store";
-      descriptionClass = "noun";
-      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
-      merge = mergeEqualOption;
+    pathInStore = pathWith {
+      inStore = true;
     };
+
+    pathWith = {
+      inStore ? null,
+      absolute ? null,
+    }:
+      throwIf (inStore != null && absolute != null && inStore && !absolute) "In pathWith, inStore means the path must be absolute" mkOptionType {
+        name = "path";
+        description = (
+          (if absolute == null then "" else (if absolute then "absolute " else "relative ")) +
+          "path" +
+          (if inStore == null then "" else (if inStore then " in the Nix store" else " not in the Nix store"))
+        );
+        descriptionClass = "noun";
+
+        merge = mergeEqualOption;
+        functor = defaultFunctor "path" // {
+          type = pathWith;
+          payload = {inherit inStore absolute; };
+          binOp = lhs: rhs: if lhs == rhs then lhs else null;
+        };
+
+        check = x:
+          let
+            isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+            isAbsolute = builtins.substring 0 1 (toString x) == "/";
+            isExpectedType = (
+              if inStore == null || inStore then
+                isStringLike x
+              else
+                isString x # Do not allow a true path, which could be copied to the store later on.
+            );
+          in
+            isExpectedType && (inStore == null || inStore == isInStore) && (absolute == null || absolute == isAbsolute);
+          };
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
@@ -1125,6 +1152,53 @@ rec {
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
   };
+
+  /**
+    Merges two option types together.
+
+    :::{.note}
+    Uses the type merge function of the first type, to merge it with the second type.
+
+    Usually types can only be merged if they are of the same type
+    :::
+
+    # Inputs
+
+    : `a` (option type): The first option type.
+    : `b` (option type): The second option type.
+
+    # Returns
+
+    - The merged option type.
+    - `{ _type = "merge-error"; error = "Cannot merge types"; }` if the types can't be merged.
+
+    # Examples
+    :::{.example}
+    ## `lib.types.mergeTypes` usage example
+    ```nix
+    let
+      enumAB = lib.types.enum ["A" "B"];
+      enumXY = lib.types.enum ["X" "Y"];
+      # This operation could be notated as: [ A ] | [ B ] -> [ A B ]
+      merged = lib.types.mergeTypes enumAB enumXY; # -> enum [ "A" "B" "X" "Y" ]
+    in
+      assert merged.check "A"; # true
+      assert merged.check "B"; # true
+      assert merged.check "X"; # true
+      assert merged.check "Y"; # true
+      merged.check "C" # false
+    ```
+    :::
+  */
+  mergeTypes = a: b:
+    assert isOptionType a && isOptionType b;
+    let
+      merged = a.typeMerge b.functor;
+    in
+    if merged == null then
+      setType "merge-error" { error = "Cannot merge types"; }
+    else
+      merged;
 };
 
 in outer_types // outer_types.types

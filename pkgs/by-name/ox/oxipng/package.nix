@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  qemu,
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "9.1.3";
+  version = "9.1.4";
   pname = "oxipng";
 
   # do not use fetchCrate (only repository includes tests)
@@ -15,14 +13,17 @@ rustPlatform.buildRustPackage rec {
     owner = "shssoichiro";
     repo = "oxipng";
     tag = "v${version}";
-    hash = "sha256-8EOEcIw10hCyYi9SwDLDZ8J3ezLXa30RUY5I9ksfqTs=";
+    hash = "sha256-cwujBgvGdNvD8vKp3+jNxcxkw/+M2FooNgsw+RejyrM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4c9YcIQRZsbDJvl8P9Pkd3atTVM+RbQ/4BMb7rE84po=";
+  cargoHash = "sha256-Z0otTCFwtGuSC1XBM3jcgGDFPZuMzQikZaYCnR+S6Us=";
 
-  # See https://github.com/shssoichiro/oxipng/blob/14b8b0e93a/.cargo/config.toml#L5
-  nativeCheckInputs = [ qemu ];
+  # don't require qemu for aarch64-linux tests
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";

@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
   python313,
-  substituteAll,
+  replaceVars,
   ffmpeg-headless,
   inetutils,
   nixosTests,
@@ -105,6 +105,16 @@ let
           repo = "async-timeout";
           tag = "v${version}";
           hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
+        };
+      });
+
+      av = super.av.overridePythonAttrs (rec {
+        version = "13.1.0";
+        src = fetchFromGitHub {
+          owner = "PyAV-Org";
+          repo = "PyAV";
+          tag = "v${version}";
+          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
       });
 
@@ -369,7 +379,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.1";
+  hassVersion = "2025.2.4";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -390,13 +400,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-iWOrBIKsN+fi5pzMzekmTBIk2FoM2HOsWujkuZ45lHE=";
+    hash = "sha256-Zrr4keJwY1q/PrHZEVUphxhA3dAOkyE5vCEa3Msr9Yk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-GToOHfDOWrjiQEcxgX9h2tCYqGUv3mXxVh1/GchiNRU=";
+    hash = "sha256-24AOIyC00U6J1Abg1zj4BbSLsRik2tQZSFaoAu7w85M=";
   };
 
   build-system = with python.pkgs; [
@@ -405,6 +415,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "aiozoneinfo"
     "attrs"
     "bcrypt"
     "ciso8601"
@@ -440,8 +451,7 @@ python.pkgs.buildPythonApplication rec {
     ./patches/static-follow-symlinks.patch
 
     # Patch path to ffmpeg binary
-    (substituteAll {
-      src = ./patches/ffmpeg-path.patch;
+    (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
   ];

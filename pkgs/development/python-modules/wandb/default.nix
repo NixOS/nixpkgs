@@ -10,11 +10,10 @@
 
   ## gpu-stats
   rustPlatform,
-  darwin,
 
   ## wandb
   buildPythonPackage,
-  substituteAll,
+  replaceVars,
 
   # build-system
   hatchling,
@@ -72,15 +71,16 @@
   tenacity,
   torch,
   tqdm,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.19.5";
+  version = "0.19.6";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-NkwXHogHBsDdaWdATWujdvnSr0oXp3RbWq5hQX53WR8=";
+    hash = "sha256-snyr0IlE4otk1ctWUrJEFAmHYsXe+k6qULCaO3aW0e4=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -150,8 +150,7 @@ buildPythonPackage rec {
 
   patches = [
     # Replace git paths
-    (substituteAll {
-      src = ./hardcode-git-path.patch;
+    (replaceVars ./hardcode-git-path.patch {
       git = lib.getExe git;
     })
   ];
@@ -236,11 +235,8 @@ buildPythonPackage rec {
     tenacity
     torch
     tqdm
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # test_matplotlib_image_with_multiple_axes may take >60s
   pytestFlagsArray = [

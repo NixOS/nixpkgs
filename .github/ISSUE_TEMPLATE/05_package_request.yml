@@ -23,23 +23,6 @@ body:
         > `Package request: hello`
 
         ---
-  - type: "dropdown"
-    id: "version"
-    attributes:
-      label: "Nixpkgs version"
-      description: |
-        What version of Nixpkgs are you using?
-
-        > [!IMPORTANT]
-        > If you are using an older or stable version, please update to the latest **unstable** version and check if the package still does not exist before continuing this request.
-      options:
-        - "Please select a version."
-        - "- Unstable (25.05)"
-        - "- Stable (24.11)"
-        - "- Previous Stable (24.05)"
-      default: 0
-    validations:
-      required: true
   - type: "textarea"
     id: "description"
     attributes:
@@ -51,9 +34,9 @@ body:
     id: "homepage"
     attributes:
       label: "Upstream homepage"
-      description: "Please copy and paste a link to the package's homepage. Leave this field blank if there is no upstream homepage."
+      description: "Please copy and paste a link to the package's homepage."
     validations:
-      required: false
+      required: true
   - type: "input"
     id: "source"
     attributes:
@@ -80,8 +63,6 @@ body:
         - "x86_64-darwin"
         - "aarch64-darwin"
         - "Exotic"
-    validations:
-      required: true
   - type: "textarea"
     id: "additional-context"
     attributes:

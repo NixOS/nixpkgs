@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-google-drive-api";
-  version = "0.0.2";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "python-google-drive-api";
     tag = "v${version}";
-    hash = "sha256-JvPaMD7UHDqCQCoh1Q8jNFw4R7Jbp2YQDBI3xVp1L1g=";
+    hash = "sha256-3es2rmndahH+DMEEwjBxyZKd27qDZIocPbzScF7B5fA=";
   };
 
   build-system = [ setuptools ];

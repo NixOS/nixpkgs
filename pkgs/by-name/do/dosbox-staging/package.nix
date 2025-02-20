@@ -124,7 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       joshuafern
-      AndersonTorres
     ];
     platforms = lib.platforms.unix;
     priority = 101;

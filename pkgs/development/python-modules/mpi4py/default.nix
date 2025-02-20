@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "4.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
     tag = version;
-    hash = "sha256-hsP4aonjiBit2un6EQWQxF+lVjsnMFFqLaAOqBWAzgo=";
+    hash = "sha256-eN/tjlnNla6RHYOXcprVVqtec1nwCEGn+MBcV/5mHJg=";
   };
 
   build-system = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    changelog = "https://github.com/mpi4py/mpi4py/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

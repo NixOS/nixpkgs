@@ -5,10 +5,15 @@
   setuptools,
   apeye-core,
   attrs,
+  click,
+  consolekit,
+  docutils,
   dom-toml,
   domdf-python-tools,
   natsort,
   packaging,
+  readme-renderer,
+  sdjson,
   shippinglabel,
   typing-extensions,
 }:
@@ -34,6 +39,20 @@ buildPythonPackage rec {
     shippinglabel
     typing-extensions
   ];
+
+  optional-dependencies = {
+    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    cli = [
+      click
+      consolekit
+      sdjson
+    ];
+    readme = [
+      docutils
+      readme-renderer
+    ] ++ readme-renderer.optional-dependencies.md;
+  };
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'

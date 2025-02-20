@@ -1,11 +1,11 @@
 diff --git a/package.json b/package.json
-index 41a84b7..eab012b 100644
+index 0d8bb1f..7c8dc67 100644
 --- a/package.json
 +++ b/package.json
 @@ -39,9 +39,9 @@
-     "@mantine/notifications": "^6.0.21",
-     "@mantine/prism": "^6.0.21",
-     "@mantine/spotlight": "^6.0.21",
+     "@mantine/notifications": "6.x",
+     "@mantine/prism": "6.x",
+     "@mantine/spotlight": "6.x",
 -    "@prisma/client": "^5.1.1",
 -    "@prisma/internals": "^5.1.1",
 -    "@prisma/migrate": "^5.1.1",
@@ -25,7 +25,7 @@ index 41a84b7..eab012b 100644
      "qrcode": "^1.5.3",
      "react": "^18.2.0",
 diff --git a/yarn.lock b/yarn.lock
-index 633a054..73e8f77 100644
+index 83a9ba4..9ea108c 100644
 --- a/yarn.lock
 +++ b/yarn.lock
 @@ -12,201 +12,6 @@ __metadata:
@@ -241,9 +241,9 @@ index 633a054..73e8f77 100644
 -  languageName: node
 -  linkType: hard
 -
- "@mantine/core@npm:^6.0.21":
-   version: 6.0.21
-   resolution: "@mantine/core@npm:6.0.21"
+ "@mantine/core@npm:6.x":
+   version: 6.0.22
+   resolution: "@mantine/core@npm:6.0.22"
 @@ -970,15 +768,6 @@ __metadata:
    languageName: node
    linkType: hard
@@ -619,7 +619,7 @@ index 633a054..73e8f77 100644
    version: 4.1.12
    resolution: "@types/debug@npm:4.1.12"
    dependencies:
-@@ -1839,13 +1521,6 @@ __metadata:
+@@ -1855,13 +1537,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -630,10 +630,10 @@ index 633a054..73e8f77 100644
 -  languageName: node
 -  linkType: hard
 -
- "@types/hast@npm:^2.0.0":
-   version: 2.3.8
-   resolution: "@types/hast@npm:2.3.8"
-@@ -1972,20 +1647,6 @@ __metadata:
+ "@types/hast@npm:^3.0.0":
+   version: 3.0.4
+   resolution: "@types/hast@npm:3.0.4"
+@@ -1979,20 +1654,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -692,7 +692,23 @@ index 633a054..73e8f77 100644
  "@typescript-eslint/eslint-plugin@npm:^6.11.0":
    version: 6.11.0
    resolution: "@typescript-eslint/eslint-plugin@npm:6.11.0"
-@@ -2436,15 +2073,6 @@ __metadata:
+@@ -2343,15 +1980,6 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"abort-controller@npm:^3.0.0":
+-  version: 3.0.0
+-  resolution: "abort-controller@npm:3.0.0"
+-  dependencies:
+-    event-target-shim: ^5.0.0
+-  checksum: 170bdba9b47b7e65906a28c8ce4f38a7a369d78e2271706f020849c1bfe0ee2067d4261df8bbb66eb84f79208fd5b710df759d64191db58cfba7ce8ef9c54b75
+-  languageName: node
+-  linkType: hard
+-
+ "abstract-logging@npm:^2.0.1":
+   version: 2.0.1
+   resolution: "abstract-logging@npm:2.0.1"
+@@ -2443,15 +2071,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -708,7 +724,7 @@ index 633a054..73e8f77 100644
  "ansi-regex@npm:^5.0.1":
    version: 5.0.1
    resolution: "ansi-regex@npm:5.0.1"
-@@ -2515,35 +2143,6 @@ __metadata:
+@@ -2522,35 +2141,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -741,10 +757,10 @@ index 633a054..73e8f77 100644
 -  languageName: node
 -  linkType: hard
 -
- "archy@npm:^1.0.0":
-   version: 1.0.0
-   resolution: "archy@npm:1.0.0"
-@@ -2706,13 +2305,6 @@ __metadata:
+ "are-we-there-yet@npm:^2.0.0":
+   version: 2.0.0
+   resolution: "are-we-there-yet@npm:2.0.0"
+@@ -2706,13 +2296,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -758,7 +774,7 @@ index 633a054..73e8f77 100644
  "async@npm:^3.2.4":
    version: 3.2.5
    resolution: "async@npm:3.2.5"
-@@ -2729,13 +2321,6 @@ __metadata:
+@@ -2729,13 +2312,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -772,7 +788,7 @@ index 633a054..73e8f77 100644
  "atomic-sleep@npm:^1.0.0":
    version: 1.0.0
    resolution: "atomic-sleep@npm:1.0.0"
-@@ -2844,7 +2429,7 @@ __metadata:
+@@ -2843,7 +2419,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -781,7 +797,7 @@ index 633a054..73e8f77 100644
    version: 4.1.0
    resolution: "bl@npm:4.1.0"
    dependencies:
-@@ -2855,17 +2440,6 @@ __metadata:
+@@ -2854,17 +2430,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -799,7 +815,7 @@ index 633a054..73e8f77 100644
  "block-stream2@npm:^2.1.0":
    version: 2.1.0
    resolution: "block-stream2@npm:2.1.0"
-@@ -2919,27 +2493,13 @@ __metadata:
+@@ -2918,27 +2483,13 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -828,7 +844,7 @@ index 633a054..73e8f77 100644
  "buffer-from@npm:^1.0.0":
    version: 1.1.2
    resolution: "buffer-from@npm:1.1.2"
-@@ -2954,13 +2514,6 @@ __metadata:
+@@ -2953,13 +2504,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -842,7 +858,24 @@ index 633a054..73e8f77 100644
  "buffer@npm:^5.5.0":
    version: 5.7.1
    resolution: "buffer@npm:5.7.1"
-@@ -3094,7 +2647,7 @@ __metadata:
+@@ -2970,16 +2514,6 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"buffer@npm:^6.0.3":
+-  version: 6.0.3
+-  resolution: "buffer@npm:6.0.3"
+-  dependencies:
+-    base64-js: ^1.3.1
+-    ieee754: ^1.2.1
+-  checksum: 5ad23293d9a731e4318e420025800b42bf0d264004c0286c8cc010af7a270c7a0f6522e84f54b9ad65cbd6db20b8badbfd8d2ebf4f80fa03dab093b89e68c3f9
+-  languageName: node
+-  linkType: hard
+-
+ "bundle-name@npm:^3.0.0":
+   version: 3.0.0
+   resolution: "bundle-name@npm:3.0.0"
+@@ -3093,7 +2627,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -851,7 +884,7 @@ index 633a054..73e8f77 100644
    version: 4.1.2
    resolution: "chalk@npm:4.1.2"
    dependencies:
-@@ -3111,20 +2664,6 @@ __metadata:
+@@ -3131,20 +2665,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -872,7 +905,7 @@ index 633a054..73e8f77 100644
  "chokidar@npm:^3.5.1":
    version: 3.5.3
    resolution: "chokidar@npm:3.5.3"
-@@ -3158,13 +2697,6 @@ __metadata:
+@@ -3178,13 +2698,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -886,7 +919,7 @@ index 633a054..73e8f77 100644
  "clean-stack@npm:^2.0.0":
    version: 2.2.0
    resolution: "clean-stack@npm:2.2.0"
-@@ -3172,32 +2704,6 @@ __metadata:
+@@ -3192,32 +2705,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -919,7 +952,7 @@ index 633a054..73e8f77 100644
  "client-only@npm:0.0.1":
    version: 0.0.1
    resolution: "client-only@npm:0.0.1"
-@@ -3216,13 +2722,6 @@ __metadata:
+@@ -3236,13 +2723,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -933,7 +966,7 @@ index 633a054..73e8f77 100644
  "clsx@npm:1.1.1":
    version: 1.1.1
    resolution: "clsx@npm:1.1.1"
-@@ -3298,15 +2797,6 @@ __metadata:
+@@ -3318,15 +2798,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -949,7 +982,7 @@ index 633a054..73e8f77 100644
  "comma-separated-tokens@npm:^2.0.0":
    version: 2.0.3
    resolution: "comma-separated-tokens@npm:2.0.3"
-@@ -3314,13 +2804,6 @@ __metadata:
+@@ -3334,13 +2805,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -963,7 +996,7 @@ index 633a054..73e8f77 100644
  "commander@npm:^4.0.0":
    version: 4.1.1
    resolution: "commander@npm:4.1.1"
-@@ -3335,25 +2818,6 @@ __metadata:
+@@ -3355,25 +2819,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -989,7 +1022,7 @@ index 633a054..73e8f77 100644
  "concat-map@npm:0.0.1":
    version: 0.0.1
    resolution: "concat-map@npm:0.0.1"
-@@ -3433,25 +2897,6 @@ __metadata:
+@@ -3453,25 +2898,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1015,7 +1048,7 @@ index 633a054..73e8f77 100644
  "cross-env@npm:^7.0.3":
    version: 7.0.3
    resolution: "cross-env@npm:7.0.3"
-@@ -3464,17 +2909,6 @@ __metadata:
+@@ -3484,17 +2910,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1033,7 +1066,7 @@ index 633a054..73e8f77 100644
  "cross-spawn@npm:^6.0.5":
    version: 6.0.5
    resolution: "cross-spawn@npm:6.0.5"
-@@ -3488,10 +2922,14 @@ __metadata:
+@@ -3508,10 +2923,14 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1052,7 +1085,7 @@ index 633a054..73e8f77 100644
    languageName: node
    linkType: hard
  
-@@ -3616,7 +3054,7 @@ __metadata:
+@@ -3636,7 +3055,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1061,7 +1094,7 @@ index 633a054..73e8f77 100644
    version: 4.3.4
    resolution: "debug@npm:4.3.4"
    dependencies:
-@@ -3712,16 +3150,7 @@ __metadata:
+@@ -3732,16 +3151,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1079,7 +1112,7 @@ index 633a054..73e8f77 100644
    version: 1.1.1
    resolution: "define-data-property@npm:1.1.1"
    dependencies:
-@@ -3732,13 +3161,6 @@ __metadata:
+@@ -3752,13 +3162,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1093,7 +1126,7 @@ index 633a054..73e8f77 100644
  "define-lazy-prop@npm:^3.0.0":
    version: 3.0.0
    resolution: "define-lazy-prop@npm:3.0.0"
-@@ -3757,29 +3179,6 @@ __metadata:
+@@ -3777,29 +3180,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1123,7 +1156,7 @@ index 633a054..73e8f77 100644
  "delegates@npm:^1.0.0":
    version: 1.0.0
    resolution: "delegates@npm:1.0.0"
-@@ -3787,13 +3186,6 @@ __metadata:
+@@ -3807,13 +3187,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1137,7 +1170,7 @@ index 633a054..73e8f77 100644
  "dequal@npm:^2.0.0, dequal@npm:^2.0.3":
    version: 2.0.3
    resolution: "dequal@npm:2.0.3"
-@@ -3929,13 +3321,6 @@ __metadata:
+@@ -3942,13 +3315,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1151,7 +1184,7 @@ index 633a054..73e8f77 100644
  "dotenv@npm:^16.3.1":
    version: 16.3.1
    resolution: "dotenv@npm:16.3.1"
-@@ -3959,15 +3344,6 @@ __metadata:
+@@ -3972,15 +3338,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1167,7 +1200,7 @@ index 633a054..73e8f77 100644
  "emoji-regex@npm:^8.0.0":
    version: 8.0.0
    resolution: "emoji-regex@npm:8.0.0"
-@@ -4031,7 +3407,7 @@ __metadata:
+@@ -4044,7 +3401,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1176,7 +1209,7 @@ index 633a054..73e8f77 100644
    version: 2.2.1
    resolution: "env-paths@npm:2.2.1"
    checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
-@@ -4101,22 +3477,6 @@ __metadata:
+@@ -4114,22 +3471,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1199,7 +1232,7 @@ index 633a054..73e8f77 100644
  "es-iterator-helpers@npm:^1.0.12, es-iterator-helpers@npm:^1.0.15":
    version: 1.0.15
    resolution: "es-iterator-helpers@npm:1.0.15"
-@@ -4247,13 +3607,6 @@ __metadata:
+@@ -4260,13 +3601,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1213,7 +1246,7 @@ index 633a054..73e8f77 100644
  "escape-string-regexp@npm:^1.0.5":
    version: 1.0.5
    resolution: "escape-string-regexp@npm:1.0.5"
-@@ -4261,10 +3614,10 @@ __metadata:
+@@ -4274,10 +3608,10 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1228,24 +1261,37 @@ index 633a054..73e8f77 100644
    languageName: node
    linkType: hard
  
-@@ -4601,14 +3954,14 @@ __metadata:
+@@ -4607,13 +3941,6 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"event-target-shim@npm:^5.0.0":
+-  version: 5.0.1
+-  resolution: "event-target-shim@npm:5.0.1"
+-  checksum: 1ffe3bb22a6d51bdeb6bf6f7cf97d2ff4a74b017ad12284cc9e6a279e727dc30a5de6bb613e5596ff4dc3e517841339ad09a7eec44266eccb1aa201a30448166
+-  languageName: node
+-  linkType: hard
+-
+ "eventemitter3@npm:^4.0.1":
+   version: 4.0.7
+   resolution: "eventemitter3@npm:4.0.7"
+@@ -4621,14 +3948,7 @@ __metadata:
    languageName: node
    linkType: hard
  
 -"events@npm:^3.0.0, events@npm:^3.3.0":
-+"events@npm:^3.3.0":
-   version: 3.3.0
-   resolution: "events@npm:3.3.0"
-   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
-   languageName: node
-   linkType: hard
- 
+-  version: 3.3.0
+-  resolution: "events@npm:3.3.0"
+-  checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
+-  languageName: node
+-  linkType: hard
+-
 -"execa@npm:5.1.1, execa@npm:^5.0.0":
 +"execa@npm:^5.0.0":
    version: 5.1.1
    resolution: "execa@npm:5.1.1"
    dependencies:
-@@ -4908,17 +4261,6 @@ __metadata:
+@@ -4937,17 +4257,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1263,7 +1309,7 @@ index 633a054..73e8f77 100644
  "find-my-way@npm:^7.7.0":
    version: 7.7.0
    resolution: "find-my-way@npm:7.7.0"
-@@ -4937,26 +4279,7 @@ __metadata:
+@@ -4977,26 +4286,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1291,7 +1337,7 @@ index 633a054..73e8f77 100644
    version: 4.1.0
    resolution: "find-up@npm:4.1.0"
    dependencies:
-@@ -4966,6 +4289,16 @@ __metadata:
+@@ -5006,6 +4296,16 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1308,7 +1354,7 @@ index 633a054..73e8f77 100644
  "flat-cache@npm:^3.0.4":
    version: 3.1.1
    resolution: "flat-cache@npm:3.1.1"
-@@ -5003,17 +4336,6 @@ __metadata:
+@@ -5043,17 +4343,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1326,7 +1372,7 @@ index 633a054..73e8f77 100644
  "forwarded@npm:0.2.0":
    version: 0.2.0
    resolution: "forwarded@npm:0.2.0"
-@@ -5021,13 +4343,6 @@ __metadata:
+@@ -5061,13 +4350,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1340,7 +1386,7 @@ index 633a054..73e8f77 100644
  "fs-constants@npm:^1.0.0":
    version: 1.0.0
    resolution: "fs-constants@npm:1.0.0"
-@@ -5046,15 +4361,6 @@ __metadata:
+@@ -5086,15 +4368,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1356,7 +1402,7 @@ index 633a054..73e8f77 100644
  "fs-minipass@npm:^2.0.0":
    version: 2.1.0
    resolution: "fs-minipass@npm:2.1.0"
-@@ -5080,7 +4386,7 @@ __metadata:
+@@ -5120,7 +4393,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1365,7 +1411,7 @@ index 633a054..73e8f77 100644
    version: 2.3.3
    resolution: "fsevents@npm:2.3.3"
    dependencies:
-@@ -5090,7 +4396,7 @@ __metadata:
+@@ -5130,7 +4403,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1374,7 +1420,7 @@ index 633a054..73e8f77 100644
    version: 2.3.3
    resolution: "fsevents@patch:fsevents@npm%3A2.3.3#~builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"
    dependencies:
-@@ -5168,13 +4474,6 @@ __metadata:
+@@ -5208,13 +4481,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1388,7 +1434,7 @@ index 633a054..73e8f77 100644
  "get-stream@npm:^6.0.0, get-stream@npm:^6.0.1":
    version: 6.0.1
    resolution: "get-stream@npm:6.0.1"
-@@ -5290,28 +4589,6 @@ __metadata:
+@@ -5330,28 +4596,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1417,7 +1463,7 @@ index 633a054..73e8f77 100644
  "globals@npm:^13.19.0":
    version: 13.23.0
    resolution: "globals@npm:13.23.0"
-@@ -5330,7 +4607,7 @@ __metadata:
+@@ -5370,7 +4614,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1426,7 +1472,7 @@ index 633a054..73e8f77 100644
    version: 11.1.0
    resolution: "globby@npm:11.1.0"
    dependencies:
-@@ -5434,23 +4711,6 @@ __metadata:
+@@ -5474,23 +4718,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1450,7 +1496,7 @@ index 633a054..73e8f77 100644
  "hasown@npm:^2.0.0":
    version: 2.0.0
    resolution: "hasown@npm:2.0.0"
-@@ -5550,7 +4810,7 @@ __metadata:
+@@ -5622,7 +4849,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1459,7 +1505,7 @@ index 633a054..73e8f77 100644
    version: 7.0.0
    resolution: "http-proxy-agent@npm:7.0.0"
    dependencies:
-@@ -5560,17 +4820,6 @@ __metadata:
+@@ -5632,17 +4859,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1477,7 +1523,7 @@ index 633a054..73e8f77 100644
  "http-response-object@npm:^3.0.1":
    version: 3.0.2
    resolution: "http-response-object@npm:3.0.2"
-@@ -5580,16 +4829,6 @@ __metadata:
+@@ -5652,16 +4868,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1494,7 +1540,7 @@ index 633a054..73e8f77 100644
  "https-proxy-agent@npm:^5.0.0":
    version: 5.0.1
    resolution: "https-proxy-agent@npm:5.0.1"
-@@ -5600,6 +4839,16 @@ __metadata:
+@@ -5672,6 +4878,16 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1511,7 +1557,7 @@ index 633a054..73e8f77 100644
  "human-signals@npm:^2.1.0":
    version: 2.1.0
    resolution: "human-signals@npm:2.1.0"
-@@ -5614,7 +4863,7 @@ __metadata:
+@@ -5686,7 +4902,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1520,7 +1566,15 @@ index 633a054..73e8f77 100644
    version: 0.6.3
    resolution: "iconv-lite@npm:0.6.3"
    dependencies:
-@@ -5630,15 +4879,6 @@ __metadata:
+@@ -5695,22 +4911,13 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
++"ieee754@npm:^1.1.13":
+   version: 1.2.1
+   resolution: "ieee754@npm:1.2.1"
+   checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
    languageName: node
    linkType: hard
  
@@ -1536,7 +1590,7 @@ index 633a054..73e8f77 100644
  "ignore@npm:^5.2.0":
    version: 5.2.4
    resolution: "ignore@npm:5.2.4"
-@@ -5670,7 +4910,7 @@ __metadata:
+@@ -5742,7 +4949,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1545,7 +1599,7 @@ index 633a054..73e8f77 100644
    version: 4.0.0
    resolution: "indent-string@npm:4.0.0"
    checksum: 824cfb9929d031dabf059bebfe08cf3137365e112019086ed3dcff6a0a7b698cb80cf67ccccde0e25b9e2d7527aa6cc1fed1ac490c752162496caba3e6699612
-@@ -5694,13 +4934,6 @@ __metadata:
+@@ -5766,13 +4973,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1559,7 +1613,7 @@ index 633a054..73e8f77 100644
  "ini@npm:~1.3.0":
    version: 1.3.8
    resolution: "ini@npm:1.3.8"
-@@ -5867,7 +5100,7 @@ __metadata:
+@@ -5963,7 +5163,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1568,7 +1622,7 @@ index 633a054..73e8f77 100644
    version: 2.2.1
    resolution: "is-docker@npm:2.2.1"
    bin:
-@@ -5937,13 +5170,6 @@ __metadata:
+@@ -6040,13 +5240,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1582,7 +1636,7 @@ index 633a054..73e8f77 100644
  "is-lambda@npm:^1.0.1":
    version: 1.0.1
    resolution: "is-lambda@npm:1.0.1"
-@@ -5981,14 +5207,7 @@ __metadata:
+@@ -6084,14 +5277,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1598,7 +1652,7 @@ index 633a054..73e8f77 100644
    version: 3.0.3
    resolution: "is-path-inside@npm:3.0.3"
    checksum: abd50f06186a052b349c15e55b182326f1936c89a78bf6c8f2b707412517c097ce04bc49a0ca221787bc44e1049f51f09a2ffb63d22899051988d3a618ba13e9
-@@ -6069,13 +5288,6 @@ __metadata:
+@@ -6172,13 +5358,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1612,7 +1666,7 @@ index 633a054..73e8f77 100644
  "is-weakmap@npm:^2.0.1":
    version: 2.0.1
    resolution: "is-weakmap@npm:2.0.1"
-@@ -6102,14 +5314,7 @@ __metadata:
+@@ -6205,14 +5384,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1628,7 +1682,7 @@ index 633a054..73e8f77 100644
    version: 2.2.0
    resolution: "is-wsl@npm:2.2.0"
    dependencies:
-@@ -6186,13 +5391,6 @@ __metadata:
+@@ -6289,13 +5461,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1642,7 +1696,7 @@ index 633a054..73e8f77 100644
  "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
    version: 4.0.0
    resolution: "js-tokens@npm:4.0.0"
-@@ -6211,13 +5409,6 @@ __metadata:
+@@ -6314,13 +5479,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1656,7 +1710,7 @@ index 633a054..73e8f77 100644
  "json-buffer@npm:3.0.1":
    version: 3.0.1
    resolution: "json-buffer@npm:3.0.1"
-@@ -6300,24 +5491,6 @@ __metadata:
+@@ -6403,24 +5561,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1681,7 +1735,7 @@ index 633a054..73e8f77 100644
  "jsx-ast-utils@npm:^2.4.1 || ^3.0.0, jsx-ast-utils@npm:^3.3.5":
    version: 3.3.5
    resolution: "jsx-ast-utils@npm:3.3.5"
-@@ -6330,55 +5503,6 @@ __metadata:
+@@ -6433,55 +5573,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1737,11 +1791,11 @@ index 633a054..73e8f77 100644
  "katex@npm:^0.16.9":
    version: 0.16.9
    resolution: "katex@npm:0.16.9"
-@@ -6399,13 +5523,6 @@ __metadata:
+@@ -6502,13 +5593,6 @@ __metadata:
    languageName: node
    linkType: hard
  
--"kleur@npm:4.1.5, kleur@npm:^4.0.3":
+-"kleur@npm:4.1.5":
 -  version: 4.1.5
 -  resolution: "kleur@npm:4.1.5"
 -  checksum: 1dc476e32741acf0b1b5b0627ffd0d722e342c1b0da14de3e8ae97821327ca08f9fb944542fb3c126d90ac5f27f9d804edbe7c585bf7d12ef495d115e0f22c12
@@ -1751,21 +1805,7 @@ index 633a054..73e8f77 100644
  "kleur@npm:^3.0.3":
    version: 3.0.3
    resolution: "kleur@npm:3.0.3"
-@@ -6413,6 +5530,13 @@ __metadata:
-   languageName: node
-   linkType: hard
- 
-+"kleur@npm:^4.0.3":
-+  version: 4.1.5
-+  resolution: "kleur@npm:4.1.5"
-+  checksum: 1dc476e32741acf0b1b5b0627ffd0d722e342c1b0da14de3e8ae97821327ca08f9fb944542fb3c126d90ac5f27f9d804edbe7c585bf7d12ef495d115e0f22c12
-+  languageName: node
-+  linkType: hard
-+
- "klona@npm:^2.0.5":
-   version: 2.0.6
-   resolution: "klona@npm:2.0.6"
-@@ -6436,15 +5560,6 @@ __metadata:
+@@ -6539,15 +5623,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1781,7 +1821,7 @@ index 633a054..73e8f77 100644
  "levn@npm:^0.4.1":
    version: 0.4.1
    resolution: "levn@npm:0.4.1"
-@@ -6499,16 +5614,6 @@ __metadata:
+@@ -6602,16 +5677,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1798,7 +1838,7 @@ index 633a054..73e8f77 100644
  "locate-path@npm:^5.0.0":
    version: 5.0.0
    resolution: "locate-path@npm:5.0.0"
-@@ -6527,55 +5632,6 @@ __metadata:
+@@ -6630,55 +5695,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1854,7 +1894,7 @@ index 633a054..73e8f77 100644
  "lodash.merge@npm:^4.6.2":
    version: 4.6.2
    resolution: "lodash.merge@npm:4.6.2"
-@@ -6583,13 +5639,6 @@ __metadata:
+@@ -6686,13 +5702,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1868,7 +1908,7 @@ index 633a054..73e8f77 100644
  "lodash.sortby@npm:^4.7.0":
    version: 4.7.0
    resolution: "lodash.sortby@npm:4.7.0"
-@@ -6597,35 +5646,13 @@ __metadata:
+@@ -6700,35 +5709,13 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1905,7 +1945,7 @@ index 633a054..73e8f77 100644
  "longest-streak@npm:^3.0.0":
    version: 3.1.0
    resolution: "longest-streak@npm:3.1.0"
-@@ -6669,16 +5696,7 @@ __metadata:
+@@ -6772,16 +5759,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1923,7 +1963,7 @@ index 633a054..73e8f77 100644
    version: 3.1.0
    resolution: "make-dir@npm:3.1.0"
    dependencies:
-@@ -6717,19 +5735,6 @@ __metadata:
+@@ -6820,19 +5798,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1943,7 +1983,7 @@ index 633a054..73e8f77 100644
  "markdown-table@npm:^3.0.0":
    version: 3.0.3
    resolution: "markdown-table@npm:3.0.3"
-@@ -6944,13 +5949,6 @@ __metadata:
+@@ -7056,13 +6021,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1957,7 +1997,7 @@ index 633a054..73e8f77 100644
  "memorystream@npm:^0.3.1":
    version: 0.3.1
    resolution: "memorystream@npm:0.3.1"
-@@ -7554,7 +6552,7 @@ __metadata:
+@@ -7430,7 +6388,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1966,7 +2006,7 @@ index 633a054..73e8f77 100644
    version: 2.1.35
    resolution: "mime-types@npm:2.1.35"
    dependencies:
-@@ -7584,13 +6582,6 @@ __metadata:
+@@ -7460,13 +6418,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1980,7 +2020,7 @@ index 633a054..73e8f77 100644
  "minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
    version: 3.1.2
    resolution: "minimatch@npm:3.1.2"
-@@ -7600,15 +6591,6 @@ __metadata:
+@@ -7476,15 +6427,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -1996,7 +2036,7 @@ index 633a054..73e8f77 100644
  "minimatch@npm:^9.0.1":
    version: 9.0.3
    resolution: "minimatch@npm:9.0.3"
-@@ -7758,81 +6740,6 @@ __metadata:
+@@ -7634,81 +6576,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2075,10 +2115,10 @@ index 633a054..73e8f77 100644
 -  languageName: node
 -  linkType: hard
 -
- "mri@npm:^1.1.0":
-   version: 1.2.0
-   resolution: "mri@npm:1.2.0"
-@@ -7847,7 +6754,7 @@ __metadata:
+ "ms@npm:2.1.2":
+   version: 2.1.2
+   resolution: "ms@npm:2.1.2"
+@@ -7716,7 +6583,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2087,7 +2127,7 @@ index 633a054..73e8f77 100644
    version: 2.1.3
    resolution: "ms@npm:2.1.3"
    checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
-@@ -7861,22 +6768,6 @@ __metadata:
+@@ -7730,22 +6597,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2110,7 +2150,7 @@ index 633a054..73e8f77 100644
  "multer@npm:^1.4.5-lts.1":
    version: 1.4.5-lts.1
    resolution: "multer@npm:1.4.5-lts.1"
-@@ -7929,13 +6820,6 @@ __metadata:
+@@ -7798,13 +6649,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2124,7 +2164,7 @@ index 633a054..73e8f77 100644
  "natural-compare@npm:^1.4.0":
    version: 1.4.0
    resolution: "natural-compare@npm:1.4.0"
-@@ -7950,13 +6834,6 @@ __metadata:
+@@ -7819,13 +6663,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2138,7 +2178,7 @@ index 633a054..73e8f77 100644
  "next@npm:^14.0.3":
    version: 14.0.3
    resolution: "next@npm:14.0.3"
-@@ -8028,13 +6905,6 @@ __metadata:
+@@ -7897,13 +6734,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2152,7 +2192,7 @@ index 633a054..73e8f77 100644
  "node-addon-api@npm:^6.1.0":
    version: 6.1.0
    resolution: "node-addon-api@npm:6.1.0"
-@@ -8053,21 +6923,7 @@ __metadata:
+@@ -7922,21 +6752,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2175,7 +2215,7 @@ index 633a054..73e8f77 100644
    version: 2.7.0
    resolution: "node-fetch@npm:2.7.0"
    dependencies:
-@@ -8123,7 +6979,7 @@ __metadata:
+@@ -7992,7 +6808,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2184,7 +2224,7 @@ index 633a054..73e8f77 100644
    version: 2.5.0
    resolution: "normalize-package-data@npm:2.5.0"
    dependencies:
-@@ -8142,36 +6998,6 @@ __metadata:
+@@ -8011,36 +6827,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2221,7 +2261,7 @@ index 633a054..73e8f77 100644
  "npm-run-all@npm:^4.1.5":
    version: 4.1.5
    resolution: "npm-run-all@npm:4.1.5"
-@@ -8334,7 +7160,7 @@ __metadata:
+@@ -8203,7 +6989,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2230,7 +2270,7 @@ index 633a054..73e8f77 100644
    version: 5.1.2
    resolution: "onetime@npm:5.1.2"
    dependencies:
-@@ -8352,27 +7178,6 @@ __metadata:
+@@ -8221,27 +7007,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2258,7 +2298,7 @@ index 633a054..73e8f77 100644
  "open@npm:^9.1.0":
    version: 9.1.0
    resolution: "open@npm:9.1.0"
-@@ -8399,23 +7204,6 @@ __metadata:
+@@ -8268,23 +7033,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2282,7 +2322,7 @@ index 633a054..73e8f77 100644
  "otplib@npm:^12.0.1":
    version: 12.0.1
    resolution: "otplib@npm:12.0.1"
-@@ -8427,16 +7215,7 @@ __metadata:
+@@ -8296,16 +7044,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2300,7 +2340,7 @@ index 633a054..73e8f77 100644
    version: 2.3.0
    resolution: "p-limit@npm:2.3.0"
    dependencies:
-@@ -8454,15 +7233,6 @@ __metadata:
+@@ -8323,15 +7062,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2316,7 +2356,7 @@ index 633a054..73e8f77 100644
  "p-locate@npm:^4.1.0":
    version: 4.1.0
    resolution: "p-locate@npm:4.1.0"
-@@ -8481,7 +7251,7 @@ __metadata:
+@@ -8350,7 +7080,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2325,7 +2365,7 @@ index 633a054..73e8f77 100644
    version: 4.0.0
    resolution: "p-map@npm:4.0.0"
    dependencies:
-@@ -8490,23 +7260,6 @@ __metadata:
+@@ -8359,23 +7089,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2349,7 +2389,7 @@ index 633a054..73e8f77 100644
  "p-try@npm:^2.0.0":
    version: 2.2.0
    resolution: "p-try@npm:2.2.0"
-@@ -8514,13 +7267,6 @@ __metadata:
+@@ -8383,13 +7096,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2363,7 +2403,7 @@ index 633a054..73e8f77 100644
  "parent-module@npm:^1.0.0":
    version: 1.0.1
    resolution: "parent-module@npm:1.0.1"
-@@ -8559,13 +7305,6 @@ __metadata:
+@@ -8443,13 +7149,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2377,7 +2417,7 @@ index 633a054..73e8f77 100644
  "path-exists@npm:^4.0.0":
    version: 4.0.0
    resolution: "path-exists@npm:4.0.0"
-@@ -8634,89 +7373,6 @@ __metadata:
+@@ -8518,89 +7217,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2467,7 +2507,7 @@ index 633a054..73e8f77 100644
  "picocolors@npm:^1.0.0":
    version: 1.0.0
    resolution: "picocolors@npm:1.0.0"
-@@ -8792,24 +7448,6 @@ __metadata:
+@@ -8675,24 +7291,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2492,7 +2532,7 @@ index 633a054..73e8f77 100644
  "pngjs@npm:^5.0.0":
    version: 5.0.0
    resolution: "pngjs@npm:5.0.0"
-@@ -8846,36 +7484,6 @@ __metadata:
+@@ -8729,36 +7327,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2529,7 +2569,7 @@ index 633a054..73e8f77 100644
  "prebuild-install@npm:^7.1.1":
    version: 7.1.1
    resolution: "prebuild-install@npm:7.1.1"
-@@ -8932,14 +7540,23 @@ __metadata:
+@@ -8815,14 +7383,23 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2558,16 +2598,23 @@ index 633a054..73e8f77 100644
    languageName: node
    linkType: hard
  
-@@ -8978,7 +7595,7 @@ __metadata:
+@@ -8868,14 +7445,7 @@ __metadata:
    languageName: node
    linkType: hard
  
+-"process@npm:^0.11.10":
+-  version: 0.11.10
+-  resolution: "process@npm:0.11.10"
+-  checksum: bfcce49814f7d172a6e6a14d5fa3ac92cc3d0c3b9feb1279774708a719e19acd673995226351a082a9ae99978254e320ccda4240ddc474ba31a76c79491ca7c3
+-  languageName: node
+-  linkType: hard
+-
 -"progress@npm:2.0.3, progress@npm:^2.0.3":
 +"progress@npm:^2.0.3":
    version: 2.0.3
    resolution: "progress@npm:2.0.3"
    checksum: f67403fe7b34912148d9252cb7481266a354bd99ce82c835f79070643bb3c6583d10dbcfda4d41e04bbc1d8437e9af0fb1e1f2135727878f5308682a579429b7
-@@ -9043,7 +7660,7 @@ __metadata:
+@@ -8940,7 +7510,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2576,7 +2623,7 @@ index 633a054..73e8f77 100644
    version: 2.3.1
    resolution: "punycode@npm:2.3.1"
    checksum: bb0a0ceedca4c3c57a9b981b90601579058903c62be23c5e8e843d2c2d4148a3ecf029d5133486fb0e1822b098ba8bba09e89d6b21742d02fa26bda6441a6fb2
-@@ -9308,17 +7925,6 @@ __metadata:
+@@ -9193,17 +7763,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2594,7 +2641,7 @@ index 633a054..73e8f77 100644
  "read-pkg@npm:^3.0.0":
    version: 3.0.0
    resolution: "read-pkg@npm:3.0.0"
-@@ -9330,18 +7936,6 @@ __metadata:
+@@ -9215,18 +7774,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2613,7 +2660,7 @@ index 633a054..73e8f77 100644
  "readable-stream@npm:3, readable-stream@npm:^3.0.2, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
    version: 3.6.2
    resolution: "readable-stream@npm:3.6.2"
-@@ -9353,7 +7947,7 @@ __metadata:
+@@ -9238,7 +7785,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2622,16 +2669,27 @@ index 633a054..73e8f77 100644
    version: 2.3.8
    resolution: "readable-stream@npm:2.3.8"
    dependencies:
-@@ -9368,7 +7962,7 @@ __metadata:
+@@ -9253,19 +7800,6 @@ __metadata:
    languageName: node
    linkType: hard
  
--"readable-stream@npm:^4.0.0, readable-stream@npm:^4.2.0":
-+"readable-stream@npm:^4.0.0":
-   version: 4.4.2
-   resolution: "readable-stream@npm:4.4.2"
-   dependencies:
-@@ -9393,15 +7987,6 @@ __metadata:
+-"readable-stream@npm:^4.2.0":
+-  version: 4.4.2
+-  resolution: "readable-stream@npm:4.4.2"
+-  dependencies:
+-    abort-controller: ^3.0.0
+-    buffer: ^6.0.3
+-    events: ^3.3.0
+-    process: ^0.11.10
+-    string_decoder: ^1.3.0
+-  checksum: 6f4063763dbdb52658d22d3f49ca976420e1fbe16bbd241f744383715845350b196a2f08b8d6330f8e219153dff34b140aeefd6296da828e1041a7eab1f20d5e
+-  languageName: node
+-  linkType: hard
+-
+ "readable-stream@npm:~1.0.17, readable-stream@npm:~1.0.27-1":
+   version: 1.0.34
+   resolution: "readable-stream@npm:1.0.34"
+@@ -9278,15 +7812,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2647,7 +2705,7 @@ index 633a054..73e8f77 100644
  "readdirp@npm:~3.6.0":
    version: 3.6.0
    resolution: "readdirp@npm:3.6.0"
-@@ -9555,13 +8140,6 @@ __metadata:
+@@ -9430,13 +7955,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2661,7 +2719,7 @@ index 633a054..73e8f77 100644
  "require-directory@npm:^2.1.1":
    version: 2.1.1
    resolution: "require-directory@npm:2.1.1"
-@@ -9604,7 +8182,7 @@ __metadata:
+@@ -9479,7 +7997,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2670,7 +2728,7 @@ index 633a054..73e8f77 100644
    version: 1.22.8
    resolution: "resolve@npm:1.22.8"
    dependencies:
-@@ -9630,7 +8208,7 @@ __metadata:
+@@ -9505,7 +8023,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2679,7 +2737,7 @@ index 633a054..73e8f77 100644
    version: 1.22.8
    resolution: "resolve@patch:resolve@npm%3A1.22.8#~builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
    dependencies:
-@@ -9656,16 +8234,6 @@ __metadata:
+@@ -9531,16 +8049,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2696,7 +2754,7 @@ index 633a054..73e8f77 100644
  "ret@npm:~0.2.0":
    version: 0.2.2
    resolution: "ret@npm:0.2.2"
-@@ -9680,13 +8248,6 @@ __metadata:
+@@ -9562,13 +8070,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2710,7 +2768,7 @@ index 633a054..73e8f77 100644
  "reusify@npm:^1.0.4":
    version: 1.0.4
    resolution: "reusify@npm:1.0.4"
-@@ -9701,7 +8262,7 @@ __metadata:
+@@ -9583,7 +8084,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2719,7 +2777,7 @@ index 633a054..73e8f77 100644
    version: 3.0.2
    resolution: "rimraf@npm:3.0.2"
    dependencies:
-@@ -9890,7 +8451,7 @@ __metadata:
+@@ -9772,7 +8273,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2728,7 +2786,7 @@ index 633a054..73e8f77 100644
    version: 7.5.4
    resolution: "semver@npm:7.5.4"
    dependencies:
-@@ -10005,14 +8566,7 @@ __metadata:
+@@ -9887,14 +8388,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2744,7 +2802,7 @@ index 633a054..73e8f77 100644
    version: 3.0.7
    resolution: "signal-exit@npm:3.0.7"
    checksum: a2f098f247adc367dffc27845853e9959b9e88b01cb301658cfe4194352d8d2bb32e18467c786a7fe15f1d44b233ea35633d076d5e737870b7139949d1ab6318
-@@ -10067,28 +8621,6 @@ __metadata:
+@@ -9949,28 +8443,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2773,7 +2831,7 @@ index 633a054..73e8f77 100644
  "smart-buffer@npm:^4.2.0":
    version: 4.2.0
    resolution: "smart-buffer@npm:4.2.0"
-@@ -10156,15 +8688,6 @@ __metadata:
+@@ -10038,15 +8510,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2789,7 +2847,7 @@ index 633a054..73e8f77 100644
  "spdx-correct@npm:^3.0.0":
    version: 3.2.0
    resolution: "spdx-correct@npm:3.2.0"
-@@ -10206,20 +8729,13 @@ __metadata:
+@@ -10088,20 +8551,13 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2811,7 +2869,7 @@ index 633a054..73e8f77 100644
  "ssri@npm:^10.0.0":
    version: 10.0.5
    resolution: "ssri@npm:10.0.5"
-@@ -10229,13 +8745,6 @@ __metadata:
+@@ -10111,13 +8567,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2825,7 +2883,7 @@ index 633a054..73e8f77 100644
  "streamsearch@npm:^1.1.0":
    version: 1.1.0
    resolution: "streamsearch@npm:1.1.0"
-@@ -10260,7 +8769,7 @@ __metadata:
+@@ -10142,7 +8591,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2834,7 +2892,16 @@ index 633a054..73e8f77 100644
    version: 4.2.3
    resolution: "string-width@npm:4.2.3"
    dependencies:
-@@ -10368,7 +8877,7 @@ __metadata:
+@@ -10225,7 +8674,7 @@ __metadata:
+   languageName: node
+   linkType: hard
+ 
+-"string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0":
++"string_decoder@npm:^1.1.1":
+   version: 1.3.0
+   resolution: "string_decoder@npm:1.3.0"
+   dependencies:
+@@ -10260,7 +8709,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2843,7 +2910,7 @@ index 633a054..73e8f77 100644
    version: 6.0.1
    resolution: "strip-ansi@npm:6.0.1"
    dependencies:
-@@ -10407,15 +8916,6 @@ __metadata:
+@@ -10299,15 +8748,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2859,7 +2926,7 @@ index 633a054..73e8f77 100644
  "strip-json-comments@npm:^3.1.1":
    version: 3.1.1
    resolution: "strip-json-comments@npm:3.1.1"
-@@ -10514,7 +9014,7 @@ __metadata:
+@@ -10406,7 +8846,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2868,7 +2935,7 @@ index 633a054..73e8f77 100644
    version: 7.2.0
    resolution: "supports-color@npm:7.2.0"
    dependencies:
-@@ -10523,16 +9023,6 @@ __metadata:
+@@ -10415,16 +8855,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2885,7 +2952,7 @@ index 633a054..73e8f77 100644
  "supports-preserve-symlinks-flag@npm:^1.0.0":
    version: 1.0.0
    resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
-@@ -10600,7 +9090,7 @@ __metadata:
+@@ -10492,7 +8922,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2894,7 +2961,7 @@ index 633a054..73e8f77 100644
    version: 3.1.6
    resolution: "tar-stream@npm:3.1.6"
    dependencies:
-@@ -10625,63 +9115,6 @@ __metadata:
+@@ -10517,63 +8947,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2958,7 +3025,7 @@ index 633a054..73e8f77 100644
  "text-table@npm:^0.2.0":
    version: 0.2.0
    resolution: "text-table@npm:0.2.0"
-@@ -10763,15 +9196,6 @@ __metadata:
+@@ -10655,15 +9028,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2974,7 +3041,7 @@ index 633a054..73e8f77 100644
  "to-fast-properties@npm:^2.0.0":
    version: 2.0.0
    resolution: "to-fast-properties@npm:2.0.0"
-@@ -10804,15 +9228,6 @@ __metadata:
+@@ -10696,15 +9060,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -2990,7 +3057,7 @@ index 633a054..73e8f77 100644
  "tr46@npm:~0.0.3":
    version: 0.0.3
    resolution: "tr46@npm:0.0.3"
-@@ -10859,13 +9274,6 @@ __metadata:
+@@ -10751,13 +9106,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3004,7 +3071,7 @@ index 633a054..73e8f77 100644
  "tsconfig-paths@npm:^3.14.2":
    version: 3.14.2
    resolution: "tsconfig-paths@npm:3.14.2"
-@@ -10878,7 +9286,7 @@ __metadata:
+@@ -10770,7 +9118,7 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3013,7 +3080,7 @@ index 633a054..73e8f77 100644
    version: 2.6.2
    resolution: "tslib@npm:2.6.2"
    checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
-@@ -10942,13 +9350,6 @@ __metadata:
+@@ -10834,13 +9182,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3027,7 +3094,7 @@ index 633a054..73e8f77 100644
  "type-fest@npm:^0.20.2":
    version: 0.20.2
    resolution: "type-fest@npm:0.20.2"
-@@ -10956,27 +9357,6 @@ __metadata:
+@@ -10848,27 +9189,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3055,7 +3122,7 @@ index 633a054..73e8f77 100644
  "type-is@npm:^1.6.4":
    version: 1.6.18
    resolution: "type-is@npm:1.6.18"
-@@ -11128,15 +9508,6 @@ __metadata:
+@@ -11005,15 +9325,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3068,10 +3135,10 @@ index 633a054..73e8f77 100644
 -  languageName: node
 -  linkType: hard
 -
- "unist-util-generated@npm:^2.0.0":
-   version: 2.0.1
-   resolution: "unist-util-generated@npm:2.0.1"
-@@ -11349,24 +9720,6 @@ __metadata:
+ "unist-util-is@npm:^6.0.0":
+   version: 6.0.0
+   resolution: "unist-util-is@npm:6.0.0"
+@@ -11180,24 +9491,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3093,10 +3160,10 @@ index 633a054..73e8f77 100644
 -  languageName: node
 -  linkType: hard
 -
- "uvu@npm:^0.5.0":
-   version: 0.5.6
-   resolution: "uvu@npm:0.5.6"
-@@ -11466,15 +9819,6 @@ __metadata:
+ "validate-npm-package-license@npm:^3.0.1":
+   version: 3.0.4
+   resolution: "validate-npm-package-license@npm:3.0.4"
+@@ -11261,15 +9554,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3112,7 +3179,7 @@ index 633a054..73e8f77 100644
  "web-encoding@npm:^1.1.5":
    version: 1.1.5
    resolution: "web-encoding@npm:1.1.5"
-@@ -11502,23 +9846,6 @@ __metadata:
+@@ -11297,23 +9581,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3136,7 +3203,7 @@ index 633a054..73e8f77 100644
  "whatwg-url@npm:^5.0.0":
    version: 5.0.0
    resolution: "whatwg-url@npm:5.0.0"
-@@ -11791,17 +10118,6 @@ __metadata:
+@@ -11586,17 +9853,6 @@ __metadata:
    languageName: node
    linkType: hard
  
@@ -3154,10 +3221,10 @@ index 633a054..73e8f77 100644
  "zipline@workspace:.":
    version: 0.0.0-use.local
    resolution: "zipline@workspace:."
-@@ -11817,9 +10133,9 @@ __metadata:
-     "@mantine/notifications": ^6.0.21
-     "@mantine/prism": ^6.0.21
-     "@mantine/spotlight": ^6.0.21
+@@ -11612,9 +9868,9 @@ __metadata:
+     "@mantine/notifications": 6.x
+     "@mantine/prism": 6.x
+     "@mantine/spotlight": 6.x
 -    "@prisma/client": ^5.1.1
 -    "@prisma/internals": ^5.1.1
 -    "@prisma/migrate": ^5.1.1
@@ -3167,7 +3234,7 @@ index 633a054..73e8f77 100644
      "@sapphire/shapeshift": ^3.9.3
      "@tabler/icons-react": ^2.41.0
      "@tanstack/react-query": ^4.28.0
-@@ -11859,7 +10175,7 @@ __metadata:
+@@ -11654,7 +9910,7 @@ __metadata:
      npm-run-all: ^4.1.5
      otplib: ^12.0.1
      prettier: ^3.1.0

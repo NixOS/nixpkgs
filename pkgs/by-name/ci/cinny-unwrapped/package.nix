@@ -9,26 +9,20 @@
   cairo,
   pango,
   stdenv,
-  olm,
-  nodejs_20,
 }:
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.2.3";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
+    hash = "sha256-PXh3ouPPgSm4BFq6lE4vr2L+Eu7rsANvhXzqYY0rpVw=";
   };
 
-  # canvas, a transitive dependency of cinny, fails to build with Node 22
-  # https://github.com/Automattic/node-canvas/issues/2448
-  nodejs = nodejs_20;
-
-  npmDepsHash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
+  npmDepsHash = "sha256-Ktz82HzbWeMvx5McWS11qpqWNVWJU6yxIFzUkMoT6WE=";
 
   nativeBuildInputs = [
     python3
@@ -55,6 +49,5 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ abbe ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
-    inherit (olm.meta) knownVulnerabilities;
   };
 }

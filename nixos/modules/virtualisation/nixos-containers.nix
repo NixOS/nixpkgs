@@ -92,7 +92,7 @@ let
       chmod 0755 "$root/etc" "$root/var/lib"
       mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
       chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
-      if ! [ -e "$root/etc/os-release" ]; then
+      if ! [ -e "$root/etc/os-release" ] && ! [ -h "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
 
@@ -113,6 +113,16 @@ let
 
       if [ "$PRIVATE_NETWORK" = 1 ]; then
         extraFlags+=("--private-network")
+      fi
+
+      NIX_BIND_OPT=""
+      if [ -n "$PRIVATE_USERS" ]; then
+        extraFlags+=("--private-users=$PRIVATE_USERS")
+        if [ "$PRIVATE_USERS" = "pick" ] || { [ "$PRIVATE_USERS" != "identity" ] && [ "$PRIVATE_USERS" -gt 0 ]; }; then
+          # when user namespacing is enabled, we use `idmap` mount option
+          # so that bind mounts under /nix get proper owner (and not nobody/nogroup).
+          NIX_BIND_OPT=":idmap"
+        fi
       fi
 
       if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
@@ -171,13 +181,14 @@ let
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
-        --bind-ro=/nix/store \
-        --bind-ro=/nix/var/nix/db \
-        --bind-ro=/nix/var/nix/daemon-socket \
-        --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
-        --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
+        --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
+        --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
+        --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
+        --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
+        --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
         ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
+        --setenv PRIVATE_USERS="$PRIVATE_USERS" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
         --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
@@ -650,6 +661,27 @@ in
               '';
             };
 
+            privateUsers = mkOption {
+              type = types.either types.ints.u32 (types.enum [ "no" "identity" "pick" ]);
+              default = "no";
+              description = ''
+                Whether to give the container its own private UIDs/GIDs space (user namespacing).
+                Disabled by default (`no`).
+
+                If set to a number (usually above host's UID/GID range: 65536),
+                user namespacing is enabled and the container UID/GIDs will start at that number.
+
+                If set to `identity`, mostly equivalent to `0`, this will only provide
+                process capability isolation (no UID/GID isolation, as they are the same as host).
+
+                If set to `pick`, user namespacing is enabled and the UID/GID range is automatically chosen,
+                so that no overlapping UID/GID ranges are assigned to multiple containers.
+                This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
+
+                See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
+              '';
+            };
+
             interfaces = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -862,6 +894,13 @@ in
                 additionalCapabilities = cfg.additionalCapabilities
                   ++ [ "CAP_NET_ADMIN" ];
               }
+            ) // (
+            optionalAttrs (!cfg.enableTun && cfg.privateNetwork
+              && (cfg.privateUsers == "pick" || (builtins.isInt cfg.privateUsers && cfg.privateUsers > 0 )))
+              {
+                allowedDevices = cfg.allowedDevices
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
+              }
             );
           in
             recursiveUpdate unit {
@@ -923,6 +962,7 @@ in
               ${optionalString (cfg.networkNamespace != null) ''
                 NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
               ''}
+              PRIVATE_USERS=${toString cfg.privateUsers}
               INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"
               ${optionalString cfg.autoStart ''

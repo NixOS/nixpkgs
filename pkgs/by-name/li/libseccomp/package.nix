@@ -7,16 +7,21 @@
   which,
   gperf,
   nix-update-script,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    hash = "sha256-JIosik2bmFiqa69ScSw0r+/PnJ6Ut23OAsHJqiX7M3U=";
+    hash = "sha256-g7YIUjLRWIw3ncm5yuR7s3QHzyYubnSZPGG6ctKnhNw=";
   };
+
+  patches = [
+    ./oob-read.patch
+  ];
 
   outputs = [
     "out"
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 
@@ -51,6 +56,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (python3Packages) seccomp;
+    };
   };
 
   meta = with lib; {

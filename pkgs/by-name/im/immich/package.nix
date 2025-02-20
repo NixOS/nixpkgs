@@ -115,8 +115,6 @@ let
     preBuild = ''
       rm node_modules/@immich/sdk
       ln -s ${openapi} node_modules/@immich/sdk
-      # Rollup does not find the dependency otherwise
-      ln -s node_modules/@immich/sdk/node_modules/@oazapfts node_modules/
     '';
 
     installPhase = ''

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR
     export DESTBINDIR=$HOME/bin
 
-    mkdir -p $HOME/lib $HOME/bin/x86_64
+    mkdir -p $HOME/lib $HOME/bin/${stdenv.hostPlatform.parsed.cpu.name}
 
     cd ./src
     chmod +x ./checkUmask.sh
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
     cd jkOwnLib
     make
 
-    cp ../lib/x86_64/jkOwnLib.a $HOME/lib
-    cp ../lib/x86_64/jkweb.a $HOME/lib
+    cp ../lib/${stdenv.hostPlatform.parsed.cpu.name}/jkOwnLib.a $HOME/lib
+    cp ../lib/${stdenv.hostPlatform.parsed.cpu.name}/jkweb.a $HOME/lib
     cp -r ../inc  $HOME/
 
     cd ../utils
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib $out/inc
     cp $HOME/lib/jkOwnLib.a $out/lib
     cp $HOME/lib/jkweb.a $out/lib
-    cp $HOME/bin/x86_64/* $out/bin
+    cp $HOME/bin/${stdenv.hostPlatform.parsed.cpu.name}/* $out/bin
     cp -r $HOME/inc/* $out/inc/
 
     runHook postInstall

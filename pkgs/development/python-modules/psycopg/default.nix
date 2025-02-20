@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchurl,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
   libpq,
@@ -35,18 +35,17 @@
 
 let
   pname = "psycopg";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "psycopg";
-    repo = pname;
+    repo = "psycopg";
     tag = version;
-    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
+    hash = "sha256-gicntSAEK5VO67M2gAGR6wSwKQwgnbHxVUoPpaAbaDk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
+    (replaceVars ./ctypes.patch {
       libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })

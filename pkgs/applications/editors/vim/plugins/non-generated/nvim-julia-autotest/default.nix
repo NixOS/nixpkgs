@@ -6,7 +6,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "nvim-julia-autotest";
-  version = "unstable-2022-10-31";
+  version = "0-unstable-2022-10-31";
 
   src = fetchFromGitLab {
     owner = "usmcamp0811";
@@ -15,7 +15,9 @@ vimUtils.buildVimPlugin {
     hash = "sha256-IaNsbBe5q7PB9Q/N/Z9nEnP6jlkQ6+xlkC0TCFnJpkk=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Automatically run Julia tests when you save runtest.jl file";

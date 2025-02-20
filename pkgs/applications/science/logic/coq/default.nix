@@ -95,6 +95,7 @@ let
 self = stdenv.mkDerivation {
   pname = "coq";
   inherit (fetched) version src;
+  exact-version = args.version;
 
   passthru = {
     inherit coq-version;
@@ -233,7 +234,8 @@ self = stdenv.mkDerivation {
 }; in
 if coqAtLeast "8.21" then self.overrideAttrs(o: {
   # coq-core is now a shim for rocq
-  propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocq-core ];
+  propagatedBuildInputs = o.propagatedBuildInputs
+    ++ [ (rocq-core.override { version = o.exact-version; }) ];
   buildPhase = ''
     runHook preBuild
     dune build -p coq-core,coqide-server${lib.optionalString buildIde ",rocqide"} -j $NIX_BUILD_CORES

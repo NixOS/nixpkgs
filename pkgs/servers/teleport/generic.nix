@@ -32,7 +32,6 @@
   vendorHash,
   extPatches ? [ ],
   cargoHash ? null,
-  cargoLock ? null,
   yarnHash ? null,
   pnpmHash ? null,
 }:
@@ -50,7 +49,8 @@ let
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    inherit cargoHash cargoLock;
+    useFetchCargoVendor = true;
+    inherit cargoHash;
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -84,7 +84,10 @@ let
     pname = "teleport-webassets";
     inherit src version;
 
-    cargoDeps = rustPlatform.importCargoLock cargoLock;
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      hash = cargoHash;
+    };
 
     pnpmDeps =
       if pnpmHash != null then

@@ -145,11 +145,6 @@
     "hash": "sha256-hNTkpKdCLY5kIuOmznD1mY+pRdJ0PKu2HypyXog9vb0="
   },
   {
-    "pname": "NLua",
-    "version": "1.7.3",
-    "hash": "sha256-2+eOxal0BDwAc6nJTNsFvf5E0KdfksIie7C7hEKeQos="
-  },
-  {
     "pname": "System.ClientModel",
     "version": "1.0.0",
     "hash": "sha256-yHb72M/Z8LeSZea9TKw2eD0SdYEoCNwVw6Z3695SC2Y="

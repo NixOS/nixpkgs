@@ -159,7 +159,7 @@ in
       # https://github.com/emersion/xdg-desktop-portal-wlr/pull/315
       xdg.portal.config.sway = {
         # Use xdg-desktop-portal-gtk for every portal interface...
-        default = "gtk";
+        default = [ "gtk" ];
         # ... except for the ScreenCast, Screenshot and Secret
         "org.freedesktop.impl.portal.ScreenCast" = "wlr";
         "org.freedesktop.impl.portal.Screenshot" = "wlr";

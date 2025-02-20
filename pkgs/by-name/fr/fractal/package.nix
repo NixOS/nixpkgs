@@ -30,19 +30,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "10";
+  version = "10.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "fractal";
     tag = version;
-    hash = "sha256-dXmdoEBvHhOoICIDCpi2JTPo7j/kQzlv+Q/S/7LNyv0=";
+    hash = "sha256-61xiHVzmLMbLNZlobH6JVcvuO9eoFwqBZBo1rVtPYOc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-qRxJvlorS5S3Wj3HjfvvR2nM/ZWzefz4x791UeSXm0w=";
+    hash = "sha256-e3IW8D4aLU6d36ErUHDUDiXF1lN4HCn5OCX6GwaT3iQ=";
   };
 
   # Dirty approach to add patches after cargoSetupPostUnpackHook

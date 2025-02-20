@@ -30,21 +30,19 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.8.2";
+  version = "4.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-application";
     tag = version;
-    hash = "sha256-rKeEi9z5eQfjn0Q4FR6CVIz9YDS7Ejg4cqcor5wtz0s=";
+    hash = "sha256-Jg+8C16qCr8HGUGtTi3eDhEFhoiR+0EFjLaUtPvXCW8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.2.0" "setuptools"
+      --replace-fail "setuptools==75.8.0" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];
@@ -107,6 +105,10 @@ buildPythonPackage rec {
       "test_grammar_aware_part_error"
       "test_grammar_aware_part_error[part2]"
       "test_grammar_aware_project_error[project0]"
+      # Temp fix - asserts fail against error messages which have changed
+      # slightly in a later revision of craft-platforms. No functional error.
+      "test_platform_invalid_arch"
+      "test_platform_invalid_build_arch"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64

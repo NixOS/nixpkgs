@@ -269,6 +269,12 @@ rec {
          Type: AttrSet
        */
       derivationArgs ? { },
+      /*
+         Whether to inherit the current `$PATH` in the script.
+
+         Type: Bool
+      */
+      inheritPath ? true
     }:
     writeTextFile {
       inherit name meta passthru derivationArgs;
@@ -289,7 +295,7 @@ rec {
             runtimeEnv))
       + lib.optionalString (runtimeInputs != [ ]) ''
 
-        export PATH="${lib.makeBinPath runtimeInputs}:$PATH"
+        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
       '' + ''
 
         ${text}

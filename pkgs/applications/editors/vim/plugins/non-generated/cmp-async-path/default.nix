@@ -7,7 +7,7 @@
 }:
 vimUtils.buildVimPlugin {
   pname = "cmp-async-path";
-  version = "unstable-2024-10-21";
+  version = "0-unstable-2024-10-21";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -19,7 +19,9 @@ vimUtils.buildVimPlugin {
 
   checkInputs = [ vimPlugins.nvim-cmp ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Nvim-cmp source for filesystem paths with async processing";

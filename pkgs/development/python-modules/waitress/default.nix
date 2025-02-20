@@ -33,6 +33,9 @@ buildPythonPackage rec {
     "test_service_port"
   ];
 
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://github.com/Pylons/waitress";
     description = "Waitress WSGI server";

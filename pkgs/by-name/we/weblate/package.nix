@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  gettext,
   pango,
   harfbuzz,
   librsvg,
@@ -26,7 +27,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.9.2";
+  version = "5.10";
 
   pyproject = true;
 
@@ -39,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-/fsNQvIIgcTPZHHIwr8sruEJpPJTmXbevoxy1GPmOOU=";
+    hash = "sha256-DRodQb4IvLfpL+TzLigtiKTvXvGYbpa9Ej4+fCHSGmo=";
   };
 
   patches = [
@@ -48,6 +49,8 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python.pkgs; [ setuptools ];
+
+  nativeBuildInputs = [ gettext ];
 
   # Build static files into a separate output
   postBuild =
@@ -64,13 +67,10 @@ python.pkgs.buildPythonApplication rec {
       mkdir $static
       cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
       export DJANGO_SETTINGS_MODULE="weblate.settings_static"
+      ${python.pythonOnBuildForHost.interpreter} manage.py compilemessages
       ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --no-input
       ${python.pythonOnBuildForHost.interpreter} manage.py compress
     '';
-
-  pythonRelaxDeps = [
-    "rapidfuzz"
-  ];
 
   dependencies =
     with python.pkgs;
@@ -99,14 +99,16 @@ python.pkgs.buildPythonApplication rec {
       django-otp
       django-otp-webauthn
       django
+      djangorestframework-csv
       djangorestframework
+      docutils
       drf-spectacular
+      drf-standardized-errors
       filelock
       fluent-syntax
       gitpython
       hiredis
       html2text
-      httpx
       iniparse
       jsonschema
       lxml
@@ -143,7 +145,8 @@ python.pkgs.buildPythonApplication rec {
     ++ django.optional-dependencies.argon2
     ++ python-redis-lock.optional-dependencies.django
     ++ celery.optional-dependencies.redis
-    ++ drf-spectacular.optional-dependencies.sidecar;
+    ++ drf-spectacular.optional-dependencies.sidecar
+    ++ drf-standardized-errors.optional-dependencies.openapi;
 
   optional-dependencies = {
     postgres = with python.pkgs; [ psycopg ];

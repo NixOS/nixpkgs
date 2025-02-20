@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
-  version = "5.13.0";
+  version = "5.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_eventhub";
     inherit version;
-    hash = "sha256-rqM6CrT4ycIhLkVcRRi+mobAAVymMBms/Fd4qxkHjPA=";
+    hash = "sha256-UTCICIQQGpalfLfFs3xksECYd0KdVMDVcDeLTwt7bTU=";
   };
 
   nativeBuildInputs = [ setuptools ];

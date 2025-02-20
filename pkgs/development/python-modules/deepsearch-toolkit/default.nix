@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "deepsearch-toolkit";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "deepsearch-toolkit";
     tag = "v${version}";
-    hash = "sha256-ObVil+0d5RIYwkz7OHJIziD3gANh9ZGN+pY9pqhY+Yg=";
+    hash = "sha256-nrz9pvyA5gPIaKt6CsJOB9cLy3sXiWW5e1Rk4vtNIY8=";
   };
 
   build-system = [

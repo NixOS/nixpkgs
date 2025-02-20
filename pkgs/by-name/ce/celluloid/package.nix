@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/celluloid-player/celluloid/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "celluloid";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

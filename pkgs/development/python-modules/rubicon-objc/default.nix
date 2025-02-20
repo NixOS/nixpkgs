@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  darwin,
   fetchFromGitHub,
   pythonOlder,
   setuptools,
   setuptools-scm,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "beeware";
@@ -25,8 +24,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==69.5.1" "setuptools" \
-      --replace-fail "setuptools_scm==8.0.4" "setuptools_scm"
+      --replace-fail "setuptools==75.7.0" "setuptools" \
+      --replace-fail "setuptools_scm==8.1.0" "setuptools_scm"
   '';
 
   build-system = [
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     make -C tests/objc
   '';
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  checkInputs = [ darwin.apple_sdk.frameworks.Foundation ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rubicon.objc" ];
 

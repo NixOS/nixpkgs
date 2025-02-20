@@ -1,12 +1,37 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   flax,
   tomlq,
-  rustPlatform,
-  pytestCheckHook,
+  python,
+
+  # build-system
+  meson-python,
+  nanobind,
+  ninja,
+
+  # nativeBuildInputs
+  cmake,
+  pkg-config,
 }:
 
+let
+  nanobind-wrapper = stdenv.mkDerivation {
+    pname = "nanobind-wrapper";
+    inherit (nanobind) version;
+
+    src = ./nanobind-wrapper;
+
+    nativeBuildInputs = [
+      cmake
+    ];
+
+    buildFlags = [ "nanobind-static" ];
+
+    env.CMAKE_PREFIX_PATH = "${nanobind}/${python.sitePackages}/nanobind";
+  };
+in
 buildPythonPackage rec {
   pname = "flaxlib";
   version = "0.0.1-a1";
@@ -14,7 +39,7 @@ buildPythonPackage rec {
 
   inherit (flax) src;
 
-  sourceRoot = "${src.name}/flaxlib";
+  sourceRoot = "${src.name}/flaxlib_src";
 
   postPatch = ''
     expected_version="$version"
@@ -28,33 +53,20 @@ buildPythonPackage rec {
     fi
   '';
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
-      pname
-      version
-      src
-      sourceRoot
-      ;
-    hash = "sha256-CN/ZbDxdCQPEuLfxPh/m+JtlFDkerO8aWgAaUwhixjQ=";
-  };
+  dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [
-    rustPlatform.maturinBuildHook
-    rustPlatform.cargoSetupHook
+  build-system = [
+    meson-python
+    nanobind
+    ninja
   ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [ nanobind-wrapper ];
 
   pythonImportsCheck = [ "flaxlib" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  env = {
-    # https://github.com/google/flax/issues/4491
-    # Upstream should update Cargo.lock
-    # Enabling `PYO3_USE_ABI3_FORWARD_COMPATIBILITY` allows us to temporarily avoid the issue
-    PYO3_USE_ABI3_FORWARD_COMPATIBILITY = true;
-  };
 
   # This package does not have tests (yet ?)
   doCheck = false;

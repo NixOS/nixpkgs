@@ -6,9 +6,10 @@
   gflags,
   gtest,
   perl,
+  pkgsBuildHost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "glog";
   version = "0.7.1";
 
@@ -18,6 +19,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
+
+  postPatch = lib.optionalString finalAttrs.doCheck ''
+    substituteInPlace src/logging_unittest.cc \
+      --replace-warn "/usr/bin/true" "${pkgsBuildHost.coreutils}/bin/true"
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -67,8 +73,8 @@ stdenv.mkDerivation rec {
         lib.optionals stdenv.hostPlatform.isDarwin [
           "mock-log"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-          "logging" # works around segfaults on aarch64-darwin for now
+        ++ [
+          "logging" # works around segfaults for now
         ];
       excludedTestsRegex = lib.optionalString (
         excludedTests != [ ]
@@ -90,4 +96,4 @@ stdenv.mkDerivation rec {
       r-burns
     ];
   };
-}
+})

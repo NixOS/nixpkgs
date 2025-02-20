@@ -35,7 +35,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     mainProgram = "py65mon";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       tomasajt
     ];
   };

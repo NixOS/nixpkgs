@@ -29,16 +29,16 @@ let
   # When upgrading, you can get these hashes from jaxlib/prefetch.sh. See
   # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
 
-  # upstream does not distribute jax-cuda12-pjrt 0.4.38 binaries for aarch64-linux
+  # upstream does not distribute jax-cuda12-pjrt binaries for aarch64-linux
   srcs = {
     "x86_64-linux" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_x86_64.whl";
       hash = "sha256-0jgzwbiF2WwnZAAOlQUvK1gnx31JLqaPZ+kDoTJlbbs=";
     };
-    "aarch64-linux" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_aarch64.whl";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-    };
+    # "aarch64-linux" = fetchurl {
+    #   url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_aarch64.whl";
+    #   hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    # };
   };
 in
 buildPythonPackage {

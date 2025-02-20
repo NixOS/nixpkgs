@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
     ./dont-call-setgroups-unconditionally.patch
   ];
 
+  configureFlags = [
+    # don't install examples due to broken symlinks
+    "--examplesdir=.."
+  ];
+
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: ...-libprom-0.1.1/include/prom_collector_registry.h:37: multiple definition of

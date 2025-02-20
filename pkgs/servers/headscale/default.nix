@@ -8,16 +8,16 @@
 }:
 buildGoModule rec {
   pname = "headscale";
-  version = "0.24.3";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    hash = "sha256-G1MGu/AVFhiBOfhmhdH9+kayPybtsQsvj73omtZVfBU=";
+    hash = "sha256-5CwaPaGh0yvHwmSpbsvc4ajkW9RbYVMilNTIJxeYcIs=";
   };
 
-  vendorHash = "sha256-SBfeixT8DQOrK2SWmHHSOBtzRdSZs+pwomHpw6Jd+qc=";
+  vendorHash = "sha256-ZQj2A0GdLhHc7JLW7qgpGBveXXNWg9ueSG47OZQQXEw=";
 
   subPackages = [ "cmd/headscale" ];
 

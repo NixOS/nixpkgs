@@ -1,18 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
   torch,
-  which,
 
   # dependencies
   cloudpickle,
   numpy,
   orjson,
+  packaging,
 
   # checks
   h5py,
@@ -23,28 +22,26 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.6.2";
+  version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${version}";
-    hash = "sha256-dsbpk0O5Gs5WUfi3ENqHdpy4rWoBjm1i44+ycp0jDJ0=";
+    hash = "sha256-tUm1uV9k/IDlR3y/e1aIlU1bjDeh2+zdJdxu8Z9x3es=";
   };
 
   build-system = [
     setuptools
     torch
-    which
   ];
 
   dependencies = [
     cloudpickle
     numpy
     orjson
+    packaging
     torch
   ];
 
@@ -62,6 +59,10 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
+      "test_tensorclass_instance_methods"
+      "test_tensorclass_stub_methods"
+
       # Hangs forever
       "test_copy_onto"
 
@@ -86,14 +87,15 @@ buildPythonPackage rec {
       "test_isend"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
-    # OpenMP support not found.
-    "test/test_compile.py"
-
-    # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    "test/test_distributed.py"
-  ];
+  disabledTestPaths =
+    [
+      # torch._dynamo.exc.Unsupported: Graph break due to unsupported builtin None.ReferenceType.__new__.
+      "test/test_compile.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      "test/test_distributed.py"
+    ];
 
   meta = {
     description = "Pytorch dedicated tensor container";
