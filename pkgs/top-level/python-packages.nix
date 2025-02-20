@@ -930,6 +930,8 @@ self: super: with self; {
 
   asyncarve = callPackage ../development/python-modules/asyncarve { };
 
+  asyncer = callPackage ../development/python-modules/asyncer { };
+
   async-cache = callPackage ../development/python-modules/async-cache { };
 
   async-dns = callPackage ../development/python-modules/async-dns { };
