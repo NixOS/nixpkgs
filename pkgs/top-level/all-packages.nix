@@ -11448,8 +11448,6 @@ with pkgs;
     tbb = tbb_2021_11;
   };
 
-  postfix = callPackage ../servers/mail/postfix { };
-
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
 
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
