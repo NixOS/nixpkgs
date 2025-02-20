@@ -2,6 +2,7 @@
   lib,
   apple-sdk,
   mkAppleDerivation,
+  darwin,
   ncurses,
   pkg-config,
   stdenvNoCC,
@@ -51,7 +52,7 @@ mkAppleDerivation {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    apple-sdk.privateFrameworksHook
+    darwin.CoreSymbolication-headers
     ncurses
   ];
 
