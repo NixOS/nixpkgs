@@ -26,7 +26,13 @@ let
       {
         otherSplices = generateSplicesForMkScope "nixComponents";
         f = import ./packaging/components.nix {
-          inherit lib officialRelease pkgs src stdenv;
+          inherit
+            lib
+            officialRelease
+            pkgs
+            src
+            stdenv
+            ;
         };
       };
 
