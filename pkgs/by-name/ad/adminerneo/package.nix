@@ -9,12 +9,12 @@
   plugins ? [ ],
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "adminer-pematon";
+  pname = "adminerneo";
   version = "4.13";
 
   src = fetchFromGitHub {
-    owner = "pematon";
-    repo = "adminer";
+    owner = "adminerneo";
+    repo = "adminerneo";
     tag = "v${finalAttrs.version}";
     hash = "sha256-7kSQl4Ch9S+680FZBsO6ynsyF1GCkT8BPpBONmeJF9U=";
   };
@@ -61,8 +61,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Database management in a single PHP file (Pematon fork)";
-    homepage = "https://github.com/pematon/adminer";
+    description = "Database management in a single PHP file (fork of Adminer)";
+    homepage = "https://github.com/adminerneo/adminerneo";
     license = with lib.licenses; [
       asl20
       gpl2Only
