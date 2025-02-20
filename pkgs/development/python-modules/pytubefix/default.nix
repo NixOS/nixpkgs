@@ -24,10 +24,12 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # require network access
+    "tests/contrib/test_playlist.py"
     "tests/test_captions.py"
     "tests/test_cli.py"
     "tests/test_exceptions.py"
     "tests/test_extract.py"
+    "tests/test_helpers.py"
     "tests/test_main.py"
     "tests/test_query.py"
     "tests/test_streams.py"
