@@ -123,7 +123,7 @@ stdenv.mkDerivation {
     description = "Foxglove studio";
     homepage = "https://foxglove.dev/";
     license = licenses.mpl20;
-    maintainers = with lib.maintainers; [ "Chun-Yu Hou" ];
+    maintainers = with lib.maintainers; [ jerry8137 ];
     platforms = [ "x86_64-linux" ];
   };
 }
