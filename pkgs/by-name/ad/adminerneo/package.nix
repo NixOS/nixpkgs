@@ -10,13 +10,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminerneo";
-  version = "4.13";
+  version = "4.14";
 
   src = fetchFromGitHub {
     owner = "adminerneo";
     repo = "adminerneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7kSQl4Ch9S+680FZBsO6ynsyF1GCkT8BPpBONmeJF9U=";
+    hash = "sha256-GxkITh6Hh7E6qKEsCYs8M1xLeCbdI1WQqM1Zjdb6BVE=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir $out
-    cp temp/adminer-${finalAttrs.version}.php $out/adminer.php
+    cp export/adminer-${finalAttrs.version}.php $out/adminer.php
     cp ${./index.php} $out/index.php
 
     ${lib.optionalString (theme != null) ''
