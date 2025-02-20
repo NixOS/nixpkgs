@@ -30,9 +30,6 @@ let
   cxxabiName = "lib${if cxxabi == null then "cxxabi" else cxxabi.libName}";
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
-  # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
-  useLLVM = stdenv.hostPlatform.useLLVM or false;
-
   src' = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out/llvm"
@@ -54,7 +51,7 @@ let
 
   cxxabiCMakeFlags = lib.optionals (lib.versionAtLeast release_version "18") [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
-  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) (if lib.versionAtLeast release_version "18" then [
+  ] ++ lib.optionals (stdenv.hostPlatform.unwinderlib == "libunwind" && !stdenv.hostPlatform.isWasm) (if lib.versionAtLeast release_version "18" then [
     "-DLIBCXXABI_ADDITIONAL_LIBRARIES=unwind"
     "-DLIBCXXABI_USE_COMPILER_RT=ON"
   ] else [
@@ -80,15 +77,15 @@ let
     "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${lib.getDev cxxabi}/include"
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) [
     "-DLIBCXX_HAS_MUSL_LIBC=1"
-  ] ++ lib.optionals (lib.versionAtLeast release_version "18" && !useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.unwinderlib == "libgcc_s" && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic) [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=gcc_s"
   ] ++ lib.optionals (lib.versionAtLeast release_version "18" && stdenv.hostPlatform.isFreeBSD) [
     # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
     # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
     "-DLIBCXXABI_USE_LLVM_UNWINDER=OFF"
-  ] ++ lib.optionals useLLVM [
+  ] ++ lib.optionals (stdenv.hostPlatform.rtlib == "compiler-rt" && !stdenv.hostPlatform.isDarwin) [
     "-DLIBCXX_USE_COMPILER_RT=ON"
-  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16") [
+  ] ++ lib.optionals (stdenv.hostPlatform.unwinderlib == "libunwind" && !stdenv.hostPlatform.isFreeBSD && lib.versionAtLeast release_version "16") [
     "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXX_ENABLE_THREADS=OFF"
@@ -135,7 +132,7 @@ stdenv.mkDerivation (rec {
     ++ lib.optional (cxxabi != null) lndir;
 
   buildInputs = [ cxxabi ]
-    ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [ libunwind ];
+    ++ lib.optionals (stdenv.hostPlatform.unwinderlib == "libunwind" && !stdenv.hostPlatform.isWasm && !stdenv.hostPlatform.isFreeBSD) [ libunwind ];
 
   # libc++.so is a linker script which expands to multiple libraries,
   # libc++.so.1 and libc++abi.so or the external cxxabi. ld-wrapper doesn't

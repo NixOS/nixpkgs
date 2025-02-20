@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       # order to support apps with 32bit sound running on x86_64 architecture.
       ./alsa-plugin-conf-multilib.patch
     ]
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false)
+    ++ lib.optional (stdenv.hostPlatform.linker == "lld")
       # Fixes version script under LLVM, should be fixed in the next update.
       # Check if "pkgsLLVM.alsa-lib" builds on next version bump and remove this
       # if it succeeds.

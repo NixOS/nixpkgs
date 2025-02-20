@@ -207,6 +207,11 @@ let
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
+        cc = "clang";
+        bintools = "llvm";
+        cxxlib = "libcxx";
+        unwinderlib = "libunwind";
+        rtlib = "compiler-rt";
         linker = "lld";
       };
     };
@@ -235,6 +240,11 @@ let
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
         useArocc = true;
+        cc = "arocc";
+        bintools = "llvm";
+        cxxlib = "libcxx";
+        unwinderlib = "libunwind";
+        rtlib = "compiler-rt";
         linker = "lld";
       };
     };
@@ -250,6 +260,11 @@ let
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
         useZig = true;
+        cc = "zig";
+        bintools = "llvm";
+        cxxlib = "libcxx";
+        unwinderlib = "libunwind";
+        rtlib = "compiler-rt";
         linker = "lld";
       };
     };

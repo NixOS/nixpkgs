@@ -24,7 +24,7 @@
   libdrm,
   libtirpc,
   # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
-  withLibunwind ? !(stdenv.hostPlatform.useLLVM or false),
+  withLibunwind ? stdenv.hostPlatform.unwinderlib == "libgcc_s",
   libunwind,
   libxcb,
   libxkbfile,

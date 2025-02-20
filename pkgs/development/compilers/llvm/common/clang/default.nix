@@ -198,7 +198,7 @@ let
     ninjaFlags = [ "docs-clang-man" ];
   }))
   // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM) {
+    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && stdenv.hostPlatform.cc != "clang") {
       # The following warning is triggered with (at least) gcc >=
       # 12, but appears to occur only for cross compiles.
       NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";

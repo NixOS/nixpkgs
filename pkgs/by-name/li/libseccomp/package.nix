@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     util-linuxMinimal
     which
   ];
-  doCheck = !(stdenv.targetPlatform.useLLVM or false);
+  doCheck = stdenv.targetPlatform.cc != "clang";
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";

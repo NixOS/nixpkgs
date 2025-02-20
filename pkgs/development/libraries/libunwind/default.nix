@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rCFBHs6rCSnp5FEwbUR5veNNTqSQpFblAv8ebSPX0qE=";
   };
 
-  patches = lib.optional (stdenv.targetPlatform.useLLVM or false) (fetchpatch {
+  patches = lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) (fetchpatch {
     url = "https://github.com/libunwind/libunwind/pull/770/commits/a69d0f14c9e6c46e82ba6e02fcdedb2eb63b7f7f.patch";
     hash = "sha256-9oBZimCXonNN++jJs3emp9w+q1aj3eNzvSKPgh92itA=";
   });

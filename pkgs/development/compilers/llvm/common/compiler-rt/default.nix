@@ -33,7 +33,6 @@
 
 let
 
-  useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
   # TODO: Make this account for GCC having libstdcxx, which will help
@@ -92,22 +91,22 @@ stdenv.mkDerivation {
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
     "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
-  ] ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
+  ] ++ lib.optionals (stdenv.hostPlatform.cxxlib == "libcxx" && haveLibc && stdenv.cc.libcxx == libcxx && !stdenv.hostPlatform.isDarwin) [
     "-DSANITIZER_CXX_ABI=libcxxabi"
     "-DSANITIZER_CXX_ABI_LIBNAME=libcxxabi"
     "-DCOMPILER_RT_USE_BUILTINS_LIBRARY=ON"
   ] ++ lib.optionals ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13")) [
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-  ] ++ lib.optionals (useLLVM && haveLibc) [
+  ] ++ lib.optionals (stdenv.hostPlatform.rtlib == "compiler-rt" && haveLibc && !stdenv.hostPlatform.isDarwin) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=ON"
   ] ++ lib.optionals (noSanitizers) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
-  ] ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
+  ] ++ lib.optionals ((stdenv.hostPlatform.rtlib == "compiler-rt" && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
-  ] ++ lib.optionals (useLLVM && haveLibc) [
+  ] ++ lib.optionals (stdenv.hostPlatform.rtlib == "compiler-rt" && haveLibc && !stdenv.hostPlatform.isDarwin) [
     "-DCOMPILER_RT_BUILD_PROFILE=ON"
   ] ++ lib.optionals (!haveLibc || bareMetal) [
      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
@@ -119,7 +118,7 @@ stdenv.mkDerivation {
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
   ] ++ lib.optionals (!haveLibc) [
     "-DCMAKE_C_FLAGS=-nodefaultlibs"
-  ] ++ lib.optionals (useLLVM) [
+  ] ++ lib.optionals (stdenv.hostPlatform.rtlib == "compiler-rt" && !stdenv.hostPlatform.isDarwin) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
@@ -191,7 +190,7 @@ stdenv.mkDerivation {
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
-  '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
+  '' + lib.optionalString (stdenv.hostPlatform.rtlib == "compiler-rt" && stdenv.hostPlatform.isLinux) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:
