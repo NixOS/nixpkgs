@@ -50,5 +50,20 @@ buildNodejs {
       stripLen = 1;
       hash = "sha256-6y3aEqxNC4iTQEv1oewodJrhOHxjp5xZMq1P1QL94Rg=";
     })
+
+    # Backport fixes for OpenSSL 3.4
+    # FIXME: remove when merged upstream
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/e799722f1a0bf43fe4d47e4824b9524363fe0d62.patch";
+      hash = "sha256-nz95vmBx+zFPdOR9kg0HdgiAlqgTeXistOP/NLF3qW0=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/e6a988dbdee47b3412094a90d35d6bd8207c750d.patch";
+      hash = "sha256-UJ8alA54PrhHXK9u120HvBgm0scuEDBwCRuuVYVa/Ng=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/7895b8eae9e4f2919028fe81e38790af07b4cc92.patch";
+      hash = "sha256-S2PmFw/e0/DY71UJb2RYXu9Qft/rBFC50K0Ex7v/9QE=";
+    })
   ] ++ gypPatches;
 }

@@ -109,6 +109,10 @@ buildPythonPackage rec {
             "MulticastTests.test_multicast"
             "MulticastTests.test_multiListen"
           ];
+          "src/twisted/trial/test/test_script.py" = [
+            # Fails in LXC containers with less than all cores availaible (limits.cpu)
+            "AutoJobsTests.test_cpuCount"
+          ];
           "src/twisted/internet/test/test_unix.py" = [
             # flaky?
             "UNIXTestsBuilder.test_sendFileDescriptorTriggersPauseProducing"

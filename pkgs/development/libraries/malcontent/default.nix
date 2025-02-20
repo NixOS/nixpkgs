@@ -101,6 +101,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    inherit (polkit.meta) platforms badPlatforms;
   };
 }

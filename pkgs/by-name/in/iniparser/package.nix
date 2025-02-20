@@ -27,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./remove-fetchcontent-usage.patch {
       # Do not let cmake's fetchContent download unity
       unitySrc = symlinkJoin {
-        name = "unity-with-iniparser-config";
         paths = [
           (fetchFromGitHub {
             owner = "throwtheswitch";

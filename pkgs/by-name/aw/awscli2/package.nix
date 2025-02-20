@@ -147,6 +147,9 @@ py.pkgs.buildPythonApplication rec {
     rm $out/nix-support/propagated-build-inputs
   '';
 
+  # tests/unit/customizations/sso/test_utils.py uses sockets
+  __darwinAllowLocalNetworking = true;
+
   pytestFlagsArray = [
     "-Wignore::DeprecationWarning"
   ];

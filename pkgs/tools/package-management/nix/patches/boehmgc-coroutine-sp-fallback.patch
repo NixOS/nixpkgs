@@ -2,7 +2,7 @@ diff --git a/pthread_stop_world.c b/pthread_stop_world.c
 index 2b45489..0e6d8ef 100644
 --- a/pthread_stop_world.c
 +++ b/pthread_stop_world.c
-@@ -776,6 +776,8 @@ STATIC void GC_restart_handler(int sig)
+@@ -776,6 +776,8 @@
  /* world is stopped.  Should not fail if it isn't.                      */
  GC_INNER void GC_push_all_stacks(void)
  {
@@ -11,21 +11,26 @@ index 2b45489..0e6d8ef 100644
      GC_bool found_me = FALSE;
      size_t nthreads = 0;
      int i;
-@@ -868,6 +870,40 @@ GC_INNER void GC_push_all_stacks(void)
+@@ -868,6 +870,45 @@
              hi = p->altstack + p->altstack_size;
  #         endif
            /* FIXME: Need to scan the normal stack too, but how ? */
 +        } else {
-+          #ifdef HAVE_PTHREAD_ATTR_GET_NP
++          #if defined(HAVE_PTHREAD_ATTR_GET_NP)
 +          if (pthread_attr_init(&pattr) != 0) {
 +            ABORT("GC_push_all_stacks: pthread_attr_init failed!");
 +          }
 +          if (pthread_attr_get_np(p->id, &pattr) != 0) {
 +            ABORT("GC_push_all_stacks: pthread_attr_get_np failed!");
 +          }
-+          #else
++          #elif defined(HAVE_PTHREAD_GETATTR_NP)
 +          if (pthread_getattr_np(p->id, &pattr)) {
 +            ABORT("GC_push_all_stacks: pthread_getattr_np failed!");
++          }
++          #else
++          /* assume default */
++          if (pthread_attr_init(&pattr) != 0) {
++            ABORT("GC_push_all_stacks: pthread_attr_init failed!");
 +          }
 +          #endif
 +          if (pthread_attr_getstacksize(&pattr, &stack_limit)) {

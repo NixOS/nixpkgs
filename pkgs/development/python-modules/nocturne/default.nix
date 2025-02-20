@@ -9,7 +9,7 @@
   pybind11,
   pyvirtualdisplay,
   sfml,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -32,8 +32,7 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./dependencies.patch;
+    (replaceVars ./dependencies.patch {
       gtest_src = gtest.src;
     })
   ];
