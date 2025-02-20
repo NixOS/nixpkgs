@@ -835,7 +835,9 @@ rec {
       getSubOptions = type.getSubOptions;
       getSubModules = type.getSubModules;
       substSubModules = m: uniq (type.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = type; };
+      functor = elemTypeFunctor name { elemType = type; } // {
+        type = payload: types.unique { inherit message; } payload.elemType;
+      };
       nestedTypes.elemType = type;
     };
 
@@ -855,7 +857,9 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = (elemTypeFunctor name { inherit elemType; }) // {
+        type = payload: types.nullOr payload.elemType;
+      };
       nestedTypes.elemType = elemType;
     };
 
@@ -869,7 +873,9 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
-      functor = (defaultFunctor "functionTo") // { wrapped = elemType; };
+      functor = (elemTypeFunctor "functionTo" { inherit elemType; }) // {
+        type = payload: types.functionTo payload.elemType;
+      };
       nestedTypes.elemType = elemType;
     };
 
@@ -1143,7 +1149,9 @@ rec {
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
         typeMerge = t: null;
-        functor = (defaultFunctor name) // { wrapped = finalType; };
+        functor = elemTypeFunctor name { elemType = finalType; } // {
+          type = payload: types.coercedTo coercedType coerceFunc payload.finalType;
+        };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;
       };
