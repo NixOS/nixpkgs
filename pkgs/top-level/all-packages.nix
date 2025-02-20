@@ -11467,8 +11467,6 @@ with pkgs;
     tbb = tbb_2021_11;
   };
 
-  pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
-
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
