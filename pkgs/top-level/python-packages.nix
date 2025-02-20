@@ -994,6 +994,8 @@ self: super: with self; {
 
   asynccmd = callPackage ../development/python-modules/asynccmd { };
 
+  asyncer = callPackage ../development/python-modules/asyncer { };
+
   asyncinotify = callPackage ../development/python-modules/asyncinotify { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
