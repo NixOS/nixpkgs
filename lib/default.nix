@@ -116,7 +116,7 @@ let
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
-      mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
+      mapAttrs' mapAttrsToList concatMapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput getFirstOutput
