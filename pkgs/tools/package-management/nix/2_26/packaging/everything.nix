@@ -190,7 +190,7 @@ makeOutputs {
       This particular attribute is _not_ used for that purpose, but it has the same value, and some other expressions expect it to be present.
     */
     inherit (drv) system;
-    tests = drv.tests or {};
+    tests = drv.tests or { };
     src = patchedSrc;
   };
   outputs = {
