@@ -157,8 +157,8 @@ mixRelease rec {
     updateScript = writeShellScriptBin "update.sh" ''
       set -eou pipefail
 
-      ${mix2nix}/bin/mix2nix '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
-      ${nixfmt-rfc-style}/bin/nixfmt pkgs/servers/mobilizon/mix.nix
+      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
+      ${lib.getExe nixfmt-rfc-style} pkgs/servers/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
   };
