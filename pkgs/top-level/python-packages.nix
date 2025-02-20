@@ -11013,6 +11013,8 @@ self: super: with self; {
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
 
+  planetary-computer = callPackage ../development/python-modules/planetary-computer { };
+
   plantuml = callPackage ../development/python-modules/plantuml { };
 
   plantuml-markdown = callPackage ../development/python-modules/plantuml-markdown {
