@@ -11,7 +11,7 @@
 , pkexecPath ? "pkexec"
 , pkg-config
 , yaml-cpp
-, nvramtool
+, coreboot-utils
 , systemd
 , qtbase
 , qtsvg
@@ -36,10 +36,10 @@ mkDerivation {
     substituteInPlace src/application/*.cpp \
       --replace '/usr/bin/pkexec' '${pkexecPath}' \
       --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl' \
-      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+      --replace '/usr/sbin/nvramtool' '${lib.getExe coreboot-utils.nvramtool}'
 
     substituteInPlace src/resources/org.coreboot.nvramtool.policy \
-      --replace '/usr/sbin/nvramtool' '${lib.getExe nvramtool}'
+      --replace '/usr/sbin/nvramtool' '${lib.getExe coreboot-utils.nvramtool}'
 
     substituteInPlace src/resources/org.coreboot.reboot.policy \
       --replace '/usr/sbin/reboot' '${lib.getBin systemd}/reboot'

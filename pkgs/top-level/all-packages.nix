@@ -2097,19 +2097,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  inherit (callPackages ../tools/misc/coreboot-utils { })
-    msrtool
-    cbmem
-    ifdtool
-    intelmetool
-    cbfstool
-    nvramtool
-    superiotool
-    ectool
-    inteltool
-    amdfwtool
-    acpidump-all
-    coreboot-utils;
+  coreboot-utils = callPackage ../tools/misc/coreboot-utils { };
 
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
