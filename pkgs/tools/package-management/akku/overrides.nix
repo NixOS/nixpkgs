@@ -25,6 +25,7 @@ in
         tables-test.ikarus.sps
         lazy.sps
         pipeline-operators.sps
+        os-environment-variables.sps
         '
       '';
     })
@@ -45,7 +46,9 @@ in
       src = akku.src;
     })
     # not a tar archive
-    (pkg: old: removeAttrs old [ "unpackPhase" ])
+    (pkg: old: {
+      unpackPhase = null;
+    })
   ];
 
   machine-code = pkg: old: {

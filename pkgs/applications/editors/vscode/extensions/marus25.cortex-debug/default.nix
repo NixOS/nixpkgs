@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cortex-debug";
     publisher = "marus25";
-    version = "1.6.10";
-    hash = "sha256-6b3JDkX6Xd91VE1h7gYyeukxLsBkn/nNzDQgBm0axRA=";
+    version = "1.12.1";
+    hash = "sha256-ioK6gwtkaAcfxn11lqpwhrpILSfft/byeEqoEtJIfM0=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/marus25.cortex-debug/changelog";

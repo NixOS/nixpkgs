@@ -186,6 +186,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
     license = licenses.agpl3Plus;
-    maintainers = teams.matrix.members;
+    maintainers = with lib.maintainers; teams.matrix.members ++ [ sumnerevans ];
   };
 }

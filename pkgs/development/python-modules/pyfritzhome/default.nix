@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
-  version = "0.6.14";
+  version = "0.6.15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "hthiery";
     repo = "python-fritzhome";
     tag = version;
-    hash = "sha256-49Ap4SSeEMlqOnzd1/oyQ1wKwFVxsC+apx+FVCWqNVI=";
+    hash = "sha256-UVn+RJRLlLPhhnuJpWv5b15TtY0EkwccE3aj4f/fP6Q=";
   };
 
   build-system = [ setuptools ];

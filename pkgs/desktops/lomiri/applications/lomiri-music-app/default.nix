@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.vm = nixosTests.lomiri-music-app;
-    updateScript = gitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {

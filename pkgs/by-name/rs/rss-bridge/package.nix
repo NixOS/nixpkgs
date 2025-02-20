@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      basic-functionality = nixosTests.rss-bridge;
+      inherit (nixosTests.rss-bridge) caddy nginx;
     };
     updateScript = nix-update-script { };
   };

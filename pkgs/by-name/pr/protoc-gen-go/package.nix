@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "protoc-gen-go";
-  version = "1.36.4";
+  version = "1.36.5";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-go";
     rev = "v${version}";
-    hash = "sha256-lDhg72i/5J4PMsdMPBthEpV3gFqr+ds3O4+rj6AZoMs=";
+    hash = "sha256-fotgvzHRRCDWRyGM9nP+BFhE0vN5/0jQlb5moOhDAWc=";
   };
 
   vendorHash = "sha256-nGI/Bd6eMEoY0sBwWEtyhFowHVvwLKjbT4yfzFz6Z3E=";

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       was designed to address the lack of good bars for wayland.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

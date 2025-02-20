@@ -2,35 +2,40 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
   # dependencies
   jsonref,
   jsonschema,
+  latex2mathml,
   pandas,
   pillow,
   pydantic,
-  tabulate,
   pyyaml,
   semchunk,
-  typing-extensions,
+  tabulate,
   transformers,
   typer,
-  latex2mathml,
+  typing-extensions,
+
+  # tests
   jsondiff,
-  requests,
   pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.17.2";
+  version = "2.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-JO6WI2juehO825QOO0FkD58OigEoLGOZAnPBOD4b1tI=";
+    hash = "sha256-SBPk9DF9M1rY6YOqO1FOfnAcaGLQrJnMaBUG1JLWYFU=";
   };
 
   build-system = [
@@ -38,18 +43,18 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    jsonschema
-    pydantic
     jsonref
-    tabulate
+    jsonschema
+    latex2mathml
     pandas
     pillow
+    pydantic
     pyyaml
-    typing-extensions
-    transformers
     semchunk
+    tabulate
+    transformers
     typer
-    latex2mathml
+    typing-extensions
   ];
 
   pythonRelaxDeps = [
@@ -73,7 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/DS4SD/docling-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/DS4SD/docling-core/blob/v${version}/CHANGELOG.md";
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/DS4SD/docling-core";
     license = lib.licenses.mit;

@@ -770,7 +770,6 @@ with lib.maintainers;
       mguentner
       ralith
       dandellion
-      sumnerevans
       nickcao
       teutat3s
     ];

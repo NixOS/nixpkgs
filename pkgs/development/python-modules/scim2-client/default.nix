@@ -12,6 +12,7 @@
   scim2-server,
   httpx,
   werkzeug,
+  cacert,
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     pytest-asyncio
     scim2-server
     werkzeug
+    cacert
   ] ++ optional-dependencies.httpx;
 
   # Werkzeug returns 500, didn't deem it worth it to investigate

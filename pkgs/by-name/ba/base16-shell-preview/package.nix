@@ -26,6 +26,6 @@ python3Packages.buildPythonApplication {
     description = "Browse and preview Base16 Shell themes in your terminal";
     mainProgram = "base16-shell-preview";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

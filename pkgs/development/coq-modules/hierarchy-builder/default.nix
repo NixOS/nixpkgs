@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, coq-elpi, version ? null }:
+{ lib, mkCoqDerivation, coq, stdlib, coq-elpi, version ? null }:
 
 let hb = mkCoqDerivation {
   pname = "hierarchy-builder";
@@ -48,4 +48,7 @@ hb.overrideAttrs (o:
    { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
    else
    { installFlags = [ "VFILES=structures.v" ] ++ o.installFlags; })
+  //
+  lib.optionalAttrs (lib.versions.isLe "1.8.1" o.version)
+    { propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ]; }
 )

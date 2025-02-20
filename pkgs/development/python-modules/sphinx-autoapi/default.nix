@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-EOrbNs1IAeQbdrmOcNaBx2mxN/ec9IvjKTcOr/xR3YA=";
+    hash = "sha256-GLIImHO6exBJBhvIMvyv8AyX+01QheIDwOj9Lhc83a8=";
   };
 
   build-system = [ flit-core ];
@@ -60,7 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
-    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/readthedocs/sphinx-autoapi/blob/${src.tag}/CHANGELOG.rst";
     description = "Provides 'autodoc' style documentation";
     longDescription = ''
       Sphinx AutoAPI provides 'autodoc' style documentation for

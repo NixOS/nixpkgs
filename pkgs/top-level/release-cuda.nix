@@ -117,8 +117,6 @@ let
       xgboost = linux;
 
       python3Packages = {
-        boxx = linux;
-        bpycv = linux;
         catboost = linux;
         cupy = linux;
         faiss = linux;

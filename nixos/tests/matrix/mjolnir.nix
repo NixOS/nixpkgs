@@ -30,8 +30,8 @@ import ../make-test-python.nix (
   in
   {
     name = "mjolnir";
-    meta = with pkgs.lib; {
-      maintainers = teams.matrix.members;
+    meta = {
+      inherit (pkgs.mjolnir.meta) maintainers;
     };
 
     nodes = {

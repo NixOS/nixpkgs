@@ -86,6 +86,7 @@ in
             libusermetrics
             lomiri
             lomiri-calculator-app
+            lomiri-calendar-app
             lomiri-camera-app
             lomiri-clock-app
             lomiri-content-hub

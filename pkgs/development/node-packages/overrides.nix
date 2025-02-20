@@ -54,15 +54,6 @@ final: prev: {
     '';
   };
 
-  graphql-language-service-cli = prev.graphql-language-service-cli.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/graphql-lsp" \
-        --prefix NODE_PATH : ${final.graphql}/lib/node_modules
-    '';
-  };
-
-
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
       export npm_config_zmq_external=true

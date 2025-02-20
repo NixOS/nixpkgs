@@ -206,6 +206,14 @@ self: super: {
   # Too strict lower bound on lens, drop with LTS 23
   provide = doJailbreak super.provide;
   # Too strict bounds on quickcheck-instances/tasty-qickcheck, drop with LTS 23
+
+  # make gtk build with pango >= 1.56: https://github.com/gtk2hs/gtk2hs/issues/337
+  pango = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/pull/336/commits/ca7f98bd3e9462deac3661244dc76004a36fc8c3.patch";
+    hash = "sha256-fsZIwh4MY3Jnr3Gv4vZKl/LwUsJ+H+7KJ8unARQBifE=";
+    stripLen = 1;
+  }) super.pango;
+
   lawful-conversions = doJailbreak super.lawful-conversions;
 
   # Out of date test data: https://github.com/ocharles/weeder/issues/176

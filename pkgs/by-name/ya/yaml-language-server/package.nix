@@ -29,11 +29,9 @@ stdenv.mkDerivation rec {
     makeWrapper
     fixup-yarn-lock
     yarn
-  ];
-
-  buildInputs = [
     nodejs
   ];
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure

@@ -18,6 +18,14 @@ tectonic-unwrapped.override (old: {
           cargoHash = "sha256-mqhbIv5r/5EDRDfP2BymXv9se2NCKxzRGqNqwqbD9A0=";
           # binary has a different name, bundled tests won't work
           doCheck = false;
+          postInstall = ''
+            ${args.postInstall or ""}
+
+            # Remove the broken `nextonic` symlink
+            # It points to `tectonic`, which doesn't exist because the exe is
+            # renamed to texpresso-tonic
+            rm $out/bin/nextonic
+          '';
           meta.mainProgram = "texpresso-tonic";
         }
       );

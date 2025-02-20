@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.36.0";
+  version = "1.37.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_securitycenter";
     inherit version;
-    hash = "sha256-z5Q9ScyCLfNQlByW0xgBb9XtDLx/ZZngiwO8FUZFCAI=";
+    hash = "sha256-98EpC9bqtcgd/5k++gbH2fRLGEAUvW80l6tcWOdnrDU=";
   };
 
   build-system = [ setuptools ];

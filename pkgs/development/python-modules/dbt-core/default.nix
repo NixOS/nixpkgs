@@ -12,7 +12,6 @@
   jinja2,
   logbook,
   mashumaro,
-  minimal-snowplow-tracker,
   networkx,
   packaging,
   pathspec,
@@ -23,6 +22,7 @@
   pyyaml,
   requests,
   setuptools,
+  snowplow-tracker,
   sqlparse,
   typing-extensions,
 }:
@@ -72,7 +72,6 @@ buildPythonPackage rec {
     jinja2
     logbook
     mashumaro
-    minimal-snowplow-tracker
     networkx
     packaging
     pathspec
@@ -80,6 +79,7 @@ buildPythonPackage rec {
     pytz
     pyyaml
     requests
+    snowplow-tracker
     sqlparse
     typing-extensions
   ] ++ mashumaro.optional-dependencies.msgpack;

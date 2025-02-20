@@ -1,0 +1,26 @@
+From 25c7d5e53cc4576a6e6a0ba91fc5ff9f288cf626 Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Wed, 11 Dec 2024 17:18:06 +0100
+Subject: [PATCH] Use "account" supported metadata instead of eds metadata
+ "collection-account-id"
+
+---
+ src/qml/CalendarChoicePopup.qml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index 8fa1e4b2..02d2c717 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -155,7 +155,7 @@ Page {
+ 
+                             Account {
+                                 id: delegateAccount
+-                                objectHandle: calendarChoicePage.accountFromId(modelData.extendedMetaData("collection-account-id"))
++                                objectHandle: calendarChoicePage.accountFromId(modelData.extendedMetaData("account"))
+                             }
+ 
+                             title.text: modelData.name
+-- 
+GitLab
+

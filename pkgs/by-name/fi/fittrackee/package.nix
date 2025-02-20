@@ -1,60 +1,39 @@
 {
   fetchFromGitHub,
-  fetchPypi,
   lib,
   stdenv,
   postgresql,
   postgresqlTestHook,
-  python3,
+  python3Packages,
 }:
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
-
-      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.5";
-
-        src = fetchPypi {
-          pname = "flask_sqlalchemy";
-          inherit version;
-          hash = "sha256-xXZeWMoUVAG1IQbA9GF4VpJDxdolVWviwjHsxghnxbE=";
-        };
-      });
-    };
-  };
-
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.8.12";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-knhXFhBb11KWidw6ym8EdZJJ9CDSU4TarupegYJx94A=";
+    hash = "sha256-ZWSlJijW8vNuUtCHhEhmZPcEygcRrtHQUOQQKZdf868=";
   };
 
   build-system = [
-    python.pkgs.poetry-core
+    python3Packages.poetry-core
   ];
 
   pythonRelaxDeps = [
     "authlib"
     "flask-limiter"
-    "gunicorn"
-    "pyjwt"
+    "flask-migrate"
+    "nh3"
     "pyopenssl"
     "pytz"
     "sqlalchemy"
-    "ua-parser"
   ];
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     [
       authlib
       babel
@@ -69,6 +48,8 @@ python.pkgs.buildPythonApplication rec {
       gpxpy
       gunicorn
       humanize
+      jsonschema
+      nh3
       psycopg2-binary
       pyjwt
       pyopenssl
@@ -83,7 +64,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "fittrackee" ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     freezegun
     postgresqlTestHook
@@ -103,6 +84,7 @@ python.pkgs.buildPythonApplication rec {
 
   preCheck = ''
     export TMP=$TMPDIR
+    export UI_URL=http://0.0.0.0:5000
   '';
 
   meta = {

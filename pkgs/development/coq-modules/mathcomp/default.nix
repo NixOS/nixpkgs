@@ -136,13 +136,20 @@ let
         installFlags = o.installFlags ++ [ "-f Makefile.coq" ];
       }
     );
-    patched-derivation = patched-derivation2.overrideAttrs (o:
+    patched-derivation3 = patched-derivation2.overrideAttrs (o:
       lib.optionalAttrs (o.version != null
         && (o.version == "dev" || lib.versions.isGe "2.0.0" o.version))
       {
         propagatedBuildInputs = o.propagatedBuildInputs ++ [ hierarchy-builder ];
       }
     );
-    in patched-derivation;
+    patched-derivation4 = patched-derivation3.overrideAttrs (o:
+      lib.optionalAttrs (o.version != null
+        && lib.versions.isLe "2.3.0" o.version)
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
+      }
+    );
+    in patched-derivation4;
 in
 mathcomp_ (if single then "single" else "all")

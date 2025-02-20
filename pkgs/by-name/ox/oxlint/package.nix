@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   env.OXC_VERSION = version;
 
-  cargoBuildFlags = [ "--bin=oxlint" ];
+  cargoBuildFlags = [ "--bin=oxlint" "--bin=oxc_language_server" ];
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {

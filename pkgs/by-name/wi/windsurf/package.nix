@@ -13,7 +13,7 @@ let
     (lib.importJSON ./info.json)."${stdenv.hostPlatform.system}"
       or (throw "windsurf: unsupported system ${stdenv.hostPlatform.system}");
 in
-callPackage vscode-generic rec {
+callPackage vscode-generic {
   inherit commandLineArgs useVSCodeRipgrep;
 
   inherit (info) version vscodeVersion;
@@ -22,6 +22,8 @@ callPackage vscode-generic rec {
   executableName = "windsurf";
   longName = "Windsurf";
   shortName = "windsurf";
+  libraryName = "windsurf";
+  iconName = "windsurf";
 
   sourceRoot = if stdenv.hostPlatform.isDarwin then "Windsurf.app" else "Windsurf";
 

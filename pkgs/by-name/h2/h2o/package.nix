@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
+  makeWrapper,
   ninja,
   perl,
   brotli,
@@ -12,6 +13,9 @@
   libuv,
   wslay,
   zlib,
+  withMruby ? true,
+  bison,
+  ruby,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,20 +36,40 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    perl
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      makeWrapper
+      ninja
+    ]
+    ++ lib.optionals withMruby [
+      bison
+      ruby
+    ];
+
   buildInputs = [
     brotli
     openssl
     libcap
     libuv
+    perl
     zlib
     wslay
   ];
+
+  cmakeFlags = [
+    "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
+  ];
+
+  postInstall = ''
+    EXES="$(find "$out/share/h2o" -type f -executable)"
+    for exe in $EXES; do
+      wrapProgram "$exe" \
+        --set "H2O_PERL" "${lib.getExe perl}" \
+        --prefix "PATH" : "${lib.getBin openssl}/bin"
+    done
+  '';
 
   meta = with lib; {
     description = "Optimized HTTP/1.x, HTTP/2, HTTP/3 server";

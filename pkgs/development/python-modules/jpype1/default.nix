@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "jpype1";
-  version = "1.5.1";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "originell";
     repo = "jpype";
     tag = "v${version}";
-    hash = "sha256-IMmMYlcTkOQ5P4FYTp1QmUY9AsnYhzJ3mcpgl52qImg=";
+    hash = "sha256-Q5/umU7JHiro+7YuC6nVG9ocpQ/Yc4LGa5+7SGGARTo=";
   };
 
   build-system = [ setuptools ];

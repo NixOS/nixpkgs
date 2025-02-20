@@ -8,7 +8,7 @@ from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
-from typing import Final
+from typing import Final, Literal
 from uuid import uuid4
 
 from . import tmpdir
@@ -77,7 +77,7 @@ def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
-    build_flags: Args | None = None,
+    realise_flags: Args | None = None,
     instantiate_flags: Args | None = None,
     copy_flags: Args | None = None,
 ) -> Path:
@@ -112,7 +112,7 @@ def build_remote(
                 drv,
                 "--add-root",
                 remote_tmpdir / uuid4().hex,
-                *dict_to_flags(build_flags),
+                *dict_to_flags(realise_flags),
             ],
             remote=build_host,
             stdout=PIPE,
@@ -554,7 +554,7 @@ def set_profile(
 
 def switch_to_configuration(
     path_to_config: Path,
-    action: Action,
+    action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
     target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,

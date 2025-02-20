@@ -1,14 +1,14 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
 # Based on ../elixir-ls/default.nix
 
 let
   pname = "ex_doc";
-  version = "0.34.1";
+  version = "0.37.1";
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "${pname}";
     rev = "v${version}";
-    hash = "sha256-OXIRippEDYAKD222XzNJkkZdXbUkDUauv5amr4oAU7c=";
+    hash = "sha256-PF+4bJ1FGr7t8khorlrB7rSSmNsGpyhC4HmWjw6j0JQ=";
   };
 in
 mixRelease {
@@ -19,7 +19,7 @@ mixRelease {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-fYINsATbw3M3r+IVoYS14aVEsg9OBuH6mNUqzQJuDQo=";
+    hash = "sha256-s4b6wuBJPdN0FPn76zbLCHzqJNEZ6E4nOyB1whUM2VY=";
   };
 
   configurePhase = ''
@@ -40,6 +40,8 @@ mixRelease {
     cp -v ex_doc $out/bin
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/elixir-lang/ex_doc";

@@ -14,6 +14,7 @@
   fetchFromGitHub,
   acl,
   cowsql,
+  incus-ui-canonical,
   libcap,
   lxc,
   pkg-config,
@@ -126,7 +127,7 @@ buildGoModule rec {
 
     tests = if lts then nixosTests.incus-lts.all else nixosTests.incus.all;
 
-    ui = callPackage ./ui.nix { };
+    ui = lib.warnOnInstantiate "`incus.ui` renamed to `incus-ui-canonical`" incus-ui-canonical;
 
     updateScript = nix-update-script {
       extraArgs = nixUpdateExtraArgs;

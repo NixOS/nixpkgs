@@ -81,6 +81,7 @@ luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,http://luarocks.org/dev,,,
 luafilesystem,,,,1.8.0-1,,flosse
 lualdap,,,,,,aanderse
+lualine.nvim,,,http://luarocks.org/dev,,,
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
@@ -108,6 +109,7 @@ luv,,,,1.48.0-2,,
 lyaml,,,,,,lblasc
 lz.n,,,,,,mrcjkb
 lze,,,,,,birdee
+lzextras,,,,,,birdee
 lzn-auto-require,,,,,,mrcjkb
 magick,,,,,5.1,donovanglover
 markdown,,,,,,
@@ -123,6 +125,8 @@ nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,,
 nvim-dbee,,,,,,perchun
 nvim-nio,,,,,,mrcjkb
+nvim-web-devicons,,,,,,
+oil.nvim,,,,,,
 orgmode,,,,,,
 papis-nvim,,,,,,GaetanLepage
 pathlib.nvim,,,,,,

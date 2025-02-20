@@ -26,13 +26,13 @@
 }:
 
 let
-  version = "0.19.1";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-UUxHLC35au4Valy/ArFdBjI5uGsIQ8aMdNLMPz0gSTs=";
+    hash = "sha256-0P3cvBI5CM03y6Km7d31Z3ZzpGW3y1oKkprpPglrujg=";
   };
 
   goDeps =
@@ -40,7 +40,7 @@ let
       pname = "ktailctl-go-wrapper";
       inherit src version;
       modRoot = "src/wrapper";
-      vendorHash = "sha256-xe2LUdh/F3ATRi2+5UbfLGAMgDnYj/J1ZIaB1lMPIkk=";
+      vendorHash = "sha256-o7eH3f+yeRr5CnBIuL2jMtVQaBLVihz2dg5RTF8RvaM=";
     }).goModules;
 in
 stdenv.mkDerivation {
