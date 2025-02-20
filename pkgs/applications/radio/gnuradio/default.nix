@@ -44,11 +44,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, version ? "3.10.11.0"
+, version ? "3.10.12.0"
 }:
 
 let
-  sourceSha256 = "sha256-QOZXUj+ZmfpazsrHEs8Gx3WSmoHG/zO43NEpyhIjpN8=";
+  sourceSha256 = "sha256-489Pc6z6Ha7jkTzZSEArDQJGkWdWRDIn1uhfFyLLiCo=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -290,12 +290,6 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
-    # https://github.com/gnuradio/gnuradio/issues/7458
-    (fetchpatch {
-      name = "gnuradio-numpy_2-compatibility.patch";
-      url = "https://github.com/gnuradio/gnuradio/commit/8fbc5eb4b7214a4cb029ccae97205a85d49bdd48.patch";
-      hash = "sha256-xYvjlyZ/Bcn23gT3EOee/GhkXzdpA+q33LgURVWOUQI=";
-    })
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must
