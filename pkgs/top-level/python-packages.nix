@@ -6262,6 +6262,8 @@ self: super: with self; {
 
   id = callPackage ../development/python-modules/id { };
 
+  idbutils = callPackage ../development/python-modules/idbutils { };
+
   identify = callPackage ../development/python-modules/identify { };
 
   idna = callPackage ../development/python-modules/idna { };
