@@ -112,6 +112,7 @@ in {
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
   agda = handleTest ./agda.nix {};
+  age-plugin-tpm-decrypt = runTest ./age-plugin-tpm-decrypt.nix;
   agorakit = runTest ./web-apps/agorakit.nix;
   airsonic = handleTest ./airsonic.nix {};
   akkoma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix {};
@@ -404,6 +405,7 @@ in {
   gollum = handleTest ./gollum.nix {};
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
+  gopro-tool = handleTest ./gopro-tool.nix {};
   goss = handleTest ./goss.nix {};
   gotenberg = handleTest ./gotenberg.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
@@ -419,6 +421,7 @@ in {
   guacamole-server = handleTest ./guacamole-server.nix {};
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
+  h2o = discoverTests (import ./web-servers/h2o { inherit handleTestOn; });
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
   hadoop_3_3 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_3; };
   hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
@@ -620,7 +623,7 @@ in {
   misc = handleTest ./misc.nix {};
   misskey = handleTest ./misskey.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
-  mobilizon = handleTest ./mobilizon.nix {};
+  mobilizon = runTest ./mobilizon.nix;
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
   mollysocket = handleTest ./mollysocket.nix { };

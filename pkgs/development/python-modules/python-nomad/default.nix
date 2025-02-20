@@ -1,10 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   requests,
   pythonOlder,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -14,10 +15,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "python_nomad";
-    inherit version;
-    hash = "sha256-U+bZ7G9mtnKunW0DWRokvi2LVFDdf9vhADgxy5t3+Ec=";
+  src = fetchFromGitHub {
+    owner = "jrxfive";
+    repo = "python-nomad";
+    tag = version;
+    hash = "sha256-tLS463sYVlOr2iZSgSkd4pHUVCtiIPJ3L8+9omlX4NY=";
   };
 
   build-system = [ setuptools ];
@@ -29,11 +31,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nomad" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
     changelog = "https://github.com/jrxFive/python-nomad/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xbreak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xbreak ];
   };
 }

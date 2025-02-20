@@ -4,28 +4,52 @@
   fetchzip,
   cctools,
   gfortran,
+  replaceVars,
   python3,
+  python3Packages,
   blas,
   lapack,
-  mpiSupport ? true,
+  zlib, # propagated by p4est but required by petsc
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  petsc-withp4est ? false,
-  hdf5-support ? false,
-  hdf5,
-  metis,
-  parmetis,
-  withParmetis ? false,
-  pkg-config,
-  p4est,
-  zlib, # propagated by p4est but required by petsc
-  petsc-optimized ? false,
+
+  # Build options
+  petsc-optimized ? true,
   petsc-scalar-type ? "real",
   petsc-precision ? "double",
+  mpiSupport ? true,
+  withPetsc4py ? false, # petsc python binding
+  withFullDeps ? false, # full External libraries support
+
+  # External libraries options
+  withHdf5 ? true,
+  withMetis ? withFullDeps,
+  withParmetis ? false, # parmetis is unfree and should be enabled manualy
+  withPtscotch ? withFullDeps,
+  withScalapack ? withFullDeps,
+  withMumps ? withFullDeps,
+  withP4est ? withFullDeps,
+
+  # External libraries
+  hdf5-fortran-mpi,
+  metis,
+  parmetis,
+  scotch,
+  scalapack,
+  mumps_par,
+  pkg-config,
+  p4est,
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
-assert petsc-withp4est -> p4est.mpiSupport;
+assert withP4est -> (p4est.mpiSupport && mpiSupport);
+
+# Package parmetis depend on metis and mpi support
+assert withParmetis -> (withMetis && mpiSupport);
+
+assert withPtscotch -> mpiSupport;
+assert withScalapack -> mpiSupport;
+assert withMumps -> withScalapack;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
@@ -37,59 +61,102 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    python3
-    gfortran
-    pkg-config
-  ] ++ lib.optional mpiSupport mpi;
-  buildInputs = [
-    blas
-    lapack
-  ] ++ lib.optional hdf5-support hdf5 ++ lib.optional petsc-withp4est p4est ++ lib.optionals withParmetis [ metis parmetis ];
 
-  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace config/install.py \
-      --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
-  '';
+  nativeBuildInputs =
+    [
+      python3
+      gfortran
+      pkg-config
+    ]
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optionals withPetsc4py [
+      python3Packages.setuptools
+      python3Packages.cython
+    ];
 
-  configureFlags = [
-    "--with-blas=1"
-    "--with-lapack=1"
-    "--with-scalar-type=${petsc-scalar-type}"
-    "--with-precision=${petsc-precision}"
-    "--with-mpi=${if mpiSupport then "1" else "0"}"
-  ] ++ lib.optionals mpiSupport [
-    "--CC=mpicc"
-    "--with-cxx=mpicxx"
-    "--with-fc=mpif90"
-  ] ++ lib.optionals (mpiSupport && withParmetis) [
-    "--with-metis=1"
-    "--with-metis-dir=${metis}"
-    "--with-parmetis=1"
-    "--with-parmetis-dir=${parmetis}"
-  ] ++ lib.optionals petsc-optimized [
-    "--with-debugging=0"
-    "COPTFLAGS=-O3"
-    "FOPTFLAGS=-O3"
-    "CXXOPTFLAGS=-O3"
-    "CXXFLAGS=-O3"
+  buildInputs =
+    [
+      blas
+      lapack
+    ]
+    ++ lib.optional withHdf5 hdf5-fortran-mpi
+    ++ lib.optional withP4est p4est
+    ++ lib.optional withMetis metis
+    ++ lib.optional withParmetis parmetis
+    ++ lib.optional withPtscotch scotch
+    ++ lib.optional withScalapack scalapack
+    ++ lib.optional withMumps mumps_par;
+
+  propagatedBuildInputs = lib.optional withPetsc4py python3Packages.numpy;
+
+  patches = [
+    (replaceVars ./fix-petsc4py-install-prefix.patch {
+      PYTHON_SITEPACKAGES = python3.sitePackages;
+    })
   ];
-  preConfigure = ''
-    patchShebangs ./lib/petsc/bin
-  '' + lib.optionalString petsc-withp4est ''
-    configureFlagsArray+=(
+
+  postPatch =
+    ''
+      patchShebangs ./lib/petsc/bin
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace config/install.py \
+        --replace /usr/bin/install_name_tool ${cctools}/bin/install_name_tool
+    '';
+
+  configureFlags =
+    [
+      "--with-blas=1"
+      "--with-lapack=1"
+      "--with-scalar-type=${petsc-scalar-type}"
+      "--with-precision=${petsc-precision}"
+      "--with-mpi=${if mpiSupport then "1" else "0"}"
+    ]
+    ++ lib.optional withPetsc4py "--with-petsc4py=1"
+    ++ lib.optionals mpiSupport [
+      "--CC=mpicc"
+      "--with-cxx=mpicxx"
+      "--with-fc=mpif90"
+    ]
+    ++ lib.optionals withMetis [
+      "--with-metis=1"
+      "--with-metis-dir=${metis}"
+    ]
+    ++ lib.optionals withParmetis [
+      "--with-parmetis=1"
+      "--with-parmetis-dir=${parmetis}"
+    ]
+    ++ lib.optionals withPtscotch [
+      "--with-ptscotch=1"
+      "--with-ptscotch-include=${lib.getDev scotch}/include"
+      "--with-ptscotch-lib=[-L${lib.getLib scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
+    ]
+    ++ lib.optionals withScalapack [
+      "--with-scalapack=1"
+      "--with-scalapack-dir=${scalapack}"
+    ]
+    ++ lib.optionals withMumps [
+      "--with-mumps=1"
+      "--with-mumps-dir=${mumps_par}"
+    ]
+    ++ lib.optionals withP4est [
       "--with-p4est=1"
-      "--with-zlib-include=${zlib.dev}/include"
-      "--with-zlib-lib=-L${zlib}/lib -lz"
-    )
-  '' + lib.optionalString hdf5-support ''
-    configureFlagsArray+=(
+      "--with-zlib-include=${lib.getDev zlib}/include"
+      "--with-zlib-lib=[-L${lib.getLib zlib}/lib,-lz]"
+    ]
+    ++ lib.optionals withHdf5 [
       "--with-hdf5=1"
       "--with-hdf5-fortran-bindings=1"
-      "--with-hdf5-include=${hdf5.dev}/include"
-      "--with-hdf5-lib=-L${hdf5}/lib -lhdf5"
-    )
-  '';
+      "--with-hdf5-include=${lib.getDev hdf5-fortran-mpi}/include"
+      "--with-hdf5-lib=[-L${lib.getLib hdf5-fortran-mpi}/lib,-lhdf5]"
+    ]
+    ++ lib.optionals petsc-optimized [
+      "--with-debugging=0"
+      "COPTFLAGS=-O3"
+      "FOPTFLAGS=-O3"
+      "CXXOPTFLAGS=-O3"
+      "CXXFLAGS=-O3"
+    ];
 
   hardeningDisable = lib.optionals (!petsc-optimized) [
     "fortify"

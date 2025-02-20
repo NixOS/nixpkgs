@@ -199,6 +199,7 @@
   ./programs/firefox.nix
   ./programs/firejail.nix
   ./programs/fish.nix
+  ./programs/flashprog.nix
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
   ./programs/foot
@@ -209,6 +210,7 @@
   ./programs/gamescope.nix
   ./programs/gdk-pixbuf.nix
   ./programs/geary.nix
+  ./programs/ghidra.nix
   ./programs/git.nix
   ./programs/git-worktree-switcher.nix
   ./programs/gnome-disks.nix
@@ -956,6 +958,7 @@
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
+  ./services/monitoring/prometheus/alertmanager-gotify-bridge.nix
   ./services/monitoring/prometheus/alertmanager-irc-relay.nix
   ./services/monitoring/prometheus/alertmanager-webhook-logger.nix
   ./services/monitoring/prometheus/alertmanager.nix
@@ -1607,6 +1610,7 @@
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/garage.nix
+  ./services/web-servers/h2o/default.nix
   ./services/web-servers/hitch/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/keter

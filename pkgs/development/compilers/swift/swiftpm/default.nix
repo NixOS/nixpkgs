@@ -13,7 +13,7 @@
   pkg-config,
   sqlite,
   ncurses,
-  substituteAll,
+  replaceVars,
   runCommandLocal,
   makeWrapper,
   DarwinTools, # sw_vers
@@ -45,8 +45,7 @@ let
       ./patches/disable-xctest.patch
       ./patches/fix-clang-cxx.patch
       ./patches/nix-pkgconfig-vars.patch
-      (substituteAll {
-        src = ./patches/fix-stdlib-path.patch;
+      (replaceVars ./patches/fix-stdlib-path.patch {
         inherit (builtins) storeDir;
         swiftLib = swift.swift.lib;
       })
@@ -429,8 +428,7 @@ stdenv.mkDerivation (
         # Prevent a warning about SDK directories we don't have.
         swiftpmMakeMutable swift-driver
         patch -p1 -d .build/checkouts/swift-driver -i ${
-          substituteAll {
-            src = ../swift-driver/patches/prevent-sdk-dirs-warnings.patch;
+          replaceVars ../swift-driver/patches/prevent-sdk-dirs-warnings.patch {
             inherit (builtins) storeDir;
           }
         }

@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
           "getaddrinfo_fail"
           "getaddrinfo_fail_sync"
           "tcp_connect6_link_local"
+          "thread_affinity" # else "test must be run with cpu 0 affinity" when affinity is set
           "threadpool_multiple_event_loops" # times out on slow machines
           "get_passwd" # passed on NixOS but failed on other Linuxes
           "tcp_writealot"

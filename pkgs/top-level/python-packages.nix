@@ -51,6 +51,8 @@ self: super: with self; {
 
   acquire = callPackage ../development/python-modules/acquire { };
 
+  acres = callPackage ../development/python-modules/acres { };
+
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   acunetix = callPackage ../development/python-modules/acunetix { };
@@ -1933,6 +1935,8 @@ self: super: with self; {
   brottsplatskartan = callPackage ../development/python-modules/brottsplatskartan { };
 
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
+
+  browserforge = callPackage ../development/python-modules/browserforge { };
 
   brunt = callPackage ../development/python-modules/brunt { };
 
@@ -4272,6 +4276,8 @@ self: super: with self; {
   esper = callPackage ../development/python-modules/esper { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
+
+  esphome-glyphsets = callPackage ../development/python-modules/esphome-glyphsets { };
 
   esprima = callPackage ../development/python-modules/esprima { };
 
@@ -7695,6 +7701,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
+
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
@@ -8064,7 +8072,9 @@ self: super: with self; {
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
     inherit buildPythonPackage pythonOlder pythonAtLeast;
-    inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
+    # when next release contains numpy2 support unpin
+    # https://github.com/enthought/mayavi/pull/1315
+    inherit (self) pyface pygments numpy_1 packaging vtk traitsui envisage apptools pyqt5;
   };
 
   mayim = callPackage ../development/python-modules/mayim { };
@@ -8103,6 +8113,7 @@ self: super: with self; {
   mdformat-simple-breaks = callPackage ../development/python-modules/mdformat-simple-breaks { };
   mdformat-tables = callPackage ../development/python-modules/mdformat-tables { };
   mdformat-toc = callPackage ../development/python-modules/mdformat-toc { };
+  mdformat-wikilink = callPackage ../development/python-modules/mdformat-wikilink { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
@@ -8322,6 +8333,10 @@ self: super: with self; {
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
+
+  miss-hit = callPackage ../development/python-modules/miss-hit { };
+
+  miss-hit-core = callPackage ../development/python-modules/miss-hit-core { };
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
@@ -10341,6 +10356,13 @@ self: super: with self; {
   pescea = callPackage ../development/python-modules/pescea { };
 
   pesq = callPackage ../development/python-modules/pesq { };
+
+  petsc4py = toPythonModule (pkgs.petsc.override {
+    python3 = python;
+    python3Packages = self;
+    withPetsc4py = true;
+    withFullDeps = true;
+  });
 
   pex = callPackage ../development/python-modules/pex { };
 
@@ -12783,6 +12805,8 @@ self: super: with self; {
   pysigma-backend-sqlite = callPackage ../development/python-modules/pysigma-backend-sqlite { };
 
   pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
+
+  pysigma-backend-loki = callPackage ../development/python-modules/pysigma-backend-loki { };
 
   pysigma-pipeline-crowdstrike = callPackage ../development/python-modules/pysigma-pipeline-crowdstrike { };
 
@@ -17591,6 +17615,8 @@ self: super: with self; {
 
   types-futures = callPackage ../development/python-modules/types-futures { };
 
+  types-greenlet = callPackage ../development/python-modules/types-greenlet { };
+
   types-html5lib = callPackage ../development/python-modules/types-html5lib { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
@@ -18613,7 +18639,7 @@ self: super: with self; {
 
   yfinance = callPackage ../development/python-modules/yfinance { };
 
-  yoda = toPythonModule (pkgs.yoda.override { inherit python; });
+  yoda = toPythonModule (pkgs.yoda.override { python3 = python; });
 
   yolink-api = callPackage ../development/python-modules/yolink-api { };
 

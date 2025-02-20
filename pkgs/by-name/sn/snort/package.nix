@@ -14,17 +14,18 @@
   pkg-config,
   zlib,
   xz,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snort";
-  version = "3.6.3.0";
+  version = "3.7.0.0";
 
   src = fetchFromGitHub {
     owner = "snort3";
     repo = "snort3";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-loMmmpoaEncW31FUIE9Zf9w635Prvke6vCY+mIt6oGI=";
+    tag = finalAttrs.version;
+    hash = "sha256-KwKgKY+zcH7bZrtfMpkwb0LopGeImTwOf79hqZeYv/k=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
@@ -60,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       aycanirican
       brianmcgillion
     ];
+    changelog = "https://github.com/snort3/snort3/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux;
   };

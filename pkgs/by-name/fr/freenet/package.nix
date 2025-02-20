@@ -8,7 +8,7 @@
   gradle_8,
   bash,
   coreutils,
-  substituteAll,
+  replaceVars,
   nixosTests,
   writeText,
 }:
@@ -50,14 +50,15 @@ stdenv.mkDerivation rec {
     jdk
   ];
 
-  wrapper = substituteAll {
-    src = ./freenetWrapper;
+  wrapper = replaceVars ./freenetWrapper {
     inherit
       bash
       coreutils
       jre
       seednodes
       ;
+    # replaced in installPhase
+    CLASSPATH = null;
   };
 
   mitmCache = gradle.fetchDeps {

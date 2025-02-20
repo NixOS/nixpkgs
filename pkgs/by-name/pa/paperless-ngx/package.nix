@@ -66,7 +66,7 @@ let
 
   path = lib.makeBinPath [
     ghostscript_headless
-    imagemagickBig
+    (imagemagickBig.override { ghostscript = ghostscript_headless; })
     jbig2enc
     optipng
     pngquant

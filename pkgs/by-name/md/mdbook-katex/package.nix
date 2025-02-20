@@ -6,15 +6,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-katex";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-O2hFv/9pqrs8cSDvHLAUnXx4mX6TN8hvPLroWgoCgwE=";
+    hash = "sha256-5EYskcYEDZENK7ehws36+5MrTY2rNTXoFnWYOC+LuiQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EoWsjuvvWeAI3OnVRJQT2hwoYq4BNqqvitH9LT0XGnA=";
+  cargoHash = "sha256-j0BdEnPP7/0i1hg7GNgc+F4EeElVm6AZIWZNelYZLIU=";
 
   meta = {
     description = "Preprocessor for mdbook, rendering LaTeX equations to HTML at build time";
