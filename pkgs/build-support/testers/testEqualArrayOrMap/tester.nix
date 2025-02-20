@@ -1,6 +1,4 @@
 # NOTE: Must be `import`-ed rather than `callPackage`-d to preserve the `override` attribute.
-# NOTE: We must use `pkgs.runCommand` instead of `testers.runCommand` to build `testers.testEqualArrayOrMap`, or else
-# our negative tests will not work. See ./tests.nix for more information.
 {
   lib,
   stdenvNoCC,
