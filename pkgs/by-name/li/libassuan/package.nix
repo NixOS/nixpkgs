@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
-  version = "2.5.7";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AQMIH/wng4ouUEeRU8oQXoc9PWXYqVkygunJTH5q+3Y=";
+    sha256 = "sha256-0pMc2tJm5jNRD5lw4aLzRgVeNRuxn5t4kSR1uAdMNvY=";
   };
 
   outputs = [
