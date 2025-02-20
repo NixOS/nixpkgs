@@ -424,6 +424,54 @@ rec {
 
   ################################################################################
 
+  types.openCpuModel = mkOptionType {
+    name = "cpu-model";
+    description = "cpu model";
+    merge = mergeOneOption;
+  };
+
+  types.cpuModel = platform: enum (attrValues (cpuModels platform));
+
+  cpuModels = platform:
+    let
+      mkCpuModel = { zig ? "baseline", gnu ? "generic", llvm ? "generic", inferiors ? [], features ? [] }@args:
+        { zig = "baseline"; gnu = "generic"; llvm = "generic"; inferiors = []; features = []; } // args;
+
+      generic = mkCpuModel {};
+
+      sets = {};
+    in setTypes types.openCpuModel ((sets.${platform.cpu.name} or {}) // { inherit generic; });
+
+  ################################################################################
+
+  types.cpu = mkOptionType {
+    name = "cpu";
+    description = "cpu options to pass to various compilers";
+    merge = mergeOneOption;
+    check = { platform, model }:
+      types.parsedPlatform.check platform
+      && types.cpuModel.check model;
+  };
+
+  isCpu = isType "cpu";
+
+  mkCpu = platform:
+    {
+      model ? "generic",
+      float ? null,
+      float-abi ? null,
+      fpu ? null,
+    }:
+    let
+      cpuModels' = cpuModels platform;
+    in
+      setType "cpu" {
+        inherit platform;
+        model = cpuModels'."${model}" or (throw "Unknown CPU model ${model} for CPU architecture ${platform.cpu.name}");
+      };
+
+  ################################################################################
+
   types.parsedPlatform = mkOptionType {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";

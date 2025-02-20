@@ -67,9 +67,7 @@ rec {
       # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
       #DTB = true;
     };
-    gcc = {
-      arch = "armv5te";
-    };
+    cpu.model = "armv5te";
   };
 
   sheevaplug = {
@@ -180,9 +178,7 @@ rec {
       target = "uImage";
       DTB = true; # Beyond 3.10
     };
-    gcc = {
-      arch = "armv5te";
-    };
+    cpu.model = "armv5te";
   };
 
   raspberrypi = {
@@ -200,9 +196,9 @@ rec {
       '';
       target = "zImage";
     };
-    gcc = {
+    cpu = {
       # https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications
-      arch = "armv6kz";
+      model = "armv6kz";
       fpu = "vfpv2";
     };
   };
@@ -212,9 +208,7 @@ rec {
 
   # Nvidia Bluefield 2 (w. crypto support)
   bluefield2 = {
-    gcc = {
-      arch = "armv8-a+fp+simd+crc+crypto";
-    };
+    cpu.model = "armv8-a+fp+simd+crc+crypto";
   };
 
   zero-gravitas = {
@@ -227,9 +221,9 @@ rec {
       autoModules = false;
       DTB = true;
     };
-    gcc = {
+    cpu = {
+      model = "cortex-a9";
       fpu = "neon";
-      cpu = "cortex-a9";
     };
   };
 
@@ -243,8 +237,8 @@ rec {
       preferBuiltin = true;
       target = "zImage";
     };
-    gcc = {
-      cpu = "cortex-a7";
+    cpu = {
+      model = "cortex-a7";
       fpu = "neon-vfpv4";
       float-abi = "hard";
     };
@@ -269,8 +263,8 @@ rec {
       target = "uImage";
       DTB = true;
     };
-    gcc = {
-      cpu = "cortex-a9";
+    cpu = {
+      model = "cortex-a9";
       fpu = "neon";
     };
   };
@@ -296,8 +290,8 @@ rec {
   # https://developer.android.com/ndk/guides/abis#v7a
   armv7a-android = {
     linux-kernel.name = "armeabi-v7a";
-    gcc = {
-      arch = "armv7-a";
+    cpu = {
+      model = "armv7-a";
       float-abi = "softfp";
       fpu = "vfpv3-d16";
     };
@@ -333,7 +327,7 @@ rec {
         KS8851_MLL y
       '';
     };
-    gcc = {
+    cpu = {
       # Some table about fpu flags:
       # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
       # Cortex-A5: -mfpu=neon-fp16
@@ -347,11 +341,11 @@ rec {
 
       # vfpv3-d16 is what Debian uses and seems to be the best compromise: NEON is not supported in e.g. Scaleway or Tegra 2,
       # and the above page suggests NEON is only an improvement with hand-written assembly.
-      arch = "armv7-a";
+      model = "armv7-a";
       fpu = "vfpv3-d16";
 
       # For Raspberry Pi the 2 the best would be:
-      #   cpu = "cortex-a7";
+      #   model = "cortex-a7";
       #   fpu = "neon-vfpv4";
     };
   };
@@ -386,16 +380,11 @@ rec {
       '';
       target = "Image";
     };
-    gcc = {
-      arch = "armv8-a";
-    };
+    cpu.model = "armv8-a";
   };
 
   apple-m1 = {
-    gcc = {
-      arch = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc";
-      cpu = "apple-a13";
-    };
+    cpu.model = "apple-m1";
   };
 
   ##
@@ -406,8 +395,8 @@ rec {
     linux-kernel = {
       name = "ben_nanonote";
     };
-    gcc = {
-      arch = "mips32";
+    cpu = {
+      model = "mips32";
       float = "soft";
     };
   };
@@ -483,49 +472,37 @@ rec {
       '';
       target = "vmlinux";
     };
-    gcc = {
-      arch = "loongson2f";
+    cpu = {
+      model = "loongson2f";
       float = "hard";
-      abi = "n32";
     };
+    abi = "n32";
   };
 
   # can execute on 32bit chip
   gcc_mips32r2_o32 = {
-    gcc = {
-      arch = "mips32r2";
-      abi = "32";
-    };
+    cpu.model = "mips32r2";
+    abi = "32";
   };
   gcc_mips32r6_o32 = {
-    gcc = {
-      arch = "mips32r6";
-      abi = "32";
-    };
+    cpu.model = "mips32r6";
+    abi = "32";
   };
   gcc_mips64r2_n32 = {
-    gcc = {
-      arch = "mips64r2";
-      abi = "n32";
-    };
+    cpu.model = "mips64r2";
+    abi = "n32";
   };
   gcc_mips64r6_n32 = {
-    gcc = {
-      arch = "mips64r6";
-      abi = "n32";
-    };
+    cpu.model = "mips64r6";
+    abi = "n32";
   };
   gcc_mips64r2_64 = {
-    gcc = {
-      arch = "mips64r2";
-      abi = "64";
-    };
+    cpu.model = "mips64r2";
+    abi = "64";
   };
   gcc_mips64r6_64 = {
-    gcc = {
-      arch = "mips64r6";
-      abi = "64";
-    };
+    cpu.model = "mips64r6";
+    abi = "64";
   };
 
   # based on:
