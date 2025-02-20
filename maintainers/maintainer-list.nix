@@ -10823,6 +10823,12 @@
     githubId = 854319;
     name = "Matt McHenry";
   };
+  jerry8137 = {
+    email = "jerry8137@gmail.com";
+    github = "jerry8137";
+    githubId = 68591229;
+    name = "Chun-Yu (Jerry) Hou";
+  };
   jerrysm64 = {
     email = "jerry.starke@icloud.com";
     github = "jerrysm64";
