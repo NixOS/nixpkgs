@@ -4,7 +4,6 @@
   fetchurl,
   fetchFromGitLab,
   buildPackages,
-  autoreconfHook,
   pkg-config,
   texinfo,
   gettext,
@@ -45,7 +44,12 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoreconfHook
+    # XXX: do not add autoreconfHook without very careful testing!
+    # Problems that were identified during the last attempt:
+    #  • Prints a warning about being a development version not
+    #    suitable for production use.
+    #  • Smartcards do not work, at least without pcscd.
+
     pkg-config
     texinfo
     libgpg-error
