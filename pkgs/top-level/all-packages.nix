@@ -18086,8 +18086,6 @@ with pkgs;
     pinentry = pinentry-curses;
   };
 
-  serial-studio = libsForQt5.callPackage ../applications/misc/serial-studio { };
-
   maphosts = callPackage ../tools/networking/maphosts { };
 
   tora = libsForQt5.callPackage ../development/tools/tora { };
