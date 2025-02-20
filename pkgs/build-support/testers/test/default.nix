@@ -234,7 +234,6 @@ lib.recurseIntoAttrs {
       expectedBuilderLogEntries = [ "failing though" ];
       script = ''
         grep --silent -F 'ok-ish' "$failed/result"
-        touch "$out"
       '';
     };
 
@@ -258,7 +257,6 @@ lib.recurseIntoAttrs {
       ];
       script = ''
         grep --silent -F 'ok-ish' "$failed/result"
-        touch "$out"
       '';
     };
 
@@ -293,7 +291,6 @@ lib.recurseIntoAttrs {
         # Checking our note that dev is the default output
         echo $failed/_ | grep -- '-dev/_' >/dev/null
         echo 'All good.'
-        touch $out
       '';
     };
 
@@ -326,8 +323,6 @@ lib.recurseIntoAttrs {
       ];
       script = ''
         [[ ! -e side-effect ]]
-
-        touch $out
       '';
     };
 
