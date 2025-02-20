@@ -17,6 +17,7 @@
   xorg,
   xdg-utils,
 }:
+
 buildDotnetModule rec {
   pname = "v2rayn";
   version = "7.8.3";
@@ -36,7 +37,7 @@ buildDotnetModule rec {
     substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
-      --replace-fail "Utils.GetExePath())" '"${placeholder "out"}/bin/v2rayN")'
+      --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
       --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
   '';
@@ -64,14 +65,14 @@ buildDotnetModule rec {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  runtimeDeps = [
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libICE
-    xorg.libSM
-    xorg.libXcursor
-    xorg.libXext
+  runtimeDeps = with xorg; [
+    libX11
+    libXrandr
+    libXi
+    libICE
+    libSM
+    libXcursor
+    libXext
   ];
 
   desktopItems = [
