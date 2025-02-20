@@ -126,6 +126,7 @@ let
   };
 
 in
+builtins.trace "`vmware-horizon-client` is being replaced with `omnissa-horizon-client`"
 stdenv.mkDerivation {
   pname = "vmware-horizon-client";
   inherit version;
@@ -145,8 +146,6 @@ stdenv.mkDerivation {
   '';
 
   unwrapped = vmwareHorizonClientFiles;
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     inherit mainProgram;
