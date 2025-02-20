@@ -153,7 +153,7 @@ let
             runtimeShell = prevStage.ccWrapperStdenv.shell;
           };
 
-      bash = prevStage.bash or bootstrapTools;
+      bashNonInteractive = prevStage.bashNonInteractive or bootstrapTools;
 
       thisStdenv = import ../generic {
         name = "${name}-stdenv-darwin";
@@ -168,7 +168,7 @@ let
         inherit extraNativeBuildInputs;
 
         preHook =
-          lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
+          lib.optionalString (!isBuiltByNixpkgsCompiler bashNonInteractive) ''
             # Don't patch #!/interpreter because it leads to retained
             # dependencies on the bootstrapTools in the final stdenv.
             dontPatchShebangs=1
@@ -181,9 +181,9 @@ let
             export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
           '';
 
-        shell = bash + "/bin/bash";
+        shell = bashNonInteractive + "/bin/bash";
         initialPath = [
-          bash
+          bashNonInteractive
           prevStage.file
           bootstrapTools
         ];
@@ -328,7 +328,7 @@ let
   # SDK packages include propagated packages and source release packages built during the bootstrap.
   sdkPackages = prevStage: {
     inherit (prevStage)
-      bash
+      bashNonInteractive
       libpng
       libxml2
       libxo
@@ -408,7 +408,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # stage should only access the stage that came before it.
         ccWrapperStdenv = self.stdenv;
 
-        bash = bootstrapTools // {
+        bashNonInteractive = bootstrapTools // {
           shellPath = "/bin/bash";
         };
 
@@ -600,7 +600,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       (llvmLibrariesPackages prevStage)
       {
         inherit (prevStage)
-          bash
+          bashNonInteractive
           cctools
           coreutils
           cpio
@@ -847,14 +847,14 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             inherit (prevStage) ccWrapperStdenv;
 
             # Avoid an infinite recursion due to the SDK’s including ncurses, which depends on bash in its `dev` output.
-            bash = super.bash.override { stdenv = self.darwin.bootstrapStdenv; };
+            bashNonInteractive = super.bashNonInteractive.override { stdenv = self.darwin.bootstrapStdenv; };
 
             # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
             libxml2 = super.libxml2.override { pythonSupport = false; };
 
             # Use Bash from this stage to avoid propagating Bash from a previous stage to the final stdenv.
             ncurses = super.ncurses.override {
-              stdenv = self.darwin.bootstrapStdenv.override { shell = lib.getExe self.bash; };
+              stdenv = self.darwin.bootstrapStdenv.override { shell = lib.getExe self.bashNonInteractive; };
             };
 
             darwin = super.darwin.overrideScope (
@@ -1162,7 +1162,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         extraAttrs = {
           inherit bootstrapTools;
           libc = prevStage.darwin.libSystem;
-          shellPackage = prevStage.bash;
+          shellPackage = prevStage.bashNonInteractive;
         };
 
         disallowedRequisites = [ bootstrapTools.out ];
@@ -1172,7 +1172,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             with prevStage;
             [
               apple-sdk
-              bash
+              bashNonInteractive
               bzip2.bin
               bzip2.out
               cc.expand-response-params

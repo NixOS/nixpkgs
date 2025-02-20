@@ -21,7 +21,6 @@
 , smartmontools
 , replaceVars
 , stdenvNoCC
-, substituteAll
 , touchegg
 , util-linux
 , vte
@@ -136,8 +135,7 @@ super: lib.trivial.pipe super [
     });
   in {
     patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/lunarcal_at_ailin.nemui.patch;
+      (replaceVars ./extensionOverridesPatches/lunarcal_at_ailin.nemui.patch {
         chinese_calendar_path = chinese-calendar;
       })
     ];

@@ -18,7 +18,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  substituteAll,
+  replaceVars,
   tinycss2,
   tinyhtml5,
 }:
@@ -37,13 +37,11 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./library-paths.patch;
+    (replaceVars ./library-paths.patch {
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";
       pangoft2 = "${pango.out}/lib/libpangoft2-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       gobject = "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       pango = "${pango.out}/lib/libpango-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
-      pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz_subset = "${harfbuzz.out}/lib/libharfbuzz-subset${stdenv.hostPlatform.extensions.sharedLibrary}";
     })

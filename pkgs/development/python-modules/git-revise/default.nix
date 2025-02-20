@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "git-revise";
-  version = "0.7.0";
+  version = "0.7.0-unstable-2025-01-28";
   format = "setuptools";
 
   # Missing tests on PyPI
   src = fetchFromGitHub {
     owner = "mystor";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xV1Z9O5FO4Q/XEpNwnX31tbv8CrXY+wF1Ltpfq+ITRg=";
+    rev = "189c9fe150e5587def75c51709246c47c93e3b4d";
+    hash = "sha256-bqhRV0WtWRUKkBG2tEvctxdoYRkcrpL4JZSHYzox8so=";
   };
 
   disabled = pythonOlder "3.8";

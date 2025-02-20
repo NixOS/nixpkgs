@@ -21,7 +21,7 @@
   pythonOlder,
   rich,
   reportlab,
-  substituteAll,
+  replaceVars,
   tesseract,
   unpaper,
   installShellFiles,
@@ -50,8 +50,7 @@ buildPythonPackage rec {
 
   patches = [
     ./use-pillow-heif.patch
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;

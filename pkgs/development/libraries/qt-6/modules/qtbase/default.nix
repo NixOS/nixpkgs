@@ -64,7 +64,9 @@
   at-spi2-core,
   unixODBC,
   unixODBCDrivers,
+  libGL,
   # darwin
+  moltenvk,
   moveBuildTree,
   darwinVersionInputs,
   xcbuild,
@@ -79,8 +81,6 @@
   withLibinput ? false,
   libinput,
   # options
-  libGLSupported ? stdenv.hostPlatform.isLinux,
-  libGL,
   qttranslations ? null,
   fetchpatch,
 }:
@@ -100,6 +100,9 @@ stdenv.mkDerivation rec {
       openssl
       sqlite
       zlib
+      libGL
+      vulkan-headers
+      vulkan-loader
       # Text rendering
       harfbuzz
       icu
@@ -133,8 +136,6 @@ stdenv.mkDerivation rec {
       libselinux
       libsepol
       lttng-ust
-      vulkan-headers
-      vulkan-loader
       libthai
       libdrm
       libdatrie
@@ -160,20 +161,13 @@ stdenv.mkDerivation rec {
       xorg.xcbutilcursor
       libepoxy
     ]
-    ++ lib.optionals libGLSupported [
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      vulkan-headers
-      vulkan-loader
-    ]
     ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
       at-spi2-core
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (darwinVersionInputs ++ [ moltenvk ])
     ++ lib.optional withGtk3 gtk3
     ++ lib.optional withLibinput libinput
     ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
@@ -282,11 +276,11 @@ stdenv.mkDerivation rec {
       "-DQT_FEATURE_libproxy=ON"
       "-DQT_FEATURE_system_sqlite=ON"
       "-DQT_FEATURE_openssl_linked=ON"
+      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       "-DQT_FEATURE_sctp=ON"
       "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
-      "-DQT_FEATURE_vulkan=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DQT_FEATURE_rpath=OFF"

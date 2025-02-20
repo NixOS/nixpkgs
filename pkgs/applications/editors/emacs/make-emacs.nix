@@ -61,6 +61,7 @@
   texinfo,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  writeText,
   zlib,
 
   # Boolean flags
@@ -184,7 +185,6 @@ mkDerivation (finalAttrs: {
             ./native-comp-driver-options-30.patch
         )
         {
-
           backendPath = (
             lib.concatStringsSep " " (
               builtins.map (x: ''"-B${x}"'') (
@@ -507,6 +507,8 @@ mkDerivation (finalAttrs: {
     patchelf --add-rpath ${lib.makeLibraryPath [ libXcursor ]} $out/bin/emacs
     patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';
+
+  setupHook = ./setup-hook.sh;
 
   passthru = {
     inherit withNativeCompilation;

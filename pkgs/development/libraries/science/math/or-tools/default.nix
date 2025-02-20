@@ -7,7 +7,7 @@
   eigen,
   ensureNewerSourcesForZipFilesHook,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   glpk,
   lib,
   pkg-config,
@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./offline.patch;
+    (replaceVars ./offline.patch {
       pybind11_protobuf = "../../pybind11_protobuf";
     })
   ];

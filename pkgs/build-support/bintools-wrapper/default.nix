@@ -43,6 +43,7 @@
     "fortify3"
     "pic"
     "relro"
+    "stackclashprotection"
     "stackprotector"
     "strictoverflow"
     "zerocallusedregs"

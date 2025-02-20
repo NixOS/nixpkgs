@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  substituteAll,
+  replaceVars,
   graphviz,
   pytestCheckHook,
   chardet,
@@ -37,8 +37,7 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+    (replaceVars ./hardcode-graphviz-path.patch {
       inherit graphviz;
     })
   ];
