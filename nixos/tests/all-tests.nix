@@ -954,6 +954,7 @@ in {
   seatd = handleTest ./seatd.nix {};
   send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
+  servo = runTest ./servo.nix;
   shadps4 = runTest ./shadps4.nix;
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
