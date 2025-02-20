@@ -11,7 +11,7 @@ let
     teleport_15 = import ./15 (
       args
       // {
-        buildGoModule = buildGo122Module;
+        buildGoModule = buildGo123Module;
       }
     );
     teleport_16 = import ./16 (
