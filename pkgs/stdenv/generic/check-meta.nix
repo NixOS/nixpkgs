@@ -106,6 +106,16 @@ let
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
+  unstructuredArrays = attrs:
+    let
+      arrayVariables =
+        builtins.filter
+        (name: builtins.match "^.*Array$" name != null)
+        (builtins.attrNames attrs);
+      __structuredAttrs = attrs.__structuredAttrs or config.structuredAttrsByDefault;
+    in
+      if __structuredAttrs then [] else arrayVariables;
+
   # Alow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
@@ -171,6 +181,7 @@ let
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
     maintainerless = x: "";
+    unstructured-arrays = x: "";
   };
   remediation_env_var = allow_attr: {
     Unfree = "NIXPKGS_ALLOW_UNFREE";
@@ -439,6 +450,18 @@ let
     # Please also update the type in /pkgs/top-level/config.nix alongside this.
     else if hasNoMaintainers attrs then
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
+    else if unstructuredArrays attrs != [] then
+      let
+        quote = s: ''"${s}"'';
+        variables = unstructuredArrays attrs;
+        variablesStr = builtins.concatStringsSep ", " (map quote variables);
+        usePlural = variables != [(builtins.head variables)];
+        plural = optionalString usePlural "s";
+      in
+      { valid = "warn";
+        reason = "unstructured-arrays";
+        errormsg = "The variable${plural} ${variablesStr} will be misinterpreted as single element bash array${plural} because __structuredAttrs is not set";
+      }
     # -----
     else validYes;
 
