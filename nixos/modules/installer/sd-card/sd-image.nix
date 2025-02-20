@@ -20,7 +20,7 @@ let
     inherit (config.sdImage) storePaths;
     compressImage = config.sdImage.compressImage;
     populateImageCommands = config.sdImage.populateRootCommands;
-    volumeLabel = "NIXOS_SD";
+    volumeLabel = config.sdImage.rootVolumeLabel;
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
     uuid = config.sdImage.rootPartitionUUID;
   });
@@ -106,6 +106,17 @@ in
       '';
     };
 
+    rootVolumeLabel = mkOption {
+      type = types.str;
+      default = "NIXOS_SD";
+      example = "NIXOS_PENDRIVE";
+      description = ''
+        Label for the NixOS root volume.
+        Usually used when creating a recovery NixOS media installation
+        that avoids conflicting with previous instalation label.
+      '';
+    };
+
     firmwareSize = mkOption {
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
@@ -183,7 +194,7 @@ in
         options = [ "nofail" "noauto" ];
       };
       "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
+        device = "/dev/disk/by-label/${config.sdImage.rootVolumeLabel}";
         fsType = "ext4";
       };
     };
