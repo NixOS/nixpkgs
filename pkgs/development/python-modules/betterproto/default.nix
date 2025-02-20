@@ -19,6 +19,21 @@
   grpcio-tools,
 }:
 
+let
+  # using a older version of pytest-asyncio only for tests
+  # https://github.com/pytest-dev/pytest-asyncio/issues/928
+  pytest-asyncio_23_8 = (
+    pytest-asyncio.overridePythonAttrs (old: rec {
+      version = "0.23.8";
+      src = fetchFromGitHub {
+        inherit (old.src) owner repo;
+        tag = "v${version}";
+        hash = "sha256-kMv0crYuYHi1LF+VlXizZkG87kSL7xzsKq9tP9LgFVY=";
+      };
+    })
+  );
+in
+
 buildPythonPackage rec {
   pname = "betterproto";
   version = "2.0.0b6";
@@ -55,7 +70,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     grpcio-tools
     pydantic
-    pytest-asyncio
+    pytest-asyncio_23_8
     pytest-mock
     pytest7CheckHook
     tomlkit
