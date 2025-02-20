@@ -184,6 +184,12 @@ makeOutputs {
     inherit (nix-cli) version;
     # Should not be required
     inherit (drv) drvPath;
+    /**
+      The build platform's system string, used by Nix to dispatch derivations to the correct kinds of hosts.
+
+      This particular attribute is _not_ used for that purpose, but it has the same value, and some other expressions expect it to be present.
+    */
+    inherit (drv) system;
     tests = drv.tests or {};
     src = patchedSrc;
   };
