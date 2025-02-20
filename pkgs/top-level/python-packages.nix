@@ -7711,6 +7711,8 @@ self: super: with self; {
     inherit (pkgs) fuse;
   };
 
+  llguidance = callPackage ../development/python-modules/llguidance { };
+
   llm = callPackage ../development/python-modules/llm { };
 
   llm-anthropic = callPackage ../development/python-modules/llm-anthropic { };
