@@ -5,7 +5,7 @@
   gtk4,
   meson,
   ninja,
-  gitUpdater,
+  nix-update-script,
   desktop-file-utils,
   appstream,
   blueprint-compiler,
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-WjhefFyd1hnngD/uIvgjAI4i6AyoldDJKWocvotGw9g=";
   };
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   postPatch = ''
     substituteInPlace upscaler/window.py \

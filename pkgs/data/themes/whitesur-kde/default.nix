@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
 }:
 
 # NOTE:
@@ -66,7 +66,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "MacOS big sur like theme for KDE Plasma desktop";

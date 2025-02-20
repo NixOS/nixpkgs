@@ -8,7 +8,7 @@
   substituteAll,
   xorg,
   wrapGAppsHook3,
-  gitUpdater,
+  nix-update-script,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -67,7 +67,7 @@ perlPackages.buildPerlPackage rec {
     wrapProgram "$out/bin/${pname}" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/trizen/fbmenugen";

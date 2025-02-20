@@ -3,7 +3,7 @@
   fetchFromGitHub,
   melpaBuild,
   prop-menu,
-  gitUpdater,
+  nix-update-script,
 }:
 
 let
@@ -24,7 +24,7 @@ melpaBuild {
     prop-menu
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/idris-community/idris2-mode";

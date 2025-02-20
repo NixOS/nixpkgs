@@ -9,7 +9,7 @@
   glib,
   perl,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
   version ? "2.1.0",
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt${lib.optionalString (lib.versionAtLeast version "2.0.0") "2"}-build-tools/modules/LXQtConfigVars.cmake
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-build-tools";

@@ -10,7 +10,7 @@
   qttools,
   qtx11extras,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

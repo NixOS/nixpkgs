@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   cmake,
   dbus,
   libqtdbustest,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Free Desktop Notification server QML implementation for Lomiri";

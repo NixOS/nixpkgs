@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   dialog,
   glib,
   gnome-themes-extra,
@@ -154,7 +154,7 @@ lib.checkListOfEnum "${pname}: window control buttons variants" [ "normal" "alt"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = {
       description = "MacOS BigSur like Gtk+ theme based on Elegant Design";

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   ayatana-indicator-messages,
   cmake,
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) ayatana-indicators;
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

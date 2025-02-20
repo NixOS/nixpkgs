@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   bison,
   flex,
   qmake,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.IODATA_VERSION = "${finalAttrs.version}";
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for reading and writing simple structured data";

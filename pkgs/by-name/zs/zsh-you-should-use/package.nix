@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, ncurses, fetchFromGitHub, gitUpdater }:
+{ lib, stdenvNoCC, ncurses, fetchFromGitHub, nix-update-script }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-you-should-use";
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D you-should-use.plugin.zsh $out/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";

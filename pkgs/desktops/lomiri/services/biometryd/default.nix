@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   testers,
   # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
   boost186,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

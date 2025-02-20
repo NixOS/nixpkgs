@@ -1,7 +1,7 @@
 {
   fetchFromGitLab,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   lib,
   stdenv,
   testers,
@@ -146,7 +146,7 @@ let
     '';
 
     passthru = {
-      updateScript = gitUpdater { };
+      updateScript = nix-update-script { };
     };
 
     meta = {

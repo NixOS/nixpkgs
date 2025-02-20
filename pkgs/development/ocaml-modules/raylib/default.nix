@@ -6,7 +6,7 @@
   ctypes,
   integers,
   patch,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildDunePackage rec {
@@ -29,7 +29,7 @@ buildDunePackage rec {
     patch
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "OCaml bindings for Raylib (5.0.0)";

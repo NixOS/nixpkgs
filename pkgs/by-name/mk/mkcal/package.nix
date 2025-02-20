@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   testers,
   cmake,
   doxygen,
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       # version field doesn't exactly match current version

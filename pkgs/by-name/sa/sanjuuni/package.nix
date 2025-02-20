@@ -7,7 +7,7 @@
   poco,
   ocl-icd,
   opencl-clhpp,
-  gitUpdater,
+  nix-update-script,
   callPackage,
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     tests = {
       run-on-nixos-artwork = callPackage ./tests/run-on-nixos-artwork.nix { };
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

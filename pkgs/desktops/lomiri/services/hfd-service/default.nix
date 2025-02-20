@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   accountsservice,
   cmake,
   cmake-extras,
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "DBus-activated service that manages human feedback devices such as LEDs and vibrators on mobile devices";

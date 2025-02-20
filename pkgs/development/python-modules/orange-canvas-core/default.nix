@@ -27,7 +27,7 @@
   pytestCheckHook,
 
   stdenv,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -88,7 +88,7 @@ buildPythonPackage rec {
     "test_widgettoolgrid"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   disabledTestPaths = [ "orangecanvas/canvas/items/tests/test_graphicstextitem.py" ];
 

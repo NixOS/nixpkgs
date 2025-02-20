@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   testers,
   boost,
@@ -183,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

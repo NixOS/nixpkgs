@@ -4,7 +4,7 @@
   exiv2,
   gettext,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   buildPythonPackage,
   setuptools,
   toml,
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "-v"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Low level Python interface to the Exiv2 C++ library";

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   cmake,
   pdal,
   curl,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Point cloud organization for massive datasets";

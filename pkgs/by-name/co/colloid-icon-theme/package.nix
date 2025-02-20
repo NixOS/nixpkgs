@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -86,7 +86,7 @@ lib.checkListOfEnum "${pname}: scheme variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Colloid icon theme";

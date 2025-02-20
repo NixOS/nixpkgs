@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   makeWrapper,
   gawk,
   gnused,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Useful set of utilities for interacting with a cloud";

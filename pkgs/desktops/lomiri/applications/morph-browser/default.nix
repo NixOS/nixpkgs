@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   cmake,
   gettext,
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests = {
       # Test of morph-browser itself
       standalone = nixosTests.morph-browser;

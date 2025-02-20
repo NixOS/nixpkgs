@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # Tests are outdated and based on Nose, which is not supported anymore.
   doCheck = false;
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScripts = nix-update-script { };
 
   meta = {
     description = "Matcher library for Python";

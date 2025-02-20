@@ -14,7 +14,7 @@
   qttools,
   qtwayland,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     qtwayland
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/lxqt/obconf-qt";

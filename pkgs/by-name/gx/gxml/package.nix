@@ -10,7 +10,7 @@
   glib,
   libgee,
   libxml2,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "GXml provides a GObject API for manipulating XML and a Serializable framework from GObject to XML";

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   python3Packages,
   gnutar,
   unzip,
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ python3Packages.invoke ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";

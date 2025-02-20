@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   pkg-config,
   postgresql,
   libversion,
@@ -28,7 +28,7 @@ buildPostgresqlExtension (finalAttrs: {
     libversion
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "PostgreSQL extension with support for version string comparison";

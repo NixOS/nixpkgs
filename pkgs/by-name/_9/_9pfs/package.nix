@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   fuse,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse ];
   enableParallelBuilding = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/ftrvxmtrx/9pfs";

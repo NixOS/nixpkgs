@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   precisely,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # Disabling tests, they rely on Nose which is outdated and not supported
   doCheck = false;
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScripts = nix-update-script { };
 
   meta = {
     description = "A mocking framework for Python, influenced by JMock";

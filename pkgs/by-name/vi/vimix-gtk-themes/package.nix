@@ -7,7 +7,7 @@
   gtk_engines,
   jdupes,
   sassc,
-  gitUpdater,
+  nix-update-script,
   themeVariants ? [ ], # default: doder (blue)
   colorVariants ? [ ], # default: all
   sizeVariants ? [ ], # default: standard
@@ -86,7 +86,7 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Flat Material Design theme for GTK based desktop environments";

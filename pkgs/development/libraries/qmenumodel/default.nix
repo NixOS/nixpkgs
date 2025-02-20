@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   testers,
   cmake,
   cmake-extras,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

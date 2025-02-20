@@ -8,7 +8,7 @@
   LWPProtocolHttps,
   DataDump,
   JSON,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPerlPackage rec {
@@ -33,7 +33,7 @@ buildPerlPackage rec {
     shortenPerlShebang $out/bin/youtube-viewer
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lightweight application for searching and streaming videos from YouTube";

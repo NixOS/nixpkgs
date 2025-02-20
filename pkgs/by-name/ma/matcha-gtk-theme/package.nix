@@ -6,7 +6,7 @@
   gtk-engine-murrine,
   jdupes,
   librsvg,
-  gitUpdater,
+  nix-update-script,
   colorVariants ? [ ], # default: all
   themeVariants ? [ ], # default: blue
 }:
@@ -68,7 +68,7 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Stylish flat Design theme for GTK based desktop environments";

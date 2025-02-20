@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  gitUpdater,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     toml
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/jim-easterbrook/Photini";

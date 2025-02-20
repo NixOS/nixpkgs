@@ -8,7 +8,7 @@
   qtbase,
   qtsvg,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     qtsvg
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/qtxdg-tools";

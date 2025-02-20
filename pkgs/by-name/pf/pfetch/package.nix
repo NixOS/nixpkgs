@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

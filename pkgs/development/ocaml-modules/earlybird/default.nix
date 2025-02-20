@@ -15,7 +15,7 @@
   path_glob,
   ppx_deriving_yojson,
   ppx_optcomp,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildDunePackage rec {
@@ -48,7 +48,7 @@ buildDunePackage rec {
     ppx_optcomp
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/hackwaly/ocamlearlybird";

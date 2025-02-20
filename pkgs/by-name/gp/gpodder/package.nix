@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   glibcLocales,
   adwaita-icon-theme,
   gobject-introspection,
@@ -84,7 +84,7 @@ python311Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Podcatcher written in python";

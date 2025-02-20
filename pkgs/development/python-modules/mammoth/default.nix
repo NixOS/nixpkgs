@@ -8,7 +8,7 @@
   pytestCheckHook,
   spur,
   tempman,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScripts = nix-update-script { };
 
   meta = {
     description = "Convert Word documents (.docx files) to HTML";

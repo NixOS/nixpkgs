@@ -15,7 +15,7 @@
   pkg-config,
   qttools,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
   version ? "2.1.0",
   qtx11extras ? null,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     pcre
   ] ++ (lib.optionals (lib.versionAtLeast "2.0.0" version) [ qtx11extras ]);
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/libfm-qt";

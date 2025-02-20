@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   six,
   setuptools,
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Python 2/3 implementation of XMPP";

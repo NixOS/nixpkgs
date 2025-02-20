@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   makeWrapper,
   ast-grep,
   ripgrep,
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
       }"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple terminal UI for search and replace, ala VS Code";

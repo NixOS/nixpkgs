@@ -15,7 +15,7 @@
   qtxdg-tools,
   xdg-user-dirs,
   xkeyboard_config,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/lxqt/lxqt-wayland-session";

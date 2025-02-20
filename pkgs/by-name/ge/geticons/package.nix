@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromSourcehut,
-  gitUpdater,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-V3e3boIzn76irAfn9fF9MycPRAWorUUSD/CUZhgKv0E=";
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "CLI utility to get icons for apps on your system or other generic icons by name";

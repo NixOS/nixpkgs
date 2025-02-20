@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   testers,
   accountsservice,
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       vm = nixosTests.ayatana-indicators;
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

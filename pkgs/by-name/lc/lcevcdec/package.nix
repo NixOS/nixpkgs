@@ -5,7 +5,7 @@
   fetchpatch,
   fmt,
   git,
-  gitUpdater,
+  nix-update-script,
   gtest,
   lib,
   makePkgconfigItem,
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

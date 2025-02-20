@@ -5,7 +5,7 @@
   cmake,
   curl,
   openssl,
-  gitUpdater,
+  nix-update-script,
   withCurl ? true,
   withOpenSSL ? true,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tiny boost library in C++11";

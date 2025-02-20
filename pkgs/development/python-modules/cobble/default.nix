@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "test_sub_sub_classes_are_included_in_abc"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScripts = nix-update-script { };
 
   meta = {
     description = "Create Python data objects";

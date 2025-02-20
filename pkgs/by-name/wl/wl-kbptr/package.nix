@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   gtk3,
   libxkbcommon,
   meson,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

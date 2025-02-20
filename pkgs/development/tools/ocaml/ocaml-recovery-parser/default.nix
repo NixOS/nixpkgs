@@ -6,7 +6,7 @@
   fix,
   menhirLib,
   menhirSdk,
-  gitUpdater,
+  nix-update-script,
 }:
 
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
@@ -33,7 +33,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
       menhirSdk
     ];
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Simple fork of OCaml parser with support for error recovery";

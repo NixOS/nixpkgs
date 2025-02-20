@@ -3,7 +3,7 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   testers,
   cmake,
@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       vm = nixosTests.ayatana-indicators;
     };
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

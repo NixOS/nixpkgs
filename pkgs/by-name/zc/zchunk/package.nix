@@ -4,7 +4,7 @@
   callPackage,
   curl,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
     tests = lib.packagesFromDirectoryRecursive {
       inherit callPackage;
       directory = ./tests;

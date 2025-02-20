@@ -10,7 +10,7 @@
   python3Packages,
   meson,
   ninja,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/a2j --replace "a2j_control" "$out/bin/a2j_control"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";

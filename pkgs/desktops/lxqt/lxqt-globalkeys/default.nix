@@ -11,7 +11,7 @@
   liblxqt,
   libqtxdg,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libqtxdg
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-globalkeys";

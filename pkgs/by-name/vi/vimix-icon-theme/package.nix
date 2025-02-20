@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -70,7 +70,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Material Design icon theme based on Paper icon theme";

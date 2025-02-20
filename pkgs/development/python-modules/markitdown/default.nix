@@ -20,7 +20,7 @@
   speechrecognition,
   youtube-transcript-api,
   pytestCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPythonPackage {
@@ -65,7 +65,7 @@ buildPythonPackage {
     "test_markitdown_remote"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScripts = nix-update-script { };
 
   meta = {
     description = "Python tool for converting files and office documents to Markdown";

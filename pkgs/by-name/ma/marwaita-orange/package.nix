@@ -6,7 +6,7 @@
   gtk-engine-murrine,
   gtk_engines,
   librsvg,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Ubuntu Style of Marwaita GTK theme";

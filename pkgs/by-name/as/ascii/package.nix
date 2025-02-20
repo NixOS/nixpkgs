@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  gitUpdater,
+  nix-update-script,
   asciidoctor,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -vp "$out/bin" "$out/share/man/man1"
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Interactive ASCII name and synonym chart";

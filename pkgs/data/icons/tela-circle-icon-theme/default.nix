@@ -7,7 +7,7 @@
   gtk3,
   hicolor-icon-theme,
   jdupes,
-  gitUpdater,
+  nix-update-script,
   allColorVariants ? false,
   circularFolder ? false,
   colorVariants ? [ ], # default is standard
@@ -82,7 +82,7 @@ lib.checkListOfEnum "${pname}: color variants"
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = nix-update-script { };
 
     meta = with lib; {
       description = "Flat and colorful personality icon theme";

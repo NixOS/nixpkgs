@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -25,7 +25,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Drop-in replacement for Nmap powered by shodan.io";

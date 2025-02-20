@@ -10,7 +10,7 @@
   gobject-introspection,
   wrapGAppsHook3,
   glib,
-  gitUpdater,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tweak tool for the MATE Desktop";

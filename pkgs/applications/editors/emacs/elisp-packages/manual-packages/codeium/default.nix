@@ -4,7 +4,7 @@
   fetchFromGitHub,
   melpaBuild,
   replaceVars,
-  gitUpdater,
+  nix-update-script,
 }:
 
 melpaBuild {
@@ -24,7 +24,7 @@ melpaBuild {
     })
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Free, ultrafast Copilot alternative for Emacs";

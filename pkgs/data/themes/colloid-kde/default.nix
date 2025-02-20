@@ -5,7 +5,7 @@
   kdeclarative,
   plasma-framework,
   plasma-workspace,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation rec {
       >> $sddm/nix-support/propagated-user-env-packages
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Clean and concise theme for KDE Plasma desktop";

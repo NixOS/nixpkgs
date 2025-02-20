@@ -8,7 +8,7 @@
   ArchiveCpio,
   SubOverride,
   shortenPerlShebang,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildPerlPackage rec {
@@ -66,7 +66,7 @@ buildPerlPackage rec {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

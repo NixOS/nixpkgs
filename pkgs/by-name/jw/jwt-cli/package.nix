@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   installShellFiles,
   rustPlatform,
 }:
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
       | grep -q 'John Doe'
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Super fast CLI tool to decode and encode JWTs";

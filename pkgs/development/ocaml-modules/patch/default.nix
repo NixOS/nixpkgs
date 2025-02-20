@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
-  gitUpdater,
+  nix-update-script,
   alcotest,
   crowbar,
 }:
@@ -25,7 +25,7 @@ buildDunePackage rec {
     crowbar
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Patch library purely in OCaml";

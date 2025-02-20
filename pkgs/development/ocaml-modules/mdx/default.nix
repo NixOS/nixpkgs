@@ -1,7 +1,7 @@
 { lib, fetchurl, buildDunePackage, ocaml, findlib
 , alcotest
 , astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
-, gitUpdater
+, nix-update-script
 }:
 
 buildDunePackage rec {
@@ -31,7 +31,7 @@ buildDunePackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Executable OCaml code blocks inside markdown files";

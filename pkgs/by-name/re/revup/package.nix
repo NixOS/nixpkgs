@@ -1,7 +1,7 @@
 {
   lib,
   fetchPypi,
-  gitUpdater,
+  nix-update-script,
   python3Packages,
   testers,
 }:
@@ -40,7 +40,7 @@ let
     ];
 
     passthru = {
-      updateScript = gitUpdater { };
+      updateScript = nix-update-script { };
       tests.version = testers.testVersion {
         package = self;
       };

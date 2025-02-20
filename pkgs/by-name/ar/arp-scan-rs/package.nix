@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   rustPlatform,
   versionCheckHook,
 }:
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "ARP scan tool for fast local network scans";

@@ -3,7 +3,7 @@
   lib,
   fetchFromGitLab,
   fetchpatch,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
   cmake,
   gettext,
@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.vm = nixosTests.lomiri-mediaplayer-app;
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

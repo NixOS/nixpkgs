@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  gitUpdater,
+  nix-update-script,
   fetchFromGitea,
   pkg-config,
   meson,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     fcft
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://codeberg.org/dnkl/fnott";

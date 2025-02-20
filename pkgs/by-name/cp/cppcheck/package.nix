@@ -16,7 +16,7 @@
   pcre,
 
   versionCheckHook,
-  gitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

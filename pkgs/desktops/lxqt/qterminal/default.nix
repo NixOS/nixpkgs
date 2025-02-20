@@ -10,7 +10,7 @@
   qttools,
   qtwayland,
   wrapQtAppsHook,
-  gitUpdater,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     qtwayland
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests.test = nixosTests.terminal-emulators.qterminal;
 

@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   pytestCheckHook,
   unittestCheckHook,
   setuptools,
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jsonslicer" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Stream JSON parser for Python";
