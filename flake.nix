@@ -8,7 +8,7 @@
       libVersionInfoOverlay = import ./lib/flake-version-info.nix self;
       lib = (import ./lib).extend libVersionInfoOverlay;
 
-      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+      forAllSystems = f: lib.genAttrs f lib.systems.flakeExposed;
 
       jobs = forAllSystems (system: import ./pkgs/top-level/release.nix {
         nixpkgs = self;

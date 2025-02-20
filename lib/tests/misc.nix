@@ -58,6 +58,7 @@ let
     foldr
     functionArgs
     generators
+    genAttrs
     genList
     getExe
     getExe'
@@ -1159,6 +1160,16 @@ runTests {
         world = false;
       };
     };
+  };
+
+  testGenAttrs = {
+    expr = genAttrs (name: "x_" + name) [ "foo" "bar" ];
+    expected = { foo = "x_foo"; bar = "x_bar"; };
+  };
+
+  testGenAttrsLegacyArgumentOrder = {
+    expr = genAttrs [ "foo" "bar" ] (name: "x_" + name);
+    expected = { foo = "x_foo"; bar = "x_bar"; };
   };
 
   # code from example
