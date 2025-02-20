@@ -10,7 +10,7 @@ let
     if stdenv.hostPlatform.isLinux then
       {
         stable = "0.0.85";
-        ptb = "0.0.130";
+        ptb = "0.0.131";
         canary = "0.0.585";
         development = "0.0.68";
       }
@@ -30,7 +30,7 @@ let
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        hash = "sha256-MuFPQK9HgTgkZV/48OazJfBXFgrEjT57SNKnq9HKD4s=";
+        hash = "sha256-KmjYQ7IDcNacXL9r2XUr3QcucQRH7/NL5t49vU4BFPA=";
       };
       canary = fetchurl {
         url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
