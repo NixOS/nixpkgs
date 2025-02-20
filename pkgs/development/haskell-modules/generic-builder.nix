@@ -47,7 +47,7 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle
-, doInstallIntermediates ? false
+, doInstallIntermediates ? outputsJS && isExecutable
 , editedCabalFile ? null
 , enableLibraryProfiling ? !outputsJS
 , enableExecutableProfiling ? false
@@ -694,6 +694,16 @@ stdenv.mkDerivation ({
     mkdir -p "$installIntermediatesDir"
     cp -r dist/build "$installIntermediatesDir"
     runHook postInstallIntermediates
+
+    ${optionalString stdenv.hostPlatform.isGhcjs ''
+      # if there are executable components, place alongside them symlinks to the .jsexe directories
+      if [ -d ${binDir} ]; then
+        for exeDir in $installIntermediatesDir/build/*; do
+          exe=$(basename $exeDir)
+          (cd ${binDir} && ln -s $exeDir/$exe.jsexe)
+        done
+      fi;
+    ''}
   '';
 
   passthru = passthru // rec {
