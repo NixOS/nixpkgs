@@ -260,9 +260,13 @@ runCommand "example" {
 This tester wraps the functionality provided by [`testers.testBuildFailure`](#tester-testBuildFailure) to make writing checks easier by simplifying checking the exit code of the builder and asserting the existence of entries in the builder's log.
 Additionally, users may specify a script containing additional checks, accessing the result of applying `testers.testBuildFailure` through the variable `failed`.
 
+NOTE: This tester will produce an empty output and exit with success if none of the checks fail; there is no need to `touch "$out"` in `script`.
+
 :::{.example #ex-testBuildFailurePrime-doc-example}
 
 # Check that a build fails, and verify the changes made during build
+
+Re-using the example from [`testers.testBuildFailure`](#ex-testBuildFailure-showingenvironmentchanges), we can see how common checks are made easier and remove the need for `runCommand`:
 
 ```nix
 testers.testBuildFailure' {
@@ -275,7 +279,6 @@ testers.testBuildFailure' {
   expectedBuilderLogEntries = [ "failing though" ];
   script = ''
     grep --silent -F 'ok-ish' "$failed/result"
-    touch "$out"
   '';
 }
 ```
