@@ -322,6 +322,7 @@ checkConfigError 'The option .undefinedPackage. was accessed but has no value de
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
 checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput 'if config.useGo then pkgs.hello-go else pkgs.hello' options.packageWithDefaultText.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
 
 # submoduleWith
