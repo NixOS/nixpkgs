@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   libcMinimal,
   include,
@@ -31,6 +33,10 @@ mkDerivation {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isStatic ''
+    rm $out/lib/libpthread.so
   '';
 
   env.MK_TESTS = "no";
