@@ -170,6 +170,16 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
+# types.stringLike
+checkConfigOutput '^"foo"$' config.stringLike.ok1 ./types.nix
+checkConfigOutput '^/foo/bar$' config.stringLike.ok2 ./types.nix
+checkConfigOutput '^{ outPath = "/foo/bar"; }$' config.stringLike.ok3 ./types.nix
+checkConfigOutput '^{ __toString = <CODE>; value = 42; }$' config.stringLike.ok4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .string-like.\. Definition values:\n\s*- In .*: 42' config.stringLike.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .string-like.\. Definition values:\n\s*- In .*:\s*[\n\s*"foo"\s*]' config.stringLike.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .string-like.\. Definition values:\n\s*- In .*: <function>' config.stringLike.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .string-like.\. Definition values:\n\s*- In .*:\s*{\s*value = 42;\s*}' config.stringLike.bad4 ./types.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix

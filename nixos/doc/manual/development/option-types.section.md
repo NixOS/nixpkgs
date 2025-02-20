@@ -232,6 +232,12 @@ merging is handled.
     definitions cannot be merged. The regular expression is processed
     using `builtins.match`.
 
+`types.stringLike`
+
+:   A string-like value that can be used without explicit conversion in
+    string interpolations and in most functions that expect a string.
+    This is the type version of `lib.isStringLike`.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
