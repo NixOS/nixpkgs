@@ -342,6 +342,7 @@
   ./programs/xfconf.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/xppen.nix
   ./programs/xss-lock.nix
   ./programs/xwayland.nix
   ./programs/yabar.nix
