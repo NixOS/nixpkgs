@@ -5122,8 +5122,6 @@ with pkgs;
     openjdk = jdk23.override { enableJavaFX = true; };
   };
 
-  sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix { };
-
   steck = callPackage ../servers/pinnwand/steck.nix { };
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
