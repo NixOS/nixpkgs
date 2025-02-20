@@ -251,6 +251,17 @@ let
         else if final.isAarch64 then "aa64"
         else final.parsed.cpu.name;
 
+      pageSize = let
+        pageSizeArg = args.pageSize or {};
+        checkValue = value: assert parse.types.pageSize.check value; value;
+      in {
+        min = checkValue (pageSizeArg.min or parse.pageSizes."4k");
+        max = checkValue (pageSizeArg.max or parse.pageSizes."64k");
+        range = builtins.attrValues (lib.filterAttrs
+          (_: v: v >= final.pageSize.min && v <= final.pageSize.max)
+            (builtins.removeAttrs parse.pageSizes [ "_type" ]));
+      };
+
       darwinArch = {
         armv7a  = "armv7";
         aarch64 = "arm64";
@@ -318,7 +329,7 @@ let
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args // {
+      // builtins.removeAttrs args [ "pageSize" ] // {
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and
           # removed, there will no longer be any need to modify any
