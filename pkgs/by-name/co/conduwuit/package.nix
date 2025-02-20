@@ -30,17 +30,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "conduwuit";
-  version = "0.4.6";
+  version = "0.5.0-rc3";
 
   src = fetchFromGitHub {
     owner = "girlbossceo";
     repo = "conduwuit";
-    rev = "v${version}";
-    hash = "sha256-ut3IWEueNR/hT7NyGfuK5IYtppC6ArSoJdEfFuD/0vE=";
+    tag = "v${version}";
+    hash = "sha256-Etzh7m1aZBwKfcS6sa+2zBzdOaZSR+yFn2pwwGTilb4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-L0UvJ5ZyEk/hZobkB21u6cfPCeRwhDl+07aWcQEOgYw=";
+  cargoHash = "sha256-GGCcYPYWkBVUD9wcSihv6q+J1kJisfETN5U0Q9V8p7Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -66,15 +66,22 @@ rustPlatform.buildRustPackage rec {
   # for available features.
   # We enable all default features except jemalloc and io_uring, which
   # we guard behind our own (default-enabled) flags.
-  buildFeatures = [
-    "brotli_compression"
-    "element_hacks"
-    "gzip_compression"
-    "release_max_log_level"
-    "sentry_telemetry"
-    "systemd"
-    "zstd_compression"
-  ] ++ lib.optional enableJemalloc "jemalloc" ++ lib.optional enableLiburing "io_uring";
+  buildFeatures =
+    [
+      "brotli_compression"
+      "element_hacks"
+      "gzip_compression"
+      "media_thumbnail"
+      "release_max_log_level"
+      "systemd"
+      "url_preview"
+      "zstd_compression"
+    ]
+    ++ lib.optionals enableJemalloc [
+      "jemalloc"
+      "jemalloc_conf"
+    ]
+    ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -96,7 +103,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/girlbossceo/conduwuit/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ niklaskorz ];
-    # Not a typo, conduwuit is a drop-in replacement for conduit.
-    mainProgram = "conduit";
+    mainProgram = "conduwuit";
   };
 }
