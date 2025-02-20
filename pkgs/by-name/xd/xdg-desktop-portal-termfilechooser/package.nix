@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
   lib,
   xdg-desktop-portal,
   ninja,
@@ -14,8 +14,9 @@ stdenv.mkDerivation {
   pname = "xdg-desktop-portal-termfilechooser";
   version = "0.4.0";
 
-  src = fetchgit {
-    url = "https://github.com/hunkyburrito/xdg-desktop-portal-termfilechooser";
+  src = fetchFromGitHub {
+    owner = "hunkyburrito";
+    repo = "xdg-desktop-portal-termfilechooser";
     rev = "c35af27e323a492cbb3b19bdd135657ae523caef";
     hash = "sha256-9bxhKkk5YFBhR2ylcDzlvt4ltYuF174w00EJK5r3aY0=";
   };
