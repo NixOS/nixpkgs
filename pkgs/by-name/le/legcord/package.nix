@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pnpm_9,
   nodejs,
-  electron_32,
+  electron_34,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist="${electron_32.dist}" \
-      -c.electronVersion="${electron_32.version}"
+      -c.electronDist="${electron_34.dist}" \
+      -c.electronVersion="${electron_34.version}"
 
     runHook postBuild
   '';
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/legcord.png"
 
-    makeShellWrapper "${lib.getExe electron_32}" "$out/bin/legcord" \
+    makeShellWrapper "${lib.getExe electron_34}" "$out/bin/legcord" \
       --add-flags "$out/share/lib/legcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
