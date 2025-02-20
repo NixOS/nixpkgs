@@ -33,7 +33,7 @@ in
       "cowbell"
       "cowbell"
     ];
-    checkSetupScript = ''
+    script = ''
       addCowbell() {
         local -rn arrayNameRef="$1"
         arrayNameRef+=( "cowbell" )
@@ -61,7 +61,7 @@ in
       "cat"
       "dog"
     ];
-    checkSetupScript = ''
+    script = ''
       ${concatValuesArrayToActualArray}
       actualArray+=( "dog" )
     '';
@@ -79,7 +79,7 @@ in
       "bee"
       "cat"
     ];
-    checkSetupScript = ''
+    script = ''
       actualArray+=( "dog" )
       ${concatValuesArrayToActualArray}
     '';
@@ -92,7 +92,7 @@ in
       "cat"
     ];
     expectedArray = [ ];
-    checkSetupScript = ''
+    script = ''
       # doing nothing
     '';
   };
@@ -103,7 +103,7 @@ in
         name = "${name}-failure";
         valuesArray = [ "apple" ];
         expectedArray = [ ];
-        checkSetupScript = concatValuesArrayToActualArray;
+        script = concatValuesArrayToActualArray;
       };
     in
     runCommand name
@@ -140,7 +140,7 @@ in
       cat = "2";
       dog = "3";
     };
-    checkSetupScript = ''
+    script = ''
       ${concatValuesMapToActualMap}
       actualMap["dog"]="3"
     '';
@@ -158,7 +158,7 @@ in
       cat = "2";
       dog = "3";
     };
-    checkSetupScript = ''
+    script = ''
       ${concatValuesMapToActualMap}
       unset 'actualMap[bee]'
     '';
@@ -179,7 +179,7 @@ in
           cat = "2";
           dog = "3";
         };
-        checkSetupScript = concatValuesMapToActualMap;
+        script = concatValuesMapToActualMap;
       };
     in
     runCommand name
@@ -210,9 +210,7 @@ in
         name = "${name}-failure";
         valuesArray = [ ];
         expectedMap.apple = 1;
-        checkSetupScript = ''
-          nixLog "doing nothing in checkSetupScript"
-        '';
+        script = "";
       };
     in
     runCommand name
@@ -252,7 +250,7 @@ in
           bee = "1";
           dog = "3";
         };
-        checkSetupScript = concatValuesMapToActualMap;
+        script = concatValuesMapToActualMap;
       };
     in
     runCommand

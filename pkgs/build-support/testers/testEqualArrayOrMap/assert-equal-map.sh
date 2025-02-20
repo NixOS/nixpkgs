@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 
+# Tests if a map is declared.
+isDeclaredMap() {
+  # shellcheck disable=SC2034
+  local -nr mapRef="$1" && [[ ${!mapRef@a} =~ A ]]
+}
+
 # Asserts that two maps are equal, printing out differences if they are not.
 # Does not short circuit on the first difference.
 assertEqualMap() {
@@ -12,13 +18,13 @@ assertEqualMap() {
   local -nr expectedMapRef="$1"
   local -nr actualMapRef="$2"
 
-  if [[ ! ${expectedMapRef@a} =~ A ]]; then
-    nixErrorLog "first arugment expectedMapRef must be an associative array reference"
+  if ! isDeclaredMap expectedMapRef; then
+    nixErrorLog "first arugment expectedMapRef must be an associative array reference to a declared associative array"
     exit 1
   fi
 
-  if [[ ! ${actualMapRef@a} =~ A ]]; then
-    nixErrorLog "second arugment actualMapRef must be an associative array reference"
+  if ! isDeclaredMap actualMapRef; then
+    nixErrorLog "second arugment actualMapRef must be an associative array reference to a declared associative array"
     exit 1
   fi
 
