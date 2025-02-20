@@ -894,6 +894,8 @@ self: super: with self; {
 
   assay = callPackage ../development/python-modules/assay { };
 
+  asserts = callPackage ../development/python-modules/asserts { };
+
   assertpy = callPackage ../development/python-modules/assertpy { };
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
@@ -6062,6 +6064,8 @@ self: super: with self; {
 
   htmldate = callPackage ../development/python-modules/htmldate { };
 
+  htmlgen = callPackage ../development/python-modules/htmlgen { };
+
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
@@ -9617,6 +9621,8 @@ self: super: with self; {
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
+
+  py-rust-stemmers = callPackage ../development/python-modules/py-rust-stemmers { };
 
   py-sucks = callPackage ../development/python-modules/py-sucks { };
 
@@ -18722,6 +18728,8 @@ self: super: with self; {
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
+
+  zebrafy = callPackage ../development/python-modules/zebrafy { };
 
   zeek = (toPythonModule (pkgs.zeek.broker.override {
     python3 = python;
