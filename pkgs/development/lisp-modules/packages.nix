@@ -292,6 +292,13 @@ let
     ];
   };
 
+  cl-project = super.cl-project.overrideLispAttrs {
+    # install skeleton.asd
+    postInstall =''
+      cp -v skeleton/skeleton.asd $out/skeleton
+    '';
+  };
+
   frugal-uuid = super.frugal-uuid.overrideLispAttrs (o: {
     systems = [
       "frugal-uuid"
