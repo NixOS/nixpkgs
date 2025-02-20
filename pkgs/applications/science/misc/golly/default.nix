@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  wrapGAppsHook,
   wxGTK,
   python3,
   zlib,
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     (python3.withPackages (ps: [ ps.setuptools ]))
+    wrapGAppsHook
   ];
 
   setSourceRoot = ''
