@@ -12,6 +12,7 @@
   libclang,
   version,
   python3,
+  substituteAll,
   buildLlvmTools,
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
@@ -71,12 +72,20 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $dev/lib
     mv $out/lib/libLLVMBOLT*.a $dev/lib
+
+    mkdir -p $out/nix-support
+    cp $setupHook $out/nix-support/setup-hook
   '';
 
   outputs = [
     "out"
     "dev"
   ];
+
+  setupHook = substituteAll {
+    src = ./setup-hook.sh.in;
+    env.readelf = lib.getExe' libllvm "llvm-readelf";
+  };
 
   meta = llvm_meta // {
     homepage = "https://github.com/llvm/llvm-project/tree/main/bolt";

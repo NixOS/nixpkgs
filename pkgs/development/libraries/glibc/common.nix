@@ -349,4 +349,7 @@ stdenv.mkDerivation (
         }
         // (args.meta or { });
     }
+  // lib.optionalAttrs stdenv.hostPlatform.useBolt {
+    dontUseBolt = stdenv.cc.isGNU;
+  }
 )
