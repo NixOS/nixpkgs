@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.20.0";
+  version = "4.20.1";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    hash = "sha256-Vv92OM/5i1bUp1A/9ZvHnygabd/82g0jjAgr7ftfvns=";
+    hash = "sha256-UmR+EmODZFM6tnHLyOSFyW+fCIidk/4O0QSmYyZhEk8=";
   };
 
   postPatch = ''
