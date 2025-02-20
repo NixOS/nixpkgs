@@ -47,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postInstall = ''
-    cd "$src"
-    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
+    install -Dm644 ../util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
 
   passthru.updateScript = gitUpdater {
