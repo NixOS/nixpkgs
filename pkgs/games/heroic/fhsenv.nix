@@ -31,6 +31,7 @@ buildFHSEnv {
       nettools
       opencl-headers
       p7zip
+      pciutils
       perl
       psmisc
       python3
