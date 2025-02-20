@@ -102,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     nodejs.python
-    nodejs.pkgs.lerna
     pkg-config
     makeWrapper
     git
