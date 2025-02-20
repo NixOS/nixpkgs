@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -12,9 +11,9 @@
   loguru,
   mmh3,
   numpy,
-  onnx,
   onnxruntime,
   pillow,
+  py-rust-stemmers,
   pystemmer,
   requests,
   snowballstemmer,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
     tag = "v${version}";
-    hash = "sha256-jroYfmcwiqrAQgQuNHMdOBWqivgSAR7yUvr2ogb3dy8=";
+    hash = "sha256-aVeQC0BooVZcbIplVRzY22ozliWW/Ts/asiInTxSBOE=";
   };
 
   build-system = [ poetry-core ];
@@ -43,9 +40,9 @@ buildPythonPackage rec {
     loguru
     mmh3
     numpy
-    onnx
     onnxruntime
     pillow
+    py-rust-stemmers
     pystemmer
     requests
     snowballstemmer
@@ -56,6 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastembed" ];
 
   pythonRelaxDeps = [
+    "mmh3"
     "onnxruntime"
     "pillow"
   ];
@@ -66,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast, Accurate, Lightweight Python library to make State of the Art Embedding";
     homepage = "https://github.com/qdrant/fastembed";
-    changelog = "https://github.com/qdrant/fastembed/releases/tag/${src.tag}";
+    changelog = "https://github.com/qdrant/fastembed/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
