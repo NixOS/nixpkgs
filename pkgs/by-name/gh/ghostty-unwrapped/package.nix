@@ -13,13 +13,10 @@
   libX11,
   libadwaita,
   ncurses,
-  nixosTests,
   oniguruma,
   pandoc,
   pkg-config,
   removeReferencesTo,
-  versionCheckHook,
-  wrapGAppsHook4,
   zig_0_13,
   # Usually you would override `zig.hook` with this, but we do that internally
   # since upstream recommends a non-default level
@@ -74,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (appRuntime == "gtk") [
       glib # Required for `glib-compile-schemas`
-      wrapGAppsHook4
     ];
 
   buildInputs =
@@ -148,22 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $vim $out/share/vim-plugins
 
 
-    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+    remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-
-  doInstallCheck = true;
-
-  versionCheckProgramArg = [ "--version" ];
-
   passthru = {
-    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      inherit (nixosTests) allTerminfo;
-      nixos = nixosTests.terminal-emulators.ghostty;
-    };
+    inherit appRuntime;
   };
 
   meta = {
