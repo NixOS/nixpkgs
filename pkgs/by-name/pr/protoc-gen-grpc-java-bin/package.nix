@@ -1,15 +1,16 @@
 {
   autoPatchelfHook,
   fetchurl,
+  fixDarwinDylibNames,
   lib,
   stdenv,
 }:
 
 let
-  inherit (lib) licenses platforms;
+  inherit (lib) licenses;
   inherit (lib.maintainers) patwid;
   inherit (lib.sourceTypes) binaryNativeCode;
-  inherit (stdenv.hostPlatform) system;
+  inherit (stdenv.hostPlatform) system isLinux isDarwin;
 
   version = "1.70.0";
   mainProgram = "protoc-gen-grpc-java";
@@ -22,9 +23,9 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    lib.optional isLinux autoPatchelfHook
+    ++ lib.optional isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     stdenv.cc.cc.lib
@@ -42,7 +43,6 @@ stdenv.mkDerivation {
     description = "Protobuf plugin for generating Java code";
     homepage = "https://github.com/grpc/grpc-java/blob/master/compiler";
     license = licenses.asl20;
-    platforms = platforms.linux;
     sourceProvenance = [ binaryNativeCode ];
     inherit mainProgram;
     maintainers = [ patwid ];
