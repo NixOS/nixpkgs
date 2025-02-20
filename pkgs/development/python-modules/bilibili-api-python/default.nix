@@ -20,6 +20,7 @@
   setuptools-scm,
   tqdm,
   yarl,
+  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "bilibili-api-python";
@@ -66,6 +67,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "bilibili_api" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Nemo2011/bilibili-api/releases/tag/${version}";
