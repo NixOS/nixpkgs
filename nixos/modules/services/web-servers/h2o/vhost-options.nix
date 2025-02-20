@@ -82,7 +82,7 @@ in
               '';
             };
             identity = mkOption {
-              type = types.nonEmptyListOf (
+              type = types.listOf (
                 types.submodule {
                   options = {
                     key-file = mkOption {
@@ -104,18 +104,16 @@ in
                 literalExpression
                   # nix
                   ''
-                    {
-                      indentities = [
-                        {
-                          key-file = "/path/to/rsa.key";
-                          certificate-file = "/path/to/rsa.crt";
-                        }
-                        {
-                          key-file = "/path/to/ecdsa.key";
-                          certificate-file = "/path/to/ecdsa.crt";
-                        }
-                      ];
-                    }
+                    [
+                      {
+                        key-file = "/path/to/rsa.key";
+                        certificate-file = "/path/to/rsa.crt";
+                      }
+                      {
+                        key-file = "/path/to/ecdsa.key";
+                        certificate-file = "/path/to/ecdsa.crt";
+                      }
+                    ]
                   '';
             };
             extraSettings = mkOption {
