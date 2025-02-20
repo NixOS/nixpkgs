@@ -229,3 +229,9 @@ adb9714bd909df283c66bbd641bd631ff50a4260
 
 # tmuxPlugins sha-to-sri.py script
 516b1e74c358a9c4b06e5591f8c1a2897aad0c33
+
+# treewide: migrate comments in lib to rfc145 style
+ef85e0daa092c9eae0d32c7ce16b889728a5fbc0
+d89ad6c70e0e89aaae75e9f886878ea4e103965a
+e0fe216f4912dd88a021d12a44155fd2cfeb31c8
+80d5b411f6397d5c3e755a0635d95742f76f3c75

@@ -355,7 +355,7 @@ with pkgs;
   };
 
   vcpkg-tool = callPackage ../by-name/vc/vcpkg-tool/package.nix {
-    fmt = fmt_10;
+    fmt = fmt_11;
   };
 
   r3ctl = qt5.callPackage ../tools/misc/r3ctl { };
@@ -1081,8 +1081,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  tailwindcss = callPackage ../development/tools/tailwindcss { };
-
   ufolint = with python3Packages; toPythonApplication ufolint;
 
   valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
@@ -1159,6 +1157,7 @@ with pkgs;
 
   gitMinimal = git.override {
     withManual = false;
+    osxkeychainSupport = false;
     pythonSupport = false;
     perlSupport = false;
     withpcre2 = false;
@@ -1629,7 +1628,7 @@ with pkgs;
 
   authelia = callPackage ../servers/authelia {
     buildGoModule = buildGo123Module;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
   };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
@@ -3475,10 +3474,6 @@ with pkgs;
 
   gdown = with python3Packages; toPythonApplication gdown;
 
-  goverlay = qt6Packages.callPackage ../tools/graphics/goverlay {
-    inherit (qt6Packages) libqtpas wrapQtAppsHook;
-  };
-
   gpt4all-cuda = gpt4all.override {
     cudaSupport = true;
   };
@@ -4069,6 +4064,10 @@ with pkgs;
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
+
+  inherit (callPackage ../development/tools/lerna { })
+    lerna_6 lerna_8;
+  lerna = lerna_8;
 
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5531,19 +5530,18 @@ with pkgs;
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
-  runtimeShellPackage = bash;
+  runtimeShellPackage = bashNonInteractive;
 
-  bash = lowPrio (callPackage ../shells/bash/5.nix { });
+  bash = callPackage ../shells/bash/5.nix { };
+  bashNonInteractive = lowPrio (callPackage ../shells/bash/5.nix {
+    interactive = false;
+  });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/5.nix {
-    interactive = true;
-    withDocs = true;
-  };
-  bashInteractiveFHS = callPackage ../shells/bash/5.nix {
-    interactive = true;
-    withDocs = true;
+  bashInteractive = bash;
+  bashFHS = callPackage ../shells/bash/5.nix {
     forFHSEnv = true;
   };
+  bashInteractiveFHS = bashFHS;
 
   carapace = callPackage ../shells/carapace {
     buildGoModule = buildGo123Module;
@@ -5702,12 +5700,7 @@ with pkgs;
   };
 
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
-    crystal_1_2
-    crystal_1_7
-    crystal_1_8
-    crystal_1_9
     crystal_1_11
-    crystal_1_12
     crystal_1_14
     crystal_1_15
     crystal;
@@ -6175,6 +6168,11 @@ with pkgs;
   };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
+
+  gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
+    vlc =
+      vlc.overrideAttrs (old: { buildInputs = old.buildInputs ++ [ x264 ]; });
+  };
 
   gwe = callPackage ../tools/misc/gwe {
     nvidia_x11 = linuxPackages.nvidia_x11;
@@ -6946,7 +6944,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_27 erlang_26 erlang_25
+    erlang erlang_28 erlang_27 erlang_26 erlang_25
     elixir elixir_1_18 elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14
     elixir-ls;
 
@@ -6964,10 +6962,14 @@ with pkgs;
   beam25Packages = recurseIntoAttrs beam.packages.erlang_25;
   beam26Packages = recurseIntoAttrs beam.packages.erlang_26;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27;
+  # 28 is pre-release
+  beam28Packages = dontRecurseIntoAttrs beam.packages.erlang_28;
 
   beamMinimal25Packages = recurseIntoAttrs beam_minimal.packages.erlang_25;
   beamMinimal26Packages = recurseIntoAttrs beam_minimal.packages.erlang_26;
   beamMinimal27Packages = recurseIntoAttrs beam_minimal.packages.erlang_27;
+  # 28 is pre-release
+  beamMinimal28Packages = dontRecurseIntoAttrs beam_minimal.packages.erlang_28;
 
   erlang_language_platform = callPackage ../by-name/er/erlang-language-platform/package.nix { };
 
@@ -7295,9 +7297,6 @@ with pkgs;
 
   inherit
     ({
-      spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix {
-        inherit (darwin) libobjc;
-      };
       spidermonkey_91 = callPackage ../development/interpreters/spidermonkey/91.nix {
         inherit (darwin) libobjc;
       };
@@ -7308,7 +7307,6 @@ with pkgs;
         inherit (darwin) libobjc;
       };
     })
-    spidermonkey_78
     spidermonkey_91
     spidermonkey_115
     spidermonkey_128
@@ -7462,9 +7460,9 @@ with pkgs;
   antlr = antlr4;
 
   inherit (callPackages ../servers/apache-kafka { })
-    apacheKafka_3_6
     apacheKafka_3_7
-    apacheKafka_3_8;
+    apacheKafka_3_8
+    apacheKafka_3_9;
 
   apacheKafka = apacheKafka_3_8;
 
@@ -8204,10 +8202,6 @@ with pkgs;
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else haskell.lib.compose.justStaticExecutables)
     haskellPackages.shake;
-
-  inherit (callPackage ../development/tools/build-managers/shards { })
-    shards_0_17
-    shards;
 
   shellcheck = callPackage ../development/tools/shellcheck {
     inherit (__splicedPackages.haskellPackages) ShellCheck;
@@ -9228,7 +9222,7 @@ with pkgs;
   #
   # `icuReal` is provided in case the upstream icu package is needed on Darwin instead of the fork.
   # Note that the versioned icu packages always correspond to the upstream versions.
-  icuReal = icu74;
+  icuReal = icu76;
   icu = if stdenv.hostPlatform.isDarwin then darwin.ICU else icuReal;
 
   idasen = with python3Packages; toPythonApplication idasen;
@@ -9686,8 +9680,7 @@ with pkgs;
   };
 
   librsvg = callPackage ../development/libraries/librsvg {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
@@ -10091,8 +10084,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
     pythonPackages = python3Packages;
-    # TODO(@connorbaker): OpenCV 4.9 only supports up to CUDA 12.3.
-    cudaPackages = cudaPackages_12_3;
     # TODO: LTO does not work.
     # https://github.com/NixOS/nixpkgs/issues/343123
     enableLto = false;
@@ -10157,7 +10148,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
-  openssl = openssl_3_3;
+  openssl = openssl_3_4;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -10166,7 +10157,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_3;
+    openssl_3_4;
 
   openwebrx = callPackage ../applications/radio/openwebrx {
     inherit (python3Packages)
@@ -11009,17 +11000,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_4_11 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.11"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_5_0 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.5.0"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_5_0;
+  sbcl_2_5_1 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.1"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_5_1;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -11256,9 +11247,6 @@ with pkgs;
 
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
-
-  grafana-loki = callPackage ../servers/monitoring/loki { };
-  promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
@@ -11596,10 +11584,11 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  postgresqlVersions = import ../servers/sql/postgresql pkgs;
-  inherit (postgresqlVersions)
-    libpq
+  inherit (import ../servers/sql/postgresql pkgs)
+    postgresqlVersions
+    libpq;
 
+  inherit (postgresqlVersions)
     postgresql_13
     postgresql_14
     postgresql_15
@@ -11756,6 +11745,8 @@ with pkgs;
   };
 
   showoff = callPackage ../servers/http/showoff { };
+
+  stalwart-mail-webadmin = stalwart-mail.webadmin;
 
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
 
@@ -12444,6 +12435,8 @@ with pkgs;
   util-linuxMinimal = util-linux.override {
     nlsSupport = false;
     ncursesSupport = false;
+    pamSupport = false;
+    shadowSupport = false;
     systemdSupport = false;
     translateManpages = false;
   };
@@ -14580,10 +14573,6 @@ with pkgs;
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
-  obsidian = callPackage ../by-name/ob/obsidian/package.nix {
-    electron = electron_33;
-  };
-
   okms-cli = callPackage ../by-name/ok/okms-cli/package.nix {
     buildGoModule = buildGo123Module;
   };
@@ -15775,7 +15764,7 @@ with pkgs;
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
   youtube-music = callPackage ../applications/audio/youtube-music {
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
   };
 
   youtube-tui = callPackage ../applications/video/youtube-tui {
@@ -16002,8 +15991,6 @@ with pkgs;
   ### GAMES/DOOM-PORTS
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
-
-  doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
 
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
@@ -17019,15 +17006,6 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
-  ### SCIENCE/GEOLOGY
-  pflotran = callPackage ../by-name/pf/pflotran/package.nix {
-    petsc = petsc.override {
-      hdf5-support = true;
-      hdf5 = hdf5-fortran-mpi;
-      petsc-optimized = true;
-    };
-  };
-
   ### SCIENCE/LOGIC
 
   abella = callPackage ../applications/science/logic/abella {
@@ -17363,13 +17341,6 @@ with pkgs;
     hepmc = hepmc2;
   };
 
-  rivet = callPackage ../development/libraries/physics/rivet {
-    imagemagick = graphicsmagick-imagemagick-compat;
-  };
-
-  yoda = callPackage ../development/libraries/physics/yoda {
-    python = python3;
-  };
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
@@ -17923,8 +17894,6 @@ with pkgs;
   };
 
   unityhub = callPackage ../development/tools/unityhub { };
-
-  unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 

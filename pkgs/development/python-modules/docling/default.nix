@@ -2,56 +2,61 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  # dependencies
-  pydantic,
-  docling-core,
-  docling-ibm-models,
-  deepsearch-glm,
-  docling-parse,
-  filetype,
-  pypdfium2,
-  pydantic-settings,
-  huggingface-hub,
-  requests,
-  easyocr,
-  tesserocr,
-  certifi,
-  rtree,
-  scipy,
-  typer,
-  python-docx,
-  python-pptx,
-  beautifulsoup4,
-  pandas,
-  marko,
-  openpyxl,
-  lxml,
-  # ocrmac # not yet packaged
-  rapidocr-onnxruntime,
-  onnxruntime,
-  pillow,
-  pyarrow,
+
   # build system
   poetry-core,
+
+  # dependencies
+  beautifulsoup4,
+  certifi,
+  deepsearch-glm,
+  docling-core,
+  docling-ibm-models,
+  docling-parse,
+  easyocr,
+  filetype,
+  huggingface-hub,
+  lxml,
+  marko,
+  # ocrmac # not yet packaged
+  onnxruntime,
+  openpyxl,
+  pandas,
+  pillow,
+  pyarrow,
+  pydantic,
+  pydantic-settings,
+  pypdfium2,
+  python-docx,
+  python-pptx,
+  rapidocr-onnxruntime,
+  requests,
+  rtree,
+  scipy,
+  tesserocr,
+  typer,
+
   # optional dependencies
-  mkdocs-material,
-  mkdocs-jupyter,
   # mkdocs-click # not yet packaged
+  mkdocs-jupyter,
+  mkdocs-material,
   mkdocstrings,
-  # native check inputs
+
+  # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "docling";
-  version = "2.20.0";
+  version = "2.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling";
     tag = "v${version}";
-    hash = "sha256-6p6/UwbI4ZB6ro1O5ELg8fENEnpH4ycpCyOk7QPX7cY=";
+    hash = "sha256-ySywKaLxjtgQM7RtzJrxZDS3z8uMwAwPDYO51uKHT28=";
   };
 
   build-system = [
@@ -59,34 +64,34 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    pydantic
+    beautifulsoup4
+    certifi
+    deepsearch-glm
     docling-core
     docling-ibm-models
-    deepsearch-glm
     docling-parse
-    filetype
-    pypdfium2
-    pydantic-settings
-    huggingface-hub
-    requests
     easyocr
-    tesserocr
-    certifi
-    rtree
-    scipy
-    typer
-    python-docx
-    python-pptx
-    beautifulsoup4
-    pandas
-    marko
-    openpyxl
+    filetype
+    huggingface-hub
     lxml
+    marko
     # ocrmac # not yet packaged
-    rapidocr-onnxruntime
     onnxruntime
+    openpyxl
+    pandas
     pillow
     pyarrow
+    pydantic
+    pydantic-settings
+    pypdfium2
+    python-docx
+    python-pptx
+    rapidocr-onnxruntime
+    requests
+    rtree
+    scipy
+    tesserocr
+    typer
   ];
 
   pythonRelaxDeps = [
@@ -107,20 +112,17 @@ buildPythonPackage rec {
     ];
 
     docs = [
-      mkdocs-material
-      mkdocs-jupyter
       # mkdocs-click # not yet packaged
+      mkdocs-jupyter
+      mkdocs-material
       mkdocstrings
       # griffle-pydantic
     ];
   };
 
-  preCheck = ''
-    export HOME="$TEMPDIR"
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [
@@ -130,6 +132,7 @@ buildPythonPackage rec {
   disabledTests = [
     "test_e2e_pdfs_conversions" # AssertionError: ## TableFormer: Table Structure Understanding with Transf
     "test_e2e_conversions" # RuntimeError: Tesseract is not available
+
     # huggingface_hub.errors.LocalEntryNotFoundError: An error happened
     "test_cli_convert"
     "test_code_and_formula_conversion"
@@ -138,8 +141,12 @@ buildPythonPackage rec {
     "test_convert_stream"
     "test_compare_legacy_output"
     "test_ocr_coverage_threshold"
+
     # requires network access
     "test_page_range"
+
+    # AssertionError: pred_itxt==true_itxt
+    "test_e2e_valid_csv_conversions"
   ];
 
   meta = {

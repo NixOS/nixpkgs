@@ -5,7 +5,6 @@
   versionCheckHook,
   autoPatchelfHook,
   makeWrapper,
-  tailwindcss_4,
 }:
 let
   version = "4.0.6";
@@ -71,7 +70,10 @@ stdenv.mkDerivation {
     homepage = "https://tailwindcss.com/blog/tailwindcss-v4";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.adamjhf ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      adamjhf
+    ];
     mainProgram = "tailwindcss";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };

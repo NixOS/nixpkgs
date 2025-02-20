@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
   python313,
-  substituteAll,
+  replaceVars,
   ffmpeg-headless,
   inetutils,
   nixosTests,
@@ -105,6 +105,16 @@ let
           repo = "async-timeout";
           tag = "v${version}";
           hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
+        };
+      });
+
+      av = super.av.overridePythonAttrs (rec {
+        version = "13.1.0";
+        src = fetchFromGitHub {
+          owner = "PyAV-Org";
+          repo = "PyAV";
+          tag = "v${version}";
+          hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
       });
 
@@ -405,6 +415,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiohttp"
+    "aiozoneinfo"
     "attrs"
     "bcrypt"
     "ciso8601"
@@ -440,8 +451,7 @@ python.pkgs.buildPythonApplication rec {
     ./patches/static-follow-symlinks.patch
 
     # Patch path to ffmpeg binary
-    (substituteAll {
-      src = ./patches/ffmpeg-path.patch;
+    (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
   ];

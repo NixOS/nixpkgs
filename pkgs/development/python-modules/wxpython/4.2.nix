@@ -4,7 +4,7 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
-  substituteAll,
+  replaceVars,
 
   # build
   autoPatchelfHook,
@@ -52,8 +52,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./4.2-ctypes.patch;
+    (replaceVars ./4.2-ctypes.patch {
       libgdk = "${gtk3.out}/lib/libgdk-3.so";
       libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
       libcairo = "${cairo}/lib/libcairo.so";

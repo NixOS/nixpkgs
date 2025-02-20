@@ -1,0 +1,30 @@
+From 966a7c3af74fb0de0f97d344b14890dc2d45f7e1 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 13 Nov 2024 13:53:14 -0500
+Subject: [PATCH 02/18] =?UTF-8?q?Add=20compile=5Fstubs.h=20using=20Clang?=
+ =?UTF-8?q?=E2=80=99s=20`#embed`=20extension=20for=20C++?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/ld/compile_stubs.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 src/ld/compile_stubs.h
+
+diff --git a/src/ld/compile_stubs.h b/src/ld/compile_stubs.h
+new file mode 100644
+index 0000000..88b8462
+--- /dev/null
++++ b/src/ld/compile_stubs.h
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: APSL-2.0
++
++#pragma once
++
++static const char compile_stubs[] = {
++#embed "../../compile_stubs" suffix(, '\0') if_empty('\0')
++};
+-- 
+2.47.2
+

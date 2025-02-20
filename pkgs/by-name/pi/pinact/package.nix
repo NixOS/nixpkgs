@@ -8,19 +8,19 @@
 
 let
   pname = "pinact";
-  version = "1.2.0";
+  version = "1.2.1";
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     tag = "v${version}";
-    hash = "sha256-OmWt4EyUHZyQDIj1Uro+bnC29MNi6wlXO2ksRP84F2U=";
+    hash = "sha256-WBKe398W9NXwZwiK6P5SDay45bFGkOf1+cmGlS+fWRc=";
   };
   mainProgram = "pinact";
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-sZv91EYksNmMhWbT/5PUQTM2gND/8b4ORVfMNtlAI2A=";
+  vendorHash = "sha256-Ix7C+Xs8Y4LoI06Xb5qVGwoJ+J87wTjYjmQp6aAeFhw=";
 
   env.CGO_ENABLED = 0;
 
