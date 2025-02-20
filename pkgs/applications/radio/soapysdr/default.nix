@@ -18,7 +18,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   # Don't forget to change passthru.abiVersion
-  version = "0.8.2-pre";
+  version = "0.8.1-unstable-2024-12-22";
 
   src = fetchFromGitHub {
     owner = "pothosware";
@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
     # use old get python lib for v2 (#437)
-    rev = "8c6cb7c5223fad995e355486527589c63aa3b21e";
-    hash = "sha256-CKasL1mlpeuxXyPe6VDdAvb1l5a1cwWgyP7XX1aM73I=";
+    rev = "309335ec6a52eb712387ed025d705a3c0f7a1e24";
+    hash = "sha256-a9414gX4fUAPQaKKqrWgSlFHZH0BWqbgHzhVCKnIn2M=";
   };
 
   nativeBuildInputs = [
