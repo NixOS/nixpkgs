@@ -71,10 +71,14 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libusb1 ];
 
+  postPatch = ''
+    substituteInPlace packages/99-libftdi.rules \
+      --replace-fail 'GROUP="plugdev"' 'GROUP="ftdi"'
+  '';
+
   postInstall =
     ''
-      mkdir -p "$out/etc/udev/rules.d/"
-      cp ../packages/99-libftdi.rules "$out/etc/udev/rules.d/"
+      install -Dm644 ../packages/99-libftdi.rules "$out/etc/udev/rules.d/99-libftdi.rules"
     ''
     + optionalString docSupport ''
       cp -r doc/man "$out/share/"
