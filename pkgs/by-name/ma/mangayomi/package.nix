@@ -13,18 +13,18 @@
 
 let
   pname = "mangayomi";
-  version = "0.3.8";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-TOCDGmJ5tlpcGS8NeVdIdx946rM1/ItQVY9OnDS6uZ0=";
+    hash = "sha256-xF3qvmEGctYXE7HWka89G4W6ytMTVGw75o26h/Ql0Aw=";
   };
 
   metaCommon = {
     changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
-    description = "Read manga and stream anime from a variety of sources including BitTorrent";
+    description = "Reading manga, novels, and watching animes";
     homepage = "https://github.com/kodjodevf/mangayomi";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ ];
@@ -38,7 +38,7 @@ let
 
     useFetchCargoVendor = true;
 
-    cargoHash = "sha256-Qzq1FyWtUy1533/S1KS8XEou5nAnq0O0Vxxlt+Iv8OQ=";
+    cargoHash = "sha256-WkWNgjTA50cOztuF9ZN6v8l38kldarqUOMXNFJDI0Ds=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
@@ -74,17 +74,20 @@ flutter327.buildFlutterApplication {
       };
   };
 
-  gitHashes = {
-    desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
-    flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
-    media_kit_libs_windows_video = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
-    media_kit_video = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
-    media_kit = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
-  };
+  gitHashes =
+    let
+      media_kit-hash = "sha256-bRwDrK6YdQGuXnxyIaNtvRoubl3i42ksaDsggAwgB80=";
+    in
+    {
+      desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
+      flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
+      media_kit_libs_windows_video = media_kit-hash;
+      media_kit_video = media_kit-hash;
+      media_kit = media_kit-hash;
+      flutter_web_auth_2 = "sha256-3aci73SP8eXg6++IQTQoyS+erUUuSiuXymvR32sxHFw=";
+    };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
   buildInputs = [
     webkitgtk_4_1
