@@ -1,0 +1,38 @@
+From 59734a33cebb317f06af2342cadea792cba69bd0 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 20 Feb 2025 19:42:49 +0100
+Subject: [PATCH] tests/CMakeLists.txt: Drop qt5_use_modules usage
+
+---
+ tests/CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 75a9712..00a3df9 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,3 +1,5 @@
++find_package(Qt5Test REQUIRED)
++
+ add_executable(tst-transfer-plugin
+     tst-transfer-plugin.cpp
+     ${CMAKE_SOURCE_DIR}/src/buteo-source.cpp
+@@ -7,6 +9,7 @@ add_executable(tst-transfer-plugin
+ target_link_libraries(tst-transfer-plugin
+     Qt5::Core
+     Qt5::DBus
++    Qt5::Test
+     Qt5::Xml
+     ${GMODULE_LIBRARIES}
+     ${TRANSFER_INDICATOR_LIBRARIES}
+@@ -22,7 +25,6 @@ include_directories(
+     ${ACCOUNTS_QT5_INCLUDE_DIRS}
+ )
+ 
+-qt5_use_modules(tst-transfer-plugin Core Test)
+ add_definitions(-std=c++11)
+ 
+ find_program(DBUS_RUNNER_BIN dbus-test-runner)
+-- 
+2.47.2
+
