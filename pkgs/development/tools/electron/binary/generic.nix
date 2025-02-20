@@ -6,6 +6,7 @@
   wrapGAppsHook3,
   glib,
   gtk3,
+  gtk4,
   unzip,
   at-spi2-atk,
   libdrm,
@@ -26,6 +27,11 @@
   pango,
   systemd,
   pciutils,
+  libnotify,
+  pipewire,
+  libsecret,
+  libpulseaudio,
+  speechd-minimal,
 }:
 
 version: hashes:
@@ -93,6 +99,7 @@ let
     gdk-pixbuf
     glib
     gtk3
+    gtk4
     nss
     nspr
     xorg.libX11
@@ -107,6 +114,11 @@ let
     pciutils
     stdenv.cc.cc
     systemd
+    libnotify
+    pipewire
+    libsecret
+    libpulseaudio
+    speechd-minimal
     libdrm
     mesa
     libxkbcommon
@@ -126,6 +138,7 @@ let
     buildInputs = [
       glib
       gtk3
+      gtk4
     ];
 
     nativeBuildInputs = [
