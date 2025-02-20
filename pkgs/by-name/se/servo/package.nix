@@ -36,6 +36,9 @@
   vulkan-loader,
   wayland,
   xorg,
+
+  # tests
+  nixosTests,
 }:
 
 let
@@ -143,7 +146,10 @@ rustPlatform.buildRustPackage {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) servo; };
+  };
 
   meta = {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
