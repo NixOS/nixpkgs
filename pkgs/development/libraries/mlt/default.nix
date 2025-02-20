@@ -38,6 +38,8 @@
   SDL2,
   gitUpdater,
   libarchive,
+  pango,
+  gdk-pixbuf
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
       pkg-config
       which
       makeWrapper
+      pango
+      gdk-pixbuf
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
@@ -124,6 +128,7 @@ stdenv.mkDerivation rec {
       # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
       "-DCMAKE_SKIP_BUILD_RPATH=ON"
       "-DMOD_OPENCV=ON"
+      "-DMOD_GDK=ON"
     ]
     ++ lib.optionals enablePython [
       "-DSWIG_PYTHON=ON"
