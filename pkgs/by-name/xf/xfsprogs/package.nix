@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.12.0";
+  version = "6.13.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-CDJAckfbeRzHDe+W5+JUvW7fBD3ISoCmLzzNbj3/0yk=";
+    hash = "sha256-BFmTP5PZTIK8J4nnvWN0InPZ10IHza5n3DAyA42ggzc=";
   };
 
   patches = [
