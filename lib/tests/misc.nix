@@ -678,6 +678,15 @@ runTests {
     ("%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B" == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;")
   ];
 
+  testToSentenceCase = {
+    expr = strings.toSentenceCase "hello world";
+    expected = "Hello world";
+  };
+
+  testToSentenceCasePath = testingThrow (
+    strings.toSentenceCase ./.
+  );
+
   testToInt = testAllTrue [
     # Naive
     (123 == toInt "123")
