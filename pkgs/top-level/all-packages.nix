@@ -9500,8 +9500,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
   };
 
-  libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
-
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
