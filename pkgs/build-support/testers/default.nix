@@ -41,6 +41,8 @@
       mkBuildCommand =
         script:
         ''
+          set -euo pipefail
+
           if [[ -n ''${expectedBuilderExitCode:-} ]]; then
             nixLog "checking original builder exit code"
             builderExitCode=$(<"$failed/testBuildFailure.exit")
