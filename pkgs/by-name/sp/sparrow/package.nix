@@ -7,7 +7,7 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
-  openjdk,
+  jdk23,
   gtk3,
   gsettings-desktop-schemas,
   writeScript,
@@ -20,11 +20,14 @@
   gzip,
   gnupg,
   libusb1,
+  pcsclite,
 }:
 
 let
   pname = "sparrow";
   version = "2.1.3";
+
+  openjdk = jdk23.override { enableJavaFX = true; };
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
@@ -70,6 +73,7 @@ let
   launcher = writeScript "sparrow" ''
     #! ${bash}/bin/bash
     params=(
+      -Dsun.security.smartcardio.library=${pcsclite.lib}/lib/libpcsclite.so.1
       --module-path @out@/lib:@jdkModules@/modules
       --add-opens=javafx.graphics/com.sun.javafx.css=org.controlsfx.controls
       --add-opens=javafx.graphics/javafx.scene=org.controlsfx.controls
@@ -212,7 +216,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   inherit version src;
-  pname = "sparrow-unwrapped";
+  pname = "sparrow";
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
