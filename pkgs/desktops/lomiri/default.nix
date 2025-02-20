@@ -64,6 +64,7 @@ let
       lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
+      lomiri-indicator-transfer-unwrapped = callPackage ./services/lomiri-indicator-transfer { };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
