@@ -26,7 +26,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/mailcap";
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pythonImpotsCheck = [ "mailcap" ];
+  pythonImportsCheck = [ "mailcap" ];
 
   meta = {
     description = "Standard library mailcap redistribution";
