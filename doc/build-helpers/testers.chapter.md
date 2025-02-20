@@ -351,7 +351,7 @@ testers.testEqualContents {
 
 Check that bash arrays (including associative arrays, referred to as "maps") are populated correctly.
 
-This can be used to ensure setup hooks are registered in a certain order, or write unit tests for shell functions which transform arrays.
+This can be used to ensure setup hooks are registered in a certain order, or to write unit tests for shell functions which transform arrays.
 
 :::{.example #ex-testEqualArrayOrMap-test-function-add-cowbell}
 
@@ -369,7 +369,7 @@ testers.testEqualArrayOrMap {
     "cowbell"
     "cowbell"
   ];
-  checkSetupScript = ''
+  script = ''
     addCowbell() {
       local -rn arrayNameRef="$1"
       arrayNameRef+=( "cowbell" )
@@ -390,8 +390,8 @@ testers.testEqualArrayOrMap {
 
 ### Inputs {#tester-testEqualArrayOrMap-inputs}
 
-NOTE: Internally, this tester uses `__structuredAttrs` to handle marhsalling between Nix expressions and shell variables.
-This imposes the restriction that arrays and "maps" have values which are string-coercible.
+NOTE: Internally, this tester uses `__structuredAttrs` to handle marshalling between Nix expressions and shell variables.
+This imposes the restriction that arrays and "maps" have values which are string-like.
 
 NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
 
@@ -399,39 +399,39 @@ NOTE: At least one of `expectedArray` and `expectedMap` must be provided.
 
 : The name of the test.
 
-`checkSetupScript` (string)
+`script` (string)
 
-: The singular task of `checkSetupScript` is to populate `actualArray` or `actualMap` (it may populate both).
-  To do this, checkSetupScript may access the following shell variables:
+: The singular task of `script` is to populate `actualArray` or `actualMap` (it may populate both).
+  To do this, `script` may access the following shell variables:
 
-  - `valuesArray`
-  - `valuesMap`
-  - `actualArray`
-  - `actualMap`
+  - `valuesArray` (available when `valuesArray` is provided to the tester)
+  - `valuesMap` (available when `valuesMap` is provided to the tester)
+  - `actualArray` (available when `expectedArray` is provided to the tester)
+  - `actualMap` (available when `expectedMap` is provided to the tester)
 
-  While both `expectedArray` and `expectedMap` are in scope during the execution of `checkSetupScript`, they *must not* be accessed or modified from within `checkSetupScript`.
+  While both `expectedArray` and `expectedMap` are in scope during the execution of `script`, they *must not* be accessed or modified from within `script`.
 
 `valuesArray` (array of string-like values, optional)
 
-: An array of string-coercible values.
-  This array may be used within `checkSetupScript`.
+: An array of string-like values.
+  This array may be used within `script`.
 
 `valuesMap` (attribute set of string-like values, optional)
 
-: An attribute set of string-coercible values.
-  This attribute set may be used within `checkSetupScript`.
+: An attribute set of string-like values.
+  This attribute set may be used within `script`.
 
 `expectedArray` (array of string-like values, optional)
 
-: An array of string-coercible values.
-  This array *must not* be accessed or modified from within `checkSetupScript`.
-  When provided, `checkSetupScript` is expected to populate `actualArray`.
+: An array of string-like values.
+  This array *must not* be accessed or modified from within `script`.
+  When provided, `script` is expected to populate `actualArray`.
 
 `expectedMap` (attribute set of string-like values, optional)
 
-: An attribute set of string-coercible values.
-  This attribute set *must not* be accessed or modified from within `checkSetupScript`.
-  When provided, `checkSetupScript` is expected to populate `actualMap`.
+: An attribute set of string-like values.
+  This attribute set *must not* be accessed or modified from within `script`.
+  When provided, `script` is expected to populate `actualMap`.
 
 ### Return value {#tester-testEqualArrayOrMap-return}
 
