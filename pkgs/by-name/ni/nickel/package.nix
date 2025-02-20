@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
+    # fails because src is not a git repo
     # `cmd.current_dir(repo.path()).output()` errors with `NotFound`
     "--skip=fetch_targets"
   ];
