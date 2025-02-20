@@ -9622,6 +9622,8 @@ self: super: with self; {
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
+  py-rust-stemmers = callPackage ../development/python-modules/py-rust-stemmers { };
+
   py-sucks = callPackage ../development/python-modules/py-sucks { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
