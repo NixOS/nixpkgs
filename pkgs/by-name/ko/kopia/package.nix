@@ -5,8 +5,8 @@ buildGoModule rec {
   version = "0.19.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "kopia";
+    repo = "kopia";
     tag = "v${version}";
     hash = "sha256-PfxMs9MwoI+4z8vZ1sVlIEal3TOmA06997jWwShNfrE=";
   };
