@@ -1,0 +1,13 @@
+diff --git a/art/dalvikvm/Android.mk b/art/dalvikvm/Android.mk
+index 3f20e405..57b0e65f 100644
+--- a/art/dalvikvm/Android.mk
++++ b/art/dalvikvm/Android.mk
+@@ -11,7 +11,7 @@ LOCAL_CFLAGS   =  \
+         -Wextra
+ LOCAL_LDFLAGS  = -Wl,--export-dynamic
+ LOCAL_SRC_FILES = dalvikvm.cc
+-LOCAL_SHARED_LIBRARIES = libnativehelper
++LOCAL_SHARED_LIBRARIES = libnativehelper liblog libart
+ LOCAL_WHOLE_STATIC_LIBRARIES = libsigchain
+ LOCAL_C_INCLUDES = $(ART_C_INCLUDES)
+ LOCAL_CPP_EXTENSION = .cc
