@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "7.6.0";
+  version = "7.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = "ntc-templates";
     tag = "v${version}";
-    hash = "sha256-N25XKFlTcxOczjOBsTvyYLYSLJLTFnn2hG5KnsHVKOc=";
+    hash = "sha256-B5gKCvouqxzH5BoMpV9I6aLuUYbfdjABqjtzkXWs0Uw=";
   };
 
   build-system = [ poetry-core ];
