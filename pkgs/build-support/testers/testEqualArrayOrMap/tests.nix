@@ -2,8 +2,13 @@
 # `testers.testBuildFailure`. This is due to the fact that `testers.testBuildFailure` modifies the derivation such that
 # it produces an output containing the exit code, logs, and other things. Since `testers.runCommand` expects the empty
 # derivation, it produces a hash mismatch.
-{ runCommand, testers, ... }:
+{
+  lib,
+  runCommand,
+  testers,
+}:
 let
+  inherit (lib.attrsets) recurseIntoAttrs;
   inherit (testers) testEqualArrayOrMap testBuildFailure;
   concatValuesArrayToActualArray = ''
     nixLog "appending all values in valuesArray to actualArray"
@@ -18,7 +23,7 @@ let
     done
   '';
 in
-{
+recurseIntoAttrs {
   # NOTE: This particular test is used in the docs:
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualArrayOrMap
   # or doc/build-helpers/testers.chapter.md
