@@ -80,6 +80,7 @@ python3Packages.buildPythonApplication {
       emantor
       wrmilling
       nickcao
+      ethancedwards8
     ];
     platforms = lib.platforms.unix;
   };
