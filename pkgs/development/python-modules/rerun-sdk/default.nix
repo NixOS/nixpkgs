@@ -71,6 +71,14 @@ buildPythonPackage {
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
+  disabledTests = [
+    # AssertionError / IndexError
+    # https://github.com/rerun-io/rerun/issues/9105
+    "test_any_value"
+    "test_bad_any_value"
+    "test_none_any_value"
+  ];
+
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
     "tests/python/log_benchmark/test_log_benchmark.py"
