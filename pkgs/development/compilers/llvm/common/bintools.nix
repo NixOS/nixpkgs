@@ -36,6 +36,7 @@ runCommand "llvm-binutils-${version}"
     ln -s $llvmBin/llvm-size $out/bin/${targetPrefix}size
     ln -s $llvmBin/llvm-strings $out/bin/${targetPrefix}strings
     ln -s $llvmBin/llvm-symbolizer $out/bin/${targetPrefix}addr2line
+    ln -s $llvmBin/llvm-lipo $out/bin/${targetPrefix}lipo
 
     if [ -e "$llvmBin/llvm-debuginfod" ]; then
       ln -s $llvmBin/llvm-debuginfod $out/bin/${targetPrefix}debuginfod
