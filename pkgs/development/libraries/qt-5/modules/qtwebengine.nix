@@ -157,6 +157,40 @@ qtModule (
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
+
+      # The latest version of Clang changed what macros it predefines on Apple
+      # targets, causing errors about predefined macros in zlib.
+      (fetchpatch2 {
+        url = "https://github.com/chromium/chromium/commit/2f39ac8d0a414dd65c0e1d5aae38c8f97aa06ae9.patch";
+        hash = "sha256-3kA2os0IntxIiJwzS5nPd7QWYlOWOpoLKYsOQFYv0Sk=";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/chromium/";
+      })
+
+      # The latest version of Clang changed what macros it predefines on Apple
+      # targets, causing errors about predefined macros in libpng.
+      (fetchpatch2 {
+        url = "https://github.com/chromium/chromium/commit/66defc14abe47c0494da9faebebfa0a5b6efcf38.patch";
+        hash = "sha256-ErS5Eycls5+xQLGYKz1r/tQC6IcRJWb/WoGsUyzO9WY=";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/chromium/";
+      })
+
+      # https://trac.macports.org/ticket/71563
+      # src/3rdparty/chromium/third_party/freetype/src/src/gzip/ftzconf.h:228:12: error: unknown type name 'Byte'
+      (fetchpatch2 {
+        url = "https://github.com/macports/macports-ports/raw/f9a4136c48020b01ecc6dffa99b88333c360f056/aqua/qt5/files/patch-qtwebengine-chromium-freetype-gzip.diff";
+        hash = "sha256-NeLmMfYMo80u3h+5GTenMANWfWLPeS35cKg+h3vzW4g=";
+        extraPrefix = "";
+      })
+
+      # Add "-target-feature +aes" to the arm crc32c build flags
+      (fetchpatch2 {
+        url = "https://github.com/chromium/chromium/commit/9f43d823b6b4cdea62f0cc7563ff01f9239b8970.patch";
+        hash = "sha256-2WCx+ZOWA8ZyV2yiSQLx9uFZOoeWQHxLqwLEZsV41QU=";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/chromium/";
+      })
     ];
 
     postPatch =
@@ -244,6 +278,8 @@ qtModule (
             # https://trac.macports.org/ticket/70850
             "-Wno-enum-constexpr-conversion"
             "-Wno-unused-but-set-variable"
+            # Clang 19
+            "-Wno-error=missing-template-arg-list-after-template-kw"
           ]
         );
       }
