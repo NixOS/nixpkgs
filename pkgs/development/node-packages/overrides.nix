@@ -105,6 +105,10 @@ final: prev: {
     };
   });
 
+  jsonlint = prev.jsonlint.override {
+    meta.mainProgram = "jsonlint";
+  };
+
   jsonplaceholder = prev.jsonplaceholder.override {
     buildInputs = [ nodejs ];
     postInstall = ''
