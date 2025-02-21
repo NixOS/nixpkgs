@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "oelint-adv";
-  version = "6.7.1";
+  version = "7.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-adv";
     tag = version;
-    hash = "sha256-rJ1M5YRXcKbDEGhy0G+N2dGD3sx8KFUfLJSLthYQNtU=";
+    hash = "sha256-DMA53vLOJUWam4fDVlY2E2bYMRzTWlgrNrzXETyjeJM=";
   };
 
   build-system = with python3Packages; [
