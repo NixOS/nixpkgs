@@ -1,0 +1,67 @@
+From 5f65a988af0fc71ec249322e0b80c017ec08c47e Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 19 Feb 2025 17:13:51 +0100
+Subject: [PATCH] CMakeLists.txt: Use system-provided gtest
+
+Instead of manually building a gtest library from sources provided outside of the repository, just ask for the libraries directly
+---
+ CMakeLists.txt       |  4 +---
+ tests/CMakeLists.txt | 18 ++++--------------
+ 2 files changed, 5 insertions(+), 17 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 12e545a..7df757b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,9 +47,7 @@ set (CC_WARNING_ARGS " -Wall -Wextra -Wno-missing-field-initializers")
+ 
+ # testing & coverage
+ if (${enable_tests})
+-  set (GTEST_SOURCE_DIR /usr/src/gtest/src)
+-  set (GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/..)
+-  set (GTEST_LIBS -lpthread)
++  find_package (GTest REQUIRED)
+   enable_testing ()
+   if (${enable_lcov})
+     include(GCov)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 18ddcb5..052b6ad 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,14 +1,4 @@
+ 
+-###
+-###  Google Test Framework
+-###
+-
+-add_library (gtest STATIC
+-             ${GTEST_SOURCE_DIR}/gtest-all.cc
+-             ${GTEST_SOURCE_DIR}/gtest_main.cc)
+-set_target_properties (gtest PROPERTIES INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} ${GTEST_INCLUDE_DIR})
+-set_target_properties (gtest PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} -w)
+-
+ ###
+ ###  General setup
+ ###
+@@ -27,14 +17,14 @@ set (TEST_NAME phone-test)
+ add_executable (${TEST_NAME} ${TEST_NAME}.cc)
+ add_test (${TEST_NAME} ${TEST_NAME})
+ add_dependencies (${TEST_NAME} ${SERVICE_LIB})
+-target_link_libraries (${TEST_NAME} ${SERVICE_LIB} gtest ${SERVICE_DEPS_LIBRARIES} ${GTEST_LIBS})
++target_link_libraries (${TEST_NAME} ${SERVICE_LIB} GTest::gtest GTest::gtest_main ${SERVICE_DEPS_LIBRARIES})
+ 
+ ###
+ ###  globals
+ ###
+ 
+ #set_property (TARGET ${ALL_TESTS}
+-#              APPEND PROPERTY LINK_LIBRARIES libindicator-location-service gtest ${GTEST_LIBS} ${GCOV_LIBS})
++#              APPEND PROPERTY LINK_LIBRARIES libindicator-location-service GTest::gtest GTest::gtest_main ${GCOV_LIBS})
+ #
+-#set_property (TARGET ${ALL_TESTS} gtest
+-#              APPEND PROPERTY INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR} ${SERVICE_INCLUDE_DIRS} ${GTEST_INCLUDE_DIR})
++#set_property (TARGET ${ALL_TESTS}
++#              APPEND PROPERTY INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR} ${SERVICE_INCLUDE_DIRS})
+-- 
+2.47.2
+

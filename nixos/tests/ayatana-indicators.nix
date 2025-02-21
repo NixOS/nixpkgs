@@ -42,6 +42,7 @@ in
             ayatana-indicator-sound
           ]
           ++ (with pkgs.lomiri; [
+            lomiri-indicator-location
             lomiri-indicator-network
             lomiri-telephony-service
           ]);
