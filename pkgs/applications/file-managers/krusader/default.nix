@@ -4,34 +4,32 @@
   fetchurl,
   extra-cmake-modules,
   kdoctools,
-  wrapGAppsHook3,
   karchive,
   kconfig,
   kcrash,
   kguiaddons,
-  kinit,
   kparts,
   kwindowsystem,
+  cmake,
+  wrapQtAppsHook,
+  qt5compat,
+  kstatusnotifieritem,
 }:
 
 stdenv.mkDerivation rec {
   pname = "krusader";
-  version = "2.8.1";
+  version = "2.9.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-N78gRRnQqxukCWSvAnQbwijxHpfyjExRjKBdNY3xgoM=";
+    url = "mirror://kde/stable/krusader/${version}/krusader-${version}.tar.xz";
+    hash = "sha256-ybeb+t5sxp/g40Hs75Mvysiv2f6U6MvPvXKf61Q5TgQ=";
   };
 
-  patches = [
-    # Fix compilation error due to forceful header include
-    ./compat-fix.patch
-  ];
-
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
-    wrapGAppsHook3
+    wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
@@ -39,9 +37,10 @@ stdenv.mkDerivation rec {
     kconfig
     kcrash
     kguiaddons
-    kinit
     kparts
     kwindowsystem
+    qt5compat
+    kstatusnotifieritem
   ];
 
   meta = {
