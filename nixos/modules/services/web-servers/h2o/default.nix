@@ -20,6 +20,8 @@ let
     types
     ;
 
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
+
   settingsFormat = pkgs.formats.yaml { };
 
   getNames = name: vhostSettings: rec {

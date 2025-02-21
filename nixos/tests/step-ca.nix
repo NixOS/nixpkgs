@@ -90,6 +90,40 @@ import ./make-test-python.nix (
           };
         };
 
+      caclienth2o =
+        { config, pkgs, ... }:
+        {
+          security.acme = {
+            acceptTerms = true;
+            defaults = {
+              server = "https://caserver:8443/acme/acme/directory";
+              email = "root@example.org";
+            };
+          };
+          security.pki.certificateFiles = [ "${test-certificates}/root_ca.crt" ];
+
+          networking.firewall.allowedTCPPorts = [
+            80
+            443
+          ];
+
+          services.h2o = {
+            enable = true;
+            hosts."caclienth2o" = {
+              tls.policy = "force";
+              acme.enable = true;
+              settings = {
+                paths."/" = {
+                  "file.file" = "${pkgs.writeTextFile {
+                    name = "h2o_welcome.txt";
+                    text = "Welcome to H2O!";
+                  }}";
+                };
+              };
+            };
+          };
+        };
+
       catester =
         { config, pkgs, ... }:
         {
@@ -110,6 +144,10 @@ import ./make-test-python.nix (
         # It’s hard to know when Caddy has finished the ACME dance with
         # step-ca, so we keep trying cURL until success.
         catester.wait_until_succeeds("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
+
+        caclienth2o.wait_for_unit("acme-finished-caclienth2o.target")
+        caclienth2o.wait_for_unit("h2o.service")
+        catester.succeed("curl https://caclienth2o/ | grep \"Welcome to H2O!\"")
       '';
   }
 )
