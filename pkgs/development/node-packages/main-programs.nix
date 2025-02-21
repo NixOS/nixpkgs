@@ -30,6 +30,7 @@
   fleek-cli = "fleek";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
+  jsonlint = "jsonlint";
   localtunnel = "lt";
   lua-fmt = "luafmt";
   parsoid = "parse.js";
