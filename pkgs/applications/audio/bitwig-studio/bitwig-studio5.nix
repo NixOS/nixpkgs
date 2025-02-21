@@ -20,7 +20,6 @@
   makeWrapper,
   pango,
   pipewire,
-  pulseaudio,
   vulkan-loader,
   wrapGAppsHook3,
   xcb-imdkit,
@@ -69,7 +68,6 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pango
     pipewire
-    pulseaudio
     (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
