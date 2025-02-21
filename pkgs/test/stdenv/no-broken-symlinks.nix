@@ -17,6 +17,20 @@ let
     ln -s${optionalString (!absolute) "r"} "$out/reflexive-symlink" "$out/reflexive-symlink"
   '';
 
+  # Some platforms implement permissions for symlinks, while others - including
+  # Linux - ignore them. This function takes an extra argument specifying
+  # whether a failure to make the symlink unreadable should count as a 'fail' or
+  # 'pass', to make sure the tests work properly for both kinds of platform.
+  mkUnreadableSymlink = absolute: failIfUnsupported: ''
+    touch "$out/unreadable-symlink-target"
+    ln -s${optionalString (!absolute) "r"} "$out/unreadable-symlink-target" "$out/unreadable-symlink"
+    chmod -h ugo-rwx "$out/unreadable-symlink"
+    if readlink "$out/unreadable-symlink" >/dev/null 2>&1; then
+      nixErrorLog "symlink permissions not supported"
+      ${optionalString failIfUnsupported "exit 1"}
+    fi
+  '';
+
   mkValidSymlink = absolute: ''
     touch "$out/valid"
     ln -s${optionalString (!absolute) "r"} "$out/valid" "$out/valid-symlink"
@@ -61,7 +75,7 @@ in
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -F 'found 1 dangling symlinks and 0 reflexive symlinks' "$failed/testBuildFailure.log"
+        grep -F 'found 1 dangling symlinks, 0 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
@@ -81,7 +95,7 @@ in
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -F 'found 1 dangling symlinks and 0 reflexive symlinks' "$failed/testBuildFailure.log"
+        grep -F 'found 1 dangling symlinks, 0 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
@@ -101,7 +115,7 @@ in
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -F 'found 0 dangling symlinks and 1 reflexive symlinks' "$failed/testBuildFailure.log"
+        grep -F 'found 0 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
@@ -121,13 +135,53 @@ in
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -F 'found 0 dangling symlinks and 1 reflexive symlinks' "$failed/testBuildFailure.log"
+        grep -F 'found 0 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
         touch $out
       '';
 
   pass-reflexive-symlink-absolute-allowed = testBuilder {
     name = "pass-reflexive-symlink-absolute-allowed";
     commands = [ (mkReflexiveSymlink true) ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+  };
+
+  fail-unreadable-symlink-relative =
+    runCommand "fail-unreadable-symlink-relative"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-unreadable-symlink-relative-inner";
+          commands = [ (mkUnreadableSymlink false true) ];
+        });
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        grep -E 'found 0 dangling symlinks, 0 reflexive symlinks and 1 unreadable symlinks|symlink permissions not supported' "$failed/testBuildFailure.log"
+        touch $out
+      '';
+
+  pass-unreadable-symlink-relative-allowed = testBuilder {
+    name = "pass-unreadable-symlink-relative-allowed";
+    commands = [ (mkUnreadableSymlink false false) ];
+    derivationArgs.dontCheckForBrokenSymlinks = true;
+  };
+
+  fail-unreadable-symlink-absolute =
+    runCommand "fail-unreadable-symlink-absolute"
+      {
+        failed = testBuildFailure (testBuilder {
+          name = "fail-unreadable-symlink-absolute-inner";
+          commands = [ (mkUnreadableSymlink true true) ];
+        });
+      }
+      ''
+        (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
+        grep -E 'found 0 dangling symlinks, 0 reflexive symlinks and 1 unreadable symlinks|symlink permissions not supported' "$failed/testBuildFailure.log"
+        touch $out
+      '';
+
+  pass-unreadable-symlink-absolute-allowed = testBuilder {
+    name = "pass-unreadable-symlink-absolute-allowed";
+    commands = [ (mkUnreadableSymlink true false) ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
   };
 
@@ -139,12 +193,16 @@ in
           commands = [
             (mkDanglingSymlink false)
             (mkReflexiveSymlink false)
+            (mkUnreadableSymlink false true)
           ];
         });
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -F 'found 1 dangling symlinks and 1 reflexive symlinks' "$failed/testBuildFailure.log"
+        if ! grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 1 unreadable symlinks' "$failed/testBuildFailure.log"; then
+          grep -F 'symlink permissions not supported' "$failed/testBuildFailure.log"
+          grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
+        fi
         touch $out
       '';
 
@@ -153,6 +211,7 @@ in
     commands = [
       (mkDanglingSymlink false)
       (mkReflexiveSymlink false)
+      (mkUnreadableSymlink false false)
     ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
   };
@@ -165,12 +224,16 @@ in
           commands = [
             (mkDanglingSymlink true)
             (mkReflexiveSymlink true)
+            (mkUnreadableSymlink true true)
           ];
         });
       }
       ''
         (( 1 == "$(cat "$failed/testBuildFailure.exit")" ))
-        grep -F 'found 1 dangling symlinks and 1 reflexive symlinks' "$failed/testBuildFailure.log"
+        if ! grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 1 unreadable symlinks' "$failed/testBuildFailure.log"; then
+          grep -F 'symlink permissions not supported' "$failed/testBuildFailure.log"
+          grep -F 'found 1 dangling symlinks, 1 reflexive symlinks and 0 unreadable symlinks' "$failed/testBuildFailure.log"
+        fi
         touch $out
       '';
 
@@ -179,6 +242,7 @@ in
     commands = [
       (mkDanglingSymlink true)
       (mkReflexiveSymlink true)
+      (mkUnreadableSymlink true false)
     ];
     derivationArgs.dontCheckForBrokenSymlinks = true;
   };
