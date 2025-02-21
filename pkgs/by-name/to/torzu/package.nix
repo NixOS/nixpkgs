@@ -221,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = "
     install -Dm444 $src/dist/72-yuzu-input.rules $out/lib/udev/rules.d/72-yuzu-input.rules
+    sed -i 's/057e:/057E:/' $out/lib/udev/rules.d/72-yuzu-input.rules
   ";
 
   meta = {
