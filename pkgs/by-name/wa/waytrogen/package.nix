@@ -17,20 +17,20 @@
 
 stdenv.mkDerivation rec {
   pname = "waytrogen";
-  version = "0.6.9";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = version;
-    hash = "sha256-bHQhgavD7L0jCWafOGnGRGOBigdcpSBvsFxTlJudZSY=";
+    hash = "sha256-Y83l6GKuaH+976MTOo03saVBh6gDegxyo3WRsRA+iQI=";
   };
 
   useFetchCargoVendor = true;
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-577bzSc2iEoTotG55qBZOR3SdRUvp3gGQP2zrtkePAw=";
+    hash = "sha256-t3bDgY1Jtc/lE3WOnmti12shwsmSX3HhGBtYjesQ7hk=";
   };
 
   nativeBuildInputs = [
