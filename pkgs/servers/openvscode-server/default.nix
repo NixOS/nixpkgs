@@ -21,10 +21,6 @@
 }:
 let
 
-  version = "1.96.4";
-  hash = "sha256-TUM2R3TT4xZ1BTsZaBRbq2E8/uPazKryEoyBenMJwzE=";
-  nodeModulesHash = "sha256-Zdk8obKjQnLkPyQ17F44YQ1LkK4YHgbhXeom5Vf5M8g=";
-
   system = stdenv.hostPlatform.system;
 
   vsBuildTarget =
@@ -39,14 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-
-  inherit nodejs version;
+  version = "1.96.4";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
-    rev = "openvscode-server-v${version}";
-    inherit hash;
+    rev = "openvscode-server-v${finalAttrs.version}";
+    hash = "sha256-TUM2R3TT4xZ1BTsZaBRbq2E8/uPazKryEoyBenMJwzE=";
   };
 
   ## fetchNpmDeps doesn't correctly process git dependencies
@@ -59,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = nodeModulesHash;
+        outputHash = "sha256-Zdk8obKjQnLkPyQ17F44YQ1LkK4YHgbhXeom5Vf5M8g=";
       }
       ''
         runPhase unpackPhase
