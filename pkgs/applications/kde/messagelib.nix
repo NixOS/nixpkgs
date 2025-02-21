@@ -6,7 +6,6 @@
   kdoctools,
   akonadi,
   akonadi-mime,
-  akonadi-notes,
   akonadi-search,
   gpgme,
   grantlee,
@@ -49,7 +48,6 @@ mkDerivation {
     kdoctools
   ];
   buildInputs = [
-    akonadi-notes
     akonadi-search
     gpgme
     grantlee

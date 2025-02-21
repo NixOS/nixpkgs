@@ -9,7 +9,6 @@
   akonadi-calendar,
   akonadi-contacts,
   akonadi-mime,
-  akonadi-notes,
   cyrus_sasl,
   kholidays,
   kcalutils,
@@ -54,7 +53,6 @@ mkDerivation {
     akonadi-calendar
     akonadi-contacts
     akonadi-mime
-    akonadi-notes
     kholidays
     kcalutils
     kcontacts

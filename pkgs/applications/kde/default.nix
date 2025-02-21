@@ -68,7 +68,6 @@ let
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
       akonadi-import-wizard = callPackage ./akonadi-import-wizard.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
-      akonadi-notes = callPackage ./akonadi-notes.nix {};
       akonadi-search = callPackage ./akonadi-search.nix {};
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
@@ -149,7 +148,6 @@ let
       kio-admin = callPackage ./kio-admin.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kio-gdrive = callPackage ./kio-gdrive.nix {};
-      kipi-plugins = callPackage ./kipi-plugins.nix {};
       kirigami-gallery = callPackage ./kirigami-gallery.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kldap = callPackage ./kldap.nix {};
@@ -170,7 +168,6 @@ let
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
       knights = callPackage ./knights.nix {};
-      knotes = callPackage ./knotes.nix {};
       kolf = callPackage ./kolf.nix {};
       kollision = callPackage ./kollision.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
@@ -216,7 +213,6 @@ let
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkgapi = callPackage ./libkgapi.nix {};
-      libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkmahjongg = callPackage ./libkmahjongg.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
@@ -236,7 +232,6 @@ let
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
-      print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       skanlite = callPackage ./skanlite.nix {};
       skanpage = callPackage ./skanpage.nix {};
