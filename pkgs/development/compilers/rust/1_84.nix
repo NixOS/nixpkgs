@@ -34,7 +34,7 @@ let
       {
         enableSharedLibraries = true;
       }
-      // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+      // lib.optionalAttrs (pkgSet.stdenv.targetPlatform.useLLVM or false) {
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;

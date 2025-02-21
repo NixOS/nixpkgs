@@ -52,7 +52,9 @@ let
     concatStringsSep
     ;
   inherit (darwin.apple_sdk.frameworks) Security;
-  useLLVM = stdenv.targetPlatform.useLLVM or false;
+  useLLVMTarget = stdenv.targetPlatform.useLLVM or false;
+  useLLVMHost = stdenv.hostPlatform.useLLVM or false;
+  useLLVMBuild = llvmSharedForBuild.stdenv.cc.libcxx.isLLVM or false;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
@@ -93,19 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
 
   NIX_LDFLAGS = toString (
-    # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-    # This doesn't apply to cross-building for FreeBSD because the host
-    # uses libstdc++, but the target (used for building std) uses libc++
-    optional (
-      stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM
-    ) "--push-state --as-needed -lstdc++ --pop-state"
-    ++
-      optional
-        (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
-        "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
-    ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
-    ++ optional stdenv.hostPlatform.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
-    ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
+    optional (stdenv.buildPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+    ++ optional stdenv.buildPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );
 
   # Increase codegen units to introduce parallelism within the compiler.
@@ -198,15 +189,23 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals (!withBundledLLVM) [
       "--enable-llvm-link-shared"
       "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
-      "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
-      "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
     ]
+    ++ (
+      if (llvmShared.stdenv.hostPlatform == llvmShared.stdenv.buildPlatform) then
+        [
+          "${setHost}.llvm-config=${llvmShared.dev}/bin/llvm-config"
+        ]
+      else
+        [
+          "${setHost}.llvm-config=${llvmShared.dev}/bin/llvm-config-native"
+        ]
+    )
     ++ optionals fastCross [
       # Since fastCross only builds std, it doesn't make sense (and
       # doesn't work) to build a linker.
       "--disable-llvm-bitcode-linker"
     ]
-    ++ optionals (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) [
+    ++ optionals (stdenv.targetPlatform.isLinux && !useLLVMTarget) [
       "--enable-profiler" # build libprofiler_builtins
     ]
     ++ optionals stdenv.buildPlatform.isMusl [
@@ -225,9 +224,34 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/rust-lang/rust/issues/92173
       "--set rust.jemalloc"
     ]
-    ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
+    ++ [
       # https://github.com/NixOS/nixpkgs/issues/311930
-      "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
+      "${setBuild}.llvm-libunwind=${
+        if (!useLLVMBuild || stdenv.buildPlatform.isFreeBSD) then
+          "no"
+        else if withBundledLLVM then
+          "in-tree"
+        else
+          "system"
+      }"
+      "${setHost}.llvm-libunwind=${
+        if (!useLLVMHost || stdenv.hostPlatform.isFreeBSD) then
+          "no"
+        else if withBundledLLVM then
+          "in-tree"
+        else
+          "system"
+      }"
+      "${setTarget}.llvm-libunwind=${
+        if (!useLLVMTarget || stdenv.targetPlatform.isFreeBSD) then
+          "no"
+        else if withBundledLLVM then
+          "in-tree"
+        else
+          "system"
+      }"
+    ]
+    ++ optionals (withBundledLLVM && useLLVMHost) [
       "--enable-use-libcxx"
     ];
 
@@ -310,7 +334,7 @@ stdenv.mkDerivation (finalAttrs: {
       directory = "vendor"
       EOF
     ''
-    + lib.optionalString (stdenv.hostPlatform.isFreeBSD) ''
+    + lib.optionalString (stdenv.buildPlatform.isFreeBSD) ''
       # lzma-sys bundles an old version of xz that doesn't build
       # on modern FreeBSD, use the system one instead
       substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
@@ -339,6 +363,13 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       xz
     ]
+    # splicing isn't working here - saying llvmPackages.libcxx here does not give you libcxx for the build platform.
+    # e.g. if you're doing linux -> freebsd -> freebsd cross, the libcxx here would be linked against freebsd libc.so.7
+    ++ optionals (!withBundledLLVM && useLLVMBuild) [
+      llvmSharedForBuild.stdenv.cc.libcxx
+      pkgsBuildBuild.llvmPackages.libunwind
+    ]
+    ++ optional (!withBundledLLVM) llvmSharedForBuild.lib
     ++ optionals fastCross [
       lndir
       makeWrapper
@@ -352,7 +383,8 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
+    ++ optional (!withBundledLLVM && (useLLVMHost || useLLVMTarget)) llvmPackages.libcxx
+    ++ optionals (useLLVMHost && !withBundledLLVM && !stdenv.hostPlatform.isFreeBSD) [
       llvmPackages.libunwind
       # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
       (runCommandLocal "libunwind-libgcc" { } ''
@@ -401,7 +433,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     llvm = llvmShared;
-    inherit llvmPackages;
+    inherit
+      llvmPackages
+      llvmSharedForBuild
+      llvmSharedForHost
+      llvmSharedForTarget
+      ;
     inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
