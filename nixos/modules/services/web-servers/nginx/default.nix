@@ -102,14 +102,6 @@ let
     proxy_set_header        X-Forwarded-Host $host;
     proxy_set_header        X-Forwarded-Server $host;
   '';
-  recommendedUwsgiConfig = pkgs.writeText "nginx-recommended-uwsgi_param-headers.conf" ''
-    uwsgi_param             HTTP_HOST $host;
-    uwsgi_param             HTTP_X_REAL_IP $remote_addr;
-    uwsgi_param             HTTP_X_FORWARDED_FOR $proxy_add_x_forwarded_for;
-    uwsgi_param             HTTP_X_FORWARDED_PROTO $scheme;
-    uwsgi_param             HTTP_X_FORWARDED_HOST $host;
-    uwsgi_param             HTTP_X_FORWARDED_SERVER $host;
-  '';
 
   proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
     proxy_cache_path ${concatStringsSep " " [
@@ -252,7 +244,6 @@ let
         uwsgi_read_timeout      ${cfg.uwsgiTimeout};
         uwsgi_param             HTTP_CONNECTION "";
         include ${cfg.package}/conf/uwsgi_params;
-        include ${recommendedUwsgiConfig};
       ''}
 
       ${optionalString (cfg.mapHashBucketSize != null) ''
@@ -477,7 +468,7 @@ let
       ${optionalString (config.return != null) "return ${toString config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
-      ${optionalString (config.uwsgiPass != null && config.recommendedUwsgiSettings) "include ${cfg.package}/conf/uwsgi_params; include ${recommendedUwsgiConfig};"}
+      ${optionalString (config.uwsgiPass != null && config.recommendedUwsgiSettings) "include ${cfg.package}/conf/uwsgi_params;"}
       ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
