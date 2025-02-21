@@ -5301,6 +5301,8 @@ self: super: with self; {
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
+  gilknocker = callPackage ../development/python-modules/gilknocker { };
+
   gin-config = callPackage ../development/python-modules/gin-config { };
 
   gios = callPackage ../development/python-modules/gios { };
