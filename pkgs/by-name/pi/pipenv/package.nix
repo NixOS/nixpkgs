@@ -68,7 +68,7 @@ buildPythonApplication rec {
     mock
     pytestCheckHook
     pytest-xdist
-    pytest-cov
+    pytest-cov-stub
     pytz
     requests
   ];
