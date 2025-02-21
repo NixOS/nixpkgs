@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.radarr;
-
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -25,6 +25,19 @@ in
         type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the Radarr web interface.";
+      };
+
+      settings = servarr.mkServarrSettingsOptions "radarr" 7878;
+
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
+        description = ''
+          Environment file to pass secret configuration values.
+
+          Each line must follow the `RADARR__SECTION__KEY=value` pattern.
+          Please consult the documentation at the [wiki](https://wiki.servarr.com/useful-tools#using-environment-variables-for-config).
+        '';
       };
 
       user = lib.mkOption {
@@ -51,18 +64,20 @@ in
       description = "Radarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = servarr.mkServarrSettingsEnvVars "RADARR" cfg.settings;
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        EnvironmentFile = cfg.environmentFiles;
         ExecStart = "${cfg.package}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 7878 ];
+      allowedTCPPorts = [ cfg.settings.server.port ];
     };
 
     users.users = lib.mkIf (cfg.user == "radarr") {
