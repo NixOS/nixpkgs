@@ -201,15 +201,17 @@ in rec {
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-WNgCa8F618JQiHDM1YxHj7oR7w+7U6SU89K90RYIUh8=";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://draculatheme.com/tmux";
+      downloadPage = "https://github.com/dracula/tmux";
       description = "Feature packed Dracula theme for tmux!";
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ ethancedwards8 ];
+      changelog = "https://github.com/dracula/tmux/releases/tag/v${version}/CHANGELOG.md";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ethancedwards8 ];
     };
   };
 
