@@ -11,7 +11,7 @@ let
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  zeroConfOpts =
+  mdnsLlmnrOpts =
     name:
     types.submodule {
       options = {
@@ -40,15 +40,9 @@ let
       };
     };
 
-  zeroConfDeprecatedOpts = [
-    "true"
-    "resolve"
-    "false"
-  ];
-
   resolvedConf =
     let
-      mkZeroConf =
+      mkMdnsLlmnr =
         option:
         if !option.enable then
           "false"
@@ -56,9 +50,6 @@ let
           "resolve"
         else
           "true";
-
-      mkZeroConfDeprecated =
-        option: if builtins.elem option zeroConfDeprecatedOpts then option else mkZeroConf option;
     in
     ''
       [Resolve]
@@ -67,8 +58,8 @@ let
       ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
       ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
       ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
-      MulticastDNS=${mkZeroConf cfg.mdns}
-      LLMNR=${mkZeroConfDeprecated cfg.llmnr}
+      MulticastDNS=${mkMdnsLlmnr cfg.mdns}
+      LLMNR=${if lib.isAttrs cfg.llmnr then mkMdnsLlmnr cfg.llmnr else cfg.llmnr}
       DNSSEC=${cfg.dnssec}
       DNSOverTLS=${cfg.dnsovertls}
       ${config.services.resolved.extraConfig}
@@ -122,7 +113,8 @@ in
     };
 
     services.resolved.mdns = mkOption {
-      type = zeroConfOpts "mDNS";
+      default = { };
+      type = mdnsLlmnrOpts "mDNS";
       description = ''
         Controls Multicast DNS (mDNS) support
         (RFC 6762[2]) on the local host.
@@ -130,7 +122,14 @@ in
     };
 
     services.resolved.llmnr = mkOption {
-      type = types.either (zeroConfOpts "LLMNR") (types.enum zeroConfDeprecatedOpts);
+      default = { };
+      type = types.either (mdnsLlmnrOpts "LLMNR") (
+        types.enum [
+          "true"
+          "resolve"
+          "false"
+        ]
+      );
       description = ''
         Controls Link-Local Multicast Name Resolution (LLMNR) support
         (RFC 4795) on the local host.
@@ -271,18 +270,14 @@ in
 
       networking.firewall =
         let
-          mkZeroConf = option: option.enable && option.openFirewall;
-          mkZeroConfDeprecated =
-            option: if builtins.elem option zeroConfDeprecatedOpts then false else mkZeroConf option;
+          fromAttrs = { enable, openFirewall, ... }: enable && openFirewall;
         in
-        lib.mkMerge [
-          (mkIf (mkZeroConf cfg.mdns) {
-            allowedUDPPorts = [ 5353 ];
-          })
-
-          (mkIf (mkZeroConfDeprecated cfg.llmnr) {
-            allowedUDPPorts = [ 5355 ];
-          })
+        [
+          {
+            allowedUDPPorts =
+              (lib.optional (fromAttrs cfg.mdns) 5353)
+              ++ (lib.optional (lib.isAttrs cfg.llmnr && fromAttrs cfg.llmnr) 5355);
+          }
         ];
     })
 
