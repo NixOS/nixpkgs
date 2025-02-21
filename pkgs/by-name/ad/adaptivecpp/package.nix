@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-ZwHDiwv1ybC+2UhiOe2f7fnfqcul+CD9Uta8PT9ICr4=";
   };
 
+  # do not use old FindCUDA cmake module
+  postPatch = ''
+    rm cmake/FindCUDA.cmake
+  '';
+
   # we may be able to get away with just wrapping hipcc and nothing more
   # this is mainly so that if acpp tries doing <PATH_TO_HIPCC>/../amdgcn/bitcode
   rocmMerged = symlinkJoin {
