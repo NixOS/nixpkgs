@@ -1,7 +1,6 @@
 import ./generic.nix {
   version = "13.20";
-  # "Stamp 13.20"
-  rev = "c8f198c3acb59ed858b5b9b88b4fbc55cece544e";
+  rev = "refs/tags/REL_13_20";
   hash = "sha256-GkDtzqwjMJipvr0wykM9Z5Tb0R7WgJA/PGPTVUXxf7Q=";
   muslPatches = {
     disable-test-collate-icu-utf8 = {
