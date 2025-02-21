@@ -209,7 +209,7 @@ let
       ${lib.concatStringsSep " " data.extraLegoRenewFlags} -
       ${toString acmeServer} ${toString data.dnsProvider}
       ${toString data.ocspMustStaple} ${data.keyType}
-    '';
+    '' + (lib.optionalString (data.csr != null) (" - " + data.csr) );
     certDir = mkHash hashData;
     # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
     domainHash = mkHash "${lib.concatStringsSep " " extraDomains} ${data.domain}";
@@ -227,11 +227,11 @@ let
     commonOpts = [
       "--accept-tos" # Checking the option is covered by the assertions
       "--path" "."
-      "-d" data.domain
       "--email" data.email
-      "--key-type" data.keyType
     ] ++ protocolOpts
       ++ lib.optionals (acmeServer != null) [ "--server" acmeServer ]
+      ++ lib.optionals (data.csr != null) [ "--csr" data.csr ]
+      ++ lib.optionals (data.csr == null) [ "--key-type" data.keyType "-d" data.domain ]
       ++ lib.concatMap (name: [ "-d" name ]) extraDomains
       ++ data.extraLegoFlags;
 
@@ -258,6 +258,8 @@ let
             (builtins.map
             (certAttrs: certAttrs.webroot)
             (lib.attrValues config.security.acme.certs)));
+
+    certificateKey = if data.csrKey != null then "${data.csrKey}" else "certificates/${keyName}.key";
   in {
     inherit accountHash cert selfsignedDeps;
 
@@ -440,7 +442,7 @@ let
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
         # We also need an account key. Avoids #190493
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e '${certificateKey}' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
@@ -475,7 +477,7 @@ let
           touch out/renewed
           echo Installing new certificate
           cp -vp 'certificates/${keyName}.crt' out/fullchain.pem
-          cp -vp 'certificates/${keyName}.key' out/key.pem
+          cp -vp '${certificateKey}' out/key.pem
           cp -vp 'certificates/${keyName}.issuer.crt' out/chain.pem
           ln -sf fullchain.pem out/cert.pem
           cat out/key.pem out/fullchain.pem > out/full.pem
@@ -732,6 +734,18 @@ let
         description = "Domain to fetch certificate for (defaults to the entry name).";
       };
 
+      csr = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Path to a Certificate Signing Request to use for fetching the certificate.";
+      };
+
+      csrKey = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Path to a the Key of the matching Certificate Signing Request.";
+      };
+
       extraDomainNames = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [];
@@ -961,6 +975,12 @@ in {
           message = ''
             Option `security.acme.certs.${cert}.credentialFiles` can only be
             used for variables suffixed by "_FILE".
+          '';
+        }
+        {
+          assertion = lib.all (certOpts: (certOpts.csr == null && certOpts.csrKey == null) || (certOpts.csr != null && certOpts.csrKey != null) ) certs;
+          message = ''
+            Either both `security.acme.certs.${cert}.csr` and `security.acme.certs.${cert}.csrKey` need to be specified, or null.
           '';
         }
       ]) cfg.certs));
