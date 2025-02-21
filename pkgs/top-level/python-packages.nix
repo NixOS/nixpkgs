@@ -1587,6 +1587,8 @@ self: super: with self; {
 
   before-after = callPackage ../development/python-modules/before-after { };
 
+  beancount = callPackage ../development/python-modules/beancount { };
+
   beancount_2 = callPackage ../development/python-modules/beancount/2.nix { };
 
   beancount-black = callPackage ../development/python-modules/beancount-black { };
