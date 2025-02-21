@@ -151,7 +151,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://pwasforfirefox.filips.si/";
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       camillemndn
       pasqui23

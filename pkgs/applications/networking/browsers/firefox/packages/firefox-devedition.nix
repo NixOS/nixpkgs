@@ -11,7 +11,7 @@ buildMozillaMach rec {
   pname = "firefox-devedition";
   binaryName = pname;
   version = "135.0b9";
-  applicationName = "Mozilla Firefox Developer Edition";
+  applicationName = "Firefox Developer Edition";
   requireSigning = false;
   branding = "browser/branding/aurora";
   src = fetchurl {
