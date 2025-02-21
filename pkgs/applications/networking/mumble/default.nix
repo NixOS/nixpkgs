@@ -3,6 +3,7 @@
 , alsa-lib, python3
 , rnnoise
 , nixosTests
+, nix-update-script
 , poco
 , flac
 , libogg
@@ -35,7 +36,10 @@ let
        patchShebangs scripts
     '';
 
-    passthru.tests.connectivity = nixosTests.mumble;
+    passthru = {
+      updateScript = nix-update-script { };
+      tests.connectivity = nixosTests.mumble;
+    };
 
     meta = with lib; {
       description = "Low-latency, high quality voice chat software";
