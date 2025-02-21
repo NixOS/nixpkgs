@@ -11,24 +11,31 @@
   sphinxHook,
   sphinx-rtd-theme,
   pytest-rerunfailures,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "24.3.0";
+  version = "25.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "pyopenssl";
     tag = version;
-    hash = "sha256-otK7Y7Kb/l3QOErhAcuDHB/CKG9l1vH2BTnOieAWNc0=";
+    hash = "sha256-CQHLEtNb2jX7WNAYlmv5EIgepetMl81Xl3AJuRqOHow=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
+  ];
+
+  patches = [
+    # fix for oauth2client used by google-cloud-sdk
+    # see: https://github.com/googleapis/google-api-python-client/issues/2554
+    ./revert-1374-Remove-APIs-that-have-been-deprecated-for-a-year.patch
   ];
 
   build-system = [ setuptools ];
@@ -38,6 +45,8 @@ buildPythonPackage rec {
     sphinxHook
     sphinx-rtd-theme
   ];
+
+  propagatedBuildInputs = [ typing-extensions ];
 
   pythonRelaxDeps = [ "cryptography" ];
 
