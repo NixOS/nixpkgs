@@ -16,7 +16,7 @@ let
       expectedMap ? null,
       script,
     }:
-    stdenvNoCC.mkDerivation (finalAttrs: {
+    stdenvNoCC.mkDerivation {
       __structuredAttrs = true;
       strictDeps = true;
 
@@ -38,6 +38,6 @@ let
         description = "Tests for equality of bash arrays (including associative arrays)";
         maintainers = [ maintainers.connorbaker ];
       };
-    });
+    };
 in
 makeOverridable testEqualArrayOrMap
