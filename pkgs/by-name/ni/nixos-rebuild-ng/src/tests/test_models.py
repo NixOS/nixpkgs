@@ -140,7 +140,7 @@ def test_flake_from_arg(
             return_value=True,
         ),
         patch(
-            get_qualified_name(m.Path.readlink, m),
+            get_qualified_name(m.Path.resolve, m),
             autospec=True,
             return_value=Path("/path/to/flake.nix"),
         ),
