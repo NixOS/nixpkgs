@@ -1,0 +1,311 @@
+{
+  "announcement" : {
+    "go-offline" : "Перейти в офлайн",
+    "go-online" : "Перейти в онлайн",
+    "healthcheck" : "Не удалось подключиться к ficsit.app. Проверьте ваше интернет-соединение или попробуйте использовать автономный режим. (Настройки Mod Manager > Играть Офлайн)",
+    "offline" : "Вы сейчас офлайн. Некоторые функции могут быть недоступны. (Чтобы снова подключиться, воспользуйтесь Настройки Mod Manager > Играть Онлайн)"
+  },
+  "common" : {
+    "add" : "Добавить",
+    "cancel" : "Отмена",
+    "close" : "Закрыть",
+    "delete" : "Удалить",
+    "import" : "Импортировать",
+    "loading" : "Загрузка...",
+    "rename" : "Переименовать"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "Произошла ошибка при создании отладочного файла. Пожалуйста, вручную проверьте журналы Satisfactory Mod Manager для получения дополнительной информации и сообщите об этом на Discord. Используйте кнопку ниже, чтобы открыть документацию и узнать, как это сделать.",
+    "generate_debug_info" : "Создать отладочную информацию",
+    "help" : "Что-то не так? Нажмите кнопку ниже и отправьте сгенерированный zip-файл в <1>Discord сервер моддеров</1> в канал #help-using-mods.",
+    "invalid_installs" : "{invalidInstalls, plural, one {Обнаружена неверная установка Satisfactory} other {Обнаружены неверные установки Satisfactory}}",
+    "no_installs" : "Установки Satisfactory не найдены",
+    "open_log_docs" : "Открыть документацию",
+    "open_modding_discord" : "Открыть Discord для моддеров",
+    "open_modding_discord.must_generate_debug_first" : "Сначала необходимо сгенерировать отладочную информацию",
+    "reporting_directions" : "Кажется, что что-то не так? Нажмите кнопку ниже, чтобы собрать журналы, а затем отправьте сгенерированный zip-файл в Discord для моддеров в канале #help-using-mods.",
+    "title" : "Что-то пошло не так"
+  },
+  "external-install-mod" : {
+    "already-installed" : "Уже установлено",
+    "error-loading" : "Ошибка при загрузке данных мода",
+    "in-queue" : "В очереди",
+    "install" : "Установить",
+    "latest-version" : "Последняя версия",
+    "title" : "Установить мод",
+    "version" : "Версия {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "Начать!",
+    "change_later_hint" : "Вы можете изменить эти настройки в любое время в меню \"Настройки Mod Manager\".",
+    "intro" : "Выберите свои предпочтения, чтобы начать.",
+    "open_welcome_guide" : "Открыть руководство",
+    "option" : {
+      "language" : {
+        "title" : "Использовать этот язык, если доступен:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "Ждать, пока я нажму \"Применить\"",
+        "enabled" : "Применить изменения сразу",
+        "title" : "Когда я добавляю или удаляю мод или переключаю профили..."
+      }
+    },
+    "title" : "Добро пожаловать в Satisfactory Mod Manager!"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "Применить {profile}",
+    "apply-queued" : "Применить {queued, plural, one {одно изменение} other {# изменений}}",
+    "are-you-sure-warning" : "Вы уверены, что хотите запустить?",
+    "cant-launch" : "SMM не может запустить эту установку",
+    "cant-launch-tooltip" : "Менеджер модов не может запустить этот тип установки, но он по-прежнему управляет файлами модов для вас. Запустите Satisfactory через свой обычный лаунчер.",
+    "changes-queued" : "Изменения в файлы модов ещё не внесены. Нажмите кнопку ниже, чтобы применить изменения, которые вы поставили в очередь.\n\nВы в режиме \"Запуск вручную\"",
+    "game-running" : "Ваш лаунчер сообщает, что игра уже запущена (или ещё закрывается).",
+    "incompatible-mods" : "{versionIncompatible, plural, one {несовместимый мод, который не загрузится или приведёт к сбою игры} other {несовместимые моды, которые не загрузятся или приведут к сбою игры}}",
+    "launch-in-progress" : "Запуск игры...",
+    "operation-in-progress" : "Операция уже выполняется.",
+    "play" : "Играть в Satisfactory",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Один мод, который {versionPossiblyCompatible, plural, one {возможно} other {возможно}} несовместим с вашей игрой} other {# модов, которые {versionPossiblyCompatible, plural, one {возможно} other {возможно}} несовместимы с вашей игрой}}",
+    "profile-change-queued" : "Изменения в файлы модов ещё не внесены. Нажмите кнопку ниже, чтобы применить новый профиль.\n\nВы в режиме \"Запуск вручную\"",
+    "ready" : "Вы готовы к действию!\n\nПримечание: Менеджер модов уже завершил установку файлов модов. Вы можете запустить игру через обычный лаунчер, и моды всё равно будут загружены.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Один мод} other {# модов}} отмечен как неисправный для этой версии игры. Ознакомьтесь с описанием или примечаниями по совместимости {versionIncompatible, plural, one {этого мода} other {этих модов}} для получения дополнительной информации.",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Один мод} other {# модов}} отмечен как повреждённый для этой версии игры. Ознакомьтесь с описанием или примечаниями по совместимости {versionIncompatible, plural, one {этого мода} other {этих модов}} для получения дополнительной информации.",
+    "you-have-warning-mods" : "У вас:"
+  },
+  "left-bar" : {
+    "export" : "Экспортировать",
+    "ficsit-app" : "ficsit.app (Репозиторий модов)",
+    "game-version" : "Выберите установку игры",
+    "help" : "Помощь",
+    "install-invalid" : "Недействительный",
+    "install-invalid-tooltip" : "Статус: SMM не может управлять этой установкой",
+    "install-loading" : "Загрузка...",
+    "install-loading-tooltip" : "Статус: Загрузка...",
+    "install-unknown" : "Неизвестно",
+    "install-unknown-tooltip" : "Статус: Не удалось получить информацию об этой установке",
+    "links" : "Ссылки",
+    "manage-servers" : "Управление серверами",
+    "mods-off" : "Моды отключены",
+    "mods-on" : "Моды включены",
+    "other" : "Другое",
+    "profile" : "Профиль",
+    "queue-blocking-switching-tooltip" : "{number, plural, one { У вас в очереди {number} действие. Примените или отмените {number, plural, one {его} other {их}} перед сменой установок или профилей.} other {У вас в очереди {number} действия. Примените или отмените {number, plural, one {его} other {их}} перед сменой установок или профилей.}}",
+    "satisfactory-modding-discord" : "Discord для модификаций Satisfactory",
+    "smm-github" : "SMM на GitHub",
+    "updates" : "Обновления"
+  },
+  "mod-changelog" : {
+    "title" : "История изменений <1>{mod}</1>"
+  },
+  "mod-details" : {
+    "change-version" : "Изменить версию",
+    "change-version-any" : "Любая",
+    "change-version-or-newer" : "или новее",
+    "changelogs" : "История изменений",
+    "compatibility" : "Совместимость",
+    "compatibility-branch" : "Этот мод был отмечен как {state} на {branch}.",
+    "compatibility-unknown" : "Неизвестно",
+    "compatibility-unknown-tooltip" : "Информация о совместимости для этого мода ещё не предоставлена. Попробуйте его и свяжитесь с нами в Discord, чтобы обновить данные!",
+    "contributors" : "Авторы <1>({authors})</1>",
+    "created" : "Создан",
+    "downloads" : "Всего скачиваний",
+    "installed-version" : "Установленная версия",
+    "latest-version" : "Последняя версия",
+    "mod-author" : "Мод от:",
+    "offline-mode" : "Офлайн-режим включён. История изменений и описания недоступны.",
+    "size" : "Размер",
+    "updated" : "Обновлено",
+    "view-on-ficsit-app" : "Посмотреть на ficsit.app",
+    "views" : "Просмотры"
+  },
+  "mod-list-item" : {
+    "by-author" : "от",
+    "compatibility-note" : "Этот мод отмечен как {state} на этой версии игры.",
+    "compatibility-note-none" : "(Не указано)",
+    "compatibility-warning" : "Обнаружены проблемы с этим модом, но вы всё равно можете попробовать его установить. Подробности:",
+    "dependency" : " Этот мод установлен как зависимость другого мода. Его нельзя установить или удалить отдельно.",
+    "disable" : "Этот мод включён в данном профиле. Нажмите, чтобы отключить его — это предотвратит его загрузку при запуске игры, но он останется частью профиля.",
+    "disable-queued" : "Этот мод поставлен в очередь на отключение. Нажмите, чтобы отменить операцию.",
+    "disabled-tooltip" : "Этот мод отключён. Нажмите на значок паузы, чтобы включить его.",
+    "enable" : "Нажмите, чтобы включить этот мод.",
+    "enable-queued" : "Этот мод поставлен в очередь на включение. Нажмите, чтобы отменить операцию.",
+    "favorite" : "Нажмите, чтобы добавить этот мод в избранное. Избранные моды не обязательно должны быть установлены — это просто способ отслеживать их для будущего, независимо от выбранного профиля.",
+    "hidden" : "Этот мод был скрыт автором.",
+    "install" : "Нажмите, чтобы установить этот мод.",
+    "no-tags" : "(не доступно)",
+    "not-installable" : "Вы не можете установить этот мод. Причина:",
+    "queued" : "Этот мод уже поставлен в очередь на другую операцию.",
+    "queued-install" : "Этот мод поставлен в очередь на установку. Нажмите, чтобы отменить операцию.",
+    "queued-uninstall" : "Этот мод поставлен в очередь на удаление. Нажмите, чтобы отменить операцию.",
+    "unavailable" : "Этот мод больше недоступен на ficsit.app. Возможно, вам стоит его удалить.",
+    "unfavorite" : "Нажмите, чтобы удалить этот мод из избранного.",
+    "uninstall" : "Этот мод установлен в данном профиле. Нажмите, чтобы удалить этот мод.",
+    "wait" : "Подождите завершения текущей операции."
+  },
+  "mod" : {
+    "compatibility-no-notes" : "(Дополнительные заметки отсутствуют)"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "Все моды",
+      "compatible" : "Совместимые",
+      "dependency" : "Зависимые",
+      "disabled" : "Отключённые",
+      "enabled" : "Включённые",
+      "favorite" : "Избранные",
+      "installed" : "Установленные",
+      "not-installed" : "Не установленные",
+      "queued" : "В очереди"
+    },
+    "order-by" : {
+      "downloads" : "Загрузки",
+      "hotness" : "Популярность",
+      "last-updated" : "Последнее обновление",
+      "name" : "Название",
+      "popularity" : "Популярность",
+      "views" : "Просмотры"
+    },
+    "search" : "Поиск модов"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : " Нет модов, соответствующих вашим фильтрам",
+    "no-mods-found" : "Моды не найдены",
+    "show-all" : "Показать все"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "Название профиля",
+      "profile-name-placeholder" : "Новое имя профиля",
+      "title" : "Добавить профиль"
+    },
+    "delete" : {
+      "profile-name" : "Название профиля",
+      "title" : "Удалить профиль"
+    },
+    "import" : {
+      "profile-file" : "Файл профиля",
+      "profile-name" : "Название профиля",
+      "profile-name-placeholder" : "Новое имя профиля",
+      "profile-version-warning" : "Этот профиль создан в более новой версии игры. Он может быть несовместим с данной версией.",
+      "title" : "Импортировать профиль"
+    },
+    "rename" : {
+      "new-profile" : "Новое имя профиля",
+      "new-profile-placeholder" : "Новый профиль",
+      "old-profile" : "Старое имя профиля",
+      "old-profile-placeholder" : "Старый профиль",
+      "title" : "Переименовать профиль"
+    }
+  },
+  "server-manager" : {
+    "add" : "Добавить",
+    "advanced-note" : "Учтите, что вам, возможно, придётся экранировать определённые символы в имени пользователя и пароле",
+    "advanced-path-placeholder" : "user:pass@host:port/path",
+    "existing-servers" : {
+      "none-yet" : null,
+      "title" : null
+    },
+    "failed-to-connect" : "Не удалось подключиться к серверу, нажмите для повторной попытки",
+    "get-help" : "Получить помощь по подключению к серверам",
+    "host-placeholder" : "хост",
+    "invalid" : "SMM не может управлять этой установкой",
+    "loading" : "Загрзука...",
+    "local-path-placeholder" : "C:\\Путь\\До\\Сервера",
+    "name-placeholder" : "Имя (по умолчанию: {default})",
+    "new-server" : {
+      "title" : null
+    },
+    "password-placeholder" : "пароль",
+    "path-placeholder" : "путь",
+    "port-placeholder" : "порт (по умолчанию: {default})",
+    "switch-to-advanced" : "Переключиться в расширенный режим",
+    "switch-to-simple" : "Переключиться в простой режим",
+    "title" : "Выделенные серверы",
+    "username-placeholder" : "имя пользователя",
+    "validating" : "Проверка..."
+  },
+  "server-picker" : {
+    "failed-list-dir" : "Не удалось получить список директории",
+    "failed-valid-check" : "Не удалось проверить, является ли выбранный путь корректным сервером"
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "Расположение кеша",
+      "reset" : "Сбросить по умолчанию",
+      "save" : "Сохранить и переместить",
+      "title" : "Изменить расположение кеша загрузок"
+    },
+    "change-cache-location" : "Изменить расположение кеша",
+    "copy-mod-list" : "Копировать список модов",
+    "debug" : "Отладка",
+    "generate-debug-info" : "Создать информацию для отладки",
+    "go-online-offline" : "Перейти {offline, select, true {в онлайн} other {в офлайн}}",
+    "language" : "Язык",
+    "launch-button" : "Кнопка запуска",
+    "launch-button.button" : "Кнопка",
+    "launch-button.cat" : "Ньян",
+    "launch-button.normal" : "Обычный",
+    "proxy" : {
+      "proxy" : "Прокси",
+      "remove" : "Удалить прокси",
+      "save" : "Сохранить и перезапустить",
+      "title" : "Установить прокси"
+    },
+    "queue" : "Очередь",
+    "queue.start-immediately" : "Начать немедленно",
+    "queue.start-manually" : "Запуск вручную",
+    "save-window-position" : "Сохранить положение окна",
+    "secret-settings" : "Секретные настройки",
+    "set-proxy" : "Настроить прокси",
+    "settings" : "Настройки",
+    "smm-debug-logging" : "Логирование отладки SMM",
+    "start-view" : "Стартовый экран",
+    "start-view.compact" : "Компактный",
+    "start-view.expanded" : "Расширенный",
+    "title" : "Настройки менеджера модов",
+    "update-check" : "Проверка обновлений",
+    "update-check.ask" : "Спрашивать при обнаружении",
+    "update-check.on-exit" : "При выходе",
+    "update-check.on-start" : "При запуске"
+  },
+  "smm-update" : {
+    "downloading" : "Загрузка в фоновом режиме",
+    "downloading-stats" : "Загрузка обновления: {current} / {total}, {speed}/с, ETA {eta}",
+    "title" : "Доступно обновление SMM - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "Улучшенная производительность",
+      "performance.description" : "Поддерживаем вашу эффективность!",
+      "platform_support" : "Родная поддержка Linux Heroic, Steam Snap, Mac",
+      "platform_support.description" : "Получите сборку из релизов на GitHub, если ещё не сделали этого!",
+      "profile_format" : "Новый формат профиля",
+      "profile_format.description" : "Профили SMM2 несовместимы с SMM3! Ваши текущие профили были автоматически перенесены, но вы не сможете импортировать профили, созданные в SMM2.",
+      "queue" : "Очередь действий",
+      "queue.description" : "Ставьте в очередь несколько загрузок/удалений модов одновременно.",
+      "servers" : "Управление выделенными серверами",
+      "servers.description" : "Легко управляйте серверами через файловую систему, SFTP, FTP и SMB!",
+      "translation" : "Поддержка переводов",
+      "translation.description" : "Присоединяйтесь к нашему Discord, чтобы помочь с переводом SMM на ваш язык!",
+      "ui" : "Обновление интерфейса пользователя",
+      "ui.description" : "Новый облик в честь релиза Satisfactory 1.0!"
+    },
+    "intro" : "Мы внесли множество улучшений в этой версии. Вот основные моменты:",
+    "open_guide" : "Открыть документацию SMM3",
+    "title" : "Добро пожаловать в Satisfactory Mod Manager версии 3!"
+  },
+  "updates" : {
+    "changelog" : "История изменений",
+    "check-for-updates" : "Проверить обновления",
+    "checking-for-updates" : "Проверка обновлений...",
+    "hide-ignored" : "Скрыть проигнорированные",
+    "ignore" : "Игнорировать",
+    "mod-update-available" : "{updates, plural, one {доступно обновление мода {updates}} other {доступны обновления модов {updates}}}",
+    "no-updates" : "Сейчас нет доступных обновлений модов или SMM",
+    "show-ignored" : "Показать проигнорированные",
+    "smm-update-available" : "Доступно обновление SMM",
+    "title" : "Обновления",
+    "unignore" : "Прекратить игнорировать",
+    "update-all" : "Обновить всё",
+    "update-selected" : "Обновить выбранные"
+  }
+}

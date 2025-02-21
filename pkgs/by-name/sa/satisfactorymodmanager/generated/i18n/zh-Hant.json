@@ -1,0 +1,311 @@
+{
+  "announcement" : {
+    "go-offline" : "進入離線模式",
+    "go-online" : "進入在線模式",
+    "healthcheck" : null,
+    "offline" : null
+  },
+  "common" : {
+    "add" : "添加",
+    "cancel" : "取消",
+    "close" : "關閉",
+    "delete" : "刪除",
+    "import" : "匯入",
+    "loading" : "載入中...",
+    "rename" : "重新命名"
+  },
+  "error" : {
+    "failed_to_generate_debug" : null,
+    "generate_debug_info" : null,
+    "help" : null,
+    "invalid_installs" : null,
+    "no_installs" : null,
+    "open_log_docs" : null,
+    "open_modding_discord" : null,
+    "open_modding_discord.must_generate_debug_first" : null,
+    "reporting_directions" : null,
+    "title" : "出錯了！"
+  },
+  "external-install-mod" : {
+    "already-installed" : "已安裝",
+    "error-loading" : null,
+    "in-queue" : null,
+    "install" : "安裝",
+    "latest-version" : null,
+    "title" : "安裝模組",
+    "version" : null
+  },
+  "first_time_setup" : {
+    "acknowledge" : "開始使用！",
+    "change_later_hint" : null,
+    "intro" : null,
+    "open_welcome_guide" : "開啟歡迎指南",
+    "option" : {
+      "language" : {
+        "title" : null
+      },
+      "queue-auto-start" : {
+        "disabled" : null,
+        "enabled" : "立即套用變更",
+        "title" : null
+      }
+    },
+    "title" : null
+  },
+  "launch-button" : {
+    "apply-profile-change" : "套用 {profile}",
+    "apply-queued" : "套用 {queued} 個更新",
+    "are-you-sure-warning" : null,
+    "cant-launch" : null,
+    "cant-launch-tooltip" : null,
+    "changes-queued" : null,
+    "game-running" : null,
+    "incompatible-mods" : null,
+    "launch-in-progress" : null,
+    "operation-in-progress" : null,
+    "play" : null,
+    "possibly-incompatible-mods" : null,
+    "profile-change-queued" : null,
+    "ready" : null,
+    "reported-incompatible-mods" : null,
+    "reported-possibly-compatible-mods" : null,
+    "you-have-warning-mods" : "您有："
+  },
+  "left-bar" : {
+    "export" : "匯出",
+    "ficsit-app" : "ficsit.app（模組儲存庫）",
+    "game-version" : "選擇已安裝遊戲",
+    "help" : "幫助",
+    "install-invalid" : null,
+    "install-invalid-tooltip" : null,
+    "install-loading" : null,
+    "install-loading-tooltip" : null,
+    "install-unknown" : null,
+    "install-unknown-tooltip" : null,
+    "links" : null,
+    "manage-servers" : null,
+    "mods-off" : null,
+    "mods-on" : null,
+    "other" : null,
+    "profile" : "設定檔",
+    "queue-blocking-switching-tooltip" : null,
+    "satisfactory-modding-discord" : null,
+    "smm-github" : "SMM GitHub",
+    "updates" : null
+  },
+  "mod-changelog" : {
+    "title" : null
+  },
+  "mod-details" : {
+    "change-version" : "變更版本",
+    "change-version-any" : null,
+    "change-version-or-newer" : null,
+    "changelogs" : "變更日誌",
+    "compatibility" : null,
+    "compatibility-branch" : null,
+    "compatibility-unknown" : null,
+    "compatibility-unknown-tooltip" : null,
+    "contributors" : null,
+    "created" : null,
+    "downloads" : null,
+    "installed-version" : null,
+    "latest-version" : null,
+    "mod-author" : null,
+    "offline-mode" : null,
+    "size" : null,
+    "updated" : null,
+    "view-on-ficsit-app" : null,
+    "views" : null
+  },
+  "mod-list-item" : {
+    "by-author" : null,
+    "compatibility-note" : null,
+    "compatibility-note-none" : "（無詳情）",
+    "compatibility-warning" : null,
+    "dependency" : "此模組是其他模組的依賴。它不能單獨安裝或移除。",
+    "disable" : null,
+    "disable-queued" : null,
+    "disabled-tooltip" : null,
+    "enable" : null,
+    "enable-queued" : null,
+    "favorite" : null,
+    "hidden" : null,
+    "install" : null,
+    "no-tags" : null,
+    "not-installable" : "無法安裝該模組。原因：",
+    "queued" : null,
+    "queued-install" : null,
+    "queued-uninstall" : null,
+    "unavailable" : null,
+    "unfavorite" : null,
+    "uninstall" : null,
+    "wait" : null
+  },
+  "mod" : {
+    "compatibility-no-notes" : null
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : null,
+      "compatible" : null,
+      "dependency" : null,
+      "disabled" : null,
+      "enabled" : null,
+      "favorite" : null,
+      "installed" : null,
+      "not-installed" : null,
+      "queued" : null
+    },
+    "order-by" : {
+      "downloads" : null,
+      "hotness" : null,
+      "last-updated" : null,
+      "name" : null,
+      "popularity" : null,
+      "views" : null
+    },
+    "search" : null
+  },
+  "mods-list" : {
+    "no-mods-filtered" : null,
+    "no-mods-found" : null,
+    "show-all" : null
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "設定檔名稱",
+      "profile-name-placeholder" : null,
+      "title" : null
+    },
+    "delete" : {
+      "profile-name" : "設定檔名稱",
+      "title" : null
+    },
+    "import" : {
+      "profile-file" : "設定檔檔案",
+      "profile-name" : "設定檔名稱",
+      "profile-name-placeholder" : null,
+      "profile-version-warning" : null,
+      "title" : null
+    },
+    "rename" : {
+      "new-profile" : null,
+      "new-profile-placeholder" : null,
+      "old-profile" : null,
+      "old-profile-placeholder" : null,
+      "title" : null
+    }
+  },
+  "server-manager" : {
+    "add" : null,
+    "advanced-note" : null,
+    "advanced-path-placeholder" : null,
+    "existing-servers" : {
+      "none-yet" : null,
+      "title" : null
+    },
+    "failed-to-connect" : null,
+    "get-help" : "取得連線至伺服器的協助",
+    "host-placeholder" : null,
+    "invalid" : null,
+    "loading" : null,
+    "local-path-placeholder" : "伺服器路徑 C:\\...",
+    "name-placeholder" : null,
+    "new-server" : {
+      "title" : null
+    },
+    "password-placeholder" : null,
+    "path-placeholder" : null,
+    "port-placeholder" : null,
+    "switch-to-advanced" : null,
+    "switch-to-simple" : null,
+    "title" : null,
+    "username-placeholder" : null,
+    "validating" : null
+  },
+  "server-picker" : {
+    "failed-list-dir" : null,
+    "failed-valid-check" : null
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : null,
+      "reset" : null,
+      "save" : null,
+      "title" : null
+    },
+    "change-cache-location" : null,
+    "copy-mod-list" : null,
+    "debug" : null,
+    "generate-debug-info" : null,
+    "go-online-offline" : null,
+    "language" : null,
+    "launch-button" : null,
+    "launch-button.button" : null,
+    "launch-button.cat" : null,
+    "launch-button.normal" : null,
+    "proxy" : {
+      "proxy" : null,
+      "remove" : null,
+      "save" : null,
+      "title" : null
+    },
+    "queue" : null,
+    "queue.start-immediately" : null,
+    "queue.start-manually" : null,
+    "save-window-position" : null,
+    "secret-settings" : null,
+    "set-proxy" : null,
+    "settings" : null,
+    "smm-debug-logging" : null,
+    "start-view" : null,
+    "start-view.compact" : null,
+    "start-view.expanded" : null,
+    "title" : null,
+    "update-check" : null,
+    "update-check.ask" : null,
+    "update-check.on-exit" : null,
+    "update-check.on-start" : null
+  },
+  "smm-update" : {
+    "downloading" : null,
+    "downloading-stats" : null,
+    "title" : null
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : null,
+      "performance.description" : null,
+      "platform_support" : null,
+      "platform_support.description" : null,
+      "profile_format" : null,
+      "profile_format.description" : null,
+      "queue" : null,
+      "queue.description" : null,
+      "servers" : null,
+      "servers.description" : null,
+      "translation" : null,
+      "translation.description" : null,
+      "ui" : null,
+      "ui.description" : null
+    },
+    "intro" : null,
+    "open_guide" : null,
+    "title" : null
+  },
+  "updates" : {
+    "changelog" : "變更日誌",
+    "check-for-updates" : null,
+    "checking-for-updates" : null,
+    "hide-ignored" : null,
+    "ignore" : null,
+    "mod-update-available" : null,
+    "no-updates" : null,
+    "show-ignored" : null,
+    "smm-update-available" : null,
+    "title" : null,
+    "unignore" : null,
+    "update-all" : null,
+    "update-selected" : null
+  }
+}
