@@ -1,0 +1,23 @@
+diff --git a/build.rs b/build.rs
+index a35a77a..dd72cc0 100644
+--- a/build.rs
++++ b/build.rs
+@@ -58,7 +58,6 @@ fn main() {
+     let arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+     if os == "windows" {
+         if arch == "x86_64" {
+-            build.flag("/arch:AVX2");
+         } else if arch == "aarch64" {
+             panic!("unsupported platform")
+         } else {
+@@ -72,10 +71,7 @@ fn main() {
+             .unwrap();
+     } else if os == "linux" || os == "macos" {
+         if arch == "x86_64" {
+-            build.flag("-march=x86-64-v3");
+         } else if arch == "aarch64" {
+-            build.flag("-march=armv8.2-a");
+-            simd_build.flag("-march=armv8.2-a");
+             simd_build.flag("-DSSE2NEON_SUPPRESS_WARNINGS");
+             simd_build.file("src/compat/aarch64.c");
+         } else {
