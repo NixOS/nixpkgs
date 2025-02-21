@@ -17237,9 +17237,7 @@ with pkgs;
     lisp-compiler = ecl;
   };
 
-  mxnet = callPackage ../applications/science/math/mxnet {
-    inherit (linuxPackages) nvidia_x11;
-  };
+  mxnet = callPackage ../applications/science/math/mxnet { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima {
     wxGTK = wxGTK32.override {
