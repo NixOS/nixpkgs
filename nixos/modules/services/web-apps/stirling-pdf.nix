@@ -40,9 +40,30 @@ in
         Secrets should be added in environmentFiles instead of environment.
       '';
     };
+
+    dataDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/stirling-pdf";
+      description = "Where stirling-pdf stores persistent files";
+    };
   };
 
   config = lib.mkIf cfg.enable {
+
+    users = {
+      users.stirling-pdf = {
+        isSystemUser = true;
+        home = cfg.dataDir;
+        description = "User for running the stirling-pdf service";
+        group = "stirling-pdf";
+      };
+      groups.stirling-pdf = { };
+    };
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - stirling-pdf stirling-pdf - -"
+    ];
+
     systemd.services.stirling-pdf = {
       environment = lib.mapAttrs (_: toString) cfg.environment;
 
@@ -54,7 +75,7 @@ in
           # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L42
           which
           unpaper
-          libreoffice
+          (libreoffice.override { dbusVerify = false; })
           qpdf
           ocrmypdf
           poppler_utils
@@ -76,23 +97,22 @@ in
       serviceConfig = {
         BindReadOnlyPaths = [ "${pkgs.tesseract}/share/tessdata:/usr/share/tessdata" ];
         CacheDirectory = "stirling-pdf";
-        Environment = [ "HOME=%S/stirling-pdf" ];
+        Environment = [ "HOME=${cfg.dataDir}" ];
         EnvironmentFile = cfg.environmentFiles;
         ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = "stirling-pdf";
         StateDirectory = "stirling-pdf";
         SuccessExitStatus = 143;
         User = "stirling-pdf";
-        WorkingDirectory = "/var/lib/stirling-pdf";
+        WorkingDirectory = cfg.dataDir;
 
         # Hardening
         CapabilityBoundingSet = "";
-        DynamicUser = true;
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateUsers = true;
-        ProcSubset = "pid";
+        ProcSubset = "all"; # for libreoffice to work
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
@@ -110,7 +130,13 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @clock @setuid @chown"
+          "~@cpu-emulation"
+          "~@privileged"
+          "~@mount"
+          "@clock"
+          "@basic-io"
+          "@file-system"
+          "@chown"
         ];
         UMask = "0077";
       };
