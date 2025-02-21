@@ -3267,6 +3267,12 @@
     githubId = 17880;
     name = "Bodil Stokke";
   };
+  body20002 = {
+    email = "body20002.test@gmail.com";
+    github = "body20002";
+    githubId = 33910565;
+    name = "Abdallah Gamal";
+  };
   boj = {
     email = "brian@uncannyworks.com";
     github = "boj";
