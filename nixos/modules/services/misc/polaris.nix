@@ -49,7 +49,8 @@ in
         description = ''
           Contents for the TOML Polaris config, applied each start.
           Although poorly documented, an example may be found here:
-          [test-config.toml](https://github.com/agersant/polaris/blob/374d0ca56fc0a466d797a4b252e2078607476797/test-data/config.toml)
+          [CONFIGURATION.md](https://github.com/agersant/polaris/blob/46aed8096ee9d8702b5a98e6f3b1ff5db2bfc32a/docs/CONFIGURATION.md#format)
+          [test-config.toml](https://github.com/agersant/polaris/blob/46aed8096ee9d8702b5a98e6f3b1ff5db2bfc32a/test-data/config.toml)
         '';
         example = lib.literalExpression ''
           {
@@ -101,6 +102,8 @@ in
             cfg.port
             "--database"
             "/var/lib/${StateDirectory}/db.sqlite"
+            "--data"
+            "/var/lib/${StateDirectory}/data"
             "--cache"
             "/var/cache/${CacheDirectory}"
           ]

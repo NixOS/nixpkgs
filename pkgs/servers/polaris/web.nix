@@ -6,20 +6,18 @@
 
 buildNpmPackage rec {
   pname = "polaris-web";
-  version = "69";
+  version = "76";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris-web";
-    rev = "build-${version}";
-    hash = "sha256-/UmAOunc/79DpZByUrzqNA7q7JNugEceKRZvyTGhtVQ=";
+    tag = "build-${version}";
+    hash = "sha256-mGsgW6lRqCt+K2RrF2s4zhvYzH94K+GEXGUCn5ngBTY=";
   };
 
-  npmDepsHash = "sha256-c11CWJB76gX+Bxmqac3VxWjJxQVzYCaaf+pmQQpnOds=";
+  npmDepsHash = "sha256-MVqC6mMdiqtJzAB8J8xdxO5xCwiibBasA3BvN6EiBSM=";
 
-  env.CYPRESS_INSTALL_BINARY = "0";
-
-  npmBuildScript = "production";
+  env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS = "true";
 
   installPhase = ''
     runHook preInstall

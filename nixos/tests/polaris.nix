@@ -15,7 +15,7 @@ import ./make-test-python.nix (
           settings.users = [
             {
               name = "test_user";
-              password = "very_secret_password";
+              initial_password = "very_secret_password";
               admin = true;
             }
           ];
@@ -26,7 +26,8 @@ import ./make-test-python.nix (
       machine.wait_for_unit("polaris.service")
       machine.wait_for_open_port(5050)
       machine.succeed("curl http://localhost:5050/api/version")
-      machine.succeed("curl -X GET http://localhost:5050/api/initial_setup -H  'accept: application/json' | jq -e '.has_any_users == true'")
+      machine.succeed("curl -X GET http://localhost:5050/api/initial_setup -H 'accept: application/json' | jq -e '.has_any_users == true'")
+      machine.succeed("curl -X GET http://localhost:5050/api-docs")
     '';
   }
 )
