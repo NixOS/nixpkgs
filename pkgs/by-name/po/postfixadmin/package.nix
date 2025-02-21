@@ -1,30 +1,37 @@
-{ fetchFromGitHub, stdenv, lib, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
 
-stdenv.mkDerivation rec {
+  configLocalPath ? "/etc/postfixadmin/config.local.php",
+  templatesCachePath ? "/var/cache/postfixadmin/templates_c",
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "postfixadmin";
-  version = "3.3.13";
+  version = "3.3.15";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-46bc34goAcRvaiyW7z0AvIcd8n61TL6vgLQ+y7nNKBQ=";
+    owner = "postfixadmin";
+    repo = "postfixadmin";
+    tag = "postfixadmin-${finalAttrs.version}";
+    sha256 = "sha256-dKdJS9WQ/pPYITP53/Aynls8ZgVF7tAqL9gQEw+u8TM=";
   };
 
   installPhase = ''
     mkdir $out
     cp -r * $out/
-    ln -sf /etc/postfixadmin/config.local.php $out/
-    ln -sf /var/cache/postfixadmin/templates_c $out/
+    ln -sf '${configLocalPath}' $out/config.local.php
+    ln -sf '${templatesCachePath}' $out/templates_c
   '';
 
   passthru.tests = { inherit (nixosTests) postfixadmin; };
 
-  meta = {
+  meta = with lib; {
     description = "Web based virtual user administration interface for Postfix mail servers";
-    homepage = "https://postfixadmin.sourceforge.io/";
-    maintainers = with lib.maintainers; [ globin ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    homepage = "https://postfixadmin.github.io/postfixadmin/";
+    maintainers = with maintainers; [ globin ];
+    license = licenses.gpl2Plus;
+    platforms = lib.subtractLists platforms.darwin platforms.unix; # There is no /var/cache/ on MacOS
   };
-}
+})
