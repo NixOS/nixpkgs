@@ -84,3 +84,15 @@ index 2f4d929..3bc1204 100644
        DIRECTORY_PERMISSIONS
        OWNER_READ OWNER_WRITE OWNER_EXECUTE
        GROUP_READ GROUP_EXECUTE
+diff --git a/src/node/desktop/src/main/session-launcher.ts b/src/node/desktop/src/main/session-launcher.ts
+index 615ca1e..847f81a 100644
+--- a/src/node/desktop/src/main/session-launcher.ts
++++ b/src/node/desktop/src/main/session-launcher.ts
+@@ -551,7 +551,6 @@ export class SessionLauncher {
+       const fileInfo = execSync(`/usr/bin/file "${rLibPath}"`, { encoding: 'utf-8' });
+       logger().logDebug(fileInfo);
+       if (fileInfo.indexOf('arm64') !== -1) {
+-        this.sessionPath = this.sessionPath.getParent().completeChildPath('rsession-arm64');
+         logger().logDebug(`R is arm64; using ${this.sessionPath}`);
+       } else {
+         logger().logDebug(`R is x86_64; using ${this.sessionPath}`);
