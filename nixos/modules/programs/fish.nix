@@ -381,35 +381,33 @@ in
       {
         etc = lib.mapAttrs' (name: def: {
           name = "fish/functions/${name}.fish";
-          value = {
-            source =
-              let
-                modifierStr = n: v: lib.optional (v != null) ''--${n}="${toString v}"'';
-                modifierStrs = n: v: lib.optional (v != null) "--${n}=${toString v}";
-                modifierBool = n: v: lib.optional (v != null && v) "--${n}";
+          value.source =
+            let
+              modifierStr = n: v: lib.optional (v != null) ''--${n}="${toString v}"'';
+              modifierStrs = n: v: lib.optional (v != null) "--${n}=${toString v}";
+              modifierBool = n: v: lib.optional (v != null && v) "--${n}";
 
-                mods =
-                  with def;
-                  modifierStr "description" description
-                  ++ modifierStr "wraps" wraps
-                  ++ modifierStr "on-event" onEvent
-                  ++ modifierStr "on-variable" onVariable
-                  ++ modifierStr "on-job-exit" onJobExit
-                  ++ modifierStr "on-process-exit" onProcessExit
-                  ++ modifierStr "on-signal" onSignal
-                  ++ modifierBool "no-scope-shadowing" noScopeShadowing
-                  ++ modifierStr "inherit-variable" inheritVariable
-                  ++ modifierStrs "argument-names" argumentNames;
+              mods =
+                with def;
+                modifierStr "description" description
+                ++ modifierStr "wraps" wraps
+                ++ modifierStr "on-event" onEvent
+                ++ modifierStr "on-variable" onVariable
+                ++ modifierStr "on-job-exit" onJobExit
+                ++ modifierStr "on-process-exit" onProcessExit
+                ++ modifierStr "on-signal" onSignal
+                ++ modifierBool "no-scope-shadowing" noScopeShadowing
+                ++ modifierStr "inherit-variable" inheritVariable
+                ++ modifierStrs "argument-names" argumentNames;
 
-                modifiers = if lib.isAttrs def then " ${toString mods}" else "";
-                body = if lib.isAttrs def then def.body else def;
-              in
-              fishIndent "${name}.fish" ''
-                function ${name}${modifiers}
-                  ${lib.strings.removeSuffix "\n" body}
-                end
-              '';
-          };
+              modifiers = if lib.isAttrs def then " ${toString mods}" else "";
+              body = if lib.isAttrs def then def.body else def;
+            in
+            fishIndent "${name}.fish" ''
+              function ${name}${modifiers}
+                ${lib.strings.removeSuffix "\n" body}
+              end
+            '';
         }) cfg.functions;
       }
 
