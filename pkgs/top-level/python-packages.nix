@@ -4229,8 +4229,6 @@ self: super: with self; {
 
   enturclient = callPackage ../development/python-modules/enturclient { };
 
-  enum34 = callPackage ../development/python-modules/enum34 { };
-
   enum-compat = callPackage ../development/python-modules/enum-compat { };
 
   env-canada = callPackage ../development/python-modules/env-canada { };
