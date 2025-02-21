@@ -1,0 +1,31 @@
+From 87ec2d0ebde07e04a9335204b33b8e56a152e9ba Mon Sep 17 00:00:00 2001
+From: qubitnano <146656568+qubitnano@users.noreply.github.com>
+Date: Sat, 6 Jul 2024 19:11:01 -0400
+Subject: [PATCH] disable cmake downloading gamecontrollerdb.txt
+
+This is fetched in the derivation
+---
+ CMakeLists.txt | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7acd983..49124ca 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -116,13 +116,6 @@ add_custom_command(OUTPUT
+                    DEPENDS ${CMAKE_SOURCE_DIR}/patches/patches.elf
+ )
+ 
+-# Download controller db file for controller support via SDL2
+-set(GAMECONTROLLERDB_COMMIT "b1e4090b3d4266e55feb0793efa35792e05faf66")
+-set(GAMECONTROLLERDB_URL "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/${GAMECONTROLLERDB_COMMIT}/gamecontrollerdb.txt")
+-
+-file(DOWNLOAD ${GAMECONTROLLERDB_URL} ${CMAKE_SOURCE_DIR}/gamecontrollerdb.txt
+-     TLS_VERIFY ON)
+-
+ add_custom_target(DownloadGameControllerDB
+     DEPENDS ${CMAKE_SOURCE_DIR}/gamecontrollerdb.txt)
+ 
+-- 
+2.45.1
+
