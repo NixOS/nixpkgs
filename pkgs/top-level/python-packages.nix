@@ -7391,6 +7391,8 @@ self: super: with self; {
     inherit python;
   })).python;
 
+  libipld = callPackage ../development/python-modules/libipld { };
+
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
   libknot = callPackage ../development/python-modules/libknot { };
