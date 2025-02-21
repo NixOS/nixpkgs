@@ -9,6 +9,7 @@
   pkg-config,
   makeWrapper,
   nixosTests,
+  pkgsCross,
   gitUpdater,
   enableDecLocator ? true,
 }:
@@ -95,6 +96,7 @@ stdenv.mkDerivation rec {
     tests = {
       customTest = nixosTests.xterm;
       standardTest = nixosTests.terminal-emulators.xterm;
+      musl = pkgsCross.musl64.xterm;
     };
 
     updateScript = gitUpdater {
