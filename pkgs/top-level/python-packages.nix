@@ -8403,6 +8403,8 @@ self: super: with self; {
 
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
 
+  mkdocs-print-site-plugin = callPackage ../development/python-modules/mkdocs-print-site-plugin { };
+
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
 
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
