@@ -9223,12 +9223,7 @@ with pkgs;
     icu76
   ;
 
-  # Use Apple’s fork of ICU by default, which provides additional APIs that are not present in upstream ICU.
-  #
-  # `icuReal` is provided in case the upstream icu package is needed on Darwin instead of the fork.
-  # Note that the versioned icu packages always correspond to the upstream versions.
-  icuReal = icu76;
-  icu = if stdenv.hostPlatform.isDarwin then darwin.ICU else icuReal;
+  icu = icu76;
 
   idasen = with python3Packages; toPythonApplication idasen;
 
