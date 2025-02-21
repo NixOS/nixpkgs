@@ -10,12 +10,12 @@
   typing-extensions,
 }:
 let
-  inherit (pulumiPackages) pulumi-aws;
-  src = pulumi-aws.sdk;
+  inherit (pulumiPackages) pulumi-command;
+  src = pulumi-command.sdk;
   sourceRoot = "${src.name}-sdk/python";
 in
 buildPythonPackage {
-  inherit (pulumi-aws) pname version;
+  inherit (pulumi-command) pname version;
   inherit src sourceRoot;
 
   outputs = [
@@ -35,13 +35,15 @@ buildPythonPackage {
     semver
   ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
 
-  pythonImportsCheck = [ "pulumi_aws" ];
+  pythonImportsCheck = [ "pulumi_command" ];
 
   meta = {
-    description = "Pulumi package for creating and managing Amazon Web Services (AWS) cloud resources";
-    homepage = "https://github.com/pulumi/pulumi-aws";
+    description = "Pulumi provider to execute commands and scripts either locally or remotely as part of the Pulumi resource model";
+    homepage = "https://github.com/pulumi/pulumi-command";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      veehaitch
+      trundle
       tie
     ];
   };

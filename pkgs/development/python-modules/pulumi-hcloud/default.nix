@@ -10,12 +10,12 @@
   typing-extensions,
 }:
 let
-  inherit (pulumiPackages) pulumi-aws;
-  src = pulumi-aws.sdk;
+  inherit (pulumiPackages) pulumi-hcloud;
+  src = pulumi-hcloud.sdk;
   sourceRoot = "${src.name}-sdk/python";
 in
 buildPythonPackage {
-  inherit (pulumi-aws) pname version;
+  inherit (pulumi-hcloud) pname version;
   inherit src sourceRoot;
 
   outputs = [
@@ -35,13 +35,14 @@ buildPythonPackage {
     semver
   ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
 
-  pythonImportsCheck = [ "pulumi_aws" ];
+  pythonImportsCheck = [ "pulumi_hcloud" ];
 
   meta = {
-    description = "Pulumi package for creating and managing Amazon Web Services (AWS) cloud resources";
-    homepage = "https://github.com/pulumi/pulumi-aws";
+    description = "Pulumi package for creating and managing Hetzner Cloud resources";
+    homepage = "https://github.com/pulumi/pulumi-hcloud";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      albertodvp
       tie
     ];
   };

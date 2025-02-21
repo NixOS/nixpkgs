@@ -1,0 +1,65 @@
+{
+  lib,
+  buildGoModule,
+  callPackage,
+  pulumi,
+  bash,
+  python3,
+}:
+let
+  inherit (pulumi) version src;
+in
+buildGoModule {
+  pname = "pulumi-python";
+  inherit version src;
+
+  sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
+
+  vendorHash = "sha256-gFm+dzn2+/RQP5vY9ND4ZPaTONE+43BbBj/tCSV/YgE=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+  ];
+
+  checkFlags = [
+    "-skip=^${
+      lib.concatStringsSep "$|^" [
+        "TestLanguage"
+        "TestDeterminePulumiPackages"
+      ]
+    }$"
+  ];
+
+  nativeCheckInputs = [
+    python3
+  ];
+
+  # For patchShebangsAuto (see scripts copied in postInstall).
+  buildInputs = [
+    bash
+    python3
+  ];
+
+  postInstall = ''
+    cp -t "$out/bin" \
+      ../pulumi-language-python-exec \
+      ../../dist/pulumi-resource-pulumi-python \
+      ../../dist/pulumi-analyzer-policy-python
+  '';
+
+  passthru.tests.smokeTest = callPackage ./smoke-test/default.nix { };
+
+  meta = {
+    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/python/";
+    description = "Language host for Pulumi programs written in Python";
+    license = lib.licenses.asl20;
+    mainProgram = "pulumi-language-python";
+    maintainers = with lib.maintainers; [
+      trundle
+      veehaitch
+      tie
+    ];
+  };
+}

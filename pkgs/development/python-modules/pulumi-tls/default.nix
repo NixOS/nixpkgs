@@ -10,12 +10,12 @@
   typing-extensions,
 }:
 let
-  inherit (pulumiPackages) pulumi-aws;
-  src = pulumi-aws.sdk;
+  inherit (pulumiPackages) pulumi-tls;
+  src = pulumi-tls.sdk;
   sourceRoot = "${src.name}-sdk/python";
 in
 buildPythonPackage {
-  inherit (pulumi-aws) pname version;
+  inherit (pulumi-tls) pname version;
   inherit src sourceRoot;
 
   outputs = [
@@ -35,11 +35,11 @@ buildPythonPackage {
     semver
   ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
 
-  pythonImportsCheck = [ "pulumi_aws" ];
+  pythonImportsCheck = [ "pulumi_tls" ];
 
   meta = {
-    description = "Pulumi package for creating and managing Amazon Web Services (AWS) cloud resources";
-    homepage = "https://github.com/pulumi/pulumi-aws";
+    description = "Pulumi package to create TLS resources in Pulumi programs";
+    homepage = "https://github.com/pulumi/pulumi-tls";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       tie
