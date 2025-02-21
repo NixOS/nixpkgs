@@ -15,7 +15,7 @@ let
       expectedMap ? null,
       script,
     }:
-    stdenvNoCC.mkDerivation (finalAttrs: {
+    stdenvNoCC.mkDerivation {
       __structuredAttrs = true;
       strictDeps = true;
 
@@ -32,6 +32,6 @@ let
       inherit script;
 
       buildCommandPath = ./build-command.sh;
-    });
+    };
 in
 makeOverridable testEqualArrayOrMap
