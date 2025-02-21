@@ -33,6 +33,12 @@ rustPlatform.buildRustPackage {
 
   __darwinAllowLocalNetworking = true;
 
+  nativeCheckInputs = [ openssl ];
+  preCheck = ''
+    patchShebangs examples/tls/create_self_signed_cert.sh
+    (cd examples/tls && chmod +x create_self_signed_cert.sh && ./create_self_signed_cert.sh)
+  '';
+
   passthru.tests = {
     inherit (nixosTests) rathole;
   };
