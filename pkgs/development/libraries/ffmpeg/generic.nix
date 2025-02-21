@@ -4,10 +4,10 @@
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
 , version # ffmpeg ABI version. Also declare this if you're overriding the source.
 , hash ? "" # hash of the upstream source for the given ABI version
+, rev ? "" # git revision of the upsteam source
 , source ? fetchgit {
     url = "https://git.ffmpeg.org/ffmpeg.git";
-    rev = "n${version}";
-    inherit hash;
+    inherit rev hash;
   }
 
 , ffmpegVariant ? "small" # Decides which dependencies are enabled by default
@@ -30,7 +30,6 @@
 , withFullDeps ? ffmpegVariant == "full"
 
 , fetchgit
-, fetchpatch
 , fetchpatch2
 
   # Feature flags
@@ -439,11 +438,7 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
         hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
       })
-      (fetchpatch2 {
-        name = "CVE-2024-31578.patch";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
-        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-      })
+      # No patch needed for CVE-2024-31578: already patched in release/6.1
       (fetchpatch2 {
         name = "CVE-2023-49501.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4adb93dff05dd947878c67784d98c9a4e13b57a7";
@@ -466,17 +461,10 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ]
     ++ optionals (lib.versionAtLeast version "7.1") [
-      ./fix-fate-ffmpeg-spec-disposition-7.1.patch
-
       # Expose a private API for Chromium / Qt WebEngine.
       (fetchpatch2 {
         url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
         hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
-      })
-      # Fix https://github.com/NixOS/nixpkgs/issues/383210
-      (fetchpatch {
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4571c80b404fef48d649c71a059d8d00c5275c95";
-        hash = "sha256-2bfLulG0EElxdaaTQI/ZfoJf4iX29xB6ufdDKQeEnQw=";
       })
     ];
 
