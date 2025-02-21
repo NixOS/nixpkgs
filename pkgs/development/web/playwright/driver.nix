@@ -140,7 +140,10 @@ let
       description = "Framework for Web Testing and Automation";
       homepage = "https://playwright.dev";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ kalekseev ];
+      maintainers = with lib.maintainers; [
+        kalekseev
+        marie
+      ];
       inherit (nodejs.meta) platforms;
     };
   };
