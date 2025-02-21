@@ -72,8 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks"
   );
 
-  configurePhase = ''
+  postPatch = ''
     substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${lib.getExe perl}
+  '';
+
+  configurePhase = ''
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
