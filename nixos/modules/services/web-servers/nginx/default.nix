@@ -305,12 +305,12 @@ let
           # If this vhost has SSL or is a SSL rejection host.
           # We enable a TLS variant for lines without explicit ssl or ssl = true.
           optionals (hasSSL || vhost.rejectSSL)
-            (map (listen: { port = cfg.defaultSSLListenPort; ssl = true; } // listen)
+            (map (listen: { port = if (hasPrefix "unix:" listen.addr) then null else cfg.defaultSSLListenPort; ssl = true; } // listen)
             (filter (listen: !(listen ? ssl) || listen.ssl) listenLines))
           # If this vhost is supposed to serve HTTP
           # We provide listen lines for those without explicit ssl or ssl = false.
           ++ optionals (!onlySSL)
-            (map (listen: { port = cfg.defaultHTTPListenPort; ssl = false; } // listen)
+            (map (listen: { port = if (hasPrefix "unix:" listen.addr) then null else cfg.defaultHTTPListenPort; ssl = false; } // listen)
             (filter (listen: !(listen ? ssl) || !listen.ssl) listenLines));
 
         defaultListen =
