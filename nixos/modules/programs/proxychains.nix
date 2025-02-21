@@ -20,38 +20,19 @@ let
     tcp_connect_time_out ${builtins.toString cfg.tcpConnectTimeOut}
     localnet ${cfg.localnet}
     [ProxyList]
-    ${builtins.concatStringsSep "\n" (
-      lib.mapAttrsToList (k: v: "${v.type} ${v.host} ${builtins.toString v.port}") (
-        lib.filterAttrs (k: v: v.enable) cfg.proxies
-      )
-    )}
+    ${lib.concatMapStrings (
+      {
+        enable,
+        type,
+        host,
+        port,
+        ...
+      }:
+      lib.optionalString enable ''
+        ${type} ${host} ${builtins.toString port}
+      ''
+    ) (lib.sort (p: q: p.order < q.order) (builtins.attrValues cfg.proxies))}
   '';
-
-  proxyOptions = {
-    options = {
-      enable = lib.mkEnableOption "this proxy";
-
-      type = lib.mkOption {
-        type = lib.types.enum [
-          "http"
-          "socks4"
-          "socks5"
-        ];
-        description = "Proxy type.";
-      };
-
-      host = lib.mkOption {
-        type = lib.types.str;
-        description = "Proxy host or IP address.";
-      };
-
-      port = lib.mkOption {
-        type = lib.types.port;
-        description = "Proxy port";
-      };
-    };
-  };
-
 in
 {
 
@@ -139,19 +120,51 @@ in
       };
 
       proxies = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.submodule proxyOptions);
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              enable = (lib.mkEnableOption "this proxy") // {
+                default = true;
+              };
+
+              type = lib.mkOption {
+                type = lib.types.enum [
+                  "http"
+                  "socks4"
+                  "socks5"
+                ];
+                description = "Proxy type.";
+              };
+
+              host = lib.mkOption {
+                type = lib.types.str;
+                description = "Proxy host or IP address.";
+              };
+
+              port = lib.mkOption {
+                type = lib.types.port;
+                description = "Proxy port";
+              };
+
+              order = lib.mkOption {
+                type = lib.types.int;
+                default = 10;
+                description = "Value used to order the list of proxies.";
+              };
+            };
+          }
+        );
         description = ''
           Proxies to be used by proxychains.
         '';
 
-        example = lib.literalExpression ''
-          { myproxy =
-            { type = "socks4";
-              host = "127.0.0.1";
-              port = 1337;
-            };
-          }
-        '';
+        example = {
+          myproxy = {
+            type = "socks4";
+            host = "127.0.0.1";
+            port = 1337;
+          };
+        };
       };
 
     };
@@ -165,10 +178,10 @@ in
   config = lib.mkIf cfg.enable {
 
     assertions = lib.singleton {
-      assertion = cfg.chain.type != "random" && cfg.chain.length == null;
+      assertion = cfg.chain.type == "random" -> cfg.chain.length != null;
       message = ''
-        Option `programs.proxychains.chain.length`
-        only makes sense with `programs.proxychains.chain.type` = "random".
+        Option `programs.proxychains.chain.length` must be specified
+        when `programs.proxychains.chain.type` = "random".
       '';
     };
 
@@ -178,6 +191,7 @@ in
         type = "socks4";
         host = "127.0.0.1";
         port = 9050;
+        order = 5;
       };
     };
 
