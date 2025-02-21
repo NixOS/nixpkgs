@@ -681,6 +681,11 @@
     name = "Antoine du Hamel";
     keys = [ { fingerprint = "C0D6 2484 39F1 D560 4AAF  FB40 21D9 00FF DB23 3756"; } ];
   };
+  aehmlo = {
+    github = "Aehmlo";
+    githubId = 1622250;
+    name = "Alex";
+  };
   aerialx = {
     email = "aaron+nixos@aaronlindsay.com";
     github = "AerialX";
