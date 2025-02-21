@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.services.lidarr;
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -27,6 +28,10 @@ in
           Open ports in the firewall for Lidarr
         '';
       };
+
+      settings = servarr.mkServarrSettingsOptions "lidarr" 8686;
+
+      environmentFiles = servarr.mkServarrEnvironmentFiles "lidarr";
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -56,18 +61,20 @@ in
       description = "Lidarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = servarr.mkServarrSettingsEnvVars "LIDARR" cfg.settings;
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        EnvironmentFile = cfg.environmentFiles;
         ExecStart = "${cfg.package}/bin/Lidarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8686 ];
+      allowedTCPPorts = [ cfg.settings.server.port ];
     };
 
     users.users = lib.mkIf (cfg.user == "lidarr") {
