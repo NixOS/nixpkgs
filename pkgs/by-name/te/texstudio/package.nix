@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qtbase,
-  qttools,
-  qtsvg,
-  qt5compat,
-  quazip,
-  qtwayland,
-  hunspell,
-  wrapQtAppsHook,
-  poppler,
-  zlib,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qttools
+, qtsvg
+, qt5compat
+, quazip
+, qtwayland
+, hunspell
+, wrapQtAppsHook
+, poppler
+, zlib
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.5";
+  version = "4.8.6";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-/sxXtapR55+/pTljFl03DYlJa7dMZVNlPji4/a06yZI=";
+    hash = "sha256-PvxzG4VPhCmwc/Kh5g85fV/Mc7ih08pt/zUNBgldZiI=";
   };
 
   nativeBuildInputs = [
