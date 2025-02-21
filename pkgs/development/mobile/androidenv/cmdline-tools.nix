@@ -8,6 +8,7 @@
   pkgs,
   stdenv,
   postInstall,
+  meta,
 }:
 
 deployAndroidPackage {
@@ -46,5 +47,5 @@ deployAndroidPackage {
     ${postInstall}
   '';
 
-  meta.license = lib.licenses.unfree;
+  inherit meta;
 }

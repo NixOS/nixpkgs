@@ -3,6 +3,7 @@
   stdenv,
   lib,
   runtimeShell,
+  meta,
 }:
 {
   name,
@@ -195,5 +196,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/run-test-emulator
   '';
 
-  meta.mainProgram = "run-test-emulator";
+  meta = meta // {
+    mainProgram = "run-test-emulator";
+  };
 }
