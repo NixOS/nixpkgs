@@ -11,6 +11,7 @@ let
     getExe
     maintainers
     mkEnableOption
+    mkIf
     mkPackageOption
     mkOption
     types
@@ -135,7 +136,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     systemd.services.routinator = {
       description = "Routinator 3000 is free, open-source RPKI Relying Party software made by NLnet Labs.";
       wantedBy = [ "multi-user.target" ];
