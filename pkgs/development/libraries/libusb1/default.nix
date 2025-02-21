@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  nix-update-script,
   doxygen,
   pkg-config,
   enableUdev ?
@@ -68,6 +69,8 @@ stdenv.mkDerivation rec {
     cp -r examples/.libs/* $out/examples/bin
     ln -s $out/examples/bin/fxload $out/sbin/fxload
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://libusb.info/";
