@@ -3,17 +3,17 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  hatchling,
   setuptools,
   click,
-  urllib3,
   requests,
   packaging,
   dparse,
   ruamel-yaml,
   jinja2,
+  levenshtein,
   marshmallow,
   authlib,
-  rich,
   typer,
   pydantic,
   safety-schemas,
@@ -22,11 +22,12 @@
   psutil,
   git,
   pytestCheckHook,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.14";
+  version = "3.3.0";
 
   disabled = pythonOlder "3.8";
 
@@ -36,10 +37,13 @@ buildPythonPackage rec {
     owner = "pyupio";
     repo = "safety";
     tag = version;
-    hash = "sha256-/RB+ota6dnlbJvtOOoIOHD+BjBzZIJRhEOAUQggUgB4=";
+    hash = "sha256-K41ytQhOP3RJ83fbd15cRJD9bAQs+wRnDIBC6XR1bOE=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail python-levenshtein levenshtein
+
     substituteInPlace safety/safety.py \
       --replace-fail "telemetry: bool = True" "telemetry: bool = False"
     substituteInPlace safety/util.py \
@@ -51,24 +55,24 @@ buildPythonPackage rec {
       --replace-fail "telemetry=True" "telemetry=False"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "pydantic"
+    "safety-schemas"
   ];
 
   dependencies = [
     setuptools
     click
-    urllib3
     requests
     packaging
     dparse
     ruamel-yaml
     jinja2
+    levenshtein
     marshmallow
     authlib
-    rich
     typer
     pydantic
     safety-schemas
@@ -80,14 +84,16 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     pytestCheckHook
+    tomli
   ];
 
-  # Disable tests depending on online services
   disabledTests = [
+    # Disable tests depending on online services
     "test_announcements_if_is_not_tty"
     "test_check_live"
     "test_debug_flag"
     "test_get_packages_licenses_without_api_key"
+    "test_init_project"
     "test_validate_with_basic_policy_file"
   ];
 
