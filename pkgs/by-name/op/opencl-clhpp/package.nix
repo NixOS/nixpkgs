@@ -4,18 +4,21 @@
   fetchFromGitHub,
   cmake,
   python3,
+  ruby,
   opencl-headers,
+  khronos-ocl-icd-loader,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencl-clhpp";
   version = "2024.10.24";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-CLHPP";
-    rev = "v${version}";
-    sha256 = "sha256-b5f2qFJqLdGEMGnaUY8JmWj2vjZscwLua4FhgC4YP+k=";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-3RVZJIt03pRmjrPa9q6h6uqFCuTnxvEqjUGUmdwybbY=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +30,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  doCheck = true;
+  checkInputs = [ khronos-ocl-icd-loader ];
+  nativeCheckInputs = [ ruby ];
+
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_TESTS=OFF"
+    (lib.cmakeBool "OPENCL_CLHPP_BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_EXAMPLES" finalAttrs.finalPackage.doCheck)
   ];
 
   meta = {
@@ -39,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.xokdvium ];
     platforms = lib.platforms.unix;
   };
-}
+})
