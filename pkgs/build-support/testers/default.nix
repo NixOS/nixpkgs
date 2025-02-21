@@ -37,7 +37,7 @@
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
   # or doc/build-helpers/testers.chapter.md
   # NOTE: Must be `import`-ed rather than `callPackage`-d to preserve the `override` attribute.
-  testBuildFailure' = import ./testBuildFailurePrime/tester.nix { inherit lib stdenvNoCC testers; };
+  testBuildFailure' = import ./testBuildFailurePrime { inherit lib stdenvNoCC testers; };
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
   # or doc/build-helpers/testers.chapter.md
