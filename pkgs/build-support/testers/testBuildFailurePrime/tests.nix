@@ -114,6 +114,34 @@ let
     };
 
     sideEffectsStructuredAttrs = overrideStructuredAttrs true final.sideEffects;
+
+    exitCodeNegativeTest = testers.testBuildFailure' {
+      drv = testers.testBuildFailure' {
+        drv = runCommand "exit-code" { } "exit 3";
+        # Default expected exit code is 1
+      };
+      expectedBuilderLogEntries = [
+        "ERROR: testBuilderExitCode: original builder produced exit code 3 but was expected to produce 1"
+      ];
+    };
+
+    exitCodeNegativeTestStructuredAttrs = overrideStructuredAttrs true final.exitCodeNegativeTest;
+
+    logNegativeTest = testers.testBuildFailure' {
+      drv = testers.testBuildFailure' {
+        drv = runCommand "exit-code" { } ''
+          nixLog "apples"
+          exit 3
+        '';
+        expectedBuilderExitCode = 3;
+        expectedBuilderLogEntries = [ "bees" ];
+      };
+      expectedBuilderLogEntries = [
+        "ERROR: testBuilderLogEntries: original builder log does not contain 'bees'"
+      ];
+    };
+
+    logNegativeTestStructuredAttrs = overrideStructuredAttrs true final.logNegativeTest;
   };
 in
 final
