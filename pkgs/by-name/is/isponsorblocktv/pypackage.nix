@@ -18,13 +18,13 @@
 }:
 buildPythonApplication rec {
   pname = "iSponsorBlockTV";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
-    rev = "v${version}";
-    hash = "sha256-v5NF6o+9IxusYNebs2a9fgHCHZNN9hHLQurujhmdsgU=";
+    tag = "v${version}";
+    hash = "sha256-vH/di/jqiSBGgJXEk5Umltu+lUJQJQgWL1Cm41qRNRc=";
   };
 
   pyproject = true;
