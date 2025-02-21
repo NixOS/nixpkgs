@@ -7,7 +7,6 @@
   qtmacextras ? null,
   qmake,
   fixDarwinDylibNames,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
