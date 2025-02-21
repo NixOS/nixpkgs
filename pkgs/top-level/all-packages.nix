@@ -7420,6 +7420,10 @@ with pkgs;
     };
   }));
 
+  ufbt = callPackage ../by-name/uf/ufbt/package.nix {
+    inherit (python3Packages) buildPythonPackage setuptools setuptools-git-versioning;
+  };
+
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
