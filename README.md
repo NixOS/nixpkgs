@@ -18,6 +18,79 @@
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
+## 🚀 Quick Start
+
+**Step 1: Install Nix**
+
+To install the Nix package manager, run:
+
+```bash
+sh <(curl -L https://nixos.org/nix/install)
+```
+
+_This script works on most Linux distributions and macOS._
+
+**Step 2: Install a Package**
+
+For example, to install `hello`, run:
+
+```bash
+nix-env -iA nixpkgs.hello
+```
+
+**Step 3: Verify Installation**
+
+Check your installation by running:
+
+```bash
+hello
+```
+
+You should see:
+
+```
+Hello, world!
+```
+
+**Step 4: Remove a Package**
+
+To uninstall, use:
+
+```bash
+nix-env -e hello
+```
+
+## 🛠️ Troubleshooting
+
+### Issue 1: Permission Errors During Installation
+- **Problem**: You get errors like `permission denied`.
+- **Solution**: Ensure the install script runs with appropriate permissions. Run:
+  ```bash
+  sh <(curl -L https://nixos.org/nix/install) --daemon
+  ```
+  _This sets up Nix as a daemon, solving most permission issues._
+
+### Issue 2: Command Not Found After Installation
+- **Problem**: Nix commands like `nix-env` aren't found after installation.
+- **Solution**: Reload your shell or source your profile:
+  ```bash
+  source ~/.nix-profile/etc/profile.d/nix.sh
+  ```
+  _This makes the Nix commands available immediately._
+
+### Issue 3: Package Not Found
+- **Problem**: You get `error: attribute ... not found` when installing a package.
+- **Solution**: Check the exact package name on [search.nixos.org](https://search.nixos.org/packages). Ensure you're using the correct attribute path (e.g., `nixpkgs.hello`).
+
+### Issue 4: Updating Packages
+- **Problem**: Your packages aren’t updating or you’re seeing old versions.
+- **Solution**: Update your channels and packages by running:
+  ```bash
+  nix-channel --update
+  nix-env -u '*'
+  ```
+  _This updates all installed packages._
+
 # Manuals
 
 * [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely-functional Linux distribution
