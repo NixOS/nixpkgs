@@ -13,6 +13,7 @@
   cryptography,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -46,12 +47,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "chacha20poly1305_reuseable" ];
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=chacha20poly1305_reuseable --cov-report=term-missing:skip-covered" ""
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "ChaCha20Poly1305 that is reuseable for asyncio";
