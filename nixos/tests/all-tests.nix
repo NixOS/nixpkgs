@@ -1138,6 +1138,7 @@ in {
   ucarp = handleTest ./ucarp.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   ulogd = handleTest ./ulogd/ulogd.nix {};
+  umami = handleTest ./web-apps/umami.nix {};
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
