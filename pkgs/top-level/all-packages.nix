@@ -3942,15 +3942,7 @@ with pkgs;
 
   maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
 
-  matrix-synapse = callPackage ../servers/matrix-synapse/wrapper.nix { };
-  matrix-synapse-unwrapped = callPackage ../servers/matrix-synapse/default.nix { };
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
-  matrix-synapse-tools = recurseIntoAttrs matrix-synapse-unwrapped.tools;
-
-  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {
-    matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
-    nodejs = nodejs_18;
-  };
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
@@ -4167,7 +4159,6 @@ with pkgs;
   };
 
   matrix-sdk-crypto-nodejs = callPackage ../development/libraries/matrix-sdk-crypto-nodejs { };
-  matrix-sdk-crypto-nodejs-0_1_0-beta_3 = callPackage ../development/libraries/matrix-sdk-crypto-nodejs/beta3.nix { };
 
   makemkv = libsForQt5.callPackage ../applications/video/makemkv { };
 
