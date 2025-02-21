@@ -11,21 +11,22 @@
   musl,
   xorg,
   gitUpdater,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "3.80.1";
+  version = "3.109.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-9ClosoDIT+yP2dvNenHW2RSxLimOT3znXD+Pq+N6cQA=";
+    hash = "sha256-66MSUlrQMe3VmDP0oyoii4cugPqIMm3WN4z2YHK7qkU=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
+    hash = "sha256-GufjVYTUQHizh5Y7WkEkxianI+2cKlx4OPBvrswl2e8=";
   };
 
   passthru.updateScript = gitUpdater { rev-prefix = "wrangler@"; };
@@ -86,6 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" # https://github.com/cloudflare/workers-sdk/issues/3264
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Command-line interface for all things Cloudflare Workers";
