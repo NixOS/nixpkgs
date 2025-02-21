@@ -42,6 +42,9 @@ in
       inherit allowUnfreePredicate;
       "${variant}Support" = true;
       inHydra = true;
+
+      # Don't evaluate duplicate and/or deprecated attributes
+      allowAliases = false;
     };
 
     __allowFileset = false;
@@ -69,96 +72,145 @@ let
     ;
 
   # Package sets to evaluate whole
+  # Derivations from these package sets are selected based on the value
+  # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
   packageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  evalPackageSet = pset: mapTestOn { ${pset} = packagePlatforms pkgs.${pset}; };
+  evalPackageSetPlatforms = lib.genAttrs packageSets (pset: packagePlatforms pkgs.${pset});
 
-  jobs =
-    mapTestOn {
-      blas = linux;
-      blender = linux;
+  # Explicitly select additional packages to also evaluate
+  # The desired platforms must be set explicitly here
+  evalIndividualPackagePlatforms = {
+    blas = linux;
+    blender = linux;
+    faiss = linux;
+    lapack = linux;
+    magma = linux;
+    mpich = linux;
+    openmpi = linux;
+    ucx = linux;
+
+    opencv = linux;
+    cctag = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+
+    cholmod-extra = linux;
+    colmap = linux;
+    ctranslate2 = linux;
+    ffmpeg-full = linux;
+    gimp = linux;
+    gpu-screen-recorder = linux;
+    gst_all_1.gst-plugins-bad = linux;
+    lightgbm = linux;
+    llama-cpp = linux;
+    meshlab = linux;
+    monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+    noisetorch = linux;
+    obs-studio-plugins.obs-backgroundremoval = linux;
+    ollama = linux;
+    onnxruntime = linux;
+    openmvg = linux;
+    openmvs = linux;
+    opentrack = linux;
+    openvino = linux;
+    pixinsight = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+    qgis = linux;
+    rtabmap = linux;
+    saga = linux;
+    suitesparse = linux;
+    truecrack-cuda = linux;
+    tts = linux;
+    ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+    wyoming-faster-whisper = linux;
+    xgboost = linux;
+
+    python3Packages = {
+      catboost = linux;
+      cupy = linux;
       faiss = linux;
-      lapack = linux;
-      magma = linux;
-      mpich = linux;
-      openmpi = linux;
-      ucx = linux;
+      faster-whisper = linux;
+      flax = linux;
+      gpt-2-simple = linux;
+      grad-cam = linux;
+      jaxlib = linux;
+      jax = linux;
+      keras = linux;
+      kornia = linux;
+      mmcv = linux;
+      mxnet = linux;
+      numpy = linux; # Only affected by MKL?
+      onnx = linux;
+      triton = linux;
+      openai-whisper = linux;
+      opencv4 = linux;
+      opensfm = linux;
+      pycuda = linux;
+      pymc = linux;
+      pyrealsense2WithCuda = linux;
+      pytorch-lightning = linux;
+      scikit-image = linux;
+      scikit-learn = linux; # Only affected by MKL?
+      scipy = linux; # Only affected by MKL?
+      spacy-transformers = linux;
+      tensorflow = linux;
+      tensorflow-probability = linux;
+      tesserocr = linux;
+      tiny-cuda-nn = linux;
+      torchaudio = linux;
+      torch = linux;
+      torchvision = linux;
+      transformers = linux;
+      ttstokenizer = linux;
+      vidstab = linux;
+      vllm = linux;
+    };
+  };
 
-      opencv = linux;
-      cctag = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
+  evalPackagePlatforms = lib.recursiveUpdate evalPackageSetPlatforms evalIndividualPackagePlatforms;
 
-      cholmod-extra = linux;
-      colmap = linux;
-      ctranslate2 = linux;
-      ffmpeg-full = linux;
-      gimp = linux;
-      gpu-screen-recorder = linux;
-      gst_all_1.gst-plugins-bad = linux;
-      lightgbm = linux;
-      llama-cpp = linux;
-      meshlab = linux;
-      monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-      noisetorch = linux;
-      obs-studio-plugins.obs-backgroundremoval = linux;
-      ollama = linux;
-      onnxruntime = linux;
-      openmvg = linux;
-      openmvs = linux;
-      opentrack = linux;
-      openvino = linux;
-      pixinsight = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-      qgis = linux;
-      rtabmap = linux;
-      saga = linux;
-      suitesparse = linux;
-      truecrack-cuda = linux;
-      tts = linux;
-      ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
-      wyoming-faster-whisper = linux;
-      xgboost = linux;
+  # Packages that match the following predicates won't be evaluated on any platforms
+  # Each predicate takes a human-readable, dot-delimited attribute path and the derivation itself
+  filterPackagePredicates =
+    let
+      matchCudaPackageByName = name: path: null != builtins.match "cudaPackages[^\.]*\.${name}" path;
+      knownBrokenConditions =
+        conds: drv: builtins.any (cond: drv.brokenConditions.${cond} or false) conds;
+    in
+    [
+      # TensorRT currently can't be built on hydra/nix-community builders due to requiring the user
+      # to explicitly agree to the NVIDIA TensorRT License (and a developer account on developer.nvidia.com)
+      # See https://docs.nvidia.com/deeplearning/tensorrt/latest/reference/sla.html
+      (drv: matchCudaPackageByName "tensorrt[^\.]*")
 
-      python3Packages = {
-        catboost = linux;
-        cupy = linux;
-        faiss = linux;
-        faster-whisper = linux;
-        flax = linux;
-        gpt-2-simple = linux;
-        grad-cam = linux;
-        jaxlib = linux;
-        jax = linux;
-        Keras = linux;
-        kornia = linux;
-        mmcv = linux;
-        mxnet = linux;
-        numpy = linux; # Only affected by MKL?
-        onnx = linux;
-        triton = linux;
-        openai-whisper = linux;
-        opencv4 = linux;
-        opensfm = linux;
-        pycuda = linux;
-        pymc = linux;
-        pyrealsense2WithCuda = linux;
-        pytorch-lightning = linux;
-        pytorch = linux;
-        scikitimage = linux;
-        scikit-learn = linux; # Only affected by MKL?
-        scipy = linux; # Only affected by MKL?
-        spacy-transformers = linux;
-        tensorflow = linux;
-        tensorflow-probability = linux;
-        tesserocr = linux;
-        Theano = linux;
-        tiny-cuda-nn = linux;
-        torchaudio = linux;
-        torch = linux;
-        torchvision = linux;
-        transformers = linux;
-        ttstokenizer = linux;
-        vidstab = linux;
-        vllm = linux;
-      };
-    }
-    // (lib.genAttrs packageSets evalPackageSet);
+      # It is expected that some combinations of CUDA and cuDNN versions aren't compatible,
+      # so we don't want to count these "broken" derivations as eval errors
+      (
+        drv: path:
+        matchCudaPackageByName "cudnn[^\.]*" path
+        && knownBrokenConditions [ "CUDA version is too old" "CUDA version is too new" ] drv
+      )
+
+      # NVIDIA Nsight Systems requires CUDA version >=11.8, so all prior versions are marked
+      # as broken, but we don't want to count these derivations as eval errors
+      (
+        drv: path:
+        matchCudaPackageByName "nsight_systems" path && knownBrokenConditions [ "CUDA too old (<11.8)" ] drv
+      )
+
+      # Getting NVIDIA drivers from cudaPackages instead of linuxPackages is unsupported,
+      # so we don't want to count these "broken" derivations as eval errors
+      (drv: matchCudaPackageByName "nvidia_driver")
+    ];
+  filterPackageFn =
+    path: platforms:
+    if
+      builtins.any (
+        pred: pred (lib.getAttrFromPath path pkgs) (lib.showAttrPath path)
+      ) filterPackagePredicates
+    then
+      [ ]
+    else
+      platforms;
+  filteredEvalPackagePlatforms = lib.mapAttrsRecursive filterPackageFn evalPackagePlatforms;
+
+  jobs = mapTestOn filteredEvalPackagePlatforms;
 in
 jobs
