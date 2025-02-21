@@ -7,7 +7,6 @@
   qtmacextras ? null,
   qmake,
   fixDarwinDylibNames,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +31,13 @@ stdenv.mkDerivation rec {
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
-  postFixup = ''
-    ln -s $out/lib/libqscintilla2_qt5.so $out/lib/libqscintilla2.so
-  '';
+  postFixup =
+    let
+      libExt = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      ln -s $out/lib/libqscintilla2_qt5${libExt} $out/lib/libqscintilla2${libExt}
+    '';
 
   dontWrapQtApps = true;
 
