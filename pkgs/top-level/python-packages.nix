@@ -11022,6 +11022,10 @@ self: super: with self; {
 
   pyzipper = callPackage ../development/python-modules/pyzipper { };
 
+  pyzstd = callPackage ../development/python-modules/pyzstd {
+    zstd-c = pkgs.zstd;
+  };
+
   plac = callPackage ../development/python-modules/plac { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
