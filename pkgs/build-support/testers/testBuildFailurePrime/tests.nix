@@ -1,12 +1,14 @@
 {
   emptyDirectory,
   hello,
+  lib,
   overrideStructuredAttrs,
   runCommand,
   stdenvNoCC,
   testers,
 }:
 let
+  inherit (lib.attrsets) recurseIntoAttrs;
   final = {
     # NOTE: This example is used in the docs.
     # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
@@ -144,4 +146,4 @@ let
     logNegativeTestStructuredAttrs = overrideStructuredAttrs true final.logNegativeTest;
   };
 in
-final
+recurseIntoAttrs final
