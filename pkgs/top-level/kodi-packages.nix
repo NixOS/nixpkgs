@@ -187,6 +187,8 @@ let
 
     plugin-cache = callPackage ../applications/video/kodi/addons/plugin-cache { };
 
+    python-twitch = callPackage ../applications/video/kodi/addons/python-twitch { };
+
     requests = callPackage ../applications/video/kodi/addons/requests { };
 
     requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
@@ -212,6 +214,8 @@ let
     xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
 
     typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+
+    twitch = callPackage ../applications/video/kodi/addons/twitch { };
 
     arrow = callPackage ../applications/video/kodi/addons/arrow { };
 
