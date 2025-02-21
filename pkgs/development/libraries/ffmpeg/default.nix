@@ -16,18 +16,21 @@ let
     );
 
   v4 = {
-    version = "4.4.5";
-    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
+    version = "4.4"; # release/4.4
+    rev = "146951502168f2671a8511ad4c6410a87b7f8478";
+    hash = "sha256-WxunplCBLAlLPpavbpZLCPeW9hjfCWgXmFP578q31VI=";
   };
 
   v6 = {
-    version = "6.1.2";
-    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
+    version = "6.1"; # release/6.1
+    rev = "138f52a3a1c49843d8bf2b693b6f6781356020f9";
+    hash = "sha256-oPVtgQJgZaIKpUKQz4/FBZ0U1AwpkS84GUWSkdHEonM=";
   };
 
   v7 = {
-    version = "7.1";
-    hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
+    version = "7.1";# release/7.1
+    rev = "8cabfd922a726a964eeae8b5276583f470df39c3";
+    hash = "sha256-qkfth1Hi97cEHmnBpVc2SJxF2Uq5tQqa6ulnT0YA5lA=";
   };
 in
 
