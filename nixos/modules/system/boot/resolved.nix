@@ -15,21 +15,21 @@ let
     name:
     types.submodule {
       options = {
-        enable = {
+        enable = mkOption {
           default = true;
           type = types.bool;
           description = ''
             Whether to enable ${name} support.
           '';
         };
-        resolveOnly = {
+        resolveOnly = mkOption {
           default = false;
           type = types.bool;
           description = ''
             Only resolve, do not respond to incoming queries.
           '';
         };
-        openFirewall = {
+        openFirewall = mkOption {
           default = true;
           type = types.bool;
           description = ''
