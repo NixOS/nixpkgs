@@ -3,6 +3,7 @@
   lib,
   binutils,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   wrapGAppsHook3,
@@ -126,7 +127,15 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Link opencv_core and opencv_imgproc instead of opencv_world
     ./patches/dont-link-opencv-world-orca.patch
+    # The changeset from https://github.com/SoftFever/OrcaSlicer/pull/7650, can be removed when that PR gets merged
+    # Allows disabling the update nag screen
+    (fetchpatch {
+      name = "pr-7650-configurable-update-check.patch";
+      url = "https://github.com/SoftFever/OrcaSlicer/pull/7650.patch";
+      hash = "sha256-t4own5AwPsLYBsGA15id5IH1ngM0NSuWdFsrxMRXmTk=";
+    })
   ];
 
   doCheck = true;
@@ -186,6 +195,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION"
     "-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-as-needed"
     "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${mesa.drivers}/lib -Wl,-rpath,${mesa.osmesa}/lib"
+    "-DORCA_VERSION_CHECK_DEFAULT=OFF"
   ];
 
   preFixup = ''
