@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  libclang,
   callPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -11,6 +12,7 @@
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   libffi,
+  sqlite,
 }:
 
 let
@@ -18,17 +20,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "2.1.10";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${version}";
-    hash = "sha256-1NqBNrTYHhsG6O2qsgANM15FOxx3xheE9T3nYDDH1D0=";
+    hash = "sha256-WXAUsBC3nAJcuUB753dpM/WDzqWu+e/Kt/BrwQkk/dY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-D7dt9RdlTmR2C1dwOl5vZKUlLUnTkdudtZ4FQpr9ddU=";
+  cargoHash = "sha256-t44Q4yBdcYAk6jkRrzAHXBsJTsRTHAD95Wyxd3waaHc=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -46,6 +48,8 @@ rustPlatform.buildRustPackage rec {
     cmake
     # required by deno_kv crate
     protobuf
+    # required by libsqlite3-sys
+    sqlite.dev
     installShellFiles
   ];
 
@@ -62,6 +66,8 @@ rustPlatform.buildRustPackage rec {
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
   env.RUSTY_V8_ARCHIVE = librusty_v8;
+  # libsqlite3-sys crate needs this for build
+  env.LIBCLANG_PATH = "${libclang.lib}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
