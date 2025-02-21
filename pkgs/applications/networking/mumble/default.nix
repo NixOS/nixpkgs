@@ -22,6 +22,7 @@
   flac,
   libogg,
   libvorbis,
+  nix-update-script,
   stdenv_32bit,
   iceSupport ? true,
   zeroc-ice,
@@ -69,7 +70,10 @@ let
           patchShebangs scripts
         '';
 
-        passthru.tests.connectivity = nixosTests.mumble;
+        passthru = {
+          updateScript = nix-update-script { };
+          tests.connectivity = nixosTests.mumble;
+        };
 
         meta = with lib; {
           description = "Low-latency, high quality voice chat software";
