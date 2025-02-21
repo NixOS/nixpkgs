@@ -68,6 +68,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isOpenBSD ''
+    ln -s $out/lib/libhistory.so* $out/lib/libhistory.so
+    ln -s $out/lib/libreadline.so* $out/lib/libreadline.so
+  '';
+
   meta = with lib; {
     description = "Library for interactive line editing";
 
