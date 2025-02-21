@@ -11,18 +11,68 @@ let
 
   dnsmasqResolve = config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries;
 
-  resolvedConf = ''
-    [Resolve]
-    ${optionalString (
-      config.networking.nameservers != [ ]
-    ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
-    ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-    ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
-    LLMNR=${cfg.llmnr}
-    DNSSEC=${cfg.dnssec}
-    DNSOverTLS=${cfg.dnsovertls}
-    ${config.services.resolved.extraConfig}
-  '';
+  zeroConfOpts =
+    name:
+    types.submodule {
+      options = {
+        enable = {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to enable ${name} support.
+          '';
+        };
+        resolveOnly = {
+          default = false;
+          type = types.bool;
+          description = ''
+            Only resolve, do not respond to incoming queries.
+          '';
+        };
+        openFirewall = {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether to open the firewall for the required UDP port.
+            Disabling this setting also disables discovering of network devices via the protocol.
+          '';
+        };
+      };
+    };
+
+  zeroConfDeprecatedOpts = [
+    "true"
+    "resolve"
+    "false"
+  ];
+
+  resolvedConf =
+    let
+      mkZeroConf =
+        option:
+        if !option.enable then
+          "false"
+        else if option.resolveOnly then
+          "resolve"
+        else
+          "true";
+
+      mkZeroConfDeprecated =
+        option: if builtins.elem option zeroConfDeprecatedOpts then option else mkZeroConf option;
+    in
+    ''
+      [Resolve]
+      ${optionalString (
+        config.networking.nameservers != [ ]
+      ) "DNS=${concatStringsSep " " config.networking.nameservers}"}
+      ${optionalString (cfg.fallbackDns != null) "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
+      ${optionalString (cfg.domains != [ ]) "Domains=${concatStringsSep " " cfg.domains}"}
+      MulticastDNS=${mkZeroConf cfg.mdns}
+      LLMNR=${mkZeroConfDeprecated cfg.llmnr}
+      DNSSEC=${cfg.dnssec}
+      DNSOverTLS=${cfg.dnsovertls}
+      ${config.services.resolved.extraConfig}
+    '';
 
 in
 {
@@ -71,22 +121,19 @@ in
       '';
     };
 
-    services.resolved.llmnr = mkOption {
-      default = "true";
-      example = "false";
-      type = types.enum [
-        "true"
-        "resolve"
-        "false"
-      ];
+    services.resolved.mdns = mkOption {
+      type = zeroConfOpts "mDNS";
       description = ''
-        Controls Link-Local Multicast Name Resolution support
-        (RFC 4795) on the local host.
+        Controls Multicast DNS (mDNS) support
+        (RFC 6762[2]) on the local host.
+      '';
+    };
 
-        If set to
-        - `"true"`: Enables full LLMNR responder and resolver support.
-        - `"false"`: Disables both.
-        - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+    services.resolved.llmnr = mkOption {
+      type = types.either (zeroConfOpts "LLMNR") (types.enum zeroConfDeprecatedOpts);
+      description = ''
+        Controls Link-Local Multicast Name Resolution (LLMNR) support
+        (RFC 4795) on the local host.
       '';
     };
 
@@ -177,6 +224,14 @@ in
           assertion = !config.networking.useHostResolvConf;
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
+
+        {
+          assertion = !(cfg.mdns.enable && config.services.avahi.enable);
+          message = ''
+            mDNS resolution cannot be handled by both systemd-resolved and
+            Avahi at the same time.
+          '';
+        }
       ];
 
       users.users.systemd-resolve.group = "systemd-resolve";
@@ -214,6 +269,21 @@ in
 
       networking.resolvconf.package = pkgs.systemd;
 
+      networking.firewall =
+        let
+          mkZeroConf = option: option.enable && option.openFirewall;
+          mkZeroConfDeprecated =
+            option: if builtins.elem option zeroConfDeprecatedOpts then false else mkZeroConf option;
+        in
+        lib.mkMerge [
+          (mkIf (mkZeroConf cfg.mdns) {
+            allowedUDPPorts = [ 5353 ];
+          })
+
+          (mkIf (mkZeroConfDeprecated cfg.llmnr) {
+            allowedUDPPorts = [ 5355 ];
+          })
+        ];
     })
 
     (mkIf config.boot.initrd.services.resolved.enable {
