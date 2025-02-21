@@ -1979,7 +1979,7 @@ let
 
   };
 
-  networkOptions = commonNetworkOptions // {
+  networkOptions = { name, ... }: { options = commonNetworkOptions // {
 
     linkConfig = mkOption {
       default = {};
@@ -2504,6 +2504,7 @@ let
     address = mkOption {
       default = [ ];
       type = types.listOf types.str;
+      apply = warn "`systemd.network.networks.\"${name}\".address` is deprecated, use  `systemd.network.networks.\"${name}\".addresses` instead.";
       description = ''
         A list of addresses to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
@@ -2621,7 +2622,10 @@ let
     addresses = mkOption {
       default = [ ];
       example = [ { Address = "192.168.0.100/24"; } ];
-      type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
+      type = types.coercedTo
+        (types.listOf types.str)
+        (map (Address: { inherit Address; }))
+        (types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress));
       description = ''
         A list of address sections to be added to the unit.  See
         {manpage}`systemd.network(5)` for details.
@@ -2648,7 +2652,7 @@ let
       '';
     };
 
-  };
+  }; };
 
   networkConfig = { config, ... }: {
     config = {
@@ -2741,7 +2745,7 @@ let
     networks = mkOption {
       default = {};
       inherit visible;
-      type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
+      type = with types; attrsOf (submodule [ networkOptions networkConfig ]);
       description = "Definition of systemd networks.";
     };
 

@@ -43,7 +43,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, systemdCreds, peerId, n
           };
           "90-wg0" = {
             matchConfig = { Name = "wg0"; };
-            address = [ "10.0.0.${nodeId}/32" ];
+            addresses = [ "10.0.0.${nodeId}/32" ];
             routes = [
               { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }
               { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; Table = "custom"; }
