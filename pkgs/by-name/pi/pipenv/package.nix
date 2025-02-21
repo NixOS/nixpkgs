@@ -31,14 +31,14 @@ let
 in
 buildPythonApplication rec {
   pname = "pipenv";
-  version = "2024.2.0";
+  version = "2024.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     tag = "v${version}";
-    hash = "sha256-5gq1kXVNAMH/AeovpUStcZffXN4GfXj3wJ7lW4qebRM=";
+    hash = "sha256-SyRkOKZ1q1j37hqdkNkEZI5e/WbBgLL5iglrvT2V5Fs=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
@@ -68,6 +68,7 @@ buildPythonApplication rec {
     mock
     pytestCheckHook
     pytest-xdist
+    pytest-cov
     pytz
     requests
   ];
