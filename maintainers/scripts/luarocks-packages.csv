@@ -123,7 +123,6 @@ neotest,,,,,,mrcjkb
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,,
-nvim-dbee,,,,,,perchun
 nvim-nio,,,,,,mrcjkb
 nvim-web-devicons,,,,,,
 oil.nvim,,,,,,
