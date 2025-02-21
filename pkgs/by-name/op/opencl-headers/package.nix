@@ -7,6 +7,7 @@
   ocl-icd,
   tesseract,
   testers,
+  opencl-clhpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   passthru.tests = {
-    inherit ocl-icd tesseract hashcat;
+    inherit
+      ocl-icd
+      tesseract
+      hashcat
+      opencl-clhpp
+      ;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       moduleNames = [ "OpenCL-Headers" ];
