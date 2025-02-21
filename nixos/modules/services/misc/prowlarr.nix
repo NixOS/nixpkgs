@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.prowlarr;
-
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -20,6 +20,10 @@ in
         default = false;
         description = "Open ports in the firewall for the Prowlarr web interface.";
       };
+
+      settings = servarr.mkServarrSettingsOptions "prowlarr" 9696;
+
+      environmentFiles = servarr.mkServarrEnvironmentFiles "prowlarr";
     };
   };
 
@@ -28,19 +32,22 @@ in
       description = "Prowlarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings // {
+        HOME = "/var/empty";
+      };
 
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
+        EnvironmentFile = cfg.environmentFiles;
         ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
-      environment.HOME = "/var/empty";
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9696 ];
+      allowedTCPPorts = [ cfg.settings.server.port ];
     };
   };
 }
