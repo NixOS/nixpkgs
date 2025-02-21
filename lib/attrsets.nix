@@ -573,7 +573,7 @@ rec {
   */
   getAttrs =
     names:
-    attrs: genAttrs names (name: attrs.${name});
+    attrs: genAttrs (name: attrs.${name}) names;
 
   /**
     Collect each attribute named `attr` from a list of attribute
@@ -1213,18 +1213,31 @@ rec {
     Generate an attribute set by mapping a function over a list of
     attribute names.
 
+    :::{.warning}
+    Due to some legacy reasons, this function took function as the second
+    argument, which makes currying impossible and is just not consistent with
+    how other map-like functions are defined. Currently, the argument order is
+    currying-friendly, but to not introduce a breaking change, the legacy
+    argument order is also valid thanks to the different argument types.
+    :::
 
     # Inputs
-
-    `names`
-
-    : Names of values in the resulting attribute set.
 
     `f`
 
     : A function, given the name of the attribute, returns the attribute's value.
 
+    `names`
+
+    : Names of values in the resulting attribute set.
+
     # Type
+
+    ```
+    genAttrs :: (String -> Any) -> [ String ] -> AttrSet
+    ```
+
+    Legacy argument order:
 
     ```
     genAttrs :: [ String ] -> (String -> Any) -> AttrSet
@@ -1235,16 +1248,18 @@ rec {
     ## `lib.attrsets.genAttrs` usage example
 
     ```nix
-    genAttrs [ "foo" "bar" ] (name: "x_" + name)
+    genAttrs (name: "x_" + name) [ "foo" "bar" ]
     => { foo = "x_foo"; bar = "x_bar"; }
     ```
 
     :::
   */
   genAttrs =
-    names:
     f:
-    listToAttrs (map (n: nameValuePair n (f n)) names);
+    names:
+    if builtins.typeOf f == "lambda"
+    then listToAttrs (map (n: nameValuePair n (f n)) names)
+    else listToAttrs (map (n: nameValuePair n (names n)) f);
 
 
   /**
