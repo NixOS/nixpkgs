@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fum";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "qxb3";
     repo = "fum";
     tag = "v${version}";
-    hash = "sha256-0359ThCHM14uSQFNoKWm88Bk3aOxyhkulSvoXcpNJMc=";
+    hash = "sha256-v/MEqfDMrEVGr2tt3I2R1xPduZSxtiSHDxcp8GBHE+U=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-XyMf9v9Pfl+j2E1BnNl8SkDvu/0LZ6av9/dsDc0zA8U=";
+  cargoHash = "sha256-1dtCcVtl0ztsrr9LPYgEi51vkAnhdE1HEEvhEOzgLwA=";
 
   nativeBuildInputs = [
     autoPatchelfHook
