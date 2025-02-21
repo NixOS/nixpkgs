@@ -1,0 +1,17 @@
+diff --git a/src/emulator.cpp b/src/emulator.cpp
+index 9b856425..4a0ff113 100644
+--- a/src/emulator.cpp
++++ b/src/emulator.cpp
+@@ -104,7 +104,11 @@ std::filesystem::path Emulator::getConfigPath() {
+ 	if constexpr (Helpers::isAndroid()) {
+ 		return getAndroidAppPath() / "config.toml";
+ 	} else {
+-		return std::filesystem::current_path() / "config.toml";
++		if (!config.usePortableBuild) {
++			return Emulator::getAppDataRoot() / "config.toml";
++		} else {
++			return std::filesystem::current_path() / "config.toml";
++		}
+ 	}
+ }
+ #endif
