@@ -2,13 +2,10 @@
 
 set -eu
 
-preScript() {
-  # If neither expectedArray nor expectedMap are declared, the test is meaningless.
-  if ! isDeclaredArray expectedArray && ! isDeclaredMap expectedMap; then
-    nixErrorLog "neither expectedArray nor expectedMap were set, so test is meaningless!"
-    exit 1
-  fi
+# NOTE: If neither expectedArray nor expectedMap are declared, the test is meaningless.
+# This precondition is checked in the Nix expression through an assert.
 
+preScript() {
   if isDeclaredArray valuesArray; then
     # shellcheck disable=SC2154
     nixLog "using valuesArray: $(declare -p valuesArray)"
