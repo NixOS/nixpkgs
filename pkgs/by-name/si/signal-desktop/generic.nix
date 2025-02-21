@@ -5,6 +5,8 @@
   autoPatchelfHook,
   noto-fonts-color-emoji,
   dpkg,
+  rpm,
+  cpio,
   asar,
   rsync,
   python3,
@@ -54,6 +56,9 @@
 {
   pname,
   dir,
+  libdir,
+  bindir,
+  extractPkg,
   version,
   hash,
   url,
@@ -101,6 +106,8 @@ stdenv.mkDerivation rec {
     downloadToTemp = true;
     nativeBuildInputs = [
       dpkg
+      rpm
+      cpio
       asar
     ];
     # Signal ships the Apple emoji set without a licence via an npm
@@ -117,10 +124,10 @@ stdenv.mkDerivation rec {
     # unlicensed emoji files, but the rest of the work is done in the
     # main derivation.
     postFetch = ''
-      dpkg-deb -x $downloadedFile $out
-      asar extract "$out/opt/${dir}/resources/app.asar" $out/asar-contents
+      ${extractPkg}
+      asar extract "$out/${libdir}/resources/app.asar" $out/asar-contents
       rm -r \
-        "$out/opt/${dir}/resources/app.asar"{,.unpacked} \
+        "$out/${libdir}/resources/app.asar"{,.unpacked} \
         $out/asar-contents/node_modules/emoji-datasource-apple
     '';
   };
@@ -196,7 +203,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
 
     mv usr/share $out/share
-    mv "opt/${dir}" "$out/lib/${dir}"
+    mv "${libdir}" "$out/lib/${dir}"
 
     # Symlink to bin
     mkdir -p $out/bin
@@ -240,7 +247,7 @@ stdenv.mkDerivation rec {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace-fail "/opt/${dir}/${pname}" ${meta.mainProgram} \
+      --replace-fail "/${bindir}/${pname}" ${meta.mainProgram} \
       --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
     # Note: The following path contains bundled libraries:
