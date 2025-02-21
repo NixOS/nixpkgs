@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "texworks";
-  version = "0.6.9";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${version}";
-    sha256 = "sha256-G8TVTVQPELyE6H9a6gWSyWHi653TWzUoaRdlfPnngM0=";
+    sha256 = "sha256-tC3ADD35yrmwBJQ8JaXdr8trVf6WLt1r2/euzt0mvN8=";
   };
 
   nativeBuildInputs = [
