@@ -7537,6 +7537,8 @@ self: super: with self; {
 
   license-expression = callPackage ../development/python-modules/license-expression { };
 
+  lida = callPackage ../development/python-modules/lida { };
+
   lief = (toPythonModule (pkgs.lief.override {
     inherit python;
   })).py;
@@ -10306,6 +10308,8 @@ self: super: with self; {
   pdoc-pyo3-sample-library = callPackage ../development/python-modules/pdoc-pyo3-sample-library { };
 
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
+
+  peacasso = callPackage ../development/python-modules/peacasso { };
 
   peaqevcore = callPackage ../development/python-modules/peaqevcore { };
 
