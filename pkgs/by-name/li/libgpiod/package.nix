@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  gitUpdater,
   autoreconfHook,
   autoconf-archive,
   pkg-config,
@@ -28,6 +29,11 @@ stdenv.mkDerivation rec {
     "--enable-tools=${if enable-tools then "yes" else "no"}"
     "--enable-bindings-cxx"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9\\.]+$";
+  };
 
   meta = with lib; {
     description = "C library and tools for interacting with the linux GPIO character device";
