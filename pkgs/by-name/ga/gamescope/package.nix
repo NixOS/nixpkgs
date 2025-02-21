@@ -59,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Make it look for shaders in the right place
+    # Make it look for data in the right place
+    ./scripts-path.patch
     ./shaders-path.patch
     # patch relative gamescopereaper path with absolute
     ./gamescopereaper.patch
@@ -69,8 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace-fail "@out@" "$out"
+    substituteInPlace src/Script/Script.cpp --replace-fail "@out@" "$out"
+
     # Patching shebangs in the main `libdisplay-info` build
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
+
     # Replace gamescopereeaper with absolute path
     substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
     patchShebangs default_scripts_install.sh
