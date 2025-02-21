@@ -6,6 +6,7 @@
   makeWrapper,
   coreutils,
   curl,
+  extraPackages ? [ ],
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +27,15 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jbang \
       --set JAVA_HOME ${jdk} \
       --set PATH ${
-        lib.makeBinPath [
-          (placeholder "out")
-          coreutils
-          jdk
-          curl
-        ]
+        lib.makeBinPath (
+          [
+            (placeholder "out")
+            coreutils
+            jdk
+            curl
+          ]
+          ++ extraPackages
+        )
       }
     runHook postInstall
   '';
