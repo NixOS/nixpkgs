@@ -7,6 +7,7 @@
 
 let
   cfg = config.services.whisparr;
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -26,6 +27,10 @@ in
         default = false;
         description = "Open ports in the firewall for the Whisparr web interface.";
       };
+
+      settings = servarr.mkServarrSettingsOptions "whisparr" 6969;
+
+      environmentFiles = servarr.mkServarrEnvironmentFiles "whisparr";
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -48,17 +53,21 @@ in
       description = "Whisparr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = servarr.mkServarrSettingsEnvVars "WHISPARR" cfg.settings;
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        EnvironmentFile = cfg.environmentFiles;
         ExecStart = "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ 6969 ]; };
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.settings.server.port ];
+    };
 
     users.users = lib.mkIf (cfg.user == "whisparr") {
       whisparr = {
