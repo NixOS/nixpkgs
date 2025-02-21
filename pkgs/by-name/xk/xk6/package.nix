@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   passthru.updateScript = nix-update-script { };
+  passthru.tests = { };
 
   meta = {
     description = "Build k6 with extensions";
