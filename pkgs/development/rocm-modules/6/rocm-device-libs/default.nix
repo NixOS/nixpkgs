@@ -6,6 +6,8 @@
   cmake,
   rocm-cmake,
   libxml2,
+  llvm,
+  clang,
 }:
 
 let
@@ -35,8 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  buildInputs = [ libxml2 ];
-  cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}" ];
+  buildInputs = [ libxml2 llvm ];
+  cmakeFlags = [
+    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+    (lib.cmakeFeature "CMAKE_C_COMPILER" "${clang}/bin/clang")
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${clang}/bin/clang++")
+  ];
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -50,8 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    # broken =
+    #   versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+    #   || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
