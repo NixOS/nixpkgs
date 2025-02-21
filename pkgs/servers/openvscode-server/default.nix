@@ -89,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   NIX_NODEJS_BUILDNPMPACKAGE = "1";
-  makeCacheWritable = true;
 
   nativeBuildInputs = [
     nodejs
