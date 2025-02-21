@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     libassuan
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   meta = with lib; {
     changelog = "https://dev.gnupg.org/source/gpa/browse/master/NEWS;gpa-${version}?view=raw";
     description = "Graphical user interface for the GnuPG";
