@@ -1,24 +1,32 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   coreutils,
-  which,
+  darwin,
+  glibcLocales,
   gnused,
   gnugrep,
   groff,
   gawk,
   man-db,
+  ninja,
   getent,
   libiconv,
   pcre2,
+  pkg-config,
+  sphinx,
   gettext,
   ncurses,
   python3,
+  cargo,
   cmake,
   fishPlugins,
   procps,
+  rustc,
+  rustPlatform,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 
   # used to generate autocompletions from manpages and for configuration editing in the browser
   usePython ? true,
@@ -141,22 +149,36 @@ let
     end # fenv
   '';
 
-  fish = stdenv.mkDerivation rec {
+  fish = stdenv.mkDerivation (finalAttrs: {
     pname = "fish";
-    version = "3.7.1";
+    version = "4.0b1";
 
-    src = fetchurl {
-      # There are differences between the release tarball and the tarball GitHub
-      # packages from the tag. Specifically, it comes with a file containing its
-      # version, which is used in `build_tools/git_version_gen.sh` to determine
-      # the shell's actual version (and what it displays when running `fish
-      # --version`), as well as the local documentation for all builtins (and
-      # maybe other things).
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha256-YUyfVkPNB5nfOROV+mu8NklCe7g5cizjsRTTu8GjslA=";
+    src = fetchFromGitHub {
+      owner = "fish-shell";
+      repo = "fish-shell";
+      # TODO: uncomment and remove rev once the stable version is released
+      #tag = finalAttrs.version;
+      # Last commit on the Integration_4.0.0 branch
+      rev = "e2a0b0e2b8899f88d2c0073c9e6a1e1381522217";
+      hash = "sha256-fewr+RUYti2bO7325uZGDMtuP0VRizUZOoZuSsnaGNc=";
+    };
+
+    env = {
+      FISH_BUILD_VERSION = finalAttrs.version;
+      # Skip tests that are known to be flaky in CI
+      CI = 1;
+    };
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (finalAttrs) src;
+      hash = "sha256-j1HCj1iZ5ZV8nfMmJq5ggPD4s+5V8IretDdoz+G3wWU=";
     };
 
     patches = [
+      # This test fails if the nix sandbox gets created on a filesystem that's
+      # mounted with the nosuid option.
+      ./disable_suid_test.patch
+
       # We don’t want to run `/usr/libexec/path_helper` on nix-darwin,
       # as it pulls in paths not tracked in the system configuration
       # and messes up the order of `$PATH`. Upstream are unfortunately
@@ -173,63 +195,74 @@ let
     # Fix FHS paths in tests
     postPatch =
       ''
-        # src/fish_tests.cpp
-        sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/fish_tests.cpp
-        sed -i 's|is_potential_path(L"/usr"|is_potential_path(L"/nix"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
-        # disable flakey test
-        sed -i '/{TEST_GROUP("history_races"), history_tests_t::test_history_races},/d' src/fish_tests.cpp
+        substituteInPlace src/builtins/tests/test_tests.rs \
+          --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-        # tests/checks/cd.fish
-        sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
+        substituteInPlace src/tests/highlight.rs \
+          --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
+          --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
+          --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
+          --replace-fail '/usr' '/'
 
-        # tests/checks/redirect.fish
-        sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/redirect.fish
+        substituteInPlace tests/checks/cd.fish \
+          --replace-fail '/bin/pwd' '${lib.getExe' coreutils "pwd"}'
 
-        # tests/checks/vars_as_commands.fish
-        sed -i 's|/usr/bin|${coreutils}/bin|' tests/checks/vars_as_commands.fish
+        substituteInPlace tests/checks/redirect.fish \
+          --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-        # tests/checks/jobs.fish
-        sed -i 's|ps -o stat|${procps}/bin/ps -o stat|' tests/checks/jobs.fish
-        sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/jobs.fish
+        substituteInPlace tests/checks/vars_as_commands.fish \
+          --replace-fail '/usr/bin' '${coreutils}/bin'
 
-        # tests/checks/job-control-noninteractive.fish
-        sed -i 's|/bin/echo|${coreutils}/bin/echo|' tests/checks/job-control-noninteractive.fish
+        substituteInPlace tests/checks/jobs.fish \
+          --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
+          --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-        # tests/checks/complete.fish
-        sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
+        substituteInPlace tests/checks/job-control-noninteractive.fish \
+          --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+
+        substituteInPlace tests/checks/complete.fish \
+          --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
+
+        # Several pexpect tests are flaky
+        # See https://github.com/fish-shell/fish-shell/issues/8789
+        rm tests/pexpects/exit_handlers.py
+        rm tests/pexpects/private_mode.py
+        rm tests/pexpects/history.py
       ''
       + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # Tests use pkill/pgrep which are currently not built on Darwin
         # See https://github.com/NixOS/nixpkgs/pull/103180
+        # and https://github.com/NixOS/nixpkgs/issues/141157
         rm tests/pexpects/exit.py
         rm tests/pexpects/job_summary.py
         rm tests/pexpects/signals.py
-
-        # pexpect tests are flaky in general
-        # See https://github.com/fish-shell/fish-shell/issues/8789
-        rm tests/pexpects/bind.py
+        rm tests/pexpects/fg.py
       ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
-        # See https://github.com/fish-shell/fish-shell/issues/8789
-        rm tests/pexpects/exit_handlers.py
+      + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+        # This test seems to consistently fail on aarch64
+        rm tests/checks/cd.fish
       '';
 
     outputs = [
       "out"
       "doc"
     ];
+
     strictDeps = true;
+
     nativeBuildInputs = [
+      cargo
       cmake
       gettext
+      ninja
+      pkg-config
+      rustc
+      rustPlatform.cargoSetupHook
+      # Avoid warnings when building the manpages about HOME not being writable
+      writableTmpDirAsHomeHook
     ];
 
     buildInputs = [
-      ncurses
       libiconv
       pcre2
     ];
@@ -255,6 +288,7 @@ let
     preConfigure =
       ''
         patchShebangs ./build_tools/git_version_gen.sh
+        patchShebangs ./tests/test_driver.py
       ''
       + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         export CMAKE_PREFIX_PATH=
@@ -271,38 +305,50 @@ let
 
     doCheck = true;
 
-    nativeCheckInputs = [
-      coreutils
-      (python3.withPackages (ps: [ ps.pexpect ]))
-      procps
-    ];
+    nativeCheckInputs =
+      [
+        coreutils
+        glibcLocales
+        (python3.withPackages (ps: [ ps.pexpect ]))
+        procps
+        sphinx
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # For the getconf command, used in default-setup-path.fish
+        darwin.system_cmds
+      ];
 
-    checkPhase = ''
-      make test
+    checkTarget = "fish_run_tests";
+    preCheck = ''
+      export TERMINFO="${ncurses}/share/terminfo"
+    '';
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgramArg = [ "--version" ];
+    doInstallCheck = true;
+
+    # Ensure that we don't vendor libpcre2, but instead link against the one from nixpkgs
+    installCheckPhase = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
+      runHook preInstallCheck
+
+      echo "Checking that we don't vendor pcre2"
+      ldd "$out/bin/fish" | grep ${lib.getLib pcre2}
+
+      runHook postInstallCheck
     '';
 
     postInstall =
       ''
-        sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
-            -i "$out/share/fish/functions/grep.fish"
-        sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
-            -i "$out/share/fish/functions/fish_prompt.fish"
-        sed -e "s|uname|${coreutils}/bin/uname|"             \
-            -i "$out/share/fish/functions/__fish_pwd.fish"   \
-               "$out/share/fish/functions/prompt_pwd.fish"
-        sed -e "s|sed |${gnused}/bin/sed |"                  \
-            -i "$out/share/fish/functions/alias.fish"        \
-               "$out/share/fish/functions/prompt_pwd.fish"
-        sed -i "s|nroff|${groff}/bin/nroff|"                 \
-               "$out/share/fish/functions/__fish_print_help.fish"
-        sed -e "s|clear;|${lib.getBin ncurses}/bin/clear;|"      \
-            -i "$out/share/fish/functions/fish_default_key_bindings.fish"
-        sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
-               $out/share/fish/completions/{sudo.fish,doas.fish}
-        sed -e "s| awk | ${gawk}/bin/awk |"                  \
-            -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
-               $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
+        substituteInPlace "$out/share/fish/functions/grep.fish" \
+          --replace-fail "command grep" "command ${lib.getExe gnugrep}"
 
+        substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
+          --replace-fail "nroff" "${lib.getExe' groff "nroff"}"
+
+        substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
+          --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
       ''
       + lib.optionalString usePython ''
         cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
@@ -311,20 +357,17 @@ let
             return 0
         end
         EOF
-
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         for cur in $out/share/fish/functions/*.fish; do
-          sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
-              -i "$cur"
+          substituteInPlace "$cur" \
+            --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
+            --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
         done
-
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
-                "$out/share/fish/tools/create_manpage_completions.py"
-        sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
-                "$out/share/fish/functions/man.fish"
+        for cur in $out/share/fish/completions/*.fish; do
+          substituteInPlace "$cur" \
+            --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        done
       ''
       + lib.optionalString useOperatingSystemEtc ''
         tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
@@ -366,7 +409,7 @@ let
               # if we don't set `delete=False`, the file will get cleaned up
               # automatically (leading the test to fail because there's no
               # tempfile to check)
-              ${lib.getExe gnused} -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
+              ${lib.getExe gnused} -e 's@delete=True,@delete=False,@' -i webconfig.py
 
               # we delete everything after the fileurl is assigned
               ${lib.getExe gnused} -e '/fileurl =/q' -i webconfig.py
@@ -386,6 +429,6 @@ let
       };
       updateScript = nix-update-script { };
     };
-  };
+  });
 in
 fish
