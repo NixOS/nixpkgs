@@ -85,9 +85,18 @@ index 2f4d929..3bc1204 100644
        OWNER_READ OWNER_WRITE OWNER_EXECUTE
        GROUP_READ GROUP_EXECUTE
 diff --git a/src/node/desktop/src/main/session-launcher.ts b/src/node/desktop/src/main/session-launcher.ts
-index 615ca1e..847f81a 100644
+index 615ca1e..a1e9e18 100644
 --- a/src/node/desktop/src/main/session-launcher.ts
 +++ b/src/node/desktop/src/main/session-launcher.ts
+@@ -73,7 +73,7 @@ function launchProcess(absPath: FilePath, argList: string[]): ChildProcess {
+   // create local copy of environment
+   const env = Object.assign({}, process.env);
+ 
+-  if (process.platform === 'darwin') {
++  if (false) {
+     // Create fallback library path (use TMPDIR so it's user-specific):
+     // reticulate needs to do some DYLD_FALLBACK_LIBRARY_PATH shenanigans to work with Anaconda Python;
+     // the solution is to have RStudio launch with a special DYLD_FALLBACK_LIBRARY_PATH, and let
 @@ -551,7 +551,6 @@ export class SessionLauncher {
        const fileInfo = execSync(`/usr/bin/file "${rLibPath}"`, { encoding: 'utf-8' });
        logger().logDebug(fileInfo);
