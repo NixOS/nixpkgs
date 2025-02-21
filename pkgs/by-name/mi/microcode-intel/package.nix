@@ -4,6 +4,7 @@
   fetchFromGitHub,
   libarchive,
   iucode-tool,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://www.intel.com/";
