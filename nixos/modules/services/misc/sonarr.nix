@@ -7,18 +7,7 @@
 }:
 let
   cfg = config.services.sonarr;
-
-  settingsEnvVars = lib.pipe cfg.settings [
-    (lib.mapAttrsRecursive (
-      path: value:
-      lib.optionalAttrs (value != null) {
-        name = lib.toUpper "SONARR__${lib.concatStringsSep "__" path}";
-        value = toString (if lib.isBool value then lib.boolToString value else value);
-      }
-    ))
-    (lib.collect (x: lib.isString x.name or false && lib.isString x.value or false))
-    lib.listToAttrs
-  ];
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -60,63 +49,7 @@ in
         '';
       };
 
-      settings = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType = (pkgs.formats.ini { }).type;
-          options = {
-            update = {
-              mechanism = lib.mkOption {
-                type =
-                  with lib.types;
-                  nullOr (enum [
-                    "external"
-                    "builtIn"
-                    "script"
-                  ]);
-                description = "which update mechanism to use";
-                default = "external";
-              };
-              automatically = lib.mkOption {
-                type = lib.types.bool;
-                description = "Automatically download and install updates.";
-                default = false;
-              };
-            };
-            server = {
-              port = lib.mkOption {
-                type = lib.types.int;
-                description = "Port Number";
-                default = 8989;
-              };
-            };
-            log = {
-              analyticsEnabled = lib.mkOption {
-                type = lib.types.bool;
-                description = "Send Anonymous Usage Data";
-                default = false;
-              };
-            };
-          };
-        };
-        example = lib.options.literalExpression ''
-          {
-            update.mechanism = "internal";
-            server = {
-              urlbase = "localhost";
-              port = 8989;
-              bindaddress = "*";
-            };
-          }
-        '';
-        default = { };
-        description = ''
-          Attribute set of arbitrary config options.
-          Please consult the documentation at the [wiki](https://wiki.servarr.com/useful-tools#using-environment-variables-for-config).
-
-          WARNING: this configuration is stored in the world-readable Nix store!
-          Use [](#opt-services.sonarr.environmentFiles) if it contains a secret.
-        '';
-      };
+      settings = servarr.mkServarrSettingsOptions "sonarr" 8989;
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -152,7 +85,7 @@ in
       description = "Sonarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = settingsEnvVars;
+      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings;
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
