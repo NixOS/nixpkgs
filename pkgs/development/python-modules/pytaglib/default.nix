@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytaglib";
-  version = "3.0.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "supermihi";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-TP3XScPDXlEnSR/BKcbF+DLt3rv8eyHrGwaBPAjIfA8=";
+    hash = "sha256-b3ODsG5rdSJ1Tq/0DARf99gHgWWGaArBFAjqeK3mvsY=";
   };
 
   buildInputs = [
@@ -30,6 +30,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "taglib" ];
+
+  # blocked on taglib 2.0, see
+  # - https://github.com/NixOS/nixpkgs/pull/384003
+  # - https://github.com/NixOS/nixpkgs/pull/373837
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Python bindings for the Taglib audio metadata library";
