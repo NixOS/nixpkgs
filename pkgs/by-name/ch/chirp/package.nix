@@ -81,6 +81,6 @@ python3Packages.buildPythonApplication {
       wrmilling
       nickcao
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
