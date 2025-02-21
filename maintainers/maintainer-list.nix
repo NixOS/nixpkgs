@@ -20010,6 +20010,12 @@
     githubId = 13752145;
     name = "Richard Lupton";
   };
+  rlwrnc = {
+    email = "raymond.lawrence@tutanota.com";
+    github = "rlwrnc";
+    githubId = 95446597;
+    name = "Raymond Lawrence";
+  };
   rmcgibbo = {
     email = "rmcgibbo@gmail.com";
     matrix = "@rmcgibbo:matrix.org";

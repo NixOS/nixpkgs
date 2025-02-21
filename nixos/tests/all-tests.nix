@@ -253,6 +253,7 @@ in {
   curl-impersonate = handleTest ./curl-impersonate.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
+  cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
   darling = handleTest ./darling.nix {};
   darling-dmg = runTest ./darling-dmg.nix;
@@ -953,6 +954,7 @@ in {
   seatd = handleTest ./seatd.nix {};
   send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
+  servo = runTest ./servo.nix;
   shadps4 = runTest ./shadps4.nix;
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};

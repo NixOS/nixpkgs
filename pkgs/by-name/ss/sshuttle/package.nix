@@ -15,21 +15,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.1.2";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sshuttle";
     repo = "sshuttle";
-    rev = "v${version}";
-    hash = "sha256-7jiDTjtL4FiQ4GimSPtUDKPUA29l22a7XILN/s4/DQY=";
+    tag = "v${version}";
+    hash = "sha256-xJxFtyLTqPozTaPZxAYZySKIo9c23dwEzn6GHpxW1OY=";
   };
 
-  patches = [ ./sudo.patch ];
+  build-system = [ python3Packages.poetry-core ];
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-    python3Packages.setuptools-scm
     sphinx
   ];
 
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
       }" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Transparent proxy server that works as a poor man's VPN";
     mainProgram = "sshuttle";
     longDescription = ''
@@ -71,8 +71,8 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/sshuttle/sshuttle";
     changelog = "https://github.com/sshuttle/sshuttle/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
       domenkozar
       carlosdagos
     ];

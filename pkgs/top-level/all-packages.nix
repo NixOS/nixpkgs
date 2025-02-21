@@ -503,6 +503,7 @@ with pkgs;
       antlr = antlr4_10;
       icu =  icu73;
       protobuf = protobuf_24;
+      stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
     };
   })
   mysql-shell_8
@@ -2962,6 +2963,7 @@ with pkgs;
   cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaVersion = "12.2"; };
   cudaPackages_12_3 = callPackage ./cuda-packages.nix { cudaVersion = "12.3"; };
   cudaPackages_12_4 = callPackage ./cuda-packages.nix { cudaVersion = "12.4"; };
+  cudaPackages_12_6 = callPackage ./cuda-packages.nix { cudaVersion = "12.6"; };
   cudaPackages_12 = cudaPackages_12_4; # Latest supported by cudnn
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
@@ -13399,16 +13401,10 @@ with pkgs;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped {
-    nameSuffix = "-beta";
     desktopName = "Firefox Beta";
-    wmClass = "firefox-beta";
-    icon = "firefox-beta";
   };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped {
-    nameSuffix = "-devedition";
     desktopName = "Firefox Developer Edition";
-    wmClass = "firefox-devedition";
-    icon = "firefox-devedition";
   };
 
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };

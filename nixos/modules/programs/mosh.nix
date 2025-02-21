@@ -13,6 +13,7 @@ in
 {
   options.programs.mosh = {
     enable = lib.mkEnableOption "mosh";
+    package = lib.mkPackageOption pkgs "mosh" { };
     openFirewall = lib.mkEnableOption "" // {
       description = "Whether to automatically open the necessary ports in the firewall.";
       default = true;
@@ -29,7 +30,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.mosh ];
+    environment.systemPackages = [ cfg.package ];
     networking.firewall.allowedUDPPortRanges = lib.optional cfg.openFirewall {
       from = 60000;
       to = 61000;
