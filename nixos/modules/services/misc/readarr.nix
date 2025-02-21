@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.services.readarr;
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -25,6 +26,19 @@ in
         default = false;
         description = ''
           Open ports in the firewall for Readarr
+        '';
+      };
+
+      settings = servarr.mkServarrSettingsOptions "readarr" 8787;
+
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
+        description = ''
+          Environment file to pass secret configuration values.
+
+          Each line must follow the `READARR__SECTION__KEY=value` pattern.
+          Please consult the documentation at the [wiki](https://wiki.servarr.com/useful-tools#using-environment-variables-for-config).
         '';
       };
 
@@ -56,18 +70,20 @@ in
       description = "Readarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = servarr.mkServarrSettingsEnvVars "READARR" cfg.settings;
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        EnvironmentFile = cfg.environmentFiles;
         ExecStart = "${cfg.package}/bin/Readarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8787 ];
+      allowedTCPPorts = [ cfg.settings.server.port ];
     };
 
     users.users = lib.mkIf (cfg.user == "readarr") {
