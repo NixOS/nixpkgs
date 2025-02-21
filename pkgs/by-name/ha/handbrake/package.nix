@@ -112,7 +112,6 @@ let
   ffmpeg-hb =
     (ffmpeg_7-full.override {
       version = ffmpeg-version;
-      hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
     }).overrideAttrs
       (old: {
         patches = (old.patches or [ ]) ++ [
@@ -140,7 +139,8 @@ let
           "${src}/contrib/ffmpeg/A18-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
           "${src}/contrib/ffmpeg/A19-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
           "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
-          "${src}/contrib/ffmpeg/A29-Revert-lavc-Check-codec_whitelist-early-in-avcodec_o.patch"
+          # No patch needed for A29: already patched in release/7.1
+          # "${src}/contrib/ffmpeg/A29-Revert-lavc-Check-codec_whitelist-early-in-avcodec_o.patch"
         ];
       });
 
