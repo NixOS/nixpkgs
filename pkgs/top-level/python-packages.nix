@@ -2524,6 +2524,8 @@ self: super: with self; {
 
   cogapp = callPackage ../development/python-modules/cogapp { };
 
+  coiled = callPackage ../development/python-modules/coiled { };
+
   coinmetrics-api-client = callPackage ../development/python-modules/coinmetrics-api-client { };
 
   colanderalchemy = callPackage ../development/python-modules/colanderalchemy { };
