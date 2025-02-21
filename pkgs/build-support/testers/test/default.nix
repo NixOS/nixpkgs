@@ -353,5 +353,5 @@ lib.recurseIntoAttrs {
       '';
   };
 
-  testEqualArrayOrMap = lib.recurseIntoAttrs (pkgs.callPackages ../testEqualArrayOrMap/tests.nix { });
+  testEqualArrayOrMap = pkgs.callPackages ../testEqualArrayOrMap/tests.nix { };
 }
