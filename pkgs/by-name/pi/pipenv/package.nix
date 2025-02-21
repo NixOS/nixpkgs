@@ -6,6 +6,8 @@
   installShellFiles,
   pipenv,
   runCommand,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
 with python3.pkgs;
@@ -32,7 +34,7 @@ in
 buildPythonApplication rec {
   pname = "pipenv";
   version = "2024.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
@@ -43,10 +45,12 @@ buildPythonApplication rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
+  build-system = [
+    setuptools
+  ];
+
   nativeBuildInputs = [
     installShellFiles
-    setuptools
-    wheel
   ];
 
   postPatch = ''
@@ -60,10 +64,6 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;
 
-  preCheck = ''
-    export HOME="$TMPDIR"
-  '';
-
   nativeCheckInputs = [
     mock
     pytestCheckHook
@@ -71,7 +71,11 @@ buildPythonApplication rec {
     pytest-cov-stub
     pytz
     requests
+    writableTmpDirAsHomeHook
+    versionCheckHook
   ];
+
+  versionCheckProgramArg = [ "--version" ];
 
   disabledTests = [
     # this test wants access to the internet
@@ -104,10 +108,11 @@ buildPythonApplication rec {
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Development Workflow for Humans";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ berdario ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ berdario ];
+    mainProgram = "pipenv";
   };
 }
