@@ -1,13 +1,31 @@
 diff --git a/src/HyperionProperties.cpp b/src/HyperionProperties.cpp
-index b585702..3fd308c 100644
+index b585702..6db56b5 100644
 --- a/src/HyperionProperties.cpp
 +++ b/src/HyperionProperties.cpp
+@@ -20,7 +20,7 @@ HyperionProperties::HyperionProperties(QWidget *parent)
+ 	ui->setupUi(this);
+ 	this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+ 
+-	config_t* config = obs_frontend_get_global_config();
++	config_t* config = obs_frontend_get_user_config();
+ 	if (config_has_user_value(config, CONFIG_SECTION, OBS_SETTINGS_AUTOSTART))
+ 	{
+ 		bool autostart = config_get_bool(config, CONFIG_SECTION, OBS_SETTINGS_AUTOSTART);
 @@ -59,7 +59,7 @@ HyperionProperties::HyperionProperties(QWidget *parent)
  	signal_handler_connect(handler, "log", logger_message, this);
  
  	connect(ui->ButtonStart, &QPushButton::clicked, this, &HyperionProperties::saveSettings);
 -	connect(ui->AutoStart, &QCheckBox::stateChanged, this, &HyperionProperties::saveSettings);
-+	connect(ui->AutoStart, &QCheckBox::checkStateChanged, this, &HyperionProperties::saveSettings);
++  connect(ui->AutoStart, &QCheckBox::checkStateChanged, this, &HyperionProperties::saveSettings);
  
  	connect(ui->ButtonStart, &QPushButton::clicked, this, &HyperionProperties::onStart);
  	connect(ui->ButtonStop, &QPushButton::clicked, this, &HyperionProperties::onStop);
+@@ -106,7 +106,7 @@ void HyperionProperties::clearLog()
+ 
+ void HyperionProperties::saveSettings()
+ {
+-	config_t* config = obs_frontend_get_global_config();
++	config_t* config = obs_frontend_get_user_config();
+ 	if(config != nullptr)
+ 	{
+ 		bool autostart = ui->AutoStart->isChecked();
