@@ -188,10 +188,10 @@ in
     old: (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old) // (addToCscOptions "-L -lncurses" old);
   taglib =
     old:
-    (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old)
+    (addToBuildInputs [ pkgs.zlib pkgs.taglib_1 ] old)
     // (
       # needed for tablib-config to be in PATH
-      addToNativeBuildInputs pkgs.taglib old
+      addToNativeBuildInputs pkgs.taglib_1 old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
   webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
