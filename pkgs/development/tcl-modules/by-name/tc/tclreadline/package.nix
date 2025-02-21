@@ -12,13 +12,13 @@
 
 mkTclDerivation rec {
   pname = "tclreadline";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclreadline";
     rev = "v${version}";
-    sha256 = "sha256-rB2bR0yu/ZFf/WOgo1LeLmciaQA42/LulnqSczmzea8=";
+    sha256 = "sha256-6FIQJsAm28jPIfNG+7xsMlCJSLw9JStOVzDemw2P+EI=";
   };
 
   nativeBuildInputs = [
