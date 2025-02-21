@@ -7,6 +7,7 @@
   ruby,
   opencl-headers,
   khronos-ocl-icd-loader,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OPENCL_CLHPP_BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "BUILD_EXAMPLES" finalAttrs.finalPackage.doCheck)
   ];
+
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "OpenCL-CLHPP" ];
+      # Package version does not match the pkg-config module version.
+    };
+  };
 
   meta = {
     description = "OpenCL Host API C++ bindings";
