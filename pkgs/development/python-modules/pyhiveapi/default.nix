@@ -27,10 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-/Q6nQb6JyjjWJv7Yj+EJdqOMy+j3cYPIkRpXa3Q48Oo=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "pre-commit" ""
-  '';
+  pythonRemoveDeps = [ "pre-commit" ];
 
   nativeBuildInputs = [
     setuptools
