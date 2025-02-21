@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
           # Other targets that don't need any extra dependencies to build.
           ++ optionals (!fastCross) [
             "wasm32-unknown-unknown"
+            "wasm32v1-none"
             "bpfel-unknown-none"
             "bpfeb-unknown-none"
           ]
