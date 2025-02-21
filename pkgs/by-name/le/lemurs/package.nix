@@ -40,7 +40,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ jeremiahs ];
+    maintainers = with maintainers; [
+      jeremiahs
+      nullcube
+    ];
     mainProgram = "lemurs";
   };
 }
