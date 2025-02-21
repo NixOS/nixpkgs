@@ -1,10 +1,10 @@
 {
-  "version": "2.15.1",
-  "hash": "sha256-BYqIGxNJWeJxYV6qZH4nELffl5Yz4pftq30Bvp/tTNw=",
-  "yarnHash": "sha256-fTvFqyU6CGxeFqC0QYT0G+RrwNwJWkTICY1TIk8ZmYE=",
+  "version": "2.16",
+  "hash": "sha256-V8v/V8LXqtIg1ZxWww05CwB2WpSZUYWstX6nFMCF3Hg=",
+  "yarnHash": "sha256-9IYMzNEfoCMa3DSHkgn6NprnP0qA+IV4So2iEkw0ujk=",
   "geocities": {
-    "rev": "096c9b2bc9ce2bda5c870a14d8280c1b9b050bd8",
-    "date": "2025-02-06",
-    "hash": "sha256-SJrW6+yXWk5mSNgZ8lIZGNQuEhRGWMM8HwoFdVy/LpA="
+    "rev": "fd381e44482c5e977073c3ef9c61b4e726c6cd5f",
+    "date": "2025-02-20",
+    "hash": "sha256-OEzwxEZdWxddy4BKfB8p55qPgxICr9hg1s5mX8SEkF4="
   }
 }

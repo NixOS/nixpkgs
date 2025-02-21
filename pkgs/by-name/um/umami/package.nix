@@ -41,14 +41,14 @@ let
   # Pin the specific version of prisma to the one used by upstream
   # to guarantee compatibility.
   prisma-engines' = prisma-engines.overrideAttrs (old: rec {
-    version = "5.22.0";
+    version = "6.1.0";
     src = fetchFromGitHub {
       owner = "prisma";
       repo = "prisma-engines";
       tag = version;
-      hash = "sha256-aCzm7pEsgbZ4ZNir3DLNnUlmiydOpLNcW2FpIQ44B6E=";
+      hash = "sha256-BQwT1wXvwyXoPX/oQ8MmaJZlXZpvhdV9QSlGOSAUy/Q=";
     };
-    cargoHash = "sha256-9rU25cyYDGXGjQFrsHwifsRc4LHYz3JGrYUoQXVKYn0=";
+    cargoHash = "sha256-1TtJwZCsVhEYKn5SDK7pe0mge8uNSjNl4l+7SIrFXIk=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) pname;
