@@ -12,20 +12,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webpack-cli";
-  version = "5.1.4";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "webpack";
     repo = "webpack-cli";
     tag = "webpack-cli@${finalAttrs.version}";
-    hash = "sha256-OjehyUw54n7/CKbDTVFCtcUp88tJCLUlBCJBQRXoyZM=";
+    hash = "sha256-teQWaWWt3rKHEVbj3twt8WQXQO9HuzIBNuvFUfRmxqY=";
   };
 
   yarnKeepDevDeps = true;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-+SntrxvFoReQXqyFqnCRCx3nftzcNioQCw6IHe8GztI=";
+    hash = "sha256-iYyH1/ZyNKq4MqMcCl7y5WvDnuGnRY0sj8hHsQhe7z4=";
   };
 
   nativeBuildInputs = [
