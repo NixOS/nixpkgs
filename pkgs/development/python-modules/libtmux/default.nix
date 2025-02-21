@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.40.1";
+  version = "0.44.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${version}";
-    hash = "sha256-rddjRBofI5M28wvlBwH2VwuIgmulThxbfxiJSOCNkPY=";
+    hash = "sha256-fcb5XujtviWxCJwyFBzfyh+360kvP8FDt3XyDVucE+A=";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Typed scripting library / ORM / API wrapper for tmux";
     homepage = "https://libtmux.git-pull.com/";
-    changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
+    changelog = "https://github.com/tmux-python/libtmux/raw/${src.tag}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ otavio ];
   };
