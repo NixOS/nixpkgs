@@ -1317,6 +1317,7 @@
   ./services/networking/v2raya.nix
   ./services/networking/veilid.nix
   ./services/networking/vdirsyncer.nix
+  ./services/networking/vpp.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
