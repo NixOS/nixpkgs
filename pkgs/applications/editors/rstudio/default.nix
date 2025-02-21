@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  runCommand,
   fetchzip,
   fetchFromGitHub,
   replaceVars,
@@ -53,6 +54,13 @@ let
     d: !(lib.hasAttr "dictFileName" d && lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts))
   ) hunspellDictionaries;
   dictionaries = largeDicts ++ otherDicts;
+
+  # rstudio assumes quarto bundles pandoc into bin/tools/
+  quartoWrapper = runCommand "quarto-wrapper" { } ''
+    mkdir -p $out/bin/tools
+    ln -s ${lib.getExe quarto} $out/bin/quarto
+    ln -s ${lib.getExe pandoc} $out/bin/tools/pandoc
+  '';
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
@@ -130,7 +138,6 @@ stdenv.mkDerivation rec {
     ./fix-resources-path.patch
     ./ignore-etc-os-release.patch
     ./dont-yarn-install.patch
-    ./dont-assume-pandoc-in-quarto.patch
     ./boost-1.86.patch
   ];
 
@@ -170,14 +177,10 @@ stdenv.mkDerivation rec {
       done
     done
 
-    ln -s ${quarto} dependencies/quarto
+    ln -s ${quartoWrapper} dependencies/quarto
 
     # version in dependencies/common/install-mathjax
     ln -s ${mathJaxSrc} dependencies/mathjax-27
-
-    # version in CMakeGlobals.txt (PANDOC_VERSION)
-    mkdir -p dependencies/pandoc/2.18
-    ln -s ${lib.getBin pandoc}/bin/* dependencies/pandoc/2.18
 
     # version in CMakeGlobals.txt (RSTUDIO_INSTALLED_NODE_VERSION)
     mkdir -p dependencies/common/node
