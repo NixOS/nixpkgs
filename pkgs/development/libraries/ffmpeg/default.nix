@@ -28,7 +28,7 @@ let
   };
 
   v7 = {
-    version = "7.1";# release/7.1
+    version = "7.1"; # release/7.1
     rev = "8cabfd922a726a964eeae8b5276583f470df39c3";
     hash = "sha256-qkfth1Hi97cEHmnBpVc2SJxF2Uq5tQqa6ulnT0YA5lA=";
   };
