@@ -58,64 +58,64 @@ let
       name = "bat";
       owner = "catppuccin";
       repo = "bat";
-      rev = "2bafe4454d8db28491e9087ff3a1382c336e7d27";
-      hash = "sha256-yHt3oIjUnljARaihalcWSNldtaJfVDfmfiecYfbzGs0=";
+      rev = "699f60fc8ec434574ca7451b444b880430319941";
+      hash = "sha256-6fWoCH90IGumAMc4buLRWL0N61op+AuMNN9CAR9/OdI=";
     };
 
     bottom = fetchFromGitHub {
       name = "bottom";
       owner = "catppuccin";
       repo = "bottom";
-      rev = "c0efe9025f62f618a407999d89b04a231ba99c92";
-      hash = "sha256-VaHX2I/Gn82wJWzybpWNqU3dPi3206xItOlt0iF6VVQ=";
+      rev = "ed09bd5a5dd78d83acdc8ff5fdec40a6340ed1c2";
+      hash = "sha256-Vi438I+YVvoD2xzq2t9hJ9R3a+2TlDdbakjFYFtjtXQ=";
     };
 
     btop = fetchFromGitHub {
       name = "btop";
       owner = "catppuccin";
       repo = "btop";
-      rev = "1.0.0";
-      hash = "sha256-J3UezOQMDdxpflGax0rGBF/XMiKqdqZXuX4KMVGTxFk=";
+      rev = "f437574b600f1c6d932627050b15ff5153b58fa3";
+      hash = "sha256-mEGZwScVPWGu+Vbtddc/sJ+mNdD2kKienGZVUcTSl+c=";
     };
 
     grub = fetchFromGitHub {
       name = "grub";
       owner = "catppuccin";
       repo = "grub";
-      rev = "v1.0.0";
-      hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
+      rev = "2a5c8be8185dae49dd22030df45860df8c796312";
+      hash = "sha256-20D1EcV8SWOd5BLdAc6FaQu3onha0+aS5yA/GK8Ra0g=";
     };
 
     hyprland = fetchFromGitHub {
       name = "hyprland";
       owner = "catppuccin";
       repo = "hyprland";
-      rev = "v1.2";
-      hash = "sha256-07B5QmQmsUKYf38oWU3+2C6KO4JvinuTwmW1Pfk8CT8=";
+      rev = "c388ac55563ddeea0afe9df79d4bfff0096b146b";
+      hash = "sha256-xSa/z0Pu+ioZ0gFH9qSo9P94NPkEMovstm1avJ7rvzM=";
     };
 
     k9s = fetchFromGitHub {
       name = "k9s";
       owner = "catppuccin";
       repo = "k9s";
-      rev = "590a762110ad4b6ceff274265f2fe174c576ce96";
-      hash = "sha256-EBDciL3F6xVFXvND+5duT+OiVDWKkFMWbOOSruQ0lus=";
+      rev = "fdbec82284744a1fc2eb3e2d24cb92ef87ffb8b4";
+      hash = "sha256-9h+jyEO4w0OnzeEKQXJbg9dvvWGZYQAO4MbgDn6QRzM=";
     };
 
     kvantum = fetchFromGitHub {
       name = "kvantum";
       owner = "catppuccin";
       repo = "Kvantum";
-      rev = "d1e174c85311de9715aefc1eba4b8efd6b2730fc";
-      hash = "sha256-IrHo8pnR3u90bq12m7FEXucUF79+iub3I9vgH5h86Lk=";
+      rev = "a87694e0a3c97644dbb34f8835112d17b54ace68";
+      hash = "sha256-eQmEeKC+L408ajlNg3oKMnDK6Syy2GV6FrR2TN5ZBCg=";
     };
 
     lazygit = fetchFromGitHub {
       name = "lazygit";
       owner = "catppuccin";
       repo = "lazygit";
-      rev = "v2.0.0";
-      hash = "sha256-gM0HplHhcpvtpmIVdlX/p59h0v+ihKEidS1imqPYlBg=";
+      rev = "d3c95a67ea3f778f7705d8ef814f87ac5213436d";
+      hash = "sha256-b2SoIeXT1BaoxvEeQ0VaPmnBND+7qUe342kOIkyOcAc=";
     };
 
     lxqt = fetchFromGitHub {
@@ -130,16 +130,16 @@ let
       name = "plymouth";
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "67759fbe15eb9490d096ef8014d9f92fc5748fe7";
-      hash = "sha256-IzoyVOi44Uay7DTfzR9RdRLSjORsdBM4pPrgeXk5YMI=";
+      rev = "e0f58d6fcf3dbc2d35dfc4fec394217fbfa92666";
+      hash = "sha256-He6ER1QNrJCUthFoBBGHBINouW/tozxQy3R79F5tsuo=";
     };
 
     qt5ct = fetchFromGitHub {
       name = "qt5ct";
       owner = "catppuccin";
       repo = "qt5ct";
-      rev = "89ee948e72386b816c7dad72099855fb0d46d41e";
-      hash = "sha256-t/uyK0X7qt6qxrScmkTU2TvcVJH97hSQuF0yyvSO/qQ=";
+      rev = "0442cc931390c226d143e3a6d6e77f819c68502a";
+      hash = "sha256-hXyPuI225WdMuVSeX1AwrylUzNt0VA33h8C7MoSJ+8A=";
     };
 
     refind = fetchFromGitHub {
@@ -154,32 +154,32 @@ let
       name = "rofi";
       owner = "catppuccin";
       repo = "rofi";
-      rev = "5350da41a11814f950c3354f090b90d4674a95ce";
-      hash = "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=";
+      rev = "c24a212a6b07c2d45f32d01d7f10b4d88ddc9f45";
+      hash = "sha256-WGYEA4Q7UvSaRDjP/DiEtfXjvmWbewtdyJWRpjhbZgg=";
     };
 
     starship = fetchFromGitHub {
       name = "starship";
       owner = "catppuccin";
       repo = "starship";
-      rev = "5629d2356f62a9f2f8efad3ff37476c19969bd4f";
-      hash = "sha256-nsRuxQFKbQkyEI4TXgvAjcroVdG+heKX5Pauq/4Ota0=";
+      rev = "e99ba6b210c0739af2a18094024ca0bdf4bb3225";
+      hash = "sha256-1w0TJdQP5lb9jCrCmhPlSexf0PkAlcz8GBDEsRjPRns=";
     };
 
     thunderbird = fetchFromGitHub {
       name = "thunderbird";
       owner = "catppuccin";
       repo = "thunderbird";
-      rev = "d61882ad9fd35909a75da6bb95fca38db552135c";
-      hash = "sha256-wn8//8lHScbbB1nEiDY8DphnLUMKZBFMc1GPaTRjTOY=";
+      rev = "0289f3bd9566f9666682f66a3355155c0d0563fc";
+      hash = "sha256-07gT37m1+OhRTbUk51l0Nhx+I+tl1il5ayx2ow23APY=";
     };
 
     waybar = fetchFromGitHub {
       name = "waybar";
       owner = "catppuccin";
       repo = "waybar";
-      rev = "v1.0";
-      hash = "sha256-vfwfBE3iqIN1cGoItSssR7h0z6tuJAhNarkziGFlNBw=";
+      rev = "v1.1";
+      hash = "sha256-9lY+v1CTbpw2lREG/h65mLLw5KuT8OJdEPOb+NNC6Fo=";
     };
   };
 in
@@ -195,7 +195,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2024-03-12";
+    version = "unstable-2025-02-21";
 
     srcs = selectedSources;
 
@@ -247,7 +247,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "kvantum" themeList) ''
         mkdir -p $out/share/Kvantum
-        cp -r ${sources.kvantum}/src/Catppuccin-"$capitalizedVariant"-"$capitalizedAccent" $out/share/Kvantum
+        cp -r "${sources.kvantum}/themes/catppuccin-${variant}-${accent}" $out/share/Kvantum
 
       ''
       + lib.optionalString (lib.elem "lazygit" themeList) ''
@@ -269,12 +269,12 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "qt5ct" themeList) ''
         mkdir -p $out/qt5ct
-        cp ${sources.qt5ct}/themes/Catppuccin-"$capitalizedVariant".conf $out/qt5ct/
+        cp "${sources.qt5ct}/themes/Catppuccin-${variant}-${accent}.conf" "$out/qt5ct"
 
       ''
       + lib.optionalString (lib.elem "rofi" themeList) ''
         mkdir -p $out/rofi
-        cp ${sources.rofi}/basic/.local/share/rofi/themes/catppuccin-${variant}.rasi $out/rofi/
+        cp "${sources.rofi}/themes/catppuccin-${variant}.rasi" "$out/rofi"
 
       ''
       + lib.optionalString (lib.elem "refind" themeList) ''
@@ -285,7 +285,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "starship" themeList) ''
         mkdir -p $out/starship
-        cp ${sources.starship}/palettes/${variant}.toml $out/starship/
+        cp "${sources.starship}/themes/${variant}.toml" "$out/starship"
 
       ''
       + lib.optionalString (lib.elem "thunderbird" themeList) ''
@@ -295,7 +295,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "waybar" themeList) ''
         mkdir -p $out/waybar
-        cp ${sources.waybar}/${variant}.css $out/waybar/
+        cp "${sources.waybar}/themes/${variant}.css" "$out/waybar"
 
       ''
       + ''
