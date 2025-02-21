@@ -16,10 +16,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-CtwGSF3EGcPqL49paNRCsB2qxYjKpCLqyRsC67nAyVk=";
   };
 
+  pythonRelaxDeps = [ "tinydb" ];
+  pythonRemoveDeps = [ "pathlib" ];
+
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "tinydb==4.3" "tinydb" \
-      --replace "pathlib" ""
     substituteInPlace creds \
       --replace "pathlib.Path(__file__).parent" "pathlib.Path.home()"
   '';
