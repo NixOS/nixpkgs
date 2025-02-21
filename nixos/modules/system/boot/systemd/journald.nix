@@ -116,57 +116,61 @@ in
     };
   };
 
-  config = {
-    systemd.additionalUpstreamSystemUnits =
-      [
-        "systemd-journald.socket"
-        "systemd-journald@.socket"
-        "systemd-journald-varlink@.socket"
-        "systemd-journald.service"
-        "systemd-journald@.service"
-        "systemd-journal-flush.service"
-        "systemd-journal-catalog-update.service"
-        "systemd-journald-sync@.service"
-      ]
-      ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket")
-      ++ [
-        "systemd-journald-dev-log.socket"
-        "syslog.socket"
+  config = lib.mkMerge [
+    {
+      systemd.additionalUpstreamSystemUnits =
+        [
+          "systemd-journald.socket"
+          "systemd-journald@.socket"
+          "systemd-journald-varlink@.socket"
+          "systemd-journald.service"
+          "systemd-journald@.service"
+          "systemd-journal-flush.service"
+          "systemd-journal-catalog-update.service"
+          "systemd-journald-sync@.service"
+        ]
+        ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket")
+        ++ [
+          "systemd-journald-dev-log.socket"
+          "syslog.socket"
+        ];
+
+      environment.etc = {
+        "systemd/journald.conf".text = ''
+          [Journal]
+          Storage=${cfg.storage}
+          RateLimitInterval=${cfg.rateLimitInterval}
+          RateLimitBurst=${toString cfg.rateLimitBurst}
+          ${lib.optionalString (cfg.console != "") ''
+            ForwardToConsole=yes
+            TTYPath=${cfg.console}
+          ''}
+          ${lib.optionalString (cfg.forwardToSyslog) ''
+            ForwardToSyslog=yes
+          ''}
+          Audit=${utils.systemdUtils.lib.toOption cfg.audit}
+          ${cfg.extraConfig}
+        '';
+      };
+
+      users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
+
+      systemd.services.systemd-journal-flush.restartIfChanged = false;
+      systemd.services.systemd-journald.restartTriggers = [
+        config.environment.etc."systemd/journald.conf".source
       ];
+      systemd.services.systemd-journald.stopIfChanged = false;
+      systemd.services."systemd-journald@".restartTriggers = [
+        config.environment.etc."systemd/journald.conf".source
+      ];
+      systemd.services."systemd-journald@".stopIfChanged = false;
+    }
 
-    systemd.sockets.systemd-journald-audit.wantedBy = [
-      "systemd-journald.service"
-      "sockets.target"
-    ];
-
-    environment.etc = {
-      "systemd/journald.conf".text = ''
-        [Journal]
-        Storage=${cfg.storage}
-        RateLimitInterval=${cfg.rateLimitInterval}
-        RateLimitBurst=${toString cfg.rateLimitBurst}
-        ${lib.optionalString (cfg.console != "") ''
-          ForwardToConsole=yes
-          TTYPath=${cfg.console}
-        ''}
-        ${lib.optionalString (cfg.forwardToSyslog) ''
-          ForwardToSyslog=yes
-        ''}
-        Audit=${utils.systemdUtils.lib.toOption cfg.audit}
-        ${cfg.extraConfig}
-      '';
-    };
-
-    users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
-
-    systemd.services.systemd-journal-flush.restartIfChanged = false;
-    systemd.services.systemd-journald.restartTriggers = [
-      config.environment.etc."systemd/journald.conf".source
-    ];
-    systemd.services.systemd-journald.stopIfChanged = false;
-    systemd.services."systemd-journald@".restartTriggers = [
-      config.environment.etc."systemd/journald.conf".source
-    ];
-    systemd.services."systemd-journald@".stopIfChanged = false;
-  };
+    (lib.mkIf (!config.boot.isContainer) {
+      systemd.sockets.systemd-journald-audit.wantedBy = [
+        "systemd-journald.service"
+        "sockets.target"
+      ];
+    })
+  ];
 }
