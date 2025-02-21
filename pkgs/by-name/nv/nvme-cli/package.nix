@@ -9,6 +9,7 @@
   json_c,
   zlib,
   python3Packages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     json_c
     zlib
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     inherit (src.meta) homepage; # https://nvmexpress.org/
