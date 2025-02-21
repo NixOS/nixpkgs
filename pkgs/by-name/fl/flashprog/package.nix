@@ -1,6 +1,7 @@
 {
   fetchgit,
   fetchpatch,
+  gitUpdater,
   lib,
   libftdi1,
   libgpiod,
@@ -50,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     cd "$src"
     install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9\\.]+$";
+  };
 
   meta = with lib; {
     homepage = "https://flashprog.org";
