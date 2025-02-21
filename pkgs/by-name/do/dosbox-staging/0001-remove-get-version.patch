@@ -1,0 +1,31 @@
+diff --git a/meson.build b/meson.build
+index 84844242b..98187ad8c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,10 +1,6 @@
+ project(
+     'dosbox-staging', 'c', 'cpp',
+ 
+-    version: run_command(
+-      meson.project_source_root() + '/scripts/get-version.sh',
+-      'version', check: true,
+-    ).stdout().strip(),
+ 
+     license: 'GPL-2.0-or-later',
+     meson_version: '>= 0.59.0',
+@@ -419,14 +415,10 @@ add_project_link_arguments(link_supported_arguments, language: 'cpp')
+ # The actual config.h file will be generated after interpreting
+ # all the build files in all the subdirs.
+ #
+-git_hash = run_command(
+-  './scripts/get-version.sh', 'hash', check: true,
+-).stdout().strip()
+ 
+ conf_data = configuration_data()
+ conf_data.set('version', meson.project_version())
+ conf_data.set('project_name', meson.project_name())
+-conf_data.set('git_hash', git_hash)
+ conf_data.set_quoted(
+     'CUSTOM_DATADIR',
+     get_option('prefix') / get_option('datadir'),
+
