@@ -25,8 +25,21 @@ let
     , pkgsHostHost
     , pkgsHostTarget
     , pkgsTargetTarget
-    }:
+    }@args:
     let
+      tryGetAttrs = value0:
+        let
+          inherit (builtins.tryEval value0) success value;
+        in
+            lib.optionalAttrs success value;
+
+      pkgsBuildBuild = tryGetAttrs args.pkgsBuildBuild;
+      pkgsBuildHost = tryGetAttrs args.pkgsBuildHost;
+      pkgsBuildTarget = tryGetAttrs args.pkgsBuildTarget;
+      pkgsHostHost = tryGetAttrs args.pkgsHostHost;
+      pkgsHostTarget = tryGetAttrs args.pkgsHostTarget;
+      pkgsTargetTarget = tryGetAttrs args.pkgsTargetTarget;
+
       mash =
         # Other pkgs sets
         pkgsBuildBuild // pkgsBuildTarget // pkgsHostHost // pkgsTargetTarget
