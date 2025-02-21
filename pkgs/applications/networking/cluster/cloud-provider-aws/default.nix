@@ -12,8 +12,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "cloud-provider-aws";
-    rev = "v${version}";
-    sha256 = "sha256-v+RTrcjEfo4A9DhPWElwSp8wYQ9HAt4p+8cQqSsy7ak=";
+    tag = "v${version}";
+    hash = "sha256-v+RTrcjEfo4A9DhPWElwSp8wYQ9HAt4p+8cQqSsy7ak=";
   };
 
   subPackages = [
