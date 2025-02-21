@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   coreutils,
   fetchFromGitHub,
   rustPlatform,
@@ -31,28 +32,28 @@ assert stdenv.hostPlatform.isDarwin -> !x11Support;
 assert stdenv.hostPlatform.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage {
   pname = "espanso";
-  version = "2.2-unstable-2024-05-14";
+  version = "2.2-unstable-2025-01-24";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
-    rev = "8daadcc949c35a7b7aa20b7f544fdcff83e2c5f7";
-    hash = "sha256-4MArENBmX6tDVLZE1O8cuJe7A0R+sLZoxBkDvIwIVZ4=";
+    rev = "5d5d0d4d59abac07e3cab52b851aeaf570f5253c";
+    hash = "sha256-dUNvG96LjZem1SLtgL04l2jCtYW7yDrNBGx+CZ5sIyU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "yaml-rust-0.4.6" = "sha256-wXFy0/s4y6wB3UO19jsLwBdzMy7CGX4JoUt5V6cU7LU=";
-    };
+    outputHashes = { };
   };
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-    pkg-config
-    makeWrapper
-    wxGTK32
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wxGTK32
+    ];
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
   buildNoDefaultFeatures = true;
@@ -73,9 +74,9 @@ rustPlatform.buildRustPackage {
   buildInputs =
     [
       libpng
-      wxGTK32
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
+      extra-cmake-modules
       openssl
       dbus
       libnotify
@@ -101,9 +102,6 @@ rustPlatform.buildRustPackage {
       --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
       --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
-
-    substituteInPlace espanso-modulo/build.rs \
-      --replace-fail '"--with-libpng=builtin"' '"--with-libpng=sys"'
   '';
 
   # Some tests require networking
