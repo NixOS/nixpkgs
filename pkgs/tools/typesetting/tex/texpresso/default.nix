@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "texpresso";
-  version = "0-unstable-2025-01-29";
+  version = "0-unstable-2025-02-07";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "c42a5912f501f180984840fa8adf9ffc09c5ac13";
-    hash = "sha256-T/vou7OcGtNoodCrznmjBLxg6ZAFDCjhpYgNyZaf44g=";
+    rev = "6bc40355ec9e3baf67d5a1c768ba62f50b18d606";
+    hash = "sha256-sBXn/F7bBU2fsEPvH0//fjCQ3PwOodcIhCcvR76BdBQ=";
   };
 
   buildFlags = [ "texpresso" ];
