@@ -3,10 +3,31 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  technitium-dns-server-library,
   nixosTests,
-  nix-update-script,
 }:
+let
+  technitium-library = buildDotnetModule rec {
+    pname = "TechnitiumLibrary";
+    version = "13.2";
+
+    src = fetchFromGitHub {
+      owner = "TechnitiumSoftware";
+      repo = "TechnitiumLibrary";
+      tag = "dns-server-v${version}";
+      hash = "sha256-stfxYe0flE1daPuXw/GAgY52ZD7pkqnBIBvmSVPWWjI=";
+      name = "${pname}-${version}";
+    };
+
+    dotnet-sdk = dotnetCorePackages.sdk_8_0;
+
+    nugetDeps = ./library-nuget-deps.json;
+
+    projectFile = [
+      "TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj"
+      "TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj"
+    ];
+  };
+in
 buildDotnetModule rec {
   pname = "technitium-dns-server";
   version = "13.2";
@@ -29,7 +50,7 @@ buildDotnetModule rec {
   # move dependencies from TechnitiumLibrary to the expected directory
   preBuild = ''
     mkdir -p ../TechnitiumLibrary/bin
-    cp -r ${technitium-dns-server-library}/lib/${technitium-dns-server-library.pname}/* ../TechnitiumLibrary/bin/
+    cp -r ${technitium-library}/lib/TechnitiumLibrary/* ../TechnitiumLibrary/bin/
   '';
 
   postFixup = ''
@@ -39,8 +60,6 @@ buildDotnetModule rec {
   passthru.tests = {
     inherit (nixosTests) technitium-dns-server;
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";
