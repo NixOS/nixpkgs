@@ -307,8 +307,7 @@ in
       substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
     '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-    cargoRoot = "ext/fast_mmaped_file_rs";
-    cargoDeps = rustPlatform.fetchCargoTarball {
+     cargoDeps = rustPlatform.fetchCargoVendor {
       src = stdenv.mkDerivation {
         inherit (buildRubyGem { inherit (attrs) gemName version source; })
           name
@@ -319,28 +318,27 @@ in
         dontBuilt = true;
         installPhase = ''
           cp -R ext/fast_mmaped_file_rs $out
+          cp Cargo.lock $out
         '';
       };
-      hash = if lib.versionAtLeast attrs.version "1.1.2"
-        then "sha256-pNzW2fQZDcuqu8apv3GU7lUC/H1cX5WRifBBQlbE8+s="
-        else
-          if lib.versionAtLeast attrs.version "1.1.1"
-          then "sha256-RsN5XWX7Mj2ORccM0eczY+44WXsbXNTnJVcCMvnOATk="
-          else "sha256-XuQZPbFWqPHlrJvllkvLl1FjKeoAUbi8oKDrS2rY1KM=";
+      hash = "sha256-KVbmDAa9EFwTUTHPF/8ZzycbieMhAuiidiz5rqGIKOo=";
     };
+
     nativeBuildInputs = [
       cargo
       rustc
       rustPlatform.cargoSetupHook
       rustPlatform.bindgenHook
     ];
+
     disallowedReferences = [
       rustc.unwrapped
     ];
-    preBuild = ''
-      cat ../.cargo/config.toml > ext/fast_mmaped_file_rs/.cargo/config.toml
-      sed -i "s|cargo-vendor-dir|$PWD/../cargo-vendor-dir|" ext/fast_mmaped_file_rs/.cargo/config.toml
+
+    preInstall = ''
+      export CARGO_HOME="$PWD/../.cargo/"
     '';
+
     postInstall = ''
       find $out -type f -name .rustc_info.json -delete
     '';
