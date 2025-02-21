@@ -5,6 +5,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   xmltodict,
 }:
@@ -23,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-e7Nt/o2A1qn2nSpWv6ZsZHn/WpcXKzol+f+JNJaSb4w=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=aiosteamist" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -37,6 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "aiosteamist" ];
