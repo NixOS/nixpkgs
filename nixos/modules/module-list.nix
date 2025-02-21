@@ -740,6 +740,7 @@
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
+  ./services/matrix/draupnir.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-signal.nix
