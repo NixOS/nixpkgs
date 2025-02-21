@@ -21,6 +21,13 @@ python3Packages.buildPythonApplication {
     hash = "sha256-wFQtpHkMPscrGhk5tNGc38rPHbFuoDMuvO50KYR+j9M=";
   };
 
+  postPatch = ''
+    # Fix tests on case-insensitive filesystems (e.g., on Darwin).
+    if [ -f test/results/e621.py~nix~case~hack~1 ]; then
+      mv test/results/e621.py~nix~case~hack~1 test/results/e621-tags.py
+    fi
+  '';
+
   build-system = [ python3Packages.setuptools ];
 
   dependencies = [
