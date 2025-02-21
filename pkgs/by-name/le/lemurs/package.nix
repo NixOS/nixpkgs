@@ -34,14 +34,14 @@ rustPlatform.buildRustPackage {
     version = "0.3.2";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Customizable TUI display/login manager written in Rust";
     homepage = "https://github.com/coastalwhite/lemurs";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jeremiahs
       nullcube
     ];
