@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pygments,
   gitMinimal,
   mercurial,
   subversion,
-  patchutils,
+  p4,
   less,
 }:
 
@@ -15,21 +15,23 @@ buildPythonPackage rec {
   version = "1.4.2";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NpvmI9zeeVTZiXP7nbF4DWTwNTmCvzrIWBjz1i/0UrA=";
+  src = fetchFromGitHub {
+    owner = "ymattw";
+    repo = "ydiff";
+    tag = version;
+    hash = "sha256-JaGkABroj+/7MrgpFYI2vE1bndsilIodopMUnfmNhwA=";
   };
 
   patchPhase = ''
     substituteInPlace ydiff.py \
-      --replace "['git'" "['${gitMinimal}/bin/git'" \
-      --replace "['hg'" "['${mercurial}/bin/hg'" \
-      --replace "['svn'" "['${subversion}/bin/svn'" \
-      --replace "['filterdiff'" "['${patchutils}/bin/filterdiff'" \
-      --replace "['less'" "['${less}/bin/less'" # doesn't support PAGER from env
+      --replace-fail "['git'" "['${lib.getExe gitMinimal}'" \
+      --replace-fail "['hg'" "['${lib.getExe mercurial}'" \
+      --replace-fail "['svn'" "['${lib.getExe subversion}'" \
+      --replace-fail "['p4'" "['${lib.getExe p4}'" \
+      --replace-fail "['less'" "['${lib.getExe less}'" # doesn't support PAGER from env
     substituteInPlace tests/test_ydiff.py \
-      --replace /bin/rm rm \
-      --replace /bin/sh sh
+      --replace-fail /bin/rm rm \
+      --replace-fail /bin/sh sh
     patchShebangs setup.py
     patchShebangs tests/*.sh
   '';
