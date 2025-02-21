@@ -3,15 +3,9 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qttools,
-  qtsvg,
-  qt5compat,
-  quazip,
-  qtwayland,
+  qt6,
+  qt6Packages,
   hunspell,
-  wrapQtAppsHook,
-  poppler,
   zlib,
   pkg-config,
 }:
@@ -29,22 +23,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
   ];
   buildInputs =
     [
       hunspell
-      poppler
-      qt5compat
-      qtbase
-      qtsvg
-      qttools
-      quazip
+      qt6.qt5compat
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+      qt6Packages.poppler
+      qt6Packages.quazip
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
+      qt6.qtwayland
     ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
