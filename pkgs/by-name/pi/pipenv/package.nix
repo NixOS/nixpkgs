@@ -6,8 +6,8 @@
   installShellFiles,
   pipenv,
   runCommand,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 with python3.pkgs;
@@ -71,10 +71,9 @@ buildPythonApplication rec {
     pytest-cov-stub
     pytz
     requests
-    writableTmpDirAsHomeHook
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
-
   versionCheckProgramArg = [ "--version" ];
 
   disabledTests = [
