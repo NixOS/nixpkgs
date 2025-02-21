@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=30.3.0,<50",' ""
+      --replace-fail '"setuptools>=30.3.0",' ""
   '';
 
   build-system = [
