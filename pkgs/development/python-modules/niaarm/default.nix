@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.13";
+  version = "0.13.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaARM";
     tag = version;
-    hash = "sha256-nDgGX5KbthOBXX5jg99fGT28ZuBx0Hxb+aHak3Uvjoc=";
+    hash = "sha256-524rJ5b9e0U1rqu1iCGMA3Tgnn9bO4biCC1FMoGNqms=";
   };
 
   pythonRelaxDeps = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     description = "Minimalistic framework for Numerical Association Rule Mining";
     mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
-    changelog = "https://github.com/firefly-cpp/NiaARM/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/firefly-cpp/NiaARM/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };
