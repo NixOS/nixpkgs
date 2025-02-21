@@ -6,8 +6,8 @@
 }:
 let
   pname = "lmstudio";
-  version = "0.3.6";
-  rev = "8";
+  version = "0.3.10";
+  rev = "6";
   meta = {
     description = "LM Studio is an easy to use desktop app for experimenting with local and open-source Large Language Models (LLMs)";
     homepage = "https://lmstudio.ai/";
@@ -23,6 +23,7 @@ let
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    broken = stdenv.hostPlatform.isDarwin; # Upstream issue: https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/347
   };
 in
 if stdenv.hostPlatform.isDarwin then
