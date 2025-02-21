@@ -210,6 +210,7 @@ in
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -s QUIT $MAINPID";
         User = cfg.user;
+        Group = cfg.group;
         Restart = "always";
         RestartSec = "10s";
         RuntimeDirectory = "h2o";
