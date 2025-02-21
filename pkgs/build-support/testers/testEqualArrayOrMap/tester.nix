@@ -5,6 +5,7 @@
 }:
 let
   inherit (lib) maintainers;
+  inherit (lib.asserts) assertMsg;
   inherit (lib.customisation) makeOverridable;
 
   testEqualArrayOrMap =
@@ -16,6 +17,9 @@ let
       expectedMap ? null,
       script,
     }:
+    assert assertMsg (
+      expectedArray != null || expectedMap != null
+    ) "testEqualArrayOrMap: at least one of 'expectedArray' or 'expectedMap' must be provided";
     stdenvNoCC.mkDerivation {
       __structuredAttrs = true;
       strictDeps = true;
