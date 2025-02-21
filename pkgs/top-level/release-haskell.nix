@@ -310,7 +310,6 @@ let
         happy
         haskell-ci
         haskell-language-server
-        hasura-graphql-engine
         hci
         hercules-ci-agent
         hinit
@@ -455,6 +454,7 @@ let
                 cabal2nix
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
+                postgrest
                 ;
             };
 
@@ -467,6 +467,7 @@ let
                 cabal2nix
                 terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
+                postgrest
                 ;
             };
 
@@ -501,6 +502,16 @@ let
                   ghc
                   hello
                   microlens
+                  ;
+              };
+
+              haskell.packages.ghc912 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  miso
+                  reflex-dom
                   ;
               };
 
@@ -563,7 +574,7 @@ let
       ] released;
       Cabal_3_10_3_0 = released;
       Cabal_3_12_1_0 = released;
-      Cabal_3_14_1_0 = released;
+      Cabal_3_14_1_1 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -603,6 +614,11 @@ let
       ] released;
       hashable = released;
       primitive = released;
+      semaphore-compat = [
+        # Compiler < 9.8 don't have the semaphore-compat core package, but
+        # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
+        compilerNames.ghc966
+      ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9121
