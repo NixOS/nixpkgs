@@ -998,6 +998,8 @@ self: super: with self; {
 
   atomman = callPackage ../development/python-modules/atomman { };
 
+  atproto = callPackage ../development/python-modules/atproto { };
+
   atpublic = callPackage ../development/python-modules/atpublic { };
 
   atsim-potentials = callPackage ../development/python-modules/atsim-potentials { };
@@ -7390,6 +7392,8 @@ self: super: with self; {
     pythonSupport = true;
     inherit python;
   })).python;
+
+  libipld = callPackage ../development/python-modules/libipld { };
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
