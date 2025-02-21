@@ -53,13 +53,11 @@ let
           ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
         '';
 
-        Caddyfile-formatted =
-          pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; }
-            ''
-              mkdir -p $out
-              cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-              caddy fmt --overwrite $out/Caddyfile
-            '';
+        Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { } ''
+          mkdir -p $out
+          cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+          ${lib.getExe cfg.package} fmt --overwrite $out/Caddyfile
+        '';
       in
       "${
         if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile
@@ -70,6 +68,20 @@ let
   configPath = "/etc/${etcConfigFile}";
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
+
+  adapterParam = optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}";
+  runOptions = ''--config ${configPath} ${adapterParam}'';
+
+  # 'validate' can not be used for validation, due to log-location access: https://github.com/caddyserver/caddy/issues/6788
+  validConfig =
+    cfg.settings != { }
+    ||
+      "0" == (lib.fileContents (
+        pkgs.runCommand "validate-caddy-config" { } ''
+          ${lib.getExe cfg.package} adapt --config ${cfg.configFile} ${adapterParam} | ${lib.getExe pkgs.jq} empty
+          echo $? > $out
+        ''
+      ));
 in
 {
   imports = [
@@ -389,6 +401,10 @@ in
           assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
           message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
         }
+        {
+          assertion = validConfig;
+          message = "Caddy configuration is invalid";
+        }
       ]
       ++ map (
         name:
@@ -425,39 +441,33 @@ in
       reloadTriggers = optional cfg.enableReload cfg.configFile;
       restartTriggers = optional (!cfg.enableReload) cfg.configFile;
 
-      serviceConfig =
-        let
-          runOptions = ''--config ${configPath} ${
-            optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"
-          }'';
-        in
-        {
-          # Override the `ExecStart` line from upstream's systemd unit file by our own:
-          # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
-          # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-          ExecStart = [
-            ""
-            ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}''
-          ];
-          # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
-          ExecReload = [
-            ""
-          ] ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
-          User = cfg.user;
-          Group = cfg.group;
-          ReadWritePaths = [ cfg.dataDir ];
-          StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
-          LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
-          Restart = "on-failure";
-          RestartPreventExitStatus = 1;
-          RestartSec = "5s";
-          EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
+      serviceConfig = {
+        # Override the `ExecStart` line from upstream's systemd unit file by our own:
+        # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
+        # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
+        ExecStart = [
+          ""
+          ''${lib.getExe cfg.package} run ${runOptions} ${optionalString cfg.resume "--resume"}''
+        ];
+        # Validating the configuration before applying it ensures we'll get a proper error that will be reported when switching to the configuration
+        ExecReload = [
+          ""
+        ] ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
+        User = cfg.user;
+        Group = cfg.group;
+        ReadWritePaths = [ cfg.dataDir ];
+        StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
+        LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
+        Restart = "on-failure";
+        RestartPreventExitStatus = 1;
+        RestartSec = "5s";
+        EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
 
-          # TODO: attempt to upstream these options
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          ProtectHome = true;
-        };
+        # TODO: attempt to upstream these options
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        ProtectHome = true;
+      };
     };
 
     users.users = optionalAttrs (cfg.user == "caddy") {
