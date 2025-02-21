@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   autoreconfHook,
   autoconf-archive,
   pkg-config,
@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
   pname = "libgpiod";
   version = "2.2";
 
-  src = fetchurl {
-    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    hash = "sha256-rjUynbcCfHQOkMiDuvJ8JjEfBhTmp7EVdxsoGIuZKuw=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git";
+    tag = "v${version}";
+    hash = "sha256-xRuYBbL2jR0ebCMI6MG/flWfhRvs6o5NDsfe6vV9VJo=";
   };
 
   nativeBuildInputs = [
