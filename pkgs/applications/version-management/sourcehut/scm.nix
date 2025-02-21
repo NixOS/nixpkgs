@@ -37,8 +37,6 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
-  dontUseSetuptoolsCheck = true;
-
   pythonImportsCheck = [ "scmsrht" ];
 
   meta = with lib; {

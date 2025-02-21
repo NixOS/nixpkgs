@@ -70,8 +70,6 @@ buildPythonPackage rec {
     "-v"
   ];
 
-  dontUseSetuptoolsCheck = true;
-
   preCheck = ''
     export HOME=$TEMPDIR
   '';

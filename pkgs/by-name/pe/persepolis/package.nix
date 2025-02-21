@@ -38,15 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     "\${qtWrapperArgs[@]}"
   ];
 
-  # The presence of these dependencies is checked during setuptoolsCheckPhase,
-  # but apart from that, they're not required during build, only runtime
-  nativeCheckInputs = [
-    libnotify
-    pulseaudio
-    sound-theme-freedesktop
-    ffmpeg
-  ];
-
   propagatedBuildInputs = [
     pulseaudio
     sound-theme-freedesktop
