@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   extra-cmake-modules,
   kdoctools,
@@ -14,7 +14,7 @@
   kwindowsystem,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "krusader";
   version = "2.8.1";
 
@@ -44,11 +44,11 @@ mkDerivation rec {
     kwindowsystem
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.krusader.org";
     description = "Norton/Total Commander clone for KDE";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ sander ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ sander ];
     mainProgram = "krusader";
   };
 }
