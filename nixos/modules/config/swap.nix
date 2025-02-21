@@ -216,8 +216,12 @@ in
         {command}`mkswap -L`).  Using a label is
         recommended.
       '';
-
-      type = types.listOf (types.submodule swapCfg);
+      type =
+        let
+          t = types.submodule swapCfg;
+          disallow = s: throw "Definitions for swapDevices items must be submodules, normally either { device = \"…\"; } or { label = \"…\"; }, but got a definition that is just ${lib.strings.escapeNixString s}";
+        in
+        types.listOf (types.coercedTo types.str disallow t // { inherit (t) description; });
     };
 
   };

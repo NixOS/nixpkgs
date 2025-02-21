@@ -74,7 +74,7 @@ in
       type = with lib.types; attrsOf (submodule encryptedFSOptions);
     };
     swapDevices = mkOption {
-      type = with lib.types; listOf (submodule encryptedFSOptions);
+      type = with lib.types; listOf (coercedTo str null (submodule encryptedFSOptions));
     };
   };
 
