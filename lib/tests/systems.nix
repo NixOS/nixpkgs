@@ -110,6 +110,7 @@ lib.runTests (
         emulatorAvailable = null;
         staticEmulatorAvailable = null;
         isCompatible = null;
+        override = null;
       }?${platformAttrName};
     };
 
