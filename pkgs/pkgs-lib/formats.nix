@@ -49,10 +49,17 @@ rec {
   inherit (lib.types) nullOr oneOf coercedTo listOf nonEmptyListOf attrsOf either;
   inherit (lib.types) bool int float str path;
 
-  json = {}: {
+  /* Creates a structured value type suitable for serialization formats.
 
-    type = let
-      valueType = nullOr (oneOf [
+     Parameters:
+     - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
+
+     Returns a type suitable for structured data formats that supports:
+     - Basic types: boolean, integer, float, string, path
+     - Complex types: attribute sets and lists
+  */
+  mkStructuredType = { typeName }: let
+    baseType = oneOf [
         bool
         int
         float
@@ -60,10 +67,15 @@ rec {
         path
         (attrsOf valueType)
         (listOf valueType)
-      ]) // {
-        description = "JSON value";
+    ];
+    valueType = (nullOr baseType) // {
+      description = "${typeName} value";
       };
     in valueType;
+
+  json = {}: {
+
+    type = mkStructuredType { typeName = "JSON"; };
 
     generate = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
       nativeBuildInputs = [ jq ];
@@ -71,7 +83,7 @@ rec {
       passAsFile = [ "value" ];
       preferLocalBuild = true;
     } ''
-      jq . "$valuePath"> $out
+      jq . "$valuePath" > $out
     '') {};
 
   };
@@ -79,6 +91,9 @@ rec {
   yaml = yaml_1_1;
 
   yaml_1_1 = {}: {
+
+    type = mkStructuredType { typeName = "YAML"; };
+
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal_0_17 }: runCommand name {
       nativeBuildInputs = [ remarshal_0_17 ];
       value = builtins.toJSON value;
@@ -87,21 +102,6 @@ rec {
     } ''
       json2yaml "$valuePath" "$out"
     '') {};
-
-    type = let
-      valueType = nullOr (oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ]) // {
-        description = "YAML value";
-      };
-    in valueType;
-
   };
 
   # the ini formats share a lot of code
@@ -285,19 +285,7 @@ rec {
   };
 
   toml = {}: json {} // {
-    type = let
-      valueType = oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ] // {
-        description = "TOML value";
-      };
-    in valueType;
+    type = mkStructuredType { typeName = "TOML"; };
 
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
@@ -319,19 +307,7 @@ rec {
     Currently used by Panda, Reposilite, and FunnyGuilds (as per the repo's readme).
   */
   cdn = {}: json {} // {
-    type = let
-      valueType = nullOr (oneOf [
-        bool
-        int
-        float
-        str
-        path
-        (attrsOf valueType)
-        (listOf valueType)
-      ]) // {
-        description = "CDN value";
-      };
-    in valueType;
+    type = mkStructuredType { typeName = "CDN"; };
 
     generate = name: value: pkgs.callPackage ({ runCommand, json2cdn }: runCommand name {
       nativeBuildInputs = [ json2cdn ];
@@ -544,19 +520,7 @@ rec {
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars = {}: {
-    type = let
-      valueType = nullOr(oneOf [
-        bool
-        float
-        int
-        path
-        str
-        (attrsOf valueType)
-        (listOf valueType)
-      ]) // {
-        description = "Python value";
-      };
-    in attrsOf valueType;
+    type = attrsOf (mkStructuredType { typeName = "Python"; });
     generate = name: value: pkgs.callPackage ({ runCommand, python3, black }: runCommand name {
       nativeBuildInputs = [ python3 black ];
       value = builtins.toJSON value;
@@ -584,19 +548,7 @@ rec {
     }:
     if format == "badgerfish" then
       {
-        type = let
-          valueType = nullOr (oneOf [
-            bool
-            int
-            float
-            str
-            path
-            (attrsOf valueType)
-            (listOf valueType)
-          ]) // {
-            description = "XML value";
-          };
-        in valueType;
+        type = mkStructuredType { typeName = "XML"; };
 
         generate =
           name: value:
