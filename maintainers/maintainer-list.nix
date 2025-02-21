@@ -7569,6 +7569,12 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  fdrake = {
+    email = "fred.drake@gmail.com";
+    github = "fred-drake";
+    githubId = 1041653;
+    name = "Fred Drake";
+  };
   feathecutie = {
     name = "feathecutie";
     github = "feathecutie";
