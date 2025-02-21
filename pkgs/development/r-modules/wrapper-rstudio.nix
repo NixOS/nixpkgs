@@ -32,7 +32,7 @@ runCommand (rstudio.name + "-wrapper")
     # with the wrapped one, however, RStudio internally overrides
     # R_LIBS_SITE.  The below works around this by turning R_LIBS_SITE
     # into an R file (fixLibsR) which achieves the same effect, then
-    # uses R_PROFILE_USER to load this code at startup in RStudio.
+    # uses R_PROFILE to load this code at startup in RStudio.
     fixLibsR = "fix_libs.R";
   }
   (
@@ -48,7 +48,7 @@ runCommand (rstudio.name + "-wrapper")
       if rstudio.server then
         ''
           makeWrapper ${rstudio}/bin/rsession $out/bin/rsession \
-            --set R_PROFILE_USER $out/$fixLibsR --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf
+            --set R_PROFILE $out/$fixLibsR --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf
 
           makeWrapper ${rstudio}/bin/rserver $out/bin/rserver \
             --add-flags --rsession-path=$out/bin/rsession
@@ -57,7 +57,7 @@ runCommand (rstudio.name + "-wrapper")
         ''
           ln -s ${rstudio}/share $out
           makeQtWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
-            --set R_PROFILE_USER $out/$fixLibsR
+            --set R_PROFILE $out/$fixLibsR
         ''
     )
   )
