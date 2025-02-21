@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     ./dont-yarn-install.patch
     ./dont-assume-pandoc-in-quarto.patch
     ./boost-1.86.patch
-    ./fix-darwin-cmake.patch
+    ./fix-darwin.patch
     # needed for rebuilding for later electron versions
     ./update-nan-and-node-abi.patch
   ];
