@@ -283,7 +283,7 @@ let
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString
-    (targetPlatform != hostPlatform)
+    (targetPlatform.config != hostPlatform.config)
     "${targetPlatform.config}-";
 
   hadrianSettings =
