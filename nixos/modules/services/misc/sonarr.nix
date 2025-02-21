@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.services.sonarr;
+  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
@@ -26,6 +27,10 @@ in
           Open ports in the firewall for the Sonarr web interface
         '';
       };
+
+      environmentFiles = servarr.mkServarrEnvironmentFiles "sonarr";
+
+      settings = servarr.mkServarrSettingsOptions "sonarr" 8989;
 
       user = lib.mkOption {
         type = lib.types.str;
@@ -52,11 +57,12 @@ in
       description = "Sonarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-
+      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings;
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        EnvironmentFile = cfg.environmentFiles;
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe cfg.package)
           "-nobrowser"
@@ -67,7 +73,7 @@ in
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8989 ];
+      allowedTCPPorts = [ cfg.settings.server.port ];
     };
 
     users.users = lib.mkIf (cfg.user == "sonarr") {
