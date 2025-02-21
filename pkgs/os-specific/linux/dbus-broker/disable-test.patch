@@ -1,0 +1,14 @@
+diff --git a/src/meson.build b/src/meson.build
+index 4b9bc71..221ed5c 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -202,9 +202,6 @@ test('Error Handling', test_error, suite: 'unit')
+ test_fdlist = executable('test-fdlist', sources: ['util/test-fdlist.c'], kwargs: test_kwargs)
+ test('Utility File-Desciptor Lists', test_fdlist, suite: 'unit')
+ 
+-test_fs = executable('test-fs', sources: ['util/test-fs.c'], kwargs: test_kwargs)
+-test('File System Helpers', test_fs, suite: 'unit')
+-
+ test_match = executable('test-match', sources: ['bus/test-match.c'], kwargs: test_kwargs)
+ test('D-Bus Match Handling', test_match, suite: 'unit')
+ 

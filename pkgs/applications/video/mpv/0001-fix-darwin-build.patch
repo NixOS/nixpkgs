@@ -1,0 +1,19 @@
+diff --git a/osdep/mac/input_helper.swift b/osdep/mac/input_helper.swift
+index 0acec6bd40..0ec5837864 100644
+--- a/osdep/mac/input_helper.swift
++++ b/osdep/mac/input_helper.swift
+@@ -18,6 +18,14 @@
+ import Cocoa
+ import Carbon.HIToolbox
+ 
++extension NSCondition {
++    fileprivate func withLock<T>(_ body: () throws -> T) rethrows -> T {
++        self.lock()
++        defer { self.unlock() }
++        return try body()
++    }
++}
++
+ class InputHelper: NSObject {
+     var option: OptionHelper?
+     var lock = NSCondition()

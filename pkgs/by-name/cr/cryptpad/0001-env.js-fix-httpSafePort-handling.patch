@@ -1,0 +1,56 @@
+From 4bf0be64fe51a9c9fd9e410ada15251378b743bf Mon Sep 17 00:00:00 2001
+From: Dominique Martinet <asmadeus@codewreck.org>
+Date: Sat, 26 Aug 2023 09:28:59 +0900
+Subject: [PATCH] env.js: fix httpSafePort handling
+
+It has been clarified that this is only a dev option that should not be
+used in production, but setting the value in config was still ignored,
+so fix the init code to consider the config value and make it clear that
+this port is not bound if safeOrigin is set.
+---
+ config/config.example.js | 3 ++-
+ lib/env.js               | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/config/config.example.js b/config/config.example.js
+index 7c8184c6c2f6..77263643c354 100644
+--- a/config/config.example.js
++++ b/config/config.example.js
+@@ -89,8 +89,9 @@ module.exports = {
+ 
+ /*  httpSafePort purpose is to emulate another origin for the sandbox when
+  *  you don't have two domains at hand (i.e. when httpSafeOrigin not defined).
+- *  It is meant to be used only in case where you are working on a local 
++ *  It is meant to be used only in case where you are working on a local
+  *  development instance. The default value is your httpPort + 1.
++ *  Setting this to 0 or setting httpSafeOrigin disables this listener.
+  *
+  */
+     //httpSafePort: 3001,
+diff --git a/lib/env.js b/lib/env.js
+index d3748750f21e..f0660cba3e11 100644
+--- a/lib/env.js
++++ b/lib/env.js
+@@ -74,8 +74,9 @@ module.exports.create = function (config) {
+ 
+     if (typeof(config.httpSafeOrigin) !== 'string') {
+         NO_SANDBOX = true;
+-        if (typeof(config.httpSafePort) !== 'number') { httpSafePort = httpPort + 1; }
+         httpSafeOrigin = deriveSandboxOrigin(httpUnsafeOrigin, httpSafePort);
++        // only set if httpSafeOrigin isn't set.
++        httpSafePort = isValidPort(config.httpSafePort) ? config.httpSafePort : (httpPort + 1);
+     } else {
+         httpSafeOrigin = canonicalizeOrigin(config.httpSafeOrigin);
+     }
+@@ -115,7 +116,7 @@ module.exports.create = function (config) {
+         permittedEmbedders: typeof(permittedEmbedders) === 'string' && permittedEmbedders? permittedEmbedders: httpSafeOrigin,
+ 
+         removeDonateButton: config.removeDonateButton,
+-        httpPort: isValidPort(config.httpPort)? config.httpPort: 3000,
++        httpPort: httpPort,
+         httpAddress: typeof(config.httpAddress) === 'string'? config.httpAddress: 'localhost',
+         websocketPath: config.externalWebsocketURL,
+         logIP: config.logIP,
+-- 
+2.45.2
+

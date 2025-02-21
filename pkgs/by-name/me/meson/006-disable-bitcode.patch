@@ -1,0 +1,24 @@
+--- a/mesonbuild/compilers/mixins/clang.py
++++ b/mesonbuild/compilers/mixins/clang.py
+@@ -56,10 +56,6 @@ class ClangCompiler(GnuLikeCompiler):
+             {OptionKey('b_colorout'), OptionKey('b_lto_threads'), OptionKey('b_lto_mode'), OptionKey('b_thinlto_cache'),
+              OptionKey('b_thinlto_cache_dir')})
+ 
+-        # TODO: this really should be part of the linker base_options, but
+-        # linkers don't have base_options.
+-        if isinstance(self.linker, AppleDynamicLinker):
+-            self.base_options.add(OptionKey('b_bitcode'))
+         # All Clang backends can also do LLVM IR
+         self.can_compile_suffixes.add('ll')
+ 
+--- a/mesonbuild/linkers/linkers.py
++++ b/mesonbuild/linkers/linkers.py
+@@ -785,7 +785,7 @@ class AppleDynamicLinker(PosixDynamicLinkerMixin, DynamicLinker):
+         return self._apply_prefix('-headerpad_max_install_names')
+ 
+     def bitcode_args(self) -> T.List[str]:
+-        return self._apply_prefix('-bitcode_bundle')
++        raise MesonException('Nixpkgs cctools does not support bitcode bundles')
+ 
+     def fatal_warnings(self) -> T.List[str]:
+         return self._apply_prefix('-fatal_warnings')
