@@ -64,8 +64,7 @@ in
 
         Note that the effective rate limit is multiplied by a factor derived
         from the available free disk space for the journal as described on
-        [
-        journald.conf(5)](https://www.freedesktop.org/software/systemd/man/journald.conf.html).
+        {manpage}`journald.conf(5)`.
 
         Note that the total amount of logs stored is limited by journald settings
         such as `SystemMaxUse`, which defaults to 10% the file system size
