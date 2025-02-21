@@ -749,6 +749,9 @@ let
         proprietary_codecs = true;
         enable_hangout_services_extension = true;
         ffmpeg_branding = "Chrome";
+        # enable video decode hardware acceleratation for x86,x86_64,aarch64 platform
+        use_vaapi = stdenv.hostPlatform.isx86;
+        use_v4l2_codec = stdenv.hostPlatform.isAarch64;
       }
       // lib.optionalAttrs pulseSupport {
         use_pulseaudio = true;
