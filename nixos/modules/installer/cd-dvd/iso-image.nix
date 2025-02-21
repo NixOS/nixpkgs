@@ -832,7 +832,7 @@ in
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
-        { source = isolinuxCfg;
+        { source = pkgs.writeText "isolinux.cfg" isolinuxCfg;
           target = "/isolinux/isolinux.cfg";
         }
         { source = "${pkgs.syslinux}/share/syslinux";
