@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "koto-ls";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "koto-lang";
     repo = "koto-ls";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6a8xckgpz2/Eb0mQ3ZUL7ywmHA69RMXar/55LUu1UWk=";
   };
 
@@ -24,9 +24,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Language server for Koto";
     homepage = "https://github.com/koto-lang/koto-ls";
-    changelog = "https://github.com/koto-lang/koto-ls/releases/tag/v${version}";
+    changelog = "https://github.com/koto-lang/koto-ls/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "koto-ls";
   };
-}
+})
