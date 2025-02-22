@@ -32,6 +32,7 @@ stdenv.mkDerivation {
     src
     cmakeFedoraSrc
   ];
+
   sourceRoot = src.name;
 
   postUnpack = ''
@@ -73,18 +74,19 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     ibus
     ibus-table
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Chinese tables for IBus-Table";
     homepage = "https://github.com/definite/ibus-table-chinese";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pneumaticat ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pneumaticat ];
   };
 }
