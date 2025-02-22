@@ -169,7 +169,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Small but very powerful text-based mail client";
+    changelog = "https://github.com/neomutt/neomutt/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "neomutt";
+    downloadPage = "https://github.com/neomutt/neomutt";
     homepage = "https://www.neomutt.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
