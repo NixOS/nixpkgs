@@ -8,6 +8,7 @@
   libinput,
   libxkbcommon,
   mesa,
+  versionCheckHook,
   nix-update-script,
   pango,
   pipewire,
@@ -101,6 +102,10 @@ rustPlatform.buildRustPackage rec {
       ]
     );
   };
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru = {
     providedSessions = [ "niri" ];
