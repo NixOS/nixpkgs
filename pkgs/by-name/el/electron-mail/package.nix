@@ -33,12 +33,12 @@ appimageTools.wrapType2 {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
     mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.princemachiavelli ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.princemachiavelli ];
     platforms = [ "x86_64-linux" ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };
