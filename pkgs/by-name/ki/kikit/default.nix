@@ -19,6 +19,7 @@
   pybars3,
   versioneer,
   shapely,
+  writableTmpDirAsHomeHook,
 }:
 let
   solidpython = callPackage ./solidpython { };
@@ -64,6 +65,7 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     pytestCheckHook
     bats
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [
