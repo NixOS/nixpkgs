@@ -7936,6 +7936,8 @@ self: super: with self; {
 
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
+  rectangle-packer = callPackage ../development/python-modules/rectangle-packer { };
+
   regress = callPackage ../development/python-modules/regress { };
 
   macaroonbakery = callPackage ../development/python-modules/macaroonbakery { };
