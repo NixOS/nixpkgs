@@ -6,15 +6,15 @@
   obs-studio,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-source-clone";
-  version = "0.1.4-unstable-2024-02-19";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-clone";
-    rev = "d1524d5d932d6841a1fbd6061cc4a0033fb615b7";
-    hash = "sha256-W9IIIGQdreI2FQGii5NUB5tVHcqsiYAKTutOHEPCyms=";
+    tag = finalAttrs.version;
+    hash = "sha256-0rBtFPfqVvB333eeWRpVe4TgrJTiBTIzsV/SSe3EgOc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})
