@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    foundMakefile=1 # for checkPhase
     $CC -Os -o ${finalAttrs.meta.mainProgram} generic_main.c
 
     runHook postBuild
@@ -37,6 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postInstall
     '';
+
+  doCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  doInstallCheck = true;
 
   meta = {
     description = "Smaller, simpler, portable pkg-config clone";
