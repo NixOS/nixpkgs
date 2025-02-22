@@ -49,13 +49,12 @@ let
     hash = "sha256-J7SZK/9q3HcXTD7WFHxvh++ttuCd89Vc4SEBrUEU0AI=";
   };
 
-  # Ideally, rev should match the rstudio release name.
-  # e.g. release/rstudio-mountain-hydrangea
+  # rev should ideally be the last commit of the release/rstudio-<codename> branch
   quartoSrc = fetchFromGitHub {
     owner = "quarto-dev";
     repo = "quarto";
-    rev = "bb264a572c6331d46abcf087748c021d815c55d7";
-    hash = "sha256-lZnZvioztbBWWa6H177X6rRrrgACx2gMjVFDgNup93g=";
+    rev = "7d1582d06250216d18696145879415e473a2ae4d";
+    hash = "sha256-AaE9EDT3tJieI403QGxAf+A/PEw1rmUdhdpy4WNf40o=";
   };
 
   hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
@@ -76,7 +75,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
-  version = "2024.04.2+764";
+  version = "2024.12.1+563";
 
   RSTUDIO_VERSION_MAJOR = lib.versions.major version;
   RSTUDIO_VERSION_MINOR = lib.versions.minor version;
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${version}";
-    hash = "sha256-j258eW1MYQrB6kkpjyolXdNuwQ3zSWv9so4q0QLsZuw=";
+    hash = "sha256-fguomJHs7FBffYfMlgWgnjLWK3uDZYX4Ip4asKZ8XVQ=";
   };
 
   nativeBuildInputs =
@@ -152,7 +151,6 @@ stdenv.mkDerivation rec {
       libclang = lib.getLib llvmPackages.libclang;
     })
 
-    ./fix-resources-path.patch
     ./ignore-etc-os-release.patch
     ./dont-yarn-install.patch
     ./boost-1.86.patch
@@ -167,13 +165,13 @@ stdenv.mkDerivation rec {
       --replace-fail "''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
 
     # set install path of freedesktop files
-    substituteInPlace src/{cpp,node}/desktop/CMakeLists.txt \
+    substituteInPlace src/node/desktop/CMakeLists.txt \
       --replace-fail "/usr/share" "$out/share"
   '';
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = quartoSrc + "/yarn.lock";
-    hash = "sha256-Qw8O1Jzl2EO0DEF3Jrw/cIT9t22zs3jyKgDA5XZbuGA=";
+    hash = "sha256-48Q2MkfzXZSL3ly56WSjRVwU3fgRD8xivQobStBkk6Y=";
   };
 
   dontYarnInstallDeps = true; # will call manually in preConfigure
@@ -183,12 +181,14 @@ stdenv.mkDerivation rec {
   # don't build native modules with node headers
   npmFlags = [ "--ignore-scripts" ];
 
+  makeCacheWritable = true;
+
   npmDeps = fetchNpmDeps {
     name = "rstudio-${version}-npm-deps";
     inherit src;
     patches = [ ./update-nan-and-node-abi.patch ];
     postPatch = "cd ${npmRoot}";
-    hash = "sha256-CtHCN4sWeHNDd59TV/TgTC4d6h7X1Cl4E/aJkAfRk7g=";
+    hash = "sha256-9VHse+nxr5A1EWuszQ6cnJAMqYiHFqHQ4OJ/TJq+XoI=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -218,14 +218,14 @@ stdenv.mkDerivation rec {
     ln -s ${mathJaxSrc} dependencies/mathjax-27
 
     # node used by cmake
-    # version in CMakeGlobals.txt (RSTUDIO_NODE_VERSION)
+    # version in cmake/globals.cmake (RSTUDIO_NODE_VERSION)
     mkdir -p dependencies/common/node
-    ln -s ${nodejs} dependencies/common/node/18.18.2
+    ln -s ${nodejs} dependencies/common/node/20.15.1
 
     # node used at runtime
-    # version in CMakeGlobals.txt (RSTUDIO_INSTALLED_NODE_VERSION)
-    mkdir -p dependencies/common/node
-    ln -s ${nodejs} dependencies/common/node/18.20.3
+    # version in cmake/globals.cmake (RSTUDIO_INSTALLED_NODE_VERSION)
+    # upstream uses the -patched suffix for the runtime node directory
+    ln -s ${nodejs} dependencies/common/node/20.15.1-patched
 
     ${lib.optionalString (!server) ''
       pushd $npmRoot
@@ -255,7 +255,7 @@ stdenv.mkDerivation rec {
       rm -r electron-dist
 
       # force @electron/packager to use our electron instead of downloading it
-      substituteInPlace node_modules/@electron/packager/src/index.js \
+      substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail "await this.getElectronZipPath(downloadOpts)" "'$(pwd)/electron.zip'"
 
       # Work around known nan issue for electron_33 and above
