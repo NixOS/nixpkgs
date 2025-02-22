@@ -39,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "rocm-${finalAttrs.version}";
     hash = "sha256-vyLfXbnxPZlR6mfbLh1E7S7HdOSHjuhGQcfihAlvvwY=";
   };
-  # env.CFLAGS = "-fsanitize=undefined";
-  # env.CXXFLAGS = "-fsanitize=undefined";
 
   nativeBuildInputs = [
     cmake
@@ -62,9 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.pyyaml
     ];
 
+  hardeningDisable = [ "zerocallusedregs" "stackprotector" ];
+
   cmakeFlags =
     [
-      "-DCMAKE_BUILD_TYPE=Release"
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${clr.hipClangPath}/clang++")
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
       "-DCMAKE_INSTALL_BINDIR=bin"
