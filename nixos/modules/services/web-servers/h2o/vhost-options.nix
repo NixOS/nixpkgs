@@ -19,6 +19,18 @@ in
       example = "example.org";
     };
 
+    serverAliases = mkOption {
+      type = types.listOf types.nonEmptyStr;
+      default = [ ];
+      example = [
+        "www.example.org"
+        "example.org"
+      ];
+      description = ''
+        Additional names of virtual hosts served by this virtual host configuration.
+      '';
+    };
+
     http = mkOption {
       type = types.nullOr (
         types.submodule {
