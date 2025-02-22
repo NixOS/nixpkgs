@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiozoneinfo";
-  version = "0.2.1";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = "aiozoneinfo";
     tag = "v${version}";
-    hash = "sha256-u7yQiy5xKK1A19cmpXjA4MMK4q7RvtuvwkUECnddzG8=";
+    hash = "sha256-7qd6Yk/K4BLocu8eQK0hLaw2r1jhWIHBr9W4KsAvmx8=";
   };
 
   postPatch = ''

@@ -15,6 +15,7 @@
 , bzip2
 , expat
 , libffi
+, libuuid
 , libxcrypt
 , mpdecimal
 , ncurses
@@ -24,7 +25,7 @@
 , zlib
 
 # platform-specific dependencies
-, bash
+, bashNonInteractive
 , darwin
 , windows
 
@@ -166,6 +167,7 @@ let
     bzip2
     expat
     libffi
+    libuuid
     libxcrypt
     mpdecimal
     ncurses
@@ -235,7 +237,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   inherit nativeBuildInputs;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [
-    bash # only required for patchShebangs
+    bashNonInteractive # only required for patchShebangs
   ] ++ buildInputs;
 
   prePatch = optionalString stdenv.hostPlatform.isDarwin ''
@@ -252,6 +254,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
+  ] ++ optionals (pythonOlder "3.12") [
+    # https://www.cve.org/CVERecord?id=CVE-2025-0938
+    ./CVE-2025-0938.patch
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
     # Cross compilation only supports a limited number of "known good"
     # configurations. If you're reading this and it's been a long time
@@ -294,8 +299,15 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
-  ] ++ optionals (pythonAtLeast "3.12" && pythonOlder "3.14") [
-    ./3.12/CVE-2024-12254.patch
+    # fix failing tests with openssl >= 3.4
+    # https://github.com/python/cpython/pull/127361
+  ] ++ optionals (pythonAtLeast "3.10" && pythonOlder "3.11") [
+    ./3.10/raise-OSError-for-ERR_LIB_SYS.patch
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.12") [
+    (fetchpatch {
+      url = "https://github.com/python/cpython/commit/f4b31edf2d9d72878dab1f66a36913b5bcc848ec.patch";
+      sha256 = "sha256-w7zZMp0yqyi4h5oG8sK4z9BwNEkqg4Ar+en3nlWcxh0=";
+    })
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
@@ -329,7 +341,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
     substituteInPlace Lib/subprocess.py \
-      --replace-fail "'/bin/sh'" "'${bash}/bin/sh'"
+      --replace-fail "'/bin/sh'" "'${bashNonInteractive}/bin/sh'"
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
@@ -611,7 +623,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
-    pythonOnBuildForHost buildPackages.bash
+    pythonOnBuildForHost buildPackages.bashNonInteractive
   ];
 
   separateDebugInfo = true;

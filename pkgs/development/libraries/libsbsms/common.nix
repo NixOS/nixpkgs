@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pname,
   version,
   url,
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Fix buidling on platforms other than x86
-    (substituteAll {
-      src = ./configure.patch;
+    (replaceVars ./configure.patch {
       msse = lib.optionalString stdenv.hostPlatform.isx86_64 "-msse";
     })
   ];

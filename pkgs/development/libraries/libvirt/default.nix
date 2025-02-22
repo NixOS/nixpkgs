@@ -32,7 +32,7 @@
 , readline
 , rpcsvc-proto
 , stdenv
-, substituteAll
+, replaceVars
 , xhtml1
 , json_c
 , writeScript
@@ -127,8 +127,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
   ] ++ lib.optionals enableZfs [
-    (substituteAll {
-      src = ./0002-substitute-zfs-and-zpool-commands.patch;
+    (replaceVars ./0002-substitute-zfs-and-zpool-commands.patch {
       zfs = "${zfs}/bin/zfs";
       zpool = "${zfs}/bin/zpool";
     })

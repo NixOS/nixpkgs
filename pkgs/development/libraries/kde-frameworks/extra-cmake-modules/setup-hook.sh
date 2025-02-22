@@ -1,3 +1,9 @@
+ecmCMakeFlags() {
+    appendToVar cmakeFlags "-DECM_DIR=@out@/share/ECM/cmake"
+}
+
+preConfigureHooks+=(ecmCMakeFlags)
+
 ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"

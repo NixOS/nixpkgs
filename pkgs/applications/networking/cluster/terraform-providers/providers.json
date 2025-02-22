@@ -354,11 +354,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "digitalocean": {
-    "hash": "sha256-Tu73hGllUGkrzxgwfz9Eg3P8YOPYD6XiTCK//ABSUsI=",
+    "hash": "sha256-MOKhwnrGfeg71d2LFcNGSZU6WI5byP8BYdnHqktjQeU=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.48.2",
+    "rev": "v2.49.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -552,13 +552,13 @@
     "vendorHash": null
   },
   "harbor": {
-    "hash": "sha256-FSuJ8upRnDny9Rjf+hS+Kd6e3YcuqYRMfwMwseHNlfo=",
+    "hash": "sha256-s3tmPNzaiSnUqOpg1luj2M5pZMfbfw98XDJfwXatoM4=",
     "homepage": "https://registry.terraform.io/providers/goharbor/harbor",
     "owner": "goharbor",
     "repo": "terraform-provider-harbor",
-    "rev": "v3.10.18",
+    "rev": "v3.10.19",
     "spdx": "MIT",
-    "vendorHash": "sha256-YkTXwx3RjIbzJnagfcYgb5IRnF0sHEDBDzdHf+GS8xI="
+    "vendorHash": "sha256-qDyMoIfWE1m1+edu6Y7L9gfGVH+GdmVVjQQDet3nu1g="
   },
   "hcloud": {
     "hash": "sha256-nkp4XTFRBSxqRAURL0O4H/l7oDF/OEXmew0MkmyQryc=",
@@ -642,11 +642,11 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-Wq8YYVDp+hUa3iZGK2umW89v5itwK1Ig1aHIb4ojXis=",
+    "hash": "sha256-dmHsNNA4gKOiNLmhJ74ryNfgh2kl3zVRMVLg4UUQCPo=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.75.1",
+    "rev": "v1.75.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-k1EQbBnpdkC7FdvyRTM8AAhUIAk3hY4CBD9wOVQnMIs="
   },
@@ -913,13 +913,13 @@
     "vendorHash": null
   },
   "okta": {
-    "hash": "sha256-LRlSqgcQPs3R/l4DKm5Ij3GjK7/WxRPV+/o4I2ukCFY=",
+    "hash": "sha256-Nub3S2RDz9ubnHT657xF+usnrOFPiAIDEqxPyKMS9CA=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v4.13.1",
+    "rev": "v4.14.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-EPBi417Ue8FFC23vOh9ENS50SHlrvJBAX1TX+oiFMMA="
+    "vendorHash": "sha256-KoKjPoIFlzASSCevd/pyLnkVAwf4GZn2cHlRl7QGSXo="
   },
   "oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",

@@ -425,6 +425,7 @@ buildStdenv.mkDerivation {
     "--disable-updater"
     "--enable-application=${application}"
     "--enable-default-toolkit=${toolkit}"
+    "--with-app-name=${binaryName}"
     "--with-distribution-id=org.nixos"
     "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
     "--with-wasi-sysroot=${wasiSysRoot}"

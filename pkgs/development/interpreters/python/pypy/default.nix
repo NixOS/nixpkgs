@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchurl
+{ lib, stdenv, replaceVars, fetchurl
 , zlibSupport ? true, zlib
 , bzip2, pkg-config, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tclPackages, libX11
@@ -76,8 +76,7 @@ in with passthru; stdenv.mkDerivation rec {
   patches = [
     ./dont_fetch_vendored_deps.patch
 
-    (substituteAll {
-      src = ./tk_tcl_paths.patch;
+    (replaceVars ./tk_tcl_paths.patch {
       inherit tk tcl;
       tk_dev = tk.dev;
       tcl_dev = tcl;
@@ -85,8 +84,7 @@ in with passthru; stdenv.mkDerivation rec {
       tcl_libprefix = tcl.libPrefix;
     })
 
-    (substituteAll {
-      src = ./sqlite_paths.patch;
+    (replaceVars ./sqlite_paths.patch {
       inherit (sqlite) out dev;
     })
   ];

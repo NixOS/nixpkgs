@@ -16,7 +16,7 @@ let
 
   inherit (lib.lists) last;
 
-  /*
+  /**
     IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
     where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
     the address. See RFC 4291.
@@ -138,7 +138,7 @@ let
   parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
 in
 {
-  /*
+  /**
     Internally, an IPv6 address is stored as a list of 16-bit integers with 8
     elements. Wherever you see `IPv6` in internal functions docs, it means that
     it is a list of integers produced by one of the internal parsers, such as

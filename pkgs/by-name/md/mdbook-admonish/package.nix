@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-admonish";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "tommilligan";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-GNQIOjgHCt3XPCzF0RjV9YStI8psLdHhTPuTkdgx8vA=";
+    hash = "sha256-rlJowyyB83bNqzOavggbwVJg9/GYZLYjGr8Pv/O6UBE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-GbXLlWHbLL7HbyuX223S/o1/+LwbK8FjL7lnEgVVn00=";
+  cargoHash = "sha256-ilX/Tky3eQB0Aumz+gRRyaVz/MAM/qiNrGulZSPGUg0=";
 
   meta = {
     description = "Preprocessor for mdbook to add Material Design admonishments";

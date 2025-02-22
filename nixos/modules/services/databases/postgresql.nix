@@ -727,10 +727,16 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged @resources"
-          ] ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
+          SystemCallFilter =
+            [
+              "@system-service"
+              "~@privileged @resources"
+            ]
+            ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ]
+            ++ lib.optionals (any extensionInstalled [ "citus" ]) [
+              "getpriority"
+              "setpriority"
+            ];
           UMask = if groupAccessAvailable then "0027" else "0077";
         }
         (mkIf (cfg.dataDir != "/var/lib/postgresql/${cfg.package.psqlSchema}") {

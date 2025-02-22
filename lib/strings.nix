@@ -1425,6 +1425,42 @@ rec {
   toUpper = replaceStrings lowerChars upperChars;
 
   /**
+    Converts the first character of a string `s` to upper-case.
+
+    # Inputs
+
+    `str`
+    : The string to convert to sentence case.
+
+    # Type
+
+    ```
+    toSentenceCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toSentenceCase` usage example
+
+    ```nix
+    toSentenceCase "home"
+    => "Home"
+    ```
+
+    :::
+  */
+  toSentenceCase = str:
+    lib.throwIfNot (isString str)
+      "toSentenceCase does only accepts string values, but got ${typeOf str}"
+      (
+        let
+          firstChar = substring 0 1 str;
+          rest = substring 1 (stringLength str) str;
+        in
+        addContextFrom str (toUpper firstChar + toLower rest)
+      );
+
+  /**
     Appends string context from string like object `src` to `target`.
 
     :::{.warning}

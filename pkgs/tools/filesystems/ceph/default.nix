@@ -257,6 +257,9 @@ let
           disabledTests = old.disabledTests or [ ] ++ [
             "test_export_md5_digest"
           ];
+          disabledTestPaths = old.disabledTestPaths or [ ] ++ [
+            "tests/test_ssl.py"
+          ];
           propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
             self.flaky
           ];

@@ -5,7 +5,7 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs =
     [
-      bash
+      bashNonInteractive
       libintl
     ]
     ++ optionals stdenv.hostPlatform.isSunOS [

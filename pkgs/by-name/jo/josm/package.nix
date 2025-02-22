@@ -47,7 +47,9 @@ stdenv.mkDerivation rec {
       # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
       makeWrapper ${jre}/bin/java $out/bin/josm \
         --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
-        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
+        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib' \
+        --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
+        --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
     '';
 
   meta = {

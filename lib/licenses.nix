@@ -24,10 +24,11 @@ let
 
 in
 lib.mapAttrs mkLicense ({
-  /* License identifiers from spdx.org where possible.
-   * If you cannot find your license here, then look for a similar license or
-   * add it to this list. The URL mentioned above is a good source for inspiration.
-   */
+  /**
+    License identifiers from spdx.org where possible.
+    If you cannot find your license here, then look for a similar license or
+    add it to this list. The URL mentioned above is a good source for inspiration.
+  */
 
   abstyles = {
     spdxId = "Abstyles";
@@ -37,7 +38,9 @@ lib.mapAttrs mkLicense ({
   acsl14 = {
     fullName = "Anti-Capitalist Software License v1.4";
     url = "https://anticapitalist.software/";
-    /* restrictions on corporations apply for both use and redistribution */
+    /**
+      restrictions on corporations apply for both use and redistribution
+    */
     free = false;
     redistributable = false;
   };

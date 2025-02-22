@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.18";
+  version = "3.19";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "flow.record";
     tag = version;
-    hash = "sha256-tEKmwDZOoGIXfJqxIat6WTbEv4EkiwkJGMpNxfv2Zd0=";
+    hash = "sha256-9slOisPr2pW18zurBoJ8AA55fGuBA4QP1tY7YSLiYEM=";
   };
 
   build-system = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for defining and creating structured data";
     homepage = "https://github.com/fox-it/flow.record";
-    changelog = "https://github.com/fox-it/flow.record/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/flow.record/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

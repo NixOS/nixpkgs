@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchurl,
   pythonOlder,
-  substituteAll,
+  replaceVars,
 
   # build
   libpq,
@@ -45,8 +45,7 @@ let
   };
 
   patches = [
-    (substituteAll {
-      src = ./ctypes.patch;
+    (replaceVars ./ctypes.patch {
       libpq = "${libpq}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })

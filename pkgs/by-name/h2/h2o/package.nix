@@ -13,7 +13,7 @@
   libuv,
   wslay,
   zlib,
-  withMruby ? false,
+  withMruby ? true,
   bison,
   ruby,
 }:
@@ -66,7 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     EXES="$(find "$out/share/h2o" -type f -executable)"
     for exe in $EXES; do
       wrapProgram "$exe" \
-        --set "H2O_PERL" "${lib.getExe perl}"
+        --set "H2O_PERL" "${lib.getExe perl}" \
+        --prefix "PATH" : "${lib.getBin openssl}/bin"
     done
   '';
 

@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kittycad-kcl-lsp";
-  version = "0.1.66";
+  version = "0.1.67";
 
   src = fetchFromGitHub {
     owner = "KittyCAD";
     repo = "kcl-lsp";
     tag = "v${version}";
-    hash = "sha256-uKsxWNR5syd2+/4I9nxZ+fWBUdHP3rhpUzLVPn4v8Wk=";
+    hash = "sha256-rqb8I8XJM83jNdaJGiLLp3MKtopRcybgjf9oZ08kdzQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-dKNuPg6XRZ6UwZr6+S3+LM3t9xATgGndhX3hrD3Xp0Q=";
+  cargoHash = "sha256-P8FdmPdeBDYHlG7VuAJkMoiBRSWXKSYQnijTfwby7Io=";
 
   nativeBuildInputs = [ pkg-config ];
 

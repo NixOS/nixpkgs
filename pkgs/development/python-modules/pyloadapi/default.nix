@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyloadapi";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "pyloadapi";
     tag = "v${version}";
-    hash = "sha256-USSTXHHhtUc8QF9U3t3rARXn5Iqo6KOGBa3VAfRMbiQ=";
+    hash = "sha256-UEzVbgMd/kplKGPxZjo9bk8WFtkFW463dd3D+e7S3bI=";
   };
 
   postPatch = ''

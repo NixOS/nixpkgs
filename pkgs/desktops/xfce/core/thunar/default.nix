@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ stdenv
+, mkXfceDerivation
 , lib
 , docbook_xsl
 , exo
@@ -14,10 +15,12 @@
 , pcre2
 , xfce4-panel
 , xfconf
-, gobject-introspection
 , makeWrapper
 , symlinkJoin
 , thunarPlugins ? []
+, withIntrospection ? false
+, buildPackages
+, gobject-introspection
 }:
 
 let unwrapped = mkXfceDerivation {
@@ -29,8 +32,9 @@ let unwrapped = mkXfceDerivation {
 
   nativeBuildInputs = [
     docbook_xsl
-    gobject-introspection
     libxslt
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [

@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdi";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
     tag = finalAttrs.version;
-    hash = "sha256-EUqgscpCubub2Zl/7fcgbdVx216Y2Ke7h8Zui2SieP8=";
+    hash = "sha256-Xrsjy6encfT2l9ks5701FjvQhyAjdvSRC3Mp0FWeq/k=";
   };
 
   # Current hdf5 version in nixpkgs is 1.14.4.3 which is 4 numbers long and doesn't match the 3 number regex. :')
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Force using nix gbenchmark instead of vendored version
-    "-DUSE_benchmark=SYSTEM"
+    (lib.cmakeFeature "USE_benchmark" "SYSTEM")
   ];
 
   passthru = {

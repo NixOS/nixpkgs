@@ -344,8 +344,8 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.15";
-    hash = "sha256-I8Zm0O3yDxQkmz2PA2isrumrWFsJ4d6CEHxm4fPslTM=";
+    version = "3.0.16";
+    hash = "sha256-V+A8UP6rXTGxUq8rdk8QN5rs2O6S8WyYWYPOSpn374Y=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -366,9 +366,9 @@ in
     };
   };
 
-  openssl_3_3 = common {
-    version = "3.3.2";
-    hash = "sha256-LopAsBl5r+i+C7+z3l3BxnCf7bRtbInBDaEUq1/D0oE=";
+  openssl_3_4 = common {
+    version = "3.4.1";
+    hash = "sha256-ACotazC1i/S+pGxDvdljZar42qbEKHgqpP7uBtoZffM=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -379,9 +379,9 @@ in
 
       (
         if stdenv.hostPlatform.isDarwin then
-          ./3.3/use-etc-ssl-certs-darwin.patch
+          ./3.4/use-etc-ssl-certs-darwin.patch
         else
-          ./3.3/use-etc-ssl-certs.patch
+          ./3.4/use-etc-ssl-certs.patch
       )
     ];
 

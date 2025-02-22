@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
+, replaceVars
 , gettext
 , pkg-config
 , dbus
@@ -122,10 +122,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit iputils openconnect ethtool gnused systemd;
+    (replaceVars ./fix-paths.patch {
+      inherit iputils openconnect ethtool gnused;
       inherit runtimeShell;
+      # patch context
+      OUTPUT = null;
     })
 
     # Meson does not support using different directories during build and

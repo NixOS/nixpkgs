@@ -168,6 +168,9 @@ in
   config = mkMerge [
     # Common Plasma dependencies
     (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
+      warnings = [
+        "Plasma 5 has been deprecated and will be removed in NixOS 25.11. Please migrate your configuration to Plasma 6."
+      ];
 
       security.wrappers = {
         kwin_wayland = {

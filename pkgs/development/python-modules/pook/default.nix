@@ -56,6 +56,9 @@ buildPythonPackage rec {
     "tests/unit/interceptors/"
   ];
 
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "HTTP traffic mocking and testing";
     homepage = "https://github.com/h2non/pook";

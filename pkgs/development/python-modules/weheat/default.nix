@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "weheat";
-  version = "2025.1.15";
+  version = "2025.2.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "wefabricate";
     repo = "wh-python";
     tag = version;
-    hash = "sha256-zt/4d7s4yoLQUQxtsc8Y6htS0PByuYmaecGsjKYo2tc=";
+    hash = "sha256-YXo+pwgCjw2CWUCS9DY9jaLjhj+q+ZqfW3uh1aSXnM0=";
   };
 
   pythonRelaxDeps = [
