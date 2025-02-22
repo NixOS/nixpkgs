@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
       darwin.apple_sdk.frameworks.Foundation
     ];
 
+  env.CFLAGS = "-Wno-error=incompatible-pointer-types";
+
   configureFlags = [ "--enable-call" ];
 
   preFixup = ''
