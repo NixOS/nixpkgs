@@ -3,6 +3,7 @@
   fetchurl,
   makeDesktopItem,
   lib,
+  xorg,
 }:
 let
   pname = "lycheeSlicer";
@@ -37,6 +38,10 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
+
+  buildInputs = [
+    xorg.libxshmfence
+  ];
 
   meta = with lib; {
     description = "An all-in-one 3D slicer for resin and FDM printers.";
