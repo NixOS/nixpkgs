@@ -9,6 +9,7 @@
   icu,
   genericUpdater,
   writeShellScript,
+  jq,
 }:
 let
   pname = "jetbrains-toolbox";
@@ -73,7 +74,7 @@ stdenv.mkDerivation {
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "jetbrains-toolbox-versionLister" ''
       curl -Ls 'https://data.services.jetbrains.com/products?code=TBA&release.type=release' \
-        | jq -r '.[] | .releases | flatten[] | .build'
+        | ${lib.getExe jq} -r '.[] | .releases | flatten[] | .build'
     '';
   };
 
