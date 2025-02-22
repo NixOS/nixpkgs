@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-c8G0CGg4jrwq+HVR4O0AtaJNzr7pDYsie1410tisLEY=";
   };
 
