@@ -11,19 +11,19 @@
 
 let
   modelData = fetchurl {
-    url = "mirror://sourceforge/libpinyin/models/model19.text.tar.gz";
-    sha256 = "02zml6m8sj5q97ibpvaj9s9yz3gfj0jnjrfhkn02qv4nwm72lhjn";
+    url = "mirror://sourceforge/libpinyin/models/model20.text.tar.gz";
+    hash = "sha256-WcaOidQ/+F9aMJSJSZy83igtKwS9kYiHNIhLfe/LEVU=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libpinyin";
-  version = "2.8.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "libpinyin";
     tag = version;
-    hash = "sha256-3+CBbjCaY0Ubyphf0uCfYvF2rtc9fF1eEAM1doonjHg=";
+    hash = "sha256-WUC1l+8q4TYDVbKwwk9lG5Wc5DM52BaZefcre0WQoBE=";
   };
 
   postUnpack = ''
