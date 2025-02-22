@@ -63,6 +63,12 @@ py.pkgs.buildPythonApplication rec {
     "terminaltables"
   ];
 
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
   postInstall = ''
     cat >oci.zsh <<EOF
     #compdef oci
