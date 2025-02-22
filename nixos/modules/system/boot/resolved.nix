@@ -116,8 +116,7 @@ in
       default = { };
       type = mdnsLlmnrOpts "mDNS";
       description = ''
-        Controls support for Multicast DNS (mDNS, RFC 6762[2]) on the local
-        host.
+        Controls support for Multicast DNS (mDNS, RFC 6762[2]).
       '';
     };
 
@@ -131,8 +130,7 @@ in
         ]
       );
       description = ''
-        Controls support for Link-Local Multicast Name Resolution
-        (LLMNR, RFC 4795) on the local host.
+        Controls support for Link-Local Multicast Name Resolution (LLMNR, RFC 4795).
       '';
     };
 
