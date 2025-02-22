@@ -5,38 +5,42 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
-  autoreconfHook,
+  cmake,
   fetchFromGitHub,
-  jam,
   lib,
   libGL,
   libGLU,
   libX11,
   libxml2,
+  libxmlxx5,
   libxslt,
   physfs,
   pkg-config,
   xorgproto,
   zlib,
+  gettext,
+  include-what-you-use,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lincity-ng";
-  version = "2.9beta.20211125";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "lincity-ng";
     repo = "lincity-ng";
-    rev = "b9062bec252632ca5d26b98d71453b8762c63173";
-    sha256 = "0l07cn8rmpmlqdppjc2ikh5c7xmwib27504zpmn3n9pryp394r46";
+    rev = "lincity-ng-${finalAttrs.version}";
+    hash = "sha256-ACJVhMq2IEJNrbAdmkgHxQV0uKSXpwR8a/5jcrQS+oI=";
   };
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    autoreconfHook
-    jam
+    cmake
     pkg-config
+    gettext
+    include-what-you-use
+    libxml2
   ];
 
   buildInputs = [
@@ -48,6 +52,7 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libX11
+    libxmlxx5
     libxml2
     libxslt
     physfs
@@ -55,26 +60,16 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  autoreconfPhase = ''
-    ./autogen.sh
-  '';
+  cmakeFlags = [
+    "-DLIBXML2_LIBRARY=${lib.getLib libxml2}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLIBXML2_XMLCATALOG_EXECUTABLE=${lib.getBin libxml2}/bin/xmlcatalog"
+    "-DLIBXML2_XMLLINT_EXECUTABLE=${lib.getBin libxml2}/bin/xmllint"
+  ];
 
-  buildPhase = ''
-    runHook preBuild
-
-    AR='ar r' jam -j $NIX_BUILD_CORES
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    touch CREDITS
-    AR='ar r' jam install
-
-    runHook postInstall
-  '';
+  env.NIX_CFLAGS_COMPILE = "
+    -I${lib.getDev SDL2_image}/include/SDL2
+    -I${lib.getDev SDL2_mixer}/include/SDL2
+  ";
 
   meta = with lib; {
     description = "City building game";
@@ -83,4 +78,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}
+})
