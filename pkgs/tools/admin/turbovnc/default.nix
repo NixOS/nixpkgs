@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "turbovnc";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = finalAttrs.version;
-    hash = "sha256-Bq9Kaz6m8twOjX0Y05TXPpYYQJqKe86WxhBmNEHAOfA=";
+    hash = "sha256-Qt9yGyGWKFBppO91D+hUfmN7CMg0I66rAXyRoCYUOEA=";
   };
 
   # TODO:
