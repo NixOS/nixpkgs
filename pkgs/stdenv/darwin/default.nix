@@ -537,6 +537,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                         fi
                       done
                       ln -s ${bootstrapTools}/bin/dsymutil $out/bin/dsymutil
+                      ln -s ${bootstrapTools}/bin/llvm-readtapi $out/bin/llvm-readtapi
                       ln -s ${bootstrapTools}/lib/libLLVM* $out/lib
                     '';
                     passthru.isFromBootstrapFiles = true;
