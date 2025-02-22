@@ -727,6 +727,23 @@ in {
         out = switch_to_specialisation("${machine}", "modifiedSystemConf")
         assert_contains(out, "starting the following units: ${dbusService}\n")
 
+    with subtest("aborts on already locked lock file"):
+        (exitcode, _) = machine.execute(
+            'flock -x --nb /run/nixos/switch-to-configuration.lock -c "${otherSystem}/bin/switch-to-configuration test"',
+            timeout=5
+        )
+        # See man timeout, exit codes above 124 come from the timeout command
+        # We want to make sure that stc actually exited with an error code,
+        # if instead we hit the timeout, then it means that stc hangs, which is
+        # what we don't want
+        # TODO: We cannot match on the exact exit code since it's not consistent between
+        # stc and stc-ng, since errno/last_os_error is not a very stable interface,
+        # we should probably get rid of that in stc-ng once we got rid of the
+        # perl implementation
+        assert exitcode < 124, \
+          "switch-to-configuration did not abort as expected, " + \
+          f"probably it timed out instead (exit code: {exitcode}), 124 means timeout"
+
     with subtest("fstab mounts"):
         switch_to_specialisation("${machine}", "")
         # add a mountpoint
