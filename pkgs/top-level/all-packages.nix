@@ -15924,6 +15924,8 @@ with pkgs;
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
+  beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
+
   beancount-black = with python3.pkgs; toPythonApplication beancount-black;
 
   beanhub-cli = with python3.pkgs; toPythonApplication beanhub-cli;
