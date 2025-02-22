@@ -3,13 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  mdformat,
+  mdformat-beautysh,
+  mdformat-footnote,
+  mdformat-frontmatter,
   mdformat-gfm,
+  mdformat-simple-breaks,
+  mdformat-tables,
+  mdformat,
   mdit-py-plugins,
   more-itertools,
-  pythonOlder,
   pytest-snapshot,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +39,20 @@ buildPythonPackage rec {
     mdit-py-plugins
     more-itertools
   ];
+
+  optional-dependencies = {
+    recommended = [
+      mdformat-beautysh
+      # mdformat-config
+      mdformat-footnote
+      mdformat-frontmatter
+      # mdformat-ruff
+      mdformat-simple-breaks
+      mdformat-tables
+      # mdformat-web
+      # mdformat-wikilink
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-snapshot
