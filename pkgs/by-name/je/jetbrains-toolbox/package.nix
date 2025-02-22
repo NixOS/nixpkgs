@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchzip
-, copyDesktopItems
-, makeWrapper
-, runCommand
-, appimageTools
-, icu
-, genericUpdater
-, writeShellScript
+{
+  stdenv,
+  lib,
+  fetchzip,
+  copyDesktopItems,
+  makeWrapper,
+  runCommand,
+  appimageTools,
+  icu,
+  genericUpdater,
+  writeShellScript,
 }:
 let
   pname = "jetbrains-toolbox";
@@ -19,20 +20,21 @@ let
     stripRoot = false;
   };
 
-  appimageContents = runCommand "${pname}-extracted"
-    {
-      nativeBuildInputs = [ appimageTools.appimage-exec ];
-    }
-    ''
-      appimage-exec.sh -x $out ${src}/jetbrains-toolbox-${version}/jetbrains-toolbox
+  appimageContents =
+    runCommand "${pname}-extracted"
+      {
+        nativeBuildInputs = [ appimageTools.appimage-exec ];
+      }
+      ''
+        appimage-exec.sh -x $out ${src}/jetbrains-toolbox-${version}/jetbrains-toolbox
 
-      # JetBrains ship a broken desktop file. Despite registering a custom
-      # scheme handler for jetbrains:// URLs, they never mark the command as
-      # being suitable for passing URLs to. Ergo, the handler never receives
-      # its payload. This causes various things to break, including login.
-      # Reported upstream at: https://youtrack.jetbrains.com/issue/TBX-11478/
-      sed -Ei '/^Exec=/s/( %U)?$/ %U/' $out/jetbrains-toolbox.desktop
-    '';
+        # JetBrains ship a broken desktop file. Despite registering a custom
+        # scheme handler for jetbrains:// URLs, they never mark the command as
+        # being suitable for passing URLs to. Ergo, the handler never receives
+        # its payload. This causes various things to break, including login.
+        # Reported upstream at: https://youtrack.jetbrains.com/issue/TBX-11478/
+        sed -Ei '/^Exec=/s/( %U)?$/ %U/' $out/jetbrains-toolbox.desktop
+      '';
 
   appimage = appimageTools.wrapAppImage {
     inherit pname version;
@@ -40,9 +42,17 @@ let
   };
 in
 stdenv.mkDerivation {
-  inherit pname version src appimage;
+  inherit
+    pname
+    version
+    src
+    appimage
+    ;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -50,7 +60,7 @@ stdenv.mkDerivation {
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
     makeWrapper ${appimage}/bin/jetbrains-toolbox $out/bin/jetbrains-toolbox \
       --append-flags "--update-failed" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ icu ]}
 
     runHook postInstall
   '';
@@ -67,11 +77,11 @@ stdenv.mkDerivation {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Jetbrains Toolbox";
     homepage = "https://jetbrains.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ AnatolyPopov ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ AnatolyPopov ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "jetbrains-toolbox";
   };
