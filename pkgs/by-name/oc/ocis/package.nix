@@ -30,7 +30,7 @@ let
 in
 buildGoModule rec {
   pname = "ocis";
-  version = "5.0.9";
+  version = "7.0.1";
 
   vendorHash = null;
 
@@ -38,7 +38,7 @@ buildGoModule rec {
     owner = "owncloud";
     repo = "ocis";
     tag = "v${version}";
-    hash = "sha256-TsMrQx+P1F2t66e0tGG0VvRi4W7+pCpDHd0aNsacOsI=";
+    hash = "sha256-rCRqMIv0MQMlZyrUzscX6MJ9RyzLGRUzXxDr1ThBqLI=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ buildGoModule rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/services/idp";
-    hash = "sha256-gNlN+u/bobnTsXrsOmkDcWs67D/trH3inT5AVQs3Brs=";
+    hash = "sha256-qsZik6Wr6A0UAy2iWEtChlVmXGaSGgNYtTp0xgU3SE4=";
   };
   pnpmRoot = "services/idp";
 
