@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "obs-scale-to-sound";
-    rev = version;
-    sha256 = "sha256-q/zNHPazNwmd7GHXrxNgajtOhcW+oTgH9rkIBzJpdpA=";
+    tag = version;
+    hash = "sha256-q/zNHPazNwmd7GHXrxNgajtOhcW+oTgH9rkIBzJpdpA=";
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ obs-studio ];
 
   cmakeFlags = [
@@ -25,17 +26,17 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir $out/lib $out/share
+    mkdir -p $out/lib $out/share
     mv $out/obs-plugins/64bit $out/lib/obs-plugins
     rm -rf $out/obs-plugins
     mv $out/data $out/share/obs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS filter plugin that scales a source reactively to sound levels";
     homepage = "https://github.com/dimtpap/obs-scale-to-sound";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
