@@ -14,7 +14,6 @@
   # for passthru.tests
   dvgrab,
   epeg,
-  freeimage,
   gd,
   graphicsmagick,
   imagemagick,
@@ -31,14 +30,13 @@
 assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
 
 stdenv.mkDerivation (finalAttrs: {
-
   pname = "libjpeg-turbo";
   version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-ZNqhOfZtWcMv10VWIUxn7MSy4KhW/jBrgC1tUFKczqs=";
   };
 
@@ -117,18 +115,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
-    license = licenses.ijg; # and some parts under other BSD-style licenses
+    license = lib.licenses.ijg; # and some parts under other BSD-style licenses
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       kamadorueda
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })
