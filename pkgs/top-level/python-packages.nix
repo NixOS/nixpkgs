@@ -10763,7 +10763,7 @@ self: super: with self; {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
+  pyhive-integration = callPackage ../development/python-modules/pyhive-integration { };
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
