@@ -14403,8 +14403,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  neomutt = darwin.apple_sdk_11_0.callPackage ../applications/networking/mailreaders/neomutt { };
-
   natron = libsForQt5.callPackage ../applications/video/natron { };
 
   netmaker = callPackage ../applications/networking/netmaker {subPackages = ["."];};
