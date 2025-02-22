@@ -1,25 +1,27 @@
 {
-  fetchPypi,
   lib,
+  fetchFromGitHub,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mycli";
-  version = "1.27.2";
+  version = "1.29.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
+  src = fetchFromGitHub {
+    owner = "dbcli";
+    repo = "mycli";
+    tag = "v${version}";
+    hash = "sha256-d90HJszhnYDxFkvLmTkt/LZ6XctcBjgKBoMUD3m+Sdw=";
   };
 
-  pythonRelaxDeps = [
-    "sqlparse"
-  ];
+  pythonRelaxDeps = [ "sqlparse" ];
 
   build-system = with python3Packages; [
     setuptools
+    setuptools-scm
   ];
 
   dependencies =
@@ -37,14 +39,11 @@ python3Packages.buildPythonApplication rec {
       pyperclip
       sqlglot
       sqlparse
+      pyfzf
     ]
     ++ cli-helpers.optional-dependencies.styles;
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ] ++ (with python3Packages; [ pytestCheckHook ]);
 
   disabledTestPaths = [
     "mycli/packages/paramiko_stub/__init__.py"
