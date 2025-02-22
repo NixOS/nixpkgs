@@ -2,7 +2,7 @@
 {
   fetchurl,
   lib,
-  llvmPackages_18,
+  llvmPackages,
   mtools,
   nasm,
   # The following options map to configure flags.
@@ -15,7 +15,6 @@
 }:
 
 let
-  llvmPackages = llvmPackages_18;
   stdenv = llvmPackages.stdenv;
 
   version = "8.7.0";
