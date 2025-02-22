@@ -96,6 +96,9 @@ py.pkgs.buildPythonApplication rec {
       asl20 # or
       upl
     ];
-    maintainers = with maintainers; [ ilian ];
+    maintainers = with maintainers; [
+      adamcstephens
+      ilian
+    ];
   };
 }
