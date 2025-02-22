@@ -27,6 +27,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
+
   dependencies = [
     pydantic
     requests
@@ -44,5 +48,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/gabrieldemarmiesse/python-on-whales/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    # Overriding pydantic to pydantic_1 in this derivation is invalid:
+    # ImportError: cannot import name 'AliasChoices' from 'pydantic'
+    broken = lib.versionOlder pydantic.version "2";
   };
 }
