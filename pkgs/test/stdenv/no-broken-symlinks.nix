@@ -23,8 +23,10 @@ let
   # 'pass', to make sure the tests work properly for both kinds of platform.
   mkUnreadableSymlink = absolute: failIfUnsupported: ''
     touch "$out/unreadable-symlink-target"
-    ln -s${optionalString (!absolute) "r"} "$out/unreadable-symlink-target" "$out/unreadable-symlink"
-    chmod -h ugo-rwx "$out/unreadable-symlink"
+    (
+      umask 777
+      ln -s${optionalString (!absolute) "r"} "$out/unreadable-symlink-target" "$out/unreadable-symlink"
+    )
     if readlink "$out/unreadable-symlink" >/dev/null 2>&1; then
       nixErrorLog "symlink permissions not supported"
       ${optionalString failIfUnsupported "exit 1"}
