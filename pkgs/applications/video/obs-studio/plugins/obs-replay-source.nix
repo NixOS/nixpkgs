@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-replay-source";
-  version = "1.6.13-unstable-2024-02-03";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-replay-source";
-    rev = "6590fde1c8e4f8c733016646a8165d52e28d094b";
-    hash = "sha256-foIzWNlU72FWXZVWR8TEiqJJMfl1vWYDTyhV6thYJbA=";
+    tag = finalAttrs.version;
+    hash = "sha256-0IBH4Wb4dbbwqu7DsMb/pfnA8dYRbsW7cBW2XTjQK0U=";
   };
 
   nativeBuildInputs = [ cmake ];
