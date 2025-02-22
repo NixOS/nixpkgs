@@ -2225,7 +2225,7 @@
       ];
     "hive" =
       ps: with ps; [
-        pyhiveapi
+        pyhive-integration
       ];
     "hko" =
       ps: with ps; [

@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyhiveapi";
+  pname = "pyhive-integration";
   version = "1.0.1";
   pyproject = true;
 
