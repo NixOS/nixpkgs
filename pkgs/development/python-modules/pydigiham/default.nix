@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pydigiham";
-  version = "0.6.0";
+  version = "0.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pydigiham";
     rev = version;
-    hash = "sha256-kiEvQl3SuDnHI4Fh97AarsszHGFt7tbWBvBRW84Qv18=";
+    hash = "sha256-QenoMyVFs8MEDPoMV6TT6XfzktfN/gAMIHR0Scq11wk=";
   };
 
   propagatedBuildInputs = [ digiham ];
