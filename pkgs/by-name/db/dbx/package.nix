@@ -3,23 +3,44 @@
   fetchFromGitHub,
   git,
   python3,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 let
   python = python3.override {
     self = python;
-    packageOverrides = self: super: { pydantic = super.pydantic_1; };
+    packageOverrides = self: super: {
+      pydantic = super.pydantic_1;
+
+      # python-on-whales is the only aiohttp dependency that is incompatible with pydantic_1
+      # Override aiohttp to remove this dependency
+      aiohttp = super.aiohttp.overridePythonAttrs (old: {
+        # Remove python-on-whales from nativeCheckInputs
+        nativeCheckInputs = lib.filter (p: (p.pname or "") != "python-on-whales") old.nativeCheckInputs;
+
+        disabledTestPaths = [
+          # Requires python-on-whales
+          "tests/autobahn/test_autobahn.py"
+        ] ++ (old.disabledTestPaths or [ ]);
+      });
+
+      instructor = super.instructor.overridePythonAttrs (old: {
+        pythonRelaxDeps = [ "pydantic" ] ++ (old.pythonRelaxDeps or [ ]);
+        pythonRemoveDeps = [ "pydantic-core" ] ++ (old.pythonRelaxDeps or [ ]);
+      });
+    };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.8.18";
+  version = "0.8.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
     tag = "v${version}";
-    hash = "sha256-5qjEABNTSUD9I2uAn49HQ4n+gbAcmfnqS4Z2M9MvFXQ=";
+    hash = "sha256-DNVJcCDHyWCorTxNN6RR6TWNF2MrysXT44UbwegROTU=";
   };
 
   pythonRelaxDeps = [
@@ -27,13 +48,18 @@ python.pkgs.buildPythonApplication rec {
     "databricks-cli"
     "rich"
     "typer"
+    "pydantic"
+    "tenacity"
   ];
 
   pythonRemoveDeps = [ "mlflow-skinny" ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python.pkgs; [
+    hatch-vcs
+    hatchling
+  ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     aiohttp
     click
     cookiecutter
@@ -52,7 +78,7 @@ python.pkgs.buildPythonApplication rec {
     watchdog
   ];
 
-  optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python.pkgs; {
     aws = [ boto3 ];
     azure = [
       azure-storage-blob
@@ -62,18 +88,17 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeCheckInputs =
-    [ git ]
-    ++ (with python3.pkgs; [
+    [
+      git
+      addBinToPathHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ (with python.pkgs; [
       pytest-asyncio
       pytest-mock
       pytest-timeout
       pytestCheckHook
     ]);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -106,11 +131,11 @@ python.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "dbx" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for advanced Databricks jobs management";
     homepage = "https://github.com/databrickslabs/dbx";
     changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
-    license = licenses.databricks-dbx;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.databricks-dbx;
+    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
   };
 }
