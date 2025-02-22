@@ -11,7 +11,6 @@
   gdalMinimal,
   json_c,
   pkg-config,
-  file,
   protobufc,
   libiconv,
   libxslt,

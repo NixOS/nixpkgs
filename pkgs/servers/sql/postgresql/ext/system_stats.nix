@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  stdenv,
   postgresql,
   buildPostgresqlExtension,
 }:

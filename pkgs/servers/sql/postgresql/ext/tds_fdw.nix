@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   postgresql,
   freetds,
-  unstableGitUpdater,
   buildPostgresqlExtension,
 }:
 

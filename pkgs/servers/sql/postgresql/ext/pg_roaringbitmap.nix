@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   postgresql,
-  postgresqlTestHook,
   buildPostgresqlExtension,
 }:
 

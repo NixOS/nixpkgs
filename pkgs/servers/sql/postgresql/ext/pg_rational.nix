@@ -1,5 +1,4 @@
 {
-  stdenv,
   fetchFromGitHub,
   lib,
   postgresql,
