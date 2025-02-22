@@ -229,12 +229,14 @@ if [[ -n "$newUrl" ]]; then
         die "Couldn't evaluate source url from '$attr.$sourceKey'!"
     fi
 
-    # Escape regex metacharacter that are allowed in store path names
-    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+    if [[ "$oldUrl" != "$newUrl" ]]; then
+        # Escape regex metacharacter that are allowed in store path names
+        oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
-    sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
-    if cmp -s "$nixFile" "$nixFile.cmp"; then
-        die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+        sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
+        if cmp -s "$nixFile" "$nixFile.cmp"; then
+            die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+        fi
     fi
 fi
 
