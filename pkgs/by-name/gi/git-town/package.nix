@@ -7,6 +7,7 @@
   testers,
   git-town,
   makeWrapper,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
@@ -16,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-q9k9x3e20oPjladE1tUSqSVQ8kKbmSu9kbU13lJsVU8=";
   };
 
@@ -40,11 +41,12 @@ buildGoModule rec {
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   preCheck = ''
-    HOME=$(mktemp -d)
-
     # this runs tests requiring local operations
     rm main_test.go
   '';
@@ -76,11 +78,11 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       allonsy
       blaggacao
       gabyx
