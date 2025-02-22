@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "qdrant";
     repo = "qdrant";
     tag = "v${version}";
-    sha256 = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
+    hash = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
   };
 
   cargoLock = {
@@ -30,6 +30,12 @@ rustPlatform.buildRustPackage rec {
       "wal-0.1.2" = "sha256-QcyS0v7O1BziVT3oahebpq+u4l5JGaujCaRIPdmsJl4=";
     };
   };
+
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
 
   buildInputs =
     [
@@ -41,29 +47,19 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  nativeBuildInputs = [
-    protobuf
-    rustPlatform.bindgenHook
-    pkg-config
-  ];
+  # Needed to get openssl-sys to use pkg-config.
+  env.OPENSSL_NO_VENDOR = 1;
 
-  env = {
-    # Needed to get openssl-sys to use pkg-config.
-    OPENSSL_NO_VENDOR = 1;
-  };
+  passthru.updateScript = nix-update-script { };
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Vector Search Engine for the next generation of AI applications";
     longDescription = ''
       Expects a config file at config/config.yaml with content similar to
       https://github.com/qdrant/qdrant/blob/master/config/config.yaml
     '';
     homepage = "https://github.com/qdrant/qdrant";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
 }
