@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "obs-source-switcher";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-switcher";
-    rev = "8babf207d140e52114b6db63d98749d7a0a2758b";
-    hash = "sha256-J/NdIGsSXCtSOGF72pJZqqN5Y73eJfrA72LgZcTlP5o=";
+    rev = "b229f40faceb0bb39cea41ce0ce2f2f236c0cbd1";
+    hash = "sha256-5io2uMvPdHQAWFDqLyXLC6nxTEjkrk8v4v8XwGsPF7U=";
   };
 
   nativeBuildInputs = [ cmake ];
