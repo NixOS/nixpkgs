@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.9.1";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,13 +49,8 @@ buildPythonPackage rec {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-PrY+jNA+OYtFzyuRzUckZZntsQg/eovkEfPPO1PX/18=";
+    hash = "sha256-U7S4JQ92H0SYEpMsMw5inioO6ayQ1/NDA7vnvR4i7Mk=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=30.3.0",' ""
-  '';
 
   build-system = [
     poetry-core
