@@ -1,7 +1,7 @@
-diff --git a/lib/Driver/ToolChains/CommonArgs.cpp b/lib/Driver/ToolChains/CommonArgs.cpp
+diff --git a/clang/lib/Driver/ToolChains/CommonArgs.cpp b/clang/lib/Driver/ToolChains/CommonArgs.cpp
 index 34640b3c450d..93c4a4f4ec5c 100644
---- a/lib/Driver/ToolChains/CommonArgs.cpp
-+++ b/lib/Driver/ToolChains/CommonArgs.cpp
+--- a/clang/lib/Driver/ToolChains/CommonArgs.cpp
++++ b/clang/lib/Driver/ToolChains/CommonArgs.cpp
 @@ -589,8 +589,7 @@ void tools::addLTOOptions(const ToolChain &ToolChain, const ArgList &Args,
  #endif
  

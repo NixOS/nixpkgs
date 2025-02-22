@@ -4,7 +4,7 @@
   fetchpatch,
   cmake,
   python3,
-  rocm-merged-llvm,
+  rocm-llvm,
   rocm-device-libs,
   zlib,
   zstd,
@@ -23,8 +23,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
   # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
+  inherit (rocm-llvm) version;
+  src = rocm-llvm.src;
 
   sourceRoot = "${finalAttrs.src.name}/amd/comgr";
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     zlib
     zstd
-    rocm-merged-llvm
+    rocm-llvm
   ];
 
   cmakeFlags = [

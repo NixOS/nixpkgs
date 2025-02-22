@@ -1,7 +1,7 @@
 diff --git a/clang/lib/Driver/Compilation.cpp b/clang/lib/Driver/Compilation.cpp
 index 06f5e7e7e335..8407d664886a 100644
---- a/lib/Driver/Compilation.cpp
-+++ b/lib/Driver/Compilation.cpp
+--- a/clang/lib/Driver/Compilation.cpp
++++ b/clang/lib/Driver/Compilation.cpp
 @@ -340,6 +340,9 @@ private:
  void Compilation::ExecuteJobs(const JobList &Jobs,
                                FailingCommandList &FailingCommands,

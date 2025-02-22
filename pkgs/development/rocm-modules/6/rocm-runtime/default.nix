@@ -14,7 +14,7 @@
   numactl,
   valgrind,
   libxml2,
-  rocm-merged-llvm,
+  rocm-llvm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     xxd
-    rocm-merged-llvm
+    rocm-llvm
   ];
 
   buildInputs = [

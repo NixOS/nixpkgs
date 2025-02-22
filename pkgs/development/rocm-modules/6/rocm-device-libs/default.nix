@@ -7,7 +7,7 @@
   zlib,
   zstd,
   ncurses,
-  rocm-merged-llvm,
+  rocm-llvm,
   python3,
 }:
 
@@ -23,8 +23,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
   # In-tree with ROCm LLVM
-  inherit (rocm-merged-llvm) version;
-  src = rocm-merged-llvm.llvm-src;
+  inherit (rocm-llvm) version;
+  src = rocm-llvm.src;
 
   postPatch = ''
     cd amd/device-libs
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
     ncurses
-    rocm-merged-llvm
+    rocm-llvm
   ];
 
   cmakeFlags = [

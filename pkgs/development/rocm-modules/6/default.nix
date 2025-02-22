@@ -10,6 +10,7 @@
   ffmpeg_4,
   libjpeg_turbo,
   python3Packages,
+  gcc13Stdenv,
   triton-llvm,
   openmpi,
   rocmGpuArches ? [ ],
@@ -27,7 +28,7 @@ let
       inherit rocmGpuArches;
       buildTests = false;
       buildBenchmarks = false;
-      stdenv = llvm.rocmClangStdenv;
+      # stdenv = llvm.rocmClangStdenv;
 
       rocmPath = self.callPackage ./rocm-path { };
       rocmUpdateScript = self.callPackage ./update.nix { };
@@ -35,10 +36,15 @@ let
       ## ROCm ##
       llvm = recurseIntoAttrs (
         callPackage ./llvm/default.nix {
-          inherit (self) rocm-device-libs rocm-runtime;
+          inherit (self)
+            clr
+            rocm-thunk
+            rocm-device-libs
+            rocm-runtime
+            rocmUpdateScript;
         }
       );
-      inherit (self.llvm) rocm-merged-llvm clang openmp;
+      inherit (self.llvm) rocm-llvm rocm-merged-llvm clang openmp;
 
       rocm-core = self.callPackage ./rocm-core { };
       amdsmi = pyPackages.callPackage ./amdsmi {
@@ -52,15 +58,15 @@ let
       };
 
       rocm-device-libs = self.callPackage ./rocm-device-libs {
-        inherit (llvm) rocm-merged-llvm;
+        inherit (llvm) rocm-llvm;
       };
 
       rocm-runtime = self.callPackage ./rocm-runtime {
-        inherit (llvm) rocm-merged-llvm;
+        inherit (llvm) rocm-llvm;
       };
 
       rocm-comgr = self.callPackage ./rocm-comgr {
-        inherit (llvm) rocm-merged-llvm;
+        inherit (llvm) rocm-llvm;
       };
 
       rocminfo = self.callPackage ./rocminfo { };
@@ -76,11 +82,14 @@ let
 
       # Eventually will be in the LLVM repo
       hipcc = self.callPackage ./hipcc {
-        inherit (llvm) rocm-merged-llvm;
+        inherit (llvm) rocm-llvm;
       };
 
       # Replaces hip, opencl-runtime, and rocclr
-      clr = self.callPackage ./clr { };
+      clr = self.callPackage ./clr {
+        # stdenv = gcc13Stdenv;
+        inherit (llvm) rocm-llvm rocm-clang;
+      };
 
       aotriton = self.callPackage ./aotriton { };
 
@@ -149,6 +158,7 @@ let
       };
 
       rocblas = self.callPackage ./rocblas {
+        inherit (llvm) rocm-llvm;
         buildTests = true;
         buildBenchmarks = true;
       };

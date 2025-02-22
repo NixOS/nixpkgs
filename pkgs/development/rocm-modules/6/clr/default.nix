@@ -25,7 +25,8 @@
   libxml2,
   libX11,
   python3Packages,
-  rocm-merged-llvm,
+  rocm-llvm,
+  rocm-clang,
   khronos-ocl-icd-loader,
   gcc-unwrapped,
   writeShellScriptBin,
@@ -33,24 +34,24 @@
 }:
 
 let
-  hipClang = rocm-merged-llvm;
+  hipClang = rocm-clang;
   hipClangPath = "${hipClang}/bin";
   wrapperArgs = [
     "--prefix PATH : $out/bin"
     "--prefix LD_LIBRARY_PATH : ${rocm-runtime}"
-    "--set HIP_PLATFORM amd"
-    "--set HIP_PATH $out"
-    "--set HIP_CLANG_PATH ${hipClangPath}"
-    "--set DEVICE_LIB_PATH ${rocm-device-libs}/amdgcn/bitcode"
-    "--set HSA_PATH ${rocm-runtime}"
-    "--set ROCM_PATH $out"
+    "--set-default HIP_PLATFORM amd"
+    "--set-default HIP_PATH $out"
+    "--set-default HIP_CLANG_PATH ${hipClangPath}"
+    "--set-default DEVICE_LIB_PATH ${rocm-device-libs}/amdgcn/bitcode"
+    "--set-default HSA_PATH ${rocm-runtime}"
+    "--set-default ROCM_PATH $out"
   ];
   ROCM_LIBPATCH_VERSION = rocm-core.ROCM_LIBPATCH_VERSION;
   amdclang = writeShellScriptBin "amdclang" ''
-    exec clang "$@"
+    exec ${hipClangPath}/clang "$@"
   '';
   amdclangxx = writeShellScriptBin "amdclang++" ''
-    exec clang++ "$@"
+    exec ${hipClangPath}/clang++ "$@"
   '';
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -85,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libX11
     khronos-ocl-icd-loader
-    hipClang
+    rocm-llvm
     libffi
     zstd
     zlib
@@ -120,7 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  env.LLVM_DIR = "";
+  # env.LLVM_DIR = "";
+  # env = {
+  #   CXXFLAGS = "-v";
+  # };
 
   # TODO: rebase patches
   patches = [
@@ -164,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
-      --replace "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang"
+      --replace "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang++"
 
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
@@ -197,11 +201,11 @@ stdenv.mkDerivation (finalAttrs: {
     fi
     CORE_LIM=$(( ''${NIX_LOAD_LIMIT:-''${CORE_LIM:-$(nproc)}} / 2 ))
     # Set HIPCC_JOBS with min and max constraints
-    export HIPCC_JOBS=$CORE_LIM
-    export HIPCC_JOBS_LINK=$CORE_LIM
-    export CFLAGS="''${CFLAGS:-} -parallel-jobs=$CORE_LIM"
-    export CXXFLAGS="''${CXXFLAGS:-} -parallel-jobs=$CORE_LIM"
-    #export HIPCC_COMPILE_FLAGS_APPEND="-O3 -Wno-format-nonliteral -parallel-jobs=$HIPCC_JOBS"
+    # export HIPCC_JOBS=$CORE_LIM
+    # export HIPCC_JOBS_LINK=$CORE_LIM
+    # export CFLAGS="''${CFLAGS:-} -parallel-jobs=$CORE_LIM"
+    # export CXXFLAGS="''${CXXFLAGS:-} -parallel-jobs=$CORE_LIM"
+    # export HIPCC_COMPILE_FLAGS_APPEND="-O3 -Wno-format-nonliteral -parallel-jobs=$HIPCC_JOBS"
     export HIP_PATH="${placeholder "out"}"
     export HIP_PLATFORM=amd
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
@@ -224,9 +228,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${hipClang} $out/llvm
   '';
 
-  disallowedRequisites = [
-    gcc-unwrapped
-  ];
+  hardeningDisable = [ "zerocallusedregs" ];
+
+  # disallowedRequisites = [
+  #   gcc-unwrapped
+  # ];
   # postFixup = ''
   #   objdump --syms $out/lib/libamdhip64.so.6
   #   readelf --debug-dump=line $out/lib/libamdhip64.so.6
@@ -259,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
         "1102"
       ] (target: "gfx${target}");
 
-      hipClangPath = hipClangPath;
+      inherit hipClangPath;
 
       updateScript = rocmUpdateScript {
         name = finalAttrs.pname;

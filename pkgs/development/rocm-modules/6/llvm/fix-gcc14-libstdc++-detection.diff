@@ -1,0 +1,16 @@
+diff --git a/clang/lib/Driver/ToolChains/Gnu.cpp b/clang/lib/Driver/ToolChains/Gnu.cpp
+index e5db1b2f1..b9dacf655 100644
+--- a/clang/lib/Driver/ToolChains/Gnu.cpp
++++ b/clang/lib/Driver/ToolChains/Gnu.cpp
+@@ -3410,6 +3410,11 @@ bool Generic_GCC::addGCCLibStdCxxIncludePaths(
+                                CC1Args))
+     return true;
+ 
++  if (addLibStdCXXIncludePaths(LibDir.str() + "/../include/c++/" + "@HARDCODE_VERSION@",
++                               TripleStr, Multilib.includeSuffix(), DriverArgs,
++                               CC1Args))
++    return true;
++
+   // Otherwise, fall back on a bunch of options which don't use multiarch
+   // layouts for simplicity.
+   const std::string LibStdCXXIncludePathCandidates[] = {
