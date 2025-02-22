@@ -45,6 +45,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "aiowaqi" ];
 
   disabledTests = [
