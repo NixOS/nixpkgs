@@ -15,27 +15,27 @@
 let
   anytype-heart = callPackage ./anytype-heart { };
   pname = "anytype";
-  version = "0.45.2";
+  version = "0.45.3";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-0jyC4TVbJBIWGUG1YJ642v17XUBnhntaqS4yxz2l8k0=";
+    hash = "sha256-fwfxmNca75xAAHKeT2nddz+XZexDomzHbw188LXxZqA=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "822f8ea833a94fb48cd8e304ef8dc557b67a9f7b";
-    hash = "sha256-fum8zLRXb8xW8TwNyelIZVZR6XXsdPHSt1WDo+TX4CU=";
+    rev = "687106c4e37297f86fab79f77ef83599b61ab65c";
+    hash = "sha256-Y0irD0jzqYobnjtD2M1+hTDRUUYnuygUx9+tE1gUoTw=";
   };
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-aYxTEy6lO2NLI8fEYUJVXTxCEyx9Hi8nABe7oo/PD9I=";
+  npmDepsHash = "sha256-9BI+rXzTYonlMhcH8uiWyyF18JGv8GL1U9hZ9Z6X3As=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
