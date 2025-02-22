@@ -177,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       erikryb
       raitobezarius
+      ethancedwards8
     ];
     platforms = lib.platforms.unix;
   };
