@@ -15,8 +15,8 @@
   python-dateutil,
   tabulate,
 
-  # Sensitive downstream dependencies
-  localstack,
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
   meta = {
