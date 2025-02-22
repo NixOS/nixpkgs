@@ -270,12 +270,14 @@ in
         let
           fromAttrs = { enable, openFirewall, ... }: enable && openFirewall;
         in
-        [
-          {
-            allowedUDPPorts =
-              (lib.optional (fromAttrs cfg.mdns) 5353)
-              ++ (lib.optional (lib.isAttrs cfg.llmnr && fromAttrs cfg.llmnr) 5355);
-          }
+        lib.mkMerge [
+          (mkIf (fromAttrs cfg.mdns) {
+            allowedUDPPorts = [ 5353 ];
+          })
+
+          (mkIf (if lib.isAttrs cfg.llmnr then mkZeroConf cfg.llmnr else false) {
+            allowedUDPPorts = [ 5355 ];
+          })
         ];
     })
 
