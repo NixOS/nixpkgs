@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
+  # Function are declared after they are used in the file, this is error since gcc-14.
+  #   randnum.c:25:3: warning: implicit declaration of function 'srand' [-Wimplicit-function-declaration]
+  #   randnum.c:33:7: warning: implicit declaration of function 'rand'; did you mean 'randnum'? [-Wimplicit-function-declaration]
+  #   text.c:34:50: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   installPhase = ''
     mkdir -p $out/bin
     cp icbm3d $out/bin
