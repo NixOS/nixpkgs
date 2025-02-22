@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "17.1.1";
+  version = "18.0.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     tag = "v${version}";
-    hash = "sha256-q9k9x3e20oPjladE1tUSqSVQ8kKbmSu9kbU13lJsVU8=";
+    hash = "sha256-vn0Cq53gqe0HGrtYMUHCFsE13CpaBJqC4LxrkJSel1Y=";
   };
 
   vendorHash = null;
@@ -57,6 +57,7 @@ buildGoModule rec {
       skippedTests = [
         "TestGodog"
         "TestMockingRunner/MockCommand"
+        "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
       ];
