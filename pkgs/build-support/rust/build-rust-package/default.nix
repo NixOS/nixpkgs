@@ -72,9 +72,11 @@ lib.extendMkDerivation {
       ...
     }@args:
 
-    let
-
-      cargoDeps' =
+    lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
+      RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
+    }
+    // {
+      cargoDeps =
         if cargoVendorDir != null then
           null
         else if cargoDeps != null then
@@ -125,12 +127,6 @@ lib.extendMkDerivation {
             }
             // depsExtraArgs
           );
-    in
-    lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
-      RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
-    }
-    // {
-      cargoDeps = cargoDeps';
       inherit buildAndTestSubdir;
 
       cargoBuildType = buildType;
