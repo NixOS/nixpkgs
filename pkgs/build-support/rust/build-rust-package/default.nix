@@ -23,7 +23,6 @@ lib.extendMkDerivation {
   excludeDrvArgNames = [
     "depsExtraArgs"
     "cargoUpdateHook"
-    "cargoDeps"
     "cargoLock"
   ];
 
