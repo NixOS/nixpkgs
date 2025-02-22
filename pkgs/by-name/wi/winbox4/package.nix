@@ -11,6 +11,7 @@
   makeWrapper,
   stdenvNoCC,
   unzip,
+  undmg,
   writeShellApplication,
   xorg,
   zlib,
@@ -20,21 +21,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";
   version = "4.0beta16";
 
-  src = fetchurl {
-    name = "WinBox_Linux-${finalAttrs.version}.zip";
-    url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/WinBox_Linux.zip";
-    hash = "sha256-RZpsKew3BaId6+tcwUV6fniUpCH4wIP9ab6P5oE7OAk=";
-  };
+  src =
+    if stdenvNoCC.isDarwin then
+      fetchurl {
+        name = "WinBox-${finalAttrs.version}.dmg";
+        url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/WinBox.dmg";
+        hash = "sha256-ZxvuEVx9BmFukPMEPKeqXQNW38ExSpnRcSuHdw6j+CI=";
+      }
+    else
+      fetchurl {
+        name = "WinBox_Linux-${finalAttrs.version}.zip";
+        url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/WinBox_Linux.zip";
+        hash = "sha256-RZpsKew3BaId6+tcwUV6fniUpCH4wIP9ab6P5oE7OAk=";
+      };
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    copyDesktopItems
-    # makeBinaryWrapper does not support --run
-    makeWrapper
-    unzip
-  ];
+  nativeBuildInputs =
+    if stdenvNoCC.isDarwin then
+      [
+        undmg
+      ]
+    else
+      [
+        autoPatchelfHook
+        copyDesktopItems
+        # makeBinaryWrapper does not support --run
+        makeWrapper
+        unzip
+      ];
 
   buildInputs = [
     fontconfig
@@ -49,16 +64,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    if stdenvNoCC.isDarwin then
+      ''
+        runHook preInstall
 
-    install -Dm644 "assets/img/winbox.png" "$out/share/pixmaps/winbox.png"
-    install -Dm755 "WinBox" "$out/bin/WinBox"
+        mkdir -p $out/{bin,Applications}
+        cp -R "WinBox.app" "$out/Applications/WinBox.app"
+        ln -s "$out/Applications/WinBox.app/Contents/MacOS/WinBox" "$out/bin/WinBox"
 
-    wrapProgram "$out/bin/WinBox" --run "${lib.getExe finalAttrs.migrationScript}"
+        runHook postInstall
+      ''
+    else
+      ''
+        runHook preInstall
 
-    runHook postInstall
-  '';
+        install -Dm644 "assets/img/winbox.png" "$out/share/pixmaps/winbox.png"
+        install -Dm755 "WinBox" "$out/bin/WinBox"
+
+        wrapProgram "$out/bin/WinBox" --run "${lib.getExe finalAttrs.migrationScript}"
+
+        runHook postInstall
+      '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -117,7 +144,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/CHANGELOG";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "WinBox";
     maintainers = with lib.maintainers; [
       Scrumplex
