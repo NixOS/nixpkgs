@@ -482,10 +482,10 @@ in rec {
         ] )}
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Password-store browser using fzf in tmux";
       homepage = "https://github.com/rafi/tmux-pass";
-      license = licenses.unlicense;
+      license = lib.licenses.gpl3Only;
     };
   };
 
