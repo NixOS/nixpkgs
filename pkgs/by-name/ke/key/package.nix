@@ -10,6 +10,9 @@
   copyDesktopItems,
   testers,
   git,
+  z3,
+  cvc4,
+  cvc5,
   key,
 }:
 
@@ -19,20 +22,35 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.12.2";
+  version = "2.12.3";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
-    tag = "KeY-${version}";
-    hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
+    tag = "KEY-${version}";
+    hash = "sha256-1pN0lmr/teVitpMIM9M9lSTkmnVcZwdAQay2pzgJDCk=";
   };
+
+  patches = [
+    # Remove linting framework, causes issues with the update script.
+    ./remove-eisop-checker.patch
+  ];
+
+  # Continuation of the patch above.
+  postPatch = ''
+    substituteInPlace build.gradle \
+      --replace-fail 'id "org.checkerframework"' '//' \
+      --replace-fail 'apply plugin: "org.checkerframework"' "" \
+      --replace-fail 'checkerFramework' "//" \
+      --replace-fail 'def anchor = "git merge-base HEAD origin/main".execute().getText()' 'return []'
+    substituteInPlace key.core/build.gradle \
+      --replace-fail '"git rev-parse $args".execute().text.trim()' '"${version}"'
+  '';
 
   nativeBuildInputs = [
     jdk
     gradle
     makeWrapper
     copyDesktopItems
-    git
   ];
 
   desktopItems = [
@@ -54,8 +72,7 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # tests are broken on darwin
-  # TODO: on update to 2.12.3+, restore to !stdenv.hostPlatform.isDarwin;
+  # TODO: on update to 2.12.4+, try again
   # (currently some tests are failing)
   doCheck = false;
 
@@ -68,6 +85,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
     makeWrapper ${lib.getExe jre} $out/bin/KeY \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          z3
+          cvc4
+          cvc5
+        ]
+      } \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
 
     runHook postInstall

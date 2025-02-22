@@ -1,0 +1,47 @@
+diff --git a/key.ncore/build.gradle b/key.ncore/build.gradle
+index 04eabab..a99e863 100644
+--- a/key.ncore/build.gradle
++++ b/key.ncore/build.gradle
+@@ -14,19 +14,3 @@ tasks.withType(Test) {
+     enableAssertions = true
+ }
+ 
+-
+-checkerFramework {
+-    if(System.getProperty("ENABLE_NULLNESS")) {
+-        checkers = [
+-                "org.checkerframework.checker.nullness.NullnessChecker",
+-        ]
+-        extraJavacArgs = [
+-                "-AonlyDefs=^org\\.key_project\\.logic",
+-                "-Xmaxerrs", "10000",
+-                "-Astubs=$rootDir/key.util/src/main/checkerframework:permit-nullness-assertion-exception.astub",
+-                "-AstubNoWarnIfNotFound",
+-                "-Werror",
+-                "-Aversion",
+-        ]
+-    }
+-}
+diff --git a/key.util/build.gradle b/key.util/build.gradle
+index 382a103..7187dc0 100644
+--- a/key.util/build.gradle
++++ b/key.util/build.gradle
+@@ -4,18 +4,3 @@ dependencies {
+     implementation("org.jspecify:jspecify:1.0.0")
+ }
+ 
+-checkerFramework {
+-    if(System.getProperty("ENABLE_NULLNESS")) {
+-        checkers = [
+-                "org.checkerframework.checker.nullness.NullnessChecker",
+-        ]
+-        extraJavacArgs = [
+-                "-AonlyDefs=^org\\.key_project\\.util",
+-                "-Xmaxerrs", "10000",
+-                "-Astubs=$projectDir/src/main/checkerframework:permit-nullness-assertion-exception.astub:checker.jar/junit-assertions.astub",
+-                "-AstubNoWarnIfNotFound",
+-                "-Werror",
+-                "-Aversion",
+-        ]
+-    }
+-}
