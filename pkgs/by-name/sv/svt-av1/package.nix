@@ -5,6 +5,7 @@
   gitUpdater,
   cmake,
   nasm,
+  cpuinfo,
 
   # for passthru.tests
   ffmpeg,
@@ -12,18 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "2.3.0";
+  version = "3.0.2";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JMOFWke/qO3cWHuhWJChzaH+sD5AVqYCTTz0Q0+r2AE=";
+    hash = "sha256-WS9awjnJV0ok6ePlLcpHPAr2gsZjbZcdFSDEmyx7vwk=";
   };
 
   nativeBuildInputs = [
     cmake
     nasm
+  ];
+
+  buildInputs = [
+    cpuinfo
   ];
 
   cmakeFlags = [
