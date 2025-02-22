@@ -1,23 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pygments,
+  fetchFromGitHub,
   gitMinimal,
-  mercurial,
-  subversion,
-  patchutils,
   less,
+  mercurial,
+  patchutils,
+  pygments,
+  setuptools,
+  subversion,
 }:
 
 buildPythonPackage rec {
   pname = "ydiff";
   version = "1.4.2";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NpvmI9zeeVTZiXP7nbF4DWTwNTmCvzrIWBjz1i/0UrA=";
+  src = fetchFromGitHub {
+    owner = "ymattw";
+    repo = "ydiff";
+    tag = "${version}";
+    hash = "sha256-JaGkABroj+/7MrgpFYI2vE1bndsilIodopMUnfmNhwA=";
   };
 
   patchPhase = ''
@@ -34,6 +37,8 @@ buildPythonPackage rec {
     patchShebangs tests/*.sh
   '';
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
@@ -44,7 +49,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
-    mainProgram = "ydiff";
     longDescription = ''
       Term based tool to view colored, incremental diff in a version
       controlled workspace (supports Git, Mercurial, Perforce and Svn
@@ -52,7 +56,9 @@ buildPythonPackage rec {
       and auto pager support.
     '';
     homepage = "https://github.com/ymattw/ydiff";
+    changelog = "https://github.com/ymattw/ydiff/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = (with maintainers; [ leenaars ]) ++ teams.deshaw.members;
+    mainProgram = "ydiff";
   };
 }
