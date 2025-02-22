@@ -123,19 +123,6 @@ in
         example = 8443;
       };
 
-      mode = mkOption {
-        type =
-          with types;
-          nullOr (enum [
-            "daemon"
-            "master"
-            "worker"
-            "test"
-          ]);
-        default = "master";
-        description = "Operating mode of H2O";
-      };
-
       settings = mkOption {
         type = settingsFormat.type;
         default = { };
@@ -246,15 +233,12 @@ in
 
       script =
         let
-          args =
-            [
-              "--conf"
-              "${h2oConfig}"
-            ]
-            ++ lib.optionals (cfg.mode != null) [
-              "--mode"
-              cfg.mode
-            ];
+          args = [
+            "--conf"
+            "${h2oConfig}"
+            "--mode"
+            "master"
+          ];
         in
         ''
           ${lib.getExe cfg.package} ${lib.strings.escapeShellArgs args}
