@@ -10,7 +10,7 @@ let
   inherit (lib) licenses;
   inherit (lib.maintainers) patwid;
 
-  version = "0.24.0";
+  version = "0.24.2";
 in
 stdenv.mkDerivation {
   pname = "hare-ssh";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "~sircmpwn";
     repo = "hare-ssh";
     rev = version;
-    hash = "sha256-I43TLPoImBsvkgV3hDy9dw0pXVt4ezINnxFtEV9P2/M=";
+    hash = "sha256-koH/M3Izyjz09SO29TF3+zWIgCxwZn024FDQPSLn1FY=";
   };
 
   nativeBuildInputs = [ hareHook ];
