@@ -55,9 +55,9 @@ let
     ];
 in
 
-assert lib.assertMsg (!(biosSupport && !hasI686)) "BIOS builds are possible only for x86";
+assert lib.assertMsg (!biosSupport || hasI686) "BIOS builds are possible only for x86";
 
-assert lib.assertMsg (!(pxeSupport && !hasI686)) "PXE builds are possible only for x86";
+assert lib.assertMsg (!pxeSupport || hasI686) "PXE builds are possible only for x86";
 
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
