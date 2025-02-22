@@ -5,8 +5,8 @@
   boto3,
   pytestCheckHook,
 
-  # downstream dependencies
-  localstack,
+  # use for promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
   meta = with lib; {
