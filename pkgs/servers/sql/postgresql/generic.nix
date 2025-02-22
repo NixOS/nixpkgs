@@ -4,9 +4,10 @@ let
     # dependencies
     {
       stdenv,
-      lib,
-      fetchurl,
+      fetchFromGitHub,
       fetchpatch,
+      fetchurl,
+      lib,
       makeWrapper,
       glibc,
       zlib,
@@ -48,6 +49,7 @@ let
       version,
       hash,
       muslPatches ? { },
+      rev,
 
       # for tests
       testers,
@@ -90,9 +92,12 @@ let
       inherit version;
       pname = pname + lib.optionalString jitSupport "-jit";
 
-      src = fetchurl {
-        url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-        inherit hash;
+      src = fetchFromGitHub {
+        owner = "postgres";
+        repo = "postgres";
+        # rev, not tag, on purpose: allows updating when new versions
+        # are "stamped" a few days before release (tag).
+        inherit hash rev;
       };
 
       __structuredAttrs = true;
@@ -157,21 +162,20 @@ let
 
       nativeBuildInputs =
         [
+          bison
+          docbook-xsl-nons
+          docbook_xml_dtd_45
+          flex
+          libxml2
+          libxslt
           makeWrapper
+          perl
           pkg-config
           removeReferencesTo
         ]
         ++ lib.optionals jitSupport [
           llvmPackages.llvm.dev
           nukeReferences
-        ]
-        ++ lib.optionals (atLeast "17") [
-          bison
-          flex
-          perl
-          docbook_xml_dtd_45
-          docbook-xsl-nons
-          libxslt
         ];
 
       enableParallelBuilding = true;
