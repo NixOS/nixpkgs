@@ -100,7 +100,7 @@ in
       package = lib.mkPackageOption pkgs "h2o" {
         example = ''
           pkgs.h2o.override {
-            withMruby = true;
+            withMruby = false;
           };
         '';
       };
