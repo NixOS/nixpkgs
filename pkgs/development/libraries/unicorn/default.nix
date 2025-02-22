@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unicorn";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "unicorn-engine";
     repo = "unicorn";
     tag = version;
-    hash = "sha256-ZlQ2WVTToT0OMxK6brsHnchxDwAR5n1wdtZtkTTgWV4=";
+    hash = "sha256-qA84xBztyWmt/rUExhhZMkQzvDPx0UE9MAIPG/Su3iE=";
   };
 
   nativeBuildInputs =
