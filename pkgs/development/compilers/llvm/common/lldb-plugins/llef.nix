@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llef";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "foundryzero";
     repo = "llef";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cpBQuRWpov4q3lEtZPA7ZWqQ8Aa/KKQbhtVStSfNa+Q=";
+    hash = "sha256-gbZDs3uurmi5YrnjumjQgzKhEumphvgYMk3R73vZiUA=";
   };
 
   dontBuild = true;
