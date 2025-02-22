@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +49,19 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postInstall
     '';
+
+  doCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  preCheck = ''
+    foundMakefile=1
+    checkFlagsArray+=(CC=$CC)
+  '';
+
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  doInstallCheck = true;
 
   meta = {
     description = "Smaller, simpler, portable pkg-config clone";
