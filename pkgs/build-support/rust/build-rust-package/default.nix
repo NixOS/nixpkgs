@@ -4,7 +4,6 @@
   fetchCargoTarball,
   fetchCargoVendor,
   stdenv,
-  callPackage,
   cargoBuildHook,
   cargoCheckHook,
   cargoInstallHook,
@@ -127,9 +126,6 @@ lib.extendMkDerivation {
             }
             // depsExtraArgs
           );
-
-      target = stdenv.hostPlatform.rust.rustcTargetSpec;
-      targetIsJSON = lib.hasSuffix ".json" target;
     in
     lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
       RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
