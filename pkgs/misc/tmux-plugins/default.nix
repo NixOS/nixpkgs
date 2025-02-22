@@ -486,6 +486,7 @@ in rec {
       description = "Password-store browser using fzf in tmux";
       homepage = "https://github.com/rafi/tmux-pass";
       license = lib.licenses.gpl3Only;
+      maintainers = [ lib.maintainers.ethancedwards8 ];
     };
   };
 
