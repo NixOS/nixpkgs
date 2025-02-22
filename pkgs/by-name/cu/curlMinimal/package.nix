@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests
+{ lib, stdenv, fetchurl, darwin, pkg-config, perl, nixosTests, autoreconfHook
 , brotliSupport ? false, brotli
 , c-aresSupport ? false, c-aresMinimal
 , gnutlsSupport ? false, gnutls
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-liconv";
   };
 
-  nativeBuildInputs = [ pkg-config perl ];
+  nativeBuildInputs = [ pkg-config perl ] ++ lib.optionals stdenv.hostPlatform.isOpenBSD [ autoreconfHook ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
