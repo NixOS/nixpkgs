@@ -4,7 +4,6 @@
   cunit,
   docbook5,
   fetchFromGitHub,
-  file,
   gdalMinimal,
   geos,
   jitSupport,

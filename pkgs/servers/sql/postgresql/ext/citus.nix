@@ -6,7 +6,6 @@
   lz4,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension rec {

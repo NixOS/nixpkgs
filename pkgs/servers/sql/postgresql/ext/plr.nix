@@ -5,7 +5,6 @@
   pkg-config,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension rec {

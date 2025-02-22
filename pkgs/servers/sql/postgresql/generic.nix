@@ -5,7 +5,6 @@ let
     {
       stdenv,
       fetchFromGitHub,
-      fetchpatch,
       fetchurl,
       lib,
       replaceVars,
