@@ -452,14 +452,21 @@ let
               stripLen = 1;
             })
           ]
-          ++ lib.optionals (lib.versions.major metadata.release_version == "14") [
-            # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
-            (fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
-              relative = "llvm";
-              hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
-            })
-          ]
+          ++
+            lib.optionals
+              (
+                (lib.versionAtLeast (lib.versions.major metadata.release_version) "14")
+                && (lib.versionOlder (lib.versions.major metadata.release_version) "17")
+              )
+              [
+                # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
+                # See also: https://github.com/numba/numba/issues/9109
+                (fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
+                  relative = "llvm";
+                  hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
+                })
+              ]
           ++
             lib.optional (lib.versions.major metadata.release_version == "17")
               # resolves https://github.com/llvm/llvm-project/issues/75168
