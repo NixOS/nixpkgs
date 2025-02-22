@@ -356,36 +356,18 @@ let
       '';
     };
 
-    exportarr-sonarr = let apikey = "eccff6a992bc2e4b88e46d064b26bb4e"; in {
+    exportarr-sonarr = let apiKeyFile = pkgs.writeText "dummy-api-key" "eccff6a992bc2e4b88e46d064b26bb4e"; in {
       nodeName = "exportarr_sonarr";
       exporterConfig = {
         enable = true;
         url = "http://127.0.0.1:8989";
-        apiKeyFile = pkgs.writeText "dummy-api-key" apikey;
+        inherit apiKeyFile;
       };
       metricProvider = {
-        services.sonarr.enable = true;
-        systemd.services.sonarr.serviceConfig.ExecStartPre =
-          let
-            sonarr_config = pkgs.writeText "config.xml" ''
-              <Config>
-                <LogLevel>info</LogLevel>
-                <EnableSsl>False</EnableSsl>
-                <Port>8989</Port>
-                <SslPort>9898</SslPort>
-                <UrlBase></UrlBase>
-                <BindAddress>*</BindAddress>
-                <ApiKey>${apikey}</ApiKey>
-                <AuthenticationMethod>None</AuthenticationMethod>
-                <UpdateMechanism>BuiltIn</UpdateMechanism>
-                <Branch>main</Branch>
-                <InstanceName>Sonarr</InstanceName>
-              </Config>
-            '';
-          in
-          [
-            ''${pkgs.coreutils}/bin/install -D -m 777 ${sonarr_config} -T /var/lib/sonarr/.config/NzbDrone/config.xml''
-          ];
+        services.sonarr = {
+          enable = true;
+          inherit apiKeyFile;
+        };
       };
       exporterTest = ''
         wait_for_unit("sonarr.service")
