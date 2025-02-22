@@ -2,31 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.2.18";
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlog";
+  version = "1.2.18";
 
   src = fetchFromGitHub {
     owner = "HardySimpson";
-    repo = pname;
-    rev = version;
+    repo = "zlog";
+    tag = finalAttrs.version;
     hash = "sha256-79yyOGKgqUR1KI2+ngZd7jfVcz4Dw1IxaYfBJyjsxYc=";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  nativeBuildInputs = [ cmake ];
 
-  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    makeFlagsArray+=(CFLAGS="-Wno-pointer-to-int-cast -Wno-newline-eof")
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
     homepage = "https://hardysimpson.github.io/zlog/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "zlog-chk-conf";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
