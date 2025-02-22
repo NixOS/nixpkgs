@@ -5868,6 +5868,8 @@ self: super: with self; {
 
   hatchling = callPackage ../development/python-modules/hatchling { };
 
+  hatch-babel = callPackage ../development/python-modules/hatch-babel { };
+
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
   hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
