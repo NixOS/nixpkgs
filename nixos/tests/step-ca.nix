@@ -107,9 +107,8 @@ import ./make-test-python.nix (
         catester.succeed("curl https://caclient/ | grep \"Welcome to nginx!\"")
 
         caclientcaddy.wait_for_unit("caddy.service")
-        # It's hard to know when caddy has finished the ACME
-        # dance with step-ca, so we keep trying to curl
-        # until succeess.
+        # It’s hard to know when Caddy has finished the ACME dance with
+        # step-ca, so we keep trying cURL until success.
         catester.wait_until_succeeds("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
       '';
   }
