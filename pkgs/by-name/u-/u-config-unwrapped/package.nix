@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
 
       installBin ${binName}
+      installManPage u-config.1
 
       runHook postInstall
     '';
