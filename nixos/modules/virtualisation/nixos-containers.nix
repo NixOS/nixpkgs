@@ -244,8 +244,8 @@ let
         cfg: ipcmd: variable: attribute:
         if cfg.${attribute} == null then
           ''
-            if [ -n "${variable}" ]; then
-              ${ipcmd} add "${variable}" dev "$ifaceHost"
+            if [[ -n "''${${variable}-}" ]]; then
+              ${ipcmd} add "''${${variable}-}" dev "$ifaceHost"
             fi
           ''
         else
