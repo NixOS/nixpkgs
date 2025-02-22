@@ -1,27 +1,15 @@
 {
   lib,
   fetchFromGitHub,
-  fetchPypi,
   python3,
   installShellFiles,
+  nix-update-script,
 }:
 
 let
   py = python3.override {
     self = py;
     packageOverrides = self: super: {
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "7.1.2";
-
-        src = fetchPypi {
-          pname = "click";
-          inherit version;
-          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
-        };
-        disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
-      });
-
       jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
         version = "0.10.0";
         src = oldAttrs.src.override {
@@ -31,21 +19,20 @@ let
         };
         doCheck = false;
       });
-
     };
   };
 in
 
 py.pkgs.buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.14.0";
+  version = "3.51.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-yooEZuSIw2EMJVyT/Z/x4hJi8a1F674CtsMMGkMAYLg=";
+    tag = "v${version}";
+    hash = "sha256-p+X6kJDjuDaOLgZ9KwrZJgAqORKLxPrXwQ4X+JZb1W4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -97,8 +84,10 @@ py.pkgs.buildPythonApplication rec {
   doCheck = true;
 
   pythonImportsCheck = [
-    " oci_cli "
+    "oci_cli"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
