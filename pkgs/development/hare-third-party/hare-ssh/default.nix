@@ -2,32 +2,40 @@
   fetchFromSourcehut,
   hareHook,
   lib,
+  nix-update-script,
   stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  inherit (lib) licenses;
+  inherit (lib.maintainers) patwid;
+
+  version = "0.24.0";
+in
+stdenv.mkDerivation {
   pname = "hare-ssh";
-  version = "0-unstable-2023-11-16";
+  inherit version;
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-ssh";
-    rev = "c6a39e37ba4a42721594e0a907fe016f8e2198a8";
+    rev = version;
     hash = "sha256-I43TLPoImBsvkgV3hDy9dw0pXVt4ezINnxFtEV9P2/M=";
   };
 
   nativeBuildInputs = [ hareHook ];
 
-  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   doCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://git.sr.ht/~sircmpwn/hare-ssh/";
     description = "SSH client & server protocol implementation for Hare";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ patwid ];
-
+    license = licenses.mpl20;
+    maintainers = [ patwid ];
     inherit (hareHook.meta) platforms badPlatforms;
   };
-})
+}
