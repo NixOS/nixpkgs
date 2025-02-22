@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     mint-x-icons
     hicolor-icon-theme
   ];
-  # still missing parent themes: Ambiant-MATE, Faenza-Dark, KFaenza
+  # still missing parent themes: Ambient-MATE, Faenza-Dark, KFaenza
 
   dontDropIconThemeCache = true;
 

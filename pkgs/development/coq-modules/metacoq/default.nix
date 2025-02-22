@@ -223,7 +223,7 @@ let
             }
           );
       # utils, common, template-pcuic, quotation, safechecker-plugin, and erasure-plugin
-      # packages didn't exist before 1.2, so bulding nothing in that case
+      # packages didn't exist before 1.2, so building nothing in that case
       patched-derivation = derivation.overrideAttrs (
         o:
         lib.optionalAttrs

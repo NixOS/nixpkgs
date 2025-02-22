@@ -7,7 +7,7 @@
   /*
     test each hook individually, to make sure that:
       - each hook works properly outside of buildRustPackage
-      - each hook is usable independantly from each other
+      - each hook is usable independently from each other
   */
   cargoSetupHook = stdenv.mkDerivation {
     name = "test-cargoSetupHook";

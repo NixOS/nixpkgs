@@ -39,7 +39,7 @@
 # `pname` and `version` will throw if they were not provided.
 # Use `name` instead of directly evaluating `pname` or `version`.
 #
-# If you need `pname` or `version` sepcifically, use `args` instead:
+# If you need `pname` or `version` specifically, use `args` instead:
 # e.g. `args.pname or ...`.
 
 let
