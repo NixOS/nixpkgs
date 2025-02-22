@@ -47,7 +47,13 @@ let
     ++ lib.optionals pxeSupport [ "--enable-bios-pxe" ]
     ++ lib.concatMap uefiFlags (
       if targets == [ ] then [ stdenv.hostPlatform.parsed.cpu.name ] else targets
-    );
+    )
+    ++ [
+      "TOOLCHAIN_FOR_TARGET=llvm"
+      # `clang` on `PATH` has to be unwrapped, but *a* wrapped clang
+      # still needs to be available
+      "CC=${lib.getExe stdenv.cc}"
+    ];
 in
 
 assert lib.assertMsg (!(biosSupport && !hasI686)) "BIOS builds are possible only for x86";
@@ -76,6 +82,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs =
     [
+      llvmPackages.clang-unwrapped
       llvmPackages.libllvm
       llvmPackages.lld
     ]
