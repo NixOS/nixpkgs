@@ -888,35 +888,21 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               # Rebuild darwin.binutils with the new LLVM, so only inherit libSystem from the previous stage.
               // {
                 inherit (prevStage.darwin) libSystem;
+
+                # Disable building the documentation due to the dependency on llvm-manpages,
+                # which brings in a bunch of Python dependencies.
+                binutils-unwrapped = superDarwin.binutils-unwrapped.override {
+                  inherit (self) cctools ld64;
+                  enableManpages = false;
+                };
               }
             );
 
             llvmPackages =
               let
-                tools = super.llvmPackages.tools.extend (
-                  _: superTools: {
-                    # darwin.binutils-unwrapped needs to build the LLVM man pages, which requires a lot of Python stuff
-                    # that ultimately ends up depending on git. Fortunately, the git dependency is only for check
-                    # inputs. The following set of overrides allow the LLVM documentation to be built without
-                    # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
-                    #
-                    # However, even without darwin.binutils-unwrapped, this has to be overridden in the LLVM package set
-                    # because otherwise llvmPackages.llvm-manpages on its own is broken.
-                    llvm-manpages = superTools.llvm-manpages.override {
-                      python3Packages = self.python3.pkgs.overrideScope (
-                        _: superPython: {
-                          hatch-vcs = superPython.hatch-vcs.overrideAttrs { doInstallCheck = false; };
-                          markdown-it-py = superPython.markdown-it-py.overrideAttrs { doInstallCheck = false; };
-                          mdit-py-plugins = superPython.mdit-py-plugins.overrideAttrs { doInstallCheck = false; };
-                          myst-parser = superPython.myst-parser.overrideAttrs { doInstallCheck = false; };
-                        }
-                      );
-                    };
-                  }
-                );
                 libraries = super.llvmPackages.libraries.extend (_: _: llvmLibrariesPackages prevStage);
               in
-              super.llvmPackages // { inherit tools libraries; } // tools // libraries;
+              super.llvmPackages // { inherit libraries; } // libraries;
           }
         ];
 
@@ -1243,6 +1229,12 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                   libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
                     _: _:
                     llvmLibrariesPackages prevStage
+                    # Avoid depending on llvm-manpages from the bootstrap, which brings a bunch of Python dependencies
+                    # into the bootstrap. This means that there are no man pages in darwin.binutils, but they are still
+                    # available from llvm-manpages, ld64, and cctools.
+                    // {
+                      inherit (super."llvmPackages_${llvmVersion}") llvm-manpages;
+                    }
                     // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
                       inherit (prevStage.llvmPackages) clang;
                     }
