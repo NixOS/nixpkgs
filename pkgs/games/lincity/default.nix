@@ -12,13 +12,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lincity";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lincity/${pname}-${version}.tar.gz";
-    sha256 = "0p81wl7labyfb6rgp0hi42l2akn3n7r2bnxal1wyvjylzw8vsk3v";
+    url = "mirror://sourceforge/lincity/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-e0y9Ef/Uy+15oKrbJfKxw04lqCARgvuyWc4vRQ/lAV0=";
   };
 
   buildInputs = [
@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
     "-Wno-error=implicit-function-declaration"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "City simulation game";
     mainProgram = "xlincity";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
     maintainers = [ ];
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
