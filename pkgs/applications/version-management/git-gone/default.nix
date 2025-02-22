@@ -29,12 +29,12 @@ rustPlatform.buildRustPackage rec {
     installManPage git-gone.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cleanup stale Git branches of merge requests";
     homepage = "https://github.com/swsnr/git-gone";
     changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cafkafk
       matthiasbeyer
     ];
