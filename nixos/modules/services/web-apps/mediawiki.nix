@@ -58,7 +58,7 @@ let
     #!${pkgs.runtimeShell}
     become=(exec)
     if [[ "$(id -u)" != ${user} ]]; then
-      become=(exec /run/wrappers/bin/sudo -u ${user} --)
+      become=(exec ${config.security.wrapperDir}/sudo -u ${user} --)
     fi
     "${"$"}{become[@]}" ${placeholder "out"}/bin/mediawiki-maintenance \
     EOF

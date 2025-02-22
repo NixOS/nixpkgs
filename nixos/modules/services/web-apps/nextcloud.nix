@@ -90,7 +90,7 @@ let
     cd ${webroot}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
+      sudo='exec ${config.security.wrapperDir}/sudo -u nextcloud'
     fi
     $sudo ${pkgs.coreutils}/bin/env \
       NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
@@ -1085,7 +1085,7 @@ in {
           phpPackage = phpPackage;
           phpEnv = {
             NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
-            PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
+            PATH = "${config.security.wrapperDir}:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
           settings = mapAttrs (name: mkDefault) {
             "listen.owner" = config.services.nginx.user;

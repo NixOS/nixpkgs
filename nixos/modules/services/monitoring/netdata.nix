@@ -4,15 +4,15 @@ let
 
   wrappedPlugins = pkgs.runCommand "wrapped-plugins" { preferLocalBuild = true; } ''
     mkdir -p $out/libexec/netdata/plugins.d
-    ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
-    ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
-    ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
-    ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
-    ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
-    ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
-    ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
-    ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
-    ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
+    ln -s ${config.security.wrapperDir}/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
+    ln -s ${config.security.wrapperDir}/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
+    ln -s ${config.security.wrapperDir}/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
+    ln -s ${config.security.wrapperDir}/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
+    ln -s ${config.security.wrapperDir}/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
+    ln -s ${config.security.wrapperDir}/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
+    ln -s ${config.security.wrapperDir}/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
+    ln -s ${config.security.wrapperDir}/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
+    ln -s ${config.security.wrapperDir}/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
   '';
 
   plugins = [
@@ -262,7 +262,7 @@ in {
 
         "/var/lib/netdata/ndsudo/ndsudo" = {
           "L+" = {
-            argument = "/run/wrappers/bin/ndsudo";
+            argument = "${config.security.wrapperDir}/ndsudo";
           };
         };
 

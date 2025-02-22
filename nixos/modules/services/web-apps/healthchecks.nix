@@ -27,7 +27,7 @@ let
   healthchecksManageScript = pkgs.writeShellScriptBin "healthchecks-manage" ''
     sudo=exec
     if [[ "$USER" != "${cfg.user}" ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env --preserve-env=PYTHONPATH'
+      sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} --preserve-env --preserve-env=PYTHONPATH'
     fi
     export $(cat ${environmentFile} | xargs)
     ${lib.optionalString (cfg.settingsFile != null) "export $(cat ${cfg.settingsFile} | xargs)"}

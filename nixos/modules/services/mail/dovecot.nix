@@ -110,7 +110,7 @@ let
     ''
       base_dir = ${baseDir}
       protocols = ${concatStringsSep " " cfg.protocols}
-      sendmail_path = /run/wrappers/bin/sendmail
+      sendmail_path = ${config.security.wrapperDir}/sendmail
       # defining mail_plugins must be done before the first protocol {} filter because of https://doc.dovecot.org/configuration_manual/config_file/config_file_syntax/#variable-expansion
       mail_plugins = $mail_plugins ${concatStringsSep " " cfg.mailPlugins.globally.enable}
     ''

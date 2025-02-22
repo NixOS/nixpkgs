@@ -162,7 +162,8 @@ in
           };
 
           mailer = lib.mkOption {
-            default = "/run/wrappers/bin/sendmail";
+            default = "${config.security.wrapperDir}/sendmail";
+            defaultText = lib.literalExpression ''"''${config.security.wrapperDir}/sendmail"'';
             type = lib.types.path;
             description = ''
               Sendmail-compatible binary to be used to send the messages.

@@ -400,7 +400,7 @@ in
         cd ${cfg.settings.pretix.datadir}
         sudo=exec
         if [[ "$USER" != ${cfg.user} ]]; then
-          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} ${optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
+          sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} ${optionalString withRedis "-g redis-pretix"} --preserve-env=PRETIX_CONFIG_FILE'
         fi
         export PRETIX_CONFIG_FILE=${configFile}
         $sudo ${getExe' pythonEnv "pretix-manage"} "$@"

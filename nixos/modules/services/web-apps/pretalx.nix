@@ -306,7 +306,7 @@ in
         cd ${cfg.settings.filesystem.data}
         sudo=exec
         if [[ "$USER" != ${cfg.user} ]]; then
-          sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
+          sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} --preserve-env=PRETALX_CONFIG_FILE'
         fi
         export PRETALX_CONFIG_FILE=${configFile}
         $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
