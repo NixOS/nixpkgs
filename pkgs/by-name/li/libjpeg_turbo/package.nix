@@ -25,6 +25,7 @@
   python3,
   vips,
   testers,
+  nix-update-script,
 }:
 
 assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
@@ -97,22 +98,25 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  passthru.tests = {
-    inherit
-      dvgrab
-      epeg
-      gd
-      graphicsmagick
-      imagemagick
-      imlib2
-      jhead
-      libjxl
-      mjpegtools
-      opencv
-      vips
-      ;
-    inherit (python3.pkgs) pillow imread pyturbojpeg;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit
+        dvgrab
+        epeg
+        gd
+        graphicsmagick
+        imagemagick
+        imlib2
+        jhead
+        libjxl
+        mjpegtools
+        opencv
+        vips
+        ;
+      inherit (python3.pkgs) pillow imread pyturbojpeg;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {
