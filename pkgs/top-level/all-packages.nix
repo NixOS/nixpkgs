@@ -13301,7 +13301,6 @@ with pkgs;
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio {
       python = python311;
-      boost = boost186;  # fails with 187
     };
   };
   gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
