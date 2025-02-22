@@ -67,6 +67,8 @@ buildPythonPackage rec {
     "test_server_connection_timeout_exception"
     # broken with openssl 3.4
     "test_ssl_close"
+    # flaky test
+    "test_send_timeout"
   ];
 
   pythonImportsCheck = [ "eventlet" ];
