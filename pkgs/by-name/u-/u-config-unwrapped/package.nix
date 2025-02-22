@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
 
       install -Dm755 ${binName} -t $out/bin
+      install -Dm644 u-config.1 $out/share/man/man1/u-config.1
 
       runHook postInstall
     '';
