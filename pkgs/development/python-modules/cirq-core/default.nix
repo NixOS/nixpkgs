@@ -1,31 +1,37 @@
 {
   lib,
   stdenv,
-  attrs,
-  autoray ? null,
   buildPythonPackage,
-  duet,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  attrs,
+  duet,
   matplotlib,
   networkx,
   numpy,
-  opt-einsum,
   pandas,
-  ply,
-  pylatex ? null,
-  pyquil ? null,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  quimb ? null,
   requests,
   scipy,
-  setuptools,
   sortedcontainers,
   sympy,
   tqdm,
   typing-extensions,
+  autoray ? null,
+  opt-einsum,
+  ply,
+  pylatex ? null,
+  pyquil ? null,
+  quimb ? null,
+
+  # tests
+  freezegun,
+  pytest-asyncio,
+  pytestCheckHook,
+
   withContribRequires ? false,
 }:
 
@@ -33,8 +39,6 @@ buildPythonPackage rec {
   pname = "cirq-core";
   version = "1.4.1-unstable-2024-09-21";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
@@ -77,9 +81,9 @@ buildPythonPackage rec {
     ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
     freezegun
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTestPaths = lib.optionals (!withContribRequires) [
@@ -99,12 +103,12 @@ buildPythonPackage rec {
       "test_prepare_two_qubit_state_using_sqrt_iswap"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       drewrisinger
       fab
     ];
