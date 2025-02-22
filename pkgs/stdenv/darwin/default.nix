@@ -417,7 +417,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         gnugrep = bootstrapTools;
         pbzx = bootstrapTools;
 
-        jq = null;
+        jq = bootstrapTools;
 
         cctools = bootstrapTools // {
           libtool = bootstrapTools;
