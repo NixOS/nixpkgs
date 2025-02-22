@@ -13,9 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "orf";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-sS452PCX2G49Q5tnScG+ySkUAhFctGsGZrMvQXL7WkY=";
+    repo = "git-workspace";
+    tag = "v${version}";
+    hash = "sha256-sS452PCX2G49Q5tnScG+ySkUAhFctGsGZrMvQXL7WkY=";
   };
 
   useFetchCargoVendor = true;
@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Sync personal and work git repositories from multiple providers";
     homepage = "https://github.com/orf/git-workspace";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ misuzu ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ misuzu ];
     mainProgram = "git-workspace";
   };
 }
