@@ -10217,11 +10217,6 @@ with pkgs;
 
   proj_7 = callPackage ../development/libraries/proj/7.nix { };
 
-  proselint = callPackage ../tools/text/proselint {
-    inherit (python3Packages)
-    buildPythonApplication click;
-  };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf_29;
