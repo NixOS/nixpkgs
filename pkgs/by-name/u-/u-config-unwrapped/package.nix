@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "u-config";
-  version = "0.33.1";
+  version = "0.33.3";
 
   src = fetchFromGitHub {
     owner = "skeeto";
     repo = "u-config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r1zcXKLqw/gK+9k3SX7OCBaZhvV2ya5VC9O3h+WdkyY=";
+    hash = "sha256-2chZwS8aC7mbPJwsf5tju2ZNZNda650qT+ARjNJ2k2g=";
   };
 
   nativeBuildInputs = [
