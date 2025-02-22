@@ -321,7 +321,6 @@ let
       libxml2
       libxo
       ncurses
-      openbsm
       openpam
       xcbuild
       zlib
@@ -1133,7 +1132,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ncurses.dev
               ncurses.man
               ncurses.out
-              openbsm
               openpam
               openssl.out
               patch
