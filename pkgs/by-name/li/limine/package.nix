@@ -72,11 +72,6 @@ stdenv.mkDerivation {
     hash = "sha256-pwoR9ptMpdhdEe/Kbyc+smv9oNIqtJ9L0KFdf6/g0Ec=";
   };
 
-  hardeningDisable = [
-    # clang doesn't support this for RISC-V target
-    "zerocallusedregs"
-  ];
-
   enableParallelBuilding = true;
 
   nativeBuildInputs =
