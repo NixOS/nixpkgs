@@ -24,9 +24,7 @@ in
         If enabled, updates are triggered in regular intervals via a
         `systemd.timer` unit.
 
-        Please see
-        <https://www.freedesktop.org/software/systemd/man/systemd-sysupdate.html>
-        for more details.
+        Please see {manpage}`systemd-sysupdate(8)` for more details.
       '';
     };
 
@@ -108,8 +106,7 @@ in
       description = ''
         Specify transfers as a set of the names of the transfer files as the
         key and the configuration as its value. The configuration can use all
-        upstream options. See
-        <https://www.freedesktop.org/software/systemd/man/sysupdate.d.html>
+        upstream options. See {manpage}`sysupdate.d(5)`
         for all available options.
       '';
     };
