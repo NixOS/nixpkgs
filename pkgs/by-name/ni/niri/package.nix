@@ -8,6 +8,7 @@
   libinput,
   libxkbcommon,
   libgbm,
+  versionCheckHook,
   nix-update-script,
   pango,
   pipewire,
@@ -22,14 +23,14 @@
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
   version = "25.02";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mTTHA0RAaQcdYe+9A3Jx77cmmyLFHmRoZdd8RpWa+m8=";
   };
 
@@ -106,6 +107,10 @@ rustPlatform.buildRustPackage rec {
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     providedSessions = [ "niri" ];
     updateScript = nix-update-script { };
@@ -114,7 +119,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
-    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${version}";
+    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       iogamaster
@@ -125,4 +130,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "niri";
     platforms = lib.platforms.linux;
   };
-}
+})
