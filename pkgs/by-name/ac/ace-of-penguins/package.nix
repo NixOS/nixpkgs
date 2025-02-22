@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes a bunch of miscompilations in modern environments
     ./fixup-miscompilations.patch
+    # make-imglib.c:205:5: error: 'return' with no value, in function returning non-void [-Wreturn-mismatch]
+    # imagelib.c:109:17: error: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+    ./fix-gcc-14.patch
   ];
 
   nativeBuildInputs = [
