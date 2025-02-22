@@ -17,7 +17,7 @@ buildGoModule rec {
   };
 
   patches = [
-    # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
+    # patch out debug.ReadBuildInfo since version information is not available with buildGoModule
     (replaceVars ./version.patch {
       version = version;
       vcsHash = version; # Maybe there is a way to get the git ref from src? idk.

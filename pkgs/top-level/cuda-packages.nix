@@ -11,7 +11,7 @@
 #
 # To summarize:
 #
-# - `prev` should only be used to access attributes which are going to be overriden.
+# - `prev` should only be used to access attributes which are going to be overridden.
 # - `final` should only be used to access `callPackage` to build new packages.
 # - Attribute names should be computable without relying on `final`.
 #   - Extensions should take arguments to build attribute names before relying on `final`.

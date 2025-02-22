@@ -122,7 +122,7 @@ let
       '';
 
       # allow an executable's dependencies to be built with source. this is convenient when
-      # building a development shell for the exectuable using `mkShell`'s `inputsFrom`.
+      # building a development shell for the executable using `mkShell`'s `inputsFrom`.
       passthru = derivation.passthru // {
         withSource = mkExecutable true;
       };

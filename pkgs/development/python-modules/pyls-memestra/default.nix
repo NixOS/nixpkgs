@@ -27,7 +27,7 @@ buildPythonPackage rec {
     python-lsp-server
   ];
 
-  # Tests fail because they rely on writting to read-only files
+  # Tests fail because they rely on writing to read-only files
   doCheck = false;
 
   pythonImportsCheck = [ "pyls_memestra" ];
