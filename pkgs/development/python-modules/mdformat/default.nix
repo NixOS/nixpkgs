@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.21";
+  version = "0.7.22";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "mdformat";
     tag = version;
-    hash = "sha256-lsjALgLuk1wpltSW58N7pMNXwIxXBLdlHinMuBo+juk=";
+    hash = "sha256-WvbGCqfzh7KlNXIGJq09goiyLzVgU7c1+qmsLrIW38k=";
   };
 
   build-system = [ setuptools ];
