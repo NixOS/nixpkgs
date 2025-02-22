@@ -202,7 +202,7 @@ in
     };
 
     systemd.services.h2o = {
-      description = "H2O web server service";
+      description = "H2O HTTP server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
