@@ -20,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     libcaption
     obs-studio
@@ -27,19 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p "$out/lib" "$out/share"
-    mv "$out/obs-plugins/64bit" "$out/lib/obs-plugins"
-    rm -rf "$out/obs-plugins"
-    mv "$out/data" "$out/share/obs"
+    mkdir -p $out/lib $out/share
+    mv $out/obs-plugins/64bit $out/lib/obs-plugins
+    rm -rf $out/obs-plugins
+    mv $out/data $out/share/obs
   '';
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Replay source for OBS studio";
     homepage = "https://github.com/exeldro/obs-replay-source";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pschmitt ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ pschmitt ];
   };
 })
