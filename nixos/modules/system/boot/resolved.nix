@@ -275,7 +275,7 @@ in
             allowedUDPPorts = [ 5353 ];
           })
 
-          (mkIf (if lib.isAttrs cfg.llmnr then mkZeroConf cfg.llmnr else false) {
+          (mkIf (if lib.isAttrs cfg.llmnr then fromAttrs cfg.llmnr else false) {
             allowedUDPPorts = [ 5355 ];
           })
         ];
