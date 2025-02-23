@@ -12,107 +12,110 @@ let
   cfgN = config.services.nextcloud;
 in
 {
-  options.services.nextcloud.notify_push =
-    {
-      enable = lib.mkEnableOption "Notify push";
+  options.services.nextcloud.notify_push = {
+    enable = lib.mkEnableOption "Notify push";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nextcloud-notify_push;
-        defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
-        description = "Which package to use for notify_push";
-      };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.nextcloud-notify_push;
+      defaultText = lib.literalMD "pkgs.nextcloud-notify_push";
+      description = "Which package to use for notify_push";
+    };
 
-      socketPath = lib.mkOption {
-        type = lib.types.str;
-        default = "/run/nextcloud-notify_push/sock";
-        description = "Socket path to use for notify_push";
-      };
+    socketPath = lib.mkOption {
+      type = lib.types.str;
+      default = "/run/nextcloud-notify_push/sock";
+      description = "Socket path to use for notify_push";
+    };
 
-      logLevel = lib.mkOption {
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
+        "error"
+        "warn"
+        "info"
+        "debug"
+        "trace"
+      ];
+      default = "error";
+      description = "Log level";
+    };
+
+    nextcloudUrl = lib.mkOption {
+      type = lib.types.str;
+      default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
+      defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
+      description = "Configure the nextcloud URL notify_push tries to connect to.";
+    };
+
+    bendDomainToLocalhost = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
+
+        This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
+      '';
+    };
+
+    database = {
+      dbtype = lib.mkOption {
         type = lib.types.enum [
-          "error"
-          "warn"
-          "info"
-          "debug"
-          "trace"
+          "sqlite"
+          "pgsql"
+          "mysql"
         ];
-        default = "error";
-        description = "Log level";
+        default = cfgN.settings.dbtype;
+        defaultText = lib.literalExpression ''
+          config.services.nextcloud.settings.dbtype
+        '';
+        description = "Database type.";
       };
-
-      nextcloudUrl = lib.mkOption {
-        type = lib.types.str;
-        default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
-        defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
-        description = "Configure the nextcloud URL notify_push tries to connect to.";
+      dbname = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = cfgN.settings.dbname;
+        defaultText = lib.literalExpression ''
+          config.services.nextcloud.settings.dbname
+        '';
+        description = "Database name.";
       };
-
-      bendDomainToLocalhost = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
+      dbuser = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = cfgN.settings.dbuser;
+        defaultText = lib.literalExpression ''
+          config.services.nextcloud.settings.dbuser
+        '';
+        description = "Database user.";
+      };
+      dbhost = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = cfgN.settings.dbhost;
+        defaultText = lib.literalExpression ''
+          config.services.nextcloud.settings.dbhost
+        '';
         description = ''
-          Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
-
-          This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
+          Database host (+port) or socket path. Defaults to the correct unix socket
+          instead if [](#opt-services.nextcloud.database.createLocally) is true and
+          [](#opt-services.nextcloud.settings.dbtype) is either `pgsql` or
+          `mysql`.
         '';
       };
-
-      database = {
-        dbtype = lib.mkOption {
-          type = lib.types.enum [ "sqlite" "pgsql" "mysql" ];
-          default = cfgN.settings.dbtype;
-          defaultText = lib.literalExpression ''
-            config.services.nextcloud.settings.dbtype
-          '';
-          description = "Database type.";
-        };
-        dbname = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = cfgN.settings.dbname;
-          defaultText = lib.literalExpression ''
-            config.services.nextcloud.settings.dbname
-          '';
-          description = "Database name.";
-        };
-        dbuser = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = cfgN.settings.dbuser;
-          defaultText = lib.literalExpression ''
-            config.services.nextcloud.settings.dbuser
-          '';
-          description = "Database user.";
-        };
-        dbhost = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = cfgN.settings.dbhost;
-          defaultText = lib.literalExpression ''
-            config.services.nextcloud.settings.dbhost
-          '';
-          description = ''
-            Database host (+port) or socket path. Defaults to the correct unix socket
-            instead if [](#opt-services.nextcloud.database.createLocally) is true and
-            [](#opt-services.nextcloud.settings.dbtype) is either `pgsql` or
-            `mysql`.
-          '';
-        };
-        dbtableprefix = lib.mkOption {
-          type = lib.types.str;
-          default = cfgN.settings.dbtableprefix;
-          defaultText = lib.literalExpression ''
-            config.services.nextcloud.settings.dbtableprefix
-          '';
-          description = "Table prefix in Nextcloud database.";
-        };
-        dbpassFile = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
-          default = null;
-          description = ''
-            The full path to a file that contains the database password.
-          '';
-        };
+      dbtableprefix = lib.mkOption {
+        type = lib.types.str;
+        default = cfgN.settings.dbtableprefix;
+        defaultText = lib.literalExpression ''
+          config.services.nextcloud.settings.dbtableprefix
+        '';
+        description = "Table prefix in Nextcloud database.";
+      };
+      dbpassFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          The full path to a file that contains the database password.
+        '';
       };
     };
+  };
 
   config = lib.mkIf cfg.enable {
     systemd.services.nextcloud-notify_push = {
