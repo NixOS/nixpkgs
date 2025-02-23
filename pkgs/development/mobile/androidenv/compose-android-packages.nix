@@ -50,6 +50,8 @@
 , includeSystemImages ? false
 , systemImageTypes ? [ "google_apis" "google_apis_playstore" ]
 , abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
+  # cmake has precompiles on x86_64 and Darwin platforms. Default to true there for compatibility.
+, includeCmake ? stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin
 , cmakeVersions ? [ repo.latest.cmake ]
 , includeNDK ? false
 , ndkVersion ? repo.latest.ndk
@@ -87,18 +89,16 @@ let
               let
                 isTargetOs = if builtins.hasAttr "os" archive then
                   archive.os == os || archive.os == "all" else true;
-                isTargetArc = if builtins.hasAttr "arch" archive then
+                isTargetArch = if builtins.hasAttr "arch" archive then
                   archive.arch == arch || archive.arch == "all" else true;
               in
-                isTargetOs && isTargetArc
+                isTargetOs && isTargetArch
             ) value;
           in
-          lib.warnIf (builtins.length validArchives == 0)
-            "No valid archives for ${lib.concatMapStringsSep "." (x: ''"${x}"'') path} for os=${os}, arch=${arch}"
-            (lib.optionals (builtins.length validArchives > 0)
-              (lib.last (map (archive:
-                (fetchurl { inherit (archive) url sha1; })
-              ) validArchives)))
+          lib.optionals (builtins.length validArchives > 0)
+            (lib.last (map (archive:
+              (fetchurl { inherit (archive) url sha1; })
+            ) validArchives))
         else value
       )
       attrSet;
@@ -139,12 +139,12 @@ let
 in
 lib.recurseIntoAttrs rec {
   deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
-    inherit stdenv lib mkLicenses meta;
+    inherit stdenv lib mkLicenses meta os arch;
   };
 
   deployAndroidPackage = ({package, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
     let
-      extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
+      extraParams = removeAttrs args [ "package" "os" "arch" "buildInputs" "patchInstructions" ];
     in
     deployAndroidPackages ({
       inherit buildInputs;
@@ -164,12 +164,12 @@ lib.recurseIntoAttrs rec {
       '';
 
   platform-tools = callPackage ./platform-tools.nix {
-    inherit deployAndroidPackage os meta;
+    inherit deployAndroidPackage os arch meta;
     package = check-version packages "platform-tools" platformToolsVersion;
   };
 
   tools = callPackage ./tools.nix {
-    inherit deployAndroidPackage os meta;
+    inherit deployAndroidPackage os arch meta;
     package = check-version packages "tools" toolsVersion;
 
     postInstall = ''
@@ -180,7 +180,7 @@ lib.recurseIntoAttrs rec {
 
   build-tools = map (version:
     callPackage ./build-tools.nix {
-      inherit deployAndroidPackage os meta;
+      inherit deployAndroidPackage os arch meta;
       package = check-version packages "build-tools" version;
 
       postInstall = ''
@@ -189,14 +189,15 @@ lib.recurseIntoAttrs rec {
     }
   ) buildToolsVersions;
 
-  emulator = lib.optionals includeEmulator (callPackage ./emulator.nix {
-    inherit deployAndroidPackage os meta;
-    package = check-version packages "emulator" emulatorVersion;
+  emulator =
+    callPackage ./emulator.nix {
+      inherit deployAndroidPackage os arch meta;
+      package = check-version packages "emulator" emulatorVersion;
 
-    postInstall = ''
-      ${linkSystemImages { images = system-images; check = includeSystemImages; }}
-    '';
-  });
+      postInstall = ''
+        ${linkSystemImages { images = system-images; check = includeSystemImages; }}
+      '';
+    };
 
   platforms = map (version:
     deployAndroidPackage {
@@ -248,29 +249,51 @@ lib.recurseIntoAttrs rec {
 
   cmake = map (version:
     callPackage ./cmake.nix {
-      inherit deployAndroidPackage os meta;
+      inherit deployAndroidPackage os arch meta;
       package = check-version packages "cmake" version;
     }
   ) cmakeVersions;
 
+  # Returns true if we should link the specified plugins.
+  shouldLink = check: packages:
+    assert builtins.isList packages;
+    if check == true then
+      true
+    else if check == false then
+      false
+    else if check == null || check == "if-supported" then
+      let
+        hasSrc = package: package.src != null && (builtins.isList package.src -> builtins.length package.src > 0);
+      in
+      packages != [] && lib.all hasSrc packages
+    else
+      throw "Invalid argument ${toString check}; use true, false, or null/if-supported";
+
   # Creates a NDK bundle.
-  makeNdkBundle = ndkVersion:
+  makeNdkBundle = package:
     callPackage ./ndk-bundle {
-      inherit deployAndroidPackage os platform-tools meta;
-      package = packages.ndk-bundle.${ndkVersion} or packages.ndk.${ndkVersion};
+      inherit deployAndroidPackage os arch platform-tools meta package;
     };
 
   # All NDK bundles.
-  ndk-bundles = lib.optionals includeNDK (map makeNdkBundle ndkVersions);
+  ndk-bundles = lib.flatten (
+    map (version:
+      let
+        package = makeNdkBundle (packages.ndk-bundle.${ndkVersion} or packages.ndk.${ndkVersion});
+      in
+      lib.optional (shouldLink includeNDK [package]) package
+    ) ndkVersions
+  );
 
   # The "default" NDK bundle.
-  ndk-bundle = if includeNDK then lib.findFirst (x: x != null) null ndk-bundles else null;
+  ndk-bundle = if ndk-bundles == [] then null else lib.head ndk-bundles;
 
+  # Makes a Google API bundle.
   google-apis = map (version:
     deployAndroidPackage {
       package = (check-version addons "addons" version).google_apis;
     }
-  ) (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
+  ) (builtins.filter (platformVersion: lib.versionOlder platformVersion "26") platformVersions); # API level 26 and higher include Google APIs by default
 
   google-tv-addons = map (version:
     deployAndroidPackage {
@@ -279,8 +302,8 @@ lib.recurseIntoAttrs rec {
   ) platformVersions;
 
   # Function that automatically links all plugins for which multiple versions can coexist
-  linkPlugins = {name, plugins}:
-    lib.optionalString (plugins != []) ''
+  linkPlugins = {name, plugins, check ? true}:
+    lib.optionalString (shouldLink check plugins) ''
       mkdir -p ${name}
       ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name}/* ${name}
@@ -288,8 +311,8 @@ lib.recurseIntoAttrs rec {
     '';
 
   # Function that automatically links all NDK plugins.
-  linkNdkPlugins = {name, plugins, rootName ? name}:
-    lib.optionalString (plugins != []) ''
+  linkNdkPlugins = {name, plugins, rootName ? name, check ? true}:
+    lib.optionalString (shouldLink check plugins) ''
       mkdir -p ${rootName}
       ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name} ${rootName}/${plugin.version}
@@ -298,17 +321,17 @@ lib.recurseIntoAttrs rec {
 
   # Function that automatically links the default NDK plugin.
   linkNdkPlugin = {name, plugin, check}:
-    lib.optionalString check ''
+    lib.optionalString (shouldLink check [plugin]) ''
       ln -s ${plugin}/libexec/android-sdk/${name} ${name}
     '';
 
   # Function that automatically links a plugin for which only one version exists
   linkPlugin = {name, plugin, check ? true}:
-    lib.optionalString check ''
+    lib.optionalString (shouldLink check [plugin]) ''
       ln -s ${plugin}/libexec/android-sdk/${name} ${name}
     '';
 
-  linkSystemImages = { images, check }: lib.optionalString check ''
+  linkSystemImages = { images, check }: lib.optionalString (shouldLink check images) ''
     mkdir -p system-images
     ${lib.concatMapStrings (system-image: ''
       apiVersion=$(basename $(echo ${system-image}/libexec/android-sdk/system-images/*))
@@ -320,7 +343,7 @@ lib.recurseIntoAttrs rec {
 
   # Links all plugins related to a requested platform
   linkPlatformPlugins = {name, plugins, check}:
-    lib.optionalString check ''
+    lib.optionalString (shouldLink check plugins) ''
       mkdir -p ${name}
       ${lib.concatMapStrings (plugin: ''
         ln -s ${plugin}/libexec/android-sdk/${name}/* ${name}
@@ -344,7 +367,7 @@ lib.recurseIntoAttrs rec {
       by an environment variable for a single invocation of the nix tools.
         $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
-    inherit deployAndroidPackage os meta;
+    inherit deployAndroidPackage os arch meta;
 
     package = cmdline-tools-package;
 
@@ -356,12 +379,12 @@ lib.recurseIntoAttrs rec {
       ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
       ${linkPlugins { name = "platforms"; plugins = platforms; }}
       ${linkPlatformPlugins { name = "sources"; plugins = sources; check = includeSources; }}
-      ${linkPlugins { name = "cmake"; plugins = cmake; }}
-      ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
+      ${linkPlugins { name = "cmake"; plugins = cmake; check = includeCmake; }}
+      ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; check = includeNDK; }}
       ${linkNdkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
       ${linkSystemImages { images = system-images; check = includeSystemImages; }}
       ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleAPIs; }}
-      ${linkPlatformPlugins { name = "add-ons"; plugins = google-apis; check = useGoogleTVAddOns; }}
+      ${linkPlatformPlugins { name = "add-ons"; plugins = google-tv-addons; check = useGoogleTVAddOns; }}
 
       # Link extras
       ${lib.concatMapStrings (identifier:
@@ -369,7 +392,7 @@ lib.recurseIntoAttrs rec {
           package = addons.extras.${identifier};
           path = package.path;
           extras = callPackage ./extras.nix {
-            inherit deployAndroidPackage package os meta;
+            inherit deployAndroidPackage package os arch meta;
           };
         in
         ''
@@ -385,7 +408,7 @@ lib.recurseIntoAttrs rec {
           ln -s $i $out/bin
       done
 
-      ${lib.optionalString includeEmulator ''
+      ${lib.optionalString (shouldLink includeEmulator [emulator]) ''
         for i in ${emulator}/bin/*; do
             ln -s $i $out/bin
         done

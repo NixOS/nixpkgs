@@ -5,6 +5,7 @@
   autoPatchelfHook,
   makeWrapper,
   os,
+  arch,
   pkgs,
   stdenv,
   postInstall,
@@ -13,7 +14,7 @@
 
 deployAndroidPackage {
   name = "androidsdk";
-  inherit package os;
+  inherit package os arch;
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
