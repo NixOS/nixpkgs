@@ -3142,12 +3142,6 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
-  blaggacao = {
-    name = "David Arnold";
-    email = "dar@xoe.solutions";
-    github = "blaggacao";
-    githubId = 7548295;
-  };
   blakesmith = {
     name = "Blake Smith";
     email = "blakesmith0@gmail.com";
@@ -17047,13 +17041,6 @@
     githubId = 24574288;
     name = "Nikodem Rabuliński";
   };
-  nrdxp = {
-    email = "tim.deh@pm.me";
-    matrix = "@timdeh:matrix.org";
-    github = "nrdxp";
-    githubId = 34083928;
-    name = "Tim DeHerrera";
-  };
   nrhelmi = {
     email = "helmiinour@gmail.com";
     github = "NRHelmi";
@@ -19785,13 +19772,6 @@
     githubId = 44014925;
     name = "Rexx Larsson";
   };
-  RGBCube = {
-    name = "RGBCube";
-    email = "nixpkgs@rgbcu.be";
-    github = "RGBCube";
-    githubId = 78925721;
-    keys = [ { fingerprint = "jPaU3Vpm/GN0tUuDg72n2+bd9dDMWe4bnKM325eP7eI"; } ];
-  };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";
@@ -22219,13 +22199,6 @@
     githubId = 219362;
     name = "Sarah Brofeldt";
   };
-  srid = {
-    email = "srid@srid.ca";
-    matrix = "@srid:matrix.org";
-    github = "srid";
-    githubId = 3998;
-    name = "Sridhar Ratnakumar";
-  };
   srounce = {
     name = "Samuel Rounce";
     email = "me@samuelrounce.co.uk";
@@ -23184,12 +23157,6 @@
     name = "Thiago Franco de Moraes";
     github = "tfmoraes";
     githubId = 351108;
-  };
-  tgunnoe = {
-    email = "t@gvno.net";
-    github = "tgunnoe";
-    githubId = 7254833;
-    name = "Taylor Gunnoe";
   };
   tg-x = {
     email = "*@tg-x.net";
