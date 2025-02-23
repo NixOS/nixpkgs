@@ -8551,8 +8551,6 @@ with pkgs;
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
-  certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
-
   certbot-full = certbot.withPlugins (cp: with cp; [
     certbot-dns-cloudflare
     certbot-dns-google
