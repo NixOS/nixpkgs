@@ -1,4 +1,8 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
@@ -6,6 +10,8 @@ let
     mkOption
     types
     ;
+
+  inherit (import ./common.nix { inherit lib; }) tlsRecommendationsOption;
 in
 {
   options = {
@@ -128,6 +134,7 @@ in
                     ]
                   '';
             };
+            recommendations = tlsRecommendationsOption;
             extraSettings = mkOption {
               type = types.attrs;
               default = { };
