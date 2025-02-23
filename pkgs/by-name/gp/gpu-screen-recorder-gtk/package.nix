@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchgit,
   pkg-config,
   addDriverRunpath,
   desktop-file-utils,
@@ -19,18 +19,18 @@
   wayland,
   wrapGAppsHook3,
   wrapperDir ? "/run/wrappers/bin",
+  gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gpu-screen-recorder-gtk";
-  version = "5.0.0";
+  version = "5.1.4";
 
-  src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.${finalAttrs.version}.tar.gz";
-    hash = "sha256-uXbiuA1XPWZVwQGLh47rKzCZSEUEPWqYALqMuCGA7do=";
+  src = fetchgit {
+    url = "https://repo.dec05eba.com/${pname}";
+    tag = version;
+    hash = "sha256-HUa7WSMWNzjGZ0PMOnIIvwg6ulFETlKCQtv5nDhLhog=";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -68,13 +68,18 @@ stdenv.mkDerivation (finalAttrs: {
       })
     '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
     description = "GTK frontend for gpu-screen-recorder.";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
     license = lib.licenses.gpl3Only;
     mainProgram = "gpu-screen-recorder-gtk";
-    maintainers = with lib.maintainers; [ babbaj ];
+    maintainers = with lib.maintainers; [
+      babbaj
+      js6pak
+    ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}
