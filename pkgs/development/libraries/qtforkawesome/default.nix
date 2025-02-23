@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtforkawesome";
-  version = "0.1.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "qtforkawesome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9e2TCg3itYtHZSvzCoaiIZmgsCMIoebh6C/XWtKz/2Q=";
+    hash = "sha256-djYgZt1mNmV5yLfQH/DPikfOPqtF11XZCTOfNXHur28=";
   };
 
   nativeBuildInputs = [
