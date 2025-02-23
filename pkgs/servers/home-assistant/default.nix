@@ -152,6 +152,22 @@ let
         ];
       });
 
+      # acme and thus hass-nabucasa doesn't support josepy v2
+      # https://github.com/certbot/certbot/issues/10185
+      josepy = super.josepy.overridePythonAttrs (old: rec {
+        version = "1.15.0";
+        src = fetchFromGitHub {
+          owner = "certbot";
+          repo = "josepy";
+          tag = "v${version}";
+          hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
+        };
+        dependencies = with self; [
+          pyopenssl
+          cryptography
+        ];
+      });
+
       letpot = super.letpot.overridePythonAttrs (rec {
         version = "0.3.0";
         src = fetchFromGitHub {

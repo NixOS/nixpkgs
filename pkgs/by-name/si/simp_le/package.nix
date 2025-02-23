@@ -1,11 +1,33 @@
 {
   lib,
-  python3Packages,
+  python3,
+  fetchFromGitHub,
   fetchPypi,
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      # acme doesn't support josepy v2
+      josepy = super.josepy.overridePythonAttrs (old: rec {
+        version = "1.15.0";
+        src = fetchFromGitHub {
+          owner = "certbot";
+          repo = "josepy";
+          tag = "v${version}";
+          hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
+        };
+        dependencies = with self; [
+          pyopenssl
+          cryptography
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "simp_le-client";
   version = "0.20.0";
   pyproject = true;
@@ -27,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # both setuptools-scm and mock are runtime dependencies
-  dependencies = with python3Packages; [
+  dependencies = with python.pkgs; [
     acme
     cryptography
     setuptools-scm
