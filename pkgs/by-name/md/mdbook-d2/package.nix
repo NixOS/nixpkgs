@@ -31,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/danieleades/mdbook-d2";
     changelog = "https://github.com/danieleades/mdbook-d2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
