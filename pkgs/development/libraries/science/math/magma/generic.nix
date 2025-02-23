@@ -160,6 +160,7 @@ stdenv.mkDerivation {
     ++ lists.optionals cudaSupport (
       with effectiveCudaPackages;
       [
+        cuda_cccl # <nv/target> and <cuda/std/type_traits>
         cuda_cudart # cuda_runtime.h
         libcublas # cublas_v2.h
         libcusparse # cusparse.h
@@ -169,9 +170,6 @@ stdenv.mkDerivation {
       ]
       ++ lists.optionals (cudaAtLeast "11.8") [
         cuda_profiler_api # <cuda_profiler_api.h>
-      ]
-      ++ lists.optionals (cudaAtLeast "12.0") [
-        cuda_cccl # <nv/target>
       ]
     )
     ++ lists.optionals rocmSupport (
