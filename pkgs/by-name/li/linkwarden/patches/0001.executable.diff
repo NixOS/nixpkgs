@@ -1,0 +1,13 @@
+--- a/lib/api/archiveHandler.ts	2024-09-15 12:48:19.171064883 -0700
++++ b/lib/api/archiveHandler.ts	2024-09-15 12:53:08.037788287 -0700
+@@ -44,6 +44,10 @@
+     };
+   }
+ 
++  if (process.env.NIXPKGS_PLAYRIGHT_EXECUTABLE_PATH){
++      browserOptions.executablePath = process.env.NIXPKGS_PLAYRIGHT_EXECUTABLE_PATH;
++  }
++
+   const browser = await chromium.launch(browserOptions);
+   const context = await browser.newContext({
+     ...devices["Desktop Chrome"],
