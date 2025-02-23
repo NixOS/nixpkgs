@@ -8,6 +8,7 @@
   libadwaita,
   blueprint-compiler,
   wrapGAppsHook4,
+  gsettings-desktop-schemas,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,13 +35,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libadwaita
+    gsettings-desktop-schemas
   ];
 
   strictDeps = true;
 
-  preBuild = ''
-    blueprint-compiler format resources/**/*.blp
-  '';
+  postInstall =
+    # The build.rs compiles the settings schema and writes the compiled file next to the .xml file.
+    # This copies the compiled file to a path that can be detected by gsettings-desktop-schemas
+    ''
+      mkdir -p "$out/share/glib-2.0/schemas"
+      cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
+    '';
 
   meta = {
     description = "Turn on devices in your local network";
