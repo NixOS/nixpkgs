@@ -22,6 +22,10 @@ python3Packages.buildPythonApplication rec {
       --replace "/bin/sh" "${bash}/bin/sh"
   '';
 
+  pythonRelaxDeps = [
+    "acme"
+  ];
+
   # both setuptools-scm and mock are runtime dependencies
   dependencies = with python3Packages; [
     acme
