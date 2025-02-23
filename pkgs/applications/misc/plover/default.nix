@@ -14,14 +14,15 @@
         appdirs
         babel
         buildPythonPackage
+        evdev
         pyqt5
-        pytestCheckHook
-        pytest-qt
         pyserial
+        pytest-qt
+        pytestCheckHook
         setuptools
+        stdenv
         wcwidth
         xlib
-        stdenv
         ;
       inherit (lib) licenses maintainers platforms;
       plover_stroke = buildPythonPackage rec {
@@ -80,7 +81,7 @@
     in
     buildPythonPackage rec {
       pname = "plover";
-      version = "4.0.0rc2";
+      version = "4.0.0";
 
       pyproject = true;
 
@@ -88,7 +89,7 @@
         owner = "openstenoproject";
         repo = "plover";
         rev = "refs/tags/v${version}";
-        sha256 = "sha256-rmMec/BbvOJ92u8Tmp3Kv2YezzJxB/L8UrDntTDSKj4=";
+        sha256 = "sha256-9oDsAbpF8YbLZyRzj9j5tk8QGi0o1F+8vB5YLJGqN+4=";
       };
 
       nativeBuildInputs = [
@@ -97,15 +98,16 @@
       ];
 
       propagatedBuildInputs = [
-        babel
-        pyqt5
-        xlib
-        pyserial
         appdirs
-        wcwidth
-        setuptools
+        babel
+        evdev
         plover_stroke
+        pyqt5
+        pyserial
         rtf_tokenize
+        setuptools
+        wcwidth
+        xlib
       ];
 
       buildInputs = [ qt5.qtwayland ];
