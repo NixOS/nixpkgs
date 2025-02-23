@@ -7,7 +7,6 @@
   pkg-config,
   enableUnicodeHelp ? true,
 }:
-
 stdenv.mkDerivation rec {
   pname = "cxxopts";
   version = "3.2.1";
@@ -22,6 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals enableUnicodeHelp [ icu74.dev ];
   cmakeFlags = [
     "-DCXXOPTS_BUILD_EXAMPLES=OFF"
+    "-DCXXOPTS_CXX_STANDARD=17"
   ] ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
   nativeBuildInputs = [ cmake ] ++ lib.optionals enableUnicodeHelp [ pkg-config ];
 
