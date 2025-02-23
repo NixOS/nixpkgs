@@ -64,10 +64,10 @@ stdenv.mkDerivation rec {
         "$out/bin/ApacheDirectoryStudio" \
         --prefix PATH : "${jdk}/bin" \
         --prefix LD_LIBRARY_PATH : ${
-          lib.makeLibraryPath ([
+          lib.makeLibraryPath [
             glib
             webkitgtk_4_0
-          ])
+          ]
         } \
         --run "mkdir -p /tmp/SWT-GDBusServer"
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
