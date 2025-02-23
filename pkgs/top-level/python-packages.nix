@@ -14837,6 +14837,8 @@ self: super: with self; {
 
   senf = callPackage ../development/python-modules/senf { };
 
+  sensai-utils = callPackage ../development/python-modules/sensai-utils { };
+
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
   sensirion-ble = callPackage ../development/python-modules/sensirion-ble { };
