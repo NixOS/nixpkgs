@@ -58,9 +58,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
+  env =
+    lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    }
+    // lib.optionalAttrs stdenv.cc.bintools.isLLVM {
+      # https://github.com/libcdio/libcdio/issues/20
+      NIX_LDFLAGS = "--undefined-version";
+    };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
