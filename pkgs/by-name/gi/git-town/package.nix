@@ -82,7 +82,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       allonsy
-      blaggacao
       gabyx
     ];
     mainProgram = "git-town";
