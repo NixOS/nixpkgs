@@ -1,6 +1,6 @@
 {
-  stdenv,
   lib,
+  stdenv,
   buildGo122Module,
   coreutils,
   fetchFromGitHub,
@@ -146,13 +146,13 @@ buildGo122Module rec {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pulumi.io/";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
-    sourceProvenance = [ sourceTypes.fromSource ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       trundle
       veehaitch
       tie
