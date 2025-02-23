@@ -30,7 +30,6 @@ buildPostgresqlExtension (finalAttrs: {
       postgresqlTestHook
       (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
     ];
-    failureHook = "postgresqlStop";
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
     passAsFile = [ "sql" ];
     sql = ''
