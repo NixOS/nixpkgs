@@ -2017,8 +2017,6 @@ self: super: {
   # Too strict lower bounds on (test) deps
   # https://github.com/phadej/puresat/issues/6
   puresat = doJailbreak super.puresat;
-  # https://github.com/phadej/spdx/issues/62
-  spdx = doJailbreak super.spdx;
 
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
@@ -2125,10 +2123,6 @@ self: super: {
   sdp4text = disableLibraryProfiling super.sdp4text;
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
-
-  # Unnecessarily strict bound on template-haskell
-  # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
-  tree-sitter = doJailbreak super.tree-sitter;
 
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
