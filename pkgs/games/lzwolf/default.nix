@@ -87,6 +87,6 @@ stdenv.mkDerivation rec {
     mainProgram = "lzwolf";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tgunnoe ];
+    maintainers = with maintainers; [ ];
   };
 }
