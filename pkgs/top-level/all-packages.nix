@@ -8552,7 +8552,7 @@ with pkgs;
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
   certbot-full = certbot.withPlugins (cp: with cp; [
-    certbot-dns-cloudflare
+    # FIXME unbreak certbot-dns-cloudflare
     certbot-dns-google
     certbot-dns-ovh
     certbot-dns-rfc2136
