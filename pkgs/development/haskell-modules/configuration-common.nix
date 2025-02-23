@@ -433,7 +433,6 @@ self: super: {
 
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
-  mysql-haskell = dontCheck super.mysql-haskell;
 
   # Test data missing
   # https://github.com/FPtje/GLuaFixer/issues/165
@@ -588,7 +587,6 @@ self: super: {
   dbmigrations = dontCheck super.dbmigrations;
   filestore = dontCheck super.filestore;
   graceful = dontCheck super.graceful;
-  HList = dontCheck super.HList;
   ide-backend = dontCheck super.ide-backend;
   marquise = dontCheck super.marquise;                  # https://github.com/anchor/marquise/issues/69
   memcached-binary = dontCheck super.memcached-binary;
@@ -662,15 +660,10 @@ self: super: {
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
   crc = dontCheck super.crc;                            # https://github.com/MichaelXavier/crc/issues/2
-  css-text = dontCheck super.css-text;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
-  data-hash = dontCheck super.data-hash;
   Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
   DigitalOcean = dontCheck super.DigitalOcean;
-  direct-sqlite = dontCheck super.direct-sqlite;
   directory-layout = dontCheck super.directory-layout;
-  dlist = dontCheck super.dlist;
-  docopt = dontCheck super.docopt;                      # http://hydra.cryp.to/build/499172/log/raw
   dom-selector = dontCheck super.dom-selector;          # http://hydra.cryp.to/build/497670/log/raw
   dotenv = dontCheck super.dotenv;                      # Tests fail because of missing test file on version 0.8.0.2 fixed on version 0.8.0.4
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
@@ -689,17 +682,14 @@ self: super: {
   GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
-  haeredes = dontCheck super.haeredes;
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
-  hath = dontCheck super.hath;
   haxl = dontCheck super.haxl;                          # non-deterministic failure https://github.com/facebook/Haxl/issues/85
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
   hedis-pile = dontCheck super.hedis-pile;
   hedis-tags = dontCheck super.hedis-tags;
-  hedn = dontCheck super.hedn;
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
@@ -750,13 +740,9 @@ self: super: {
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
-  memcache = dontCheck super.memcache;
-  metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
-  netpbm = dontCheck super.netpbm;
-  network = dontCheck super.network;
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
@@ -769,7 +755,6 @@ self: super: {
   parameterized = dontCheck super.parameterized; # https://github.com/louispan/parameterized/issues/2
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
-  pipes-websockets = dontCheck super.pipes-websockets;
   posix-pty = dontCheck super.posix-pty; # https://github.com/merijn/posix-pty/issues/12
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
   powerdns = dontCheck super.powerdns; # Tests require networking and external services
@@ -780,36 +765,25 @@ self: super: {
   redis-io = dontCheck super.redis-io;
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
-  safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
   sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
-  snap-core = dontCheck super.snap-core;
   sourcemap = dontCheck super.sourcemap;
   static-resources = dontCheck super.static-resources;
-  strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
   svndump = dontCheck super.svndump;
   tar = dontCheck super.tar; #https://hydra.nixos.org/build/25088435/nixlog/2 (fails only on 32-bit)
-  th-printf = dontCheck super.th-printf;
   thumbnail-plus = dontCheck super.thumbnail-plus;
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
-  wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
-  webdriver = dontCheck super.webdriver;
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
-  zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
-
-  # These test suites run for ages, even on a fast machine. This is nuts.
-  Random123 = dontCheck super.Random123;
-  systemd = dontCheck super.systemd;
 
   # Allow template-haskell 2.22
   # https://github.com/well-typed/ixset-typed/pull/23
@@ -847,9 +821,6 @@ self: super: {
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
-
-  # https://github.com/Philonous/xml-picklers/issues/5
-  xml-picklers = dontCheck super.xml-picklers;
 
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
@@ -948,9 +919,6 @@ self: super: {
     "--ghc-option=-DCURL_DISABLE_TYPECHECK"
   ] super.curl;
 
-  # https://github.com/hvr/token-bucket/issues/3
-  token-bucket = dontCheck super.token-bucket;
-
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
 
@@ -1038,7 +1006,6 @@ self: super: {
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
-    doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   }) super.hindent);
 
   # https://github.com/basvandijk/concurrent-extra/issues/12
@@ -1105,9 +1072,6 @@ self: super: {
     (self.generateOptparseApplicativeCompletions [ "idris" ])
   ];
 
-  # fails with sandbox
-  yi-keymap-vim = dontCheck super.yi-keymap-vim;
-
   # https://hydra.nixos.org/build/42769611/nixlog/1/raw
   # note: the library is unmaintained, no upstream issue
   dataenc = doJailbreak super.dataenc;
@@ -1120,10 +1084,6 @@ self: super: {
 
   # No upstream issue tracker
   hspec-expectations-pretty-diff = dontCheck super.hspec-expectations-pretty-diff;
-
-  # Don't depend on chell-quickcheck, which doesn't compile due to restricting
-  # QuickCheck to versions ">=2.3 && <2.9".
-  system-filepath = dontCheck super.system-filepath;
 
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
@@ -1205,12 +1165,6 @@ self: super: {
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
 
-  # Test suite fails due to trying to create directories
-  path-io = dontCheck super.path-io;
-
-  # Duplicate instance with smallcheck.
-  store = dontCheck super.store;
-
   # With ghc-8.2.x haddock would time out for unknown reason
   # See https://github.com/haskell/haddock/issues/679
   language-puppet = dontHaddock super.language-puppet;
@@ -1227,9 +1181,6 @@ self: super: {
   # Compiles some C or C++ source which requires these headers
   VulkanMemoryAllocator = addExtraLibrary pkgs.vulkan-headers super.VulkanMemoryAllocator;
   vulkan-utils = addExtraLibrary pkgs.vulkan-headers super.vulkan-utils;
-
-  # dontCheck: https://github.com/haskell-servant/servant-auth/issues/113
-  servant-auth-client = dontCheck super.servant-auth-client;
 
   # Generate cli completions for dhall.
   dhall = self.generateOptparseApplicativeCompletions [ "dhall" ] super.dhall;
@@ -1643,12 +1594,6 @@ self: super: {
   # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
 
-  # tests seem to require a different version of hspec-core
-  hspec-contrib = dontCheck super.hspec-contrib;
-
-  # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
-  domain-auth = dontCheck super.domain-auth;
-
   # - Deps are required during the build for testing and also during execution,
   #   so add them to build input and also wrap the resulting binary so they're in
   #   PATH.
@@ -1788,9 +1733,6 @@ self: super: {
     "--ghc-option=-fno-safe-haskell"
     "--haddock-option=--optghc=-fno-safe-haskell"
   ] super.alg;
-
-  # Missing test files in 1.8.1.0, fixed in 1.8.1.1
-  sequence-formats = dontCheck super.sequence-formats;
 
   # 2025-02-11: Too strict bounds on hedgehog < 1.5
   nothunks = doJailbreak super.nothunks;
@@ -2155,10 +2097,6 @@ self: super: {
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
 
-  # Test suite fails to compile
-  # https://github.com/kuribas/mfsolve/issues/8
-  mfsolve = dontCheck super.mfsolve;
-
   # Fixes compilation with GHC 9.0 and above
   # https://hub.darcs.net/shelarcy/regex-compat-tdfa/issue/3
   regex-compat-tdfa = appendPatches [
@@ -2222,9 +2160,6 @@ self: super: {
   # 2025-01-07: unreleased upstream supports hedgehog 1.5 but drifted quite a bit from hackage revisions so hard to patch
   hw-hspec-hedgehog = doJailbreak super.hw-hspec-hedgehog;
 
-  # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
-  system-fileio = dontCheck super.system-fileio;
-
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
@@ -2263,10 +2198,6 @@ self: super: {
   })
   super.polynomial);
 
-  # Tests likely broke because of https://github.com/nick8325/quickcheck/issues/359,
-  # but fft is not on GitHub, so no issue reported.
-  fft = dontCheck super.fft;
-
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:
@@ -2279,9 +2210,6 @@ self: super: {
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
 
-  # doctest-parallel is broken with v1-style cabal-install / Setup.hs
-  # https://github.com/martijnbastiaan/doctest-parallel/issues/22
-  doctest-parallel = dontCheck super.doctest-parallel;
   clash-prelude = dontCheck super.clash-prelude;
 
   krank = appendPatches [
@@ -2589,18 +2517,8 @@ self: super: {
     hash = "sha256-4osUMo0cvTvyDTXF8lY9tQbFqLywRwsc3RkHIhqSriQ=";
   }) super.gauge;
 
-  # Flaky QuickCheck tests
-  # https://github.com/Haskell-Things/ImplicitCAD/issues/441
-  implicit = dontCheck super.implicit;
-
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
-
-  # 2024-01-23: https://github.com/composewell/unicode-data/issues/118
-  unicode-data = dontCheck super.unicode-data;
-
-  # 2024-01-24: https://github.com/haskellari/tree-diff/issues/79
-  tree-diff = dontCheck super.tree-diff;
 
   # base <4.19
   # https://github.com/well-typed/large-records/issues/168
