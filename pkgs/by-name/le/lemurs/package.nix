@@ -2,11 +2,10 @@
   fetchFromGitHub,
   lib,
   bash,
-  lemurs,
   linux-pam,
   rustPlatform,
   systemdMinimal,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lemurs";
@@ -28,9 +27,8 @@ rustPlatform.buildRustPackage rec {
     systemdMinimal
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lemurs;
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Customizable TUI display/login manager written in Rust";
