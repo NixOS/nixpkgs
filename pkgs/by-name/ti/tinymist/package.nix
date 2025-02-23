@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   pkg-config,
   libgit2,
@@ -19,29 +18,17 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.12.22";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     tag = "v${version}";
-    hash = "sha256-fhM9IF+1iHfDcL+aI/31sqkyO5UmN+AwUUkKwyw+hWw=";
+    hash = "sha256-b2tU9weUKc0Y8LikSblfa3ifckp3u09M9Rhl+WujugI=";
   };
 
-  patches = [
-    # Fixes:
-    # cargo metadata failure: error: Package `tinymist-std v0.12.20 (/build/source/crates/tinymist-std)` does not have feature `wasm-bindgen`.
-    # It has an optional dependency with that name, but that dependency uses the "dep:" syntax in the features table, so it does not have an implicit feature with that name.
-    # https://github.com/Myriad-Dreamin/tinymist/pull/1363
-    (fetchpatch {
-      name = "fix-cargo-features";
-      url = "https://github.com/Myriad-Dreamin/tinymist/pull/1363/commits/96e0a15fa20f09734f2b8152977a1137f5469761.patch";
-      hash = "sha256-W3HzV0GGhGuX/V4rox32LSw6YJ2BLTAG16bF2pZ+xYs=";
-    })
-  ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3nmGg0dF9GesbmJUQyvSHTg0KAj3FeyCxdK03q1BctM=";
+  cargoHash = "sha256-eKMkvRPVM6UjURQ8GCCYYU4gTaVi/dLWh/D/XQmM6mw=";
 
   nativeBuildInputs = [
     installShellFiles
