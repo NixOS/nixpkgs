@@ -124,7 +124,7 @@ let
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
       mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
-      filter ifilter0 concatMap flatten remove findSingle findFirst any all count
+      filter ifilter0 concatMap filterMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists
       take drop dropEnd sublist last init
