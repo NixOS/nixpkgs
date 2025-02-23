@@ -49,6 +49,6 @@ hb.overrideAttrs (o:
    else
    { installFlags = [ "VFILES=structures.v" ] ++ o.installFlags; })
   //
-  lib.optionalAttrs (lib.versions.isLe "1.8.1" o.version)
+  lib.optionalAttrs (o.version != null && o.version == "1.8.1")
     { propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ]; }
 )
