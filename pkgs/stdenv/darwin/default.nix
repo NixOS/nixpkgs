@@ -647,8 +647,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           selfDarwin: superDarwin: {
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
-            postLinkSignHook = prevStage.darwin.postLinkSignHook.override { inherit (selfDarwin) sigtool; };
-
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {
               inherit (self) coreutils;
