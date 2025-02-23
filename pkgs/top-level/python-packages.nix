@@ -16393,6 +16393,8 @@ self: super: with self; {
     py = python.override (lib.optionalAttrs (!python.isPyPy) { x11Support = true; });
   };
 
+  tianshou = callPackage ../development/python-modules/tianshou { };
+
   tidalapi = callPackage ../development/python-modules/tidalapi { };
 
   tidyexc = callPackage ../development/python-modules/tidyexc { };
