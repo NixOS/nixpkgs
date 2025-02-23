@@ -1,4 +1,5 @@
 {
+  lib,
   buildGoModule,
   pulumi,
   python3,
@@ -33,4 +34,14 @@ buildGoModule rec {
     cp ../../dist/pulumi-resource-pulumi-python $out/bin
     cp ../../dist/pulumi-analyzer-policy-python $out/bin
   '';
+
+  meta = {
+    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/python/";
+    description = "Language host for Pulumi programs written in Python";
+    license = lib.licenses.asl20;
+    mainProgram = "pulumi-language-python";
+    maintainers = with lib.maintainers; [
+      tie
+    ];
+  };
 }
