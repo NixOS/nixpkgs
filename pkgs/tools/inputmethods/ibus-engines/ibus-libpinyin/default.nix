@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
-    rev = version;
+    tag = version;
     hash = "sha256-u21avBSSu/78tLoyFI9XGocC7rT/64L5HqQQj3Zg1Mc=";
   };
 
@@ -61,14 +61,14 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       linsui
       ericsagnes
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
