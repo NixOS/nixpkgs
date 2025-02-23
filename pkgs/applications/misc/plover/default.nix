@@ -5,6 +5,7 @@
   # https://github.com/openstenoproject/plover/commits/a8ac3631bee1971eec2b41b74fbebdad4750291a
   python310Packages,
   qt5,
+  dbus,
 }:
 
 {
@@ -92,6 +93,12 @@
         sha256 = "sha256-9oDsAbpF8YbLZyRzj9j5tk8QGi0o1F+8vB5YLJGqN+4=";
       };
 
+      postPatch = ''
+        # Plover dynamically loads the dbus library
+        substituteInPlace plover/oslayer/linux/log_dbus.py \
+          --replace-fail "ctypes.util.find_library('dbus-1')" "'${dbus.lib}/lib/libdbus-1.so'"
+      '';
+
       nativeBuildInputs = [
         setuptools
         qt5.wrapQtAppsHook
@@ -110,7 +117,9 @@
         xlib
       ];
 
-      buildInputs = [ qt5.qtwayland ];
+      buildInputs = [
+        qt5.qtwayland
+      ];
 
       nativeCheckInputs = [
         pytestCheckHook
