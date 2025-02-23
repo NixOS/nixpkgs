@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchurl,
+  fetchFromGitHub,
   fig2dev,
   texliveSmall,
   ghostscript,
   colm,
+  bash,
+  autoreconfHook,
   build-manual ? false,
 }:
 
@@ -13,59 +16,74 @@ let
   generic =
     {
       version,
-      sha256,
+      src,
+      dev ? false,
       broken ? false,
       license,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "ragel";
-      inherit version;
+      inherit version src;
 
-      src = fetchurl {
-        url = "https://www.colm.net/files/ragel/${pname}-${version}.tar.gz";
-        inherit sha256;
-      };
-
-      buildInputs = lib.optionals build-manual [
+      buildInputs = lib.optionals (build-manual || dev) [
         fig2dev
         ghostscript
         texliveSmall
       ];
 
-      preConfigure = lib.optionalString build-manual ''
-        sed -i "s/build_manual=no/build_manual=yes/g" DIST
+      postPatch = lib.optionalString dev ''
+        find . -type f -exec sed -i 's|^#!/bin/bash|#!${lib.getExe bash}|' {} \;
       '';
+
+      preConfigure =
+        lib.optionalString (build-manual && (!dev)) ''
+          sed -i "s/build_manual=no/build_manual=yes/g" DIST
+        ''
+        + lib.optionalString dev ''
+          ./autogen.sh
+        '';
 
       configureFlags = [ "--with-colm=${colm}" ];
 
       env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu++98";
 
+      nativeBuildInputs = lib.optionals dev [ autoreconfHook ];
+
       doCheck = true;
 
       enableParallelBuilding = true;
 
-      meta = with lib; {
+      meta = {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
         mainProgram = "ragel";
         inherit broken license;
-        platforms = platforms.unix;
-        maintainers = with maintainers; [ pSub ];
+        platforms = lib.platforms.unix;
+        maintainers = with lib.maintainers; [ pSub ];
       };
     };
 
 in
 
 {
-  ragelStable = generic {
+  ragelStable = generic rec {
     version = "6.10";
-    sha256 = "0gvcsl62gh6sg73nwaxav4a5ja23zcnyxncdcdnqa2yjcpdnw5az";
+    src = fetchurl {
+      url = "https://www.colm.net/files/ragel/ragel-${version}.tar.gz";
+      hash = "sha256-XxVu22XSC4VtY43Z7i37QyhZFNmqK27HedrAJwzVbD8=";
+    };
     license = lib.licenses.gpl2;
   };
 
   ragelDev = generic {
-    version = "7.0.0.12";
-    sha256 = "0x3si355lv6q051lgpg8bpclpiq5brpri5lv3p8kk2qhzfbyz69r";
+    version = "7.0.4-unstable-2023-03-13";
+    src = fetchFromGitHub {
+      owner = "adrian-thurston";
+      repo = "ragel";
+      rev = "65540b65ff09330b0293423e3fecc44e63f30614";
+      hash = "sha256-6xo4upfjvJvA9DwM9iNF5BZ5e1jYZ49G83vQ2RTkV3E=";
+    };
+    dev = true;
     license = lib.licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
   };
