@@ -1,4 +1,5 @@
 {
+  lib,
   buildGoModule,
   pulumi,
   nodejs,
@@ -28,4 +29,14 @@ buildGoModule rec {
   nativeCheckInputs = [
     nodejs
   ];
+
+  meta = {
+    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/javascript/";
+    description = "Language host for Pulumi programs written in TypeScript & JavaScript (Node.js)";
+    license = lib.licenses.asl20;
+    mainProgram = "pulumi-language-nodejs";
+    maintainers = with lib.maintainers; [
+      tie
+    ];
+  };
 }
