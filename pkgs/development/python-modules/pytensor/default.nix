@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.26.4";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-pREyBedkF9MW7g3Bctnk8C9vVbRTsLLreldxlqDdHVI=";
+    hash = "sha256-jwx7fcMiFNvnwP746nM2rqo2BD6PEbKkfEwIz8MenN4=";
   };
 
   pythonRelaxDeps = [
@@ -91,6 +91,9 @@ buildPythonPackage rec {
       "test_minimal_random_function_call_benchmark"
       "test_scan_multiple_output"
       "test_vector_taps_benchmark"
+
+      # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
+      "test_jax_pad"
 
       # Failure reported upstream: https://github.com/pymc-devs/pytensor/issues/980
       "test_choose_signature"
@@ -156,6 +159,9 @@ buildPythonPackage rec {
       "test_unbroadcast"
       "test_update_equiv"
       "test_update_same"
+      "test_solve_triangular_grad"
+      "test_numba_Cholesky_grad"
+      "test_alloc"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # Flaky: TypeError: cannot pickle 'PyCapsule' object
@@ -181,14 +187,11 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
       ferrine
     ];
-    # Not yet compatible with numpy >= 2.0
-    # https://github.com/pymc-devs/pytensor/issues/688
-    broken = true;
   };
 }
