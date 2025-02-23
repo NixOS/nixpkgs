@@ -93,6 +93,9 @@ let
         ${concatMapStringsSep "\n" (
           template: "cp -r ${template}/. $out/application/views/invoice_templates/pdf/"
         ) cfg.invoiceTemplates}
+        ${concatMapStringsSep "\n" (
+          template: "cp -r ${template}/. $out/application/views/quote_templates/pdf/"
+        ) cfg.quoteTemplates}
       '';
     };
 
@@ -160,6 +163,38 @@ let
           default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
+
+            ::: {.note}
+            These templates need to be packaged before use, see example.
+            :::
+          '';
+          example = literalExpression ''
+            let
+              # Let's package an example template
+              template-vtdirektmarketing = pkgs.stdenv.mkDerivation {
+                name = "vtdirektmarketing";
+                # Download the template from a public repository
+                src = pkgs.fetchgit {
+                  url = "https://git.project-insanity.org/onny/invoiceplane-vtdirektmarketing.git";
+                  sha256 = "1hh0q7wzsh8v8x03i82p6qrgbxr4v5fb05xylyrpp975l8axyg2z";
+                };
+                sourceRoot = ".";
+                # Installing simply means copying template php file to the output directory
+                installPhase = ""
+                  mkdir -p $out
+                  cp invoiceplane-vtdirektmarketing/vtdirektmarketing.php $out/
+                "";
+              };
+            # And then pass this package to the template list like this:
+            in [ template-vtdirektmarketing ]
+          '';
+        };
+
+        quoteTemplates = mkOption {
+          type = types.listOf types.path;
+          default = [ ];
+          description = ''
+            List of path(s) to respective template(s) which are copied from the 'quote_templates/pdf' directory.
 
             ::: {.note}
             These templates need to be packaged before use, see example.
