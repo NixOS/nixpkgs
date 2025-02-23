@@ -14,11 +14,19 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=${version}"
   ];
 
-  # go: inconsistent vendoring in ...
-  doCheck = false;
+  checkFlags = [
+    "-skip=^${
+      lib.concatStringsSep "$|^" [
+        "TestLanguage"
+        "TestPluginsAndDependencies_vendored"
+        "TestPluginsAndDependencies_subdir"
+        "TestPluginsAndDependencies_moduleMode"
+      ]
+    }$"
+  ];
 
   meta = {
     homepage = "https://www.pulumi.com/docs/iac/languages-sdks/go/";
