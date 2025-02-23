@@ -606,9 +606,6 @@ self: super: builtins.intersectAttrs super {
     testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
   }) super.either-unwrap;
 
-  # https://github.com/haskell-fswatch/hfsnotify/issues/62
-  fsnotify = dontCheck super.fsnotify;
-
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
   discount = super.discount.override { markdown = pkgs.discount; };
