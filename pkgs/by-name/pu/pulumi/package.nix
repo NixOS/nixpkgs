@@ -147,11 +147,11 @@ buildGo122Module rec {
   };
 
   meta = {
-    homepage = "https://pulumi.io/";
+    homepage = "https://www.pulumi.com";
     description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    mainProgram = "pulumi";
     maintainers = with lib.maintainers; [
       trundle
       veehaitch
