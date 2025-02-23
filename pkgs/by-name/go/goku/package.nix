@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    changelog = "https://github.com/yqrashawn/GokuRakuJoudo/blob/v${finalAttrs.version}/CHANGELOG.org";
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
     license = lib.licenses.gpl3;
