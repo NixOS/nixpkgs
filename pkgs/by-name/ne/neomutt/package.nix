@@ -41,13 +41,13 @@ assert lib.warnIf (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20241002";
+  version = "20250113";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
-    rev = finalAttrs.version;
-    hash = "sha256-c8G0CGg4jrwq+HVR4O0AtaJNzr7pDYsie1410tisLEY=";
+    tag = finalAttrs.version;
+    hash = "sha256-30uagr4Z748U34yaTpw0lqxifuMlQRqccuZHKpbkXVE=";
   };
 
   buildInputs =
@@ -169,12 +169,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Small but very powerful text-based mail client";
+    changelog = "https://github.com/neomutt/neomutt/releases/tag/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "neomutt";
+    downloadPage = "https://github.com/neomutt/neomutt";
     homepage = "https://www.neomutt.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       erikryb
       raitobezarius
+      ethancedwards8
     ];
     platforms = lib.platforms.unix;
   };
