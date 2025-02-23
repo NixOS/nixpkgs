@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/vale-ls \
-      --prefix PATH : ${lib.makeBinPath [ vale ]}
+      --suffix PATH : ${lib.makeBinPath [ vale ]}
   '';
 
   meta = with lib; {
