@@ -89,8 +89,6 @@ self: super: builtins.intersectAttrs super {
   ghcide = overrideCabal (drv: {
     # tests depend on executable
     preCheck = ''export PATH="$PWD/dist/build/ghcide:$PATH"'';
-    # tests disabled because they require network
-    doCheck = false;
   }) super.ghcide;
 
   hiedb = overrideCabal (drv: {
@@ -337,24 +335,20 @@ self: super: builtins.intersectAttrs super {
   hjsonschema = overrideCabal (drv: { testTargets = [ "local" ]; }) super.hjsonschema;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   mongoDB = dontCheck super.mongoDB;
-  network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
   persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
-  raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
   servant-router = dontCheck super.servant-router;
   serversession-backend-redis = dontCheck super.serversession-backend-redis;
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
-  socket = dontCheck super.socket;
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
-  wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
   download = dontCheck super.download;
   http-client = dontCheck super.http-client;
   http-client-openssl = dontCheck super.http-client-openssl;
@@ -362,10 +356,8 @@ self: super: builtins.intersectAttrs super {
   http-conduit = dontCheck super.http-conduit;
   transient-universe = dontCheck super.transient-universe;
   telegraph = dontCheck super.telegraph;
-  typed-process = dontCheck super.typed-process;
   js-jquery = dontCheck super.js-jquery;
   hPDB-examples = dontCheck super.hPDB-examples;
-  configuration-tools = dontCheck super.configuration-tools; # https://github.com/alephcloud/hs-configuration-tools/issues/40
   tcp-streams = dontCheck super.tcp-streams;
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
@@ -1213,9 +1205,6 @@ self: super: builtins.intersectAttrs super {
     )
   );
 
-  # Test suite is just the default example executable which doesn't work if not
-  # executed by Setup.hs, but works if started on a proper TTY
-  isocline = dontCheck super.isocline;
 
   # Some hash implementations are x86 only, but part of the test suite.
   # So executing and building it on non-x86 platforms will always fail.
