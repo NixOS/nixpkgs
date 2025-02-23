@@ -63,7 +63,7 @@ let
         cmakeFlags = [
           (lib.cmakeBool "g15" false)
           (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # protobuf >22 requires C++ 17
-        ] ++ (overrides.configureFlags or [ ]);
+        ] ++ (overrides.cmakeFlags or [ ]);
 
         preConfigure = ''
           patchShebangs scripts
@@ -106,24 +106,28 @@ let
         ++ lib.optional jackSupport libjack2
         ++ lib.optional speechdSupport speechd-minimal
         ++ lib.optional pulseSupport libpulseaudio
-        ++ lib.optional pipewireSupport pipewire;
+        ++ lib.optional pipewireSupport pipewire
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          xar
+          makeWrapper
+        ];
 
-      configureFlags =
-        [
-          "-D server=OFF"
-          "-D bundled-celt=ON"
-          "-D bundled-opus=OFF"
-          "-D bundled-speex=OFF"
-          "-D bundle-qt-translations=OFF"
-          "-D update=OFF"
-          "-D overlay-xcompile=OFF"
-          "-D oss=OFF"
-          "-D warnings-as-errors=OFF" # conversion error workaround
-        ]
-        ++ lib.optional (!speechdSupport) "-D speechd=OFF"
-        ++ lib.optional (!pulseSupport) "-D pulseaudio=OFF"
-        ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
-        ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
+      cmakeFlags = [
+        (lib.cmakeBool "server" false)
+        (lib.cmakeBool "bundled-celt" true)
+        (lib.cmakeBool "bundled-opus" false)
+        (lib.cmakeBool "bundled-speex" false)
+        (lib.cmakeBool "bundle-qt-translations" false)
+        (lib.cmakeBool "update" false)
+        (lib.cmakeBool "overlay-xcompile" false)
+        (lib.cmakeBool "oss" false)
+        (lib.cmakeBool "warnings-as-errors" false) # conversion error workaround
+        (lib.cmakeBool "speechd" speechdSupport)
+        (lib.cmakeBool "pulseaudio" pulseSupport)
+        (lib.cmakeBool "pipewire" pipewireSupport)
+        (lib.cmakeBool "jackaudio" jackSupport)
+        (lib.cmakeBool "alsa" (!jackSupport))
+      ];
 
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
@@ -142,15 +146,15 @@ let
     generic {
       type = "murmur";
 
-      configureFlags =
+      cmakeFlags =
         [
-          "-D client=OFF"
+          (lib.cmakeBool "client" false)
+          (lib.cmakeBool "ice" iceSupport)
         ]
-        ++ lib.optional (!iceSupport) "-D ice=OFF"
         ++ lib.optionals iceSupport [
-          "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-          "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-          "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+          (lib.cmakeFeature "Ice_HOME" "${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}")
+          (lib.cmakeFeature "CMAKE_PREFIX_PATH" "${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}")
+          (lib.cmakeFeature "Ice_SLICE_DIR" "${lib.getDev zeroc-ice}/share/ice/slice")
         ];
 
       buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
@@ -162,10 +166,10 @@ let
       stdenv = stdenv_32bit;
       type = "mumble-overlay";
 
-      configureFlags = [
-        "-D server=OFF"
-        "-D client=OFF"
-        "-D overlay=ON"
+      cmakeFlags = [
+        (lib.cmakeBool "server" false)
+        (lib.cmakeBool "client" false)
+        (lib.cmakeBool "overlay" true)
       ];
     } source;
 
@@ -185,5 +189,6 @@ in
 {
   mumble = lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; };
   murmur = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
+  # What is this meant to be used for? It's not used in nixpkgs.
   overlay = overlay source;
 }
