@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meme-bingo-web";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "meme-bingo-web";
     rev = "v${version}";
-    hash = "sha256-AKY0EjeoOnliRN3XSnlCgzCvnWOkZPQz/9QIcr8+hQM=";
+    hash = "sha256-0ahyyuihpwmAmaBwZv7lNmjuy8UsAm1a9XUhWcYq76w=";
   };
 
   useFetchCargoVendor = true;
