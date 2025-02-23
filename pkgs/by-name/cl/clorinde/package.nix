@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Generate type-checked Rust from your PostgreSQL";
     homepage = "https://github.com/halcyonnouveau/clorinde";
-    changelog = "https://github.com/halcyonnouveau/clorinde/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/halcyonnouveau/clorinde/blob/clorinde-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
