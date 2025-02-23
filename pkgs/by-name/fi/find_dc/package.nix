@@ -8,17 +8,17 @@ pkgs.buildGoModule rec {
     owner = "0xthefr34k";
     repo = "find_dc";
     rev = "v${version}";
-    hash = "sha256-rPw0H2jlCyeAKGLCR1Gvisv+hHCCmyRWi1k+i5zzxTg=";  # Replace with correct hash
+    hash = "sha256-rPw0H2jlCyeAKGLCR1Gvisv+hHCCmyRWi1k+i5zzxTg=";
   };
 
-  vendorHash = null;  # No vendor dependencies
+  vendorHash = null;
 
   meta = {
     description = "find_dc is a Go-based tool to process nxc output and find domain controllers.";
     homepage = "https://github.com/0xthefr34k/find_dc";
     license = pkgs.lib.licenses.mit;
-    maintainers = [ "0xthefr34k" ];
-    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ 0xthefr34k ];
+    platforms = lib.platforms.unix;
   };
 }
 
