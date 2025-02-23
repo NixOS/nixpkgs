@@ -1,73 +1,78 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  replaceVars,
+
   pkg-config,
+  cmake,
+
   dbus,
   ffmpeg,
   oniguruma,
+  onnxruntime,
   openssl,
-  sqlite,
-  stdenv,
-  darwin,
+
   alsa-lib,
   xorg,
+
+  apple-sdk_15,
+  xcbuild,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
-  version = "0.1.48";
+  version = "0.2.58";
 
   src = fetchFromGitHub {
     owner = "louis030195";
     repo = "screen-pipe";
     rev = "v${version}";
-    hash = "sha256-rWKRCqWFuPO84C52mMrrS4euD6XdJU8kqZsAz28+vWE=";
+    hash = "sha256-IydgUGZlSe9o0LxL2i/6cheOqM/hc4xTrqf0fSgG5Kc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cpal-0.15.3" = "sha256-eKn3tS5QuqbMTwnRAEybvbPZOiKiid7ghGztAmrs9fw=";
-      "rusty-tesseract-1.1.10" = "sha256-XT74zGn+DetEBUujHm4Soe2iorQcIoUeZbscTv+64hw=";
-    };
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-
-  nativeBuildInputs = [
-    pkg-config
-    rustPlatform.bindgenHook
+  patches = [
+    (replaceVars ./hardcode-paths.patch {
+      ffmpeg_exe_path = lib.getExe ffmpeg;
+    })
   ];
+
+  cargoPatches = [
+    # This adds the missing Cargo.lock file
+    # I also had to re-lock and override dependency versions
+    # to avoid having duplicate pname-version ids (fetchCargoVendor doesn't support it ATM)
+    ./lock-deps.patch
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FQa9Iwk+kZzl2cfFUdmIG5X4DS5JvrJ1t0WkYQz+oFM=";
+
+  nativeBuildInputs =
+    [
+      pkg-config
+      rustPlatform.bindgenHook
+      cmake # for libsamplerate-sys
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+    ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs =
     [
       dbus
-      ffmpeg
       oniguruma
+      onnxruntime
       openssl
-      sqlite
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_12_3.frameworks;
-      [
-        CoreAudio
-        AudioUnit
-        CoreFoundation
-        CoreGraphics
-        CoreMedia
-        IOKit
-        Metal
-        MetalPerformanceShaders
-        Security
-        ScreenCaptureKit
-        SystemConfiguration
-      ]
-    )
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       xorg.libxcb
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
     ];
 
   buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";

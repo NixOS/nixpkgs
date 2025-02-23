@@ -1,0 +1,13 @@
+diff --git a/screenpipe-core/src/ffmpeg.rs b/screenpipe-core/src/ffmpeg.rs
+index b5b70b5..039a1da 100644
+--- a/screenpipe-core/src/ffmpeg.rs
++++ b/screenpipe-core/src/ffmpeg.rs
+@@ -22,6 +22,8 @@ pub fn find_ffmpeg_path() -> Option<PathBuf> {
+ }
+ 
+ fn find_ffmpeg_path_internal() -> Option<PathBuf> {
++    return Some(PathBuf::from("@ffmpeg_exe_path@"));
++
+     debug!("Starting search for ffmpeg executable");
+ 
+     // Check if `ffmpeg` is in the PATH environment variable
