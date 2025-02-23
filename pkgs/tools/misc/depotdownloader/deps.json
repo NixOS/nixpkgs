@@ -46,8 +46,8 @@
   },
   {
     "pname": "SteamKit2",
-    "version": "3.0.0",
-    "hash": "sha256-bRRdX8WFo9k+QCZWh0KHb3TULpJxpR4Hg9FDXKBW6d4="
+    "version": "3.0.1",
+    "hash": "sha256-OnfUEPSEE9J6oTO1NFsa1MJRWvEH5MDR1wsGedKGzgI="
   },
   {
     "pname": "System.Collections.Immutable",
@@ -56,8 +56,8 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "8.0.0",
-    "hash": "sha256-szOGt0TNBo6dEdC3gf6H+e9YW3Nw0woa6UnCGGGK5cE="
+    "version": "9.0.0",
+    "hash": "sha256-k6Pdndm5fTD6CB1QsQfP7G+2h4B30CWIsuvjHuBg3fc="
   },
   {
     "pname": "System.Security.AccessControl",
