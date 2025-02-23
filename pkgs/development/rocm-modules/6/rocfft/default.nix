@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rocmUpdateScript,
   cmake,
   clr,
@@ -38,10 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
   # FIXME: rocfft_aot_helper times out build due to no logs!!
   buildInputs = [ sqlite ];
 
+  patches = [
+    (fetchpatch {
+      name = "allow-setting-rocfft_concurrency-using-envvar.patch";
+      url = "https://github.com/GZGavinZhao/rocFFT/commit/627e0d15cf38a32227ce3f0a847054987eef4476.patch";
+      hash = "sha256-NuawjU/DQA5rpefXIMCN4uwmIZI0DitYqbnujScYO+Y=";
+    })
+  ];
+
+  postPatch = ''
+    export ROCFFT_CONCURRENCY=$NIX_BUILD_CORES
+  '';
+
   cmakeFlags =
     [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${clr.hipClangPath}/clang++")
       "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
@@ -53,9 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     ];
 
-  preConfigure = ''
-    makeFlagsArray+=("-l$(((NIX_BUILD_CORES * 2) / 3))")
-  '';
+  hardeningDisable = [ "zerocallusedregs" "stackprotector" ];
 
   passthru = {
     test = stdenv.mkDerivation {
