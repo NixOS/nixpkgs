@@ -6529,10 +6529,10 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_84 = callPackage ../development/compilers/rust/1_84.nix {
+  rust_1_85 = callPackage ../development/compilers/rust/1_85.nix {
     llvm_19 = llvmPackages_19.libllvm;
   };
-  rust = rust_1_84;
+  rust = rust_1_85;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -6540,8 +6540,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_84 = rust_1_84.packages.stable;
-  rustPackages = rustPackages_1_84;
+  rustPackages_1_85 = rust_1_85.packages.stable;
+  rustPackages = rustPackages_1_85;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
