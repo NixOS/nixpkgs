@@ -146,10 +146,10 @@ in
 
   emacs30 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "30.0.93";
+    version = "30.1-rc1";
     variant = "mainline";
-    rev = "30.0.93";
-    hash = "sha256-lcpB4lKD3tjvCn646hUyAskxWNCQwEJ0RX/ZddRBRRU=";
+    rev = "30.1-rc1";
+    hash = "sha256-eUEeSCr58uVPxTJMhRZvVSEbfrJ6n59iuYxR6LQkWJw=";
     patches = fetchpatch: [
       (builtins.path {
         name = "inhibit-lexical-cookie-warning-67916.patch";
