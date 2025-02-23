@@ -86,10 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     export NIX_BUILD_CORES=$((1 + NIX_BUILD_CORES/10))
     makeFlagsArray+=("-l$(nproc)")
   '';
+
+  hardeningDisable = [ "zerocallusedregs" "stackprotector" ];
+
   cmakeFlags =
     [
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${clr.hipClangPath}/clang++")
       "-DHIP_CLANG_NUM_PARALLEL_JOBS=10"
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DCMAKE_VERBOSE_MAKEFILE=ON"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
