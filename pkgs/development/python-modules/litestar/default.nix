@@ -10,6 +10,7 @@
   anyio,
   asyncpg,
   click,
+  multipart,
   cryptography,
   fsspec,
   httpx,
@@ -23,6 +24,7 @@
   psutil,
   psycopg,
   pyyaml,
+  httpx-sse,
   redis,
   rich,
   rich-click,
@@ -32,6 +34,7 @@
 
   # tests
   pytestCheckHook,
+  valkey,
   pytest-lazy-fixtures,
   pytest-xdist,
   pytest-mock,
@@ -43,14 +46,14 @@
 
 buildPythonPackage rec {
   pname = "litestar";
-  version = "2.13.0";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
     tag = "v${version}";
-    hash = "sha256-PR2DVNRtILHs7XwVi9/ZCVRJQFqfGLn1x2gpYtYjHDo=";
+    hash = "sha256-rF/TQT1TgvM24BxjKY9nmCMNTsEijmesx3IHFjiQFg4=";
   };
 
   build-system = [
@@ -64,11 +67,13 @@ buildPythonPackage rec {
     cryptography
     fsspec
     httpx
+    httpx-sse
     jinja2
     litestar-htmx
     mako
     msgspec
     multidict
+    multipart
     picologging
     polyfactory
     psutil
@@ -86,6 +91,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-lazy-fixtures
     pytest-xdist
+    valkey
     pytest-mock
     pytest-asyncio
     pytest-timeout
@@ -98,14 +104,15 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # Follow github CI
-    "docs/examples/"
+    "docs/examples/testing"
+    "tests"
   ];
 
   meta = {
     homepage = "https://litestar.dev/";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    changelog = "https://github.com/litestar-org/litestar/releases/tag/v${version}";
+    changelog = "https://github.com/litestar-org/litestar/releases/tag/${src.tag}";
     description = "Production-ready, Light, Flexible and Extensible ASGI API framework";
     license = lib.licenses.mit;
     mainProgram = "litestar";
