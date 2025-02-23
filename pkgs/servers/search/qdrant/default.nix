@@ -10,26 +10,23 @@
   nix-update-script,
   Security,
   SystemConfiguration,
+  rust-jemalloc-sys-unprefixed,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.12.1";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     tag = "v${version}";
-    hash = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
+    hash = "sha256-77BuXTrQPtg7lus4WXukYSrJllR9hBMqn8+xAaq96z8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tar-0.4.41" = "sha256-32n96yoGbDzhgVZvISLGwxHuv7PGtxde5ma/YlsR1Gg=";
-      "wal-0.1.2" = "sha256-QcyS0v7O1BziVT3oahebpq+u4l5JGaujCaRIPdmsJl4=";
-    };
-  };
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-r+UilkSsV875j7tNkGJxuR/XC8Y1Fk4nqHYah9Z9q9c=";
 
   nativeBuildInputs = [
     protobuf
@@ -41,6 +38,7 @@ rustPlatform.buildRustPackage rec {
     [
       openssl
       rust-jemalloc-sys
+      rust-jemalloc-sys-unprefixed
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
