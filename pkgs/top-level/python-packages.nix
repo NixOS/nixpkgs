@@ -2568,6 +2568,8 @@ self: super: with self; {
 
   colormath = callPackage ../development/python-modules/colormath { };
 
+  colormath2 = callPackage ../development/python-modules/colormath2 { };
+
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
   colorthief = callPackage ../development/python-modules/colorthief { };
@@ -4686,6 +4688,8 @@ self: super: with self; {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fitfile = callPackage ../development/python-modules/fitfile { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
@@ -6265,6 +6269,8 @@ self: super: with self; {
   icontract = callPackage ../development/python-modules/icontract { };
 
   id = callPackage ../development/python-modules/id { };
+
+  idbutils = callPackage ../development/python-modules/idbutils { };
 
   identify = callPackage ../development/python-modules/identify { };
 
@@ -16102,6 +16108,8 @@ self: super: with self; {
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
+
+  tcxfile = callPackage ../development/python-modules/tcxfile { };
 
   tcxparser = callPackage ../development/python-modules/tcxparser { };
 
