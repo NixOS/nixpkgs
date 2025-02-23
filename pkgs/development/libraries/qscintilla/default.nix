@@ -9,16 +9,16 @@
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qscintilla-qt5";
-  version = "2.13.2";
+  version = "2.14.1";
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
-    sha256 = "sha256-tsfl8ntR0l8J/mz4Sumn8Idq8NZdjMtVEQnm57JYhfQ=";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${finalAttrs.version}/QScintilla_src-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-3+E8asydhd/Lp2zMgGHnGiI5V6bALzw0OzCp1DpM3U0=";
   };
 
-  sourceRoot = "QScintilla_src-${version}/src";
+  sourceRoot = "QScintilla_src-${finalAttrs.version}/src";
 
   buildInputs = [ qtbase ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
       background colours and multiple fonts.
     '';
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
-    license = with licenses; [ gpl3 ]; # and commercial
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     # ld: library not found for -lcups
     broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
-}
+})
