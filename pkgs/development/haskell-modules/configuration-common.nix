@@ -1563,11 +1563,6 @@ self: super: {
   # See: https://github.com/robstewart57/rdf4h/issues/39
   rdf4h = dontCheck super.rdf4h;
 
-  # hasn't bumped upper bounds
-  # test fails because of a "Warning: Unused LANGUAGE pragma"
-  # https://github.com/ennocramer/monad-dijkstra/issues/4
-  monad-dijkstra = dontCheck super.monad-dijkstra;
-
   # Fixed upstream but not released to Hackage yet:
   # https://github.com/k0001/hs-libsodium/issues/2
   libsodium = overrideCabal (drv: {
