@@ -4488,6 +4488,8 @@ self: super: with self; {
 
   factory-boy = callPackage ../development/python-modules/factory-boy { };
 
+  faicons = callPackage ../development/python-modules/faicons { };
+
   fairscale = callPackage ../development/python-modules/fairscale { };
 
   fairseq = callPackage ../development/python-modules/fairseq { };
