@@ -75,7 +75,7 @@ in
         TemporaryFileSystem = "/";
         # Allowlist /nix/store (to allow the binary to find its dependencies)
         # and dbus.
-        ReadOnlyPaths = "/nix/store /run/dbus";
+        BindReadOnlyPaths = "/nix/store /run/dbus";
         # Let systemd manage `/var/lib/matter-server` for us inside the
         # ephemeral TemporaryFileSystem.
         StateDirectory = storageDir;
@@ -89,7 +89,7 @@ in
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
-        DynamicUser = true;
+        DynamicUser = false;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
