@@ -29,6 +29,7 @@
   transformers,
   xformers,
   xgrammar,
+  numba,
   fastapi,
   uvicorn,
   pydantic,
@@ -323,6 +324,7 @@ buildPythonPackage rec {
       uvicorn
       xformers
       xgrammar
+      numba
     ]
     ++ uvicorn.optional-dependencies.standard
     ++ aioprometheus.optional-dependencies.starlette
