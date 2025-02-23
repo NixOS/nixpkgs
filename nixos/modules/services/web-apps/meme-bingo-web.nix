@@ -36,6 +36,14 @@ in
         default = "http://localhost:41678/";
         example = "https://bingo.example.com/";
       };
+      address = mkOption {
+        description = ''
+          The address the webserver will bind to.
+        '';
+        type = types.str;
+        default = "localhost";
+        example = "::";
+      };
       port = mkOption {
         description = ''
           Port to be used for the web server.
@@ -44,16 +52,22 @@ in
         default = 41678;
         example = 21035;
       };
+      openFirewall = mkEnableOption ''
+        Opens the specified port in the firewall.
+      '';
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
     systemd.services.meme-bingo-web = {
       description = "A web app for playing meme bingos";
       wantedBy = [ "multi-user.target" ];
 
       environment = {
         MEME_BINGO_BASE = cfg.baseUrl;
+        MEME_BINGO_ADDRESS = cfg.address;
         MEME_BINGO_PORT = toString cfg.port;
       };
       path = [ cfg.package ];
