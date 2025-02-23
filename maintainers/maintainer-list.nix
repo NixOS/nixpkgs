@@ -19505,6 +19505,12 @@
     githubId = 45141270;
     name = "Steve Mathew Joy";
   };
+  razielgn = {
+    email = "ravasio.federico@gmail.com";
+    github = "razielgn";
+    githubId = 237493;
+    name = "Federico Ravasio";
+  };
   razvan = {
     email = "razvan.panda@gmail.com";
     github = "freeman42x";
