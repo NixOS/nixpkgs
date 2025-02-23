@@ -15,7 +15,7 @@
   validatePkgConfig,
   # Boolean flags
   enableTests ? true,
-  useImageIO ? stdenv.hostPlatform.isDarwin,
+  enableImageIO ? stdenv.hostPlatform.isDarwin,
 }:
 
 let
@@ -53,23 +53,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '@CMAKE_INSTALL_INCLUDEDIR@' 'include'
   '';
 
-  cmakeFlags =
-    [
-      # Disable dynamically loaded dependencies
-      "-DSDLIMAGE_WEBP_SHARED=OFF"
-      "-DSDLIMAGE_TIF_SHARED=OFF"
-      "-DSDLIMAGE_PNG_SHARED=OFF"
-      "-DSDLIMAGE_AVIF_SHARED=OFF"
-      "-DSDLIMAGE_JPG_SHARED=OFF"
-    ]
-    ++ lib.optionals enableTests [
-      # Build unit tests
-      "-DSDLIMAGE_TESTS=ON"
-    ]
-    ++ lib.optionals useImageIO [
-      # on darwin use native imageio
-      "-DSDLIMAGE_BACKEND_IMAGEIO=ON"
-    ];
+  cmakeFlags = [
+    # disable dynamically loaded dependencies
+    "-DSDLIMAGE_WEBP_SHARED=OFF"
+    "-DSDLIMAGE_TIF_SHARED=OFF"
+    "-DSDLIMAGE_PNG_SHARED=OFF"
+    "-DSDLIMAGE_AVIF_SHARED=OFF"
+    "-DSDLIMAGE_JPG_SHARED=OFF"
+    # enable imageio backend
+    "-DSDLIMAGE_BACKEND_IMAGEIO=${if enableImageIO then "ON" else "OFF"}"
+    # enable tests
+    "-DSDLIMAGE_TESTS=${if enableTests then "ON" else "OFF"}"
+  ];
 
   strictDeps = true;
 
