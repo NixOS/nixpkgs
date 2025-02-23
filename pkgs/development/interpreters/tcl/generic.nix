@@ -73,7 +73,14 @@ let
         "--disable-zipfs"
       ]
       ++ [
+        # During cross compilation, the tcl build system assumes that libc
+        # functions are broken if it cannot test if they are broken or not and
+        # then causes a link error on static platforms due to symbol conflict.
+        # These functions are *checks notes* strtoul and strstr. These are
+        # never broken on modern platforms!
         "tcl_cv_strtod_unbroken=ok"
+        "tcl_cv_strtoul_unbroken=ok"
+        "tcl_cv_strstr_unbroken=ok"
       ]
       ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
@@ -82,11 +89,17 @@ let
     postInstall =
       let
         dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+        staticExtension = stdenv.hostPlatform.extensions.staticLibrary;
       in
       ''
         make install-private-headers
         ln -s $out/bin/tclsh${release} $out/bin/tclsh
-        ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+        if [[ -e $out/lib/libtcl${release}${staticExtension} ]]; then
+          ln -s $out/lib/libtcl${release}${staticExtension} $out/lib/libtcl${staticExtension}
+        fi
+        ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+          ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+        ''}
       '';
 
     meta = with lib; {
