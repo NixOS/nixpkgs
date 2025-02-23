@@ -16736,7 +16736,7 @@ with pkgs;
 
   heroic-unwrapped = callPackage ../games/heroic {
     # Upstream uses EOL Electron 31.  Use next oldest version.
-    electron = electron_32;
+    electron = electron_33;
   };
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };
