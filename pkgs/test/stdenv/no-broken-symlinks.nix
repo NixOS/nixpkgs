@@ -29,7 +29,10 @@ let
     )
     if readlink "$out/unreadable-symlink" >/dev/null 2>&1; then
       nixErrorLog "symlink permissions not supported"
-      ${optionalString failIfUnsupported "exit 1"}
+      ${optionalString failIfUnsupported
+        # Postpone the failure until after no-broken-symlinks.sh has a chance to print its messages
+        "postFixupHooks+=('exit 1')"
+      }
     fi
   '';
 
