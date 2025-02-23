@@ -1,4 +1,4 @@
-{stdenv, lib, unzip, mkLicenses, meta}:
+{stdenv, lib, unzip, mkLicenses, os, arch, meta}:
 {packages, nativeBuildInputs ? [], buildInputs ? [], patchesInstructions ? {}, ...}@args:
 
 let
@@ -62,11 +62,18 @@ stdenv.mkDerivation ({
   inherit buildInputs;
   pname = "android-sdk-${lib.concatMapStringsSep "-" (package: package.name) sortedPackages}";
   version = lib.concatMapStringsSep "-" (package: package.revision) sortedPackages;
-  src = map (package: package.archives) packages;
+  src = lib.flatten (map (package: package.archives) packages);
+  inherit os arch;
   nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
   preferLocalBuild = true;
 
   unpackPhase = ''
+    runHook preUnpack
+    if [ -z "$src" ]; then
+      echo "$pname did not have any sources available for os=$os, arch=$arch." >&2
+      echo "Are packages available for this architecture?" >&2
+      exit 1
+    fi
     buildDir=$PWD
     i=0
     for srcArchive in $src; do
@@ -77,9 +84,12 @@ stdenv.mkDerivation ({
       cd "$extractedZip"
       unpackFile "$srcArchive"
     done
+    runHook postUnpack
   '';
 
-  installPhase = lib.concatStrings (lib.imap0 (i: package: ''
+  installPhase = ''
+    runHook preInstall
+  '' + lib.concatStrings (lib.imap0 (i: package: ''
     cd $buildDir/extractedzip-${toString i}
 
     # Most Android Zip packages have a root folder, but some don't. We unpack
@@ -101,7 +111,9 @@ stdenv.mkDerivation ({
     ${mkXmlPackage package}
     EOF
     fi
-  '') packages);
+  '') packages) + ''
+    runHook postInstall
+  '';
 
   # Some executables that have been patched with patchelf may not work any longer after they have been stripped.
   dontStrip = true;

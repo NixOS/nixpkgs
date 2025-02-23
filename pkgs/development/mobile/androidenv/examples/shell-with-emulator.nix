@@ -46,9 +46,11 @@ let
     inherit config pkgs licenseAccepted;
   };
 
+  emulatorSupported = pkgs.stdenv.hostPlatform.isx86_64 || pkgs.stdenv.hostPlatform.isDarwin;
+
   sdkArgs = {
     includeSystemImages = true;
-    includeEmulator = true;
+    includeEmulator = "if-supported";
 
     # Accepting more licenses declaratively:
     extraLicenses = [
@@ -122,9 +124,10 @@ pkgs.mkShell rec {
 
           packages=(
             "build-tools" "cmdline-tools" \
-            "emulator" "platform-tools" "platforms;android-35" \
+            "platform-tools" "platforms;android-35" \
             "system-images;android-35;google_apis;x86_64"
           )
+          ${pkgs.lib.optionalString emulatorSupported ''packages+=("emulator")''}
 
           for package in "''${packages[@]}"; do
             if [[ ! $installed_packages_section =~ "$package" ]]; then
@@ -183,7 +186,7 @@ pkgs.mkShell rec {
             jdk
           ];
         }
-        ''
+        (pkgs.lib.optionalString emulatorSupported ''
           export ANDROID_USER_HOME=$PWD/.android
           mkdir -p $ANDROID_USER_HOME
 
@@ -197,7 +200,8 @@ pkgs.mkShell rec {
           fi
 
           avdmanager delete avd -n testAVD || true
-          touch "$out"
-        '';
+        '' + ''
+          touch $out
+        '');
   };
 }
