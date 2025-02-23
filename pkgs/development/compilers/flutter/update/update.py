@@ -203,7 +203,7 @@ def get_pubspec_lock(flutter_compact_version, flutter_src):
     return yaml.safe_load(pubspec_lock_yaml)
 
 def get_engine_swiftshader_rev(engine_version):
-    with urllib.request.urlopen(f"https://github.com/flutter/engine/raw/{engine_version}/DEPS") as f:
+    with urllib.request.urlopen(f"https://github.com/flutter/flutter/raw/{engine_version}/DEPS") as f:
         deps = f.read().decode('utf-8')
         pattern = re.compile(r"Var\('swiftshader_git'\) \+ '\/SwiftShader\.git' \+ '@' \+ \'([0-9a-fA-F]{40})\'\,")
         rev = pattern.findall(deps)[0]
@@ -305,15 +305,17 @@ def find_versions(flutter_version=None, channel=None):
     tags = subprocess.Popen(['git',
                              'ls-remote',
                              '--tags',
-                             'https://github.com/flutter/engine.git'],
+                             'https://github.com/flutter/flutter.git'],
                             stdout=subprocess.PIPE,
                             text=True).communicate()[0].strip()
 
     try:
-        engine_hash = next(
+        flutter_hash = next(
             filter(
                 lambda line: line.endswith(f'refs/tags/{flutter_version}'),
                 tags.splitlines())).split('refs')[0].strip()
+
+        engine_hash = urllib.request.urlopen(f'https://github.com/flutter/flutter/raw/{flutter_hash}/bin/internal/engine.version').read().decode('utf-8').strip()
     except StopIteration:
         exit(
             f"Couldn't find Engine hash for Flutter version: {flutter_version}")
