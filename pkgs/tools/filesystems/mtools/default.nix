@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   passthru = {
