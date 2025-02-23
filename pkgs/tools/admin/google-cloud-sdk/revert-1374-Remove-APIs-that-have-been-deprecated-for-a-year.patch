@@ -1,0 +1,789 @@
+diff --git a/CHANGELOG.rst b/CHANGELOG.rst
+index 903bf38..fe66b7a 100644
+--- a/CHANGELOG.rst
++++ b/CHANGELOG.rst
+@@ -25,9 +25,6 @@ Changes:
+ Backward-incompatible changes:
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+-- Removed the deprecated ``OpenSSL.crypto.CRL``, ``OpenSSL.crypto.Revoked``, ``OpenSSL.crypto.dump_crl``, and ``OpenSSL.crypto.load_crl``. ``cryptography.x509``'s CRL functionality should be used instead.
+-- Removed the deprecated ``OpenSSL.crypto.sign`` and ``OpenSSL.crypto.verify``. ``cryptography.hazmat.primitives.asymmetric``'s signature APIs should be used instead.
+-
+ Deprecations:
+ ^^^^^^^^^^^^^
+ 
+diff --git a/doc/api/crypto.rst b/doc/api/crypto.rst
+index eafd0fd..d838727 100644
+--- a/doc/api/crypto.rst
++++ b/doc/api/crypto.rst
+@@ -63,6 +63,20 @@ Public keys
+ 
+ .. autofunction:: load_publickey
+ 
++Certificate revocation lists
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++.. autofunction:: dump_crl
++
++.. autofunction:: load_crl
++
++Signing and verifying signatures
++--------------------------------
++
++.. autofunction:: sign
++
++.. autofunction:: verify
++
+ 
+ .. _openssl-x509:
+ 
+@@ -158,6 +172,24 @@ X509Extension objects
+                :special-members:
+                :exclude-members: __weakref__
+ 
++.. _crl:
++
++CRL objects
++-----------
++
++.. autoclass:: CRL
++               :members:
++               :special-members:
++               :exclude-members: __weakref__
++
++.. _revoked:
++
++Revoked objects
++---------------
++
++.. autoclass:: Revoked
++               :members:
++
+ Exceptions
+ ----------
+ 
+diff --git a/src/OpenSSL/crypto.py b/src/OpenSSL/crypto.py
+index 366007e..9681876 100644
+--- a/src/OpenSSL/crypto.py
++++ b/src/OpenSSL/crypto.py
+@@ -35,6 +35,9 @@ from cryptography.hazmat.primitives.asymmetric import (
+ )
+ 
+ from OpenSSL._util import StrOrBytesPath
++from OpenSSL._util import (
++    UNSPECIFIED as _UNSPECIFIED,
++)
+ from OpenSSL._util import (
+     byte_string as _byte_string,
+ )
+@@ -53,8 +56,12 @@ from OpenSSL._util import (
+ from OpenSSL._util import (
+     path_bytes as _path_bytes,
+ )
++from OpenSSL._util import (
++    text_to_bytes_and_warn as _text_to_bytes_and_warn,
++)
+ 
+ __all__ = [
++    "CRL",
+     "FILETYPE_ASN1",
+     "FILETYPE_PEM",
+     "FILETYPE_TEXT",
+@@ -63,6 +70,7 @@ __all__ = [
+     "X509",
+     "Error",
+     "PKey",
++    "Revoked",
+     "X509Extension",
+     "X509Name",
+     "X509Req",
+@@ -72,14 +80,18 @@ __all__ = [
+     "X509StoreFlags",
+     "dump_certificate",
+     "dump_certificate_request",
++    "dump_crl",
+     "dump_privatekey",
+     "dump_publickey",
+     "get_elliptic_curve",
+     "get_elliptic_curves",
+     "load_certificate",
+     "load_certificate_request",
++    "load_crl",
+     "load_privatekey",
+     "load_publickey",
++    "sign",
++    "verify",
+ ]
+ 
+ 
+@@ -1749,7 +1761,9 @@ class X509Store:
+         res = _lib.X509_STORE_add_cert(self._store, cert._x509)
+         _openssl_assert(res == 1)
+ 
+-    def add_crl(self, crl: x509.CertificateRevocationList) -> None:
++    def add_crl(
++        self, crl: _CRLInternal | x509.CertificateRevocationList
++    ) -> None:
+         """
+         Add a certificate revocation list to this store.
+ 
+@@ -1760,7 +1774,7 @@ class X509Store:
+         .. versionadded:: 16.1.0
+ 
+         :param crl: The certificate revocation list to add to this store.
+-        :type crl: ``cryptography.x509.CertificateRevocationList``
++        :type crl: ``Union[CRL, cryptography.x509.CertificateRevocationList]``
+         :return: ``None`` if the certificate revocation list was added
+             successfully.
+         """
+@@ -1771,9 +1785,11 @@ class X509Store:
+             openssl_crl = _lib.d2i_X509_CRL_bio(bio, _ffi.NULL)
+             _openssl_assert(openssl_crl != _ffi.NULL)
+             crl = _ffi.gc(openssl_crl, _lib.X509_CRL_free)
++        elif isinstance(crl, _CRLInternal):
++            crl = crl._crl
+         else:
+             raise TypeError(
+-                "CRL must be of type "
++                "CRL must be of type OpenSSL.crypto.CRL or "
+                 "cryptography.x509.CertificateRevocationList"
+             )
+ 
+@@ -2205,6 +2221,447 @@ def dump_privatekey(
+     return _bio_to_string(bio)
+ 
+ 
++class Revoked:
++    """
++    A certificate revocation.
++
++    .. deprecated:: 23.3.0
++       Use cryptography's X509 APIs instead.
++    """
++
++    # https://www.openssl.org/docs/manmaster/man5/x509v3_config.html#CRL-distribution-points
++    # which differs from crl_reasons of crypto/x509v3/v3_enum.c that matches
++    # OCSP_crl_reason_str.  We use the latter, just like the command line
++    # program.
++    _crl_reasons: typing.ClassVar[list[bytes]] = [
++        b"unspecified",
++        b"keyCompromise",
++        b"CACompromise",
++        b"affiliationChanged",
++        b"superseded",
++        b"cessationOfOperation",
++        b"certificateHold",
++        # b"removeFromCRL",
++    ]
++
++    def __init__(self) -> None:
++        revoked = _lib.X509_REVOKED_new()
++        self._revoked = _ffi.gc(revoked, _lib.X509_REVOKED_free)
++
++    def set_serial(self, hex_str: bytes) -> None:
++        """
++        Set the serial number.
++
++        The serial number is formatted as a hexadecimal number encoded in
++        ASCII.
++
++        :param bytes hex_str: The new serial number.
++
++        :return: ``None``
++        """
++        bignum_serial = _ffi.gc(_lib.BN_new(), _lib.BN_free)
++        bignum_ptr = _ffi.new("BIGNUM**")
++        bignum_ptr[0] = bignum_serial
++        bn_result = _lib.BN_hex2bn(bignum_ptr, hex_str)
++        if not bn_result:
++            raise ValueError("bad hex string")
++
++        asn1_serial = _ffi.gc(
++            _lib.BN_to_ASN1_INTEGER(bignum_serial, _ffi.NULL),
++            _lib.ASN1_INTEGER_free,
++        )
++        _lib.X509_REVOKED_set_serialNumber(self._revoked, asn1_serial)
++
++    def get_serial(self) -> bytes:
++        """
++        Get the serial number.
++
++        The serial number is formatted as a hexadecimal number encoded in
++        ASCII.
++
++        :return: The serial number.
++        :rtype: bytes
++        """
++        bio = _new_mem_buf()
++
++        asn1_int = _lib.X509_REVOKED_get0_serialNumber(self._revoked)
++        _openssl_assert(asn1_int != _ffi.NULL)
++        result = _lib.i2a_ASN1_INTEGER(bio, asn1_int)
++        _openssl_assert(result >= 0)
++        return _bio_to_string(bio)
++
++    def _delete_reason(self) -> None:
++        for i in range(_lib.X509_REVOKED_get_ext_count(self._revoked)):
++            ext = _lib.X509_REVOKED_get_ext(self._revoked, i)
++            obj = _lib.X509_EXTENSION_get_object(ext)
++            if _lib.OBJ_obj2nid(obj) == _lib.NID_crl_reason:
++                _lib.X509_EXTENSION_free(ext)
++                _lib.X509_REVOKED_delete_ext(self._revoked, i)
++                break
++
++    def set_reason(self, reason: bytes | None) -> None:
++        """
++        Set the reason of this revocation.
++
++        If :data:`reason` is ``None``, delete the reason instead.
++
++        :param reason: The reason string.
++        :type reason: :class:`bytes` or :class:`NoneType`
++
++        :return: ``None``
++
++        .. seealso::
++
++            :meth:`all_reasons`, which gives you a list of all supported
++            reasons which you might pass to this method.
++        """
++        if reason is None:
++            self._delete_reason()
++        elif not isinstance(reason, bytes):
++            raise TypeError("reason must be None or a byte string")
++        else:
++            reason = reason.lower().replace(b" ", b"")
++            reason_code = [r.lower() for r in self._crl_reasons].index(reason)
++
++            new_reason_ext = _lib.ASN1_ENUMERATED_new()
++            _openssl_assert(new_reason_ext != _ffi.NULL)
++            new_reason_ext = _ffi.gc(new_reason_ext, _lib.ASN1_ENUMERATED_free)
++
++            set_result = _lib.ASN1_ENUMERATED_set(new_reason_ext, reason_code)
++            _openssl_assert(set_result != _ffi.NULL)
++
++            self._delete_reason()
++            add_result = _lib.X509_REVOKED_add1_ext_i2d(
++                self._revoked, _lib.NID_crl_reason, new_reason_ext, 0, 0
++            )
++            _openssl_assert(add_result == 1)
++
++    def get_reason(self) -> bytes | None:
++        """
++        Get the reason of this revocation.
++
++        :return: The reason, or ``None`` if there is none.
++        :rtype: bytes or NoneType
++
++        .. seealso::
++
++            :meth:`all_reasons`, which gives you a list of all supported
++            reasons this method might return.
++        """
++        for i in range(_lib.X509_REVOKED_get_ext_count(self._revoked)):
++            ext = _lib.X509_REVOKED_get_ext(self._revoked, i)
++            obj = _lib.X509_EXTENSION_get_object(ext)
++            if _lib.OBJ_obj2nid(obj) == _lib.NID_crl_reason:
++                bio = _new_mem_buf()
++
++                print_result = _lib.X509V3_EXT_print(bio, ext, 0, 0)
++                if not print_result:
++                    print_result = _lib.M_ASN1_OCTET_STRING_print(
++                        bio, _lib.X509_EXTENSION_get_data(ext)
++                    )
++                    _openssl_assert(print_result != 0)
++
++                return _bio_to_string(bio)
++        return None
++
++    def all_reasons(self) -> list[bytes]:
++        """
++        Return a list of all the supported reason strings.
++
++        This list is a copy; modifying it does not change the supported reason
++        strings.
++
++        :return: A list of reason strings.
++        :rtype: :class:`list` of :class:`bytes`
++        """
++        return self._crl_reasons[:]
++
++    def set_rev_date(self, when: bytes) -> None:
++        """
++        Set the revocation timestamp.
++
++        :param bytes when: The timestamp of the revocation,
++            as ASN.1 TIME.
++        :return: ``None``
++        """
++        revocationDate = _new_asn1_time(when)
++        ret = _lib.X509_REVOKED_set_revocationDate(
++            self._revoked, revocationDate
++        )
++        _openssl_assert(ret == 1)
++
++    def get_rev_date(self) -> bytes | None:
++        """
++        Get the revocation timestamp.
++
++        :return: The timestamp of the revocation, as ASN.1 TIME.
++        :rtype: bytes
++        """
++        dt = _lib.X509_REVOKED_get0_revocationDate(self._revoked)
++        return _get_asn1_time(dt)
++
++
++_RevokedInternal = Revoked
++utils.deprecated(
++    Revoked,
++    __name__,
++    (
++        "CRL support in pyOpenSSL is deprecated. You should use the APIs "
++        "in cryptography."
++    ),
++    DeprecationWarning,
++    name="Revoked",
++)
++
++
++class CRL:
++    """
++    A certificate revocation list.
++
++    .. deprecated:: 23.3.0
++       Use cryptography's X509 APIs instead.
++    """
++
++    def __init__(self) -> None:
++        crl = _lib.X509_CRL_new()
++        self._crl = _ffi.gc(crl, _lib.X509_CRL_free)
++
++    def to_cryptography(self) -> x509.CertificateRevocationList:
++        """
++        Export as a ``cryptography`` CRL.
++
++        :rtype: ``cryptography.x509.CertificateRevocationList``
++
++        .. versionadded:: 17.1.0
++        """
++        from cryptography.x509 import load_der_x509_crl
++
++        der = _dump_crl_internal(FILETYPE_ASN1, self)
++        return load_der_x509_crl(der)
++
++    @classmethod
++    def from_cryptography(
++        cls, crypto_crl: x509.CertificateRevocationList
++    ) -> _CRLInternal:
++        """
++        Construct based on a ``cryptography`` *crypto_crl*.
++
++        :param crypto_crl: A ``cryptography`` certificate revocation list
++        :type crypto_crl: ``cryptography.x509.CertificateRevocationList``
++
++        :rtype: CRL
++
++        .. versionadded:: 17.1.0
++        """
++        if not isinstance(crypto_crl, x509.CertificateRevocationList):
++            raise TypeError("Must be a certificate revocation list")
++
++        from cryptography.hazmat.primitives.serialization import Encoding
++
++        der = crypto_crl.public_bytes(Encoding.DER)
++        return _load_crl_internal(FILETYPE_ASN1, der)
++
++    def get_revoked(self) -> tuple[_RevokedInternal, ...] | None:
++        """
++        Return the revocations in this certificate revocation list.
++
++        These revocations will be provided by value, not by reference.
++        That means it's okay to mutate them: it won't affect this CRL.
++
++        :return: The revocations in this CRL.
++        :rtype: :class:`tuple` of :class:`Revocation`
++        """
++        results = []
++        revoked_stack = _lib.X509_CRL_get_REVOKED(self._crl)
++        for i in range(_lib.sk_X509_REVOKED_num(revoked_stack)):
++            revoked = _lib.sk_X509_REVOKED_value(revoked_stack, i)
++            revoked_copy = _lib.X509_REVOKED_dup(revoked)
++            pyrev = _RevokedInternal.__new__(_RevokedInternal)
++            pyrev._revoked = _ffi.gc(revoked_copy, _lib.X509_REVOKED_free)
++            results.append(pyrev)
++        if results:
++            return tuple(results)
++        return None
++
++    def add_revoked(self, revoked: _RevokedInternal) -> None:
++        """
++        Add a revoked (by value not reference) to the CRL structure
++
++        This revocation will be added by value, not by reference. That
++        means it's okay to mutate it after adding: it won't affect
++        this CRL.
++
++        :param Revoked revoked: The new revocation.
++        :return: ``None``
++        """
++        copy = _lib.X509_REVOKED_dup(revoked._revoked)
++        _openssl_assert(copy != _ffi.NULL)
++
++        add_result = _lib.X509_CRL_add0_revoked(self._crl, copy)
++        _openssl_assert(add_result != 0)
++
++    def get_issuer(self) -> X509Name:
++        """
++        Get the CRL's issuer.
++
++        .. versionadded:: 16.1.0
++
++        :rtype: X509Name
++        """
++        _issuer = _lib.X509_NAME_dup(_lib.X509_CRL_get_issuer(self._crl))
++        _openssl_assert(_issuer != _ffi.NULL)
++        _issuer = _ffi.gc(_issuer, _lib.X509_NAME_free)
++        issuer = X509Name.__new__(X509Name)
++        issuer._name = _issuer
++        return issuer
++
++    def set_version(self, version: int) -> None:
++        """
++        Set the CRL version.
++
++        .. versionadded:: 16.1.0
++
++        :param int version: The version of the CRL.
++        :return: ``None``
++        """
++        _openssl_assert(_lib.X509_CRL_set_version(self._crl, version) != 0)
++
++    def set_lastUpdate(self, when: bytes) -> None:
++        """
++        Set when the CRL was last updated.
++
++        The timestamp is formatted as an ASN.1 TIME::
++
++            YYYYMMDDhhmmssZ
++
++        .. versionadded:: 16.1.0
++
++        :param bytes when: A timestamp string.
++        :return: ``None``
++        """
++        lastUpdate = _new_asn1_time(when)
++        ret = _lib.X509_CRL_set1_lastUpdate(self._crl, lastUpdate)
++        _openssl_assert(ret == 1)
++
++    def set_nextUpdate(self, when: bytes) -> None:
++        """
++        Set when the CRL will next be updated.
++
++        The timestamp is formatted as an ASN.1 TIME::
++
++            YYYYMMDDhhmmssZ
++
++        .. versionadded:: 16.1.0
++
++        :param bytes when: A timestamp string.
++        :return: ``None``
++        """
++        nextUpdate = _new_asn1_time(when)
++        ret = _lib.X509_CRL_set1_nextUpdate(self._crl, nextUpdate)
++        _openssl_assert(ret == 1)
++
++    def sign(self, issuer_cert: X509, issuer_key: PKey, digest: bytes) -> None:
++        """
++        Sign the CRL.
++
++        Signing a CRL enables clients to associate the CRL itself with an
++        issuer. Before a CRL is meaningful to other OpenSSL functions, it must
++        be signed by an issuer.
++
++        This method implicitly sets the issuer's name based on the issuer
++        certificate and private key used to sign the CRL.
++
++        .. versionadded:: 16.1.0
++
++        :param X509 issuer_cert: The issuer's certificate.
++        :param PKey issuer_key: The issuer's private key.
++        :param bytes digest: The digest method to sign the CRL with.
++        """
++        digest_obj = _lib.EVP_get_digestbyname(digest)
++        _openssl_assert(digest_obj != _ffi.NULL)
++        _lib.X509_CRL_set_issuer_name(
++            self._crl, _lib.X509_get_subject_name(issuer_cert._x509)
++        )
++        _lib.X509_CRL_sort(self._crl)
++        result = _lib.X509_CRL_sign(self._crl, issuer_key._pkey, digest_obj)
++        _openssl_assert(result != 0)
++
++    def export(
++        self,
++        cert: X509,
++        key: PKey,
++        type: int = FILETYPE_PEM,
++        days: int = 100,
++        digest: bytes = _UNSPECIFIED,  # type: ignore
++    ) -> bytes:
++        """
++        Export the CRL as a string.
++
++        :param X509 cert: The certificate used to sign the CRL.
++        :param PKey key: The key used to sign the CRL.
++        :param int type: The export format, either :data:`FILETYPE_PEM`,
++            :data:`FILETYPE_ASN1`, or :data:`FILETYPE_TEXT`.
++        :param int days: The number of days until the next update of this CRL.
++        :param bytes digest: The name of the message digest to use (eg
++            ``b"sha256"``).
++        :rtype: bytes
++        """
++
++        if not isinstance(cert, X509):
++            raise TypeError("cert must be an X509 instance")
++        if not isinstance(key, PKey):
++            raise TypeError("key must be a PKey instance")
++        if not isinstance(type, int):
++            raise TypeError("type must be an integer")
++
++        if digest is _UNSPECIFIED:
++            raise TypeError("digest must be provided")
++
++        digest_obj = _lib.EVP_get_digestbyname(digest)
++        if digest_obj == _ffi.NULL:
++            raise ValueError("No such digest method")
++
++        # A scratch time object to give different values to different CRL
++        # fields
++        sometime = _lib.ASN1_TIME_new()
++        _openssl_assert(sometime != _ffi.NULL)
++        sometime = _ffi.gc(sometime, _lib.ASN1_TIME_free)
++
++        ret = _lib.X509_gmtime_adj(sometime, 0)
++        _openssl_assert(ret != _ffi.NULL)
++        ret = _lib.X509_CRL_set1_lastUpdate(self._crl, sometime)
++        _openssl_assert(ret == 1)
++
++        ret = _lib.X509_gmtime_adj(sometime, days * 24 * 60 * 60)
++        _openssl_assert(ret != _ffi.NULL)
++        ret = _lib.X509_CRL_set1_nextUpdate(self._crl, sometime)
++        _openssl_assert(ret == 1)
++
++        ret = _lib.X509_CRL_set_issuer_name(
++            self._crl, _lib.X509_get_subject_name(cert._x509)
++        )
++        _openssl_assert(ret == 1)
++
++        sign_result = _lib.X509_CRL_sign(self._crl, key._pkey, digest_obj)
++        if not sign_result:
++            _raise_current_error()
++
++        return _dump_crl_internal(type, self)
++
++
++_CRLInternal = CRL
++utils.deprecated(
++    CRL,
++    __name__,
++    (
++        "CRL support in pyOpenSSL is deprecated. You should use the APIs "
++        "in cryptography."
++    ),
++    DeprecationWarning,
++    name="CRL",
++)
++
++
+ class _PassphraseHelper:
+     def __init__(
+         self,
+@@ -2448,3 +2905,189 @@ utils.deprecated(
+     DeprecationWarning,
+     name="load_certificate_request",
+ )
++
++
++def sign(pkey: PKey, data: str | bytes, digest: str) -> bytes:
++    """
++    Sign a data string using the given key and message digest.
++
++    :param pkey: PKey to sign with
++    :param data: data to be signed
++    :param digest: message digest to use
++    :return: signature
++
++    .. versionadded:: 0.11
++    .. deprecated:: 23.3.0
++       Use cryptography's X509 APIs instead.
++    """
++    data = _text_to_bytes_and_warn("data", data)
++
++    digest_obj = _lib.EVP_get_digestbyname(_byte_string(digest))
++    if digest_obj == _ffi.NULL:
++        raise ValueError("No such digest method")
++
++    md_ctx = _lib.EVP_MD_CTX_new()
++    md_ctx = _ffi.gc(md_ctx, _lib.EVP_MD_CTX_free)
++
++    _lib.EVP_SignInit(md_ctx, digest_obj)
++    _lib.EVP_SignUpdate(md_ctx, data, len(data))
++
++    length = _lib.EVP_PKEY_size(pkey._pkey)
++    _openssl_assert(length > 0)
++    signature_buffer = _ffi.new("unsigned char[]", length)
++    signature_length = _ffi.new("unsigned int *")
++    final_result = _lib.EVP_SignFinal(
++        md_ctx, signature_buffer, signature_length, pkey._pkey
++    )
++    _openssl_assert(final_result == 1)
++
++    return _ffi.buffer(signature_buffer, signature_length[0])[:]
++
++
++utils.deprecated(
++    sign,
++    __name__,
++    "sign() is deprecated. Use the equivalent APIs in cryptography.",
++    DeprecationWarning,
++    name="sign",
++)
++
++
++def verify(
++    cert: X509, signature: bytes, data: str | bytes, digest: str
++) -> None:
++    """
++    Verify the signature for a data string.
++
++    :param cert: signing certificate (X509 object) corresponding to the
++        private key which generated the signature.
++    :param signature: signature returned by sign function
++    :param data: data to be verified
++    :param digest: message digest to use
++    :return: ``None`` if the signature is correct, raise exception otherwise.
++
++    .. versionadded:: 0.11
++    .. deprecated:: 23.3.0
++       Use cryptography's X509 APIs instead.
++    """
++    data = _text_to_bytes_and_warn("data", data)
++
++    digest_obj = _lib.EVP_get_digestbyname(_byte_string(digest))
++    if digest_obj == _ffi.NULL:
++        raise ValueError("No such digest method")
++
++    pkey = _lib.X509_get_pubkey(cert._x509)
++    _openssl_assert(pkey != _ffi.NULL)
++    pkey = _ffi.gc(pkey, _lib.EVP_PKEY_free)
++
++    md_ctx = _lib.EVP_MD_CTX_new()
++    md_ctx = _ffi.gc(md_ctx, _lib.EVP_MD_CTX_free)
++
++    _lib.EVP_VerifyInit(md_ctx, digest_obj)
++    _lib.EVP_VerifyUpdate(md_ctx, data, len(data))
++    verify_result = _lib.EVP_VerifyFinal(
++        md_ctx, signature, len(signature), pkey
++    )
++
++    if verify_result != 1:
++        _raise_current_error()
++
++
++utils.deprecated(
++    verify,
++    __name__,
++    "verify() is deprecated. Use the equivalent APIs in cryptography.",
++    DeprecationWarning,
++    name="verify",
++)
++
++
++def dump_crl(type: int, crl: _CRLInternal) -> bytes:
++    """
++    Dump a certificate revocation list to a buffer.
++
++    :param type: The file type (one of ``FILETYPE_PEM``, ``FILETYPE_ASN1``, or
++        ``FILETYPE_TEXT``).
++    :param CRL crl: The CRL to dump.
++
++    :return: The buffer with the CRL.
++    :rtype: bytes
++
++    .. deprecated:: 23.3.0
++       Use cryptography's X509 APIs instead.
++    """
++    bio = _new_mem_buf()
++
++    if type == FILETYPE_PEM:
++        ret = _lib.PEM_write_bio_X509_CRL(bio, crl._crl)
++    elif type == FILETYPE_ASN1:
++        ret = _lib.i2d_X509_CRL_bio(bio, crl._crl)
++    elif type == FILETYPE_TEXT:
++        ret = _lib.X509_CRL_print(bio, crl._crl)
++    else:
++        raise ValueError(
++            "type argument must be FILETYPE_PEM, FILETYPE_ASN1, or "
++            "FILETYPE_TEXT"
++        )
++
++    _openssl_assert(ret == 1)
++    return _bio_to_string(bio)
++
++
++_dump_crl_internal = dump_crl
++utils.deprecated(
++    dump_crl,
++    __name__,
++    (
++        "CRL support in pyOpenSSL is deprecated. You should use the APIs "
++        "in cryptography."
++    ),
++    DeprecationWarning,
++    name="dump_crl",
++)
++
++
++def load_crl(type: int, buffer: str | bytes) -> _CRLInternal:
++    """
++    Load Certificate Revocation List (CRL) data from a string *buffer*.
++    *buffer* encoded with the type *type*.
++
++    :param type: The file type (one of FILETYPE_PEM, FILETYPE_ASN1)
++    :param buffer: The buffer the CRL is stored in
++
++    :return: The CRL object
++
++    .. deprecated:: 23.3.0
++       Use cryptography's X509 APIs instead.
++    """
++    if isinstance(buffer, str):
++        buffer = buffer.encode("ascii")
++
++    bio = _new_mem_buf(buffer)
++
++    if type == FILETYPE_PEM:
++        crl = _lib.PEM_read_bio_X509_CRL(bio, _ffi.NULL, _ffi.NULL, _ffi.NULL)
++    elif type == FILETYPE_ASN1:
++        crl = _lib.d2i_X509_CRL_bio(bio, _ffi.NULL)
++    else:
++        raise ValueError("type argument must be FILETYPE_PEM or FILETYPE_ASN1")
++
++    if crl == _ffi.NULL:
++        _raise_current_error()
++
++    result = _CRLInternal.__new__(_CRLInternal)
++    result._crl = _ffi.gc(crl, _lib.X509_CRL_free)
++    return result
++
++
++_load_crl_internal = load_crl
++utils.deprecated(
++    load_crl,
++    __name__,
++    (
++        "CRL support in pyOpenSSL is deprecated. You should use the APIs "
++        "in cryptography."
++    ),
++    DeprecationWarning,
++    name="load_crl",
++)
