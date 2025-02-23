@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/rigetti/quil-rs/blob/quil-py/v${version}/quil-py/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/quil-rs/blob/${src.tag}/quil-py/CHANGELOG.md";
     description = "Python package for building and parsing Quil programs";
     homepage = "https://github.com/rigetti/quil-rs/tree/main/quil-py";
     license = lib.licenses.asl20;
