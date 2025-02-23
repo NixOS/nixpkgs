@@ -124,15 +124,6 @@ cfggnome = """  # Enable the X11 windowing system.
 
 """
 
-cfgplasma5 = """  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-
-"""
-
 cfgplasma6 = """  # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
@@ -588,8 +579,6 @@ def run():
     # Choose desktop environment
     if gs.value("packagechooser_packagechooser") == "gnome":
         cfg += cfggnome
-    elif gs.value("packagechooser_packagechooser") == "plasma5":
-        cfg += cfgplasma5
     elif gs.value("packagechooser_packagechooser") == "plasma6":
         cfg += cfgplasma6
     elif gs.value("packagechooser_packagechooser") == "xfce":
@@ -718,9 +707,7 @@ def run():
 
     cfg += cfgpkgs
     # Use firefox as default as a graphical web browser, and add kate to plasma desktop
-    if gs.value("packagechooser_packagechooser") == "plasma5":
-        catenate(variables, "pkgs", "\n      kate\n    #  thunderbird\n    ")
-    elif gs.value("packagechooser_packagechooser") == "plasma6":
+    if gs.value("packagechooser_packagechooser") == "plasma6":
         catenate(
             variables, "pkgs", "\n      kdePackages.kate\n    #  thunderbird\n    "
         )
