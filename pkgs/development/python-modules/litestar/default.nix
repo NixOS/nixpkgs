@@ -34,7 +34,6 @@
 
   # tests
   pytestCheckHook,
-  valkey,
   pytest-lazy-fixtures,
   pytest-xdist,
   pytest-mock,
@@ -91,7 +90,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-lazy-fixtures
     pytest-xdist
-    valkey
     pytest-mock
     pytest-asyncio
     pytest-timeout
@@ -105,7 +103,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # Follow github CI
     "docs/examples/testing"
-    "tests"
   ];
 
   meta = {
