@@ -192,8 +192,6 @@ makeScopeWithSplicing' {
 
       signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
-      postLinkSignHook = callPackage ../os-specific/darwin/signing-utils/post-link-sign-hook.nix { };
-
       autoSignDarwinBinariesHook = pkgs.makeSetupHook {
         name = "auto-sign-darwin-binaries-hook";
         propagatedBuildInputs = [ self.signingUtils ];

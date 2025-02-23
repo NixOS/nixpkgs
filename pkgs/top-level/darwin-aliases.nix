@@ -85,4 +85,7 @@ mapAliases ({
   ### O ###
 
   opencflite = pkgs.opencflite; # added 2024-05-02
+
+  ### P ###
+  postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23
 })
