@@ -89,6 +89,9 @@ in
         InaccessiblePaths = [
           "/dev/shm"
           "/sys"
+          "/run/dbus"
+          "/run/user"
+          "/run/nscd"
         ];
         LockPersonality = true;
         PrivateDevices = true;
@@ -124,6 +127,8 @@ in
         RemoveIPC = true;
         NoNewPrivileges = true;
         MemoryDenyWriteExecute = true;
+        ExecPaths = [ "/nix/store" ];
+        NoExecPaths = [ "/" ];
       };
     };
   };
