@@ -185,7 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ValveSoftware/gamescope";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      nrdxp
       pedrohlc
       Scrumplex
       zhaofengli
