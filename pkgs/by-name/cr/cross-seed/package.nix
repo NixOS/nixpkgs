@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
@@ -18,7 +19,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-hSiGnw3Fo//oTONBmtuv0sDvldCzs1PsdImxdGWEpMo=";
 
-  passthru.updateScript = nix-update-script;
+  passthru = {
+    updateScript = nix-update-script;
+    tests.cross-seed = nixosTests.cross-seed;
+  };
 
   meta = {
     description = "Fully-automatic torrent cross-seeding with Torznab";
