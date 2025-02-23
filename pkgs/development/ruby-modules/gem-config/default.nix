@@ -554,6 +554,10 @@ in
       rpath="$(patchelf --print-rpath "$soPath")"
       patchelf --set-rpath "${lib.makeLibraryPath [ lasem glib cairo ]}:$rpath" "$soPath"
       patchelf --replace-needed liblasem.so liblasem-0.4.so "$soPath"
+    ''  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.bundle"
+      install_name_tool -add_rpath "${lib.makeLibraryPath [ lasem glib cairo ]}/lib" "$soPath"
+      install_name_tool -change @rpath/liblasem.dylib "${lib.getLib lasem}/lib/liblasem-0.4.dylib" "$soPath"
     '';
   };
 
