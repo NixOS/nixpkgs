@@ -4,21 +4,23 @@
   fetchurl,
   php,
   nix-update-script,
+  unzip,
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.8.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "4.16.0";
   pname = "adminer";
 
   # not using fetchFromGitHub as the git repo relies on submodules that are included in the tar file
   src = fetchurl {
-    url = "https://github.com/vrana/adminer/releases/download/v${version}/adminer-${version}.tar.gz";
-    sha256 = "sha256-2rkNq79sc5RBFxWuiaSlpWr0rwrnEFlnW1WcoxjoP2M=";
+    url = "https://github.com/vrana/adminer/releases/download/v${finalAttrs.version}/adminer-${finalAttrs.version}.zip";
+    hash = "sha256-9pWyPVeS3LTwPOi5y1iEaRyChT0XevqEPifcPhi3pRM=";
   };
 
   nativeBuildInputs = [
     php
     php.packages.composer
+    unzip
   ];
 
   buildPhase = ''
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir $out
-    cp adminer-${version}.php $out/adminer.php
+    cp adminer-${finalAttrs.version}.php $out/adminer.php
 
     runHook postInstall
   '';
@@ -55,4 +57,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
   };
-}
+})
