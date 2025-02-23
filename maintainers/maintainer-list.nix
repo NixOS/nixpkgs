@@ -17041,13 +17041,6 @@
     githubId = 24574288;
     name = "Nikodem Rabuliński";
   };
-  nrdxp = {
-    email = "tim.deh@pm.me";
-    matrix = "@timdeh:matrix.org";
-    github = "nrdxp";
-    githubId = 34083928;
-    name = "Tim DeHerrera";
-  };
   nrhelmi = {
     email = "helmiinour@gmail.com";
     github = "NRHelmi";
