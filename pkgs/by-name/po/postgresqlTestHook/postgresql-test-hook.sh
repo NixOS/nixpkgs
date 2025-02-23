@@ -12,6 +12,8 @@ postgresqlStart() {
   # Server variables:
   #  - only PGDATA: https://www.postgresql.org/docs/current/creating-cluster.html
 
+  export PGSSLMODE=${PGSSLMODE:-disable}
+
   if [[ "${PGDATA:-}" == "" ]]; then
     PGDATA="$NIX_BUILD_TOP/postgresql"
   fi
@@ -54,7 +56,7 @@ EOF
     false
   fi
   echo 'initializing postgresql'
-  initdb -U postgres
+  initdb --username=postgres --auth=trust --no-sync --no-instructions
 
   echo "$postgresqlExtraSettings" >>"$PGDATA/postgresql.conf"
 
@@ -79,5 +81,5 @@ EOF
 
 postgresqlStop() {
   echo 'stopping postgresql'
-  pg_ctl stop
+  pg_ctl stop --mode=immediate
 }
