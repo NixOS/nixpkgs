@@ -11,7 +11,6 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   fontconfig,
   harfbuzzFull,
   openssl,
@@ -56,21 +55,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "external-harfbuzz" ];
 
-  buildInputs =
-    [
-      icu
-      fontconfig
-      harfbuzzFull
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-        Cocoa
-        Foundation
-      ]
-    );
+  buildInputs = [
+    icu
+    fontconfig
+    harfbuzzFull
+    openssl
+  ];
 
   postInstall =
     ''
