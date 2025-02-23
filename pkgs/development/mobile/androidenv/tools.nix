@@ -1,8 +1,8 @@
-{deployAndroidPackage, lib, stdenv, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, postInstall, meta}:
+{deployAndroidPackage, lib, stdenv, package, os, arch, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall, meta}:
 
 deployAndroidPackage {
   name = "androidsdk-tools";
-  inherit package;
+  inherit package os arch;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs = lib.optional (os == "linux") (

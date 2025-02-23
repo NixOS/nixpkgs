@@ -29,15 +29,9 @@ lib.recurseIntoAttrs rec {
       "34"
       "35"
     ];
-    includeEmulator =
-      with pkgs.stdenv.hostPlatform;
-      system == "x86_64-linux" || system == "x86_64-darwin" || system == "aarch64-darwin";
-    includeSystemImages =
-      with pkgs.stdenv.hostPlatform;
-      system == "x86_64-linux" || system == "x86_64-darwin" || system == "aarch64-darwin";
-    includeNDK =
-      with pkgs.stdenv.hostPlatform;
-      system == "x86_64-linux" || system == "x86_64-darwin" || system == "aarch64-darwin";
+    includeEmulator = "if-supported";
+    includeSystemImages = "if-supported";
+    includeNDK = "if-supported";
   };
 
   test-suite = pkgs.callPackage ./test-suite.nix {
