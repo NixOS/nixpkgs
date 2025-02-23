@@ -20,9 +20,9 @@ let
           owner = "nginx";
           path = "/var/ssl/${host}-ca.pem";
         };
-        label = "www_ca";
-        profile = "three-month";
+        profile = "default";
         remote = "localhost:8888";
+        auth_key_file = "/var/ssl/apitoken";
       };
       certificate = {
         group = "nginx";
@@ -80,7 +80,22 @@ let
             ];
             networking.extraHosts = "127.0.0.1 imp.example.org decl.example.org";
 
-            services.cfssl.enable = true;
+            services.cfssl = {
+              enable = true;
+              configFile = toString (pkgs.writeText "cfssl.json" (
+                builtins.toJSON {
+                  auth_keys.default = {
+                    key = "file:/var/ssl/apitoken";
+                    type = "standard";
+                  };
+                  signing.profiles.default = {
+                    auth_key = "default";
+                    expiry = "720h";
+                    usages = ["digital signature"];
+                  };
+                }
+              ));
+            };
             systemd.services.cfssl.after = [
               "cfssl-init.service"
               "networking.target"
@@ -94,7 +109,7 @@ let
               serviceConfig = {
                 User = "cfssl";
                 Type = "oneshot";
-                WorkingDirectory = config.services.cfssl.dataDir;
+                inherit (config.systemd.services.cfssl.serviceConfig) WorkingDirectory StateDirectory StateDirectoryMode;
               };
               script = ''
                 ${pkgs.cfssl}/bin/cfssl genkey -initca ${
@@ -117,6 +132,8 @@ let
                     }
                   )
                 } | ${pkgs.cfssl}/bin/cfssljson -bare ca
+
+                echo 012345678012345678 > /var/ssl/apitoken
               '';
             };
 
@@ -145,7 +162,12 @@ let
 
             systemd.services.nginx.wantedBy = lib.mkForce [ ];
 
-            systemd.services.certmgr.after = [ "cfssl.service" ];
+            systemd.services.certmgr.after = [
+              "cfssl.service"
+              # make sure nginx starts up first so we can check that certmgr
+              # restarts it
+              "nginx.service"
+            ];
             services.certmgr = {
               enable = true;
               inherit svcManager;
