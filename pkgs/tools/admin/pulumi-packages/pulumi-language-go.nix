@@ -20,10 +20,13 @@ buildGoModule rec {
   # go: inconsistent vendoring in ...
   doCheck = false;
 
-  meta = with lib; {
-    description = "Golang language host plugin for Pulumi";
+  meta = {
+    homepage = "https://www.pulumi.com/docs/iac/languages-sdks/go/";
+    description = "Language host for Pulumi programs written in Go";
+    license = lib.licenses.asl20;
     mainProgram = "pulumi-language-go";
-    homepage = "https://github.com/pulumi/pulumi/tree/master/sdk/go";
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [
+      tie
+    ];
   };
 }
