@@ -6,7 +6,7 @@
   makeWrapper,
   openssl,
   mpv,
-  ffmpeg,
+  ffmpeg_6,
   nodejs,
 }:
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage {
     wrapProgram "$out/bin/dmlive" --suffix PATH : "${
       lib.makeBinPath [
         mpv
-        ffmpeg
+        ffmpeg_6
         nodejs
       ]
     }"
