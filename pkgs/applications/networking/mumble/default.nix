@@ -62,7 +62,7 @@ let
         cmakeFlags = [
           "-D g15=OFF"
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
-        ] ++ (overrides.configureFlags or [ ]);
+        ] ++ (overrides.cmakeFlags or [ ]);
 
         preConfigure = ''
           patchShebangs scripts
@@ -106,7 +106,7 @@ let
         ++ lib.optional pulseSupport libpulseaudio
         ++ lib.optional pipewireSupport pipewire;
 
-      configureFlags =
+      cmakeFlags =
         [
           "-D server=OFF"
           "-D bundled-celt=ON"
@@ -140,7 +140,7 @@ let
     generic {
       type = "murmur";
 
-      configureFlags =
+      cmakeFlags =
         [
           "-D client=OFF"
         ]
@@ -160,7 +160,7 @@ let
       stdenv = stdenv_32bit;
       type = "mumble-overlay";
 
-      configureFlags = [
+      cmakeFlags = [
         "-D server=OFF"
         "-D client=OFF"
         "-D overlay=ON"
