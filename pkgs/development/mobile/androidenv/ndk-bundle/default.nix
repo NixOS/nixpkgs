@@ -1,5 +1,5 @@
 { stdenv, lib, pkgs, pkgsHostHost, makeWrapper, autoPatchelfHook
-, deployAndroidPackage, package, os, platform-tools, meta
+, deployAndroidPackage, package, os, arch, platform-tools, meta
 }:
 
 let
@@ -8,7 +8,7 @@ let
   ]) + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage rec {
-  inherit package;
+  inherit package os arch;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = [ "*" ];
