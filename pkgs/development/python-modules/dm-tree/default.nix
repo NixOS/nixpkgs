@@ -65,7 +65,10 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  pythonImportsCheck = [ "tree" ];
+  pythonImportsCheck = [
+    "tree"
+    "tree._tree"
+  ];
 
   meta = {
     description = "Tree is a library for working with nested data structures";
