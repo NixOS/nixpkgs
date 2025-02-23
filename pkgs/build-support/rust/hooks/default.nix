@@ -17,6 +17,7 @@
   # `target/` from which to copy the build artifacts.  It is derived
   # from a stdenv platform (or a JSON file).
   target ? stdenv.targetPlatform.rust.cargoShortTarget,
+  targetStdenv ? pkgsTargetTarget.stdenv,
   tests,
   pkgsCross,
 }:
@@ -105,13 +106,13 @@
         cargoConfig =
           lib.optionalString (stdenv.hostPlatform.config != stdenv.targetPlatform.config) ''
             [target."${stdenv.targetPlatform.rust.rustcTarget}"]
-            "linker" = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
+            "linker" = "${targetStdenv.cc}/bin/${targetStdenv.cc.targetPrefix}cc"
           ''
           + ''
             [target."${stdenv.hostPlatform.rust.rustcTarget}"]
             "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
             "rustflags" = [ "-C", "target-feature=${
-              if pkgsTargetTarget.stdenv.targetPlatform.isStatic then "+" else "-"
+              if targetStdenv.targetPlatform.isStatic then "+" else "-"
             }crt-static" ]
           '';
       };
