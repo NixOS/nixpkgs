@@ -1,28 +1,37 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   makeWrapper,
   gcc,
   asciidoc,
+  python3Packages,
   autoreconfHook,
+  bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "colm";
-  version = "0.13.0.7";
+  version = "0.14.7-unstable-2023-03-13";
 
-  src = fetchurl {
-    url = "https://www.colm.net/files/colm/${pname}-${version}.tar.gz";
-    sha256 = "0f76iri173l2wja2v7qrwmf958cqwh5g9x4bhj2z8wknmlla6gz4";
+  src = fetchFromGitHub {
+    owner = "adrian-thurston";
+    repo = "colm";
+    rev = "28b6e0a01157049b4cb279b0ef25ea9dcf3b46ed";
+    hash = "sha256-Ype/KtbICGuueAvAErPc38HDxF1dmZ/bGjr+pc6bXLQ=";
   };
 
-  patches = [ ./cross-compile.patch ];
+  postPatch = ''
+    find . -type f -exec sed -i 's|^#!/bin/bash|#!${lib.getExe bash}|' {} \;
+  '';
+
+  configureFlags = [ "--enable-manual" ];
 
   nativeBuildInputs = [
     makeWrapper
     asciidoc
     autoreconfHook
+    python3Packages.pygments
   ];
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
@@ -36,12 +45,12 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${gcc}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Programming language for the analysis and transformation of computer languages";
     mainProgram = "colm";
     homepage = "http://www.colm.net/open-source/colm";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }
