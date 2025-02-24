@@ -94,7 +94,7 @@ let
       (
         # The stacktrace from exception feature causes memory leaks when built
         # with libc++. For all other standard library implementations, i.e.
-        # libstdc++, we must aknowledge this or stacktrace refuses to compile.
+        # libstdc++, we must acknowledge this or stacktrace refuses to compile.
         # Issue upstream: https://github.com/boostorg/stacktrace/issues/163
         if (stdenv.cc.libcxx != null) then
           "boost.stacktrace.from_exception=off"

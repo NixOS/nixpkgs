@@ -240,7 +240,7 @@ let
 
         passthru = lib.mapAttrs (package: deps: mathcomp_ package) packages;
       });
-      # split packages didn't exist before 0.6, so bulding nothing in that case
+      # split packages didn't exist before 0.6, so building nothing in that case
       patched-derivation1 = derivation.overrideAttrs (
         o:
         lib.optionalAttrs
@@ -267,7 +267,7 @@ let
           && lib.versions.isLt "0.6" o.version
         ) { preBuild = ""; }
       );
-      # only packages classical and analysis existed before 1.7, so bulding nothing in that case
+      # only packages classical and analysis existed before 1.7, so building nothing in that case
       patched-derivation3 = patched-derivation2.overrideAttrs (
         o:
         lib.optionalAttrs
