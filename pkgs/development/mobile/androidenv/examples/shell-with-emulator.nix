@@ -186,22 +186,25 @@ pkgs.mkShell rec {
             jdk
           ];
         }
-        (pkgs.lib.optionalString emulatorSupported ''
-          export ANDROID_USER_HOME=$PWD/.android
-          mkdir -p $ANDROID_USER_HOME
+        (
+          pkgs.lib.optionalString emulatorSupported ''
+            export ANDROID_USER_HOME=$PWD/.android
+            mkdir -p $ANDROID_USER_HOME
 
-          avdmanager delete avd -n testAVD || true
-          echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
-          result=$(avdmanager list avd)
+            avdmanager delete avd -n testAVD || true
+            echo "" | avdmanager create avd --force --name testAVD --package 'system-images;android-35;google_apis;x86_64'
+            result=$(avdmanager list avd)
 
-          if [[ ! $result =~ "Name: testAVD" ]]; then
-            echo "avdmanager couldn't create the avd! The output is :''${result}"
-            exit 1
-          fi
+            if [[ ! $result =~ "Name: testAVD" ]]; then
+              echo "avdmanager couldn't create the avd! The output is :''${result}"
+              exit 1
+            fi
 
-          avdmanager delete avd -n testAVD || true
-        '' + ''
-          touch $out
-        '');
+            avdmanager delete avd -n testAVD || true
+          ''
+          + ''
+            touch $out
+          ''
+        );
   };
 }
