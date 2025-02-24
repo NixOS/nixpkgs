@@ -5,6 +5,7 @@
 , callPackage
 , autoPatchelfHook
 , glib
+, darwin
 }:
 
 let
@@ -86,18 +87,24 @@ in {
       version = ide.version;
       src = ide;
       dontInstall = true;
-      dontFixup = true;
+      dontStrip = true;
       passthru.plugins = plugins ++ (ide.plugins or [ ]);
       newPlugins = plugins;
       disallowedReferences = [ ide ];
-      nativeBuildInputs = (lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook) ++ (ide.nativeBuildInputs or [ ]);
+      nativeBuildInputs =
+        (lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook)
+        # The buildPhase hook rewrites the binary, which invaliates the code
+        # signature. Add the fixup hook to sign the output.
+        ++ (lib.optional stdenv.hostPlatform.isDarwin darwin.autoSignDarwinBinariesHook)
+        ++ (ide.nativeBuildInputs or [ ]);
       buildInputs = lib.unique ((ide.buildInputs or [ ]) ++ [ glib ]);
 
       inherit (ide) meta;
 
       buildPhase =
       let
-        rootDir = if stdenv.hostPlatform.isDarwin then "Applications/${ide.product}.app/Contents" else meta.mainProgram;
+        appDir = lib.optionalString stdenv.hostPlatform.isDarwin "Applications/${lib.escapeShellArg ide.product}.app";
+        rootDir = if stdenv.hostPlatform.isDarwin then "${appDir}/Contents" else meta.mainProgram;
       in
       ''
         cp -r ${ide} $out
