@@ -28,5 +28,7 @@ tectonic-unwrapped.overrideAttrs (finalAttrs: prevAttrs: {
             # renamed to texpresso-tonic
             rm $out/bin/nextonic
           '';
-          meta.mainProgram = "texpresso-tonic";
+          meta = prevAttrs.meta // {
+            mainProgram = "texpresso-tonic";
+          };
 })
