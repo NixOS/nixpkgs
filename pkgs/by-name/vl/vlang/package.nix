@@ -19,7 +19,7 @@ let
     #include <sys/types.h>
     #include <sys/ptrace.h>
   '';
-  # vc is the V compiler's source translated to C (needed for boostrap).
+  # vc is the V compiler's source translated to C (needed for bootstrap).
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";

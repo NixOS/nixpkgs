@@ -88,7 +88,7 @@ lib.fix (self: {
       fetcherOpts ? { },
       # A map from node_module path to an alternative package to use instead of fetching the source in package-lock.json.
       # Example: { "node_modules/axios" = stdenv.mkDerivation { ... }; }
-      # This is usefull if you want to inject custom sources for a specific package.
+      # This is useful if you want to inject custom sources for a specific package.
       packageSourceOverrides ? { },
     }:
     let

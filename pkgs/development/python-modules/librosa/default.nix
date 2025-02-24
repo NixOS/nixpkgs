@@ -139,7 +139,7 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ GuillaumeDesforges ];
     badPlatforms = [
-      # Several non-deterministic occurances of "Fatal Python error: Segmentation fault", both in
+      # Several non-deterministic occurrences of "Fatal Python error: Segmentation fault", both in
       # numpy's and in this package's code.
       "aarch64-linux"
     ];

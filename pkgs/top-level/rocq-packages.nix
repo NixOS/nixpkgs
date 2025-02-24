@@ -41,7 +41,7 @@ in rec {
    * a set of libraries built with that specific Rocq. More libraries are known to
    * this function than what is compatible with that version of Rocq. Therefore,
    * libraries that are not known to be compatible are removed (filtered out) from
-   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * the resulting set. For meta-programming purposes (inspecting the derivations
    * rather than building the libraries) this filtering can be disabled by setting
    * a `dontFilter` attribute into the Rocq derivation.
    */

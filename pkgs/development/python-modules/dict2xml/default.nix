@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  # Tests are inplemented in a custom DSL (RSpec)
+  # Tests are implemented in a custom DSL (RSpec)
   doCheck = false;
 
   pythonImportsCheck = [ "dict2xml" ];

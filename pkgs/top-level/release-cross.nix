@@ -194,7 +194,7 @@ in
   fuloongminipc = mapTestOnCross systems.examples.fuloongminipc linuxCommon;
   ben-nanonote = mapTestOnCross systems.examples.ben-nanonote linuxCommon;
 
-  /* Javacript */
+  /* Javascript */
   ghcjs = mapTestOnCross systems.examples.ghcjs {
     haskell.packages.ghcjs.hello = nativePlatforms;
     haskell.packages.native-bignum.ghcHEAD.hello = nativePlatforms;

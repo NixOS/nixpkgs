@@ -19,7 +19,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ hatchling ];
 
   patches = [
-    # Cannot use hatch-vcs, due to an inifinite recursion
+    # Cannot use hatch-vcs, due to an infinite recursion
     (replaceVars ./version.patch {
       inherit version;
     })

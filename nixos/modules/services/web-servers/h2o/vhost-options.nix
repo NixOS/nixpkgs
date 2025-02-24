@@ -19,6 +19,18 @@ in
       example = "example.org";
     };
 
+    serverAliases = mkOption {
+      type = types.listOf types.nonEmptyStr;
+      default = [ ];
+      example = [
+        "www.example.org"
+        "example.org"
+      ];
+      description = ''
+        Additional names of virtual hosts served by this virtual host configuration.
+      '';
+    };
+
     http = mkOption {
       type = types.nullOr (
         types.submodule {
@@ -82,7 +94,7 @@ in
               '';
             };
             identity = mkOption {
-              type = types.nonEmptyListOf (
+              type = types.listOf (
                 types.submodule {
                   options = {
                     key-file = mkOption {
@@ -96,7 +108,7 @@ in
                   };
                 }
               );
-              default = null;
+              default = [ ];
               description = ''
                 Key / certificate pairs for the virtual host.
               '';
@@ -104,23 +116,21 @@ in
                 literalExpression
                   # nix
                   ''
-                    {
-                      indentities = [
-                        {
-                          key-file = "/path/to/rsa.key";
-                          certificate-file = "/path/to/rsa.crt";
-                        }
-                        {
-                          key-file = "/path/to/ecdsa.key";
-                          certificate-file = "/path/to/ecdsa.crt";
-                        }
-                      ];
-                    }
+                    [
+                      {
+                        key-file = "/path/to/rsa.key";
+                        certificate-file = "/path/to/rsa.crt";
+                      }
+                      {
+                        key-file = "/path/to/ecdsa.key";
+                        certificate-file = "/path/to/ecdsa.crt";
+                      }
+                    ]
                   '';
             };
             extraSettings = mkOption {
-              type = types.nullOr types.attrs;
-              default = null;
+              type = types.attrs;
+              default = { };
               description = ''
                 Additional TLS/SSL-related configuration options.
               '';
@@ -138,6 +148,49 @@ in
       );
       default = null;
       description = "TLS options for virtual host";
+    };
+
+    acme = mkOption {
+      type = types.nullOr (
+        types.addCheck (types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to ask Let’s Encrypt to sign a certificate for this
+                virtual host. Alternatively, an existing host can be used thru
+                {option}`acme.useHost`.
+              '';
+            };
+            useHost = mkOption {
+              type = types.nullOr types.nonEmptyStr;
+              default = null;
+              description = ''
+                An existing Let’s Encrypt certificate to use for this virtual
+                host. This is useful if you have many subdomains and want to
+                avoid hitting the [rate
+                limit](https://letsencrypt.org/docs/rate-limits). Alternately,
+                you can generate a certificate through {option}`acme.enable`.
+                Note that this option neither creates any certificates nor does
+                it add subdomains to existing ones — you will need to create
+                them manually using [](#opt-security.acme.certs).
+              '';
+            };
+            root = mkOption {
+              type = types.nullOr types.path;
+              default = "/var/lib/acme/acme-challenge";
+              description = ''
+                Directory for the ACME challenge, which is **public**. Don’t put
+                certs or keys in here. Set to `null` to inherit from
+                config.security.acme.
+              '';
+            };
+          };
+        }) (a: (a.enable || a.useHost != null) && !(a.enable && a.useHost != null))
+      );
+      default = null;
+      description = "ACME options for virtual host.";
     };
 
     settings = mkOption {

@@ -84,7 +84,7 @@
 , runAccuracyTests ? true
 , runPerformanceTests ? false
 # Modules to enable via BUILD_LIST to build a customized opencv.
-# An empty lists means this setting is ommited which matches upstreams default.
+# An empty lists means this setting is omitted which matches upstreams default.
 , enabledModules ? [ ]
 
 , AVFoundation
@@ -519,7 +519,7 @@ effectiveStdenv.mkDerivation {
       "$out/lib/pkgconfig/opencv4.pc"
     mkdir "$cxxdev"
   ''
-  # fix deps not progagating from opencv4.cxxdev if cuda is disabled
+  # fix deps not propagating from opencv4.cxxdev if cuda is disabled
   # see https://github.com/NixOS/nixpkgs/issues/276691
   + optionalString (!enableCuda) ''
     mkdir -p "$cxxdev/nix-support"
