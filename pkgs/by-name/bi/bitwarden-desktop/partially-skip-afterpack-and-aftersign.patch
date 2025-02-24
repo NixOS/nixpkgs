@@ -1,0 +1,38 @@
+diff --git a/apps/desktop/scripts/after-pack.js b/apps/desktop/scripts/after-pack.js
+index fd16cd5..e22f45e 100644
+--- a/apps/desktop/scripts/after-pack.js
++++ b/apps/desktop/scripts/after-pack.js
+@@ -17,7 +17,8 @@ async function run(context) {
+     await addElectronFuses(context);
+   }
+ 
+-  if (context.electronPlatformName === "linux") {
++  // disable wrapping
++  if (false) {
+     console.log("Creating memory-protection wrapper script");
+     const appOutDir = context.appOutDir;
+     const oldBin = path.join(appOutDir, context.packager.executableName);
+@@ -32,7 +33,8 @@ async function run(context) {
+     console.log("Copied memory-protection wrapper script");
+   }
+ 
+-  if (["darwin", "mas"].includes(context.electronPlatformName)) {
++  // disable codesigning
++  if (false) {
+     const is_mas = context.electronPlatformName === "mas";
+     const is_mas_dev = context.targets.some((e) => e.name === "mas-dev");
+ 
+diff --git a/apps/desktop/scripts/after-sign.js b/apps/desktop/scripts/after-sign.js
+index dc60e9d..383838a 100644
+--- a/apps/desktop/scripts/after-sign.js
++++ b/apps/desktop/scripts/after-sign.js
+@@ -12,6 +12,9 @@ async function run(context) {
+   console.log("## After sign");
+   // console.log(context);
+ 
++  // skip after-sign
++  return
++
+   const appName = context.packager.appInfo.productFilename;
+   const appPath = `${context.appOutDir}/${appName}.app`;
+   const macBuild = context.electronPlatformName === "darwin";
