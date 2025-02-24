@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scraper";
-  version = "0.22.0";
+  version = "0.23.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-YefezVG/p+nhdJu5YetR84yL9H7Iqz/k+Hnp8Bwv7gI=";
+    hash = "sha256-s38EnVooSCL6TNjU90x2Q7lXDyOf9sWjOpxAxangyAU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wIoToIbOSN1kKN3njkshZvN2FoHoY0kUMVv8RteD5uI=";
+  cargoHash = "sha256-cijkLybvjwdz3k2CG0hYwSTisbJUpyI7QUG0l8xLfKQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
