@@ -820,7 +820,6 @@
   ./services/misc/klipper.nix
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
-  ./services/misc/lidarr.nix
   ./services/misc/lifecycled.nix
   ./services/misc/llama-cpp.nix
   ./services/misc/logkeys.nix
@@ -860,12 +859,9 @@
   ./services/misc/portunus.nix
   ./services/misc/preload.nix
   ./services/misc/private-gpt.nix
-  ./services/misc/prowlarr.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
-  ./services/misc/radarr.nix
   ./services/misc/radicle.nix
-  ./services/misc/readarr.nix
   ./services/misc/realmd.nix
   ./services/misc/recyclarr.nix
   ./services/misc/redlib.nix
@@ -876,13 +872,18 @@
   ./services/misc/rshim.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
+  ./services/misc/servarr/lidarr.nix
+  ./services/misc/servarr/prowlarr.nix
+  ./services/misc/servarr/radarr.nix
+  ./services/misc/servarr/readarr.nix
+  ./services/misc/servarr/sonarr.nix
+  ./services/misc/servarr/whisparr.nix
   ./services/misc/serviio.nix
   ./services/misc/sickbeard.nix
   ./services/misc/signald.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/soft-serve.nix
-  ./services/misc/sonarr.nix
   ./services/misc/sourcehut
   ./services/misc/spice-autorandr.nix
   ./services/misc/spice-vdagentd.nix
@@ -908,7 +909,6 @@
   ./services/misc/wastebin.nix
   ./services/misc/weechat.nix
   ./services/misc/workout-tracker.nix
-  ./services/misc/whisparr.nix
   ./services/misc/xmrig.nix
   ./services/misc/ytdl-sub.nix
   ./services/misc/zoneminder.nix
