@@ -1,9 +1,13 @@
 {
   lib,
+  boost,
   rustPlatform,
   fetchFromGitHub,
   python3,
+  pkg-config,
+  nix,
   nix-update-script,
+  enableNixImport ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,9 +29,20 @@ rustPlatform.buildRustPackage rec {
     "-p nickel-lang-lsp"
   ];
 
-  nativeBuildInputs = [
-    python3
+  buildInputs = lib.optionals enableNixImport [
+    nix
+    boost
   ];
+
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals enableNixImport [
+      pkg-config
+    ];
+
+  buildFeatures = lib.optionals enableNixImport [ "nix-experimental" ];
 
   outputs = [
     "out"
