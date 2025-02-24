@@ -579,7 +579,7 @@ let
       runHook postInstall
     '';
 
-    # patching rpath with patchelf doens't work. The execuable
+    # patching rpath with patchelf doens't work. The executable
     # raises an segmentation fault
     postFixup =
       let

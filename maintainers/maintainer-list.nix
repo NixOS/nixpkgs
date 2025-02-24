@@ -3142,12 +3142,6 @@
     githubId = 5718007;
     name = "Bastian Köcher";
   };
-  blaggacao = {
-    name = "David Arnold";
-    email = "dar@xoe.solutions";
-    github = "blaggacao";
-    githubId = 7548295;
-  };
   blakesmith = {
     name = "Blake Smith";
     email = "blakesmith0@gmail.com";
@@ -3266,6 +3260,12 @@
     github = "bodil";
     githubId = 17880;
     name = "Bodil Stokke";
+  };
+  body20002 = {
+    email = "body20002.test@gmail.com";
+    github = "body20002";
+    githubId = 33910565;
+    name = "Abdallah Gamal";
   };
   boj = {
     email = "brian@uncannyworks.com";
@@ -7487,6 +7487,13 @@
     github = "fadenb";
     githubId = 878822;
     name = "Tristan Helmich";
+  };
+  famfo = {
+    name = "famfo";
+    email = "famfo+nixpkgs@famfo.xyz";
+    matrix = "@famfo:ccc.ac";
+    github = "famfo";
+    githubId = 44938471;
   };
   fangpen = {
     email = "hello@fangpenlin.com";
@@ -15454,6 +15461,12 @@
     githubId = 780485;
     name = "Misty De Méo";
   };
+  mistyttm = {
+    name = "Emmey Rose";
+    email = "contact@mistyttm.dev";
+    github = "Mistyttm";
+    githubId = 51770769;
+  };
   misuzu = {
     email = "bakalolka@gmail.com";
     github = "misuzu";
@@ -17033,13 +17046,6 @@
     github = "nrabulinski";
     githubId = 24574288;
     name = "Nikodem Rabuliński";
-  };
-  nrdxp = {
-    email = "tim.deh@pm.me";
-    matrix = "@timdeh:matrix.org";
-    github = "nrdxp";
-    githubId = 34083928;
-    name = "Tim DeHerrera";
   };
   nrhelmi = {
     email = "helmiinour@gmail.com";
@@ -19772,13 +19778,6 @@
     githubId = 44014925;
     name = "Rexx Larsson";
   };
-  RGBCube = {
-    name = "RGBCube";
-    email = "nixpkgs@rgbcu.be";
-    github = "RGBCube";
-    githubId = 78925721;
-    keys = [ { fingerprint = "jPaU3Vpm/GN0tUuDg72n2+bd9dDMWe4bnKM325eP7eI"; } ];
-  };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";
@@ -22206,13 +22205,6 @@
     githubId = 219362;
     name = "Sarah Brofeldt";
   };
-  srid = {
-    email = "srid@srid.ca";
-    matrix = "@srid:matrix.org";
-    github = "srid";
-    githubId = 3998;
-    name = "Sridhar Ratnakumar";
-  };
   srounce = {
     name = "Samuel Rounce";
     email = "me@samuelrounce.co.uk";
@@ -23171,12 +23163,6 @@
     name = "Thiago Franco de Moraes";
     github = "tfmoraes";
     githubId = 351108;
-  };
-  tgunnoe = {
-    email = "t@gvno.net";
-    github = "tgunnoe";
-    githubId = 7254833;
-    name = "Taylor Gunnoe";
   };
   tg-x = {
     email = "*@tg-x.net";

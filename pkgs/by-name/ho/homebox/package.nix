@@ -25,7 +25,7 @@ buildGo123Module {
   vendorHash = "sha256-Zo/yI1mNeN0O9gZsHux6aOzBlv72h17s7QNO+MaG2/g=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
-  # Since we do pnpm thing in those it fails if we don't explicitely remove them
+  # Since we do pnpm thing in those it fails if we don't explicitly remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
       go_1_23

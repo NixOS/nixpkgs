@@ -49,7 +49,7 @@ buildPythonApplication {
   '';
 
   meta = with lib; {
-    # Fails to build, propably incompatible with latest Python
+    # Fails to build, probably incompatible with latest Python
     # error: Multiple top-level packages discovered in a flat-layout
     # https://github.com/RaaH/gscrabble/issues/13
     broken = true;

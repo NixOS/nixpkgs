@@ -25,21 +25,21 @@
   pytest-mock,
   pytestCheckHook,
   tensorflow-probability,
-  pythonAtLeast,
+  writableTmpDirAsHomeHook,
 
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.26.4";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     tag = "rel-${version}";
-    hash = "sha256-pREyBedkF9MW7g3Bctnk8C9vVbRTsLLreldxlqDdHVI=";
+    hash = "sha256-jwx7fcMiFNvnwP746nM2rqo2BD6PEbKkfEwIz8MenN4=";
   };
 
   pythonRelaxDeps = [
@@ -69,11 +69,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     tensorflow-probability
+    writableTmpDirAsHomeHook
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "pytensor" ];
 
@@ -94,6 +91,10 @@ buildPythonPackage rec {
 
       # Failure reported upstream: https://github.com/pymc-devs/pytensor/issues/980
       "test_choose_signature"
+
+      # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
+      # Mismatched elements: 9 / 81 (11.1%)
+      "test_jax_pad"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
@@ -111,6 +112,7 @@ buildPythonPackage rec {
       "test_NoOutputFromInplace"
       "test_OpFromGraph"
       "test_adv_sub1_sparse_grad"
+      "test_alloc"
       "test_binary"
       "test_borrow_input"
       "test_borrow_output"
@@ -136,6 +138,7 @@ buildPythonPackage rec {
       "test_mul_s_v_grad"
       "test_multiple_outputs"
       "test_not_inplace"
+      "test_numba_Cholesky_grad"
       "test_numba_pad"
       "test_optimizations_preserved"
       "test_overided_function"
@@ -146,6 +149,7 @@ buildPythonPackage rec {
       "test_scan_err1"
       "test_scan_err2"
       "test_shared"
+      "test_solve_triangular_grad"
       "test_structured_add_s_v_grad"
       "test_structureddot_csc_grad"
       "test_structureddot_csr_grad"
@@ -157,18 +161,29 @@ buildPythonPackage rec {
       "test_update_equiv"
       "test_update_same"
     ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # Flaky: TypeError: cannot pickle 'PyCapsule' object
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fatal Python error: Segmentation fault
+      # pytensor/link/basic.py", line 665 in thunk
+      "test_Unique"
+      "test_aligned_RandomVariable"
       "test_blockwise"
-      "test_blockwise_benchmark"
+      "test_mvnormal_cov_decomposition_method"
+      "test_unnatural_batched_dims"
     ];
 
-  disabledTestPaths = [
-    # Don't run the most compute-intense tests
-    "tests/scan/"
-    "tests/tensor/"
-    "tests/sparse/sandbox/"
-  ];
+  disabledTestPaths =
+    [
+      # Don't run the most compute-intense tests
+      "tests/scan/"
+      "tests/tensor/"
+      "tests/sparse/sandbox/"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fatal Python error: Segmentation fault
+      # pytensor/link/basic.py", line 665 in thunk
+      "tests/link/numba/test_nlinalg.py"
+      "tests/link/numba/test_slinalg.py"
+    ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -181,14 +196,11 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
       ferrine
     ];
-    # Not yet compatible with numpy >= 2.0
-    # https://github.com/pymc-devs/pytensor/issues/688
-    broken = true;
   };
 }

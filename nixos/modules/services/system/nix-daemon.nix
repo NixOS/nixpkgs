@@ -16,7 +16,9 @@ let
 
   nixPackage = cfg.package.out;
 
-  isNixAtLeast = lib.versionAtLeast (lib.getVersion nixPackage);
+  # nixVersion is an attribute which defines the implementation version.
+  # This is useful for Nix implementations which don't follow Nix's versioning.
+  isNixAtLeast = lib.versionAtLeast (nixPackage.nixVersion or (lib.getVersion nixPackage));
 
   makeNixBuildUser = nr: {
     name = "nixbld${toString nr}";

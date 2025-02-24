@@ -3,7 +3,11 @@
 let
   libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
   grammarToAttrSet = drv: {
-    name = "lib/lib${lib.strings.removeSuffix "-grammar" (lib.strings.getName drv)}${libExt}";
+    name = "lib/lib${
+      lib.strings.replaceStrings [ "_" ] [ "-" ] (
+        lib.strings.removeSuffix "-grammar" (lib.strings.getName drv)
+      )
+    }${libExt}";
     path = "${drv}/parser";
   };
 

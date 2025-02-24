@@ -47,6 +47,10 @@
     "hash": "sha256-/Mf+RhaTU9O5i95gddZ2h9eDjLezwj3nP6FvryMF54E=",
     "version": "66"
   },
+  "dyld": {
+    "hash": "sha256-DDhV7X81nhd3oeJuICEvF8FU43yE/afQ/LYgDNtXswA=",
+    "version": "1241.17"
+  },
   "file_cmds": {
     "hash": "sha256-/79jS//IBZiQBumGA60lKDmddQCzl/r8QnviD6lGXNg=",
     "version": "448.0.3"

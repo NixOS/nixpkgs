@@ -96,7 +96,7 @@ recursiveUpdate lib (rec {
 
   /*
     Returns a list of list, splitting it using a predicate.
-     This is analoguous to builtins.split sep list,
+     This is analogous to builtins.split sep list,
      with a predicate as a separator and a list instead of a string.
 
     Type: splitList :: (a -> bool) -> [a] -> [[a]]

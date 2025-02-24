@@ -40,6 +40,55 @@ let
     p4 = "${prefix}transmission_4${suffix}";
   in "${p} has been renamed to ${p3} since ${p4} is also available. Note that upgrade caused data loss for some users so backup is recommended (see NixOS 24.11 release notes for details)";
 
+  deprecatedPlasma5Packages = {
+    inherit (plasma5Packages)
+      akonadi akregator arianna ark bluedevil bomber bovo breeze-grub breeze-gtk
+      breeze-icons breeze-plymouth breeze-qt5 colord-kde discover dolphin dragon elisa falkon
+      ffmpegthumbs filelight granatier gwenview k3b kactivitymanagerd kaddressbook
+      kalzium kapman kapptemplate kate katomic kblackbox kblocks kbounce
+      kcachegrind kcalc kcharselect kcolorchooser kde-cli-tools kde-gtk-config
+      kdenlive kdeplasma-addons kdevelop-pg-qt kdevelop-unwrapped kdev-php
+      kdev-python kdevelop kdf kdialog kdiamond keditbookmarks kfind
+      kgamma5 kget kgpg khelpcenter kig kigo killbots kinfocenter kitinerary
+      kleopatra klettres klines kmag kmail kmenuedit kmines kmix kmplot
+      knavalbattle knetwalk knights kollision kolourpaint kompare konsole kontact
+      konversation korganizer kpkpass krdc kreversi krfb kscreen kscreenlocker
+      kshisen ksquares ksshaskpass ksystemlog kteatime ktimer ktorrent ktouch
+      kturtle kwallet-pam kwalletmanager kwave kwayland-integration kwin kwrited
+      marble merkuro milou minuet okular oxygen oxygen-icons5 picmi
+      plasma-browser-integration plasma-desktop plasma-integration plasma-nano
+      plasma-nm plasma-pa plasma-mobile plasma-systemmonitor plasma-thunderbolt
+      plasma-vault plasma-workspace plasma-workspace-wallpapers polkit-kde-agent
+      powerdevil qqc2-breeze-style sddm-kcm skanlite skanpage spectacle
+      systemsettings xdg-desktop-portal-kde yakuake zanshin
+      ;
+
+    inherit (plasma5Packages.thirdParty)
+      krohnkite
+      krunner-ssh
+      krunner-symbols
+      kwin-dynamic-workspaces
+      kwin-tiling
+      plasma-applet-caffeine-plus
+      plasma-applet-virtual-desktop-bar
+      ;
+
+    inherit (libsForQt5)
+      sddm
+      ;
+  };
+
+  makePlasma5Throw = name: throw ''
+    The top-level ${name} alias has been removed.
+
+    Please explicitly use kdePackages.${name} for the latest Qt 6-based version,
+    or libsForQt5.${name} for the deprecated Qt 5 version.
+
+    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
+  '';
+
+  plasma5Throws = lib.mapAttrs (k: _: makePlasma5Throw k) deprecatedPlasma5Packages;
+
   # Make sure that we are not shadowing something from all-packages.nix.
   checkInPkgs = n: alias:
     if builtins.hasAttr n super
@@ -476,7 +525,7 @@ mapAliases {
   gfortran49 = throw "'gfortran49' has been removed from nixpkgs"; # Added 2024-09-11
   gfortran7 = throw "gfortran7 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   gfortran8 = throw "gfortran8 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
-  ghostwriter = libsForQt5.kdeGear.ghostwriter; # Added 2023-03-18
+  ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
   git-codeowners = throw "'git-codeowners' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   gmp5 = throw "'gmp5' has been removed as it is unmaintained. Consider using 'gmp' instead"; # Added 2024-10-28
   gmpc = throw "'gmpc' has been removed due to lack of maintenance upstream. Consider using 'plattenalbum' instead"; # Added 2024-09-14
@@ -665,7 +714,7 @@ mapAliases {
   kgx = gnome-console; # Added 2022-02-19
   kibana7 = throw "Kibana 7.x has been removed from nixpkgs as it depends on an end of life Node.js version and received no maintenance in time."; # Added 2023-30-10
   kibana = kibana7;
-  kio-admin = libsForQt5.kdeGear.kio-admin; # Added 2023-03-18
+  kio-admin = makePlasma5Throw "kio-admin"; # Added 2023-03-18
   kiwitalk = throw "KiwiTalk has been removed because the upstream has been deprecated at the request of Kakao and it's now obsolete."; # Added 2024-10-10
   kodiGBM = kodi-gbm;
   kodiPlain = kodi;
@@ -876,6 +925,10 @@ mapAliases {
   matomo-beta = throw "matomo-beta has been removed as it mostly just pointed to the latest matomo release, use `matomo.overrideAttrs` to access a specific beta version instead"; # Added 2025-01-15
   matrique = throw "'matrique' has been renamed to/replaced by 'spectral'"; # Converted to throw 2024-10-17
   matrix-sliding-sync = throw "matrix-sliding-sync has been removed as matrix-synapse 114.0 and later covers its functionality"; # Added 2024-10-20
+  matrix-synapse-tools = recurseIntoAttrs {
+    rust-synapse-state-compress = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-state-compress;
+    synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm;
+  }; # Added 2025-02-20
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
   maui-shell = throw "maui-shell has been removed from nixpkgs, it was broken"; # Added 2024-07-15
   mcomix3 = mcomix; # Added 2022-06-05
@@ -961,7 +1014,7 @@ mapAliases {
   ''; # Added 2024-06-25
   nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
   nagiosPluginsOfficial = monitoring-plugins;
-  neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
+  neochat = makePlasma5Throw "neochat"; # added 2022-05-10
   nerdfonts = throw ''
     nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
     For example change:
@@ -1058,6 +1111,8 @@ mapAliases {
   openlp = throw "openlp has been removed for now because the outdated version depended on insecure and removed packages and it needs help to upgrade and maintain it; see https://github.com/NixOS/nixpkgs/pull/314882"; # Added 2024-07-29
   openmpt123 = throw "'openmpt123' has been renamed to/replaced by 'libopenmpt'"; # Converted to throw 2024-10-17
   openssl_3_0 = openssl_3; # Added 2022-06-27
+  opensycl = lib.warn "'opensycl' has been renamed to 'adaptivecpp'" adaptivecpp; # Added 2024-12-04
+  opensyclWithRocm = lib.warn "'opensyclWithRocm ' has been renamed to 'adaptivecppWithRocm '" adaptivecppWithRocm; # Added 2024-12-04
   orchis = throw "'orchis' has been renamed to/replaced by 'orchis-theme'"; # Converted to throw 2024-10-17
   onlyoffice-bin = onlyoffice-desktopeditors; # Added 2024-09-20
   onlyoffice-bin_latest = onlyoffice-bin; # Added 2024-07-03
@@ -1088,7 +1143,7 @@ mapAliases {
   paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
   paperless = throw "'paperless' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2024-10-17
   paperless-ng = paperless-ngx; # Added 2022-04-11
-  partition-manager = libsForQt5.partitionmanager; # Added 2024-01-08
+  partition-manager = makePlasma5Throw "partitionmanager"; # Added 2024-01-08
   patchelfStable = patchelf; # Added 2024-01-25
   paup =  paup-cli; # Added 2024-09-11
   pcsctools = pcsc-tools; # Added 2023-12-07
@@ -1408,6 +1463,7 @@ mapAliases {
   termplay = throw "'termplay' has been removed due to lack of maintenance upstream"; # Added 2025-01-25
   testVersion = testers.testVersion; # Added 2022-04-20
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01
+  thiefmd = throw "'thiefmd' has been removed due to lack of maintenance upstream and incompatible with newer Pandoc. Please use 'apostrophe' or 'folio' instead"; # Added 2025-02-20
   invalidateFetcherByDrvHash = testers.invalidateFetcherByDrvHash; # Added 2022-05-05
   tijolo = throw "'tijolo' has been removed due to being unmaintained"; # Added 2024-12-27
   timescale-prometheus = throw "'timescale-prometheus' has been renamed to/replaced by 'promscale'"; # Converted to throw 2024-10-17
@@ -1574,7 +1630,7 @@ mapAliases {
   xtrlock-pam = throw "xtrlock-pam has been removed because it is unmaintained for 10 years and doesn't support Python 3.10 or newer"; # Added 2025-01-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = throw "'xvfb_run' has been renamed to/replaced by 'xvfb-run'"; # Converted to throw 2024-10-17
-  xwaylandvideobridge = libsForQt5.xwaylandvideobridge; # Added 2024-09-27
+  xwaylandvideobridge = makePlasma5Throw "xwaylandvideobridge"; # Added 2024-09-27
   xxv = throw "'xxv' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
 
   ### Y ###
@@ -1624,44 +1680,8 @@ mapAliases {
     between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
 
-  inherit (plasma5Packages)
-    akonadi akregator arianna ark bluedevil bomber bovo breeze-grub breeze-gtk
-    breeze-icons breeze-plymouth breeze-qt5 colord-kde discover dolphin dragon elisa falkon
-    ffmpegthumbs filelight granatier gwenview k3b kactivitymanagerd kaddressbook
-    kalzium kapman kapptemplate kate katomic kblackbox kblocks kbounce
-    kcachegrind kcalc kcharselect kcolorchooser kde-cli-tools kde-gtk-config
-    kdenlive kdeplasma-addons kdevelop-pg-qt kdevelop-unwrapped kdev-php
-    kdev-python kdevelop kdf kdialog kdiamond keditbookmarks kfind
-    kgamma5 kget kgpg khelpcenter kig kigo killbots kinfocenter kitinerary
-    kleopatra klettres klines kmag kmail kmenuedit kmines kmix kmplot
-    knavalbattle knetwalk knights kollision kolourpaint kompare konsole kontact
-    konversation korganizer kpkpass krdc kreversi krfb kscreen kscreenlocker
-    kshisen ksquares ksshaskpass ksystemlog kteatime ktimer ktorrent ktouch
-    kturtle kwallet-pam kwalletmanager kwave kwayland-integration kwin kwrited
-    marble merkuro milou minuet okular oxygen oxygen-icons5 picmi
-    plasma-browser-integration plasma-desktop plasma-integration plasma-nano
-    plasma-nm plasma-pa plasma-mobile plasma-systemmonitor plasma-thunderbolt
-    plasma-vault plasma-workspace plasma-workspace-wallpapers polkit-kde-agent
-    powerdevil qqc2-breeze-style sddm-kcm skanlite skanpage spectacle
-    systemsettings xdg-desktop-portal-kde yakuake zanshin
-    ;
-
   kalendar = merkuro; # Renamed in 23.08
   kfloppy = throw "kfloppy has been removed upstream in KDE Gear 23.08";
-
-  inherit (plasma5Packages.thirdParty)
-    krohnkite
-    krunner-ssh
-    krunner-symbols
-    kwin-dynamic-workspaces
-    kwin-tiling
-    plasma-applet-caffeine-plus
-    plasma-applet-virtual-desktop-bar
-    ;
-
-  inherit (libsForQt5)
-    sddm
-    ;
 
   inherit (pidginPackages)
     pidgin-indicator
@@ -1691,4 +1711,4 @@ mapAliases {
     purple-facebook
     ;
 
-}
+} // plasma5Throws

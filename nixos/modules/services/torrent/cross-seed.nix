@@ -154,9 +154,16 @@ in
         }
       ];
 
-      systemd.tmpfiles.settings."10-cross-seed"."${cfg.configDir}".d = {
-        inherit (cfg) group user;
-        mode = "700";
+      systemd.tmpfiles.settings."10-cross-seed" = {
+        ${cfg.configDir}.d = {
+          inherit (cfg) group user;
+          mode = "700";
+        };
+
+        ${cfg.settings.outputDir}.d = {
+          inherit (cfg) group user;
+          mode = "750";
+        };
       };
 
       systemd.services.cross-seed = {

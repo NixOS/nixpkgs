@@ -152,6 +152,22 @@ let
         ];
       });
 
+      # acme and thus hass-nabucasa doesn't support josepy v2
+      # https://github.com/certbot/certbot/issues/10185
+      josepy = super.josepy.overridePythonAttrs (old: rec {
+        version = "1.15.0";
+        src = fetchFromGitHub {
+          owner = "certbot";
+          repo = "josepy";
+          tag = "v${version}";
+          hash = "sha256-fK4JHDP9eKZf2WO+CqRdEjGwJg/WNLvoxiVrb5xQxRc=";
+        };
+        dependencies = with self; [
+          pyopenssl
+          cryptography
+        ];
+      });
+
       letpot = super.letpot.overridePythonAttrs (rec {
         version = "0.3.0";
         src = fetchFromGitHub {
@@ -379,7 +395,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.2.4";
+  hassVersion = "2025.2.5";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -400,13 +416,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-Zrr4keJwY1q/PrHZEVUphxhA3dAOkyE5vCEa3Msr9Yk=";
+    hash = "sha256-8adHpOiuWddgqQjInc92FjEwVyg2Rvgx7wNOj3+Kxsk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-24AOIyC00U6J1Abg1zj4BbSLsRik2tQZSFaoAu7w85M=";
+    hash = "sha256-JD2xus356qNzT5jqZOHr5gn4WGeC189rM83D81xVtWo=";
   };
 
   build-system = with python.pkgs; [

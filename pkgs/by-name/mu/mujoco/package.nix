@@ -118,7 +118,7 @@ let
       buildInputs = [
         pin.tmd
 
-        # Mainline. The otherwise pinned glm realease from 2018 does
+        # Mainline. The otherwise pinned glm release from 2018 does
         # not build due to test failures and missing files.
         glm
 

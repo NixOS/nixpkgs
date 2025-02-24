@@ -42,13 +42,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.3.1611.0";
+  version = "3.3.1802.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     tag = version;
-    hash = "sha256-mwru2BAnVSYLXoA+g7eizadSYLr9c3ikEJipo7N1n4Y=";
+    hash = "sha256-xJ4yl93/Wr+R29YmRsGNfkRGhlvfhkXiP8FMgxhqjdE=";
   };
 
   vendorHash = null;

@@ -30,8 +30,47 @@ let
         # (if it is a function).
         discoverTests (val { inherit system pkgs; })
       else val;
+
+  /**
+    Evaluate a test and return a derivation that runs the test as its builder.
+
+    This function is deprecated in favor of runTest and runTestOn, which works
+    by passing a module instead of a specific set of arguments.
+    Benefits of runTest and runTestOn:
+    - Define values for any test option
+    - Use imports to compose tests
+    - Access the module arguments like hostPkgs and config.node.pkgs
+    - Portable to other VM hosts, specifically Darwin
+    - Faster evaluation, using a single `pkgs` instance
+
+    Changes required to migrate to runTest:
+    - Remove any `import ../make-test-python.nix` or similar calls, leaving only
+      the callback function.
+    - Convert the function header to make it a module.
+      Packages can be taken from the following. For VM host portability, use
+      - `config.node.pkgs.<name>` or `config.nodes.foo.nixpkgs.pkgs.<name>` to refer
+        to the Nixpkgs used on the VM guest(s).
+      - `hostPkgs.<name>` when invoking commands on the VM host (e.g. in Python
+        `os.system("foo")`)
+    - Since the runTest argument is a module instead of a function, arguments
+      must be passed as option definitions.
+      You may declare explicit `options` for the test parameter(s), or use the
+      less explicit `_module.args.<name>` to pass arguments to the module.
+
+      Example call with arguments:
+
+          runTest {
+            imports = [ ./test.nix ];
+            _module.args.getPackage = pkgs: pkgs.foo_1_2;
+          }
+
+    - If your test requires any definitions in `nixpkgs.*` options, set
+      `node.pkgsReadOnly = false` in the test configuration.
+   */
   handleTest = path: args:
     discoverTests (import path ({ inherit system pkgs; } // args));
+
+  /** See handleTest */
   handleTestOn = systems: path: args:
     if elem system systems then handleTest path args
     else {};
@@ -61,7 +100,9 @@ let
         if elem system systems then runTest arg
         else {};
     })
+    /** See https://nixos.org/manual/nixos/unstable/#sec-calling-nixos-tests */
     runTest
+    /** See https://nixos.org/manual/nixos/unstable/#sec-calling-nixos-tests */
     runTestOn
     ;
 
@@ -329,7 +370,7 @@ in {
   etcd-cluster = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./etcd/etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
-  evcc = handleTest ./evcc.nix {};
+  evcc = runTest ./evcc.nix;
   fail2ban = handleTest ./fail2ban.nix { };
   fakeroute = handleTest ./fakeroute.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
@@ -414,6 +455,7 @@ in {
   grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
+  grav = runTest ./web-apps/grav.nix;
   graylog = handleTest ./graylog.nix {};
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix {};
   grocy = handleTest ./grocy.nix {};
@@ -924,6 +966,7 @@ in {
   rmfakecloud = runTest ./rmfakecloud.nix;
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
+  routinator = handleTest ./routinator.nix {};
   rosenpass = handleTest ./rosenpass.nix {};
   rshim = handleTest ./rshim.nix {};
   rspamd = handleTest ./rspamd.nix {};

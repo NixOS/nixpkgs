@@ -2,16 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pnpm_9,
   nodejs,
-  yarn-berry,
-  pkg-config,
   makeWrapper,
-  cacert,
   prisma-engines,
-  openssl,
   ffmpeg,
-  python3,
+  openssl,
   vips,
+  versionCheckHook,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -29,93 +28,49 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "3.7.13";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3+gDOlTj47qvQ3CrInT1rgBhLpyT+QA65r6OnokreWM=";
+    hash = "sha256-q+/fjSvrPoTDwk+vxg7qltoJvD/cLcAG5fzKen1cAuk=";
   };
 
-  patches = [
-    # Update prisma to match the version in nixpkgs exactly (currently 6.3.0). To create this patch, change the
-    # versions in `package.json`, then run `nix run nixpkgs#yarn-berry -- install --mode update-lockfile`
-    # to update `yarn.lock`.
-    ./prisma6.patch
-  ];
-
-  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
-  yarnOfflineCache = stdenv.mkDerivation {
-    pname = "yarn-deps";
-    inherit (finalAttrs) version src patches;
-
-    nativeBuildInputs = [ yarn-berry ];
-
-    dontInstall = true;
-
-    YARN_ENABLE_TELEMETRY = "0";
-    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-    configurePhase = ''
-      export HOME="$NIX_BUILD_TOP"
-      yarn config set enableGlobalCache false
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux" ]'
-      yarn config set --json supportedArchitectures.cpu '[ "arm64", "x64" ]'
-    '';
-
-    buildPhase = ''
-      mkdir -p $out
-      yarn install --immutable --mode skip-build
-    '';
-
-    outputHash = "sha256-niO+obo1JHAoWbLgjf1ttB6UqTCCjEuhiILvfT3O0q4=";
-    outputHashMode = "recursive";
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-rDm3LFFB65SdSfqABMZelhfx4Cq6u0EV3xdDp9lBR54=";
   };
+
+  buildInputs = [ vips ];
 
   nativeBuildInputs = [
-    pkg-config
-    makeWrapper
+    pnpm_9.configHook
     nodejs
-    yarn-berry
-    python3
+    makeWrapper
   ];
 
-  buildInputs = [
-    vips
-    openssl
-  ];
-
-  env = {
-    YARN_ENABLE_TELEMETRY = "0";
-    ZIPLINE_DOCKER_BUILD = "true";
-  } // environment;
-
-  configurePhase = ''
-    export HOME="$NIX_BUILD_TOP"
-    yarn config set enableGlobalCache false
-    yarn config set cacheFolder $yarnOfflineCache
-  '';
+  env = environment;
 
   buildPhase = ''
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
+    runHook preBuild
 
-    yarn install --immutable --immutable-cache
-    yarn build
+    pnpm build
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r dist public node_modules .next prisma next.config.js mimes.json package.json $out/share/zipline
+    cp -r build node_modules prisma .next mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
       makeWrapper ${lib.getExe nodejs} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
+        --set NODE_ENV production \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
         ${
@@ -123,17 +78,31 @@ stdenv.mkDerivation (finalAttrs: {
             lib.mapAttrsToList (name: value: "--set ${name} ${lib.escapeShellArg value}") environment
           )
         } \
-        --add-flags "--enable-source-maps $2"
+        --add-flags "--enable-source-maps build/$2"
     }
 
-    mkBin zipline dist
-    for script in dist/scripts/*.js; do
-      mkBin "zipline-$(basename $script .js)" "$script"
+    mkBin zipline server
+    mkBin ziplinectl ctl
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    find $out -name libvips-cpp.so.42 -print0 | while read -d $'\0' libvips; do
+      echo replacing libvips at $libvips
+      rm $libvips
+      ln -s ${lib.getLib vips}/lib/libvips-cpp.so.42 $libvips
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/ziplinectl";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     tests = { inherit (nixosTests) zipline; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -143,9 +112,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
   };
 })

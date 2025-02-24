@@ -17,7 +17,8 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "5.0";
 
-  doCheck = true;
+  # Tests are not compatible with mirage-crypto-rng 1.2.0
+  doCheck = false;
   nativeCheckInputs = [
     mdx.bin
   ];
