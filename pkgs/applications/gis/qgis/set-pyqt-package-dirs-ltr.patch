@@ -11,16 +11,6 @@ index b51fd0075e..87ee317e05 100644
      IF(_pyqt5_metadata)
        FILE(READ ${_pyqt5_metadata} _pyqt5_metadata_contents)
        STRING(REGEX REPLACE ".*\nVersion: ([^\n]+).*$" "\\1" PYQT5_VERSION_STR ${_pyqt5_metadata_contents})
-@@ -34,8 +34,8 @@ ELSE(EXISTS PYQT5_VERSION_STR)
-     ENDIF(_pyqt5_metadata)
- 
-     IF(PYQT5_VERSION_STR)
--      SET(PYQT5_MOD_DIR "${Python_SITEARCH}/PyQt5")
--      SET(PYQT5_SIP_DIR "${Python_SITEARCH}/PyQt5/bindings")
-+      SET(PYQT5_MOD_DIR "@pyQt5PackageDir@/PyQt5")
-+      SET(PYQT5_SIP_DIR "@pyQt5PackageDir@/PyQt5/bindings")
-       FIND_PROGRAM(__pyuic5 "pyuic5")
-       GET_FILENAME_COMPONENT(PYQT5_BIN_DIR ${__pyuic5} DIRECTORY)
  
 diff --git a/cmake/FindQsci.cmake b/cmake/FindQsci.cmake
 index 69e41c1fe9..5456c3d59b 100644
