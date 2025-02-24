@@ -29,14 +29,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-13";
+  version = "0-unstable-2025-02-23";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "ee0c04e735fb94cb5119681f704fb7fa6731e713";
+    rev = "4ff581a8aa3460d04f859fdadb50f29b3c507763";
     fetchSubmodules = true;
-    hash = "sha256-0jqnSzzfg8ecBaayJI8oP9X0FyijFFT3LA6GKfpAFwI=";
+    hash = "sha256-KKfGB1vM8ytpNieWD6CHD5zVyUe17tFAegZFzLx7QfE=";
   };
 
   postPatch = ''
