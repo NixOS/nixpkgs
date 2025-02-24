@@ -23,16 +23,19 @@
   libogg,
   libvorbis,
   stdenv_32bit,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   iceSupport ? true,
   zeroc-ice,
   jackSupport ? false,
   libjack2,
-  pipewireSupport ? true,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
   pipewire,
   pulseSupport ? true,
   libpulseaudio,
   speechdSupport ? false,
   speechd-minimal,
+  xar,
+  makeWrapper,
 }:
 
 let
@@ -53,12 +56,14 @@ let
           qt5.qttools
         ] ++ (overrides.nativeBuildInputs or [ ]);
 
-        buildInputs = [
-          avahi
-          boost
-          poco
-          protobuf
-        ] ++ (overrides.buildInputs or [ ]);
+        buildInputs =
+          [
+            boost
+            poco
+            protobuf
+          ]
+          ++ (overrides.buildInputs or [ ])
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ];
 
         cmakeFlags = [
           (lib.cmakeBool "g15" false)
@@ -79,7 +84,7 @@ let
             felixsinger
             lilacious
           ];
-          platforms = platforms.linux;
+          platforms = platforms.linux ++ platforms.darwin;
         };
       }
     );
@@ -102,11 +107,15 @@ let
           speex
           utf8proc
         ]
-        ++ lib.optional (!jackSupport) alsa-lib
+        ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
         ++ lib.optional jackSupport libjack2
         ++ lib.optional speechdSupport speechd-minimal
         ++ lib.optional pulseSupport libpulseaudio
-        ++ lib.optional pipewireSupport pipewire;
+        ++ lib.optional pipewireSupport pipewire
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          xar
+          makeWrapper
+        ];
 
       cmakeFlags = [
         (lib.cmakeBool "server" false)
@@ -122,18 +131,24 @@ let
         (lib.cmakeBool "pulseaudio" pulseSupport)
         (lib.cmakeBool "pipewire" pipewireSupport)
         (lib.cmakeBool "jackaudio" jackSupport)
-        (lib.cmakeBool "alsa" (!jackSupport))
+        (lib.cmakeBool "alsa" (!jackSupport && alsaSupport))
       ];
 
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
-      postFixup = ''
+      postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
         wrapProgram $out/bin/mumble \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath (
               lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire
             )
           }"
+      '';
+
+      installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        mkdir -p $out/Applications $out/bin
+        mv Mumble.app $out/Applications/Mumble.app
+        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/Mumble $out/bin/mumble
       '';
     } source;
 
