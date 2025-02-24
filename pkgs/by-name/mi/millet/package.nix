@@ -6,35 +6,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "millet";
-  version = "0.14.3";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "azdavis";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-V1FToLhBzeZd3ve+eKAHniHN6oveEg0FBHnkSZPxBqo=";
+    hash = "sha256-nj/ueMQSAqdcAG5jaSZBOHd4D4l7xD3i+LO9MUYsz0c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "chain-map-0.1.0" = "sha256-nds+lPGCbxw3GqrgfmTbKnPkiV3F6f5A2xr82qV33iI=";
-      "sml-libs-0.1.0" = "sha256-zQrhH24XlA9SeQ+sVzaVwJwrm80TRIjFq99Vay7QEN8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LFk51PL0r6YAlwXPthZIKe2DD5g9KZBSNCfdhhwWP10=";
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
   cargoBuildFlags = [
-    "--package"
-    "millet-ls"
+    "--package=millet-ls"
+    "--package=millet-cli"
   ];
 
   cargoTestFlags = [
-    "--package"
-    "millet-ls"
+    "--package=millet-ls"
+    "--package=millet-cli"
   ];
 
   meta = with lib; {
@@ -46,6 +41,6 @@ rustPlatform.buildRustPackage rec {
       licenses.asl20
     ];
     maintainers = [ ];
-    mainProgram = "millet-ls";
+    mainProgram = "millet-cli";
   };
 }
