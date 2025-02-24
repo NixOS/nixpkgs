@@ -344,15 +344,22 @@ in
                     options = {
                       name = mkOption {
                         type = types.str;
+                        description = "DNS record name";
+                        example = "prometheus.myvpn.example.com";
                       };
                       type = mkOption {
                         type = types.enum [
                           "A"
                           "AAAA"
                         ];
+                        description = "DNS record type";
+                        default = "A";
+                        example = "AAAA";
                       };
                       value = mkOption {
                         type = types.str;
+                        description = "DNS record mapping";
+                        example = "100.64.0.3";
                       };
                     };
                   };
