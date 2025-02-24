@@ -309,6 +309,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = lib.mapAttrsToList (name: tunnel: {
+      assertion =
+        tunnel.ingress == { } || (cfg.certificateFile != null || tunnel.certificateFile != null);
+      message = "Cloudflare Tunnel ${name} has a declarative configuration, but no certificate file was defined.";
+    }) cfg.tunnels;
+
     systemd.targets = lib.mapAttrs' (
       name: tunnel:
       lib.nameValuePair "cloudflared-tunnel-${name}" {
