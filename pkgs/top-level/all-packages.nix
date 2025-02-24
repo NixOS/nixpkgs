@@ -14927,7 +14927,14 @@ with pkgs;
   else
     callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
 
-  inherit (callPackage ../applications/networking/cluster/rke2 { }) rke2_stable rke2_latest rke2_testing;
+  inherit (callPackage ../applications/networking/cluster/rke2 { })
+    rke2_1_29
+    rke2_1_30
+    rke2_1_31
+    rke2_1_32
+    rke2_stable
+    rke2_latest
+    ;
   rke2 = rke2_stable;
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
