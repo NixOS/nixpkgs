@@ -74,6 +74,11 @@ stdenv.mkDerivation {
       url = "https://gist.githubusercontent.com/joanbm/72189c81ff67b39d36a660cf00483ccb/raw/17cae74c8d3ebb90e5bfcb84dc176c32f2519078/broadcom-wl-fix-linux-6.13.patch";
       hash = "sha256-b4XE3Dys0d7finPmNhTtvQqxXBSX1CXEj2Krq7qGHAw=";
     })
+    # Fix for Kernel 6.14
+    (fetchpatch2 {
+      url = "https://gist.githubusercontent.com/joanbm/b711bafdcb065d57364a701061b902a3/raw/28cd6b07c395ac36f5f7fb47b7ae449b16730466/broadcom-wl-fix-linux-6.14.patch";
+      hash = "sha256-d6G/BiNwW/DkcK2+/8LyKkt+qhdBm4m+vG9vw+ic+LQ=";
+    })
   ];
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
