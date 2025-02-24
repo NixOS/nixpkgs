@@ -24,6 +24,12 @@ import ./make-test-python.nix (
       boot.kernel.sysctl."kernel.printk_ratelimit" = 0;
       boot.kernelParams = [ "audit_backlog_limit=8192" ];
     };
+    nodes.containerCheck = {
+      containers.c1 = {
+        autoStart = true;
+        config = { };
+      };
+    };
 
     testScript = ''
       machine.wait_for_unit("multi-user.target")
@@ -56,6 +62,16 @@ import ./make-test-python.nix (
         # logs ideally should NOT end up in kmesg, but they do due to
         # https://github.com/systemd/systemd/issues/15324
         journaldAudit.succeed("journalctl _TRANSPORT=kernel --grep 'unit=systemd-journald'")
+
+      with subtest("container systemd-journald-audit disabled"):
+        containerCheck.wait_for_unit("multi-user.target");
+        containerCheck.wait_until_succeeds("systemctl -M c1 is-active default.target");
+
+        # systemd-journald-audit.socket should not exist, so we expect exit status 4: "no such unit"
+        (status, output) = containerCheck.execute("systemctl -M c1 status systemd-journald-audit.socket")
+        containerCheck.log(output)
+        assert status == 4, f"systemd-journald-audit.socket should not exist in a container so we expect an exit status of 4, but status was: {status}"
+
     '';
   }
 )
