@@ -83,7 +83,7 @@ let
   fetchArchives = attrSet:
     lib.attrsets.mapAttrsRecursive
       (path: value:
-        if (builtins.elemAt path ((builtins.length path) - 1)) == "archives" then
+        if (builtins.elemAt path (builtins.length path - 1)) == "archives" then
           let
             validArchives = builtins.filter (archive:
               let
@@ -94,22 +94,56 @@ let
               in
                 isTargetOs && isTargetArch
             ) value;
+            packageInfo = lib.attrByPath (lib.sublist 0 (builtins.length path - 1) path) null attrSet;
           in
           lib.optionals (builtins.length validArchives > 0)
             (lib.last (map (archive:
-              (fetchurl { inherit (archive) url sha1; })
+              (fetchurl {
+                inherit (archive) url sha1;
+                passthru = {
+                  info = packageInfo;
+                };
+              })
             ) validArchives))
         else value
-      )
-      attrSet;
+      ) attrSet;
 
-  # Converts the repo attrset into fetch calls
-  packages = fetchArchives repo.packages;
-  system-images-packages = fetchArchives repo.images;
-  addons = {
+  # Converts the repo attrset into fetch calls.
+  allArchives = {
+    packages = fetchArchives repo.packages;
+    system-images = fetchArchives repo.images;
     addons = fetchArchives repo.addons;
     extras = fetchArchives repo.extras;
   };
+
+  # Lift the archives to the package level for easy search,
+  # and add recurseIntoAttrs to all of them.
+  allPackages =
+    let
+      liftedArchives = lib.attrsets.mapAttrsRecursiveCond
+        (value: !(builtins.hasAttr "archives" value))
+        (path: value:
+          if (value.archives or null) != null && (value.archives or [ ]) != [ ] then
+            lib.dontRecurseIntoAttrs value.archives
+          else
+            null
+        ) allArchives;
+
+      # Creates a version key from a name.
+      # Converts things like 'extras;google;auto' to 'extras-google-auto'
+      toVersionKey = name:
+        lib.optionalString (lib.match "^[0-9].*" name != null) "v"
+          + lib.concatStringsSep "_" (lib.splitVersion (lib.replaceStrings [ ";" ] [ "-" ] name));
+
+      recurse = lib.mapAttrs'
+        (name: value:
+          if builtins.isAttrs value && (value.recurseForDerivations or true) then
+            lib.nameValuePair (toVersionKey name) (lib.recurseIntoAttrs (recurse value))
+          else
+            lib.nameValuePair (toVersionKey name) value
+        );
+    in
+    lib.recurseIntoAttrs (recurse liftedArchives);
 
   # Converts a license name to a list of license texts.
   mkLicenses = licenseName: repo.licenses.${licenseName};
@@ -136,22 +170,6 @@ let
   licenseNames = lib.lists.unique ([
     "android-sdk-license"
   ] ++ extraLicenses);
-in
-lib.recurseIntoAttrs rec {
-  deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
-    inherit stdenv lib mkLicenses meta os arch;
-  };
-
-  deployAndroidPackage = ({package, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
-    let
-      extraParams = removeAttrs args [ "package" "os" "arch" "buildInputs" "patchInstructions" ];
-    in
-    deployAndroidPackages ({
-      inherit buildInputs;
-      packages = [ package ];
-      patchesInstructions = { "${package.name}" = patchInstructions; };
-    } // extraParams
-  ));
 
   # put a much nicer error message that includes the available options.
   check-version = packages: package: version:
@@ -162,97 +180,6 @@ lib.recurseIntoAttrs rec {
         The version ${version} is missing in package ${package}.
         The only available versions are ${builtins.concatStringsSep ", " (builtins.attrNames packages.${package})}.
       '';
-
-  platform-tools = callPackage ./platform-tools.nix {
-    inherit deployAndroidPackage os arch meta;
-    package = check-version packages "platform-tools" platformToolsVersion;
-  };
-
-  tools = callPackage ./tools.nix {
-    inherit deployAndroidPackage os arch meta;
-    package = check-version packages "tools" toolsVersion;
-
-    postInstall = ''
-      ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
-      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
-    '';
-  };
-
-  build-tools = map (version:
-    callPackage ./build-tools.nix {
-      inherit deployAndroidPackage os arch meta;
-      package = check-version packages "build-tools" version;
-
-      postInstall = ''
-        ${linkPlugin { name = "tools"; plugin = tools; check = toolsVersion != null; }}
-      '';
-    }
-  ) buildToolsVersions;
-
-  emulator =
-    callPackage ./emulator.nix {
-      inherit deployAndroidPackage os arch meta;
-      package = check-version packages "emulator" emulatorVersion;
-
-      postInstall = ''
-        ${linkSystemImages { images = system-images; check = includeSystemImages; }}
-      '';
-    };
-
-  platforms = map (version:
-    deployAndroidPackage {
-      package = check-version packages "platforms" version;
-    }
-  ) platformVersions;
-
-  sources = map (version:
-    deployAndroidPackage {
-      package = check-version packages "sources" version;
-    }
-  ) platformVersions;
-
-  system-images = lib.flatten (map (apiVersion:
-    map (type:
-      # Deploy all system images with the same  systemImageType in one derivation to avoid the `null` problem below
-      # with avdmanager when trying to create an avd!
-      #
-      # ```
-      # $ yes "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
-      # Error: Package path is not valid. Valid system image paths are:
-      # null
-      # ```
-      let
-        availablePackages = map (abiVersion:
-          system-images-packages.${apiVersion}.${type}.${abiVersion}
-        ) (builtins.filter (abiVersion:
-          lib.hasAttrByPath [apiVersion type abiVersion] system-images-packages
-        ) abiVersions);
-
-        instructions = builtins.listToAttrs (map (package: {
-            name = package.name;
-            value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
-              # Patch 'google_apis' system images so they're recognized by the sdk.
-              # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
-              # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
-              sed -i '/^Addon.Vendor/d' source.properties
-            '';
-          }) availablePackages
-        );
-      in
-      lib.optionals (availablePackages != [])
-        (deployAndroidPackages {
-          packages = availablePackages;
-          patchesInstructions = instructions;
-        })
-    ) systemImageTypes
-  ) platformVersions);
-
-  cmake = map (version:
-    callPackage ./cmake.nix {
-      inherit deployAndroidPackage os arch meta;
-      package = check-version packages "cmake" version;
-    }
-  ) cmakeVersions;
 
   # Returns true if we should link the specified plugins.
   shouldLink = check: packages:
@@ -268,38 +195,6 @@ lib.recurseIntoAttrs rec {
       packages != [] && lib.all hasSrc packages
     else
       throw "Invalid argument ${toString check}; use true, false, or null/if-supported";
-
-  # Creates a NDK bundle.
-  makeNdkBundle = package:
-    callPackage ./ndk-bundle {
-      inherit deployAndroidPackage os arch platform-tools meta package;
-    };
-
-  # All NDK bundles.
-  ndk-bundles = lib.flatten (
-    map (version:
-      let
-        package = makeNdkBundle (packages.ndk-bundle.${ndkVersion} or packages.ndk.${ndkVersion});
-      in
-      lib.optional (shouldLink includeNDK [package]) package
-    ) ndkVersions
-  );
-
-  # The "default" NDK bundle.
-  ndk-bundle = if ndk-bundles == [] then null else lib.head ndk-bundles;
-
-  # Makes a Google API bundle.
-  google-apis = map (version:
-    deployAndroidPackage {
-      package = (check-version addons "addons" version).google_apis;
-    }
-  ) (builtins.filter (platformVersion: lib.versionOlder platformVersion "26") platformVersions); # API level 26 and higher include Google APIs by default
-
-  google-tv-addons = map (version:
-    deployAndroidPackage {
-      package = (check-version addons "addons" version).google_tv_addon;
-    }
-  ) platformVersions;
 
   # Function that automatically links all plugins for which multiple versions can coexist
   linkPlugins = {name, plugins, check ? true}:
@@ -350,7 +245,149 @@ lib.recurseIntoAttrs rec {
       '') plugins}
     ''; # */
 
-  cmdline-tools-package = check-version packages "cmdline-tools" cmdLineToolsVersion;
+in
+lib.recurseIntoAttrs rec {
+  deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
+    inherit stdenv lib mkLicenses meta os arch;
+  };
+
+  deployAndroidPackage = ({package, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
+    let
+      extraParams = removeAttrs args [ "package" "os" "arch" "buildInputs" "patchInstructions" ];
+    in
+    deployAndroidPackages ({
+      inherit buildInputs;
+      packages = [ package ];
+      patchesInstructions = { "${package.name}" = patchInstructions; };
+    } // extraParams
+  ));
+
+  all = allPackages;
+
+  platform-tools = callPackage ./platform-tools.nix {
+    inherit deployAndroidPackage os arch meta;
+    package = check-version allArchives.packages "platform-tools" platformToolsVersion;
+  };
+
+  tools = callPackage ./tools.nix {
+    inherit deployAndroidPackage os arch meta;
+    package = check-version allArchives.packages "tools" toolsVersion;
+
+    postInstall = ''
+      ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
+      ${linkPlugin { name = "emulator"; plugin = emulator; check = includeEmulator; }}
+    '';
+  };
+
+  build-tools = map (version:
+    callPackage ./build-tools.nix {
+      inherit deployAndroidPackage os arch meta;
+      package = check-version allArchives.packages "build-tools" version;
+
+      postInstall = ''
+        ${linkPlugin { name = "tools"; plugin = tools; check = toolsVersion != null; }}
+      '';
+    }
+  ) buildToolsVersions;
+
+  emulator =
+    callPackage ./emulator.nix {
+      inherit deployAndroidPackage os arch meta;
+      package = check-version allArchives.packages "emulator" emulatorVersion;
+
+      postInstall = ''
+        ${linkSystemImages { images = system-images; check = includeSystemImages; }}
+      '';
+    };
+
+  platforms = map (version:
+    deployAndroidPackage {
+      package = check-version allArchives.packages "platforms" version;
+    }
+  ) platformVersions;
+
+  sources = map (version:
+    deployAndroidPackage {
+      package = check-version allArchives.packages "sources" version;
+    }
+  ) platformVersions;
+
+  system-images = lib.flatten (map (apiVersion:
+    map (type:
+      # Deploy all system images with the same  systemImageType in one derivation to avoid the `null` problem below
+      # with avdmanager when trying to create an avd!
+      #
+      # ```
+      # $ yes "" | avdmanager create avd --force --name testAVD --package 'system-images;android-33;google_apis;x86_64'
+      # Error: Package path is not valid. Valid system image paths are:
+      # null
+      # ```
+      let
+        availablePackages = map (abiVersion:
+          allArchives.system-images.${apiVersion}.${type}.${abiVersion}
+        ) (builtins.filter (abiVersion:
+          lib.hasAttrByPath [apiVersion type abiVersion] allArchives.system-images
+        ) abiVersions);
+
+        instructions = builtins.listToAttrs (map (package: {
+            name = package.name;
+            value = lib.optionalString (lib.hasPrefix "google_apis" type) ''
+              # Patch 'google_apis' system images so they're recognized by the sdk.
+              # Without this, `android list targets` shows 'Tag/ABIs : no ABIs' instead
+              # of 'Tag/ABIs : google_apis*/*' and the emulator fails with an ABI-related error.
+              sed -i '/^Addon.Vendor/d' source.properties
+            '';
+          }) availablePackages
+        );
+      in
+      lib.optionals (availablePackages != [])
+        (deployAndroidPackages {
+          packages = availablePackages;
+          patchesInstructions = instructions;
+        })
+    ) systemImageTypes
+  ) platformVersions);
+
+  cmake = map (version:
+    callPackage ./cmake.nix {
+      inherit deployAndroidPackage os arch meta;
+      package = check-version allArchives.packages "cmake" version;
+    }
+  ) cmakeVersions;
+
+  # All NDK bundles.
+  ndk-bundles = let
+    # Creates a NDK bundle.
+    makeNdkBundle = package:
+      callPackage ./ndk-bundle {
+        inherit deployAndroidPackage os arch platform-tools meta package;
+      };
+  in lib.flatten (
+    map (version:
+      let
+        package = makeNdkBundle (allArchives.packages.ndk-bundle.${ndkVersion} or allArchives.packages.ndk.${ndkVersion});
+      in
+      lib.optional (shouldLink includeNDK [package]) package
+    ) ndkVersions
+  );
+
+  # The "default" NDK bundle.
+  ndk-bundle = if ndk-bundles == [] then null else lib.head ndk-bundles;
+
+  # Makes a Google API bundle.
+  google-apis = map (version:
+    deployAndroidPackage {
+      package = (check-version allArchives "addons" version).google_apis;
+    }
+  ) (builtins.filter (platformVersion: lib.versionOlder platformVersion "26") platformVersions); # API level 26 and higher include Google APIs by default
+
+  google-tv-addons = map (version:
+    deployAndroidPackage {
+      package = (check-version allArchives "addons" version).google_tv_addon;
+    }
+  ) platformVersions;
+
+  cmdline-tools-package = check-version allArchives.packages "cmdline-tools" cmdLineToolsVersion;
 
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
@@ -389,7 +426,7 @@ lib.recurseIntoAttrs rec {
       # Link extras
       ${lib.concatMapStrings (identifier:
         let
-          package = addons.extras.${identifier};
+          package = allArchives.extras.${identifier};
           path = package.path;
           extras = callPackage ./extras.nix {
             inherit deployAndroidPackage package os arch meta;
