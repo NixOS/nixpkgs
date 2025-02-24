@@ -83,7 +83,7 @@ lib.extendMkDerivation {
           cargoDeps
         else if cargoLock != null then
           importCargoLock cargoLock
-        else if (args.cargoHash or null == null) && (args.cargoSha256 or null == null) then
+        else if args.cargoHash or null == null then
           throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
         else if useFetchCargoVendor then
           fetchCargoVendor (
@@ -116,14 +116,9 @@ lib.extendMkDerivation {
                 postUnpack
                 cargoUpdateHook
                 ;
+              hash = args.cargoHash;
               name = cargoDepsName;
               patches = cargoPatches;
-            }
-            // lib.optionalAttrs (args ? cargoHash) {
-              hash = args.cargoHash;
-            }
-            // lib.optionalAttrs (args ? cargoSha256) {
-              sha256 = lib.warn "cargoSha256 is deprecated. Please use cargoHash with SRI hash instead" args.cargoSha256;
             }
             // depsExtraArgs
           );
