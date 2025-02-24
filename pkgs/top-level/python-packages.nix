@@ -5354,6 +5354,8 @@ self: super: with self; {
 
   github3-py = callPackage ../development/python-modules/github3-py { };
 
+  gitingest = callPackage ../development/python-modules/gitingest { };
+
   gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
   gitlike-commands = callPackage ../development/python-modules/gitlike-commands { };
