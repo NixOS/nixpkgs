@@ -1783,6 +1783,39 @@
       },
       "name": "gitlab"
     },
+    "23029": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.23654.183": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.24978.27": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.24978.46": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.24978.50": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.24978.54": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.24978.55": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip",
+        "243.24978.59": "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip"
+      },
+      "name": "catppuccin-icons"
+    },
     "23043": {
       "compatible": [
         "clion",
@@ -1981,6 +2014,7 @@
     "https://plugins.jetbrains.com/files/22857/633914/vcs-gitlab-243.21565.204.zip": "sha256-dnnbmo9OILtgVr8vXGSqQ6uSGDfxbrPptToAMs9SPRM=",
     "https://plugins.jetbrains.com/files/22857/640903/vcs-gitlab-243.22562.53.zip": "sha256-lDStIaRy9ZtCXZxM2RRrz/5oZeL90aRVS63wC4XkJNw=",
     "https://plugins.jetbrains.com/files/22857/654839/vcs-gitlab-243.23654.19.zip": "sha256-VKGZLlL8ALjr6JEQtjhXiIxNrnTPXIoXMToJkJux2dw=",
+    "https://plugins.jetbrains.com/files/23029/650304/Catppuccin_Icons-1.10.1.zip": "sha256-HFELG8i+EQtr97y87sBwqPMmTxexIfJH1DRXTmlOytw=",
     "https://plugins.jetbrains.com/files/23043/635877/MermaidChart-1.1.8.zip": "sha256-ssaSY1I6FopLBgVKHUyjBrqzxHLSuI/swtDfQWJ7gxU=",
     "https://plugins.jetbrains.com/files/23927/668616/Extra_IDE_Tweaks-2025.1.1.zip": "sha256-nOPYnvLuApgpQwHBhRE3MJLDl2pE4bCz/6XHQQTZfA8=",
     "https://plugins.jetbrains.com/files/24559/672148/Extra_Tools_Pack-2025.1.2.zip": "sha256-U3gxwqLNGWNM26gTLJ7Q/9pBf9hbriSPvMvrE8EZVmc=",
