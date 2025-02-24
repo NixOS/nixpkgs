@@ -57,7 +57,7 @@ buildPythonPackage rec {
   disabledTests =
     [
       # Require internet access
-      # ValueError: default auth: cannot configure default credentials, please chec...
+      # ValueError: default auth: cannot configure default credentials, please check...
       "test_azure_cli_does_not_specify_tenant_id_with_msi"
       "test_azure_cli_fallback"
       "test_azure_cli_user_no_management_access"

@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-4SGkkC4LjZXTDXwK6jMOIKXR1qX76CasOwSqv8XUrjs=";
   };
 
-  # Upstream splitted the project into gitlint and gitlint-core to
+  # Upstream split the project into gitlint and gitlint-core to
   # simplify the dependency handling
   sourceRoot = "${src.name}/gitlint-core";
 

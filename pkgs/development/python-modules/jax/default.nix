@@ -83,7 +83,7 @@ buildPythonPackage rec {
   # high parallelism will result in the tests getting stuck
   dontUsePytestXdist = true;
 
-  # NOTE: Don't run the tests in the expiremental directory as they require flax
+  # NOTE: Don't run the tests in the experimental directory as they require flax
   # which creates a circular dependency. See https://discourse.nixos.org/t/how-to-nix-ify-python-packages-with-circular-dependencies/14648/2.
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.

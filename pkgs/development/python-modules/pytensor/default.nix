@@ -89,9 +89,6 @@ buildPythonPackage rec {
       "test_scan_multiple_output"
       "test_vector_taps_benchmark"
 
-      # AssertionError: Not equal to tolerance rtol=1e-06, atol=1e-06
-      "test_jax_pad"
-
       # Failure reported upstream: https://github.com/pymc-devs/pytensor/issues/980
       "test_choose_signature"
 
@@ -163,9 +160,6 @@ buildPythonPackage rec {
       "test_unbroadcast"
       "test_update_equiv"
       "test_update_same"
-      "test_solve_triangular_grad"
-      "test_numba_Cholesky_grad"
-      "test_alloc"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # Fatal Python error: Segmentation fault

@@ -15,7 +15,7 @@
 }:
 
 # Latest tagged release release "1.1.2" (Nov 2018) does not contain
-# documenation, it was added in commits Aug 10, 2019. Repository does not have
+# documentation, it was added in commits Aug 10, 2019. Repository does not have
 # any activity since then.
 buildPythonPackage {
   pname = "sphinx-version-warning";

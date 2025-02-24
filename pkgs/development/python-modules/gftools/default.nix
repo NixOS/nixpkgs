@@ -186,7 +186,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
-    # Wants none exsiting module
+    # Wants none existing module
     "bin/test_args.py"
     # Requires internet
     "tests/push/test_items.py"
