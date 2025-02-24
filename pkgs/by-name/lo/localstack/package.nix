@@ -1,46 +1,27 @@
 {
   lib,
-  buildPythonPackage,
+  python3,
   fetchFromGitHub,
-  apispec,
-  boto3,
-  build,
-  cachetools,
-  click,
-  cryptography,
-  localstack-client,
-  localstack-ext,
-  plux,
-  psutil,
-  python-dotenv,
-  pyyaml,
-  packaging,
-  requests,
-  rich,
-  semver,
-  setuptools,
-  setuptools-scm,
-  tailer,
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "localstack";
-  version = "4.0.3";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     tag = "v${version}";
-    hash = "sha256-BsmXhTJVvRKEubDQwehsrY2jRSfvDBSH5S35CNg8vrQ=";
+    hash = "sha256-hITo6BAsFNGFG5N0b2N9nydGCsG7ged8/3g0sWovNYw=";
   };
 
-  build-system = [
+  build-system = with python3.pkgs; [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
+  propagatedBuildInputs = with python3.pkgs; [
     apispec
     boto3
     build
@@ -60,7 +41,9 @@ buildPythonPackage rec {
     tailer
   ];
 
-  pythonRelaxDeps = [ "dill" ];
+  pythonRelaxDeps = [
+    "dill"
+  ];
 
   pythonImportsCheck = [ "localstack" ];
 
@@ -74,6 +57,12 @@ buildPythonPackage rec {
     $out/bin/localstack --version
 
     runHook postCheck
+  '';
+
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   meta = with lib; {
