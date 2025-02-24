@@ -38,6 +38,8 @@ lib.recurseIntoAttrs rec {
     inherit meta;
   };
 
+  inherit (test-suite) passthru;
+
   meta = {
     homepage = "https://developer.android.com/tools";
     description = "Android SDK tools, packaged in Nixpkgs";
