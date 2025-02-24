@@ -11,24 +11,24 @@
   xz,
   replaceVars,
   # for passthru.tests:
-  edgedb,
+  gel,
   testers,
 }:
 rustPlatform.buildRustPackage rec {
-  pname = "edgedb";
-  version = "6.1.2";
+  pname = "gel";
+  version = "7.0.3";
 
   src = fetchFromGitHub {
-    owner = "edgedb";
-    repo = "edgedb-cli";
+    owner = "geldata";
+    repo = "gel-cli";
     tag = "v${version}";
-    hash = "sha256-7epi7cF6u3Y/Fomcd1+lQfIIRKzuqL6Qk3gTZGZnjv8=";
+    hash = "sha256-QP4LtLgF2OWCsPCFzpLR8k/RetfEevSd8Uv/PciHCwk=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Iq960LU3Xxu5LHBENsZ48diPVJrdTHxtChtSp7yghCw=";
+    hash = "sha256-s8UKYZs4GorM0qvAvE+HL+Qma2x05IDtuqYebMDrZHk=";
   };
 
   nativeBuildInputs = [
@@ -60,16 +60,21 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  # cli warns when edgedb found but gel doesn't
+  postInstall = ''
+    mv $out/bin/edgedb $out/bin/gel
+  '';
+
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
-    package = edgedb;
-    command = "edgedb --version";
+    package = gel;
+    command = "gel --version";
   };
 
   meta = {
-    description = "EdgeDB cli";
-    homepage = "https://www.edgedb.com/docs/cli/index";
+    description = "Gel cli";
+    homepage = "https://docs.geldata.com/reference/cli";
     license = with lib.licenses; [
       asl20
       # or
@@ -79,6 +84,6 @@ rustPlatform.buildRustPackage rec {
       ahirner
       kirillrdy
     ];
-    mainProgram = "edgedb";
+    mainProgram = "gel";
   };
 }
