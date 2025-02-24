@@ -1,27 +1,32 @@
-{ lib, buildDotnetModule, fetchFromGitHub, pkgs }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
+}:
 
-buildDotnetModule rec {
-  pname = "Obj2Tiles";
+buildDotnetModule (finalAttrs: {
+  pname = "obj2tiles";
   version = "1.0.13";
-
   src = fetchFromGitHub {
     owner = "OpenDroneMap";
     repo = "Obj2Tiles";
-    rev = version;
-    sha256 = "04hwipsbwvwg3y9y4chx1y9sywsyjwyqqcc0i5yfi1hmd430pcqql";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GLMLBmkVhuh8iYAxjD2XXnOvkw8dMuKTH49vvvSNHBI=";
   };
-
-  nativeBuildInputs = with pkgs; [ dotnetCorePackages.sdk_8_0_3xx ];
-
-  buildPhase = ''
-    cd Obj2Tiles
-    dotnet build -c Release
-  '';
-
-  meta =  {
+  projectFile = "Obj2Tiles/Obj2Tiles.csproj";
+  nugetDeps = ./deps.json;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/Obj2Tiles";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  meta = {
     description = "Converts OBJ files to OGC 3D tiles by performing splitting, decimation and conversion";
     homepage = "https://github.com/OpenDroneMap/Obj2Tiles";
-    license = lib.licenses.agplv3;
+    changelog = "https://github.com/OpenDroneMap/Obj2Tiles/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mapperfr ];
+    mainProgram = "Obj2Tiles";
   };
-}
+})
