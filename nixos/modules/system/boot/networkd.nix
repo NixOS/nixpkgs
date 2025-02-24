@@ -2620,7 +2620,7 @@ let
 
     addresses = mkOption {
       default = [ ];
-      example = [ { Address = "192.168.0.100/24"; } ];
+      example = [ { addressConfig = { Address = "192.168.0.100/24"; }; } ];
       type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
       description = ''
         A list of address sections to be added to the unit.  See
