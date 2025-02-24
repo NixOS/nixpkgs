@@ -224,8 +224,6 @@ with pkgs;
   # many more scenarios than just opengl now.
   anime-downloader = callPackage ../applications/video/anime-downloader { };
 
-  video2x = callPackage ../by-name/vi/video2x/package.nix { };
-
   aocd = with python3Packages; toPythonApplication aocd;
 
   archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
