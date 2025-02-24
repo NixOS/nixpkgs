@@ -94,6 +94,12 @@
     sha256 = "sha256-5qhC9OypSQV1zbaLaxu3jUe5Wol95I3uKSxDGJLlfRc=";
   };
 
+  "12.5" = {
+    version = "12.5.1";
+    url = "https://developer.download.nvidia.com/compute/cuda/12.5.1/local_installers/cuda_12.5.1_555.42.06_linux.run";
+    sha256 = "sha256-teCneeCJyGYQBRFBxM9Ji+70MYWOxjOYEHORcn7L2wQ=";
+  };
+
   "12.6" = {
     version = "12.6.0";
     url = "https://developer.download.nvidia.com/compute/cuda/12.6.0/local_installers/cuda_12.6.0_560.28.03_linux.run";
