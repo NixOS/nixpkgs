@@ -56,6 +56,15 @@ in
         example = lib.literalExpression ''"''${pkgs.kdePackages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
         description = "Replace the IBus panel with another panel.";
       };
+      waylandFrontend = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Use the Wayland input method frontend.
+          This doesn't set `GTK_IM_MODULE` and `QT_IM_MODULE` environment variables.
+          See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#GTK_IM_MODULE).
+        '';
+      };
     };
   };
 
@@ -76,9 +85,11 @@ in
     ];
 
     environment.variables = {
+      XMODIFIERS = "@im=ibus";
+    }
+    // lib.optionalAttrs (!cfg.waylandFrontend) {
       GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
-      XMODIFIERS = "@im=ibus";
     };
 
     xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [
