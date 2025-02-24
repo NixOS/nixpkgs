@@ -6,9 +6,8 @@
   stdenv,
   darwin,
   libusb1,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  cyme,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,12 +46,14 @@ rustPlatform.buildRustPackage rec {
       "--skip=test_run"
     ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = cyme;
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";
