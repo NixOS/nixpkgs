@@ -18662,7 +18662,7 @@ self: super: with self; {
   vtjp = callPackage ../development/python-modules/vtjp { };
 
   vtk = toPythonModule (
-    pkgs.vtk_9.override {
+    pkgs.vtk.override {
       inherit python;
       enablePython = true;
     }
