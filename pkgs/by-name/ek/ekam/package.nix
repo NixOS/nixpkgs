@@ -2,9 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  capnproto,
 }:
 
+let
+  capnproto.src = fetchFromGitHub {
+    owner = "capnproto";
+    repo = "capnproto";
+    tag = "v1.0.2";
+    hash = "sha256-LVdkqVBTeh8JZ1McdVNtRcnFVwEJRNjt0JV2l7RkuO8=";
+  };
+in
 stdenv.mkDerivation {
   pname = "ekam";
   version = "unstable-2021-09-18";
