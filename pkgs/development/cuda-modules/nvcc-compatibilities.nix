@@ -98,7 +98,8 @@ let
     # No changes from 12.2 to 12.3
     "12.3" = attrs."12.2";
 
-    # No changes from 12.2 to 12.3
+    # Added support for Clang 17 and GCC 13
+    # https://docs.nvidia.com/cuda/archive/12.4.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
     "12.4" = attrs."12.3" // {
       clangMaxMajorVersion = "17";
       gccMaxMajorVersion = "13";
@@ -110,6 +111,12 @@ let
       clangMaxMajorVersion = "18";
     };
 
+    # Added support for Clang 19 and GCC 14
+    # https://docs.nvidia.com/cuda/archive/12.8.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "12.8" = attrs."12.6" // {
+      clangMaxMajorVersion = "19";
+      gccMaxMajorVersion = "14";
+    };
   };
 in
 attrs
