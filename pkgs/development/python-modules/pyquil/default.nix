@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  deprecated,
   fetchFromGitHub,
+
+  deprecated,
   ipython,
   matplotlib-inline,
   nest-asyncio,
@@ -13,7 +14,6 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   qcs-sdk-python,
   respx,
   rpcq,
@@ -25,21 +25,20 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.15.0";
+  version = "4.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "pyquil";
     tag = "v${version}";
-    hash = "sha256-zRXIMSgcFlTZQ5Y/1pSC30ZhvKj1Pn1+7SbTetEdzio=";
+    hash = "sha256-6nJ0eozqbzHDF3e/Q/bVJnng1b+LUL2tsv4X7sWE9/0=";
   };
 
   pythonRelaxDeps = [
     "lark"
     "networkx"
+    "numpy"
     "packaging"
     "qcs-sdk-python"
     "rpcq"
@@ -75,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyquil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";
     homepage = "https://github.com/rigetti/pyquil";
     changelog = "https://github.com/rigetti/pyquil/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

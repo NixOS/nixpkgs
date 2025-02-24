@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   darwin,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,5 +36,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ _0x4A6F ];
     mainProgram = "routinator";
+  };
+
+  passthru.tests = {
+    basic-functioniality = nixosTests.routinator;
   };
 }

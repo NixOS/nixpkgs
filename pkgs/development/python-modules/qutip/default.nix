@@ -40,7 +40,7 @@ buildPythonPackage rec {
   };
 
   postPatch =
-    # build-time constriant, used to ensure forward and backward compat
+    # build-time constraint, used to ensure forward and backward compat
     ''
       substituteInPlace pyproject.toml setup.cfg \
         --replace-fail "numpy>=2.0.0" "numpy"

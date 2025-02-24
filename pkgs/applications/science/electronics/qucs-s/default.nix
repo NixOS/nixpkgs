@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "-DWITH_QT6=ON"
   ];
 
-  # Make custom kernels avaible from qucs-s
+  # Make custom kernels available from qucs-s
   qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
 
   QTDIR = qtbase.dev;

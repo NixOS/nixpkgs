@@ -2267,6 +2267,8 @@ in
     dependencies = [ self.nvim-dap ];
   };
 
+  nvim-dbee = callPackage ./non-generated/nvim-dbee { };
+
   nvim-coverage = super.nvim-coverage.overrideAttrs {
     dependencies = with self; [
       neotest
@@ -4035,7 +4037,6 @@ in
       "neotest"
       "nui-nvim"
       "nvim-cmp"
-      "nvim-dbee"
       "nvim-nio"
       "nvim-web-devicons"
       "oil-nvim"

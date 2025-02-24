@@ -16,13 +16,13 @@
 
 let
   pname = "trilium-next-desktop";
-  version = "0.91.5";
+  version = "0.91.6";
 
   linuxSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-linux-x64.zip";
-  linuxSource.sha256 = "10icng86y0idp7sjm7gzbcldd3gzc4z882d99hq959xiqd5lkcfi";
+  linuxSource.sha256 = "13r9akfakmrpvnyab182irhraf9hpqb24205r8rxjfgj8dpmfa4p";
 
   darwinSource.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-v${version}-macos-x64.zip";
-  darwinSource.sha256 = "0377d12a43q2dmwb8zm22354w7crydj5q8n0g7i60gcyqsqpph8w";
+  darwinSource.sha256 = "0iaz4wim11x110phg4xgzdw3sjcbmxwbksk5gpygjbhlzhjprnnp";
 
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";

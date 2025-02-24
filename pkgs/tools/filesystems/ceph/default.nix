@@ -511,7 +511,7 @@ rec {
       #          |       ^~~~~~~~~~~~~~~~~~
       # Looks like `close()` is somehow not included.
       # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
-      # So it's proably not worth trying to fix that for this Ceph version,
+      # So it's probably not worth trying to fix that for this Ceph version,
       # and instead just disable Ceph's Jaeger support.
       "-DWITH_JAEGER:BOOL=OFF"
       "-DWITH_TESTS:BOOL=OFF"

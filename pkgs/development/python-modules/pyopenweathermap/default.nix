@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyopenweathermap";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     repo = "pyopenweathermap";
     # https://github.com/freekode/pyopenweathermap/issues/2
     tag = "v${version}";
-    hash = "sha256-UcnELAJf0Ltf0xJOlyzsHb4HQGSBTJ+/mOZ/XSTkA0w=";
+    hash = "sha256-i/oqjrViATNR+HuG72ZdPMJF9TJf7B1pi+wqCth34OU=";
   };
 
   build-system = [ poetry-core ];

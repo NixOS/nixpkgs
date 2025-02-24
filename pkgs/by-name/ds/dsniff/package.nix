@@ -18,7 +18,7 @@
 
 let
   /*
-    dsniff's build system unconditionnaly wants static libraries and does not
+    dsniff's build system unconditionally wants static libraries and does not
     support multi output derivations. We do some overriding to give it
     satisfaction.
   */

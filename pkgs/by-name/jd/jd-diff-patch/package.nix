@@ -29,7 +29,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       bryanasdev000
-      blaggacao
     ];
     mainProgram = "jd";
   };

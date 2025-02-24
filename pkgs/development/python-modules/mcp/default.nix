@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-1kTU6YoHAxPdYTeCiPFGw2c0Dno+CA//hvoD9T4Fvwo=";
+    hash = "sha256-DbRXD4o/uFfpGvrux8lm7/t2utdFDEFg2G7CiraCJd0=";
   };
 
   postPatch = ''
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/modelcontextprotocol/python-sdk/releases/tag/${src.rev}";
+    changelog = "https://github.com/modelcontextprotocol/python-sdk/releases/tag/${src.tag}";
     description = "Official Python SDK for Model Context Protocol servers and clients";
     homepage = "https://github.com/modelcontextprotocol/python-sdk";
     license = lib.licenses.mit;

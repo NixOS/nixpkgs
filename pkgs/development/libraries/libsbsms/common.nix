@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix buidling on platforms other than x86
+    # Fix building on platforms other than x86
     (replaceVars ./configure.patch {
       msse = lib.optionalString stdenv.hostPlatform.isx86_64 "-msse";
     })
