@@ -12,11 +12,17 @@ import ./make-test-python.nix (
     };
     nodes.auditd = {
       security.auditd.enable = true;
+      security.audit.enable = true;
       environment.systemPackages = [ pkgs.audit ];
+      boot.kernel.sysctl."kernel.printk_ratelimit" = 0;
+      boot.kernelParams = [ "audit_backlog_limit=8192" ];
     };
     nodes.journaldAudit = {
       services.journald.audit = true;
+      security.audit.enable = true;
       environment.systemPackages = [ pkgs.audit ];
+      boot.kernel.sysctl."kernel.printk_ratelimit" = 0;
+      boot.kernelParams = [ "audit_backlog_limit=8192" ];
     };
 
     testScript = ''
