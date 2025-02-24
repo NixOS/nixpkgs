@@ -43,6 +43,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "saga-${version}/saga-gis";
 
+  patches = [
+    # Patches from https://sourceforge.net/p/saga-gis/code/merge-requests/38/.
+    # These are needed to fix building on Darwin (technically the first is not
+    # required, but the second doesn't apply without it).
+    ./darwin-patch-1.patch
+    ./darwin-patch-2.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     wrapGAppsHook3
