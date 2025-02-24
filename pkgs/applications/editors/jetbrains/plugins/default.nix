@@ -110,26 +110,40 @@ in {
         cp -r ${ide} $out
         chmod +w -R $out
         rm -f $out/${rootDir}/plugins/plugin-classpath.txt
-        IFS=' ' read -ra pluginArray <<< "$newPlugins"
-        for plugin in "''${pluginArray[@]}"
-        do
-          pluginfiles=$(ls $plugin);
-          if [ $(echo $pluginfiles | wc -l) -eq 1 ] && echo $pluginfiles | grep -E "\.jar" 1> /dev/null; then
-            # if the plugin contains a single jar file, link it directly into the plugins folder
-            ln -s "$plugin/$(echo $pluginfiles | head -1)" $out/${rootDir}/plugins/
-          else
-            # otherwise link the plugin directory itself
-            ln -s "$plugin" -t $out/${rootDir}/plugins/
-          fi
-        done
-        sed "s|${ide.outPath}|$out|" \
-          -i $(realpath $out/bin/${meta.mainProgram})
 
-        if test -f "$out/bin/${meta.mainProgram}-remote-dev-server"; then
-          sed "s|${ide.outPath}|$out|" \
-            -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
+        (
+          IFS=' ' read -ra pluginArray <<< "$newPlugins"
+          shopt -s nullglob
+          for plugin in "''${pluginArray[@]}"; do
+            pluginfiles=($plugin)
+            if [[ ''${#pluginfiles[@]} -eq 1 ]] && [[ "$pluginfiles" == *.jar ]]; then
+              # if the plugin contains a single jar file, link it directly into the plugins folder
+              ln -s "$pluginfiles" $out/${rootDir}/plugins/
+            else
+              # otherwise link the plugin directory itself
+              ln -s "$plugin" -t $out/${rootDir}/plugins/
+            fi
+          done
+        )
+
+        substituteInPlace $(realpath "$out/bin/${meta.mainProgram}") \
+          --replace-warn '${ide.outPath}' $out
+            IFS=' ' read -ra pluginArray <<< "$newPlugins"
+            for plugin in "''${pluginArray[@]}"; do
+              if [[ "$plugin" == *.jar ]]; then
+                # if the plugin contains a single jar file, link it directly into the plugins folder
+                ln -s "$plugin" $out/${rootDir}/plugins/
+              else
+                # otherwise link the plugin directory itself
+                ln -s "$plugin" -t $out/${rootDir}/plugins/
+              fi
+            done
+
+        remote_dev="$out/bin/${meta.mainProgram}-remote-dev-server"
+        if [[ -f "$remote_dev" ]]; then
+          substituteInPlace $(realpath "$remote_dev") \
+            --replace-warn '${ide.outPath}' $out
         fi
-
       '' + lib.optionalString stdenv.hostPlatform.isLinux ''
         autoPatchelf $out
       '';
