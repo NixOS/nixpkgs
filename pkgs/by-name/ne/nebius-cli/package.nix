@@ -42,17 +42,17 @@ in stdenv.mkDerivation {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/nebius version
-  '';
+  nativeCheckInputs = [ lib.versionCheckHook ];
+  versionCheckProgramArg = [ "version" ];
+  versionCheckProgram = "${placeholder "out"}/bin/nebius";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface for the Nebius AI Cloud Platform";
     homepage = "https://docs.nebius.com/cli";
-    platforms = platforms.unix;
+    platforms = lib.latforms.unix;
     # Mark as a downloaded binary
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [{
       email = "danielgafni16@gmail.com";
       name = "Daniel Gafni";
