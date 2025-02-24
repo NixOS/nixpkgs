@@ -110,6 +110,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ryand56
       sigmasquadron
     ];
+    badPlatforms = [
+      # output app is called "Electron.app" while derivation expects "FreeTube.app"
+      #see: https://github.com/NixOS/nixpkgs/pull/384596#issuecomment-2677141349
+      lib.systems.inspect.patterns.isDarwin
+    ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";
   };
