@@ -4,7 +4,6 @@
   fetchCargoTarball,
   fetchCargoVendor,
   stdenv,
-  callPackage,
   cargoBuildHook,
   cargoCheckHook,
   cargoInstallHook,
