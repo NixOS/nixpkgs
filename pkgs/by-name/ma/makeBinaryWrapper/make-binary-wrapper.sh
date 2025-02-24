@@ -6,6 +6,8 @@ set -euo pipefail
 # assertExecutable FILE
 assertExecutable() {
     local file="$1"
+    [[ -e "$file" ]] || \
+        die "Cannot wrap '$file' because it does not exist"
     [[ -f "$file" && -x "$file" ]] || \
         die "Cannot wrap '$file' because it is not an executable file"
 }
