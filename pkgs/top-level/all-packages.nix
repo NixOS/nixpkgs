@@ -15619,10 +15619,6 @@ with pkgs;
 
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
-  whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_27;
-  };
-
   inherit (windowmaker) dockapps;
 
   wofi-pass = callPackage ../../pkgs/tools/security/pass/wofi-pass.nix { };
