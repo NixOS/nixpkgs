@@ -6,9 +6,9 @@
 , cmake
 , ninja
 # see: https://github.com/Dwarf-Therapist/Dwarf-Therapist/releases
-, version ? "42.1.8"
-, maxDfVersion ? "50.15"
-, hash ? "sha256-s9FvPbl5qh8bEW7wV42Eym4ZaDLceyyJIQL216mMKCI="
+, version ? "42.1.9"
+, maxDfVersion ? "51.04"
+, hash ? "sha256-cJmz1CFKaDkmbHbnBq5oSzmKOjTubgEiG4hm+9JfnB4="
 }:
 
 stdenv.mkDerivation rec {
