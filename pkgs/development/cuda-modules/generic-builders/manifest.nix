@@ -287,6 +287,9 @@ backendStdenv.mkDerivation (finalAttrs: {
   autoPatchelfIgnoreMissingDeps = [
     "libcuda.so"
     "libcuda.so.*"
+    "libnvidia-ml.so*"
+    # "libQtPropertyBrowser.so"
+    "libtiff.so.5"
   ];
 
   # _multioutPropagateDev() currently expects a space-separated string rather than an array
