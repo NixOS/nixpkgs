@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "2.10.0";
+  version = "3.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    rev = "v${version}";
-    hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oNwFxH75TJm0iJSbLIO8SlIih72ImlHIhUW7GjOEorw=";
   };
 
   nativeBuildInputs = [ poetry-core ];
