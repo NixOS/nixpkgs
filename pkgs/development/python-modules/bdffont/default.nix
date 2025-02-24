@@ -27,8 +27,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bdffont" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://github.com/TakWolf/bdffont";
     description = "A library for manipulating Glyph Bitmap Distribution Format (BDF) Fonts";

@@ -30,8 +30,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pcffont" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     homepage = "https://github.com/TakWolf/pcffont";
     description = "A library for manipulating Portable Compiled Format (PCF) Fonts";
