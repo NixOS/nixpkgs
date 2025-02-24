@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-p1ylYB6xuF0UrhUO+QbGIgxqvZeQ6+GIbSNijTDXyRE=";
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [
