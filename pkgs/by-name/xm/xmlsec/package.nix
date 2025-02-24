@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     license = licenses.mit;
     mainProgram = "xmlsec1";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.b4dm4n ];
     platforms = with platforms; linux ++ darwin;
   };
 })
