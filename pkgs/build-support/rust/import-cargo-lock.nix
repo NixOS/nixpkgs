@@ -160,6 +160,10 @@ let
               rev = gitParts.sha;
               allRefs = true;
               submodules = true;
+              postFetch = ''
+                # Find and remove dangling symlinks.
+                find $out -xtype l -print -delete
+              '';
             }
           else
             missingHash;
