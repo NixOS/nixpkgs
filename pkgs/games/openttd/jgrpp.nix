@@ -10,6 +10,7 @@ openttd.overrideAttrs (oldAttrs: rec {
     rev = "jgrpp-${version}";
     hash = "sha256-aEmuwWNxqjuLmiWMrqwTUtCwdwDMA00eQspCHntxEXw=";
   };
+  patches = [];
 
   buildInputs = oldAttrs.buildInputs ++ [ zstd ];
 
