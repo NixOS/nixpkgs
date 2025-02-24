@@ -27,11 +27,11 @@
   # https://github.com/NixOS/rfcs/pull/169
 
   # CPU extensions
-  enable_avx ? true,
-  enable_avx2 ? true,
+  enable_avx ? stdenv.hostPlatform.avxSupport,
+  enable_avx2 ? stdenv.hostPlatform.avx2Support,
   enable_avx512 ? stdenv.hostPlatform.avx512Support,
-  enable_f16c ? true,
-  enable_fma ? true,
+  enable_f16c ? stdenv.hostPlatform.isx86_64, # TODO: figure out proper condition
+  enable_fma ? stdenv.hostPlatform.fmaSupport,
 
   with_openblas ? false,
   openblas,
