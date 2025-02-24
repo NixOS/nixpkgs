@@ -3,25 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   pytestCheckHook,
   tokenize-rt,
 }:
 
 buildPythonPackage rec {
   pname = "pyupgrade";
-  version = "3.15.0";
-  format = "setuptools";
+  version = "3.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asottile";
-    repo = pname;
+    repo = "pyupgrade";
     rev = "v${version}";
-    hash = "sha256-n6WlJc7Hh7SArJ8Z0fikxidtpXaPQvKTDGn6HukL2q8=";
+    hash = "sha256-uArlT6g7kV94HzCRsiGKZP6/1v8OYUN8OZfZPERzE60=";
   };
 
-  propagatedBuildInputs = [ tokenize-rt ];
+  build-system = [ setuptools ];
+
+  dependencies = [ tokenize-rt ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
