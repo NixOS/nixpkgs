@@ -62,6 +62,8 @@ appimageTools.wrapType2 rec {
     ln -sf ${tor}/bin/tor $out/share/${pname}/resources/bin/tor/tor
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
