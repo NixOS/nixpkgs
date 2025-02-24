@@ -90,11 +90,14 @@ rec {
       installPhase =
         with builtins;
         let
+          # set toolchains via environment properties in wrapper and in gradle.properties.
+          # See https://docs.gradle.org/current/userguide/toolchains.html#sec:custom_loc
           toolchain = rec {
             prefix = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
             varDefs = (lib.imap0 (i: x: "${prefix i} ${x}") javaToolchains);
             varNames = lib.imap0 (i: x: prefix i) javaToolchains;
             property = " -Porg.gradle.java.installations.fromEnv='${concatStringsSep "," varNames}'";
+            paths = "org.gradle.java.installations.paths=${concatStringsSep "," javaToolchains}";
           };
           varDefs = concatStringsSep "\n" (
             map (x: "  --set ${x} \\") ([ "JAVA_HOME ${java}" ] ++ toolchain.varDefs)
@@ -113,6 +116,8 @@ rec {
             ${varDefs}
             ${jnaFlag} \
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
+
+          echo "${toolchain.paths}" > $out/lib/gradle/gradle.properties
         '';
 
       dontFixup = !stdenv.hostPlatform.isLinux;
