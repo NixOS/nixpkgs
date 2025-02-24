@@ -34,7 +34,7 @@ in
     dubLock = ./creator-dub-lock.json;
 
     patches = [
-      # Upstream asks that we change the bug tracker URL to not point to the upsteam bug tracker
+      # Upstream asks that we change the bug tracker URL to not point to the upstream bug tracker
       (replaceVars ./support-url.patch {
         assignees = "TomaSajt"; # should be a comma separated list of the github usernames of the maintainers
       })

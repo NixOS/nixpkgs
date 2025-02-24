@@ -2,7 +2,7 @@
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
-  # SBCL, because you can use your existing stock SBCL as a boostrap.  On Hydra
+  # SBCL, because you can use your existing stock SBCL as a bootstrap.  On Hydra
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
   # ECL but that’s much slower.
 , bootstrapLisp ? null

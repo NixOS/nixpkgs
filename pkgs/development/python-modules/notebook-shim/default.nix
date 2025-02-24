@@ -29,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   # TODO: understand & possibly fix why tests fail. On github most testfiles
-  # have been comitted with msgs "wip" though.
+  # have been committed with msgs "wip" though.
   doCheck = false;
 
   nativeCheckInputs = [

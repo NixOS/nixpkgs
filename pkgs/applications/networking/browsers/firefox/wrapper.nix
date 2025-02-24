@@ -95,7 +95,7 @@ let
 
       nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
-      # Check that every extension has a unqiue .name attribute
+      # Check that every extension has a unique .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
@@ -259,7 +259,7 @@ let
         "1"
 
       ] ++ lib.optionals (!xdg-utils.meta.broken) [
-        # make xdg-open overrideable at runtime
+        # make xdg-open overridable at runtime
         "--suffix"
         "PATH"
         ":"

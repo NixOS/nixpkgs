@@ -89,7 +89,7 @@ buildPythonPackage rec {
     "scripts/tokenizer_test.py"
   ];
 
-  # As dynamo is not supported on Python 3.13+, no successfull tests remain.
+  # As dynamo is not supported on Python 3.13+, no successful tests remain.
   doCheck = pythonOlder "3.13";
 
   meta = {
