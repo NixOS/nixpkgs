@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: ZHANG Yuntian <yt@radxa.com>
+Date: Wed, 22 Jan 2025 16:45:36 +0800
+Subject: [PATCH] HACK: add HOST_ARCH detection for armv5tel and armv6l
+
+In 9fd623afede63a7049b498bbc285f3555eb2bf26@v2025.01, `HOST_ARCH` was introduced
+to EFI library. However, our `CROSS_COMPILE=armv6l-unknown-linux-gnueabihf-`
+does not have a match in `Makefile` so it is undefined, and thus breaks the
+build.
+
+Same issue can potentially affect `armv5tel-linux` targets. However, their
+defconfig do not define `CONFIG_EFI_LOADER`, so that code is not complied, and
+we happen to build the target normally.
+
+Add both to fix the armv6l build, in case if we want to support EFI on armv5tel
+targets.
+
+Signed-off-by: ZHANG Yuntian <yt@radxa.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index f67aac72b9f..544b23402b7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -30,7 +30,7 @@ else ifneq (,$(findstring $(MK_ARCH), "i386" "i486" "i586" "i686"))
+   export HOST_ARCH=$(HOST_ARCH_X86)
+ else ifneq (,$(findstring $(MK_ARCH), "aarch64" "armv8l"))
+   export HOST_ARCH=$(HOST_ARCH_AARCH64)
+-else ifneq (,$(findstring $(MK_ARCH), "arm" "armv7" "armv7a" "armv7l"))
++else ifneq (,$(findstring $(MK_ARCH), "arm" "armv5tel" "armv6l" "armv7" "armv7a" "armv7l"))
+   export HOST_ARCH=$(HOST_ARCH_ARM)
+ else ifeq ("riscv32", $(MK_ARCH))
+   export HOST_ARCH=$(HOST_ARCH_RISCV32)
+-- 
+2.48.1
+

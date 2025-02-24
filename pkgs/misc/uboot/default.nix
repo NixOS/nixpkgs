@@ -65,6 +65,7 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
+      ./0002-HACK-add-HOST_ARCH-detection-for-armv5tel-and-armv6l.patch
     ] ++ extraPatches;
 
     postPatch = ''
