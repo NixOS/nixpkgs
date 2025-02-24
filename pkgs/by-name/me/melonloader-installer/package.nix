@@ -3,7 +3,6 @@
   dotnetCorePackages,
   buildDotnetModule,
   lib,
-  gitUpdater,
 }:
 buildDotnetModule rec {
   pname = "melonloader-installer";
@@ -22,7 +21,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
   selfContainedBuild = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://melonwiki.xyz";
