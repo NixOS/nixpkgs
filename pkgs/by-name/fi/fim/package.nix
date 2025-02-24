@@ -4,12 +4,14 @@
   autoconf,
   automake,
   pkg-config,
+  substituteAll,
   lib,
   perl,
   flex,
   bison,
   readline,
   libexif,
+  buildPackages,
   x11Support ? true,
   SDL,
   svgSupport ? true,
@@ -35,22 +37,30 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
   };
 
+  patches = [
+    # build tools with a build compiler
+    (substituteAll {
+      src = ./native-tools.patch;
+      cc_for_build = lib.getExe buildPackages.stdenv.cc;
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace doc/vim2html.pl \
-      --replace /usr/bin/perl ${perl}/bin/perl
+    patchShebangs --build doc/vim2html.pl
   '';
 
   nativeBuildInputs = [
     autoconf
     automake
+    bison
+    flex
+    perl
     pkg-config
   ];
 
   buildInputs =
     [
-      perl
       flex
-      bison
       readline
       libexif
     ]
