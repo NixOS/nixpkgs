@@ -28609,6 +28609,35 @@ with self; {
     };
   };
 
+  Xapian = buildPerlModule rec {
+    pname = "Xapian";
+    version = "1.4.27";
+    src = fetchurl {
+      url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
+      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+    };
+    buildInputs = [ pkgs.xapian ];
+    preConfigure = ''
+      # FIXME: doesn't work for cross
+      export PERL_LIB="$out/lib/perl5/site_perl/${perl.version}"
+      export PERL_ARCH="$PERL_LIB/$(perl -MConfig -e 'print $Config{archname}')"
+    '';
+    configureFlags = [
+      "--with-perl"
+    ];
+    outputs = [ "out" ]; # no "devdoc"
+    # Use default phases
+    buildPhase = null;
+    checkPhase = null;
+    checkTarget = "check";
+    installPhase = null;
+    meta = {
+      description = "Bindings allowing Xapian to be used from Perl";
+      homepage = "https://xapian.org";
+      license = [ lib.licenses.gpl2Plus ];
+    };
+  };
+
   XMLDescent = buildPerlModule {
     pname = "XML-Descent";
     version = "1.04";
