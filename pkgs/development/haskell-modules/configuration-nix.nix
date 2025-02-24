@@ -598,7 +598,7 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.GLUT;
 
-  libsystemd-journal = doJailbreak (addExtraLibrary pkgs.systemd super.libsystemd-journal);
+  libsystemd-journal = addExtraLibrary pkgs.systemd super.libsystemd-journal;
 
   # does not specify tests in cabal file, instead has custom runTest cabal hook,
   # so cabal2nix will not detect test dependencies.
@@ -952,8 +952,7 @@ self: super: builtins.intersectAttrs super {
     }) (addBuildTool pkgs.buildPackages.makeWrapper super.cut-the-crap);
 
   # Compiling the readme throws errors and has no purpose in nixpkgs
-  aeson-gadt-th =
-    disableCabalFlag "build-readme" (doJailbreak super.aeson-gadt-th);
+  aeson-gadt-th = disableCabalFlag "build-readme" super.aeson-gadt-th;
 
   # Fix compilation of Setup.hs by removing the module declaration.
   # See: https://github.com/tippenein/guid/issues/1
@@ -1065,7 +1064,7 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace src/Nix/Diff/Types.hs \
         --replace "{-# OPTIONS_GHC -Wno-orphans #-}" "{-# OPTIONS_GHC -Wno-orphans -fconstraint-solver-iterations=0 #-}"
       '';
-  }) (doJailbreak (dontCheck super.nix-diff));
+  }) (dontCheck super.nix-diff);
 
   # mockery's tests depend on hspec-discover which dependso on mockery for its tests
   mockery = dontCheck super.mockery;

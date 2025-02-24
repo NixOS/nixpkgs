@@ -85,8 +85,10 @@ self: super: {
   #
   base64 = doJailbreak super.base64; # base <4.20
   floskell = doJailbreak super.floskell; # base <4.20
+  spdx = doJailbreak super.spdx; # Cabal-syntax < 3.13
   tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
   tree-diff = doJailbreak super.tree-diff; # base <4.20
+  tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
   time-compat = doJailbreak super.time-compat; # base <4.20
 
   bitvec = doJailbreak super.bitvec; # primitive <0.9
