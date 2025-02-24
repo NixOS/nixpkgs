@@ -5,24 +5,23 @@
   pkg-config,
   stdenv,
   darwin,
-  libusb1,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "1.8.5";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-4lnW6p7MaAZdvyXddIoB8TuEQSCmBYOwyvOA1r2ZKxk=";
+    hash = "sha256-KAHCeM1rAPGi98PrcVJtzkhTWGWFwf37VuSQTjqXSEg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eUBhMI/ff99SEU76yYvCzEvyLHtQqXgk/bHqmxPQlnc=";
+  cargoHash = "sha256-LwBTDBrsigt8H6PFuuGndiMlj5d8v68dyHipVYOGKVk=";
 
   nativeBuildInputs =
     [
@@ -32,19 +31,13 @@ rustPlatform.buildRustPackage rec {
       darwin.DarwinTools
     ];
 
-  buildInputs = [
-    libusb1
+  checkFlags = [
+    # doctest that requires access outside sandbox
+    "--skip=udev::hwdb::get"
+    # - system_profiler is not available in the sandbox
+    # - workaround for "Io Error: No such file or directory"
+    "--skip=test_run"
   ];
-
-  checkFlags =
-    [
-      # doctest that requires access outside sandbox
-      "--skip=udev::hwdb::get"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # system_profiler is not available in the sandbox
-      "--skip=test_run"
-    ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
