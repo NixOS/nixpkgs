@@ -101,9 +101,20 @@ let
       xmlRev = "be343a666869be92c28036ca0e1cebcb9328b636";
     };
     "50.15" = {
-      dfHackRelease = "50.15-r1.2";
-      hash = "sha256-k/Qd47guvk/ziCIiuvqOg5Yr8Zb5L4YsaCyud7s30EM=";
-      xmlRev = "ffdf5771ea23e3b35f5f46624f773a555e1c450f";
+      dfHackRelease = "50.15-r2";
+      hash = "sha256-6T1RXdBJdo/tvHXwYATS8emLIfDg7/0cGL4i982iHdY=";
+      xmlRev = "c6c8f15afec05d457813c003a869509901993af4";
+    };
+    "51.02" = {
+      # See release note about compatibility for this version.
+      dfHackRelease = "51.04-r1.1";
+      hash = "sha256-rXyg++G6ZNRjR54uwEIRrijLJfNw4dmAg4Vtp2yVG1k=";
+      xmlRev = "ee9a53f73b4d2bf918dca0fc9dcb450f53d6e7c3";
+    };
+    "51.05" = {
+      dfHackRelease = "51.05-r1";
+      hash = "sha256-emTuKWisYGzfmg8hKb1wLVn/5BcKsYA5xQeLhW56YQw=";
+      xmlRev = "5513dc1ffa70d567d87ce946a0c57ce4760fae7c";
     };
   };
 
