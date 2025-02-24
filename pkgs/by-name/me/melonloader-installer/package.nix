@@ -1,0 +1,35 @@
+{
+  fetchFromGitHub,
+  dotnetCorePackages,
+  buildDotnetModule,
+  lib,
+  gitUpdater,
+}:
+buildDotnetModule rec {
+  pname = "melonloader-installer";
+  version = "4.2.1";
+
+  src = fetchFromGitHub {
+    owner = "LavaGang";
+    repo = "MelonLoader.Installer";
+    tag = version;
+    hash = "sha256-0hUc4f1avPfNDGAQDokLpRLK4sSrUFD5GkJZeP/Gu34=";
+  };
+
+  projectFile = "MelonLoader.Installer/MelonLoader.Installer.csproj";
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
+  nugetDeps = ./deps.json;
+  selfContainedBuild = true;
+
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
+    homepage = "https://melonwiki.xyz";
+    mainProgram = "MelonLoader.Installer.Linux";
+    description = "Automated installer for MelonLoader, the universal mod-loader for games built in the Unity Engine";
+    license = lib.licenses.asl20;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ WillemToorenburgh ];
+  };
+}
