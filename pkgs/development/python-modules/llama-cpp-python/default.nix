@@ -80,9 +80,7 @@ buildPythonPackage rec {
     ]
   );
 
-  preBuild = ''
-    export CMAKE_BUILD_PARALLEL_LEVEL="$NIX_BUILD_CORES"
-  '';
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
