@@ -69,21 +69,15 @@ stdenv.mkDerivation rec {
       "--bundled-libraries=NONE"
       "--builtin-libraries=replace"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) (
-      [
-        "--cross-compile"
-      ]
-      ++ (
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-compile"
+      (
         if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
-          [
-            "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-          ]
+          "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
         else
-          [
-            "--cross-answers=answers"
-          ]
+          "--cross-answers=answers"
       )
-    );
+    ];
 
   postFixup =
     if stdenv.hostPlatform.isDarwin then
