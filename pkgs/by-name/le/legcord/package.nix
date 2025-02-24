@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pnpm_9,
   nodejs,
-  electron_32,
+  electron_34,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     rev = "v${version}";
-    hash = "sha256-VjEvW5vM6ByZUzQw21iH347M1KmED+zRrRiS2glyJ1w=";
+    hash = "sha256-IfRjblC3L6A7HgeEDeDrRxtIMvWQB3P7mpq5bhaHWqk=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-cgoFvCCjfR9HP1mJZJ0n/GELATO2lm0tDexSQE8fJGw=";
+    hash = "sha256-LbHYY97HsNF9cBQzAfFw+A/tLf27y3he9Bbw9H3RKK4=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
 
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist="${electron_32.dist}" \
-      -c.electronVersion="${electron_32.version}"
+      -c.electronDist="${electron_34.dist}" \
+      -c.electronVersion="${electron_34.version}"
 
     runHook postBuild
   '';
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/legcord.png"
 
-    makeShellWrapper "${lib.getExe electron_32}" "$out/bin/legcord" \
+    makeShellWrapper "${lib.getExe electron_34}" "$out/bin/legcord" \
       --add-flags "$out/share/lib/legcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
