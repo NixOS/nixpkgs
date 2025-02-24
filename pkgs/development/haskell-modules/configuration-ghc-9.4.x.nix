@@ -140,6 +140,9 @@ in
     self.OneTuple
   ] super.base-compat-batteries;
 
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
+
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;
 }

@@ -69,6 +69,9 @@ self: super: {
     wherefrom-compat = null;
   };
 
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
+
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
