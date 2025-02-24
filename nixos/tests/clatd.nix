@@ -227,6 +227,7 @@ import ./make-test-python.nix (
 
       # wait for all machines to start up
       for machine in client, router, server:
+        machine.start_job("network-online.target")
         machine.wait_for_unit("network-online.target")
 
       with subtest("Wait for tayga and clatd"):
