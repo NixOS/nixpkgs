@@ -7,6 +7,7 @@
 tectonic-unwrapped.overrideAttrs (
   finalAttrs: prevAttrs: {
     pname = "texpresso-tonic";
+    version = "0.15.0-unstable-2024-04-19";
     src = fetchFromGitHub {
       owner = "let-def";
       repo = "tectonic";
