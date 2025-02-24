@@ -1,11 +1,5 @@
-{ tectonic-unwrapped, fetchFromGitHub }:
-tectonic-unwrapped.override (old: {
-  rustPlatform = old.rustPlatform // {
-    buildRustPackage =
-      args:
-      old.rustPlatform.buildRustPackage (
-        args
-        // {
+{ tectonic-unwrapped, fetchFromGitHub, rustPlatform }:
+tectonic-unwrapped.overrideAttrs (finalAttrs: prevAttrs: {
           pname = "texpresso-tonic";
           src = fetchFromGitHub {
             owner = "let-def";
@@ -16,10 +10,18 @@ tectonic-unwrapped.override (old: {
           };
           useFetchCargoVendor = true;
           cargoHash = "sha256-mqhbIv5r/5EDRDfP2BymXv9se2NCKxzRGqNqwqbD9A0=";
+          # rebuild cargoDeps by hand because `.overrideAttrs cargoHash`
+          # does not reconstruct cargoDeps (a known limitation):
+          cargoDeps = rustPlatform.fetchCargoVendor {
+            inherit (finalAttrs) src;
+            name = "${finalAttrs.pname}-${finalAttrs.version}";
+            hash = finalAttrs.cargoHash;
+            patches = finalAttrs.cargoPatches;
+          };
           # binary has a different name, bundled tests won't work
           doCheck = false;
           postInstall = ''
-            ${args.postInstall or ""}
+            ${prevAttrs.postInstall or ""}
 
             # Remove the broken `nextonic` symlink
             # It points to `tectonic`, which doesn't exist because the exe is
@@ -27,7 +29,4 @@ tectonic-unwrapped.override (old: {
             rm $out/bin/nextonic
           '';
           meta.mainProgram = "texpresso-tonic";
-        }
-      );
-  };
 })
