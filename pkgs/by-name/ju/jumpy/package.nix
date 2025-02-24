@@ -17,23 +17,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.8.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
+    tag = "v${version}";
+    hash = "sha256-g/CpSycTCM1i6O7Mir+3huabvr4EXghDApquEUNny8c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bevy_egui-0.21.0" = "sha256-hu55tZQppw1NajwqIsYsw6de0IAwQwgra3D9OFzSSLc=";
-      "bones_asset-0.3.0" = "sha256-1UeOXW6O/gMQBBUnHxRreJgmiUTPC5SJB+uLn9V8aa4=";
-      "kira-0.8.5" = "sha256-z4R5aIaoRQQprL6JsVrFI69rwTOsW5OH01+jORS+hBQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-y0VdzC2URitYzU+DLtAd0mppjF3dhznXqvjxHmOBBKs=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -82,15 +76,12 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tactical 2D shooter played by up to 4 players online or on a shared screen";
     mainProgram = "jumpy";
-    homepage = "https://fishfight.org/";
+    homepage = "https://fishfolk.org/games/jumpy";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${version}";
-    license = with licenses; [
-      mit # or
-      asl20
-    ];
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }
