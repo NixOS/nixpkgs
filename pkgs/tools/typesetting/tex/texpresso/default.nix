@@ -13,7 +13,7 @@
   openjpeg,
   gumbo,
   libjpeg,
-  texpresso-tectonic,
+  callPackage,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
   # needs to have texpresso-tonic on its path
   postInstall = ''
     wrapProgram $out/bin/texpresso \
-      --prefix PATH : ${lib.makeBinPath [ texpresso-tectonic ]}
+      --prefix PATH : ${lib.makeBinPath [ passthru.tectonic ]}
   '';
 
   passthru = {
-    tectonic = texpresso-tectonic;
+    tectonic = callPackage ./tectonic.nix { };
     updateScript = writeScript "update-texpresso" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl jq nix-update
