@@ -15,6 +15,7 @@ let
   repo = "analysis";
   owner = "math-comp";
 
+  release."1.9.0".sha256 = "sha256-zj7WSDUg8ISWxcipGpjEwvvnLp1g8nm23BZiib/15+g=";
   release."1.8.0".sha256 = "sha256-2ZafDmZAwGB7sxdUwNIE3xvwBRw1kFDk0m5Vz+onWZc=";
   release."1.7.0".sha256 = "sha256-GgsMIHqLkWsPm2VyOPeZdOulkN00IoBz++qA6yE9raQ=";
   release."1.5.0".sha256 = "sha256-EWogrkr5TC5F9HjQJwO3bl4P8mij8U7thUGJNNI+k88=";
@@ -52,7 +53,7 @@ let
             (range "8.19" "8.20")
             (range "2.1.0" "2.3.0")
           ];
-          out = "1.8.0";
+          out = "1.9.0";
         }
         {
           cases = [
