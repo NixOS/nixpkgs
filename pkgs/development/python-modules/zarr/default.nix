@@ -70,6 +70,13 @@ buildPythonPackage rec {
     ++ moto.optional-dependencies.s3
     ++ moto.optional-dependencies.server
     ++ optional-dependencies.remote;
+  pytestFlagsArray = [
+    # Don't measure the time it takes for hypothesis related tests to succeed.
+    # See https://github.com/astropy/astropy/issues/17649 for a similar
+    # discussion, and see:
+    # https://github.com/zarr-developers/zarr-python/blob/v3.0.4/tests/conftest.py#L182C1-L187C2
+    "--hypothesis-profile=ci"
+  ];
 
   pythonImportsCheck = [ "zarr" ];
 
