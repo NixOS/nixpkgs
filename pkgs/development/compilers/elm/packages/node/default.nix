@@ -122,9 +122,8 @@ with self; with elmLib; {
     };
   };
 
-  elm-pages = import ./elm-pages { inherit nodePkgs pkgs lib makeWrapper; };
-
   elm-land = pkgs.elm-land; # Alias
+  elm-pages = pkgs.elm-pages; # Alias
 
   elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ old.nodejs.pkgs.node-gyp-build ];
