@@ -12,18 +12,14 @@
   includeMatrixDiscovery ? false,
 }:
 
-let
-  version = "0.9.0";
+stdenv.mkDerivation (finalAttrs: {
   pname = "razergenie";
-
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "z3ntu";
     repo = "RazerGenie";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "17xlv26q8sdbav00wdm043449pg2424l3yaf8fvkc9rrlqkv13a4";
   };
 
@@ -44,15 +40,15 @@ stdenv.mkDerivation {
     "-Dinclude_matrix_discovery=${lib.boolToString includeMatrixDiscovery}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/z3ntu/RazerGenie";
     description = "Qt application for configuring your Razer devices under GNU/Linux";
     mainProgram = "razergenie";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       f4814n
       Mogria
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
