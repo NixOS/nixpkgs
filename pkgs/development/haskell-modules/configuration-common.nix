@@ -790,6 +790,24 @@ self: super: {
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
 
+  # Allow template-haskell 2.22
+  # https://github.com/well-typed/ixset-typed/pull/23
+  ixset-typed = appendPatches [
+    (fetchpatch {
+      name = "ixset-typed-template-haskell-2.21.patch";
+      url = "https://github.com/well-typed/ixset-typed/commit/085cccbaa845bff4255028ed5ff71402e98a953a.patch";
+      sha256 = "1cz30dmby3ff3zcnyz7d2xsqls7zxmzig7bgzy2gfa24s3sa32jg";
+    })
+    (fetchpatch {
+      name = "ixset-typed-template-haskell-2.22.patch";
+      url = "https://github.com/well-typed/ixset-typed/commit/0d699386eab5c4f6aa53e4de41defb460acbbd99.patch";
+      sha256 = "04lbfvaww05czhnld674c9hm952f94xpicf08hby8xpksfj7rs41";
+    })
+  ] (overrideCabal {
+    editedCabalFile = null;
+    revision = null;
+  } super.ixset-typed);
+
   # https://github.com/eli-frey/cmdtheline/issues/28
   cmdtheline = dontCheck super.cmdtheline;
 
