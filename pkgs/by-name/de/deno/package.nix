@@ -12,6 +12,7 @@
   },
   libffi,
   sqlite,
+  lld,
 }:
 
 let
@@ -32,24 +33,24 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-t44Q4yBdcYAk6jkRrzAHXBsJTsRTHAD95Wyxd3waaHc=";
 
   postPatch = ''
-    # upstream uses lld on aarch64-darwin for faster builds
-    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace-fail "-fuse-ld=lld " ""
-
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
     substituteInPlace ext/ffi/Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
   '';
 
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-    # required by libz-ng-sys crate
-    cmake
-    # required by deno_kv crate
-    protobuf
-    installShellFiles
-  ];
+  nativeBuildInputs =
+    [
+      rustPlatform.bindgenHook
+      # required by libz-ng-sys crate
+      cmake
+      # required by deno_kv crate
+      protobuf
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      lld
+    ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
