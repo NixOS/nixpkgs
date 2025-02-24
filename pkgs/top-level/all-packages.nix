@@ -6098,8 +6098,8 @@ with pkgs;
     # Use 9.4 for static over broken 9.6
     (if stdenv.targetPlatform.isStatic then haskell.compiler.native-bignum.ghc94
     # JS backend can't use GMP
-    else if stdenv.targetPlatform.isGhcjs then haskell.compiler.native-bignum.ghc96
-    else haskell.compiler.ghc96);
+    else if stdenv.targetPlatform.isGhcjs then haskell.compiler.native-bignum.ghc98
+    else haskell.compiler.ghc98);
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
