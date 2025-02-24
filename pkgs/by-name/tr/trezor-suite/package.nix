@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   appimageTools,
+  makeWrapper,
   tor,
   trezord,
 }:
@@ -29,7 +30,7 @@ let
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
@@ -38,12 +39,17 @@ in
 appimageTools.wrapType2 rec {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
     mkdir -p $out/bin $out/share/${pname} $out/share/${pname}/resources
 
     cp -a ${appimageContents}/locales/ $out/share/${pname}
     cp -a ${appimageContents}/resources/app*.* $out/share/${pname}/resources
     cp -a ${appimageContents}/resources/images/ $out/share/${pname}/resources
+
+    wrapProgram $out/bin/trezor-suite \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/resources/images/desktop/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
