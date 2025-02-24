@@ -3,7 +3,7 @@ use backoff::{retry, ExponentialBackoff};
 use data_encoding::BASE64;
 use digest::Digest;
 use isahc::{
-    config::{CaCertificate, Configurable, RedirectPolicy, SslOption},
+    config::{CaCertificate, Configurable, RedirectPolicy},
     Body, Request, RequestExt,
 };
 use log::info;
@@ -25,11 +25,6 @@ pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
         if Path::new(&ssl_cert_file).exists() {
             // When file exists, use it. NIX_SSL_CERT_FILE will still override.
             request = request.ssl_ca_certificate(CaCertificate::file(ssl_cert_file));
-        } else if env::var("outputHash").is_ok() {
-            // When file does not exist, assume we are downloading in a FOD and
-            // therefore do not need to check certificates, since the output is
-            // already hashed.
-            request = request.ssl_options(SslOption::DANGER_ACCEPT_INVALID_CERTS);
         }
     }
 
