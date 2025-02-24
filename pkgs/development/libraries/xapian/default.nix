@@ -47,7 +47,7 @@ let
 
     passthru.tests = {
       inherit mu xapian-omega;
-      inherit (perlPackages) SearchXapian Xapian;
+      inherit (perlPackages) Xapian;
       python-xapian = python3.pkgs.xapian;
     };
 
