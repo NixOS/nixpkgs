@@ -43,8 +43,6 @@ let
     cmakeFeature
     optional
     optionals
-    optionalString
-    forEach
     ;
 
   darwinBuildInputs = [ apple-sdk_11 ];
@@ -73,13 +71,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6mPnX9gE+labntNRukxpZeUebecBJlmzk1PZ/lvFam4=";
   };
 
   # The upstream download script tries to download the models to the
@@ -89,7 +87,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   patches = [ ./download-models.patch ];
 
   postPatch = ''
-    for target in examples/{bench,command,main,quantize,server,stream,talk}/CMakeLists.txt; do
+    for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
       if ! grep -q -F 'install('; then
         echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
       fi
@@ -117,7 +115,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
       (cmakeBool "GGML_CUDA" cudaSupport)
       (cmakeBool "GGML_HIPBLAS" rocmSupport)
       (cmakeBool "GGML_VULKAN" vulkanSupport)
@@ -126,6 +123,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       (cmakeBool "GGML_NATIVE" false)
       (cmakeBool "BUILD_SHARED_LIBS" (!effectiveStdenv.hostPlatform.isStatic))
     ]
+    ++ optional effectiveStdenv.hostPlatform.isDarwin (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
     ++ optionals (effectiveStdenv.hostPlatform.isx86 && !effectiveStdenv.hostPlatform.isStatic) [
       (cmakeBool "GGML_BACKEND_DL" true)
       (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
@@ -153,18 +151,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ];
 
   postInstall = ''
-    # Add "whisper-cpp" prefix before every command
-    mv -v $out/bin/{main,whisper-cpp}
+    # Add "whisper-" prefix to quantize command
+    mv -v "$out/bin/"{quantize,whisper-quantize}
 
-    for file in $out/bin/*; do
-      if [[ -x "$file" && -f "$file" && "$(basename $file)" != "whisper-cpp" ]]; then
-        mv -v "$file" "$out/bin/whisper-cpp-$(basename $file)"
-      fi
-    done
+    install -v -D -m755 "$src/models/download-ggml-model.sh" "$out/bin/whisper-cpp-download-ggml-model"
 
-    install -v -D -m755 $src/models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
-
-    wrapProgram $out/bin/whisper-cpp-download-ggml-model \
+    wrapProgram "$out/bin/whisper-cpp-download-ggml-model" \
       --prefix PATH : ${lib.makeBinPath [ wget ]}
   '';
 
@@ -174,7 +166,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    $out/bin/whisper-cpp --help >/dev/null
+    "$out/bin/whisper-cli" --help >/dev/null
     runHook postInstallCheck
   '';
 
@@ -186,7 +178,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/ggerganov/whisper.cpp";
     license = lib.licenses.mit;
-    mainProgram = "whisper-cpp";
+    mainProgram = "whisper-cli";
     platforms = lib.platforms.all;
     broken = coreMLSupport;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
