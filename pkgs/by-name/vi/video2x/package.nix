@@ -17,8 +17,9 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  meta = with lib; {
+  meta = {
     description = "AI-powered video upscaling tool";
+    changelog = "https://github.com/k4yt3x/video2x/releases/tag/${version}/CHANGELOG.md";
     homepage = "https://github.com/k4yt3x/video2x";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
