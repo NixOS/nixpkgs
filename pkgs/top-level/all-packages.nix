@@ -10623,9 +10623,7 @@ with pkgs;
     fmt = fmt_11;
   };
 
-  texpresso = callPackage ../tools/typesetting/tex/texpresso {
-    texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
-  };
+  texpresso = callPackage ../tools/typesetting/tex/texpresso { };
 
   tinyxml = tinyxml2;
 
