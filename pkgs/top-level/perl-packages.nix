@@ -22483,21 +22483,6 @@ with self; {
     };
   };
 
-  SearchXapian = buildPerlPackage {
-    pname = "Search-Xapian";
-    version = "1.2.25.5";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.5.tar.gz";
-      hash = "sha256-IE+9xxLWcR/6tmjB9M/AB7Y5qftkrX4ZyyD8EKkQuos=";
-    };
-    buildInputs = [ pkgs.xapian DevelLeak ];
-    meta = {
-      description = "Perl XS frontend to the Xapian C++ search library";
-      homepage = "https://xapian.org";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
-
   SeleniumRemoteDriver = buildPerlPackage {
     pname = "Selenium-Remote-Driver";
     version = "1.49";
