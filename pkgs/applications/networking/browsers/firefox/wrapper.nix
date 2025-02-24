@@ -25,7 +25,7 @@ browser:
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
   wrapper =
-    { applicationName ? browser.binaryName or (lib.getName browser) # Note: this is actually *binary* name and is different from browser.passthru.applicationName, which is *app* name!
+    { applicationName ? browser.binaryName or (lib.getName browser) # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
     , pname ? applicationName
     , version ? lib.getVersion browser
     , nameSuffix ? ""
@@ -164,7 +164,7 @@ let
         name = launcherName;
         exec = "${launcherName} --name ${wmClass} %U";
         inherit icon;
-        desktopName = browser.passthru.applicationName;
+        desktopName = browser.applicationName;
         startupNotify = true;
         startupWMClass = wmClass;
         terminal = false;
@@ -280,7 +280,7 @@ let
       ]) allNativeMessagingHosts);
 
       buildCommand = let
-        appPath = "Applications/${browser.passthru.applicationName}.app";
+        appPath = "Applications/${browser.applicationName}.app";
         executablePrefix = if isDarwin then "${appPath}/Contents/MacOS" else "bin";
         executablePath="${executablePrefix}/${applicationName}";
         finalBinaryPath = "${executablePath}" + lib.optionalString (!isDarwin) "${nameSuffix}";
