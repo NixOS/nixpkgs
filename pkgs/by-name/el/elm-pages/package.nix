@@ -5,6 +5,9 @@
   elmPackages,
   writeScriptBin,
   stdenv,
+  esbuild,
+  buildGoModule,
+  nodejs_20,
 }:
 let
   # Patching binwrap by NoOp script
@@ -17,23 +20,48 @@ let
     #! ${stdenv.shell}
     echo "binwrap-install called: Doing nothing"
   '';
+
+  ESBUILD_BINARY_PATH = lib.getExe (
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // rec {
+            version = "0.21.5";
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-FpvXWIlt67G8w3pBKZo/mcp57LunxDmRUaCU/Ne89B8=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    }
+  );
 in
 buildNpmPackage rec {
   pname = "elm-pages";
-  version = "2.1.11";
+  version = "3.0.20";
+  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "dillonkearns";
     repo = "elm-pages";
     rev = "v${version}";
-    hash = "sha256-HlxllQJ6vBUiIofKLVFz1gLrKXNW8qcPKqPnCMvaDEY=";
+    hash = "sha256-Z319PuVnMCmDB7ew6wbFHYFGBLmBVNpE79phLXjIObs=";
   };
 
-  npmDepsHash = "sha256-eWqea0sU4QMP7U32wmJSwkq7NdMGV7v0r8WSK6CawS0=";
-
-  patches = [ ./fix-read-only.patch ];
+  npmDepsHash = "sha256-KQEkPtNxrsr2NAOeg79rkvP5Js5Gfox+Y/GqtRhBepE=";
 
   dontNpmBuild = true;
+
+  postPatchPhase = ''
+    sed -i 's/"esbuild": "0\.19\.12"/"esbuild": "0.21.5"/' package.json
+  '';
+
+  patches = [ ./read-only.patch ./init-read-only.patch ];
 
   nativeBuildInputs = [
     binwrap
