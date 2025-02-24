@@ -82,7 +82,6 @@ extra-packages:
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0, needed for HLS
   - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
-  - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
   - lsp == 2.1.*                        # 2024-02-28: need for dhall-lsp-server
   - lsp-types == 2.1.*                  # 2024-02-28: need for dhall-lsp-server and koka

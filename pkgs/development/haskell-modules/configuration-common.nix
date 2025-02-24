@@ -2010,10 +2010,15 @@ self: super: {
   # 2025-02-11: Too strict bounds on bytestring
   streamly-bytestring = doJailbreak super.streamly-bytestring;
 
-  # Stackage LTS 19 still has 10.*
-  hadolint = super.hadolint.override {
-    language-docker = self.language-docker_11_0_0;
-  };
+  # Allow building with language-docker >= 13 (!); waiting for 2.13 release.
+  hadolint = doJailbreak (appendPatches [
+    (pkgs.fetchpatch {
+      name = "hadolint-language-docker-12.patch";
+      url = "https://github.com/hadolint/hadolint/commit/593ccde5af13c9b960b3ea815c47ce028a2e8adc.patch";
+      sha256 = "07v5c1k8if72j04m017jpsf7gvc5kwyi1q3a532n0zhxqc7w1zjn";
+      includes = [ "**/DL3011.hs" "**/DL3011Spec.hs" ];
+    })
+  ] super.hadolint);
 
   # Too strict lower bounds on (test) deps
   # https://github.com/phadej/puresat/issues/6
