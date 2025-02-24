@@ -5,13 +5,26 @@ from unittest.mock import Mock, patch
 
 from pytest import MonkeyPatch
 
+import nixos_rebuild as nr
 import nixos_rebuild.models as m
 
 from .helpers import get_qualified_name
 
 
-def test_build_attr_from_arg() -> None:
-    assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
+def test_build_attr_from_arg(tmp_path: Path) -> None:
+    nixpkgs_path = tmp_path / "nixpkgs"
+    with patch(
+        get_qualified_name(nr.process.subprocess.run),
+        autospec=True,
+        return_value=subprocess.CompletedProcess([], 0, f"\"{nixpkgs_path}\"\n")
+    ):
+        assert m.BuildAttr.from_arg(None, None) == m.BuildAttr(str(nixpkgs_path / "nixos"), None)
+    with patch(
+        get_qualified_name(nr.process.subprocess.run),
+        autospec=True,
+        return_value=subprocess.CompletedProcess([], 1, "")
+    ):
+        assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
     assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
         Path("default.nix"), "attr"
     )

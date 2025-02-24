@@ -145,6 +145,12 @@ in
           You can read this path in a custom deployment tool for example.
         '';
       };
+      usingFlakes = mkOption {
+        type = types.bool;
+        default = false;
+        readOnly = true;
+        description = "Whether the NixOS system is being built using flakes.";
+      };
     };
 
 
