@@ -9,7 +9,7 @@ let
     unique
     ;
 
-  inherit (libretro) fuse genesis-plus-gx gw mgba nestopia snes9x twenty-fortyeight;
+  inherit (libretro) fbneo fuse genesis-plus-gx gw mgba nestopia snes9x twenty-fortyeight;
 
   callPackage = newScope self;
 
@@ -70,6 +70,8 @@ let
     libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
     libretro-2048 = callPackage ../applications/video/kodi/addons/libretro-2048 { inherit twenty-fortyeight; };
+
+    libretro-fbneo = callPackage ../applications/video/kodi/addons/libretro-fbneo { inherit fbneo; };
 
     libretro-fuse = callPackage ../applications/video/kodi/addons/libretro-fuse { inherit fuse; };
 
