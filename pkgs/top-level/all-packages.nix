@@ -2461,10 +2461,6 @@ with pkgs;
     jdk11 = jdk11_headless;
   };
 
-  micropad = callPackage ../applications/office/micropad {
-    electron = electron_27;
-  };
-
   mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
 
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
