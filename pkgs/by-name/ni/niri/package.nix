@@ -102,10 +102,6 @@ rustPlatform.buildRustPackage rec {
     );
   };
 
-  preCheck = ''
-    export XDG_RUNTIME_DIR=$(mktemp -d)
-  '';
-
   passthru = {
     providedSessions = [ "niri" ];
     updateScript = nix-update-script { };
