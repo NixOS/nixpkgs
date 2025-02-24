@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.whisparr;
-  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
+  servarr = import ./settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {

@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.services.readarr;
-  servarr = import ./servarr/settings-options.nix { inherit lib pkgs; };
+  servarr = import ./settings-options.nix { inherit lib pkgs; };
 in
 {
   options = {
