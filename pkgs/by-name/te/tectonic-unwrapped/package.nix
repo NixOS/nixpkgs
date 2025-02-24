@@ -8,7 +8,7 @@
 
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   rustPlatform,
   fontconfig,
@@ -19,7 +19,17 @@
   fetchpatch2,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    # use clang to work around build failure with GCC 14
+    # see: https://github.com/tectonic-typesetting/tectonic/issues/1263
+    stdenv = clangStdenv;
+  };
+
+in
+
+buildRustPackage rec {
   pname = "tectonic";
   version = "0.15.0";
 
@@ -67,7 +77,7 @@ rustPlatform.buildRustPackage rec {
       # Makes it possible to automatically use the V2 CLI API
       ln -s $out/bin/tectonic $out/bin/nextonic
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString clangStdenv.hostPlatform.isLinux ''
       substituteInPlace dist/appimage/tectonic.desktop \
         --replace Exec=tectonic Exec=$out/bin/tectonic
       install -D dist/appimage/tectonic.desktop -t $out/share/applications/
