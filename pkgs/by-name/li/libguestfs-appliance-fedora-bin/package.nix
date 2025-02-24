@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "VM appliance disk image used in libguestfs package";
+    description = "Fedora-based upstream VM appliance disk image used in libguestfs package";
     homepage = "https://libguestfs.org";
     license = with licenses; [
       gpl2Plus
