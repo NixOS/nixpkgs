@@ -54,7 +54,7 @@ jobs:
           echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
 
       - name: Upload the list of all attributes
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: paths
           path: result/*
@@ -123,7 +123,7 @@ jobs:
           # If it uses too much memory, slightly decrease chunkSize
 
       - name: Upload the output paths and eval stats
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: intermediate-${{ matrix.system }}
           path: result/*
@@ -160,7 +160,7 @@ jobs:
             -o prResult
 
       - name: Upload the combined results
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: result
           path: prResult/*
@@ -224,7 +224,7 @@ jobs:
 
       - name: Upload the combined results
         if: steps.targetRunId.outputs.targetRunId
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: comparison
           path: comparison/*
