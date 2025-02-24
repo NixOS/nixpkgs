@@ -878,6 +878,39 @@
       },
       "name": "dot-language"
     },
+    "10481": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.23654.183": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.24978.27": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.24978.46": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.24978.50": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.24978.54": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.24978.55": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip",
+        "243.24978.59": "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip"
+      },
+      "name": "hocon"
+    },
     "11058": {
       "compatible": [
         "clion",
@@ -1846,6 +1879,7 @@
     "https://plugins.jetbrains.com/files/10037/658496/intellij-csv-validator-4.0.2.zip": "sha256-frvQ+Dm1ueID6+vNlja0HtecGyn+ppq9GTgmU3kQ+58=",
     "https://plugins.jetbrains.com/files/10080/645834/intellij-rainbow-brackets-2024.2.8-241.zip": "sha256-IWRvV8NDYnoxxvQVOf3K3pueD+Hp7ctaWOmFHnaVTJg=",
     "https://plugins.jetbrains.com/files/10312/581013/dotplugin-1.5.4.zip": "sha256-25vtwXuBNiYL9E0pKG4dqJDkwX1FckAErdqRPKXybQA=",
+    "https://plugins.jetbrains.com/files/10481/583591/intellij-hocon-2024.2.0.zip": "sha256-Bnnvy+HDNkx2DQM7N+JUa8hQzIA3H/5Y0WpWAjPmhUI=",
     "https://plugins.jetbrains.com/files/11058/668614/Extra_Icons-2025.1.1.zip": "sha256-bQHgzbSUh7cZEzVGrZQxUJ+fGY7GB4Sy5izwadkkQiQ=",
     "https://plugins.jetbrains.com/files/11349/684473/aws-toolkit-jetbrains-standalone-3.56-243.zip": "sha256-f3NJXTqUxLh0O78UhJP+WAu1CYXGo+3x03z0MYobUVI=",
     "https://plugins.jetbrains.com/files/12024/622380/ReSharperPlugin.CognitiveComplexity-2024.3.0-eap04.zip": "sha256-X2x7uyWoV4aBI8E5bw35QfzmySWzbEAZ2nvdo5i+t+s=",
