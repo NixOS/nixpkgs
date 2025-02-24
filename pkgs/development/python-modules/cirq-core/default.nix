@@ -49,10 +49,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "matplotlib~=3.0" "matplotlib"
-  '';
+  pythonRelaxDeps = [ "matplotlib" ];
 
   build-system = [ setuptools ];
 
