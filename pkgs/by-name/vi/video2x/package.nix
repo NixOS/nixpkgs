@@ -21,8 +21,8 @@ appimageTools.wrapType2 {
     description = "AI-powered video upscaling tool";
     changelog = "https://github.com/k4yt3x/video2x/releases/tag/${version}/CHANGELOG.md";
     homepage = "https://github.com/k4yt3x/video2x";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "video2x";
   };
 }
