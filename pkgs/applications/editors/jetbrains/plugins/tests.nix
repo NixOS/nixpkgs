@@ -27,9 +27,9 @@
     in
     writeText "jb-ides" paths;
 
-    clion-with-vim = jetbrains.plugins.addPlugins jetbrains.clion [
-      "ideavim"
-      # test JAR plugins
-      "wakatime"
-    ];
+  clion-with-vim = jetbrains.plugins.addPlugins jetbrains.clion [
+    "ideavim"
+    # test JAR plugins
+    "wakatime"
+  ];
 }
