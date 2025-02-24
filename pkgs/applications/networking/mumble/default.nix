@@ -1,111 +1,188 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, qt5, cmake
-, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsa-lib, python3
-, rnnoise
-, nixosTests
-, poco
-, flac
-, libogg
-, libvorbis
-, stdenv_32bit
-, iceSupport ? true, zeroc-ice
-, jackSupport ? false, libjack2
-, pipewireSupport ? true, pipewire
-, pulseSupport ? true, libpulseaudio
-, speechdSupport ? false, speechd-minimal
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  qt5,
+  cmake,
+  avahi,
+  boost,
+  libopus,
+  libsndfile,
+  protobuf,
+  speex,
+  libcap,
+  utf8proc,
+  alsa-lib,
+  python3,
+  rnnoise,
+  nixosTests,
+  poco,
+  flac,
+  libogg,
+  libvorbis,
+  stdenv_32bit,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  iceSupport ? true,
+  zeroc-ice,
+  jackSupport ? false,
+  libjack2,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  pipewire,
+  pulseSupport ? true,
+  libpulseaudio,
+  speechdSupport ? false,
+  speechd-minimal,
+  xar,
+  makeWrapper,
 }:
 
 let
-  generic = overrides: source: (overrides.stdenv or stdenv).mkDerivation (source // overrides // {
-    pname = overrides.type;
-    version = source.version;
+  generic =
+    overrides: source:
+    (overrides.stdenv or stdenv).mkDerivation (
+      source
+      // overrides
+      // {
+        pname = overrides.type;
+        version = source.version;
 
-    nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
-      ++ (overrides.nativeBuildInputs or [ ]);
+        nativeBuildInputs = [
+          cmake
+          pkg-config
+          python3
+          qt5.wrapQtAppsHook
+          qt5.qttools
+        ] ++ (overrides.nativeBuildInputs or [ ]);
 
-    buildInputs = [ avahi boost poco protobuf ]
-      ++ (overrides.buildInputs or [ ]);
+        buildInputs =
+          [
+            boost
+            poco
+            protobuf
+          ]
+          ++ (overrides.buildInputs or [ ])
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ];
 
-    cmakeFlags = [
-      "-D g15=OFF"
-      "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
-    ] ++ (overrides.configureFlags or [ ]);
+        cmakeFlags = [
+          (lib.cmakeBool "g15" false)
+          (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17") # protobuf >22 requires C++ 17
+        ] ++ (overrides.cmakeFlags or [ ]);
 
-    preConfigure = ''
-       patchShebangs scripts
-    '';
+        preConfigure = ''
+          patchShebangs scripts
+        '';
 
-    passthru.tests.connectivity = nixosTests.mumble;
+        passthru.tests.connectivity = nixosTests.mumble;
 
-    meta = with lib; {
-      description = "Low-latency, high quality voice chat software";
-      homepage = "https://mumble.info";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ felixsinger lilacious ];
-      platforms = platforms.linux;
-    };
-  });
+        meta = with lib; {
+          description = "Low-latency, high quality voice chat software";
+          homepage = "https://mumble.info";
+          license = licenses.bsd3;
+          maintainers = with maintainers; [
+            felixsinger
+            lilacious
+          ];
+          platforms = platforms.linux ++ platforms.darwin;
+        };
+      }
+    );
 
-  client = source: generic {
-    type = "mumble";
+  client =
+    source:
+    generic {
+      type = "mumble";
 
-    nativeBuildInputs = [ qt5.qttools ];
-    buildInputs = [ flac libogg libopus libsndfile libvorbis qt5.qtsvg rnnoise speex ]
-      ++ lib.optional (!jackSupport) alsa-lib
-      ++ lib.optional jackSupport libjack2
-      ++ lib.optional speechdSupport speechd-minimal
-      ++ lib.optional pulseSupport libpulseaudio
-      ++ lib.optional pipewireSupport pipewire;
+      nativeBuildInputs = [ qt5.qttools ];
+      buildInputs =
+        [
+          flac
+          libogg
+          libopus
+          libsndfile
+          libvorbis
+          qt5.qtsvg
+          rnnoise
+          speex
+          utf8proc
+        ]
+        ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
+        ++ lib.optional jackSupport libjack2
+        ++ lib.optional speechdSupport speechd-minimal
+        ++ lib.optional pulseSupport libpulseaudio
+        ++ lib.optional pipewireSupport pipewire
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          xar
+          makeWrapper
+        ];
 
-    configureFlags = [
-      "-D server=OFF"
-      "-D bundled-celt=ON"
-      "-D bundled-opus=OFF"
-      "-D bundled-speex=OFF"
-      "-D bundle-qt-translations=OFF"
-      "-D update=OFF"
-      "-D overlay-xcompile=OFF"
-      "-D oss=OFF"
-      "-D warnings-as-errors=OFF" # conversion error workaround
-    ] ++ lib.optional (!speechdSupport) "-D speechd=OFF"
-      ++ lib.optional (!pulseSupport) "-D pulseaudio=OFF"
-      ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
-      ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
-
-    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
-
-    postFixup = ''
-      wrapProgram $out/bin/mumble \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire)}"
-    '';
-  } source;
-
-  server = source: generic {
-    type = "murmur";
-
-    configureFlags = [
-      "-D client=OFF"
-    ] ++ lib.optional (!iceSupport) "-D ice=OFF"
-      ++ lib.optionals iceSupport [
-        "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-        "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-        "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+      cmakeFlags = [
+        (lib.cmakeBool "server" false)
+        (lib.cmakeBool "bundled-celt" true)
+        (lib.cmakeBool "bundled-opus" false)
+        (lib.cmakeBool "bundled-speex" false)
+        (lib.cmakeBool "bundle-qt-translations" false)
+        (lib.cmakeBool "update" false)
+        (lib.cmakeBool "overlay-xcompile" false)
+        (lib.cmakeBool "oss" false)
+        (lib.cmakeBool "warnings-as-errors" false) # conversion error workaround
+        (lib.cmakeBool "speechd" speechdSupport)
+        (lib.cmakeBool "pulseaudio" pulseSupport)
+        (lib.cmakeBool "pipewire" pipewireSupport)
+        (lib.cmakeBool "jackaudio" jackSupport)
+        (lib.cmakeBool "alsa" (!jackSupport && alsaSupport))
       ];
 
-    buildInputs = [ libcap ]
-      ++ lib.optional iceSupport zeroc-ice;
-  } source;
+      env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
-  overlay = source: generic {
-    stdenv = stdenv_32bit;
-    type = "mumble-overlay";
+      postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+        wrapProgram $out/bin/mumble \
+          --prefix LD_LIBRARY_PATH : "${
+            lib.makeLibraryPath (
+              lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire
+            )
+          }"
+      '';
 
-    configureFlags = [
-      "-D server=OFF"
-      "-D client=OFF"
-      "-D overlay=ON"
-    ];
-  } source;
+      installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        mkdir -p $out/Applications $out/bin
+        mv Mumble.app $out/Applications/Mumble.app
+        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/Mumble $out/bin/mumble
+      '';
+    } source;
+
+  server =
+    source:
+    generic {
+      type = "murmur";
+
+      cmakeFlags =
+        [
+          (lib.cmakeBool "client" false)
+          (lib.cmakeBool "ice" iceSupport)
+        ]
+        ++ lib.optionals iceSupport [
+          (lib.cmakeFeature "Ice_HOME" "${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}")
+          (lib.cmakeFeature "CMAKE_PREFIX_PATH" "${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}")
+          (lib.cmakeFeature "Ice_SLICE_DIR" "${lib.getDev zeroc-ice}/share/ice/slice")
+        ];
+
+      buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
+    } source;
+
+  overlay =
+    source:
+    generic {
+      stdenv = stdenv_32bit;
+      type = "mumble-overlay";
+
+      cmakeFlags = [
+        (lib.cmakeBool "server" false)
+        (lib.cmakeBool "client" false)
+        (lib.cmakeBool "overlay" true)
+      ];
+    } source;
 
   source = rec {
     version = "1.5.735";
@@ -119,8 +196,10 @@ let
       fetchSubmodules = true;
     };
   };
-in {
-  mumble  = lib.recursiveUpdate (client source) {meta.mainProgram = "mumble";};
-  murmur  = lib.recursiveUpdate (server source) {meta.mainProgram = "mumble-server";};
+in
+{
+  mumble = lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; };
+  murmur = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
+  # What is this meant to be used for? It's not used in nixpkgs.
   overlay = overlay source;
 }
