@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     icu
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=c++17";
+
   doCheck = false;
 
   meta = with lib; {
