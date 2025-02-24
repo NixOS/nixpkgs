@@ -115,18 +115,16 @@ self: super: {
         ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
       }))
       [
-        doJailbreak
         dontCheck
       ];
 
-  hls-plugin-api = doJailbreak super.hls-plugin-api;
-  ghcide = doJailbreak (appendPatch (pkgs.fetchpatch {
+  ghcide = appendPatch (pkgs.fetchpatch {
     name = "ghcide-ghc-9.8.3.patch";
     url = "https://github.com/haskell/haskell-language-server/commit/6d0a6f220226fe6c1cb5b6533177deb55e755b0b.patch";
     sha256 = "1jwxldar9qzkg2z6vsx8f2yih3vkf4yjk9p3mryv0azn929qn3h1";
     stripLen = 1;
     excludes = [ "cabal.project" ];
-  }) super.ghcide);
+  }) super.ghcide;
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
@@ -251,9 +249,6 @@ self: super: {
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
-
-  # currently, cabal-plan seems to get not much maintenance
-  cabal-plan = doJailbreak super.cabal-plan;
 
   # support for transformers >= 0.6
   lifted-base = appendPatch (fetchpatch {
@@ -771,8 +766,7 @@ self: super: {
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
-  snap-core = doJailbreak (dontCheck super.snap-core); # attoparsec bound is too strict. This has been fixed on master
-  snap-server = doJailbreak super.snap-server; # attoparsec bound is too strict
+  snap-core = dontCheck super.snap-core;
   sourcemap = dontCheck super.sourcemap;
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
@@ -896,9 +890,6 @@ self: super: {
   # 2025-02-10: Too strict bounds on hedgehog < 1.5
   tasty-sugar = doJailbreak super.tasty-sugar;
 
-  # Allow bytestring-0.12.1.0, https://github.com/lpeterse/haskell-socket/issues/71
-  socket = doJailbreak super.socket;
-
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
   tasty-expected-failure = dontCheck super.tasty-expected-failure;
@@ -937,9 +928,6 @@ self: super: {
 
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
-
-  # https://github.com/Euterpea/Euterpea2/issues/40
-  Euterpea = doJailbreak super.Euterpea;
 
   # Byte-compile elisp code for Emacs.
   ghc-mod = overrideCabal (drv: {
@@ -1450,14 +1438,10 @@ self: super: {
   # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
   # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
   # needs jailbreaking to build successfully.
-  dhall-lsp-server = lib.pipe
-    (super.dhall-lsp-server.overrideScope (lself: lsuper: {
-      lsp = doJailbreak lself.lsp_2_1_0_0;  # sorted-list <0.2.2
-      lsp-types = doJailbreak lself.lsp-types_2_1_1_0;  # lens <5.3
-    }))
-    [
-      doJailbreak
-    ];
+  dhall-lsp-server = super.dhall-lsp-server.overrideScope (lself: lsuper: {
+    lsp = doJailbreak lself.lsp_2_1_0_0;  # sorted-list <0.2.2
+    lsp-types = doJailbreak lself.lsp-types_2_1_1_0;  # lens <5.3
+  });
 
   ghcjs-dom-hello = appendPatches [
     (fetchpatch {
@@ -1862,7 +1846,6 @@ self: super: {
   # 2021-04-16: too strict bounds on QuickCheck and tasty
   # https://github.com/hasufell/lzma-static/issues/1
   lzma-static = doJailbreak super.lzma-static;
-  xz = doJailbreak super.xz;
 
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
@@ -2017,8 +2000,6 @@ self: super: {
   # Too strict lower bounds on (test) deps
   # https://github.com/phadej/puresat/issues/6
   puresat = doJailbreak super.puresat;
-  # https://github.com/phadej/spdx/issues/62
-  spdx = doJailbreak super.spdx;
 
   # test suite requires stack to run, https://github.com/dino-/photoname/issues/24
   photoname = dontCheck super.photoname;
@@ -2034,7 +2015,7 @@ self: super: {
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/unique: simple test/"
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
     ] ++ drv.testFlags or [];
-  }) (doJailbreak super.Unique);
+  }) super.Unique;
 
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
   aeson-casing = assert super.aeson-casing.version == "0.2.0.0"; overrideCabal (drv: {
@@ -2125,10 +2106,6 @@ self: super: {
   sdp4text = disableLibraryProfiling super.sdp4text;
   sdp4unordered = disableLibraryProfiling super.sdp4unordered;
   sdp4vector = disableLibraryProfiling super.sdp4vector;
-
-  # Unnecessarily strict bound on template-haskell
-  # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
-  tree-sitter = doJailbreak super.tree-sitter;
 
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
@@ -2399,8 +2376,6 @@ self: super: {
 
   # Overly strict bounds on tasty-quickcheck (test suite) (< 0.11)
   hashable = doJailbreak super.hashable;
-  # https://github.com/haskell/aeson/pull/1126
-  text-iso8601 = doJailbreak super.text-iso8601;
   # https://github.com/well-typed/cborg/issues/340
   cborg = doJailbreak super.cborg;
   # Doesn't compile with tasty-quickcheck == 0.11 (see issue above)
@@ -2809,7 +2784,7 @@ let
   setAmazonkaSourceRoot = dir: drv: (overrideSrc { version = "2.0"; src = amazonkaSrc + "/${dir}"; }) drv;
   isAmazonkaService = name: lib.hasPrefix "amazonka-" name && name != "amazonka-test";
   amazonkaServices = lib.filter isAmazonkaService (lib.attrNames super);
-  amazonkaServiceOverrides = (lib.genAttrs amazonkaServices (name: lib.pipe super.${name} [(setAmazonkaSourceRoot "lib/services/${name}") doJailbreak]));
+  amazonkaServiceOverrides = (lib.genAttrs amazonkaServices (name: lib.pipe super.${name} [(setAmazonkaSourceRoot "lib/services/${name}") (x: x)]));
 in
 amazonkaServiceOverrides // {
   amazonka-core = assert super.amazonka-core.version == "2.0"; lib.pipe

@@ -60,32 +60,17 @@ self: super: {
   #
   # Jailbreaks
   #
-  blaze-svg = doJailbreak super.blaze-svg; # base <4.19
-  commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
-  diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
-  diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
-  diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
-  ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
   hashing = doJailbreak super.hashing; # bytestring <0.12
   hevm = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/hellwolf/hevm/commit/338674d1fe22d46ea1e8582b24c224d76d47d0f3.patch";
     name = "release-0.54.2-ghc-9.8.4-patch";
     sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
   }) super.hevm;
-  json-sop = doJailbreak super.json-sop; # aeson <2.2, base <4.19, text <2.1
   primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
-  statestack = doJailbreak super.statestack; # base < 4.19
-  newtype-generics = doJailbreak super.newtype-generics; # base < 4.19
   hw-prim = doJailbreak super.hw-prim; # doctest < 0.22, ghc-prim < 0.11, hedgehog < 1.4
-  svg-builder = doJailbreak super.svg-builder; # base <4.19, bytestring <0.12, text <2.1
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
-  raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
   saltine = doJailbreak super.saltine; # bytestring  && <0.12, deepseq <1.5, text > 1.2 && <1.3 || >=2.0 && <2.1
-  stripe-concepts = doJailbreak super.stripe-concepts; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
-  stripe-signature = doJailbreak super.stripe-signature; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
-  string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
-  universe-some = doJailbreak super.universe-some; # th-abstraction < 0.7
   broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
