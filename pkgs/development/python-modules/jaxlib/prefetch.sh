@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i sh -p jq
 
-prefetch () {
+prefetch() {
     expr="(import <nixpkgs> { system = \"$2\"; config.cudaSupport = true; }).python$1.pkgs.$3.src.url"
     url=$(NIX_PATH=.. nix-instantiate --eval -E "$expr" | jq -r)
     echo "$url"
@@ -14,7 +14,6 @@ for py in "310" "311" "312" "313"; do
     prefetch "$py" "x86_64-linux" "jaxlib-bin"
     prefetch "$py" "aarch64-linux" "jaxlib-bin"
     prefetch "$py" "aarch64-darwin" "jaxlib-bin"
-    prefetch "$py" "x86_64-darwin" "jaxlib-bin"
     prefetch "$py" "x86_64-linux" "jax-cuda12-plugin"
     prefetch "$py" "aarch64-linux" "jax-cuda12-plugin"
 done
