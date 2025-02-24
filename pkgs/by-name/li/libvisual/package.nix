@@ -2,19 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  SDL,
+  SDL_compat,
   autoreconfHook,
   autoconf-archive,
   glib,
-  pkg-config,
+  pkgconf,
   fullVariant ? false,
   withLvTool ? fullVariant,
   withExamples ? fullVariant,
 }:
-
-# Remove when 0.5.x is published.
-assert stdenv.hostPlatform != stdenv.buildPlatform -> !withLvTool;
-
 stdenv.mkDerivation rec {
   pname = "libvisual" + lib.optionalString fullVariant "-full";
   version = "0.4.2";
@@ -37,9 +33,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
-    pkg-config
+    pkgconf
   ];
-  buildInputs = [ glib ] ++ lib.optional (withLvTool || withExamples) SDL;
+  buildInputs = [ glib ] ++ lib.optional (withLvTool || withExamples) SDL_compat;
 
   configureFlags =
     [
