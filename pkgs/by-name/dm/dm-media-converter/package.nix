@@ -5,6 +5,7 @@
   lib,
   libqt5pas,
   libX11,
+  makeDesktopItem,
   numactl,
   qtbase,
   stdenv,
@@ -41,8 +42,10 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p "$out"/bin/bin/x86_64-linux
+    mkdir -p "$out"/share/pixmaps
 
     mv dmMediaConverter "$out"/bin
+    mv dmMediaConverter_logo.png "$out"/share/pixmaps/dm-media-converter.png
 
     ln -s "${lib.getExe ffmpeg}" "$out"/bin/bin/x86_64-linux/ffmpeg
     ln -s "${lib.getExe ffmpeg}" "$out"/bin/bin/x86_64-linux/ffmpeg.mfx
@@ -50,6 +53,22 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "DM Media Converter";
+      desktopName = "DM Media Converter";
+      genericName = "DM Media Converter";
+      comment = "Cross-platform FFmpeg GUI supporting many common encoding options";
+      icon = "dm-media-converter";
+      exec = "dmMediaConverter";
+      type = "Application";
+      categories = [
+        "AudioVideo"
+        "Video"
+      ];
+    })
+  ];
 
   meta = with lib; {
     description = "Cross-platform FFmpeg GUI supporting many common encoding options";
