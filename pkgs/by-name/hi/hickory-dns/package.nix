@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hickory-dns";
   version = "0.25.0-alpha.5";
 
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dbtdTvwm1DiV/nQzTAZJ7CD5raId9+bGNLrS88OocxI=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "hickory-dns";
   };
-}
+})
