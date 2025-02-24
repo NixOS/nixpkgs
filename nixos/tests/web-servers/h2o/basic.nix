@@ -118,7 +118,6 @@ import ../../make-test-python.nix (
         assert "${sawatdi_chao_lok}" in http_hello_world_body
 
         tls_hello_world_head = server.succeed("curl -v --head --compressed --http2 --tlsv1.3 --fail-with-body 'https://${domain.TLS}:${builtins.toString port.TLS}/hello_world.rst'").lower()
-        print(tls_hello_world_head)
         assert "http/2 200" in tls_hello_world_head
         assert "server: h2o" in tls_hello_world_head
         assert "content-type: text/x-rst" in tls_hello_world_head

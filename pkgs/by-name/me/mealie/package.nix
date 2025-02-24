@@ -56,7 +56,7 @@ pythonpkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   patches = [
-      # compatiblity with openai 1.63.0
+      # compatibility with openai 1.63.0
       ./0000_openai_1.63.0.patch
   ];
 

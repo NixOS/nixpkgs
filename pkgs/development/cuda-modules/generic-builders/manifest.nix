@@ -103,7 +103,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     in
     outputs;
 
-  # Traversed in the order of the outputs speficied in outputs;
+  # Traversed in the order of the outputs specified in outputs;
   # entries are skipped if they don't exist in outputs.
   outputToPatterns = {
     bin = [ "bin" ];

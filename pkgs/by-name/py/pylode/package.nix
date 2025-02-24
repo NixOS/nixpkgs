@@ -28,10 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "rdflib==6.0.0" "rdflib"
-  '';
+  pythonRelaxDeps = [ "rdflib" ];
 
   # Path issues with the tests
   doCheck = false;

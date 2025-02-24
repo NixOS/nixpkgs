@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # The tests check what CPU the host has and makes sure it can query information.
-  # not all build environments may have this information availaible. And, cpuinfo may
+  # not all build environments may have this information available. And, cpuinfo may
   # not understand all CPUs (causing test failures such as https://github.com/pytorch/cpuinfo/issues/132)
   # Instead, allow building in any environment.
   doCheck = false;

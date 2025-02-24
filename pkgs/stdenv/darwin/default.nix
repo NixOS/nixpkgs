@@ -220,7 +220,7 @@ let
     };
 
   # Dependencies - these are packages that are rebuilt together in groups. Defining them here ensures they are
-  # asserted and overlayed together. It also removes a lot of clutter from the stage definitions.
+  # asserted and overlaid together. It also removes a lot of clutter from the stage definitions.
   #
   # When multiple dependency sets share a dependency, it should be put in the one that will be (re)built first.
   # That makes sure everything else will share the same dependency in the final stdenv.
@@ -954,7 +954,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                     # inputs. The following set of overrides allow the LLVM documentation to be built without
                     # pulling curl (and other packages like ffmpeg) into the stdenv bootstrap.
                     #
-                    # However, even without darwin.binutils-unwrapped, this has to be overriden in the LLVM package set
+                    # However, even without darwin.binutils-unwrapped, this has to be overridden in the LLVM package set
                     # because otherwise llvmPackages.llvm-manpages on its own is broken.
                     llvm-manpages = superTools.llvm-manpages.override {
                       python3Packages = self.python3.pkgs.overrideScope (
