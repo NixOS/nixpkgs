@@ -1415,6 +1415,39 @@
       },
       "name": "netbeans-6-5-keymap"
     },
+    "18682": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.23654.183": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.24978.27": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.24978.46": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.24978.50": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.24978.54": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.24978.55": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip",
+        "243.24978.59": "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip"
+      },
+      "name": "catppuccin-theme"
+    },
     "18824": {
       "compatible": [
         "clion",
@@ -1932,6 +1965,7 @@
     "https://plugins.jetbrains.com/files/16604/671364/Extra_ToolWindow_Colorful_Icons_Subscription-2025.1.3.zip": "sha256-U2kNQtumZ71+G3maxxXPVsLL8Q+8YonpC4ejr1DYMbo=",
     "https://plugins.jetbrains.com/files/17718/683782/github-copilot-intellij-1.5.35-242.zip": "sha256-XySBxVlZLPTj1Y3urLpfgkrYwt/y12hX0oCK1p0Vdx0=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
+    "https://plugins.jetbrains.com/files/18682/680233/Catppuccin_Theme-3.4.1.zip": "sha256-QOF3nAXOfYhNl3YUK1fc9z5H2uXTPm2X+6fVZ5QP8ZQ=",
     "https://plugins.jetbrains.com/files/18824/671527/CodeGlancePro-1.9.6-signed.zip": "sha256-AEHZxuRMBEZlT3xTxBUbHEPjEJBOCLxdj1wEYBzlNdk=",
     "https://plugins.jetbrains.com/files/18922/685255/GerryThemes.jar": "sha256-GROc7EiggdGHUQknzduildmchx3axkoij1Zqwqqm76I=",
     "https://plugins.jetbrains.com/files/19275/355572/better_direnv-1.2.2-signed.zip": "sha256-hoFfIid7lClHDiT+ZH3H+tFSvWYb1tSRZH1iif+kWrM=",
