@@ -8,7 +8,7 @@
   db,
   cyrus_sasl,
   zlib,
-  perl538Packages,
+  perlPackages,
   autoreconfHook,
   Security,
   # Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ] ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
   buildInputs = [
-    perl538Packages.TimeDate
+    perlPackages.TimeDate
     openssl
     db
     cyrus_sasl
