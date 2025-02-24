@@ -180,9 +180,9 @@ def update_rubyenv():
         cwd=rubyenv_dir,
     )
 
-    # update to 1.1.2 to fix https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/issues/68
+    # update to 1.2.9 to include https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/commit/5d77f3f3e048834250589b416c6b3d4bba65a570
     subprocess.check_output(
-        ["sed", "-i", "s:'prometheus-client-mmap', '~> 1.1', '>= 1.1.1':'prometheus-client-mmap', '1.1.2':g", "Gemfile"],
+        ["sed", "-i", "s:'prometheus-client-mmap', '~> 1.2.8':'prometheus-client-mmap', '~> 1.2.9':g", "Gemfile"],
         cwd=rubyenv_dir,
     )
 
