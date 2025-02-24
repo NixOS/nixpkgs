@@ -9,6 +9,7 @@
 
 buildMozillaMach rec {
   pname = "firefox-devedition";
+  binaryName = pname;
   version = "135.0b9";
   applicationName = "Mozilla Firefox Developer Edition";
   requireSigning = false;
@@ -29,7 +30,7 @@ buildMozillaMach rec {
     # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
-    mainProgram = "firefox";
+    mainProgram = binaryName;
   };
   tests = {
     inherit (nixosTests) firefox-devedition;

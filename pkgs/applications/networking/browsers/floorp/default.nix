@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.23.0";
+    packageVersion = "11.23.1";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -24,11 +24,10 @@
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-wH1u64Ldj9Ghzw8cXRu43mhUBmqjAH7k3MiknjW+xcw=";
+      hash = "sha256-oKLpxOXukoTksJag+o4JNwSeNQA0kYP2wUTOWFTCVqk=";
     };
 
     extraConfigureFlags = [
-      "--with-app-name=${pname}"
       "--with-app-basename=${applicationName}"
       "--with-unsigned-addon-scopes=app,system"
       "--enable-proxy-bypass-protection"

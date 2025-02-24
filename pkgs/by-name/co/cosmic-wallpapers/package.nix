@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
-  version = "1.0.0-alpha.5";
+  version = "1.0.0-alpha.5.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
@@ -50,7 +50,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # round_moons_nasa.jpg: https://www.planetary.org/space-images/the-solar-systems-round-moons
       publicDomain
     ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = with lib.maintainers; [
+      pandapip1
+      HeitorAugustoLN
+    ];
     platforms = lib.platforms.unix;
   };
 })

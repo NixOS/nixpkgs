@@ -6,7 +6,7 @@
   installShellFiles,
   git,
   spdx-license-list-data,
-  substituteAll,
+  replaceVars,
 }:
 
 with python3Packages;
@@ -29,12 +29,10 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./interpreter.patch;
+    (replaceVars ./interpreter.patch {
       interpreter = (python3Packages.python.withPackages (_: propagatedBuildInputs)).interpreter;
     })
-    (substituteAll {
-      src = ./use-local-spdx-license-list.patch;
+    (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
     })
     ./missing-udev-rules-nixos.patch

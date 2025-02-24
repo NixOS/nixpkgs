@@ -60,15 +60,6 @@ let
       # hwdb.bin is managed by NixOS
       # "systemd-hwdb-update.service"
 
-      # Consoles.
-      "getty.target"
-      "getty-pre.target"
-      "getty@.service"
-      "serial-getty@.service"
-      "console-getty.service"
-      "container-getty@.service"
-      "systemd-vconsole-setup.service"
-
       # Hardware (started by udev when a relevant device is plugged in).
       "sound.target"
       "bluetooth.target"

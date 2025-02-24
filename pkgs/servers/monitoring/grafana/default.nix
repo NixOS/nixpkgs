@@ -31,7 +31,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "11.5.1";
+  version = "11.5.2";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -43,7 +43,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-s3yU+S6fGgWHA5GrZQsJ6klOcyUxMi5AS+3ykSRbMQk=";
+    hash = "sha256-W0wn19SqqzxHm2fRtsEOru4khNqZziAfzWWc6H+Juew=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -81,9 +81,9 @@ buildGoModule rec {
     outputHashMode = "recursive";
     outputHash =
       rec {
-        x86_64-linux = "sha256-ZGsEAyvAMUKJoNRArtS3fZUoC4c8WDizwugzJY89+dE=";
+        x86_64-linux = "sha256-8KoSBzcEih9UKOkbcNTN1pZz/wVTedJ8qLRe+uXV/dE=";
         aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-NbbX8cewI7fA/8rJjZArU+pYWiVam3vMKXCMiotcqJ0=";
+        aarch64-darwin = "sha256-XW6AV0tzrEWizn4G0KEXegEcNmlTJl6mZ92ZRmz17HM=";
         x86_64-darwin = aarch64-darwin;
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

@@ -10,7 +10,7 @@
   electron,
   vulkan-helper,
   gogdl,
-  legendary-gl,
+  legendary-heroic,
   nile,
   comet-gog,
 }:
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/opt/heroic/resources/app.asar.unpacked/build/bin/x64/linux"
     ln -s \
       "${lib.getExe gogdl}" \
-      "${lib.getExe legendary-gl}" \
+      "${lib.getExe legendary-heroic}" \
       "${lib.getExe nile}" \
       "${lib.getExe comet-gog}" \
       "${lib.getExe vulkan-helper}" \

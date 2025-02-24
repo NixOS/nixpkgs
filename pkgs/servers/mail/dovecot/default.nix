@@ -14,7 +14,7 @@
   libcap,
   coreutils,
   clucene_core_2,
-  icu,
+  icu75,
   libexttextcat,
   openldap,
   libsodium,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       zlib
       lz4
       clucene_core_2
-      icu
+      icu75
       libexttextcat
       openldap
       libsodium

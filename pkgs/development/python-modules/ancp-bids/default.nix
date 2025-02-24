@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ancp-bids";
-  version = "0.2.6";
+  version = "0.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ANCPLabOldenburg";
     repo = pname;
     tag = version;
-    hash = "sha256-JxF1W4yMPFIQXPH7QHfcHssWMP/Uci07e66WE5qVJx4=";
+    hash = "sha256-vmw8SAikvbaHnPOthBQxTbyvDwnnZwCOV97aUogIgxw=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://ancpbids.readthedocs.io";
     description = "Read/write/validate/query BIDS datasets";
-    changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${version}";
+    changelog = "https://github.com/ANCPLabOldenburg/ancp-bids/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

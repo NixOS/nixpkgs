@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -8,9 +7,6 @@
   # build-system
   cargo,
   rustc,
-
-  # buildInputs
-  libiconv,
 
   # dependencies
   arviz,
@@ -26,24 +22,25 @@
   pymc,
   pytestCheckHook,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.13.2";
+  version = "0.13.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-XyUMCnHm5V7oFaf3W+nGpcHfq1ZFppeGMIMCU5OB87s=";
+    hash = "sha256-BpKt/EWBefCQUGDxyqF6Xjrj/HUvY4M26gk79R/CyZo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-mLoMbIy3Chmby+c6j3dg+bQvIHuhDgt3ZzPIXB3WxuE=";
+    hash = "sha256-d0Qk01YwosHlOy3yb/2PV5Op1Wz+yB5ROVbUWfHooEk=";
   };
 
   build-system = [
@@ -54,8 +51,8 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
+  pythonRelaxDeps = [
+    "xarray"
   ];
 
   dependencies = [
@@ -75,23 +72,18 @@ buildPythonPackage rec {
     pymc
     pytestCheckHook
     setuptools
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
     # Require unpackaged bridgestan
     "tests/test_stan.py"
-
-    # KeyError: "duplicate registration for <class 'numba.core.types.misc.SliceType'>"
-    "tests/test_pymc.py"
   ];
-
-  # Currently, no test are working...
-  doCheck = false;
 
   meta = {
     description = "Python wrapper for nuts-rs";
     homepage = "https://github.com/pymc-devs/nutpie";
-    changelog = "https://github.com/pymc-devs/nutpie/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pymc-devs/nutpie/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

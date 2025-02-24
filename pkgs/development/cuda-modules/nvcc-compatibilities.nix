@@ -103,6 +103,13 @@ let
       clangMaxMajorVersion = "17";
       gccMaxMajorVersion = "13";
     };
+
+    # Added support for Clang 18
+    # https://docs.nvidia.com/cuda/archive/12.6.0/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "12.6" = attrs."12.4" // {
+      clangMaxMajorVersion = "18";
+    };
+
   };
 in
 attrs

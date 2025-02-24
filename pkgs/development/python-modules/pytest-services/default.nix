@@ -66,6 +66,9 @@ buildPythonPackage rec {
     "test_xvfb"
   ];
 
+  # Tests use sockets
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
     homepage = "https://github.com/pytest-dev/pytest-services";

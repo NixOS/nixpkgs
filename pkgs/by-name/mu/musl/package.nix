@@ -78,6 +78,16 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
+    (fetchurl {
+      name = "CVE-2025-26519_0.patch";
+      url = "https://www.openwall.com/lists/musl/2025/02/13/1/1";
+      hash = "sha256-CJb821El2dByP04WXxPCCYMOcEWnXLpOhYBgg3y3KS4=";
+    })
+    (fetchurl {
+      name = "CVE-2025-26519_1.patch";
+      url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
+      hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
+    })
   ];
   CFLAGS = [
     "-fstack-protector-strong"

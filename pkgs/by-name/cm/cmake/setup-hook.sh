@@ -93,7 +93,6 @@ cmakeConfigurePhase() {
     prependToVar cmakeFlags "-DCMAKE_INSTALL_BINDIR=${!outputBin}/bin"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_SBINDIR=${!outputBin}/sbin"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
-    prependToVar cmakeFlags "-DCMAKE_INSTALL_OLDINCLUDEDIR=${!outputInclude}/include"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_MANDIR=${!outputMan}/share/man"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_INFODIR=${!outputInfo}/share/info"
     prependToVar cmakeFlags "-DCMAKE_INSTALL_DOCDIR=${!outputDoc}/share/doc/${shareDocName}"
@@ -130,6 +129,9 @@ cmakeConfigurePhase() {
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
         echo "cmake: enabled parallel building"
+    fi
+    if [[ "$enableParallelBuilding" -ne 0 ]]; then
+        export CMAKE_BUILD_PARALLEL_LEVEL=$NIX_BUILD_CORES
     fi
 
     if ! [[ -v enableParallelInstalling ]]; then

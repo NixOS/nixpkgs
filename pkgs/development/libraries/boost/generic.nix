@@ -222,6 +222,15 @@ stdenv.mkDerivation {
         extraPrefix = "libs/python/";
         hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
       })
+    ]
+    ++ lib.optional (lib.versionAtLeast version "1.87") [
+      # Fix operator<< for shared_ptr and intrusive_ptr
+      # https://github.com/boostorg/smart_ptr/issues/115
+      (fetchpatch {
+        url = "https://github.com/boostorg/smart_ptr/commit/e7433ba54596da97cb7859455cd37ca140305a9c.patch";
+        relative = "include";
+        hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
+      })
     ];
 
   meta = with lib; {

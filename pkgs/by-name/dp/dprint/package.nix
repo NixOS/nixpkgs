@@ -6,7 +6,6 @@
   installShellFiles,
   testers,
   nix-update-script,
-  deno,
   dprint,
 }:
 
@@ -31,18 +30,14 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  nativeCheckInputs = [
-    # Used in unsafe_ignore_cert test
-    # https://github.com/dprint/dprint/blob/00e8f5e9895147b20fe70a0e4e5437bd54d928e8/crates/dprint/src/utils/url.rs#L527
-    deno
-  ];
-
   checkFlags = [
     # Require creating directory and network access
     "--skip=plugins::cache_fs_locks::test"
     "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
+    # Requires deno for the testing, and making unstable results on darwin
+    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

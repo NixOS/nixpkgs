@@ -179,7 +179,7 @@ let
         type = types.attrsOf types.path;
         default = { };
         description = ''
-          Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
+          Hooks that will be placed under /var/lib/libvirt/hooks/network.d/
           and called for networks begin/end events.
           Please see https://libvirt.org/hooks.html for documentation.
         '';

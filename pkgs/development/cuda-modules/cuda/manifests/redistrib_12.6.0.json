@@ -1,0 +1,1037 @@
+{
+  "release_date": "2024-08-01",
+  "release_label": "12.6.0",
+  "release_product": "cuda",
+  "cuda_cccl": {
+    "name": "CXX Core Compute Libraries",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_cccl/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_cccl/linux-x86_64/cuda_cccl-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "478adda30882b8fbff54d7da109708be5e6a988eafb18d9397868f8d6633981f",
+      "md5": "0aa87816194845693c6892628387a616",
+      "size": "932208"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_cccl/linux-sbsa/cuda_cccl-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "0985a1a4fe3f1e1b68d90909a1cad922194b111c5c965098978b66038c700436",
+      "md5": "ef44af859b3c9f4030029879b3c1fd99",
+      "size": "932348"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_cccl/windows-x86_64/cuda_cccl-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "4fe0460b101887a62fd8ceb1e518926439148c23ec95ef41b694c583031392e9",
+      "md5": "886a846848192218aee2bf8982116aa7",
+      "size": "2929962"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_cccl/linux-aarch64/cuda_cccl-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "90166f9066db13bfb017a7a9a1cea52ac7d2d23637b555192f3f071bededa054",
+      "md5": "5904ec75b0853a4d26520f3486da2589",
+      "size": "932860"
+    }
+  },
+  "cuda_compat": {
+    "name": "CUDA compat L4T",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_compat/LICENSE.txt",
+    "version": "12.6.36890662",
+    "linux-aarch64": {
+      "relative_path": "cuda_compat/linux-aarch64/cuda_compat-linux-aarch64-12.6.36890662-archive.tar.xz",
+      "sha256": "007cdab536bf0a1ec274faff73cde2233f3ccfe0e6dba2b015fb1b527e7e231f",
+      "md5": "de7405e0e2e570b52d16dedc14ebc44e",
+      "size": "19628624"
+    }
+  },
+  "cuda_cudart": {
+    "name": "CUDA Runtime (cudart)",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_cudart/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "75af44a162ee204adf0afcb81bf0448d64baee787d9d694e92722dbbcd05a42c",
+      "md5": "f6d4b5eeb13842c383a4ba153e819bbb",
+      "size": "1125188"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_cudart/linux-sbsa/cuda_cudart-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "c2efb179cf90aa18c6fd4f7a7103d43ead400f0af1859033a19478a45bca8f62",
+      "md5": "2759642f20c8aa441b20dc13cf4e3d93",
+      "size": "1113088"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_cudart/windows-x86_64/cuda_cudart-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "c66badb16921c4acb7abc38f211d530c2f290bd52c2cbdb5fb12095dc6eab0a9",
+      "md5": "92866e246041dc9edce483ed0d60972d",
+      "size": "2512085"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_cudart/linux-aarch64/cuda_cudart-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "061fd21ab9274172094f903708d44af6ecbd0102a77568e3304d76d9fca27308",
+      "md5": "044127d6f6b3c76a430a52aa88339f84",
+      "size": "1176084"
+    }
+  },
+  "cuda_cuobjdump": {
+    "name": "cuobjdump",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_cuobjdump/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_cuobjdump/linux-x86_64/cuda_cuobjdump-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "2e46b5b095625686e7909c18678e93e0654aa71b52af544f3aa0d55c260e7f90",
+      "md5": "479852ce6a592b6d8d8aa0cc37a055c5",
+      "size": "218612"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_cuobjdump/linux-sbsa/cuda_cuobjdump-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "b858cabd5894544e4f5f99f003f030d67633b93c90a09593251e0dd980ff132b",
+      "md5": "0c5a857d08f3519eca810f6b16aebfc1",
+      "size": "208872"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_cuobjdump/windows-x86_64/cuda_cuobjdump-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "b6a75a68cd6c8320f9c4a12921c5b05c8995d2e6035c502f24b691f7b9a09b86",
+      "md5": "cd98acb1d89bf5aece441d0464ef1d8e",
+      "size": "4248446"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_cuobjdump/linux-aarch64/cuda_cuobjdump-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "5c5e817580f6e9324928e9d27babb5d0c2880159fbe16ccd1cebba7c5989af5c",
+      "md5": "3d42cd9cf6fe46c3e3d2fa4ef9aa8a84",
+      "size": "196380"
+    }
+  },
+  "cuda_cupti": {
+    "name": "CUPTI",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_cupti/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_cupti/linux-x86_64/cuda_cupti-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "0f6e58132433617ab1ca279e0cfc1d82737d2320061ab7033a6e32f23f9fb25f",
+      "md5": "02e5720dcfe7e484b8e42a69fa2dd6c8",
+      "size": "13774776"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_cupti/linux-sbsa/cuda_cupti-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "9b203ba8cf9265efb4a518e6911d2f2a4353a489c11e7c9b4f043b0feb6d2aea",
+      "md5": "4237cc74796efbbee160c607a5afca23",
+      "size": "11196596"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_cupti/windows-x86_64/cuda_cupti-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "3c8aceca20d531ab5928027c132cc1f2cd0d4ad119e3d0cba27fce06142f431c",
+      "md5": "cfe3a2a820ab0b50ff2be3e5b9963798",
+      "size": "10981748"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_cupti/linux-aarch64/cuda_cupti-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "cb033b7b180a99485dca32db3f07642577d42fc30943f5cee7a751a971c3d1a5",
+      "md5": "a253a65389ee2139494ba124be9b1ae0",
+      "size": "4087960"
+    }
+  },
+  "cuda_cuxxfilt": {
+    "name": "CUDA cuxxfilt (demangler)",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_cuxxfilt/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_cuxxfilt/linux-x86_64/cuda_cuxxfilt-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "ce83cae28ce59bc57c08d95f2af9ee094f0ef436e28788822b3ac63dd90769a3",
+      "md5": "f8c4ab23d0980b980b8e1a9edf381f96",
+      "size": "188484"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_cuxxfilt/linux-sbsa/cuda_cuxxfilt-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "985bdff002d46aa2a3a352551f91d1de059c6a9464c982a66284e48ce418161e",
+      "md5": "625e38128834233777fc62c12ec62c3e",
+      "size": "176852"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_cuxxfilt/windows-x86_64/cuda_cuxxfilt-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "5346a24fea309c37299f88180c99a11156d5a0e2e7f69fc18e79db805e86e89f",
+      "md5": "5940e132242f420b511307aba509221d",
+      "size": "170742"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_cuxxfilt/linux-aarch64/cuda_cuxxfilt-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "899f215d054bd6ce7e18518313ef218c75781ea32d3b9827e66d6ce4780ba820",
+      "md5": "41a0d96e8558d8f0795a68724a7a62cc",
+      "size": "170564"
+    }
+  },
+  "cuda_demo_suite": {
+    "name": "CUDA Demo Suite",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_demo_suite/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_demo_suite/linux-x86_64/cuda_demo_suite-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "0a088cf533d444d85e555ac2fce026af0d9563a3837ff42dc2b1e0518fc91645",
+      "md5": "4038521ac9f6ceef17500b8ca980c3a9",
+      "size": "4016660"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_demo_suite/windows-x86_64/cuda_demo_suite-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "98f8a84a854a0d04cd4674a39909d385658efc0b0b437fe2b45eff46c6a6d1d6",
+      "md5": "df0c9397780e8d335701136bc28ef4c1",
+      "size": "5065769"
+    }
+  },
+  "cuda_documentation": {
+    "name": "CUDA Documentation",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_documentation/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_documentation/linux-x86_64/cuda_documentation-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "935605cc2e312e194730200f25d42307dc7bd59e991c97f62367851b504b0c6a",
+      "md5": "17e0c8a99474c49aab86c0c4a77b5664",
+      "size": "67284"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_documentation/linux-sbsa/cuda_documentation-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "ea7c7f817d2f2ebbd7a43b60298ff9081934a5d090ac437af2fe689194d1e2ae",
+      "md5": "d03b24f940b859a110226606628123e2",
+      "size": "67256"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_documentation/windows-x86_64/cuda_documentation-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "c23005736c9c37bac18235217062d8c4afb6281e3f128b7267b77f93145bfd44",
+      "md5": "efa4911d884b192a35e6db5b162daea0",
+      "size": "105658"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_documentation/linux-aarch64/cuda_documentation-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "4c7435524a1a63617034718dec2a5e6555987662f108e783853730b10c75ec37",
+      "md5": "c28d9938105f701033998ce437e9be63",
+      "size": "67152"
+    }
+  },
+  "cuda_gdb": {
+    "name": "CUDA GDB",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_gdb/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_gdb/linux-x86_64/cuda_gdb-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "67eacd5a8800656e7fe5da2e13a3f8ae44c77f8602044cd698c2b7089e1e1def",
+      "md5": "018d371b2d2a22dbf9284fc901982f55",
+      "size": "64552872"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_gdb/linux-sbsa/cuda_gdb-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "ede4cc0df5d9e926cc32d89bacd83959ba10995517e1a9f3a34cfdde2d96e1fb",
+      "md5": "9891a9722f245d01a1dd1ed1082b48cb",
+      "size": "43519672"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_gdb/linux-aarch64/cuda_gdb-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "1cbe8ebda2021fbf7a46a5e60d11b5f0207199a278a25d7a1596359dfc5697b9",
+      "md5": "a9793f512a702f16fd9666d0d2494513",
+      "size": "43420800"
+    }
+  },
+  "cuda_nsight": {
+    "name": "Nsight Eclipse Edition Plugin",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nsight/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_nsight/linux-x86_64/cuda_nsight-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "ccd4ee4c869a4a974b7d4ef034f8031759986d2ef26134ca9e434a843e8a4042",
+      "md5": "c039492390bc6a0cc5a765f4d9701c3d",
+      "size": "118683048"
+    }
+  },
+  "cuda_nvcc": {
+    "name": "CUDA NVCC",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvcc/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "4336a230269db14336ca1f727a0502631390a52d37c17d3bde05ccda5d534406",
+      "md5": "87a4f1258aba2e8fa23e314854581bcc",
+      "size": "50046060"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_nvcc/linux-sbsa/cuda_nvcc-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "06112bf1cc0cfb6b881a2e0420cb4611b6d701decbb195fbfb4f0e9966a42006",
+      "md5": "9fccd171e3f1bf757e782bdc0b893aa9",
+      "size": "43972764"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvcc/windows-x86_64/cuda_nvcc-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "03282a36fb98c2f227877a62efd04c36b1ab01fb1b676d9edbd0b10179e0a40a",
+      "md5": "9898c14c601e235be49e91986c482570",
+      "size": "79358872"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_nvcc/linux-aarch64/cuda_nvcc-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "468c5c31a49740cae8edff724aad10a0f20c5ca7fb9eef54881c01f68a48d713",
+      "md5": "27549d26cac1a783bb94123ff0f1fc8e",
+      "size": "45395828"
+    }
+  },
+  "cuda_nvdisasm": {
+    "name": "CUDA nvdisasm",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvdisasm/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvdisasm/linux-x86_64/cuda_nvdisasm-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "ba60cc8c9cfabb399b70aa49ee3428f7c489330b0aa7c8616121651e56dacc3e",
+      "md5": "af4b438995e57268bd30d5c48865eec6",
+      "size": "49896088"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_nvdisasm/linux-sbsa/cuda_nvdisasm-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "7ed318e59165e4d838df65618042b139f7743b80c22f3f28764287732503f52b",
+      "md5": "11ca1a4823e20f3f1eed5eba1b4cbdee",
+      "size": "49812164"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvdisasm/windows-x86_64/cuda_nvdisasm-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "9ac787efbcd20c4c871038ee5ca1c0757139990b25ea90d368aa9c1759952be6",
+      "md5": "21aeff3b5a59917fa77c03899d83b0f6",
+      "size": "50158278"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_nvdisasm/linux-aarch64/cuda_nvdisasm-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "d9bd48904d11a707988201566478eb3dc50b04e40d7eff8db005089c21d1e00c",
+      "md5": "df5f113ba7ccbb1205a42b54837577e4",
+      "size": "49821444"
+    }
+  },
+  "cuda_nvml_dev": {
+    "name": "CUDA NVML Headers",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvml_dev/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvml_dev/linux-x86_64/cuda_nvml_dev-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "db21efb8e2f3d05196aef2b41378f96955312e539ffa3d0c4bc98baa04128376",
+      "md5": "2b31fcc6f03341648e70f50ba35eb4d2",
+      "size": "145524"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_nvml_dev/linux-sbsa/cuda_nvml_dev-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "2ebfa603850fd1498189b67d4a00ca6e34aea25dd4d0c761c2bc8ceafa6db26f",
+      "md5": "80f4ca0debd6732b259d29a39cd060aa",
+      "size": "148308"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvml_dev/windows-x86_64/cuda_nvml_dev-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "700e17949a17db4bc7703f9140c56eb1eb9ec7ee79bba76b072ec17eacada5ef",
+      "md5": "8d002e05434bc0af06daa4db5fdde103",
+      "size": "129922"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_nvml_dev/linux-aarch64/cuda_nvml_dev-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "611871b70d3ca2a5e64e1bd54365ca616a51fb89013145f210b844edf9e07ae7",
+      "md5": "4a55b8d6f29581fbfe8f8881c53ef0bf",
+      "size": "148376"
+    }
+  },
+  "cuda_nvprof": {
+    "name": "CUDA nvprof",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvprof/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvprof/linux-x86_64/cuda_nvprof-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "2df45141995feed32fd8ca0a88738604a4d61989b7d4394caf868f1b92d63d2b",
+      "md5": "625d280a5aaa7c01bf1868d233eccdca",
+      "size": "2437928"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvprof/windows-x86_64/cuda_nvprof-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "7d7f6cb89fc22c8b711a48f9deceaf21908014ab07c44d1a53e064b4bcd26582",
+      "md5": "21689852da1b96726c3aef752d499451",
+      "size": "1703120"
+    }
+  },
+  "cuda_nvprune": {
+    "name": "CUDA nvprune",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvprune/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvprune/linux-x86_64/cuda_nvprune-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "8ad2a26164cfaea08038363ebe9628503abba5440a708800f013771d1eec0f03",
+      "md5": "6924ca0576c035274e1af87b139b58c4",
+      "size": "57032"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_nvprune/linux-sbsa/cuda_nvprune-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "9de86514d4262bd8af499631fac3f40d8a1f002983342990d511219224b6e498",
+      "md5": "f469834a24a2a457c6d0f18e3d7cf511",
+      "size": "48852"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvprune/windows-x86_64/cuda_nvprune-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "9a5abccbbd8132417a86f2419f52a93ca48272a9d89336f060225bf955f7ee2c",
+      "md5": "c533e2163250873eb6d34ff02a48a0a8",
+      "size": "146652"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_nvprune/linux-aarch64/cuda_nvprune-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "f3c8410ceb349304303c44a8b8385411403db20a6df336ed67bb135683df4f11",
+      "md5": "3e51c413f08ea3cdad1291ae73f06be7",
+      "size": "50688"
+    }
+  },
+  "cuda_nvrtc": {
+    "name": "CUDA NVRTC",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvrtc/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvrtc/linux-x86_64/cuda_nvrtc-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "e8f85fc2f9a7e32838723f2f138662a87e3d74eb05ff3a864f1059e7400d9bb6",
+      "md5": "5a1dd9e80c805aed8054f650cbf866a4",
+      "size": "34417392"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_nvrtc/linux-sbsa/cuda_nvrtc-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "7c19bbdea7cf054d0dc42db7c619c754b590006a60284e7ffdfd8be327c69ed1",
+      "md5": "b110c7c43146f499a5a6ad0e9a4e442b",
+      "size": "31938896"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvrtc/windows-x86_64/cuda_nvrtc-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "0838c4b8e0a4ed60af8028b2e57ca18410922df7550bf8eb175d61e384f165d3",
+      "md5": "0768af782ab53263957fe781997f478e",
+      "size": "187470695"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_nvrtc/linux-aarch64/cuda_nvrtc-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "5fd36dcf809771befc30b6a7b4a652c1e479dc1e6e6f9edc4eb20c26b0eddb02",
+      "md5": "ab661283879e8128c99f4fcc7966e25d",
+      "size": "33106688"
+    }
+  },
+  "cuda_nvtx": {
+    "name": "CUDA NVTX",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvtx/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvtx/linux-x86_64/cuda_nvtx-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "bb70f2dc55a7475b073edc681254e4b5b428bdd49c003bdb8628df5b8ecc4690",
+      "md5": "426e58e33f4571b880f0ad0b8dc61d7c",
+      "size": "48556"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_nvtx/linux-sbsa/cuda_nvtx-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "10340336b529157ab47d34ede3a4bc253097a99d17cd3cb8b8c1b677c1a99a89",
+      "md5": "bab7efe3802a7b00d073bab57fd7a8ff",
+      "size": "49140"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvtx/windows-x86_64/cuda_nvtx-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "694786f26f72c9d7d5980e685ec28e2e8936a94613c90c89a4c57bf61273030a",
+      "md5": "583f4da262c770019914069c3b286e52",
+      "size": "65837"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_nvtx/linux-aarch64/cuda_nvtx-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "50febf6a40ff0d684c7dded5b855a710927a68968685e9e70894ce80e20ed7d1",
+      "md5": "64ffd8be03399c479921c9c337ecf9cf",
+      "size": "51752"
+    }
+  },
+  "cuda_nvvp": {
+    "name": "CUDA NVVP",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_nvvp/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_nvvp/linux-x86_64/cuda_nvvp-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "a81bb02d101e32317c055fd836f3cc4a2450beb69f379ed7802c82ccf4b728a8",
+      "md5": "dc9161723ee6e8ba2ba7445784d59ad6",
+      "size": "117718700"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_nvvp/windows-x86_64/cuda_nvvp-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "62504d9dbe2eaa61a2cb22d55b66e666e4a16498e4e2477ed0994010ebb13c74",
+      "md5": "f5371255f42d24f503915e90ac4fd9da",
+      "size": "120342243"
+    }
+  },
+  "cuda_opencl": {
+    "name": "CUDA OpenCL",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_opencl/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_opencl/linux-x86_64/cuda_opencl-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "8cf5d1e7e499d984a4edf324d437feb760fe1d968d237c3cdce5ddcbcfec74c3",
+      "md5": "1593cf3441acda8079d44db60e5745fd",
+      "size": "92328"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_opencl/windows-x86_64/cuda_opencl-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "f9490978dff3adc505a662271f391136dba14e62e16c8ca18beb737a1a85a1dd",
+      "md5": "539317476d135a4da603d6f9325bc85f",
+      "size": "137329"
+    }
+  },
+  "cuda_profiler_api": {
+    "name": "CUDA Profiler API",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_profiler_api/LICENSE.txt",
+    "version": "12.6.37",
+    "linux-x86_64": {
+      "relative_path": "cuda_profiler_api/linux-x86_64/cuda_profiler_api-linux-x86_64-12.6.37-archive.tar.xz",
+      "sha256": "11795a3d7fe0ce551aa1ccaaa363b6581f363de8648d8d1b0221c77a6abb4906",
+      "md5": "443337cfc10f5abe9a6a35e52f86238b",
+      "size": "16184"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_profiler_api/linux-sbsa/cuda_profiler_api-linux-sbsa-12.6.37-archive.tar.xz",
+      "sha256": "75f6477808e2685eafded60334d1f1d25ab410b84d285303f8486ed3812cdfb1",
+      "md5": "185956bcbc7ce765cac2d0d986276741",
+      "size": "16184"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_profiler_api/windows-x86_64/cuda_profiler_api-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "4755d260fb95d029f1cbe050a2b881beaf1a0cc2d004f431d7559c40299c3484",
+      "md5": "d1c59886f99430271031f93f1fada4fe",
+      "size": "20222"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_profiler_api/linux-aarch64/cuda_profiler_api-linux-aarch64-12.6.37-archive.tar.xz",
+      "sha256": "f347b67749067c3815821e1fbe6b2aff50f82ac4c97d53a54c575142b117afac",
+      "md5": "a0133a431055a4e3ec5ecb75f6cfcc61",
+      "size": "16168"
+    }
+  },
+  "cuda_sanitizer_api": {
+    "name": "CUDA Compute Sanitizer API",
+    "license": "CUDA Toolkit",
+    "license_path": "cuda_sanitizer_api/LICENSE.txt",
+    "version": "12.6.34",
+    "linux-x86_64": {
+      "relative_path": "cuda_sanitizer_api/linux-x86_64/cuda_sanitizer_api-linux-x86_64-12.6.34-archive.tar.xz",
+      "sha256": "c7c11f19000b06fa722dc601eeb63ae947cb431cbf2bc47f6e20623977026804",
+      "md5": "1f9bdaab65a6633744b8d641dc6b3b29",
+      "size": "9545036"
+    },
+    "linux-sbsa": {
+      "relative_path": "cuda_sanitizer_api/linux-sbsa/cuda_sanitizer_api-linux-sbsa-12.6.34-archive.tar.xz",
+      "sha256": "32c5b3ab3e98d0539abaedf24f2339bddbee50fc3d13fec79be6328e747ed737",
+      "md5": "195ef2a24b21455ffd49248d5dfd89db",
+      "size": "7301920"
+    },
+    "windows-x86_64": {
+      "relative_path": "cuda_sanitizer_api/windows-x86_64/cuda_sanitizer_api-windows-x86_64-12.6.34-archive.zip",
+      "sha256": "c03df7f2f82653d19fcaa391fd27ab135eada49f037b07a217b5e65e6b9722de",
+      "md5": "a3899421789890cd31481a44f5be5430",
+      "size": "9741696"
+    },
+    "linux-aarch64": {
+      "relative_path": "cuda_sanitizer_api/linux-aarch64/cuda_sanitizer_api-linux-aarch64-12.6.34-archive.tar.xz",
+      "sha256": "702de338886684a50c98452c8d13ad72e4ddebd534d0026e0ca8a08082747098",
+      "md5": "df7ff3e952c39fc7f53eafad2de0380d",
+      "size": "3944532"
+    }
+  },
+  "fabricmanager": {
+    "name": "NVIDIA Fabric Manager",
+    "license": "NVIDIA Driver",
+    "license_path": "fabricmanager/LICENSE.txt",
+    "version": "560.28.03",
+    "linux-x86_64": {
+      "relative_path": "fabricmanager/linux-x86_64/fabricmanager-linux-x86_64-560.28.03-archive.tar.xz",
+      "sha256": "306fcba1b9eee60303b3f3e9b65c42be73874bd0c0fbfcde9d9132e66c71f3f1",
+      "md5": "c57ccb8df7bc142ffdca05678d2f0546",
+      "size": "6071684"
+    },
+    "linux-sbsa": {
+      "relative_path": "fabricmanager/linux-sbsa/fabricmanager-linux-sbsa-560.28.03-archive.tar.xz",
+      "sha256": "54c60d00cafdff69f678617ef98d0d18b775a6b371c27f62437c9e10e59179d4",
+      "md5": "15fb812d5da343fe581485e023f253ee",
+      "size": "5483676"
+    }
+  },
+  "imex": {
+    "name": "Nvidia-Imex",
+    "license": "NVIDIA Proprietary",
+    "license_path": "imex/LICENSE.txt",
+    "version": "560.28.03",
+    "linux-x86_64": {
+      "relative_path": "imex/linux-x86_64/nvidia-imex-linux-x86_64-560.28.03-archive.tar.xz",
+      "sha256": "cb55326901e0725484c5ebb95fe0c9f0077cfa2d1a3f0f5e59a7fe62e798b1c1",
+      "md5": "d82ac4203f2e2921cc818cf954cca747",
+      "size": "7419404"
+    },
+    "linux-sbsa": {
+      "relative_path": "imex/linux-sbsa/nvidia-imex-linux-sbsa-560.28.03-archive.tar.xz",
+      "sha256": "82553814c8f2b5032ea337292b250db69dd6b5c5b6986e306b539b2dc4313597",
+      "md5": "f2b92c8868f6e992e0f77456d7388fc5",
+      "size": "6617548"
+    }
+  },
+  "libcublas": {
+    "name": "CUDA cuBLAS",
+    "license": "CUDA Toolkit",
+    "license_path": "libcublas/LICENSE.txt",
+    "version": "12.6.0.22",
+    "linux-x86_64": {
+      "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-12.6.0.22-archive.tar.xz",
+      "sha256": "1bac7ba106e19d7f8d40a60b1eec8decbd9522718db15df043b4329225923d5f",
+      "md5": "4c5c65db9d9577988cc5fe665ae354b7",
+      "size": "498284668"
+    },
+    "linux-sbsa": {
+      "relative_path": "libcublas/linux-sbsa/libcublas-linux-sbsa-12.6.0.22-archive.tar.xz",
+      "sha256": "a4e5cc7dd46010850330641938b3167c705197d6db7503e97dd43aa6fb1d12fa",
+      "md5": "710728404b3522dbfc776b4a65d6d539",
+      "size": "496692428"
+    },
+    "windows-x86_64": {
+      "relative_path": "libcublas/windows-x86_64/libcublas-windows-x86_64-12.6.0.22-archive.zip",
+      "sha256": "4f38ba0ab036296bcc48727cc3ed27e633911c0fc5dccb60d5131657b1a58002",
+      "md5": "2f4538b86d009c2af3267a6e57b31ba6",
+      "size": "404037803"
+    },
+    "linux-aarch64": {
+      "relative_path": "libcublas/linux-aarch64/libcublas-linux-aarch64-12.6.0.22-archive.tar.xz",
+      "sha256": "8c98b14e527e555f969ffacb86baa11eb1a96370ba57e7c8bb5138236136a907",
+      "md5": "28eb394e5142d2d4b0051f4aca49ae1a",
+      "size": "441196020"
+    }
+  },
+  "libcudla": {
+    "name": "cuDLA",
+    "license": "CUDA Toolkit",
+    "license_path": "libcudla/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-aarch64": {
+      "relative_path": "libcudla/linux-aarch64/libcudla-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "7c16a6701a815afbf90c14e63f8319525a8fef6bcc7388071c904be016ab2efd",
+      "md5": "00f3e39fa30128fc035226c3d02466be",
+      "size": "38568"
+    }
+  },
+  "libcufft": {
+    "name": "CUDA cuFFT",
+    "license": "CUDA Toolkit",
+    "license_path": "libcufft/LICENSE.txt",
+    "version": "11.2.6.28",
+    "linux-x86_64": {
+      "relative_path": "libcufft/linux-x86_64/libcufft-linux-x86_64-11.2.6.28-archive.tar.xz",
+      "sha256": "9af45404b4ae48ec44c564c5e2cbb896d89e10b66f68fa32e47dbdb0e62bdb20",
+      "md5": "327c338b78228fa497d4f1aba2e3f6cb",
+      "size": "453141340"
+    },
+    "linux-sbsa": {
+      "relative_path": "libcufft/linux-sbsa/libcufft-linux-sbsa-11.2.6.28-archive.tar.xz",
+      "sha256": "d9042f93b5222161df3495bc6eb8cc9516cf618c1bf778b39adf589d46119893",
+      "md5": "fca04fbab460746985e72d778c68c281",
+      "size": "453107820"
+    },
+    "windows-x86_64": {
+      "relative_path": "libcufft/windows-x86_64/libcufft-windows-x86_64-11.2.6.28-archive.zip",
+      "sha256": "1eb247d48ae39a259e7d65a1bd6face05cedc37cdee3c26d8a5fcf7492c3444a",
+      "md5": "b19929277b56d6fd17a036b30e38e5a0",
+      "size": "189989045"
+    },
+    "linux-aarch64": {
+      "relative_path": "libcufft/linux-aarch64/libcufft-linux-aarch64-11.2.6.28-archive.tar.xz",
+      "sha256": "27a8d511accf18c58126d71a069974a4d13d0d5ad003be0813b503b85a3ac232",
+      "md5": "b361a83296efa4c16f6d1a542c534655",
+      "size": "453208548"
+    }
+  },
+  "libcufile": {
+    "name": "CUDA cuFile",
+    "license": "CUDA Toolkit",
+    "license_path": "libcufile/LICENSE.txt",
+    "version": "1.11.0.15",
+    "linux-x86_64": {
+      "relative_path": "libcufile/linux-x86_64/libcufile-linux-x86_64-1.11.0.15-archive.tar.xz",
+      "sha256": "735783b817edd5c4431df5f4b5d5ee3b00496441148243155024da3d82da3d15",
+      "md5": "ebe5475327ddac9df3efed272f0e915b",
+      "size": "41836036"
+    },
+    "linux-sbsa": {
+      "relative_path": "libcufile/linux-sbsa/libcufile-linux-sbsa-1.11.0.15-archive.tar.xz",
+      "sha256": "9e3e41ac3ae9e368a2aaee2518557cfdb34c1f1db72e094777f59f84b424688d",
+      "md5": "90f2daf2071c06a5ebccd1d763397c1b",
+      "size": "41283512"
+    },
+    "linux-aarch64": {
+      "relative_path": "libcufile/linux-aarch64/libcufile-linux-aarch64-1.11.0.15-archive.tar.xz",
+      "sha256": "697132545001080d0138a8303eccc3877974c2188099dff9b232658cac8aaa7e",
+      "md5": "da8378c3116a5eaa5b412fd81595be34",
+      "size": "41270500"
+    }
+  },
+  "libcurand": {
+    "name": "CUDA cuRAND",
+    "license": "CUDA Toolkit",
+    "license_path": "libcurand/LICENSE.txt",
+    "version": "10.3.7.37",
+    "linux-x86_64": {
+      "relative_path": "libcurand/linux-x86_64/libcurand-linux-x86_64-10.3.7.37-archive.tar.xz",
+      "sha256": "92575006cd1fcb55edc91c5be660de5f94c796d8c840b5827a52d18168fda099",
+      "md5": "f6eaaed3e3ab457092a34e715d19b875",
+      "size": "81727424"
+    },
+    "linux-sbsa": {
+      "relative_path": "libcurand/linux-sbsa/libcurand-linux-sbsa-10.3.7.37-archive.tar.xz",
+      "sha256": "ede18730ce95c0c4492a952216470cab2c82163f19d26006c66919f8dcfde58d",
+      "md5": "7100a53721b9aa0a525306c4464ee87c",
+      "size": "81711744"
+    },
+    "windows-x86_64": {
+      "relative_path": "libcurand/windows-x86_64/libcurand-windows-x86_64-10.3.7.37-archive.zip",
+      "sha256": "5db79007bde6f0cb2d1f062c1c4d51465f6b6a56173e575b140eeae0f9c5ee4f",
+      "md5": "6b59bb25ca870321a6841209d4fc22f1",
+      "size": "55078901"
+    },
+    "linux-aarch64": {
+      "relative_path": "libcurand/linux-aarch64/libcurand-linux-aarch64-10.3.7.37-archive.tar.xz",
+      "sha256": "1f2346a36ad8b989432583fea0186ba2f6c84bfb0a0cd1b35b7261763161d53f",
+      "md5": "7c7f528988b69c3b9b95fa7947aabc5c",
+      "size": "83950692"
+    }
+  },
+  "libcusolver": {
+    "name": "CUDA cuSOLVER",
+    "license": "CUDA Toolkit",
+    "license_path": "libcusolver/LICENSE.txt",
+    "version": "11.6.4.38",
+    "linux-x86_64": {
+      "relative_path": "libcusolver/linux-x86_64/libcusolver-linux-x86_64-11.6.4.38-archive.tar.xz",
+      "sha256": "625801d29840f6d022b6af73c7db9638c439423d97b504edf83bc27a2bf7ef54",
+      "md5": "affc3901970e0ceaaccfb15ff30492e8",
+      "size": "129942132"
+    },
+    "linux-sbsa": {
+      "relative_path": "libcusolver/linux-sbsa/libcusolver-linux-sbsa-11.6.4.38-archive.tar.xz",
+      "sha256": "df97eb51b2669c3951d3e3ca41a33a848e1b7461f26eeac7e6cc6b6d043bd82b",
+      "md5": "4744321a9a6dc000f079c36a22e78efa",
+      "size": "129208412"
+    },
+    "windows-x86_64": {
+      "relative_path": "libcusolver/windows-x86_64/libcusolver-windows-x86_64-11.6.4.38-archive.zip",
+      "sha256": "3d82c16f8331707aa3ca516a1beaaca0e8169f6e34991d0d824873cfe6197044",
+      "md5": "050b7da685672e1e2cc8ab1242318bff",
+      "size": "126191983"
+    },
+    "linux-aarch64": {
+      "relative_path": "libcusolver/linux-aarch64/libcusolver-linux-aarch64-11.6.4.38-archive.tar.xz",
+      "sha256": "2ffbabc3fd9c9bd0a482123673bc5c57c2e805d0ad864678f37cab93551000cf",
+      "md5": "095ca68e20643519e26b5439aadaeb27",
+      "size": "141678100"
+    }
+  },
+  "libcusparse": {
+    "name": "CUDA cuSPARSE",
+    "license": "CUDA Toolkit",
+    "license_path": "libcusparse/LICENSE.txt",
+    "version": "12.5.2.23",
+    "linux-x86_64": {
+      "relative_path": "libcusparse/linux-x86_64/libcusparse-linux-x86_64-12.5.2.23-archive.tar.xz",
+      "sha256": "ee3ec738f7dccb19d91b0d0714f56090369d4adeae5eade259f84d44281da311",
+      "md5": "53a2c05f694ce6e263ef38c71012e3ca",
+      "size": "236907508"
+    },
+    "linux-sbsa": {
+      "relative_path": "libcusparse/linux-sbsa/libcusparse-linux-sbsa-12.5.2.23-archive.tar.xz",
+      "sha256": "d9981407c6af8a3ed07d956f888426093a34a81fd9199d020c28714509ee050e",
+      "md5": "f7617eac8c5a51d104d99ab7189c0e06",
+      "size": "236556584"
+    },
+    "windows-x86_64": {
+      "relative_path": "libcusparse/windows-x86_64/libcusparse-windows-x86_64-12.5.2.23-archive.zip",
+      "sha256": "8ca7f006ecdd89ba1faf7b7eac2c0b6abfabe1c732f4520a82c653f80fc50cff",
+      "md5": "d03e9f50f9d10d400d56a1f63805f376",
+      "size": "212353352"
+    },
+    "linux-aarch64": {
+      "relative_path": "libcusparse/linux-aarch64/libcusparse-linux-aarch64-12.5.2.23-archive.tar.xz",
+      "sha256": "39f2080143d9d97a3c075c9310c4380350eb44ea96ab59e5b198e4984da6253e",
+      "md5": "ca7b3af07228794bdad2267e914e765e",
+      "size": "254625232"
+    }
+  },
+  "libnpp": {
+    "name": "CUDA NPP",
+    "license": "CUDA Toolkit",
+    "license_path": "libnpp/LICENSE.txt",
+    "version": "12.3.1.23",
+    "linux-x86_64": {
+      "relative_path": "libnpp/linux-x86_64/libnpp-linux-x86_64-12.3.1.23-archive.tar.xz",
+      "sha256": "ce1981caf8b083b92fba9f16b14a1fba8e8087f702f354155abfd29ee71170e6",
+      "md5": "c0573257ddd5639fcb3807a8f9a50a9c",
+      "size": "182782160"
+    },
+    "linux-sbsa": {
+      "relative_path": "libnpp/linux-sbsa/libnpp-linux-sbsa-12.3.1.23-archive.tar.xz",
+      "sha256": "a3c4a3c2f3110adf41db621585ac12fec153bef36be75f06af3a4353566c6455",
+      "md5": "068a8fe22dbd11ca14583821bb2893e3",
+      "size": "182334704"
+    },
+    "windows-x86_64": {
+      "relative_path": "libnpp/windows-x86_64/libnpp-windows-x86_64-12.3.1.23-archive.zip",
+      "sha256": "fdc4eb5217a6c13d8075cb9c57ab3ebdd4a194358231d90b53c6ab7b19d830fe",
+      "md5": "8ed6ca830492f364a8ef8366310f1c26",
+      "size": "154934891"
+    },
+    "linux-aarch64": {
+      "relative_path": "libnpp/linux-aarch64/libnpp-linux-aarch64-12.3.1.23-archive.tar.xz",
+      "sha256": "fce78a19918f61538b0215f32f816e105e3102ddd16917535deec6e9b94e2460",
+      "md5": "4e0303cdcb0286295615724d8f803558",
+      "size": "200211544"
+    }
+  },
+  "libnvfatbin": {
+    "name": "NVIDIA compiler library for fatbin interaction",
+    "license": "CUDA Toolkit",
+    "license_path": "libnvfatbin/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "libnvfatbin/linux-x86_64/libnvfatbin-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "039d2a6be8ed7208a5ba3a3c04afdd423b524f9f747c73f6165d725d2aca70cf",
+      "md5": "607c99694913565205514428821d2145",
+      "size": "909260"
+    },
+    "linux-sbsa": {
+      "relative_path": "libnvfatbin/linux-sbsa/libnvfatbin-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "6b7abcfa16f8c25c554ecd7c4bb6cc6f98b77601ea66ac6d1e698a092c0aec14",
+      "md5": "5e6fbf5ac49fcfcffb7f5664189e4361",
+      "size": "819628"
+    },
+    "windows-x86_64": {
+      "relative_path": "libnvfatbin/windows-x86_64/libnvfatbin-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "80f9ef23d4e3744facedcad62af34ae330a7ab7873405ed8c40f5d2f273f4f5a",
+      "md5": "8934c38ab9147418e2807e4a727a487e",
+      "size": "2180735"
+    },
+    "linux-aarch64": {
+      "relative_path": "libnvfatbin/linux-aarch64/libnvfatbin-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "b40bb546231d434e5bebd961952b82ed3679be1682149c02b9c91d86a176a5b8",
+      "md5": "3a4b1fddd2fb72e00c37fc908b3cc68b",
+      "size": "791412"
+    }
+  },
+  "libnvidia_nscq": {
+    "name": "NVIDIA NSCQ API",
+    "license": "NVIDIA Driver",
+    "license_path": "libnvidia_nscq/LICENSE.txt",
+    "version": "560.28.03",
+    "linux-x86_64": {
+      "relative_path": "libnvidia_nscq/linux-x86_64/libnvidia_nscq-linux-x86_64-560.28.03-archive.tar.xz",
+      "sha256": "8ce02d35b47f7c6ff1078a72a47f24610603b799a5b4e884b06b4e8e4f4e85b0",
+      "md5": "bd8c794531f3672f96132cab2f1e9b89",
+      "size": "357044"
+    },
+    "linux-sbsa": {
+      "relative_path": "libnvidia_nscq/linux-sbsa/libnvidia_nscq-linux-sbsa-560.28.03-archive.tar.xz",
+      "sha256": "93c4838c2705bfcb275fbe9ccaff5cc5fe74753a51de718941638b07da269b62",
+      "md5": "d025d27dc697f6f8b3bd640a752c8229",
+      "size": "351108"
+    }
+  },
+  "libnvjitlink": {
+    "name": "NVIDIA compiler library for JIT LTO functionality",
+    "license": "CUDA Toolkit",
+    "license_path": "libnvjitlink/LICENSE.txt",
+    "version": "12.6.20",
+    "linux-x86_64": {
+      "relative_path": "libnvjitlink/linux-x86_64/libnvjitlink-linux-x86_64-12.6.20-archive.tar.xz",
+      "sha256": "7e57521fc4065f264bd7fd118d267636c2cdf0e542465f281e767e206cf5a794",
+      "md5": "69474f3eba69c334f8246e9ad51d4c23",
+      "size": "29002588"
+    },
+    "linux-sbsa": {
+      "relative_path": "libnvjitlink/linux-sbsa/libnvjitlink-linux-sbsa-12.6.20-archive.tar.xz",
+      "sha256": "a25199ea3a109f216e14bb55c5043feac237f6c5adfdc28e709cbad0a6783317",
+      "md5": "2ffee7213ebbb4cad26da8b2a2e528ee",
+      "size": "26761092"
+    },
+    "windows-x86_64": {
+      "relative_path": "libnvjitlink/windows-x86_64/libnvjitlink-windows-x86_64-12.6.20-archive.zip",
+      "sha256": "e7577c412f7ff3d7f6fde50733ef2af6bcfc4e093f8cb4e282129bc55f5aba06",
+      "md5": "a5bee346c175d408c463c7df166922cb",
+      "size": "153527323"
+    },
+    "linux-aarch64": {
+      "relative_path": "libnvjitlink/linux-aarch64/libnvjitlink-linux-aarch64-12.6.20-archive.tar.xz",
+      "sha256": "33d13a47a84401bae9c66a23613a8fd18862affeb13ee402f27779674e8fa857",
+      "md5": "bc7ae8463e4bba5c761738f53dd443cd",
+      "size": "27928804"
+    }
+  },
+  "libnvjpeg": {
+    "name": "CUDA nvJPEG",
+    "license": "CUDA Toolkit",
+    "license_path": "libnvjpeg/LICENSE.txt",
+    "version": "12.3.3.23",
+    "linux-x86_64": {
+      "relative_path": "libnvjpeg/linux-x86_64/libnvjpeg-linux-x86_64-12.3.3.23-archive.tar.xz",
+      "sha256": "4beb2ee853f791eddd7365bfa2de71456bfc7ee4a7a49a9b14083207f1905a9c",
+      "md5": "4236dbe25a02ee466a583f7c7d011203",
+      "size": "2580132"
+    },
+    "linux-sbsa": {
+      "relative_path": "libnvjpeg/linux-sbsa/libnvjpeg-linux-sbsa-12.3.3.23-archive.tar.xz",
+      "sha256": "85e19a7d31105db44feb986373a079bce0f9aee4b7339d54081d40ed5c6864aa",
+      "md5": "60db48adac8d547382e5b7e6673d2cf4",
+      "size": "2418628"
+    },
+    "windows-x86_64": {
+      "relative_path": "libnvjpeg/windows-x86_64/libnvjpeg-windows-x86_64-12.3.3.23-archive.zip",
+      "sha256": "731e97201a96adb53aa8960db0ab694b4fc289dc5d45ae65599e5fabbeda3d6e",
+      "md5": "ea4c38b5e81067c02bd5709385791c83",
+      "size": "2829128"
+    },
+    "linux-aarch64": {
+      "relative_path": "libnvjpeg/linux-aarch64/libnvjpeg-linux-aarch64-12.3.3.23-archive.tar.xz",
+      "sha256": "5aea63a5f39ee50e9c5a7658081bf90a7f9c5414a1e37b2c2f9e47d9b7c2b75c",
+      "md5": "937841101629bd756ff7284b958ad652",
+      "size": "2561560"
+    }
+  },
+  "libnvsdm": {
+    "name": "LIBNVSDM",
+    "license": "NVIDIA",
+    "license_path": "libnvsdm/LICENSE.txt",
+    "version": "560.28.03",
+    "linux-x86_64": {
+      "relative_path": "libnvsdm/linux-x86_64/libnvsdm-linux-x86_64-560.28.03-archive.tar.xz",
+      "sha256": "4dbdefde4ef7887706f75dc364efa1406c771c34f7de5704d0eeca563b9695b5",
+      "md5": "fd5639e9d0f834d759397c9be78df3b0",
+      "size": "550168"
+    }
+  },
+  "nsight_compute": {
+    "name": "Nsight Compute",
+    "license": "NVIDIA SLA",
+    "license_path": "nsight_compute/LICENSE.txt",
+    "version": "2024.3.0.15",
+    "linux-x86_64": {
+      "relative_path": "nsight_compute/linux-x86_64/nsight_compute-linux-x86_64-2024.3.0.15-archive.tar.xz",
+      "sha256": "438fd13ee0bcccbfbbcd71419c9c60a491096d20599e623abc9885e6153929dd",
+      "md5": "4549ef7615fc4b3847b836bcaeee9067",
+      "size": "429309152"
+    },
+    "linux-sbsa": {
+      "relative_path": "nsight_compute/linux-sbsa/nsight_compute-linux-sbsa-2024.3.0.15-archive.tar.xz",
+      "sha256": "6a38835fc5fab866f9d0f4e35d6344f5d82ef6ee98f9e23c3de990a814548eaa",
+      "md5": "dad3d36cb8549a09b162312ecd268d12",
+      "size": "219322980"
+    },
+    "windows-x86_64": {
+      "relative_path": "nsight_compute/windows-x86_64/nsight_compute-windows-x86_64-2024.3.0.15-archive.zip",
+      "sha256": "4ddaf359f36a8ebc1b9237d297f34d1faa4e8dcba1f0fd3d851956d88c29482b",
+      "md5": "b423290bd7ca8bcde2e4ff506a4458e3",
+      "size": "462192979"
+    },
+    "linux-aarch64": {
+      "relative_path": "nsight_compute/linux-aarch64/nsight_compute-linux-aarch64-2024.3.0.15-archive.tar.xz",
+      "sha256": "5d91f96a99188ee60c05f9f5341d2f8e16f0a27a5e7b9e9d946262084af5fa02",
+      "md5": "d86b14d665e1800de87bb22df5f31f69",
+      "size": "430001220"
+    }
+  },
+  "nsight_systems": {
+    "name": "Nsight Systems",
+    "license": "NVIDIA SLA",
+    "license_path": "nsight_systems/LICENSE.txt",
+    "version": "2024.4.2.133",
+    "linux-x86_64": {
+      "relative_path": "nsight_systems/linux-x86_64/nsight_systems-linux-x86_64-2024.4.2.133-archive.tar.xz",
+      "sha256": "7e5dae8b23da110462e2b9545360e37d9931a336ac8d4e1e14364fa516acc4db",
+      "md5": "f922c51cb16567c64737486d3cca9edd",
+      "size": "254795020"
+    },
+    "linux-sbsa": {
+      "relative_path": "nsight_systems/linux-sbsa/nsight_systems-linux-sbsa-2024.4.2.133-archive.tar.xz",
+      "sha256": "9fa78d9f72160dea2a8a4075eaba6dbb61b54126fcec53138aec86df7f052660",
+      "md5": "a186b2aade2f2057e00995c67eeee7b4",
+      "size": "206467024"
+    },
+    "windows-x86_64": {
+      "relative_path": "nsight_systems/windows-x86_64/nsight_systems-windows-x86_64-2024.4.2.133-archive.zip",
+      "sha256": "77cd8cd2cd4588acf5be36508db71e40e725dbd2c96c89d88ac243e26844d9ef",
+      "md5": "f15fda899004953ff9704b3e5cc594cd",
+      "size": "367169284"
+    }
+  },
+  "nsight_vse": {
+    "name": "Nsight Visual Studio Edition (VSE)",
+    "license": "NVIDIA SLA",
+    "license_path": "nsight_vse/LICENSE.txt",
+    "version": "2024.3.0.24164",
+    "windows-x86_64": {
+      "relative_path": "nsight_vse/windows-x86_64/nsight_vse-windows-x86_64-2024.3.0.24164-archive.zip",
+      "sha256": "f06b1b9d9e4bcdf6cb44a85c506ecbf55482c4557df02c1906c1d469986b371a",
+      "md5": "e86b066ca8aa0922c2db274757e40dad",
+      "size": "471792358"
+    }
+  },
+  "nvidia_driver": {
+    "name": "NVIDIA Linux Driver",
+    "license": "NVIDIA Driver",
+    "license_path": "nvidia_driver/LICENSE.txt",
+    "version": "560.28.03",
+    "linux-x86_64": {
+      "relative_path": "nvidia_driver/linux-x86_64/nvidia_driver-linux-x86_64-560.28.03-archive.tar.xz",
+      "sha256": "88cc9982dc18435dad6f62c549736b0680b6df518144331234df3ccd3150512c",
+      "md5": "da1cc544e6655eeace7bc43db04b020d",
+      "size": "377251444"
+    },
+    "linux-sbsa": {
+      "relative_path": "nvidia_driver/linux-sbsa/nvidia_driver-linux-sbsa-560.28.03-archive.tar.xz",
+      "sha256": "bad8d2c150366429538526344c6b9f64d3b4b6c8006fc76bc8e3123c207a9d0d",
+      "md5": "86dd3549f55cb43510a6a2575162cfd9",
+      "size": "289677692"
+    }
+  },
+  "nvidia_fs": {
+    "name": "NVIDIA filesystem",
+    "license": "CUDA Toolkit",
+    "license_path": "nvidia_fs/LICENSE.txt",
+    "version": "2.22.3",
+    "linux-x86_64": {
+      "relative_path": "nvidia_fs/linux-x86_64/nvidia_fs-linux-x86_64-2.22.3-archive.tar.xz",
+      "sha256": "67ac2e05a6388db2824c454e0bdd808d662aa1fe63ad3292471b144fb0c7fad1",
+      "md5": "605ff67650a8ae1f72a9bd8540ed0ee0",
+      "size": "59284"
+    },
+    "linux-sbsa": {
+      "relative_path": "nvidia_fs/linux-sbsa/nvidia_fs-linux-sbsa-2.22.3-archive.tar.xz",
+      "sha256": "1c73cfb016ce4c6b0c99d46084a678a5e062875e1180b556bda624f7648653f6",
+      "md5": "8debe062baaa33cd4283237d112633c4",
+      "size": "59284"
+    },
+    "linux-aarch64": {
+      "relative_path": "nvidia_fs/linux-aarch64/nvidia_fs-linux-aarch64-2.22.3-archive.tar.xz",
+      "sha256": "7d8db9cf65b6c29198a6c29749ffb5aea3367c1adee71c6bd10169fcaca488db",
+      "md5": "076dbd175b9dbacd9a199f29069161e5",
+      "size": "59288"
+    }
+  },
+  "visual_studio_integration": {
+    "name": "CUDA Visual Studio Integration",
+    "license": "CUDA Toolkit",
+    "license_path": "visual_studio_integration/LICENSE.txt",
+    "version": "12.6.37",
+    "windows-x86_64": {
+      "relative_path": "visual_studio_integration/windows-x86_64/visual_studio_integration-windows-x86_64-12.6.37-archive.zip",
+      "sha256": "ab43531c3a13aeca7eeac35a0027b9063bcc03e9d788e59b7000607856264f9b",
+      "md5": "571995a1fd83da361b0c5f0e8b9c7a61",
+      "size": "533182"
+    }
+  }
+}

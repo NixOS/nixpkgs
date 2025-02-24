@@ -43,6 +43,8 @@ makeScopeWithSplicing' {
 
       thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
+      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
+
       tumbler = callPackage ./core/tumbler { };
 
       xfce4-panel = callPackage ./core/xfce4-panel { };

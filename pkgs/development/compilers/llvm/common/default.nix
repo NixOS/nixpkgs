@@ -347,7 +347,6 @@ let
         mkExtraBuildCommands0 cc
         + ''
           ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
-          ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/share" "$rsrc/share"
         '';
       mkExtraBuildCommands =
         cc:
@@ -494,14 +493,14 @@ let
               (lib.versionAtLeast metadata.release_version "17" && lib.versionOlder metadata.release_version "19")
               [
                 # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
-                (fetchpatch2 {
+                (fetchpatch {
                   url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
-                  hash = "sha256-EX+PYGicK73lsL/J0kSZ4S5y1/NHIclBddhsnV6NPPI=";
+                  hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
                   stripLen = 1;
                 })
               ]
           ++
-            lib.optional (lib.versionAtLeast metadata.release_version "20")
+            lib.optional (lib.versions.major metadata.release_version == "20")
               # Fix OrcJIT tests with page sizes > 16k
               # PR: https://github.com/llvm/llvm-project/pull/127115
               (

@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     pysigma-backend-opensearch
     pysigma-backend-qradar
     pysigma-backend-splunk
+    pysigma-backend-loki
     pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
     pysigma-pipeline-windows

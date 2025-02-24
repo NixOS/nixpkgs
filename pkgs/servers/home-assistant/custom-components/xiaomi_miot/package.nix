@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "al-one";
   domain = "xiaomi_miot";
-  version = "1.0.8";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "al-one";
     repo = "hass-xiaomi-miot";
     rev = "v${version}";
-    hash = "sha256-DTIXhs5gPN96C/fWz3s7ZTOybp7Mx+/NbNGXIOGyMmk=";
+    hash = "sha256-WU512UnKRHVoflerXK4vs/wJXxaerC1XVhfLN1YPh84=";
   };
 
   dependencies = [
@@ -28,7 +28,7 @@ buildHomeAssistantComponent rec {
 
   dontBuild = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^v([0-9.]+)$" ]; };
 
   meta = {
     changelog = "https://github.com/al-one/hass-xiaomi-miot/releases/tag/v${version}";

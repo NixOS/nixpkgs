@@ -855,12 +855,16 @@ in
           User = "kanidm";
           Group = "kanidm";
 
-          BindPaths = [
-            # To create the socket
-            "/run/kanidmd:/run/kanidmd"
-            # To store backups
-            cfg.serverSettings.online_backup.path
-          ];
+          BindPaths =
+            [
+              # To create the socket
+              "/run/kanidmd:/run/kanidmd"
+              # To store backups
+              cfg.serverSettings.online_backup.path
+            ]
+            ++ optional (
+              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+            ) cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

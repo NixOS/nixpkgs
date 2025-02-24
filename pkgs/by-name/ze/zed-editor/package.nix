@@ -96,7 +96,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.173.10";
+  version = "0.174.6";
 
   outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-6GVRJUBCXD9ohRcOATK/tzh7e7icyZzA/SuCAL9DauQ=";
+    hash = "sha256-X/xGOJBKXRiCfcAyZ0Tiedk9WCnjwA8Ra4TMPf/sYbU=";
   };
 
   patches = [
@@ -113,6 +113,12 @@ rustPlatform.buildRustPackage rec {
     # Until https://github.com/zed-industries/zed/issues/19971 is fixed,
     # we also skip any crate for which the license cannot be determined.
     ./0001-generate-licenses.patch
+
+    # Upstream delegates linking on Linux to clang to make use of mold,
+    # but builds fine with our standard linker.
+    # This patch removes their linker override from the cargo config.
+    ./0002-linux-linker.patch
+
     # See https://github.com/zed-industries/zed/pull/21661#issuecomment-2524161840
     "script/patches/use-cross-platform-livekit.patch"
   ];
@@ -124,7 +130,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xtziusGBsSni/ZtG+OzIkWxp3azg54G4r/5Wi9n9cyc=";
+  cargoHash = "sha256-EXlV+QFaIErre7Bi06e7V8VKo5SuLdqJQDvQujmBP8o=";
 
   nativeBuildInputs =
     [

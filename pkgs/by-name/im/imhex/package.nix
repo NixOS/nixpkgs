@@ -27,15 +27,15 @@
 }:
 
 let
-  version = "1.36.2";
-  patterns_version = "1.36.2";
+  version = "1.37.1";
+  patterns_version = "1.37.1";
 
   patterns_src = fetchFromGitHub {
     name = "ImHex-Patterns-source-${patterns_version}";
     owner = "WerWolv";
     repo = "ImHex-Patterns";
-    rev = "ImHex-v${patterns_version}";
-    hash = "sha256-MKw9BsOhbaojmQGdl+Wkit/ot5Xsym+AvCTHY2vZHmY=";
+    tag = "ImHex-v${patterns_version}";
+    hash = "sha256-2NgMYaG6+XKp0fIHAn3vAcoXXa3EF4HV01nI+t1IL1U=";
   };
 
 in
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WerWolv";
     repo = "ImHex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e7ppx2MdtTPki/Q+1kWswHkFLNRcO0Y8+q9VzpgUoVE=";
+    hash = "sha256-0vfetOUYQmi3FNWI8+QkBHJe2Crg4LNrKeT1vSTdsjM=";
   };
 
   strictDeps = true;
@@ -137,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kashw2
       cafkafk
+      govanify
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };

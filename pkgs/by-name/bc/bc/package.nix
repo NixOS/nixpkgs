@@ -12,17 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "bc";
-  version = "1.07.1";
+  version = "1.08.1";
   src = fetchurl {
-    url = "mirror://gnu/bc/bc-${version}.tar.gz";
-    sha256 = "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a";
+    url = "mirror://gnu/bc/bc-${version}.tar.xz";
+    hash = "sha256-UVQwEVszNMY2MXUDRgoJUN/3mUCqMlnOLBqmfCiB0CM=";
   };
 
   configureFlags = [ "--with-readline" ];
 
   # As of 1.07 cross-compilation is quite complicated as the build system wants
   # to build a code generator, bc/fbc, on the build machine.
-  patches = [ ./cross-bc.patch ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     # Tools

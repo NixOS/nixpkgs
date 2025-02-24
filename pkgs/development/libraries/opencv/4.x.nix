@@ -12,7 +12,7 @@
 , glib
 , glog
 , gflags
-, protobuf_21
+, protobuf_29
 , config
 , ocl-icd
 , buildPackages
@@ -44,7 +44,7 @@
 , enableCublas ? enableCuda
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
 , enableCufft ? enableCuda
-, cudaPackages ? {}
+, cudaPackages ? cudaPackages
 , nvidia-optical-flow-sdk
 
 , enableLto ? true
@@ -104,7 +104,7 @@ let
   inherit (lib.strings) cmakeBool cmakeFeature cmakeOptionType concatStrings concatStringsSep optionalString;
   inherit (lib.trivial) flip;
 
-  version = "4.9.0";
+  version = "4.11.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -114,22 +114,22 @@ let
   src = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv";
-    rev = version;
-    hash = "sha256-3qqu4xlRyMbPKHHTIT+iRRGtpFlcv0NU8GNZpgjdi6k=";
+    tag = version;
+    hash = "sha256-oiU4CwoMfuUbpDtujJVTShMCzc5GsnIaprC4DzkSzEM=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
-    rev = version;
-    hash = "sha256-K74Ghk4uDqj4OWEzDxT2R3ERi+jkAWZszzezRenfuZ8=";
+    tag = version;
+    hash = "sha256-YNd96qFJ8SHBgDEEsoNps888myGZdELbbuYCae9pW3M=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
-    rev = version;
-    hash = "sha256-pActKi7aN5EOZq2Fpf5mALnZq71c037/R3Q6wJ4uCfQ=";
+    tag = version;
+    hash = "sha256-EqlGlemztYlk03MX1LAviArWT+OA3/qL3jfgHYC+SP8=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -140,16 +140,16 @@ let
     src = fetchFromGitHub {
       owner = "opencv";
       repo = "opencv_3rdparty";
-      rev = "0cc4aa06bf2bef4b05d237c69a5a96b9cd0cb85a";
-      hash = "sha256-/kHivOgCkY9YdcRRaVgytXal3ChE9xFfGAB0CfFO5ec=";
+      rev = "7f55c0c26be418d494615afca15218566775c725";
+      hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
     } + "/ippicv";
     files = let name = platform: "ippicv_2021.10.0_${platform}_20230919_general.tgz"; in
       if effectiveStdenv.hostPlatform.system == "x86_64-linux" then
-        { ${name "lnx_intel64"} = "606a19b207ebedfe42d59fd916cc4850"; }
+        { ${name "lnx_intel64"} = ""; }
       else if effectiveStdenv.hostPlatform.system == "i686-linux" then
-        { ${name "lnx_ia32"} = "ea08487b810baad2f68aca87b74a2db9"; }
+        { ${name "lnx_ia32"} = ""; }
       else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
-        { ${name "mac_intel64"} = "14f01c5a4780bfae9dde9b0aaf5e56fc"; }
+        { ${name "mac_intel64"} = ""; }
       else
         throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -210,10 +210,10 @@ let
   ade = rec {
     src = fetchurl {
       url = "https://github.com/opencv/ade/archive/${name}";
-      hash = "sha256-WG/GudVpkO10kOJhoKXFMj672kggvyRYCIpezal3wcE=";
+      hash = "sha256-O+Yshk3N2Lkl6S9qWxWnoDmBngSms88IiCfwjPLMB78=";
     };
-    name = "v0.1.2d.zip";
-    md5 = "dbb095a8bf3008e91edbbf45d8d34885";
+    name = "v0.1.2e.zip";
+    md5 = "";
     dst = ".cache/ade";
   };
 
@@ -308,7 +308,7 @@ effectiveStdenv.mkDerivation {
     glib
     glog
     pcre2
-    protobuf_21
+    protobuf_29
     zlib
   ] ++ optionals enablePython [
     pythonPackages.python
@@ -419,7 +419,6 @@ effectiveStdenv.mkDerivation {
     (cmakeBool "OPENCV_GENERATE_PKGCONFIG" true)
     (cmakeBool "WITH_OPENMP" true)
     (cmakeBool "BUILD_PROTOBUF" false)
-    (cmakeOptionType "path" "Protobuf_PROTOC_EXECUTABLE" (getExe buildPackages.protobuf_21))
     (cmakeBool "PROTOBUF_UPDATE_FILES" true)
     (cmakeBool "OPENCV_ENABLE_NONFREE" enableUnfree)
     (cmakeBool "BUILD_TESTS" runAccuracyTests)
@@ -557,7 +556,10 @@ effectiveStdenv.mkDerivation {
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }
-    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) { inherit qimgv; }
+    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
+      inherit qimgv;
+      withIpp = opencv4.override { enableIpp = true; };
+    }
     // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
     // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
       opencv4-tests = callPackage ./tests.nix {

@@ -1,0 +1,19 @@
+diff --git a/lib/web/proxy/reverse_proxy.ex b/lib/web/proxy/reverse_proxy.ex
+index 8a78ef27..788ccc30 100644
+--- a/lib/web/proxy/reverse_proxy.ex
++++ b/lib/web/proxy/reverse_proxy.ex
+@@ -187,9 +187,13 @@ defmodule Mobilizon.Web.ReverseProxy do
+   @spec response(Plug.Conn.t(), any(), String.t(), pos_integer(), list(tuple()), Keyword.t()) ::
+           Plug.Conn.t()
+   defp response(conn, client, url, status, headers, opts) do
++    headers = build_resp_headers(headers, opts)
++    # Fix HTTP/1.1 protocol violation: content-length can't be combined with chunked encoding
++    headers = Enum.reject(headers, fn {k, _} -> k == "content-length" end)
++
+     result =
+       conn
+-      |> put_resp_headers(build_resp_headers(headers, opts))
++      |> put_resp_headers(headers)
+       |> send_chunked(status)
+       |> chunk_reply(client, opts)
+ 

@@ -1,9 +1,9 @@
 {
   "chromium": {
-    "version": "133.0.6943.98",
+    "version": "133.0.6943.126",
     "chromedriver": {
-      "hash_darwin": "sha256-OD/E+h4APHs8qBXdDyhBtZ42D3PvbBJHhbRXMxWY/34=",
-      "hash_darwin_aarch64": "sha256-H3JEby9RZPT2cCmuzOvc7n6+SOy1EMcH0v71g7Z1yio="
+      "hash_darwin": "sha256-UeRQgrMG89DHywbvWUnjjlhkkyKR9eFE1i3ESPAElls=",
+      "hash_darwin_aarch64": "sha256-cpJOw+f+AybAtLu7w+g+Vojmjkl+r3sHzt4x6TjbBJI="
     },
     "deps": {
       "depot_tools": {
@@ -19,8 +19,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "da53563ceb66412e2637507c8724bd0cab05e453",
-        "hash": "sha256-yltjJNXU+YQD/sFEa8+ZKqUJpVZ2Yi0YDx27bnekcng=",
+        "rev": "cffa127ce7b6be72885391527c15b452056a2e81",
+        "hash": "sha256-WOd3FsqaZlKEroWg763LQhQS5S1964vAoZWxstxGS3U=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -575,8 +575,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "b57762c6c6ad261024f11fc724687593c03cce67",
-        "hash": "sha256-ksN/7volHAeQLJSFQMV/YOfkXyZ97GSawXp31uca4oc="
+        "rev": "a6637ded97c46aa4879769b1a6b0f2128e6ea257",
+        "hash": "sha256-Y2quVCJS62YFwxBSB42Wg03QQ10M8C1GTrRvhr73IN8="
       },
       "src/third_party/perfetto": {
         "url": "https://android.googlesource.com/platform/external/perfetto.git",
@@ -785,13 +785,13 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "79c3c1ab7faee8247b740b4ec660a998f2881633",
-        "hash": "sha256-fmd2mIjJs6l9zRTJ2bFIMQNnApFN3epeS+57TBlF/Uk="
+        "rev": "4e04a09a1a0ef90841656e210e976bfc2a81ed57",
+        "hash": "sha256-XbeU9L2IRHMP5pTzM3MPW1L2PMHViNRP/6u/HcBq96M="
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "133.0.6943.98",
+    "version": "133.0.6943.126",
     "deps": {
       "depot_tools": {
         "rev": "423f1e1914ab4aa7b2bdf804e216d4c097853ba2",
@@ -802,16 +802,16 @@
         "hash": "sha256-T2dcISln9WCODoI/LsE2ldkRfFdMwVOmqqjQinAmZss="
       },
       "ungoogled-patches": {
-        "rev": "133.0.6943.98-1",
-        "hash": "sha256-lSRJD8tKmZ89MJr6MkldV8/50iB/l8FEwl6ZM/KtZHA="
+        "rev": "133.0.6943.126-1",
+        "hash": "sha256-bOtkMuGYu/iovgj0ZOecxQBmBvUhbF0px/M3Zp7ixKI="
       },
       "npmHash": "sha256-oVoTruhxTymYiGkELd2Oa1wOfjGLtChQZozP4GzOO1A="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "da53563ceb66412e2637507c8724bd0cab05e453",
-        "hash": "sha256-yltjJNXU+YQD/sFEa8+ZKqUJpVZ2Yi0YDx27bnekcng=",
+        "rev": "cffa127ce7b6be72885391527c15b452056a2e81",
+        "hash": "sha256-WOd3FsqaZlKEroWg763LQhQS5S1964vAoZWxstxGS3U=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1366,8 +1366,8 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "b57762c6c6ad261024f11fc724687593c03cce67",
-        "hash": "sha256-ksN/7volHAeQLJSFQMV/YOfkXyZ97GSawXp31uca4oc="
+        "rev": "a6637ded97c46aa4879769b1a6b0f2128e6ea257",
+        "hash": "sha256-Y2quVCJS62YFwxBSB42Wg03QQ10M8C1GTrRvhr73IN8="
       },
       "src/third_party/perfetto": {
         "url": "https://android.googlesource.com/platform/external/perfetto.git",
@@ -1576,8 +1576,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "79c3c1ab7faee8247b740b4ec660a998f2881633",
-        "hash": "sha256-fmd2mIjJs6l9zRTJ2bFIMQNnApFN3epeS+57TBlF/Uk="
+        "rev": "4e04a09a1a0ef90841656e210e976bfc2a81ed57",
+        "hash": "sha256-XbeU9L2IRHMP5pTzM3MPW1L2PMHViNRP/6u/HcBq96M="
       }
     }
   }

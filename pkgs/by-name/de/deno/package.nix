@@ -11,6 +11,7 @@
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   libffi,
+  sqlite,
 }:
 
 let
@@ -18,17 +19,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "2.1.10";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${version}";
-    hash = "sha256-1NqBNrTYHhsG6O2qsgANM15FOxx3xheE9T3nYDDH1D0=";
+    hash = "sha256-WXAUsBC3nAJcuUB753dpM/WDzqWu+e/Kt/BrwQkk/dY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-D7dt9RdlTmR2C1dwOl5vZKUlLUnTkdudtZ4FQpr9ddU=";
+  cargoHash = "sha256-t44Q4yBdcYAk6jkRrzAHXBsJTsRTHAD95Wyxd3waaHc=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage rec {
   # uses zlib-ng but can't dynamically link yet
   # https://github.com/rust-lang/libz-sys/issues/158
   nativeBuildInputs = [
+    rustPlatform.bindgenHook
     # required by libz-ng-sys crate
     cmake
     # required by deno_kv crate
@@ -54,7 +56,11 @@ rustPlatform.buildRustPackage rec {
     "--disable-multi-os-directory"
   ];
 
-  buildInputs = [ libffi ];
+  buildInputs = [
+    libffi
+    # required by libsqlite3-sys
+    sqlite.dev
+  ];
   buildAndTestSubdir = "cli";
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"

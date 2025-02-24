@@ -2,9 +2,8 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch2
 , Foundation
-, abseil-cpp_202401
+, abseil-cpp_202407
 , cmake
 , cpuinfo
 , eigen
@@ -12,6 +11,7 @@
 , gbenchmark
 , glibcLocales
 , gtest
+, howard-hinnant-date
 , libpng
 , nlohmann_json
 , nsync
@@ -30,34 +30,33 @@
 
 
 let
-  version = "1.18.1";
+  version = "1.20.1";
 
-  abseil-cpp = abseil-cpp_202401;
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "onnxruntime";
+    tag = "v${version}";
+    hash = "sha256-xIjR2HsVIqc78ojSXzoTGIxk7VndGYa8o4pVB8U8oXI=";
+    fetchSubmodules = true;
+  };
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 
-  howard-hinnant-date = fetchFromGitHub {
-    owner = "HowardHinnant";
-    repo = "date";
-    rev = "v3.0.1";
-    sha256 = "sha256-ZSjeJKAcT7mPym/4ViDvIR9nFMQEBCSUtPEuMO27Z+I=";
-  };
-
   mp11 = fetchFromGitHub {
     owner = "boostorg";
     repo = "mp11";
-    rev = "boost-1.82.0";
+    tag = "boost-1.82.0";
     hash = "sha256-cLPvjkf2Au+B19PJNrUkTW/VPxybi1MpPxnIl4oo4/o=";
   };
 
   safeint = fetchFromGitHub {
     owner = "dcleblanc";
     repo = "safeint";
-    rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
-    hash = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+    tag = "3.0.28";
+    hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
   };
 
   pytorch_clog = effectiveStdenv.mkDerivation {
@@ -78,28 +77,26 @@ let
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v1.16.1";
-    hash = "sha256-I1wwfn91hdH3jORIKny0Xc73qW2P04MjkVCgcaNnQUE=";
+    tag = "v1.16.1";
+    hash = "sha256-+NmWoZDXNJ8YQIWlUXV+czHyI8UtJedu2VG+1aR5L7s=";
+    # Apply backport of https://github.com/onnx/onnx/pull/6195 from 1.17.0
+    postFetch = ''
+      pushd $out
+      patch -p1 < ${src}/cmake/patches/onnx/onnx.patch
+      popd
+    '';
   };
 
    cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "v3.1.0";
-    hash = "sha256-mpaiCxiYR1WaSSkcEPTzvcREenJWklD+HRdTT5/pD54=";
+    tag = "v3.5.1";
+    hash = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
  };
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "onnxruntime";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+zWtbLKekGhwdBU3bm1u2F7rYejQ62epE+HcHj05/8A=";
-    fetchSubmodules = true;
-  };
+  inherit src version;
 
   patches = [
     # If you stumble on these patches trying to update onnxruntime, check
@@ -109,20 +106,7 @@ effectiveStdenv.mkDerivation rec {
     # - always try find_package first (FIND_PACKAGE_ARGS),
     # - use MakeAvailable instead of the low-level Populate,
     # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
-    ./0001-eigen-allow-dependency-injection.patch
-    # Incorporate a patch that has landed upstream which exposes new
-    # 'abseil-cpp' libraries & modifies the 're2' CMakeLists to fix a
-    # configuration error that around missing 'gmock' exports.
-    #
-    # TODO: Check if it can be dropped after 1.19.0
-    # https://github.com/microsoft/onnxruntime/commit/b522df0ae477e59f60acbe6c92c8a64eda96cace
-    ./update-re2.patch
-    # fix `error: template-id not allowed for constructor in C++20`
-    (fetchpatch2 {
-      name = "suppress-gcc-warning-in-TreeEnsembleAggregator.patch";
-      url = "https://github.com/microsoft/onnxruntime/commit/10883d7997ed4b53f989a49bd4387c5769fbd12f.patch?full_index=1";
-      hash = "sha256-NgvuCHE7axaUtZIjtQvDpagr+QtHdyL7xXkPQwZbhvY=";
-    })
+    ./eigen.patch
   ] ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
@@ -142,12 +126,14 @@ effectiveStdenv.mkDerivation rec {
     wheel
   ]) ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+    cudaPackages.cudnn-frontend
   ];
 
   buildInputs = [
     cpuinfo
     eigen
     glibcLocales
+    howard-hinnant-date
     libpng
     nlohmann_json
     microsoft-gsl
@@ -192,16 +178,16 @@ effectiveStdenv.mkDerivation rec {
     "-DABSL_ENABLE_INSTALL=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202407.src}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers_23.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
     "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
     "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
+    # fails to find protoc on darwin, so specify it
+    "-DONNX_CUSTOM_PROTOC_EXECUTABLE=${protobuf_21}/bin/protoc"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
@@ -229,6 +215,7 @@ effectiveStdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+    echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
 
     # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
     substituteInPlace onnxruntime/core/platform/env.h --replace-fail \

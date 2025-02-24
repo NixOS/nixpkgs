@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.13.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-XKzH2nMByE0WE7WX4YYj2boq9+iwD7SyO5w9/4g9cGE=";
+    hash = "sha256-tet2Ep2Mvucg2QBJbo9A6531cJhQ9L7+ZMmo07S8cwY=";
   };
 
   # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509

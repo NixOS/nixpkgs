@@ -48,25 +48,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.5";
+  version = "9.6";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
+    hash = "sha256-egEkMns5j9nrGmq95YM4mCFCLHRP+hBzSyT1V2ENMoM=";
   };
-
-  patches =
-    [
-      # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
-      # This is not precisely the patch provided - this is a diff of the Makefile.in
-      # after the patch was applied and autoreconf was run, since adding autoreconf
-      # here causes infinite recursion.
-      ./fix-mix-flags-deps-libintl.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
-      ./fix-test-failure-musl.patch
-    ];
 
   postPatch =
     ''
@@ -167,6 +154,11 @@ stdenv.mkDerivation rec {
     # the shipped configure script doesn't enable nls, but using autoreconfHook
     # does so which breaks the build
     ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
+    # The VMULL-based CRC implementation produces incorrect results on musl.
+    # https://lists.gnu.org/archive/html/bug-coreutils/2025-02/msg00046.html
+    ++ optional (
+      stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
+    ) "utils_cv_vmull_intrinsic_exists=no"
     ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.

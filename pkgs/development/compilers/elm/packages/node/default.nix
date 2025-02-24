@@ -7,19 +7,19 @@ let
     inherit (pkgs.stdenv.hostPlatform) system;
   };
   ESBUILD_BINARY_PATH = lib.getExe (
-      pkgs.esbuild.override {
-        buildGoModule = args: pkgs.buildGoModule (args // rec {
-          version = "0.20.2";
-          src = pkgs.fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-      }
-    );
+    pkgs.esbuild.override {
+      buildGoModule = args: pkgs.buildGoModule (args // rec {
+        version = "0.20.2";
+        src = pkgs.fetchFromGitHub {
+          owner = "evanw";
+          repo = "esbuild";
+          rev = "v${version}";
+          hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
+        };
+        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+      });
+    }
+  );
 in
 with self; with elmLib; {
   inherit (nodePkgs) elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
@@ -124,20 +124,7 @@ with self; with elmLib; {
 
   elm-pages = import ./elm-pages { inherit nodePkgs pkgs lib makeWrapper; };
 
-  elm-land =
-    let
-      patched = patchNpmElm nodePkgs.elm-land;
-    in
-    patched.override (old: {
-      inherit ESBUILD_BINARY_PATH;
-      meta = with lib; nodePkgs."elm-land".meta // {
-        description = "Production-ready framework for building Elm applications";
-        homepage = "https://elm.land/";
-        license = licenses.bsd3;
-        maintainers = [ maintainers.zupo ];
-      };
-    }
-    );
+  elm-land = pkgs.elm-land; # Alias
 
   elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ old.nodejs.pkgs.node-gyp-build ];

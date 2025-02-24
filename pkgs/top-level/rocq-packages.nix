@@ -14,6 +14,7 @@ let
       mkRocqDerivation = lib.makeOverridable (callPackage ../build-support/rocq {});
 
       bignums = callPackage ../development/rocq-modules/bignums {};
+      rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi {};
       stdlib = callPackage ../development/rocq-modules/stdlib {};
 
       filterPackages = doesFilter: if doesFilter then filterRocqPackages self else self;

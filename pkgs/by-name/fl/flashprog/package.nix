@@ -1,5 +1,6 @@
 {
   fetchgit,
+  fetchpatch,
   lib,
   libftdi1,
   libgpiod,
@@ -24,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
   };
 
+  patches = [
+    # fixes compiler warnings on Darwin
+    (fetchpatch {
+      url = "https://review.sourcearcade.org/changes/flashprog~309/revisions/2/patch?download";
+      hash = "sha256-eiEenR8+CHCJcNx9YY09I7gxRGUQWmaQlmXtykvXyMU=";
+      decode = "base64 -d";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -45,10 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
       libgpiod
     ];
 
+  postInstall = ''
+    cd "$src"
+    install -Dm644 util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
+  '';
+
   meta = with lib; {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = with licenses; [ gpl2Plus ];
+    license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [
       felixsinger
       funkeleinhorn

@@ -1037,7 +1037,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         die();
     };
 
-    let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusive) else {
+    let Ok(_lock) = Flock::lock(lock, FlockArg::LockExclusiveNonblock) else {
         eprintln!("Could not acquire lock");
         die();
     };

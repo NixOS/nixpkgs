@@ -30,8 +30,47 @@ let
         # (if it is a function).
         discoverTests (val { inherit system pkgs; })
       else val;
+
+  /**
+    Evaluate a test and return a derivation that runs the test as its builder.
+
+    This function is deprecated in favor of runTest and runTestOn, which works
+    by passing a module instead of a specific set of arguments.
+    Benefits of runTest and runTestOn:
+    - Define values for any test option
+    - Use imports to compose tests
+    - Access the module arguments like hostPkgs and config.node.pkgs
+    - Portable to other VM hosts, specifically Darwin
+    - Faster evaluation, using a single `pkgs` instance
+
+    Changes required to migrate to runTest:
+    - Remove any `import ../make-test-python.nix` or similar calls, leaving only
+      the callback function.
+    - Convert the function header to make it a module.
+      Packages can be taken from the following. For VM host portability, use
+      - `config.node.pkgs.<name>` or `config.nodes.foo.nixpkgs.pkgs.<name>` to refer
+        to the Nixpkgs used on the VM guest(s).
+      - `hostPkgs.<name>` when invoking commands on the VM host (e.g. in Python
+        `os.system("foo")`)
+    - Since the runTest argument is a module instead of a function, arguments
+      must be passed as option definitions.
+      You may declare explicit `options` for the test parameter(s), or use the
+      less explicit `_module.args.<name>` to pass arguments to the module.
+
+      Example call with arguments:
+
+          runTest {
+            imports = [ ./test.nix ];
+            _module.args.getPackage = pkgs: pkgs.foo_1_2;
+          }
+
+    - If your test requires any definitions in `nixpkgs.*` options, set
+      `node.pkgsReadOnly = false` in the test configuration.
+   */
   handleTest = path: args:
     discoverTests (import path ({ inherit system pkgs; } // args));
+
+  /** See handleTest */
   handleTestOn = systems: path: args:
     if elem system systems then handleTest path args
     else {};
@@ -61,7 +100,9 @@ let
         if elem system systems then runTest arg
         else {};
     })
+    /** See https://nixos.org/manual/nixos/unstable/#sec-calling-nixos-tests */
     runTest
+    /** See https://nixos.org/manual/nixos/unstable/#sec-calling-nixos-tests */
     runTestOn
     ;
 
@@ -112,6 +153,7 @@ in {
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
   agda = handleTest ./agda.nix {};
+  age-plugin-tpm-decrypt = runTest ./age-plugin-tpm-decrypt.nix;
   agorakit = runTest ./web-apps/agorakit.nix;
   airsonic = handleTest ./airsonic.nix {};
   akkoma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix {};
@@ -252,6 +294,7 @@ in {
   curl-impersonate = handleTest ./curl-impersonate.nix {};
   custom-ca = handleTest ./custom-ca.nix {};
   croc = handleTest ./croc.nix {};
+  cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
   darling = handleTest ./darling.nix {};
   darling-dmg = runTest ./darling-dmg.nix;
@@ -327,7 +370,7 @@ in {
   etcd-cluster = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./etcd/etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
-  evcc = handleTest ./evcc.nix {};
+  evcc = runTest ./evcc.nix;
   fail2ban = handleTest ./fail2ban.nix { };
   fakeroute = handleTest ./fakeroute.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
@@ -412,6 +455,7 @@ in {
   grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
+  grav = runTest ./web-apps/grav.nix;
   graylog = handleTest ./graylog.nix {};
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix {};
   grocy = handleTest ./grocy.nix {};
@@ -420,6 +464,7 @@ in {
   guacamole-server = handleTest ./guacamole-server.nix {};
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
+  h2o = discoverTests (import ./web-servers/h2o { inherit handleTestOn; });
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
   hadoop_3_3 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_3; };
   hadoop2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop2; };
@@ -621,7 +666,7 @@ in {
   misc = handleTest ./misc.nix {};
   misskey = handleTest ./misskey.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
-  mobilizon = handleTest ./mobilizon.nix {};
+  mobilizon = runTest ./mobilizon.nix;
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
   mollysocket = handleTest ./mollysocket.nix { };
@@ -921,6 +966,7 @@ in {
   rmfakecloud = runTest ./rmfakecloud.nix;
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
+  routinator = handleTest ./routinator.nix {};
   rosenpass = handleTest ./rosenpass.nix {};
   rshim = handleTest ./rshim.nix {};
   rspamd = handleTest ./rspamd.nix {};
@@ -951,6 +997,7 @@ in {
   seatd = handleTest ./seatd.nix {};
   send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
+  servo = runTest ./servo.nix;
   shadps4 = runTest ./shadps4.nix;
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};

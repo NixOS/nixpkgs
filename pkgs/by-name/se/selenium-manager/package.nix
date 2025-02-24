@@ -16,7 +16,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-b5xwuZ4lcwLbGhJuEmHYrFXoaTW/M0ABdK3dvbpj8oM=";
   };
 
-  sourceRoot = "${src.name}/rust";
+  patches = [
+    ./disable-telemetry.patch
+  ];
+
+  postPatch = ''
+    cd rust
+  '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-hXtF3qFzzM2TqpEP9JWdi7uU5TgFHF9lZO5bmZcEuDk=";

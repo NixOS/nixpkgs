@@ -14,12 +14,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
       {
         caserver =
           { config, pkgs, ... }: {
+            environment.etc.password-file.source = "${test-certificates}/intermediate-password-file";
             services.step-ca = {
               enable = true;
               address = "[::]";
               port = 8443;
               openFirewall = true;
-              intermediatePasswordFile = "${test-certificates}/intermediate-password-file";
+              intermediatePasswordFile = "/etc/${config.environment.etc.password-file.target}";
               settings = {
                 dnsNames = [ "caserver" ];
                 root = "${test-certificates}/root_ca.crt";
@@ -95,6 +96,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
         catester.succeed("curl https://caclient/ | grep \"Welcome to nginx!\"")
 
         caclientcaddy.wait_for_unit("caddy.service")
-        catester.succeed("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
+
+        # It's hard to know when caddy has finished the ACME
+        # dance with step-ca, so we keep trying to curl
+        # until succeess.
+        catester.wait_until_succeeds("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
       '';
   })

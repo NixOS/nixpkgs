@@ -166,6 +166,7 @@ let
         alderlake      = versionAtLeast ccVersion "12.0";
         sapphirerapids = versionAtLeast ccVersion "11.0";
         emeraldrapids  = versionAtLeast ccVersion "13.0";
+        sierraforest   = versionAtLeast ccVersion "13.0";
 
         # AMD
         znver1         = true;
