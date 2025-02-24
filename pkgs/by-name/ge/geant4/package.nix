@@ -118,8 +118,8 @@ stdenv.mkDerivation rec {
 
   postFixup =
     ''
-      # Don't try to export invalid environment variables.
-      sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
+      substituteInPlace "$out"/bin/geant4.sh \
+        --replace-fail "export GEANT4_DATA_DIR" "# export GEANT4_DATA_DIR"
     ''
     + lib.optionalString enableQt ''
       wrapQtAppsHook
