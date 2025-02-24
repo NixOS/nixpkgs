@@ -103,10 +103,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
   };
 
-  preCheck = ''
-    export XDG_RUNTIME_DIR=$(mktemp -d)
-  '';
-
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;

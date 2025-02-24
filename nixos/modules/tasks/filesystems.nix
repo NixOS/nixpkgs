@@ -400,7 +400,7 @@ in
         # Filesystems.
         ${makeFstabEntries fileSystems {}}
 
-        # Swap devices.
+        ${lib.optionalString (config.swapDevices != []) "# Swap devices."}
         ${flip concatMapStrings config.swapDevices (sw:
             "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}
