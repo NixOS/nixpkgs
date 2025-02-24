@@ -7472,7 +7472,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_28-bin
     electron_29-bin
     electron_30-bin
     electron_31-bin
@@ -7490,7 +7489,6 @@ with pkgs;
     electron-chromedriver_34
     ;
 
-  electron_28 = electron_28-bin;
   electron_29 = electron_29-bin;
   electron_30 = electron_30-bin;
   electron_31 = electron_31-bin;
