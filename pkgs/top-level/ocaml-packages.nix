@@ -1863,7 +1863,7 @@ let
     ### T ###
 
     taglib = callPackage ../development/ocaml-modules/taglib {
-      inherit (pkgs) taglib;
+      inherit (pkgs) taglib_1;
     };
 
     tar = callPackage ../development/ocaml-modules/tar { };
