@@ -40,8 +40,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    mv usr/bin/wi-fiman-desktop $out/bin
+    # mkdir -p $out/bin
+    # mv usr/bin/wi-fiman-desktop $out/bin
+    mv usr/bin $out
+    mv usr/lib $out
+    mv usr/share $out
+
     runHook postInstall
   '';
 
