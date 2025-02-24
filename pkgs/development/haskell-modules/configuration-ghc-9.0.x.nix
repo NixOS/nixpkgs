@@ -134,6 +134,9 @@ self: super: {
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
 
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
+
   # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
   # which means that the upstream cabal file isn't allowed to add the flag.
   inline-c-cpp =
