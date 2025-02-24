@@ -7476,7 +7476,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_29-bin
     electron_30-bin
     electron_31-bin
     electron_32-bin
@@ -7493,7 +7492,6 @@ with pkgs;
     electron-chromedriver_34
     ;
 
-  electron_29 = electron_29-bin;
   electron_30 = electron_30-bin;
   electron_31 = electron_31-bin;
   electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
