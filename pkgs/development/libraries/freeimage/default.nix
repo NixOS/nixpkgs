@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./unbundle.diff
     ./libtiff-4.4.0.diff
+    ./CVE-2021-33367.patch
   ];
 
   postPatch =
