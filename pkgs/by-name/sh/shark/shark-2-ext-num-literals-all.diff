@@ -1,0 +1,13 @@
+diff -burN Shark.orig/CMakeLists.txt Shark/CMakeLists.txt
+--- Shark.orig/CMakeLists.txt	2018-02-05 18:04:58.012612932 +0100
++++ Shark/CMakeLists.txt	2018-02-05 18:20:50.032233165 +0100
+@@ -415,6 +415,9 @@
+ #####################################################################
+ #                       General Path settings
+ #####################################################################
++if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
++  add_definitions(-fext-numeric-literals)
++endif()
+ include_directories( ${shark_SOURCE_DIR}/include )
+ include_directories( ${shark_BINARY_DIR}/include )
+ add_subdirectory( include )

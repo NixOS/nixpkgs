@@ -1,0 +1,38 @@
+diff --git a/cmake/Modules/FindPythonSiteLibs.cmake b/cmake/Modules/FindPythonSiteLibs.cmake
+index ab2931e..08e2c98 100644
+--- a/cmake/Modules/FindPythonSiteLibs.cmake
++++ b/cmake/Modules/FindPythonSiteLibs.cmake
+@@ -27,30 +27,9 @@
+ 
+ if (PYTHON_EXECUTABLE)
+     ### PYTHON_SITELIB
+-    execute_process(
+-        COMMAND
+-        ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix=''))"
+-        OUTPUT_VARIABLE
+-            PYTHON_SITELIB_OUTPUT_VARIABLE
+-        RESULT_VARIABLE
+-            PYTHON_SITELIB_RESULT_VARIABLE
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-    )
+-    if (NOT PYTHON_SITELIB_RESULT_VARIABLE)
+-        file(TO_CMAKE_PATH "${PYTHON_SITELIB_OUTPUT_VARIABLE}" PYTHON_SITELIB)
+-    endif ()
++    file(TO_CMAKE_PATH "@siteDir@" PYTHON_SITELIB)
++
+ 
+     ### PYTHON_SITEINC
+-    execute_process(
+-        COMMAND
+-            ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_inc; print(get_python_inc(plat_specific=True, prefix=''))"
+-        OUTPUT_VARIABLE
+-            PYTHON_SITEINC_OUTPUT_VARIABLE
+-        RESULT_VARIABLE
+-            PYTHON_SITEINC_RESULT_VARIABLE
+-        OUTPUT_STRIP_TRAILING_WHITESPACE
+-    )
+-    if (NOT PYTHON_SITEINC_RESULT_VARIABLE)
+-        file(TO_CMAKE_PATH "${PYTHON_SITEINC_OUTPUT_VARIABLE}" PYTHON_SITEINC)
+-    endif ()
++    file(TO_CMAKE_PATH "@includeDir@" PYTHON_SITEINC)
+ endif (PYTHON_EXECUTABLE)

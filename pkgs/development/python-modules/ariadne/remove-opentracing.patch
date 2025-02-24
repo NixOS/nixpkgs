@@ -1,0 +1,12 @@
+diff --git a/tests/asgi/conftest.py b/tests/asgi/conftest.py
+index a703466..223586e 100644
+--- a/tests/asgi/conftest.py
++++ b/tests/asgi/conftest.py
+@@ -8,7 +8,6 @@ from ariadne.asgi.handlers import (
+     GraphQLTransportWSHandler,
+     GraphQLWSHandler,
+ )
+-from ariadne.contrib.tracing.opentracing import opentracing_extension
+ 
+ 
+ @pytest.fixture

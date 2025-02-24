@@ -1,0 +1,47 @@
+From RedHat: https://bugzilla.redhat.com/attachment.cgi?id=971984&action=diff&context=patch&collapsed=&headers=1&format=raw
+
+--- unzip60/extract.c	2010-04-03 14:41:55 -0500
++++ unzip60/extract.c	2014-12-03 15:33:35 -0600
+@@ -1,5 +1,5 @@ 
+ /*
+-  Copyright (c) 1990-2009 Info-ZIP.  All rights reserved.
++  Copyright (c) 1990-2014 Info-ZIP.  All rights reserved.
+ 
+   See the accompanying file LICENSE, version 2009-Jan-02 or later
+   (the contents of which are also included in unzip.h) for terms of use.
+@@ -298,6 +298,8 @@ 
+ #ifndef SFX
+    static ZCONST char Far InconsistEFlength[] = "bad extra-field entry:\n \
+      EF block length (%u bytes) exceeds remaining EF data (%u bytes)\n";
++   static ZCONST char Far TooSmallEFlength[] = "bad extra-field entry:\n \
++     EF block length (%u bytes) invalid (< %d)\n";
+    static ZCONST char Far InvalidComprDataEAs[] =
+      " invalid compressed data for EAs\n";
+ #  if (defined(WIN32) && defined(NTSD_EAS))
+@@ -2023,7 +2025,8 @@ 
+         ebID = makeword(ef);
+         ebLen = (unsigned)makeword(ef+EB_LEN);
+ 
+-        if (ebLen > (ef_len - EB_HEADSIZE)) {
++        if (ebLen > (ef_len - EB_HEADSIZE))
++        {
+            /* Discovered some extra field inconsistency! */
+             if (uO.qflag)
+                 Info(slide, 1, ((char *)slide, "%-22s ",
+@@ -2032,6 +2035,16 @@ 
+               ebLen, (ef_len - EB_HEADSIZE)));
+             return PK_ERR;
+         }
++        else if (ebLen < EB_HEADSIZE)
++        {
++            /* Extra block length smaller than header length. */
++            if (uO.qflag)
++                Info(slide, 1, ((char *)slide, "%-22s ",
++                  FnFilter1(G.filename)));
++            Info(slide, 1, ((char *)slide, LoadFarString(TooSmallEFlength),
++              ebLen, EB_HEADSIZE));
++            return PK_ERR;
++        }
+ 
+         switch (ebID) {
+             case EF_OS2:

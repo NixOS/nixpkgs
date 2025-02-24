@@ -1,0 +1,24 @@
+diff --git a/vendor/glycin/src/sandbox.rs b/vendor/glycin/src/sandbox.rs
+index 7d00b36..aa70dc7 100644
+--- a/vendor/glycin/src/sandbox.rs
++++ b/vendor/glycin/src/sandbox.rs
+@@ -165,7 +165,7 @@ impl Sandbox {
+ 
+                 args.push(self.command);
+ 
+-                ("bwrap".into(), args, Some(seccomp_memfd))
++                ("@bwrap@".into(), args, Some(seccomp_memfd))
+             }
+             SandboxMechanism::FlatpakSpawn => {
+                 let memory_limit = Self::memory_limit();
+@@ -233,8 +233,8 @@ impl Sandbox {
+                 "/",
+                 // Make /usr available as read only
+                 "--ro-bind",
+-                "/usr",
+-                "/usr",
++                "/nix/store",
++                "/nix/store",
+                 // Make tmpfs dev available
+                 "--dev",
+                 "/dev",

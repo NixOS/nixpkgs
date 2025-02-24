@@ -1,0 +1,18 @@
+diff --git a/src/arma3-unix-launcher/main.cpp b/src/arma3-unix-launcher/main.cpp
+index 10f6ed9..c706734 100644
+--- a/src/arma3-unix-launcher/main.cpp
++++ b/src/arma3-unix-launcher/main.cpp
+@@ -216,3 +216,3 @@ int main(int argc, char *argv[])
+
+-        MainWindow w(std::move(client), config_file, parser.get<bool>("--disable-steam-integration"));
++        MainWindow w(std::move(client), config_file, !parser.get<bool>("--disable-steam-integration"));
+         w.show();
+diff --git a/src/dayz-linux-launcher/main.cpp b/src/dayz-linux-launcher/main.cpp
+index f30bf8a..e0cef66 100644
+--- a/src/dayz-linux-launcher/main.cpp
++++ b/src/dayz-linux-launcher/main.cpp
+@@ -216,3 +216,3 @@ int main(int argc, char *argv[])
+
+-        MainWindow w(std::move(client), config_file, parser.get<bool>("--disable-steam-integration"));
++        MainWindow w(std::move(client), config_file, !parser.get<bool>("--disable-steam-integration"));
+         w.show();
