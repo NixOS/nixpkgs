@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://torsion.org/borgmatic/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
+    mainProgram = "borgmatic";
     maintainers = with lib.maintainers; [
       imlonghao
       x123
