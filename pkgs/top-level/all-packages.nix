@@ -10623,8 +10623,6 @@ with pkgs;
     fmt = fmt_11;
   };
 
-  texpresso = callPackage ../tools/typesetting/tex/texpresso { };
-
   tinyxml = tinyxml2;
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
