@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
-    rev = version;
+    tag = version;
     sha256 = "sha256-uafjAaXtn97NNmRPxeHmbAaMeHIR/nrQKsTqDX5NRGU=";
   };
 
