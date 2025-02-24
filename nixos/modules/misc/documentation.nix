@@ -176,6 +176,10 @@ let
       ];
     };
 
+    options-ctags = import ../../lib/ctags.nix {
+      inherit lib options;
+    };
+
 in
 
 {
@@ -379,6 +383,7 @@ in
 
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
+      system.build.optionsCtags.vim = pkgs.writeTextFile { name = "options-tags"; text = options-ctags; };
 
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
