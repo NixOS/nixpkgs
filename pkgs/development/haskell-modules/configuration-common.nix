@@ -2413,6 +2413,12 @@ self: super: {
     sha256 = "sha256-y6/hK18YveyPhRtvrGvJ+Ho4fKoAeD7efXgkusyWfug=";
   }) super.stm-hamt;
 
+  # Support tasty-quickcheck 0.11: https://github.com/ku-fpg/natural-transformation/pull/16
+  natural-transformation = appendPatch (fetchpatch {
+    url = "https://github.com/ku-fpg/natural-transformation/commit/12dac8789c775a9cdbb36e702b36eb347a6f8b43.patch";
+    sha256 = "sha256-7BLdVZ+2mCug0tvgftzolAwfwwrtGkWHF3gHuojQgvM=";
+  }) super.natural-transformation;
+
   # composite-aeson <0.8, composite-base <0.8
   compdoc = doJailbreak super.compdoc;
 
