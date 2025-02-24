@@ -464,6 +464,39 @@
       },
       "name": "docker"
     },
+    "8097": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "243.21565.447": "https://plugins.jetbrains.com/files/8097/629964/graphql-243.21565.122.zip",
+        "243.22562.218": "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip",
+        "243.22562.220": "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip",
+        "243.23654.157": "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip",
+        "243.23654.167": "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip",
+        "243.23654.180": "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip",
+        "243.23654.183": "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip",
+        "243.24978.27": "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip",
+        "243.24978.46": "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip",
+        "243.24978.50": "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip",
+        "243.24978.54": "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip",
+        "243.24978.55": "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip",
+        "243.24978.59": "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip"
+      },
+      "name": "graphql"
+    },
     "8182": {
       "compatible": [
         "clion",
@@ -1940,6 +1973,9 @@
     "https://plugins.jetbrains.com/files/7724/654910/clouds-docker-impl-243.22562.236.zip": "sha256-3F25CTNLfQcUFklNXovLVXQ8cfOr/6Y5yetPc3jTFQM=",
     "https://plugins.jetbrains.com/files/7724/672289/clouds-docker-impl-243.23654.177.zip": "sha256-zTp+nL22jW/93GkpVUK39D0VWgPtqRvW/BdhMqnsy1o=",
     "https://plugins.jetbrains.com/files/7724/680796/clouds-docker-impl-243.24978.54.zip": "sha256-pGAUljrRizCer076iM1oKrNj54tN3VxSvYldfKAsqRE=",
+    "https://plugins.jetbrains.com/files/8097/629964/graphql-243.21565.122.zip": "sha256-oaFy2E3e1cQyjf4JKblnhUXqKbXmDugzDPZXJLphWQw=",
+    "https://plugins.jetbrains.com/files/8097/636616/graphql-243.22562.13.zip": "sha256-rr2pO0mIsqWXYZgwEhcQJlk0lQabxnIPxqRCGdTFaTw=",
+    "https://plugins.jetbrains.com/files/8097/680200/graphql-243.24978.46.zip": "sha256-RJELd6KPzlRu+UwWBPW1fN33Zj0PcgQ0hGCJ6+ii/fI=",
     "https://plugins.jetbrains.com/files/8195/630064/toml-243.21565.122.zip": "sha256-vKigewUGi06by9/6a9HbjN51zPAIafdk6w4MFG4kwG8=",
     "https://plugins.jetbrains.com/files/8195/672659/toml-243.23654.183.zip": "sha256-OFoWuz5z0BcZJqWkS+vkcD/Q0e5IUnQRY84/GEQQIb8=",
     "https://plugins.jetbrains.com/files/8327/615097/Minecraft_Development-2024.3-1.8.2.zip": "sha256-4c1nxjbEsNs9twmQnJllk1OIVmm0nnUYZ0R7f/6bJt4=",
