@@ -666,6 +666,8 @@ let
           { name = "oslogin_login"; enable = cfg.googleOsLoginAccountVerification; control = "[success=ok ignore=ignore default=die]"; modulePath = "${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so"; }
           { name = "oslogin_admin"; enable = cfg.googleOsLoginAccountVerification; control = "[success=ok default=ignore]"; modulePath = "${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so"; }
           { name = "systemd_home"; enable = config.services.homed.enable; control = "sufficient"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
+          { name = "slurm"; enable = config.security.pam.slurm.enable; control = "required"; modulePath = "${pkgs.slurm}/lib/security/pam_slurm.so";}
+          { name = "slurm_adopt"; enable = config.security.pam.slurm.adopt.enable; control = "required"; modulePath = "${pkgs.slurm}/lib/security/pam_slurm_adopt.so"; settings = config.security.pam.slurm.adopt.settings;}
           # The required pam_unix.so module has to come after all the sufficient modules
           # because otherwise, the account lookup will fail if the user does not exist
           # locally, for example with MySQL- or LDAP-auth.
@@ -1537,6 +1539,94 @@ in
       use something other than pam_unix to verify user passwords, please remember to
       adjust this PAM service
     '';
+
+    security.pam.slurm = {
+      enable = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          If set, ONLY prevents users from logging into nodes if they have no
+          jobs in the node. This module is a legacy implementation with
+          functionality limited to login restriction.
+        '';
+      };
+      adopt = {
+        enable = lib.mkOption {
+          default = false;
+          type = lib.types.bool;
+          description = ''
+            If set, prevents users from logging into nodes if they have no jobs
+            in the node. It also tracks any other spawned processes for accounting
+            and ensures complete job cleanup when a job is completed, for any
+            successful connection. Spawned processes gets "adopted" as external
+            steps into the current job. As such those steps gets integrated with
+            SLURM accounting, and control group facilities.
+          '';
+        };
+        settings = lib.mkOption {
+          type = lib.types.submodule {
+            freeformType = moduleSettingsType;
+            options = {
+              action_no_jobs = lib.mkOption {
+                type = lib.types.enum [ "ignore" "deny" ];
+                default = "ignore";
+                description = ''
+                  What to do if no jobs from the user are found, deny or ignore
+                  (pass along to next pam module).
+                '';
+              };
+              action_unknown = lib.mkOption {
+                type = lib.types.enum [ "newest" "allow" "deny" ];
+                default = "newest";
+                description = ''
+                  If the user has jobs, attach to newest job. Allow lets the
+                  connection through without adoption.
+                '';
+              };
+              action_adopt_failure = lib.mkOption {
+                type = lib.types.enum [ "allow" "deny" ];
+                default = "deny";
+                description = ''
+                  What to do if the process is unable to be adopted into a job.
+                  Allow lets the connection through without adoption, useful
+                  when testing.
+                '';
+              };
+              action_generic_failure = lib.mkOption {
+                type = lib.types.enum [ "ignore" "allow" "deny" ];
+                default = "ignore";
+                description = ''
+                  Catch all for failures which might be related to kernel
+                  issues or slurmd access. Ignore falls through to next PAM
+                  module, allow lets the connection through without adoption.
+                '';
+              };
+              disable_x11 = lib.mkOption {
+                type = lib.types.enum [ "0" "1" ];
+                default = "1";
+                description = ''
+                  Disable or enable x11 sessions. '0' means adopted connection
+                  has SLURM X11 forwarding with DISPLAY overwritten using X11
+                  tunnel endpoint details.
+                '';
+              };
+              join_container = lib.mkOption {
+                type = lib.types.enum [ "true" "false" ];
+                default = "true";
+                description = ''
+                  Attach to a container created by job_container/tmpfs
+                '';
+              };
+            };
+          };
+          default = {};
+          description = ''
+            SLURM Adopt Settings. More information is available at:
+              - https://slurm.schedmd.com/pam_slurm_adopt.html
+          '';
+        };
+      };
+    };
 
     users.motd = lib.mkOption {
       default = "";
