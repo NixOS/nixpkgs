@@ -1,4 +1,10 @@
-{ lib, buildEnv, writeShellScriptBin, fetchurl, jre }:
+{
+  lib,
+  buildEnv,
+  writeShellScriptBin,
+  fetchurl,
+  jre,
+}:
 
 let
   name = "legends-browser-${version}";
@@ -28,7 +34,10 @@ buildEnv {
 
   meta = with lib; {
     description = "Multi-platform, open source, java-based legends viewer for dwarf fortress";
-    maintainers = with maintainers; [ Baughn numinit ];
+    maintainers = with maintainers; [
+      Baughn
+      numinit
+    ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     platforms = platforms.all;

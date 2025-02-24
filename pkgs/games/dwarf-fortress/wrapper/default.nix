@@ -246,10 +246,9 @@ lib.throwIf (enableTWBT' && !enableDFHack) "dwarf-fortress: TWBT requires DFHack
 
     installCheckPhase =
       let
-        commonExpectStatements =
-          ''
-            expect "Loading bindings from data/init/interface.txt"
-          '';
+        commonExpectStatements = ''
+          expect "Loading bindings from data/init/interface.txt"
+        '';
         dfHackExpectScript = writeText "dfhack-test.exp" (
           ''
             spawn env NIXPKGS_DF_OPTS=debug xvfb-run $env(out)/bin/dfhack
