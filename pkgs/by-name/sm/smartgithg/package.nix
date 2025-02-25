@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "GUI for Git, Mercurial, Subversion";
+    description = "GUI for Git";
     homepage = "https://www.syntevo.com/smartgit/";
     changelog = "https://www.syntevo.com/smartgit/changelog.txt";
     license = lib.licenses.unfree;
