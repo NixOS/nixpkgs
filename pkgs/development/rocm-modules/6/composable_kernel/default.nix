@@ -5,7 +5,6 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  rocm-merged-llvm,
   clr,
   rocm-device-libs,
   rocminfo,
@@ -89,8 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
-  env.ROCM_PATH = clr;
-  env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
+  hardeningDisable = [ "zerocallusedregs" "stackprotector" ];
+
+  env = {
+    CXXFLAGS = "-w";
+    HIPFLAGS = "-w";
+  };
 
   cmakeFlags =
     [
@@ -107,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
       "-DBUILD_DEV=OFF"
       "-DROCM_PATH=${clr}"
-      "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
+      (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${clr.hipClangPath}/clang++")
+      (lib.cmakeFeature "CMAKE_HIP_COMPILER" "${clr.hipClangPath}/clang++")
 
       # FP8 can build for 908/90a but very slow build
       # and produces unusably slow kernels that are huge
