@@ -5,6 +5,7 @@
   fetchpatch,
   rocmUpdateScript,
   cmake,
+  ninja,
   rocm-cmake,
   clr,
   gfortran,
@@ -19,6 +20,7 @@
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 # Can also use cuBLAS
@@ -69,13 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    #ninja
+    ninja
     rocm-cmake
     clr
     gfortran
-    (writeShellScriptBin "amdclang++" ''
-      exec clang++ "$@"
-    '')
   ];
 
   propagatedBuildInputs = [ hipblas-common ];
@@ -95,10 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
       lapack-reference
     ];
 
+  hardeningDisable = [ "zerocallusedregs" "stackprotector" ];
+
   cmakeFlags =
     [
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DCMAKE_CXX_COMPILER=${lib.getBin clr}/bin/hipcc"
+      "-DCMAKE_CXX_COMPILER=${clr.hipClangPath}/clang++"
       # Upstream is migrating to amdclang++, it is likely this will be correct in next version bump
       #"-DCMAKE_CXX_COMPILER=${lib.getBin clr}/bin/amdclang++"
       # Manually define CMAKE_INSTALL_<DIR>
@@ -106,7 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DAMDGPU_TARGETS=${rocblas.amdgpu_targets}" # FIXME:
+    ]
+    ++ lib.optionals (gpuTargets != [ ]) [
+      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     ]
     ++ lib.optionals buildTests [
       "-DBUILD_CLIENTS_TESTS=ON"
