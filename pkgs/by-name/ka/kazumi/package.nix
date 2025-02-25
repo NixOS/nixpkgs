@@ -20,13 +20,13 @@
 
 flutter327.buildFlutterApplication rec {
   pname = "kazumi";
-  version = "1.5.4";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-OVMJnSaIL0mm+Uf8tnGkbszYcQxf4vl9B+RwQVvzHbA=";
+    hash = "sha256-UBylNN6UViYuUn70eV0VSsnfN6/kGAFIaa9GU/OV9Zo=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -93,18 +93,22 @@ flutter327.buildFlutterApplication rec {
       };
   };
 
-  gitHashes = {
-    desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
-    webview_windows = "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE=";
-    media_kit = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_android_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_ios_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_linux = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_macos_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_libs_windows_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-    media_kit_video = "sha256-ciznKvZedg2poq377zkyjwyeGRxq0N7b/Rh4upCoths=";
-  };
+  gitHashes =
+    let
+      media_kit-hash = "sha256-6V4ZTRsExm8TidznnvAZRXGbkxTLDs7YFNutNh7tLK8=";
+    in
+    {
+      desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
+      webview_windows = "sha256-9oWTvEoFeF7djEVA3PSM72rOmOMUhV8ZYuV6+RreNzE=";
+      media_kit = media_kit-hash;
+      media_kit_libs_android_video = media_kit-hash;
+      media_kit_libs_ios_video = media_kit-hash;
+      media_kit_libs_linux = media_kit-hash;
+      media_kit_libs_macos_video = media_kit-hash;
+      media_kit_libs_video = media_kit-hash;
+      media_kit_libs_windows_video = media_kit-hash;
+      media_kit_video = media_kit-hash;
+    };
 
   postInstall = ''
     ln -snf ${mpv}/lib/libmpv.so.2 $out/app/kazumi/lib/libmpv.so.2
