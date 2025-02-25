@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  SDL,
   autoreconfHook,
   autoconf-archive,
   glib,
@@ -34,15 +32,12 @@ stdenv.mkDerivation rec {
     autoconf-archive
     pkg-config
   ];
-  buildInputs = [
-    SDL
-    glib
-  ];
+  buildInputs = [ glib ];
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # Remove when 0.5.x is published.
-      "--disable-lv-tool"
+    [
+      (lib.enableFeature false "lv-tool")
+      (lib.enableFeature false "examples")
     ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
       "ac_cv_func_malloc_0_nonnull=yes"
