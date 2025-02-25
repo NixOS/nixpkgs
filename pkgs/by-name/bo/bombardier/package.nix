@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "bombardier";
-  version = "1.2.6";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "codesenberg";
     repo = "bombardier";
     rev = "v${version}";
-    hash = "sha256-sJ5+nxfyWSN6dFlA4INaqa3UHTY7huYkZhaTidMJFAs=";
+    hash = "sha256-y5UCaCJXB/RDK79QgYgR0o65RuwW2MLpynRCvqqB/i0=";
   };
 
-  vendorHash = "sha256-SxW/87l1w86H5cxEhiF/Fj8SxJ/uAfhtc7I1DVvIilk=";
+  vendorHash = "sha256-SezGoDM4xzOj1y/qmvlngYKOVdJnxBD4l9LPVErevUI=";
 
   subPackages = [
     "."
