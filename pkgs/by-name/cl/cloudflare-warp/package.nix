@@ -15,28 +15,34 @@
   nftables,
   nss,
   openssl,
+  writeShellApplication,
+  curl,
+  jq,
+  ripgrep,
+  common-updater-scripts,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "cloudflare-warp";
+let
   version = "2024.12.554";
-
-  suffix =
-    {
-      aarch64-linux = "arm64";
-      x86_64-linux = "amd64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_${suffix}.deb";
-    hash =
-      {
-        aarch64-linux = "sha256-FdT7C5ltqCXdVToIFdEgMKVpvCf6PVcvTpvMTCJj5vc=";
-        x86_64-linux = "sha256-8FMDVUoAYInXVJ5mwpPpUxECAN8safiHetM03GJTmTg=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_amd64.deb";
+      hash = "sha256-8FMDVUoAYInXVJ5mwpPpUxECAN8safiHetM03GJTmTg=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_arm64.deb";
+      hash = "sha256-FdT7C5ltqCXdVToIFdEgMKVpvCf6PVcvTpvMTCJj5vc=";
+    };
   };
+in
+stdenv.mkDerivation rec {
+  inherit version;
+
+  pname = "cloudflare-warp";
+
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     dpkg
@@ -106,6 +112,36 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = [ "--version" ];
+
+  passthru = {
+    inherit sources;
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-cloudflare-warp";
+
+      runtimeInputs = [
+        curl
+        jq
+        ripgrep
+        common-updater-scripts
+      ];
+
+      text = ''
+        new_version="$(
+          curl --fail --silent -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            'https://api.github.com/repos/cloudflare/cloudflare-docs/git/trees/production?recursive=true' |
+            jq 'last(.tree.[] | select(.path | startswith("src/content/warp-releases/linux/ga/"))).path' |
+            rg '([^/]+)\.0\.yaml\b' --only-matching --replace '$1'
+        )"
+
+        for platform in ${lib.escapeShellArgs meta.platforms}; do
+          update-source-version "${pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
+        done
+      '';
+    });
+  };
 
   meta = with lib; {
     description = "Replaces the connection between your device and the Internet with a modern, optimized, protocol";
