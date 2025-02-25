@@ -19,6 +19,7 @@
   pybars3,
   versioneer,
   shapely,
+  setuptools,
 }:
 let
   solidpython = callPackage ./solidpython { };
@@ -26,7 +27,7 @@ in
 buildPythonApplication rec {
   pname = "kikit";
   version = "1.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -37,7 +38,11 @@ buildPythonApplication rec {
     hash = "sha256-GG0OXPoTy219QefQ7GwMen4u66lPob5DI8lU9sqwaRQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     kicad
     numpy
     click
