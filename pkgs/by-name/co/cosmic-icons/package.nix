@@ -7,14 +7,14 @@
   hicolor-icon-theme,
   nix-update-script,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
   version = "1.0.0-alpha.6";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-icons";
-    rev = "epoch-1.0.0-alpha.6";
+    tag = "epoch-${finalAttrs.version}";
     hash = "sha256-j5H2+BOWxq2jShN15QCvj9rY6OK+vlUbyR9R07Ka2rA=";
   };
 
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ a-kenji ];
   };
-}
+})
