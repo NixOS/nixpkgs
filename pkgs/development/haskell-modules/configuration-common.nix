@@ -2721,6 +2721,11 @@ self: super: {
     })
   ] super.hailgun;
 
+  some =
+    if lib.versionAtLeast pkgs.haskell.packages.ghc96.ghc.version self.ghc.version
+    then addBuildDepend self.base-orphans super.some
+    else super.some;
+
   # opencascade-hs requires the include path configuring relative to the
   # opencascade subdirectory in include.
   opencascade-hs = appendConfigureFlags [
