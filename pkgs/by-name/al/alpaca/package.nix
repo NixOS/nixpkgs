@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "4.0.1";
+  version = "5.0.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-BTTqSYoyhtFh+sk95hTNpg9AK/mdnXKz3hy/nqSbSTQ=";
+    hash = "sha256-Vy5eep9/2X03ttpo85TZ2mFBbuIu2ukxNc//0oVxhOo=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication rec {
     odfpy
     pyicu
     matplotlib
+    openai
   ];
 
   dontWrapGApps = true;
