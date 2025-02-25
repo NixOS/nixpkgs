@@ -53,33 +53,11 @@ in
 let
   inherit (versionInfo.${versionNum} or (throw "Unsupported versionNum")) release rev src;
 
-  extraPostPatch = lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
-    # GCC 13 needs the <cstdint> header explicitly included
-    sed -i src/gpsim/value.h -e '1i #include <cstdint>'
-    sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
-  '';
-
-  extraBuildInputs = lib.optionals (lib.versionOlder versionNum "1.1.0") [
-    libsForQt5.qtscript
-  ];
-
   iconPath =
     if lib.versionOlder versionNum "1.0.0" then
       "resources/icons/hicolor/256x256/simulide.png" # upstream had a messed up icon path in this release
     else
       "resources/icons/simulide.png";
-
-  installFiles =
-    if lib.versionOlder versionNum "1.0.0" then
-      ''
-        cp -r share/simulide/* $out/share/simulide
-        cp bin/simulide $out/bin/simulide
-      ''
-    else
-      ''
-        cp -r data examples $out/share/simulide
-        cp simulide $out/bin/simulide
-      '';
 
   release' = lib.optionalString (lib.versionOlder versionNum "1.2.0") "-" + release;
 in
@@ -101,25 +79,31 @@ stdenv.mkDerivation {
       -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
       -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
 
-    ${extraPostPatch}
+    ${lib.optionalString (lib.versionOlder versionNum "1.0.0") ''
+      # GCC 13 needs the <cstdint> header explicitly included
+      sed -i src/gpsim/value.h -e '1i #include <cstdint>'
+      sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
+    ''}
   '';
 
   preConfigure = ''
     cd build_XX
   '';
 
-  nativeBuildInputs = with libsForQt5; [
-    qmake
-    wrapQtAppsHook
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
-    (with libsForQt5; [
-      qtserialport
-      qtmultimedia
-      qttools
-    ])
-    ++ extraBuildInputs;
+    [
+      libsForQt5.qtserialport
+      libsForQt5.qtmultimedia
+      libsForQt5.qttools
+    ]
+    ++ lib.optionals (lib.versionOlder versionNum "1.1.0") [
+      libsForQt5.qtscript
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -129,7 +113,18 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/simulide $out/bin
     pushd executables/SimulIDE_*
-    ${installFiles}
+    ${
+      if lib.versionOlder versionNum "1.0.0" then
+        ''
+          cp -r share/simulide/* $out/share/simulide
+          cp bin/simulide $out/bin/simulide
+        ''
+      else
+        ''
+          cp -r data examples $out/share/simulide
+          cp simulide $out/bin/simulide
+        ''
+    }
     popd
 
     runHook postInstall
