@@ -34,6 +34,11 @@
     ] ++ orig.args or ["-e" ../../stdenv/generic/source-stdenv.sh (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });
 
+  # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
+  # or doc/build-helpers/testers.chapter.md
+  # NOTE: Must be `import`-ed rather than `callPackage`-d to preserve the `override` attribute.
+  testBuildFailure' = import ./testBuildFailurePrime { inherit lib stdenvNoCC testers; };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testEqualDerivation
   # or doc/build-helpers/testers.chapter.md
   testEqualDerivation = callPackage ./test-equal-derivation.nix { };
