@@ -2015,6 +2015,22 @@ let
         };
       };
 
+      fstarlang.fstar-vscode-assistant = buildVscodeMarketplaceExtension {
+        meta = {
+          description = "An interactive editing mode VS Code extension for F*";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=FStarLang.fstar-vscode-assistant";
+          homepage = "https://github.com/FStarLang/fstar-vscode-assistant";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.parrot7483 ];
+        };
+        mktplcRef = {
+          name = "fstar-vscode-assistant";
+          publisher = "FStarLang";
+          version = "0.17.1";
+          sha256 = "sha256-8Lbb1XPtcd6JHZnlLRQggbVJfynJaK2DQ/XhHy+3joE=";
+        };
+      };
+
       funkyremi.vscode-google-translate = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "funkyremi";
