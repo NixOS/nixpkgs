@@ -4,12 +4,12 @@ let
 
   driversEnv = pkgs.buildEnv {
     name = "graphics-drivers";
-    paths = [ cfg.package ] ++ cfg.extraPackages;
+    paths = [ cfg.package pkgs.libGL ] ++ cfg.extraPackages;
   };
 
   driversEnv32 = pkgs.buildEnv {
     name = "graphics-drivers-32bit";
-    paths = [ cfg.package32 ] ++ cfg.extraPackages32;
+    paths = [ cfg.package32 pkgs.libGL ] ++ cfg.extraPackages32;
   };
 in
 {
