@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  runCommand,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
@@ -31,6 +32,12 @@ let
     rev = "822f8ea833a94fb48cd8e304ef8dc557b67a9f7b";
     hash = "sha256-fum8zLRXb8xW8TwNyelIZVZR6XXsdPHSt1WDo+TX4CU=";
   };
+
+  electron-headers = runCommand "electron-headers" { } ''
+    mkdir -p $out
+    tar -C $out --strip-components=1 -xvf ${electron.headers}
+  '';
+
 in
 buildNpmPackage {
   inherit pname version src;
@@ -46,6 +53,11 @@ buildNpmPackage {
     copyDesktopItems
   ];
   buildInputs = [ libsecret ];
+
+  npmFlags = [
+    # keytar needs to be built against electron's ABI
+    "--nodedir=${electron-headers}"
+  ];
 
   buildPhase = ''
     runHook preBuild
