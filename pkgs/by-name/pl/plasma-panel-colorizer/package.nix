@@ -48,6 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace package/contents/ui/tools/service.py \
       --replace-fail '#!/usr/bin/env python' '#!${lib.getExe pythonEnv}'
+
+    substituteInPlace package/contents/ui/DBusFallback.qml \
+      --replace-fail 'gdbus' '${lib.getExe' glib "gdbus"}'
   '';
 
   postInstall = ''
