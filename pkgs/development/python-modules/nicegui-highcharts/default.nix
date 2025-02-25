@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nicegui-highcharts";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "zauberzeug";
     repo = "nicegui-highcharts";
     tag = "v${version}";
-    hash = "sha256-r4X4faU7Nlq/FDbIYbTpvnC1w14XskpsNGtkEXtGrFo=";
+    hash = "sha256-9COui3gqLZqJSeZyzazxQcOc2oM9Li+dLBoy5VcEKBw=";
   };
 
   postPatch = ''
