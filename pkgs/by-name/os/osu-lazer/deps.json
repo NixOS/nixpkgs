@@ -651,8 +651,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2025.220.1",
-    "hash": "sha256-nzEZ6c0woNWxhbwu4kyMwxQy20TElqFgK0ugZWFqgCo="
+    "version": "2025.225.0",
+    "hash": "sha256-XXqNC/nzUb/mEKy7SzVBQnE2VsOwQiCFhH700/LDblc="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
