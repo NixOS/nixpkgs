@@ -4,10 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   just,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
+  libcosmicAppHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,13 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-
-  buildInputs = [
-    libxkbcommon
-    wayland
+    libcosmicAppHook
   ];
 
   dontUseJustBuild = true;
@@ -49,11 +40,6 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-launcher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
   env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
