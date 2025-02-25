@@ -6,6 +6,7 @@
 , cmake
 , pkg-config
 , makeWrapper
+, wrapGAppsHook3
 , bzip2
 , fontconfig
 , freetype
@@ -42,11 +43,14 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-kKyH+JAydoaPvuhHxkC18Io4CWbyjhVcuu9+CBOvEwg=";
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
     cmake
     installShellFiles
     pkg-config
     makeWrapper
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -101,7 +105,8 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       patchelf --set-rpath "${libPath}" "$out/bin/ludusavi"
-      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]}
+      wrapProgram $out/bin/ludusavi --prefix PATH : ${lib.makeBinPath [ zenity libsForQt5.kdialog ]} \
+        "''${gappsWrapperArgs[@]}"
     '';
 
 
