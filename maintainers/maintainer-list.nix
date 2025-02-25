@@ -14279,6 +14279,13 @@
     githubId = 50797868;
     name = "Shaolong Chen";
   };
+  mapperfr = {
+    email = "jeremy@mapper.fr";
+    github = "mapperfr";
+    githubId = 3398608;
+    name = "Jérémy Garniaux";
+  };
+
   maralorn = {
     email = "mail@maralorn.de";
     matrix = "@maralorn:maralorn.de";
