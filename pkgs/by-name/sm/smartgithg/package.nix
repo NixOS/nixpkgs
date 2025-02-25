@@ -101,7 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "GUI for Git, Mercurial, Subversion";
+    description = "Git GUI client";
+    longDescription = ''
+      SmartGit is a multi-platform Git GUI client, free to use for active Open Source developers and users from academic institutions.
+      Command line Git is required.
+    '';
     homepage = "https://www.syntevo.com/smartgit/";
     changelog = "https://www.syntevo.com/smartgit/changelog.txt";
     license = lib.licenses.unfree;
